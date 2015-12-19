@@ -25,15 +25,15 @@ public class AppIntroMy extends AppIntro {
                 ContextCompat.getColor(this, R.color.colorPrimary)));
         addSlide(AppIntroFragment.newInstance("How to use?",
                 "Just set chromer as your default browser, chromer will display the link in a non intrusive way.",
-                R.drawable.web_hi_res_512,
+                R.drawable.chromer_default_image,
                 ContextCompat.getColor(this, R.color.colorPrimary)));
         addSlide(AppIntroFragment.newInstance("Advantages?",
                 "No need to login to sites again, faster load, stay in the app you are using, save data, auto complete forms.",
-                R.drawable.web_hi_res_512,
+                R.drawable.advantages,
                 ContextCompat.getColor(this, R.color.colorPrimary)));
         addSlide(AppIntroFragment.newInstance("That's it!",
                 "Configure Chromer to your liking by launching the main app. Enjoy and share your thoughts!",
-                R.drawable.web_hi_res_512,
+                R.drawable.smile,
                 ContextCompat.getColor(this, R.color.colorPrimary)));
         // Hide Skip/Done button
         showSkipButton(false);
