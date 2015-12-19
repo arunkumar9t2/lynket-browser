@@ -95,11 +95,13 @@ public class MainActivity extends AppCompatActivity {
         if (defaultViewHandlerInfo != null) {
             defaultViewHandlerPackageName = defaultViewHandlerInfo.activityInfo.packageName;
         }
-        if (defaultViewHandlerPackageName.trim().equalsIgnoreCase(getPackageName())) {
-            Toast.makeText(this, "Already set!", Toast.LENGTH_SHORT).show();
-        } else {
-            if (activityIntent.resolveActivity(getPackageManager()) != null) {
-                startActivity(activityIntent);
+        if (defaultViewHandlerPackageName != null) {
+            if (defaultViewHandlerPackageName.trim().equalsIgnoreCase(getPackageName())) {
+                Toast.makeText(this, "Already set!", Toast.LENGTH_SHORT).show();
+            } else {
+                if (activityIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(activityIntent);
+                }
             }
         }
 

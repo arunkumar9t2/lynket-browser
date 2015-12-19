@@ -20,7 +20,7 @@ public class CustomTabHelperFragMine extends Fragment {
 
     private static final String FRAGMENT_TAG = CustomTabsHelperFragment.class.getName();
 
-    private MyCustomActivityHelper mCusActivtyHelper = new MyCustomActivityHelper();
+    private final MyCustomActivityHelper mCusActivtyHelper = new MyCustomActivityHelper();
 
     /**
      * Ensure that an instance of this fragment is attached to an activity.
