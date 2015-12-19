@@ -28,7 +28,7 @@ public class AppIntroMy extends AppIntro {
                 R.drawable.chromer_default_image,
                 ContextCompat.getColor(this, R.color.colorPrimary)));
         addSlide(AppIntroFragment.newInstance("Advantages?",
-                "No need to login to sites again, faster load, stay in the app you are using, save data, auto complete forms.",
+                "Shared login info from Chrome, faster loading, non intrusive, save data, auto complete forms and secure with latest updates!",
                 R.drawable.advantages,
                 ContextCompat.getColor(this, R.color.colorPrimary)));
         addSlide(AppIntroFragment.newInstance("That's it!",
