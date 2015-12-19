@@ -1,5 +1,6 @@
 package arun.com.chromer;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,8 +14,8 @@ import android.support.v4.content.ContextCompat;
  */
 class Util {
     public static CustomTabsIntent getCutsomizedTabIntent(
-            Context c
-    ) {
+            Context c,
+            String url) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(c);
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
 
@@ -36,7 +37,33 @@ class Util {
         } else
             builder.setShowTitle(false);
 
+        addShareIntent(c, url, builder);
+
+        addCopyItem(c, url, builder);
         return builder.build();
+    }
+
+    private static void addCopyItem(Context c, String url, CustomTabsIntent.Builder builder) {
+        if (url != null) {
+            Intent notificationIntent = new Intent(c, ClipboardService.class);
+            notificationIntent.putExtra(Intent.EXTRA_TEXT, url);
+            PendingIntent serviceIntent = PendingIntent.getService(c, 0, notificationIntent,
+                    PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
+            builder.addMenuItem("Copy link", serviceIntent);
+        }
+    }
+
+    private static void addShareIntent(Context c, String url, CustomTabsIntent.Builder builder) {
+        if (url != null) {
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, url);
+            shareIntent.setType("text/plain");
+
+            PendingIntent pendingShareIntent = PendingIntent
+                    .getActivity(c, 0, shareIntent,
+                            PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
+            builder.addMenuItem("Share", pendingShareIntent);
+        }
     }
 
     public static void openPlayStore(Context context, String appPackageName) {

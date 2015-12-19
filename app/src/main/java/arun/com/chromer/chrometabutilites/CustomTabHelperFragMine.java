@@ -1,4 +1,4 @@
-package arun.com.chromer;
+package arun.com.chromer.chrometabutilites;
 
 import android.app.Activity;
 import android.net.Uri;

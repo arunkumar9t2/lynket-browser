@@ -34,9 +34,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AppIntroMy"
+            android:name=".intro.AppIntroMy"
             android:label="Intro"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <service
+            android:name=".ClipboardService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

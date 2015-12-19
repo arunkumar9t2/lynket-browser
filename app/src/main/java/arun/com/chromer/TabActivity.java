@@ -9,6 +9,9 @@ import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import arun.com.chromer.chrometabutilites.CustomTabHelperFragMine;
+import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
+
 public class TabActivity extends AppCompatActivity {
     private final MyCustomActivityHelper.CustomTabsFallback mCustomTabsFallback =
             new MyCustomActivityHelper.CustomTabsFallback() {
@@ -38,7 +41,8 @@ public class TabActivity extends AppCompatActivity {
         }
 
         CustomTabHelperFragMine mCustomTabHelperFragMine = CustomTabHelperFragMine.attachTo(this);
-        CustomTabsIntent mCustomTabsIntent = Util.getCutsomizedTabIntent(this);
+        CustomTabsIntent mCustomTabsIntent = Util.getCutsomizedTabIntent(this,
+                getIntent().getData().toString());
 
         mCustomTabHelperFragMine.setConnectionCallback(
                 new MyCustomActivityHelper.ConnectionCallback() {

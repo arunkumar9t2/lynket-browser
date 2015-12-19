@@ -22,6 +22,10 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
+import arun.com.chromer.chrometabutilites.CustomTabHelperFragMine;
+import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
+import arun.com.chromer.intro.AppIntroMy;
+
 public class MainActivity extends AppCompatActivity {
     private static final String URL = "http://www.google.com/";
     private final MyCustomActivityHelper.CustomTabsFallback mCustomTabsFallback =
@@ -74,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCustomTabsIntent = Util.getCutsomizedTabIntent(MainActivity.this);
+                mCustomTabsIntent = Util.getCutsomizedTabIntent(getApplicationContext(), URL);
                 CustomTabHelperFragMine.open(MainActivity.this, mCustomTabsIntent, Uri.parse(URL),
                         mCustomTabsFallback);
             }
