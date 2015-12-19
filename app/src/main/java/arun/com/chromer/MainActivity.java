@@ -24,8 +24,8 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 public class MainActivity extends AppCompatActivity {
     private static final String URL = "http://www.google.com/";
-    private final CusActivtyHelper.CustomTabsFallback mCustomTabsFallback =
-            new CusActivtyHelper.CustomTabsFallback() {
+    private final MyCustomActivityHelper.CustomTabsFallback mCustomTabsFallback =
+            new MyCustomActivityHelper.CustomTabsFallback() {
                 @Override
                 public void openUri(Activity activity, Uri uri) {
                     Toast.makeText(activity, "No custom tab compatible browsers found", Toast.LENGTH_SHORT)
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupCustomTab() {
         CustomTabHelperFragMine mCustomTabHelperFragMine = CustomTabHelperFragMine.attachTo(this);
         mCustomTabHelperFragMine.setConnectionCallback(
-                new CusActivtyHelper.ConnectionCallback() {
+                new MyCustomActivityHelper.ConnectionCallback() {
                     @Override
                     public void onCustomTabsConnected() {
                     }

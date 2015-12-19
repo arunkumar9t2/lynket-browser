@@ -10,8 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 public class TabActivity extends AppCompatActivity {
-    private final CusActivtyHelper.CustomTabsFallback mCustomTabsFallback =
-            new CusActivtyHelper.CustomTabsFallback() {
+    private final MyCustomActivityHelper.CustomTabsFallback mCustomTabsFallback =
+            new MyCustomActivityHelper.CustomTabsFallback() {
                 @Override
                 public void openUri(Activity activity, Uri uri) {
                     Toast.makeText(TabActivity.this,
@@ -41,7 +41,7 @@ public class TabActivity extends AppCompatActivity {
         CustomTabsIntent mCustomTabsIntent = Util.getCutsomizedTabIntent(this);
 
         mCustomTabHelperFragMine.setConnectionCallback(
-                new CusActivtyHelper.ConnectionCallback() {
+                new MyCustomActivityHelper.ConnectionCallback() {
                     @Override
                     public void onCustomTabsConnected() {
                     }

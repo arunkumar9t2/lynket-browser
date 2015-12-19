@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by Arun on 18/12/2015.
  */
-public class CusActivtyHelper implements ServiceConnectionCallback {
+public class MyCustomActivityHelper implements ServiceConnectionCallback {
 
 
     private CustomTabsSession mCustomTabsSession;
@@ -36,7 +36,7 @@ public class CusActivtyHelper implements ServiceConnectionCallback {
                                      CustomTabsIntent customTabsIntent,
                                      Uri uri,
                                      CustomTabsFallback fallback) {
-        String packageName = CTHelper.getPackageNameToUse(activity);
+        String packageName = MyCustomTabHelper.getPackageNameToUse(activity);
 
         //If we cant find a package name, it means theres no browser that supports
         //Chrome Custom Tabs installed. So, we fallback to the webview
@@ -94,7 +94,7 @@ public class CusActivtyHelper implements ServiceConnectionCallback {
     public void bindCustomTabsService(Activity activity) {
         if (mClient != null) return;
 
-        String packageName = CTHelper.getPackageNameToUse(activity);
+        String packageName = MyCustomTabHelper.getPackageNameToUse(activity);
         if (packageName == null) return;
 
         mConnection = new ServiceConnection(this);

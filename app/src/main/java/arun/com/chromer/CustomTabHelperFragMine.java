@@ -20,7 +20,7 @@ public class CustomTabHelperFragMine extends Fragment {
 
     private static final String FRAGMENT_TAG = CustomTabsHelperFragment.class.getName();
 
-    private CusActivtyHelper mCusActivtyHelper = new CusActivtyHelper();
+    private MyCustomActivityHelper mCusActivtyHelper = new MyCustomActivityHelper();
 
     /**
      * Ensure that an instance of this fragment is attached to an activity.
@@ -54,39 +54,39 @@ public class CustomTabHelperFragMine extends Fragment {
 
     // Cannot get javadoc to compile, saying "reference not found".
     /*
-     * @see CusActivtyHelper#openCustomTab(Activity, CustomTabsIntent, Uri, CusActivtyHelper.CustomTabsFallback)
+     * @see MyCustomActivityHelper#openCustomTab(Activity, CustomTabsIntent, Uri, MyCustomActivityHelper.CustomTabsFallback)
      */
     public static void open(Activity activity, CustomTabsIntent intent, Uri uri,
-                            CusActivtyHelper.CustomTabsFallback fallback) {
-        CusActivtyHelper.openCustomTab(activity, intent, uri, fallback);
+                            MyCustomActivityHelper.CustomTabsFallback fallback) {
+        MyCustomActivityHelper.openCustomTab(activity, intent, uri, fallback);
     }
 
     /**
-     * Get the {@link CusActivtyHelper} this fragment manages.
+     * Get the {@link MyCustomActivityHelper} this fragment manages.
      *
-     * @return The {@link CusActivtyHelper}.
+     * @return The {@link MyCustomActivityHelper}.
      */
-    public CusActivtyHelper getHelper() {
+    public MyCustomActivityHelper getHelper() {
         return mCusActivtyHelper;
     }
 
     /**
-     * @see CusActivtyHelper#getSession()
+     * @see MyCustomActivityHelper#getSession()
      */
     public CustomTabsSession getSession() {
         return mCusActivtyHelper.getSession();
     }
 
     /**
-     * @see CusActivtyHelper#setConnectionCallback(CusActivtyHelper.ConnectionCallback)
+     * @see MyCustomActivityHelper#setConnectionCallback(MyCustomActivityHelper.ConnectionCallback)
      */
     public void setConnectionCallback(
-            CusActivtyHelper.ConnectionCallback connectionCallback) {
+            MyCustomActivityHelper.ConnectionCallback connectionCallback) {
         mCusActivtyHelper.setConnectionCallback(connectionCallback);
     }
 
     /**
-     * @see CusActivtyHelper#mayLaunchUrl(Uri, Bundle, List)
+     * @see MyCustomActivityHelper#mayLaunchUrl(Uri, Bundle, List)
      */
     public boolean mayLaunchUrl(Uri uri, Bundle extras, List<Bundle> otherLikelyBundles) {
         return mCusActivtyHelper.mayLaunchUrl(uri, extras, otherLikelyBundles);
