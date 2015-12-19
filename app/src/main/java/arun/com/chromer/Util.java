@@ -45,9 +45,9 @@ class Util {
 
     private static void addCopyItem(Context c, String url, CustomTabsIntent.Builder builder) {
         if (url != null) {
-            Intent notificationIntent = new Intent(c, ClipboardService.class);
-            notificationIntent.putExtra(Intent.EXTRA_TEXT, url);
-            PendingIntent serviceIntent = PendingIntent.getService(c, 0, notificationIntent,
+            Intent clipboardIntent = new Intent(c, ClipboardService.class);
+            clipboardIntent.putExtra(Intent.EXTRA_TEXT, url);
+            PendingIntent serviceIntent = PendingIntent.getService(c, 0, clipboardIntent,
                     PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
             builder.addMenuItem("Copy link", serviceIntent);
         }

@@ -40,7 +40,7 @@
 
         <service
             android:name=".ClipboardService"
-            android:exported="false"></service>
+            android:exported="true" />
     </application>
 
 </manifest>
