@@ -2,5 +2,14 @@
     <string name="app_name">Chromer</string>
     <string name="action_settings">Settings</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+    <string-array name="animationValues">
+        <item>Slide Right</item>
+        <item>Slide Up</item>
+    </string-array>
+
+    <string-array name="animationKeys">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
 </resources>

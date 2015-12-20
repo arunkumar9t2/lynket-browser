@@ -4,14 +4,22 @@
     android:title="Settings">
     <CheckBoxPreference
         android:defaultValue="true"
-        android:key="title_pref"
-        android:title="Show title" />
-    <CheckBoxPreference
-        android:defaultValue="true"
         android:key="toolbar_color_pref"
         android:title="Colored Toolbar" />
+    
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="title_pref"
+        android:title="Show title" />
+
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="animations_pref"
-        android:title="Slide Animation" />
+        android:title="Animations" />
+    <ListPreference
+        android:defaultValue="1"
+        android:entries="@array/animationValues"
+        android:entryValues="@array/animationKeys"
+        android:key="animation_preference"
+        android:title="Choose Animation" />
 </PreferenceScreen>

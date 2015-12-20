@@ -24,8 +24,20 @@ class Util {
         }
 
         if (sharedPreferences.getBoolean("animations_pref", true)) {
-            builder.setStartAnimations(c, R.anim.slide_in_right, R.anim.slide_out_left)
-                    .setExitAnimations(c, R.anim.slide_in_left, R.anim.slide_out_right);
+            switch (Integer.parseInt(sharedPreferences.getString("animation_preference", "1"))) {
+                case 1:
+                    builder.setStartAnimations(c, R.anim.slide_in_right, R.anim.slide_out_left)
+                            .setExitAnimations(c, R.anim.slide_in_left, R.anim.slide_out_right);
+                    break;
+                case 2:
+                    builder.setStartAnimations(c, R.anim.slide_up_right, R.anim.slide_down_left)
+                            .setExitAnimations(c, R.anim.slide_up_left, R.anim.slide_down_right);
+                    break;
+                default:
+                    builder.setStartAnimations(c, R.anim.slide_in_right, R.anim.slide_out_left)
+                            .setExitAnimations(c, R.anim.slide_in_left, R.anim.slide_out_right);
+            }
+
         }
 
         if (sharedPreferences.getBoolean("url_pref", true)) {
