@@ -2,6 +2,7 @@ package arun.com.chromer.extra;
 
 import de.psdev.licensesdialog.licenses.ApacheSoftwareLicense20;
 import de.psdev.licensesdialog.licenses.License;
+import de.psdev.licensesdialog.licenses.MITLicense;
 import de.psdev.licensesdialog.model.Notice;
 import de.psdev.licensesdialog.model.Notices;
 
@@ -16,6 +17,13 @@ public class Licenses {
         String copyright = "Copyright 2013 Philip Schiffer <admin@psdev.de>";
         License license = new ApacheSoftwareLicense20();
         Notice notice = new Notice(name, url, copyright, license);
+        notices.addNotice(notice);
+
+        name = "Material Dialogs";
+        url = "https://github.com/afollestad/material-dialogs";
+        copyright = "Copyright (c) 2015 Aidan Michael Follestad";
+        license = new MITLicense();
+        notice = new Notice(name, url, copyright, license);
         notices.addNotice(notice);
 
         name = "Android Open Source Project";

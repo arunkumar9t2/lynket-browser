@@ -6,7 +6,7 @@
         android:defaultValue="true"
         android:key="toolbar_color_pref"
         android:title="Colored Toolbar" />
-    
+
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="title_pref"

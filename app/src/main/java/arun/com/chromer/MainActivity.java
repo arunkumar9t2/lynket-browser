@@ -40,9 +40,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     private static final String CUSTOM_TAB_URL = "https://developer.chrome.com/multidevice/android/customtabs#whentouse";
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private CustomTabsIntent mCustomTabsIntent;
     private SharedPreferences preferences;
-    private Drawer drawer;
     private View colorView;
 
     private boolean isFirstRun() {
@@ -115,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     private void launchCustomTab(String url) {
-        mCustomTabsIntent = Util.getCutsomizedTabIntent(getApplicationContext(), url);
+        CustomTabsIntent mCustomTabsIntent = Util.getCutsomizedTabIntent(getApplicationContext(), url);
         CustomTabHelperFragMine.open(MainActivity.this, mCustomTabsIntent, Uri.parse(url),
                 TabActivity.mCustomTabsFallback);
     }
@@ -148,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     private void setupDrawer(Toolbar toolbar) {
-        drawer = new DrawerBuilder()
+        Drawer drawer = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .withAccountHeader(new AccountHeaderBuilder()
@@ -174,6 +172,11 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         new SecondaryDrawerItem().withName("More on custom tabs")
                                 .withIcon(GoogleMaterial.Icon.gmd_open_in_new)
                                 .withIdentifier(5)
+                                .withSelectable(false),
+                        new SecondaryDrawerItem().withName("Share")
+                                .withIcon(GoogleMaterial.Icon.gmd_share)
+                                .withDescription("Help Chromer grow!")
+                                .withIdentifier(7)
                                 .withSelectable(false),
                         new SecondaryDrawerItem().withName("Licenses")
                                 .withIcon(GoogleMaterial.Icon.gmd_card_membership)
@@ -211,6 +214,11 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                             case 6:
                                 showLicensesDialog();
                                 break;
+                            case 7:
+                                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                                shareIntent.putExtra(Intent.EXTRA_TEXT, "Hey Checkout 'Chromer' for quick and secure browsing experience! Download here https://goo.gl/992ils");
+                                shareIntent.setType("text/plain");
+                                startActivity(Intent.createChooser(shareIntent, "Share via..."));
                         }
                         return false;
                     }
