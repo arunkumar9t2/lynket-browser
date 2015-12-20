@@ -20,7 +20,9 @@ class Util {
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
 
         if (sharedPreferences.getBoolean("toolbar_color_pref", true)) {
-            builder.setToolbarColor(ContextCompat.getColor(c, R.color.colorPrimary));
+            final int choosenColor = sharedPreferences.getInt("toolbar_color",
+                    ContextCompat.getColor(c, R.color.colorPrimary));
+            builder.setToolbarColor(choosenColor);
         }
 
         if (sharedPreferences.getBoolean("animations_pref", true)) {

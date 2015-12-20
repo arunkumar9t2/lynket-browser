@@ -6,6 +6,9 @@ import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +18,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -30,7 +34,7 @@ import arun.com.chromer.extra.Licenses;
 import arun.com.chromer.intro.AppIntroMy;
 import de.psdev.licensesdialog.LicensesDialog;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback {
     private static final String GOOGLE_URL = "http://www.google.com/";
 
     private static final String CUSTOM_TAB_URL = "https://developer.chrome.com/multidevice/android/customtabs#whentouse";
@@ -39,10 +43,11 @@ public class MainActivity extends AppCompatActivity {
     private CustomTabsIntent mCustomTabsIntent;
     private SharedPreferences preferences;
     private Drawer drawer;
+    private View colorView;
 
     private boolean isFirstRun() {
         if (preferences.getBoolean("firstrun", true)) {
-            preferences.edit().putBoolean("firstrun", false).commit();
+            preferences.edit().putBoolean("firstrun", false).apply();
             return true;
         }
         return false;
@@ -83,6 +88,30 @@ public class MainActivity extends AppCompatActivity {
         });
 
         setupCustomTab();
+
+        setupColorPicker();
+    }
+
+    private void setupColorPicker() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        final int choosenColor = sharedPreferences.getInt("toolbar_color",
+                getResources().getColor(R.color.primary));
+        findViewById(R.id.color_picker_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new ColorChooserDialog.Builder(MainActivity.this, R.string.md_choose_label)
+                        .titleSub(R.string.md_presets_label)
+                        .doneButton(R.string.md_done_label)  // changes label of the done button
+                        .cancelButton(R.string.md_cancel_label)  // changes label of the cancel button
+                        .backButton(R.string.md_back_label)  // changes label of the back button
+                        .allowUserColorInputAlpha(false)
+                        .preselect(choosenColor)
+                        .dynamicButtonColor(true)  // defaults to true, false will disable changing action buttons' color to currently selected color
+                        .show();
+            }
+        });
+        colorView = findViewById(R.id.color_preview);
+        colorView.setBackgroundColor(choosenColor);
     }
 
     private void launchCustomTab(String url) {
@@ -221,5 +250,12 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(TAG, "Disconnect to custom tab");
                     }
                 });
+    }
+
+    @Override
+    public void onColorSelection(@NonNull ColorChooserDialog dialog, @ColorInt int selectedColor) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        colorView.setBackgroundColor(selectedColor);
+        sharedPreferences.edit().putInt("toolbar_color", selectedColor).apply();
     }
 }
