@@ -41,12 +41,20 @@ public class MyCustomActivityHelper implements ServiceConnectionCallback {
         //If we cant find a package name, it means theres no browser that supports
         //Chrome Custom Tabs installed. So, we fallback to the webview
         if (packageName == null) {
-            if (fallback != null) {
-                fallback.openUri(activity, uri);
-            }
+            callFallback(activity, uri, fallback);
         } else {
             customTabsIntent.intent.setPackage(packageName);
-            customTabsIntent.launchUrl(activity, uri);
+            try {
+                customTabsIntent.launchUrl(activity, uri);
+            } catch (Exception e) {
+                callFallback(activity, uri, fallback);
+            }
+        }
+    }
+
+    private static void callFallback(Activity activity, Uri uri, CustomTabsFallback fallback) {
+        if (fallback != null) {
+            fallback.openUri(activity, uri);
         }
     }
 
