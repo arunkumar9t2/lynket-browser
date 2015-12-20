@@ -19,7 +19,9 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import arun.com.chromer.chrometabutilites.CustomTabHelperFragMine;
@@ -27,7 +29,10 @@ import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
 import arun.com.chromer.intro.AppIntroMy;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String URL = "http://www.google.com/";
+    private static final String GOOGLE_URL = "http://www.google.com/";
+
+    private static final String CUSTOM_TAB_URL = "https://developer.chrome.com/multidevice/android/customtabs#whentouse";
+
     private final MyCustomActivityHelper.CustomTabsFallback mCustomTabsFallback =
             new MyCustomActivityHelper.CustomTabsFallback() {
                 @Override
@@ -71,20 +76,24 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.set_default).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openWebPage(URL);
+                openWebPage(GOOGLE_URL);
             }
         });
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCustomTabsIntent = Util.getCutsomizedTabIntent(getApplicationContext(), URL);
-                CustomTabHelperFragMine.open(MainActivity.this, mCustomTabsIntent, Uri.parse(URL),
-                        mCustomTabsFallback);
+                launchCustomTab(GOOGLE_URL);
             }
         });
 
         setupCustomTab();
+    }
+
+    private void launchCustomTab(String url) {
+        mCustomTabsIntent = Util.getCutsomizedTabIntent(getApplicationContext(), url);
+        CustomTabHelperFragMine.open(MainActivity.this, mCustomTabsIntent, Uri.parse(url),
+                mCustomTabsFallback);
     }
 
     private void openWebPage(String url) {
@@ -125,13 +134,26 @@ public class MainActivity extends AppCompatActivity {
                         .build())
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName("About").withIdentifier(4)
-                                .withIcon(GoogleMaterial.Icon.gmd_assignment),
+                                .withIcon(GoogleMaterial.Icon.gmd_assignment)
+                                .withSelectable(false),
                         new PrimaryDrawerItem().withName("More Apps").withIdentifier(1)
-                                .withIcon(GoogleMaterial.Icon.gmd_android),
+                                .withIcon(GoogleMaterial.Icon.gmd_android)
+                                .withSelectable(false),
                         new PrimaryDrawerItem().withName("Feedback").withIdentifier(2)
-                                .withIcon(GoogleMaterial.Icon.gmd_feedback),
+                                .withIcon(GoogleMaterial.Icon.gmd_feedback)
+                                .withSelectable(false),
                         new PrimaryDrawerItem().withName("Rate").withIdentifier(3)
                                 .withIcon(GoogleMaterial.Icon.gmd_rate_review)
+                                .withSelectable(false),
+                        new DividerDrawerItem(),
+                        new SecondaryDrawerItem().withName("More on custom tabs")
+                                .withIcon(GoogleMaterial.Icon.gmd_open_in_new)
+                                .withIdentifier(5)
+                                .withSelectable(false),
+                        new SecondaryDrawerItem().withName("Licenses")
+                                .withIcon(GoogleMaterial.Icon.gmd_card_membership)
+                                .withIdentifier(6)
+                                .withSelectable(false)
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -146,21 +168,23 @@ public class MainActivity extends AppCompatActivity {
                                 } catch (ActivityNotFoundException anfe) {
                                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/search?q=pub:Arunkumar")));
                                 }
-                                drawer.setSelection(-1);
                                 break;
                             case 2:
                                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "arunk.beece@gmail.com", null));
                                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Chromer");
                                 startActivity(Intent.createChooser(emailIntent, "Send email..."));
-                                drawer.setSelection(-1);
                                 break;
                             case 3:
                                 Util.openPlayStore(MainActivity.this, getPackageName());
-                                drawer.setSelection(-1);
                                 break;
                             case 4:
                                 startActivity(new Intent(MainActivity.this, AppIntroMy.class));
-                                drawer.setSelection(-1);
+                                break;
+                            case 5:
+                                launchCustomTab(CUSTOM_TAB_URL);
+                                break;
+                            case 6:
+                                startActivity(new Intent(MainActivity.this, AppIntroMy.class));
                                 break;
                         }
                         return false;
@@ -176,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
                 new MyCustomActivityHelper.ConnectionCallback() {
                     @Override
                     public void onCustomTabsConnected() {
+
                     }
 
                     @Override
