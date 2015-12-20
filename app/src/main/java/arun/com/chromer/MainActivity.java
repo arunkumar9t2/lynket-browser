@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.set_default).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openWebPage("http://www.google.com");
+                openWebPage(URL);
             }
         });
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
