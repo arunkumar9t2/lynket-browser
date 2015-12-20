@@ -18,7 +18,6 @@ public class Licenses {
         Notice notice = new Notice(name, url, copyright, license);
         notices.addNotice(notice);
 
-
         name = "Android Open Source Project";
         url = "https://source.android.com/";
         copyright = "Copyright (C) 2008 The Android Open Source Project";
@@ -35,7 +34,7 @@ public class Licenses {
 
         name = "AppIntro";
         url = "https://github.com/PaoloRotolo/AppIntro";
-        copyright = " Copyright 2015 Paolo Rotolo";
+        copyright = "Copyright 2015 Paolo Rotolo";
         license = new ApacheSoftwareLicense20();
         notice = new Notice(name, url, copyright, license);
         notices.addNotice(notice);
