@@ -13,17 +13,21 @@ import arun.com.chromer.chrometabutilites.CustomTabHelperFragMine;
 import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
 
 public class TabActivity extends AppCompatActivity {
-    private final MyCustomActivityHelper.CustomTabsFallback mCustomTabsFallback =
+
+    public final static MyCustomActivityHelper.CustomTabsFallback mCustomTabsFallback =
             new MyCustomActivityHelper.CustomTabsFallback() {
                 @Override
                 public void openUri(Activity activity, Uri uri) {
-                    Toast.makeText(TabActivity.this,
-                            "Could not open custom tab, fall back to browsers"
+                    Toast.makeText(activity,
+                            "Could not open custom tab, falling back to normal browsers"
                             , Toast.LENGTH_SHORT).show();
                     try {
-                        activity.startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                        activity.startActivity(
+                                Intent.createChooser(
+                                        new Intent(Intent.ACTION_VIEW, uri),
+                                        "Open with.."));
                     } catch (ActivityNotFoundException e) {
-                        Toast.makeText(activity, "No custom tab compatible browsers found", Toast.LENGTH_SHORT)
+                        Toast.makeText(activity, "Unexpected error, try again", Toast.LENGTH_SHORT)
                                 .show();
                     }
                 }

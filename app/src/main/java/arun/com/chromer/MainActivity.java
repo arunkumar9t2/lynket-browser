@@ -1,6 +1,5 @@
 package arun.com.chromer;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,14 +34,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String CUSTOM_TAB_URL = "https://developer.chrome.com/multidevice/android/customtabs#whentouse";
 
-    private final MyCustomActivityHelper.CustomTabsFallback mCustomTabsFallback =
-            new MyCustomActivityHelper.CustomTabsFallback() {
-                @Override
-                public void openUri(Activity activity, Uri uri) {
-                    Toast.makeText(activity, "No custom tab compatible browsers found", Toast.LENGTH_SHORT)
-                            .show();
-                }
-            };
     private CustomTabsIntent mCustomTabsIntent;
     private SharedPreferences preferences;
     private Drawer drawer;
@@ -95,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
     private void launchCustomTab(String url) {
         mCustomTabsIntent = Util.getCutsomizedTabIntent(getApplicationContext(), url);
         CustomTabHelperFragMine.open(MainActivity.this, mCustomTabsIntent, Uri.parse(url),
-                mCustomTabsFallback);
+                TabActivity.mCustomTabsFallback);
     }
 
     private void openWebPage(String url) {
