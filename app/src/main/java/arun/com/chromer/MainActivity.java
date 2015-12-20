@@ -26,7 +26,9 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import arun.com.chromer.chrometabutilites.CustomTabHelperFragMine;
 import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
+import arun.com.chromer.extra.Licenses;
 import arun.com.chromer.intro.AppIntroMy;
+import de.psdev.licensesdialog.LicensesDialog;
 
 public class MainActivity extends AppCompatActivity {
     private static final String GOOGLE_URL = "http://www.google.com/";
@@ -184,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
                                 launchCustomTab(CUSTOM_TAB_URL);
                                 break;
                             case 6:
-                                startActivity(new Intent(MainActivity.this, AppIntroMy.class));
+                                showLicensesDialog();
                                 break;
                         }
                         return false;
@@ -192,6 +194,14 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .build();
         drawer.setSelection(-1);
+    }
+
+    private void showLicensesDialog() {
+        new LicensesDialog.Builder(this)
+                .setNotices(Licenses.getNotices())
+                .setTitle("Licenses")
+                .build()
+                .showAppCompat();
     }
 
     private void setupCustomTab() {
