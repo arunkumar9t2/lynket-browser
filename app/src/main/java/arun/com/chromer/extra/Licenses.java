@@ -19,18 +19,25 @@ public class Licenses {
         notices.addNotice(notice);
 
 
+        name = "Android Open Source Project";
+        url = "https://source.android.com/";
+        copyright = "Copyright (C) 2008 The Android Open Source Project";
+        license = new ApacheSoftwareLicense20();
+        notice = new Notice(name, url, copyright, license);
+        notices.addNotice(notice);
+
         name = "Material Drawer";
         url = "https://github.com/mikepenz/MaterialDrawer";
-        // copyright = "Copyright 2013 Philip Schiffer <admin@psdev.de>";
+        copyright = "Copyright Mike Penz";
         license = new ApacheSoftwareLicense20();
-        notice = new Notice(name, url, null, license);
+        notice = new Notice(name, url, copyright, license);
         notices.addNotice(notice);
 
         name = "AppIntro";
         url = "https://github.com/PaoloRotolo/AppIntro";
-        // copyright = "Copyright 2013 Philip Schiffer <admin@psdev.de>";
+        copyright = " Copyright 2015 Paolo Rotolo";
         license = new ApacheSoftwareLicense20();
-        notice = new Notice(name, url, null, license);
+        notice = new Notice(name, url, copyright, license);
         notices.addNotice(notice);
 
         return notices;
