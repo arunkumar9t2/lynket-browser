@@ -88,23 +88,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openWebPage(String url) {
-        Uri webpage = Uri.parse(url);
-        Intent activityIntent = new Intent(Intent.ACTION_VIEW, webpage);
-        ResolveInfo defaultViewHandlerInfo = getPackageManager().resolveActivity(activityIntent, 0);
+        Uri googleURI = Uri.parse(url);
+        Intent activityIntent = new Intent(Intent.ACTION_VIEW, googleURI);
+        if (!isDefaultSet(activityIntent)) {
+            if (activityIntent.resolveActivity(getPackageManager()) != null) {
+                startActivity(activityIntent);
+            }
+        } else {
+            Toast.makeText(this, "Already set!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private boolean isDefaultSet(Intent web) {
+        ResolveInfo defaultViewHandlerInfo = getPackageManager().resolveActivity(web, 0);
         String defaultViewHandlerPackageName = null;
         if (defaultViewHandlerInfo != null) {
             defaultViewHandlerPackageName = defaultViewHandlerInfo.activityInfo.packageName;
         }
         if (defaultViewHandlerPackageName != null) {
             if (defaultViewHandlerPackageName.trim().equalsIgnoreCase(getPackageName())) {
-                Toast.makeText(this, "Already set!", Toast.LENGTH_SHORT).show();
-            } else {
-                if (activityIntent.resolveActivity(getPackageManager()) != null) {
-                    startActivity(activityIntent);
-                }
+                return true;
             }
         }
-
+        return false;
     }
 
     private void setupDrawer(Toolbar toolbar) {
