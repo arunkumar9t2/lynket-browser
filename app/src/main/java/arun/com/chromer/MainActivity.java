@@ -10,6 +10,7 @@ import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String GOOGLE_URL = "http://www.google.com/";
 
     private static final String CUSTOM_TAB_URL = "https://developer.chrome.com/multidevice/android/customtabs#whentouse";
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     private CustomTabsIntent mCustomTabsIntent;
     private SharedPreferences preferences;
@@ -109,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (defaultViewHandlerPackageName != null) {
             if (defaultViewHandlerPackageName.trim().equalsIgnoreCase(getPackageName())) {
+                Log.d(TAG, "Chromer defaulted");
                 return true;
             }
         }
@@ -196,16 +199,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupCustomTab() {
-        CustomTabHelperFragMine mCustomTabHelperFragMine = CustomTabHelperFragMine.attachTo(this);
+        final CustomTabHelperFragMine mCustomTabHelperFragMine =
+                CustomTabHelperFragMine.attachTo(this);
         mCustomTabHelperFragMine.setConnectionCallback(
                 new MyCustomActivityHelper.ConnectionCallback() {
                     @Override
                     public void onCustomTabsConnected() {
-
+                        Log.d(TAG, "Connect to custom tab");
+                        try {
+                            Log.d(TAG, "Gave may launch command");
+                            mCustomTabHelperFragMine.mayLaunchUrl(
+                                    Uri.parse(GOOGLE_URL)
+                                    , null, null);
+                        } catch (Exception e) {
+                            // Don't care. Yes.. You heard me.
+                        }
                     }
 
                     @Override
                     public void onCustomTabsDisconnected() {
+                        Log.d(TAG, "Disconnect to custom tab");
                     }
                 });
     }
