@@ -10,8 +10,6 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
-import org.chromium.customtabsclient.KeepAliveService;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +56,7 @@ public class MyCustomTabHelper {
      * Goes through all apps that handle VIEW intents and have a warmup service. Picks
      * the one chosen by the user if there is one, otherwise makes a best effort to return a
      * valid package name.
-     * <p>
+     * <p/>
      * This is <strong>not</strong> threadsafe.
      *
      * @param context {@link Context} to use for accessing {@link PackageManager}.

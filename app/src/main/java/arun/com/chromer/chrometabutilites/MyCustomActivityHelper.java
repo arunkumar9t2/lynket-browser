@@ -9,9 +9,6 @@ import android.support.customtabs.CustomTabsServiceConnection;
 import android.support.customtabs.CustomTabsSession;
 import android.util.Log;
 
-import org.chromium.customtabsclient.ServiceConnection;
-import org.chromium.customtabsclient.ServiceConnectionCallback;
-
 import java.util.List;
 
 /**

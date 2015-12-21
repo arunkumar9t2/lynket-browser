@@ -11,14 +11,12 @@ import android.support.v4.app.FragmentManager;
 
 import java.util.List;
 
-import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment;
-
 /**
  * Created by Arun on 18/12/2015.
  */
 public class CustomTabHelperFragMine extends Fragment {
 
-    private static final String FRAGMENT_TAG = CustomTabsHelperFragment.class.getName();
+    private static final String FRAGMENT_TAG = "Fuck me";
 
     private final MyCustomActivityHelper mCusActivtyHelper = new MyCustomActivityHelper();
 
