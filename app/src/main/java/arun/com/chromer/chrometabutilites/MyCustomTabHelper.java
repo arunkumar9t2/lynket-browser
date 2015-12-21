@@ -1,7 +1,4 @@
-package arun.com.chromer.chrometabutilites;/*
- * Copyright (c) 2015 Zhang Hai <Dreaming.in.Code.ZH@Gmail.com>
- * All Rights Reserved.
- */
+package arun.com.chromer.chrometabutilites;
 
 
 import android.content.Context;
@@ -35,7 +32,7 @@ import java.util.List;
 /**
  * Helper class for Custom Tabs.
  */
-class MyCustomTabHelper {
+public class MyCustomTabHelper {
     private static final String STABLE_PACKAGE = "com.android.chrome";
     private static final String BETA_PACKAGE = "com.chrome.beta";
     private static final String DEV_PACKAGE = "com.chrome.dev";
