@@ -52,10 +52,6 @@ public class CustomTabHelperFragMine extends Fragment {
         return attachTo(fragment.getActivity());
     }
 
-    // Cannot get javadoc to compile, saying "reference not found".
-    /*
-     * @see MyCustomActivityHelper#openCustomTab(Activity, CustomTabsIntent, Uri, MyCustomActivityHelper.CustomTabsFallback)
-     */
     public static void open(Activity activity, CustomTabsIntent intent, Uri uri,
                             MyCustomActivityHelper.CustomTabsFallback fallback) {
         MyCustomActivityHelper.openCustomTab(activity, intent, uri, fallback);

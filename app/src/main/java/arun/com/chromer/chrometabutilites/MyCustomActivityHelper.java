@@ -7,6 +7,7 @@ import android.support.customtabs.CustomTabsClient;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsServiceConnection;
 import android.support.customtabs.CustomTabsSession;
+import android.util.Log;
 
 import org.chromium.customtabsclient.ServiceConnection;
 import org.chromium.customtabsclient.ServiceConnectionCallback;
@@ -18,6 +19,7 @@ import java.util.List;
  */
 public class MyCustomActivityHelper implements ServiceConnectionCallback {
 
+    private static String TAG = MyCustomActivityHelper.class.getSimpleName();
 
     private CustomTabsSession mCustomTabsSession;
     private CustomTabsClient mClient;
@@ -36,18 +38,23 @@ public class MyCustomActivityHelper implements ServiceConnectionCallback {
                                      CustomTabsIntent customTabsIntent,
                                      Uri uri,
                                      CustomTabsFallback fallback) {
+
+        // getting all the packages here
         String packageName = MyCustomTabHelper.getPackageNameToUse(activity);
 
         //If we cant find a package name, it means theres no browser that supports
         //Chrome Custom Tabs installed. So, we fallback to the webview
         if (packageName == null) {
+            Log.d(TAG, "Called fallback since no package found!");
             callFallback(activity, uri, fallback);
         } else {
             customTabsIntent.intent.setPackage(packageName);
             try {
                 customTabsIntent.launchUrl(activity, uri);
+                Log.d(TAG, "Launched url:" + uri.toString());
             } catch (Exception e) {
                 callFallback(activity, uri, fallback);
+                Log.d(TAG, "Called fallback even though package was found, weird");
             }
         }
     }
@@ -64,11 +71,13 @@ public class MyCustomActivityHelper implements ServiceConnectionCallback {
      * @param activity the activity that is connected to the service.
      */
     public void unbindCustomTabsService(Activity activity) {
+        Log.d(TAG, "Attempting to unbind service!");
         if (mConnection == null) return;
         activity.unbindService(mConnection);
         mClient = null;
         mCustomTabsSession = null;
         mConnection = null;
+        Log.d(TAG, "Unbounded service!");
     }
 
     /**
@@ -100,30 +109,37 @@ public class MyCustomActivityHelper implements ServiceConnectionCallback {
      * @param activity the activity to be binded to the service.
      */
     public void bindCustomTabsService(Activity activity) {
+        Log.d(TAG, "Attempting to bind custom tabs service");
         if (mClient != null) return;
 
         String packageName = MyCustomTabHelper.getPackageNameToUse(activity);
         if (packageName == null) return;
 
         mConnection = new ServiceConnection(this);
-        CustomTabsClient.bindCustomTabsService(activity, packageName, mConnection);
+        boolean ok = CustomTabsClient.bindCustomTabsService(activity, packageName, mConnection);
+        if (ok) {
+            Log.d(TAG, "Bound successfully");
+        } else
+            Log.d(TAG, "Did not bind, something wrong");
     }
 
-    // Cannot get javadoc to compile, saying "reference not found".
-    /*
-     * @see CustomTabsSession#mayLaunchUrl(Uri, Bundle, List)
-     */
     public boolean mayLaunchUrl(Uri uri, Bundle extras, List<Bundle> otherLikelyBundles) {
+        Log.d(TAG, "Attempting may launch url");
         if (mClient == null) return false;
 
         CustomTabsSession session = getSession();
         if (session == null) return false;
 
-        return session.mayLaunchUrl(uri, extras, otherLikelyBundles);
+        boolean ok = session.mayLaunchUrl(uri, extras, otherLikelyBundles);
+        if (ok) {
+            Log.d(TAG, "Successfully warmed up with may launch URL");
+        }
+        return ok;
     }
 
     @Override
     public void onServiceConnected(CustomTabsClient client) {
+        Log.d(TAG, "Service connected properly!");
         mClient = client;
         mClient.warmup(0L);
         if (mConnectionCallback != null) mConnectionCallback.onCustomTabsConnected();
@@ -131,6 +147,7 @@ public class MyCustomActivityHelper implements ServiceConnectionCallback {
 
     @Override
     public void onServiceDisconnected() {
+        Log.d(TAG, "Service disconnected!");
         mClient = null;
         mCustomTabsSession = null;
         if (mConnectionCallback != null) mConnectionCallback.onCustomTabsDisconnected();
