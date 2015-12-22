@@ -20,7 +20,7 @@ public class AppIntroMy extends AppIntro {
         // OPTIONAL METHODS
         // Override bar/separator color
         addSlide(AppIntroFragment.newInstance("Chromer",
-                "Chomer allows you to use Chrome's custom tabs feature for browsing everywhere in your phone independent of whether the app supports it.",
+                "Chromer allows you to use Chrome's custom tabs feature, which is an extremely light weight chrome tab for faster and secure browsing experience.",
                 R.drawable.web_hi_res_512,
                 ContextCompat.getColor(this, R.color.colorPrimary)));
         addSlide(AppIntroFragment.newInstance("How to use?",
