@@ -9,6 +9,8 @@ import android.preference.PreferenceManager;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.content.ContextCompat;
 
+import arun.com.chromer.chrometabutilites.ShareBroadcastReceiver;
+
 /**
  * Created by Arun on 17/12/2015.
  */
@@ -69,12 +71,11 @@ class Util {
 
     private static void addShareIntent(Context c, String url, CustomTabsIntent.Builder builder) {
         if (url != null) {
-            Intent shareIntent = new Intent(Intent.ACTION_SEND);
-            shareIntent.putExtra(Intent.EXTRA_TEXT, url);
-            shareIntent.setType("text/plain");
+            Intent shareIntent = new Intent(c, ShareBroadcastReceiver.class);
+            shareIntent.setData(Uri.parse(url));
 
             PendingIntent pendingShareIntent = PendingIntent
-                    .getActivity(c, 0, shareIntent,
+                    .getBroadcast(c, 0, shareIntent,
                             PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
             builder.addMenuItem("Share", pendingShareIntent);
         }

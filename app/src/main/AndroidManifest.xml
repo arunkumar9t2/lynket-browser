@@ -41,6 +41,8 @@
         <service
             android:name=".ClipboardService"
             android:exported="true" />
+        
+        <receiver android:name=".chrometabutilites.ShareBroadcastReceiver" />
     </application>
 
 </manifest>

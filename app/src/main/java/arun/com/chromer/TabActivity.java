@@ -59,7 +59,8 @@ public class TabActivity extends AppCompatActivity {
         }
 
         final String url = getIntent().getData().toString();
-        CustomTabsIntent mCustomTabsIntent = Util.getCutsomizedTabIntent(this, url);
+        CustomTabsIntent mCustomTabsIntent = Util.getCutsomizedTabIntent(
+                getApplicationContext(), url);
 
         mCustomTabActivityHelper = new MyCustomActivityHelper();
         mCustomTabActivityHelper.setConnectionCallback(
