@@ -7,9 +7,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
-import arun.com.chromer.chrometabutilites.CustomTabHelperFragMine;
 import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
 
 public class TabActivity extends AppCompatActivity {
@@ -32,6 +32,20 @@ public class TabActivity extends AppCompatActivity {
                     }
                 }
             };
+    private static final String TAG = TabActivity.class.getSimpleName();
+    private MyCustomActivityHelper mCustomTabActivityHelper;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mCustomTabActivityHelper.bindCustomTabsService(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mCustomTabActivityHelper.unbindCustomTabsService(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,14 +58,23 @@ public class TabActivity extends AppCompatActivity {
             return;
         }
 
-        CustomTabHelperFragMine mCustomTabHelperFragMine = CustomTabHelperFragMine.attachTo(this);
-        CustomTabsIntent mCustomTabsIntent = Util.getCutsomizedTabIntent(this,
-                getIntent().getData().toString());
+        final String url = getIntent().getData().toString();
+        CustomTabsIntent mCustomTabsIntent = Util.getCutsomizedTabIntent(this, url);
 
-        mCustomTabHelperFragMine.setConnectionCallback(
+        mCustomTabActivityHelper = new MyCustomActivityHelper();
+        mCustomTabActivityHelper.setConnectionCallback(
                 new MyCustomActivityHelper.ConnectionCallback() {
                     @Override
                     public void onCustomTabsConnected() {
+                        Log.d(TAG, "Connect to custom tab");
+                        try {
+                            Log.d(TAG, "Gave may launch command");
+                            mCustomTabActivityHelper.mayLaunchUrl(
+                                    Uri.parse(url)
+                                    , null, null);
+                        } catch (Exception e) {
+                            // Don't care. Yes.. You heard me.
+                        }
                     }
 
                     @Override
@@ -60,7 +83,7 @@ public class TabActivity extends AppCompatActivity {
                     }
                 });
 
-        CustomTabHelperFragMine.open(this, mCustomTabsIntent,
+        MyCustomActivityHelper.openCustomTab(this, mCustomTabsIntent,
                 Uri.parse(getIntent().getData().toString()),
                 mCustomTabsFallback);
         finish();

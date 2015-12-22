@@ -28,7 +28,6 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
-import arun.com.chromer.chrometabutilites.CustomTabHelperFragMine;
 import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
 import arun.com.chromer.extra.Licenses;
 import arun.com.chromer.intro.AppIntroMy;
@@ -39,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private static final String CUSTOM_TAB_URL = "https://developer.chrome.com/multidevice/android/customtabs#whentouse";
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    private MyCustomActivityHelper mCustomTabActivityHelper;
 
     private SharedPreferences preferences;
     private View colorView;
@@ -52,9 +53,22 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        mCustomTabActivityHelper.bindCustomTabsService(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mCustomTabActivityHelper.unbindCustomTabsService(this);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -66,17 +80,26 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
         setupDrawer(toolbar);
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.preference_fragment, new PreferenceFragment())
-                .commit();
-
         findViewById(R.id.set_default).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openWebPage(GOOGLE_URL);
             }
         });
+
+        setupFAB();
+
+        setupCustomTab();
+
+        setupColorPicker();
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.preference_fragment, new PreferenceFragment())
+                .commit();
+    }
+
+    private void setupFAB() {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,10 +107,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 launchCustomTab(GOOGLE_URL);
             }
         });
-
-        setupCustomTab();
-
-        setupColorPicker();
     }
 
     private void setupColorPicker() {
@@ -114,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private void launchCustomTab(String url) {
         CustomTabsIntent mCustomTabsIntent = Util.getCutsomizedTabIntent(getApplicationContext(), url);
-        CustomTabHelperFragMine.open(MainActivity.this, mCustomTabsIntent, Uri.parse(url),
+        MyCustomActivityHelper.openCustomTab(this, mCustomTabsIntent, Uri.parse(url),
                 TabActivity.mCustomTabsFallback);
     }
 
@@ -236,16 +255,15 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     private void setupCustomTab() {
-        final CustomTabHelperFragMine mCustomTabHelperFragMine =
-                CustomTabHelperFragMine.attachTo(this);
-        mCustomTabHelperFragMine.setConnectionCallback(
+        mCustomTabActivityHelper = new MyCustomActivityHelper();
+        mCustomTabActivityHelper.setConnectionCallback(
                 new MyCustomActivityHelper.ConnectionCallback() {
                     @Override
                     public void onCustomTabsConnected() {
                         Log.d(TAG, "Connect to custom tab");
                         try {
                             Log.d(TAG, "Gave may launch command");
-                            mCustomTabHelperFragMine.mayLaunchUrl(
+                            mCustomTabActivityHelper.mayLaunchUrl(
                                     Uri.parse(GOOGLE_URL)
                                     , null, null);
                         } catch (Exception e) {
