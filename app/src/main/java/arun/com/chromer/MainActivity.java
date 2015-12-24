@@ -31,6 +31,7 @@ import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
 import arun.com.chromer.extra.Licenses;
 import arun.com.chromer.fragments.PreferenceFragment;
 import arun.com.chromer.intro.AppIntroMy;
+import arun.com.chromer.util.Util;
 import de.psdev.licensesdialog.LicensesDialog;
 
 public class MainActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback {

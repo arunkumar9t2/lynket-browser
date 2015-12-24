@@ -24,9 +24,9 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
-import arun.com.chromer.ExtendedBaseAdapter;
 import arun.com.chromer.R;
-import arun.com.chromer.Util;
+import arun.com.chromer.adapter.ExtendedBaseAdapter;
+import arun.com.chromer.util.Util;
 
 /**
  * Created by Arun on 11/11/2015.

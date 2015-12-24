@@ -1,4 +1,4 @@
-package arun.com.chromer;
+package arun.com.chromer.util;
 
 import android.app.PendingIntent;
 import android.content.Context;
@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import arun.com.chromer.R;
 import arun.com.chromer.chrometabutilites.ShareBroadcastReceiver;
 import arun.com.chromer.services.ClipboardService;
 
