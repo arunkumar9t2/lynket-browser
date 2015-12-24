@@ -84,7 +84,8 @@
                             android:id="@+id/about_author_version_list"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:divider="@null">
+                            android:divider="@null"
+                            android:scrollbars="none">
 
                         </ListView>
 
