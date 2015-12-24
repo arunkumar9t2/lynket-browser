@@ -10,6 +10,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -113,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     private void setupColorPicker() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         final int choosenColor = sharedPreferences.getInt("toolbar_color",
-                getResources().getColor(R.color.primary));
+                ContextCompat.getColor(this, R.color.primary));
         findViewById(R.id.color_picker_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
