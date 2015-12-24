@@ -1,6 +1,5 @@
 package arun.com.chromer;
 
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
@@ -179,13 +178,10 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         new PrimaryDrawerItem().withName("Intro").withIdentifier(4)
                                 .withIcon(GoogleMaterial.Icon.gmd_assignment)
                                 .withSelectable(false),
-                        new PrimaryDrawerItem().withName("More Apps").withIdentifier(1)
-                                .withIcon(GoogleMaterial.Icon.gmd_android)
-                                .withSelectable(false),
                         new PrimaryDrawerItem().withName("Feedback").withIdentifier(2)
                                 .withIcon(GoogleMaterial.Icon.gmd_feedback)
                                 .withSelectable(false),
-                        new PrimaryDrawerItem().withName("Rate").withIdentifier(3)
+                        new PrimaryDrawerItem().withName("Rate on Playstore").withIdentifier(3)
                                 .withIcon(GoogleMaterial.Icon.gmd_rate_review)
                                 .withSelectable(false),
                         new DividerDrawerItem(),
@@ -213,13 +209,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                             return false;
                         int i = drawerItem.getIdentifier();
                         switch (i) {
-                            case 1:
-                                try {
-                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://search?q=pub:Arunkumar")));
-                                } catch (ActivityNotFoundException anfe) {
-                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/search?q=pub:Arunkumar")));
-                                }
-                                break;
                             case 2:
                                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "arunk.beece@gmail.com", null));
                                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Chromer");

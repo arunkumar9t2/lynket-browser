@@ -2,11 +2,16 @@ package arun.com.chromer.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,11 +55,11 @@ public class AboutFragment extends Fragment {
     }
 
     private void populateData(View rootView) {
-        ListView koloretteList = (ListView) rootView.findViewById(R.id.about_app_version_list);
+        ListView chromerList = (ListView) rootView.findViewById(R.id.about_app_version_list);
         ListView authorList = (ListView) rootView.findViewById(R.id.about_author_version_list);
 
         // Loading the header
-        koloretteList.setAdapter(new ExtendedBaseAdapter() {
+        chromerList.setAdapter(new ExtendedBaseAdapter() {
             final Context context = getActivity().getApplicationContext();
 
             @Override
@@ -76,7 +81,7 @@ public class AboutFragment extends Fragment {
                 } else {
                     holder = (ViewHolder) convertView.getTag();
                 }
-                int materialdarkColor = Color.parseColor("#424242");
+                int materialdarkColor = ContextCompat.getColor(context, R.color.material_dark_color);
                 switch (position) {
                     case 0:
                         holder.title.setText("Version");
@@ -143,6 +148,12 @@ public class AboutFragment extends Fragment {
                         holder.subtitle.setText("Coventry, UK");
                         holder.imageView.getLayoutParams().height = (int) getResources().getDimension(R.dimen.arun_height);
                         holder.imageView.getLayoutParams().width = (int) getResources().getDimension(R.dimen.arun_width);
+                        Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.arun);
+                        RoundedBitmapDrawable roundedBitmapDrawable =
+                                RoundedBitmapDrawableFactory.create(getResources(), imageBitmap);
+                        roundedBitmapDrawable.setAntiAlias(true);
+                        roundedBitmapDrawable.setCircular(true);
+                        holder.imageView.setImageDrawable(roundedBitmapDrawable);
                         break;
                     case 1:
                         holder.title.setText("Add to Google+ Circles");
@@ -181,7 +192,7 @@ public class AboutFragment extends Fragment {
             }
         });
 
-        koloretteList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        chromerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
@@ -189,7 +200,7 @@ public class AboutFragment extends Fragment {
                         return;
                     case 1:
                         Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "arunk.beece@gmail.com", null));
-                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Kolorette");
+                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Chromer");
                         getActivity().startActivity(Intent.createChooser(emailIntent, "Send email..."));
                         break;
                     case 2:
