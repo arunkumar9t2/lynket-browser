@@ -140,9 +140,9 @@ public class MyCustomActivityHelper implements ServiceConnectionCallback {
 
         boolean ok = session.mayLaunchUrl(uri, extras, otherLikelyBundles);
         if (ok) {
-            Log.d(TAG, "Successfully warmed up with may launch URL");
+            Log.d(TAG, "Successfully warmed up with may launch URL:" + uri.toString());
         } else {
-            Log.d(TAG, "May launch url was a failure");
+            Log.d(TAG, "May launch url was a failure for " + uri.toString());
         }
         return ok;
     }
