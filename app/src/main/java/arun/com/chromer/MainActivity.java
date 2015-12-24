@@ -201,9 +201,12 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         new SecondaryDrawerItem().withName("Licenses")
                                 .withIcon(GoogleMaterial.Icon.gmd_card_membership)
                                 .withIdentifier(6)
+                                .withSelectable(false),
+                        new SecondaryDrawerItem().withName("About")
+                                .withIcon(GoogleMaterial.Icon.gmd_info_outline)
+                                .withIdentifier(8)
                                 .withSelectable(false)
-                )
-                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                ).withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         if (drawerItem == null)
@@ -239,6 +242,11 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                                 shareIntent.putExtra(Intent.EXTRA_TEXT, "Hey Checkout 'Chromer' for quick and secure browsing experience! Download here https://goo.gl/992ils");
                                 shareIntent.setType("text/plain");
                                 startActivity(Intent.createChooser(shareIntent, "Share via..."));
+                                break;
+                            case 8:
+                                Intent aboutActivityIntent = new Intent(MainActivity.this, AboutAppActivity.class);
+                                startActivity(aboutActivityIntent);
+                                break;
                         }
                         return false;
                     }

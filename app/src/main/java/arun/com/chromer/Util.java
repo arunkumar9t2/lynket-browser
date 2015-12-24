@@ -4,6 +4,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.customtabs.CustomTabsIntent;
@@ -21,7 +22,7 @@ import arun.com.chromer.services.ClipboardService;
 /**
  * Created by Arun on 17/12/2015.
  */
-class Util {
+public class Util {
     private static final String TAG = Util.class.getSimpleName();
 
     public static CustomTabsIntent getCutsomizedTabIntent(
@@ -117,4 +118,25 @@ class Util {
 
         return links;
     }
+
+    public static String getPackageVersion(Context context) {
+        String versionName = null;
+        try {
+            versionName = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            return "";
+        }
+        return versionName;
+    }
+
+    public static boolean isPackageInstalled(Context c, String packagename) {
+        PackageManager pm = c.getPackageManager();
+        try {
+            pm.getPackageInfo(packagename, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
 }

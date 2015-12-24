@@ -59,6 +59,10 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".AboutAppActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
