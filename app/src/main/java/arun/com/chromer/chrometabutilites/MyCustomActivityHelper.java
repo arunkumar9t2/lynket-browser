@@ -3,6 +3,7 @@ package arun.com.chromer.chrometabutilites;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.customtabs.CustomTabsCallback;
 import android.support.customtabs.CustomTabsClient;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsServiceConnection;
@@ -22,6 +23,7 @@ public class MyCustomActivityHelper implements ServiceConnectionCallback {
     private CustomTabsClient mClient;
     private CustomTabsServiceConnection mConnection;
     private ConnectionCallback mConnectionCallback;
+    private NavigationCallback mNavigationCallback;
 
     /**
      * Opens the URL on a Custom Tab if possible. Otherwise fallsback to opening it on a WebView.
@@ -86,7 +88,7 @@ public class MyCustomActivityHelper implements ServiceConnectionCallback {
         if (mClient == null) {
             mCustomTabsSession = null;
         } else if (mCustomTabsSession == null) {
-            mCustomTabsSession = mClient.newSession(null);
+            mCustomTabsSession = mClient.newSession(mNavigationCallback);
         }
         return mCustomTabsSession;
     }
@@ -98,6 +100,15 @@ public class MyCustomActivityHelper implements ServiceConnectionCallback {
      */
     public void setConnectionCallback(ConnectionCallback connectionCallback) {
         this.mConnectionCallback = connectionCallback;
+    }
+
+    /**
+     * Register a Callback to be called when Navigation occurs..
+     *
+     * @param navigationCallback
+     */
+    public void setNavigationCallback(NavigationCallback navigationCallback) {
+        this.mNavigationCallback = navigationCallback;
     }
 
     /**
@@ -130,6 +141,8 @@ public class MyCustomActivityHelper implements ServiceConnectionCallback {
         boolean ok = session.mayLaunchUrl(uri, extras, otherLikelyBundles);
         if (ok) {
             Log.d(TAG, "Successfully warmed up with may launch URL");
+        } else {
+            Log.d(TAG, "May launch url was a failure");
         }
         return ok;
     }
@@ -175,5 +188,12 @@ public class MyCustomActivityHelper implements ServiceConnectionCallback {
          * @param uri      The uri to be opened by the fallback.
          */
         void openUri(Activity activity, Uri uri);
+    }
+
+    private static class NavigationCallback extends CustomTabsCallback {
+        @Override
+        public void onNavigationEvent(int navigationEvent, Bundle extras) {
+            Log.w(TAG, "onNavigationEvent: Code = " + navigationEvent);
+        }
     }
 }

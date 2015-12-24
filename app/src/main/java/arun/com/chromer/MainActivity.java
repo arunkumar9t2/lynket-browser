@@ -266,6 +266,10 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                             mCustomTabActivityHelper.mayLaunchUrl(
                                     Uri.parse(GOOGLE_URL)
                                     , null, null);
+                            mCustomTabActivityHelper.mayLaunchUrl(
+                                    Uri.parse(CUSTOM_TAB_URL)
+                                    , null, null
+                            );
                         } catch (Exception e) {
                             // Don't care. Yes.. You heard me.
                         }
