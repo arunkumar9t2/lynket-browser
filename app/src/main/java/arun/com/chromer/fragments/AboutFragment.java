@@ -25,7 +25,6 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.ExtendedBaseAdapter;
-import arun.com.chromer.MainActivity;
 import arun.com.chromer.R;
 import arun.com.chromer.Util;
 
@@ -82,6 +81,7 @@ public class AboutFragment extends Fragment {
                     holder = (ViewHolder) convertView.getTag();
                 }
                 int materialdarkColor = ContextCompat.getColor(context, R.color.material_dark_color);
+                holder.subtitle.setVisibility(View.VISIBLE);
                 switch (position) {
                     case 0:
                         holder.title.setText("Version");
@@ -92,18 +92,18 @@ public class AboutFragment extends Fragment {
                                 .sizeDp(24));
                         break;
                     case 1:
-                        holder.title.setText("Send Feedback");
-                        holder.subtitle.setText("Report bugs or suggest features");
+                        holder.title.setText("Changelog");
+                        holder.subtitle.setVisibility(View.GONE);
                         holder.imageView.setBackground(new IconicsDrawable(context)
-                                .icon(GoogleMaterial.Icon.gmd_feedback)
+                                .icon(GoogleMaterial.Icon.gmd_track_changes)
                                 .color(materialdarkColor)
                                 .sizeDp(24));
                         break;
                     case 2:
-                        holder.title.setText("Rate on Play Store");
-                        holder.subtitle.setText("Show some love");
+                        holder.title.setText("Join Google+ Community");
+                        holder.subtitle.setText("Share your ideas");
                         holder.imageView.setBackground(new IconicsDrawable(context)
-                                .icon(CommunityMaterial.Icon.cmd_star)
+                                .icon(CommunityMaterial.Icon.cmd_google_circles_communities)
                                 .color(materialdarkColor)
                                 .sizeDp(24));
                         break;
@@ -199,16 +199,13 @@ public class AboutFragment extends Fragment {
                     case 0:
                         return;
                     case 1:
-                        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "arunk.beece@gmail.com", null));
-                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Chromer");
-                        getActivity().startActivity(Intent.createChooser(emailIntent, "Send email..."));
+                        // TODO Changelog!
                         break;
                     case 2:
-                        Util.openPlayStore(getActivity(), getActivity().getPackageName());
+                        // TODO Community link
                         break;
                     case 3:
-                        Intent intent = new Intent(getActivity(), MainActivity.class);
-                        startActivity(intent);
+                        // Donation!!!
                         break;
                 }
             }
