@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         .withDividerBelowHeader(true)
                         .build())
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withName("About").withIdentifier(4)
+                        new PrimaryDrawerItem().withName("Intro").withIdentifier(4)
                                 .withIcon(GoogleMaterial.Icon.gmd_assignment)
                                 .withSelectable(false),
                         new PrimaryDrawerItem().withName("More Apps").withIdentifier(1)
