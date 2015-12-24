@@ -46,6 +46,7 @@
 
         <activity
             android:name=".ShareInterceptActivity"
+            android:excludeFromRecents="true"
             android:label="Open in Chromer">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
