@@ -30,6 +30,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
 import arun.com.chromer.extra.Licenses;
+import arun.com.chromer.fragments.PreferenceFragment;
 import arun.com.chromer.intro.AppIntroMy;
 import de.psdev.licensesdialog.LicensesDialog;
 

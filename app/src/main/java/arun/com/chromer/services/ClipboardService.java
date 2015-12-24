@@ -1,4 +1,4 @@
-package arun.com.chromer;
+package arun.com.chromer.services;
 
 import android.app.IntentService;
 import android.content.ClipData;

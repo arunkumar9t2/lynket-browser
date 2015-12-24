@@ -51,7 +51,7 @@ public class MyCustomActivityHelper implements ServiceConnectionCallback {
                 Log.d(TAG, "Launched url:" + uri.toString());
             } catch (Exception e) {
                 callFallback(activity, uri, fallback);
-                Log.d(TAG, "Called fallback even though package was found, weird");
+                Log.d(TAG, "Called fallback even though package was found, weird Exception :" + e.toString());
             }
         }
     }

@@ -8,13 +8,22 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import arun.com.chromer.chrometabutilites.ShareBroadcastReceiver;
+import arun.com.chromer.services.ClipboardService;
 
 /**
  * Created by Arun on 17/12/2015.
  */
 class Util {
+    private static final String TAG = Util.class.getSimpleName();
+
     public static CustomTabsIntent getCutsomizedTabIntent(
             Context c,
             String url) {
@@ -87,5 +96,25 @@ class Util {
         } catch (android.content.ActivityNotFoundException anfe) {
             context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageName)));
         }
+    }
+
+
+    public static List<String> findURLs(String string) {
+        if (string == null) {
+            return null;
+        }
+        List<String> links = new ArrayList<String>();
+        Matcher m = Pattern.compile("\\b((?:[a-z][\\w-]+:(?:/{1,3}|[a-z0-9%])|www\\d{0,3}[.]|[a-z0-9.\\-]+[.][a-z]{2,4}/)(?:[^\\s()<>]+|\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\))+(?:\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))", Pattern.CASE_INSENSITIVE)
+                .matcher(string);
+        while (m.find()) {
+            String url = m.group();
+            Log.d(TAG, "URL extracted: " + url);
+            if (!url.toLowerCase().matches("^\\w+://.*")) {
+                url = "http://" + url;
+            }
+            links.add(url);
+        }
+
+        return links;
     }
 }
