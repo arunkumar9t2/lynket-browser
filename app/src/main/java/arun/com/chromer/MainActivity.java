@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         .backButton(R.string.md_back_label)  // changes label of the back button
                         .allowUserColorInputAlpha(false)
                         .preselect(choosenColor)
-                        .dynamicButtonColor(true)  // defaults to true, false will disable changing action buttons' color to currently selected color
+                        .dynamicButtonColor(false)  // defaults to true, false will disable changing action buttons' color to currently selected color
                         .show();
             }
         });
