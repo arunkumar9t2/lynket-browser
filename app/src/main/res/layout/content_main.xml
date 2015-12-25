@@ -51,12 +51,31 @@
         android:textColor="@color/material_dark_color"
         android:textSize="12sp" />
 
+    <LinearLayout
+        android:id="@+id/default_provider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="5dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="15dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Choose Default Provider"
+            android:textColor="@color/material_dark_color"
+            android:textSize="16sp" />
+
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/color_picker_button"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_marginTop="15dp"
+        android:background="?android:attr/selectableItemBackground"
         android:paddingLeft="15dp"
         android:paddingRight="15dp">
 

@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -28,7 +29,10 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
+import java.util.List;
+
 import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
+import arun.com.chromer.chrometabutilites.MyCustomTabHelper;
 import arun.com.chromer.extra.Licenses;
 import arun.com.chromer.fragments.PreferenceFragment;
 import arun.com.chromer.intro.AppIntroMy;
@@ -100,10 +104,49 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             }
         });
 
+        setupDefaultProvider();
+
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.preference_fragment, new PreferenceFragment())
                 .commit();
+
+    }
+
+    private void setupDefaultProvider() {
+        findViewById(R.id.default_provider).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String[] packagesArray = new String[0];
+                final List<String> suppPackages = MyCustomTabHelper.
+                        getCustomTabSupportingPackages(getApplicationContext());
+                if (suppPackages != null) {
+                    packagesArray = Util.getAppNameFromPackages(getApplicationContext(), suppPackages);
+                }
+                int choice = -1;
+                String pack = preferences.getString("preferred_package", null);
+                if (suppPackages != null && Util.isPackageInstalled(getApplicationContext(),
+                        pack)) {
+                    choice = suppPackages.indexOf(pack);
+                }
+                new MaterialDialog.Builder(MainActivity.this)
+                        .title("Choose default provider")
+                        .items(packagesArray)
+                        .itemsCallbackSingleChoice(choice,
+                                new MaterialDialog.ListCallbackSingleChoice() {
+                                    @Override
+                                    public boolean onSelection(MaterialDialog dialog, View itemView,
+                                                               int which, CharSequence text) {
+                                        if (suppPackages != null) {
+                                            preferences.edit().putString("preferred_package",
+                                                    suppPackages.get(which)).apply();
+                                        }
+                                        return true;
+                                    }
+                                })
+                        .show();
+            }
+        });
     }
 
     private void setupFAB() {

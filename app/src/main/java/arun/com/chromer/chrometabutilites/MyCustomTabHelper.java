@@ -13,6 +13,8 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import arun.com.chromer.util.Util;
+
 // Copyright 2015 Google Inc. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -63,7 +65,9 @@ public class MyCustomTabHelper {
      * @return The package name recommended to use for connecting to custom tabs related components.
      */
     public static String getPackageNameToUse(Context context) {
-        if (sPackageNameToUse != null) return sPackageNameToUse;
+        if (sPackageNameToUse != null && Util.isPackageInstalled(context, sPackageNameToUse)) {
+            return sPackageNameToUse;
+        }
 
         PackageManager pm = context.getPackageManager();
         // Get default VIEW intent handler.
@@ -106,6 +110,23 @@ public class MyCustomTabHelper {
             sPackageNameToUse = LOCAL_PACKAGE;
         }
         return sPackageNameToUse;
+    }
+
+    public static List<String> getCustomTabSupportingPackages(Context context) {
+        PackageManager pm = context.getPackageManager();
+        Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));
+        // Get all apps that can handle VIEW intents.
+        List<ResolveInfo> resolvedActivityList = pm.queryIntentActivities(activityIntent, PackageManager.MATCH_ALL);
+        List<String> packagesSupportingCustomTabs = new ArrayList<>();
+        for (ResolveInfo info : resolvedActivityList) {
+            Intent serviceIntent = new Intent();
+            serviceIntent.setAction(ACTION_CUSTOM_TABS_CONNECTION);
+            serviceIntent.setPackage(info.activityInfo.packageName);
+            if (pm.resolveService(serviceIntent, 0) != null) {
+                packagesSupportingCustomTabs.add(info.activityInfo.packageName);
+            }
+        }
+        return packagesSupportingCustomTabs;
     }
 
     /**

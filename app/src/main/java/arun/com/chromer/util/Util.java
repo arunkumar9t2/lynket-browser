@@ -4,6 +4,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
@@ -139,5 +140,24 @@ public class Util {
             return false;
         }
     }
+
+    public static String[] getAppNameFromPackages(Context context, List<String> packages) {
+        List<String> appNameList = new ArrayList<>();
+        String[] appNames = new String[0];
+        for (String pack : packages) {
+            final PackageManager pm = context.getPackageManager();
+            ApplicationInfo ai;
+            try {
+                ai = pm.getApplicationInfo(pack, 0);
+            } catch (final PackageManager.NameNotFoundException e) {
+                ai = null;
+            }
+            final String applicationName = (String) (ai != null ? pm.getApplicationLabel(ai) : "(unknown)");
+            appNameList.add(applicationName);
+        }
+        appNames = appNameList.toArray(appNames);
+        return appNames;
+    }
+
 
 }

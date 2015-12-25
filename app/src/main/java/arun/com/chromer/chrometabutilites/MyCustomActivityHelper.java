@@ -1,6 +1,7 @@
 package arun.com.chromer.chrometabutilites;
 
 import android.app.Activity;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsCallback;
@@ -11,6 +12,8 @@ import android.support.customtabs.CustomTabsSession;
 import android.util.Log;
 
 import java.util.List;
+
+import arun.com.chromer.util.Util;
 
 /**
  * Created by Arun on 18/12/2015.
@@ -37,11 +40,22 @@ public class MyCustomActivityHelper implements ServiceConnectionCallback {
                                      CustomTabsIntent customTabsIntent,
                                      Uri uri,
                                      CustomTabsFallback fallback) {
+        // The package name to use
+        String packageName;
 
-        // getting all the packages here
-        String packageName = MyCustomTabHelper.getPackageNameToUse(activity);
-
-        //If we cant find a package name, it means theres no browser that supports
+        // first check user preferred custom provider is there
+        String userPrefProvider = activity.getSharedPreferences(activity.getPackageName(), Context.MODE_PRIVATE)
+                .getString("preferred_package", null);
+        if (userPrefProvider != null && Util.isPackageInstalled(activity, userPrefProvider)) {
+            // TODO optionally check if preferred selection is valid by comparing with all providers
+            Log.d(TAG, "Valid user preferred custom tab provider present");
+            packageName = userPrefProvider;
+        } else {
+            // getting all the packages here
+            Log.d(TAG, "Valid user choice not present, defaulting to conventional method");
+            packageName = MyCustomTabHelper.getPackageNameToUse(activity);
+        }
+        //If we cant find a package name, it means there's no browser that supports
         //Chrome Custom Tabs installed. So, we fallback to the webview
         if (packageName == null) {
             Log.d(TAG, "Called fallback since no package found!");
