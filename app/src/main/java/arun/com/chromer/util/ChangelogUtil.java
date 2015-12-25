@@ -24,7 +24,7 @@ import arun.com.chromer.R;
  * Created by Arun on 25/12/2015.
  */
 public class ChangelogUtil {
-    public static MaterialDialog showChangelogDialog(Activity activity) {
+    public static void showChangelogDialog(Activity activity) {
         MaterialDialog dialog = new MaterialDialog.Builder(activity)
                 .customView(R.layout.changelog_text, true)
                 .title("Changelog")
@@ -40,7 +40,6 @@ public class ChangelogUtil {
                     ));
         }
         dialog.show();
-        return dialog;
     }
 
     public static boolean shouldShowChangelog(Context context) {
@@ -82,12 +81,12 @@ class MyTagHandler implements Html.TagHandler {
      * Keeps track of lists (ol, ul). On bottom of Stack is the outermost list
      * and on top of Stack is the most nested list
      */
-    Stack<String> lists = new Stack<String>();
+    private final Stack<String> lists = new Stack<>();
     /**
      * Tracks indexes of ordered lists so that after a nested list ends
      * we can continue with correct index of outer list
      */
-    Stack<Integer> olNextIndex = new Stack<Integer>();
+    private final Stack<Integer> olNextIndex = new Stack<>();
 
     /**
      * @see android.text.Html
@@ -110,7 +109,6 @@ class MyTagHandler implements Html.TagHandler {
                 text.setSpan(replace, where, len, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
-        return;
     }
 
     /**
@@ -139,7 +137,7 @@ class MyTagHandler implements Html.TagHandler {
         } else if (tag.equalsIgnoreCase("ol")) {
             if (opening) {
                 lists.push(tag);
-                olNextIndex.push(Integer.valueOf(1)).toString();//TODO: add support for lists starting other index than 1
+                olNextIndex.push(1).toString();//TODO: add support for lists starting other index than 1
             } else {
                 lists.pop();
                 olNextIndex.pop().toString();
@@ -153,7 +151,7 @@ class MyTagHandler implements Html.TagHandler {
                 if (parentList.equalsIgnoreCase("ol")) {
                     start(output, new Ol());
                     output.append(olNextIndex.peek().toString() + ". ");
-                    olNextIndex.push(Integer.valueOf(olNextIndex.pop().intValue() + 1));
+                    olNextIndex.push(olNextIndex.pop().intValue() + 1);
                 } else if (parentList.equalsIgnoreCase("ul")) {
                     start(output, new Ul());
                 }

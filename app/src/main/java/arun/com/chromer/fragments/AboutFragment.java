@@ -39,7 +39,7 @@ public class AboutFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static AboutFragment newInstance(int arg) {
+    public static AboutFragment newInstance() {
         AboutFragment fragment = new AboutFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);

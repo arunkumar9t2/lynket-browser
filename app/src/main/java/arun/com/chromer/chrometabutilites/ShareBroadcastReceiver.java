@@ -25,7 +25,7 @@ import android.widget.Toast;
  */
 public class ShareBroadcastReceiver extends BroadcastReceiver {
 
-    public static String TAG = ShareBroadcastReceiver.class.getSimpleName();
+    private static final String TAG = ShareBroadcastReceiver.class.getSimpleName();
 
     @Override
     public void onReceive(Context context, Intent intent) {

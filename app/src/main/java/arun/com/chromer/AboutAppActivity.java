@@ -20,7 +20,7 @@ public class AboutAppActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("About");
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.about_fragment, AboutFragment.newInstance(0))
+                .replace(R.id.about_fragment, AboutFragment.newInstance())
                 .commit();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

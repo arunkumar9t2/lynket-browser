@@ -33,20 +33,40 @@ import arun.com.chromer.payments.SkuDetails;
 
 public class DonateActivity extends AppCompatActivity implements IabBroadcastReceiver.IabBroadcastListener,
         DialogInterface.OnClickListener {
-    static final String COFEE_SKU = "coffee_small";
-    static final String LUNCH_SKU = "lunch_mega";
-    static final String PREMIUM_SKU = "premium_donation";
+    private static final String COFEE_SKU = "coffee_small";
+    private static final String LUNCH_SKU = "lunch_mega";
+    private static final String PREMIUM_SKU = "premium_donation";
     // (arbitrary) request code for the purchase flow
-    static final int RC_REQUEST = 10001;
+    private static final int RC_REQUEST = 10001;
     private static final String TAG = DonateActivity.class.getSimpleName();
     private static boolean mCoffeDone = false;
     private static boolean mLunchDone = false;
     private static boolean mPremiumDone = false;
-    IabHelper mHelper;
+    private IabHelper mHelper;
+    // Called when consumption is complete
+    IabHelper.OnConsumeFinishedListener mConsumeFinishedListener = new IabHelper.OnConsumeFinishedListener() {
+        public void onConsumeFinished(Purchase purchase, IabResult result) {
+            Log.d(TAG, "Consumption finished. Purchase: " + purchase + ", result: " + result);
+
+            // if we were disposed of in the meantime, quit.
+            if (mHelper == null) return;
+
+            // We know this is the "gas" sku because it's the only one we consume,
+            // so we don't check which sku was consumed. If you have more than one
+            // sku, you probably should check...
+            if (result.isSuccess()) {
+                // successfully consumed, so we apply the effects of the item in our
+                // game world's logic, which in our case means filling the gas tank a bit
+                Log.d(TAG, "Consumption successful. Provisioning.");
+            } else {
+            }
+            Log.d(TAG, "End consumption flow.");
+        }
+    };
     // Provides purchase notification while this app is running
-    IabBroadcastReceiver mBroadcastReceiver;
+    private IabBroadcastReceiver mBroadcastReceiver;
     // Callback for when a purchase is finished
-    IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
+    private IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
         public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
             Log.d(TAG, "Purchase finished: " + result + ", purchase: " + purchase);
 
@@ -60,7 +80,7 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
         }
     };
     // Listener that's called when we finish querying the items and subscriptions we own
-    IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
+    private IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
         public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
             Log.d(TAG, "Query inventory finished.");
 
@@ -91,26 +111,6 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
             loadData(list);
         }
     };
-    // Called when consumption is complete
-    IabHelper.OnConsumeFinishedListener mConsumeFinishedListener = new IabHelper.OnConsumeFinishedListener() {
-        public void onConsumeFinished(Purchase purchase, IabResult result) {
-            Log.d(TAG, "Consumption finished. Purchase: " + purchase + ", result: " + result);
-
-            // if we were disposed of in the meantime, quit.
-            if (mHelper == null) return;
-
-            // We know this is the "gas" sku because it's the only one we consume,
-            // so we don't check which sku was consumed. If you have more than one
-            // sku, you probably should check...
-            if (result.isSuccess()) {
-                // successfully consumed, so we apply the effects of the item in our
-                // game world's logic, which in our case means filling the gas tank a bit
-                Log.d(TAG, "Consumption successful. Provisioning.");
-            } else {
-            }
-            Log.d(TAG, "End consumption flow.");
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +127,7 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
 
         Log.d(TAG, "Starting setup.");
         mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+            @SuppressWarnings("unchecked")
             @Override
             public void onIabSetupFinished(IabResult result) {
                 Log.d(TAG, "Setup finished.");

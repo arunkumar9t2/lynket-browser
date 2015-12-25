@@ -20,7 +20,7 @@ import arun.com.chromer.util.Util;
  */
 public class MyCustomActivityHelper implements ServiceConnectionCallback {
 
-    private static String TAG = MyCustomActivityHelper.class.getSimpleName();
+    private static final String TAG = MyCustomActivityHelper.class.getSimpleName();
 
     private CustomTabsSession mCustomTabsSession;
     private CustomTabsClient mClient;
