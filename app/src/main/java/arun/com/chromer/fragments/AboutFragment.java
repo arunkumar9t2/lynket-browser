@@ -146,7 +146,7 @@ public class AboutFragment extends Fragment {
                 switch (position) {
                     case 0:
                         holder.title.setText("Arunkumar");
-                        holder.subtitle.setText("Coventry, UK");
+                        holder.subtitle.setText("Tamilnadu, India");
                         holder.imageView.getLayoutParams().height = (int) getResources().getDimension(R.dimen.arun_height);
                         holder.imageView.getLayoutParams().width = (int) getResources().getDimension(R.dimen.arun_width);
                         Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.arun);
