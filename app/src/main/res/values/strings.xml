@@ -12,6 +12,17 @@
     </string-array>
     
     <string name="changelog_text"><![CDATA[
+<strong>1.3</strong>
+<ul>
+   <li>DONATE option. Please donate if you like this app and to support development:)</li>
+   <li>Share links to open in Chromer</li>
+   <li>For 6.0, select a text link to open in Chromer</li>
+   <li>Option to choose between multiple Chrome versions</li>
+   <li>About screen</li>
+   <li>Link to Chromer G+ community</li>
+   <li>Changelog screen</li>
+   <li>Link to Chrome in case no custom tab provider is found</li>
+</ul>
 <strong>1.2.1</strong>
 <ul>
    <li>Reworked share menu. Direct share enabled for 6.0</li>
