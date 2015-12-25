@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="arun.com.chromer">
 
+    <uses-permission android:name="com.android.vending.BILLING" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -63,6 +64,11 @@
         <activity
             android:name=".AboutAppActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".DonateActivity"
+            android:excludeFromRecents="true"
+            android:theme="@style/DonatePopUp" />
     </application>
 
 </manifest>

@@ -24,6 +24,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
+import arun.com.chromer.DonateActivity;
 import arun.com.chromer.R;
 import arun.com.chromer.adapter.ExtendedBaseAdapter;
 import arun.com.chromer.util.ChangelogUtil;
@@ -208,7 +209,7 @@ public class AboutFragment extends Fragment {
                         getActivity().startActivity(googleIntent);
                         break;
                     case 3:
-                        // Donation!!!
+                        startActivity(new Intent(getActivity(), DonateActivity.class));
                         break;
                 }
             }
