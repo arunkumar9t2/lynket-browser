@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -103,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 .replace(R.id.preference_fragment, new PreferenceFragment())
                 .commit();
 
+        checkAndEducateUser();
     }
 
     private boolean isFirstRun() {
@@ -328,4 +330,22 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         colorView.setBackgroundColor(selectedColor);
         sharedPreferences.edit().putInt("toolbar_color", selectedColor).apply();
     }
+
+    private void checkAndEducateUser() {
+        List packages = MyCustomTabHelper.getCustomTabSupportingPackages(this);
+        if (packages.size() == 0) {
+            new MaterialDialog.Builder(this)
+                    .title("Compatible custom tab provider not found")
+                    .content("Chromer requires you to have any Custom tab compatible browser on your phone. Currently there are no browsers on your phone that supports it. Would you like to install Google Chrome (Free) from play store?")
+                    .positiveText("Install")
+                    .negativeText("No")
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            Util.openPlayStore(MainActivity.this, "com.android.chrome");
+                        }
+                    }).show();
+        }
+    }
+
 }
