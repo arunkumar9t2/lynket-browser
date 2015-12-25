@@ -202,7 +202,9 @@ public class AboutFragment extends Fragment {
                         // TODO Changelog!
                         break;
                     case 2:
-                        // TODO Community link
+                        Intent googleIntent = new Intent(Intent.ACTION_VIEW,
+                                Uri.parse("https://plus.google.com/communities/109754631011301174504"));
+                        getActivity().startActivity(googleIntent);
                         break;
                     case 3:
                         // Donation!!!
