@@ -51,14 +51,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     private SharedPreferences preferences;
     private View colorView;
 
-    private boolean isFirstRun() {
-        if (preferences.getBoolean("firstrun", true)) {
-            preferences.edit().putBoolean("firstrun", false).apply();
-            return true;
-        }
-        return false;
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -111,6 +103,14 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 .replace(R.id.preference_fragment, new PreferenceFragment())
                 .commit();
 
+    }
+
+    private boolean isFirstRun() {
+        if (preferences.getBoolean("firstrun", true)) {
+            preferences.edit().putBoolean("firstrun", false).apply();
+            return true;
+        }
+        return false;
     }
 
     private void setupDefaultProvider() {
@@ -179,12 +179,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         });
         colorView = findViewById(R.id.color_preview);
         colorView.setBackgroundColor(choosenColor);
-    }
-
-    private void launchCustomTab(String url) {
-        CustomTabsIntent mCustomTabsIntent = Util.getCutsomizedTabIntent(getApplicationContext(), url);
-        MyCustomActivityHelper.openCustomTab(this, mCustomTabsIntent, Uri.parse(url),
-                TabActivity.mCustomTabsFallback);
     }
 
     private void openWebPage(String url) {
@@ -274,7 +268,11 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                                 launchCustomTab(CUSTOM_TAB_URL);
                                 break;
                             case 6:
-                                showLicensesDialog();
+                                new LicensesDialog.Builder(MainActivity.this)
+                                        .setNotices(Licenses.getNotices())
+                                        .setTitle("Licenses")
+                                        .build()
+                                        .showAppCompat();
                                 break;
                             case 7:
                                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -294,12 +292,10 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         drawer.setSelection(-1);
     }
 
-    private void showLicensesDialog() {
-        new LicensesDialog.Builder(this)
-                .setNotices(Licenses.getNotices())
-                .setTitle("Licenses")
-                .build()
-                .showAppCompat();
+    private void launchCustomTab(String url) {
+        CustomTabsIntent mCustomTabsIntent = Util.getCutsomizedTabIntent(getApplicationContext(), url);
+        MyCustomActivityHelper.openCustomTab(this, mCustomTabsIntent, Uri.parse(url),
+                TabActivity.mCustomTabsFallback);
     }
 
     private void setupCustomTab() {
