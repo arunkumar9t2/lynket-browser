@@ -32,6 +32,7 @@ import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
 import arun.com.chromer.extra.Licenses;
 import arun.com.chromer.fragments.PreferenceFragment;
 import arun.com.chromer.intro.AppIntroMy;
+import arun.com.chromer.util.ChangelogUtil;
 import arun.com.chromer.util.Util;
 import de.psdev.licensesdialog.LicensesDialog;
 
@@ -80,7 +81,17 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             startActivity(new Intent(this, AppIntroMy.class));
         }
 
+        if (ChangelogUtil.shouldShowChangelog(this)) {
+            ChangelogUtil.showChangelogDialog(this);
+        }
+
         setupDrawer(toolbar);
+
+        setupFAB();
+
+        setupCustomTab();
+
+        setupColorPicker();
 
         findViewById(R.id.set_default).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,12 +99,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 openWebPage(GOOGLE_URL);
             }
         });
-
-        setupFAB();
-
-        setupCustomTab();
-
-        setupColorPicker();
 
         getSupportFragmentManager()
                 .beginTransaction()

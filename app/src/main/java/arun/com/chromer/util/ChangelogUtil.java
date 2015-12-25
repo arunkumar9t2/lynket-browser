@@ -1,6 +1,8 @@
 package arun.com.chromer.util;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.text.Editable;
 import android.text.Html;
 import android.text.Spanned;
@@ -15,6 +17,7 @@ import org.xml.sax.XMLReader;
 
 import java.util.Stack;
 
+import arun.com.chromer.BuildConfig;
 import arun.com.chromer.R;
 
 /**
@@ -38,6 +41,33 @@ public class ChangelogUtil {
         }
         dialog.show();
         return dialog;
+    }
+
+    public static boolean shouldShowChangelog(Context context) {
+        final String PREF_VERSION_CODE_KEY = "version_code";
+        final int DOESNT_EXIST = -1;
+
+        // Get current version code
+        int currentVersionCode = BuildConfig.VERSION_CODE;
+
+        // Get saved version code
+        SharedPreferences prefs = context.getSharedPreferences(
+                context.getPackageName(),
+                Context.MODE_PRIVATE);
+        int savedVersionCode = prefs.getInt(PREF_VERSION_CODE_KEY, DOESNT_EXIST);
+        prefs.edit().putInt(PREF_VERSION_CODE_KEY, currentVersionCode).commit();
+        // Check for first run or upgrade
+        if (currentVersionCode == savedVersionCode) {
+            // This is just a normal run
+            return false;
+        } else if (savedVersionCode == DOESNT_EXIST) {
+            // This is a new install (or the user cleared the shared preferences)
+            return true;
+        } else if (currentVersionCode > savedVersionCode) {
+            // This is an upgrade
+            return true;
+        }
+        return false;
     }
 }
 
