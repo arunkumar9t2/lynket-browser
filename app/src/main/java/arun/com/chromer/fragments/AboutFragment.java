@@ -26,6 +26,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
 import arun.com.chromer.adapter.ExtendedBaseAdapter;
+import arun.com.chromer.util.ChangelogUtil;
 import arun.com.chromer.util.Util;
 
 /**
@@ -199,7 +200,7 @@ public class AboutFragment extends Fragment {
                     case 0:
                         return;
                     case 1:
-                        // TODO Changelog!
+                        ChangelogUtil.showChangelogDialog(getActivity());
                         break;
                     case 2:
                         Intent googleIntent = new Intent(Intent.ACTION_VIEW,

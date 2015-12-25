@@ -10,5 +10,30 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+    
+    <string name="changelog_text"><![CDATA[
+<strong>1.2.1</strong>
+<ul>
+   <li>Reworked share menu. Direct share enabled for 6.0</li>
+</ul>
+<strong>1.2</strong>
+<ul>
+   <li>Change Toolbar color to your liking</li>
+   <li>Configure animations</li>
+   <li>Link to read about chrome custom tabs</li>
+   <li>Option to share Chromer link to others</li>
+   <li>Licenses dialog</li>
+   <li>Tutorial flow performance fixes</li>
+   <li>Icons and imagery updated</li>
+</ul>
+<strong>1.1</strong>
+<ul>
+   <li>Much requested copy and share options</li>
+</ul>
+<strong>1.0</strong>
+<ul>
+   <li>Fixed "no custom tab compatible browser found" issue.</li>
+</ul>
+]]></string>
 
 </resources>
