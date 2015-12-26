@@ -337,11 +337,12 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     private void checkAndEducateUser() {
+        // TODO add automatic detection
         List packages = MyCustomTabHelper.getCustomTabSupportingPackages(this);
         if (packages.size() == 0) {
             new MaterialDialog.Builder(this)
                     .title("Compatible custom tab provider not found")
-                    .content("Chromer requires you to have any Custom tab compatible browser on your phone. Currently there are no browsers on your phone that supports it. Would you like to install Google Chrome (Free) from play store?")
+                    .content("Chromer requires you to have any Custom tab compatible browser on your phone. Currently there are no browsers on your phone that supports it. Would you like to install Google Chrome (Free) from play store? If you already have it, then please update it to latest version.")
                     .positiveText("Install")
                     .negativeText("No")
                     .onPositive(new MaterialDialog.SingleButtonCallback() {

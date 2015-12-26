@@ -64,7 +64,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Choose Default Provider"
+            android:text="Choose default provider"
             android:textColor="@color/material_dark_color"
             android:textSize="16sp" />
 
@@ -83,7 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left|center"
-            android:text="Choose Toolbar color"
+            android:text="Choose toolbar color"
             android:textColor="@color/material_dark_color"
             android:textSize="16sp" />
 
