@@ -82,7 +82,7 @@ public class AboutFragment extends Fragment {
                 } else {
                     holder = (ViewHolder) convertView.getTag();
                 }
-                int materialdarkColor = ContextCompat.getColor(context, R.color.material_dark_color);
+                int materialdarkColor = ContextCompat.getColor(context, R.color.accent);
                 holder.subtitle.setVisibility(View.VISIBLE);
                 switch (position) {
                     case 0:

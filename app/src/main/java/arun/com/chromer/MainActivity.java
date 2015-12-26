@@ -1,5 +1,6 @@
 package arun.com.chromer;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
@@ -284,7 +285,11 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                                 break;
                             case 8:
                                 Intent aboutActivityIntent = new Intent(MainActivity.this, AboutAppActivity.class);
-                                startActivity(aboutActivityIntent);
+                                startActivity(aboutActivityIntent,
+                                        ActivityOptions.makeCustomAnimation(MainActivity.this,
+                                                R.anim.slide_in_right,
+                                                R.anim.slide_out_left).toBundle()
+                                );
                                 break;
                         }
                         return false;
