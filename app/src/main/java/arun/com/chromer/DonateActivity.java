@@ -63,10 +63,8 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
             Log.d(TAG, "End consumption flow.");
         }
     };
-    // Provides purchase notification while this app is running
-    private IabBroadcastReceiver mBroadcastReceiver;
     // Callback for when a purchase is finished
-    private IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
+    private final IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
         public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
             Log.d(TAG, "Purchase finished: " + result + ", purchase: " + purchase);
 
@@ -80,7 +78,7 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
         }
     };
     // Listener that's called when we finish querying the items and subscriptions we own
-    private IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
+    private final IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
         public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
             Log.d(TAG, "Query inventory finished.");
 
@@ -111,6 +109,8 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
             loadData(list);
         }
     };
+    // Provides purchase notification while this app is running
+    private IabBroadcastReceiver mBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
