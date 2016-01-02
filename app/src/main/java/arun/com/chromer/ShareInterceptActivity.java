@@ -59,7 +59,7 @@ public class ShareInterceptActivity extends AppCompatActivity {
     }
 
     private void invalidLink() {
-        Toast.makeText(this, "Invalid link", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.invalid_link), Toast.LENGTH_SHORT).show();
         finish();
     }
 }

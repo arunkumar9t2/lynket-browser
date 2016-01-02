@@ -75,5 +75,7 @@
     <string name="coffee">Coffee</string>
     <string name="lunch">Lunch</string>
     <string name="premimum_donation">Premium Donation</string>
+    <string name="invalid_link">Invalid link</string>
+    <string name="copied">Copied</string>
 
 </resources>

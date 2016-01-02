@@ -9,6 +9,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
 
+import arun.com.chromer.R;
+
 public class ClipboardService extends IntentService {
     public ClipboardService() {
         super("ClipboardService");
@@ -31,7 +33,7 @@ public class ClipboardService extends IntentService {
                         public void run() {
                             Toast.makeText(
                                     ClipboardService.this,
-                                    "Copied " + urlToCopy,
+                                    getString(R.string.copied) + " " + urlToCopy,
                                     Toast.LENGTH_SHORT).show();
                         }
                     });
