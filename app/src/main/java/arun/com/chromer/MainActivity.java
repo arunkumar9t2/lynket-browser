@@ -51,8 +51,9 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private MyCustomActivityHelper mCustomTabActivityHelper;
 
-    private SharedPreferences preferences;
-    private View colorView;
+    private SharedPreferences mPreferences;
+
+    private View mColorView;
 
     @Override
     protected void onStart() {
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        preferences = getSharedPreferences(getPackageName(), MODE_PRIVATE);
+        mPreferences = getSharedPreferences(getPackageName(), MODE_PRIVATE);
 
         if (isFirstRun()) {
             startActivity(new Intent(this, AppIntroMy.class));
@@ -110,8 +111,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     private boolean isFirstRun() {
-        if (preferences.getBoolean("firstrun", true)) {
-            preferences.edit().putBoolean("firstrun", false).apply();
+        if (mPreferences.getBoolean("firstrun", true)) {
+            mPreferences.edit().putBoolean("firstrun", false).apply();
             return true;
         }
         return false;
@@ -128,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                     packagesArray = Util.getAppNameFromPackages(getApplicationContext(), suppPackages);
                 }
                 int choice = -1;
-                String pack = preferences.getString("preferred_package", null);
+                String pack = mPreferences.getString("preferred_package", null);
                 if (suppPackages != null && Util.isPackageInstalled(getApplicationContext(),
                         pack)) {
                     choice = suppPackages.indexOf(pack);
@@ -142,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                                     public boolean onSelection(MaterialDialog dialog, View itemView,
                                                                int which, CharSequence text) {
                                         if (suppPackages != null) {
-                                            preferences.edit().putString("preferred_package",
+                                            mPreferences.edit().putString("preferred_package",
                                                     suppPackages.get(which)).apply();
                                         }
                                         return true;
@@ -181,8 +182,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         .show();
             }
         });
-        colorView = findViewById(R.id.color_preview);
-        colorView.setBackgroundColor(choosenColor);
+        mColorView = findViewById(R.id.color_preview);
+        mColorView.setBackgroundColor(choosenColor);
     }
 
     private void openWebPage(String url) {
@@ -337,7 +338,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     @Override
     public void onColorSelection(@NonNull ColorChooserDialog dialog, @ColorInt int selectedColor) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        colorView.setBackgroundColor(selectedColor);
+        mColorView.setBackgroundColor(selectedColor);
         sharedPreferences.edit().putInt("toolbar_color", selectedColor).apply();
     }
 
