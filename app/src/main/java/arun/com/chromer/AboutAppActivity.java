@@ -24,7 +24,7 @@ public class AboutAppActivity extends AppCompatActivity {
                 .commit();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.primary));
+            getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.primary_dark));
         }
     }
 

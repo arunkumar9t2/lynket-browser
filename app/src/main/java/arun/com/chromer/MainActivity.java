@@ -187,6 +187,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     private void openWebPage(String url) {
+        // TODO Fix default behaviour
         Uri googleURI = Uri.parse(url);
         Intent activityIntent = new Intent(Intent.ACTION_VIEW, googleURI);
         if (!isDefaultSet(activityIntent)) {
