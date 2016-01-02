@@ -18,6 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import arun.com.chromer.R;
+import arun.com.chromer.chrometabutilites.AddHomeShortcutReceiver;
 import arun.com.chromer.chrometabutilites.ShareBroadcastReceiver;
 import arun.com.chromer.services.ClipboardService;
 
@@ -68,7 +69,20 @@ public class Util {
         addShareIntent(c, url, builder);
 
         addCopyItem(c, url, builder);
+
+        addShortcuttoHomescreen(c, url, builder);
         return builder.build();
+    }
+
+    private static void addShortcuttoHomescreen(Context c, String url, CustomTabsIntent.Builder builder) {
+        if (url != null) {
+            Intent addShortcutIntent = new Intent(c, AddHomeShortcutReceiver.class);
+            addShortcutIntent.putExtra(Intent.EXTRA_TEXT, url);
+            PendingIntent addShortcut = PendingIntent
+                    .getBroadcast(c, 0, addShortcutIntent,
+                            PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
+            builder.addMenuItem("Add to homescreen", addShortcut);
+        }
     }
 
     private static void addCopyItem(Context c, String url, CustomTabsIntent.Builder builder) {
