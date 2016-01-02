@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -156,7 +156,7 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
     private void loadData(final List<SkuDetails> details) {
         ListView donateList = (ListView) findViewById(R.id.donate_item_list);
 
-        final String error = "Couldn't load price";
+        final String error = getString(R.string.couldnt_load_price);
 
         donateList.setAdapter(new ExtendedBaseAdapter() {
             final Context context = getApplicationContext();
@@ -183,35 +183,41 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
                 switch (position) {
                     case 0:
                         if (mCoffeDone) setGreen(holder);
-                        holder.title.setText("Coffee");
+                        else setBlack(holder);
+                        holder.title.setText(getString(R.string.coffee));
                         holder.subtitle.setText(details.get(0) != null ?
                                 details.get(0).getPrice() + " " + details.get(0).getPriceCurrencyCode()
                                 : error);
                         holder.imageView.setBackground(new IconicsDrawable(context)
                                 .icon(CommunityMaterial.Icon.cmd_coffee)
-                                .color(Color.parseColor("#795548"))
+                                .color(ContextCompat.getColor(getApplicationContext(),
+                                        R.color.coffee_color))
                                 .sizeDp(24));
                         break;
                     case 1:
                         if (mLunchDone) setGreen(holder);
-                        holder.title.setText("Lunch");
+                        else setBlack(holder);
+                        holder.title.setText(getString(R.string.lunch));
                         holder.subtitle.setText(details.get(1) != null ?
                                 details.get(1).getPrice() + " " + details.get(1).getPriceCurrencyCode()
                                 : error);
                         holder.imageView.setBackground(new IconicsDrawable(context)
                                 .icon(CommunityMaterial.Icon.cmd_food)
-                                .color(Color.parseColor("#FF9800"))
+                                .color(ContextCompat.getColor(getApplicationContext(),
+                                        R.color.lunch_color))
                                 .sizeDp(24));
                         break;
                     case 2:
                         if (mPremiumDone) setGreen(holder);
-                        holder.title.setText("Premium Donation");
+                        else setBlack(holder);
+                        holder.title.setText(getString(R.string.premimum_donation));
                         holder.subtitle.setText(details.get(2) != null ?
                                 details.get(2).getPrice() + " " + details.get(2).getPriceCurrencyCode()
                                 : error);
                         holder.imageView.setBackground(new IconicsDrawable(context)
                                 .icon(CommunityMaterial.Icon.cmd_cash_usd)
-                                .color(Color.parseColor("#8BC34A"))
+                                .color(ContextCompat.getColor(getApplicationContext(),
+                                        (R.color.premium_color)))
                                 .sizeDp(24));
                         break;
                 }
@@ -242,8 +248,17 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
 
     private void setGreen(AboutFragment.ViewHolder holder) {
         if (holder != null) {
-            holder.title.setTextColor(Color.parseColor("#4CAF50"));
-            holder.subtitle.setTextColor(Color.parseColor("#4CAF50"));
+            int color = ContextCompat.getColor(this, R.color.donate_green);
+            holder.title.setTextColor(color);
+            holder.subtitle.setTextColor(color);
+        }
+    }
+
+    private void setBlack(AboutFragment.ViewHolder holder) {
+        if (holder != null) {
+            int color = ContextCompat.getColor(this, R.color.material_dark_color);
+            holder.title.setTextColor(color);
+            holder.subtitle.setTextColor(color);
         }
     }
 

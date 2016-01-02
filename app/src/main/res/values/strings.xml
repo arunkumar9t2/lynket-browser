@@ -71,5 +71,9 @@
     <string name="open_with">Open with...</string>
     <string name="unxp_err">Unexpected error, try again</string>
     <string name="unsupported_link">Not a supported link, try again</string>
+    <string name="couldnt_load_price">Couldn\'t load price</string>
+    <string name="coffee">Coffee</string>
+    <string name="lunch">Lunch</string>
+    <string name="premimum_donation">Premium Donation</string>
 
 </resources>
