@@ -43,10 +43,11 @@ import arun.com.chromer.util.Util;
 import de.psdev.licensesdialog.LicensesDialog;
 
 public class MainActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback {
-    private static final String GOOGLE_URL = "http://www.google.com/";
-
-    private static final String CUSTOM_TAB_URL = "https://developer.chrome.com/multidevice/android/customtabs#whentouse";
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    private static final String GOOGLE_URL = "http://www.google.com/";
+    private static final String CUSTOM_TAB_URL = "https://developer.chrome.com/multidevice/android/customtabs#whentouse";
+    private static final String CHROME_PACKAGE = "com.android.chrome";
 
     private MyCustomActivityHelper mCustomTabActivityHelper;
 
@@ -133,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                     choice = suppPackages.indexOf(pack);
                 }
                 new MaterialDialog.Builder(MainActivity.this)
-                        .title("Choose default provider")
+                        .title(getString(R.string.choose_default_provider))
                         .items(packagesArray)
                         .itemsCallbackSingleChoice(choice,
                                 new MaterialDialog.ListCallbackSingleChoice() {
@@ -176,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         .backButton(R.string.md_back_label)  // changes label of the back button
                         .allowUserColorInputAlpha(false)
                         .preselect(choosenColor)
-                        .dynamicButtonColor(false)  // defaults to true, false will disable changing action buttons' color to currently selected color
+                        .dynamicButtonColor(false)
                         .show();
             }
         });
@@ -222,30 +223,30 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         .withDividerBelowHeader(true)
                         .build())
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withName("Intro").withIdentifier(4)
+                        new PrimaryDrawerItem().withName(getString(R.string.intro)).withIdentifier(4)
                                 .withIcon(GoogleMaterial.Icon.gmd_assignment)
                                 .withSelectable(false),
-                        new PrimaryDrawerItem().withName("Feedback").withIdentifier(2)
+                        new PrimaryDrawerItem().withName(getString(R.string.feedback)).withIdentifier(2)
                                 .withIcon(GoogleMaterial.Icon.gmd_feedback)
                                 .withSelectable(false),
-                        new PrimaryDrawerItem().withName("Rate on Playstore").withIdentifier(3)
+                        new PrimaryDrawerItem().withName(getString(R.string.rate_play_store)).withIdentifier(3)
                                 .withIcon(GoogleMaterial.Icon.gmd_rate_review)
                                 .withSelectable(false),
                         new DividerDrawerItem(),
-                        new SecondaryDrawerItem().withName("More on custom tabs")
+                        new SecondaryDrawerItem().withName(getString(R.string.more_custom_tbs))
                                 .withIcon(GoogleMaterial.Icon.gmd_open_in_new)
                                 .withIdentifier(5)
                                 .withSelectable(false),
-                        new SecondaryDrawerItem().withName("Share")
+                        new SecondaryDrawerItem().withName(getString(R.string.share))
                                 .withIcon(GoogleMaterial.Icon.gmd_share)
-                                .withDescription("Help Chromer grow!")
+                                .withDescription(getString(R.string.help_chromer_grow))
                                 .withIdentifier(7)
                                 .withSelectable(false),
-                        new SecondaryDrawerItem().withName("Licenses")
+                        new SecondaryDrawerItem().withName(getString(R.string.licenses))
                                 .withIcon(GoogleMaterial.Icon.gmd_card_membership)
                                 .withIdentifier(6)
                                 .withSelectable(false),
-                        new SecondaryDrawerItem().withName("About")
+                        new SecondaryDrawerItem().withName(getString(R.string.about))
                                 .withIcon(GoogleMaterial.Icon.gmd_info_outline)
                                 .withIdentifier(8)
                                 .withSelectable(false)
@@ -257,9 +258,11 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         int i = drawerItem.getIdentifier();
                         switch (i) {
                             case 2:
-                                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "arunk.beece@gmail.com", null));
-                                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Chromer");
-                                startActivity(Intent.createChooser(emailIntent, "Send email..."));
+                                Intent emailIntent = new Intent(Intent.ACTION_SENDTO,
+                                        Uri.fromParts("mailto", "arunk.beece@gmail.com", null));
+                                emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+                                startActivity(Intent.createChooser(emailIntent,
+                                        getString(R.string.send_email)));
                                 break;
                             case 3:
                                 Util.openPlayStore(MainActivity.this, getPackageName());
@@ -273,18 +276,20 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                             case 6:
                                 new LicensesDialog.Builder(MainActivity.this)
                                         .setNotices(Licenses.getNotices())
-                                        .setTitle("Licenses")
+                                        .setTitle(R.string.licenses)
                                         .build()
                                         .showAppCompat();
                                 break;
                             case 7:
                                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                                shareIntent.putExtra(Intent.EXTRA_TEXT, "Hey Checkout 'Chromer' for quick and secure browsing experience! Download here https://goo.gl/992ils");
+                                shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text));
                                 shareIntent.setType("text/plain");
-                                startActivity(Intent.createChooser(shareIntent, "Share via..."));
+                                startActivity(Intent.createChooser(shareIntent,
+                                        getString(R.string.share_via)));
                                 break;
                             case 8:
-                                Intent aboutActivityIntent = new Intent(MainActivity.this, AboutAppActivity.class);
+                                Intent aboutActivityIntent = new Intent(MainActivity.this,
+                                        AboutAppActivity.class);
                                 startActivity(aboutActivityIntent,
                                         ActivityOptions.makeCustomAnimation(MainActivity.this,
                                                 R.anim.slide_in_right,
@@ -341,14 +346,14 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         List packages = MyCustomTabHelper.getCustomTabSupportingPackages(this);
         if (packages.size() == 0) {
             new MaterialDialog.Builder(this)
-                    .title("Compatible custom tab provider not found")
-                    .content("Chromer requires you to have any Custom tab compatible browser on your phone. Currently there are no browsers on your phone that supports it. Would you like to install Google Chrome (Free) from play store? If you already have it, then please update it to latest version.")
-                    .positiveText("Install")
-                    .negativeText("No")
+                    .title(getString(R.string.custom_tab_provider_not_found))
+                    .content(getString(R.string.custom_tab_provider_not_found_expln))
+                    .positiveText(getString(R.string.install))
+                    .negativeText(getString(android.R.string.no))
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            Util.openPlayStore(MainActivity.this, "com.android.chrome");
+                            Util.openPlayStore(MainActivity.this, CHROME_PACKAGE);
                         }
                     }).show();
         }

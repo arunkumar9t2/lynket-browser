@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Chromer</string>
+    <string name="share_text">Hey Checkout \'Chromer\' for quick and secure browsing experience! Download here https://goo.gl/992ils</string>
+    <string name="share_via">Share via...</string>
+    <string name="custom_tab_provider_not_found">Compatible custom tab provider not found</string>
+    <string name="custom_tab_provider_not_found_expln">Chromer requires you to have any Custom tab compatible browser on your phone. Currently there are no browsers on your phone that supports it. Would you like to install Google Chrome (Free) from play store? If you already have it, then please update it to latest version.</string>
 
     <string-array name="animationValues">
         <item>Slide Right</item>
@@ -52,5 +56,16 @@
    <li>Fixed "no custom tab compatible browser found" issue.</li>
 </ul>
 ]]></string>
+    <string name="install">Install</string>
+    <string name="licenses">Licenses</string>
+    <string name="about">About</string>
+    <string name="help_chromer_grow">Help Chromer grow!</string>
+    <string name="share">Share</string>
+    <string name="more_custom_tbs">More on custom tabs</string>
+    <string name="rate_play_store">Rate on Playstore</string>
+    <string name="feedback">Feedback</string>
+    <string name="intro">Intro</string>
+    <string name="send_email">Send email...</string>
+    <string name="choose_default_provider">Choose default provider</string>
 
 </resources>
