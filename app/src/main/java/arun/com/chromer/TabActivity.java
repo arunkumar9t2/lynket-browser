@@ -19,21 +19,25 @@ public class TabActivity extends AppCompatActivity {
             new MyCustomActivityHelper.CustomTabsFallback() {
                 @Override
                 public void openUri(Activity activity, Uri uri) {
-                    Toast.makeText(activity,
-                            "Could not open custom tab, falling back to normal browsers"
-                            , Toast.LENGTH_SHORT).show();
-                    try {
-                        activity.startActivity(
-                                Intent.createChooser(
-                                        new Intent(Intent.ACTION_VIEW, uri),
-                                        "Open with.."));
-                    } catch (ActivityNotFoundException e) {
-                        Toast.makeText(activity, "Unexpected error, try again", Toast.LENGTH_SHORT)
-                                .show();
+
+                    if (activity != null) {
+                        Toast.makeText(activity,
+                                activity.getString(R.string.fallback_msg),
+                                Toast.LENGTH_SHORT).show();
+                        try {
+                            activity.startActivity(Intent.createChooser(
+                                    new Intent(Intent.ACTION_VIEW, uri),
+                                    activity.getString(R.string.open_with)));
+                        } catch (ActivityNotFoundException e) {
+                            Toast.makeText(activity,
+                                    activity.getString(R.string.unxp_err), Toast.LENGTH_SHORT)
+                                    .show();
+                        }
                     }
                 }
             };
     private static final String TAG = TabActivity.class.getSimpleName();
+
     private MyCustomActivityHelper mCustomTabActivityHelper;
 
     @Override
@@ -53,7 +57,7 @@ public class TabActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         if (getIntent() == null || getIntent().getData() == null) {
-            Toast.makeText(this, "Not a supported link, try again", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.unsupported_link), Toast.LENGTH_SHORT).show();
             finish();
             // TODO handle no intent later
             return;
