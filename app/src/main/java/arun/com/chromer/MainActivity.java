@@ -1,8 +1,10 @@
 package arun.com.chromer;
 
 import android.app.ActivityOptions;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,13 +13,13 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -97,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         findViewById(R.id.set_default).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openWebPage(GOOGLE_URL);
+                handleDefaultBehaviour();
             }
         });
 
@@ -188,16 +190,26 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     @SuppressWarnings("SameParameterValue")
-    private void openWebPage(String url) {
-        // TODO Fix default behaviour
-        Uri googleURI = Uri.parse(url);
+    private void handleDefaultBehaviour() {
+        Uri googleURI = Uri.parse(GOOGLE_URL);
         Intent activityIntent = new Intent(Intent.ACTION_VIEW, googleURI);
         if (!isDefaultSet(activityIntent)) {
             if (activityIntent.resolveActivity(getPackageManager()) != null) {
+                PackageManager p = getPackageManager();
+                ComponentName cN = new ComponentName(this, DummyActivity.class);
+                p.setComponentEnabledSetting(cN,
+                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                        PackageManager.DONT_KILL_APP);
+
                 startActivity(activityIntent);
+
+                p.setComponentEnabledSetting(cN,
+                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                        PackageManager.DONT_KILL_APP);
             }
         } else {
-            Toast.makeText(this, "Already set!", Toast.LENGTH_SHORT).show();
+            // TODO replace view something more reliable
+            Snackbar.make(mColorView, "Already set!", Snackbar.LENGTH_SHORT).show();
         }
     }
 

@@ -6,6 +6,7 @@
 <br></br>
 <strong>1.4</strong>
 <ul>
+    <li><b>FIX:</b> Setting default will properly ask you to choose from list when other app is set as default</li>
     <li><b>FIX:</b> Copy and share actions now target the current open page instead of first open page.</li>
     <li><b>NEW:</b> Add to home screen option.</li>
 </ul>

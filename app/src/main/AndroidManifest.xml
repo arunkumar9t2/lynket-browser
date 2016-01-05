@@ -11,6 +11,12 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <service android:name=".services.ClipboardService" />
+
+        <receiver android:name=".chrometabutilites.ShareBroadcastReceiver" />
+        <receiver android:name=".chrometabutilites.AddHomeShortcutReceiver" />
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -40,12 +46,6 @@
             android:name=".intro.AppIntroMy"
             android:label="Intro"
             android:theme="@style/AppTheme.NoActionBar" />
-
-        <service android:name=".services.ClipboardService" />
-
-        <receiver android:name=".chrometabutilites.ShareBroadcastReceiver" />
-        <receiver android:name=".chrometabutilites.AddHomeShortcutReceiver" />
-
         <activity
             android:name=".ShareInterceptActivity"
             android:excludeFromRecents="true"
@@ -72,6 +72,20 @@
             android:name=".DonateActivity"
             android:excludeFromRecents="true"
             android:theme="@style/DonatePopUp" />
+
+        <activity
+            android:name=".DummyActivity"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
