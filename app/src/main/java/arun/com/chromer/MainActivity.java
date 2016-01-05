@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                     packagesArray = Util.getAppNameFromPackages(getApplicationContext(), suppPackages);
                 }
                 int choice = -1;
-                String pack = mPreferences.getString("preferred_package", null);
+                String pack = PrefUtil.getPreferredTabApp(MainActivity.this);
                 if (suppPackages != null && Util.isPackageInstalled(getApplicationContext(),
                         pack)) {
                     choice = suppPackages.indexOf(pack);
@@ -140,8 +140,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                                     public boolean onSelection(MaterialDialog dialog, View itemView,
                                                                int which, CharSequence text) {
                                         if (suppPackages != null) {
-                                            mPreferences.edit().putString("preferred_package",
-                                                    suppPackages.get(which)).apply();
+                                            PrefUtil.setPreferredTabApp(MainActivity.this,
+                                                    suppPackages.get(which));
                                         }
                                         return true;
                                     }

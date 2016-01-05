@@ -68,4 +68,17 @@ public class PrefUtil {
                 .getDefaultSharedPreferences(context)
                 .getBoolean(SHOW_TITLE_PREF, true);
     }
+
+    public static String getPreferredTabApp(Context context) {
+        return PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .getString(PREFERRED_PACKAGE, null);
+    }
+
+    public static void setPreferredTabApp(Context context, String string) {
+        PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .edit()
+                .putString(PREFERRED_PACKAGE, string).apply();
+    }
 }
