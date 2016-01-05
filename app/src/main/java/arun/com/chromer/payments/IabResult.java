@@ -23,6 +23,7 @@ package arun.com.chromer.payments;
  * can also inquire whether a result is a success or a failure by
  * calling {@link #isSuccess()} and {@link #isFailure()}.
  */
+@SuppressWarnings("ALL")
 public class IabResult {
     private int mResponse;
     private String mMessage;

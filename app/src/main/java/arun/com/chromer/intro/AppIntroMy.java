@@ -19,24 +19,27 @@ public class AppIntroMy extends AppIntro {
 
         // OPTIONAL METHODS
         // Override bar/separator color
-        addSlide(AppIntroFragment.newInstance("Chromer",
-                "Chromer allows you to use Chrome's custom tabs feature, which is an extremely light weight chrome tab for faster and secure browsing experience.",
+        addSlide(AppIntroFragment.newInstance(getString(R.string.app_name),
+                getString(R.string.intro_1),
                 R.drawable.web_hi_res_512,
                 ContextCompat.getColor(this, R.color.colorPrimary)));
-        addSlide(AppIntroFragment.newInstance("How to use?",
-                "Just set Chromer as your default browser, Chromer will display the link in a non intrusive way. Or choose Chromer when prompted.",
+        addSlide(AppIntroFragment.newInstance(getString(R.string.how_to_use),
+                getString(R.string.intro_2),
                 R.drawable.chromer_default_image,
                 ContextCompat.getColor(this, R.color.colorPrimary)));
-        addSlide(AppIntroFragment.newInstance("Advantages?",
-                "Faster loading, non intrusive, saves data, shared login info from Chrome, auto complete forms and SECURE with latest updates!",
+        addSlide(AppIntroFragment.newInstance(getString(R.string.advantages),
+                getString(R.string.intro_3),
                 R.drawable.advantages,
                 ContextCompat.getColor(this, R.color.colorPrimary)));
-        addSlide(AppIntroFragment.newInstance("That's it!",
-                "Configure Chromer to your liking by launching the main app. Enjoy and share your thoughts!",
+        addSlide(AppIntroFragment.newInstance(getString(R.string.thats_it),
+                getString(R.string.intro_4),
                 R.drawable.smile,
                 ContextCompat.getColor(this, R.color.colorPrimary)));
+
+
         // Hide Skip/Done button
         showSkipButton(false);
+        //noinspection deprecation
         showDoneButton(true);
         showStatusBar(false);
     }

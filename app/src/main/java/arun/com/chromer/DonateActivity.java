@@ -39,7 +39,7 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
     // (arbitrary) request code for the purchase flow
     private static final int RC_REQUEST = 10001;
     private static final String TAG = DonateActivity.class.getSimpleName();
-    private static boolean mCoffeDone = false;
+    private static boolean mCoffeeDone = false;
     private static boolean mLunchDone = false;
     private static boolean mPremiumDone = false;
     private IabHelper mHelper;
@@ -102,7 +102,7 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
             list.add(lunchSku);
             list.add(premiumSku);
 
-            mCoffeDone = inventory.getPurchase(COFEE_SKU) != null;
+            mCoffeeDone = inventory.getPurchase(COFEE_SKU) != null;
             mLunchDone = inventory.getPurchase(LUNCH_SKU) != null;
             mPremiumDone = inventory.getPurchase(PREMIUM_SKU) != null;
 
@@ -182,7 +182,7 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
                 }
                 switch (position) {
                     case 0:
-                        if (mCoffeDone) setGreen(holder);
+                        if (mCoffeeDone) setGreen(holder);
                         else setBlack(holder);
                         holder.title.setText(getString(R.string.coffee));
                         holder.subtitle.setText(details.get(0) != null ?
@@ -226,6 +226,7 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
         });
 
         donateList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @SuppressWarnings("UnnecessaryReturnStatement")
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {

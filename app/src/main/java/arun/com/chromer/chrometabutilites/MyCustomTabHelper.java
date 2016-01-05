@@ -1,12 +1,14 @@
 package arun.com.chromer.chrometabutilites;
 
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -64,6 +66,7 @@ public class MyCustomTabHelper {
      * @param context {@link Context} to use for accessing {@link PackageManager}.
      * @return The package name recommended to use for connecting to custom tabs related components.
      */
+    @TargetApi(Build.VERSION_CODES.M)
     public static String getPackageNameToUse(Context context) {
         if (sPackageNameToUse != null && Util.isPackageInstalled(context, sPackageNameToUse)) {
             return sPackageNameToUse;
@@ -112,6 +115,7 @@ public class MyCustomTabHelper {
         return sPackageNameToUse;
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     public static List<String> getCustomTabSupportingPackages(Context context) {
         PackageManager pm = context.getPackageManager();
         Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));

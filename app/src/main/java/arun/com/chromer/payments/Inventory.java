@@ -24,6 +24,7 @@ import java.util.Map;
  * Represents a block of information about in-app items.
  * An Inventory is returned by such methods as {@link IabHelper#queryInventory}.
  */
+@SuppressWarnings("ALL")
 public class Inventory {
     private Map<String, SkuDetails> mSkuMap = new HashMap<String, SkuDetails>();
     private Map<String, Purchase> mPurchaseMap = new HashMap<String, Purchase>();

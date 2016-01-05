@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -7,7 +8,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:ignore="UselessParent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,7 +45,8 @@
                             android:id="@+id/about_app_version_list"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:divider="@null">
+                            android:divider="@null"
+                            tools:ignore="NestedScrolling">
 
                         </ListView>
 
@@ -71,7 +74,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingBottom="16dp"
-                        android:text="Author"
+                        android:text="@string/author"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         android:textColor="@color/material_dark_color" />
 
@@ -85,7 +88,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:divider="@null"
-                            android:scrollbars="none">
+                            android:scrollbars="none"
+                            tools:ignore="NestedScrolling">
 
                         </ListView>
 

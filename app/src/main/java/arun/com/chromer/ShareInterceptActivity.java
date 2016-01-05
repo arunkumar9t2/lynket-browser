@@ -1,7 +1,9 @@
 package arun.com.chromer;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -16,13 +18,14 @@ public class ShareInterceptActivity extends AppCompatActivity {
 
     private static final String TAG = ShareInterceptActivity.class.getSimpleName();
 
+    @TargetApi(Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         if (intent != null) {
             if (intent.getAction().equalsIgnoreCase(Intent.ACTION_SEND)) {
-                String text = intent.hasExtra(Intent.EXTRA_TEXT) ?
+                @SuppressWarnings("ConstantConditions") String text = intent.hasExtra(Intent.EXTRA_TEXT) ?
                         intent.getExtras().getCharSequence(Intent.EXTRA_TEXT).toString() : null;
                 Log.d(TAG, "Intent. Text: " + text);
                 findAndOpenLink(text);

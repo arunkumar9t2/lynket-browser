@@ -28,16 +28,16 @@ import arun.com.chromer.services.ClipboardService;
 public class Util {
     private static final String TAG = Util.class.getSimpleName();
 
-    public static CustomTabsIntent getCutsomizedTabIntent(
+    public static CustomTabsIntent getCustomizedTabIntent(
             Context c,
             String url) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(c);
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
 
         if (sharedPreferences.getBoolean("toolbar_color_pref", true)) {
-            final int choosenColor = sharedPreferences.getInt("toolbar_color",
+            final int chosenColor = sharedPreferences.getInt("toolbar_color",
                     ContextCompat.getColor(c, R.color.colorPrimary));
-            builder.setToolbarColor(choosenColor);
+            builder.setToolbarColor(chosenColor);
         }
 
         if (sharedPreferences.getBoolean("animations_pref", true)) {
@@ -81,7 +81,8 @@ public class Util {
             PendingIntent addShortcut = PendingIntent
                     .getBroadcast(c, 0, addShortcutIntent,
                             PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
-            builder.addMenuItem("Add to homescreen", addShortcut);
+
+            builder.addMenuItem(c.getString(R.string.add_to_homescreen), addShortcut);
         }
     }
 
@@ -91,19 +92,18 @@ public class Util {
             clipboardIntent.putExtra(Intent.EXTRA_TEXT, url);
             PendingIntent serviceIntent = PendingIntent.getService(c, 0, clipboardIntent,
                     PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
-            builder.addMenuItem("Copy link", serviceIntent);
+            builder.addMenuItem(c.getString(R.string.copy_link), serviceIntent);
         }
     }
 
     private static void addShareIntent(Context c, String url, CustomTabsIntent.Builder builder) {
         if (url != null) {
             Intent shareIntent = new Intent(c, ShareBroadcastReceiver.class);
-            shareIntent.setData(Uri.parse(url));
 
             PendingIntent pendingShareIntent = PendingIntent
                     .getBroadcast(c, 0, shareIntent,
                             PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
-            builder.addMenuItem("Share", pendingShareIntent);
+            builder.addMenuItem(c.getString(R.string.share), pendingShareIntent);
         }
     }
 
@@ -138,7 +138,10 @@ public class Util {
     public static String getPackageVersion(Context context) {
         String versionName;
         try {
-            versionName = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+            versionName = context.getPackageManager().getPackageInfo(
+                    context.getPackageName(),
+                    0)
+                    .versionName;
         } catch (PackageManager.NameNotFoundException e) {
             return "";
         }

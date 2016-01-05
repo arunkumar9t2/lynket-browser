@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+        <string name="changelog_text"><![CDATA[
+<strong>You can view this again in the about screen.</strong>
+<br></br>
+<strong>1.3</strong>
+<ul>
+   <li><b>DONATE option.</b> Please donate if you like this app and to support development:)</li>
+   <li>Share links to open in Chromer</li>
+   <li>For 6.0, select a text link to open in Chromer</li>
+   <li>Option to choose between multiple Chrome versions</li>
+   <li>About screen</li>
+   <li>Link to Chromer G+ community</li>
+   <li>Changelog screen</li>
+   <li>Link to Chrome in case no custom tab provider is found</li>
+</ul>
+<br></br>
+<strong>1.2.1</strong>
+<ul>
+   <li>Reworked share menu. Direct share enabled for 6.0</li>
+</ul>
+<br></br>
+<strong>1.2</strong>
+<ul>
+   <li>Change Toolbar color to your liking</li>
+   <li>Configure animations</li>
+   <li>Link to read about chrome custom tabs</li>
+   <li>Option to share Chromer link to others</li>
+   <li>Licenses dialog</li>
+   <li>Tutorial flow performance fixes</li>
+   <li>Icons and imagery updated</li>
+</ul>
+<br></br>
+<strong>1.1</strong>
+<ul>
+   <li>Much requested copy and share options</li>
+</ul>
+<br></br>
+<strong>1.0</strong>
+<ul>
+   <li>Fixed "no custom tab compatible browser found" issue.</li>
+</ul>
+]]></string>
+</resources>

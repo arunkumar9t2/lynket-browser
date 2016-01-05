@@ -41,9 +41,7 @@
             android:label="Intro"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <service
-            android:name=".services.ClipboardService"
-            android:exported="true" />
+        <service android:name=".services.ClipboardService" />
 
         <receiver android:name=".chrometabutilites.ShareBroadcastReceiver" />
         <receiver android:name=".chrometabutilites.AddHomeShortcutReceiver" />

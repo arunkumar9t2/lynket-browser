@@ -9,4 +9,8 @@
     <color name="coffee_color">#795548</color>
     <color name="lunch_color">#FF9800</color>
     <color name="premium_color">#8BC34A</color>
+    <color name="google_plus">#dc4e41</color>
+    <color name="twitter">#55acee</color>
+    <color name="linkedin">#0077b5</color>
+    <color name="playstore_green">#0f9d58</color>
 </resources>

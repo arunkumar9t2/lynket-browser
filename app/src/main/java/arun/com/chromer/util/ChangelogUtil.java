@@ -54,7 +54,7 @@ public class ChangelogUtil {
                 context.getPackageName(),
                 Context.MODE_PRIVATE);
         int savedVersionCode = prefs.getInt(PREF_VERSION_CODE_KEY, DOESNT_EXIST);
-        prefs.edit().putInt(PREF_VERSION_CODE_KEY, currentVersionCode).commit();
+        prefs.edit().putInt(PREF_VERSION_CODE_KEY, currentVersionCode).apply();
         // Check for first run or upgrade
         if (currentVersionCode == savedVersionCode) {
             // This is just a normal run
@@ -126,6 +126,7 @@ class MyTagHandler implements Html.TagHandler {
         return objs[objs.length - 1];
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public void handleTag(boolean opening, String tag, Editable output, XMLReader xmlReader) {
         if (tag.equalsIgnoreCase("ul")) {

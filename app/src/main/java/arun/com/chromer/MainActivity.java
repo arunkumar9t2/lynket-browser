@@ -39,6 +39,7 @@ import arun.com.chromer.extra.Licenses;
 import arun.com.chromer.fragments.PreferenceFragment;
 import arun.com.chromer.intro.AppIntroMy;
 import arun.com.chromer.util.ChangelogUtil;
+import arun.com.chromer.util.StringConstants;
 import arun.com.chromer.util.Util;
 import de.psdev.licensesdialog.LicensesDialog;
 
@@ -186,6 +187,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         mColorView.setBackgroundColor(choosenColor);
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void openWebPage(String url) {
         // TODO Fix default behaviour
         Uri googleURI = Uri.parse(url);
@@ -261,7 +263,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         switch (i) {
                             case 2:
                                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO,
-                                        Uri.fromParts("mailto", "arunk.beece@gmail.com", null));
+                                        Uri.fromParts("mailto", StringConstants.MAILID, null));
                                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
                                 startActivity(Intent.createChooser(emailIntent,
                                         getString(R.string.send_email)));
@@ -307,7 +309,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     private void launchCustomTab(String url) {
-        CustomTabsIntent mCustomTabsIntent = Util.getCutsomizedTabIntent(getApplicationContext(), url);
+        CustomTabsIntent mCustomTabsIntent = Util.getCustomizedTabIntent(getApplicationContext(), url);
         MyCustomActivityHelper.openCustomTab(this, mCustomTabsIntent, Uri.parse(url),
                 TabActivity.mCustomTabsFallback);
     }

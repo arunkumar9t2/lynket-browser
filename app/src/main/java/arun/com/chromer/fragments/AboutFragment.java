@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -28,6 +27,7 @@ import arun.com.chromer.DonateActivity;
 import arun.com.chromer.R;
 import arun.com.chromer.adapter.ExtendedBaseAdapter;
 import arun.com.chromer.util.ChangelogUtil;
+import arun.com.chromer.util.StringConstants;
 import arun.com.chromer.util.Util;
 
 /**
@@ -86,7 +86,7 @@ public class AboutFragment extends Fragment {
                 holder.subtitle.setVisibility(View.VISIBLE);
                 switch (position) {
                     case 0:
-                        holder.title.setText("Version");
+                        holder.title.setText(R.string.version);
                         holder.subtitle.setText(Util.getPackageVersion(context));
                         holder.imageView.setBackground(new IconicsDrawable(context)
                                 .icon(GoogleMaterial.Icon.gmd_info_outline)
@@ -94,7 +94,7 @@ public class AboutFragment extends Fragment {
                                 .sizeDp(24));
                         break;
                     case 1:
-                        holder.title.setText("Changelog");
+                        holder.title.setText(R.string.changelog);
                         holder.subtitle.setVisibility(View.GONE);
                         holder.imageView.setBackground(new IconicsDrawable(context)
                                 .icon(GoogleMaterial.Icon.gmd_track_changes)
@@ -102,16 +102,16 @@ public class AboutFragment extends Fragment {
                                 .sizeDp(24));
                         break;
                     case 2:
-                        holder.title.setText("Join Google+ Community");
-                        holder.subtitle.setText("Share your ideas");
+                        holder.title.setText(R.string.join_google_plus);
+                        holder.subtitle.setText(R.string.share_ideas);
                         holder.imageView.setBackground(new IconicsDrawable(context)
                                 .icon(CommunityMaterial.Icon.cmd_google_circles_communities)
                                 .color(materialdarkColor)
                                 .sizeDp(24));
                         break;
                     case 3:
-                        holder.title.setText("Support Development");
-                        holder.subtitle.setText("Consider a donation");
+                        holder.title.setText(R.string.support_development);
+                        holder.subtitle.setText(R.string.consider_donation);
                         holder.imageView.setBackground(new IconicsDrawable(context)
                                 .icon(GoogleMaterial.Icon.gmd_favorite)
                                 .color(materialdarkColor)
@@ -146,8 +146,8 @@ public class AboutFragment extends Fragment {
                 }
                 switch (position) {
                     case 0:
-                        holder.title.setText("Arunkumar");
-                        holder.subtitle.setText("Tamilnadu, India");
+                        holder.title.setText(StringConstants.ME);
+                        holder.subtitle.setText(StringConstants.LOCATION);
                         holder.imageView.getLayoutParams().height = (int) getResources().getDimension(R.dimen.arun_height);
                         holder.imageView.getLayoutParams().width = (int) getResources().getDimension(R.dimen.arun_width);
                         Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.arun);
@@ -158,35 +158,35 @@ public class AboutFragment extends Fragment {
                         holder.imageView.setImageDrawable(roundedBitmapDrawable);
                         break;
                     case 1:
-                        holder.title.setText("Add to Google+ Circles");
+                        holder.title.setText(R.string.add_to_circles);
                         holder.subtitle.setVisibility(View.GONE);
                         holder.imageView.setBackground(new IconicsDrawable(context)
                                 .icon(CommunityMaterial.Icon.cmd_google_circles)
-                                .color(Color.parseColor("#dc4e41"))
+                                .color(ContextCompat.getColor(getActivity(), R.color.google_plus))
                                 .sizeDp(24));
                         break;
                     case 2:
-                        holder.title.setText("Follow on Twitter");
+                        holder.title.setText(R.string.follow_twitter);
                         holder.subtitle.setVisibility(View.GONE);
                         holder.imageView.setBackground(new IconicsDrawable(context)
                                 .icon(CommunityMaterial.Icon.cmd_twitter)
-                                .color(Color.parseColor("#55acee"))
+                                .color(ContextCompat.getColor(getActivity(), R.color.twitter))
                                 .sizeDp(24));
                         break;
                     case 3:
-                        holder.title.setText("Connect on LinkedIn");
+                        holder.title.setText(R.string.connect_linkedIn);
                         holder.subtitle.setVisibility(View.GONE);
                         holder.imageView.setBackground(new IconicsDrawable(context)
                                 .icon(CommunityMaterial.Icon.cmd_linkedin_box)
-                                .color(Color.parseColor("#0077b5"))
+                                .color(ContextCompat.getColor(getActivity(), R.color.linkedin))
                                 .sizeDp(24));
                         break;
                     case 4:
-                        holder.title.setText("More apps");
+                        holder.title.setText(R.string.more_apps);
                         holder.subtitle.setVisibility(View.GONE);
                         holder.imageView.setBackground(new IconicsDrawable(context)
                                 .icon(CommunityMaterial.Icon.cmd_google_play)
-                                .color(Color.parseColor("#0f9d58"))
+                                .color(ContextCompat.getColor(getActivity(), R.color.playstore_green))
                                 .sizeDp(24));
                         break;
                 }

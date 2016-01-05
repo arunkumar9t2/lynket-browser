@@ -19,6 +19,7 @@ import android.support.customtabs.CustomTabsClient;
 /**
  * Callback for events when connecting and disconnecting from Custom Tabs Service.
  */
+@SuppressWarnings("WeakerAccess")
 public interface ServiceConnectionCallback {
     /**
      * Called when the service is connected.

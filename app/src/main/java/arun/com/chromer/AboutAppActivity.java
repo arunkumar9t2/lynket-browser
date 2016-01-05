@@ -15,14 +15,19 @@ public class AboutAppActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_app);
+
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("About");
+        getSupportActionBar().setTitle(getString(R.string.about));
+
+        // Replace the fragment
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.about_fragment, AboutFragment.newInstance())
                 .commit();
 
+        // Color status bar for lollipop
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.primary_dark));
         }
@@ -31,6 +36,7 @@ public class AboutAppActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            // For finishing activity on clicking up caret
             finish();
             return true;
         }

@@ -24,8 +24,10 @@ import java.lang.ref.WeakReference;
  * Implementation for the CustomTabsServiceConnection that avoids leaking the
  * ServiceConnectionCallback
  */
+@SuppressWarnings("WeakerAccess")
 public class ServiceConnection extends CustomTabsServiceConnection {
     // A weak reference to the ServiceConnectionCallback to avoid leaking it.
+    @SuppressWarnings("CanBeFinal")
     private WeakReference<ServiceConnectionCallback> mConnectionCallback;
 
     public ServiceConnection(ServiceConnectionCallback connectionCallback) {

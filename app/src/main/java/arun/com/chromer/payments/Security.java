@@ -39,6 +39,7 @@ import arun.com.chromer.BuildConfig;
  * make it harder for an attacker to replace the code with stubs that treat all
  * purchases as verified.
  */
+@SuppressWarnings("WeakerAccess")
 public class Security {
     private static final String TAG = "IABUtil/Security";
 

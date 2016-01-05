@@ -1,10 +1,4 @@
 <resources>
-    <string name="app_name">Chromer</string>
-    <string name="share_text">Hey Checkout \'Chromer\' for quick and secure browsing experience! Download here https://goo.gl/992ils</string>
-    <string name="share_via">Share via...</string>
-    <string name="custom_tab_provider_not_found">Compatible custom tab provider not found</string>
-    <string name="custom_tab_provider_not_found_expln">Chromer requires you to have any Custom tab compatible browser on your phone. Currently there are no browsers on your phone that supports it. Would you like to install Google Chrome (Free) from play store? If you already have it, then please update it to latest version.</string>
-
     <string-array name="animationValues">
         <item>Slide Right</item>
         <item>Slide Up</item>
@@ -14,48 +8,13 @@
         <item>1</item>
         <item>2</item>
     </string-array>
-    
-    <string name="changelog_text"><![CDATA[
-<strong>You can view this again in the about screen.</strong>
-<br></br>
-<strong>1.3</strong>
-<ul>
-   <li><b>DONATE option.</b> Please donate if you like this app and to support development:)</li>
-   <li>Share links to open in Chromer</li>
-   <li>For 6.0, select a text link to open in Chromer</li>
-   <li>Option to choose between multiple Chrome versions</li>
-   <li>About screen</li>
-   <li>Link to Chromer G+ community</li>
-   <li>Changelog screen</li>
-   <li>Link to Chrome in case no custom tab provider is found</li>
-</ul>
-<br></br>
-<strong>1.2.1</strong>
-<ul>
-   <li>Reworked share menu. Direct share enabled for 6.0</li>
-</ul>
-<br></br>
-<strong>1.2</strong>
-<ul>
-   <li>Change Toolbar color to your liking</li>
-   <li>Configure animations</li>
-   <li>Link to read about chrome custom tabs</li>
-   <li>Option to share Chromer link to others</li>
-   <li>Licenses dialog</li>
-   <li>Tutorial flow performance fixes</li>
-   <li>Icons and imagery updated</li>
-</ul>
-<br></br>
-<strong>1.1</strong>
-<ul>
-   <li>Much requested copy and share options</li>
-</ul>
-<br></br>
-<strong>1.0</strong>
-<ul>
-   <li>Fixed "no custom tab compatible browser found" issue.</li>
-</ul>
-]]></string>
+
+
+    <string name="app_name">Chromer</string>
+    <string name="share_text">Hey Checkout \'Chromer\' for quick and secure browsing experience! Download here https://goo.gl/992ils</string>
+    <string name="share_via">Share via…</string>
+    <string name="custom_tab_provider_not_found">Compatible custom tab provider not found</string>
+    <string name="custom_tab_provider_not_found_expln">Chromer requires you to have any Custom tab compatible browser on your phone. Currently there are no browsers on your phone that supports it. Would you like to install Google Chrome (Free) from play store? If you already have it, then please update it to latest version.</string>
     <string name="install">Install</string>
     <string name="licenses">Licenses</string>
     <string name="about">About</string>
@@ -65,10 +24,10 @@
     <string name="rate_play_store">Rate on Playstore</string>
     <string name="feedback">Feedback</string>
     <string name="intro">Intro</string>
-    <string name="send_email">Send email...</string>
+    <string name="send_email">Send email…</string>
     <string name="choose_default_provider">Choose default provider</string>
     <string name="fallback_msg">Could not open custom tab, falling back to normal browsers</string>
-    <string name="open_with">Open with...</string>
+    <string name="open_with">Open with…</string>
     <string name="unxp_err">Unexpected error, try again</string>
     <string name="unsupported_link">Not a supported link, try again</string>
     <string name="couldnt_load_price">Couldn\'t load price</string>
@@ -77,5 +36,24 @@
     <string name="premimum_donation">Premium Donation</string>
     <string name="invalid_link">Invalid link</string>
     <string name="copied">Copied</string>
-
+    <string name="copy_link">Copy link</string>
+    <string name="add_to_homescreen">Add to homescreen</string>
+    <string name="intro_1">Chromer allows you to use Chrome\'s custom tabs feature, which is an extremely light weight chrome tab for faster and secure browsing experience.</string>
+    <string name="how_to_use">How to use?</string>
+    <string name="intro_2">Just set Chromer as your default browser, Chromer will display the link in a non intrusive way. Or choose Chromer when prompted.</string>
+    <string name="advantages">Advantages?</string>
+    <string name="intro_3">Faster loading, non intrusive, saves data, shared login info from Chrome, auto complete forms and SECURE with latest updates!</string>
+    <string name="thats_it">That\'s it!</string>
+    <string name="intro_4">Configure Chromer to your liking by launching the main app. Enjoy and share your thoughts!</string>
+    <string name="version">Version</string>
+    <string name="changelog">Changelog</string>
+    <string name="join_google_plus">Join Google+ Community</string>
+    <string name="share_ideas">Share your ideas!</string>
+    <string name="support_development">Support Development</string>
+    <string name="consider_donation">Consider a donation</string>
+    <string name="add_to_circles">Add to Google+ Circles</string>
+    <string name="follow_twitter">Follow on Twitter</string>
+    <string name="connect_linkedIn">Connect on LinkedIn</string>
+    <string name="more_apps">More apps</string>
+    <string name="author">Author</string>
 </resources>

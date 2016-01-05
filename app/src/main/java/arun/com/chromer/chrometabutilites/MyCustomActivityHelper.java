@@ -36,6 +36,7 @@ public class MyCustomActivityHelper implements ServiceConnectionCallback {
      * @param uri              the Uri to be opened.
      * @param fallback         a CustomTabsFallback to be used if Custom Tabs is not available.
      */
+    @SuppressWarnings("SameParameterValue")
     public static void openCustomTab(Activity activity,
                                      CustomTabsIntent customTabsIntent,
                                      Uri uri,
@@ -98,6 +99,7 @@ public class MyCustomActivityHelper implements ServiceConnectionCallback {
      *
      * @return a CustomTabsSession.
      */
+    @SuppressWarnings("WeakerAccess")
     public CustomTabsSession getSession() {
         if (mClient == null) {
             mCustomTabsSession = null;
@@ -145,6 +147,7 @@ public class MyCustomActivityHelper implements ServiceConnectionCallback {
             Log.d(TAG, "Did not bind, something wrong");
     }
 
+    @SuppressWarnings("SameParameterValue")
     public boolean mayLaunchUrl(Uri uri, Bundle extras, List<Bundle> otherLikelyBundles) {
         Log.d(TAG, "Attempting may launch url");
         if (mClient == null) return false;
