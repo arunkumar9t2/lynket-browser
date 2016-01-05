@@ -37,9 +37,21 @@ public class AboutAppActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             // For finishing activity on clicking up caret
-            finish();
+            finishWithTransistion();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onBackPressed() {
+        finishWithTransistion();
+        super.onBackPressed();
+    }
+
+    private void finishWithTransistion() {
+        finish();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+
 }
