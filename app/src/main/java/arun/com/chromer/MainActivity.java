@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.preference_fragment, new PreferenceFragment())
+                .replace(R.id.preference_fragment, PreferenceFragment.newInstance())
                 .commit();
 
         checkAndEducateUser();
