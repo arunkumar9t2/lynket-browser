@@ -3,6 +3,13 @@
         <string name="changelog_text"><![CDATA[
 <strong>You can view this again in the about screen.</strong>
 <br></br>
+<br></br>
+<strong>1.4</strong>
+<ul>
+    <li><b>FIX:</b> Copy and share actions now target the current open page instead of first open page.</li>
+    <li><b>NEW:</b> Add to home screen option.</li>
+</ul>
+<br></br>
 <strong>1.3</strong>
 <ul>
    <li><b>DONATE option.</b> Please donate if you like this app and to support development:)</li>

@@ -77,7 +77,6 @@ public class Util {
     private static void addShortcuttoHomescreen(Context c, String url, CustomTabsIntent.Builder builder) {
         if (url != null) {
             Intent addShortcutIntent = new Intent(c, AddHomeShortcutReceiver.class);
-            addShortcutIntent.putExtra(Intent.EXTRA_TEXT, url);
             PendingIntent addShortcut = PendingIntent
                     .getBroadcast(c, 0, addShortcutIntent,
                             PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
@@ -89,7 +88,6 @@ public class Util {
     private static void addCopyItem(Context c, String url, CustomTabsIntent.Builder builder) {
         if (url != null) {
             Intent clipboardIntent = new Intent(c, ClipboardService.class);
-            clipboardIntent.putExtra(Intent.EXTRA_TEXT, url);
             PendingIntent serviceIntent = PendingIntent.getService(c, 0, clipboardIntent,
                     PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
             builder.addMenuItem(c.getString(R.string.copy_link), serviceIntent);
@@ -99,7 +97,6 @@ public class Util {
     private static void addShareIntent(Context c, String url, CustomTabsIntent.Builder builder) {
         if (url != null) {
             Intent shareIntent = new Intent(c, ShareBroadcastReceiver.class);
-
             PendingIntent pendingShareIntent = PendingIntent
                     .getBroadcast(c, 0, shareIntent,
                             PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);

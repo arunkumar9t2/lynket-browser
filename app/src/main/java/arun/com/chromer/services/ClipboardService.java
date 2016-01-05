@@ -18,32 +18,31 @@ public class ClipboardService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        try {
-            if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
-                final String urlToCopy = intent.getStringExtra(Intent.EXTRA_TEXT);
-                if (urlToCopy != null) {
-                    ClipboardManager clipboard = (ClipboardManager)
-                            getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText(getPackageName(), urlToCopy);
-                    clipboard.setPrimaryClip(clip);
-                    Handler handler = new Handler(Looper.getMainLooper());
-                    handler.post(new Runnable() {
 
-                        @Override
-                        public void run() {
-                            Toast.makeText(
-                                    ClipboardService.this,
-                                    getString(R.string.copied) + " " + urlToCopy,
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    });
+        final String urlToCopy = intent.getDataString();
+        if (urlToCopy != null) {
+            ClipboardManager clipboard = (ClipboardManager)
+                    getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText(getPackageName(), urlToCopy);
+            clipboard.setPrimaryClip(clip);
 
-                }
-            } else {
-                //Toast.makeText(this, "Nothing to copy", Toast.LENGTH_SHORT).show();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+            showToast(getString(R.string.copied) + " " + urlToCopy);
+        } else {
+            showToast(getString(R.string.unxp_err));
         }
+    }
+
+    private void showToast(final String msgToShow) {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+
+            @Override
+            public void run() {
+                Toast.makeText(
+                        ClipboardService.this,
+                        msgToShow,
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

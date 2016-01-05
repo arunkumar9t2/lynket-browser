@@ -20,31 +20,31 @@ public class AddHomeShortcutReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        try {
-            if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
-                final String urlToCopy = intent.getStringExtra(Intent.EXTRA_TEXT);
-                if (urlToCopy != null) {
-                    Log.d(TAG, "Attempting to add for " + urlToCopy);
-                    Intent openUrl = new Intent(context, TabActivity.class);
-                    // TODO fix return behaviour
-                    openUrl.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    openUrl.setData(Uri.parse(urlToCopy));
+        final String urlToAdd = intent.getDataString();
+        if (urlToAdd != null) {
 
-                    String shortcutName = Uri.parse(urlToCopy).getHost() == null
-                            ? urlToCopy : Uri.parse(urlToCopy).getHost();
-                    Intent addIntent = new Intent();
-                    addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, openUrl);
-                    addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, shortcutName);
-                    addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
-                            Intent.ShortcutIconResource.fromContext(context,
-                                    R.mipmap.ic_launcher));
-                    addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
-                    context.sendBroadcast(addIntent);
-                    Toast.makeText(context, "Added " + shortcutName, LENGTH_SHORT).show();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+            Log.d(TAG, "Attempting to add for " + urlToAdd);
+            Intent openTabIntent = new Intent(context, TabActivity.class);
+            // TODO fix return behaviour
+            openTabIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            openTabIntent.setData(Uri.parse(urlToAdd));
+
+            String shortcutName = Uri.parse(urlToAdd).getHost() == null
+                    ? urlToAdd : Uri.parse(urlToAdd).getHost();
+            Intent addIntent = new Intent();
+            addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, openTabIntent);
+            addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, shortcutName);
+            addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
+                    Intent.ShortcutIconResource.fromContext(context,
+                            R.mipmap.ic_launcher));
+            addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+            context.sendBroadcast(addIntent);
+
+            Toast.makeText(
+                    context,
+                    context.getString(R.string.added) + " " + shortcutName,
+                    LENGTH_SHORT).show();
         }
+
     }
 }
