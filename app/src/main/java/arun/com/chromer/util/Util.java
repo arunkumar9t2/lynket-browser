@@ -3,13 +3,10 @@ package arun.com.chromer.util;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.support.customtabs.CustomTabsIntent;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -29,48 +26,42 @@ public class Util {
     private static final String TAG = Util.class.getSimpleName();
 
     public static CustomTabsIntent getCustomizedTabIntent(
-            Context c,
+            Context ctx,
             String url) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(c);
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
 
-        if (sharedPreferences.getBoolean("toolbar_color_pref", true)) {
-            final int chosenColor = sharedPreferences.getInt("toolbar_color",
-                    ContextCompat.getColor(c, R.color.colorPrimary));
+        if (PrefUtil.isColoredToolbar(ctx)) {
+            final int chosenColor = PrefUtil.getToolbarColor(ctx);
             builder.setToolbarColor(chosenColor);
         }
 
-        if (sharedPreferences.getBoolean("animations_pref", true)) {
-            switch (Integer.parseInt(sharedPreferences.getString("animation_preference", "1"))) {
+        if (PrefUtil.isAnimationEnabled(ctx)) {
+            switch (PrefUtil.getAnimationPref(ctx)) {
                 case 1:
-                    builder.setStartAnimations(c, R.anim.slide_in_right, R.anim.slide_out_left)
-                            .setExitAnimations(c, R.anim.slide_in_left, R.anim.slide_out_right);
+                    builder.setStartAnimations(ctx, R.anim.slide_in_right, R.anim.slide_out_left)
+                            .setExitAnimations(ctx, R.anim.slide_in_left, R.anim.slide_out_right);
                     break;
                 case 2:
-                    builder.setStartAnimations(c, R.anim.slide_up_right, R.anim.slide_down_left)
-                            .setExitAnimations(c, R.anim.slide_up_left, R.anim.slide_down_right);
+                    builder.setStartAnimations(ctx, R.anim.slide_up_right, R.anim.slide_down_left)
+                            .setExitAnimations(ctx, R.anim.slide_up_left, R.anim.slide_down_right);
                     break;
                 default:
-                    builder.setStartAnimations(c, R.anim.slide_in_right, R.anim.slide_out_left)
-                            .setExitAnimations(c, R.anim.slide_in_left, R.anim.slide_out_right);
+                    builder.setStartAnimations(ctx, R.anim.slide_in_right, R.anim.slide_out_left)
+                            .setExitAnimations(ctx, R.anim.slide_in_left, R.anim.slide_out_right);
             }
 
         }
 
-        if (sharedPreferences.getBoolean("url_pref", true)) {
-            builder.enableUrlBarHiding();
-        }
-
-        if (sharedPreferences.getBoolean("title_pref", true)) {
+        if (PrefUtil.isShowTitle(ctx)) {
             builder.setShowTitle(true);
         } else
             builder.setShowTitle(false);
 
-        addShareIntent(c, url, builder);
+        addShareIntent(ctx, url, builder);
 
-        addCopyItem(c, url, builder);
+        addCopyItem(ctx, url, builder);
 
-        addShortcuttoHomescreen(c, url, builder);
+        addShortcuttoHomescreen(ctx, url, builder);
         return builder.build();
     }
 

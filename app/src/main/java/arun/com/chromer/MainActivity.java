@@ -8,13 +8,11 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -44,6 +42,7 @@ import arun.com.chromer.extra.Licenses;
 import arun.com.chromer.fragments.PreferenceFragment;
 import arun.com.chromer.intro.AppIntroMy;
 import arun.com.chromer.util.ChangelogUtil;
+import arun.com.chromer.util.PrefUtil;
 import arun.com.chromer.util.StringConstants;
 import arun.com.chromer.util.Util;
 import de.psdev.licensesdialog.LicensesDialog;
@@ -83,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
         mPreferences = getSharedPreferences(getPackageName(), MODE_PRIVATE);
 
-        if (isFirstRun()) {
+        if (PrefUtil.isFirstRun(this)) {
             startActivity(new Intent(this, AppIntroMy.class));
         }
 
@@ -114,14 +113,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 .commit();
 
         checkAndEducateUser();
-    }
-
-    private boolean isFirstRun() {
-        if (mPreferences.getBoolean("firstrun", true)) {
-            mPreferences.edit().putBoolean("firstrun", false).apply();
-            return true;
-        }
-        return false;
     }
 
     private void setupDefaultProvider() {
@@ -171,25 +162,23 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     private void setupColorPicker() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        final int choosenColor = sharedPreferences.getInt("toolbar_color",
-                ContextCompat.getColor(this, R.color.primary));
+        final int chosenColor = PrefUtil.getToolbarColor(this);
         findViewById(R.id.color_picker_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new ColorChooserDialog.Builder(MainActivity.this, R.string.md_choose_label)
                         .titleSub(R.string.md_presets_label)
-                        .doneButton(R.string.md_done_label)  // changes label of the done button
-                        .cancelButton(R.string.md_cancel_label)  // changes label of the cancel button
-                        .backButton(R.string.md_back_label)  // changes label of the back button
+                        .doneButton(R.string.md_done_label)
+                        .cancelButton(R.string.md_cancel_label)
+                        .backButton(R.string.md_back_label)
                         .allowUserColorInputAlpha(false)
-                        .preselect(choosenColor)
+                        .preselect(chosenColor)
                         .dynamicButtonColor(false)
                         .show();
             }
         });
         mColorView = findViewById(R.id.color_preview);
-        mColorView.setBackgroundColor(choosenColor);
+        mColorView.setBackgroundColor(chosenColor);
     }
 
     @SuppressWarnings("SameParameterValue")
@@ -355,13 +344,11 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     @Override
     public void onColorSelection(@NonNull ColorChooserDialog dialog, @ColorInt int selectedColor) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mColorView.setBackgroundColor(selectedColor);
-        sharedPreferences.edit().putInt("toolbar_color", selectedColor).apply();
+        PrefUtil.setToolbarColor(this, selectedColor);
     }
 
     private void checkAndEducateUser() {
-        // TODO add automatic detection
         List packages = MyCustomTabHelper.getCustomTabSupportingPackages(this);
         if (packages.size() == 0) {
             new MaterialDialog.Builder(this)
