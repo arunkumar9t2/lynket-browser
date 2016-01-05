@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:key="settings"
-    android:title="Settings">
+    android:title="@string/settings">
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="toolbar_color_pref"
-        android:title="Colored toolbar" />
+        android:title="@string/colored_toolbar" />
 
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="title_pref"
-        android:title="Show title" />
+        android:title="@string/show_title" />
 
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="animations_pref"
-        android:title="Animations" />
+        android:title="@string/animations" />
     <ListPreference
         android:defaultValue="1"
         android:entries="@array/animationValues"
         android:entryValues="@array/animationKeys"
         android:key="animation_preference"
-        android:title="Choose animation" />
+        android:title="@string/choose_animation" />
 </PreferenceScreen>
