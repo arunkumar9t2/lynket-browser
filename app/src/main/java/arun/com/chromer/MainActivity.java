@@ -1,7 +1,6 @@
 package arun.com.chromer;
 
 import android.app.ActivityOptions;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -18,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -34,7 +34,6 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import java.util.List;
 
 import arun.com.chromer.activities.AboutAppActivity;
-import arun.com.chromer.activities.DummyActivity;
 import arun.com.chromer.activities.TabActivity;
 import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
 import arun.com.chromer.chrometabutilites.MyCustomTabHelper;
@@ -113,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 .commit();
 
         checkAndEducateUser();
+
     }
 
     private void setupDefaultProvider() {
@@ -183,41 +183,33 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     @SuppressWarnings("SameParameterValue")
     private void handleDefaultBehaviour() {
-        Uri googleURI = Uri.parse(GOOGLE_URL);
-        Intent activityIntent = new Intent(Intent.ACTION_VIEW, googleURI);
-        if (!isDefaultSet(activityIntent)) {
-            if (activityIntent.resolveActivity(getPackageManager()) != null) {
-                PackageManager p = getPackageManager();
-                ComponentName cN = new ComponentName(this, DummyActivity.class);
-                p.setComponentEnabledSetting(cN,
-                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                        PackageManager.DONT_KILL_APP);
-
-                startActivity(activityIntent);
-
-                p.setComponentEnabledSetting(cN,
-                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                        PackageManager.DONT_KILL_APP);
+        String packageName = getDefaultBrowserPackage();
+        if (packageName != null) {
+            if (packageName.trim().equalsIgnoreCase(getPackageName())) {
+                Log.d(TAG, "Chromer defaulted");
+                Snackbar.make(mColorView, "Already set!", Snackbar.LENGTH_SHORT).show();
+            } else if (packageName.equalsIgnoreCase("android") && Util.isPackageInstalled(this, packageName)) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(GOOGLE_URL)));
+            } else {
+                Intent intent = new Intent(
+                        android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                intent.setData(Uri.parse(
+                        "package:" + packageName));
+                Toast.makeText(this,
+                        Util.getAppNameWithPackage(this, packageName)
+                                + " "
+                                + getString(R.string.default_clear_msg), Toast.LENGTH_LONG).show();
+                startActivity(intent);
             }
-        } else {
-            // TODO replace view something more reliable
-            Snackbar.make(mColorView, "Already set!", Snackbar.LENGTH_SHORT).show();
         }
     }
 
-    private boolean isDefaultSet(Intent web) {
-        ResolveInfo defaultViewHandlerInfo = getPackageManager().resolveActivity(web, 0);
-        String defaultViewHandlerPackageName = null;
-        if (defaultViewHandlerInfo != null) {
-            defaultViewHandlerPackageName = defaultViewHandlerInfo.activityInfo.packageName;
-        }
-        if (defaultViewHandlerPackageName != null) {
-            if (defaultViewHandlerPackageName.trim().equalsIgnoreCase(getPackageName())) {
-                Log.d(TAG, "Chromer defaulted");
-                return true;
-            }
-        }
-        return false;
+    private String getDefaultBrowserPackage() {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(GOOGLE_URL));
+        ResolveInfo resolveInfo = getPackageManager().resolveActivity(browserIntent,
+                PackageManager.MATCH_DEFAULT_ONLY);
+
+        return resolveInfo.activityInfo.packageName;
     }
 
     private void setupDrawer(Toolbar toolbar) {

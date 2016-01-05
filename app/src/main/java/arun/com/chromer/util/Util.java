@@ -150,19 +150,22 @@ public class Util {
         List<String> appNameList = new ArrayList<>();
         String[] appNames = new String[0];
         for (String pack : packages) {
-            final PackageManager pm = context.getPackageManager();
-            ApplicationInfo ai;
-            try {
-                ai = pm.getApplicationInfo(pack, 0);
-            } catch (final PackageManager.NameNotFoundException e) {
-                ai = null;
-            }
-            final String applicationName = (String) (ai != null ? pm.getApplicationLabel(ai) : "(unknown)");
-            appNameList.add(applicationName);
+
+            appNameList.add(getAppNameWithPackage(context, pack));
         }
         appNames = appNameList.toArray(appNames);
         return appNames;
     }
 
-
+    public static String getAppNameWithPackage(Context context, String pack) {
+        final PackageManager pm = context.getPackageManager();
+        ApplicationInfo ai;
+        try {
+            ai = pm.getApplicationInfo(pack, 0);
+        } catch (final PackageManager.NameNotFoundException e) {
+            ai = null;
+        }
+        final String applicationName = (String) (ai != null ? pm.getApplicationLabel(ai) : "(unknown)");
+        return applicationName;
+    }
 }
