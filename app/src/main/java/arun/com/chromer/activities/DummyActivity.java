@@ -1,4 +1,4 @@
-package arun.com.chromer;
+package arun.com.chromer.activities;
 
 import android.support.v7.app.AppCompatActivity;
 

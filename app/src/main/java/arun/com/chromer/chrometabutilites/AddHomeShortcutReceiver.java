@@ -8,7 +8,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import arun.com.chromer.R;
-import arun.com.chromer.TabActivity;
+import arun.com.chromer.activities.TabActivity;
 
 import static android.widget.Toast.LENGTH_SHORT;
 

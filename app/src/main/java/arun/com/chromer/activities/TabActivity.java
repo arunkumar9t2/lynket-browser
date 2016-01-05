@@ -1,4 +1,4 @@
-package arun.com.chromer;
+package arun.com.chromer.activities;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import arun.com.chromer.R;
 import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
 import arun.com.chromer.util.Util;
 

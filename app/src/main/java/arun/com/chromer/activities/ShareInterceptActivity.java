@@ -1,4 +1,4 @@
-package arun.com.chromer;
+package arun.com.chromer.activities;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import arun.com.chromer.R;
 import arun.com.chromer.util.Util;
 
 public class ShareInterceptActivity extends AppCompatActivity {

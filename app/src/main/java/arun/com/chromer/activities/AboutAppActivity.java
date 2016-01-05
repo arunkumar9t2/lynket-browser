@@ -1,4 +1,4 @@
-package arun.com.chromer;
+package arun.com.chromer.activities;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import arun.com.chromer.R;
 import arun.com.chromer.fragments.AboutFragment;
 
 public class AboutAppActivity extends AppCompatActivity {

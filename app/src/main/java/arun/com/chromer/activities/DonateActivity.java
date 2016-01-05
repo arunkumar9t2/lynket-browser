@@ -1,4 +1,4 @@
-package arun.com.chromer;
+package arun.com.chromer.activities;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,6 +22,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 import java.util.ArrayList;
 import java.util.List;
 
+import arun.com.chromer.R;
 import arun.com.chromer.adapter.ExtendedBaseAdapter;
 import arun.com.chromer.fragments.AboutFragment;
 import arun.com.chromer.payments.IabBroadcastReceiver;

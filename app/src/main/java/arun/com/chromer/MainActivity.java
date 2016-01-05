@@ -35,6 +35,9 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.util.List;
 
+import arun.com.chromer.activities.AboutAppActivity;
+import arun.com.chromer.activities.DummyActivity;
+import arun.com.chromer.activities.TabActivity;
 import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
 import arun.com.chromer.chrometabutilites.MyCustomTabHelper;
 import arun.com.chromer.extra.Licenses;

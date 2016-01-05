@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TabActivity"
+            android:name=".activities.TabActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:theme="@style/Transparent">
@@ -47,7 +47,7 @@
             android:label="Intro"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ShareInterceptActivity"
+            android:name=".activities.ShareInterceptActivity"
             android:excludeFromRecents="true"
             android:label="Open in Chromer">
             <intent-filter>
@@ -66,15 +66,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AboutAppActivity"
+            android:name=".activities.AboutAppActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".DonateActivity"
+            android:name=".activities.DonateActivity"
             android:excludeFromRecents="true"
             android:theme="@style/DonatePopUp" />
 
         <activity
-            android:name=".DummyActivity"
+            android:name=".activities.DummyActivity"
             android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

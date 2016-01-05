@@ -23,8 +23,8 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
-import arun.com.chromer.DonateActivity;
 import arun.com.chromer.R;
+import arun.com.chromer.activities.DonateActivity;
 import arun.com.chromer.adapter.ExtendedBaseAdapter;
 import arun.com.chromer.util.ChangelogUtil;
 import arun.com.chromer.util.StringConstants;
