@@ -1,7 +1,10 @@
 package arun.com.chromer.services;
 
 import android.accessibilityservice.AccessibilityService;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsService;
@@ -72,7 +75,7 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
     public void onAccessibilityEvent(AccessibilityEvent event) {
         mScannerService = this;
 
-        if (PrefUtil.isPreFetchPrefered(this)) {
+        if (PrefUtil.isPreFetchPrefered(this) && shouldHonourWifi()) {
             try {
                 stopService(new Intent(this, WarmupService.class));
             } catch (Exception e) {
@@ -149,5 +152,14 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
     @Override
     public void onCustomTabsDisconnected() {
 
+    }
+
+    public boolean shouldHonourWifi() {
+        if (PrefUtil.isWifiPreferred(this)) {
+            ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            return mWifi.isConnected();
+        } else
+            return true;
     }
 }
