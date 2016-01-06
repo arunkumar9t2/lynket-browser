@@ -22,7 +22,8 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingLeft="30dp">
+        android:paddingLeft="30dp"
+        tools:ignore="RtlSymmetry">
 
         <TextView
             android:id="@+id/about_app_title"

@@ -481,7 +481,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         }
     }
 
-    boolean shouldBind() {
+    private boolean shouldBind() {
         if (PrefUtil.isPreFetchPrefered(this) && Util.isAccessibilityServiceEnabled(this)) {
             return false;
         } else if (!PrefUtil.isPreFetchPrefered(this))

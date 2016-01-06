@@ -18,7 +18,7 @@ public class WarmupService extends Service implements MyCustomActivityHelper.Con
 
     private static WarmupService mWarmupService = null;
 
-    MyCustomActivityHelper myCustomActivityHelper;
+    private MyCustomActivityHelper myCustomActivityHelper;
 
     public static WarmupService getInstance() {
         return mWarmupService;

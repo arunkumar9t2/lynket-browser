@@ -26,10 +26,8 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
     private static final String TAG = ScannerService.class.getSimpleName();
 
     private static ScannerService mScannerService = null;
-
-    MyCustomActivityHelper myCustomActivityHelper;
-
     String lastWarmedUpUrl = "";
+    private MyCustomActivityHelper myCustomActivityHelper;
 
     public static ScannerService getInstance() {
         return mScannerService;
@@ -101,7 +99,7 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
                     bundle.putParcelable(CustomTabsService.KEY_URL, Uri.parse(url));
                     possibleUrls.add(bundle);
 
-                    boolean success = false;
+                    boolean success;
                     if (!priortyUrl.equalsIgnoreCase(lastWarmedUpUrl)) {
                         success = myCustomActivityHelper.mayLaunchUrl(Uri.parse(priortyUrl), null, possibleUrls);
                         if (success) lastWarmedUpUrl = priortyUrl;

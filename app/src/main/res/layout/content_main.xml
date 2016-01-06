@@ -171,7 +171,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center_vertical"
                                 android:gravity="center_vertical"
-                                android:text="Only on Wi-Fi"
+                                android:text="@string/only_on_wifi"
                                 android:textColor="@color/material_dark_color"
                                 android:textSize="14sp" />
 
@@ -277,7 +277,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="start|center"
-                            android:text="Choose toolbar color"
+                            android:text="@string/choose_toolbar_color"
                             android:textColor="@color/material_dark_color"
                             android:textSize="16sp" />
 
@@ -285,7 +285,6 @@
                             android:id="@+id/color_preview"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:layout_alignParentRight="true"
                             android:background="@color/primary" />
                     </LinearLayout>
 

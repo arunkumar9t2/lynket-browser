@@ -92,8 +92,7 @@ public class Util {
         } catch (final PackageManager.NameNotFoundException e) {
             ai = null;
         }
-        final String applicationName = (String) (ai != null ? pm.getApplicationLabel(ai) : "(unknown)");
-        return applicationName;
+        return (String) (ai != null ? pm.getApplicationLabel(ai) : "(unknown)");
     }
 
     public static boolean isAccessibilityServiceEnabled(Context context) {

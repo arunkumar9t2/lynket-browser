@@ -59,7 +59,6 @@
     <string name="added">Added</string>
     <string name="settings">Settings</string>
     <string name="colored_toolbar">Colored toolbar</string>
-    <string name="show_title">Show title</string>
     <string name="animations">Animations</string>
     <string name="choose_animation">Choose animation</string>
     <string name="usage_options">Usage Options</string>
@@ -78,4 +77,6 @@
     <string name="accesiblity_dialog_title">Accessibility permission required</string>
     <string name="accesiblity_dialog_desc">To allow Chromer to scan for links in any app, it requires you to grant accessibility service permission. Please grant accessibility permission in the next screen, after which you can enable this option and enjoy quick launches.</string>
     <string name="open_settings">Open Settings</string>
+    <string name="only_on_wifi">Only on Wi-Fi</string>
+    <string name="choose_toolbar_color">Choose toolbar color</string>
 </resources>
