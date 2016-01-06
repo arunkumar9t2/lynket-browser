@@ -64,7 +64,7 @@
                             android:layout_centerInParent="true"
                             android:layout_gravity="center_horizontal"
                             android:gravity="center"
-                            android:text="Set Default Browser"
+                            android:text="@string/set_default_chromer"
                             android:textAllCaps="true"
                             android:theme="@style/BrandButtonStyle" />
                     </RelativeLayout>
@@ -137,7 +137,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Tap the circle button to preview changes"
+                        android:text="@string/circle_to_preview_changes"
                         android:textColor="@color/material_dark_color"
                         android:textSize="12sp" />
 
@@ -156,7 +156,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:gravity="start|center"
-                            android:text="Choose default provider"
+                            android:text="@string/default_provider"
                             android:textColor="@color/material_dark_color"
                             android:textSize="16sp" />
 
