@@ -7,12 +7,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Toast;
 
 import arun.com.chromer.R;
 import arun.com.chromer.chrometabutilites.CustomTabDelegate;
 import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
+import arun.com.chromer.util.PrefUtil;
+import arun.com.chromer.util.Util;
 
 public class TabActivity extends AppCompatActivity {
 
@@ -39,19 +40,6 @@ public class TabActivity extends AppCompatActivity {
             };
     private static final String TAG = TabActivity.class.getSimpleName();
 
-    private MyCustomActivityHelper mCustomTabActivityHelper;
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mCustomTabActivityHelper.bindCustomTabsService(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mCustomTabActivityHelper.unbindCustomTabsService(this);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,31 +56,18 @@ public class TabActivity extends AppCompatActivity {
         CustomTabsIntent mCustomTabsIntent = CustomTabDelegate.getCustomizedTabIntent(
                 getApplicationContext(), url);
 
-        mCustomTabActivityHelper = new MyCustomActivityHelper();
-        mCustomTabActivityHelper.setConnectionCallback(
-                new MyCustomActivityHelper.ConnectionCallback() {
-                    @Override
-                    public void onCustomTabsConnected() {
-                        Log.d(TAG, "Connect to custom tab");
-                        try {
-                            Log.d(TAG, "Gave may launch command");
-                            mCustomTabActivityHelper.mayLaunchUrl(
-                                    Uri.parse(url)
-                                    , null, null);
-                        } catch (Exception e) {
-                            // Don't care. Yes.. You heard me.
-                        }
-                    }
-
-                    @Override
-                    public void onCustomTabsDisconnected() {
-                        finish();
-                    }
-                });
-
         MyCustomActivityHelper.openCustomTab(this, mCustomTabsIntent,
                 Uri.parse(getIntent().getData().toString()),
                 mCustomTabsFallback);
         finish();
+    }
+
+    boolean shouldBind() {
+        if (PrefUtil.isPreFetchPrefered(this) && Util.isAccessibilityServiceEnabled(this)) {
+            return false;
+        } else if (!PrefUtil.isPreFetchPrefered(this))
+            return true;
+
+        return true;
     }
 }

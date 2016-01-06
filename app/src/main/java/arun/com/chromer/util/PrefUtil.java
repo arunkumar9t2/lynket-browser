@@ -19,6 +19,8 @@ public class PrefUtil {
     public static final String ANIMATION_TYPE = "animation_preference";
     public static final String FIRST_RUN = "firstrun";
     public static final String WARM_UP = "warm_up_preference";
+    public static final String PRE_FETCH = "pre_fetch_preference";
+    public static final String WIFI_PREFETCH = "wifi_preference";
 
     private static SharedPreferences preferences(Context context) {
         return context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
@@ -92,5 +94,27 @@ public class PrefUtil {
 
     public static void setWarmUpPreference(Context context, boolean preference) {
         preferences(context).edit().putBoolean(WARM_UP, preference).commit();
+    }
+
+    public static boolean isPreFetchPrefered(Context context) {
+        if (preferences(context).getBoolean(PRE_FETCH, false)) {
+            return true;
+        }
+        return false;
+    }
+
+    public static void setPrefetchPreference(Context context, boolean preference) {
+        preferences(context).edit().putBoolean(PRE_FETCH, preference).commit();
+    }
+
+    public static boolean isWifiPreferred(Context context) {
+        if (preferences(context).getBoolean(WIFI_PREFETCH, false)) {
+            return true;
+        }
+        return false;
+    }
+
+    public static void setWifiPrefetch(Context context, boolean preference) {
+        preferences(context).edit().putBoolean(WIFI_PREFETCH, preference).commit();
     }
 }

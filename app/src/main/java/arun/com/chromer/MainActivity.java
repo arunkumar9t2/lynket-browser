@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
@@ -43,6 +44,7 @@ import arun.com.chromer.chrometabutilites.MyCustomTabHelper;
 import arun.com.chromer.extra.Licenses;
 import arun.com.chromer.fragments.PreferenceFragment;
 import arun.com.chromer.intro.AppIntroMy;
+import arun.com.chromer.services.ScannerService;
 import arun.com.chromer.services.WarmupService;
 import arun.com.chromer.util.ChangelogUtil;
 import arun.com.chromer.util.PrefUtil;
@@ -63,17 +65,25 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private View mColorView;
     private SwitchCompat mWarmUpSwitch;
+    private SwitchCompat mPrefetchSwitch;
+    private SwitchCompat mWifiSwitch;
 
     @Override
     protected void onStart() {
         super.onStart();
-        mCustomTabActivityHelper.bindCustomTabsService(this);
+        if (shouldBind()) {
+            mCustomTabActivityHelper.bindCustomTabsService(this);
+        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        mCustomTabActivityHelper.unbindCustomTabsService(this);
+        try {
+            mCustomTabActivityHelper.unbindCustomTabsService(this);
+        } catch (Exception e) {
+            /* Best effort */
+        }
     }
 
     @Override
@@ -123,7 +133,15 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         takeCareOfServices();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        linkAccessiblityAndPrefetch();
+    }
+
     private void populateUIBasedOnPreferences() {
+        linkAccessiblityAndPrefetch();
+
         mWarmUpSwitch = (SwitchCompat) findViewById(R.id.warm_up_switch);
         mWarmUpSwitch.setChecked(PrefUtil.isWarmUpPreferred(this));
         mWarmUpSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -133,6 +151,68 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 takeCareOfServices();
             }
         });
+
+        mPrefetchSwitch = (SwitchCompat) findViewById(R.id.pre_fetch_switch);
+        mPrefetchSwitch.setChecked(PrefUtil.isPreFetchPrefered(this));
+        linkWarmAndPrefetch(PrefUtil.isPreFetchPrefered(this));
+        mPrefetchSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                boolean warmup = isChecked ? false : PrefUtil.isWarmUpPreferred(MainActivity.this);
+
+                if (!Util.isAccessibilityServiceEnabled(MainActivity.this)) {
+                    mPrefetchSwitch.setChecked(false);
+                    new MaterialDialog.Builder(MainActivity.this)
+                            .title(R.string.accesiblity_dialog_title)
+                            .content(R.string.accesiblity_dialog_desc)
+                            .positiveText(R.string.open_settings)
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    startActivityForResult(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS), 0);
+                                }
+                            })
+                            .show();
+                } else {
+                    mWarmUpSwitch.setChecked(warmup);
+                    PrefUtil.setWarmUpPreference(MainActivity.this, warmup);
+                    linkWarmAndPrefetch(isChecked);
+                }
+                PrefUtil.setPrefetchPreference(MainActivity.this, isChecked);
+                takeCareOfServices();
+            }
+        });
+
+        mWifiSwitch = (SwitchCompat) findViewById(R.id.only_wifi_switch);
+        mWifiSwitch.setChecked(PrefUtil.isWifiPreferred(this));
+        mWifiSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                PrefUtil.setWifiPrefetch(MainActivity.this, isChecked);
+                takeCareOfServices();
+            }
+        });
+    }
+
+    private void linkAccessiblityAndPrefetch() {
+        if (Util.isAccessibilityServiceEnabled(this)) {
+            Log.d(TAG, "Scanning permission granted");
+            if (mPrefetchSwitch != null)
+                mPrefetchSwitch.setChecked(PrefUtil.isPreFetchPrefered(this));
+        } else {
+            // Turn off preference
+            if (mPrefetchSwitch != null)
+                mPrefetchSwitch.setChecked(false);
+            PrefUtil.setPrefetchPreference(MainActivity.this, false);
+        }
+    }
+
+    private void linkWarmAndPrefetch(boolean isChecked) {
+        if (isChecked) {
+            mWarmUpSwitch.setEnabled(false);
+        } else {
+            mWarmUpSwitch.setEnabled(true);
+        }
     }
 
     private void takeCareOfServices() {
@@ -140,6 +220,16 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             startService(new Intent(this, WarmupService.class));
         else
             stopService(new Intent(this, WarmupService.class));
+
+        try {
+            if (PrefUtil.isPreFetchPrefered(this))
+                startService(new Intent(this, ScannerService.class));
+            else
+                stopService(new Intent(this, ScannerService.class));
+        } catch (Exception e) {
+            Log.d(TAG, "Ignoring startup exception of accessibility service");
+        }
+
     }
 
     private void setupDefaultProvider() {
@@ -339,17 +429,26 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private void setupCustomTab() {
         mCustomTabActivityHelper = new MyCustomActivityHelper();
+
+        if (!shouldBind()) {
+            try {
+                boolean ok = ScannerService.getInstance().mayLaunchUrl(Uri.parse(GOOGLE_URL));
+                if (ok) {
+                    return;
+                }
+            } catch (Exception e) {
+                // Ignored - best effort
+            }
+        }
+
         mCustomTabActivityHelper.setConnectionCallback(
                 new MyCustomActivityHelper.ConnectionCallback() {
                     @Override
                     public void onCustomTabsConnected() {
                         Log.d(TAG, "Connect to custom tab");
                         try {
-                            mCustomTabActivityHelper.mayLaunchUrl(
-                                    Uri.parse(GOOGLE_URL)
-                                    , null, null);
+                            mCustomTabActivityHelper.mayLaunchUrl(Uri.parse(GOOGLE_URL), null, null);
                         } catch (Exception e) {
-                            // Don't care. Yes.. You heard me.
                         }
                     }
 
@@ -382,4 +481,12 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         }
     }
 
+    boolean shouldBind() {
+        if (PrefUtil.isPreFetchPrefered(this) && Util.isAccessibilityServiceEnabled(this)) {
+            return false;
+        } else if (!PrefUtil.isPreFetchPrefered(this))
+            return true;
+
+        return true;
+    }
 }

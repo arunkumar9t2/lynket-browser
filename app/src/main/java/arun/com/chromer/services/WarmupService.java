@@ -42,12 +42,21 @@ public class WarmupService extends Service implements MyCustomActivityHelper.Con
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         if (myCustomActivityHelper != null)
             myCustomActivityHelper.unbindCustomTabsService(this);
         myCustomActivityHelper = null;
         mWarmupService = null;
         Log.d(TAG, "Died");
+        super.onDestroy();
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        mWarmupService = null;
+        if (myCustomActivityHelper != null)
+            myCustomActivityHelper.unbindCustomTabsService(this);
+
+        return super.onUnbind(intent);
     }
 
     @Override

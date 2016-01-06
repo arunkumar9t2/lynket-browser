@@ -5,12 +5,16 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import arun.com.chromer.BuildConfig;
 
 /**
  * Created by Arun on 17/12/2015.
@@ -36,7 +40,7 @@ public class Util {
                 .matcher(string);
         while (m.find()) {
             String url = m.group();
-            Log.d(TAG, "URL extracted: " + url);
+            // Log.d(TAG, "URL extracted: " + url);
             if (!url.toLowerCase().matches("^\\w+://.*")) {
                 url = "http://" + url;
             }
@@ -90,5 +94,34 @@ public class Util {
         }
         final String applicationName = (String) (ai != null ? pm.getApplicationLabel(ai) : "(unknown)");
         return applicationName;
+    }
+
+    public static boolean isAccessibilityServiceEnabled(Context context) {
+        int accesEnbld = 0;
+        final String service = BuildConfig.APPLICATION_ID + "/arun.com.chromer.services.ScannerService";
+        try {
+            accesEnbld = Settings.Secure.getInt(context.getContentResolver(), android.provider.Settings.Secure.ACCESSIBILITY_ENABLED);
+        } catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
+        }
+        TextUtils.SimpleStringSplitter splitter = new TextUtils.SimpleStringSplitter(':');
+
+        if (accesEnbld == 1) {
+            String settingValue = Settings.Secure.getString(
+                    context.getContentResolver(),
+                    Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+            if (settingValue != null) {
+                splitter.setString(settingValue);
+                while (splitter.hasNext()) {
+                    String aService = splitter.next();
+                    if (aService.equalsIgnoreCase(service)) {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            Log.v(TAG, "Scanner service is disabled.");
+        }
+        return false;
     }
 }

@@ -72,4 +72,10 @@
     <string name="set_default_chromer">Set Default Browser</string>
     <string name="circle_to_preview_changes">Tap the circle button to preview changes</string>
     <string name="default_provider">Choose default provider</string>
+    <string name="pre_fetch_content">Prefetch content</string>
+    <string name="pre_fetch_desc">Scan your screen for links and load them in background for instant launch</string>
+    <string name="accesiblity_description">This service will be used by Chromer to scan text links on your screen and load them in the background. No other information is processed by Chromer. You can still use Chromer in light mode if you choose to not grant this. For more information, launch Chromer app.</string>
+    <string name="accesiblity_dialog_title">Accessibility permission required</string>
+    <string name="accesiblity_dialog_desc">To allow Chromer to scan for links in any app, it requires you to grant accessibility service permission. Please grant accessibility permission in the next screen, after which you can enable this option and enjoy quick launches.</string>
+    <string name="open_settings">Open Settings</string>
 </resources>

@@ -13,6 +13,7 @@ import android.util.Log;
 
 import java.util.List;
 
+import arun.com.chromer.util.PrefUtil;
 import arun.com.chromer.util.Util;
 
 /**
@@ -45,8 +46,7 @@ public class MyCustomActivityHelper implements ServiceConnectionCallback {
         String packageName;
 
         // first check user preferred custom provider is there
-        String userPrefProvider = activity.getSharedPreferences(activity.getPackageName(), Context.MODE_PRIVATE)
-                .getString("preferred_package", null);
+        String userPrefProvider = PrefUtil.getPreferredTabApp(activity);
         if (userPrefProvider != null && Util.isPackageInstalled(activity, userPrefProvider)) {
             // TODO optionally check if preferred selection is valid by comparing with all providers
             Log.d(TAG, "Valid user preferred custom tab provider present");
@@ -218,10 +218,10 @@ public class MyCustomActivityHelper implements ServiceConnectionCallback {
         void openUri(Activity activity, Uri uri);
     }
 
-    private static class NavigationCallback extends CustomTabsCallback {
+    public static class NavigationCallback extends CustomTabsCallback {
         @Override
         public void onNavigationEvent(int navigationEvent, Bundle extras) {
-            Log.w(TAG, "onNavigationEvent: Code = " + navigationEvent);
+            // Log.w(TAG, "onNavigationEvent: Code = " + navigationEvent);
         }
     }
 }

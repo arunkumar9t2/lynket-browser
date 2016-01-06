@@ -9,6 +9,7 @@ import android.util.Log;
 
 import arun.com.chromer.R;
 import arun.com.chromer.services.ClipboardService;
+import arun.com.chromer.services.ScannerService;
 import arun.com.chromer.services.WarmupService;
 import arun.com.chromer.util.PrefUtil;
 
@@ -24,7 +25,6 @@ public class CustomTabDelegate {
         CustomTabsSession session = getAvailableSessions(ctx);
 
         if (session != null) {
-            Log.d(TAG, "Using an already present session!");
             builder = new CustomTabsIntent.Builder(session);
         } else
             builder = new CustomTabsIntent.Builder();
@@ -62,11 +62,17 @@ public class CustomTabDelegate {
     }
 
     private static CustomTabsSession getAvailableSessions(Context ctx) {
+        ScannerService sService = ScannerService.getInstance();
+        if (sService != null && PrefUtil.isPreFetchPrefered(ctx)) {
+            Log.d(TAG, "Scanner service is running properly");
+            return sService.getTabSession();
+        }
         WarmupService service = WarmupService.getInstance();
         if (service != null) {
             Log.d(TAG, "Warmup service is running properly");
             return service.getTabSession();
         }
+        Log.d(TAG, "No existing sessions present");
         return null;
     }
 
