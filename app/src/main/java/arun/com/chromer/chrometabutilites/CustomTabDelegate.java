@@ -13,7 +13,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsSession;
-import android.util.Log;
 
 import java.util.List;
 
@@ -22,6 +21,7 @@ import arun.com.chromer.services.ClipboardService;
 import arun.com.chromer.services.ScannerService;
 import arun.com.chromer.services.WarmupService;
 import arun.com.chromer.util.PrefUtil;
+import timber.log.Timber;
 
 /**
  * Created by Arun on 06/01/2016.
@@ -86,7 +86,6 @@ public class CustomTabDelegate {
                     if (info.activityInfo.packageName.equalsIgnoreCase(secondaryPackage))
                         activityIntent.setComponent(new ComponentName(info.activityInfo.packageName,
                                 info.activityInfo.name));
-                    Log.d(TAG, "Set");
                 }
 
                 PendingIntent openBrowser = PendingIntent
@@ -101,15 +100,15 @@ public class CustomTabDelegate {
     private static CustomTabsSession getAvailableSessions(Context ctx) {
         ScannerService sService = ScannerService.getInstance();
         if (sService != null && PrefUtil.isPreFetchPrefered(ctx)) {
-            Log.d(TAG, "Scanner service is running properly");
+            Timber.d("Scanner service is running properly");
             return sService.getTabSession();
         }
         WarmupService service = WarmupService.getInstance();
         if (service != null) {
-            Log.d(TAG, "Warmup service is running properly");
+            Timber.d("Warmup service is running properly");
             return service.getTabSession();
         }
-        Log.d(TAG, "No existing sessions present");
+        Timber.d("No existing sessions present");
         return null;
     }
 

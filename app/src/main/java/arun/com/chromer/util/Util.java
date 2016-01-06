@@ -40,7 +40,7 @@ public class Util {
                 .matcher(string);
         while (m.find()) {
             String url = m.group();
-            // Log.d(TAG, "URL extracted: " + url);
+            // Timber.d( "URL extracted: " + url);
             if (!url.toLowerCase().matches("^\\w+://.*")) {
                 url = "http://" + url;
             }

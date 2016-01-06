@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsService;
 import android.support.customtabs.CustomTabsSession;
-import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
@@ -20,6 +19,7 @@ import java.util.List;
 import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
 import arun.com.chromer.util.PrefUtil;
 import arun.com.chromer.util.Util;
+import timber.log.Timber;
 
 /**
  * Created by Arun on 06/01/2016.
@@ -46,14 +46,14 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
             // Do nothing
         });
         boolean success = myCustomActivityHelper.bindCustomTabsService(this);
-        Log.d(TAG, "Was binded " + success);
+        Timber.d("Was binded " + success);
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
         mScannerService = null;
         myCustomActivityHelper.unbindCustomTabsService(this);
-        Log.d(TAG, "Unbinding");
+        Timber.d("Unbinding");
         return super.onUnbind(intent);
     }
 
@@ -67,7 +67,7 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
 
     public boolean mayLaunchUrl(Uri uri) {
         boolean ok = myCustomActivityHelper.mayLaunchUrl(uri, null, null);
-        Log.d(TAG, "Warmup " + ok);
+        Timber.d("Warmup " + ok);
         return ok;
     }
 
@@ -82,7 +82,7 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
             }
 
             CharSequence packageName = event.getPackageName();
-            //Log.d(TAG, "Targetting " + packageName + " now");
+            //Timber.d( "Targetting " + packageName + " now");
 
             String texts = extractText(getRootInActiveWindow());
             List<String> urls = Util.findURLs(texts);
@@ -107,7 +107,7 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
                         success = myCustomActivityHelper.mayLaunchUrl(Uri.parse(priortyUrl), null, possibleUrls);
                         if (success) lastWarmedUpUrl = priortyUrl;
                     } else {
-                        Log.d(TAG, "Ignored, already warmed up");
+                        Timber.d("Ignored, already warmed up");
                     }
                 }
             }
@@ -135,7 +135,7 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
 
             string += text + " ";
 
-            // Log.d(TAG, "Text: " + text);
+            // Timber.d( "Text: " + text);
         }
         for (int i = 0; i < source.getChildCount(); i++) {
             string += extractText(source.getChild(i));
@@ -146,7 +146,7 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
 
     @Override
     public void onCustomTabsConnected() {
-        Log.d(TAG, "connected");
+        Timber.d("connected");
     }
 
     @Override

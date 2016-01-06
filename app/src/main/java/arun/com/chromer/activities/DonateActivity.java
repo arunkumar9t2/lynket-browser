@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +30,7 @@ import arun.com.chromer.payments.IabResult;
 import arun.com.chromer.payments.Inventory;
 import arun.com.chromer.payments.Purchase;
 import arun.com.chromer.payments.SkuDetails;
+import timber.log.Timber;
 
 public class DonateActivity extends AppCompatActivity implements IabBroadcastReceiver.IabBroadcastListener,
         DialogInterface.OnClickListener {
@@ -47,7 +47,7 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
     // Called when consumption is complete
     IabHelper.OnConsumeFinishedListener mConsumeFinishedListener = new IabHelper.OnConsumeFinishedListener() {
         public void onConsumeFinished(Purchase purchase, IabResult result) {
-            Log.d(TAG, "Consumption finished. Purchase: " + purchase + ", result: " + result);
+            Timber.d("Consumption finished. Purchase: " + purchase + ", result: " + result);
 
             // if we were disposed of in the meantime, quit.
             if (mHelper == null) return;
@@ -58,16 +58,16 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
             if (result.isSuccess()) {
                 // successfully consumed, so we apply the effects of the item in our
                 // game world's logic, which in our case means filling the gas tank a bit
-                Log.d(TAG, "Consumption successful. Provisioning.");
+                Timber.d("Consumption successful. Provisioning.");
             } else {
             }
-            Log.d(TAG, "End consumption flow.");
+            Timber.d("End consumption flow.");
         }
     };
     // Callback for when a purchase is finished
     private final IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
         public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
-            Log.d(TAG, "Purchase finished: " + result + ", purchase: " + purchase);
+            Timber.d("Purchase finished: " + result + ", purchase: " + purchase);
 
             // if we were disposed of in the meantime, quit.
             if (mHelper == null) return;
@@ -75,13 +75,13 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
             if (result.isFailure()) {
                 return;
             }
-            Log.d(TAG, "Purchase successful.");
+            Timber.d("Purchase successful.");
         }
     };
     // Listener that's called when we finish querying the items and subscriptions we own
     private final IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
         public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
-            Log.d(TAG, "Query inventory finished.");
+            Timber.d("Query inventory finished.");
 
             // Have we been disposed of in the meantime? If so, quit.
             if (mHelper == null) return;
@@ -91,7 +91,7 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
                 return;
             }
 
-            Log.d(TAG, "Query inventory was successful.");
+            Timber.d("Query inventory was successful.");
 
             // Get coffee sku
             SkuDetails coffeSku = inventory.getSkuDetails(COFEE_SKU);
@@ -126,14 +126,14 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
         // enable debug logging (for a production application, you should set this to false).
         mHelper.enableDebugLogging(false);
 
-        Log.d(TAG, "Starting setup.");
+        Timber.d("Starting setup.");
         mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
             @SuppressWarnings("unchecked")
             @Override
             public void onIabSetupFinished(IabResult result) {
-                Log.d(TAG, "Setup finished.");
+                Timber.d("Setup finished.");
                 if (!result.isSuccess()) {
-                    Log.d(TAG, "Problem setting up In-app Billing: " + result);
+                    Timber.d("Problem setting up In-app Billing: " + result);
                     return;
                 }
                 // Have we been disposed of in the meantime? If so, quit.
@@ -144,7 +144,7 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
                 registerReceiver(mBroadcastReceiver, broadcastFilter);
 
                 // IAB is fully set up. Now, let's get an inventory of stuff we own.
-                Log.d(TAG, "Setup successful. Querying inventory.");
+                Timber.d("Setup successful. Querying inventory.");
                 List additionalSku = new ArrayList();
                 additionalSku.add(COFEE_SKU);
                 additionalSku.add(LUNCH_SKU);
@@ -275,7 +275,7 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
         }
 
         // very important:
-        Log.d(TAG, "Destroying helper.");
+        Timber.d("Destroying helper.");
         if (mHelper != null) {
             mHelper.dispose();
             mHelper = null;
@@ -285,7 +285,7 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
     @Override
     public void receivedBroadcast() {
         // Received a broadcast notification that the inventory of items has changed
-        Log.d(TAG, "Received broadcast notification. Querying inventory.");
+        Timber.d("Received broadcast notification. Querying inventory.");
         mHelper.queryInventoryAsync(mGotInventoryListener);
     }
 
@@ -296,7 +296,7 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "onActivityResult(" + requestCode + "," + resultCode + "," + data);
+        Timber.d("onActivityResult(" + requestCode + "," + resultCode + "," + data);
         if (mHelper == null) return;
 
         // Pass on the activity result to the helper for handling
@@ -306,7 +306,7 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
             // billing...
             super.onActivityResult(requestCode, resultCode, data);
         } else {
-            Log.d(TAG, "onActivityResult handled by IABUtil.");
+            Timber.d("onActivityResult handled by IABUtil.");
         }
     }
 }

@@ -17,8 +17,9 @@ package arun.com.chromer.chrometabutilites;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.widget.Toast;
+
+import timber.log.Timber;
 
 /**
  * A BroadcastReceiver that handles the Action Intent from the Custom Tab and fires a Share Intent.
@@ -29,7 +30,7 @@ public class ShareBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, "Came to share reciever!");
+        Timber.d("Came to share reciever!");
         String url = intent.getDataString();
 
         if (url != null) {

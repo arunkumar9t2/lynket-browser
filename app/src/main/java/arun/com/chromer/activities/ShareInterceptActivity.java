@@ -6,13 +6,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.util.List;
 
 import arun.com.chromer.R;
 import arun.com.chromer.util.Util;
+import timber.log.Timber;
 
 public class ShareInterceptActivity extends AppCompatActivity {
 
@@ -28,11 +28,11 @@ public class ShareInterceptActivity extends AppCompatActivity {
             if (intent.getAction().equalsIgnoreCase(Intent.ACTION_SEND)) {
                 @SuppressWarnings("ConstantConditions") String text = intent.hasExtra(Intent.EXTRA_TEXT) ?
                         intent.getExtras().getCharSequence(Intent.EXTRA_TEXT).toString() : null;
-                Log.d(TAG, "Intent. Text: " + text);
+                Timber.d("Intent. Text: " + text);
                 findAndOpenLink(text);
             } else if (intent.getAction().equalsIgnoreCase(Intent.ACTION_PROCESS_TEXT)) {
                 final String text = intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT);
-                Log.d(TAG, "Process Text Intent. Text: " + text);
+                Timber.d("Process Text Intent. Text: " + text);
                 findAndOpenLink(text);
             }
         }
@@ -54,7 +54,7 @@ public class ShareInterceptActivity extends AppCompatActivity {
         if (url == null) {
             invalidLink();
         }
-        Log.d(TAG, "Opening " + url);
+        Timber.d("Opening " + url);
         Intent tabActivity = new Intent(this, TabActivity.class);
         tabActivity.setData(Uri.parse(url));
 

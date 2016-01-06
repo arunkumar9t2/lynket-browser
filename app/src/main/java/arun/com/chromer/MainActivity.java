@@ -16,7 +16,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -52,6 +51,7 @@ import arun.com.chromer.util.PrefUtil;
 import arun.com.chromer.util.StringConstants;
 import arun.com.chromer.util.Util;
 import de.psdev.licensesdialog.LicensesDialog;
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -258,7 +258,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private void linkAccessiblityAndPrefetch() {
         if (Util.isAccessibilityServiceEnabled(this)) {
-            Log.d(TAG, "Scanning permission granted");
+            Timber.d("Scanning permission granted");
             if (mPrefetchSwitch != null)
                 mPrefetchSwitch.setChecked(PrefUtil.isPreFetchPrefered(this));
         } else {
@@ -289,7 +289,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             else
                 stopService(new Intent(this, ScannerService.class));
         } catch (Exception e) {
-            Log.d(TAG, "Ignoring startup exception of accessibility service");
+            Timber.d("Ignoring startup exception of accessibility service");
         }
 
     }
@@ -365,7 +365,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         String packageName = getDefaultBrowserPackage();
         if (packageName != null) {
             if (packageName.trim().equalsIgnoreCase(getPackageName())) {
-                Log.d(TAG, "Chromer defaulted");
+                Timber.d("Chromer defaulted");
                 Snackbar.make(mColorView, "Already set!", Snackbar.LENGTH_SHORT).show();
             } else if (packageName.equalsIgnoreCase("android") && Util.isPackageInstalled(this, packageName)) {
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(GOOGLE_URL)));
@@ -507,7 +507,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 new MyCustomActivityHelper.ConnectionCallback() {
                     @Override
                     public void onCustomTabsConnected() {
-                        Log.d(TAG, "Connect to custom tab");
+                        Timber.d("Connect to custom tab");
                         try {
                             mCustomTabActivityHelper.mayLaunchUrl(Uri.parse(GOOGLE_URL), null, null);
                         } catch (Exception e) {

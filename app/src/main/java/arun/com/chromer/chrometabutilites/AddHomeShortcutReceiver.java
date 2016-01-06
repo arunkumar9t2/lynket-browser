@@ -4,11 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 import android.widget.Toast;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.TabActivity;
+import timber.log.Timber;
 
 import static android.widget.Toast.LENGTH_SHORT;
 
@@ -23,7 +23,7 @@ public class AddHomeShortcutReceiver extends BroadcastReceiver {
         final String urlToAdd = intent.getDataString();
         if (urlToAdd != null) {
 
-            Log.d(TAG, "Attempting to add for " + urlToAdd);
+            Timber.d("Attempting to add for " + urlToAdd);
             Intent openTabIntent = new Intent(context, TabActivity.class);
             // TODO fix return behaviour
             openTabIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -5,9 +5,9 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsSession;
-import android.util.Log;
 
 import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
+import timber.log.Timber;
 
 /**
  * Created by Arun on 06/01/2016.
@@ -35,7 +35,7 @@ public class WarmupService extends Service implements MyCustomActivityHelper.Con
         myCustomActivityHelper = new MyCustomActivityHelper();
         myCustomActivityHelper.setConnectionCallback(this);
         boolean success = myCustomActivityHelper.bindCustomTabsService(this);
-        Log.d(TAG, "Was binded " + success);
+        Timber.d("Was binded " + success);
         mWarmupService = this;
         return START_STICKY;
     }
@@ -46,7 +46,7 @@ public class WarmupService extends Service implements MyCustomActivityHelper.Con
             myCustomActivityHelper.unbindCustomTabsService(this);
         myCustomActivityHelper = null;
         mWarmupService = null;
-        Log.d(TAG, "Died");
+        Timber.d("Died");
         super.onDestroy();
     }
 
@@ -61,7 +61,7 @@ public class WarmupService extends Service implements MyCustomActivityHelper.Con
 
     @Override
     public void onCustomTabsConnected() {
-        Log.d(TAG, "Connected to custom tabs");
+        Timber.d("Connected to custom tabs");
     }
 
     @Override
