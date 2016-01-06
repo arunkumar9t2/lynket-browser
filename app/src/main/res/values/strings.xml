@@ -66,4 +66,5 @@
     <string name="default_pref_xpln">Set Chromer as default to open all links, or you can choose Chromer from the list when it is shown</string>
     <string name="personalization">Personalization</string>
     <string name="default_clear_msg">is set as the default browser, please clear it by clicking clear defaults.</string>
+    <string name="web_dep_tlbr_clr">Website dependent toolbar color</string>
 </resources>
