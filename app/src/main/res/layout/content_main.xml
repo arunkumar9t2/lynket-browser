@@ -69,6 +69,31 @@
                             android:theme="@style/BrandButtonStyle" />
                     </RelativeLayout>
 
+                    <LinearLayout
+                        android:id="@+id/secondary_browser"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="16dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="start|center"
+                            android:text="@string/choose_secondary_browser"
+                            android:textColor="@color/material_dark_color"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:id="@+id/secondary_browser_view"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp" />
+                    </LinearLayout>
+
                     <Space
                         android:layout_width="match_parent"
                         android:layout_height="5dp" />

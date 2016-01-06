@@ -34,6 +34,7 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import arun.com.chromer.activities.AboutAppActivity;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     private SwitchCompat mWarmUpSwitch;
     private SwitchCompat mPrefetchSwitch;
     private SwitchCompat mWifiSwitch;
+    private ImageView mSecondaryBrowser;
 
     @Override
     protected void onStart() {
@@ -121,6 +123,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
         setupDefaultProvider();
 
+        setUpSecondaryBrowser();
+
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.preference_fragment, PreferenceFragment.newInstance())
@@ -131,6 +135,64 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         populateUIBasedOnPreferences();
 
         takeCareOfServices();
+    }
+
+    private void setUpSecondaryBrowser() {
+        mSecondaryBrowser = (ImageView) findViewById(R.id.secondary_browser_view);
+
+        try {
+            mSecondaryBrowser.setImageDrawable(
+                    getPackageManager()
+                            .getApplicationIcon(PrefUtil.getSecondaryPref(this)));
+        } catch (PackageManager.NameNotFoundException e) {
+
+        }
+
+        View click = findViewById(R.id.secondary_browser);
+        click.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));
+                List<ResolveInfo> resolvedActivityList = getPackageManager()
+                        .queryIntentActivities(activityIntent, PackageManager.MATCH_ALL);
+                final List<String> packages = new ArrayList<>();
+                for (ResolveInfo info : resolvedActivityList) {
+                    if (!info.activityInfo.packageName.equalsIgnoreCase(getPackageName()))
+                        packages.add(info.activityInfo.packageName);
+                }
+                String pack[] = Util.getAppNameFromPackages(MainActivity.this, packages);
+                int choice = -1;
+
+                String secondaryPref = PrefUtil.getSecondaryPref(MainActivity.this);
+                if (Util.isPackageInstalled(getApplicationContext(), secondaryPref)) {
+                    choice = packages.indexOf(secondaryPref);
+                }
+
+                new MaterialDialog.Builder(MainActivity.this)
+                        .title(getString(R.string.choose_secondary_browser))
+                        .items(pack)
+                        .itemsCallbackSingleChoice(choice,
+                                new MaterialDialog.ListCallbackSingleChoice() {
+                                    @Override
+                                    public boolean onSelection(MaterialDialog dialog, View itemView,
+                                                               int which, CharSequence text) {
+                                        if (packages != null) {
+                                            PrefUtil.setSecondaryPref(MainActivity.this,
+                                                    packages.get(which));
+                                            try {
+                                                mSecondaryBrowser.setImageDrawable(
+                                                        getPackageManager()
+                                                                .getApplicationIcon(packages.get(which)));
+                                            } catch (PackageManager.NameNotFoundException e) {
+                                                // Ignore, should not happen
+                                            }
+                                        }
+                                        return true;
+                                    }
+                                })
+                        .show();
+            }
+        });
     }
 
     @Override

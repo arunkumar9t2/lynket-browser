@@ -1,11 +1,21 @@
 package arun.com.chromer.chrometabutilites;
 
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsSession;
 import android.util.Log;
+
+import java.util.List;
 
 import arun.com.chromer.R;
 import arun.com.chromer.services.ClipboardService;
@@ -58,7 +68,34 @@ public class CustomTabDelegate {
         addCopyItem(ctx, url, builder);
 
         addShortcuttoHomescreen(ctx, url, builder);
+
+        addActionButtonSecondary(ctx, url, builder);
         return builder.build();
+    }
+
+    private static void addActionButtonSecondary(Context ctx, String url, CustomTabsIntent.Builder builder) {
+        if (url != null) {
+            try {
+                Bitmap icon = drawableToBitmap(ctx.getPackageManager().getApplicationIcon(PrefUtil.getSecondaryPref(ctx)));
+                String secondaryPackage = PrefUtil.getSecondaryPref(ctx);
+
+                Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                List<ResolveInfo> resolvedActivityList = ctx.getPackageManager()
+                        .queryIntentActivities(activityIntent, PackageManager.MATCH_ALL);
+                for (ResolveInfo info : resolvedActivityList) {
+                    if (info.activityInfo.packageName.equalsIgnoreCase(secondaryPackage))
+                        activityIntent.setComponent(new ComponentName(info.activityInfo.packageName,
+                                info.activityInfo.name));
+                    Log.d(TAG, "Set");
+                }
+
+                PendingIntent openBrowser = PendingIntent
+                        .getActivity(ctx, 0, activityIntent,
+                                PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
+                builder.setActionButton(icon, "Secondary browser", openBrowser);
+            } catch (PackageManager.NameNotFoundException e) {
+            }
+        }
     }
 
     private static CustomTabsSession getAvailableSessions(Context ctx) {
@@ -104,5 +141,27 @@ public class CustomTabDelegate {
                             PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
             builder.addMenuItem(c.getString(R.string.share), pendingShareIntent);
         }
+    }
+
+    public static Bitmap drawableToBitmap(Drawable drawable) {
+        Bitmap bitmap = null;
+
+        if (drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            if (bitmapDrawable.getBitmap() != null) {
+                return bitmapDrawable.getBitmap();
+            }
+        }
+
+        if (drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+        } else {
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        }
+
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
     }
 }

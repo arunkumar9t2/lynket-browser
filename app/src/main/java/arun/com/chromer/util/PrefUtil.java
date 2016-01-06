@@ -21,6 +21,7 @@ public class PrefUtil {
     public static final String WARM_UP = "warm_up_preference";
     public static final String PRE_FETCH = "pre_fetch_preference";
     public static final String WIFI_PREFETCH = "wifi_preference";
+    public static final String SECONDARY_PREF = "secondary_preference";
 
     private static SharedPreferences preferences(Context context) {
         return context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
@@ -83,6 +84,19 @@ public class PrefUtil {
                 .getDefaultSharedPreferences(context)
                 .edit()
                 .putString(PREFERRED_PACKAGE, string).apply();
+    }
+
+    public static String getSecondaryPref(Context context) {
+        return PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .getString(SECONDARY_PREF, null);
+    }
+
+    public static void setSecondaryPref(Context context, String string) {
+        PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .edit()
+                .putString(SECONDARY_PREF, string).apply();
     }
 
     public static boolean isWarmUpPreferred(Context context) {

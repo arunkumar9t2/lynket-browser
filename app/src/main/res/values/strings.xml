@@ -79,4 +79,5 @@
     <string name="open_settings">Open Settings</string>
     <string name="only_on_wifi">Only on Wi-Fi</string>
     <string name="choose_toolbar_color">Choose toolbar color</string>
+    <string name="choose_secondary_browser">Choose secondary browser</string>
 </resources>
