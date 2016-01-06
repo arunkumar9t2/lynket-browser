@@ -41,4 +41,5 @@ dependencies {
     compile('com.github.afollestad.material-dialogs:commons:0.8.5.3@aar') {
         transitive = true
     }
+    compile 'com.jakewharton.timber:timber:4.1.0'
 }

@@ -47,6 +47,13 @@ public class Licenses {
         notice = new Notice(name, url, copyright, license);
         notices.addNotice(notice);
 
+        name = "Timber";
+        url = "https://github.com/JakeWharton/timber";
+        copyright = "Copyright 2013 Jake Wharton";
+        license = new ApacheSoftwareLicense20();
+        notice = new Notice(name, url, copyright, license);
+        notices.addNotice(notice);
+
         return notices;
     }
 }
