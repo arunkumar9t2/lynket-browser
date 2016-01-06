@@ -13,9 +13,11 @@ import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -35,11 +37,13 @@ import java.util.List;
 
 import arun.com.chromer.activities.AboutAppActivity;
 import arun.com.chromer.activities.TabActivity;
+import arun.com.chromer.chrometabutilites.CustomTabDelegate;
 import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
 import arun.com.chromer.chrometabutilites.MyCustomTabHelper;
 import arun.com.chromer.extra.Licenses;
 import arun.com.chromer.fragments.PreferenceFragment;
 import arun.com.chromer.intro.AppIntroMy;
+import arun.com.chromer.services.WarmupService;
 import arun.com.chromer.util.ChangelogUtil;
 import arun.com.chromer.util.PrefUtil;
 import arun.com.chromer.util.StringConstants;
@@ -58,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     private SharedPreferences mPreferences;
 
     private View mColorView;
+    private SwitchCompat mWarmUpSwitch;
 
     @Override
     protected void onStart() {
@@ -113,6 +118,28 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
         checkAndEducateUser();
 
+        populateUIBasedOnPreferences();
+
+        takeCareOfServices();
+    }
+
+    private void populateUIBasedOnPreferences() {
+        mWarmUpSwitch = (SwitchCompat) findViewById(R.id.warm_up_switch);
+        mWarmUpSwitch.setChecked(PrefUtil.isWarmUpPreferred(this));
+        mWarmUpSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                PrefUtil.setWarmUpPreference(MainActivity.this, isChecked);
+                takeCareOfServices();
+            }
+        });
+    }
+
+    private void takeCareOfServices() {
+        if (PrefUtil.isWarmUpPreferred(this))
+            startService(new Intent(this, WarmupService.class));
+        else
+            stopService(new Intent(this, WarmupService.class));
     }
 
     private void setupDefaultProvider() {
@@ -305,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     private void launchCustomTab(String url) {
-        CustomTabsIntent mCustomTabsIntent = Util.getCustomizedTabIntent(getApplicationContext(), url);
+        CustomTabsIntent mCustomTabsIntent = CustomTabDelegate.getCustomizedTabIntent(getApplicationContext(), url);
         MyCustomActivityHelper.openCustomTab(this, mCustomTabsIntent, Uri.parse(url),
                 TabActivity.mCustomTabsFallback);
     }
@@ -318,7 +345,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                     public void onCustomTabsConnected() {
                         Log.d(TAG, "Connect to custom tab");
                         try {
-                            Log.d(TAG, "Gave may launch command");
                             mCustomTabActivityHelper.mayLaunchUrl(
                                     Uri.parse(GOOGLE_URL)
                                     , null, null);
@@ -329,7 +355,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
                     @Override
                     public void onCustomTabsDisconnected() {
-                        Log.d(TAG, "Disconnect to custom tab");
                     }
                 });
     }

@@ -82,12 +82,12 @@ public class MyCustomActivityHelper implements ServiceConnectionCallback {
     /**
      * Unbinds the Activity from the Custom Tabs Service.
      *
-     * @param activity the activity that is connected to the service.
+     * @param context the activity that is connected to the service.
      */
-    public void unbindCustomTabsService(Activity activity) {
+    public void unbindCustomTabsService(Context context) {
         Log.d(TAG, "Attempting to unbind service!");
         if (mConnection == null) return;
-        activity.unbindService(mConnection);
+        context.unbindService(mConnection);
         mClient = null;
         mCustomTabsSession = null;
         mConnection = null;
@@ -130,21 +130,22 @@ public class MyCustomActivityHelper implements ServiceConnectionCallback {
     /**
      * Binds the Activity to the Custom Tabs Service.
      *
-     * @param activity the activity to be binded to the service.
+     * @param context the activity to be binded to the service.
      */
-    public void bindCustomTabsService(Activity activity) {
+    public boolean bindCustomTabsService(Context context) {
         Log.d(TAG, "Attempting to bind custom tabs service");
-        if (mClient != null) return;
+        if (mClient != null) return false;
 
-        String packageName = MyCustomTabHelper.getPackageNameToUse(activity);
-        if (packageName == null) return;
+        String packageName = MyCustomTabHelper.getPackageNameToUse(context);
+        if (packageName == null) return false;
 
         mConnection = new ServiceConnection(this);
-        boolean ok = CustomTabsClient.bindCustomTabsService(activity, packageName, mConnection);
+        boolean ok = CustomTabsClient.bindCustomTabsService(context, packageName, mConnection);
         if (ok) {
             Log.d(TAG, "Bound successfully");
         } else
             Log.d(TAG, "Did not bind, something wrong");
+        return ok;
     }
 
     @SuppressWarnings("SameParameterValue")
@@ -170,6 +171,16 @@ public class MyCustomActivityHelper implements ServiceConnectionCallback {
         mClient = client;
         mClient.warmup(0L);
         if (mConnectionCallback != null) mConnectionCallback.onCustomTabsConnected();
+    }
+
+
+    public boolean requestWarmUp() {
+        boolean x = false;
+        if (mClient != null) {
+            x = mClient.warmup(0L);
+            Log.d(TAG, "Warmup status " + x);
+        }
+        return false;
     }
 
     @Override

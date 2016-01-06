@@ -67,4 +67,6 @@
     <string name="personalization">Personalization</string>
     <string name="default_clear_msg">is set as the default browser, please clear it by clicking clear defaults.</string>
     <string name="web_dep_tlbr_clr">Website dependent toolbar color</string>
+    <string name="keep_chrome_warmedup">Keep your browser warmed up for faster launch</string>
+    <string name="warmup_browser">Warm up browser</string>
 </resources>

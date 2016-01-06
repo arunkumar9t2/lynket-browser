@@ -18,6 +18,7 @@ public class PrefUtil {
     public static final String ENABLE_ANIMATION = "animations_pref";
     public static final String ANIMATION_TYPE = "animation_preference";
     public static final String FIRST_RUN = "firstrun";
+    public static final String WARM_UP = "warm_up_preference";
 
     private static SharedPreferences preferences(Context context) {
         return context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
@@ -80,5 +81,16 @@ public class PrefUtil {
                 .getDefaultSharedPreferences(context)
                 .edit()
                 .putString(PREFERRED_PACKAGE, string).apply();
+    }
+
+    public static boolean isWarmUpPreferred(Context context) {
+        if (preferences(context).getBoolean(WARM_UP, false)) {
+            return true;
+        }
+        return false;
+    }
+
+    public static void setWarmUpPreference(Context context, boolean preference) {
+        preferences(context).edit().putBoolean(WARM_UP, preference).commit();
     }
 }

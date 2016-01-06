@@ -11,8 +11,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import arun.com.chromer.R;
+import arun.com.chromer.chrometabutilites.CustomTabDelegate;
 import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
-import arun.com.chromer.util.Util;
 
 public class TabActivity extends AppCompatActivity {
 
@@ -65,7 +65,7 @@ public class TabActivity extends AppCompatActivity {
         }
 
         final String url = getIntent().getData().toString();
-        CustomTabsIntent mCustomTabsIntent = Util.getCustomizedTabIntent(
+        CustomTabsIntent mCustomTabsIntent = CustomTabDelegate.getCustomizedTabIntent(
                 getApplicationContext(), url);
 
         mCustomTabActivityHelper = new MyCustomActivityHelper();

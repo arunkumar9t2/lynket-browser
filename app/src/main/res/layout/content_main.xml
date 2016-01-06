@@ -69,6 +69,46 @@
                             android:theme="@style/BrandButtonStyle" />
                     </RelativeLayout>
 
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/warmup_browser"
+                                android:textColor="@color/material_dark_color"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/keep_chrome_warmedup"
+                                android:textColor="@color/material_dark_color"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/warm_up_switch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:checked="false" />
+                    </LinearLayout>
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
@@ -98,8 +138,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Tap the circle button to preview changes"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                        android:textColor="@color/material_dark_color" />
+                        android:textColor="@color/material_dark_color"
+                        android:textSize="12sp" />
 
                     <LinearLayout
                         android:id="@+id/default_provider"

@@ -9,11 +9,6 @@
 
     <CheckBoxPreference
         android:defaultValue="true"
-        android:key="title_pref"
-        android:title="@string/show_title" />
-
-    <CheckBoxPreference
-        android:defaultValue="true"
         android:key="animations_pref"
         android:title="@string/animations" />
     <ListPreference

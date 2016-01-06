@@ -13,6 +13,7 @@
         android:theme="@style/AppTheme">
 
         <service android:name=".services.ClipboardService" />
+        <service android:name=".services.WarmupService" />
 
         <receiver android:name=".chrometabutilites.ShareBroadcastReceiver" />
         <receiver android:name=".chrometabutilites.AddHomeShortcutReceiver" />
