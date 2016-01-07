@@ -260,6 +260,13 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 PrefUtil.setDynamicToolbar(MainActivity.this, isChecked);
+                if (isChecked) {
+                    new MaterialDialog.Builder(MainActivity.this)
+                            .title(R.string.web_dep_tlbr_clr)
+                            .content(R.string.dynamic_toolbar_help)
+                            .positiveText(android.R.string.ok)
+                            .show();
+                }
             }
         });
     }
