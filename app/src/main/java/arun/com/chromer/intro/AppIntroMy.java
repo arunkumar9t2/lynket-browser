@@ -27,6 +27,10 @@ public class AppIntroMy extends AppIntro {
                 getString(R.string.intro_2),
                 R.drawable.chromer_default_image,
                 ContextCompat.getColor(this, R.color.colorPrimary)));
+        addSlide(AppIntroFragment.newInstance(getString(R.string.optional),
+                getString(R.string.optional_intro),
+                R.drawable.optional,
+                ContextCompat.getColor(this, R.color.colorPrimary)));
         addSlide(AppIntroFragment.newInstance(getString(R.string.advantages),
                 getString(R.string.intro_3),
                 R.drawable.advantages,

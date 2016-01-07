@@ -40,9 +40,9 @@
     <string name="add_to_homescreen">Add to homescreen</string>
     <string name="intro_1">Chromer allows you to use Chrome\'s custom tabs feature, which is an extremely light weight chrome tab for faster and secure browsing experience.</string>
     <string name="how_to_use">How to use?</string>
-    <string name="intro_2">Just set Chromer as your default browser, Chromer will display the link in a non intrusive way. Or choose Chromer when prompted.</string>
+    <string name="intro_2">Just set Chromer as your default browser, Chromer will display the link in a non-intrusive way. Or choose Chromer when prompted.</string>
     <string name="advantages">Advantages?</string>
-    <string name="intro_3">Faster loading, non intrusive, saves data, shared login info from Chrome, auto complete forms and SECURE with latest updates!</string>
+    <string name="intro_3">Faster loading, non-intrusive, saves data, shared login info from Chrome, auto complete forms and SECURE with latest updates!</string>
     <string name="thats_it">That\'s it!</string>
     <string name="intro_4">Configure Chromer to your liking by launching the main app. Enjoy and share your thoughts!</string>
     <string name="version">Version</string>
@@ -81,4 +81,6 @@
     <string name="choose_toolbar_color">Choose toolbar color</string>
     <string name="choose_secondary_browser">Choose secondary browser</string>
     <string name="dynamic_toolbar_help">To enable dynamic coloring of toolbar, Chromer learns the colors silently. It might not come initially for a website, but it will improve over time with usage. Enjoy!</string>
+    <string name="optional">More…</string>
+    <string name="optional_intro">Chromer can also keep your browser warmed up to reduce launch times. It can also scan links on your screen and preload them to quickly view content. These are completely optional.</string>
 </resources>
