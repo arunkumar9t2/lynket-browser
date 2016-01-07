@@ -37,11 +37,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import arun.com.chromer.activities.AboutAppActivity;
+import arun.com.chromer.activities.DonateActivity;
 import arun.com.chromer.activities.TabActivity;
 import arun.com.chromer.chrometabutilites.CustomTabDelegate;
 import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
 import arun.com.chromer.chrometabutilites.MyCustomTabHelper;
-import arun.com.chromer.extra.Licenses;
 import arun.com.chromer.fragments.PreferenceFragment;
 import arun.com.chromer.intro.AppIntroMy;
 import arun.com.chromer.services.ScannerService;
@@ -50,7 +50,6 @@ import arun.com.chromer.util.ChangelogUtil;
 import arun.com.chromer.util.PrefUtil;
 import arun.com.chromer.util.StringConstants;
 import arun.com.chromer.util.Util;
-import de.psdev.licensesdialog.LicensesDialog;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback {
@@ -436,8 +435,9 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                                 .withDescription(getString(R.string.help_chromer_grow))
                                 .withIdentifier(7)
                                 .withSelectable(false),
-                        new SecondaryDrawerItem().withName(getString(R.string.licenses))
-                                .withIcon(GoogleMaterial.Icon.gmd_card_membership)
+                        new SecondaryDrawerItem().withName(getString(R.string.support_development))
+                                .withDescription(R.string.consider_donation)
+                                .withIcon(GoogleMaterial.Icon.gmd_favorite)
                                 .withIdentifier(6)
                                 .withSelectable(false),
                         new SecondaryDrawerItem().withName(getString(R.string.about))
@@ -468,11 +468,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                                 launchCustomTab(CUSTOM_TAB_URL);
                                 break;
                             case 6:
-                                new LicensesDialog.Builder(MainActivity.this)
-                                        .setNotices(Licenses.getNotices())
-                                        .setTitle(R.string.licenses)
-                                        .build()
-                                        .showAppCompat();
+                                startActivity(new Intent(MainActivity.this, DonateActivity.class));
                                 break;
                             case 7:
                                 Intent shareIntent = new Intent(Intent.ACTION_SEND);

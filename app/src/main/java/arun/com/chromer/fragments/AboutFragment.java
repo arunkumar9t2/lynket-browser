@@ -24,11 +24,12 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.DonateActivity;
 import arun.com.chromer.adapter.ExtendedBaseAdapter;
+import arun.com.chromer.extra.Licenses;
 import arun.com.chromer.util.ChangelogUtil;
 import arun.com.chromer.util.StringConstants;
 import arun.com.chromer.util.Util;
+import de.psdev.licensesdialog.LicensesDialog;
 
 /**
  * Created by Arun on 11/11/2015.
@@ -110,10 +111,10 @@ public class AboutFragment extends Fragment {
                                 .sizeDp(24));
                         break;
                     case 3:
-                        holder.title.setText(R.string.support_development);
-                        holder.subtitle.setText(R.string.consider_donation);
+                        holder.title.setText(R.string.licenses);
+                        holder.subtitle.setVisibility(View.GONE);
                         holder.imageView.setBackground(new IconicsDrawable(context)
-                                .icon(GoogleMaterial.Icon.gmd_favorite)
+                                .icon(GoogleMaterial.Icon.gmd_card_membership)
                                 .color(materialdarkColor)
                                 .sizeDp(24));
                         break;
@@ -209,7 +210,11 @@ public class AboutFragment extends Fragment {
                         getActivity().startActivity(googleIntent);
                         break;
                     case 3:
-                        startActivity(new Intent(getActivity(), DonateActivity.class));
+                        new LicensesDialog.Builder(getActivity())
+                                .setNotices(Licenses.getNotices())
+                                .setTitle(R.string.licenses)
+                                .build()
+                                .showAppCompat();
                         break;
                 }
             }
