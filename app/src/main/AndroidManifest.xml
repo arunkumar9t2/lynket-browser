@@ -14,7 +14,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <service android:name=".services.ColorExtractor" />
         <service android:name=".services.ClipboardService" />
         <service android:name=".services.WarmupService" />
@@ -89,7 +88,6 @@
             android:name=".activities.DonateActivity"
             android:excludeFromRecents="true"
             android:theme="@style/DonatePopUp" />
-
         <activity
             android:name=".activities.DummyActivity"
             android:enabled="false">
@@ -103,6 +101,11 @@
                 <data android:scheme="https" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name=".chrometabutilites.SecondaryBrowserReceiver"
+            android:enabled="true"
+            android:exported="false"></receiver>
     </application>
 
 </manifest>

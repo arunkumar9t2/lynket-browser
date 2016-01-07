@@ -1,11 +1,9 @@
 package arun.com.chromer.chrometabutilites;
 
 import android.app.PendingIntent;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
@@ -13,8 +11,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsSession;
-
-import java.util.List;
 
 import arun.com.chromer.R;
 import arun.com.chromer.services.ClipboardService;
@@ -91,22 +87,15 @@ public class CustomTabDelegate {
         if (url != null) {
             try {
                 Bitmap icon = drawableToBitmap(ctx.getPackageManager().getApplicationIcon(PrefUtil.getSecondaryPref(ctx)));
-                String secondaryPackage = PrefUtil.getSecondaryPref(ctx);
 
-                Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                List<ResolveInfo> resolvedActivityList = ctx.getPackageManager()
-                        .queryIntentActivities(activityIntent, PackageManager.MATCH_ALL);
-                for (ResolveInfo info : resolvedActivityList) {
-                    if (info.activityInfo.packageName.equalsIgnoreCase(secondaryPackage))
-                        activityIntent.setComponent(new ComponentName(info.activityInfo.packageName,
-                                info.activityInfo.name));
-                }
+                Intent activityIntent = new Intent(ctx, SecondaryBrowserReceiver.class);
 
                 PendingIntent openBrowser = PendingIntent
-                        .getActivity(ctx, 0, activityIntent,
+                        .getBroadcast(ctx, 0, activityIntent,
                                 PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
                 builder.setActionButton(icon, "Secondary browser", openBrowser);
             } catch (PackageManager.NameNotFoundException e) {
+                Timber.d("Was not able to set secondary browser");
             }
         }
     }
