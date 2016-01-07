@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     private SwitchCompat mPrefetchSwitch;
     private SwitchCompat mWifiSwitch;
     private ImageView mSecondaryBrowser;
+    private SwitchCompat mDynamicSwitch;
 
     @Override
     protected void onStart() {
@@ -252,6 +253,15 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 PrefUtil.setWifiPrefetch(MainActivity.this, isChecked);
                 takeCareOfServices();
+            }
+        });
+
+        mDynamicSwitch = (SwitchCompat) findViewById(R.id.dynamic_swich);
+        mDynamicSwitch.setChecked(PrefUtil.isDynamicToolbar(this));
+        mDynamicSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                PrefUtil.setDynamicToolbar(MainActivity.this, isChecked);
             }
         });
     }

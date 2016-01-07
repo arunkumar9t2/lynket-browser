@@ -18,9 +18,11 @@ import java.util.List;
 
 import arun.com.chromer.R;
 import arun.com.chromer.services.ClipboardService;
+import arun.com.chromer.services.ColorExtractor;
 import arun.com.chromer.services.ScannerService;
 import arun.com.chromer.services.WarmupService;
 import arun.com.chromer.util.PrefUtil;
+import arun.com.chromer.util.ToolbarColorUtil;
 import timber.log.Timber;
 
 /**
@@ -41,7 +43,19 @@ public class CustomTabDelegate {
 
 
         if (PrefUtil.isColoredToolbar(ctx)) {
-            final int chosenColor = PrefUtil.getToolbarColor(ctx);
+            int chosenColor = -1;
+            if (PrefUtil.isDynamicToolbar(ctx)) {
+                String host = Uri.parse(url).getHost();
+                chosenColor = ToolbarColorUtil.getColor(host);
+                if (chosenColor == -1) {
+                    // Color does not exist for this site, so let's extract it
+                    chosenColor = PrefUtil.getToolbarColor(ctx);
+                    Intent extractorService = new Intent(ctx, ColorExtractor.class);
+                    extractorService.setData(Uri.parse(url));
+                    ctx.startService(extractorService);
+                }
+            } else chosenColor = PrefUtil.getToolbarColor(ctx);
+
             builder.setToolbarColor(chosenColor);
         }
 

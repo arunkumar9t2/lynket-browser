@@ -4,6 +4,7 @@
 
     <uses-permission android:name="com.android.vending.BILLING" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
@@ -14,6 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <service android:name=".services.ColorExtractor" />
         <service android:name=".services.ClipboardService" />
         <service android:name=".services.WarmupService" />
         <service

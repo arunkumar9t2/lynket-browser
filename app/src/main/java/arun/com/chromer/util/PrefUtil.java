@@ -22,6 +22,7 @@ public class PrefUtil {
     public static final String PRE_FETCH = "pre_fetch_preference";
     public static final String WIFI_PREFETCH = "wifi_preference";
     public static final String SECONDARY_PREF = "secondary_preference";
+    public static final String DYNAMIC_COLOR = "dynamic_color";
 
     private static SharedPreferences preferences(Context context) {
         return context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
@@ -130,5 +131,16 @@ public class PrefUtil {
 
     public static void setWifiPrefetch(Context context, boolean preference) {
         preferences(context).edit().putBoolean(WIFI_PREFETCH, preference).commit();
+    }
+
+    public static boolean isDynamicToolbar(Context context) {
+        if (preferences(context).getBoolean(DYNAMIC_COLOR, false)) {
+            return true;
+        }
+        return false;
+    }
+
+    public static void setDynamicToolbar(Context context, boolean preference) {
+        preferences(context).edit().putBoolean(DYNAMIC_COLOR, preference).commit();
     }
 }
