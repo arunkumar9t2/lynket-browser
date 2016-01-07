@@ -10,7 +10,7 @@ import timber.log.Timber;
  * Created by Arun on 06/01/2016.
  */
 public class Chromer extends Application {
-    private static final String DBNAME = "Chromer_database";
+    public static final String DBNAME = "Chromer_database";
 
     @Override
     public void onCreate() {

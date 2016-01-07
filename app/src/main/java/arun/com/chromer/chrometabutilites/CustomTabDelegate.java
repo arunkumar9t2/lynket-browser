@@ -12,6 +12,9 @@ import android.net.Uri;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsSession;
 
+import com.afollestad.inquiry.Inquiry;
+
+import arun.com.chromer.Chromer;
 import arun.com.chromer.R;
 import arun.com.chromer.services.ClipboardService;
 import arun.com.chromer.services.ColorExtractor;
@@ -28,6 +31,9 @@ public class CustomTabDelegate {
     private static final String TAG = CustomTabDelegate.class.getSimpleName();
 
     public static CustomTabsIntent getCustomizedTabIntent(Context ctx, String url) {
+
+        ensureDbAccess(ctx);
+
         CustomTabsIntent.Builder builder;
 
         CustomTabsSession session = getAvailableSessions(ctx);
@@ -81,6 +87,15 @@ public class CustomTabDelegate {
 
         addActionButtonSecondary(ctx, url, builder);
         return builder.build();
+    }
+
+    private static void ensureDbAccess(Context context) {
+        try {
+            Inquiry.get();
+        } catch (IllegalStateException e) {
+            Timber.d("Re-init Inquiry");
+            Inquiry.init(context, Chromer.DBNAME, 1);
+        }
     }
 
     private static void addActionButtonSecondary(Context ctx, String url, CustomTabsIntent.Builder builder) {
