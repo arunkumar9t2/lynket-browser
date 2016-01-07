@@ -10,7 +10,7 @@ import arun.com.chromer.model.WebColor;
  * Created by Arun on 06/01/2016.
  */
 public class ToolbarColorUtil {
-    public static final String TABLE_COLOR = "WebToolbarColor";
+    private static final String TABLE_COLOR = "WebToolbarColor";
 
 
     public static void insertColor(WebColor websiteToolbarColor) {

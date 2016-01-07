@@ -29,7 +29,7 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
     private static final String TAG = ScannerService.class.getSimpleName();
 
     private static ScannerService mScannerService = null;
-    String lastWarmedUpUrl = "";
+    private String lastWarmedUpUrl = "";
     private MyCustomActivityHelper myCustomActivityHelper;
 
     public static ScannerService getInstance() {
@@ -157,6 +157,7 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
     public boolean shouldHonourWifi() {
         if (PrefUtil.isWifiPreferred(this)) {
             ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            // TODO fix this deprecated call
             NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
             return mWifi.isConnected();
         } else

@@ -62,8 +62,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private MyCustomActivityHelper mCustomTabActivityHelper;
 
-    private SharedPreferences mPreferences;
-
     private View mColorView;
     private SwitchCompat mWarmUpSwitch;
     private SwitchCompat mPrefetchSwitch;
@@ -97,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mPreferences = getSharedPreferences(getPackageName(), MODE_PRIVATE);
+        SharedPreferences mPreferences = getSharedPreferences(getPackageName(), MODE_PRIVATE);
 
         if (PrefUtil.isFirstRun(this)) {
             startActivity(new Intent(this, AppIntroMy.class));

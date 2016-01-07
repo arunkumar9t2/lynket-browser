@@ -31,7 +31,8 @@
             android:layout_height="wrap_content"
             android:text="Title"
             android:textColor="@color/material_dark_color"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:id="@+id/about_app_subtitle"
@@ -39,7 +40,8 @@
             android:layout_height="wrap_content"
             android:text="Subtitle"
             android:textColor="@color/material_dark_color"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            tools:ignore="HardcodedText" />
     </LinearLayout>
 
 </LinearLayout>

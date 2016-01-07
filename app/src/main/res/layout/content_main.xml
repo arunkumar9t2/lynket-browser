@@ -91,7 +91,8 @@
                         <ImageView
                             android:id="@+id/secondary_browser_view"
                             android:layout_width="30dp"
-                            android:layout_height="30dp" />
+                            android:layout_height="30dp"
+                            tools:ignore="ContentDescription" />
                     </LinearLayout>
 
                     <Space
