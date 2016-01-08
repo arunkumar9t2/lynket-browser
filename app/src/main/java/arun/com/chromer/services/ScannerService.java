@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsService;
 import android.support.customtabs.CustomTabsSession;
@@ -15,18 +16,18 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
 import arun.com.chromer.util.PrefUtil;
-import arun.com.chromer.util.Util;
 import timber.log.Timber;
 
 /**
  * Created by Arun on 06/01/2016.
  */
 public class ScannerService extends AccessibilityService implements MyCustomActivityHelper.ConnectionCallback {
-
-    private static final String TAG = ScannerService.class.getSimpleName();
 
     private static ScannerService mScannerService = null;
     private String lastWarmedUpUrl = "";
@@ -80,68 +81,17 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
                 stopService(new Intent(this, WarmupService.class));
             } catch (Exception e) {
             }
+            TextProcessorTask mTextProcessor = new TextProcessorTask(getRootInActiveWindow());
 
-            CharSequence packageName = event.getPackageName();
-            //Timber.d( "Targetting " + packageName + " now");
-
-            String texts = extractText(getRootInActiveWindow());
-            List<String> urls = Util.findURLs(texts);
-            Collections.reverse(urls);
-
-            if (urls.size() != 0) {
-                int first = 0;
-                String priortyUrl = null;
-                List<Bundle> possibleUrls = new ArrayList<>();
-                for (String url : urls) {
-                    if (first == 0) {
-                        priortyUrl = url;
-                        first++;
-                        continue;
-                    }
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable(CustomTabsService.KEY_URL, Uri.parse(url));
-                    possibleUrls.add(bundle);
-
-                    boolean success;
-                    if (!priortyUrl.equalsIgnoreCase(lastWarmedUpUrl)) {
-                        success = myCustomActivityHelper.mayLaunchUrl(Uri.parse(priortyUrl), null, possibleUrls);
-                        if (success) lastWarmedUpUrl = priortyUrl;
-                    } else {
-                        Timber.d("Ignored, already warmed up");
-                    }
-                }
-            }
+            mTextProcessor.execute();
         } else {
             // Do nothing
         }
-
-
     }
 
     @Override
     public void onInterrupt() {
         // Nothing
-    }
-
-    private String extractText(AccessibilityNodeInfo source) {
-        String string = "";
-        if (source == null) {
-            return string;
-        }
-        if (source.getText() != null) {
-            String text = source.getText().toString();
-
-            text = text.replace("\n", " ");
-
-            string += text + " ";
-
-            // Timber.d( "Text: " + text);
-        }
-        for (int i = 0; i < source.getChildCount(); i++) {
-            string += extractText(source.getChild(i));
-        }
-        source.recycle();
-        return string;
     }
 
     @Override
@@ -162,5 +112,101 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
             return mWifi.isConnected();
         } else
             return true;
+    }
+
+    private class TextProcessorTask extends AsyncTask<Void, String, Void> {
+        private AccessibilityNodeInfo info;
+        private Stack<AccessibilityNodeInfo> tree;
+        private int maxUrl = 4;
+        private int extractedCount = 0;
+        private List<String> urls = new ArrayList<>();
+
+        TextProcessorTask(AccessibilityNodeInfo nodeInfo) {
+            info = nodeInfo;
+            tree = new Stack<>();
+        }
+
+        private void actOnCurrentNode(AccessibilityNodeInfo node) {
+            if (node != null && node.getText() != null) {
+                String currNodeText = node.getText().toString();
+                // Timber.d("cuur " + currNodeText);
+                // Now attempt to get all the URLS in this string
+                extractURL(currNodeText);
+                if (urls != null && urls.size() != 0) {
+                    extractedCount += urls.size();
+                }
+            }
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            Timber.d("Background");
+            if (info == null) return null;
+
+            tree.push(info);
+
+            while (!tree.empty() && extractedCount < maxUrl) {
+                AccessibilityNodeInfo currNode = tree.pop();
+                if (currNode != null) {
+                    actOnCurrentNode(currNode);
+                    for (int i = 0; i < currNode.getChildCount(); i++) {
+                        tree.push(currNode.getChild(i));
+                    }
+                }
+            }
+            Timber.d("End");
+            return null;
+        }
+
+        void extractURL(String string) {
+            if (string == null) {
+                return;
+            }
+            Matcher m = Pattern.compile("\\b((?:[a-z][\\w-]+:(?:/{1,3}|[a-z0-9%])|www\\d{0,3}[.]|[a-z0-9.\\-]+[.][a-z]{2,4}/)(?:[^\\s()<>]+|\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\))+(?:\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))", Pattern.CASE_INSENSITIVE)
+                    .matcher(string);
+            while (m.find()) {
+                String url = m.group();
+                // Timber.d( "URL extracted: " + url);
+                if (!url.toLowerCase().matches("^\\w+://.*")) {
+                    url = "http://" + url;
+                }
+                urls.add(url);
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            Timber.d("On post execute");
+            for (int i = 0; i < urls.size(); i++) {
+                String url = urls.get(i);
+                Timber.d("Extracted " + url);
+            }
+
+            Collections.reverse(urls);
+
+            if (urls.size() != 0) {
+                int first = 0;
+                String priorityUrl = null;
+                List<Bundle> possibleUrls = new ArrayList<>();
+                for (String url : urls) {
+                    if (first == 0) {
+                        priorityUrl = url;
+                        first++;
+                    } else {
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(CustomTabsService.KEY_URL, Uri.parse(url));
+                        possibleUrls.add(bundle);
+                    }
+                    boolean success;
+                    if (!priorityUrl.equalsIgnoreCase(lastWarmedUpUrl)) {
+                        success = myCustomActivityHelper.mayLaunchUrl(Uri.parse(priorityUrl), null, possibleUrls);
+                        if (success) lastWarmedUpUrl = priorityUrl;
+                    } else {
+                        Timber.d("Ignored, already warmed up");
+                    }
+                }
+            }
+
+        }
     }
 }
