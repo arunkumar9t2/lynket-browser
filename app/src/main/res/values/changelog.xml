@@ -4,6 +4,11 @@
 <strong>You can view this again in the about screen.</strong>
 <br></br>
 <br></br>
+<strong>1.4.1</strong>
+<ul>
+    <li>Rewritten affected code to avoid potential license violations. Credits added where due, please update reviews.</li>
+</ul>
+<br></br>
 <strong>1.4</strong>
 <ul>
     <li><b>NEW:</b> Pre fetching. Chromer can scan links on screen and pre load them in background for you.</li>
