@@ -14,6 +14,7 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import arun.com.chromer.util.ChromerDatabaseUtil;
 import timber.log.Timber;
 
 /**
@@ -81,6 +82,12 @@ public class ColorExtractor extends IntentService {
         if (color != 0) {
             // successful extraction
             Timber.d(urll.getHost());
+            // Attempt to install
+            try {
+                new ChromerDatabaseUtil(this).insertColor(color, urll.getHost());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

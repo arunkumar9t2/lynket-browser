@@ -12,16 +12,13 @@ import android.net.Uri;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsSession;
 
-import com.afollestad.inquiry.Inquiry;
-
-import arun.com.chromer.Chromer;
 import arun.com.chromer.R;
 import arun.com.chromer.services.ClipboardService;
 import arun.com.chromer.services.ColorExtractor;
 import arun.com.chromer.services.ScannerService;
 import arun.com.chromer.services.WarmupService;
+import arun.com.chromer.util.ChromerDatabaseUtil;
 import arun.com.chromer.util.PrefUtil;
-import arun.com.chromer.util.ToolbarColorUtil;
 import timber.log.Timber;
 
 /**
@@ -31,8 +28,6 @@ public class CustomTabDelegate {
     private static final String TAG = CustomTabDelegate.class.getSimpleName();
 
     public static CustomTabsIntent getCustomizedTabIntent(Context ctx, String url) {
-
-        ensureDbAccess(ctx);
 
         CustomTabsIntent.Builder builder;
 
@@ -48,7 +43,7 @@ public class CustomTabDelegate {
             int chosenColor = -1;
             if (PrefUtil.isDynamicToolbar(ctx)) {
                 String host = Uri.parse(url).getHost();
-                chosenColor = ToolbarColorUtil.getColor(host);
+                chosenColor = new ChromerDatabaseUtil(ctx).getColor(host);
                 if (chosenColor == -1) {
                     // Color does not exist for this site, so let's extract it
                     chosenColor = PrefUtil.getToolbarColor(ctx);
@@ -87,15 +82,6 @@ public class CustomTabDelegate {
 
         addActionButtonSecondary(ctx, url, builder);
         return builder.build();
-    }
-
-    private static void ensureDbAccess(Context context) {
-        try {
-            Inquiry.get();
-        } catch (IllegalStateException e) {
-            Timber.d("Re-init Inquiry");
-            Inquiry.init(context, Chromer.DBNAME, 1);
-        }
     }
 
     private static void addActionButtonSecondary(Context ctx, String url, CustomTabsIntent.Builder builder) {
