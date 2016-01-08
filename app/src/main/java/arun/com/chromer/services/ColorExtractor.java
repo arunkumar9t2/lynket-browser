@@ -3,16 +3,17 @@ package arun.com.chromer.services;
 import android.app.IntentService;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import arun.com.chromer.model.WebColor;
-import arun.com.chromer.util.ToolbarColorUtil;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import timber.log.Timber;
 
 /**
@@ -20,54 +21,66 @@ import timber.log.Timber;
  */
 public class ColorExtractor extends IntentService {
 
+    private static String splitter = "content=\"";
+
     public ColorExtractor() {
         super(ColorExtractor.class.getSimpleName());
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        String url = intent.getDataString();
+        String url1 = intent.getDataString();
 
-        int color = -1;
+        // Testing link
+        URL urll = null;
+
+        int color = 0;
         try {
-            // Attempting to extract colors
-            OkHttpClient httpClient = new OkHttpClient();
+            urll = new URL(url1);
 
-            Response response = httpClient.newCall(new Request.Builder()
-                    .url(url)
-                    .build())
-                    .execute();
+            HttpURLConnection connection = (HttpURLConnection) urll.openConnection();
+            // attempt to connect
+            InputStream inputStream = connection.getInputStream();
 
-            BufferedReader reader = new BufferedReader(response.body().charStream());
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-
-                if (line.contains("<meta name=\"theme-color\" content=\"")) {
-                    String substring = line.substring(line.indexOf('#'), line.lastIndexOf('"'));
-                    color = Color.parseColor(substring);
-                    break;
-                }
-
-                if (line.contains("</head>")) {
+            String temp = "";
+            String page = "";
+            while ((temp = reader.readLine()) != null) {
+                page += temp;
+                if (temp.contains("</head>")) {
+                    Timber.d("Stopping");
                     break;
                 }
             }
-            reader.close();
-            response.body().close();
-        } catch (IOException | IllegalArgumentException e) {
+
+            String test = "<meta name=\"theme-color\" content=\"#0041C8\">";
+
+            Matcher matcher = Pattern.compile("<meta name=\\\"theme-color\\\"(.*?)>").matcher(page);
+
+            while (matcher.find()) {
+                Timber.d("Found" + matcher.groupCount());
+                for (int i = 0; i < matcher.groupCount(); i++) {
+                    Timber.d(matcher.group(i));
+                    String content = matcher.group().split(splitter)[1];
+                    color = Color.parseColor(content.split("\">")[0]);
+                }
+            }
+
+            // Attempt to extract the color tag using regex.
+        } catch (MalformedURLException e) {
             e.printStackTrace();
-
-        }
-        Timber.d("Extracted color =  " + color + " for" + url);
-
-        if (color != -1) {
-            WebColor webColor = new WebColor();
-            webColor.host = Uri.parse(url).getHost();
-            webColor.toolbarColor = color;
-
-            ToolbarColorUtil.insertColor(webColor);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
+        Timber.d("Extracted color " + color);
+
+        if (color != 0) {
+            // successful extraction
+            Timber.d(urll.getHost());
+        }
     }
 }

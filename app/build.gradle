@@ -43,5 +43,4 @@ dependencies {
     }
     compile 'com.jakewharton.timber:timber:4.1.0'
     compile 'com.github.afollestad:inquiry:2.0.0'
-    compile 'com.squareup.okhttp3:okhttp:3.0.0-RC1'
 }
