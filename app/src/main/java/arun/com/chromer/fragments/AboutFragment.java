@@ -60,6 +60,16 @@ public class AboutFragment extends Fragment {
         ListView chromerList = (ListView) rootView.findViewById(R.id.about_app_version_list);
         ListView authorList = (ListView) rootView.findViewById(R.id.about_author_version_list);
 
+        View daniel = rootView.findViewById(R.id.daniel);
+        daniel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent googleIntent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://plus.google.com/u/0/+DanielCiao/about"));
+                getActivity().startActivity(googleIntent);
+            }
+        });
+
         // Loading the header
         chromerList.setAdapter(new ExtendedBaseAdapter() {
             final Context context = getActivity().getApplicationContext();
@@ -248,6 +258,7 @@ public class AboutFragment extends Fragment {
                 }
             }
         });
+
     }
 
     public static class ViewHolder {
