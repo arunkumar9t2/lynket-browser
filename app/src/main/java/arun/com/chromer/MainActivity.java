@@ -53,7 +53,6 @@ import arun.com.chromer.util.Util;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback {
-    private static final String TAG = MainActivity.class.getSimpleName();
 
     private static final String GOOGLE_URL = "http://www.google.com/";
     private static final String CUSTOM_TAB_URL = "https://developer.chrome.com/multidevice/android/customtabs#whentouse";
