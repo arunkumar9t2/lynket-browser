@@ -376,7 +376,11 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     @SuppressWarnings("SameParameterValue")
     private void handleDefaultBehaviour() {
-        String packageName = getDefaultBrowserPackage();
+        Intent launchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(GOOGLE_URL));
+        ResolveInfo resolveInfo = getPackageManager().resolveActivity(launchIntent,
+                PackageManager.MATCH_DEFAULT_ONLY);
+
+        String packageName = resolveInfo != null ? resolveInfo.activityInfo.packageName : "";
         if (packageName != null) {
             if (packageName.trim().equalsIgnoreCase(getPackageName())) {
                 Timber.d("Chromer defaulted");
@@ -395,14 +399,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 startActivity(intent);
             }
         }
-    }
-
-    private String getDefaultBrowserPackage() {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(GOOGLE_URL));
-        ResolveInfo resolveInfo = getPackageManager().resolveActivity(browserIntent,
-                PackageManager.MATCH_DEFAULT_ONLY);
-
-        return resolveInfo.activityInfo.packageName;
     }
 
     private void setupDrawer(Toolbar toolbar) {
