@@ -2,7 +2,6 @@ package arun.com.chromer;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
@@ -92,8 +91,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        SharedPreferences mPreferences = getSharedPreferences(getPackageName(), MODE_PRIVATE);
 
         if (PrefUtil.isFirstRun(this)) {
             startActivity(new Intent(this, AppIntroMy.class));
