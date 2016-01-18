@@ -192,11 +192,11 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     @Override
     protected void onResume() {
         super.onResume();
-        linkAccessiblityAndPrefetch();
+        linkAccessibilityAndPrefetch();
     }
 
     private void populateUIBasedOnPreferences() {
-        linkAccessiblityAndPrefetch();
+        linkAccessibilityAndPrefetch();
 
         mWarmUpSwitch = (SwitchCompat) findViewById(R.id.warm_up_switch);
         mWarmUpSwitch.setChecked(PrefUtil.isWarmUpPreferred(this));
@@ -266,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         });
     }
 
-    private void linkAccessiblityAndPrefetch() {
+    private void linkAccessibilityAndPrefetch() {
         if (Util.isAccessibilityServiceEnabled(this)) {
             Timber.d("Scanning permission granted");
             if (mPrefetchSwitch != null)
