@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
         mPrefetchSwitch = (SwitchCompat) findViewById(R.id.pre_fetch_switch);
         mPrefetchSwitch.setChecked(PrefUtil.isPreFetchPrefered(this));
-        linkWarmAndPrefetch(PrefUtil.isPreFetchPrefered(this));
+        linkWarmUpWithPreference(PrefUtil.isPreFetchPrefered(this));
         mPrefetchSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -227,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 } else {
                     mWarmUpSwitch.setChecked(warmup);
                     PrefUtil.setWarmUpPreference(MainActivity.this, warmup);
-                    linkWarmAndPrefetch(isChecked);
+                    linkWarmUpWithPreference(isChecked);
                 }
                 PrefUtil.setPrefetchPreference(MainActivity.this, isChecked);
                 takeCareOfServices();
@@ -274,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         }
     }
 
-    private void linkWarmAndPrefetch(boolean isChecked) {
+    private void linkWarmUpWithPreference(boolean isChecked) {
         if (isChecked) {
             mWarmUpSwitch.setEnabled(false);
         } else {
