@@ -39,7 +39,7 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
     private static final String PREMIUM_SKU = "premium_donation";
     // (arbitrary) request code for the purchase flow
     private static final int RC_REQUEST = 10001;
-    private static final String TAG = DonateActivity.class.getSimpleName();
+    private static final int ICON_SIZE_DP = 24;
     private static boolean mCoffeeDone = false;
     private static boolean mLunchDone = false;
     private static boolean mPremiumDone = false;
@@ -187,39 +187,36 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
                         else setBlack(holder);
                         holder.title.setText(getString(R.string.coffee));
                         holder.subtitle.setText(details.get(0) != null ?
-                                details.get(0).getPrice() + " " + details.get(0).getPriceCurrencyCode()
-                                : error);
+                                details.get(0).getPrice() : error);
                         holder.imageView.setBackground(new IconicsDrawable(context)
                                 .icon(CommunityMaterial.Icon.cmd_coffee)
                                 .color(ContextCompat.getColor(getApplicationContext(),
                                         R.color.coffee_color))
-                                .sizeDp(24));
+                                .sizeDp(ICON_SIZE_DP));
                         break;
                     case 1:
                         if (mLunchDone) setGreen(holder);
                         else setBlack(holder);
                         holder.title.setText(getString(R.string.lunch));
                         holder.subtitle.setText(details.get(1) != null ?
-                                details.get(1).getPrice() + " " + details.get(1).getPriceCurrencyCode()
-                                : error);
+                                details.get(1).getPrice() : error);
                         holder.imageView.setBackground(new IconicsDrawable(context)
                                 .icon(CommunityMaterial.Icon.cmd_food)
                                 .color(ContextCompat.getColor(getApplicationContext(),
                                         R.color.lunch_color))
-                                .sizeDp(24));
+                                .sizeDp(ICON_SIZE_DP));
                         break;
                     case 2:
                         if (mPremiumDone) setGreen(holder);
                         else setBlack(holder);
                         holder.title.setText(getString(R.string.premimum_donation));
                         holder.subtitle.setText(details.get(2) != null ?
-                                details.get(2).getPrice() + " " + details.get(2).getPriceCurrencyCode()
-                                : error);
+                                details.get(2).getPrice() : error);
                         holder.imageView.setBackground(new IconicsDrawable(context)
                                 .icon(CommunityMaterial.Icon.cmd_cash_usd)
                                 .color(ContextCompat.getColor(getApplicationContext(),
                                         (R.color.premium_color)))
-                                .sizeDp(24));
+                                .sizeDp(ICON_SIZE_DP));
                         break;
                 }
                 return convertView;
