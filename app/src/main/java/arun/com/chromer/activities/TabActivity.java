@@ -12,8 +12,6 @@ import android.widget.Toast;
 import arun.com.chromer.R;
 import arun.com.chromer.chrometabutilites.CustomTabDelegate;
 import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
-import arun.com.chromer.util.PrefUtil;
-import arun.com.chromer.util.Util;
 
 public class TabActivity extends AppCompatActivity {
 
@@ -38,8 +36,6 @@ public class TabActivity extends AppCompatActivity {
                     }
                 }
             };
-    private static final String TAG = TabActivity.class.getSimpleName();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +49,7 @@ public class TabActivity extends AppCompatActivity {
         }
 
         final String url = getIntent().getData().toString();
-        CustomTabsIntent mCustomTabsIntent = CustomTabDelegate.getCustomizedTabIntent(
-                getApplicationContext(), url);
+        CustomTabsIntent mCustomTabsIntent = CustomTabDelegate.getCustomizedTabIntent(getApplicationContext(), url);
 
         MyCustomActivityHelper.openCustomTab(this, mCustomTabsIntent,
                 Uri.parse(getIntent().getData().toString()),
@@ -62,12 +57,4 @@ public class TabActivity extends AppCompatActivity {
         finish();
     }
 
-    boolean shouldBind() {
-        if (PrefUtil.isPreFetchPrefered(this) && Util.isAccessibilityServiceEnabled(this)) {
-            return false;
-        } else if (!PrefUtil.isPreFetchPrefered(this))
-            return true;
-
-        return true;
-    }
 }
