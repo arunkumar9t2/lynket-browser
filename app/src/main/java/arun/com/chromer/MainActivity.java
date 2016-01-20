@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     private SwitchCompat mWifiSwitch;
     private ImageView mSecondaryBrowser;
     private SwitchCompat mDynamicSwitch;
+    private ImageView mDefaultProviderIcn;
 
     @Override
     protected void onStart() {
@@ -134,16 +135,10 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     private void setUpSecondaryBrowser() {
         mSecondaryBrowser = (ImageView) findViewById(R.id.secondary_browser_view);
 
-        try {
-            mSecondaryBrowser.setImageDrawable(
-                    getPackageManager()
-                            .getApplicationIcon(PrefUtil.getSecondaryPref(this)));
-        } catch (PackageManager.NameNotFoundException e) {
+        setIconWithPackageName(mSecondaryBrowser, PrefUtil.getSecondaryPref(this));
 
-        }
-
-        View click = findViewById(R.id.secondary_browser);
-        click.setOnClickListener(new View.OnClickListener() {
+        View secondaryBrowserClickTarget = findViewById(R.id.secondary_browser);
+        secondaryBrowserClickTarget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));
@@ -305,20 +300,23 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     private void setupDefaultProvider() {
+        mDefaultProviderIcn = (ImageView) findViewById(R.id.default_provider_view);
+
+        final String preferredApp = PrefUtil.getPreferredTabApp(MainActivity.this);
+
+        setIconWithPackageName(mDefaultProviderIcn, preferredApp);
+
         findViewById(R.id.default_provider).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String[] packagesArray = new String[0];
-                final List<String> suppPackages = MyCustomTabHelper.
-                        getCustomTabSupportingPackages(getApplicationContext());
+                final List<String> suppPackages = MyCustomTabHelper.getCustomTabSupportingPackages(getApplicationContext());
                 if (suppPackages != null) {
                     packagesArray = Util.getAppNameFromPackages(getApplicationContext(), suppPackages);
                 }
                 int choice = -1;
-                String pack = PrefUtil.getPreferredTabApp(MainActivity.this);
-                if (suppPackages != null && Util.isPackageInstalled(getApplicationContext(),
-                        pack)) {
-                    choice = suppPackages.indexOf(pack);
+                if (suppPackages != null && Util.isPackageInstalled(getApplicationContext(), preferredApp)) {
+                    choice = suppPackages.indexOf(preferredApp);
                 }
                 new MaterialDialog.Builder(MainActivity.this)
                         .title(getString(R.string.choose_default_provider))
@@ -553,5 +551,15 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             return true;
 
         return true;
+    }
+
+    private void setIconWithPackageName(ImageView imageView, String packageName) {
+        if (imageView == null || packageName == null) return;
+
+        try {
+            imageView.setImageDrawable(getPackageManager().getApplicationIcon(packageName));
+        } catch (PackageManager.NameNotFoundException e) {
+            return;
+        }
     }
 }
