@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
         mPrefetchSwitch = (SwitchCompat) findViewById(R.id.pre_fetch_switch);
         mPrefetchSwitch.setChecked(PrefUtil.isPreFetchPrefered(this));
-        linkWarmUpWithPreference(PrefUtil.isPreFetchPrefered(this));
+        linkWarmUpWithPrefetch(PrefUtil.isPreFetchPrefered(this));
         mPrefetchSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -226,9 +226,10 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                             })
                             .show();
                 } else {
-                    mWarmUpSwitch.setChecked(warmup);
+                    // Jan 21, 2016 - Changing to !warmup so that indicator shows it as enabled.
+                    mWarmUpSwitch.setChecked(!warmup);
                     PrefUtil.setWarmUpPreference(MainActivity.this, warmup);
-                    linkWarmUpWithPreference(isChecked);
+                    linkWarmUpWithPrefetch(isChecked);
                 }
                 PrefUtil.setPrefetchPreference(MainActivity.this, isChecked);
                 takeCareOfServices();
@@ -275,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         }
     }
 
-    private void linkWarmUpWithPreference(boolean isChecked) {
+    private void linkWarmUpWithPrefetch(boolean isChecked) {
         if (isChecked) {
             mWarmUpSwitch.setEnabled(false);
         } else {
@@ -328,8 +329,9 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                                     public boolean onSelection(MaterialDialog dialog, View itemView,
                                                                int which, CharSequence text) {
                                         if (suppPackages != null) {
-                                            PrefUtil.setPreferredTabApp(MainActivity.this,
-                                                    suppPackages.get(which));
+                                            String selectedPackage = suppPackages.get(which);
+                                            PrefUtil.setPreferredTabApp(MainActivity.this, selectedPackage);
+                                            setIconWithPackageName(mDefaultProviderIcn, selectedPackage);
                                         }
                                         return true;
                                     }
