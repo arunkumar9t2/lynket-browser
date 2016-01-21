@@ -46,11 +46,31 @@
                         android:layout_width="match_parent"
                         android:layout_height="8dp" />
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/default_pref_xpln"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                        android:layout_height="56dp"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp">
+
+                        <TextView
+                            android:id="@+id/default_setting_xpln"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/default_pref_xpln"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                        <ImageView
+                            android:id="@+id/default_icon_c"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:visibility="gone"
+                            tools:ignore="ContentDescription" />
+
+                    </LinearLayout>
 
 
                     <RelativeLayout
@@ -77,7 +97,7 @@
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:paddingLeft="8dp"
-                        android:paddingRight="16dp">
+                        android:paddingRight="8dp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -104,7 +124,7 @@
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:paddingLeft="8dp"
-                        android:paddingRight="16dp">
+                        android:paddingRight="8dp">
 
                         <TextView
                             android:layout_width="0dp"

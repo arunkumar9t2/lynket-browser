@@ -13,4 +13,5 @@
     <color name="twitter">#55acee</color>
     <color name="linkedin">#0077b5</color>
     <color name="playstore_green">#0f9d58</color>
+    <color name="default_success">#4CAF50</color>
 </resources>

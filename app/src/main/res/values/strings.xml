@@ -83,4 +83,5 @@
     <string name="dynamic_toolbar_help">To enable dynamic coloring of toolbar, Chromer learns the colors silently. It might not come initially for a website, but it will improve over time with usage. Enjoy!</string>
     <string name="optional">More…</string>
     <string name="optional_intro">Chromer can also keep your browser warmed up to reduce launch times. It can also scan links on your screen and preload them to quickly view content. These are completely optional.</string>
+    <string name="chromer_defaulted">Chromer is the current default browser</string>
 </resources>

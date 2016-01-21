@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -15,6 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import arun.com.chromer.BuildConfig;
+import arun.com.chromer.MainActivity;
 
 /**
  * Created by Arun on 17/12/2015.
@@ -122,5 +124,14 @@ public class Util {
             Log.v(TAG, "Scanner service is disabled.");
         }
         return false;
+    }
+
+    public static String getDefaultBrowserPackage(Context context) {
+        Intent launchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(MainActivity.GOOGLE_URL));
+        ResolveInfo resolveInfo = context.getPackageManager().resolveActivity(launchIntent,
+                PackageManager.MATCH_DEFAULT_ONLY);
+
+        String packageName = resolveInfo != null ? resolveInfo.activityInfo.packageName : "";
+        return packageName;
     }
 }

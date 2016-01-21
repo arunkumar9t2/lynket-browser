@@ -12,18 +12,23 @@ import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
@@ -53,7 +58,7 @@ import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback {
 
-    private static final String GOOGLE_URL = "http://www.google.com/";
+    public static final String GOOGLE_URL = "http://www.google.com/";
     private static final String CUSTOM_TAB_URL = "https://developer.chrome.com/multidevice/android/customtabs#whentouse";
     private static final String CHROME_PACKAGE = "com.android.chrome";
 
@@ -66,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     private ImageView mSecondaryBrowser;
     private SwitchCompat mDynamicSwitch;
     private ImageView mDefaultProviderIcn;
+    private AppCompatButton mSetDefaultButton;
 
     @Override
     protected void onStart() {
@@ -110,12 +116,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
         setupColorPicker();
 
-        findViewById(R.id.set_default).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleDefaultBehaviour();
-            }
-        });
+        setupDefaultBrowser();
 
         setupDefaultProvider();
 
@@ -189,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     protected void onResume() {
         super.onResume();
         linkAccessibilityAndPrefetch();
+        setupDefaultBrowser();
     }
 
     private void populateUIBasedOnPreferences() {
@@ -371,30 +373,44 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         mColorView.setBackgroundColor(chosenColor);
     }
 
-    @SuppressWarnings("SameParameterValue")
-    private void handleDefaultBehaviour() {
-        Intent launchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(GOOGLE_URL));
-        ResolveInfo resolveInfo = getPackageManager().resolveActivity(launchIntent,
-                PackageManager.MATCH_DEFAULT_ONLY);
+    private void setupDefaultBrowser() {
+        final String defaultBrowserPackage = Util.getDefaultBrowserPackage(MainActivity.this);
 
-        String packageName = resolveInfo != null ? resolveInfo.activityInfo.packageName : "";
-        if (packageName != null) {
-            if (packageName.trim().equalsIgnoreCase(getPackageName())) {
-                Timber.d("Chromer defaulted");
-                Snackbar.make(mColorView, "Already set!", Snackbar.LENGTH_SHORT).show();
-            } else if (packageName.equalsIgnoreCase("android") && Util.isPackageInstalled(this, packageName)) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(GOOGLE_URL)));
-            } else {
-                Intent intent = new Intent(
-                        android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                intent.setData(Uri.parse(
-                        "package:" + packageName));
-                Toast.makeText(this,
-                        Util.getAppNameWithPackage(this, packageName)
-                                + " "
-                                + getString(R.string.default_clear_msg), Toast.LENGTH_LONG).show();
-                startActivity(intent);
+        mSetDefaultButton = (AppCompatButton) findViewById(R.id.set_default);
+        mSetDefaultButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (defaultBrowserPackage != null) {
+                    if (defaultBrowserPackage.trim().equalsIgnoreCase(getPackageName())) {
+                        Timber.d("Chromer defaulted");
+                        Snackbar.make(mColorView, "Already set!", Snackbar.LENGTH_SHORT).show();
+                    } else if (defaultBrowserPackage.equalsIgnoreCase("android") && Util.isPackageInstalled(MainActivity.this, defaultBrowserPackage)) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(GOOGLE_URL)));
+                    } else {
+                        Intent intent = new Intent(
+                                android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        intent.setData(Uri.parse("package:" + defaultBrowserPackage));
+                        Toast.makeText(getApplicationContext(),
+                                Util.getAppNameWithPackage(getApplicationContext(), defaultBrowserPackage)
+                                        + " "
+                                        + getString(R.string.default_clear_msg), Toast.LENGTH_LONG).show();
+                        startActivity(intent);
+                    }
+                }
             }
+        });
+
+        if (defaultBrowserPackage.trim().equalsIgnoreCase(getPackageName())) {
+            mSetDefaultButton.setVisibility(View.GONE);
+            ImageView defaultSuccessIcon = (ImageView) findViewById(R.id.default_icon_c);
+            defaultSuccessIcon.setVisibility(View.VISIBLE);
+            defaultSuccessIcon.setImageDrawable(new IconicsDrawable(this)
+                    .icon(GoogleMaterial.Icon.gmd_check_circle)
+                    .color(ContextCompat.getColor(this, R.color.default_success))
+                    .sizeDp(24));
+            TextView explanation = (TextView) findViewById(R.id.default_setting_xpln);
+            explanation.setText(R.string.chromer_defaulted);
+            explanation.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         }
     }
 
