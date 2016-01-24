@@ -11,9 +11,18 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 class DBHelper extends SQLiteOpenHelper {
 
+    private static DBHelper mInstance;
+
 
     public DBHelper(Context context) {
         super(context, ChromerDatabaseUtil.DATABASE_NAME, null, 1);
+    }
+
+    public static DBHelper getInstance(Context context) {
+        if (mInstance == null) {
+            mInstance = new DBHelper(context.getApplicationContext());
+        }
+        return mInstance;
     }
 
     @Override
@@ -23,22 +32,25 @@ class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS ExtractedColors");
+        db.execSQL("drop table if exists ExtractedColors");
         onCreate(db);
     }
 
     public boolean insertColor(int color, String url) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("color", color);
-        contentValues.put("url", url);
+        contentValues.put(ChromerDatabaseUtil.COLUMN_COLOR, color);
+        contentValues.put(ChromerDatabaseUtil.COLUMN_URL, url);
         db.insert("ExtractedColors", null, contentValues);
+        // Jan 24, 2016 - Close connection
+        db.close();
         return true;
     }
 
-    public Cursor getColorForClass(String url) {
+    public Cursor getColorForUrl(String url) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("select * from ExtractedColors where url = ?", new String[]{url});
         return res;
     }
+
 }

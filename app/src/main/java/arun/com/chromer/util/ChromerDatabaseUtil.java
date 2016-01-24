@@ -3,37 +3,38 @@ package arun.com.chromer.util;
 import android.content.Context;
 import android.database.Cursor;
 
+import timber.log.Timber;
+
 /**
  * Created by Arun on 06/01/2016.
  */
 public class ChromerDatabaseUtil {
     public static final String DATABASE_NAME = "database.db";
-    public static final String OLD_DATABASE_NAME = "Chromer_database.db";
-    public static final String ColorTABLE = "Chromer_database.db";
 
-    public static final String CONTACTS_COLUMN_URL = "url";
+    // TODO To run clean up
+    public static final String OLD_DATABASE_NAME = "Chromer_database.db";
+
+    public static final String COLUMN_URL = "url";
     public static final String COLUMN_COLOR = "color";
 
-    private DBHelper dbHelper;
+    private DBHelper mDBHelper;
 
     public ChromerDatabaseUtil(Context context) {
-        dbHelper = new DBHelper(context);
+        mDBHelper = DBHelper.getInstance(context);
     }
 
-    void deinit() {
-        if (dbHelper != null) {
-            dbHelper.close();
+    void deInit() {
+        if (mDBHelper != null) {
+            Timber.d("Disposing");
+            mDBHelper.close();
+            mDBHelper = null;
         }
     }
 
     public int getColor(String url) {
-        Cursor cursor = dbHelper.getColorForClass(url);
-        if (cursor == null) {
-            return -1;
-        }
-        if (cursor.isLast()) {
-            return -1;
-        }
+        Cursor cursor = mDBHelper.getColorForUrl(url);
+        if (cursor == null) return -1;
+        if (cursor.getCount() == 0) return -1;
         int color = -1;
         try {
             cursor.moveToFirst();
@@ -45,13 +46,17 @@ public class ChromerDatabaseUtil {
             e.printStackTrace();
         }
 
+        // dispose
+        deInit();
         return color;
     }
 
     public void insertColor(int color, String url) {
-        if (dbHelper != null) {
-            dbHelper.insertColor(color, url);
+        if (mDBHelper != null) {
+            mDBHelper.insertColor(color, url);
         }
+        // dispose
+        deInit();
     }
 }
 
