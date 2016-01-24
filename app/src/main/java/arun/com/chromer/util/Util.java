@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -17,6 +18,7 @@ import java.util.regex.Pattern;
 
 import arun.com.chromer.BuildConfig;
 import arun.com.chromer.MainActivity;
+import arun.com.chromer.model.App;
 
 /**
  * Created by Arun on 17/12/2015.
@@ -133,5 +135,25 @@ public class Util {
 
         String packageName = resolveInfo != null ? resolveInfo.activityInfo.packageName : "";
         return packageName;
+    }
+
+    public static List<App> getScndryBrwsrApps(Context context) {
+        List<App> apps = new ArrayList<>();
+        Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));
+        List<ResolveInfo> resolvedActivityList = context.getPackageManager().queryIntentActivities(activityIntent, PackageManager.MATCH_ALL);
+        for (ResolveInfo info : resolvedActivityList) {
+            String packag = info.activityInfo.packageName;
+            if (packag.equalsIgnoreCase(context.getPackageName()))
+                continue;
+            String appName = getAppNameWithPackage(context, packag);
+            Drawable appIcon;
+            try {
+                appIcon = context.getPackageManager().getApplicationIcon(packag);
+            } catch (PackageManager.NameNotFoundException e) {
+                appIcon = null;
+            }
+            apps.add(new App(appName, packag, appIcon));
+        }
+        return apps;
     }
 }

@@ -3,7 +3,6 @@ package arun.com.chromer;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -37,17 +36,18 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import arun.com.chromer.activities.AboutAppActivity;
 import arun.com.chromer.activities.DonateActivity;
 import arun.com.chromer.activities.TabActivity;
+import arun.com.chromer.adapter.AppRenderAdapter;
 import arun.com.chromer.chrometabutilites.CustomTabDelegate;
 import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
 import arun.com.chromer.chrometabutilites.MyCustomTabHelper;
 import arun.com.chromer.fragments.PreferenceFragment;
 import arun.com.chromer.intro.AppIntroMy;
+import arun.com.chromer.model.App;
 import arun.com.chromer.services.ScannerService;
 import arun.com.chromer.services.WarmupService;
 import arun.com.chromer.util.ChangelogUtil;
@@ -134,6 +134,12 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         takeCareOfServices();
     }
 
+    private void snack(String textToSnack) {
+        // Have to provide a view for view traversal, so providing the set default button.
+        Snackbar.make(mSetDefaultButton, textToSnack, Snackbar.LENGTH_SHORT).show();
+    }
+
+
     private void setUpSecondaryBrowser() {
         mSecondaryBrowser = (ImageView) findViewById(R.id.secondary_browser_view);
 
@@ -143,42 +149,21 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         secondaryBrowserClickTarget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));
-                List<ResolveInfo> resolvedActivityList = getPackageManager()
-                        .queryIntentActivities(activityIntent, PackageManager.MATCH_ALL);
-                final List<String> packages = new ArrayList<>();
-                for (ResolveInfo info : resolvedActivityList) {
-                    if (!info.activityInfo.packageName.equalsIgnoreCase(getPackageName()))
-                        packages.add(info.activityInfo.packageName);
-                }
-                String pack[] = Util.getAppNameFromPackages(MainActivity.this, packages);
-                int choice = -1;
-
-                String secondaryPref = PrefUtil.getSecondaryPref(MainActivity.this);
-                if (Util.isPackageInstalled(getApplicationContext(), secondaryPref)) {
-                    choice = packages.indexOf(secondaryPref);
-                }
+                final List<App> compatibleApps = Util.getScndryBrwsrApps(MainActivity.this);
 
                 new MaterialDialog.Builder(MainActivity.this)
                         .title(getString(R.string.choose_secondary_browser))
-                        .items(pack)
-                        .itemsCallbackSingleChoice(choice,
-                                new MaterialDialog.ListCallbackSingleChoice() {
+                        .adapter(new AppRenderAdapter(getApplicationContext(), compatibleApps),
+                                new MaterialDialog.ListCallback() {
                                     @Override
-                                    public boolean onSelection(MaterialDialog dialog, View itemView,
-                                                               int which, CharSequence text) {
-                                        if (packages != null) {
-                                            PrefUtil.setSecondaryPref(MainActivity.this,
-                                                    packages.get(which));
-                                            try {
-                                                mSecondaryBrowser.setImageDrawable(
-                                                        getPackageManager()
-                                                                .getApplicationIcon(packages.get(which)));
-                                            } catch (PackageManager.NameNotFoundException e) {
-                                                // Ignore, should not happen
-                                            }
+                                    public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
+                                        App app = compatibleApps.get(which);
+                                        if (app != null) {
+                                            PrefUtil.setSecondaryPref(MainActivity.this, app.getPackageName());
+                                            setIconWithPackageName(mSecondaryBrowser, app.getPackageName());
+                                            snack(String.format(getString(R.string.secondary_browser_success), app.getAppName()));
                                         }
-                                        return true;
+                                        if (dialog != null) dialog.dismiss();
                                     }
                                 })
                         .show();
