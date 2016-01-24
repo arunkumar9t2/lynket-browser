@@ -82,7 +82,7 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
 
         Timber.d(packageName);
 
-        if (PrefUtil.isPreFetchPrefered(this) && shouldHonourWifi()) {
+        if (PrefUtil.isPreFetchPrefered(this) && isWifiConditionsMet()) {
             try {
                 stopService(new Intent(this, WarmupService.class));
             } catch (Exception e) {
@@ -112,7 +112,7 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
 
     }
 
-    public boolean shouldHonourWifi() {
+    public boolean isWifiConditionsMet() {
         if (PrefUtil.isWifiPreferred(this)) {
             ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             // TODO fix this deprecated call
