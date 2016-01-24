@@ -44,6 +44,7 @@ import arun.com.chromer.activities.AboutAppActivity;
 import arun.com.chromer.activities.DonateActivity;
 import arun.com.chromer.activities.TabActivity;
 import arun.com.chromer.adapter.AppRenderAdapter;
+import arun.com.chromer.adapter.SecondaryBrowserAdapter;
 import arun.com.chromer.chrometabutilites.CustomTabDelegate;
 import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
 import arun.com.chromer.chrometabutilites.MyCustomTabHelper;
@@ -155,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
                 new MaterialDialog.Builder(MainActivity.this)
                         .title(getString(R.string.choose_secondary_browser))
-                        .adapter(new AppRenderAdapter(getApplicationContext(), compatibleApps),
+                        .adapter(new SecondaryBrowserAdapter(getApplicationContext(), compatibleApps),
                                 new MaterialDialog.ListCallback() {
                                     @Override
                                     public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {

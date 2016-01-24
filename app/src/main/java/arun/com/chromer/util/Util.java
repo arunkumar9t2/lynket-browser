@@ -143,9 +143,13 @@ public class Util {
         List<ResolveInfo> resolvedActivityList = context.getPackageManager().queryIntentActivities(activityIntent, PackageManager.MATCH_ALL);
         for (ResolveInfo info : resolvedActivityList) {
             String packageName = info.activityInfo.packageName;
+            CharSequence label = info.activityInfo.loadLabel(context.getPackageManager());
             if (packageName.equalsIgnoreCase(context.getPackageName()))
                 continue;
-            apps.add(new App(context, packageName));
+            App app = new App(context, packageName);
+            app.setLabel(label);
+            apps.add(app);
+
         }
         return apps;
     }

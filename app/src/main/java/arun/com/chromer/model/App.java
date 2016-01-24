@@ -13,6 +13,7 @@ public class App {
     private String appName;
     private String packageName;
     private Drawable appIcon;
+    private CharSequence label;
 
     public App(Context context, String packageName) {
         this.packageName = packageName;
@@ -46,5 +47,13 @@ public class App {
 
     public void setAppIcon(Drawable appIcon) {
         this.appIcon = appIcon;
+    }
+
+    public CharSequence getLabel() {
+        return label;
+    }
+
+    public void setLabel(CharSequence label) {
+        this.label = label;
     }
 }
