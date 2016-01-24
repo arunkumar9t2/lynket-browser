@@ -9,6 +9,7 @@ import android.provider.Settings;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
+import android.support.customtabs.CustomTabsService;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -36,6 +37,7 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import arun.com.chromer.activities.AboutAppActivity;
@@ -112,6 +114,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
         setupFAB();
 
+        populateUIBasedOnPreferences();
+
         setupCustomTab();
 
         setupColorPicker();
@@ -128,8 +132,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 .commit();
 
         checkAndEducateUser();
-
-        populateUIBasedOnPreferences();
 
         takeCareOfServices();
     }
@@ -497,15 +499,27 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private void setupCustomTab() {
         mCustomTabActivityHelper = new MyCustomActivityHelper();
+        List<Bundle> possibleUrls = new ArrayList<>();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(CustomTabsService.KEY_URL, Uri.parse(CUSTOM_TAB_URL));
+        possibleUrls.add(bundle);
 
         if (!shouldBind()) {
             try {
-                boolean ok = ScannerService.getInstance().mayLaunchUrl(Uri.parse(GOOGLE_URL));
-                if (ok) {
-                    return;
+                boolean ok;
+                if (ScannerService.getInstance() != null) {
+                    ok = ScannerService.getInstance().mayLaunchUrl(Uri.parse(GOOGLE_URL), possibleUrls);
+                    if (ok) return;
+                }
+                if (WarmupService.getInstance() != null) {
+                    ok = WarmupService.getInstance().mayLaunchUrl(Uri.parse(GOOGLE_URL), possibleUrls);
+                    if (ok) return;
                 }
             } catch (Exception e) {
                 // Ignored - best effort
+                // If mayLaunch with a service failed, then we will bind a connection with this activity
+                // and pre fetch the google url.
+                e.printStackTrace();
             }
         }
 
@@ -517,6 +531,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         try {
                             mCustomTabActivityHelper.mayLaunchUrl(Uri.parse(GOOGLE_URL), null, null);
                         } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
 
@@ -550,6 +565,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     private boolean shouldBind() {
+        if (PrefUtil.isWarmUpPreferred(this)) return false;
         if (PrefUtil.isPreFetchPrefered(this) && Util.isAccessibilityServiceEnabled(this)) {
             return false;
         } else if (!PrefUtil.isPreFetchPrefered(this))

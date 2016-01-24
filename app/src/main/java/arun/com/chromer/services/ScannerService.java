@@ -66,8 +66,10 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
     }
 
 
-    public boolean mayLaunchUrl(Uri uri) {
-        boolean ok = myCustomActivityHelper.mayLaunchUrl(uri, null, null);
+    public boolean mayLaunchUrl(Uri uri, List<Bundle> possibleUrls) {
+        if (!PrefUtil.isPreFetchPrefered(this)) return false;
+
+        boolean ok = myCustomActivityHelper.mayLaunchUrl(uri, null, possibleUrls);
         Timber.d("Warmup " + ok);
         return ok;
     }

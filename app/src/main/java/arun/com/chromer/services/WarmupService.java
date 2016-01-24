@@ -2,9 +2,13 @@ package arun.com.chromer.services;
 
 import android.app.Service;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsSession;
+
+import java.util.List;
 
 import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
 import timber.log.Timber;
@@ -67,6 +71,12 @@ public class WarmupService extends Service implements MyCustomActivityHelper.Con
     @Override
     public void onCustomTabsDisconnected() {
 
+    }
+
+    public boolean mayLaunchUrl(Uri uri, List<Bundle> possibleUrls) {
+        boolean ok = myCustomActivityHelper.mayLaunchUrl(uri, null, possibleUrls);
+        Timber.d("Warmup " + ok);
+        return ok;
     }
 
     public CustomTabsSession getTabSession() {
