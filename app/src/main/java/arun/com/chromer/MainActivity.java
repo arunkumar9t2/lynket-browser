@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         linkAccessibilityAndPrefetch();
 
         mWarmUpSwitch = (SwitchCompat) findViewById(R.id.warm_up_switch);
-        mWarmUpSwitch.setChecked(PrefUtil.isWarmUpPreferred(this));
+        mWarmUpSwitch.setChecked(PrefUtil.isPreFetchPrefered(this) || PrefUtil.isWarmUpPreferred(MainActivity.this));
         mWarmUpSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -197,28 +197,23 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         mPrefetchSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                boolean warmup = isChecked ? false : PrefUtil.isWarmUpPreferred(MainActivity.this);
+                boolean warmup = !isChecked && PrefUtil.isWarmUpPreferred(MainActivity.this);
 
                 if (!Util.isAccessibilityServiceEnabled(MainActivity.this)) {
                     mPrefetchSwitch.setChecked(false);
-                    new MaterialDialog.Builder(MainActivity.this)
-                            .title(R.string.accesiblity_dialog_title)
-                            .content(R.string.accesiblity_dialog_desc)
-                            .positiveText(R.string.open_settings)
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    startActivityForResult(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS), 0);
-                                }
-                            })
-                            .show();
+                    guideUserToSettings();
                 } else {
-                    // Jan 21, 2016 - Changing to !warmup so that indicator shows it as enabled.
                     mWarmUpSwitch.setChecked(!warmup);
                     PrefUtil.setWarmUpPreference(MainActivity.this, warmup);
                     linkWarmUpWithPrefetch(isChecked);
                 }
                 PrefUtil.setPrefetchPreference(MainActivity.this, isChecked);
+
+                if (!isChecked)
+                    // Since pre fetch is not active, the  warmup preference should properly reflect what's on the
+                    // UI, hence setting the preference to the checked value of the warm up switch.
+                    PrefUtil.setWarmUpPreference(MainActivity.this, mWarmUpSwitch.isChecked());
+
                 takeCareOfServices();
             }
         });
@@ -248,6 +243,20 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 }
             }
         });
+    }
+
+    private void guideUserToSettings() {
+        new MaterialDialog.Builder(MainActivity.this)
+                .title(R.string.accesiblity_dialog_title)
+                .content(R.string.accesiblity_dialog_desc)
+                .positiveText(R.string.open_settings)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        startActivityForResult(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS), 0);
+                    }
+                })
+                .show();
     }
 
     private void linkAccessibilityAndPrefetch() {
