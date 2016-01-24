@@ -1,6 +1,10 @@
 package arun.com.chromer.model;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+
+import arun.com.chromer.util.Util;
 
 /**
  * Created by Arun on 24/01/2016.
@@ -10,10 +14,14 @@ public class App {
     private String packageName;
     private Drawable appIcon;
 
-    public App(String appName, String packageName, Drawable appIcon) {
-        this.appName = appName;
+    public App(Context context, String packageName) {
         this.packageName = packageName;
-        this.appIcon = appIcon;
+        this.appName = Util.getAppNameWithPackage(context, packageName);
+        try {
+            this.appIcon = context.getPackageManager().getApplicationIcon(packageName);
+        } catch (PackageManager.NameNotFoundException e) {
+            this.appIcon = null;
+        }
     }
 
     public String getAppName() {
