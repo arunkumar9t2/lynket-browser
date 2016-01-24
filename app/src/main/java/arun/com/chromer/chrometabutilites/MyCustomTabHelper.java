@@ -35,6 +35,8 @@ import arun.com.chromer.util.Util;
  * Helper class for Custom Tabs.
  */
 public class MyCustomTabHelper {
+    public static final String ACTION_CUSTOM_TABS_CONNECTION =
+            "android.support.customtabs.action.CustomTabsService";
     private static final String STABLE_PACKAGE = "com.android.chrome";
     private static final String BETA_PACKAGE = "com.chrome.beta";
     private static final String DEV_PACKAGE = "com.chrome.dev";
@@ -42,9 +44,6 @@ public class MyCustomTabHelper {
     private static final String TAG = MyCustomTabHelper.class.getSimpleName();
     private static final String EXTRA_CUSTOM_TABS_KEEP_ALIVE =
             "android.support.customtabs.extra.KEEP_ALIVE";
-    private static final String ACTION_CUSTOM_TABS_CONNECTION =
-            "android.support.customtabs.action.CustomTabsService";
-
     private static String sPackageNameToUse;
 
     private MyCustomTabHelper() {
@@ -60,7 +59,7 @@ public class MyCustomTabHelper {
      * Goes through all apps that handle VIEW intents and have a warmup service. Picks
      * the one chosen by the user if there is one, otherwise makes a best effort to return a
      * valid package name.
-     * <p/>
+     * <p>
      * This is <strong>not</strong> threadsafe.
      *
      * @param context {@link Context} to use for accessing {@link PackageManager}.

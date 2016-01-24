@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -18,6 +17,7 @@ import java.util.regex.Pattern;
 
 import arun.com.chromer.BuildConfig;
 import arun.com.chromer.MainActivity;
+import arun.com.chromer.chrometabutilites.MyCustomTabHelper;
 import arun.com.chromer.model.App;
 
 /**
@@ -142,17 +142,29 @@ public class Util {
         Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));
         List<ResolveInfo> resolvedActivityList = context.getPackageManager().queryIntentActivities(activityIntent, PackageManager.MATCH_ALL);
         for (ResolveInfo info : resolvedActivityList) {
-            String packag = info.activityInfo.packageName;
-            if (packag.equalsIgnoreCase(context.getPackageName()))
+            String packageName = info.activityInfo.packageName;
+            if (packageName.equalsIgnoreCase(context.getPackageName()))
                 continue;
-            String appName = getAppNameWithPackage(context, packag);
-            Drawable appIcon;
-            try {
-                appIcon = context.getPackageManager().getApplicationIcon(packag);
-            } catch (PackageManager.NameNotFoundException e) {
-                appIcon = null;
+            apps.add(new App(context, packageName));
+        }
+        return apps;
+    }
+
+    public static List<App> getCustomTabApps(Context context) {
+        List<App> apps = new ArrayList<>();
+        PackageManager pm = context.getPackageManager();
+        Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));
+        List<ResolveInfo> resolvedActivityList = pm.queryIntentActivities(activityIntent, PackageManager.MATCH_ALL);
+        for (ResolveInfo info : resolvedActivityList) {
+            Intent serviceIntent = new Intent();
+            serviceIntent.setAction(MyCustomTabHelper.ACTION_CUSTOM_TABS_CONNECTION);
+            serviceIntent.setPackage(info.activityInfo.packageName);
+            if (pm.resolveService(serviceIntent, 0) != null) {
+                String packageName = info.activityInfo.packageName;
+                if (packageName.equalsIgnoreCase(context.getPackageName()))
+                    continue;
+                apps.add(new App(context, packageName));
             }
-            apps.add(new App(appName, packag, appIcon));
         }
         return apps;
     }

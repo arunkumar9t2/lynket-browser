@@ -298,29 +298,21 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         findViewById(R.id.default_provider).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String[] packagesArray = new String[0];
-                final List<String> suppPackages = MyCustomTabHelper.getCustomTabSupportingPackages(getApplicationContext());
-                if (suppPackages != null) {
-                    packagesArray = Util.getAppNameFromPackages(getApplicationContext(), suppPackages);
-                }
-                int choice = -1;
-                if (suppPackages != null && Util.isPackageInstalled(getApplicationContext(), preferredApp)) {
-                    choice = suppPackages.indexOf(preferredApp);
-                }
+                final List<App> customTabApps = Util.getCustomTabApps(MainActivity.this);
+
                 new MaterialDialog.Builder(MainActivity.this)
                         .title(getString(R.string.choose_default_provider))
-                        .items(packagesArray)
-                        .itemsCallbackSingleChoice(choice,
-                                new MaterialDialog.ListCallbackSingleChoice() {
+                        .adapter(new AppRenderAdapter(getApplicationContext(), customTabApps),
+                                new MaterialDialog.ListCallback() {
                                     @Override
-                                    public boolean onSelection(MaterialDialog dialog, View itemView,
-                                                               int which, CharSequence text) {
-                                        if (suppPackages != null) {
-                                            String selectedPackage = suppPackages.get(which);
-                                            PrefUtil.setPreferredTabApp(MainActivity.this, selectedPackage);
-                                            setIconWithPackageName(mDefaultProviderIcn, selectedPackage);
+                                    public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
+                                        App app = customTabApps.get(which);
+                                        if (app != null) {
+                                            PrefUtil.setPreferredTabApp(MainActivity.this, app.getPackageName());
+                                            setIconWithPackageName(mDefaultProviderIcn, app.getPackageName());
+                                            snack(String.format(getString(R.string.default_provider_success), app.getAppName()));
                                         }
-                                        return true;
+                                        if (dialog != null) dialog.dismiss();
                                     }
                                 })
                         .show();
