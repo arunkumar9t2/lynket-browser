@@ -65,7 +65,7 @@
         <activity
             android:name=".activities.ShareInterceptActivity"
             android:excludeFromRecents="true"
-            android:label="Open in Chromer">
+            android:label="Chromer - Open/Search">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -105,7 +105,7 @@
         <receiver
             android:name=".chrometabutilites.SecondaryBrowserReceiver"
             android:enabled="true"
-            android:exported="false"></receiver>
+            android:exported="false" />
     </application>
 
 </manifest>
