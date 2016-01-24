@@ -30,8 +30,8 @@ import timber.log.Timber;
 public class ScannerService extends AccessibilityService implements MyCustomActivityHelper.ConnectionCallback {
 
     private static ScannerService mScannerService = null;
-    private String lastWarmedUpUrl = "";
     private MyCustomActivityHelper myCustomActivityHelper;
+    private String lastWarmedUpUrl = "";
 
     public static ScannerService getInstance() {
         return mScannerService;
@@ -43,9 +43,7 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
         mScannerService = this;
         myCustomActivityHelper = new MyCustomActivityHelper();
         myCustomActivityHelper.setConnectionCallback(this);
-        myCustomActivityHelper.setNavigationCallback(new MyCustomActivityHelper.NavigationCallback() {
-            // Do nothing
-        });
+        myCustomActivityHelper.setNavigationCallback(new MyCustomActivityHelper.NavigationCallback());
         boolean success = myCustomActivityHelper.bindCustomTabsService(this);
         Timber.d("Was binded " + success);
     }
@@ -78,14 +76,22 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
     public void onAccessibilityEvent(AccessibilityEvent event) {
         mScannerService = this;
 
+        if (event == null) return;
+
+        String packageName = event.getPackageName().toString();
+
+        Timber.d(packageName);
+
         if (PrefUtil.isPreFetchPrefered(this) && shouldHonourWifi()) {
             try {
                 stopService(new Intent(this, WarmupService.class));
             } catch (Exception e) {
+                e.printStackTrace();
             }
-            TextProcessorTask mTextProcessor = new TextProcessorTask(getRootInActiveWindow());
 
-            mTextProcessor.execute();
+            TextProcessorTask textProcessorTask = new TextProcessorTask(getRootInActiveWindow());
+
+            textProcessorTask.execute();
         } else {
             // Do nothing
         }
@@ -128,38 +134,6 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
             tree = new Stack<>();
         }
 
-        private void actOnCurrentNode(AccessibilityNodeInfo node) {
-            if (node != null && node.getText() != null) {
-                String currNodeText = node.getText().toString();
-                // Timber.d("cuur " + currNodeText);
-                // Now attempt to get all the URLS in this string
-                extractURL(currNodeText);
-                if (urls != null && urls.size() != 0) {
-                    extractedCount += urls.size();
-                }
-            }
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            Timber.d("Background");
-            if (info == null) return null;
-
-            tree.push(info);
-
-            while (!tree.empty() && extractedCount < maxUrl) {
-                AccessibilityNodeInfo currNode = tree.pop();
-                if (currNode != null) {
-                    actOnCurrentNode(currNode);
-                    for (int i = 0; i < currNode.getChildCount(); i++) {
-                        tree.push(currNode.getChild(i));
-                    }
-                }
-            }
-            Timber.d("End");
-            return null;
-        }
-
         void extractURL(String string) {
             if (string == null) {
                 return;
@@ -176,9 +150,38 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
             }
         }
 
+
+        private void actOnCurrentNode(AccessibilityNodeInfo node) {
+            if (node != null && node.getText() != null) {
+                String currNodeText;
+                currNodeText = node.getText().toString();
+                extractURL(currNodeText);
+                if (urls != null && urls.size() != 0) {
+                    extractedCount += urls.size();
+                }
+            }
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            if (info == null) return null;
+
+            tree.push(info);
+
+            while (!tree.empty() && extractedCount < maxUrl) {
+                AccessibilityNodeInfo currNode = tree.pop();
+                if (currNode != null) {
+                    actOnCurrentNode(currNode);
+                    for (int i = 0; i < currNode.getChildCount(); i++) {
+                        tree.push(currNode.getChild(i));
+                    }
+                }
+            }
+            return null;
+        }
+
         @Override
         protected void onPostExecute(Void aVoid) {
-            Timber.d("On post execute");
             for (int i = 0; i < urls.size(); i++) {
                 String url = urls.get(i);
                 Timber.d("Extracted " + url);
