@@ -88,24 +88,15 @@
             android:name=".activities.DonateActivity"
             android:excludeFromRecents="true"
             android:theme="@style/DonatePopUp" />
-        <activity
-            android:name=".activities.DummyActivity"
-            android:enabled="false">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="http" />
-                <data android:scheme="https" />
-            </intent-filter>
-        </activity>
 
         <receiver
             android:name=".chrometabutilites.SecondaryBrowserReceiver"
             android:enabled="true"
             android:exported="false" />
+
+        <meta-data
+            android:name="DOMAIN_PACKAGE_NAME"
+            android:value="arun.com.chromer.model" />
     </application>
 
 </manifest>

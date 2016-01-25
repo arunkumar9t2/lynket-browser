@@ -12,12 +12,14 @@ import android.net.Uri;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsSession;
 
+import java.util.List;
+
 import arun.com.chromer.R;
+import arun.com.chromer.model.WebColor;
 import arun.com.chromer.services.ClipboardService;
 import arun.com.chromer.services.ColorExtractor;
 import arun.com.chromer.services.ScannerService;
 import arun.com.chromer.services.WarmupService;
-import arun.com.chromer.util.ChromerDatabaseUtil;
 import arun.com.chromer.util.PrefUtil;
 import timber.log.Timber;
 
@@ -25,8 +27,6 @@ import timber.log.Timber;
  * Created by Arun on 06/01/2016.
  */
 public class CustomTabDelegate {
-    private static final String TAG = CustomTabDelegate.class.getSimpleName();
-
     public static CustomTabsIntent getCustomizedTabIntent(Context ctx, String url) {
 
         CustomTabsIntent.Builder builder;
@@ -40,19 +40,21 @@ public class CustomTabDelegate {
 
 
         if (PrefUtil.isColoredToolbar(ctx)) {
-            int chosenColor = -1;
+            int chosenColor = PrefUtil.getToolbarColor(ctx);
             if (PrefUtil.isDynamicToolbar(ctx)) {
+                // Check if we have the color extracted for this source
                 String host = Uri.parse(url).getHost();
-                chosenColor = new ChromerDatabaseUtil(ctx).getColor(host);
-                if (chosenColor == -1) {
-                    // Color does not exist for this site, so let's extract it
-                    chosenColor = PrefUtil.getToolbarColor(ctx);
-                    Intent extractorService = new Intent(ctx, ColorExtractor.class);
-                    extractorService.setData(Uri.parse(url));
-                    ctx.startService(extractorService);
-                }
-            } else chosenColor = PrefUtil.getToolbarColor(ctx);
+                List<WebColor> webColors = WebColor.find(WebColor.class, "url = ?", host);
 
+                if (webColors.size() > 0) {
+                    // Extracted colors exists
+                    chosenColor = webColors.get(0).getColor();
+                    Timber.d(String.valueOf(chosenColor));
+                } else {
+                    // Color does not exist for this site, so let's extract it
+                    doExtractionForHost(ctx, url);
+                }
+            }
             builder.setToolbarColor(chosenColor);
         }
 
@@ -74,6 +76,7 @@ public class CustomTabDelegate {
         }
 
         builder.setShowTitle(true);
+
         addShareIntent(ctx, url, builder);
 
         addCopyItem(ctx, url, builder);
@@ -82,6 +85,12 @@ public class CustomTabDelegate {
 
         addActionButtonSecondary(ctx, url, builder);
         return builder.build();
+    }
+
+    private static void doExtractionForHost(Context ctx, String url) {
+        Intent extractorService = new Intent(ctx, ColorExtractor.class);
+        extractorService.setData(Uri.parse(url));
+        ctx.startService(extractorService);
     }
 
     private static void addActionButtonSecondary(Context ctx, String url, CustomTabsIntent.Builder builder) {

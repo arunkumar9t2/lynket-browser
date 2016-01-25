@@ -42,4 +42,5 @@ dependencies {
         transitive = true
     }
     compile 'com.jakewharton.timber:timber:4.1.0'
+    compile 'com.github.satyan:sugar:1.4'
 }

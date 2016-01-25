@@ -54,6 +54,7 @@ import arun.com.chromer.model.App;
 import arun.com.chromer.services.ScannerService;
 import arun.com.chromer.services.WarmupService;
 import arun.com.chromer.util.ChangelogUtil;
+import arun.com.chromer.util.DatabaseConstants;
 import arun.com.chromer.util.PrefUtil;
 import arun.com.chromer.util.StringConstants;
 import arun.com.chromer.util.Util;
@@ -135,6 +136,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         checkAndEducateUser();
 
         takeCareOfServices();
+
+        cleanOldDbs();
     }
 
     private void snack(String textToSnack) {
@@ -583,5 +586,15 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         } catch (PackageManager.NameNotFoundException e) {
             return;
         }
+    }
+
+    private void cleanOldDbs() {
+        if (PrefUtil.shouldCleanDB(this)) {
+            boolean ok = deleteDatabase(DatabaseConstants.DATABASE_NAME);
+            Timber.d("Deleted " + DatabaseConstants.DATABASE_NAME + ": " + ok);
+            ok = deleteDatabase(DatabaseConstants.OLD_DATABASE_NAME);
+            Timber.d("Deleted " + DatabaseConstants.OLD_DATABASE_NAME + ": " + ok);
+        } else
+            Timber.d("Skipped cleaning DB");
     }
 }

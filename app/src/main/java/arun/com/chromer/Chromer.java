@@ -2,6 +2,8 @@ package arun.com.chromer;
 
 import android.app.Application;
 
+import com.orm.SugarContext;
+
 import timber.log.Timber;
 
 /**
@@ -14,5 +16,12 @@ public class Chromer extends Application {
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
+        SugarContext.init(this);
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        SugarContext.terminate();
     }
 }
