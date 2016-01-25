@@ -43,4 +43,5 @@ dependencies {
     }
     compile 'com.jakewharton.timber:timber:4.1.0'
     compile 'com.github.satyan:sugar:1.4'
+    compile 'com.android.support:palette-v7:23.1.1'
 }
