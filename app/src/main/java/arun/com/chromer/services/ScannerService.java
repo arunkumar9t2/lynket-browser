@@ -80,8 +80,6 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
 
         String packageName = event.getPackageName().toString();
 
-        Timber.d(packageName);
-
         if (PrefUtil.isPreFetchPrefered(this) && isWifiConditionsMet()) {
             try {
                 stopService(new Intent(this, WarmupService.class));
@@ -212,6 +210,24 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
                 }
             }
 
+            // Dispose resources after processing is done, should help with RAM usage.
+            try {
+                if (info != null) {
+                    info.recycle();
+                }
+                if (tree != null) {
+                    tree.clear();
+                    tree = null;
+                }
+                if (urls != null) {
+                    urls.clear();
+                    urls = null;
+                }
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
