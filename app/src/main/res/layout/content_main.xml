@@ -304,7 +304,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="start|center"
-                            android:text="@string/web_dep_tlbr_clr"
+                            android:text="@string/dynamic_toolbar_color"
                             android:textColor="@color/material_dark_color"
                             android:textSize="16sp" />
 

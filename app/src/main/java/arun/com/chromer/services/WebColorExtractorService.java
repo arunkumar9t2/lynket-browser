@@ -18,12 +18,12 @@ import timber.log.Timber;
 /**
  * Created by Arun on 06/01/2016.
  */
-public class ColorExtractor extends IntentService {
+public class WebColorExtractorService extends IntentService {
 
     private static String splitter = "content=\"";
 
-    public ColorExtractor() {
-        super(ColorExtractor.class.getSimpleName());
+    public WebColorExtractorService() {
+        super(WebColorExtractorService.class.getSimpleName());
     }
 
     @Override

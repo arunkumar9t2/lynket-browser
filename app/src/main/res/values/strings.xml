@@ -9,7 +9,6 @@
         <item>2</item>
     </string-array>
 
-
     <string name="app_name">Chromer</string>
     <string name="share_text">Hey Checkout \'Chromer\' for quick and secure browsing experience! Download here https://goo.gl/992ils</string>
     <string name="share_via">Share via…</string>
@@ -65,7 +64,7 @@
     <string name="default_pref_xpln">Set Chromer as default to open all links, or you can choose Chromer from the list when it is shown</string>
     <string name="personalization">Personalization</string>
     <string name="default_clear_msg">is set as the default browser, please clear it by clicking clear defaults.</string>
-    <string name="web_dep_tlbr_clr">Website dependent toolbar color</string>
+    <string name="dynamic_toolbar_color">Dynamic toolbar color</string>
     <string name="keep_chrome_warmedup">Keep your browser warmed up for faster launch</string>
     <string name="warmup_browser">Warm up browser</string>
     <string name="set_default_chromer">Set Default Browser</string>
@@ -86,4 +85,6 @@
     <string name="chromer_defaulted">Chromer is the current default browser</string>
     <string name="secondary_browser_success">%1$s set as the secondary browser!</string>
     <string name="default_provider_success">%1$s will be used to provide Custom Tabs!</string>
+    <string name="based_on_app">Based on app</string>
+    <string name="based_on_web">Based on website</string>
 </resources>

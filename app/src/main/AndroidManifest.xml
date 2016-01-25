@@ -6,6 +6,7 @@
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <application
         android:name=".Chromer"
@@ -14,7 +15,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service android:name=".services.ColorExtractor" />
+        <service android:name=".services.WebColorExtractorService" />
         <service android:name=".services.ClipboardService" />
         <service android:name=".services.WarmupService" />
         <service
@@ -97,6 +98,14 @@
         <meta-data
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="arun.com.chromer.model" />
+
+        <service
+            android:name=".AppDetectService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".services.AppColorExtractorService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

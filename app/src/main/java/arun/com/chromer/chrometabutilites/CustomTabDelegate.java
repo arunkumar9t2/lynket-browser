@@ -5,22 +5,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsSession;
 
 import java.util.List;
 
+import arun.com.chromer.AppDetectService;
 import arun.com.chromer.R;
+import arun.com.chromer.model.AppColor;
 import arun.com.chromer.model.WebColor;
+import arun.com.chromer.services.AppColorExtractorService;
 import arun.com.chromer.services.ClipboardService;
-import arun.com.chromer.services.ColorExtractor;
 import arun.com.chromer.services.ScannerService;
 import arun.com.chromer.services.WarmupService;
+import arun.com.chromer.services.WebColorExtractorService;
 import arun.com.chromer.util.PrefUtil;
+import arun.com.chromer.util.Util;
 import timber.log.Timber;
 
 /**
@@ -38,26 +39,24 @@ public class CustomTabDelegate {
         } else
             builder = new CustomTabsIntent.Builder();
 
+        builder.setShowTitle(true);
 
-        if (PrefUtil.isColoredToolbar(ctx)) {
-            int chosenColor = PrefUtil.getToolbarColor(ctx);
-            if (PrefUtil.isDynamicToolbar(ctx)) {
-                // Check if we have the color extracted for this source
-                String host = Uri.parse(url).getHost();
-                List<WebColor> webColors = WebColor.find(WebColor.class, "url = ?", host);
+        handleAnimations(ctx, builder);
 
-                if (webColors.size() > 0) {
-                    // Extracted colors exists
-                    chosenColor = webColors.get(0).getColor();
-                    Timber.d(String.valueOf(chosenColor));
-                } else {
-                    // Color does not exist for this site, so let's extract it
-                    doExtractionForHost(ctx, url);
-                }
-            }
-            builder.setToolbarColor(chosenColor);
-        }
+        handleToolbarColor(ctx, url, builder);
 
+        addShareIntent(ctx, url, builder);
+
+        addCopyItem(ctx, url, builder);
+
+        addShortcutToHomescreen(ctx, url, builder);
+
+        addActionButtonSecondary(ctx, url, builder);
+
+        return builder.build();
+    }
+
+    private static void handleAnimations(Context ctx, CustomTabsIntent.Builder builder) {
         if (PrefUtil.isAnimationEnabled(ctx)) {
             switch (PrefUtil.getAnimationPref(ctx)) {
                 case 1:
@@ -74,35 +73,76 @@ public class CustomTabDelegate {
             }
 
         }
-
-        builder.setShowTitle(true);
-
-        addShareIntent(ctx, url, builder);
-
-        addCopyItem(ctx, url, builder);
-
-        addShortcuttoHomescreen(ctx, url, builder);
-
-        addActionButtonSecondary(ctx, url, builder);
-        return builder.build();
     }
 
-    private static void doExtractionForHost(Context ctx, String url) {
-        Intent extractorService = new Intent(ctx, ColorExtractor.class);
+    private static void handleToolbarColor(Context ctx, String url, CustomTabsIntent.Builder builder) {
+        //Toast.makeText(ctx, AppDetectService.getInstance().getLastApp(), Toast.LENGTH_SHORT).show();
+        if (PrefUtil.isColoredToolbar(ctx)) {
+            // Get the user chosen color first
+            int chosenColor = PrefUtil.getToolbarColor(ctx);
+
+            if (PrefUtil.isDynamicToolbar(ctx)) {
+
+                // Attempt to get the color of the calling app then
+                if (PrefUtil.isDynamicToolbarApp(ctx)) {
+                    try {
+                        String lastApp = AppDetectService.getInstance().getLastApp();
+                        List<AppColor> appColors = AppColor.find(AppColor.class, "app = ?", lastApp);
+
+                        if (appColors.size() > 0) {
+                            // Extracted colors exists
+                            chosenColor = appColors.get(0).getColor();
+                        } else {
+                            // Color does not exist for this app, so let's extract it
+                            doExtractionForApp(ctx, lastApp);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                // Further try to get extract theme color of website
+                if (PrefUtil.isDynamicToolbarWeb(ctx)) {
+                    // Check if we have the color extracted for this source
+                    String host = Uri.parse(url).getHost();
+                    List<WebColor> webColors = WebColor.find(WebColor.class, "url = ?", host);
+
+                    if (webColors.size() > 0) {
+                        // Extracted colors exists
+                        chosenColor = webColors.get(0).getColor();
+                    } else {
+                        // Color does not exist for this site, so let's extract it
+                        doExtractionForUrl(ctx, url);
+                    }
+                }
+
+            }
+            builder.setToolbarColor(chosenColor);
+        }
+    }
+
+    private static void doExtractionForUrl(Context ctx, String url) {
+        Intent extractorService = new Intent(ctx, WebColorExtractorService.class);
         extractorService.setData(Uri.parse(url));
+        ctx.startService(extractorService);
+    }
+
+    private static void doExtractionForApp(Context ctx, String app) {
+        Intent extractorService = new Intent(ctx, AppColorExtractorService.class);
+        extractorService.putExtra("app", app);
         ctx.startService(extractorService);
     }
 
     private static void addActionButtonSecondary(Context ctx, String url, CustomTabsIntent.Builder builder) {
         if (url != null) {
             try {
-                Bitmap icon = drawableToBitmap(ctx.getPackageManager().getApplicationIcon(PrefUtil.getSecondaryPref(ctx)));
+                Bitmap icon = Util.drawableToBitmap(ctx.getPackageManager()
+                        .getApplicationIcon(PrefUtil.getSecondaryPref(ctx)));
 
                 Intent activityIntent = new Intent(ctx, SecondaryBrowserReceiver.class);
 
-                PendingIntent openBrowser = PendingIntent
-                        .getBroadcast(ctx, 0, activityIntent,
-                                PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent openBrowser = PendingIntent.getBroadcast(ctx, 0, activityIntent,
+                        PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
                 builder.setActionButton(icon, "Secondary browser", openBrowser);
             } catch (PackageManager.NameNotFoundException e) {
                 Timber.d("Was not able to set secondary browser");
@@ -113,24 +153,23 @@ public class CustomTabDelegate {
     private static CustomTabsSession getAvailableSessions(Context ctx) {
         ScannerService sService = ScannerService.getInstance();
         if (sService != null && PrefUtil.isPreFetchPrefered(ctx)) {
-            Timber.d("Scanner service is running properly");
+            Timber.d("Using scanner service");
             return sService.getTabSession();
         }
         WarmupService service = WarmupService.getInstance();
         if (service != null) {
-            Timber.d("Warmup service is running properly");
+            Timber.d("Using warmup service");
             return service.getTabSession();
         }
         Timber.d("No existing sessions present");
         return null;
     }
 
-    private static void addShortcuttoHomescreen(Context c, String url, CustomTabsIntent.Builder builder) {
+    private static void addShortcutToHomescreen(Context c, String url, CustomTabsIntent.Builder builder) {
         if (url != null) {
             Intent addShortcutIntent = new Intent(c, AddHomeShortcutReceiver.class);
-            PendingIntent addShortcut = PendingIntent
-                    .getBroadcast(c, 0, addShortcutIntent,
-                            PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent addShortcut = PendingIntent.getBroadcast(c, 0, addShortcutIntent,
+                    PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
 
             builder.addMenuItem(c.getString(R.string.add_to_homescreen), addShortcut);
         }
@@ -148,32 +187,10 @@ public class CustomTabDelegate {
     private static void addShareIntent(Context c, String url, CustomTabsIntent.Builder builder) {
         if (url != null) {
             Intent shareIntent = new Intent(c, ShareBroadcastReceiver.class);
-            PendingIntent pendingShareIntent = PendingIntent
-                    .getBroadcast(c, 0, shareIntent,
-                            PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingShareIntent = PendingIntent.getBroadcast(c, 0, shareIntent,
+                    PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
             builder.addMenuItem(c.getString(R.string.share), pendingShareIntent);
         }
     }
 
-    private static Bitmap drawableToBitmap(Drawable drawable) {
-        Bitmap bitmap = null;
-
-        if (drawable instanceof BitmapDrawable) {
-            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-            if (bitmapDrawable.getBitmap() != null) {
-                return bitmapDrawable.getBitmap();
-            }
-        }
-
-        if (drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
-            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
-        } else {
-            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        }
-
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        drawable.draw(canvas);
-        return bitmap;
-    }
 }

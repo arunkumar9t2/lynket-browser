@@ -24,6 +24,8 @@ public class PrefUtil {
     public static final String SECONDARY_PREF = "secondary_preference";
     public static final String DYNAMIC_COLOR = "dynamic_color";
     public static final String CLEAN_DATABASE = "clean_database";
+    public static final String DYNAMIC_COLOR_APP = "dynamic_color_app";
+    public static final String DYNAMIC_COLOR_WEB = "dynamic_color_web";
 
     private static SharedPreferences preferences(Context context) {
         return context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
@@ -151,5 +153,32 @@ public class PrefUtil {
             return true;
         }
         return false;
+    }
+
+    public static boolean isDynamicToolbarApp(Context context) {
+        if (preferences(context).getBoolean(DYNAMIC_COLOR_APP, false)) {
+            return true;
+        }
+        return false;
+    }
+
+    public static void setDynamicToolbarApp(Context context, boolean preference) {
+        preferences(context).edit().putBoolean(DYNAMIC_COLOR_APP, preference).commit();
+    }
+
+    public static boolean isDynamicToolbarWeb(Context context) {
+        if (preferences(context).getBoolean(DYNAMIC_COLOR_WEB, false)) {
+            return true;
+        }
+        return false;
+    }
+
+    public static void setDynamicToolbarWeb(Context context, boolean preference) {
+        preferences(context).edit().putBoolean(DYNAMIC_COLOR_WEB, preference).commit();
+    }
+
+    public static void setDynamicToolbarPref(Context context, boolean app, boolean web) {
+        setDynamicToolbarApp(context, app);
+        setDynamicToolbarWeb(context, web);
     }
 }
