@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         secondaryBrowserClickTarget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final List<App> compatibleApps = Util.getScndryBrwsrApps(MainActivity.this);
+                final List<App> compatibleApps = Util.getScndryBrwsrApps(getApplicationContext());
 
                 new MaterialDialog.Builder(MainActivity.this)
                         .title(getString(R.string.choose_secondary_browser))
@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                                     public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
                                         App app = compatibleApps.get(which);
                                         if (app != null) {
-                                            PrefUtil.setSecondaryPref(MainActivity.this, app.getPackageName());
+                                            PrefUtil.setSecondaryPref(getApplicationContext(), app.getPackageName());
                                             setIconWithPackageName(mSecondaryBrowser, app.getPackageName());
                                             snack(String.format(getString(R.string.secondary_browser_success), app.getAppName()));
                                         }
@@ -185,11 +185,11 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         linkAccessibilityAndPrefetch();
 
         mWarmUpSwitch = (SwitchCompat) findViewById(R.id.warm_up_switch);
-        mWarmUpSwitch.setChecked(PrefUtil.isPreFetchPrefered(this) || PrefUtil.isWarmUpPreferred(MainActivity.this));
+        mWarmUpSwitch.setChecked(PrefUtil.isPreFetchPrefered(this) || PrefUtil.isWarmUpPreferred(this));
         mWarmUpSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                PrefUtil.setWarmUpPreference(MainActivity.this, isChecked);
+                PrefUtil.setWarmUpPreference(getApplicationContext(), isChecked);
                 takeCareOfServices();
             }
         });
@@ -200,22 +200,22 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         mPrefetchSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                boolean warmup = !isChecked && PrefUtil.isWarmUpPreferred(MainActivity.this);
+                boolean warmup = !isChecked && PrefUtil.isWarmUpPreferred(getApplicationContext());
 
-                if (!Util.isAccessibilityServiceEnabled(MainActivity.this)) {
+                if (!Util.isAccessibilityServiceEnabled(getApplicationContext())) {
                     mPrefetchSwitch.setChecked(false);
                     guideUserToSettings();
                 } else {
                     mWarmUpSwitch.setChecked(!warmup);
-                    PrefUtil.setWarmUpPreference(MainActivity.this, warmup);
+                    PrefUtil.setWarmUpPreference(getApplicationContext(), warmup);
                     linkWarmUpWithPrefetch(isChecked);
                 }
-                PrefUtil.setPrefetchPreference(MainActivity.this, isChecked);
+                PrefUtil.setPrefetchPreference(getApplicationContext(), isChecked);
 
                 if (!isChecked)
                     // Since pre fetch is not active, the  warmup preference should properly reflect what's on the
                     // UI, hence setting the preference to the checked value of the warm up switch.
-                    PrefUtil.setWarmUpPreference(MainActivity.this, mWarmUpSwitch.isChecked());
+                    PrefUtil.setWarmUpPreference(getApplicationContext(), mWarmUpSwitch.isChecked());
 
                 takeCareOfServices();
             }
@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         mWifiSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                PrefUtil.setWifiPrefetch(MainActivity.this, isChecked);
+                PrefUtil.setWifiPrefetch(getApplicationContext(), isChecked);
                 takeCareOfServices();
             }
         });
@@ -236,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         mDynamicSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                PrefUtil.setDynamicToolbar(MainActivity.this, isChecked);
+                PrefUtil.setDynamicToolbar(getApplicationContext(), isChecked);
                 if (isChecked) {
                     new MaterialDialog.Builder(MainActivity.this)
                             .title(R.string.web_dep_tlbr_clr)
@@ -310,7 +310,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         findViewById(R.id.default_provider).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final List<App> customTabApps = Util.getCustomTabApps(MainActivity.this);
+                final List<App> customTabApps = Util.getCustomTabApps(getApplicationContext());
 
                 new MaterialDialog.Builder(MainActivity.this)
                         .title(getString(R.string.choose_default_provider))
@@ -320,7 +320,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                                     public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
                                         App app = customTabApps.get(which);
                                         if (app != null) {
-                                            PrefUtil.setPreferredTabApp(MainActivity.this, app.getPackageName());
+                                            PrefUtil.setPreferredTabApp(getApplicationContext(), app.getPackageName());
                                             setIconWithPackageName(mDefaultProviderIcn, app.getPackageName());
                                             snack(String.format(getString(R.string.default_provider_success), app.getAppName()));
                                         }
@@ -373,7 +373,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                     if (defaultBrowserPackage.trim().equalsIgnoreCase(getPackageName())) {
                         Timber.d("Chromer defaulted");
                         Snackbar.make(mColorView, "Already set!", Snackbar.LENGTH_SHORT).show();
-                    } else if (defaultBrowserPackage.equalsIgnoreCase("android") && Util.isPackageInstalled(MainActivity.this, defaultBrowserPackage)) {
+                    } else if (defaultBrowserPackage.equalsIgnoreCase("android") && Util.isPackageInstalled(getApplicationContext(), defaultBrowserPackage)) {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(GOOGLE_URL)));
                     } else {
                         Intent intent = new Intent(
@@ -559,7 +559,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            Util.openPlayStore(MainActivity.this, CHROME_PACKAGE);
+                            Util.openPlayStore(getApplicationContext(), CHROME_PACKAGE);
                         }
                     }).show();
         }
