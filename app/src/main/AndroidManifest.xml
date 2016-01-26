@@ -32,6 +32,7 @@
         </service>
 
         <receiver android:name=".chrometabutilites.ShareBroadcastReceiver" />
+        <receiver android:name=".chrometabutilites.FavShareBroadcastReceiver" />
         <receiver android:name=".chrometabutilites.AddHomeShortcutReceiver" />
 
         <activity
@@ -95,9 +96,6 @@
             android:enabled="true"
             android:exported="false" />
 
-        <meta-data
-            android:name="DOMAIN_PACKAGE_NAME"
-            android:value="arun.com.chromer.model" />
 
         <service
             android:name=".AppDetectService"
@@ -105,7 +103,11 @@
             android:exported="true" />
         <service
             android:name=".services.AppColorExtractorService"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <meta-data
+            android:name="DOMAIN_PACKAGE_NAME"
+            android:value="arun.com.chromer.model" />
     </application>
 
 </manifest>

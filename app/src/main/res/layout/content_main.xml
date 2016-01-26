@@ -142,6 +142,32 @@
                             tools:ignore="ContentDescription" />
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:id="@+id/fav_share_app"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="start|center"
+                            android:text="@string/fav_share_app"
+                            android:textColor="@color/material_dark_color"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:id="@+id/fav_share_app_view"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            tools:ignore="ContentDescription" />
+                    </LinearLayout>
+
                     <Space
                         android:layout_width="match_parent"
                         android:layout_height="5dp" />

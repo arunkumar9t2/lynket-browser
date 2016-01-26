@@ -47,11 +47,25 @@ public class CustomTabDelegate {
 
         addShareIntent(ctx, url, builder);
 
+        switch (Preferences.preferredAction(ctx)) {
+            // TODO handle cases of uninstalling packages
+            case 1:
+                addActionButtonSecondary(ctx, url, builder);
+                addMenuFavShareApp(ctx, url, builder);
+                break;
+            case 2:
+                addMenuSecondaryBrowser(ctx, url, builder);
+                addActionBtnFavShareApp(ctx, url, builder);
+                break;
+            default:
+                addActionButtonSecondary(ctx, url, builder);
+                addMenuFavShareApp(ctx, url, builder);
+                break;
+        }
+
         addCopyItem(ctx, url, builder);
 
         addShortcutToHomescreen(ctx, url, builder);
-
-        addActionButtonSecondary(ctx, url, builder);
 
         return builder.build();
     }
@@ -147,6 +161,64 @@ public class CustomTabDelegate {
             } catch (PackageManager.NameNotFoundException e) {
                 Timber.d("Was not able to set secondary browser");
             }
+        }
+    }
+
+    private static void addMenuSecondaryBrowser(Context ctx, String url, CustomTabsIntent.Builder builder) {
+        if (url != null) {
+            try {
+                Intent browserInter = new Intent(ctx, SecondaryBrowserReceiver.class);
+
+                PendingIntent openBrowser = PendingIntent.getBroadcast(ctx, 0, browserInter,
+                        PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
+                String app = Util.getAppNameWithPackage(ctx, Preferences.secondaryBrowser(ctx));
+
+                if (app == null) return;
+
+                String label = String.format(ctx.getString(R.string.open_in_browser), app);
+                builder.addMenuItem(label, openBrowser);
+            } catch (Exception e) {
+                Timber.d("Was not able to set secondary browser");
+            }
+        }
+    }
+
+    private static void addMenuFavShareApp(Context ctx, String url, CustomTabsIntent.Builder builder) {
+        if (url != null) {
+            Intent shareIntent = new Intent(ctx, FavShareBroadcastReceiver.class);
+            PendingIntent pendingShareIntent = PendingIntent.getBroadcast(ctx, 0, shareIntent,
+                    PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
+
+            String pakage = Preferences.favSharePackage(ctx);
+
+            if (pakage == null || !Util.isPackageInstalled(ctx, pakage)) return;
+
+            String app = Util.getAppNameWithPackage(ctx, pakage);
+
+            String label = String.format(ctx.getString(R.string.share_with), app);
+
+            builder.addMenuItem(label, pendingShareIntent);
+        }
+    }
+
+    private static void addActionBtnFavShareApp(Context ctx, String url, CustomTabsIntent.Builder builder) {
+        if (url != null) {
+            Intent shareIntent = new Intent(ctx, FavShareBroadcastReceiver.class);
+            PendingIntent pendingShareIntent = PendingIntent.getBroadcast(ctx, 0, shareIntent,
+                    PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
+
+            String pakage = Preferences.favSharePackage(ctx);
+
+            if (pakage == null || !Util.isPackageInstalled(ctx, pakage)) return;
+
+            Bitmap icon;
+            try {
+                icon = Util.drawableToBitmap(ctx.getPackageManager().getApplicationIcon(pakage));
+            } catch (PackageManager.NameNotFoundException e) {
+                return;
+            }
+
+            builder.setActionButton(icon, "Fav share app", pendingShareIntent);
         }
     }
 

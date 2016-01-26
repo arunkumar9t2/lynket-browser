@@ -26,6 +26,8 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
+import com.flipboard.bottomsheet.BottomSheetLayout;
+import com.flipboard.bottomsheet.commons.IntentPickerSheetView;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -74,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     private ImageView mSecondaryBrowser;
     private ImageView mDefaultProviderIcn;
     private AppCompatButton mSetDefaultButton;
+    private BottomSheetLayout mBottomSheet;
+    private ImageView mFavShareAppIcon;
 
     @Override
     protected void onStart() {
@@ -125,6 +129,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         setupDefaultProvider();
 
         setUpSecondaryBrowser();
+
+        setUpFavShareApp();
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -516,6 +522,45 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 })
                 .build();
         drawer.setSelection(-1);
+    }
+
+    private void setUpFavShareApp() {
+        mBottomSheet = (BottomSheetLayout) findViewById(R.id.bottomsheet);
+        mFavShareAppIcon = (ImageView) findViewById(R.id.fav_share_app_view);
+
+        setIconWithPackageName(mFavShareAppIcon, Preferences.favSharePackage(this));
+
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, "");
+        final IntentPickerSheetView picker = new IntentPickerSheetView(this,
+                shareIntent,
+                getString(R.string.choose_fav_share_app),
+                new IntentPickerSheetView.OnIntentPickedListener() {
+                    @Override
+                    public void onIntentPicked(IntentPickerSheetView.ActivityInfo activityInfo) {
+                        mBottomSheet.dismissSheet();
+                        String componentNameFlatten = activityInfo.componentName.flattenToString();
+                        if (componentNameFlatten != null) {
+                            Preferences.favShareComponent(getApplicationContext(), componentNameFlatten);
+                        }
+                        setIconWithPackageName(mFavShareAppIcon,
+                                activityInfo.componentName.getPackageName());
+                    }
+                });
+        picker.setFilter(new IntentPickerSheetView.Filter() {
+            @Override
+            public boolean include(IntentPickerSheetView.ActivityInfo info) {
+                return !info.componentName.getPackageName().startsWith("com.android")
+                        && !info.componentName.getPackageName().equalsIgnoreCase(getPackageName());
+            }
+        });
+        findViewById(R.id.fav_share_app).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mBottomSheet != null) mBottomSheet.showWithSheetView(picker);
+            }
+        });
     }
 
     private void launchCustomTab(String url) {

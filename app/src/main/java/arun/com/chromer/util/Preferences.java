@@ -1,5 +1,6 @@
 package arun.com.chromer.util;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -14,13 +15,13 @@ public class Preferences {
     public static final String PREFERRED_PACKAGE = "preferred_package";
     public static final String TOOLBAR_COLOR = "toolbar_color";
     public static final String TOOLBAR_COLOR_PREF = "toolbar_color_pref";
-    public static final String SHOW_TITLE_PREF = "title_pref";
     public static final String ANIMATION_TYPE = "animation_preference";
     public static final String FIRST_RUN = "firstrun";
     public static final String WARM_UP = "warm_up_preference";
     public static final String PRE_FETCH = "pre_fetch_preference";
     public static final String WIFI_PREFETCH = "wifi_preference";
     public static final String SECONDARY_PREF = "secondary_preference";
+    public static final String FAV_SHARE_PREF = "fav_share_preference";
     public static final String DYNAMIC_COLOR = "dynamic_color";
     public static final String CLEAN_DATABASE = "clean_database";
     public static final String DYNAMIC_COLOR_APP = "dynamic_color_app";
@@ -69,6 +70,12 @@ public class Preferences {
                 .getString(ANIMATION_TYPE, "1"));
     }
 
+    public static int preferredAction(Context context) {
+        return Integer.parseInt(PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .getString(PREFERRED_ACTION, "1"));
+    }
+
     public static String customTabApp(Context context) {
         return PreferenceManager
                 .getDefaultSharedPreferences(context)
@@ -93,6 +100,32 @@ public class Preferences {
                 .getDefaultSharedPreferences(context)
                 .edit()
                 .putString(SECONDARY_PREF, string).apply();
+    }
+
+
+    public static String favShareComponent(Context context) {
+        return PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .getString(FAV_SHARE_PREF, null);
+    }
+
+    public static String favSharePackage(Context context) {
+        String flatString = favShareComponent(context);
+        if (flatString == null) {
+            return null;
+        }
+
+        ComponentName cN = ComponentName.unflattenFromString(flatString);
+        if (cN == null) return null;
+
+        return cN.getPackageName();
+    }
+
+    public static void favShareComponent(Context context, String string) {
+        PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .edit()
+                .putString(FAV_SHARE_PREF, string).apply();
     }
 
     public static boolean warmUp(Context context) {
