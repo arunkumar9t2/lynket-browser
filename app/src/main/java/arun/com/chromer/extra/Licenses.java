@@ -54,6 +54,13 @@ public class Licenses {
         notice = new Notice(name, url, copyright, license);
         notices.addNotice(notice);
 
+        name = "Glide";
+        url = "https://github.com/bumptech/glide";
+        copyright = "Copyright 2014 Google, Inc";
+        license = new ApacheSoftwareLicense20();
+        notice = new Notice(name, url, copyright, license);
+        notices.addNotice(notice);
+
         return notices;
     }
 }
