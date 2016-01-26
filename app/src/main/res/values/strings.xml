@@ -1,10 +1,22 @@
 <resources>
     <string-array name="animationValues">
+        <item>None</item>
         <item>Slide Right</item>
         <item>Slide Up</item>
     </string-array>
 
     <string-array name="animationKeys">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="actionValues">
+        <item>Secondary browser</item>
+        <item>Favourite share app</item>
+    </string-array>
+
+    <string-array name="actionKeys">
         <item>1</item>
         <item>2</item>
     </string-array>
@@ -87,4 +99,5 @@
     <string name="default_provider_success">%1$s will be used to provide Custom Tabs!</string>
     <string name="based_on_app">Based on app</string>
     <string name="based_on_web">Based on website</string>
+    <string name="preferred_action">Preferred action</string>
 </resources>

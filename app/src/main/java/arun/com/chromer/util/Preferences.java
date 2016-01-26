@@ -15,7 +15,6 @@ public class Preferences {
     public static final String TOOLBAR_COLOR = "toolbar_color";
     public static final String TOOLBAR_COLOR_PREF = "toolbar_color_pref";
     public static final String SHOW_TITLE_PREF = "title_pref";
-    public static final String ENABLE_ANIMATION = "animations_pref";
     public static final String ANIMATION_TYPE = "animation_preference";
     public static final String FIRST_RUN = "firstrun";
     public static final String WARM_UP = "warm_up_preference";
@@ -26,6 +25,7 @@ public class Preferences {
     public static final String CLEAN_DATABASE = "clean_database";
     public static final String DYNAMIC_COLOR_APP = "dynamic_color_app";
     public static final String DYNAMIC_COLOR_WEB = "dynamic_color_web";
+    public static final String PREFERRED_ACTION = "preferred_action_preference";
 
     private static SharedPreferences preferences(Context context) {
         return context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
@@ -60,9 +60,7 @@ public class Preferences {
     }
 
     public static boolean isAnimationEnabled(Context context) {
-        return PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getBoolean(ENABLE_ANIMATION, true);
+        return animationType(context) != 0;
     }
 
     public static int animationType(Context context) {

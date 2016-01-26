@@ -7,14 +7,18 @@
         android:key="toolbar_color_pref"
         android:title="@string/colored_toolbar" />
 
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="animations_pref"
-        android:title="@string/animations" />
+    <ListPreference
+        android:defaultValue="1"
+        android:entries="@array/actionValues"
+        android:entryValues="@array/actionKeys"
+        android:key="preferred_action_preference"
+        android:title="@string/preferred_action" />
+
     <ListPreference
         android:defaultValue="1"
         android:entries="@array/animationValues"
         android:entryValues="@array/animationKeys"
         android:key="animation_preference"
         android:title="@string/choose_animation" />
+
 </PreferenceScreen>

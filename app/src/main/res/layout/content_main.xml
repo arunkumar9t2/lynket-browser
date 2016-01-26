@@ -344,7 +344,7 @@
                     <FrameLayout
                         android:id="@+id/preference_fragment"
                         android:layout_width="match_parent"
-                        android:layout_height="165dp" />
+                        android:layout_height="198dp" />
 
                 </LinearLayout>
 

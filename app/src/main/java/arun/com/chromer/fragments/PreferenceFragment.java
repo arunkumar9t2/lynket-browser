@@ -37,13 +37,12 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
     @Override
     public void onResume() {
         super.onResume();
-        updateAnimationSummary();
+        updatePreferenceSummary();
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        updateAnimationSummary();
-
+        updatePreferenceSummary();
     }
 
     @Override
@@ -52,9 +51,14 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
         super.onDestroy();
     }
 
-    private void updateAnimationSummary() {
+    private void updatePreferenceSummary() {
         // Showing summary for animation preference
         ListPreference preference = (ListPreference) findPreference(Preferences.ANIMATION_TYPE);
+        if (preference != null) {
+            preference.setSummary(preference.getEntry());
+        }
+        // Showing summary for preferred action
+        preference = (ListPreference) findPreference(Preferences.PREFERRED_ACTION);
         if (preference != null) {
             preference.setSummary(preference.getEntry());
         }
