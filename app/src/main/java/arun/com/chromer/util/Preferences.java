@@ -10,7 +10,7 @@ import arun.com.chromer.R;
 /**
  * Created by Arun on 05/01/2016.
  */
-public class PrefUtil {
+public class Preferences {
     public static final String PREFERRED_PACKAGE = "preferred_package";
     public static final String TOOLBAR_COLOR = "toolbar_color";
     public static final String TOOLBAR_COLOR_PREF = "toolbar_color_pref";
@@ -45,18 +45,18 @@ public class PrefUtil {
                 .getBoolean(TOOLBAR_COLOR_PREF, true);
     }
 
-    public static int getToolbarColor(Context context) {
+    public static int toolbarColor(Context context) {
         return PreferenceManager
                 .getDefaultSharedPreferences(context)
                 .getInt(TOOLBAR_COLOR,
                         ContextCompat.getColor(context, R.color.colorPrimary));
     }
 
-    public static void setToolbarColor(Context context, int selectedColor) {
+    public static void toolbarColor(Context context, int selectedColor) {
         PreferenceManager
                 .getDefaultSharedPreferences(context)
                 .edit()
-                .putInt("toolbar_color", selectedColor).apply();
+                .putInt(TOOLBAR_COLOR, selectedColor).apply();
     }
 
     public static boolean isAnimationEnabled(Context context) {
@@ -65,85 +65,79 @@ public class PrefUtil {
                 .getBoolean(ENABLE_ANIMATION, true);
     }
 
-    public static int getAnimationPref(Context context) {
+    public static int animationType(Context context) {
         return Integer.parseInt(PreferenceManager
                 .getDefaultSharedPreferences(context)
                 .getString(ANIMATION_TYPE, "1"));
     }
 
-    public static boolean isShowTitle(Context context) {
-        return PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getBoolean(SHOW_TITLE_PREF, true);
-    }
-
-    public static String getPreferredTabApp(Context context) {
+    public static String customTabApp(Context context) {
         return PreferenceManager
                 .getDefaultSharedPreferences(context)
                 .getString(PREFERRED_PACKAGE, null);
     }
 
-    public static void setPreferredTabApp(Context context, String string) {
+    public static void customTabApp(Context context, String string) {
         PreferenceManager
                 .getDefaultSharedPreferences(context)
                 .edit()
                 .putString(PREFERRED_PACKAGE, string).apply();
     }
 
-    public static String getSecondaryPref(Context context) {
+    public static String secondaryBrowser(Context context) {
         return PreferenceManager
                 .getDefaultSharedPreferences(context)
                 .getString(SECONDARY_PREF, null);
     }
 
-    public static void setSecondaryPref(Context context, String string) {
+    public static void secondaryBrowser(Context context, String string) {
         PreferenceManager
                 .getDefaultSharedPreferences(context)
                 .edit()
                 .putString(SECONDARY_PREF, string).apply();
     }
 
-    public static boolean isWarmUpPreferred(Context context) {
-        if (preferences(context).getBoolean(WARM_UP, false)) {
+    public static boolean warmUp(Context context) {
+        if (preferences(context).getBoolean(WARM_UP, false))
             return true;
-        }
-        return false;
+        else
+            return false;
     }
 
-    public static void setWarmUpPreference(Context context, boolean preference) {
+    public static void warmUp(Context context, boolean preference) {
         preferences(context).edit().putBoolean(WARM_UP, preference).commit();
     }
 
-    public static boolean isPreFetchPrefered(Context context) {
-        if (preferences(context).getBoolean(PRE_FETCH, false)) {
+    public static boolean preFetch(Context context) {
+        if (preferences(context).getBoolean(PRE_FETCH, false))
             return true;
-        }
-        return false;
+        else
+            return false;
     }
 
-    public static void setPrefetchPreference(Context context, boolean preference) {
+    public static void preFetch(Context context, boolean preference) {
         preferences(context).edit().putBoolean(PRE_FETCH, preference).commit();
     }
 
-    public static boolean isWifiPreferred(Context context) {
-        if (preferences(context).getBoolean(WIFI_PREFETCH, false)) {
+    public static boolean wifiOnlyPrefetch(Context context) {
+        if (preferences(context).getBoolean(WIFI_PREFETCH, false))
             return true;
-        }
-        return false;
+        else
+            return false;
     }
 
-    public static void setWifiPrefetch(Context context, boolean preference) {
+    public static void wifiOnlyPrefetch(Context context, boolean preference) {
         preferences(context).edit().putBoolean(WIFI_PREFETCH, preference).commit();
     }
 
-    public static boolean isDynamicToolbar(Context context) {
-        if (preferences(context).getBoolean(DYNAMIC_COLOR, false)) {
+    public static boolean dynamicToolbar(Context context) {
+        if (preferences(context).getBoolean(DYNAMIC_COLOR, false))
             return true;
-        }
-        return false;
+        else
+            return false;
     }
 
-    public static void setDynamicToolbar(Context context, boolean preference) {
+    public static void dynamicToolbar(Context context, boolean preference) {
         preferences(context).edit().putBoolean(DYNAMIC_COLOR, preference).commit();
     }
 
@@ -155,39 +149,39 @@ public class PrefUtil {
         return false;
     }
 
-    public static boolean isDynamicToolbarApp(Context context) {
-        if (preferences(context).getBoolean(DYNAMIC_COLOR_APP, false)) {
+    public static boolean dynamicToolbarOnApp(Context context) {
+        if (preferences(context).getBoolean(DYNAMIC_COLOR_APP, false))
             return true;
-        }
-        return false;
+        else
+            return false;
     }
 
-    public static void setDynamicToolbarApp(Context context, boolean preference) {
+    public static void dynamicToolbarOnApp(Context context, boolean preference) {
         preferences(context).edit().putBoolean(DYNAMIC_COLOR_APP, preference).commit();
     }
 
-    public static boolean isDynamicToolbarWeb(Context context) {
-        if (preferences(context).getBoolean(DYNAMIC_COLOR_WEB, false)) {
+    public static boolean dynamicToolbarOnWeb(Context context) {
+        if (preferences(context).getBoolean(DYNAMIC_COLOR_WEB, false))
             return true;
-        }
-        return false;
+        else
+            return false;
     }
 
-    public static void setDynamicToolbarWeb(Context context, boolean preference) {
+    public static void dynamicToolbarOnWeb(Context context, boolean preference) {
         preferences(context).edit().putBoolean(DYNAMIC_COLOR_WEB, preference).commit();
     }
 
-    public static void setDynamicToolbarPref(Context context, boolean app, boolean web) {
-        setDynamicToolbarApp(context, app);
-        setDynamicToolbarWeb(context, web);
+    public static void dynamicToolbarOptions(Context context, boolean app, boolean web) {
+        dynamicToolbarOnApp(context, app);
+        dynamicToolbarOnWeb(context, web);
     }
 
-    public static Integer[] getDynTlbrSelection(Context context) {
-        if (isDynamicToolbarApp(context) && isDynamicToolbarWeb(context))
+    public static Integer[] dynamicToolbarSelections(Context context) {
+        if (dynamicToolbarOnApp(context) && dynamicToolbarOnWeb(context))
             return new Integer[]{0, 1};
-        else if (isDynamicToolbarApp(context))
+        else if (dynamicToolbarOnApp(context))
             return new Integer[]{0};
-        else if (isDynamicToolbarWeb(context))
+        else if (dynamicToolbarOnWeb(context))
             return new Integer[]{1};
         else return null;
     }
@@ -195,17 +189,17 @@ public class PrefUtil {
     public static void updateAppAndWeb(Context context, Integer[] which) {
         switch (which.length) {
             case 0:
-                PrefUtil.setDynamicToolbarPref(context, false, false);
+                Preferences.dynamicToolbarOptions(context, false, false);
                 break;
             case 1:
                 if (which[0] == 0) {
-                    PrefUtil.setDynamicToolbarPref(context, true, false);
+                    Preferences.dynamicToolbarOptions(context, true, false);
                 } else if (which[0] == 1) {
-                    PrefUtil.setDynamicToolbarPref(context, false, true);
+                    Preferences.dynamicToolbarOptions(context, false, true);
                 }
                 break;
             case 2:
-                PrefUtil.setDynamicToolbarPref(context, true, true);
+                Preferences.dynamicToolbarOptions(context, true, true);
                 break;
         }
     }

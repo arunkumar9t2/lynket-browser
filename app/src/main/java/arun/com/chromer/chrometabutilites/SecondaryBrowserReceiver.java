@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import arun.com.chromer.util.PrefUtil;
+import arun.com.chromer.util.Preferences;
 import timber.log.Timber;
 
 public class SecondaryBrowserReceiver extends BroadcastReceiver {
@@ -24,7 +24,7 @@ public class SecondaryBrowserReceiver extends BroadcastReceiver {
         String url = intent.getDataString();
 
         if (url != null) {
-            String secondaryPackage = PrefUtil.getSecondaryPref(context);
+            String secondaryPackage = Preferences.secondaryBrowser(context);
 
             Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             activityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

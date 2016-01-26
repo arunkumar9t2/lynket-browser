@@ -12,7 +12,7 @@ import android.support.customtabs.CustomTabsSession;
 
 import java.util.List;
 
-import arun.com.chromer.util.PrefUtil;
+import arun.com.chromer.util.Preferences;
 import arun.com.chromer.util.Util;
 import timber.log.Timber;
 
@@ -46,7 +46,7 @@ public class MyCustomActivityHelper implements ServiceConnectionCallback {
         String packageName;
 
         // first check user preferred custom provider is there
-        String userPrefProvider = PrefUtil.getPreferredTabApp(activity);
+        String userPrefProvider = Preferences.customTabApp(activity);
         if (userPrefProvider != null && Util.isPackageInstalled(activity, userPrefProvider)) {
             Timber.d("Valid user preferred custom tab provider present");
             packageName = userPrefProvider;

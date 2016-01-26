@@ -21,7 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
-import arun.com.chromer.util.PrefUtil;
+import arun.com.chromer.util.Preferences;
 import timber.log.Timber;
 
 /**
@@ -65,7 +65,7 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
 
 
     public boolean mayLaunchUrl(Uri uri, List<Bundle> possibleUrls) {
-        if (!PrefUtil.isPreFetchPrefered(this)) return false;
+        if (!Preferences.preFetch(this)) return false;
 
         boolean ok = myCustomActivityHelper.mayLaunchUrl(uri, null, possibleUrls);
         Timber.d("Warmup " + ok);
@@ -80,7 +80,7 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
 
         String packageName = event.getPackageName().toString();
 
-        if (PrefUtil.isPreFetchPrefered(this) && isWifiConditionsMet()) {
+        if (Preferences.preFetch(this) && isWifiConditionsMet()) {
             try {
                 stopService(new Intent(this, WarmupService.class));
             } catch (Exception e) {
@@ -111,7 +111,7 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
     }
 
     public boolean isWifiConditionsMet() {
-        if (PrefUtil.isWifiPreferred(this)) {
+        if (Preferences.wifiOnlyPrefetch(this)) {
             ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             // TODO fix this deprecated call
             NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);

@@ -20,7 +20,7 @@ import arun.com.chromer.services.ClipboardService;
 import arun.com.chromer.services.ScannerService;
 import arun.com.chromer.services.WarmupService;
 import arun.com.chromer.services.WebColorExtractorService;
-import arun.com.chromer.util.PrefUtil;
+import arun.com.chromer.util.Preferences;
 import arun.com.chromer.util.Util;
 import timber.log.Timber;
 
@@ -57,8 +57,8 @@ public class CustomTabDelegate {
     }
 
     private static void handleAnimations(Context ctx, CustomTabsIntent.Builder builder) {
-        if (PrefUtil.isAnimationEnabled(ctx)) {
-            switch (PrefUtil.getAnimationPref(ctx)) {
+        if (Preferences.isAnimationEnabled(ctx)) {
+            switch (Preferences.animationType(ctx)) {
                 case 1:
                     builder.setStartAnimations(ctx, R.anim.slide_in_right, R.anim.slide_out_left)
                             .setExitAnimations(ctx, R.anim.slide_in_left, R.anim.slide_out_right);
@@ -77,14 +77,14 @@ public class CustomTabDelegate {
 
     private static void handleToolbarColor(Context ctx, String url, CustomTabsIntent.Builder builder) {
         //Toast.makeText(ctx, AppDetectService.getInstance().getLastApp(), Toast.LENGTH_SHORT).show();
-        if (PrefUtil.isColoredToolbar(ctx)) {
+        if (Preferences.isColoredToolbar(ctx)) {
             // Get the user chosen color first
-            int chosenColor = PrefUtil.getToolbarColor(ctx);
+            int chosenColor = Preferences.toolbarColor(ctx);
 
-            if (PrefUtil.isDynamicToolbar(ctx)) {
+            if (Preferences.dynamicToolbar(ctx)) {
 
                 // Attempt to get the color of the calling app then
-                if (PrefUtil.isDynamicToolbarApp(ctx)) {
+                if (Preferences.dynamicToolbarOnApp(ctx)) {
                     try {
                         String lastApp = AppDetectService.getInstance().getLastApp();
                         List<AppColor> appColors = AppColor.find(AppColor.class, "app = ?", lastApp);
@@ -102,7 +102,7 @@ public class CustomTabDelegate {
                 }
 
                 // Further try to get extract theme color of website
-                if (PrefUtil.isDynamicToolbarWeb(ctx)) {
+                if (Preferences.dynamicToolbarOnWeb(ctx)) {
                     // Check if we have the color extracted for this source
                     String host = Uri.parse(url).getHost();
                     List<WebColor> webColors = WebColor.find(WebColor.class, "url = ?", host);
@@ -137,7 +137,7 @@ public class CustomTabDelegate {
         if (url != null) {
             try {
                 Bitmap icon = Util.drawableToBitmap(ctx.getPackageManager()
-                        .getApplicationIcon(PrefUtil.getSecondaryPref(ctx)));
+                        .getApplicationIcon(Preferences.secondaryBrowser(ctx)));
 
                 Intent activityIntent = new Intent(ctx, SecondaryBrowserReceiver.class);
 
@@ -152,7 +152,7 @@ public class CustomTabDelegate {
 
     private static CustomTabsSession getAvailableSessions(Context ctx) {
         ScannerService sService = ScannerService.getInstance();
-        if (sService != null && PrefUtil.isPreFetchPrefered(ctx)) {
+        if (sService != null && Preferences.preFetch(ctx)) {
             Timber.d("Using scanner service");
             return sService.getTabSession();
         }
