@@ -77,7 +77,7 @@
     <string name="accesiblity_dialog_desc">To allow Chromer to scan for links in any app, it requires you to grant accessibility service permission. Please grant accessibility permission in the next screen, after which you can enable this option and enjoy quick launches.</string>
     <string name="open_settings">Open Settings</string>
     <string name="only_on_wifi">Only on Wi-Fi</string>
-    <string name="choose_toolbar_color">Choose toolbar color</string>
+    <string name="default_toolbar_color">Default toolbar color</string>
     <string name="choose_secondary_browser">Choose secondary browser</string>
     <string name="dynamic_toolbar_help">To enable dynamic coloring of toolbar, Chromer learns the colors silently. It might not come initially for a website, but it will improve over time with usage. Enjoy!</string>
     <string name="optional">More…</string>
