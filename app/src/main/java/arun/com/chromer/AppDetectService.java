@@ -80,6 +80,8 @@ public class AppDetectService extends Service {
 
     @Override
     public void onDestroy() {
+        mShouldStopPolling = true;
+
         Timber.d("Destroying");
         unregisterReceiver(mScreenReceiver);
         // TODO Potential leak??
