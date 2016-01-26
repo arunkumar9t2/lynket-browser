@@ -181,4 +181,32 @@ public class PrefUtil {
         setDynamicToolbarApp(context, app);
         setDynamicToolbarWeb(context, web);
     }
+
+    public static Integer[] getDynTlbrSelection(Context context) {
+        if (isDynamicToolbarApp(context) && isDynamicToolbarWeb(context))
+            return new Integer[]{0, 1};
+        else if (isDynamicToolbarApp(context))
+            return new Integer[]{0};
+        else if (isDynamicToolbarWeb(context))
+            return new Integer[]{1};
+        else return null;
+    }
+
+    public static void updateAppAndWeb(Context context, Integer[] which) {
+        switch (which.length) {
+            case 0:
+                PrefUtil.setDynamicToolbarPref(context, false, false);
+                break;
+            case 1:
+                if (which[0] == 0) {
+                    PrefUtil.setDynamicToolbarPref(context, true, false);
+                } else if (which[0] == 1) {
+                    PrefUtil.setDynamicToolbarPref(context, false, true);
+                }
+                break;
+            case 2:
+                PrefUtil.setDynamicToolbarPref(context, true, true);
+                break;
+        }
+    }
 }

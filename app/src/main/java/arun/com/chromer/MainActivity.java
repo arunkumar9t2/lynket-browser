@@ -252,28 +252,17 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                                     getString(R.string.based_on_web)})
                             .positiveText(android.R.string.ok)
                             .alwaysCallMultiChoiceCallback()
-                            .itemsCallbackMultiChoice(null, new MaterialDialog.ListCallbackMultiChoice() {
-                                @Override
-                                public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
-                                    switch (which.length) {
-                                        case 0:
-                                            PrefUtil.setDynamicToolbarPref(getApplicationContext(), false, false);
-                                            break;
-                                        case 1:
-                                            if (which[0] == 0) {
-                                                PrefUtil.setDynamicToolbarPref(getApplicationContext(), true, false);
-                                            } else if (which[0] == 1) {
-                                                PrefUtil.setDynamicToolbarPref(getApplicationContext(), false, true);
-                                            }
-                                            break;
-                                        case 2:
-                                            PrefUtil.setDynamicToolbarPref(getApplicationContext(), true, true);
-                                            break;
-                                    }
-                                    takeCareOfServices();
-                                    return true;
-                                }
-                            })
+                            .itemsCallbackMultiChoice(PrefUtil.getDynTlbrSelection(getApplicationContext()),
+                                    new MaterialDialog.ListCallbackMultiChoice() {
+                                        @Override
+                                        public boolean onSelection(MaterialDialog dialog,
+                                                                   Integer[] which,
+                                                                   CharSequence[] text) {
+                                            PrefUtil.updateAppAndWeb(getApplicationContext(), which);
+                                            takeCareOfServices();
+                                            return true;
+                                        }
+                                    })
                             .show();
                 }
             }
