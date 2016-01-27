@@ -102,7 +102,7 @@
 
 
         <service
-            android:name=".AppDetectService"
+            android:name=".services.AppDetectService"
             android:enabled="true"
             android:exported="true" />
         <service

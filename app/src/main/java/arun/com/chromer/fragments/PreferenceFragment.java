@@ -15,8 +15,8 @@ import android.support.v7.preference.SwitchPreferenceCompat;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import arun.com.chromer.AppDetectService;
 import arun.com.chromer.R;
+import arun.com.chromer.services.AppDetectService;
 import arun.com.chromer.util.Preferences;
 import arun.com.chromer.util.Util;
 

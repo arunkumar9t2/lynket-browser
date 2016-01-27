@@ -11,11 +11,11 @@ import android.support.customtabs.CustomTabsSession;
 
 import java.util.List;
 
-import arun.com.chromer.AppDetectService;
 import arun.com.chromer.R;
 import arun.com.chromer.model.AppColor;
 import arun.com.chromer.model.WebColor;
 import arun.com.chromer.services.AppColorExtractorService;
+import arun.com.chromer.services.AppDetectService;
 import arun.com.chromer.services.ClipboardService;
 import arun.com.chromer.services.ScannerService;
 import arun.com.chromer.services.WarmupService;

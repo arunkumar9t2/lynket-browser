@@ -50,6 +50,7 @@ import arun.com.chromer.chrometabutilites.MyCustomTabHelper;
 import arun.com.chromer.fragments.PreferenceFragment;
 import arun.com.chromer.intro.AppIntroMy;
 import arun.com.chromer.model.App;
+import arun.com.chromer.services.AppDetectService;
 import arun.com.chromer.services.ScannerService;
 import arun.com.chromer.services.WarmupService;
 import arun.com.chromer.util.ChangelogUtil;

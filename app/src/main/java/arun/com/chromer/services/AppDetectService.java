@@ -1,4 +1,4 @@
-package arun.com.chromer;
+package arun.com.chromer.services;
 
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
