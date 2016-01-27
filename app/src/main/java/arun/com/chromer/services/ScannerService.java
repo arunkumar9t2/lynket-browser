@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsService;
 import android.support.customtabs.CustomTabsSession;
@@ -30,8 +29,14 @@ import timber.log.Timber;
 public class ScannerService extends AccessibilityService implements MyCustomActivityHelper.ConnectionCallback {
 
     private static ScannerService mScannerService = null;
+    private final int MAX_URL = 4;
     private MyCustomActivityHelper myCustomActivityHelper;
-    private String lastWarmedUpUrl = "";
+    private String mLastFetchedUrl = "";
+    private int mExtractedCount = 0;
+
+    private Stack<AccessibilityNodeInfo> mTraversalTree = new Stack<>();
+
+    private List<String> mExtractedUrls = new ArrayList<>();
 
     public static ScannerService getInstance() {
         return mScannerService;
@@ -76,23 +81,114 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
     public void onAccessibilityEvent(AccessibilityEvent event) {
         mScannerService = this;
 
+        mExtractedCount = 0;
+
         if (event == null) return;
 
         String packageName = event.getPackageName().toString();
 
+        // Stop extraction once custom tab is opened.
+        if (packageName.equalsIgnoreCase(Preferences.customTabApp(this))) return;
+
         if (Preferences.preFetch(this) && isWifiConditionsMet()) {
+            stopWarmUpService();
+
+            // Traverse the tree and find urls
+            mTraversalTree.push(getRootInActiveWindow());
+            while (!mTraversalTree.empty() && mExtractedCount < MAX_URL) {
+                AccessibilityNodeInfo currNode = mTraversalTree.pop();
+                if (currNode != null) {
+                    actOnCurrentNode(currNode);
+                    for (int i = 0; i < currNode.getChildCount(); i++) {
+                        mTraversalTree.push(currNode.getChild(i));
+                    }
+                }
+            }
+
+            if (mExtractedUrls.size() != 0) {
+
+                Collections.reverse(mExtractedUrls);
+
+                int first = 0;
+                String priorityUrl = null;
+                List<Bundle> possibleUrls = new ArrayList<>();
+                for (String url : mExtractedUrls) {
+                    if (first == 0) {
+                        priorityUrl = url;
+                        first++;
+                    } else {
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(CustomTabsService.KEY_URL, Uri.parse(url));
+                        possibleUrls.add(bundle);
+                    }
+                    boolean success;
+                    if (!priorityUrl.equalsIgnoreCase(mLastFetchedUrl)) {
+                        success = myCustomActivityHelper.mayLaunchUrl(Uri.parse(priorityUrl), null, possibleUrls);
+                        if (success) mLastFetchedUrl = priorityUrl;
+                    } else {
+                        Timber.d("Ignored, already fetched");
+                    }
+                }
+            }
+
             try {
-                stopService(new Intent(this, WarmupService.class));
+                //getRootInActiveWindow().recycle();
+                mTraversalTree.clear();
+                mExtractedUrls.clear();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-            TextProcessorTask textProcessorTask = new TextProcessorTask(getRootInActiveWindow());
-
-            textProcessorTask.execute();
-        } else {
-            // Do nothing
         }
+    }
+
+    private void actOnCurrentNode(AccessibilityNodeInfo node) {
+        if (node != null && node.getText() != null) {
+            String currNodeText;
+            currNodeText = node.getText().toString();
+            // Timber.d(currNodeText);
+            extractURL(currNodeText);
+            if (mExtractedUrls != null && mExtractedUrls.size() != 0) {
+                mExtractedCount += mExtractedUrls.size();
+            }
+        }
+    }
+
+
+    void extractURL(String string) {
+        if (string == null) {
+            return;
+        }
+        Matcher m = Pattern.compile("\\b((?:[a-z][\\w-]+:(?:/{1,3}|[a-z0-9%])|www\\d{0,3}[.]|[a-z0-9.\\-]+[.][a-z]{2,4}/)(?:[^\\s()<>]+|\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\))+(?:\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))", Pattern.CASE_INSENSITIVE)
+                .matcher(string);
+        while (m.find()) {
+            String url = m.group();
+            if (!url.toLowerCase().matches("^\\w+://.*")) {
+                url = "http://" + url;
+            }
+
+            //Timber.d(url);
+
+            mExtractedUrls.add(url);
+        }
+    }
+
+
+    private void stopWarmUpService() {
+        try {
+            stopService(new Intent(this, WarmupService.class));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean isWifiConditionsMet() {
+        if (Preferences.wifiOnlyPrefetch(this)) {
+            ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            // TODO fix this deprecated call
+            NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            return mWifi.isConnected();
+        } else
+            return true;
     }
 
     @Override
@@ -110,124 +206,4 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
 
     }
 
-    public boolean isWifiConditionsMet() {
-        if (Preferences.wifiOnlyPrefetch(this)) {
-            ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-            // TODO fix this deprecated call
-            NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-            return mWifi.isConnected();
-        } else
-            return true;
-    }
-
-    private class TextProcessorTask extends AsyncTask<Void, String, Void> {
-        private AccessibilityNodeInfo info;
-        private Stack<AccessibilityNodeInfo> tree;
-        private int maxUrl = 4;
-        private int extractedCount = 0;
-        private List<String> urls = new ArrayList<>();
-
-        TextProcessorTask(AccessibilityNodeInfo nodeInfo) {
-            info = nodeInfo;
-            tree = new Stack<>();
-        }
-
-        void extractURL(String string) {
-            if (string == null) {
-                return;
-            }
-            Matcher m = Pattern.compile("\\b((?:[a-z][\\w-]+:(?:/{1,3}|[a-z0-9%])|www\\d{0,3}[.]|[a-z0-9.\\-]+[.][a-z]{2,4}/)(?:[^\\s()<>]+|\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\))+(?:\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))", Pattern.CASE_INSENSITIVE)
-                    .matcher(string);
-            while (m.find()) {
-                String url = m.group();
-                // Timber.d( "URL extracted: " + url);
-                if (!url.toLowerCase().matches("^\\w+://.*")) {
-                    url = "http://" + url;
-                }
-                urls.add(url);
-            }
-        }
-
-
-        private void actOnCurrentNode(AccessibilityNodeInfo node) {
-            if (node != null && node.getText() != null) {
-                String currNodeText;
-                currNodeText = node.getText().toString();
-                extractURL(currNodeText);
-                if (urls != null && urls.size() != 0) {
-                    extractedCount += urls.size();
-                }
-            }
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            if (info == null) return null;
-
-            tree.push(info);
-
-            while (!tree.empty() && extractedCount < maxUrl) {
-                AccessibilityNodeInfo currNode = tree.pop();
-                if (currNode != null) {
-                    actOnCurrentNode(currNode);
-                    for (int i = 0; i < currNode.getChildCount(); i++) {
-                        tree.push(currNode.getChild(i));
-                    }
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            for (int i = 0; i < urls.size(); i++) {
-                String url = urls.get(i);
-                Timber.d("Extracted " + url);
-            }
-
-            Collections.reverse(urls);
-
-            if (urls.size() != 0) {
-                int first = 0;
-                String priorityUrl = null;
-                List<Bundle> possibleUrls = new ArrayList<>();
-                for (String url : urls) {
-                    if (first == 0) {
-                        priorityUrl = url;
-                        first++;
-                    } else {
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable(CustomTabsService.KEY_URL, Uri.parse(url));
-                        possibleUrls.add(bundle);
-                    }
-                    boolean success;
-                    if (!priorityUrl.equalsIgnoreCase(lastWarmedUpUrl)) {
-                        success = myCustomActivityHelper.mayLaunchUrl(Uri.parse(priorityUrl), null, possibleUrls);
-                        if (success) lastWarmedUpUrl = priorityUrl;
-                    } else {
-                        Timber.d("Ignored, already warmed up");
-                    }
-                }
-            }
-
-            // Dispose resources after processing is done, should help with RAM usage.
-            try {
-                if (info != null) {
-                    info.recycle();
-                }
-                if (tree != null) {
-                    tree.clear();
-                    tree = null;
-                }
-                if (urls != null) {
-                    urls.clear();
-                    urls = null;
-                }
-            } catch (IllegalStateException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
 }
