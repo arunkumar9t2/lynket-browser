@@ -1,18 +1,24 @@
 package arun.com.chromer.fragments;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.SwitchPreferenceCompat;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import arun.com.chromer.AppDetectService;
 import arun.com.chromer.R;
 import arun.com.chromer.util.Preferences;
+import arun.com.chromer.util.Util;
 
 public class PreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -106,18 +112,40 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
                                                                        CharSequence[] text) {
                                                 Preferences.updateAppAndWeb(getActivity()
                                                         .getApplicationContext(), which);
+                                                requestUsagePermissionIfNeeded();
                                                 startStopAppDetectionSrvc();
                                                 updateDynamicSummary();
                                                 return true;
                                             }
                                         })
                                 .show();
+                        requestUsagePermissionIfNeeded();
                     }
+                    startStopAppDetectionSrvc();
                     updateDynamicSummary();
                     return false;
                 }
             });
         }
+    }
+
+    private void requestUsagePermissionIfNeeded() {
+        if (Preferences.dynamicToolbarOnApp(getActivity().getApplicationContext())
+                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                && !Util.canReadUsageStats(getActivity().getApplicationContext())) {
+            new MaterialDialog.Builder(getActivity())
+                    .title(R.string.permission_required)
+                    .content(R.string.usage_permission_explanation)
+                    .positiveText(R.string.grant)
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+                        }
+                    }).show();
+        }
+
     }
 
     private void startStopAppDetectionSrvc() {

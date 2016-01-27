@@ -108,4 +108,7 @@
     <string name="dynamic_summary_app">Color will be based on app that launches the website</string>
     <string name="dynamic_summary_web">Color will be based on the launched website</string>
     <string name="no_option_selected">No options selected</string>
+    <string name="permission_required">Permission required</string>
+    <string name="usage_permission_explanation">To enable dynamic coloring of toolbar based on apps, Chromer needs your permission to know the apps you are using. Would you like to grant this permission now?</string>
+    <string name="grant">Grant</string>
 </resources>

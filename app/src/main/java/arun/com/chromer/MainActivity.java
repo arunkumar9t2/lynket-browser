@@ -289,6 +289,12 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         else
             stopService(new Intent(this, WarmupService.class));
 
+
+        if (Preferences.dynamicToolbarOnApp(getApplicationContext()) && Preferences.dynamicToolbar(getApplicationContext()))
+            startService(new Intent(this, AppDetectService.class));
+        else
+            stopService(new Intent(this, AppDetectService.class));
+
         try {
             if (Preferences.preFetch(this))
                 startService(new Intent(this, ScannerService.class));
