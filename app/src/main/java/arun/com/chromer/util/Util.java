@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Outline;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -16,6 +17,9 @@ import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.View;
+import android.view.ViewOutlineProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -216,4 +220,31 @@ public class Util {
             return false;
         }
     }
+
+    public static int dp2px(Context context, float dp) {
+        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
+        return Math.round(px);
+    }
+
+
+    /**
+     * A helper class for providing a shadow on sheets
+     */
+    @TargetApi(21)
+    public static class ShadowOutline extends ViewOutlineProvider {
+
+        int width;
+        int height;
+
+        public ShadowOutline(int width, int height) {
+            this.width = width;
+            this.height = height;
+        }
+
+        @Override
+        public void getOutline(View view, Outline outline) {
+            outline.setRect(0, 0, width, height);
+        }
+    }
+
 }

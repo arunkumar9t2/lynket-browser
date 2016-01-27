@@ -27,7 +27,6 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.flipboard.bottomsheet.BottomSheetLayout;
-import com.flipboard.bottomsheet.commons.IntentPickerSheetView;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -58,6 +57,7 @@ import arun.com.chromer.util.DatabaseConstants;
 import arun.com.chromer.util.Preferences;
 import arun.com.chromer.util.StringConstants;
 import arun.com.chromer.util.Util;
+import arun.com.chromer.views.IntentPickerSheetView;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback {
