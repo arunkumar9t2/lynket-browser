@@ -175,6 +175,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
+                        android:background="?android:attr/selectableItemBackground"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:paddingLeft="8dp"
@@ -197,8 +198,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/keep_chrome_warmedup"
-                                android:textColor="@color/material_dark_color"
-                                android:textSize="12sp" />
+                                android:textColor="?android:textColorSecondary"
+                                android:textSize="13sp" />
                         </LinearLayout>
 
                         <android.support.v7.widget.SwitchCompat
@@ -216,6 +217,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
+                        android:background="?android:attr/selectableItemBackground"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:paddingLeft="8dp"
@@ -238,8 +240,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/pre_fetch_desc"
-                                android:textColor="@color/material_dark_color"
-                                android:textSize="12sp" />
+                                android:textColor="?android:textColorSecondary"
+                                android:textSize="13sp" />
                         </LinearLayout>
 
                         <android.support.v7.widget.SwitchCompat
@@ -253,6 +255,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
+                        android:background="?android:attr/selectableItemBackground"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:paddingLeft="16dp"
