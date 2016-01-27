@@ -316,32 +316,6 @@
                         android:textSize="12sp" />
 
                     <LinearLayout
-                        android:id="@+id/dynamic_toolbar_color"
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:background="?android:attr/selectableItemBackground"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingLeft="@dimen/preference_padding"
-                        android:paddingRight="@dimen/preference_padding">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="start|center"
-                            android:text="@string/dynamic_toolbar_color"
-                            android:textColor="@color/material_dark_color"
-                            android:textSize="16sp" />
-
-                        <android.support.v7.widget.SwitchCompat
-                            android:id="@+id/dynamic_swich"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="false" />
-                    </LinearLayout>
-
-                    <LinearLayout
                         android:id="@+id/color_picker_button"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
@@ -370,7 +344,7 @@
                     <FrameLayout
                         android:id="@+id/preference_fragment"
                         android:layout_width="match_parent"
-                        android:layout_height="198dp" />
+                        android:layout_height="290dp" />
 
                 </LinearLayout>
 

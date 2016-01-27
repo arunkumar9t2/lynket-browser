@@ -2,6 +2,12 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:key="settings"
     android:title="@string/settings">
+
+    <SwitchPreferenceCompat
+        android:defaultValue="false"
+        android:key="dynamic_color"
+        android:title="@string/dynamic_toolbar_color" />
+
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="toolbar_color_pref"

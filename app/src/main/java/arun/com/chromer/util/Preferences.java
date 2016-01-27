@@ -162,14 +162,16 @@ public class Preferences {
     }
 
     public static boolean dynamicToolbar(Context context) {
-        if (preferences(context).getBoolean(DYNAMIC_COLOR, false))
-            return true;
-        else
-            return false;
+        return PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .getBoolean(DYNAMIC_COLOR, false);
     }
 
     public static void dynamicToolbar(Context context, boolean preference) {
-        preferences(context).edit().putBoolean(DYNAMIC_COLOR, preference).commit();
+        PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(DYNAMIC_COLOR, preference).apply();
     }
 
     public static boolean shouldCleanDB(Context context) {
@@ -233,5 +235,16 @@ public class Preferences {
                 Preferences.dynamicToolbarOptions(context, true, true);
                 break;
         }
+    }
+
+    public static CharSequence dynamicColorSummary(Context context) {
+        if (dynamicToolbarOnApp(context) && dynamicToolbarOnWeb(context)) {
+            return context.getString(R.string.dynamic_summary_appweb);
+        } else if (dynamicToolbarOnApp(context)) {
+            return context.getString(R.string.dynamic_summary_app);
+        } else if (dynamicToolbarOnWeb(context)) {
+            return context.getString(R.string.dynamic_summary_web);
+        } else
+            return context.getString(R.string.no_option_selected);
     }
 }

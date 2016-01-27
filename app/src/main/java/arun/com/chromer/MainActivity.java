@@ -237,42 +237,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 takeCareOfServices();
             }
         });
-
-        setupDynamicToolbar();
-    }
-
-    private void setupDynamicToolbar() {
-        SwitchCompat mDynamicSwitch = (SwitchCompat) findViewById(R.id.dynamic_swich);
-        mDynamicSwitch.setChecked(Preferences.dynamicToolbar(this));
-        mDynamicSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Preferences.dynamicToolbar(getApplicationContext(), isChecked);
-                takeCareOfServices();
-                if (isChecked) {
-                    new MaterialDialog.Builder(MainActivity.this)
-                            .title(R.string.dynamic_toolbar_color)
-                            .content(R.string.dynamic_toolbar_help)
-                            .items(new String[]{
-                                    getString(R.string.based_on_app),
-                                    getString(R.string.based_on_web)})
-                            .positiveText(android.R.string.ok)
-                            .alwaysCallMultiChoiceCallback()
-                            .itemsCallbackMultiChoice(Preferences.dynamicToolbarSelections(getApplicationContext()),
-                                    new MaterialDialog.ListCallbackMultiChoice() {
-                                        @Override
-                                        public boolean onSelection(MaterialDialog dialog,
-                                                                   Integer[] which,
-                                                                   CharSequence[] text) {
-                                            Preferences.updateAppAndWeb(getApplicationContext(), which);
-                                            takeCareOfServices();
-                                            return true;
-                                        }
-                                    })
-                            .show();
-                }
-            }
-        });
     }
 
     private void guideUserToSettings() {
@@ -315,11 +279,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             startService(new Intent(this, WarmupService.class));
         else
             stopService(new Intent(this, WarmupService.class));
-
-        if (Preferences.dynamicToolbarOnApp(this) && Preferences.dynamicToolbar(this))
-            startService(new Intent(this, AppDetectService.class));
-        else
-            stopService(new Intent(this, AppDetectService.class));
 
         try {
             if (Preferences.preFetch(this))

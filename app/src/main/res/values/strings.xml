@@ -104,4 +104,8 @@
     <string name="preferred_action">Preferred action</string>
     <string name="fav_share_app">Favorite share app</string>
     <string name="choose_fav_share_app">Choose favorite share app</string>
+    <string name="dynamic_summary_appweb">Color will be based on website if the site supports it else will be based on app</string>
+    <string name="dynamic_summary_app">Color will be based on app that launches the website</string>
+    <string name="dynamic_summary_web">Color will be based on the launched website</string>
+    <string name="no_option_selected">No options selected</string>
 </resources>
