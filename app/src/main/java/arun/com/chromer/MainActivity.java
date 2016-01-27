@@ -45,7 +45,6 @@ import arun.com.chromer.activities.AboutAppActivity;
 import arun.com.chromer.activities.DonateActivity;
 import arun.com.chromer.activities.TabActivity;
 import arun.com.chromer.adapter.AppRenderAdapter;
-import arun.com.chromer.adapter.SecondaryBrowserAdapter;
 import arun.com.chromer.chrometabutilites.CustomTabDelegate;
 import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
 import arun.com.chromer.chrometabutilites.MyCustomTabHelper;
@@ -73,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     private SwitchCompat mWarmUpSwitch;
     private SwitchCompat mPrefetchSwitch;
     private SwitchCompat mWifiSwitch;
-    private ImageView mSecondaryBrowser;
+    private ImageView mSecondaryBrowserIcon;
     private ImageView mDefaultProviderIcn;
     private AppCompatButton mSetDefaultButton;
     private BottomSheetLayout mBottomSheet;
@@ -114,6 +113,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             ChangelogUtil.showChangelogDialog(this);
         }
 
+        mBottomSheet = (BottomSheetLayout) findViewById(R.id.bottomsheet);
+
         setupDrawer(toolbar);
 
         setupFAB();
@@ -151,32 +152,40 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
 
     private void setUpSecondaryBrowser() {
-        mSecondaryBrowser = (ImageView) findViewById(R.id.secondary_browser_view);
+        mSecondaryBrowserIcon = (ImageView) findViewById(R.id.secondary_browser_view);
 
-        setIconWithPackageName(mSecondaryBrowser, Preferences.secondaryBrowser(this));
+        setIconWithPackageName(mSecondaryBrowserIcon, Preferences.secondaryBrowserPackage(this));
 
-        View secondaryBrowserClickTarget = findViewById(R.id.secondary_browser);
-        secondaryBrowserClickTarget.setOnClickListener(new View.OnClickListener() {
+        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));
+        final IntentPickerSheetView picker = new IntentPickerSheetView(this,
+                webIntent,
+                getString(R.string.choose_secondary_browser),
+                new IntentPickerSheetView.OnIntentPickedListener() {
+                    @Override
+                    public void onIntentPicked(IntentPickerSheetView.ActivityInfo activityInfo) {
+                        mBottomSheet.dismissSheet();
+                        String componentNameFlatten = activityInfo.componentName.flattenToString();
+                        if (componentNameFlatten != null) {
+                            Preferences.secondaryBrowserComponent(getApplicationContext(),
+                                    componentNameFlatten);
+                        }
+                        setIconWithPackageName(mSecondaryBrowserIcon,
+                                activityInfo.componentName.getPackageName());
+                        snack(String.format(getString(R.string.secondary_browser_success),
+                                activityInfo.label));
+                    }
+                });
+        picker.setFilter(new IntentPickerSheetView.Filter() {
+            @Override
+            public boolean include(IntentPickerSheetView.ActivityInfo info) {
+                return !info.componentName.getPackageName().startsWith("com.android")
+                        && !info.componentName.getPackageName().equalsIgnoreCase(getPackageName());
+            }
+        });
+        findViewById(R.id.secondary_browser).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final List<App> compatibleApps = Util.getScndryBrwsrApps(getApplicationContext());
-
-                new MaterialDialog.Builder(MainActivity.this)
-                        .title(getString(R.string.choose_secondary_browser))
-                        .adapter(new SecondaryBrowserAdapter(getApplicationContext(), compatibleApps),
-                                new MaterialDialog.ListCallback() {
-                                    @Override
-                                    public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-                                        App app = compatibleApps.get(which);
-                                        if (app != null) {
-                                            Preferences.secondaryBrowser(getApplicationContext(), app.getPackageName());
-                                            setIconWithPackageName(mSecondaryBrowser, app.getPackageName());
-                                            snack(String.format(getString(R.string.secondary_browser_success), app.getAppName()));
-                                        }
-                                        if (dialog != null) dialog.dismiss();
-                                    }
-                                })
-                        .show();
+                if (mBottomSheet != null) mBottomSheet.showWithSheetView(picker);
             }
         });
     }
@@ -484,7 +493,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     private void setUpFavShareApp() {
-        mBottomSheet = (BottomSheetLayout) findViewById(R.id.bottomsheet);
         mFavShareAppIcon = (ImageView) findViewById(R.id.fav_share_app_view);
 
         setIconWithPackageName(mFavShareAppIcon, Preferences.favSharePackage(this));

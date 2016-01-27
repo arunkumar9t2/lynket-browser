@@ -4,15 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.widget.Toast;
 
-import java.util.List;
-
 import arun.com.chromer.util.Preferences;
-import timber.log.Timber;
 
 public class SecondaryBrowserReceiver extends BroadcastReceiver {
     public SecondaryBrowserReceiver() {
@@ -20,22 +15,20 @@ public class SecondaryBrowserReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Timber.d("Came to secondary browser reciever!");
         String url = intent.getDataString();
 
         if (url != null) {
-            String secondaryPackage = Preferences.secondaryBrowser(context);
-
             Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             activityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            List<ResolveInfo> resolvedActivityList = context.getPackageManager()
-                    .queryIntentActivities(activityIntent, PackageManager.MATCH_ALL);
-            for (ResolveInfo info : resolvedActivityList) {
-                if (info.activityInfo.packageName.equalsIgnoreCase(secondaryPackage))
-                    activityIntent.setComponent(new ComponentName(info.activityInfo.packageName,
-                            info.activityInfo.name));
-            }
+            activityIntent.setComponent(ComponentName.unflattenFromString(
+                    Preferences.secondaryBrowserComponent(context)));
             context.startActivity(activityIntent);
+            try {
+                context.startActivity(activityIntent);
+            } catch (Exception e) {
+                // TODO Add default behavior
+                Toast.makeText(context, "Something went wrong, try again!", Toast.LENGTH_SHORT).show();
+            }
         } else {
             Toast.makeText(context, "Something went wrong, try again!", Toast.LENGTH_SHORT).show();
         }

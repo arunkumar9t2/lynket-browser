@@ -149,18 +149,22 @@ public class CustomTabDelegate {
 
     private static void addActionButtonSecondary(Context ctx, String url, CustomTabsIntent.Builder builder) {
         if (url != null) {
+            Intent activityIntent = new Intent(ctx, SecondaryBrowserReceiver.class);
+
+            PendingIntent openBrowser = PendingIntent.getBroadcast(ctx, 0, activityIntent,
+                    PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
+
+            String pakage = Preferences.secondaryBrowserPackage(ctx);
+
+            if (pakage == null || !Util.isPackageInstalled(ctx, pakage)) return;
+
+            Bitmap icon;
             try {
-                Bitmap icon = Util.drawableToBitmap(ctx.getPackageManager()
-                        .getApplicationIcon(Preferences.secondaryBrowser(ctx)));
-
-                Intent activityIntent = new Intent(ctx, SecondaryBrowserReceiver.class);
-
-                PendingIntent openBrowser = PendingIntent.getBroadcast(ctx, 0, activityIntent,
-                        PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
-                builder.setActionButton(icon, "Secondary browser", openBrowser);
+                icon = Util.drawableToBitmap(ctx.getPackageManager().getApplicationIcon(pakage));
             } catch (PackageManager.NameNotFoundException e) {
-                Timber.d("Was not able to set secondary browser");
+                return;
             }
+            builder.setActionButton(icon, "Secondary browser", openBrowser);
         }
     }
 
@@ -171,11 +175,15 @@ public class CustomTabDelegate {
 
                 PendingIntent openBrowser = PendingIntent.getBroadcast(ctx, 0, browserInter,
                         PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
-                String app = Util.getAppNameWithPackage(ctx, Preferences.secondaryBrowser(ctx));
 
-                if (app == null) return;
+                String pakage = Preferences.secondaryBrowserPackage(ctx);
+
+                if (pakage == null || !Util.isPackageInstalled(ctx, pakage)) return;
+
+                String app = Util.getAppNameWithPackage(ctx, pakage);
 
                 String label = String.format(ctx.getString(R.string.open_in_browser), app);
+
                 builder.addMenuItem(label, openBrowser);
             } catch (Exception e) {
                 Timber.d("Was not able to set secondary browser");

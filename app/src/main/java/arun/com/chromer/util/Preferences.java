@@ -89,17 +89,29 @@ public class Preferences {
                 .putString(PREFERRED_PACKAGE, string).apply();
     }
 
-    public static String secondaryBrowser(Context context) {
+    public static String secondaryBrowserComponent(Context context) {
         return PreferenceManager
                 .getDefaultSharedPreferences(context)
                 .getString(SECONDARY_PREF, null);
     }
 
-    public static void secondaryBrowser(Context context, String string) {
+    public static void secondaryBrowserComponent(Context context, String string) {
         PreferenceManager
                 .getDefaultSharedPreferences(context)
                 .edit()
                 .putString(SECONDARY_PREF, string).apply();
+    }
+
+    public static String secondaryBrowserPackage(Context context) {
+        String flatString = secondaryBrowserComponent(context);
+        if (flatString == null) {
+            return null;
+        }
+
+        ComponentName cN = ComponentName.unflattenFromString(flatString);
+        if (cN == null) return null;
+
+        return cN.getPackageName();
     }
 
 
@@ -107,6 +119,13 @@ public class Preferences {
         return PreferenceManager
                 .getDefaultSharedPreferences(context)
                 .getString(FAV_SHARE_PREF, null);
+    }
+
+    public static void favShareComponent(Context context, String string) {
+        PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .edit()
+                .putString(FAV_SHARE_PREF, string).apply();
     }
 
     public static String favSharePackage(Context context) {
@@ -119,13 +138,6 @@ public class Preferences {
         if (cN == null) return null;
 
         return cN.getPackageName();
-    }
-
-    public static void favShareComponent(Context context, String string) {
-        PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .edit()
-                .putString(FAV_SHARE_PREF, string).apply();
     }
 
     public static boolean warmUp(Context context) {
