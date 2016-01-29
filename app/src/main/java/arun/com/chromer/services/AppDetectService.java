@@ -100,7 +100,8 @@ public class AppDetectService extends Service {
     }
 
     public void clearLastAppIfNeeded(Intent intent) {
-        if (intent.getBooleanExtra(CLEAR_LAST_APP, false)) {
+        if (intent == null) return;
+        else if (intent.getBooleanExtra(CLEAR_LAST_APP, false)) {
             mLastDetectedApp = "";
             Timber.d("Last app cleared");
         }

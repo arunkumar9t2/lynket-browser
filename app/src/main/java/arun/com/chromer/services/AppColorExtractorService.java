@@ -3,6 +3,8 @@ package arun.com.chromer.services;
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.v7.graphics.Palette;
@@ -32,34 +34,101 @@ public class AppColorExtractorService extends IntentService {
                 if (app.equalsIgnoreCase(getPackageName()) | app.equalsIgnoreCase("android"))
                     return;
 
+                if (extractColorFromResources(app)) {
+                    Timber.d("Successful extraction from resources");
+                } else extractColorFromAppIcon(app);
+            }
+        }
+    }
+
+    private boolean extractColorFromResources(String app) {
+        try {
+            int color = -1;
+
+            Resources resources = getPackageManager().getResourcesForApplication(app);
+
+            // Try to extract appcompat primary color value
+            int appCompatId = resources.getIdentifier("colorPrimary", "attr", app);
+            if (appCompatId > 0) {
+                // Successful, let's get the themed value of this attribute
+                color = getThemedColor(resources, appCompatId, app);
+                if (color != -1) {
+                    saveColorToDb(app, color);
+                    return true;
+                }
+            }
+
+            // If above was not successful, then attempt to get lollipop colorPrimary attribute
+            int lollipopAttrId = resources.getIdentifier("android:colorPrimary", "attr", app);
+            if (lollipopAttrId > 0) {
+                // Found
+                color = getThemedColor(resources, lollipopAttrId, app);
+                if (color != -1) {
+                    saveColorToDb(app, color);
+                    return true;
+                }
+            }
+
+            // If color is -1 here, then both attempt failed
+            if (color == -1) return false;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return false;
+    }
+
+    private int getThemedColor(Resources resources, int attributeId, String app) throws PackageManager.NameNotFoundException {
+        if (resources == null || attributeId == 0 || app == null) return -1;
+
+        // Create dummy theme
+        Resources.Theme tempTheme = resources.newTheme();
+        // Need the theme id to apply the theme, so let's get it.
+        int themeId = getPackageManager().getPackageInfo(app, PackageManager.GET_META_DATA).applicationInfo.theme;
+        // Apply the theme
+        tempTheme.applyStyle(themeId, false);
+
+        // Attempt to get styled values now
+        TypedArray array = tempTheme.obtainStyledAttributes(new int[]{attributeId});
+
+        // Styled color
+        int color = array.getColor(0, -1);
+
+        array.recycle();
+        return color;
+    }
+
+    private void extractColorFromAppIcon(String app) {
+        try {
+            Drawable iconDrawable = getPackageManager().getApplicationIcon(app);
+            // Convert to bitmap
+            Bitmap iconBitmap = Util.drawableToBitmap(iconDrawable);
+
+            Palette palette = null;
+            if (iconBitmap != null)
+                palette = Palette.from(iconBitmap).generate();
+
+            if (palette == null) return; // No use when there are no colors, so exit
+
+            int extractColor = getPreferredColorFromSwatches(palette);
+
+            if (extractColor != -1) {
+                Timber.d("Extracted " + extractColor + " for " + app);
                 try {
-                    Drawable iconDrawable = getPackageManager().getApplicationIcon(app);
-                    // Convert to bitmap
-                    Bitmap iconBitmap = Util.drawableToBitmap(iconDrawable);
-
-                    Palette palette = null;
-                    if (iconBitmap != null)
-                        palette = Palette.from(iconBitmap).generate();
-
-                    if (palette == null) return; // No use when there are no colors, so exit
-
-                    int extractColor = getPreferredColorFromSwatches(palette);
-
-                    if (extractColor != -1) {
-                        Timber.d("Extracted " + extractColor + " for " + app);
-                        try {
-                            // Save this color to DB
-                            AppColor appColor = new AppColor(app, extractColor);
-                            appColor.save();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                } catch (PackageManager.NameNotFoundException e) {
+                    // Save this color to DB
+                    saveColorToDb(app, extractColor);
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
+    }
+
+    private void saveColorToDb(String app, int extractColor) {
+        AppColor appColor = new AppColor(app, extractColor);
+        appColor.save();
     }
 
     private int getPreferredColorFromSwatches(Palette palette) {
