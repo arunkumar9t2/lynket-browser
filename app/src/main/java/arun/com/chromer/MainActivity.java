@@ -116,6 +116,10 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
         mBottomSheet = (BottomSheetLayout) findViewById(R.id.bottomsheet);
 
+        setupDefaultBrowser();
+
+        setupMaterialSearch();
+
         setupDrawer(toolbar);
 
         setupFAB();
@@ -125,8 +129,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         setupCustomTab();
 
         setupColorPicker();
-
-        setupDefaultBrowser();
 
         setupDefaultProvider();
 
@@ -144,6 +146,9 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         takeCareOfServices();
 
         cleanOldDbs();
+    }
+
+    private void setupMaterialSearch() {
     }
 
     private void snack(String textToSnack) {
