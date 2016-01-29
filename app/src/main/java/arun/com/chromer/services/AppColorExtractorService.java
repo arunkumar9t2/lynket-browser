@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import arun.com.chromer.model.AppColor;
+import arun.com.chromer.db.AppColor;
 import arun.com.chromer.util.Util;
 import timber.log.Timber;
 

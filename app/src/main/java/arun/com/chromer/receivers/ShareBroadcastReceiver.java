@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package arun.com.chromer.chrometabutilites;
+package arun.com.chromer.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -25,8 +25,6 @@ import timber.log.Timber;
  * A BroadcastReceiver that handles the Action Intent from the Custom Tab and fires a Share Intent.
  */
 public class ShareBroadcastReceiver extends BroadcastReceiver {
-
-    private static final String TAG = ShareBroadcastReceiver.class.getSimpleName();
 
     @Override
     public void onReceive(Context context, Intent intent) {

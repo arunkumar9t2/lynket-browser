@@ -1,4 +1,4 @@
-package arun.com.chromer.adapter;
+package arun.com.chromer.views.adapter;
 
 import android.view.View;
 import android.view.ViewGroup;

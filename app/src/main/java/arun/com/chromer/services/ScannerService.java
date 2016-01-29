@@ -19,18 +19,18 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
+import arun.com.chromer.chrometabutilites.CustomActivityHelper;
 import arun.com.chromer.util.Preferences;
 import timber.log.Timber;
 
 /**
  * Created by Arun on 06/01/2016.
  */
-public class ScannerService extends AccessibilityService implements MyCustomActivityHelper.ConnectionCallback {
+public class ScannerService extends AccessibilityService implements CustomActivityHelper.ConnectionCallback {
 
     private static ScannerService mScannerService = null;
     private final int MAX_URL = 4;
-    private MyCustomActivityHelper myCustomActivityHelper;
+    private CustomActivityHelper customActivityHelper;
     private String mLastFetchedUrl = "";
     private int mExtractedCount = 0;
 
@@ -46,24 +46,24 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
     protected void onServiceConnected() {
         super.onServiceConnected();
         mScannerService = this;
-        myCustomActivityHelper = new MyCustomActivityHelper();
-        myCustomActivityHelper.setConnectionCallback(this);
-        myCustomActivityHelper.setNavigationCallback(new MyCustomActivityHelper.NavigationCallback());
-        boolean success = myCustomActivityHelper.bindCustomTabsService(this);
+        customActivityHelper = new CustomActivityHelper();
+        customActivityHelper.setConnectionCallback(this);
+        customActivityHelper.setNavigationCallback(new CustomActivityHelper.NavigationCallback());
+        boolean success = customActivityHelper.bindCustomTabsService(this);
         Timber.d("Was binded " + success);
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
         mScannerService = null;
-        myCustomActivityHelper.unbindCustomTabsService(this);
+        customActivityHelper.unbindCustomTabsService(this);
         Timber.d("Unbinding");
         return super.onUnbind(intent);
     }
 
     public CustomTabsSession getTabSession() {
-        if (myCustomActivityHelper != null) {
-            return myCustomActivityHelper.getSession();
+        if (customActivityHelper != null) {
+            return customActivityHelper.getSession();
         }
         return null;
     }
@@ -72,7 +72,7 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
     public boolean mayLaunchUrl(Uri uri, List<Bundle> possibleUrls) {
         if (!Preferences.preFetch(this)) return false;
 
-        boolean ok = myCustomActivityHelper.mayLaunchUrl(uri, null, possibleUrls);
+        boolean ok = customActivityHelper.mayLaunchUrl(uri, null, possibleUrls);
         Timber.d("Warmup " + ok);
         return ok;
     }
@@ -123,7 +123,7 @@ public class ScannerService extends AccessibilityService implements MyCustomActi
                     }
                     boolean success;
                     if (!priorityUrl.equalsIgnoreCase(mLastFetchedUrl)) {
-                        success = myCustomActivityHelper.mayLaunchUrl(Uri.parse(priorityUrl), null, possibleUrls);
+                        success = customActivityHelper.mayLaunchUrl(Uri.parse(priorityUrl), null, possibleUrls);
                         if (success) mLastFetchedUrl = priorityUrl;
                     } else {
                         Timber.d("Ignored, already fetched");

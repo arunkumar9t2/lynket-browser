@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
 
 import arun.com.chromer.BuildConfig;
 import arun.com.chromer.MainActivity;
-import arun.com.chromer.chrometabutilites.MyCustomTabHelper;
+import arun.com.chromer.chrometabutilites.CustomTabHelper;
 import arun.com.chromer.model.App;
 
 /**
@@ -172,7 +172,7 @@ public class Util {
         List<ResolveInfo> resolvedActivityList = pm.queryIntentActivities(activityIntent, PackageManager.MATCH_ALL);
         for (ResolveInfo info : resolvedActivityList) {
             Intent serviceIntent = new Intent();
-            serviceIntent.setAction(MyCustomTabHelper.ACTION_CUSTOM_TABS_CONNECTION);
+            serviceIntent.setAction(CustomTabHelper.ACTION_CUSTOM_TABS_CONNECTION);
             serviceIntent.setPackage(info.activityInfo.packageName);
             if (pm.resolveService(serviceIntent, 0) != null) {
                 String packageName = info.activityInfo.packageName;

@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import arun.com.chromer.R;
-import arun.com.chromer.adapter.ExtendedBaseAdapter;
 import arun.com.chromer.fragments.AboutFragment;
 import arun.com.chromer.payments.IabBroadcastReceiver;
 import arun.com.chromer.payments.IabHelper;
@@ -30,6 +29,7 @@ import arun.com.chromer.payments.IabResult;
 import arun.com.chromer.payments.Inventory;
 import arun.com.chromer.payments.Purchase;
 import arun.com.chromer.payments.SkuDetails;
+import arun.com.chromer.views.adapter.ExtendedBaseAdapter;
 import timber.log.Timber;
 
 public class DonateActivity extends AppCompatActivity implements IabBroadcastReceiver.IabBroadcastListener,

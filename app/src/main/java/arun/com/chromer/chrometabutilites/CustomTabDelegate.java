@@ -12,8 +12,12 @@ import android.support.customtabs.CustomTabsSession;
 import java.util.List;
 
 import arun.com.chromer.R;
-import arun.com.chromer.model.AppColor;
-import arun.com.chromer.model.WebColor;
+import arun.com.chromer.db.AppColor;
+import arun.com.chromer.db.WebColor;
+import arun.com.chromer.receivers.AddHomeShortcutReceiver;
+import arun.com.chromer.receivers.FavShareBroadcastReceiver;
+import arun.com.chromer.receivers.SecondaryBrowserReceiver;
+import arun.com.chromer.receivers.ShareBroadcastReceiver;
 import arun.com.chromer.services.AppColorExtractorService;
 import arun.com.chromer.services.AppDetectService;
 import arun.com.chromer.services.ClipboardService;
@@ -105,6 +109,7 @@ public class CustomTabDelegate {
 
                         if (appColors.size() > 0) {
                             // Extracted colors exists
+                            Timber.d("Using color for " + lastApp);
                             chosenColor = appColors.get(0).getColor();
                         } else {
                             // Color does not exist for this app, so let's extract it

@@ -10,13 +10,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import arun.com.chromer.R;
+import arun.com.chromer.chrometabutilites.CustomActivityHelper;
 import arun.com.chromer.chrometabutilites.CustomTabDelegate;
-import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
 
 public class TabActivity extends AppCompatActivity {
 
-    public final static MyCustomActivityHelper.CustomTabsFallback mCustomTabsFallback =
-            new MyCustomActivityHelper.CustomTabsFallback() {
+    public final static CustomActivityHelper.CustomTabsFallback mCustomTabsFallback =
+            new CustomActivityHelper.CustomTabsFallback() {
                 @Override
                 public void openUri(Activity activity, Uri uri) {
 
@@ -51,7 +51,7 @@ public class TabActivity extends AppCompatActivity {
         final String url = getIntent().getData().toString();
         CustomTabsIntent mCustomTabsIntent = CustomTabDelegate.getCustomizedTabIntent(getApplicationContext(), url);
 
-        MyCustomActivityHelper.openCustomTab(this, mCustomTabsIntent,
+        CustomActivityHelper.openCustomTab(this, mCustomTabsIntent,
                 Uri.parse(getIntent().getData().toString()),
                 mCustomTabsFallback);
         finish();

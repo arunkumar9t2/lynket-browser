@@ -12,7 +12,7 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import arun.com.chromer.model.WebColor;
+import arun.com.chromer.db.WebColor;
 import timber.log.Timber;
 
 /**

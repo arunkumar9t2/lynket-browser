@@ -1,4 +1,4 @@
-package arun.com.chromer.intro;
+package arun.com.chromer.activities.intro;
 
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;

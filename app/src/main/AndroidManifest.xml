@@ -35,9 +35,9 @@
                 android:resource="@xml/service" />
         </service>
 
-        <receiver android:name=".chrometabutilites.ShareBroadcastReceiver" />
-        <receiver android:name=".chrometabutilites.FavShareBroadcastReceiver" />
-        <receiver android:name=".chrometabutilites.AddHomeShortcutReceiver" />
+        <receiver android:name=".receivers.ShareBroadcastReceiver" />
+        <receiver android:name=".receivers.FavShareBroadcastReceiver" />
+        <receiver android:name=".receivers.AddHomeShortcutReceiver" />
 
         <activity
             android:name=".MainActivity"
@@ -65,7 +65,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".intro.AppIntroMy"
+            android:name=".activities.intro.AppIntroMy"
             android:label="Intro"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -96,7 +96,7 @@
             android:theme="@style/DonatePopUp" />
 
         <receiver
-            android:name=".chrometabutilites.SecondaryBrowserReceiver"
+            android:name=".receivers.SecondaryBrowserReceiver"
             android:enabled="true"
             android:exported="false" />
 

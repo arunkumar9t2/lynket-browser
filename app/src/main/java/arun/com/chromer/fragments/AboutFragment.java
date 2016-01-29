@@ -24,11 +24,11 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
-import arun.com.chromer.adapter.ExtendedBaseAdapter;
 import arun.com.chromer.extra.Licenses;
 import arun.com.chromer.util.ChangelogUtil;
 import arun.com.chromer.util.StringConstants;
 import arun.com.chromer.util.Util;
+import arun.com.chromer.views.adapter.ExtendedBaseAdapter;
 import de.psdev.licensesdialog.LicensesDialog;
 
 /**

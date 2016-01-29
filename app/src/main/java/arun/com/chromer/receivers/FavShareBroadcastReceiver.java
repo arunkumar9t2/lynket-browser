@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package arun.com.chromer.chrometabutilites;
+package arun.com.chromer.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;

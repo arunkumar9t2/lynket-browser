@@ -43,12 +43,11 @@ import java.util.List;
 import arun.com.chromer.activities.AboutAppActivity;
 import arun.com.chromer.activities.DonateActivity;
 import arun.com.chromer.activities.TabActivity;
-import arun.com.chromer.adapter.AppRenderAdapter;
+import arun.com.chromer.activities.intro.AppIntroMy;
+import arun.com.chromer.chrometabutilites.CustomActivityHelper;
 import arun.com.chromer.chrometabutilites.CustomTabDelegate;
-import arun.com.chromer.chrometabutilites.MyCustomActivityHelper;
-import arun.com.chromer.chrometabutilites.MyCustomTabHelper;
+import arun.com.chromer.chrometabutilites.CustomTabHelper;
 import arun.com.chromer.fragments.PreferenceFragment;
-import arun.com.chromer.intro.AppIntroMy;
 import arun.com.chromer.model.App;
 import arun.com.chromer.services.AppDetectService;
 import arun.com.chromer.services.ScannerService;
@@ -59,6 +58,7 @@ import arun.com.chromer.util.Preferences;
 import arun.com.chromer.util.StringConstants;
 import arun.com.chromer.util.Util;
 import arun.com.chromer.views.IntentPickerSheetView;
+import arun.com.chromer.views.adapter.AppRenderAdapter;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback {
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     private static final String CUSTOM_TAB_URL = "https://developer.chrome.com/multidevice/android/customtabs#whentouse";
     private static final String CHROME_PACKAGE = "com.android.chrome";
 
-    private MyCustomActivityHelper mCustomTabActivityHelper;
+    private CustomActivityHelper mCustomTabActivityHelper;
 
     private View mColorView;
     private SwitchCompat mWarmUpSwitch;
@@ -539,11 +539,11 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private void launchCustomTab(String url) {
         CustomTabsIntent mCustomTabsIntent = CustomTabDelegate.getCustomizedTabIntent(getApplicationContext(), url);
-        MyCustomActivityHelper.openCustomTab(this, mCustomTabsIntent, Uri.parse(url), TabActivity.mCustomTabsFallback);
+        CustomActivityHelper.openCustomTab(this, mCustomTabsIntent, Uri.parse(url), TabActivity.mCustomTabsFallback);
     }
 
     private void setupCustomTab() {
-        mCustomTabActivityHelper = new MyCustomActivityHelper();
+        mCustomTabActivityHelper = new CustomActivityHelper();
         List<Bundle> possibleUrls = new ArrayList<>();
         Bundle bundle = new Bundle();
         bundle.putParcelable(CustomTabsService.KEY_URL, Uri.parse(CUSTOM_TAB_URL));
@@ -569,7 +569,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         }
 
         mCustomTabActivityHelper.setConnectionCallback(
-                new MyCustomActivityHelper.ConnectionCallback() {
+                new CustomActivityHelper.ConnectionCallback() {
                     @Override
                     public void onCustomTabsConnected() {
                         Timber.d("Connect to custom tab");
@@ -593,7 +593,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     private void checkAndEducateUser() {
-        List packages = MyCustomTabHelper.getCustomTabSupportingPackages(this);
+        List packages = CustomTabHelper.getCustomTabSupportingPackages(this);
         if (packages.size() == 0) {
             new MaterialDialog.Builder(this)
                     .title(getString(R.string.custom_tab_provider_not_found))

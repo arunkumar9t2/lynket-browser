@@ -1,4 +1,4 @@
-package arun.com.chromer.model;
+package arun.com.chromer.db;
 
 import com.orm.SugarRecord;
 import com.orm.dsl.Unique;

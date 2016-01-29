@@ -19,9 +19,9 @@ import timber.log.Timber;
 /**
  * Created by Arun on 18/12/2015.
  */
-public class MyCustomActivityHelper implements ServiceConnectionCallback {
+public class CustomActivityHelper implements ServiceConnectionCallback {
 
-    private static final String TAG = MyCustomActivityHelper.class.getSimpleName();
+    private static final String TAG = CustomActivityHelper.class.getSimpleName();
 
     private CustomTabsSession mCustomTabsSession;
     private CustomTabsClient mClient;
@@ -53,7 +53,7 @@ public class MyCustomActivityHelper implements ServiceConnectionCallback {
         } else {
             // getting all the packages here
             Timber.d("Valid user choice not present, defaulting to conventional method");
-            packageName = MyCustomTabHelper.getPackageNameToUse(activity);
+            packageName = CustomTabHelper.getPackageNameToUse(activity);
         }
         //If we cant find a package name, it means there's no browser that supports
         //Chrome Custom Tabs installed. So, we fallback to the webview
@@ -135,7 +135,7 @@ public class MyCustomActivityHelper implements ServiceConnectionCallback {
         Timber.d("Attempting to bind custom tabs service");
         if (mClient != null) return false;
 
-        String packageName = MyCustomTabHelper.getPackageNameToUse(context);
+        String packageName = CustomTabHelper.getPackageNameToUse(context);
         if (packageName == null) return false;
 
         mConnection = new ServiceConnection(this);
