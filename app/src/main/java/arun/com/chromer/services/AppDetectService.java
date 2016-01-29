@@ -22,9 +22,11 @@ import timber.log.Timber;
 
 public class AppDetectService extends Service {
 
+    public static final String CLEAR_LAST_APP = "CLEAR_LAST_APP";
+
     private static final int POLLING_INTERVAL = 350;
 
-    private static AppDetectService mAppDetectService = null;
+    private static AppDetectService sAppDetectService = null;
 
     private static Thread mPollThread;
 
@@ -90,19 +92,33 @@ public class AppDetectService extends Service {
     }
 
     public static AppDetectService getInstance() {
-        return mAppDetectService;
+        return sAppDetectService;
     }
 
     public String getLastApp() {
         return mLastDetectedApp.trim();
     }
 
+    public void clearLastAppIfNeeded(Intent intent) {
+        if (intent.getBooleanExtra(CLEAR_LAST_APP, false)) {
+            mLastDetectedApp = "";
+            Timber.d("Last app cleared");
+        }
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        super.onStartCommand(intent, flags, startId);
+
         Timber.d("Started");
-        mAppDetectService = this;
+        sAppDetectService = this;
+
         registerScreenReceiver();
+
+        clearLastAppIfNeeded(intent);
+
         startDetection();
+
         return START_STICKY;
     }
 
@@ -118,7 +134,7 @@ public class AppDetectService extends Service {
         Timber.d("Destroying");
         unregisterReceiver(mScreenReceiver);
         // TODO Potential leak??
-        mAppDetectService = null;
+        sAppDetectService = null;
         super.onDestroy();
     }
 
