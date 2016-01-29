@@ -97,6 +97,7 @@
     <string name="optional_intro">Chromer can also keep your browser warmed up to reduce launch times. It can also scan links on your screen and preload them to quickly view content. These are completely optional.</string>
     <string name="chromer_defaulted">Chromer is the current default browser</string>
     <string name="secondary_browser_success">%1$s set as the secondary browser!</string>
+    <string name="fav_share_success">%1$s set as your favorite share app!</string>
     <string name="default_provider_success">%1$s will be used to provide Custom Tabs!</string>
     <string name="based_on_app">Based on app</string>
     <string name="based_on_web">Based on website</string>

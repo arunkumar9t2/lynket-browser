@@ -522,6 +522,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         }
                         setIconWithPackageName(mFavShareAppIcon,
                                 activityInfo.componentName.getPackageName());
+                        snack(String.format(getString(R.string.fav_share_success),
+                                activityInfo.label));
                     }
                 });
         picker.setFilter(new IntentPickerSheetView.Filter() {
