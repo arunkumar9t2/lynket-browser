@@ -18,8 +18,6 @@ import timber.log.Timber;
  */
 public class WarmupService extends Service implements CustomActivityHelper.ConnectionCallback {
 
-    private static final String TAG = WarmupService.class.getSimpleName();
-
     private static WarmupService mWarmupService = null;
 
     private CustomActivityHelper customActivityHelper;

@@ -46,7 +46,7 @@
     <string name="couldnt_load_price">Couldn\'t load price</string>
     <string name="coffee">Coffee</string>
     <string name="lunch">Lunch</string>
-    <string name="premimum_donation">Premium Donation</string>
+    <string name="premium_donation">Premium Donation</string>
     <string name="invalid_link">Invalid link</string>
     <string name="copied">Copied</string>
     <string name="copy_link">Copy link</string>
@@ -72,7 +72,6 @@
     <string name="added">Added</string>
     <string name="settings">Settings</string>
     <string name="colored_toolbar">Colored toolbar</string>
-    <string name="animations">Animations</string>
     <string name="choose_animation">Choose animation</string>
     <string name="usage_options">Usage Options</string>
     <string name="default_pref_xpln">Set Chromer as default to open all links, or you can choose Chromer from the list when it is shown</string>
@@ -86,9 +85,9 @@
     <string name="default_provider">Choose default provider</string>
     <string name="pre_fetch_content">Prefetch content</string>
     <string name="pre_fetch_desc">Scan your screen for links and load them in background for instant launch</string>
-    <string name="accesiblity_description">This service will be used by Chromer to scan text links on your screen and load them in the background. No other information is processed by Chromer. You can still use Chromer in light mode if you choose to not grant this. For more information, launch Chromer app.</string>
-    <string name="accesiblity_dialog_title">Accessibility permission required</string>
-    <string name="accesiblity_dialog_desc">To allow Chromer to scan for links in any app, it requires you to grant accessibility service permission. Please grant accessibility permission in the next screen, after which you can enable this option and enjoy quick launches.</string>
+    <string name="accessibility_description">This service will be used by Chromer to scan text links on your screen and load them in the background. No other information is processed by Chromer. You can still use Chromer in light mode if you choose to not grant this. For more information, launch Chromer app.</string>
+    <string name="accessibility_dialog_title">Accessibility permission required</string>
+    <string name="accessibility_dialog_desc">To allow Chromer to scan for links in any app, it requires you to grant accessibility service permission. Please grant accessibility permission in the next screen, after which you can enable this option and enjoy quick launches.</string>
     <string name="open_settings">Open Settings</string>
     <string name="only_on_wifi">Only on Wi-Fi</string>
     <string name="default_toolbar_color">Default toolbar color</string>
@@ -111,4 +110,6 @@
     <string name="permission_required">Permission required</string>
     <string name="usage_permission_explanation">To enable dynamic coloring of toolbar based on apps, Chromer needs your permission to know the apps you are using. Would you like to grant this permission now?</string>
     <string name="grant">Grant</string>
+    <string name="credits_danieal">Credits to Daniel Ciao</string>
+    <string name="open_source_contributions">Open source contributions</string>
 </resources>

@@ -209,7 +209,7 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
                     case 2:
                         if (mPremiumDone) setGreen(holder);
                         else setBlack(holder);
-                        holder.title.setText(getString(R.string.premimum_donation));
+                        holder.title.setText(getString(R.string.premium_donation));
                         holder.subtitle.setText(details.get(2) != null ?
                                 details.get(2).getPrice() : error);
                         holder.imageView.setBackground(new IconicsDrawable(context)

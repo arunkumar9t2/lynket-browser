@@ -4,6 +4,6 @@
     android:accessibilityFeedbackType="feedbackGeneric"
     android:accessibilityFlags="flagDefault|flagRetrieveInteractiveWindows|flagReportViewIds|flagIncludeNotImportantViews"
     android:canRetrieveWindowContent="true"
-    android:description="@string/accesiblity_description"
+    android:description="@string/accessibility_description"
     android:notificationTimeout="350"
     android:settingsActivity="arun.com.chromer.MainActivity" />

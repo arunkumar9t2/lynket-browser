@@ -17,8 +17,6 @@ import timber.log.Timber;
 public class ShareInterceptActivity extends AppCompatActivity {
 
 
-    private static final String TAG = ShareInterceptActivity.class.getSimpleName();
-
     private static final String SEARCH_URL = "http://www.google.com/search?q=";
 
     @TargetApi(Build.VERSION_CODES.M)

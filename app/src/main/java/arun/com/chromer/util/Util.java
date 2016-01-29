@@ -144,8 +144,7 @@ public class Util {
         ResolveInfo resolveInfo = context.getPackageManager().resolveActivity(launchIntent,
                 PackageManager.MATCH_DEFAULT_ONLY);
 
-        String packageName = resolveInfo != null ? resolveInfo.activityInfo.packageName : "";
-        return packageName;
+        return resolveInfo != null ? resolveInfo.activityInfo.packageName : "";
     }
 
     public static List<App> getScndryBrwsrApps(Context context) {
@@ -185,7 +184,7 @@ public class Util {
     }
 
     public static Bitmap drawableToBitmap(Drawable drawable) {
-        Bitmap bitmap = null;
+        Bitmap bitmap;
 
         if (drawable instanceof BitmapDrawable) {
             BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;

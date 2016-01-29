@@ -141,10 +141,7 @@ public class Preferences {
     }
 
     public static boolean warmUp(Context context) {
-        if (preferences(context).getBoolean(WARM_UP, false))
-            return true;
-        else
-            return false;
+        return preferences(context).getBoolean(WARM_UP, false);
     }
 
     public static void warmUp(Context context, boolean preference) {
@@ -152,10 +149,7 @@ public class Preferences {
     }
 
     public static boolean preFetch(Context context) {
-        if (preferences(context).getBoolean(PRE_FETCH, false))
-            return true;
-        else
-            return false;
+        return preferences(context).getBoolean(PRE_FETCH, false);
     }
 
     public static void preFetch(Context context, boolean preference) {
@@ -163,10 +157,7 @@ public class Preferences {
     }
 
     public static boolean wifiOnlyPrefetch(Context context) {
-        if (preferences(context).getBoolean(WIFI_PREFETCH, false))
-            return true;
-        else
-            return false;
+        return preferences(context).getBoolean(WIFI_PREFETCH, false);
     }
 
     public static void wifiOnlyPrefetch(Context context, boolean preference) {
@@ -195,10 +186,7 @@ public class Preferences {
     }
 
     public static boolean dynamicToolbarOnApp(Context context) {
-        if (preferences(context).getBoolean(DYNAMIC_COLOR_APP, false))
-            return true;
-        else
-            return false;
+        return preferences(context).getBoolean(DYNAMIC_COLOR_APP, false);
     }
 
     public static void dynamicToolbarOnApp(Context context, boolean preference) {
@@ -206,10 +194,7 @@ public class Preferences {
     }
 
     public static boolean dynamicToolbarOnWeb(Context context) {
-        if (preferences(context).getBoolean(DYNAMIC_COLOR_WEB, false))
-            return true;
-        else
-            return false;
+        return preferences(context).getBoolean(DYNAMIC_COLOR_WEB, false);
     }
 
     public static void dynamicToolbarOnWeb(Context context, boolean preference) {

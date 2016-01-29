@@ -30,13 +30,11 @@ public class ScannerService extends AccessibilityService implements CustomActivi
 
     private static ScannerService mScannerService = null;
     private final int MAX_URL = 4;
+    private final Stack<AccessibilityNodeInfo> mTraversalTree = new Stack<>();
+    private final List<String> mExtractedUrls = new ArrayList<>();
     private CustomActivityHelper customActivityHelper;
     private String mLastFetchedUrl = "";
     private int mExtractedCount = 0;
-
-    private Stack<AccessibilityNodeInfo> mTraversalTree = new Stack<>();
-
-    private List<String> mExtractedUrls = new ArrayList<>();
 
     public static ScannerService getInstance() {
         return mScannerService;
@@ -50,7 +48,7 @@ public class ScannerService extends AccessibilityService implements CustomActivi
         customActivityHelper.setConnectionCallback(this);
         customActivityHelper.setNavigationCallback(new CustomActivityHelper.NavigationCallback());
         boolean success = customActivityHelper.bindCustomTabsService(this);
-        Timber.d("Was binded " + success);
+        Timber.d("Was bound " + success);
     }
 
     @Override
@@ -154,7 +152,7 @@ public class ScannerService extends AccessibilityService implements CustomActivi
     }
 
 
-    void extractURL(String string) {
+    private void extractURL(String string) {
         if (string == null) {
             return;
         }
@@ -181,7 +179,7 @@ public class ScannerService extends AccessibilityService implements CustomActivi
         }
     }
 
-    public boolean isWifiConditionsMet() {
+    private boolean isWifiConditionsMet() {
         if (Preferences.wifiOnlyPrefetch(this)) {
             ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             // TODO fix this deprecated call

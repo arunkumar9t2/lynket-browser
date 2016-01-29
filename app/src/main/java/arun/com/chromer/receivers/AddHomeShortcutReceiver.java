@@ -13,7 +13,6 @@ import timber.log.Timber;
 import static android.widget.Toast.LENGTH_SHORT;
 
 public class AddHomeShortcutReceiver extends BroadcastReceiver {
-    private static final String TAG = AddHomeShortcutReceiver.class.getSimpleName();
 
     public AddHomeShortcutReceiver() {
     }
@@ -23,7 +22,7 @@ public class AddHomeShortcutReceiver extends BroadcastReceiver {
         final String urlToAdd = intent.getDataString();
         if (urlToAdd != null) {
 
-            Timber.d("Attempting to add for " + urlToAdd);
+            Timber.d("Attempting to add for %s", urlToAdd);
             Intent openTabIntent = new Intent(context, TabActivity.class);
             // TODO fix return behaviour
             openTabIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

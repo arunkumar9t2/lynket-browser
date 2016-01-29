@@ -70,7 +70,6 @@
 
 
                     <TextView
-                        android:id="@+id/author_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingBottom="16dp"
@@ -115,14 +114,14 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Credits to Daniel Ciao"
+                        android:text="@string/credits_danieal"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         android:textColor="@color/material_dark_color" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="For his open source contributions"
+                        android:text="@string/open_source_contributions"
                         android:textColor="@color/material_dark_color"
                         android:textSize="12sp" />
                 </LinearLayout>

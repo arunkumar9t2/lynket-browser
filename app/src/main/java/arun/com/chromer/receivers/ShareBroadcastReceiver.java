@@ -28,7 +28,7 @@ public class ShareBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Timber.d("Came to share reciever!");
+        Timber.d("Came to share receiver!");
         String url = intent.getDataString();
 
         if (url != null) {

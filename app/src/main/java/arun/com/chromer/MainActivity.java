@@ -251,8 +251,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private void guideUserToSettings() {
         new MaterialDialog.Builder(MainActivity.this)
-                .title(R.string.accesiblity_dialog_title)
-                .content(R.string.accesiblity_dialog_desc)
+                .title(R.string.accessibility_dialog_title)
+                .content(R.string.accessibility_dialog_desc)
                 .positiveText(R.string.open_settings)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
@@ -627,7 +627,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         try {
             imageView.setImageDrawable(getPackageManager().getApplicationIcon(packageName));
         } catch (PackageManager.NameNotFoundException e) {
-            return;
+            e.printStackTrace();
         }
     }
 

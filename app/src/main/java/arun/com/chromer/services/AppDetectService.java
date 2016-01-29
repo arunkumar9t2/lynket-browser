@@ -28,16 +28,15 @@ public class AppDetectService extends Service {
 
     private static AppDetectService sAppDetectService = null;
 
-    private static Thread mPollThread;
-
     private static BroadcastReceiver mScreenReceiver;
 
     private static String mLastDetectedApp = "";
 
     private boolean mShouldStopPolling = false;
 
-    private Runnable mAppDetectRunnable = new Runnable() {
+    private final Runnable mAppDetectRunnable = new Runnable() {
 
+        @SuppressWarnings("deprecation")
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         @Override
         public void run() {
@@ -78,8 +77,6 @@ public class AppDetectService extends Service {
 
                     // Sleep and continue again.
                     Thread.sleep(POLLING_INTERVAL);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -99,9 +96,8 @@ public class AppDetectService extends Service {
         return mLastDetectedApp.trim();
     }
 
-    public void clearLastAppIfNeeded(Intent intent) {
-        if (intent == null) return;
-        else if (intent.getBooleanExtra(CLEAR_LAST_APP, false)) {
+    private void clearLastAppIfNeeded(Intent intent) {
+        if (intent != null && intent.getBooleanExtra(CLEAR_LAST_APP, false)) {
             mLastDetectedApp = "";
             Timber.d("Last app cleared");
         }
@@ -140,7 +136,7 @@ public class AppDetectService extends Service {
     }
 
     private void startDetection() {
-        mPollThread = null;
+        Thread mPollThread = null;
         // Create a new instance to start thread again
         mPollThread = new Thread(mAppDetectRunnable);
         mPollThread.start();

@@ -20,8 +20,6 @@ import timber.log.Timber;
  */
 public class WebColorExtractorService extends IntentService {
 
-    private static String splitter = "content=\"";
-
     public WebColorExtractorService() {
         super(WebColorExtractorService.class.getSimpleName());
     }
@@ -57,6 +55,7 @@ public class WebColorExtractorService extends IntentService {
 
             while (matcher.find()) {
                 for (int i = 0; i < matcher.groupCount(); i++) {
+                    String splitter = "content=\"";
                     String content = matcher.group().split(splitter)[1];
                     color = Color.parseColor(content.split("\">")[0]);
                 }

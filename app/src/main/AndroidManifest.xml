@@ -104,7 +104,7 @@
         <service
             android:name=".services.AppDetectService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="false" />
         <service
             android:name=".services.AppColorExtractorService"
             android:exported="false" />

@@ -3,6 +3,7 @@
     android:key="settings"
     android:title="@string/settings">
 
+    <!--suppress AndroidElementNotAllowed -->
     <SwitchPreferenceCompat
         android:defaultValue="false"
         android:key="dynamic_color"

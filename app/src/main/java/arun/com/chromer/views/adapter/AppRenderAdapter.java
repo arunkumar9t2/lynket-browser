@@ -22,9 +22,8 @@ import arun.com.chromer.model.App;
  * Created by Arun on 24/01/2016.
  */
 public class AppRenderAdapter extends ExtendedBaseAdapter {
-    List<App> mApps = new ArrayList<>();
-
-    Context mContext;
+    private final Context mContext;
+    private List<App> mApps = new ArrayList<>();
 
     public AppRenderAdapter(Context context, List<App> apps) {
         mApps = apps;

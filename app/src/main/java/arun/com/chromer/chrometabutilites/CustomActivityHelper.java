@@ -21,8 +21,6 @@ import timber.log.Timber;
  */
 public class CustomActivityHelper implements ServiceConnectionCallback {
 
-    private static final String TAG = CustomActivityHelper.class.getSimpleName();
-
     private CustomTabsSession mCustomTabsSession;
     private CustomTabsClient mClient;
     private CustomTabsServiceConnection mConnection;
@@ -129,7 +127,7 @@ public class CustomActivityHelper implements ServiceConnectionCallback {
     /**
      * Binds the Activity to the Custom Tabs Service.
      *
-     * @param context the activity to be binded to the service.
+     * @param context the activity to be bound to the service.
      */
     public boolean bindCustomTabsService(Context context) {
         Timber.d("Attempting to bind custom tabs service");
@@ -174,7 +172,7 @@ public class CustomActivityHelper implements ServiceConnectionCallback {
 
 
     public boolean requestWarmUp() {
-        boolean x = false;
+        boolean x;
         if (mClient != null) {
             x = mClient.warmup(0L);
             Timber.d("Warmup status " + x);
