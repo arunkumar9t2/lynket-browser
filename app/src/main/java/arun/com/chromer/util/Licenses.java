@@ -1,4 +1,4 @@
-package arun.com.chromer.extra;
+package arun.com.chromer.util;
 
 import de.psdev.licensesdialog.licenses.ApacheSoftwareLicense20;
 import de.psdev.licensesdialog.licenses.License;
