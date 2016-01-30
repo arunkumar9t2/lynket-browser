@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     public static final String GOOGLE_URL = "http://www.google.com/";
     private static final String CUSTOM_TAB_URL = "https://developer.chrome.com/multidevice/android/customtabs#whentouse";
-    private static final String CHROME_PACKAGE = "com.android.chrome";
 
     private CustomActivityHelper mCustomTabActivityHelper;
 
@@ -330,13 +329,22 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
         final String preferredApp = Preferences.customTabApp(MainActivity.this);
 
-        setIconWithPackageName(mDefaultProviderIcn, preferredApp);
+        if (preferredApp == null || preferredApp.length() == 0)
+            mDefaultProviderIcn.setImageDrawable(new IconicsDrawable(getApplicationContext())
+                    .icon(GoogleMaterial.Icon.gmd_error_outline)
+                    .color(ContextCompat.getColor(this, R.color.error))
+                    .sizeDp(24));
+        else setIconWithPackageName(mDefaultProviderIcn, preferredApp);
 
         findViewById(R.id.default_provider).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final List<App> customTabApps = Util.getCustomTabApps(getApplicationContext());
 
+                if (customTabApps.size() == 0) {
+                    checkAndEducateUser();
+                    return;
+                }
                 new MaterialDialog.Builder(MainActivity.this)
                         .title(getString(R.string.choose_default_provider))
                         .adapter(new AppRenderAdapter(getApplicationContext(), customTabApps),
@@ -421,7 +429,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             mSetDefaultButton.setVisibility(View.GONE);
             ImageView defaultSuccessIcon = (ImageView) findViewById(R.id.default_icon_c);
             defaultSuccessIcon.setVisibility(View.VISIBLE);
-            defaultSuccessIcon.setImageDrawable(new IconicsDrawable(this)
+            defaultSuccessIcon.setImageDrawable(new IconicsDrawable(getApplicationContext())
                     .icon(GoogleMaterial.Icon.gmd_check_circle)
                     .color(ContextCompat.getColor(this, R.color.default_success))
                     .sizeDp(24));
@@ -626,7 +634,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            Util.openPlayStore(getApplicationContext(), CHROME_PACKAGE);
+                            Util.openPlayStore(getApplicationContext(), StringConstants.CHROME_PACKAGE);
                         }
                     }).show();
         }

@@ -9,6 +9,7 @@ public class StringConstants {
     public static final String ME = "Arunkumar";
     public static final String LOCATION = "Tamilnadu, India";
     public static final String SEARCH_URL = "http://www.google.com/search?q=";
+    public static final String CHROME_PACKAGE = "com.android.chrome";
 
     private StringConstants() {
         throw new UnsupportedOperationException("Cannot instantiate");

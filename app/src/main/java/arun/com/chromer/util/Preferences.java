@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 
 import arun.com.chromer.R;
+import arun.com.chromer.chrometabutilites.CustomTabHelper;
 
 /**
  * Created by Arun on 05/01/2016.
@@ -77,9 +78,30 @@ public class Preferences {
     }
 
     public static String customTabApp(Context context) {
-        return PreferenceManager
+        String packageName = PreferenceManager
                 .getDefaultSharedPreferences(context)
                 .getString(PREFERRED_PACKAGE, null);
+
+        if (packageName != null && Util.isPackageInstalled(context, packageName))
+            return packageName;
+        else {
+            packageName = getDefaultCustomTabApp(context);
+            // update the new custom tab package
+            customTabApp(context, packageName);
+        }
+        return packageName;
+    }
+
+    private static String getDefaultCustomTabApp(Context context) {
+        if (Util.isPackageInstalled(context, StringConstants.CHROME_PACKAGE) &&
+                CustomTabHelper.isPackageSupportCustomTabs(context, StringConstants.CHROME_PACKAGE))
+            return StringConstants.CHROME_PACKAGE;
+
+        String[] supportingPackages = CustomTabHelper.getPackages();
+        if (supportingPackages.length > 0) {
+            return supportingPackages[0];
+        } else
+            return null;
     }
 
     public static void customTabApp(Context context, String string) {

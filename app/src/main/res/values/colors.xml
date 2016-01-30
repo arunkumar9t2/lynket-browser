@@ -14,4 +14,5 @@
     <color name="playstore_green">#0f9d58</color>
     <color name="default_success">#4CAF50</color>
     <color name="accent_icon_nofocus">#616161</color>
+    <color name="error">#DD2C00</color>
 </resources>

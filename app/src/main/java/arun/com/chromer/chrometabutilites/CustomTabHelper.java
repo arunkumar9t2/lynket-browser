@@ -122,14 +122,22 @@ public class CustomTabHelper {
         List<ResolveInfo> resolvedActivityList = pm.queryIntentActivities(activityIntent, PackageManager.MATCH_ALL);
         List<String> packagesSupportingCustomTabs = new ArrayList<>();
         for (ResolveInfo info : resolvedActivityList) {
-            Intent serviceIntent = new Intent();
-            serviceIntent.setAction(ACTION_CUSTOM_TABS_CONNECTION);
-            serviceIntent.setPackage(info.activityInfo.packageName);
-            if (pm.resolveService(serviceIntent, 0) != null) {
+            if (isPackageSupportCustomTabs(context, info.activityInfo.packageName)) {
                 packagesSupportingCustomTabs.add(info.activityInfo.packageName);
             }
         }
         return packagesSupportingCustomTabs;
+    }
+
+    public static boolean isPackageSupportCustomTabs(Context context, String packageName) {
+        PackageManager pm = context.getPackageManager();
+        Intent serviceIntent = new Intent();
+        serviceIntent.setAction(ACTION_CUSTOM_TABS_CONNECTION);
+        serviceIntent.setPackage(packageName);
+        if (pm.resolveService(serviceIntent, 0) != null) {
+            return true;
+        } else
+            return false;
     }
 
     /**
