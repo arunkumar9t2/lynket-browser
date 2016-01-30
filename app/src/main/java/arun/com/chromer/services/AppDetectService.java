@@ -136,7 +136,7 @@ public class AppDetectService extends Service {
     }
 
     private void startDetection() {
-        Thread mPollThread = null;
+        Thread mPollThread;
         // Create a new instance to start thread again
         mPollThread = new Thread(mAppDetectRunnable);
         mPollThread.start();

@@ -8,6 +8,5 @@
     <dimen name="arun_height">48dp</dimen>
     <dimen name="preference_padding">8dp</dimen>
 
-    <dimen name="material_search_height">56dp</dimen>
     <dimen name="material_search_marginbottom">10dp</dimen>
 </resources>

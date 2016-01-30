@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     private View mColorView;
     private SwitchCompat mWarmUpSwitch;
     private SwitchCompat mPrefetchSwitch;
-    private SwitchCompat mWifiSwitch;
     private ImageView mSecondaryBrowserIcon;
     private ImageView mDefaultProviderIcn;
     private AppCompatButton mSetDefaultButton;
@@ -255,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             }
         });
 
-        mWifiSwitch = (SwitchCompat) findViewById(R.id.only_wifi_switch);
+        SwitchCompat mWifiSwitch = (SwitchCompat) findViewById(R.id.only_wifi_switch);
         mWifiSwitch.setChecked(Preferences.wifiOnlyPrefetch(this));
         mWifiSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

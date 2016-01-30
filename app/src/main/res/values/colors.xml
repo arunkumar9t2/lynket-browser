@@ -13,6 +13,5 @@
     <color name="linkedin">#0077b5</color>
     <color name="playstore_green">#0f9d58</color>
     <color name="default_success">#4CAF50</color>
-    <color name="accent_icon_focused">#F06292</color>
     <color name="accent_icon_nofocus">#616161</color>
 </resources>

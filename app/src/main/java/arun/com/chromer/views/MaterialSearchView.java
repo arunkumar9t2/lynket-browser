@@ -25,8 +25,8 @@ import com.mikepenz.iconics.IconicsDrawable;
 import arun.com.chromer.R;
 
 public class MaterialSearchView extends FrameLayout {
-    int normalColor = ContextCompat.getColor(getContext(), R.color.accent_icon_nofocus);
-    int focusedColor = ContextCompat.getColor(getContext(), R.color.accent);
+    final int normalColor = ContextCompat.getColor(getContext(), R.color.accent_icon_nofocus);
+    final int focusedColor = ContextCompat.getColor(getContext(), R.color.accent);
     boolean animated = false;
     private ImageView leftIcon;
     private ImageView rightIcon;
