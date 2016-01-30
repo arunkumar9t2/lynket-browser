@@ -42,6 +42,7 @@
                 android:alpha="0"
                 android:background="@android:color/transparent"
                 android:gravity="bottom"
+                android:inputType="textUri"
                 android:singleLine="true"
                 android:textColor="@color/material_dark_color"
                 android:textSize="16sp" />
