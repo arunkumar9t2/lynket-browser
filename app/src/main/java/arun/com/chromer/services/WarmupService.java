@@ -20,7 +20,7 @@ public class WarmupService extends Service implements CustomActivityHelper.Conne
 
     private static WarmupService mWarmupService = null;
 
-    private CustomActivityHelper customActivityHelper;
+    private CustomActivityHelper mCustomActivityHelper;
 
     public static WarmupService getInstance() {
         return mWarmupService;
@@ -34,9 +34,16 @@ public class WarmupService extends Service implements CustomActivityHelper.Conne
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        customActivityHelper = new CustomActivityHelper();
-        customActivityHelper.setConnectionCallback(this);
-        boolean success = customActivityHelper.bindCustomTabsService(this);
+        if (mCustomActivityHelper != null) {
+            // Already an instance exists, so we will un bind the current connection and then bind again.
+            Timber.d("Severing existing connection");
+            mCustomActivityHelper.unbindCustomTabsService(this);
+        }
+
+
+        mCustomActivityHelper = new CustomActivityHelper();
+        mCustomActivityHelper.setConnectionCallback(this);
+        boolean success = mCustomActivityHelper.bindCustomTabsService(this);
         Timber.d("Was binded " + success);
         mWarmupService = this;
         return START_STICKY;
@@ -44,9 +51,9 @@ public class WarmupService extends Service implements CustomActivityHelper.Conne
 
     @Override
     public void onDestroy() {
-        if (customActivityHelper != null)
-            customActivityHelper.unbindCustomTabsService(this);
-        customActivityHelper = null;
+        if (mCustomActivityHelper != null)
+            mCustomActivityHelper.unbindCustomTabsService(this);
+        mCustomActivityHelper = null;
         mWarmupService = null;
         Timber.d("Died");
         super.onDestroy();
@@ -55,8 +62,8 @@ public class WarmupService extends Service implements CustomActivityHelper.Conne
     @Override
     public boolean onUnbind(Intent intent) {
         mWarmupService = null;
-        if (customActivityHelper != null)
-            customActivityHelper.unbindCustomTabsService(this);
+        if (mCustomActivityHelper != null)
+            mCustomActivityHelper.unbindCustomTabsService(this);
 
         return super.onUnbind(intent);
     }
@@ -72,14 +79,14 @@ public class WarmupService extends Service implements CustomActivityHelper.Conne
     }
 
     public boolean mayLaunchUrl(Uri uri, List<Bundle> possibleUrls) {
-        boolean ok = customActivityHelper.mayLaunchUrl(uri, null, possibleUrls);
+        boolean ok = mCustomActivityHelper.mayLaunchUrl(uri, null, possibleUrls);
         Timber.d("Warmup " + ok);
         return ok;
     }
 
     public CustomTabsSession getTabSession() {
-        if (customActivityHelper != null) {
-            return customActivityHelper.getSession();
+        if (mCustomActivityHelper != null) {
+            return mCustomActivityHelper.getSession();
         }
         return null;
     }

@@ -62,7 +62,7 @@ public class CustomActivityHelper implements ServiceConnectionCallback {
             customTabsIntent.intent.setPackage(packageName);
             try {
                 customTabsIntent.launchUrl(activity, uri);
-                Timber.d("Launched url:" + uri.toString());
+                Timber.d("Launched url: " + uri.toString());
             } catch (Exception e) {
                 callFallback(activity, uri, fallback);
                 Timber.d("Called fallback even though package was found, weird Exception :" + e.toString());
@@ -130,7 +130,6 @@ public class CustomActivityHelper implements ServiceConnectionCallback {
      * @param context the activity to be bound to the service.
      */
     public boolean bindCustomTabsService(Context context) {
-        Timber.d("Attempting to bind custom tabs service");
         if (mClient != null) return false;
 
         String packageName = Preferences.customTabApp(context);
@@ -139,27 +138,15 @@ public class CustomActivityHelper implements ServiceConnectionCallback {
         mConnection = new ServiceConnection(this);
         boolean ok = CustomTabsClient.bindCustomTabsService(context, packageName, mConnection);
         if (ok) {
-            Timber.d("Bound successfully");
+            Timber.d("Bound successfully with " + packageName);
         } else
             Timber.d("Did not bind, something wrong");
         return ok;
     }
 
 
-    public boolean forceBindCustomTabsService(Context context) {
-        // Attempt to bind with new package name
-        String packageName = Preferences.customTabApp(context);
-        if (packageName == null) return false;
-
-        mConnection = new ServiceConnection(this);
-        boolean ok = CustomTabsClient.bindCustomTabsService(context, packageName, mConnection);
-        if (ok) Timber.d("Force binding successful on package " + packageName);
-        return ok;
-    }
-
     @SuppressWarnings("SameParameterValue")
     public boolean mayLaunchUrl(Uri uri, Bundle extras, List<Bundle> otherLikelyBundles) {
-        Timber.d("Attempting may launch url");
         if (mClient == null) return false;
 
         CustomTabsSession session = getSession();
@@ -176,7 +163,6 @@ public class CustomActivityHelper implements ServiceConnectionCallback {
 
     @Override
     public void onServiceConnected(CustomTabsClient client) {
-        Timber.d("Service connected properly!");
         mClient = client;
         mClient.warmup(0L);
         if (mConnectionCallback != null) mConnectionCallback.onCustomTabsConnected();

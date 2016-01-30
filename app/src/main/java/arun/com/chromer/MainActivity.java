@@ -50,12 +50,12 @@ import arun.com.chromer.chrometabutilites.CustomTabDelegate;
 import arun.com.chromer.chrometabutilites.CustomTabHelper;
 import arun.com.chromer.fragments.PreferenceFragment;
 import arun.com.chromer.model.App;
-import arun.com.chromer.services.AppDetectService;
 import arun.com.chromer.services.ScannerService;
 import arun.com.chromer.services.WarmupService;
 import arun.com.chromer.util.ChangelogUtil;
 import arun.com.chromer.util.DatabaseConstants;
 import arun.com.chromer.util.Preferences;
+import arun.com.chromer.util.ServicesUtil;
 import arun.com.chromer.util.StringConstants;
 import arun.com.chromer.util.Util;
 import arun.com.chromer.views.IntentPickerSheetView;
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
         checkAndEducateUser();
 
-        takeCareOfServices();
+        ServicesUtil.takeCareOfServices(getApplicationContext());
 
         cleanOldDbs();
     }
@@ -221,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Preferences.warmUp(getApplicationContext(), isChecked);
-                takeCareOfServices();
+                ServicesUtil.takeCareOfServices(getApplicationContext());
             }
         });
 
@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                     // UI, hence setting the preference to the checked value of the warm up switch.
                     Preferences.warmUp(getApplicationContext(), mWarmUpSwitch.isChecked());
 
-                takeCareOfServices();
+                ServicesUtil.takeCareOfServices(getApplicationContext());
             }
         });
 
@@ -258,7 +258,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Preferences.wifiOnlyPrefetch(getApplicationContext(), isChecked);
-                takeCareOfServices();
+                ServicesUtil.takeCareOfServices(getApplicationContext());
             }
         });
     }
@@ -296,31 +296,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         } else {
             mWarmUpSwitch.setEnabled(true);
         }
-    }
-
-    private void takeCareOfServices() {
-        if (Preferences.warmUp(this))
-            startService(new Intent(this, WarmupService.class));
-        else
-            stopService(new Intent(this, WarmupService.class));
-
-
-        if (Preferences.dynamicToolbarOnApp(getApplicationContext()) && Preferences.dynamicToolbar(getApplicationContext())) {
-            Intent appDetectService = new Intent(this, AppDetectService.class);
-            appDetectService.putExtra(AppDetectService.CLEAR_LAST_APP, true);
-            startService(appDetectService);
-        } else
-            stopService(new Intent(this, AppDetectService.class));
-
-        try {
-            if (Preferences.preFetch(this))
-                startService(new Intent(this, ScannerService.class));
-            else
-                stopService(new Intent(this, ScannerService.class));
-        } catch (Exception e) {
-            Timber.d("Ignoring startup exception of accessibility service");
-        }
-
     }
 
     private void setupDefaultProvider() {
@@ -590,7 +565,10 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         // Unbind from currently bound service
         mCustomTabActivityHelper.unbindCustomTabsService(this);
         setupCustomTab();
-        mCustomTabActivityHelper.forceBindCustomTabsService(this);
+        mCustomTabActivityHelper.bindCustomTabsService(this);
+
+        // Restarting services will make them update their bindings.
+        ServicesUtil.refreshCustomTabBindings(getApplicationContext());
     }
 
     private void setupCustomTab() {

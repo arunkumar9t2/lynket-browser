@@ -32,7 +32,7 @@ public class ScannerService extends AccessibilityService implements CustomActivi
     private final int MAX_URL = 4;
     private final Stack<AccessibilityNodeInfo> mTraversalTree = new Stack<>();
     private final List<String> mExtractedUrls = new ArrayList<>();
-    private CustomActivityHelper customActivityHelper;
+    private CustomActivityHelper mCustomActivityHelper;
     private String mLastFetchedUrl = "";
     private int mExtractedCount = 0;
 
@@ -41,27 +41,39 @@ public class ScannerService extends AccessibilityService implements CustomActivi
     }
 
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (mCustomActivityHelper != null) {
+            Timber.d("Updating connections");
+            mCustomActivityHelper.unbindCustomTabsService(this);
+            mCustomActivityHelper = new CustomActivityHelper();
+            mCustomActivityHelper.bindCustomTabsService(this);
+            mCustomActivityHelper.setConnectionCallback(this);
+        }
+
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
     protected void onServiceConnected() {
         super.onServiceConnected();
         mScannerService = this;
-        customActivityHelper = new CustomActivityHelper();
-        customActivityHelper.setConnectionCallback(this);
-        customActivityHelper.setNavigationCallback(new CustomActivityHelper.NavigationCallback());
-        boolean success = customActivityHelper.bindCustomTabsService(this);
+        mCustomActivityHelper = new CustomActivityHelper();
+        mCustomActivityHelper.setConnectionCallback(this);
+        boolean success = mCustomActivityHelper.bindCustomTabsService(this);
         Timber.d("Was bound " + success);
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
         mScannerService = null;
-        customActivityHelper.unbindCustomTabsService(this);
+        mCustomActivityHelper.unbindCustomTabsService(this);
         Timber.d("Unbinding");
         return super.onUnbind(intent);
     }
 
     public CustomTabsSession getTabSession() {
-        if (customActivityHelper != null) {
-            return customActivityHelper.getSession();
+        if (mCustomActivityHelper != null) {
+            return mCustomActivityHelper.getSession();
         }
         return null;
     }
@@ -70,7 +82,7 @@ public class ScannerService extends AccessibilityService implements CustomActivi
     public boolean mayLaunchUrl(Uri uri, List<Bundle> possibleUrls) {
         if (!Preferences.preFetch(this)) return false;
 
-        boolean ok = customActivityHelper.mayLaunchUrl(uri, null, possibleUrls);
+        boolean ok = mCustomActivityHelper.mayLaunchUrl(uri, null, possibleUrls);
         Timber.d("Warmup " + ok);
         return ok;
     }
@@ -121,7 +133,7 @@ public class ScannerService extends AccessibilityService implements CustomActivi
                     }
                     boolean success;
                     if (!priorityUrl.equalsIgnoreCase(mLastFetchedUrl)) {
-                        success = customActivityHelper.mayLaunchUrl(Uri.parse(priorityUrl), null, possibleUrls);
+                        success = mCustomActivityHelper.mayLaunchUrl(Uri.parse(priorityUrl), null, possibleUrls);
                         if (success) mLastFetchedUrl = priorityUrl;
                     } else {
                         Timber.d("Ignored, already fetched");
@@ -196,7 +208,7 @@ public class ScannerService extends AccessibilityService implements CustomActivi
 
     @Override
     public void onCustomTabsConnected() {
-        Timber.d("connected");
+
     }
 
     @Override
