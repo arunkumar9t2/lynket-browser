@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     @Override
     protected void onResume() {
         super.onResume();
-        linkAccessibilityAndPrefetch();
+        updatePrefetchIfPermissionGranted();
         setupDefaultBrowser();
     }
 
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
         setupFAB();
 
-        populateUIBasedOnPreferences();
+        setupSwitches();
 
         setupCustomTab();
 
@@ -136,9 +136,9 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
         setupDefaultProvider();
 
-        setUpSecondaryBrowser();
+        setupSecondaryBrowser();
 
-        setUpFavShareApp();
+        setupFavShareApp();
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -174,13 +174,13 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
 
-    private void setUpSecondaryBrowser() {
+    private void setupSecondaryBrowser() {
         mSecondaryBrowserIcon = (ImageView) findViewById(R.id.secondary_browser_view);
 
         setIconWithPackageName(mSecondaryBrowserIcon, Preferences.secondaryBrowserPackage(this));
 
-        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));
-        final IntentPickerSheetView picker = new IntentPickerSheetView(this,
+        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(GOOGLE_URL));
+        final IntentPickerSheetView browserPicker = new IntentPickerSheetView(this,
                 webIntent,
                 getString(R.string.choose_secondary_browser),
                 new IntentPickerSheetView.OnIntentPickedListener() {
@@ -189,16 +189,13 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         mBottomSheet.dismissSheet();
                         String componentNameFlatten = activityInfo.componentName.flattenToString();
                         if (componentNameFlatten != null) {
-                            Preferences.secondaryBrowserComponent(getApplicationContext(),
-                                    componentNameFlatten);
+                            Preferences.secondaryBrowserComponent(getApplicationContext(), componentNameFlatten);
                         }
-                        setIconWithPackageName(mSecondaryBrowserIcon,
-                                activityInfo.componentName.getPackageName());
-                        snack(String.format(getString(R.string.secondary_browser_success),
-                                activityInfo.label));
+                        setIconWithPackageName(mSecondaryBrowserIcon, activityInfo.componentName.getPackageName());
+                        snack(String.format(getString(R.string.secondary_browser_success), activityInfo.label));
                     }
                 });
-        picker.setFilter(new IntentPickerSheetView.Filter() {
+        browserPicker.setFilter(new IntentPickerSheetView.Filter() {
             @Override
             public boolean include(IntentPickerSheetView.ActivityInfo info) {
                 return !info.componentName.getPackageName().equalsIgnoreCase(getPackageName());
@@ -207,13 +204,13 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         findViewById(R.id.secondary_browser).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mBottomSheet != null) mBottomSheet.showWithSheetView(picker);
+                if (mBottomSheet != null) mBottomSheet.showWithSheetView(browserPicker);
             }
         });
     }
 
-    private void populateUIBasedOnPreferences() {
-        linkAccessibilityAndPrefetch();
+    private void setupSwitches() {
+        updatePrefetchIfPermissionGranted();
 
         mWarmUpSwitch = (SwitchCompat) findViewById(R.id.warm_up_switch);
         mWarmUpSwitch.setChecked(Preferences.preFetch(this) || Preferences.warmUp(this));
@@ -227,24 +224,24 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
         mPrefetchSwitch = (SwitchCompat) findViewById(R.id.pre_fetch_switch);
         mPrefetchSwitch.setChecked(Preferences.preFetch(this));
-        linkWarmUpWithPrefetch(Preferences.preFetch(this));
+        enableDisableWarmUpSwitch(Preferences.preFetch(this));
         mPrefetchSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                boolean warmup = !isChecked && Preferences.warmUp(getApplicationContext());
+                boolean warmUp = !isChecked && Preferences.warmUp(getApplicationContext());
 
                 if (!Util.isAccessibilityServiceEnabled(getApplicationContext())) {
                     mPrefetchSwitch.setChecked(false);
                     guideUserToSettings();
                 } else {
-                    mWarmUpSwitch.setChecked(!warmup);
-                    Preferences.warmUp(getApplicationContext(), warmup);
-                    linkWarmUpWithPrefetch(isChecked);
+                    mWarmUpSwitch.setChecked(!warmUp);
+                    Preferences.warmUp(getApplicationContext(), warmUp);
+                    enableDisableWarmUpSwitch(isChecked);
                 }
                 Preferences.preFetch(getApplicationContext(), isChecked);
 
                 if (!isChecked)
-                    // Since pre fetch is not active, the  warmup preference should properly reflect what's on the
+                    // Since pre fetch is not active, the  warm up preference should properly reflect what's on the
                     // UI, hence setting the preference to the checked value of the warm up switch.
                     Preferences.warmUp(getApplicationContext(), mWarmUpSwitch.isChecked());
 
@@ -277,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 .show();
     }
 
-    private void linkAccessibilityAndPrefetch() {
+    private void updatePrefetchIfPermissionGranted() {
         if (Util.isAccessibilityServiceEnabled(this)) {
             Timber.d("Scanning permission granted");
             if (mPrefetchSwitch != null)
@@ -290,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         }
     }
 
-    private void linkWarmUpWithPrefetch(boolean isChecked) {
+    private void enableDisableWarmUpSwitch(boolean isChecked) {
         if (isChecked) {
             mWarmUpSwitch.setEnabled(false);
         } else {
@@ -304,6 +301,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         final String preferredApp = Preferences.customTabApp(MainActivity.this);
 
         if (preferredApp == null || preferredApp.length() == 0)
+            // Setting an error icon
             mDefaultProviderIcn.setImageDrawable(new IconicsDrawable(getApplicationContext())
                     .icon(GoogleMaterial.Icon.gmd_error_outline)
                     .color(ContextCompat.getColor(this, R.color.error))
@@ -387,11 +385,11 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                     if (defaultBrowserPackage.trim().equalsIgnoreCase(getPackageName())) {
                         Timber.d("Chromer defaulted");
                         Snackbar.make(mColorView, "Already set!", Snackbar.LENGTH_SHORT).show();
-                    } else if (defaultBrowserPackage.equalsIgnoreCase("android") && Util.isPackageInstalled(getApplicationContext(), defaultBrowserPackage)) {
+                    } else if (defaultBrowserPackage.equalsIgnoreCase("android")
+                            && Util.isPackageInstalled(getApplicationContext(), defaultBrowserPackage)) {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(GOOGLE_URL)));
                     } else {
-                        Intent intent = new Intent(
-                                android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                         intent.setData(Uri.parse("package:" + defaultBrowserPackage));
                         Toast.makeText(getApplicationContext(),
                                 Util.getAppNameWithPackage(getApplicationContext(), defaultBrowserPackage)
@@ -506,7 +504,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         drawer.setSelection(-1);
     }
 
-    private void setUpFavShareApp() {
+    private void setupFavShareApp() {
         mFavShareAppIcon = (ImageView) findViewById(R.id.fav_share_app_view);
 
         setIconWithPackageName(mFavShareAppIcon, Preferences.favSharePackage(this));
@@ -547,8 +545,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     private void launchCustomTab(String url) {
-        CustomTabsIntent mCustomTabsIntent = CustomTabDelegate.getCustomizedTabIntent(getApplicationContext(), url);
-        CustomActivityHelper.openCustomTab(this, mCustomTabsIntent, Uri.parse(url), TabActivity.mCustomTabsFallback);
+        CustomTabsIntent customTabsIntent = CustomTabDelegate.getCustomizedTabIntent(getApplicationContext(), url);
+        CustomActivityHelper.openCustomTab(this, customTabsIntent, Uri.parse(url), TabActivity.mCustomTabsFallback);
     }
 
     private boolean shouldBind() {
@@ -654,8 +652,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             Timber.d("Deleted " + DatabaseConstants.DATABASE_NAME + ": " + ok);
             ok = deleteDatabase(DatabaseConstants.OLD_DATABASE_NAME);
             Timber.d("Deleted " + DatabaseConstants.OLD_DATABASE_NAME + ": " + ok);
-        } else
-            Timber.d("Skipped cleaning DB");
+        }
     }
 
     @Override
