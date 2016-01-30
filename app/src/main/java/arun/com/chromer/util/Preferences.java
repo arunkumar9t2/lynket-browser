@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 
+import java.util.List;
+
 import arun.com.chromer.R;
 import arun.com.chromer.chrometabutilites.CustomTabHelper;
 
@@ -97,9 +99,9 @@ public class Preferences {
                 CustomTabHelper.isPackageSupportCustomTabs(context, StringConstants.CHROME_PACKAGE))
             return StringConstants.CHROME_PACKAGE;
 
-        String[] supportingPackages = CustomTabHelper.getPackages();
-        if (supportingPackages.length > 0) {
-            return supportingPackages[0];
+        List<String> supportingPackages = CustomTabHelper.getCustomTabSupportingPackages(context);
+        if (supportingPackages.size() > 0) {
+            return supportingPackages.get(0);
         } else
             return null;
     }

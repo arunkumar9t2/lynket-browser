@@ -133,7 +133,7 @@ public class CustomActivityHelper implements ServiceConnectionCallback {
         Timber.d("Attempting to bind custom tabs service");
         if (mClient != null) return false;
 
-        String packageName = CustomTabHelper.getPackageNameToUse(context);
+        String packageName = Preferences.customTabApp(context);
         if (packageName == null) return false;
 
         mConnection = new ServiceConnection(this);
@@ -142,6 +142,18 @@ public class CustomActivityHelper implements ServiceConnectionCallback {
             Timber.d("Bound successfully");
         } else
             Timber.d("Did not bind, something wrong");
+        return ok;
+    }
+
+
+    public boolean forceBindCustomTabsService(Context context) {
+        // Attempt to bind with new package name
+        String packageName = Preferences.customTabApp(context);
+        if (packageName == null) return false;
+
+        mConnection = new ServiceConnection(this);
+        boolean ok = CustomTabsClient.bindCustomTabsService(context, packageName, mConnection);
+        if (ok) Timber.d("Force binding successful on package " + packageName);
         return ok;
     }
 

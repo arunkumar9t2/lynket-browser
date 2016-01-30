@@ -352,9 +352,13 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                                     public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
                                         App app = customTabApps.get(which);
                                         if (app != null) {
-                                            Preferences.customTabApp(getApplicationContext(), app.getPackageName());
-                                            setIconWithPackageName(mDefaultProviderIcn, app.getPackageName());
+                                            String packageName = app.getPackageName();
+                                            Preferences.customTabApp(getApplicationContext(), packageName);
+                                            setIconWithPackageName(mDefaultProviderIcn, packageName);
                                             snack(String.format(getString(R.string.default_provider_success), app.getAppName()));
+
+                                            // Refresh bindings so as to reflect changed custom tab package
+                                            refreshCustomTabBindings();
                                         }
                                         if (dialog != null) dialog.dismiss();
                                     }
@@ -572,6 +576,23 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         CustomActivityHelper.openCustomTab(this, mCustomTabsIntent, Uri.parse(url), TabActivity.mCustomTabsFallback);
     }
 
+    private boolean shouldBind() {
+        if (Preferences.warmUp(this)) return false;
+        if (Preferences.preFetch(this) && Util.isAccessibilityServiceEnabled(this)) {
+            return false;
+        } else if (!Preferences.preFetch(this))
+            return true;
+
+        return true;
+    }
+
+    private void refreshCustomTabBindings() {
+        // Unbind from currently bound service
+        mCustomTabActivityHelper.unbindCustomTabsService(this);
+        setupCustomTab();
+        mCustomTabActivityHelper.forceBindCustomTabsService(this);
+    }
+
     private void setupCustomTab() {
         mCustomTabActivityHelper = new CustomActivityHelper();
         List<Bundle> possibleUrls = new ArrayList<>();
@@ -602,7 +623,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 new CustomActivityHelper.ConnectionCallback() {
                     @Override
                     public void onCustomTabsConnected() {
-                        Timber.d("Connect to custom tab");
+                        Timber.d("Connect to custom tab in main activity");
                         try {
                             mCustomTabActivityHelper.mayLaunchUrl(Uri.parse(GOOGLE_URL), null, null);
                         } catch (Exception e) {
@@ -637,16 +658,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         }
                     }).show();
         }
-    }
-
-    private boolean shouldBind() {
-        if (Preferences.warmUp(this)) return false;
-        if (Preferences.preFetch(this) && Util.isAccessibilityServiceEnabled(this)) {
-            return false;
-        } else if (!Preferences.preFetch(this))
-            return true;
-
-        return true;
     }
 
     private void setIconWithPackageName(ImageView imageView, String packageName) {
