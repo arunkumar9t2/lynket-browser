@@ -201,8 +201,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         picker.setFilter(new IntentPickerSheetView.Filter() {
             @Override
             public boolean include(IntentPickerSheetView.ActivityInfo info) {
-                return !info.componentName.getPackageName().startsWith("com.android")
-                        && !info.componentName.getPackageName().equalsIgnoreCase(getPackageName());
+                return !info.componentName.getPackageName().equalsIgnoreCase(getPackageName());
             }
         });
         findViewById(R.id.secondary_browser).setOnClickListener(new View.OnClickListener() {
