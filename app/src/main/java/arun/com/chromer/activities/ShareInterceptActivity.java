@@ -11,13 +11,12 @@ import android.widget.Toast;
 import java.util.List;
 
 import arun.com.chromer.R;
+import arun.com.chromer.util.StringConstants;
 import arun.com.chromer.util.Util;
 import timber.log.Timber;
 
 public class ShareInterceptActivity extends AppCompatActivity {
 
-
-    private static final String SEARCH_URL = "http://www.google.com/search?q=";
 
     @TargetApi(Build.VERSION_CODES.M)
     @Override
@@ -47,8 +46,7 @@ public class ShareInterceptActivity extends AppCompatActivity {
             openInTabActivity(url);
         } else {
             // No urls were found, so lets do a google search with the text received.
-            text = SEARCH_URL + text.replace(" ", "+");
-            Timber.d(text);
+            text = StringConstants.SEARCH_URL + text.replace(" ", "+");
             openInTabActivity(text);
         }
     }

@@ -17,6 +17,7 @@ import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewOutlineProvider;
@@ -223,6 +224,16 @@ public class Util {
     public static int dp2px(Context context, float dp) {
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
         return Math.round(px);
+    }
+
+    public static String processSearchText(String text) {
+        if (Patterns.WEB_URL.matcher(text).matches()) {
+            if (!text.toLowerCase().matches("^\\w+://.*")) {
+                text = "http://" + text;
+            }
+            return text;
+        } else
+            return StringConstants.SEARCH_URL + text.replace(" ", "+");
     }
 
 

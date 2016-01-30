@@ -17,6 +17,7 @@ import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -58,6 +59,7 @@ import arun.com.chromer.util.Preferences;
 import arun.com.chromer.util.StringConstants;
 import arun.com.chromer.util.Util;
 import arun.com.chromer.views.IntentPickerSheetView;
+import arun.com.chromer.views.MaterialSearchView;
 import arun.com.chromer.views.adapter.AppRenderAdapter;
 import timber.log.Timber;
 
@@ -78,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     private AppCompatButton mSetDefaultButton;
     private BottomSheetLayout mBottomSheet;
     private ImageView mFavShareAppIcon;
+    private MaterialSearchView mMaterialSearchView;
 
     @Override
     protected void onStart() {
@@ -90,11 +93,14 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     @Override
     protected void onStop() {
         super.onStop();
-        try {
-            mCustomTabActivityHelper.unbindCustomTabsService(this);
-        } catch (Exception e) {
-            /* Best effort */
-        }
+        mCustomTabActivityHelper.unbindCustomTabsService(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        linkAccessibilityAndPrefetch();
+        setupDefaultBrowser();
     }
 
     @Override
@@ -149,6 +155,19 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     private void setupMaterialSearch() {
+        mMaterialSearchView = (MaterialSearchView) findViewById(R.id.material_search_view);
+        mMaterialSearchView.clearFocus();
+        mMaterialSearchView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    launchCustomTab(Util.processSearchText(mMaterialSearchView.getText()));
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     private void snack(String textToSnack) {
@@ -194,13 +213,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 if (mBottomSheet != null) mBottomSheet.showWithSheetView(picker);
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        linkAccessibilityAndPrefetch();
-        setupDefaultBrowser();
     }
 
     private void populateUIBasedOnPreferences() {
@@ -351,7 +363,10 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                launchCustomTab(GOOGLE_URL);
+                if (mMaterialSearchView.hasFocus() && mMaterialSearchView.getText().length() > 0) {
+                    launchCustomTab(Util.processSearchText(mMaterialSearchView.getText()));
+                } else
+                    launchCustomTab(GOOGLE_URL);
             }
         });
     }
@@ -646,5 +661,14 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             Timber.d("Deleted " + DatabaseConstants.OLD_DATABASE_NAME + ": " + ok);
         } else
             Timber.d("Skipped cleaning DB");
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mMaterialSearchView.hasFocus()) {
+            mMaterialSearchView.clearFocus();
+            return;
+        }
+        super.onBackPressed();
     }
 }

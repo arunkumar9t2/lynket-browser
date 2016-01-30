@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -25,18 +26,16 @@ import arun.com.chromer.R;
 
 public class MaterialSearchView extends FrameLayout {
     int normalColor = ContextCompat.getColor(getContext(), R.color.accent_icon_nofocus);
-    int focusedColor = ContextCompat.getColor(getContext(), R.color.accent_icon_focused);
+    int focusedColor = ContextCompat.getColor(getContext(), R.color.accent);
     boolean animated = false;
     private ImageView leftIcon;
     private ImageView rightIcon;
     private TextView label;
     private EditText editText;
     private CardView card;
-    private int labelTopMargin;
 
     public MaterialSearchView(Context context) {
         super(context);
-        init(null, 0);
     }
 
     public MaterialSearchView(Context context, AttributeSet attrs) {
@@ -54,6 +53,7 @@ public class MaterialSearchView extends FrameLayout {
         final TypedArray a = getContext().obtainStyledAttributes(
                 attrs, R.styleable.MaterialSearchView, defStyle, 0);
 
+        a.recycle();
     }
 
     private void toggle() {
@@ -68,22 +68,22 @@ public class MaterialSearchView extends FrameLayout {
                 getColorChangeAnimatorOnImageView(rightIcon, focusedColor, normalColor, 400),
                 ObjectAnimator.ofFloat(label, "scaleX", 1),
                 ObjectAnimator.ofFloat(label, "scaleY", 1),
-                ObjectAnimator.ofFloat(label, "translationY", 0),
+                ObjectAnimator.ofFloat(label, "alpha", 1),
 
                 ObjectAnimator.ofFloat(editText, "alpha", 0).setDuration(300)
         );
 
         animatorSet.start();
-        clearFocusFromEditText();
+        editText.clearFocus();
 
-        // Hide the keyboard
-        ((InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+        hideKeyboard();
 
         animated = false;
     }
 
-    private void clearFocusFromEditText() {
-        rightIcon.requestFocus();
+    private void hideKeyboard() {
+        ((InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
+                .toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
     }
 
     private void gainFocus() {
@@ -94,11 +94,11 @@ public class MaterialSearchView extends FrameLayout {
                 getColorChangeAnimatorOnImageView(rightIcon, normalColor, focusedColor, 300),
                 ObjectAnimator.ofFloat(label, "scaleX", 0.6f),
                 ObjectAnimator.ofFloat(label, "scaleY", 0.6f),
-                ObjectAnimator.ofFloat(label, "translationY", -labelTopMargin),
+                ObjectAnimator.ofFloat(label, "alpha", 0.5f),
 
                 ObjectAnimator.ofFloat(editText, "alpha", 1).setDuration(300)
         );
-
+        animatorSet.start();
 
         animated = true;
     }
@@ -111,7 +111,7 @@ public class MaterialSearchView extends FrameLayout {
         addView(LayoutInflater.from(getContext()).inflate(R.layout.material_search_view, this, false));
 
         editText = (EditText) findViewById(R.id.msv_edittext);
-        editText.clearFocus();
+        editText.setImeActionLabel(getContext().getString(R.string.go), KeyEvent.KEYCODE_ENTER);
         editText.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,10 +121,8 @@ public class MaterialSearchView extends FrameLayout {
         editText.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus)
-                    gainFocus();
-                else
-                    loseFocus();
+                if (hasFocus) gainFocus();
+                else loseFocus();
             }
         });
 
@@ -144,17 +142,12 @@ public class MaterialSearchView extends FrameLayout {
         label.setPivotX(0);
         label.setPivotY(0);
 
-        labelTopMargin = FrameLayout.LayoutParams.class.cast(label.getLayoutParams()).topMargin;
-
         card = (CardView) findViewById(R.id.msv_card);
-
-        //// FIXME: 29/01/2016
-        clearFocusFromEditText();
 
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggle();
+                if (!animated) gainFocus();
             }
         });
 
@@ -186,8 +179,29 @@ public class MaterialSearchView extends FrameLayout {
     }
 
 
-    public int adjustAlpha(int color, float factor) {
+    private int adjustAlpha(int color, float factor) {
         return Color.argb(Math.round(Color.alpha(color) * factor),
                 Color.red(color), Color.green(color), Color.blue(color));
+    }
+
+    @Override
+    public void clearFocus() {
+        loseFocus();
+        View view = findFocus();
+        if (view != null) view.clearFocus();
+        super.clearFocus();
+    }
+
+    @Override
+    public boolean hasFocus() {
+        return animated && super.hasFocus();
+    }
+
+    public void setOnKeyListener(OnKeyListener listener) {
+        editText.setOnKeyListener(listener);
+    }
+
+    public String getText() {
+        return editText.getText().toString();
     }
 }

@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/msv_root_frame"
     android:layout_width="match_parent"
-    android:layout_height="56dp">
+    android:layout_height="56dp"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
 
     <android.support.v7.widget.CardView
@@ -28,8 +30,6 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:foreground="?android:attr/selectableItemBackground"
                 tools:ignore="ContentDescription" />
 
@@ -39,6 +39,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginBottom="5dp"
                 android:layout_weight="1"
+                android:alpha="0"
                 android:background="@android:color/transparent"
                 android:gravity="bottom"
                 android:singleLine="true"
@@ -52,8 +53,6 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:foreground="?android:attr/selectableItemBackground"
                 tools:ignore="ContentDescription" />
         </LinearLayout>
