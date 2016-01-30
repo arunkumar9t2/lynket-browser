@@ -89,17 +89,6 @@ public class Util {
         }
     }
 
-    public static String[] getAppNameFromPackages(Context context, List<String> packages) {
-        List<String> appNameList = new ArrayList<>();
-        String[] appNames = new String[0];
-        for (String pack : packages) {
-
-            appNameList.add(getAppNameWithPackage(context, pack));
-        }
-        appNames = appNameList.toArray(appNames);
-        return appNames;
-    }
-
     public static String getAppNameWithPackage(Context context, String pack) {
         final PackageManager pm = context.getPackageManager();
         ApplicationInfo ai;
@@ -146,23 +135,6 @@ public class Util {
                 PackageManager.MATCH_DEFAULT_ONLY);
 
         return resolveInfo != null ? resolveInfo.activityInfo.packageName : "";
-    }
-
-    public static List<App> getScndryBrwsrApps(Context context) {
-        List<App> apps = new ArrayList<>();
-        Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));
-        List<ResolveInfo> resolvedActivityList = context.getPackageManager().queryIntentActivities(activityIntent, PackageManager.MATCH_ALL);
-        for (ResolveInfo info : resolvedActivityList) {
-            String packageName = info.activityInfo.packageName;
-            CharSequence label = info.activityInfo.loadLabel(context.getPackageManager());
-            if (packageName.equalsIgnoreCase(context.getPackageName()))
-                continue;
-            App app = new App(context, packageName);
-            app.setLabel(label);
-            apps.add(app);
-
-        }
-        return apps;
     }
 
     public static List<App> getCustomTabApps(Context context) {
