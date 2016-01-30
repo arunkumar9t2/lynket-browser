@@ -284,7 +284,9 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
                         startActivityForResult(new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS), 0);
+                        // Close the dialog to avoid potential memory leak
                     }
                 })
                 .show();
@@ -318,7 +320,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
         if (preferredApp == null || preferredApp.length() == 0)
             // Setting an error icon
-            mDefaultProviderIcn.setImageDrawable(new IconicsDrawable(getApplicationContext())
+            mDefaultProviderIcn.setImageDrawable(new IconicsDrawable(this)
                     .icon(GoogleMaterial.Icon.gmd_error_outline)
                     .color(ContextCompat.getColor(this, R.color.error))
                     .sizeDp(24));
@@ -421,7 +423,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             mSetDefaultButton.setVisibility(View.GONE);
             ImageView defaultSuccessIcon = (ImageView) findViewById(R.id.default_icon_c);
             defaultSuccessIcon.setVisibility(View.VISIBLE);
-            defaultSuccessIcon.setImageDrawable(new IconicsDrawable(getApplicationContext())
+            defaultSuccessIcon.setImageDrawable(new IconicsDrawable(this)
                     .icon(GoogleMaterial.Icon.gmd_check_circle)
                     .color(ContextCompat.getColor(this, R.color.default_success))
                     .sizeDp(24));
@@ -646,6 +648,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            dialog.dismiss();
                             Util.openPlayStore(getApplicationContext(), StringConstants.CHROME_PACKAGE);
                         }
                     }).show();
