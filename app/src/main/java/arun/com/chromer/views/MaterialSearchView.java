@@ -28,8 +28,8 @@ public class MaterialSearchView extends FrameLayout {
     final int normalColor = ContextCompat.getColor(getContext(), R.color.accent_icon_nofocus);
     final int focusedColor = ContextCompat.getColor(getContext(), R.color.accent);
     boolean animated = false;
-    private ImageView leftIcon;
-    private ImageView rightIcon;
+    private ImageView searchIcon;
+    private ImageView voiceIcon;
     private TextView label;
     private EditText editText;
     private CardView card;
@@ -64,8 +64,8 @@ public class MaterialSearchView extends FrameLayout {
     private void loseFocus() {
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(
-                getColorChangeAnimatorOnImageView(leftIcon, focusedColor, normalColor, 400),
-                getColorChangeAnimatorOnImageView(rightIcon, focusedColor, normalColor, 400),
+                getColorChangeAnimatorOnImageView(searchIcon, focusedColor, normalColor, 400),
+                getColorChangeAnimatorOnImageView(voiceIcon, focusedColor, normalColor, 400),
                 ObjectAnimator.ofFloat(label, "scaleX", 1),
                 ObjectAnimator.ofFloat(label, "scaleY", 1),
                 ObjectAnimator.ofFloat(label, "alpha", 1),
@@ -90,8 +90,8 @@ public class MaterialSearchView extends FrameLayout {
 
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(
-                getColorChangeAnimatorOnImageView(leftIcon, normalColor, focusedColor, 300),
-                getColorChangeAnimatorOnImageView(rightIcon, normalColor, focusedColor, 300),
+                getColorChangeAnimatorOnImageView(searchIcon, normalColor, focusedColor, 300),
+                getColorChangeAnimatorOnImageView(voiceIcon, normalColor, focusedColor, 300),
                 ObjectAnimator.ofFloat(label, "scaleX", 0.6f),
                 ObjectAnimator.ofFloat(label, "scaleY", 0.6f),
                 ObjectAnimator.ofFloat(label, "alpha", 0.5f),
@@ -126,14 +126,14 @@ public class MaterialSearchView extends FrameLayout {
             }
         });
 
-        leftIcon = (ImageView) findViewById(R.id.msv_left_icon);
-        leftIcon.setImageDrawable(new IconicsDrawable(getContext())
+        searchIcon = (ImageView) findViewById(R.id.msv_left_icon);
+        searchIcon.setImageDrawable(new IconicsDrawable(getContext())
                 .icon(GoogleMaterial.Icon.gmd_search)
                 .color(normalColor)
                 .sizeDp(24));
 
-        rightIcon = (ImageView) findViewById(R.id.msv_right_icon);
-        rightIcon.setImageDrawable(new IconicsDrawable(getContext())
+        voiceIcon = (ImageView) findViewById(R.id.msv_right_icon);
+        voiceIcon.setImageDrawable(new IconicsDrawable(getContext())
                 .icon(GoogleMaterial.Icon.gmd_keyboard_voice)
                 .color(normalColor)
                 .sizeDp(24));
@@ -203,5 +203,9 @@ public class MaterialSearchView extends FrameLayout {
 
     public String getText() {
         return editText.getText().toString();
+    }
+
+    public void setVoiceIconClickListener(OnClickListener listener) {
+        voiceIcon.setOnClickListener(listener);
     }
 }

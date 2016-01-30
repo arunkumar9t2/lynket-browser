@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     public static final String GOOGLE_URL = "http://www.google.com/";
     private static final String CUSTOM_TAB_URL = "https://developer.chrome.com/multidevice/android/customtabs#whentouse";
+    private static final int VOICE_REQUEST = 10001;
 
     private CustomActivityHelper mCustomTabActivityHelper;
 
@@ -164,6 +166,20 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                     return true;
                 }
                 return false;
+            }
+        });
+        mMaterialSearchView.setVoiceIconClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Util.isVoiceRecognizerPresent(getApplicationContext())) {
+                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                    intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
+                    intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.voice_prompt));
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
+                    startActivityForResult(intent, VOICE_REQUEST);
+
+                } else snack("No compatible voice recognition apps found");
+
             }
         });
     }
@@ -662,5 +678,21 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             return;
         }
         super.onBackPressed();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == VOICE_REQUEST) {
+            switch (resultCode) {
+                case RESULT_OK:
+                    List<String> resultList = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    if (!resultList.isEmpty()) {
+                        launchCustomTab(Util.processSearchText(resultList.get(0)));
+                    }
+                    break;
+                default:
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

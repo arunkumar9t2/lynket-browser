@@ -15,6 +15,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
+import android.speech.RecognizerIntent;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
@@ -206,6 +207,12 @@ public class Util {
             return text;
         } else
             return StringConstants.SEARCH_URL + text.replace(" ", "+");
+    }
+
+    public static boolean isVoiceRecognizerPresent(Context context) {
+        PackageManager pm = context.getPackageManager();
+        List<ResolveInfo> activities = pm.queryIntentActivities(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
+        return (activities != null) && (activities.size() > 0);
     }
 
 
