@@ -20,14 +20,14 @@ import arun.com.chromer.services.AppDetectService;
 import arun.com.chromer.util.Preferences;
 import arun.com.chromer.util.Util;
 
-public class PreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class PersonalizationPreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    public PreferenceFragment() {
+    public PersonalizationPreferenceFragment() {
         // Required empty public constructor
     }
 
-    public static PreferenceFragment newInstance() {
-        PreferenceFragment fragment = new PreferenceFragment();
+    public static PersonalizationPreferenceFragment newInstance() {
+        PersonalizationPreferenceFragment fragment = new PersonalizationPreferenceFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;

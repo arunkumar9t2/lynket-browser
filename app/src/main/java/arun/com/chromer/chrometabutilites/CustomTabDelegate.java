@@ -26,6 +26,7 @@ import arun.com.chromer.services.WarmupService;
 import arun.com.chromer.services.WebColorExtractorService;
 import arun.com.chromer.util.Preferences;
 import arun.com.chromer.util.Util;
+import arun.com.chromer.webheads.WebHeadService;
 import timber.log.Timber;
 
 /**
@@ -73,6 +74,49 @@ public class CustomTabDelegate {
 
         return builder.build();
     }
+
+
+    public static CustomTabsIntent getWebHeadIntent(Context ctx, String url) {
+
+        CustomTabsIntent.Builder builder;
+
+        if (WebHeadService.getInstance() != null && WebHeadService.getInstance().getTabSession() != null) {
+            CustomTabsSession session = WebHeadService.getInstance().getTabSession();
+            builder = new CustomTabsIntent.Builder(session);
+        } else
+            builder = new CustomTabsIntent.Builder();
+
+        builder.setShowTitle(true);
+
+        handleAnimations(ctx, builder);
+
+        handleToolbarColor(ctx, url, builder);
+
+        addShareIntent(ctx, url, builder);
+
+        switch (Preferences.preferredAction(ctx)) {
+            // TODO handle cases of uninstalling packages
+            case 1:
+                addActionButtonSecondary(ctx, url, builder);
+                addMenuFavShareApp(ctx, url, builder);
+                break;
+            case 2:
+                addMenuSecondaryBrowser(ctx, url, builder);
+                addActionBtnFavShareApp(ctx, url, builder);
+                break;
+            default:
+                addActionButtonSecondary(ctx, url, builder);
+                addMenuFavShareApp(ctx, url, builder);
+                break;
+        }
+
+        addCopyItem(ctx, url, builder);
+
+        addShortcutToHomescreen(ctx, url, builder);
+
+        return builder.build();
+    }
+
 
     private static void handleAnimations(Context ctx, CustomTabsIntent.Builder builder) {
         if (Preferences.isAnimationEnabled(ctx)) {

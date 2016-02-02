@@ -30,6 +30,7 @@ public class Preferences {
     public static final String DYNAMIC_COLOR_APP = "dynamic_color_app";
     public static final String DYNAMIC_COLOR_WEB = "dynamic_color_web";
     public static final String PREFERRED_ACTION = "preferred_action_preference";
+    public static final String WEB_HEAD_ENABLED = "webhead_enabled_pref";
 
     private static SharedPreferences preferences(Context context) {
         return context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
@@ -267,5 +268,18 @@ public class Preferences {
             return context.getString(R.string.dynamic_summary_web);
         } else
             return context.getString(R.string.no_option_selected);
+    }
+
+    public static boolean webHeads(Context context) {
+        return PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .getBoolean(WEB_HEAD_ENABLED, false);
+    }
+
+    public static void webHeads(Context context, boolean preference) {
+        PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(WEB_HEAD_ENABLED, preference).apply();
     }
 }

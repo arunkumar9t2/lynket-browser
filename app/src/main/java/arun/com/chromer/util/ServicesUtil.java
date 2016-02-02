@@ -2,10 +2,12 @@ package arun.com.chromer.util;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 
 import arun.com.chromer.services.AppDetectService;
 import arun.com.chromer.services.ScannerService;
 import arun.com.chromer.services.WarmupService;
+import arun.com.chromer.webheads.WebHeadService;
 import timber.log.Timber;
 
 /**
@@ -52,5 +54,9 @@ public class ServicesUtil {
             scanService.putExtra(StringConstants.SHOULD_REFRESH_BINDING, true);
             context.startService(scanService);
         }
+
+        Intent intent = new Intent(WebHeadService.REBIND_EVENT);
+        intent.putExtra(WebHeadService.SHOULD_REBIND, true);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 }

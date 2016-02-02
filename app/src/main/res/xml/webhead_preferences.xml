@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="settings"
+    android:title="@string/settings">
+
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="webhead_enabled_pref"
+        android:summary="You can stack multiple links and view them later"
+        android:title="Open links in floating bubbles" />
+
+</PreferenceScreen>

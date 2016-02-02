@@ -12,6 +12,8 @@ import android.widget.Toast;
 import arun.com.chromer.R;
 import arun.com.chromer.chrometabutilites.CustomActivityHelper;
 import arun.com.chromer.chrometabutilites.CustomTabDelegate;
+import arun.com.chromer.util.Preferences;
+import arun.com.chromer.webheads.WebHeadService;
 
 public class TabActivity extends AppCompatActivity {
 
@@ -44,16 +46,28 @@ public class TabActivity extends AppCompatActivity {
         if (getIntent() == null || getIntent().getData() == null) {
             Toast.makeText(this, getString(R.string.unsupported_link), Toast.LENGTH_SHORT).show();
             finish();
-            // TODO handle no intent later
             return;
         }
 
-        final String url = getIntent().getData().toString();
-        CustomTabsIntent mCustomTabsIntent = CustomTabDelegate.getCustomizedTabIntent(getApplicationContext(), url);
+        // If user prefers to open in bubbles, then start the web head service which will take care
+        // of pre fetching and loading the bubble. We don't need this activity anymore, so we will
+        // finish this silently.
+        if (Preferences.webHeads(this)) {
+            Intent webHeadService = new Intent(this, WebHeadService.class);
+            webHeadService.setData(getIntent().getData());
+            startService(webHeadService);
+        } else {
+            final String url = getIntent().getData().toString();
+            CustomTabsIntent mCustomTabsIntent = CustomTabDelegate.getCustomizedTabIntent(
+                    getApplicationContext(),
+                    url);
 
-        CustomActivityHelper.openCustomTab(this, mCustomTabsIntent,
-                Uri.parse(getIntent().getData().toString()),
-                mCustomTabsFallback);
+            CustomActivityHelper.openCustomTab(this,
+                    mCustomTabsIntent,
+                    Uri.parse(getIntent().getData().toString()),
+                    mCustomTabsFallback);
+        }
+
         finish();
     }
 

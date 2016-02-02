@@ -12,6 +12,7 @@ import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsService;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
@@ -49,7 +50,8 @@ import arun.com.chromer.activities.intro.AppIntroMy;
 import arun.com.chromer.chrometabutilites.CustomActivityHelper;
 import arun.com.chromer.chrometabutilites.CustomTabDelegate;
 import arun.com.chromer.chrometabutilites.CustomTabHelper;
-import arun.com.chromer.fragments.PreferenceFragment;
+import arun.com.chromer.fragments.PersonalizationPreferenceFragment;
+import arun.com.chromer.fragments.WebHeadPreferenceFragment;
 import arun.com.chromer.model.App;
 import arun.com.chromer.services.ScannerService;
 import arun.com.chromer.services.WarmupService;
@@ -62,6 +64,7 @@ import arun.com.chromer.util.Util;
 import arun.com.chromer.views.IntentPickerSheetView;
 import arun.com.chromer.views.MaterialSearchView;
 import arun.com.chromer.views.adapter.AppRenderAdapter;
+import arun.com.chromer.webheads.WebHeadService;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback {
@@ -88,12 +91,15 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         if (shouldBind()) {
             mCustomTabActivityHelper.bindCustomTabsService(this);
         }
+
+        startService(new Intent(this, WebHeadService.class));
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         mCustomTabActivityHelper.unbindCustomTabsService(this);
+        stopService(new Intent(this, WebHeadService.class));
     }
 
     @Override
@@ -142,16 +148,21 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
         setupFavShareApp();
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.preference_fragment, PreferenceFragment.newInstance())
-                .commit();
+        attachFragments();
 
         checkAndEducateUser();
 
         ServicesUtil.takeCareOfServices(getApplicationContext());
 
         cleanOldDbs();
+    }
+
+    private void attachFragments() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+
+        ft.replace(R.id.webhead_container, WebHeadPreferenceFragment.newInstance());
+        ft.replace(R.id.preference_container, PersonalizationPreferenceFragment.newInstance())
+                .commit();
     }
 
     private void setupMaterialSearch() {
@@ -401,7 +412,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             public void onClick(View v) {
                 if (defaultBrowserPackage != null) {
                     if (defaultBrowserPackage.trim().equalsIgnoreCase(getPackageName())) {
-                        Timber.d("Chromer defaulted");
                         Snackbar.make(mColorView, "Already set!", Snackbar.LENGTH_SHORT).show();
                     } else if (defaultBrowserPackage.equalsIgnoreCase("android")
                             && Util.isPackageInstalled(getApplicationContext(), defaultBrowserPackage)) {
@@ -585,6 +595,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
         // Restarting services will make them update their bindings.
         ServicesUtil.refreshCustomTabBindings(getApplicationContext());
+
     }
 
     private void setupCustomTab() {
