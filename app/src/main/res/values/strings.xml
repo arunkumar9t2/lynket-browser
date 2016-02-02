@@ -116,4 +116,5 @@
     <string name="search_or_type_url">Search or type URL</string>
     <string name="go">Go</string>
     <string name="voice_prompt">Speak your query</string>
+    <string name="web_heads">Web Heads</string>
 </resources>

@@ -27,17 +27,17 @@ public class WebHeadService extends Service implements WebHead.WebHeadClickListe
     public static final String SHOULD_REBIND = "should_rebind";
     public static final String REBIND_EVENT = "rebind_event";
     private static WebHeadService sInstance = null;
-    private ArrayList<WebHead> mWebHeads = new ArrayList<>();
+    private final ArrayList<WebHead> mWebHeads = new ArrayList<>();
     private WindowManager mWindowManager;
     private CustomActivityHelper mCustomActivityHelper;
-    private boolean mCustomTabConnected;
-    private BroadcastReceiver mRebindReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mRebindReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             boolean shouldRebind = intent.getBooleanExtra(SHOULD_REBIND, false);
             if (shouldRebind) bindToCustomTabSession();
         }
     };
+    private boolean mCustomTabConnected;
 
     public WebHeadService() {
     }

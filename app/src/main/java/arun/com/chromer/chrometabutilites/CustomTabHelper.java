@@ -134,10 +134,7 @@ public class CustomTabHelper {
         Intent serviceIntent = new Intent();
         serviceIntent.setAction(ACTION_CUSTOM_TABS_CONNECTION);
         serviceIntent.setPackage(packageName);
-        if (pm.resolveService(serviceIntent, 0) != null) {
-            return true;
-        } else
-            return false;
+        return pm.resolveService(serviceIntent, 0) != null;
     }
 
     /**

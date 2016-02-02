@@ -1,5 +1,6 @@
 package arun.com.chromer.webheads;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.util.DisplayMetrics;
@@ -16,24 +17,20 @@ import com.facebook.rebound.SpringSystem;
 /**
  * Created by Arun on 30/01/2016.
  */
+@SuppressLint("ViewConstructor")
 public class WebHead extends ImageView {
 
-    private static final int TOUCH_DELAY_MS = 350;
     private static WindowManager sWindowManager;
-    float posX, posY;
-    float lastDownX, lastDownY;
-    private String mUrl;
+    private final String mUrl;
+    private final GestureDetector mGestDetector = new GestureDetector(getContext(), new GestureSingleTap());
+    private float posX;
+    private float posY;
     private WindowManager.LayoutParams mWindowParams;
     private int mDispHeight, mDispWidth;
     private boolean mDragging;
-    private long mLastDownTime;
     private WebHeadClickListener mClickListener;
-
     private SpringSystem mSpringSystem;
-
     private Spring mScaleSpring, mWallAttachSpring;
-
-    private GestureDetector mGestDetector = new GestureDetector(getContext(), new GestureSingleTap());
 
     public WebHead(Context context, String url, WindowManager windowManager) {
         super(context);
@@ -98,10 +95,6 @@ public class WebHead extends ImageView {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 mDragging = true;
-                mLastDownTime = System.currentTimeMillis();
-
-                lastDownX = event.getX();
-                lastDownY = event.getY();
 
                 mScaleSpring.setEndValue(1f);
                 break;
