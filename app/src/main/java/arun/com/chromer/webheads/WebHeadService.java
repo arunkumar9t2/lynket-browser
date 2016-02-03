@@ -26,10 +26,15 @@ public class WebHeadService extends Service implements WebHead.WebHeadClickListe
 
     public static final String SHOULD_REBIND = "should_rebind";
     public static final String REBIND_EVENT = "rebind_event";
+
     private static WebHeadService sInstance = null;
+
     private final ArrayList<WebHead> mWebHeads = new ArrayList<>();
+
     private WindowManager mWindowManager;
+
     private CustomActivityHelper mCustomActivityHelper;
+
     private final BroadcastReceiver mRebindReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -37,6 +42,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadClickListe
             if (shouldRebind) bindToCustomTabSession();
         }
     };
+
     private boolean mCustomTabConnected;
 
     public WebHeadService() {
@@ -72,9 +78,35 @@ public class WebHeadService extends Service implements WebHead.WebHeadClickListe
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        processIntentAndLaunchBubble(intent);
-
+        //processIntentAndLaunchBubble(intent);
+        addTestWebHeads();
         return START_STICKY;
+    }
+
+    private void addTestWebHeads() {
+        WebHead webHead = new WebHead(this, "www.google.com", mWindowManager);
+        webHead.setImageDrawable(new IconicsDrawable(this)
+                .icon(GoogleMaterial.Icon.gmd_adjust)
+                .color(ContextCompat.getColor(this, R.color.primary))
+                .sizeDp(56));
+        webHead.setOnWebHeadClickListener(this);
+        addWebHead(webHead);
+
+        webHead = new WebHead(this, "www.twitter.com", mWindowManager);
+        webHead.setImageDrawable(new IconicsDrawable(this)
+                .icon(GoogleMaterial.Icon.gmd_adjust)
+                .color(ContextCompat.getColor(this, R.color.primary))
+                .sizeDp(56));
+        webHead.setOnWebHeadClickListener(this);
+        addWebHead(webHead);
+
+        webHead = new WebHead(this, "www.androidpolice.com", mWindowManager);
+        webHead.setImageDrawable(new IconicsDrawable(this)
+                .icon(GoogleMaterial.Icon.gmd_adjust)
+                .color(ContextCompat.getColor(this, R.color.primary))
+                .sizeDp(56));
+        webHead.setOnWebHeadClickListener(this);
+        addWebHead(webHead);
     }
 
     private void processIntentAndLaunchBubble(Intent intent) {
