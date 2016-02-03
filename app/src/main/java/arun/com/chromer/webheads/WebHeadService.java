@@ -8,16 +8,11 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.IBinder;
 import android.support.customtabs.CustomTabsSession;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.WindowManager;
 
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
-
 import java.util.ArrayList;
 
-import arun.com.chromer.R;
 import arun.com.chromer.activities.WebHeadActivity;
 import arun.com.chromer.chrometabutilites.CustomActivityHelper;
 import timber.log.Timber;
@@ -84,27 +79,15 @@ public class WebHeadService extends Service implements WebHead.WebHeadClickListe
     }
 
     private void addTestWebHeads() {
-        WebHead webHead = new WebHead(this, "www.google.com", mWindowManager);
-        webHead.setImageDrawable(new IconicsDrawable(this)
-                .icon(GoogleMaterial.Icon.gmd_adjust)
-                .color(ContextCompat.getColor(this, R.color.primary))
-                .sizeDp(56));
+        WebHead webHead = new WebHead(this, "http://www.google.com", mWindowManager);
         webHead.setOnWebHeadClickListener(this);
         addWebHead(webHead);
 
-        webHead = new WebHead(this, "www.twitter.com", mWindowManager);
-        webHead.setImageDrawable(new IconicsDrawable(this)
-                .icon(GoogleMaterial.Icon.gmd_adjust)
-                .color(ContextCompat.getColor(this, R.color.primary))
-                .sizeDp(56));
+        webHead = new WebHead(this, "http://www.twitter.com", mWindowManager);
         webHead.setOnWebHeadClickListener(this);
         addWebHead(webHead);
 
-        webHead = new WebHead(this, "www.androidpolice.com", mWindowManager);
-        webHead.setImageDrawable(new IconicsDrawable(this)
-                .icon(GoogleMaterial.Icon.gmd_adjust)
-                .color(ContextCompat.getColor(this, R.color.primary))
-                .sizeDp(56));
+        webHead = new WebHead(this, "http://www.androidpolice.com", mWindowManager);
         webHead.setOnWebHeadClickListener(this);
         addWebHead(webHead);
     }
@@ -116,10 +99,6 @@ public class WebHeadService extends Service implements WebHead.WebHeadClickListe
 
         if (!isLinkAlreadyLoaded(urlToLoad)) {
             WebHead webHead = new WebHead(this, urlToLoad, mWindowManager);
-            webHead.setImageDrawable(new IconicsDrawable(this)
-                    .icon(GoogleMaterial.Icon.gmd_adjust)
-                    .color(ContextCompat.getColor(this, R.color.primary))
-                    .sizeDp(56));
             webHead.setOnWebHeadClickListener(this);
             addWebHead(webHead);
 

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Outline;
@@ -17,6 +18,7 @@ import android.os.Build;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Patterns;
 import android.util.TypedValue;
@@ -215,6 +217,15 @@ public class Util {
         return (activities != null) && (activities.size() > 0);
     }
 
+    public static int dpToPx(int dp) {
+        // resources instead of context !!
+        DisplayMetrics displayMetrics = Resources.getSystem().getDisplayMetrics();
+        return (int) ((dp * displayMetrics.density) + 0.5);
+    }
+
+    public static int pxToDp(int px) {
+        return (int) (px / Resources.getSystem().getDisplayMetrics().density);
+    }
 
     /**
      * A helper class for providing a shadow on sheets
