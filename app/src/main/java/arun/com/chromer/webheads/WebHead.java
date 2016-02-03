@@ -96,10 +96,12 @@ public class WebHead extends ImageView {
             case MotionEvent.ACTION_DOWN:
                 mDragging = true;
 
-                mScaleSpring.setEndValue(1f);
+                // Shrink on touch
+                mScaleSpring.setEndValue(0.7f);
                 break;
             case MotionEvent.ACTION_UP:
-                mScaleSpring.setEndValue(0.5f);
+                // Expand on release
+                mScaleSpring.setEndValue(1f);
 
                 stickToWall();
                 mDragging = false;
@@ -155,10 +157,10 @@ public class WebHead extends ImageView {
         @Override
         public void onSpringUpdate(Spring spring) {
             float value = (float) spring.getCurrentValue();
-            float scale = 1f - (value * 0.5f);
+            //float scale = 1f - (value * 0.5f);
             // TODO To investigate why scaling is not working
-            WebHead.this.setScaleX(scale);
-            WebHead.this.setScaleY(scale);
+            setScaleX(value);
+            setScaleY(value);
         }
     }
 
