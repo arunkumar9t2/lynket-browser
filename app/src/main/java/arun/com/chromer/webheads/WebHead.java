@@ -36,7 +36,7 @@ public class WebHead extends View {
     private static final int WEB_HEAD_SIZE_DP = 48;
     private static WindowManager sWindowManager;
     private final String mUrl;
-    private final GestureDetector mGestDetector = new GestureDetector(getContext(), new GestureSingleTap());
+    private final GestureDetector mGestDetector = new GestureDetector(getContext(), new GestureTapListener());
     private float posX;
     private float posY;
     private WindowManager.LayoutParams mWindowParams;
@@ -45,6 +45,7 @@ public class WebHead extends View {
     private WebHeadClickListener mClickListener;
     private Spring mScaleSpring, mWallAttachSpring;
     private Paint mBgPaint;
+    private SpringSystem mSpringSystem;
 
     public WebHead(Context context, String url, WindowManager windowManager) {
         super(context);
@@ -77,12 +78,12 @@ public class WebHead extends View {
     }
 
     private void setUpSprings() {
-        SpringSystem springSystem = SpringSystem.create();
+        mSpringSystem = SpringSystem.create();
 
-        mScaleSpring = springSystem.createSpring();
+        mScaleSpring = mSpringSystem.createSpring();
         mScaleSpring.addListener(new ScaleSpringListener());
 
-        mWallAttachSpring = springSystem.createSpring();
+        mWallAttachSpring = mSpringSystem.createSpring();
         mWallAttachSpring.addListener(new SimpleSpringListener() {
             @Override
             public void onSpringUpdate(Spring spring) {
@@ -174,11 +175,17 @@ public class WebHead extends View {
                 mDragging = true;
 
                 // Shrink on touch
-                mScaleSpring.setEndValue(0.7f);
+                mScaleSpring.setEndValue(0.8f);
+
+                // transparent on touch
+                setAlpha(0.9f);
                 break;
             case MotionEvent.ACTION_UP:
                 // Expand on release
                 mScaleSpring.setEndValue(1f);
+
+                // opaque on release
+                setAlpha(1f);
 
                 stickToWall();
                 mDragging = false;
@@ -217,6 +224,20 @@ public class WebHead extends View {
         sWindowManager.updateViewLayout(this, mWindowParams);
     }
 
+    public void destroySelf() {
+        mWallAttachSpring.setAtRest();
+        mWallAttachSpring.destroy();
+        mWallAttachSpring = null;
+
+        mScaleSpring.setAtRest();
+        mScaleSpring.destroy();
+        mScaleSpring = null;
+
+        setOnWebHeadClickListener(null);
+
+        sWindowManager.removeView(this);
+    }
+
     public void setOnWebHeadClickListener(WebHeadClickListener listener) {
         mClickListener = listener;
     }
@@ -234,18 +255,22 @@ public class WebHead extends View {
         @Override
         public void onSpringUpdate(Spring spring) {
             float value = (float) spring.getCurrentValue();
-            //float scale = 1f - (value * 0.5f);
-            // TODO To investigate why scaling is not working
             setScaleX(value);
             setScaleY(value);
         }
     }
 
-    private class GestureSingleTap extends GestureDetector.SimpleOnGestureListener {
+    private class GestureTapListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
             if (mClickListener != null) mClickListener.onClick(WebHead.this);
             return super.onSingleTapConfirmed(e);
+        }
+
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            //destroySelf();
+            return super.onDoubleTap(e);
         }
     }
 
