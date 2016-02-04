@@ -54,6 +54,7 @@ public class RemoveWebHead extends FrameLayout {
         setDisplayMetrics();
 
         setVisibility(INVISIBLE);
+        mHidden = true;
 
         mWindowParams.gravity = Gravity.CENTER | Gravity.BOTTOM;
         mWindowParams.x = 0;
