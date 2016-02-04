@@ -39,6 +39,8 @@ public class WebHead extends FrameLayout {
     private WebHeadCircle contentView;
     private boolean mWasRemoveLocked;
 
+    private boolean dimmed;
+
     public WebHead(Context context, String url, WindowManager windowManager) {
         super(context);
         mUrl = url;
@@ -188,16 +190,32 @@ public class WebHead extends FrameLayout {
         }
     }
 
+    public void dim() {
+        if (!dimmed) {
+            contentView.setAlpha(0.3f);
+            dimmed = true;
+        }
+    }
+
+    public void bright() {
+        if (dimmed) {
+            contentView.setAlpha(1f);
+            dimmed = false;
+        }
+    }
+
     private void setReleaseScale() {
         mScaleSpring.setEndValue(1f);
     }
 
     private void setReleaseAlpha() {
-        contentView.setAlpha(1f);
+        if (!dimmed)
+            contentView.setAlpha(1f);
     }
 
     private void setTouchingAlpha() {
-        contentView.setAlpha(0.7f);
+        if (!dimmed)
+            contentView.setAlpha(0.7f);
     }
 
     private void setTouchingScale() {

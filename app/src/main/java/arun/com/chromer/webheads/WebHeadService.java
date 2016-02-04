@@ -6,7 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.support.customtabs.CustomTabsSession;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.WindowManager;
@@ -158,6 +161,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
 
         mCustomActivityHelper = new CustomActivityHelper();
         mCustomActivityHelper.setConnectionCallback(this);
+        mCustomActivityHelper.setNavigationCallback(new CustomTabNavigationCallback());
 
         boolean ok = mCustomActivityHelper.bindCustomTabsService(this);
         if (ok) Timber.d("Binding successful");
@@ -217,5 +221,43 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         }
         return null;
     }
+
+    private void dimAllWebHeads() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                for (WebHead webhead : mWebHeads.values()) {
+                    webhead.dim();
+                }
+            }
+        });
+    }
+
+    private void brightAllWebHeads() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                for (WebHead webhead : mWebHeads.values()) {
+                    webhead.bright();
+                }
+            }
+        });
+    }
+
+    private class CustomTabNavigationCallback extends CustomActivityHelper.NavigationCallback {
+        @Override
+        public void onNavigationEvent(int navigationEvent, Bundle extras) {
+            switch (navigationEvent) {
+                case TAB_SHOWN:
+                    dimAllWebHeads();
+                    break;
+                case TAB_HIDDEN:
+                    brightAllWebHeads();
+                    break;
+            }
+        }
+
+    }
+
 
 }
