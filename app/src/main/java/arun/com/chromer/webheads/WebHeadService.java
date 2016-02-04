@@ -77,8 +77,8 @@ public class WebHeadService extends Service implements WebHead.WebHeadClickListe
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        //processIntentAndLaunchBubble(intent);
-        addTestWebHeads();
+        processIntentAndLaunchBubble(intent);
+        //addTestWebHeads();
         return START_STICKY;
     }
 

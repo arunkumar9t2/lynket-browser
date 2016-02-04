@@ -64,7 +64,6 @@ import arun.com.chromer.util.Util;
 import arun.com.chromer.views.IntentPickerSheetView;
 import arun.com.chromer.views.MaterialSearchView;
 import arun.com.chromer.views.adapter.AppRenderAdapter;
-import arun.com.chromer.webheads.WebHeadService;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback {
@@ -92,14 +91,14 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             mCustomTabActivityHelper.bindCustomTabsService(this);
         }
 
-        startService(new Intent(this, WebHeadService.class));
+        // startService(new Intent(this, WebHeadService.class));
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         mCustomTabActivityHelper.unbindCustomTabsService(this);
-        stopService(new Intent(this, WebHeadService.class));
+        // stopService(new Intent(this, WebHeadService.class));
     }
 
     @Override
