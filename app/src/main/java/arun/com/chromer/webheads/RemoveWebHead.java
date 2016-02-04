@@ -115,8 +115,7 @@ public class RemoveWebHead extends FrameLayout {
     private int calculateXOffset() {
         int sizePx = Util.dpToPx(RemoveHeadCircle.REMOVE_HEAD_DP + RemoveHeadCircle.EXTRA_DP);
 
-        // The radius were given as width/2.4, so lets calculate multiply by 2/2.4 which is 0.83
-        int offset = (int) (sizePx / 2.4);
+        int offset = (sizePx / 2);
         return offset;
     }
 
