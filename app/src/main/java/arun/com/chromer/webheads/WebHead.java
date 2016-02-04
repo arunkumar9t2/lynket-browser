@@ -15,6 +15,7 @@ import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringSystem;
 
 import arun.com.chromer.util.Util;
+import timber.log.Timber;
 
 /**
  * Created by Arun on 30/01/2016.
@@ -23,30 +24,19 @@ import arun.com.chromer.util.Util;
 public class WebHead extends FrameLayout {
 
     private static WindowManager sWindowManager;
-
+    private static int WEB_HEAD_COUNT = 0;
     private final String mUrl;
-
     private final GestureDetector mGestDetector = new GestureDetector(getContext(), new GestureTapListener());
-
     private float posX;
     private float posY;
-
     private WindowManager.LayoutParams mWindowParams;
-
     private int mDispHeight, mDispWidth;
-
     private boolean mDragging;
-
-    private WebHeadClickListener mClickListener;
-
+    private WebHeadInteractionListener mInteractonListener;
     private Spring mScaleSpring, mWallAttachSpring;
-
     private SpringSystem mSpringSystem;
-
     private RemoveWebHead mRemoveWebHead;
-
     private WebHeadCircle contentView;
-
     private boolean mWasRemoveLocked;
 
     public WebHead(Context context, String url, WindowManager windowManager) {
@@ -55,6 +45,10 @@ public class WebHead extends FrameLayout {
         sWindowManager = windowManager;
 
         init(context, url, windowManager);
+
+        WEB_HEAD_COUNT++;
+
+        Timber.d("Created %d webheads", WEB_HEAD_COUNT);
     }
 
 
@@ -232,6 +226,14 @@ public class WebHead extends FrameLayout {
     }
 
     public void destroySelf() {
+        if (mInteractonListener != null) {
+            mInteractonListener.onWebHeadDestroy(this, isLastWebHead());
+        }
+
+        WEB_HEAD_COUNT--;
+
+        Timber.d("%d Webheads remaining", WEB_HEAD_COUNT);
+
         mWallAttachSpring.setAtRest();
         mWallAttachSpring.destroy();
         mWallAttachSpring = null;
@@ -245,21 +247,30 @@ public class WebHead extends FrameLayout {
 
         mSpringSystem = null;
 
-        setOnWebHeadClickListener(null);
+        setWebHeadInteractionListener(null);
 
+        removeView(contentView);
+
+        contentView = null;
         sWindowManager.removeView(this);
     }
 
-    public void setOnWebHeadClickListener(WebHeadClickListener listener) {
-        mClickListener = listener;
+    public boolean isLastWebHead() {
+        return WEB_HEAD_COUNT - 1 == 0;
+    }
+
+    public void setWebHeadInteractionListener(WebHeadInteractionListener listener) {
+        mInteractonListener = listener;
     }
 
     public String getUrl() {
         return mUrl;
     }
 
-    public interface WebHeadClickListener {
-        void onClick(WebHead webHead);
+    public interface WebHeadInteractionListener {
+        void onWebHeadClick(WebHead webHead);
+
+        void onWebHeadDestroy(WebHead webHead, boolean isLastWebHead);
     }
 
     private class ScaleSpringListener extends SimpleSpringListener {
@@ -275,7 +286,7 @@ public class WebHead extends FrameLayout {
     private class GestureTapListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
-            if (mClickListener != null) mClickListener.onClick(WebHead.this);
+            if (mInteractonListener != null) mInteractonListener.onWebHeadClick(WebHead.this);
             mRemoveWebHead.hide();
             return super.onSingleTapConfirmed(e);
         }

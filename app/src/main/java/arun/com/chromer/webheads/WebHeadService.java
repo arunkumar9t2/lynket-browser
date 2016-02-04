@@ -10,21 +10,23 @@ import android.os.IBinder;
 import android.support.customtabs.CustomTabsSession;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.WindowManager;
+import android.widget.Toast;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import arun.com.chromer.activities.WebHeadActivity;
 import arun.com.chromer.chrometabutilites.CustomActivityHelper;
 import timber.log.Timber;
 
-public class WebHeadService extends Service implements WebHead.WebHeadClickListener, CustomActivityHelper.ConnectionCallback {
+public class WebHeadService extends Service implements WebHead.WebHeadInteractionListener,
+        CustomActivityHelper.ConnectionCallback {
 
     public static final String SHOULD_REBIND = "should_rebind";
     public static final String REBIND_EVENT = "rebind_event";
 
     private static WebHeadService sInstance = null;
 
-    private final ArrayList<WebHead> mWebHeads = new ArrayList<>();
+    private final HashMap<String, WebHead> mWebHeads = new HashMap<>();
 
     private WindowManager mWindowManager;
 
@@ -72,6 +74,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadClickListe
 
     private void addWebHead(WebHead webHead) {
         mWindowManager.addView(webHead, webHead.getWindowParams());
+        mWebHeads.put(webHead.getUrl(), webHead);
     }
 
     @Override
@@ -84,15 +87,15 @@ public class WebHeadService extends Service implements WebHead.WebHeadClickListe
 
     private void addTestWebHeads() {
         WebHead webHead = new WebHead(this, "http://www.google.com", mWindowManager);
-        webHead.setOnWebHeadClickListener(this);
+        webHead.setWebHeadInteractionListener(this);
         addWebHead(webHead);
 
         webHead = new WebHead(this, "http://www.twitter.com", mWindowManager);
-        webHead.setOnWebHeadClickListener(this);
+        webHead.setWebHeadInteractionListener(this);
         addWebHead(webHead);
 
         webHead = new WebHead(this, "http://www.androidpolice.com", mWindowManager);
-        webHead.setOnWebHeadClickListener(this);
+        webHead.setWebHeadInteractionListener(this);
         addWebHead(webHead);
     }
 
@@ -103,24 +106,20 @@ public class WebHeadService extends Service implements WebHead.WebHeadClickListe
 
         if (!isLinkAlreadyLoaded(urlToLoad)) {
             WebHead webHead = new WebHead(this, urlToLoad, mWindowManager);
-            webHead.setOnWebHeadClickListener(this);
+            webHead.setWebHeadInteractionListener(this);
             addWebHead(webHead);
 
             if (mCustomTabConnected)
                 mCustomActivityHelper.mayLaunchUrl(Uri.parse(urlToLoad), null, null);
             else
                 deferMayLaunchUntilConnected(urlToLoad);
-        }
+        } else
+            Toast.makeText(this, "Already loaded", Toast.LENGTH_SHORT).show();
     }
 
     private boolean isLinkAlreadyLoaded(String urlToLoad) {
         if (urlToLoad == null) return true;
-        for (WebHead webHead : mWebHeads) {
-            String webHeadUrl = webHead.getUrl();
-            if (webHeadUrl != null && webHeadUrl.equalsIgnoreCase(urlToLoad)) {
-                return true;
-            }
-        }
+        if (mWebHeads != null) return mWebHeads.containsKey(urlToLoad);
         return false;
     }
 
@@ -165,26 +164,31 @@ public class WebHeadService extends Service implements WebHead.WebHeadClickListe
 
     @Override
     public void onDestroy() {
+        Timber.d("Exiting webhead service");
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRebindReceiver);
         if (mCustomActivityHelper != null) mCustomActivityHelper.unbindCustomTabsService(this);
 
         mWindowManager.removeView(mRemoveWebHead);
-
-        for (WebHead webHead : mWebHeads) {
-            mWindowManager.removeView(webHead);
-        }
 
         sInstance = null;
         super.onDestroy();
     }
 
     @Override
-    public void onClick(WebHead webHead) {
+    public void onWebHeadClick(WebHead webHead) {
         if (webHead.getUrl() != null && webHead.getUrl().length() != 0) {
             Intent webHeadActivity = new Intent(this, WebHeadActivity.class);
             webHeadActivity.setData(Uri.parse(webHead.getUrl()));
             webHeadActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(webHeadActivity);
+        }
+    }
+
+    @Override
+    public void onWebHeadDestroy(WebHead webHead, boolean isLastWebHead) {
+        mWebHeads.remove(webHead.getUrl());
+        if (isLastWebHead) {
+            stopSelf();
         }
     }
 
@@ -205,4 +209,5 @@ public class WebHeadService extends Service implements WebHead.WebHeadClickListe
         }
         return null;
     }
+
 }
