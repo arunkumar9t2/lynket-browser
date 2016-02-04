@@ -32,7 +32,13 @@ public class RemoveHeadCircle extends View {
         mBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mBgPaint.setColor(ContextCompat.getColor(getContext(), R.color.md_red_500));
         mBgPaint.setStyle(Paint.Style.FILL);
-        mBgPaint.setShadowLayer(4.0f, 1.0f, 2.0f, 0x85000000);
+
+        float shadwR = context.getResources().getDimension(R.dimen.web_head_shadow_radius);
+        float shadwDx = context.getResources().getDimension(R.dimen.web_head_shadow_dx);
+        float shadwDy = context.getResources().getDimension(R.dimen.web_head_shadow_dy);
+
+        mBgPaint.setShadowLayer(shadwR, shadwDx, shadwDy, 0x85000000);
+        setLayerType(View.LAYER_TYPE_SOFTWARE, null);
     }
 
     @Override

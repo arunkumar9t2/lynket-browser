@@ -9,4 +9,12 @@
     <dimen name="preference_padding">8dp</dimen>
 
     <dimen name="material_search_marginbottom">10dp</dimen>
+
+    <dimen name="web_head_shadow_radius">2dp</dimen>
+    <dimen name="web_head_shadow_dx">0dp</dimen>
+    <dimen name="web_head_shadow_dy">1dp</dimen>
+
+    <dimen name="remove_head_shadow_radius">3dp</dimen>
+    <dimen name="remove_head_shadow_dx">0dp</dimen>
+    <dimen name="remove_head_shadow_dy">1dp</dimen>
 </resources>
