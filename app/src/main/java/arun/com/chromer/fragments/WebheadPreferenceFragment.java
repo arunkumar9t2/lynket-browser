@@ -2,9 +2,11 @@ package arun.com.chromer.fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
 import arun.com.chromer.R;
+import arun.com.chromer.util.Preferences;
 
 public class WebHeadPreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -35,6 +37,7 @@ public class WebHeadPreferenceFragment extends PreferenceFragmentCompat implemen
         super.onResume();
         getPreferenceScreen()
                 .getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        updatePreferenceSummary();
     }
 
     @Override
@@ -46,6 +49,13 @@ public class WebHeadPreferenceFragment extends PreferenceFragmentCompat implemen
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        updatePreferenceSummary();
     }
 
+    private void updatePreferenceSummary() {
+        ListPreference preference = (ListPreference) findPreference(Preferences.WEB_HEAD_SPAWN_LOCATION);
+        if (preference != null) {
+            preference.setSummary(preference.getEntry());
+        }
+    }
 }
