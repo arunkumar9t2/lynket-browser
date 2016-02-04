@@ -25,22 +25,35 @@ import timber.log.Timber;
 public class WebHead extends FrameLayout {
 
     private static WindowManager sWindowManager;
+
     private static int WEB_HEAD_COUNT = 0;
+
     private final String mUrl;
+
     private final GestureDetector mGestDetector = new GestureDetector(getContext(), new GestureTapListener());
+
     private float posX;
     private float posY;
-    private WindowManager.LayoutParams mWindowParams;
-    private int mDispHeight, mDispWidth;
-    private boolean mDragging;
-    private WebHeadInteractionListener mInteractonListener;
-    private Spring mScaleSpring, mWallAttachSpring;
-    private SpringSystem mSpringSystem;
-    private RemoveWebHead mRemoveWebHead;
-    private WebHeadCircle contentView;
-    private boolean mWasRemoveLocked;
 
-    private boolean dimmed;
+    private WindowManager.LayoutParams mWindowParams;
+
+    private int mDispHeight, mDispWidth;
+
+    private boolean mDragging;
+
+    private Spring mScaleSpring, mWallAttachSpring, mStackSpring;
+    private SpringSystem mSpringSystem;
+
+    private RemoveWebHead mRemoveWebHead;
+
+    private WebHeadCircle contentView;
+
+    private boolean mWasRemoveLocked;
+    private boolean mDimmed;
+
+    private boolean mUserManuallyMoved;
+
+    private WebHeadInteractionListener mInteractonListener;
 
     public WebHead(Context context, String url, WindowManager windowManager) {
         super(context);
@@ -93,6 +106,14 @@ public class WebHead extends FrameLayout {
             }
         });
 
+        mStackSpring = mSpringSystem.createSpring();
+        mStackSpring.addListener(new SimpleSpringListener() {
+            @Override
+            public void onSpringUpdate(Spring spring) {
+                mWindowParams.y = (int) spring.getCurrentValue();
+                sWindowManager.updateViewLayout(WebHead.this, mWindowParams);
+            }
+        });
     }
 
     private void setDisplayMetrics() {
@@ -188,6 +209,9 @@ public class WebHead extends FrameLayout {
         // update wall attach spring here
         mWallAttachSpring.setCurrentValue(mWindowParams.x, true);
 
+        // update user manually moved flag here
+        mUserManuallyMoved = true;
+
         if (shouldLockToRemove()) {
             mRemoveWebHead.grow();
             setReleaseAlpha();
@@ -200,17 +224,25 @@ public class WebHead extends FrameLayout {
         }
     }
 
+    public void moveSelfToStackDistance() {
+        if (!mUserManuallyMoved) {
+            int y = mWindowParams.y + Util.dpToPx(3);
+            mStackSpring.setCurrentValue(mWindowParams.y);
+            mStackSpring.setEndValue(mWindowParams.y + Util.dpToPx(3));
+        }
+    }
+
     public void dim() {
-        if (!dimmed) {
+        if (!mDimmed) {
             contentView.setAlpha(0.3f);
-            dimmed = true;
+            mDimmed = true;
         }
     }
 
     public void bright() {
-        if (dimmed) {
+        if (mDimmed) {
             contentView.setAlpha(1f);
-            dimmed = false;
+            mDimmed = false;
         }
     }
 
@@ -219,12 +251,12 @@ public class WebHead extends FrameLayout {
     }
 
     private void setReleaseAlpha() {
-        if (!dimmed)
+        if (!mDimmed)
             contentView.setAlpha(1f);
     }
 
     private void setTouchingAlpha() {
-        if (!dimmed)
+        if (!mDimmed)
             contentView.setAlpha(0.7f);
     }
 
@@ -269,6 +301,10 @@ public class WebHead extends FrameLayout {
         mScaleSpring.setAtRest();
         mScaleSpring.destroy();
         mScaleSpring = null;
+
+        mStackSpring.setAtRest();
+        mStackSpring.destroy();
+        mStackSpring = null;
 
         mRemoveWebHead.hide();
         mRemoveWebHead = null;

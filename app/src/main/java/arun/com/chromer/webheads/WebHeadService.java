@@ -77,8 +77,18 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     }
 
     private void addWebHead(WebHead webHead) {
+        // Before adding new web heads, call move self to stack distance on existing web heads to move
+        // them a little such that they appear to be stacked
+        stackPreviousWebHeads();
+
         mWindowManager.addView(webHead, webHead.getWindowParams());
         mWebHeads.put(webHead.getUrl(), webHead);
+    }
+
+    private void stackPreviousWebHeads() {
+        for (WebHead webhead : mWebHeads.values()) {
+            webhead.moveSelfToStackDistance();
+        }
     }
 
     @Override
