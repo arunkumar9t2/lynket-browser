@@ -60,7 +60,7 @@ public class WebHeadCircle extends View {
     private void drawText(Canvas canvas) {
         Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-        textPaint.setTextSize(Util.dpToPx(18));
+        textPaint.setTextSize(Util.dpToPx(20));
         textPaint.setColor(Color.BLACK);
         textPaint.setStyle(Paint.Style.FILL);
 
