@@ -1,11 +1,16 @@
 package arun.com.chromer.webheads;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
 import arun.com.chromer.util.Util;
@@ -41,6 +46,19 @@ public class RemoveHeadCircle extends View {
     protected void onDraw(Canvas canvas) {
         canvas.drawColor(0, PorterDuff.Mode.CLEAR);
         canvas.drawCircle(getWidth() / 2, getHeight() / 2, (float) (getWidth() / 2.4), mBgPaint);
+
+        drawDeleteIcon(canvas);
     }
 
+    private void drawDeleteIcon(Canvas canvas) {
+        Bitmap deleteIcon = new IconicsDrawable(getContext())
+                .icon(GoogleMaterial.Icon.gmd_delete)
+                .color(Color.WHITE)
+                .sizeDp(18).toBitmap();
+        int cHeight = canvas.getClipBounds().height();
+        int cWidth = canvas.getClipBounds().width();
+        float x = cWidth / 2f - deleteIcon.getWidth() / 2;
+        float y = cHeight / 2f - deleteIcon.getHeight() / 2;
+        canvas.drawBitmap(deleteIcon, x, y, null);
+    }
 }
