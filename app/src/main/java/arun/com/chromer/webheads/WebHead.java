@@ -157,6 +157,15 @@ public class WebHead extends FrameLayout {
         return true;
     }
 
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+
+        // Spring scale animation when getting attached to window
+        mScaleSpring.setCurrentValue(0);
+        mScaleSpring.setEndValue(1f);
+    }
+
     private void stickToWall() {
         int x = mWindowParams.x;
         int dispCentre = mDispWidth / 2;
