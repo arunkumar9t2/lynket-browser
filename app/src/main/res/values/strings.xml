@@ -121,12 +121,13 @@
     <string name="permission_required">Permission required</string>
     <string name="usage_permission_explanation">To enable dynamic coloring of toolbar based on apps, Chromer needs your permission to know the apps you are using. Would you like to grant this permission now?</string>
     <string name="grant">Grant</string>
-    <string name="credits_danieal">Credits to Daniel Ciao</string>
-    <string name="open_source_contributions">Open source contributions</string>
+    <string name="open_source_contributions">Open source stuff</string>
     <string name="search_or_type_url">Search or type URL</string>
     <string name="go">Go</string>
     <string name="voice_prompt">Speak your query</string>
     <string name="web_heads">Web Heads</string>
     <string name="webhead_spawn_summary">Initial spawn location</string>
     <string name="webhead_spawn_title">Choose where the web heads initially appears</string>
+    <string name="credits">Credits</string>
+    <string name="icon_design">Icon Design</string>
 </resources>

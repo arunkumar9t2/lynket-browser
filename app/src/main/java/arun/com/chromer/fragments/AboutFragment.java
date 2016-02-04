@@ -52,14 +52,12 @@ public class AboutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.about_fragment, container, false);
 
+        setupCredits(rootView);
         populateData(rootView);
         return rootView;
     }
 
-    private void populateData(View rootView) {
-        ListView chromerList = (ListView) rootView.findViewById(R.id.about_app_version_list);
-        ListView authorList = (ListView) rootView.findViewById(R.id.about_author_version_list);
-
+    private void setupCredits(View rootView) {
         View daniel = rootView.findViewById(R.id.daniel);
         daniel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +67,22 @@ public class AboutFragment extends Fragment {
                 getActivity().startActivity(googleIntent);
             }
         });
+
+        View patryk = rootView.findViewById(R.id.patryk);
+        patryk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent googleIntent = new Intent(Intent.ACTION_VIEW,
+                        // TODO add Patryk's G+ url here
+                        Uri.parse("https://plus.google.com/"));
+                getActivity().startActivity(googleIntent);
+            }
+        });
+    }
+
+    private void populateData(View rootView) {
+        ListView chromerList = (ListView) rootView.findViewById(R.id.about_app_version_list);
+        ListView authorList = (ListView) rootView.findViewById(R.id.about_author_version_list);
 
         // Loading the header
         chromerList.setAdapter(new ExtendedBaseAdapter() {

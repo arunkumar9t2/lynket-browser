@@ -105,25 +105,67 @@
                 android:layout_marginRight="@dimen/activity_horizontal_margin">
 
                 <LinearLayout
-                    android:id="@+id/daniel"
                     style="@style/Widget.CardContent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/credits_danieal"
+                        android:text="@string/credits"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         android:textColor="@color/material_dark_color" />
 
-                    <TextView
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="5dp" />
+
+                    <LinearLayout
+                        android:id="@+id/patryk"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/open_source_contributions"
-                        android:textColor="@color/material_dark_color"
-                        android:textSize="12sp" />
+                        android:background="?android:attr/selectableItemBackground"
+                        android:orientation="vertical"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Patryk Goworowski"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@color/material_dark_color"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/icon_design"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/daniel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:orientation="vertical"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Daniel Ciao"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@color/material_dark_color"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/open_source_contributions"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
