@@ -14,6 +14,7 @@ import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringSystem;
 
+import arun.com.chromer.util.Preferences;
 import arun.com.chromer.util.Util;
 import timber.log.Timber;
 
@@ -104,7 +105,7 @@ public class WebHead extends FrameLayout {
 
     private void setSpawnLocation() {
         mWindowParams.gravity = Gravity.TOP | Gravity.LEFT;
-        mWindowParams.x = 0;
+        mWindowParams.x = Preferences.webHeadsSpawnLocation(getContext()) == 1 ? mDispWidth : 0;
         mWindowParams.y = mDispHeight / 3;
     }
 

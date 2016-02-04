@@ -23,7 +23,7 @@
         <FrameLayout
             android:id="@+id/webhead_container"
             android:layout_width="match_parent"
-            android:layout_height="80dp" />
+            android:layout_height="170dp" />
     </LinearLayout>
 
 </android.support.v7.widget.CardView>

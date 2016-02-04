@@ -21,6 +21,16 @@
         <item>2</item>
     </string-array>
 
+    <string-array name="webHeadsSpawnValues">
+        <item>Right</item>
+        <item>Left</item>
+    </string-array>
+
+    <string-array name="webHeadsSpawnKeys">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
     <string name="app_name">Chromer</string>
     <string name="share_text">Hey Checkout \'Chromer\' for quick and secure browsing experience! Download here https://goo.gl/992ils</string>
     <string name="share_via">Share via…</string>
@@ -117,4 +127,6 @@
     <string name="go">Go</string>
     <string name="voice_prompt">Speak your query</string>
     <string name="web_heads">Web Heads</string>
+    <string name="webhead_spawn_summary">Initial spawn location</string>
+    <string name="webhead_spawn_title">Choose where the web heads initially appears</string>
 </resources>

@@ -31,6 +31,7 @@ public class Preferences {
     public static final String DYNAMIC_COLOR_WEB = "dynamic_color_web";
     public static final String PREFERRED_ACTION = "preferred_action_preference";
     public static final String WEB_HEAD_ENABLED = "webhead_enabled_pref";
+    public static final String WEB_HEAD_SPAWN_LOCATION = "webhead_spawn_preference";
 
     private static SharedPreferences preferences(Context context) {
         return context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
@@ -281,5 +282,11 @@ public class Preferences {
                 .getDefaultSharedPreferences(context)
                 .edit()
                 .putBoolean(WEB_HEAD_ENABLED, preference).apply();
+    }
+
+    public static int webHeadsSpawnLocation(Context context) {
+        return Integer.parseInt(PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .getString(WEB_HEAD_SPAWN_LOCATION, "1"));
     }
 }

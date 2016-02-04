@@ -10,4 +10,12 @@
         android:summary="You can stack multiple links and view them later"
         android:title="Open links in floating bubbles" />
 
+    <ListPreference
+        android:defaultValue="1"
+        android:dialogTitle="@string/webhead_spawn_title"
+        android:entries="@array/webHeadsSpawnValues"
+        android:entryValues="@array/webHeadsSpawnKeys"
+        android:key="webhead_spawn_preference"
+        android:title="@string/webhead_spawn_summary" />
+
 </PreferenceScreen>
