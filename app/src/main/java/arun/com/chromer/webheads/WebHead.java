@@ -47,10 +47,14 @@ public class WebHead extends View {
     private Paint mBgPaint;
     private SpringSystem mSpringSystem;
 
+    private RemoveWebHeadView mRemoveWebHeadView;
+
     public WebHead(Context context, String url, WindowManager windowManager) {
         super(context);
         mUrl = url;
         sWindowManager = windowManager;
+
+        mRemoveWebHeadView = RemoveWebHeadView.get(context, windowManager);
         init();
     }
 
@@ -188,10 +192,17 @@ public class WebHead extends View {
                 setAlpha(1f);
 
                 stickToWall();
+
+                // show remove view
+                mRemoveWebHeadView.hide();
+
                 mDragging = false;
                 break;
             case MotionEvent.ACTION_MOVE:
-                if (mDragging) move(x - posX, y - posY);
+                if (mDragging) {
+                    move(x - posX, y - posY);
+                    mRemoveWebHeadView.reveal();
+                }
             default:
                 break;
         }
@@ -264,6 +275,7 @@ public class WebHead extends View {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
             if (mClickListener != null) mClickListener.onClick(WebHead.this);
+            mRemoveWebHeadView.hide();
             return super.onSingleTapConfirmed(e);
         }
 

@@ -39,6 +39,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadClickListe
     };
 
     private boolean mCustomTabConnected;
+    private RemoveWebHeadView mRemoveWebHeadView;
 
     public WebHeadService() {
     }
@@ -58,6 +59,9 @@ public class WebHeadService extends Service implements WebHead.WebHeadClickListe
         sInstance = this;
 
         mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+
+        mRemoveWebHeadView = RemoveWebHeadView.get(this, mWindowManager);
+        mWindowManager.addView(mRemoveWebHeadView, mRemoveWebHeadView.getWindowParams());
 
         // bind to custom tab session
         bindToCustomTabSession();
@@ -163,6 +167,8 @@ public class WebHeadService extends Service implements WebHead.WebHeadClickListe
     public void onDestroy() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRebindReceiver);
         if (mCustomActivityHelper != null) mCustomActivityHelper.unbindCustomTabsService(this);
+
+        mWindowManager.removeView(mRemoveWebHeadView);
 
         for (WebHead webHead : mWebHeads) {
             mWindowManager.removeView(webHead);
