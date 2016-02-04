@@ -87,6 +87,31 @@ public class RemoveWebHead extends FrameLayout {
         }
     }
 
+    public static void destroy() {
+        if (ourInstance != null) {
+            ourInstance.destroySelf();
+        }
+    }
+
+    private void destroySelf() {
+        mScaleSpring.setAtRest();
+        mScaleSpring.destroy();
+        mScaleSpring = null;
+
+        mBgPaint = null;
+        removeView(mRemoveHeadCircle);
+        mRemoveHeadCircle = null;
+
+        mWindowParams = null;
+
+        mSpringSystem = null;
+
+        ourInstance = null;
+
+        sWindowManager.removeView(this);
+        Timber.d("Remove view detached and killed");
+    }
+
     private int calculateXOffset() {
         int sizePx = Util.dpToPx(RemoveHeadCircle.REMOVE_HEAD_DP + RemoveHeadCircle.EXTRA_DP);
 

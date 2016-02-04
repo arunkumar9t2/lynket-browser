@@ -168,7 +168,8 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRebindReceiver);
         if (mCustomActivityHelper != null) mCustomActivityHelper.unbindCustomTabsService(this);
 
-        mWindowManager.removeView(mRemoveWebHead);
+        RemoveWebHead.destroy();
+        mRemoveWebHead = null;
 
         sInstance = null;
         super.onDestroy();
