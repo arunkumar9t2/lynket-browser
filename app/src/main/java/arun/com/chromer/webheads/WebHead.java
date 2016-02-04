@@ -2,60 +2,55 @@ package arun.com.chromer.webheads;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.PixelFormat;
-import android.graphics.PorterDuff;
-import android.graphics.Rect;
-import android.graphics.Typeface;
-import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 
 import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringSystem;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import arun.com.chromer.R;
-import arun.com.chromer.util.Util;
-
 /**
  * Created by Arun on 30/01/2016.
  */
 @SuppressLint("ViewConstructor")
-public class WebHead extends View {
+public class WebHead extends FrameLayout {
 
-    private static final int WEB_HEAD_SIZE_DP = 48;
     private static WindowManager sWindowManager;
+
     private final String mUrl;
+
     private final GestureDetector mGestDetector = new GestureDetector(getContext(), new GestureTapListener());
+
     private float posX;
     private float posY;
+
     private WindowManager.LayoutParams mWindowParams;
+
     private int mDispHeight, mDispWidth;
+
     private boolean mDragging;
+
     private WebHeadClickListener mClickListener;
+
     private Spring mScaleSpring, mWallAttachSpring;
-    private Paint mBgPaint;
+
     private SpringSystem mSpringSystem;
 
-    private RemoveWebHeadView mRemoveWebHeadView;
+    private RemoveWebHead mRemoveWebHead;
+
+    private WebHeadCircle contentView;
 
     public WebHead(Context context, String url, WindowManager windowManager) {
         super(context);
         mUrl = url;
         sWindowManager = windowManager;
 
-        mRemoveWebHeadView = RemoveWebHeadView.get(context, windowManager);
-        init();
+        init(context, url, windowManager);
     }
 
 
@@ -63,7 +58,13 @@ public class WebHead extends View {
         return mWindowParams;
     }
 
-    private void init() {
+    private void init(Context context, String url, WindowManager windowManager) {
+        // Getting an instance of remove view
+        mRemoveWebHead = RemoveWebHead.get(context, windowManager);
+
+        contentView = new WebHeadCircle(context, url);
+        addView(contentView);
+
         mWindowParams = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -74,11 +75,6 @@ public class WebHead extends View {
         setDisplayMetrics();
         setSpawnLocation();
         setUpSprings();
-
-        mBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mBgPaint.setColor(ContextCompat.getColor(getContext(), R.color.web_head_bg));
-        mBgPaint.setStyle(Paint.Style.FILL);
-        mBgPaint.setShadowLayer(4.0f, 1.0f, 2.0f, 0x85000000);
     }
 
     private void setUpSprings() {
@@ -112,64 +108,6 @@ public class WebHead extends View {
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int size = Util.dpToPx(WEB_HEAD_SIZE_DP + 10);
-        setMeasuredDimension(size, size);
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        canvas.drawColor(0, PorterDuff.Mode.CLEAR);
-        canvas.drawCircle(getWidth() / 2, getHeight() / 2, (float) (getWidth() / 2.4), mBgPaint);
-
-        drawText(canvas);
-    }
-
-    private void drawText(Canvas canvas) {
-        Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        textPaint.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-        textPaint.setTextSize(Util.dpToPx(18));
-        textPaint.setColor(Color.BLACK);
-        textPaint.setStyle(Paint.Style.FILL);
-
-        String indicator = getUrlIndicator();
-        if (indicator != null) drawTextInCanvasCentre(canvas, textPaint, indicator);
-    }
-
-    private String getUrlIndicator() {
-        String result = "x";
-        if (mUrl != null) {
-            try {
-                URL url = new URL(mUrl);
-                String host = url.getHost();
-                if (host != null) {
-                    if (host.startsWith("www")) {
-                        String[] splits = host.split("\\.");
-                        if (splits.length > 1) result = String.valueOf(splits[1].charAt(0));
-                        else result = String.valueOf(splits[0].charAt(0));
-                    } else
-                        result = String.valueOf(host.charAt(0));
-                }
-            } catch (MalformedURLException e) {
-                return result;
-            }
-        }
-        return result.toUpperCase();
-    }
-
-    private void drawTextInCanvasCentre(Canvas canvas, Paint paint, String text) {
-        int cH = canvas.getClipBounds().height();
-        int cW = canvas.getClipBounds().width();
-        Rect rect = new Rect();
-        paint.setTextAlign(Paint.Align.LEFT);
-        paint.getTextBounds(text, 0, text.length(), rect);
-        float x = cW / 2f - rect.width() / 2f - rect.left;
-        float y = cH / 2f + rect.height() / 2f - rect.bottom;
-        canvas.drawText(text, x, y, paint);
-    }
-
-    @Override
     public boolean onTouchEvent(MotionEvent event) {
         float x = event.getRawX();
         float y = event.getRawY();
@@ -182,26 +120,26 @@ public class WebHead extends View {
                 mScaleSpring.setEndValue(0.8f);
 
                 // transparent on touch
-                setAlpha(0.9f);
+                contentView.setAlpha(0.7f);
                 break;
             case MotionEvent.ACTION_UP:
                 // Expand on release
                 mScaleSpring.setEndValue(1f);
 
                 // opaque on release
-                setAlpha(1f);
+                contentView.setAlpha(1f);
 
                 stickToWall();
 
                 // show remove view
-                mRemoveWebHeadView.hide();
+                mRemoveWebHead.hide();
 
                 mDragging = false;
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (mDragging) {
                     move(x - posX, y - posY);
-                    mRemoveWebHeadView.reveal();
+                    mRemoveWebHead.reveal();
                 }
             default:
                 break;
@@ -266,8 +204,8 @@ public class WebHead extends View {
         @Override
         public void onSpringUpdate(Spring spring) {
             float value = (float) spring.getCurrentValue();
-            setScaleX(value);
-            setScaleY(value);
+            contentView.setScaleX(value);
+            contentView.setScaleY(value);
         }
     }
 
@@ -275,7 +213,7 @@ public class WebHead extends View {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
             if (mClickListener != null) mClickListener.onClick(WebHead.this);
-            mRemoveWebHeadView.hide();
+            mRemoveWebHead.hide();
             return super.onSingleTapConfirmed(e);
         }
 
