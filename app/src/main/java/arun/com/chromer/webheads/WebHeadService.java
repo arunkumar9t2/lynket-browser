@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import java.util.HashMap;
 
+import arun.com.chromer.BuildConfig;
 import arun.com.chromer.activities.WebHeadActivity;
 import arun.com.chromer.chrometabutilites.CustomActivityHelper;
 import timber.log.Timber;
@@ -165,6 +166,12 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     @Override
     public void onDestroy() {
         Timber.d("Exiting webhead service");
+
+        if (BuildConfig.DEBUG) {
+            // TODO Strictly comment this for production!
+            Toast.makeText(this, "Exited service", Toast.LENGTH_SHORT).show();
+        }
+
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRebindReceiver);
         if (mCustomActivityHelper != null) mCustomActivityHelper.unbindCustomTabsService(this);
 
