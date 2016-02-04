@@ -54,6 +54,7 @@ public class TabActivity extends AppCompatActivity {
         // finish this silently.
         if (Preferences.webHeads(this)) {
             Intent webHeadService = new Intent(this, WebHeadService.class);
+            webHeadService.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             webHeadService.setData(getIntent().getData());
             startService(webHeadService);
         } else {
