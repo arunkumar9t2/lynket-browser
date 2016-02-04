@@ -14,6 +14,8 @@ import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringSystem;
 
+import arun.com.chromer.util.Util;
+
 /**
  * Created by Arun on 30/01/2016.
  */
@@ -44,6 +46,8 @@ public class WebHead extends FrameLayout {
     private RemoveWebHead mRemoveWebHead;
 
     private WebHeadCircle contentView;
+
+    private boolean mWasRemoveLocked;
 
     public WebHead(Context context, String url, WindowManager windowManager) {
         super(context);
@@ -91,6 +95,7 @@ public class WebHead extends FrameLayout {
                 sWindowManager.updateViewLayout(WebHead.this, mWindowParams);
             }
         });
+
     }
 
     private void setDisplayMetrics() {
@@ -117,18 +122,25 @@ public class WebHead extends FrameLayout {
                 mDragging = true;
 
                 // Shrink on touch
-                mScaleSpring.setEndValue(0.8f);
+                setTouchingScale();
 
                 // transparent on touch
-                contentView.setAlpha(0.7f);
+                setTouchingAlpha();
                 break;
             case MotionEvent.ACTION_UP:
+                if (mWasRemoveLocked) {
+                    // If head was locked onto a remove bubble before, then kill ourselves
+                    destroySelf();
+                    return true;
+                }
+
                 // Expand on release
-                mScaleSpring.setEndValue(1f);
+                setReleaseScale();
 
                 // opaque on release
-                contentView.setAlpha(1f);
+                setReleaseAlpha();
 
+                // Go to the nearest side and rest there
                 stickToWall();
 
                 // show remove view
@@ -170,7 +182,53 @@ public class WebHead extends FrameLayout {
         // update wall attach spring here
         mWallAttachSpring.setCurrentValue(mWindowParams.x, true);
 
-        sWindowManager.updateViewLayout(this, mWindowParams);
+        if (shouldLockToRemove()) {
+            mRemoveWebHead.grow();
+            setReleaseAlpha();
+            setReleaseScale();
+        } else {
+            mRemoveWebHead.shrink();
+            setTouchingAlpha();
+            setTouchingScale();
+            sWindowManager.updateViewLayout(this, mWindowParams);
+        }
+    }
+
+    private void setReleaseScale() {
+        mScaleSpring.setEndValue(1f);
+    }
+
+    private void setReleaseAlpha() {
+        contentView.setAlpha(1f);
+    }
+
+    private void setTouchingAlpha() {
+        contentView.setAlpha(0.7f);
+    }
+
+    private void setTouchingScale() {
+        mScaleSpring.setEndValue(0.8f);
+    }
+
+    private boolean shouldLockToRemove() {
+        int circleDia = Util.dpToPx(RemoveHeadCircle.REMOVE_HEAD_DP - 10);
+
+        int rX = mRemoveWebHead.getWindowParams().x;
+        int rY = mRemoveWebHead.getWindowParams().y - circleDia;
+
+        int rXmax = rX + circleDia;
+        int rYmax = rY + circleDia;
+
+        int x = mWindowParams.x + (Util.dpToPx(WebHeadCircle.WEB_HEAD_SIZE_DP) / 2);
+        int y = mWindowParams.y + (Util.dpToPx(WebHeadCircle.WEB_HEAD_SIZE_DP));
+
+        if ((x > rX && x < rXmax) && (y > rY && y < rYmax)) {
+            mWasRemoveLocked = true;
+            return true;
+        } else {
+            mWasRemoveLocked = false;
+            return false;
+        }
     }
 
     public void destroySelf() {
@@ -181,6 +239,11 @@ public class WebHead extends FrameLayout {
         mScaleSpring.setAtRest();
         mScaleSpring.destroy();
         mScaleSpring = null;
+
+        mRemoveWebHead.hide();
+        mRemoveWebHead = null;
+
+        mSpringSystem = null;
 
         setOnWebHeadClickListener(null);
 

@@ -21,7 +21,6 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Patterns;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 
@@ -194,11 +193,6 @@ public class Util {
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
-    }
-
-    public static int dp2px(Context context, float dp) {
-        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
-        return Math.round(px);
     }
 
     public static String processSearchText(String text) {

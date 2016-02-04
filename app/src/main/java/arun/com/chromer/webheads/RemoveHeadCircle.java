@@ -17,6 +17,8 @@ public class RemoveHeadCircle extends View {
 
     public static final int REMOVE_HEAD_DP = 72;
 
+    public static final int EXTRA_DP = 10;
+
     private Paint mBgPaint;
 
 

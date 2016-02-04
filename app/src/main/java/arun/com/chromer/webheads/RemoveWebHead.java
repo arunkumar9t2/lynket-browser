@@ -40,6 +40,8 @@ public class RemoveWebHead extends FrameLayout {
 
     private RemoveHeadCircle mRemoveHeadCircle;
 
+    private boolean mGrew;
+
     private RemoveWebHead(Context context, WindowManager windowManager) {
         super(context);
         sWindowManager = windowManager;
@@ -56,9 +58,11 @@ public class RemoveWebHead extends FrameLayout {
         setVisibility(INVISIBLE);
         mHidden = true;
 
-        mWindowParams.gravity = Gravity.CENTER | Gravity.BOTTOM;
-        mWindowParams.x = 0;
-        mWindowParams.y = Util.dpToPx(20);
+        mWindowParams.gravity = Gravity.LEFT | Gravity.TOP;
+
+        int offset = calculateXOffset();
+        mWindowParams.x = (mDispWidth / 2) - offset;
+        mWindowParams.y = mDispHeight - Util.dpToPx(20);
 
 
         mBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -80,6 +84,14 @@ public class RemoveWebHead extends FrameLayout {
             ourInstance = new RemoveWebHead(context, windowManager);
             return ourInstance;
         }
+    }
+
+    private int calculateXOffset() {
+        int sizePx = Util.dpToPx(RemoveHeadCircle.REMOVE_HEAD_DP + RemoveHeadCircle.EXTRA_DP);
+
+        // The radius were given as width/2.4, so lets calculate multiply by 2/2.4 which is 0.83
+        int offset = (int) (sizePx / 2.4);
+        return offset;
     }
 
     private void setUpSprings() {
@@ -118,6 +130,21 @@ public class RemoveWebHead extends FrameLayout {
         if (mHidden) {
             mScaleSpring.setEndValue(1);
             mHidden = false;
+        }
+    }
+
+    public void grow() {
+        if (!mGrew) {
+            mScaleSpring.setCurrentValue(1f);
+            mScaleSpring.setEndValue(1.1f);
+            mGrew = true;
+        }
+    }
+
+    public void shrink() {
+        if (mGrew) {
+            mScaleSpring.setEndValue(1);
+            mGrew = false;
         }
     }
 }

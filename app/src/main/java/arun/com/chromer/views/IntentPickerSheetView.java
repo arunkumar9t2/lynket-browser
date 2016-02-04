@@ -63,7 +63,7 @@ public class IntentPickerSheetView extends FrameLayout {
             }
         });
 
-        ViewCompat.setElevation(this, Util.dp2px(getContext(), 16f));
+        ViewCompat.setElevation(this, Util.dpToPx(16));
     }
 
     @Override
