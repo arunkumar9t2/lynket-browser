@@ -58,6 +58,8 @@ public class WebHead extends FrameLayout {
 
     private WebHeadInteractionListener mInteractonListener;
 
+    private boolean isBeingDestroyed;
+
     public WebHead(Context context, String url, WindowManager windowManager) {
         super(context);
         mUrl = url;
@@ -135,6 +137,9 @@ public class WebHead extends FrameLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        // Don't react to any touch event when we are being destroyed
+        if (isBeingDestroyed) return super.onTouchEvent(event);
+
         float x = event.getRawX();
         float y = event.getRawY();
         mGestDetector.onTouchEvent(event);
@@ -288,6 +293,8 @@ public class WebHead extends FrameLayout {
     }
 
     public void destroySelf() {
+        isBeingDestroyed = true;
+
         if (mInteractonListener != null) {
             mInteractonListener.onWebHeadDestroy(this, isLastWebHead());
         }
