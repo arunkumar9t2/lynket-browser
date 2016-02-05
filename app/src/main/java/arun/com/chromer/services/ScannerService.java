@@ -131,7 +131,10 @@ public class ScannerService extends AccessibilityService implements CustomActivi
                         bundle.putParcelable(CustomTabsService.KEY_URL, Uri.parse(url));
                         possibleUrls.add(bundle);
                     }
-                    boolean success;
+                }
+
+                boolean success;
+                if (priorityUrl != null) {
                     if (!priorityUrl.equalsIgnoreCase(mLastFetchedUrl)) {
                         success = mCustomActivityHelper.mayLaunchUrl(Uri.parse(priorityUrl), null, possibleUrls);
                         if (success) mLastFetchedUrl = priorityUrl;
