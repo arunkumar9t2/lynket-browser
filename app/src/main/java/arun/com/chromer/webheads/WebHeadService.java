@@ -10,12 +10,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.support.customtabs.CustomTabsService;
 import android.support.customtabs.CustomTabsSession;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Stack;
 
 import arun.com.chromer.BuildConfig;
 import arun.com.chromer.activities.WebHeadActivity;
@@ -30,10 +34,15 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     public static final String REBIND_EVENT = "rebind_event";
 
     private static WebHeadService sInstance = null;
+
     private static String sLastOpenedUrl = "";
-    private final HashMap<String, WebHead> mWebHeads = new HashMap<>();
+
+    private final LinkedHashMap<String, WebHead> mWebHeads = new LinkedHashMap<>();
+
     private WindowManager mWindowManager;
+
     private CustomActivityHelper mCustomActivityHelper;
+
     private final BroadcastReceiver mRebindReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -41,7 +50,9 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
             if (shouldRebind) bindToCustomTabSession();
         }
     };
+
     private boolean mCustomTabConnected;
+
     private RemoveWebHead mRemoveWebHead;
 
     public WebHeadService() {
@@ -158,6 +169,57 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         deferThread.start();
     }
 
+    /**
+     * Pre-fetches next set of urls for launch with the given parameter url as reference. The first
+     * url in web heads order found is considered as the priority url and other url as likely urls.
+     *
+     * @param sLastOpenedUrl
+     */
+    private void prepareNextSetOfUrls(String sLastOpenedUrl) {
+        Stack<String> urlStack = getUrlStack(sLastOpenedUrl);
+        if (urlStack.size() > 0) {
+            String priorityUrl = urlStack.pop();
+
+            if (priorityUrl == null) return;
+
+            Timber.d("Priority : %s", priorityUrl);
+
+            List<Bundle> possibleUrls = new ArrayList<>();
+
+            for (String url : urlStack) {
+                if (url == null) continue;
+
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(CustomTabsService.KEY_URL, Uri.parse(url));
+                possibleUrls.add(bundle);
+                Timber.d("Others : %s", url);
+            }
+
+            // Now let's prepare urls
+            mCustomActivityHelper.mayLaunchUrl(Uri.parse(priorityUrl), null, possibleUrls);
+        }
+    }
+
+    private Stack<String> getUrlStack(String sLastOpenedUrl) {
+        Stack<String> urlStack = new Stack<>();
+        if (mWebHeads.containsKey(sLastOpenedUrl)) {
+            boolean foundWebHead = false;
+            for (WebHead webhead : mWebHeads.values()) {
+                if (!foundWebHead) {
+                    foundWebHead = webhead.getUrl().equalsIgnoreCase(sLastOpenedUrl);
+                    if (!foundWebHead) urlStack.push(webhead.getUrl());
+                } else {
+                    urlStack.push(webhead.getUrl());
+                }
+            }
+        } else {
+            for (WebHead webhead : mWebHeads.values()) {
+                urlStack.push(webhead.getUrl());
+            }
+        }
+        return urlStack;
+    }
+
     private void bindToCustomTabSession() {
         if (mCustomActivityHelper != null) {
             // Already an instance exists, so we will un bind the current connection and then
@@ -210,6 +272,9 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
                 webHead.destroySelf();
             }
 
+            // Since the current url is opened, lets prepare the next set of urls
+            prepareNextSetOfUrls(sLastOpenedUrl);
+
             hideRemoveView();
         }
     }
@@ -217,8 +282,13 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     @Override
     public void onWebHeadDestroy(WebHead webHead, boolean isLastWebHead) {
         mWebHeads.remove(webHead.getUrl());
+
         if (isLastWebHead) {
             stopSelf();
+        } else {
+            // Now that this web head is destroyed, with this web head as the reference prepare the
+            // other urls
+            prepareNextSetOfUrls(webHead.getUrl());
         }
     }
 
@@ -281,6 +351,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
                     hideRemoveView();
 
                     dimAllWebHeads();
+
                     break;
                 case TAB_HIDDEN:
                     brightAllWebHeads();
@@ -292,4 +363,5 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         }
 
     }
+
 }
