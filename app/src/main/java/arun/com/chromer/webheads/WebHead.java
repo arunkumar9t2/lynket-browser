@@ -24,6 +24,8 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class WebHead extends FrameLayout {
 
+    public static final int STACKING_GAP_DP = 6;
+
     private static WindowManager sWindowManager;
 
     private static int WEB_HEAD_COUNT = 0;
@@ -49,6 +51,7 @@ public class WebHead extends FrameLayout {
     private WebHeadCircle contentView;
 
     private boolean mWasRemoveLocked;
+
     private boolean mDimmed;
 
     private boolean mUserManuallyMoved;
@@ -226,9 +229,8 @@ public class WebHead extends FrameLayout {
 
     public void moveSelfToStackDistance() {
         if (!mUserManuallyMoved) {
-            int y = mWindowParams.y + Util.dpToPx(3);
             mStackSpring.setCurrentValue(mWindowParams.y);
-            mStackSpring.setEndValue(mWindowParams.y + Util.dpToPx(3));
+            mStackSpring.setEndValue(mWindowParams.y + Util.dpToPx(STACKING_GAP_DP));
         }
     }
 
