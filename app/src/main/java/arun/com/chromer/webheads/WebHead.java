@@ -353,7 +353,8 @@ public class WebHead extends FrameLayout {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
             if (mInteractonListener != null) mInteractonListener.onWebHeadClick(WebHead.this);
-            mRemoveWebHead.hide();
+
+            if (mRemoveWebHead != null) mRemoveWebHead.hide();
             return super.onSingleTapConfirmed(e);
         }
 

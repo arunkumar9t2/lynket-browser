@@ -20,6 +20,7 @@ import java.util.HashMap;
 import arun.com.chromer.BuildConfig;
 import arun.com.chromer.activities.WebHeadActivity;
 import arun.com.chromer.chrometabutilites.CustomActivityHelper;
+import arun.com.chromer.util.Preferences;
 import timber.log.Timber;
 
 public class WebHeadService extends Service implements WebHead.WebHeadInteractionListener,
@@ -29,13 +30,10 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     public static final String REBIND_EVENT = "rebind_event";
 
     private static WebHeadService sInstance = null;
-
+    private static String sLastOpenedUrl = "";
     private final HashMap<String, WebHead> mWebHeads = new HashMap<>();
-
     private WindowManager mWindowManager;
-
     private CustomActivityHelper mCustomActivityHelper;
-
     private final BroadcastReceiver mRebindReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -43,7 +41,6 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
             if (shouldRebind) bindToCustomTabSession();
         }
     };
-
     private boolean mCustomTabConnected;
     private RemoveWebHead mRemoveWebHead;
 
@@ -203,6 +200,9 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
             webHeadActivity.setData(Uri.parse(webHead.getUrl()));
             webHeadActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(webHeadActivity);
+
+            // Store the last opened url
+            sLastOpenedUrl = webHead.getUrl();
         }
     }
 
@@ -233,7 +233,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     }
 
     private void dimAllWebHeads() {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 for (WebHead webhead : mWebHeads.values()) {
@@ -244,11 +244,29 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     }
 
     private void brightAllWebHeads() {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 for (WebHead webhead : mWebHeads.values()) {
                     webhead.bright();
+                }
+            }
+        });
+    }
+
+    private void runOnUiThread(Runnable r) {
+        new Handler(Looper.getMainLooper()).post(r);
+    }
+
+    private void closeWebHeadIfNecessary() {
+        // If user prefers to the close the head on opening the link, then call destroySelf()
+        // which will take care of closing and detaching the web head
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mWebHeads.containsKey(sLastOpenedUrl) && Preferences.webHeadsCloseOnOpen(WebHeadService.this)) {
+                    WebHead webHead = mWebHeads.get(sLastOpenedUrl);
+                    webHead.destroySelf();
                 }
             }
         });
@@ -260,14 +278,17 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
             switch (navigationEvent) {
                 case TAB_SHOWN:
                     dimAllWebHeads();
+                    closeWebHeadIfNecessary();
                     break;
                 case TAB_HIDDEN:
                     brightAllWebHeads();
+
+                    // Clear the last opened url flag
+                    sLastOpenedUrl = "";
                     break;
             }
         }
 
     }
-
 
 }
