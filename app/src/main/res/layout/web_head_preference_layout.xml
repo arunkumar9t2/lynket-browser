@@ -13,12 +13,35 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/web_heads_intro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/web_heads"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/material_dark_color" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/web_heads"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/material_dark_color" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:gravity="right"
+                android:text="@string/intro"
+                android:textAllCaps="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/accent"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
 
         <FrameLayout
             android:id="@+id/webhead_container"
