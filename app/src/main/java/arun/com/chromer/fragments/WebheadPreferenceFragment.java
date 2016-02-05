@@ -1,9 +1,20 @@
 package arun.com.chromer.fragments;
 
+import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v7.preference.ListPreference;
+import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import android.support.v7.preference.SwitchPreferenceCompat;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import arun.com.chromer.R;
 import arun.com.chromer.util.Preferences;
@@ -25,6 +36,43 @@ public class WebHeadPreferenceFragment extends PreferenceFragmentCompat implemen
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.webhead_preferences);
+        setUpWebHeadSwitch();
+    }
+
+    private void setUpWebHeadSwitch() {
+        SwitchPreferenceCompat webHeadSwitch = (SwitchPreferenceCompat) findPreference(Preferences.WEB_HEAD_ENABLED);
+        if (webHeadSwitch != null) {
+            webHeadSwitch.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    final SwitchPreferenceCompat switc = (SwitchPreferenceCompat) preference;
+                    boolean isChecked = switc.isChecked();
+                    if (isChecked) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            if (!Settings.canDrawOverlays(getActivity())) {
+                                new MaterialDialog.Builder(getActivity())
+                                        .title(R.string.permission_required)
+                                        .content(R.string.overlay_permission_content)
+                                        .positiveText(R.string.grant)
+                                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                            @TargetApi(Build.VERSION_CODES.M)
+                                            @Override
+                                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                dialog.dismiss();
+                                                final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                                        Uri.parse("package:" + getActivity().getPackageName()));
+                                                switc.setChecked(false);
+                                                startActivityForResult(intent, 0);
+                                            }
+                                        })
+                                        .show();
+                            }
+                        }
+                    }
+                    return false;
+                }
+            });
+        }
     }
 
     @Override

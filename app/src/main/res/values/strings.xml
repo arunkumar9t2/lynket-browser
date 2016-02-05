@@ -130,4 +130,5 @@
     <string name="webhead_spawn_title">Choose where the web heads initially appears</string>
     <string name="credits">Credits</string>
     <string name="icon_design">Icon Design</string>
+    <string name="overlay_permission_content">To draw the web heads on screen, screen overlay permission needs to be granted. Would you like to grant it now?</string>
 </resources>
