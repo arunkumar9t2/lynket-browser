@@ -203,6 +203,14 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
 
             // Store the last opened url
             sLastOpenedUrl = webHead.getUrl();
+
+            // If user prefers to the close the head on opening the link, then call destroySelf()
+            // which will take care of closing and detaching the web head
+            if (Preferences.webHeadsCloseOnOpen(WebHeadService.this)) {
+                webHead.destroySelf();
+            }
+
+            hideRemoveView();
         }
     }
 
@@ -254,22 +262,14 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         });
     }
 
-    private void runOnUiThread(Runnable r) {
-        new Handler(Looper.getMainLooper()).post(r);
+
+    private void hideRemoveView() {
+        if (mRemoveWebHead != null) mRemoveWebHead.hide();
     }
 
-    private void closeWebHeadIfNecessary() {
-        // If user prefers to the close the head on opening the link, then call destroySelf()
-        // which will take care of closing and detaching the web head
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mWebHeads.containsKey(sLastOpenedUrl) && Preferences.webHeadsCloseOnOpen(WebHeadService.this)) {
-                    WebHead webHead = mWebHeads.get(sLastOpenedUrl);
-                    webHead.destroySelf();
-                }
-            }
-        });
+
+    private void runOnUiThread(Runnable r) {
+        new Handler(Looper.getMainLooper()).post(r);
     }
 
     private class CustomTabNavigationCallback extends CustomActivityHelper.NavigationCallback {
@@ -277,8 +277,10 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         public void onNavigationEvent(int navigationEvent, Bundle extras) {
             switch (navigationEvent) {
                 case TAB_SHOWN:
+                    // Edge cases where the remove view can be still visible after touching the webhead
+                    hideRemoveView();
+
                     dimAllWebHeads();
-                    closeWebHeadIfNecessary();
                     break;
                 case TAB_HIDDEN:
                     brightAllWebHeads();
@@ -290,5 +292,4 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         }
 
     }
-
 }
