@@ -46,7 +46,7 @@ import java.util.List;
 import arun.com.chromer.activities.AboutAppActivity;
 import arun.com.chromer.activities.DonateActivity;
 import arun.com.chromer.activities.TabActivity;
-import arun.com.chromer.activities.intro.AppIntroMy;
+import arun.com.chromer.activities.intro.ChromerIntro;
 import arun.com.chromer.chrometabutilites.CustomActivityHelper;
 import arun.com.chromer.chrometabutilites.CustomTabDelegate;
 import arun.com.chromer.chrometabutilites.CustomTabHelper;
@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         setSupportActionBar(toolbar);
 
         if (Preferences.isFirstRun(this)) {
-            startActivity(new Intent(this, AppIntroMy.class));
+            startActivity(new Intent(this, ChromerIntro.class));
         }
 
         if (ChangelogUtil.shouldShowChangelog(this)) {
@@ -501,7 +501,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                                 Util.openPlayStore(MainActivity.this, getPackageName());
                                 break;
                             case 4:
-                                startActivity(new Intent(MainActivity.this, AppIntroMy.class));
+                                startActivity(new Intent(MainActivity.this, ChromerIntro.class));
                                 break;
                             case 5:
                                 launchCustomTab(CUSTOM_TAB_URL);
@@ -715,7 +715,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         findViewById(R.id.web_heads_intro).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), AppIntroMy.class));
+                startActivity(new Intent(getApplicationContext(), ChromerIntro.class));
             }
         });
     }

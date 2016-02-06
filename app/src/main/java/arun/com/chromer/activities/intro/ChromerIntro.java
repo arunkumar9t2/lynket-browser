@@ -4,14 +4,13 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 
 import com.github.paolorotolo.appintro.AppIntro;
-import com.github.paolorotolo.appintro.AppIntroFragment;
 
 import arun.com.chromer.R;
 
 /**
  * Created by Arun on 17/12/2015.
  */
-public class AppIntroMy extends AppIntro {
+public class ChromerIntro extends AppIntro {
 
     // Please DO NOT override onCreate. Use init
     @Override
