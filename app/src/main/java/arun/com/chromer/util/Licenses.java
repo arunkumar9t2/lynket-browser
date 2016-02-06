@@ -1,6 +1,7 @@
 package arun.com.chromer.util;
 
 import de.psdev.licensesdialog.licenses.ApacheSoftwareLicense20;
+import de.psdev.licensesdialog.licenses.BSD2ClauseLicense;
 import de.psdev.licensesdialog.licenses.License;
 import de.psdev.licensesdialog.licenses.MITLicense;
 import de.psdev.licensesdialog.model.Notice;
@@ -59,6 +60,26 @@ public class Licenses {
         copyright = "Copyright 2014 Google, Inc";
         license = new ApacheSoftwareLicense20();
         notice = new Notice(name, url, copyright, license);
+        notices.addNotice(notice);
+
+        name = "Sugar";
+        url = "https://github.com/satyan/sugar";
+        copyright = "Copyright (C) 2012 by Satya Narayan";
+        license = new ApacheSoftwareLicense20();
+        notice = new Notice(name, url, copyright, license);
+        notices.addNotice(notice);
+
+        name = "Rebound";
+        url = "https://github.com/facebook/rebound";
+        copyright = "Copyright (c) 2013, Facebook, Inc.";
+        license = new BSD2ClauseLicense();
+        notice = new Notice(name, url, copyright, license);
+        notices.addNotice(notice);
+
+        name = "Bottomsheet";
+        url = "https://github.com/Flipboard/bottomsheet";
+        copyright = "Copyright (c) 2015, Flipboard";
+        notice = new Notice(name, url, copyright, null);
         notices.addNotice(notice);
 
         return notices;
