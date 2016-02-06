@@ -4,9 +4,24 @@
 <strong>You can view this again in the about screen.</strong>
 <br></br>
 <br></br>
+<strong>1.5</strong>
+<ul>
+    <li><b>NEW: WEBHEADS -</b> Ability to stack multiple links in floating bubbles and open them later. See the separate Intro in main screen.</li>
+    <li><b>NEW:</b> Configurable action item in custom tab. Choose between secondary browser and any sharing app. <b>Example:</b> Choose <b>Pocket</b> to instantly save the link.</li>
+    <li><b>NEW:</b> Ability to do text and voice search from main screen with the new material design search bar.</li>
+    <li><b>NEW:</b> Dynamic toolbar enhanced. Now can adapt color based on the launching app\'s color.</li>
+    <li><b>NEW:</b> Launch screen, new icon and app intro.</li>
+    <li><b>IMPROVED:</b> Better app pickers</li>
+    <li><b>IMPROVED:</b> Sharing a non url text to Chromer will now do a Google search. Also in text selection pop up in 6.0</li>
+    <li><b>IMPROVED:</b> Setting default behaviour on Cyanogen devices</li>
+    <li><b>IMPROVED:</b> Improved warm up and pre-fetch performance on non Chrome browsers</li>
+    <li><b>IMPROVED:</b> Reduced memory consumptions and general crash fixes</li>
+    <li><b>IMPROVED:</b> UI layout changes</li>
+</ul>
+<br></br>
 <strong>1.4.1</strong>
 <ul>
-    <li>Rewritten affected code to avoid potential license violations. Credits added where due, please update reviews.</li>
+    <li>Rewritten affected code to avoid potential license violations.</li>
 </ul>
 <br></br>
 <strong>1.4</strong>
