@@ -73,8 +73,7 @@ public class AboutFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent googleIntent = new Intent(Intent.ACTION_VIEW,
-                        // TODO add Patryk's G+ url here
-                        Uri.parse("https://plus.google.com/"));
+                        Uri.parse("https://plus.google.com/u/0/109304801957014561872/about"));
                 getActivity().startActivity(googleIntent);
             }
         });
