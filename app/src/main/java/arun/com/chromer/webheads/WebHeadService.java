@@ -141,8 +141,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
 
     private boolean isLinkAlreadyLoaded(String urlToLoad) {
         if (urlToLoad == null) return true;
-        if (mWebHeads != null) return mWebHeads.containsKey(urlToLoad);
-        return false;
+        return mWebHeads != null && mWebHeads.containsKey(urlToLoad);
     }
 
     private void deferMayLaunchUntilConnected(final String urlToLoad) {

@@ -24,7 +24,7 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class WebHead extends FrameLayout {
 
-    public static final int STACKING_GAP_DP = 6;
+    private static final int STACKING_GAP_DP = 6;
 
     private static WindowManager sWindowManager;
 
@@ -328,7 +328,7 @@ public class WebHead extends FrameLayout {
         sWindowManager.removeView(this);
     }
 
-    public boolean isLastWebHead() {
+    private boolean isLastWebHead() {
         return WEB_HEAD_COUNT - 1 == 0;
     }
 
@@ -365,11 +365,6 @@ public class WebHead extends FrameLayout {
             return super.onSingleTapConfirmed(e);
         }
 
-        @Override
-        public boolean onDoubleTap(MotionEvent e) {
-            //destroySelf();
-            return super.onDoubleTap(e);
-        }
     }
 
 }

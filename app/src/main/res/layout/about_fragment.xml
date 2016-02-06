@@ -134,7 +134,8 @@
                             android:text="Patryk Goworowski"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                             android:textColor="@color/material_dark_color"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"
+                            tools:ignore="HardcodedText" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -157,7 +158,8 @@
                             android:text="Daniel Ciao"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                             android:textColor="@color/material_dark_color"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"
+                            tools:ignore="HardcodedText" />
 
                         <TextView
                             android:layout_width="match_parent"

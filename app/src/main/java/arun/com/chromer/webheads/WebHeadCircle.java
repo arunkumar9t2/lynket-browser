@@ -23,7 +23,7 @@ public class WebHeadCircle extends View {
 
     public static final int WEB_HEAD_SIZE_DP = 56;
     private final String mUrl;
-    private Paint mBgPaint;
+    private final Paint mBgPaint;
 
     public WebHeadCircle(Context context, String mUrl) {
         super(context);

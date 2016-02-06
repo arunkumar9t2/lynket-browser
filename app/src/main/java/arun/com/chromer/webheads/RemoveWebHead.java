@@ -115,8 +115,7 @@ public class RemoveWebHead extends FrameLayout {
     private int calculateXOffset() {
         int sizePx = Util.dpToPx(RemoveHeadCircle.REMOVE_HEAD_DP + RemoveHeadCircle.EXTRA_DP);
 
-        int offset = (sizePx / 2);
-        return offset;
+        return (sizePx / 2);
     }
 
     private void setUpSprings() {
