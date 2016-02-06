@@ -16,32 +16,55 @@ public class ChromerIntro extends AppIntro {
     @Override
     public void init(Bundle savedInstanceState) {
 
+        int bgColor = ContextCompat.getColor(this, R.color.colorPrimaryDarker);
+
         // OPTIONAL METHODS
         // Override bar/separator color
         addSlide(AppIntroFragment.newInstance(getString(R.string.app_name),
                 getString(R.string.intro_1),
-                R.drawable.web_hi_res_512,
-                ContextCompat.getColor(this, R.color.colorPrimary)));
-        addSlide(AppIntroFragment.newInstance(getString(R.string.how_to_use),
+                R.drawable.chromer_hd_icon,
+                bgColor));
+
+        addSlide(AppIntroFragment.newInstance(getString(R.string.app_name),
                 getString(R.string.intro_2),
-                R.drawable.chromer_default_image,
-                ContextCompat.getColor(this, R.color.colorPrimary)));
-        addSlide(AppIntroFragment.newInstance(getString(R.string.optional),
-                getString(R.string.optional_intro),
-                R.drawable.optional,
-                ContextCompat.getColor(this, R.color.colorPrimary)));
-        addSlide(AppIntroFragment.newInstance(getString(R.string.advantages),
+                R.drawable.chromer_hd_icon,
+                bgColor));
+
+
+        addSlide(AppIntroFragment.newInstance(getString(R.string.app_name),
                 getString(R.string.intro_3),
-                R.drawable.advantages,
-                ContextCompat.getColor(this, R.color.colorPrimary)));
-        addSlide(AppIntroFragment.newInstance(getString(R.string.thats_it),
+                R.drawable.chromer_hd_icon,
+                bgColor));
+
+        addSlide(AppIntroFragment.newInstance(getString(R.string.app_name),
                 getString(R.string.intro_4),
-                R.drawable.smile,
-                ContextCompat.getColor(this, R.color.colorPrimary)));
+                R.drawable.intro_webheads,
+                bgColor));
+
+        addSlide(AppIntroFragment.newInstance(getString(R.string.app_name),
+                getString(R.string.intro_5),
+                R.drawable.intro_scan_links,
+                bgColor));
+
+        addSlide(AppIntroFragment.newInstance(getString(R.string.how_to_use),
+                getString(R.string.intro_6),
+                R.drawable.intro_set_default,
+                bgColor));
+
+        addSlide(AppIntroFragment.newInstance(getString(R.string.why_use),
+                getString(R.string.intro_7),
+                R.drawable.intro_why_use,
+                bgColor));
+
+        addSlide(AppIntroFragment.newInstance(getString(R.string.thats_it),
+                getString(R.string.intro_8),
+                R.drawable.intro_customizable,
+                bgColor));
 
 
         // Hide Skip/Done button
-        showSkipButton(false);
+        showSkipButton(true);
+
         //noinspection deprecation
         showDoneButton(true);
         showStatusBar(false);
