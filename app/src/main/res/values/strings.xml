@@ -108,7 +108,7 @@
     <string name="only_on_wifi">Only on Wi-Fi</string>
     <string name="default_toolbar_color">Default toolbar color</string>
     <string name="choose_secondary_browser">Secondary browser</string>
-    <string name="dynamic_toolbar_help">To enable dynamic coloring of toolbar, Chromer learns the colors silently. It might not come initially for a website, but it will improve over time with usage. Enjoy!</string>
+    <string name="dynamic_toolbar_help">To enable dynamic coloring of toolbar, Chromer learns the colors silently. It might not come initially for a website or an app, but it will improve over time with usage. Enjoy!</string>
     <string name="chromer_defaulted">Chromer is the current default browser</string>
     <string name="secondary_browser_success">%1$s set as the secondary browser!</string>
     <string name="fav_share_success">%1$s set as your favorite share app!</string>

@@ -20,3 +20,11 @@
     **[] $VALUES;
     public *;
 }
+-keep class org.apache.http.** { *; }
+-dontwarn org.apache.http.**
+-keep class android.net.http.** { *; }
+-dontwarn android.net.http.**
+
+-keepclasseswithmembernames public class * extends com.orm.SugarRecord { *; }
+-keepclasseswithmembernames class com.orm.* { *; }
+-dontwarn com.google.common.**
