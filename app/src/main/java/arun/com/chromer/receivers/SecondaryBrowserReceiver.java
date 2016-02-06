@@ -26,8 +26,12 @@ public class SecondaryBrowserReceiver extends BroadcastReceiver {
             try {
                 context.startActivity(activityIntent);
             } catch (Exception e) {
-                // TODO Add default behavior
                 Toast.makeText(context, "Something went wrong, try again!", Toast.LENGTH_SHORT).show();
+                Intent defaultIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+
+                Intent chooserIntent = Intent.createChooser(defaultIntent, "Open with..");
+                chooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(chooserIntent);
             }
         } else {
             Toast.makeText(context, "Something went wrong, try again!", Toast.LENGTH_SHORT).show();
