@@ -90,6 +90,10 @@
             android:label="Intro"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".activities.intro.WebHeadsIntro"
+            android:label="Intro"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".activities.ShareInterceptActivity"
             android:excludeFromRecents="true"
             android:label="Chromer - Open/Search">

@@ -47,6 +47,7 @@ import arun.com.chromer.activities.AboutAppActivity;
 import arun.com.chromer.activities.DonateActivity;
 import arun.com.chromer.activities.TabActivity;
 import arun.com.chromer.activities.intro.ChromerIntro;
+import arun.com.chromer.activities.intro.WebHeadsIntro;
 import arun.com.chromer.chrometabutilites.CustomActivityHelper;
 import arun.com.chromer.chrometabutilites.CustomTabDelegate;
 import arun.com.chromer.chrometabutilites.CustomTabHelper;
@@ -715,7 +716,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         findViewById(R.id.web_heads_intro).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), ChromerIntro.class));
+                startActivity(new Intent(getApplicationContext(), WebHeadsIntro.class));
             }
         });
     }

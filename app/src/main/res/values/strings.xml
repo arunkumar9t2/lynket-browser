@@ -135,4 +135,8 @@
     <string name="credits">Credits</string>
     <string name="icon_design">Icon Design</string>
     <string name="overlay_permission_content">To draw the web heads on screen, screen overlay permission needs to be granted. Would you like to grant it now?</string>
+    <string name="webheads_intro_1">When you open a link in any app, a floating bubble called web head will be created on screen and Chromer will attempt to pre fetch the link.</string>
+    <string name="webheads_intro_2">On opening multiple links, these web heads will automatically stack on each other as shown. You can open these links later by tapping them.</string>
+    <string name="webheads_intro_3">When you start dragging a web head, a trash will be shown. Drop on this trash to delete the web head.</string>
+    <string name="webheads_intro_4">Chromer prioritizes the last opened link and pre-fetches it. The recommended method is to click the web heads one by one from top to bottom. Enabling close web heads on launch wil make this seamless.</string>
 </resources>
