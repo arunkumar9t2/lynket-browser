@@ -241,8 +241,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         Timber.d("Exiting webhead service");
 
         if (BuildConfig.DEBUG) {
-            // TODO Strictly comment this for production!
-            Toast.makeText(this, "Exited service", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(this, "Exited service", Toast.LENGTH_SHORT).show();
         }
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRebindReceiver);

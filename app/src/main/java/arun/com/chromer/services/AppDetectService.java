@@ -130,7 +130,6 @@ public class AppDetectService extends Service {
 
         Timber.d("Destroying");
         unregisterReceiver(mScreenReceiver);
-        // TODO Potential leak??
         sAppDetectService = null;
         super.onDestroy();
     }
