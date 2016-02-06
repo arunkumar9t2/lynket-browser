@@ -19,7 +19,8 @@ public class Preferences {
     public static final String TOOLBAR_COLOR = "toolbar_color";
     public static final String TOOLBAR_COLOR_PREF = "toolbar_color_pref";
     public static final String ANIMATION_TYPE = "animation_preference";
-    public static final String FIRST_RUN = "firstrun";
+    // Cganged key for 1.5 build which will force intro to show
+    public static final String FIRST_RUN = "firstrun_1";
     public static final String WARM_UP = "warm_up_preference";
     public static final String PRE_FETCH = "pre_fetch_preference";
     public static final String WIFI_PREFETCH = "wifi_preference";
