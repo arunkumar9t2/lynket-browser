@@ -31,17 +31,17 @@ public class ChromerIntro extends AppIntro {
                 bgColor));
 
 
-        addSlide(AppIntroFragment.newInstance(getString(R.string.app_name),
+        addSlide(AppIntroFragment.newInstance(getString(R.string.warmup_browser),
                 getString(R.string.intro_3),
                 R.drawable.chromer_hd_icon,
                 bgColor));
 
-        addSlide(AppIntroFragment.newInstance(getString(R.string.app_name),
+        addSlide(AppIntroFragment.newInstance(getString(R.string.web_heads),
                 getString(R.string.intro_4),
                 R.drawable.intro_webheads,
                 bgColor));
 
-        addSlide(AppIntroFragment.newInstance(getString(R.string.app_name),
+        addSlide(AppIntroFragment.newInstance(getString(R.string.pre_fetch_content),
                 getString(R.string.intro_5),
                 R.drawable.intro_scan_links,
                 bgColor));
