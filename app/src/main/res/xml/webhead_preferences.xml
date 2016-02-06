@@ -20,7 +20,7 @@
         android:title="@string/webhead_spawn_summary" />
 
     <CheckBoxPreference
-        android:defaultValue="false"
+        android:defaultValue="true"
         android:key="webhead_close_onclick_pref"
         android:summary="Web heads will disappear once you open the link"
         android:title="Close web heads on link open" />
