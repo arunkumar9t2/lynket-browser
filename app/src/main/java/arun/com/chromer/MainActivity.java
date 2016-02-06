@@ -415,7 +415,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 if (defaultBrowserPackage != null) {
                     if (defaultBrowserPackage.trim().equalsIgnoreCase(getPackageName())) {
                         Snackbar.make(mColorView, "Already set!", Snackbar.LENGTH_SHORT).show();
-                    } else if (defaultBrowserPackage.equalsIgnoreCase("android")
+                    } else if ((defaultBrowserPackage.equalsIgnoreCase("android") || defaultBrowserPackage.startsWith("org.cyanogenmod"))
                             && Util.isPackageInstalled(getApplicationContext(), defaultBrowserPackage)) {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(GOOGLE_URL)));
                     } else {
