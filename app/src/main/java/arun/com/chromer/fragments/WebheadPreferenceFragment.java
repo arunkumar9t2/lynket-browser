@@ -63,7 +63,7 @@ public class WebHeadPreferenceFragment extends PreferenceFragmentCompat implemen
                                                 dialog.dismiss();
                                                 final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                                                         Uri.parse("package:" + getActivity().getPackageName()));
-                                                startActivityForResult(intent, 0);
+                                                getActivity().startActivityForResult(intent, 0);
                                             }
                                         })
                                         .show();

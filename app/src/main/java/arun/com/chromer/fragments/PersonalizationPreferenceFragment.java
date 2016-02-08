@@ -141,7 +141,7 @@ public class PersonalizationPreferenceFragment extends PreferenceFragmentCompat 
                         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+                            getActivity().startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
                         }
                     }).show();
         }

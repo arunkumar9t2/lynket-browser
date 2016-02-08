@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
         attachFragments();
 
-        setUpWebHeadsInro();
+        setUpWebHeadsIntro();
 
         checkAndEducateUser();
 
@@ -712,11 +712,11 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void setUpWebHeadsInro() {
+    private void setUpWebHeadsIntro() {
         findViewById(R.id.web_heads_intro).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), WebHeadsIntro.class));
+                startActivity(new Intent(MainActivity.this, WebHeadsIntro.class));
             }
         });
     }
