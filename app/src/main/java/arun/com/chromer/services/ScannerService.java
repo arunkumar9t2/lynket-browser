@@ -95,7 +95,11 @@ public class ScannerService extends AccessibilityService implements CustomActivi
 
         if (event == null) return;
 
-        String packageName = event.getPackageName().toString();
+        String packageName = "";
+
+        // Crash fix, some times package name is null.
+        if (event.getPackageName() != null)
+            packageName = event.getPackageName().toString();
 
         // Stop extraction once custom tab is opened.
         if (packageName.equalsIgnoreCase(Preferences.customTabApp(this))) return;
