@@ -144,6 +144,17 @@ public class AppDetectService extends Service {
     }
 
     private void registerScreenReceiver() {
+        // We should prevent the same receiver from registering again, to do thi we will attempt to
+        // register a existing instance of Screen receiver and check if IllegalArgumentException
+        // is thrown.
+        if (mScreenReceiver != null) {
+            try {
+                unregisterReceiver(mScreenReceiver);
+            } catch (Exception ignored) {
+                Timber.d("Un registering receiver exception message: %s", ignored.getMessage());
+            }
+        }
+
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         mScreenReceiver = new ScreenReceiver();
@@ -178,8 +189,10 @@ public class AppDetectService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+                // Timber.d("Screen off");
                 mShouldStopPolling = true;
             } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+                // Timber.d("Screen on");
                 mShouldStopPolling = false;
                 startDetection();
             }
