@@ -19,7 +19,6 @@ import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.view.ViewOutlineProvider;
@@ -107,9 +106,9 @@ public class Util {
         final String service = BuildConfig.APPLICATION_ID + "/arun.com.chromer.services.ScannerService";
         try {
             accesEnbld = Settings.Secure.getInt(context.getContentResolver(), android.provider.Settings.Secure.ACCESSIBILITY_ENABLED);
-        } catch (Settings.SettingNotFoundException e) {
-            e.printStackTrace();
+        } catch (Settings.SettingNotFoundException ignored) {
         }
+
         TextUtils.SimpleStringSplitter splitter = new TextUtils.SimpleStringSplitter(':');
 
         if (accesEnbld == 1) {
@@ -125,8 +124,6 @@ public class Util {
                     }
                 }
             }
-        } else {
-            Log.v(TAG, "Scanner service is disabled.");
         }
         return false;
     }
