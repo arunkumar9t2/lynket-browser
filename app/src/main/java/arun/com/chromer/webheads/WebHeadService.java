@@ -6,10 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.provider.Settings;
 import android.support.customtabs.CustomTabsService;
 import android.support.customtabs.CustomTabsSession;
 import android.support.v4.content.LocalBroadcastManager;
@@ -70,6 +72,15 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     @Override
     public void onCreate() {
         super.onCreate();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // TODO Test scenario properly
+            if (!Settings.canDrawOverlays(this)) {
+                Timber.d("Exited webhead service since overlay permission was revoked");
+                stopSelf();
+            }
+        }
+
         sInstance = this;
 
         mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
