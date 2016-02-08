@@ -138,49 +138,52 @@ public class CustomTabDelegate {
     }
 
     private static void handleToolbarColor(Context ctx, String url, CustomTabsIntent.Builder builder) {
-        //Toast.makeText(ctx, AppDetectService.getInstance().getLastApp(), Toast.LENGTH_SHORT).show();
-        if (Preferences.isColoredToolbar(ctx)) {
-            // Get the user chosen color first
-            int chosenColor = Preferences.toolbarColor(ctx);
+        if (url != null) {
+            //Toast.makeText(ctx, AppDetectService.getInstance().getLastApp(), Toast.LENGTH_SHORT).show();
+            if (Preferences.isColoredToolbar(ctx)) {
+                // Get the user chosen color first
+                int chosenColor = Preferences.toolbarColor(ctx);
 
-            if (Preferences.dynamicToolbar(ctx)) {
+                if (Preferences.dynamicToolbar(ctx)) {
 
-                // Attempt to get the color of the calling app then
-                if (Preferences.dynamicToolbarOnApp(ctx)) {
-                    try {
-                        String lastApp = AppDetectService.getInstance().getLastApp();
-                        List<AppColor> appColors = AppColor.find(AppColor.class, "app = ?", lastApp);
+                    // Attempt to get the color of the calling app then
+                    if (Preferences.dynamicToolbarOnApp(ctx)) {
+                        try {
+                            String lastApp = AppDetectService.getInstance().getLastApp();
+                            List<AppColor> appColors = AppColor.find(AppColor.class, "app = ?", lastApp);
 
-                        if (appColors.size() > 0) {
-                            // Extracted colors exists
-                            Timber.d("Using color for " + lastApp);
-                            chosenColor = appColors.get(0).getColor();
-                        } else {
-                            // Color does not exist for this app, so let's extract it
-                            doExtractionForApp(ctx, lastApp);
+                            if (appColors.size() > 0) {
+                                // Extracted colors exists
+                                Timber.d("Using color for " + lastApp);
+                                chosenColor = appColors.get(0).getColor();
+                            } else {
+                                // Color does not exist for this app, so let's extract it
+                                doExtractionForApp(ctx, lastApp);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    }
+
+                    // Further try to get extract theme color of website
+                    if (Preferences.dynamicToolbarOnWeb(ctx)) {
+                        // Check if we have the color extracted for this source
+                        String host = Uri.parse(url).getHost();
+                        if (host != null) {
+                            List<WebColor> webColors = WebColor.find(WebColor.class, "url = ?", host);
+
+                            if (webColors.size() > 0) {
+                                // Extracted colors exists
+                                chosenColor = webColors.get(0).getColor();
+                            } else {
+                                // Color does not exist for this site, so let's extract it
+                                doExtractionForUrl(ctx, url);
+                            }
+                        }
                     }
                 }
-
-                // Further try to get extract theme color of website
-                if (Preferences.dynamicToolbarOnWeb(ctx)) {
-                    // Check if we have the color extracted for this source
-                    String host = Uri.parse(url).getHost();
-                    List<WebColor> webColors = WebColor.find(WebColor.class, "url = ?", host);
-
-                    if (webColors.size() > 0) {
-                        // Extracted colors exists
-                        chosenColor = webColors.get(0).getColor();
-                    } else {
-                        // Color does not exist for this site, so let's extract it
-                        doExtractionForUrl(ctx, url);
-                    }
-                }
-
+                builder.setToolbarColor(chosenColor);
             }
-            builder.setToolbarColor(chosenColor);
         }
     }
 

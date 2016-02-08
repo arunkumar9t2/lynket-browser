@@ -93,7 +93,9 @@ public class AppDetectService extends Service {
     }
 
     public String getLastApp() {
-        return mLastDetectedApp.trim();
+        if (mLastDetectedApp != null) {
+            return mLastDetectedApp.trim();
+        } else return "";
     }
 
     private void clearLastAppIfNeeded(Intent intent) {
