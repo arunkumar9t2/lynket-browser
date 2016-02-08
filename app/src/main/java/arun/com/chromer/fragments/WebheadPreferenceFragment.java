@@ -50,6 +50,8 @@ public class WebHeadPreferenceFragment extends PreferenceFragmentCompat implemen
                     if (isChecked) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             if (!Settings.canDrawOverlays(getActivity())) {
+                                // Don't check the switch until permission is granted
+                                switc.setChecked(false);
                                 new MaterialDialog.Builder(getActivity())
                                         .title(R.string.permission_required)
                                         .content(R.string.overlay_permission_content)
@@ -61,7 +63,6 @@ public class WebHeadPreferenceFragment extends PreferenceFragmentCompat implemen
                                                 dialog.dismiss();
                                                 final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                                                         Uri.parse("package:" + getActivity().getPackageName()));
-                                                switc.setChecked(false);
                                                 startActivityForResult(intent, 0);
                                             }
                                         })
