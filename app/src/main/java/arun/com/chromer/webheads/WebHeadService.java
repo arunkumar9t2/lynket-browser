@@ -354,6 +354,9 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
                 case TAB_HIDDEN:
                     brightAllWebHeads();
 
+                    // When a tab is exited, prepare the other urls.
+                    prepareNextSetOfUrls(sLastOpenedUrl);
+
                     // Clear the last opened url flag
                     sLastOpenedUrl = "";
                     break;
