@@ -359,11 +359,11 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
                     // Edge cases where the remove view can be still visible after touching the webhead
                     hideRemoveView();
 
-                    dimAllWebHeads();
+                    // dimAllWebHeads();
 
                     break;
                 case TAB_HIDDEN:
-                    brightAllWebHeads();
+                    // brightAllWebHeads();
 
                     // When a tab is exited, prepare the other urls.
                     prepareNextSetOfUrls(sLastOpenedUrl);
