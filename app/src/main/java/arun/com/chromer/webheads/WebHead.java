@@ -7,6 +7,7 @@ import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
+import android.view.ViewConfiguration;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
@@ -30,12 +31,18 @@ public class WebHead extends FrameLayout {
 
     private static int WEB_HEAD_COUNT = 0;
 
+    private static int mRemoveCircleDia = Util.dpToPx(RemoveHeadCircle.REMOVE_HEAD_DP + RemoveHeadCircle.EXTRA_DP);
+
     private final String mUrl;
 
     private final GestureDetector mGestDetector = new GestureDetector(getContext(), new GestureTapListener());
 
+    private final int mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
+
     private float posX;
     private float posY;
+
+    private int initialDownX, initialDownY;
 
     private WindowManager.LayoutParams mWindowParams;
 
@@ -47,7 +54,6 @@ public class WebHead extends FrameLayout {
     private SpringSystem mSpringSystem;
 
     private RemoveWebHead mRemoveWebHead;
-
     private WebHeadCircle contentView;
 
     private boolean mWasRemoveLocked;
@@ -56,7 +62,7 @@ public class WebHead extends FrameLayout {
 
     private boolean mUserManuallyMoved;
 
-    private WebHeadInteractionListener mInteractonListener;
+    private WebHeadInteractionListener mInteractionListener;
 
     private boolean isBeingDestroyed;
 
@@ -87,7 +93,7 @@ public class WebHead extends FrameLayout {
         mWindowParams = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_PHONE,
+                WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
 
@@ -106,8 +112,10 @@ public class WebHead extends FrameLayout {
         mWallAttachSpring.addListener(new SimpleSpringListener() {
             @Override
             public void onSpringUpdate(Spring spring) {
-                mWindowParams.x = (int) spring.getCurrentValue();
-                sWindowManager.updateViewLayout(WebHead.this, mWindowParams);
+                if (!mDragging) {
+                    mWindowParams.x = (int) spring.getCurrentValue();
+                    sWindowManager.updateViewLayout(WebHead.this, mWindowParams);
+                }
             }
         });
 
@@ -140,12 +148,14 @@ public class WebHead extends FrameLayout {
         // Don't react to any touch event when we are being destroyed
         if (isBeingDestroyed) return super.onTouchEvent(event);
 
-        float x = event.getRawX();
-        float y = event.getRawY();
         mGestDetector.onTouchEvent(event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                mDragging = true;
+                initialDownX = mWindowParams.x;
+                initialDownY = mWindowParams.y;
+
+                posX = event.getRawX();
+                posY = event.getRawY();
 
                 // Shrink on touch
                 setTouchingScale();
@@ -154,6 +164,8 @@ public class WebHead extends FrameLayout {
                 setTouchingAlpha();
                 break;
             case MotionEvent.ACTION_UP:
+                mDragging = false;
+
                 if (mWasRemoveLocked) {
                     // If head was locked onto a remove bubble before, then kill ourselves
                     destroySelf();
@@ -171,19 +183,19 @@ public class WebHead extends FrameLayout {
 
                 // show remove view
                 mRemoveWebHead.hide();
-
-                mDragging = false;
                 break;
             case MotionEvent.ACTION_MOVE:
+                if (Math.hypot(event.getRawX() - posX, event.getRawY() - posY) > mTouchSlop) {
+                    mDragging = true;
+                }
+
                 if (mDragging) {
-                    move(x - posX, y - posY);
+                    move(event);
                     mRemoveWebHead.reveal();
                 }
             default:
                 break;
         }
-        posX = x;
-        posY = y;
         return true;
     }
 
@@ -199,7 +211,8 @@ public class WebHead extends FrameLayout {
     private void stickToWall() {
         int x = mWindowParams.x;
         int dispCentre = mDispWidth / 2;
-        mWallAttachSpring.setCurrentValue(x);
+
+        mWallAttachSpring.setCurrentValue(x, true);
 
         if ((x + (getWidth() / 2)) >= dispCentre) {
             // move to right wall
@@ -210,17 +223,21 @@ public class WebHead extends FrameLayout {
         }
     }
 
-    private void move(float deltaX, float deltaY) {
-        mWindowParams.x += deltaX;
-        mWindowParams.y += deltaY;
+    private void move(MotionEvent event) {
+        if (initialDownX == 0) {
+            // Ugly fix where we are checking where the move action originated and then decrementing
+            // web head size from X so that web head tracks down the user fingers. This fix is needed
+            // since Gravity is set as Left. Idle fix should be keeping gravity as centre.
+            mWindowParams.x = (int) (initialDownX + (event.getRawX() - posX));
+        } else {
+            mWindowParams.x = (int) (initialDownX + (event.getRawX() - posX)) - getWidth();
+        }
+        mWindowParams.y = (int) (initialDownY + (event.getRawY() - posY));
 
-        // update wall attach spring here
-        mWallAttachSpring.setCurrentValue(mWindowParams.x, true);
 
-        // update user manually moved flag here
         mUserManuallyMoved = true;
 
-        if (shouldLockToRemove()) {
+        if (isNearRemoveCircle()) {
             mRemoveWebHead.grow();
             setReleaseAlpha();
             setReleaseScale();
@@ -228,8 +245,8 @@ public class WebHead extends FrameLayout {
             mRemoveWebHead.shrink();
             setTouchingAlpha();
             setTouchingScale();
-            sWindowManager.updateViewLayout(this, mWindowParams);
         }
+        sWindowManager.updateViewLayout(this, mWindowParams);
     }
 
     public void moveSelfToStackDistance() {
@@ -271,8 +288,8 @@ public class WebHead extends FrameLayout {
         mScaleSpring.setEndValue(0.8f);
     }
 
-    private boolean shouldLockToRemove() {
-        int circleDia = Util.dpToPx(RemoveHeadCircle.REMOVE_HEAD_DP - 10);
+    private boolean isNearRemoveCircle() {
+        int circleDia = mRemoveCircleDia;
 
         int rX = mRemoveWebHead.getWindowParams().x;
         int rY = mRemoveWebHead.getWindowParams().y - circleDia;
@@ -280,8 +297,8 @@ public class WebHead extends FrameLayout {
         int rXmax = rX + circleDia;
         int rYmax = rY + circleDia;
 
-        int x = mWindowParams.x + (Util.dpToPx(WebHeadCircle.WEB_HEAD_SIZE_DP) / 2);
-        int y = mWindowParams.y + (Util.dpToPx(WebHeadCircle.WEB_HEAD_SIZE_DP));
+        int x = mWindowParams.x + (getWidth() / 2);
+        int y = mWindowParams.y + getWidth();
 
         if ((x > rX && x < rXmax) && (y > rY && y < rYmax)) {
             mWasRemoveLocked = true;
@@ -295,8 +312,8 @@ public class WebHead extends FrameLayout {
     public void destroySelf() {
         isBeingDestroyed = true;
 
-        if (mInteractonListener != null) {
-            mInteractonListener.onWebHeadDestroy(this, isLastWebHead());
+        if (mInteractionListener != null) {
+            mInteractionListener.onWebHeadDestroy(this, isLastWebHead());
         }
 
         WEB_HEAD_COUNT--;
@@ -333,7 +350,7 @@ public class WebHead extends FrameLayout {
     }
 
     public void setWebHeadInteractionListener(WebHeadInteractionListener listener) {
-        mInteractonListener = listener;
+        mInteractionListener = listener;
     }
 
     public String getUrl() {
@@ -359,7 +376,7 @@ public class WebHead extends FrameLayout {
     private class GestureTapListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
-            if (mInteractonListener != null) mInteractonListener.onWebHeadClick(WebHead.this);
+            if (mInteractionListener != null) mInteractionListener.onWebHeadClick(WebHead.this);
 
             if (mRemoveWebHead != null) mRemoveWebHead.hide();
             return super.onSingleTapConfirmed(e);

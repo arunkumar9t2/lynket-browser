@@ -49,7 +49,7 @@ public class RemoveWebHead extends FrameLayout {
         mWindowParams = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_PHONE,
+                WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                         | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 PixelFormat.TRANSLUCENT);
@@ -159,7 +159,7 @@ public class RemoveWebHead extends FrameLayout {
 
     public void grow() {
         if (!mGrew) {
-            mScaleSpring.setCurrentValue(1f);
+            mScaleSpring.setCurrentValue(1f, true);
             mScaleSpring.setEndValue(1.1f);
             mGrew = true;
         }

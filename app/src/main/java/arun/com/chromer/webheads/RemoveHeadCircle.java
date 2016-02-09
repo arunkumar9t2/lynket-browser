@@ -22,7 +22,7 @@ public class RemoveHeadCircle extends View {
 
     public static final int REMOVE_HEAD_DP = 72;
 
-    public static final int EXTRA_DP = 10;
+    public static final int EXTRA_DP = 20;
 
     private Paint mBgPaint;
 
@@ -44,7 +44,7 @@ public class RemoveHeadCircle extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int size = Util.dpToPx(REMOVE_HEAD_DP + 10);
+        int size = Util.dpToPx(REMOVE_HEAD_DP + EXTRA_DP);
         setMeasuredDimension(size, size);
     }
 
