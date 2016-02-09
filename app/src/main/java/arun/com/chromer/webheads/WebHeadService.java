@@ -137,6 +137,8 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
 
         String urlToLoad = intent.getDataString();
 
+        if (urlToLoad == null) return;
+
         if (!isLinkAlreadyLoaded(urlToLoad)) {
             WebHead webHead = new WebHead(this, urlToLoad, mWindowManager);
             webHead.setWebHeadInteractionListener(this);
@@ -340,7 +342,6 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
             }
         });
     }
-
 
     private void hideRemoveView() {
         if (mRemoveWebHead != null) mRemoveWebHead.hide();
