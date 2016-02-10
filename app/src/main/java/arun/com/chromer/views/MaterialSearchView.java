@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -111,7 +110,6 @@ public class MaterialSearchView extends FrameLayout {
         addView(LayoutInflater.from(getContext()).inflate(R.layout.material_search_view, this, false));
 
         editText = (EditText) findViewById(R.id.msv_edittext);
-        editText.setImeActionLabel(getContext().getString(R.string.go), KeyEvent.KEYCODE_ENTER);
         editText.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -197,8 +195,8 @@ public class MaterialSearchView extends FrameLayout {
         return animated && super.hasFocus();
     }
 
-    public void setOnKeyListener(OnKeyListener listener) {
-        editText.setOnKeyListener(listener);
+    public void setOnKeyListener(TextView.OnEditorActionListener listener) {
+        editText.setOnEditorActionListener(listener);
     }
 
     public String getText() {

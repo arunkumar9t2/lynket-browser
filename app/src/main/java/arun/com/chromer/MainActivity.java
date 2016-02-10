@@ -21,6 +21,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -170,11 +171,10 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     private void setupMaterialSearch() {
         mMaterialSearchView = (MaterialSearchView) findViewById(R.id.material_search_view);
         mMaterialSearchView.clearFocus();
-        mMaterialSearchView.setOnKeyListener(new View.OnKeyListener() {
+        mMaterialSearchView.setOnKeyListener(new TextView.OnEditorActionListener() {
             @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     launchCustomTab(Util.processSearchText(mMaterialSearchView.getText()));
                     return true;
                 }
