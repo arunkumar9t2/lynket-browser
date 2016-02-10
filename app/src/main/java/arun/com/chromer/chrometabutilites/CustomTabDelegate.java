@@ -46,6 +46,8 @@ public class CustomTabDelegate {
 
         builder.setShowTitle(true);
 
+        builder.enableUrlBarHiding();
+
         handleAnimations(ctx, builder);
 
         handleToolbarColor(ctx, url, builder);
@@ -87,6 +89,8 @@ public class CustomTabDelegate {
             builder = new CustomTabsIntent.Builder();
 
         builder.setShowTitle(true);
+
+        builder.enableUrlBarHiding();
 
         handleAnimations(ctx, builder);
 
