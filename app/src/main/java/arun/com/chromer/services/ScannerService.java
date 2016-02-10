@@ -96,65 +96,66 @@ public class ScannerService extends AccessibilityService implements CustomActivi
         if (event == null) return;
 
         String packageName = "";
+        try {
+            // Crash fix, some times package name is null.
+            if (event.getPackageName() != null)
+                packageName = event.getPackageName().toString();
 
-        // Crash fix, some times package name is null.
-        if (event.getPackageName() != null)
-            packageName = event.getPackageName().toString();
+            // Stop extraction once custom tab is opened.
+            if (packageName.equalsIgnoreCase(Preferences.customTabApp(this))) return;
 
-        // Stop extraction once custom tab is opened.
-        if (packageName.equalsIgnoreCase(Preferences.customTabApp(this))) return;
+            if (Preferences.preFetch(this) && isWifiConditionsMet()) {
+                stopWarmUpService();
 
-        if (Preferences.preFetch(this) && isWifiConditionsMet()) {
-            stopWarmUpService();
-
-            // Traverse the tree and find urls
-            mTraversalTree.push(getRootInActiveWindow());
-            while (!mTraversalTree.empty() && mExtractedCount < MAX_URL) {
-                AccessibilityNodeInfo currNode = mTraversalTree.pop();
-                if (currNode != null) {
-                    actOnCurrentNode(currNode);
-                    for (int i = 0; i < currNode.getChildCount(); i++) {
-                        mTraversalTree.push(currNode.getChild(i));
-                    }
-                }
-            }
-
-            if (mExtractedUrls.size() != 0) {
-
-                Collections.reverse(mExtractedUrls);
-
-                int first = 0;
-                String priorityUrl = null;
-                List<Bundle> possibleUrls = new ArrayList<>();
-                for (String url : mExtractedUrls) {
-                    if (first == 0) {
-                        priorityUrl = url;
-                        first++;
-                    } else {
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable(CustomTabsService.KEY_URL, Uri.parse(url));
-                        possibleUrls.add(bundle);
+                // Traverse the tree and find urls
+                mTraversalTree.push(getRootInActiveWindow());
+                while (!mTraversalTree.empty() && mExtractedCount < MAX_URL) {
+                    AccessibilityNodeInfo currNode = mTraversalTree.pop();
+                    if (currNode != null) {
+                        actOnCurrentNode(currNode);
+                        for (int i = 0; i < currNode.getChildCount(); i++) {
+                            mTraversalTree.push(currNode.getChild(i));
+                        }
                     }
                 }
 
-                boolean success;
-                if (priorityUrl != null) {
-                    if (!priorityUrl.equalsIgnoreCase(mLastFetchedUrl)) {
-                        success = mCustomActivityHelper.mayLaunchUrl(Uri.parse(priorityUrl), null, possibleUrls);
-                        if (success) mLastFetchedUrl = priorityUrl;
-                    } else {
-                        Timber.d("Ignored, already fetched");
-                    }
-                }
-            }
-
-            try {
-                //getRootInActiveWindow().recycle();
                 mTraversalTree.clear();
-                mExtractedUrls.clear();
-            } catch (Exception e) {
-                e.printStackTrace();
+
+                if (mExtractedUrls.size() != 0) {
+
+                    Collections.reverse(mExtractedUrls);
+
+                    int first = 0;
+                    String priorityUrl = null;
+                    List<Bundle> possibleUrls = new ArrayList<>();
+                    for (String url : mExtractedUrls) {
+                        if (first == 0) {
+                            priorityUrl = url;
+                            first++;
+                        } else {
+                            Bundle bundle = new Bundle();
+                            bundle.putParcelable(CustomTabsService.KEY_URL, Uri.parse(url));
+                            possibleUrls.add(bundle);
+                        }
+                    }
+
+                    boolean success;
+                    if (priorityUrl != null) {
+                        if (!priorityUrl.equalsIgnoreCase(mLastFetchedUrl)) {
+                            success = mCustomActivityHelper.mayLaunchUrl(Uri.parse(priorityUrl), null, possibleUrls);
+                            if (success) mLastFetchedUrl = priorityUrl;
+                        } else {
+                            Timber.d("Ignored, already fetched");
+                        }
+                    }
+                }
+
             }
+
+            //getRootInActiveWindow().recycle();
+            mExtractedUrls.clear();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
