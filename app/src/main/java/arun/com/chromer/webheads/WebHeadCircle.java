@@ -10,7 +10,6 @@ import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import arun.com.chromer.R;
@@ -74,7 +73,7 @@ public class WebHeadCircle extends View {
             try {
                 URL url = new URL(mUrl);
                 String host = url.getHost();
-                if (host != null) {
+                if (host != null && host.length() != 0) {
                     if (host.startsWith("www")) {
                         String[] splits = host.split("\\.");
                         if (splits.length > 1) result = String.valueOf(splits[1].charAt(0));
@@ -82,7 +81,7 @@ public class WebHeadCircle extends View {
                     } else
                         result = String.valueOf(host.charAt(0));
                 }
-            } catch (MalformedURLException e) {
+            } catch (Exception e) {
                 return result;
             }
         }
