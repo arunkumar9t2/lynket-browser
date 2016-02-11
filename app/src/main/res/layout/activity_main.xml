@@ -27,7 +27,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginBottom="@dimen/material_search_marginbottom"
             android:layout_marginTop="10dp"
-            app:layout_collapseMode="parallax" />
+            app:layout_collapseMode="pin" />
 
     </android.support.design.widget.AppBarLayout>
 
