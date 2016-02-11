@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Stack;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.WebHeadActivity;
+import arun.com.chromer.activities.CustomTabActivity;
 import arun.com.chromer.chrometabutilites.CustomActivityHelper;
 import arun.com.chromer.util.Preferences;
 import timber.log.Timber;
@@ -133,7 +133,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
 
         showNotification();
 
-        addTestWebHeads();
+        // addTestWebHeads();
         return START_STICKY;
     }
 
@@ -318,7 +318,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     @Override
     public void onWebHeadClick(WebHead webHead) {
         if (webHead.getUrl() != null && webHead.getUrl().length() != 0) {
-            Intent webHeadActivity = new Intent(this, WebHeadActivity.class);
+            Intent webHeadActivity = new Intent(this, CustomTabActivity.class);
             webHeadActivity.setData(Uri.parse(webHead.getUrl()));
             webHeadActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(webHeadActivity);

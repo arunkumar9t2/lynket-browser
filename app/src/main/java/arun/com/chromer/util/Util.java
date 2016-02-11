@@ -1,7 +1,9 @@
 package arun.com.chromer.util;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AppOpsManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -22,6 +24,7 @@ import android.util.DisplayMetrics;
 import android.util.Patterns;
 import android.view.View;
 import android.view.ViewOutlineProvider;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +33,8 @@ import java.util.regex.Pattern;
 
 import arun.com.chromer.BuildConfig;
 import arun.com.chromer.MainActivity;
+import arun.com.chromer.R;
+import arun.com.chromer.chrometabutilites.CustomActivityHelper;
 import arun.com.chromer.chrometabutilites.CustomTabHelper;
 import arun.com.chromer.model.App;
 
@@ -37,7 +42,28 @@ import arun.com.chromer.model.App;
  * Created by Arun on 17/12/2015.
  */
 public class Util {
-    private static final String TAG = Util.class.getSimpleName();
+
+    public final static CustomActivityHelper.CustomTabsFallback CUSTOM_TABS_FALLBACK =
+            new CustomActivityHelper.CustomTabsFallback() {
+                @Override
+                public void openUri(Activity activity, Uri uri) {
+
+                    if (activity != null) {
+                        Toast.makeText(activity,
+                                activity.getString(R.string.fallback_msg),
+                                Toast.LENGTH_SHORT).show();
+                        try {
+                            activity.startActivity(Intent.createChooser(
+                                    new Intent(Intent.ACTION_VIEW, uri),
+                                    activity.getString(R.string.open_with)));
+                        } catch (ActivityNotFoundException e) {
+                            Toast.makeText(activity,
+                                    activity.getString(R.string.unxp_err), Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                    }
+                }
+            };
 
     public static void openPlayStore(Context context, String appPackageName) {
         try {

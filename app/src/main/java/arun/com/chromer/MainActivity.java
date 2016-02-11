@@ -46,7 +46,6 @@ import java.util.List;
 
 import arun.com.chromer.activities.AboutAppActivity;
 import arun.com.chromer.activities.DonateActivity;
-import arun.com.chromer.activities.TabActivity;
 import arun.com.chromer.activities.intro.ChromerIntro;
 import arun.com.chromer.activities.intro.WebHeadsIntro;
 import arun.com.chromer.chrometabutilites.CustomActivityHelper;
@@ -576,7 +575,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private void launchCustomTab(String url) {
         CustomTabsIntent customTabsIntent = CustomTabDelegate.getCustomizedTabIntent(getApplicationContext(), url);
-        CustomActivityHelper.openCustomTab(this, customTabsIntent, Uri.parse(url), TabActivity.mCustomTabsFallback);
+        CustomActivityHelper.openCustomTab(this, customTabsIntent, Uri.parse(url), Util.CUSTOM_TABS_FALLBACK);
     }
 
     private boolean shouldBind() {

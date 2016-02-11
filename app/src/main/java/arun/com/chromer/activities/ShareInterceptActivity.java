@@ -56,7 +56,7 @@ public class ShareInterceptActivity extends AppCompatActivity {
             invalidLink();
         }
         Timber.d("Opening " + url);
-        Intent tabActivity = new Intent(this, TabActivity.class);
+        Intent tabActivity = new Intent(this, BrowserInterceptActivity.class);
         tabActivity.setData(Uri.parse(url));
 
         startActivity(tabActivity);

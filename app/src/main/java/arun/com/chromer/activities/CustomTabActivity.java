@@ -9,8 +9,9 @@ import android.widget.Toast;
 import arun.com.chromer.R;
 import arun.com.chromer.chrometabutilites.CustomActivityHelper;
 import arun.com.chromer.chrometabutilites.CustomTabDelegate;
+import arun.com.chromer.util.Util;
 
-public class WebHeadActivity extends AppCompatActivity {
+public class CustomTabActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +31,7 @@ public class WebHeadActivity extends AppCompatActivity {
         CustomActivityHelper.openCustomTab(this,
                 mCustomTabsIntent,
                 Uri.parse(getIntent().getData().toString()),
-                TabActivity.mCustomTabsFallback);
+                Util.CUSTOM_TABS_FALLBACK);
 
         finish();
     }
