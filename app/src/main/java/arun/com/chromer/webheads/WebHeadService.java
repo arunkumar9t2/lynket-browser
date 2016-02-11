@@ -137,7 +137,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification notification = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_chromer_notification)
                 .setPriority(NotificationCompat.PRIORITY_MIN)
                 .setContentText("Tap to close all")
                 .setContentTitle("Web Heads Service")
