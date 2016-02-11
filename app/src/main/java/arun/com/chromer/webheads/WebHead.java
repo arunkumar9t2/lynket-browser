@@ -168,7 +168,7 @@ public class WebHead extends FrameLayout {
 
                 if (mWasRemoveLocked) {
                     // If head was locked onto a remove bubble before, then kill ourselves
-                    destroySelf();
+                    destroySelf(true);
                     return true;
                 }
 
@@ -309,10 +309,10 @@ public class WebHead extends FrameLayout {
         }
     }
 
-    public void destroySelf() {
+    public void destroySelf(boolean shouldReceiveCallback) {
         isBeingDestroyed = true;
 
-        if (mInteractionListener != null) {
+        if (mInteractionListener != null && shouldReceiveCallback) {
             mInteractionListener.onWebHeadDestroy(this, isLastWebHead());
         }
 

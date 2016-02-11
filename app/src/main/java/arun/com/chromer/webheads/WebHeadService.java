@@ -1,5 +1,7 @@
 package arun.com.chromer.webheads;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,6 +17,7 @@ import android.provider.Settings;
 import android.support.customtabs.CustomTabsService;
 import android.support.customtabs.CustomTabsSession;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.NotificationCompat;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -23,7 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Stack;
 
-import arun.com.chromer.BuildConfig;
+import arun.com.chromer.R;
 import arun.com.chromer.activities.WebHeadActivity;
 import arun.com.chromer.chrometabutilites.CustomActivityHelper;
 import arun.com.chromer.util.Preferences;
@@ -34,17 +37,22 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
 
     public static final String SHOULD_REBIND = "should_rebind";
     public static final String REBIND_EVENT = "rebind_event";
+    public static final String CLOSE_SERVICE = "close_service";
 
     private static WebHeadService sInstance = null;
 
     private static String sLastOpenedUrl = "";
 
     private final LinkedHashMap<String, WebHead> mWebHeads = new LinkedHashMap<>();
-
+    private final BroadcastReceiver mStopServiceReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Timber.d("Closing from notification");
+            stopSelf();
+        }
+    };
     private WindowManager mWindowManager;
-
     private CustomActivityHelper mCustomActivityHelper;
-
     private final BroadcastReceiver mRebindReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -52,7 +60,6 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
             if (shouldRebind) bindToCustomTabSession();
         }
     };
-
     private boolean mCustomTabConnected;
 
     private RemoveWebHead mRemoveWebHead;
@@ -91,8 +98,10 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         // bind to custom tab session
         bindToCustomTabSession();
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(mRebindReceiver,
-                new IntentFilter(REBIND_EVENT));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRebindReceiver, new IntentFilter(REBIND_EVENT));
+
+        // Register the receiver which will stop this service.
+        registerReceiver(mStopServiceReceiver, new IntentFilter(CLOSE_SERVICE));
     }
 
     private void addWebHead(WebHead webHead) {
@@ -114,8 +123,30 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         processIntentAndLaunchBubble(intent);
-        //addTestWebHeads();
+
+        showNotification();
+
+        addTestWebHeads();
         return START_STICKY;
+    }
+
+    private void showNotification() {
+        PendingIntent contentIntent = PendingIntent.getBroadcast(this,
+                0,
+                new Intent(CLOSE_SERVICE),
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Notification notification = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setPriority(NotificationCompat.PRIORITY_MIN)
+                .setContentText("Tap to close all")
+                .setContentTitle("Web Heads Service")
+                .setContentIntent(contentIntent)
+                .setAutoCancel(false)
+                .setLocalOnly(true)
+                .build();
+
+        startForeground(1, notification);
     }
 
     private void addTestWebHeads() {
@@ -252,9 +283,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     public void onDestroy() {
         Timber.d("Exiting webhead service");
 
-        if (BuildConfig.DEBUG) {
-            // Toast.makeText(this, "Exited service", Toast.LENGTH_SHORT).show();
-        }
+        closeAllWebHeads();
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRebindReceiver);
         if (mCustomActivityHelper != null) mCustomActivityHelper.unbindCustomTabsService(this);
@@ -263,7 +292,20 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         mRemoveWebHead = null;
 
         sInstance = null;
+
+        unregisterReceiver(mStopServiceReceiver);
+
+        stopForeground(true);
+
         super.onDestroy();
+    }
+
+    private void closeAllWebHeads() {
+        if (mWebHeads != null) {
+            for (WebHead webhead : mWebHeads.values()) {
+                webhead.destroySelf(false);
+            }
+        }
     }
 
     @Override
@@ -280,7 +322,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
             // If user prefers to the close the head on opening the link, then call destroySelf()
             // which will take care of closing and detaching the web head
             if (Preferences.webHeadsCloseOnOpen(WebHeadService.this)) {
-                webHead.destroySelf();
+                webHead.destroySelf(true);
             }
 
             // Since the current url is opened, lets prepare the next set of urls
