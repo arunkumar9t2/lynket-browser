@@ -44,15 +44,11 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     private static String sLastOpenedUrl = "";
 
     private final LinkedHashMap<String, WebHead> mWebHeads = new LinkedHashMap<>();
-    private final BroadcastReceiver mStopServiceReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Timber.d("Closing from notification");
-            stopSelf();
-        }
-    };
+
     private WindowManager mWindowManager;
+
     private CustomActivityHelper mCustomActivityHelper;
+
     private final BroadcastReceiver mRebindReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -60,6 +56,17 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
             if (shouldRebind) bindToCustomTabSession();
         }
     };
+
+
+    private final BroadcastReceiver mStopServiceReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Timber.d("Closing from notification");
+            stopSelf();
+        }
+    };
+
+
     private boolean mCustomTabConnected;
 
     private RemoveWebHead mRemoveWebHead;
