@@ -662,7 +662,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             dialog.dismiss();
-                            Util.openPlayStore(getApplicationContext(), StringConstants.CHROME_PACKAGE);
+                            Util.openPlayStore(MainActivity.this, StringConstants.CHROME_PACKAGE);
                         }
                     }).show();
         }
