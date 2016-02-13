@@ -148,6 +148,8 @@ public class WebHead extends FrameLayout {
         // Don't react to any touch event when we are being destroyed
         if (isBeingDestroyed) return super.onTouchEvent(event);
 
+        if (mRemoveWebHead == null) initRemoveView();
+
         mGestDetector.onTouchEvent(event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -197,6 +199,14 @@ public class WebHead extends FrameLayout {
                 break;
         }
         return true;
+    }
+
+    private void initRemoveView() {
+        Context context = getContext();
+        if (context != null && sWindowManager != null) {
+            mRemoveWebHead = RemoveWebHead.get(context, sWindowManager);
+            Timber.d("Remove view was null, created again");
+        }
     }
 
     @Override
