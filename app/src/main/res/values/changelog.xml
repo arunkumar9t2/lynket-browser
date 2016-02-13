@@ -4,6 +4,19 @@
 <strong>You can view this again in the about screen.</strong>
 <br></br>
 <br></br>
+<strong>1.5.1</strong>
+<ul>
+    <li><b>NEW:</b> Ability to choose color of web heads.</li>
+    <li><b>NEW:</b> Ability to close all webheads from notification bar.</li>
+    <li><b>IMPROVE:</b> Webheads dragging. Webheads now snap to trash when near.</li>
+    <li><b>IMPROVE:</b> Scrolling behaviour in Chromer settings screen.</li>
+    <li><b>FIX:</b> Not able to perform search on some keyboards. Now <b>search icon</b> will be shown on your keyboard, press that to launch URL or search.</li>
+    <li><b>FIX:</b> Crash when trying to install Chrome from dialog.</li>
+    <li><b>FIX:</b> Multiple crashes related to webheads.</li>
+    <li><b>FIX:</b> Chromer settings appearing randomly when closing custom tabs.</li>
+    <li><b>FIX:</b> For 6.0+, re ask permission to draw on other apps if it was revoked with webheads turned on.</li>
+</ul>
+<br></br>
 <strong>1.5</strong>
 <ul>
     <li><b>NEW: WEBHEADS -</b> Ability to stack multiple links in floating bubbles and open them later. See the separate Intro in main screen.</li>
