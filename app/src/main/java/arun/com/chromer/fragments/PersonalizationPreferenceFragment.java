@@ -93,7 +93,7 @@ public class PersonalizationPreferenceFragment extends PreferenceFragmentCompat 
             switchPreferenceCompat.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    SwitchPreferenceCompat switc = (SwitchPreferenceCompat) preference;
+                    final SwitchPreferenceCompat switc = (SwitchPreferenceCompat) preference;
                     boolean isChecked = switc.isChecked();
                     if (isChecked) {
                         new MaterialDialog.Builder(getActivity())
@@ -110,6 +110,7 @@ public class PersonalizationPreferenceFragment extends PreferenceFragmentCompat 
                                             public boolean onSelection(MaterialDialog dialog,
                                                                        Integer[] which,
                                                                        CharSequence[] text) {
+                                                if (which.length == 0) switc.setChecked(false);
                                                 Preferences.updateAppAndWeb(getActivity()
                                                         .getApplicationContext(), which);
                                                 requestUsagePermissionIfNeeded();
