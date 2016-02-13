@@ -3,6 +3,7 @@ package arun.com.chromer.webheads;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -31,8 +32,6 @@ public class WebHead extends FrameLayout {
 
     private static int WEB_HEAD_COUNT = 0;
 
-    private static int mRemoveCircleDia = Util.dpToPx(RemoveHeadCircle.REMOVE_HEAD_DP + RemoveHeadCircle.EXTRA_DP);
-
     private final String mUrl;
 
     private final GestureDetector mGestDetector = new GestureDetector(getContext(), new GestureTapListener());
@@ -50,7 +49,7 @@ public class WebHead extends FrameLayout {
 
     private boolean mDragging;
 
-    private Spring mScaleSpring, mWallAttachSpring, mStackSpring;
+    private Spring mScaleSpring, mWallAttachSpring, mXSpring, mYSpring;
     private SpringSystem mSpringSystem;
 
     private RemoveWebHead mRemoveWebHead;
@@ -65,6 +64,10 @@ public class WebHead extends FrameLayout {
     private WebHeadInteractionListener mInteractionListener;
 
     private boolean isBeingDestroyed;
+
+    private static final double MAGNETISM_THRESHOLD = Util.dpToPx(120);
+
+    private static Point mCentreLockPoint;
 
     public WebHead(Context context, String url, WindowManager windowManager) {
         super(context);
@@ -119,11 +122,20 @@ public class WebHead extends FrameLayout {
             }
         });
 
-        mStackSpring = mSpringSystem.createSpring();
-        mStackSpring.addListener(new SimpleSpringListener() {
+        mYSpring = mSpringSystem.createSpring();
+        mYSpring.addListener(new SimpleSpringListener() {
             @Override
             public void onSpringUpdate(Spring spring) {
                 mWindowParams.y = (int) spring.getCurrentValue();
+                sWindowManager.updateViewLayout(WebHead.this, mWindowParams);
+            }
+        });
+
+        mXSpring = mSpringSystem.createSpring();
+        mXSpring.addListener(new SimpleSpringListener() {
+            @Override
+            public void onSpringUpdate(Spring spring) {
+                mWindowParams.x = (int) spring.getCurrentValue();
                 sWindowManager.updateViewLayout(WebHead.this, mWindowParams);
             }
         });
@@ -135,7 +147,6 @@ public class WebHead extends FrameLayout {
         mDispWidth = metrics.widthPixels;
         mDispHeight = metrics.heightPixels;
     }
-
 
     private void setSpawnLocation() {
         mWindowParams.gravity = Gravity.TOP | Gravity.LEFT;
@@ -235,9 +246,6 @@ public class WebHead extends FrameLayout {
 
     private void move(MotionEvent event) {
         if (initialDownX == 0) {
-            // Ugly fix where we are checking where the move action originated and then decrementing
-            // web head size from X so that web head tracks down the user fingers. This fix is needed
-            // since Gravity is set as Left. Idle fix should be keeping gravity as centre.
             mWindowParams.x = (int) (initialDownX + (event.getRawX() - posX));
         } else {
             mWindowParams.x = (int) (initialDownX + (event.getRawX() - posX)) - getWidth();
@@ -251,18 +259,22 @@ public class WebHead extends FrameLayout {
             mRemoveWebHead.grow();
             setReleaseAlpha();
             setReleaseScale();
+            mXSpring.setEndValue(getCentreLockPoint().x);
+            mYSpring.setEndValue(getCentreLockPoint().y);
         } else {
+            mXSpring.setCurrentValue(mWindowParams.x);
+            mYSpring.setCurrentValue(mWindowParams.y);
             mRemoveWebHead.shrink();
             setTouchingAlpha();
             setTouchingScale();
+            sWindowManager.updateViewLayout(this, mWindowParams);
         }
-        sWindowManager.updateViewLayout(this, mWindowParams);
     }
 
     public void moveSelfToStackDistance() {
         if (!mUserManuallyMoved) {
-            mStackSpring.setCurrentValue(mWindowParams.y);
-            mStackSpring.setEndValue(mWindowParams.y + Util.dpToPx(STACKING_GAP_DP));
+            mYSpring.setCurrentValue(mWindowParams.y);
+            mYSpring.setEndValue(mWindowParams.y + Util.dpToPx(STACKING_GAP_DP));
         }
     }
 
@@ -299,24 +311,27 @@ public class WebHead extends FrameLayout {
     }
 
     private boolean isNearRemoveCircle() {
-        int circleDia = mRemoveCircleDia;
+        Point p = mRemoveWebHead.getCenterCoordinates();
+        int rX = p.x;
+        int rY = p.y;
 
-        int rX = mRemoveWebHead.getWindowParams().x;
-        int rY = mRemoveWebHead.getWindowParams().y - circleDia;
+        int offset = getWidth() / 2;
+        int x = mWindowParams.x + offset;
+        int y = mWindowParams.y + +offset + (offset / 2);
 
-        int rXmax = rX + circleDia;
-        int rYmax = rY + circleDia;
-
-        int x = mWindowParams.x + (getWidth() / 2);
-        int y = mWindowParams.y + getWidth();
-
-        if ((x > rX && x < rXmax) && (y > rY && y < rYmax)) {
+        if (getEuclideanDistance(rX, rY, x, y) < MAGNETISM_THRESHOLD) {
             mWasRemoveLocked = true;
             return true;
         } else {
             mWasRemoveLocked = false;
             return false;
         }
+    }
+
+    private double getEuclideanDistance(int x1, int y1, int x2, int y2) {
+        double x = x1 - x2;
+        double y = y1 - y2;
+        return Math.sqrt(x * x + y * y);
     }
 
     public void destroySelf(boolean shouldReceiveCallback) {
@@ -338,9 +353,13 @@ public class WebHead extends FrameLayout {
         mScaleSpring.destroy();
         mScaleSpring = null;
 
-        mStackSpring.setAtRest();
-        mStackSpring.destroy();
-        mStackSpring = null;
+        mYSpring.setAtRest();
+        mYSpring.destroy();
+        mYSpring = null;
+
+        mXSpring.setAtRest();
+        mXSpring.destroy();
+        mXSpring = null;
 
         mRemoveWebHead.hide();
         mRemoveWebHead = null;
@@ -365,6 +384,17 @@ public class WebHead extends FrameLayout {
 
     public String getUrl() {
         return mUrl;
+    }
+
+    private Point getCentreLockPoint() {
+        if (mCentreLockPoint == null) {
+            Point removeCentre = mRemoveWebHead.getCenterCoordinates();
+            int offset = getWidth() / 2;
+            int x = removeCentre.x - offset;
+            int y = removeCentre.y - offset - (offset / 2) - (offset / 4);
+            mCentreLockPoint = new Point(x, y);
+        }
+        return mCentreLockPoint;
     }
 
     public interface WebHeadInteractionListener {

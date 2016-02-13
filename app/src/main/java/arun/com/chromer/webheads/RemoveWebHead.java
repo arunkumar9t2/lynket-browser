@@ -1,9 +1,8 @@
 package arun.com.chromer.webheads;
 
 import android.content.Context;
-import android.graphics.Paint;
 import android.graphics.PixelFormat;
-import android.support.v4.content.ContextCompat;
+import android.graphics.Point;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.WindowManager;
@@ -13,7 +12,6 @@ import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringSystem;
 
-import arun.com.chromer.R;
 import arun.com.chromer.util.Util;
 import timber.log.Timber;
 
@@ -22,7 +20,6 @@ import timber.log.Timber;
  */
 public class RemoveWebHead extends FrameLayout {
 
-
     private static WindowManager sWindowManager;
     private static RemoveWebHead ourInstance;
 
@@ -30,8 +27,6 @@ public class RemoveWebHead extends FrameLayout {
 
     private int mDispWidth;
     private int mDispHeight;
-
-    private Paint mBgPaint;
 
     private Spring mScaleSpring;
     private SpringSystem mSpringSystem;
@@ -42,9 +37,14 @@ public class RemoveWebHead extends FrameLayout {
 
     private boolean mGrew;
 
+    private Point mCentrePoint;
+
     private RemoveWebHead(Context context, WindowManager windowManager) {
         super(context);
         sWindowManager = windowManager;
+
+        mRemoveHeadCircle = new RemoveHeadCircle(context);
+        addView(mRemoveHeadCircle);
 
         mWindowParams = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -61,18 +61,9 @@ public class RemoveWebHead extends FrameLayout {
 
         mWindowParams.gravity = Gravity.LEFT | Gravity.TOP;
 
-        int offset = calculateXOffset();
+        int offset = getOffset();
         mWindowParams.x = (mDispWidth / 2) - offset;
-        mWindowParams.y = mDispHeight - Util.dpToPx(20);
-
-
-        mBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mBgPaint.setColor(ContextCompat.getColor(getContext(), R.color.md_red_700));
-        mBgPaint.setStyle(Paint.Style.FILL);
-        mBgPaint.setShadowLayer(4.0f, 1.0f, 2.0f, 0x85000000);
-
-        mRemoveHeadCircle = new RemoveHeadCircle(context);
-        addView(mRemoveHeadCircle);
+        mWindowParams.y = mDispHeight - (mDispHeight / 6) - offset;
 
         setUpSprings();
     }
@@ -98,7 +89,6 @@ public class RemoveWebHead extends FrameLayout {
         mScaleSpring.destroy();
         mScaleSpring = null;
 
-        mBgPaint = null;
         removeView(mRemoveHeadCircle);
         mRemoveHeadCircle = null;
 
@@ -112,10 +102,20 @@ public class RemoveWebHead extends FrameLayout {
         Timber.d("Remove view detached and killed");
     }
 
-    private int calculateXOffset() {
+    private int getOffset() {
         int sizePx = Util.dpToPx(RemoveHeadCircle.REMOVE_HEAD_DP + RemoveHeadCircle.EXTRA_DP);
 
         return (sizePx / 2);
+    }
+
+    public Point getCenterCoordinates() {
+        if (mCentrePoint == null) {
+            int offset = getWidth() / 2;
+            int rX = getWindowParams().x + offset;
+            int rY = getWindowParams().y + offset + (offset / 2);
+            mCentrePoint = new Point(rX, rY);
+        }
+        return mCentrePoint;
     }
 
     private void setUpSprings() {
