@@ -140,4 +140,6 @@
     <string name="webheads_intro_3">When you start dragging a web head, a trash will be shown. Drop on this trash to delete the web head.</string>
     <string name="webheads_intro_4">Chromer prioritizes the last opened link and pre-fetches it. The recommended method is to click the web heads one by one from top to bottom. Enabling close web heads on launch wil make this seamless.</string>
     <string name="web_head_permission_toast">To open links in floating bubbles, Chromer needs drawing over other apps permission, please grant to continue or disable Web Heads in Chromer settings.</string>
+    <string name="tap_close_all">Tap to close all</string>
+    <string name="web_heads_service">Web Heads Service</string>
 </resources>
