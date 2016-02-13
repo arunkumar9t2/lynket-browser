@@ -111,6 +111,8 @@ public class PersonalizationPreferenceFragment extends PreferenceFragmentCompat 
                                                                        Integer[] which,
                                                                        CharSequence[] text) {
                                                 if (which.length == 0) switc.setChecked(false);
+                                                else switc.setChecked(true);
+
                                                 Preferences.updateAppAndWeb(getActivity()
                                                         .getApplicationContext(), which);
                                                 requestUsagePermissionIfNeeded();
