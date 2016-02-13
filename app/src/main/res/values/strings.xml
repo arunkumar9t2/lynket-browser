@@ -94,7 +94,7 @@
     <string name="personalization">Personalization</string>
     <string name="default_clear_msg">is set as the default browser, please clear it by clicking clear defaults.</string>
     <string name="dynamic_toolbar_color">Dynamic toolbar color</string>
-    <string name="keep_chrome_warmedup">Keep your browser warmed up for faster launch</string>
+    <string name="keep_chrome_warmedup">Keep your browser in memory for faster launch</string>
     <string name="warmup_browser">Warm up browser</string>
     <string name="set_default_chromer">Set Default Browser</string>
     <string name="circle_to_preview_changes">Tap the circle button to preview changes</string>
