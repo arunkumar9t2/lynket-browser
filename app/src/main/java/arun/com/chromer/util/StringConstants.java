@@ -11,6 +11,9 @@ public class StringConstants {
     public static final String SEARCH_URL = "http://www.google.com/search?q=";
     public static final String CHROME_PACKAGE = "com.android.chrome";
     public static final String SHOULD_REFRESH_BINDING = "SHOULD_REFRESH_BINDING";
+    public static final String TOOLBAR_COLOR = "TOOLBAR_COLOR";
+    public static final String WEBHEAD_COLOR = "WEBHEAD_COLOR";
+    public static final String COLOR_SELECTION = "COLOR_SELECTION";
 
     private StringConstants() {
         throw new UnsupportedOperationException("Cannot instantiate");

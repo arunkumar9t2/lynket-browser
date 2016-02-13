@@ -2,17 +2,16 @@ package arun.com.chromer.webheads;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 
 import java.net.URL;
 
 import arun.com.chromer.R;
+import arun.com.chromer.util.Preferences;
 import arun.com.chromer.util.Util;
 
 /**
@@ -23,13 +22,16 @@ public class WebHeadCircle extends View {
     public static final int WEB_HEAD_SIZE_DP = 56;
     private final String mUrl;
     private final Paint mBgPaint;
+    private Paint textPaint;
 
     public WebHeadCircle(Context context, String mUrl) {
         super(context);
         this.mUrl = mUrl;
 
+        int webHeadsColor = Preferences.webHeadColor(context);
+
         mBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mBgPaint.setColor(ContextCompat.getColor(getContext(), R.color.web_head_bg));
+        mBgPaint.setColor(webHeadsColor);
         mBgPaint.setStyle(Paint.Style.FILL);
 
         float shadwR = context.getResources().getDimension(R.dimen.web_head_shadow_radius);
@@ -37,6 +39,12 @@ public class WebHeadCircle extends View {
         float shadwDy = context.getResources().getDimension(R.dimen.web_head_shadow_dy);
 
         mBgPaint.setShadowLayer(shadwR, shadwDx, shadwDy, 0x75000000);
+
+        textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        textPaint.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+        textPaint.setTextSize(Util.dpToPx(20));
+        textPaint.setColor(Util.getForegroundTextColor(webHeadsColor));
+        textPaint.setStyle(Paint.Style.FILL);
 
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);
     }
@@ -57,12 +65,6 @@ public class WebHeadCircle extends View {
     }
 
     private void drawText(Canvas canvas) {
-        Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        textPaint.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-        textPaint.setTextSize(Util.dpToPx(20));
-        textPaint.setColor(Color.BLACK);
-        textPaint.setStyle(Paint.Style.FILL);
-
         String indicator = getUrlIndicator();
         if (indicator != null) drawTextInCanvasCentre(canvas, textPaint, indicator);
     }

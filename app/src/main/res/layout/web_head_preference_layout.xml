@@ -47,6 +47,32 @@
             android:id="@+id/webhead_container"
             android:layout_width="match_parent"
             android:layout_height="256dp" />
+
+        <LinearLayout
+            android:id="@+id/color_picker_button_webheads"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/preference_padding"
+            android:paddingRight="@dimen/preference_padding">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="start|center"
+                android:text="@string/web_heads_color"
+                android:textColor="@color/material_dark_color"
+                android:textSize="16sp" />
+
+            <View
+                android:id="@+id/color_preview_webheads"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@color/primary" />
+        </LinearLayout>
     </LinearLayout>
 
 </android.support.v7.widget.CardView>

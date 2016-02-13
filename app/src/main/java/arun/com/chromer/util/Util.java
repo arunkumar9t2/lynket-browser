@@ -12,6 +12,7 @@ import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -19,6 +20,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
+import android.support.v4.graphics.ColorUtils;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Patterns;
@@ -264,4 +266,20 @@ public class Util {
         }
     }
 
+    public static int getForegroundTextColor(int backgroundColor) {
+        final int whiteColorAlpha = ColorUtils.calculateMinimumAlpha(Color.WHITE, backgroundColor, 4.5f);
+
+        if (whiteColorAlpha != -1) {
+            return ColorUtils.setAlphaComponent(Color.WHITE, whiteColorAlpha);
+        }
+
+        final int blackColorAlpha = ColorUtils.calculateMinimumAlpha(Color.BLACK, backgroundColor, 4.5f);
+
+        if (blackColorAlpha != -1) {
+            return ColorUtils.setAlphaComponent(Color.BLACK, blackColorAlpha);
+        }
+
+        return whiteColorAlpha != -1 ? ColorUtils.setAlphaComponent(Color.WHITE, whiteColorAlpha)
+                : ColorUtils.setAlphaComponent(Color.BLACK, blackColorAlpha);
+    }
 }

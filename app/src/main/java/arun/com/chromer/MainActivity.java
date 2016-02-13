@@ -75,7 +75,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private CustomActivityHelper mCustomTabActivityHelper;
 
-    private View mColorView;
+    private View mColorViewToolbar;
+    private View mColorViewWebHeads;
     private SwitchCompat mWarmUpSwitch;
     private SwitchCompat mPrefetchSwitch;
     private ImageView mSecondaryBrowserIcon;
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     private BottomSheetLayout mBottomSheet;
     private ImageView mFavShareAppIcon;
     private MaterialSearchView mMaterialSearchView;
+    private String mColorSelection;
 
     @Override
     protected void onStart() {
@@ -157,6 +159,16 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         ServicesUtil.takeCareOfServices(getApplicationContext());
 
         cleanOldDbs();
+
+        if (savedInstanceState != null) {
+            mColorSelection = savedInstanceState.getString(StringConstants.COLOR_SELECTION);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString(StringConstants.COLOR_SELECTION, mColorSelection);
+        super.onSaveInstanceState(outState);
     }
 
     private void attachFragments() {
@@ -385,23 +397,39 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     private void setupColorPicker() {
-        final int chosenColor = Preferences.toolbarColor(this);
+        final int toolbarColor = Preferences.toolbarColor(this);
         findViewById(R.id.color_picker_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ColorChooserDialog.Builder(MainActivity.this, R.string.md_choose_label)
-                        .titleSub(R.string.md_presets_label)
-                        .doneButton(R.string.md_done_label)
-                        .cancelButton(R.string.md_cancel_label)
-                        .backButton(R.string.md_back_label)
-                        .allowUserColorInputAlpha(false)
-                        .preselect(chosenColor)
-                        .dynamicButtonColor(false)
-                        .show();
+                mColorSelection = StringConstants.TOOLBAR_COLOR;
+                showColorChooser(toolbarColor);
             }
         });
-        mColorView = findViewById(R.id.color_preview);
-        mColorView.setBackgroundColor(chosenColor);
+        mColorViewToolbar = findViewById(R.id.color_preview);
+        mColorViewToolbar.setBackgroundColor(toolbarColor);
+
+        final int webHeadColor = Preferences.webHeadColor(this);
+        mColorViewWebHeads = findViewById(R.id.color_preview_webheads);
+        findViewById(R.id.color_picker_button_webheads).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mColorSelection = StringConstants.WEBHEAD_COLOR;
+                showColorChooser(webHeadColor);
+            }
+        });
+        mColorViewWebHeads.setBackgroundColor(webHeadColor);
+    }
+
+    private void showColorChooser(int chosenColor) {
+        new ColorChooserDialog.Builder(MainActivity.this, R.string.md_choose_label)
+                .titleSub(R.string.md_presets_label)
+                .doneButton(R.string.md_done_label)
+                .cancelButton(R.string.md_cancel_label)
+                .backButton(R.string.md_back_label)
+                .allowUserColorInputAlpha(false)
+                .preselect(chosenColor)
+                .dynamicButtonColor(false)
+                .show();
     }
 
     private void setupDefaultBrowser() {
@@ -413,7 +441,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             public void onClick(View v) {
                 if (defaultBrowserPackage != null) {
                     if (defaultBrowserPackage.trim().equalsIgnoreCase(getPackageName())) {
-                        Snackbar.make(mColorView, "Already set!", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(mColorViewToolbar, "Already set!", Snackbar.LENGTH_SHORT).show();
                     } else if ((defaultBrowserPackage.equalsIgnoreCase("android") || defaultBrowserPackage.startsWith("org.cyanogenmod"))
                             && Util.isPackageInstalled(getApplicationContext(), defaultBrowserPackage)) {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(GOOGLE_URL)));
@@ -645,8 +673,15 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     @Override
     public void onColorSelection(@NonNull ColorChooserDialog dialog, @ColorInt int selectedColor) {
-        mColorView.setBackgroundColor(selectedColor);
-        Preferences.toolbarColor(this, selectedColor);
+        if (mColorSelection.equalsIgnoreCase(StringConstants.TOOLBAR_COLOR)) {
+            Timber.d("Setting toolbar color");
+            mColorViewToolbar.setBackgroundColor(selectedColor);
+            Preferences.toolbarColor(this, selectedColor);
+        } else if (mColorSelection.equalsIgnoreCase(StringConstants.WEBHEAD_COLOR)) {
+            Timber.d("Setting webheads color");
+            mColorViewWebHeads.setBackgroundColor(selectedColor);
+            Preferences.webHeadColor(this, selectedColor);
+        }
     }
 
     private void checkAndEducateUser() {

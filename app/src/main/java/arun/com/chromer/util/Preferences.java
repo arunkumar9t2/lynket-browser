@@ -17,6 +17,7 @@ import arun.com.chromer.chrometabutilites.CustomTabHelper;
 public class Preferences {
     public static final String PREFERRED_PACKAGE = "preferred_package";
     public static final String TOOLBAR_COLOR = "toolbar_color";
+    public static final String WEBHEADS_COLOR = "webhead_color";
     public static final String TOOLBAR_COLOR_PREF = "toolbar_color_pref";
     public static final String ANIMATION_TYPE = "animation_preference";
     // Cganged key for 1.5 build which will force intro to show
@@ -65,6 +66,20 @@ public class Preferences {
                 .getDefaultSharedPreferences(context)
                 .edit()
                 .putInt(TOOLBAR_COLOR, selectedColor).apply();
+    }
+
+    public static int webHeadColor(Context context) {
+        return PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .getInt(WEBHEADS_COLOR,
+                        ContextCompat.getColor(context, R.color.web_head_bg));
+    }
+
+    public static void webHeadColor(Context context, int selectedColor) {
+        PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .edit()
+                .putInt(WEBHEADS_COLOR, selectedColor).apply();
     }
 
     public static boolean isAnimationEnabled(Context context) {
