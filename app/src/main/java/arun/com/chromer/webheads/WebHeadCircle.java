@@ -1,5 +1,6 @@
 package arun.com.chromer.webheads;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -17,12 +18,13 @@ import arun.com.chromer.util.Util;
 /**
  * Created by Arun on 04/02/2016.
  */
+@SuppressLint("ViewConstructor")
 public class WebHeadCircle extends View {
 
-    public static final int WEB_HEAD_SIZE_DP = 56;
+    private static final int WEB_HEAD_SIZE_DP = 56;
     private final String mUrl;
     private final Paint mBgPaint;
-    private Paint textPaint;
+    private final Paint textPaint;
 
     public WebHeadCircle(Context context, String mUrl) {
         super(context);

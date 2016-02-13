@@ -148,6 +148,7 @@ public class WebHead extends FrameLayout {
         mDispHeight = metrics.heightPixels;
     }
 
+    @SuppressLint("RtlHardcoded")
     private void setSpawnLocation() {
         mWindowParams.gravity = Gravity.TOP | Gravity.LEFT;
         mWindowParams.x = Preferences.webHeadsSpawnLocation(getContext()) == 1 ? mDispWidth : 0;

@@ -1,5 +1,6 @@
 package arun.com.chromer.webheads;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
@@ -18,6 +19,7 @@ import timber.log.Timber;
 /**
  * Created by Arun on 03/02/2016.
  */
+@SuppressLint("ViewConstructor")
 public class RemoveWebHead extends FrameLayout {
 
     private static WindowManager sWindowManager;
@@ -39,6 +41,7 @@ public class RemoveWebHead extends FrameLayout {
 
     private Point mCentrePoint;
 
+    @SuppressLint("RtlHardcoded")
     private RemoveWebHead(Context context, WindowManager windowManager) {
         super(context);
         sWindowManager = windowManager;

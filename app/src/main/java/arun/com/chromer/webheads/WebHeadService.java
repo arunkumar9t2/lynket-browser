@@ -37,7 +37,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
 
     public static final String SHOULD_REBIND = "should_rebind";
     public static final String REBIND_EVENT = "rebind_event";
-    public static final String CLOSE_SERVICE = "close_service";
+    private static final String CLOSE_SERVICE = "close_service";
 
     private static WebHeadService sInstance = null;
 
