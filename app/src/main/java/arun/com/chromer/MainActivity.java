@@ -28,9 +28,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.flipboard.bottomsheet.BottomSheetLayout;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -492,6 +494,10 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         new PrimaryDrawerItem().withName(getString(R.string.rate_play_store)).withIdentifier(3)
                                 .withIcon(GoogleMaterial.Icon.gmd_rate_review)
                                 .withSelectable(false),
+                        new PrimaryDrawerItem().withName(R.string.join_beta)
+                                .withIdentifier(9)
+                                .withIcon(CommunityMaterial.Icon.cmd_beta)
+                                .withSelectable(false),
                         new DividerDrawerItem(),
                         new SecondaryDrawerItem().withName(getString(R.string.more_custom_tbs))
                                 .withIcon(GoogleMaterial.Icon.gmd_open_in_new)
@@ -553,12 +559,41 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                                                 R.anim.slide_out_left).toBundle()
                                 );
                                 break;
+                            case 9:
+                                showJoinBetaDialog();
+                                break;
                         }
                         return false;
                     }
                 })
                 .build();
         drawer.setSelection(-1);
+    }
+
+    private void showJoinBetaDialog() {
+        new MaterialDialog.Builder(this)
+                .title(R.string.join_beta)
+                .content(R.string.join_beta_content)
+                .btnStackedGravity(GravityEnum.END)
+                .forceStacking(true)
+                .positiveText(R.string.join_google_plus)
+                .neutralText(R.string.become_a_tester)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        Intent googleIntent = new Intent(Intent.ACTION_VIEW,
+                                Uri.parse("https://plus.google.com/communities/109754631011301174504"));
+                        startActivity(googleIntent);
+                    }
+                })
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        launchCustomTab("https://play.google.com/apps/testing/arun.com.chromer");
+                    }
+                })
+                .build()
+                .show();
     }
 
     private void setupFavShareApp() {

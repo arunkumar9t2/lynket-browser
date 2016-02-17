@@ -142,4 +142,7 @@
     <string name="web_head_permission_toast">To open links in floating bubbles, Chromer needs drawing over other apps permission, please grant to continue or disable Web Heads in Chromer settings.</string>
     <string name="tap_close_all">Tap to close all</string>
     <string name="web_heads_service">Web Heads Service</string>
+    <string name="join_beta">Join Beta</string>
+    <string name="become_a_tester">Become a tester</string>
+    <string name="join_beta_content">Beta releases are experimental builds that has the latest features but has few bugs. You can contribute to the development by joining as tester and then reporting bugs you face in the Google+ Community. \n\nPlease make sure you have joined the Google+ community, and then click the become a tester button to go to Google Play testing link. \n\nNOTE: You have to join the community to become a tester.</string>
 </resources>
