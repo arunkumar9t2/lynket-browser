@@ -411,9 +411,6 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         public void onNavigationEvent(int navigationEvent, Bundle extras) {
             switch (navigationEvent) {
                 case TAB_SHOWN:
-                    // Edge cases where the remove view can be still visible after touching the webhead
-                    hideRemoveView();
-
                     // dimAllWebHeads();
 
                     break;
