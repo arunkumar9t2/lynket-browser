@@ -102,4 +102,8 @@ public class WebHeadCircle extends View {
         float y = cH / 2f + rect.height() / 2f - rect.bottom;
         canvas.drawText(text, x, y, paint);
     }
+
+    public static int getSizePx() {
+        return Util.dpToPx(WEB_HEAD_SIZE_DP);
+    }
 }
