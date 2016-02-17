@@ -38,8 +38,8 @@ public class CustomTabHelper {
     public static final String ACTION_CUSTOM_TABS_CONNECTION =
             "android.support.customtabs.action.CustomTabsService";
     private static final String STABLE_PACKAGE = "com.android.chrome";
-    private static final String BETA_PACKAGE = "com.chrome.beta";
-    private static final String DEV_PACKAGE = "com.chrome.dev";
+    public static final String BETA_PACKAGE = "com.chrome.beta";
+    public static final String DEV_PACKAGE = "com.chrome.dev";
     private static final String LOCAL_PACKAGE = "com.google.android.apps.chrome";
     private static final String TAG = CustomTabHelper.class.getSimpleName();
     private static final String EXTRA_CUSTOM_TABS_KEEP_ALIVE =

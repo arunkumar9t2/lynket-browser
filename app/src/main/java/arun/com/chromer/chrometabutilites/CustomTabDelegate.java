@@ -74,6 +74,8 @@ public class CustomTabDelegate {
 
         addShortcutToHomescreen(ctx, url, builder);
 
+        addOpenInMainBrowser(ctx, url, builder);
+
         return builder.build();
     }
 
@@ -118,7 +120,30 @@ public class CustomTabDelegate {
 
         addShortcutToHomescreen(ctx, url, builder);
 
+        addOpenInMainBrowser(ctx, url, builder);
+
         return builder.build();
+    }
+
+    private static void addOpenInMainBrowser(Context ctx, String url, CustomTabsIntent.Builder builder) {
+        if (url != null) {
+            String currentDefaultProvider = Preferences.customTabApp(ctx);
+            // TODO add normal chrome also when it implements the open in <default> behaviour
+            if (currentDefaultProvider.equalsIgnoreCase(CustomTabHelper.BETA_PACKAGE)
+                    || currentDefaultProvider.equalsIgnoreCase(CustomTabHelper.DEV_PACKAGE)) {
+                if (Util.isPackageInstalled(ctx, currentDefaultProvider)) {
+                    Intent intent = ctx.getPackageManager().getLaunchIntentForPackage(currentDefaultProvider);
+                    PendingIntent openBrowser = PendingIntent.getActivity(ctx, 0, intent,
+                            PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    String app = Util.getAppNameWithPackage(ctx, currentDefaultProvider);
+
+                    String label = String.format(ctx.getString(R.string.open_in_browser), app);
+
+                    builder.addMenuItem(label, openBrowser);
+                }
+            }
+        }
     }
 
 
