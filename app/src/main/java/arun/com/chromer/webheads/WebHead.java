@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 
 import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
+import com.facebook.rebound.SpringConfig;
 import com.facebook.rebound.SpringSystem;
 
 import arun.com.chromer.util.Preferences;
@@ -112,6 +113,7 @@ public class WebHead extends FrameLayout {
         mScaleSpring.addListener(new ScaleSpringListener());
 
         mWallAttachSpring = mSpringSystem.createSpring();
+        mWallAttachSpring.setSpringConfig(SpringConfig.fromOrigamiTensionAndFriction(40, 10));
         mWallAttachSpring.addListener(new SimpleSpringListener() {
             @Override
             public void onSpringUpdate(Spring spring) {
@@ -236,9 +238,11 @@ public class WebHead extends FrameLayout {
 
         mWallAttachSpring.setCurrentValue(x, true);
 
-        if ((x + (getWidth() / 2)) >= dispCentre) {
+        int xOffset = (getWidth() / 2);
+
+        if ((x + xOffset) >= dispCentre) {
             // move to right wall
-            mWallAttachSpring.setEndValue(mDispWidth);
+            mWallAttachSpring.setEndValue(mDispWidth - getWidth());
         } else {
             // move to left wall
             mWallAttachSpring.setEndValue(0);
@@ -246,11 +250,11 @@ public class WebHead extends FrameLayout {
     }
 
     private void move(MotionEvent event) {
-        if (initialDownX == 0) {
-            mWindowParams.x = (int) (initialDownX + (event.getRawX() - posX));
-        } else {
-            mWindowParams.x = (int) (initialDownX + (event.getRawX() - posX)) - getWidth();
-        }
+        // if (initialDownX == 0) {
+        mWindowParams.x = (int) (initialDownX + (event.getRawX() - posX));
+        // } else {
+        // mWindowParams.x = (int) (initialDownX + (event.getRawX() - posX)) - getWidth();
+        // }
         mWindowParams.y = (int) (initialDownY + (event.getRawY() - posY));
 
 
