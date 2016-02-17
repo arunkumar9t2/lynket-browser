@@ -69,13 +69,16 @@ public class RemoveWebHead extends FrameLayout {
         mWindowParams.y = mDispHeight - (mDispHeight / 6) - offset;
 
         setUpSprings();
+
+        sWindowManager.addView(this, mWindowParams);
     }
 
-    public static RemoveWebHead get(Context context, WindowManager windowManager) {
+    public static RemoveWebHead get(Context context) {
         if (ourInstance != null)
             return ourInstance;
         else {
-            Timber.d("Creating new instance");
+            Timber.d("Creating new instance of remove web head");
+            WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
             ourInstance = new RemoveWebHead(context, windowManager);
             return ourInstance;
         }
@@ -99,15 +102,16 @@ public class RemoveWebHead extends FrameLayout {
 
         mSpringSystem = null;
 
-        ourInstance = null;
-
         sWindowManager.removeView(this);
+
+        mCentrePoint = null;
+
+        ourInstance = null;
         Timber.d("Remove view detached and killed");
     }
 
     private int getOffset() {
         int sizePx = Util.dpToPx(RemoveHeadCircle.REMOVE_HEAD_DP + RemoveHeadCircle.EXTRA_DP);
-
         return (sizePx / 2);
     }
 

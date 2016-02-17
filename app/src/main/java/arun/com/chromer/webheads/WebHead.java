@@ -53,7 +53,6 @@ public class WebHead extends FrameLayout {
     private Spring mScaleSpring, mWallAttachSpring, mXSpring, mYSpring;
     private SpringSystem mSpringSystem;
 
-    private RemoveWebHead mRemoveWebHead;
     private WebHeadCircle contentView;
 
     private boolean mWasRemoveLocked;
@@ -75,7 +74,7 @@ public class WebHead extends FrameLayout {
         mUrl = url;
         sWindowManager = windowManager;
 
-        init(context, url, windowManager);
+        init(context, url);
 
         WEB_HEAD_COUNT++;
 
@@ -87,10 +86,7 @@ public class WebHead extends FrameLayout {
         return mWindowParams;
     }
 
-    private void init(Context context, String url, WindowManager windowManager) {
-        // Getting an instance of remove view
-        mRemoveWebHead = RemoveWebHead.get(context, windowManager);
-
+    private void init(Context context, String url) {
         contentView = new WebHeadCircle(context, url);
         addView(contentView);
 
@@ -160,12 +156,14 @@ public class WebHead extends FrameLayout {
         mWindowParams.y = mDispHeight / 3;
     }
 
+    private RemoveWebHead getRemoveWebHead() {
+        return RemoveWebHead.get(getContext());
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // Don't react to any touch event when we are being destroyed
         if (isBeingDestroyed) return super.onTouchEvent(event);
-
-        if (mRemoveWebHead == null) initRemoveView();
 
         mGestDetector.onTouchEvent(event);
         switch (event.getAction()) {
@@ -201,7 +199,7 @@ public class WebHead extends FrameLayout {
                 stickToWall();
 
                 // show remove view
-                mRemoveWebHead.hide();
+                getRemoveWebHead().hide();
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (Math.hypot(event.getRawX() - posX, event.getRawY() - posY) > mTouchSlop) {
@@ -210,20 +208,12 @@ public class WebHead extends FrameLayout {
 
                 if (mDragging) {
                     move(event);
-                    mRemoveWebHead.reveal();
+                    getRemoveWebHead().reveal();
                 }
             default:
                 break;
         }
         return true;
-    }
-
-    private void initRemoveView() {
-        Context context = getContext();
-        if (context != null && sWindowManager != null) {
-            mRemoveWebHead = RemoveWebHead.get(context, sWindowManager);
-            Timber.d("Remove view was null, created again");
-        }
     }
 
     @Override
@@ -264,7 +254,7 @@ public class WebHead extends FrameLayout {
         mUserManuallyMoved = true;
 
         if (isNearRemoveCircle()) {
-            mRemoveWebHead.grow();
+            getRemoveWebHead().grow();
             setReleaseAlpha();
             setReleaseScale();
             mXSpring.setEndValue(getCentreLockPoint().x);
@@ -272,7 +262,7 @@ public class WebHead extends FrameLayout {
         } else {
             mXSpring.setCurrentValue(mWindowParams.x);
             mYSpring.setCurrentValue(mWindowParams.y);
-            mRemoveWebHead.shrink();
+            getRemoveWebHead().shrink();
             setTouchingAlpha();
             setTouchingScale();
             sWindowManager.updateViewLayout(this, mWindowParams);
@@ -319,7 +309,7 @@ public class WebHead extends FrameLayout {
     }
 
     private boolean isNearRemoveCircle() {
-        Point p = mRemoveWebHead.getCenterCoordinates();
+        Point p = getRemoveWebHead().getCenterCoordinates();
         int rX = p.x;
         int rY = p.y;
 
@@ -369,8 +359,7 @@ public class WebHead extends FrameLayout {
         mXSpring.destroy();
         mXSpring = null;
 
-        mRemoveWebHead.hide();
-        mRemoveWebHead = null;
+        getRemoveWebHead().hide();
 
         mSpringSystem = null;
 
@@ -396,7 +385,7 @@ public class WebHead extends FrameLayout {
 
     private Point getCentreLockPoint() {
         if (mCentreLockPoint == null) {
-            Point removeCentre = mRemoveWebHead.getCenterCoordinates();
+            Point removeCentre = getRemoveWebHead().getCenterCoordinates();
             int offset = getWidth() / 2;
             int x = removeCentre.x - offset;
             int y = removeCentre.y - offset - (offset / 2) - (offset / 4);
@@ -426,7 +415,8 @@ public class WebHead extends FrameLayout {
         public boolean onSingleTapConfirmed(MotionEvent e) {
             if (mInteractionListener != null) mInteractionListener.onWebHeadClick(WebHead.this);
 
-            if (mRemoveWebHead != null) mRemoveWebHead.hide();
+            getRemoveWebHead().hide();
+
             return super.onSingleTapConfirmed(e);
         }
 

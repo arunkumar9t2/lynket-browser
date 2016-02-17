@@ -69,8 +69,6 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
 
     private boolean mCustomTabConnected;
 
-    private RemoveWebHead mRemoveWebHead;
-
     public WebHeadService() {
     }
 
@@ -99,8 +97,8 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
 
         mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
 
-        mRemoveWebHead = RemoveWebHead.get(this, mWindowManager);
-        mWindowManager.addView(mRemoveWebHead, mRemoveWebHead.getWindowParams());
+        // create a remove view
+        getRemoveWebHead();
 
         // bind to custom tab session
         bindToCustomTabSession();
@@ -135,6 +133,10 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
 
         // addTestWebHeads();
         return START_STICKY;
+    }
+
+    private RemoveWebHead getRemoveWebHead() {
+        return RemoveWebHead.get(this);
     }
 
     private void showNotification() {
@@ -293,16 +295,16 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         closeAllWebHeads();
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRebindReceiver);
-        if (mCustomActivityHelper != null) mCustomActivityHelper.unbindCustomTabsService(this);
 
-        RemoveWebHead.destroy();
-        mRemoveWebHead = null;
+        if (mCustomActivityHelper != null) mCustomActivityHelper.unbindCustomTabsService(this);
 
         sInstance = null;
 
         unregisterReceiver(mStopServiceReceiver);
 
         stopForeground(true);
+
+        RemoveWebHead.destroy();
 
         super.onDestroy();
     }
@@ -396,7 +398,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     }
 
     private void hideRemoveView() {
-        if (mRemoveWebHead != null) mRemoveWebHead.hide();
+        getRemoveWebHead().hide();
     }
 
 
