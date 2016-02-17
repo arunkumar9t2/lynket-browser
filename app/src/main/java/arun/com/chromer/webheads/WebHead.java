@@ -120,7 +120,10 @@ public class WebHead extends FrameLayout {
             }
         });
 
+        SpringConfig movingSpringConfig = SpringConfig.fromOrigamiTensionAndFriction(100, 7);
+
         mYSpring = mSpringSystem.createSpring();
+        mYSpring.setSpringConfig(movingSpringConfig);
         mYSpring.addListener(new SimpleSpringListener() {
             @Override
             public void onSpringUpdate(Spring spring) {
@@ -130,6 +133,7 @@ public class WebHead extends FrameLayout {
         });
 
         mXSpring = mSpringSystem.createSpring();
+        mYSpring.setSpringConfig(movingSpringConfig);
         mXSpring.addListener(new SimpleSpringListener() {
             @Override
             public void onSpringUpdate(Spring spring) {
