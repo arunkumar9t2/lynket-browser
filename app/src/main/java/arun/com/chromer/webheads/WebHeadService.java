@@ -310,8 +310,11 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     private void closeAllWebHeads() {
         if (mWebHeads != null) {
             for (WebHead webhead : mWebHeads.values()) {
-                webhead.destroySelf(false);
+                if (webhead != null) webhead.destroySelf(false);
             }
+            // Since no callback is received clear the map manually.
+            mWebHeads.clear();
+            Timber.d("Webheads: %d", mWebHeads.size());
         }
     }
 
