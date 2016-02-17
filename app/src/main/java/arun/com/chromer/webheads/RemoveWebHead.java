@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 
 import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
+import com.facebook.rebound.SpringConfig;
 import com.facebook.rebound.SpringSystem;
 
 import arun.com.chromer.util.Util;
@@ -128,6 +129,9 @@ public class RemoveWebHead extends FrameLayout {
     private void setUpSprings() {
         mSpringSystem = SpringSystem.create();
         mScaleSpring = mSpringSystem.createSpring();
+
+        SpringConfig scaleSpringConfig = SpringConfig.fromOrigamiTensionAndFriction(100, 9);
+        mScaleSpring.setSpringConfig(scaleSpringConfig);
         mScaleSpring.addListener(new SimpleSpringListener() {
             @Override
             public void onSpringUpdate(Spring spring) {
