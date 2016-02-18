@@ -41,11 +41,11 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                 launchWebHead();
             }
         } else {
-            Intent webHeadActivity = new Intent(this, CustomTabActivity.class);
-            webHeadActivity.setData(getIntent().getData());
-            webHeadActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            webHeadActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(webHeadActivity);
+            Intent customTabActivity = new Intent(this, CustomTabActivity.class);
+            customTabActivity.setData(getIntent().getData());
+            customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            customTabActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(customTabActivity);
         }
 
         finish();
