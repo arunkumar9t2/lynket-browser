@@ -221,6 +221,7 @@ public class Util {
     }
 
     public static String processSearchText(String text) {
+        if (text == null) return null;
         if (Patterns.WEB_URL.matcher(text).matches()) {
             if (!text.toLowerCase().matches("^\\w+://.*")) {
                 text = "http://" + text;

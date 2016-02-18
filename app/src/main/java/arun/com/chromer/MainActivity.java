@@ -460,7 +460,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             }
         });
 
-        if (defaultBrowserPackage.trim().equalsIgnoreCase(getPackageName())) {
+        if (defaultBrowserPackage != null && defaultBrowserPackage.trim().equalsIgnoreCase(getPackageName())) {
             mSetDefaultButton.setVisibility(View.GONE);
             ImageView defaultSuccessIcon = (ImageView) findViewById(R.id.default_icon_c);
             defaultSuccessIcon.setVisibility(View.VISIBLE);
@@ -637,8 +637,10 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     private void launchCustomTab(String url) {
-        CustomTabsIntent customTabsIntent = CustomTabDelegate.getCustomizedTabIntent(getApplicationContext(), url);
-        CustomActivityHelper.openCustomTab(this, customTabsIntent, Uri.parse(url), Util.CUSTOM_TABS_FALLBACK);
+        if (url != null) {
+            CustomTabsIntent customTabsIntent = CustomTabDelegate.getCustomizedTabIntent(getApplicationContext(), url);
+            CustomActivityHelper.openCustomTab(this, customTabsIntent, Uri.parse(url), Util.CUSTOM_TABS_FALLBACK);
+        }
     }
 
     private boolean shouldBind() {

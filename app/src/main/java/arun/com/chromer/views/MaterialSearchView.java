@@ -200,7 +200,7 @@ public class MaterialSearchView extends FrameLayout {
     }
 
     public String getText() {
-        return editText.getText().toString();
+        return editText.getText() == null ? "" : editText.getText().toString();
     }
 
     public void setVoiceIconClickListener(OnClickListener listener) {
