@@ -128,6 +128,9 @@ public class CustomTabDelegate {
     private static void addOpenInMainBrowser(Context ctx, String url, CustomTabsIntent.Builder builder) {
         if (url != null) {
             String currentDefaultProvider = Preferences.customTabApp(ctx);
+
+            if (currentDefaultProvider == null) return;
+
             // TODO add normal chrome also when it implements the open in <default> behaviour
             if (currentDefaultProvider.equalsIgnoreCase(CustomTabHelper.BETA_PACKAGE)
                     || currentDefaultProvider.equalsIgnoreCase(CustomTabHelper.DEV_PACKAGE)) {
