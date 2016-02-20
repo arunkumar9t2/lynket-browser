@@ -145,4 +145,6 @@
     <string name="join_beta">Join Beta</string>
     <string name="become_a_tester">Become a tester</string>
     <string name="join_beta_content">Beta releases are experimental builds that has the latest features but has few bugs. You can contribute to the development by joining as tester and then reporting bugs you face in the Google+ Community. \n\nPlease make sure you have joined the Google+ community, and then click the become a tester button to go to Google Play testing link. \n\nNOTE: You have to join the community to become a tester.</string>
+    <string name="no_voice_rec_apps">No compatible voice recognition apps found</string>
+    <string name="already_set">Already set!</string>
 </resources>

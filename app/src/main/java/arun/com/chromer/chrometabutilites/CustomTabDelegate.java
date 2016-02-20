@@ -171,13 +171,11 @@ public class CustomTabDelegate {
 
     private static void handleToolbarColor(Context ctx, String url, CustomTabsIntent.Builder builder) {
         if (url != null) {
-            //Toast.makeText(ctx, AppDetectService.getInstance().getLastApp(), Toast.LENGTH_SHORT).show();
             if (Preferences.isColoredToolbar(ctx)) {
                 // Get the user chosen color first
                 int chosenColor = Preferences.toolbarColor(ctx);
 
                 if (Preferences.dynamicToolbar(ctx)) {
-
                     // Attempt to get the color of the calling app then
                     if (Preferences.dynamicToolbarOnApp(ctx)) {
                         try {
@@ -334,7 +332,6 @@ public class CustomTabDelegate {
             Intent addShortcutIntent = new Intent(c, AddHomeShortcutReceiver.class);
             PendingIntent addShortcut = PendingIntent.getBroadcast(c, 0, addShortcutIntent,
                     PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
-
             builder.addMenuItem(c.getString(R.string.add_to_homescreen), addShortcut);
         }
     }

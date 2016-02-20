@@ -175,10 +175,9 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private void attachFragments() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-
         ft.replace(R.id.webhead_container, WebHeadPreferenceFragment.newInstance());
-        ft.replace(R.id.preference_container, PersonalizationPreferenceFragment.newInstance())
-                .commit();
+        ft.replace(R.id.preference_container, PersonalizationPreferenceFragment.newInstance());
+        ft.commit();
     }
 
     private void setupMaterialSearch() {
@@ -203,8 +202,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                     intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.voice_prompt));
                     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
                     startActivityForResult(intent, VOICE_REQUEST);
-
-                } else snack("No compatible voice recognition apps found");
+                } else snack(getString(R.string.no_voice_rec_apps));
 
             }
         });
@@ -443,9 +441,10 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             public void onClick(View v) {
                 if (defaultBrowserPackage != null) {
                     if (defaultBrowserPackage.trim().equalsIgnoreCase(getPackageName())) {
-                        Snackbar.make(mColorViewToolbar, "Already set!", Snackbar.LENGTH_SHORT).show();
+                        snack(getString(R.string.already_set));
                     } else if ((defaultBrowserPackage.equalsIgnoreCase("android") || defaultBrowserPackage.startsWith("org.cyanogenmod"))
                             && Util.isPackageInstalled(getApplicationContext(), defaultBrowserPackage)) {
+                        // TODO Change this detection such that "if defaultBrowserPackage is not a compatible browser" condition is used
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(GOOGLE_URL)));
                     } else {
                         Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -464,10 +463,11 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             mSetDefaultButton.setVisibility(View.GONE);
             ImageView defaultSuccessIcon = (ImageView) findViewById(R.id.default_icon_c);
             defaultSuccessIcon.setVisibility(View.VISIBLE);
-            defaultSuccessIcon.setImageDrawable(new IconicsDrawable(this)
-                    .icon(GoogleMaterial.Icon.gmd_check_circle)
-                    .color(ContextCompat.getColor(this, R.color.default_success))
-                    .sizeDp(24));
+            defaultSuccessIcon.setImageDrawable(
+                    new IconicsDrawable(this)
+                            .icon(GoogleMaterial.Icon.gmd_check_circle)
+                            .color(ContextCompat.getColor(this, R.color.default_success))
+                            .sizeDp(24));
             TextView explanation = (TextView) findViewById(R.id.default_setting_xpln);
             explanation.setText(R.string.chromer_defaulted);
             explanation.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
@@ -528,8 +528,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO,
                                         Uri.fromParts("mailto", StringConstants.MAILID, null));
                                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
-                                startActivity(Intent.createChooser(emailIntent,
-                                        getString(R.string.send_email)));
+                                startActivity(Intent.createChooser(emailIntent, getString(R.string.send_email)));
                                 break;
                             case 3:
                                 Util.openPlayStore(MainActivity.this, getPackageName());
@@ -547,12 +546,10 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                                 shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text));
                                 shareIntent.setType("text/plain");
-                                startActivity(Intent.createChooser(shareIntent,
-                                        getString(R.string.share_via)));
+                                startActivity(Intent.createChooser(shareIntent, getString(R.string.share_via)));
                                 break;
                             case 8:
-                                Intent aboutActivityIntent = new Intent(MainActivity.this,
-                                        AboutAppActivity.class);
+                                Intent aboutActivityIntent = new Intent(MainActivity.this, AboutAppActivity.class);
                                 startActivity(aboutActivityIntent,
                                         ActivityOptions.makeCustomAnimation(MainActivity.this,
                                                 R.anim.slide_in_right,
@@ -773,7 +770,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             switch (resultCode) {
                 case RESULT_OK:
                     List<String> resultList = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    if (!resultList.isEmpty()) {
+                    if (resultList != null && !resultList.isEmpty()) {
                         launchCustomTab(Util.processSearchText(resultList.get(0)));
                     }
                     break;
