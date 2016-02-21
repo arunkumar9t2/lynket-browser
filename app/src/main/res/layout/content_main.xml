@@ -39,9 +39,10 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
+                    android:layout_height="wrap_content"
                     android:background="?android:attr/selectableItemBackground"
                     android:gravity="center_vertical"
+                    android:minHeight="56dp"
                     android:orientation="horizontal"
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp">
@@ -165,7 +166,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
+                    android:layout_height="wrap_content"
                     android:background="?android:attr/selectableItemBackground"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
@@ -174,8 +175,9 @@
 
                     <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:minHeight="56dp"
                         android:orientation="vertical">
 
                         <TextView
@@ -207,7 +209,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
+                    android:layout_height="wrap_content"
                     android:background="?android:attr/selectableItemBackground"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
@@ -216,8 +218,9 @@
 
                     <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:minHeight="56dp"
                         android:orientation="vertical">
 
                         <TextView
