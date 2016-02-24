@@ -109,6 +109,9 @@ public class BlacklistManagerActivity extends AppCompatActivity implements Black
             SortedSet<App> sortedSet = new TreeSet<>();
             for (ResolveInfo resolveInfo : resolveList) {
                 String pkg = resolveInfo.activityInfo.packageName;
+
+                if (pkg.equalsIgnoreCase(getPackageName())) continue;
+
                 App app = new App();
                 app.setAppName(Util.getAppNameWithPackage(getApplicationContext(), pkg));
                 app.setPackageName(pkg);
