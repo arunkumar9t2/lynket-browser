@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import arun.com.chromer.activities.AboutAppActivity;
+import arun.com.chromer.activities.BlacklistManagerActivity;
 import arun.com.chromer.activities.DonateActivity;
 import arun.com.chromer.activities.intro.ChromerIntro;
 import arun.com.chromer.activities.intro.WebHeadsIntro;
@@ -157,6 +158,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         setUpWebHeadsIntro();
 
         checkAndEducateUser();
+
+        setupBlacklistedApp();
 
         ServicesUtil.takeCareOfServices(getApplicationContext());
 
@@ -522,7 +525,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         if (drawerItem == null)
                             return false;
-                        int i = drawerItem.getIdentifier();
+                        int i = (int) drawerItem.getIdentifier();
                         switch (i) {
                             case 2:
                                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO,
@@ -785,6 +788,20 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, WebHeadsIntro.class));
+            }
+        });
+    }
+
+    private void setupBlacklistedApp() {
+        findViewById(R.id.blacklisted_target).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent blackList = new Intent(MainActivity.this, BlacklistManagerActivity.class);
+                startActivity(blackList,
+                        ActivityOptions.makeCustomAnimation(MainActivity.this,
+                                R.anim.slide_in_right,
+                                R.anim.slide_out_left).toBundle()
+                );
             }
         });
     }

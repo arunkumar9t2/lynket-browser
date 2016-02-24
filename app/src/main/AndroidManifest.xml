@@ -123,6 +123,11 @@
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="arun.com.chromer.db" />
 
+        <activity
+            android:name=".activities.BlacklistManagerActivity"
+            android:label="@string/blacklisted_apps"
+            android:launchMode="singleInstance"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="arun.com.chromer.MainActivity">
+    android:fitsSystemWindows="true"
+    tools:context="arun.com.chromer.activities.BlacklistManagerActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -16,35 +17,18 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-        <arun.com.chromer.views.MaterialSearchView
-            android:id="@+id/material_search_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginBottom="@dimen/material_search_marginbottom"
-            android:layout_marginTop="10dp" />
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    <include layout="@layout/content_blacklist_manager" />
 
-        <include layout="@layout/content_main" />
-    </android.support.v4.widget.NestedScrollView>
-
-    <include layout="@layout/bottom_sheet_layout" />
-
-    <android.support.design.widget.FloatingActionButton
+    <!--<android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_launch_white_24dp" />
+        android:src="@drawable/ic_add_white_24dp" />-->
 
 </android.support.design.widget.CoordinatorLayout>
