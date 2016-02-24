@@ -127,6 +127,7 @@
             android:name=".activities.BlacklistManagerActivity"
             android:label="@string/blacklisted_apps"
             android:launchMode="singleInstance"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
