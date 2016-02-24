@@ -20,9 +20,9 @@ public class SecondaryBrowserReceiver extends BroadcastReceiver {
         if (url != null) {
             Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             activityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            // TODO Fix component missing cases
             activityIntent.setComponent(ComponentName.unflattenFromString(
                     Preferences.secondaryBrowserComponent(context)));
-            context.startActivity(activityIntent);
             try {
                 context.startActivity(activityIntent);
             } catch (Exception e) {
