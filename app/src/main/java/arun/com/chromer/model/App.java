@@ -88,9 +88,16 @@ public class App implements Comparable {
     private static int compareApps(App lhs, App rhs) {
         String lhsName = lhs != null ? lhs.appName : null;
         String rhsName = rhs != null ? rhs.appName : null;
+
+        boolean lhsBlacklist = lhs != null && lhs.blackListed;
+        boolean rhsBlacklist = rhs != null && rhs.blackListed;
+
+        if (lhsBlacklist ^ rhsBlacklist) return (lhsBlacklist) ? -1 : 1;
+
+        if (lhsName == null ^ rhsName == null) return lhs == null ? -1 : 1;
+
         if (lhsName == null && rhsName == null) return 0;
-        if (lhsName != null && rhsName == null) return 1;
-        if (lhsName == null && rhsName != null) return -1;
+
         return lhsName.compareToIgnoreCase(rhsName);
     }
 }
