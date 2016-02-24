@@ -1,7 +1,8 @@
 package arun.com.chromer.views.adapter;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
+import android.content.pm.ApplicationInfo;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatCheckBox;
@@ -12,9 +13,19 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.ResourceDecoder;
+import com.bumptech.glide.load.data.DataFetcher;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.Resource;
+import com.bumptech.glide.load.model.ModelLoader;
+import com.bumptech.glide.load.resource.drawable.DrawableResource;
+import com.bumptech.glide.util.Util;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
+import java.io.IOException;
 import java.util.List;
 
 import arun.com.chromer.R;
@@ -26,20 +37,20 @@ import arun.com.chromer.model.App;
 public class BlackListAppRender extends RecyclerView.Adapter<BlackListAppRender.ViewHolder> {
     private final Context mContext;
     private final List<App> apps;
-    private ItemClickListener externalListener;
-    private static Drawable placeHolder;
+    private ItemClickListener mExternalListenere;
+    private static Drawable mPlaceholder;
 
     public BlackListAppRender(Context mContext, List<App> apps) {
         this.apps = apps;
         this.mContext = mContext;
-        this.placeHolder = new IconicsDrawable(mContext)
+        mPlaceholder = new IconicsDrawable(mContext)
                 .icon(GoogleMaterial.Icon.gmd_android)
-                .color(ContextCompat.getColor(mContext, R.color.accent_icon_nofocus))
+                .color(ContextCompat.getColor(mContext, R.color.accent))
                 .sizeDp(48);
     }
 
     public void setOnItemClickListener(ItemClickListener listener) {
-        this.externalListener = listener;
+        this.mExternalListenere = listener;
     }
 
     public void add(int position, App item) {
@@ -58,14 +69,23 @@ public class BlackListAppRender extends RecyclerView.Adapter<BlackListAppRender.
         App currApp = apps.get(position);
         holder.title.setText(currApp.getAppName());
         // holder.subtitle.setText(currApp.getPackageName());
-        Drawable icon = null;
-        try {
-            icon = mContext.getPackageManager().getApplicationIcon(currApp.getPackageName());
-            holder.icon.setImageDrawable(icon);
-        } catch (PackageManager.NameNotFoundException e) {
-            holder.icon.setImageDrawable(placeHolder);
-        }
         holder.checkBox.setChecked(currApp.isBlackListed());
+
+        ApplicationInfo info;
+        try {
+            info = mContext.getPackageManager().getApplicationInfo(currApp.getPackageName(), 0);
+            Glide.with(mContext)
+                    .using(new PassThroughModelLoader<ApplicationInfo>(), ApplicationInfo.class)
+                    .from(ApplicationInfo.class)
+                    .as(Drawable.class)
+                    .placeholder(mPlaceholder)
+                    .decoder(new ApplicationIconDecoder(mContext))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .load(info)
+                    .into(holder.icon);
+        } catch (Exception e) {
+            holder.icon.setImageDrawable(mPlaceholder);
+        }
     }
 
     @Override
@@ -100,9 +120,70 @@ public class BlackListAppRender extends RecyclerView.Adapter<BlackListAppRender.
             int position = getAdapterPosition();
             App app = apps.get(position);
             app.setBlackListed(checkBox.isChecked());
-            if (externalListener != null) {
-                externalListener.onClick(position, app, checkBox.isChecked());
+            if (mExternalListenere != null) {
+                mExternalListenere.onClick(position, app, checkBox.isChecked());
             }
+        }
+    }
+
+    // see https://groups.google.com/forum/#!topic/glidelibrary/MAqPfuHpjr4
+    class PassThroughModelLoader<T> implements ModelLoader<T, T> {
+        @Override
+        public DataFetcher<T> getResourceFetcher(final T model, int width, int height) {
+            return new DataFetcher<T>() {
+                @Override
+                public T loadData(Priority priority) throws Exception {
+                    return model;
+                }
+
+                @Override
+                public void cleanup() {
+                }
+
+                @Override
+                public String getId() {
+                    return "PassThroughDataFetcherApplicationInfo";
+                }
+
+                @Override
+                public void cancel() {
+                }
+            };
+        }
+    }
+
+    // https://groups.google.com/forum/#!topic/glidelibrary/MAqPfuHpjr4
+    class ApplicationIconDecoder implements ResourceDecoder<ApplicationInfo, Drawable> {
+        private final Context context;
+        private ApplicationInfo source;
+
+        public ApplicationIconDecoder(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public Resource<Drawable> decode(ApplicationInfo source, int width, int height) throws IOException {
+            Drawable icon = context.getPackageManager().getApplicationIcon(source);
+            this.source = source;
+            return new DrawableResource<Drawable>(icon) {
+                @Override
+                public int getSize() {
+                    if (drawable instanceof BitmapDrawable) {
+                        return Util.getBitmapByteSize(((BitmapDrawable) drawable).getBitmap());
+                    } else {
+                        return 1;
+                    }
+                }
+
+                @Override
+                public void recycle() {
+                }
+            };
+        }
+
+        @Override
+        public String getId() {
+            return String.valueOf(Math.random());
         }
     }
 
