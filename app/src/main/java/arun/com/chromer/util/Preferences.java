@@ -20,9 +20,10 @@ public class Preferences {
     public static final String WEBHEADS_COLOR = "webhead_color";
     public static final String TOOLBAR_COLOR_PREF = "toolbar_color_pref";
     public static final String ANIMATION_TYPE = "animation_preference";
-    // Cganged key for 1.5 build which will force intro to show
+    // Changed key for 1.5 build which will force intro to show
     public static final String FIRST_RUN = "firstrun_1";
     public static final String WARM_UP = "warm_up_preference";
+    public static final String BLACKLIST = "blacklist_preference";
     public static final String PRE_FETCH = "pre_fetch_preference";
     public static final String WIFI_PREFETCH = "wifi_preference";
     public static final String SECONDARY_PREF = "secondary_preference";
@@ -318,5 +319,13 @@ public class Preferences {
                 .getDefaultSharedPreferences(context)
                 .edit()
                 .putBoolean(WEB_HEAD_CLOSE_ON_OPEN, preference).apply();
+    }
+
+    public static boolean blacklist(Context context) {
+        return preferences(context).getBoolean(BLACKLIST, false);
+    }
+
+    public static void blacklist(Context context, boolean preference) {
+        preferences(context).edit().putBoolean(BLACKLIST, preference).commit();
     }
 }

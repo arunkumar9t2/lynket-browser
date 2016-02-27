@@ -8,7 +8,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.CompoundButton;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -20,6 +24,8 @@ import java.util.TreeSet;
 import arun.com.chromer.R;
 import arun.com.chromer.db.BlacklistedApps;
 import arun.com.chromer.model.App;
+import arun.com.chromer.util.Preferences;
+import arun.com.chromer.util.ServicesUtil;
 import arun.com.chromer.util.Util;
 import arun.com.chromer.views.adapter.BlackListAppRender;
 import timber.log.Timber;
@@ -54,6 +60,26 @@ public class BlacklistManagerActivity extends AppCompatActivity implements Black
     @Override
     public void onClick(int position, App app, boolean checked) {
         updateBlacklists(app.getPackageName(), checked);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.blacklist_menu, menu);
+        MenuItem item = menu.findItem(R.id.blacklist_switch_item);
+        if (item != null) {
+            SwitchCompat blackListSwitch = (SwitchCompat) item.getActionView().findViewById(R.id.blacklist_switch);
+            if (blackListSwitch != null) {
+                blackListSwitch.setChecked(Preferences.blacklist(this));
+                blackListSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        Preferences.blacklist(getApplicationContext(), isChecked);
+                        ServicesUtil.takeCareOfServices(getApplicationContext());
+                    }
+                });
+            }
+        }
+        return true;
     }
 
     private void updateBlacklists(String packageName, boolean checked) {

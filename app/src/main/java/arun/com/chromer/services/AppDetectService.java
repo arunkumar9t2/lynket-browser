@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import java.util.List;
@@ -92,6 +93,7 @@ public class AppDetectService extends Service {
         return sAppDetectService;
     }
 
+    @NonNull
     public String getLastApp() {
         if (mLastDetectedApp != null) {
             return mLastDetectedApp.trim();

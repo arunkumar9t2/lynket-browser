@@ -150,4 +150,5 @@
     <string name="blacklisted_apps">Blacklisted apps</string>
     <string name="loading">Loading</string>
     <string name="please_wait">Please wait</string>
+    <string name="blacklist_message">You have blacklisted this app from launching in Chromer, please choose another browser to continue.</string>
 </resources>

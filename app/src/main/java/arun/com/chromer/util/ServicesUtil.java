@@ -19,27 +19,31 @@ public class ServicesUtil {
         throw new AssertionError("Cannot instantiate");
     }
 
-    public static void takeCareOfServices(Context ctx) {
-        if (Preferences.warmUp(ctx))
-            ctx.startService(new Intent(ctx, WarmupService.class));
+    public static void takeCareOfServices(Context context) {
+        if (Preferences.warmUp(context))
+            context.startService(new Intent(context, WarmupService.class));
         else
-            ctx.stopService(new Intent(ctx, WarmupService.class));
+            context.stopService(new Intent(context, WarmupService.class));
 
-        if (Preferences.dynamicToolbarOnApp(ctx) && Preferences.dynamicToolbar(ctx)) {
-            Intent appDetectService = new Intent(ctx, AppDetectService.class);
+        if (isAppBasedToolbarColor(context) || Preferences.blacklist(context)) {
+            Intent appDetectService = new Intent(context, AppDetectService.class);
             appDetectService.putExtra(AppDetectService.CLEAR_LAST_APP, true);
-            ctx.startService(appDetectService);
+            context.startService(appDetectService);
         } else
-            ctx.stopService(new Intent(ctx, AppDetectService.class));
+            context.stopService(new Intent(context, AppDetectService.class));
 
         try {
-            if (Preferences.preFetch(ctx))
-                ctx.startService(new Intent(ctx, ScannerService.class));
+            if (Preferences.preFetch(context))
+                context.startService(new Intent(context, ScannerService.class));
             else
-                ctx.stopService(new Intent(ctx, ScannerService.class));
+                context.stopService(new Intent(context, ScannerService.class));
         } catch (Exception e) {
             Timber.d("Ignoring startup exception of accessibility service");
         }
+    }
+
+    private static boolean isAppBasedToolbarColor(Context ctx) {
+        return Preferences.dynamicToolbarOnApp(ctx) && Preferences.dynamicToolbar(ctx);
     }
 
     public static void refreshCustomTabBindings(Context context) {
