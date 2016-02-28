@@ -5,6 +5,7 @@
     <color name="colorPrimaryDarker">#283593</color>
     <color name="colorAccent">#FF4081</color>
     <color name="material_dark_color">#212121</color>
+    <color name="android_green">#a4c639</color>
     <color name="donate_green">#4CAF50</color>
     <color name="coffee_color">#795548</color>
     <color name="lunch_color">#FF9800</color>

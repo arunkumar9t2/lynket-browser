@@ -37,7 +37,7 @@ import arun.com.chromer.model.App;
 public class BlackListAppRender extends RecyclerView.Adapter<BlackListAppRender.ViewHolder> {
     private final Context mContext;
     private final List<App> apps;
-    private ItemClickListener mExternalListenere;
+    private ItemClickListener mExternalListener;
     private static Drawable mPlaceholder;
 
     public BlackListAppRender(Context mContext, List<App> apps) {
@@ -45,12 +45,12 @@ public class BlackListAppRender extends RecyclerView.Adapter<BlackListAppRender.
         this.mContext = mContext;
         mPlaceholder = new IconicsDrawable(mContext)
                 .icon(GoogleMaterial.Icon.gmd_android)
-                .color(ContextCompat.getColor(mContext, R.color.accent))
+                .color(ContextCompat.getColor(mContext, R.color.android_green))
                 .sizeDp(48);
     }
 
     public void setOnItemClickListener(ItemClickListener listener) {
-        this.mExternalListenere = listener;
+        this.mExternalListener = listener;
     }
 
     public void add(int position, App item) {
@@ -120,8 +120,8 @@ public class BlackListAppRender extends RecyclerView.Adapter<BlackListAppRender.
             int position = getAdapterPosition();
             App app = apps.get(position);
             app.setBlackListed(checkBox.isChecked());
-            if (mExternalListenere != null) {
-                mExternalListenere.onClick(position, app, checkBox.isChecked());
+            if (mExternalListener != null) {
+                mExternalListener.onClick(position, app, checkBox.isChecked());
             }
         }
     }
@@ -155,7 +155,6 @@ public class BlackListAppRender extends RecyclerView.Adapter<BlackListAppRender.
     // https://groups.google.com/forum/#!topic/glidelibrary/MAqPfuHpjr4
     class ApplicationIconDecoder implements ResourceDecoder<ApplicationInfo, Drawable> {
         private final Context context;
-        private ApplicationInfo source;
 
         public ApplicationIconDecoder(Context context) {
             this.context = context;
@@ -164,7 +163,6 @@ public class BlackListAppRender extends RecyclerView.Adapter<BlackListAppRender.
         @Override
         public Resource<Drawable> decode(ApplicationInfo source, int width, int height) throws IOException {
             Drawable icon = context.getPackageManager().getApplicationIcon(source);
-            this.source = source;
             return new DrawableResource<Drawable>(icon) {
                 @Override
                 public int getSize() {
