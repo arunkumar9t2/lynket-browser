@@ -29,7 +29,6 @@ public class AppColorExtractorService extends IntentService {
         if (intent != null) {
             String app = intent.getStringExtra("app");
             if (app != null) {
-                // No need to extract for our app or android, exit
                 // TODO find all exclusions by testing thoroughly
                 if (app.equalsIgnoreCase(getPackageName()) | app.equalsIgnoreCase("android"))
                     return;

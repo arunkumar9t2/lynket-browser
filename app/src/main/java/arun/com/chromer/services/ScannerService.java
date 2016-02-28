@@ -60,7 +60,7 @@ public class ScannerService extends AccessibilityService implements CustomActivi
         mCustomActivityHelper = new CustomActivityHelper();
         mCustomActivityHelper.setConnectionCallback(this);
         boolean success = mCustomActivityHelper.bindCustomTabsService(this);
-        Timber.d("Was bound " + success);
+        Timber.d("Was bound %b", success);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class ScannerService extends AccessibilityService implements CustomActivi
         if (!Preferences.preFetch(this)) return false;
 
         boolean ok = mCustomActivityHelper.mayLaunchUrl(uri, null, possibleUrls);
-        Timber.d("Warmup " + ok);
+        Timber.d("Warmup %b", ok);
         return ok;
     }
 

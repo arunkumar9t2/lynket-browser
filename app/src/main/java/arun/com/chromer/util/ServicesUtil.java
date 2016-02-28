@@ -42,7 +42,7 @@ public class ServicesUtil {
         }
     }
 
-    private static boolean isAppBasedToolbarColor(Context ctx) {
+    public static boolean isAppBasedToolbarColor(Context ctx) {
         return Preferences.dynamicToolbarOnApp(ctx) && Preferences.dynamicToolbar(ctx);
     }
 

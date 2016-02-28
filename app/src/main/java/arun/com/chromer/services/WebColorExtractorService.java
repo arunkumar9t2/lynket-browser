@@ -65,7 +65,7 @@ public class WebColorExtractorService extends IntentService {
             e.printStackTrace();
         }
 
-        Timber.d("Extracted color " + color);
+        Timber.d("Extracted color %d", color);
 
         if (color != 0) {
             // successful extraction

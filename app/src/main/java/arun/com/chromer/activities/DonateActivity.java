@@ -44,26 +44,6 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
     private static boolean mLunchDone = false;
     private static boolean mPremiumDone = false;
     private IabHelper mHelper;
-    // Called when consumption is complete
-    IabHelper.OnConsumeFinishedListener mConsumeFinishedListener = new IabHelper.OnConsumeFinishedListener() {
-        public void onConsumeFinished(Purchase purchase, IabResult result) {
-            Timber.d("Consumption finished. Purchase: " + purchase + ", result: " + result);
-
-            // if we were disposed of in the meantime, quit.
-            if (mHelper == null) return;
-
-            // We know this is the "gas" sku because it's the only one we consume,
-            // so we don't check which sku was consumed. If you have more than one
-            // sku, you probably should check...
-            if (result.isSuccess()) {
-                // successfully consumed, so we apply the effects of the item in our
-                // game world's logic, which in our case means filling the gas tank a bit
-                Timber.d("Consumption successful. Provisioning.");
-            } else {
-            }
-            Timber.d("End consumption flow.");
-        }
-    };
     // Callback for when a purchase is finished
     private final IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
         public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
@@ -94,12 +74,12 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
             Timber.d("Query inventory was successful.");
 
             // Get coffee sku
-            SkuDetails coffeSku = inventory.getSkuDetails(COFEE_SKU);
+            SkuDetails coffeeSku = inventory.getSkuDetails(COFEE_SKU);
             SkuDetails lunchSku = inventory.getSkuDetails(LUNCH_SKU);
             SkuDetails premiumSku = inventory.getSkuDetails(PREMIUM_SKU);
 
             List<SkuDetails> list = new ArrayList<>();
-            list.add(coffeSku);
+            list.add(coffeeSku);
             list.add(lunchSku);
             list.add(premiumSku);
 

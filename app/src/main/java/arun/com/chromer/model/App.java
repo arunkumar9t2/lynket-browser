@@ -3,6 +3,7 @@ package arun.com.chromer.model;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 
 import java.util.Comparator;
 
@@ -73,7 +74,7 @@ public class App implements Comparable {
     }
 
     @Override
-    public int compareTo(Object another) {
+    public int compareTo(@NonNull Object another) {
         return compareApps(this, (App) another);
     }
 

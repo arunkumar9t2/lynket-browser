@@ -19,8 +19,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
-import timber.log.Timber;
-
 /**
  * A BroadcastReceiver that handles the Action Intent from the Custom Tab and fires a Share Intent.
  */
@@ -28,9 +26,7 @@ public class ShareBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Timber.d("Came to share receiver!");
         String url = intent.getDataString();
-
         if (url != null) {
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType("text/plain");

@@ -49,7 +49,6 @@ public class Util {
             new CustomActivityHelper.CustomTabsFallback() {
                 @Override
                 public void openUri(Activity activity, Uri uri) {
-
                     if (activity != null) {
                         Toast.makeText(activity,
                                 activity.getString(R.string.fallback_msg),
@@ -85,7 +84,6 @@ public class Util {
                 .matcher(string);
         while (m.find()) {
             String url = m.group();
-            // Timber.d( "URL extracted: " + url);
             if (!url.toLowerCase().matches("^\\w+://.*")) {
                 url = "http://" + url;
             }
@@ -98,10 +96,9 @@ public class Util {
     public static String getPackageVersion(Context context) {
         String versionName;
         try {
-            versionName = context.getPackageManager().getPackageInfo(
-                    context.getPackageName(),
-                    0)
-                    .versionName;
+            versionName = context
+                    .getPackageManager()
+                    .getPackageInfo(context.getPackageName(), 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
             return "";
         }

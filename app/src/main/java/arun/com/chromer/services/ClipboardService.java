@@ -21,11 +21,9 @@ public class ClipboardService extends IntentService {
 
         final String urlToCopy = intent.getDataString();
         if (urlToCopy != null) {
-            ClipboardManager clipboard = (ClipboardManager)
-                    getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData clip = ClipData.newPlainText(getPackageName(), urlToCopy);
             clipboard.setPrimaryClip(clip);
-
             showToast(getString(R.string.copied) + " " + urlToCopy);
         } else {
             showToast(getString(R.string.unxp_err));

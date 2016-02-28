@@ -45,13 +45,13 @@ public class WebHeadPreferenceFragment extends PreferenceFragmentCompat implemen
             webHeadSwitch.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    final SwitchPreferenceCompat switc = (SwitchPreferenceCompat) preference;
-                    boolean isChecked = switc.isChecked();
+                    final SwitchPreferenceCompat switchCompat = (SwitchPreferenceCompat) preference;
+                    boolean isChecked = switchCompat.isChecked();
                     if (isChecked) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             if (!Settings.canDrawOverlays(getActivity())) {
                                 // Don't check the switch until permission is granted
-                                switc.setChecked(false);
+                                switchCompat.setChecked(false);
                                 new MaterialDialog.Builder(getActivity())
                                         .title(R.string.permission_required)
                                         .content(R.string.overlay_permission_content)

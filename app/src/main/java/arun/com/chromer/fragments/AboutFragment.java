@@ -62,9 +62,9 @@ public class AboutFragment extends Fragment {
         daniel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent googleIntent = new Intent(Intent.ACTION_VIEW,
+                Intent danielProfile = new Intent(Intent.ACTION_VIEW,
                         Uri.parse("https://plus.google.com/u/0/+DanielCiao/about"));
-                getActivity().startActivity(googleIntent);
+                getActivity().startActivity(danielProfile);
             }
         });
 
@@ -72,9 +72,9 @@ public class AboutFragment extends Fragment {
         patryk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent googleIntent = new Intent(Intent.ACTION_VIEW,
+                Intent patrykProfile = new Intent(Intent.ACTION_VIEW,
                         Uri.parse("https://plus.google.com/u/0/109304801957014561872/about"));
-                getActivity().startActivity(googleIntent);
+                getActivity().startActivity(patrykProfile);
             }
         });
     }
@@ -228,9 +228,9 @@ public class AboutFragment extends Fragment {
                         ChangelogUtil.showChangelogDialog(getActivity());
                         break;
                     case 2:
-                        Intent googleIntent = new Intent(Intent.ACTION_VIEW,
+                        Intent communityIntent = new Intent(Intent.ACTION_VIEW,
                                 Uri.parse("https://plus.google.com/communities/109754631011301174504"));
-                        getActivity().startActivity(googleIntent);
+                        getActivity().startActivity(communityIntent);
                         break;
                     case 3:
                         new LicensesDialog.Builder(getActivity())
@@ -250,8 +250,8 @@ public class AboutFragment extends Fragment {
                     case 0:
                         return;
                     case 1:
-                        Intent googleIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://google.com/+arunkumar5592"));
-                        getActivity().startActivity(googleIntent);
+                        Intent myProfile = new Intent(Intent.ACTION_VIEW, Uri.parse("http://google.com/+arunkumar5592"));
+                        getActivity().startActivity(myProfile);
                         break;
                     case 2:
                         Intent twitterIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/arunkumar_9t2"));

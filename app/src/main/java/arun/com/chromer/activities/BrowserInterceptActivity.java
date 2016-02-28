@@ -37,7 +37,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                     List<BlacklistedApps> blacklisted = BlacklistedApps.find(BlacklistedApps.class, "package_name = ?", lastApp);
                     if (blacklisted.size() > 0) {
                         // The calling app was found in blacklisted table in DB, so lets show an intent
-                        // choose and kill this activity
+                        // chooser and kill this activity
                         Toast.makeText(this, getString(R.string.blacklist_message), Toast.LENGTH_LONG).show();
                         showIntentChooserAndFinish();
                         return;

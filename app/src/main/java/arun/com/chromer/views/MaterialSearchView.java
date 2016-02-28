@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,14 +23,13 @@ import com.mikepenz.iconics.IconicsDrawable;
 import arun.com.chromer.R;
 
 public class MaterialSearchView extends FrameLayout {
-    private final int normalColor = ContextCompat.getColor(getContext(), R.color.accent_icon_nofocus);
-    private final int focusedColor = ContextCompat.getColor(getContext(), R.color.accent);
-    private boolean animated = false;
-    private ImageView searchIcon;
-    private ImageView voiceIcon;
-    private TextView label;
-    private EditText editText;
-    private CardView card;
+    private final int mNormalColor = ContextCompat.getColor(getContext(), R.color.accent_icon_nofocus);
+    private final int mFocusedColor = ContextCompat.getColor(getContext(), R.color.accent);
+    private boolean mAnimated = false;
+    private ImageView mSearchIcon;
+    private ImageView mVoiceIcon;
+    private TextView mLabel;
+    private EditText mEditText;
 
     public MaterialSearchView(Context context) {
         super(context);
@@ -55,29 +53,23 @@ public class MaterialSearchView extends FrameLayout {
         a.recycle();
     }
 
-    private void toggle() {
-        if (animated) loseFocus();
-        else gainFocus();
-    }
-
     private void loseFocus() {
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(
-                getColorChangeAnimatorOnImageView(searchIcon, focusedColor, normalColor, 400),
-                getColorChangeAnimatorOnImageView(voiceIcon, focusedColor, normalColor, 400),
-                ObjectAnimator.ofFloat(label, "scaleX", 1),
-                ObjectAnimator.ofFloat(label, "scaleY", 1),
-                ObjectAnimator.ofFloat(label, "alpha", 1),
-
-                ObjectAnimator.ofFloat(editText, "alpha", 0).setDuration(300)
+                getColorChangeAnimatorOnImageView(mSearchIcon, mFocusedColor, mNormalColor, 400),
+                getColorChangeAnimatorOnImageView(mVoiceIcon, mFocusedColor, mNormalColor, 400),
+                ObjectAnimator.ofFloat(mLabel, "scaleX", 1),
+                ObjectAnimator.ofFloat(mLabel, "scaleY", 1),
+                ObjectAnimator.ofFloat(mLabel, "alpha", 1),
+                ObjectAnimator.ofFloat(mEditText, "alpha", 0).setDuration(300)
         );
 
         animatorSet.start();
-        editText.clearFocus();
+        mEditText.clearFocus();
 
         hideKeyboard();
 
-        animated = false;
+        mAnimated = false;
     }
 
     private void hideKeyboard() {
@@ -86,20 +78,18 @@ public class MaterialSearchView extends FrameLayout {
     }
 
     private void gainFocus() {
-
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(
-                getColorChangeAnimatorOnImageView(searchIcon, normalColor, focusedColor, 300),
-                getColorChangeAnimatorOnImageView(voiceIcon, normalColor, focusedColor, 300),
-                ObjectAnimator.ofFloat(label, "scaleX", 0.6f),
-                ObjectAnimator.ofFloat(label, "scaleY", 0.6f),
-                ObjectAnimator.ofFloat(label, "alpha", 0.5f),
-
-                ObjectAnimator.ofFloat(editText, "alpha", 1).setDuration(300)
+                getColorChangeAnimatorOnImageView(mSearchIcon, mNormalColor, mFocusedColor, 300),
+                getColorChangeAnimatorOnImageView(mVoiceIcon, mNormalColor, mFocusedColor, 300),
+                ObjectAnimator.ofFloat(mLabel, "scaleX", 0.6f),
+                ObjectAnimator.ofFloat(mLabel, "scaleY", 0.6f),
+                ObjectAnimator.ofFloat(mLabel, "alpha", 0.5f),
+                ObjectAnimator.ofFloat(mEditText, "alpha", 1).setDuration(300)
         );
         animatorSet.start();
 
-        animated = true;
+        mAnimated = true;
     }
 
     @Override
@@ -109,14 +99,14 @@ public class MaterialSearchView extends FrameLayout {
         // Inflate and add the xml layout we designed
         addView(LayoutInflater.from(getContext()).inflate(R.layout.material_search_view, this, false));
 
-        editText = (EditText) findViewById(R.id.msv_edittext);
-        editText.setOnClickListener(new OnClickListener() {
+        mEditText = (EditText) findViewById(R.id.msv_edittext);
+        mEditText.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 performClick();
             }
         });
-        editText.setOnFocusChangeListener(new OnFocusChangeListener() {
+        mEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) gainFocus();
@@ -124,31 +114,28 @@ public class MaterialSearchView extends FrameLayout {
             }
         });
 
-        searchIcon = (ImageView) findViewById(R.id.msv_left_icon);
-        searchIcon.setImageDrawable(new IconicsDrawable(getContext())
+        mSearchIcon = (ImageView) findViewById(R.id.msv_left_icon);
+        mSearchIcon.setImageDrawable(new IconicsDrawable(getContext())
                 .icon(GoogleMaterial.Icon.gmd_search)
-                .color(normalColor)
+                .color(mNormalColor)
                 .sizeDp(24));
 
-        voiceIcon = (ImageView) findViewById(R.id.msv_right_icon);
-        voiceIcon.setImageDrawable(new IconicsDrawable(getContext())
+        mVoiceIcon = (ImageView) findViewById(R.id.msv_right_icon);
+        mVoiceIcon.setImageDrawable(new IconicsDrawable(getContext())
                 .icon(GoogleMaterial.Icon.gmd_keyboard_voice)
-                .color(normalColor)
+                .color(mNormalColor)
                 .sizeDp(24));
 
-        label = (TextView) findViewById(R.id.msv_label);
-        label.setPivotX(0);
-        label.setPivotY(0);
-
-        card = (CardView) findViewById(R.id.msv_card);
+        mLabel = (TextView) findViewById(R.id.msv_label);
+        mLabel.setPivotX(0);
+        mLabel.setPivotY(0);
 
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!animated) gainFocus();
+                if (!mAnimated) gainFocus();
             }
         });
-
     }
 
     private Animator getColorChangeAnimatorOnImageView(final ImageView viewToAnimate, int fromColor, int toColor, int duration) {
@@ -176,12 +163,6 @@ public class MaterialSearchView extends FrameLayout {
         return anim;
     }
 
-
-    private int adjustAlpha(int color, float factor) {
-        return Color.argb(Math.round(Color.alpha(color) * factor),
-                Color.red(color), Color.green(color), Color.blue(color));
-    }
-
     @Override
     public void clearFocus() {
         loseFocus();
@@ -192,18 +173,18 @@ public class MaterialSearchView extends FrameLayout {
 
     @Override
     public boolean hasFocus() {
-        return animated && super.hasFocus();
+        return mAnimated && super.hasFocus();
     }
 
     public void setOnKeyListener(TextView.OnEditorActionListener listener) {
-        editText.setOnEditorActionListener(listener);
+        mEditText.setOnEditorActionListener(listener);
     }
 
     public String getText() {
-        return editText.getText() == null ? "" : editText.getText().toString();
+        return mEditText.getText() == null ? "" : mEditText.getText().toString();
     }
 
     public void setVoiceIconClickListener(OnClickListener listener) {
-        voiceIcon.setOnClickListener(listener);
+        mVoiceIcon.setOnClickListener(listener);
     }
 }

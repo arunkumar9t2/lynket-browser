@@ -27,11 +27,11 @@ public class ShareInterceptActivity extends AppCompatActivity {
             if (intent.getAction().equalsIgnoreCase(Intent.ACTION_SEND)) {
                 @SuppressWarnings("ConstantConditions") String text = intent.hasExtra(Intent.EXTRA_TEXT) ?
                         intent.getExtras().getCharSequence(Intent.EXTRA_TEXT).toString() : null;
-                Timber.d("Intent. Text: " + text);
+                Timber.d("Intent. Text: %s", text);
                 findAndOpenLink(text);
             } else if (intent.getAction().equalsIgnoreCase(Intent.ACTION_PROCESS_TEXT)) {
                 final String text = intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT);
-                Timber.d("Process Text Intent. Text: " + text);
+                Timber.d("Process Text Intent. Text: %s", text);
                 findAndOpenLink(text);
             }
         }
@@ -55,7 +55,7 @@ public class ShareInterceptActivity extends AppCompatActivity {
         if (url == null) {
             invalidLink();
         }
-        Timber.d("Opening " + url);
+        Timber.d("Opening %s", url);
         Intent tabActivity = new Intent(this, BrowserInterceptActivity.class);
         tabActivity.setData(Uri.parse(url));
 

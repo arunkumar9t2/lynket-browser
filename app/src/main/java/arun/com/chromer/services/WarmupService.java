@@ -44,7 +44,7 @@ public class WarmupService extends Service implements CustomActivityHelper.Conne
         mCustomActivityHelper = new CustomActivityHelper();
         mCustomActivityHelper.setConnectionCallback(this);
         boolean success = mCustomActivityHelper.bindCustomTabsService(this);
-        Timber.d("Was binded " + success);
+        Timber.d("Was binded %b", success);
         mWarmupService = this;
         return START_STICKY;
     }
@@ -80,7 +80,7 @@ public class WarmupService extends Service implements CustomActivityHelper.Conne
 
     public boolean mayLaunchUrl(Uri uri, List<Bundle> possibleUrls) {
         boolean ok = mCustomActivityHelper.mayLaunchUrl(uri, null, possibleUrls);
-        Timber.d("Warmup " + ok);
+        Timber.d("Warmup %b", ok);
         return ok;
     }
 

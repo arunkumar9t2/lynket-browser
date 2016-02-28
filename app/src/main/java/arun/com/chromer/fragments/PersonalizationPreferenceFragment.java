@@ -18,9 +18,11 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import arun.com.chromer.R;
 import arun.com.chromer.services.AppDetectService;
 import arun.com.chromer.util.Preferences;
+import arun.com.chromer.util.ServicesUtil;
 import arun.com.chromer.util.Util;
 
-public class PersonalizationPreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class PersonalizationPreferenceFragment extends PreferenceFragmentCompat
+        implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public PersonalizationPreferenceFragment() {
         // Required empty public constructor
@@ -93,8 +95,8 @@ public class PersonalizationPreferenceFragment extends PreferenceFragmentCompat 
             switchPreferenceCompat.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    final SwitchPreferenceCompat switc = (SwitchPreferenceCompat) preference;
-                    boolean isChecked = switc.isChecked();
+                    final SwitchPreferenceCompat switchCompat = (SwitchPreferenceCompat) preference;
+                    boolean isChecked = switchCompat.isChecked();
                     if (isChecked) {
                         new MaterialDialog.Builder(getActivity())
                                 .title(R.string.dynamic_toolbar_color)
@@ -110,13 +112,14 @@ public class PersonalizationPreferenceFragment extends PreferenceFragmentCompat 
                                             public boolean onSelection(MaterialDialog dialog,
                                                                        Integer[] which,
                                                                        CharSequence[] text) {
-                                                if (which.length == 0) switc.setChecked(false);
-                                                else switc.setChecked(true);
+                                                if (which.length == 0)
+                                                    switchCompat.setChecked(false);
+                                                else switchCompat.setChecked(true);
 
                                                 Preferences.updateAppAndWeb(getActivity()
                                                         .getApplicationContext(), which);
                                                 requestUsagePermissionIfNeeded();
-                                                startStopAppDetectionSrvc();
+                                                handleAppDetectionService();
                                                 updateDynamicSummary();
                                                 return true;
                                             }
@@ -124,7 +127,7 @@ public class PersonalizationPreferenceFragment extends PreferenceFragmentCompat 
                                 .show();
                         requestUsagePermissionIfNeeded();
                     }
-                    startStopAppDetectionSrvc();
+                    handleAppDetectionService();
                     updateDynamicSummary();
                     return false;
                 }
@@ -144,6 +147,7 @@ public class PersonalizationPreferenceFragment extends PreferenceFragmentCompat 
                         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            // TODO Some devices don't have this activity. Should // FIXME: 28/02/2016
                             getActivity().startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
                         }
                     }).show();
@@ -151,9 +155,8 @@ public class PersonalizationPreferenceFragment extends PreferenceFragmentCompat 
 
     }
 
-    private void startStopAppDetectionSrvc() {
-        if (Preferences.dynamicToolbarOnApp(getActivity().getApplicationContext())
-                && Preferences.dynamicToolbar(getActivity().getApplicationContext()))
+    private void handleAppDetectionService() {
+        if (ServicesUtil.isAppBasedToolbarColor(getActivity()) || Preferences.blacklist(getActivity()))
             getActivity().startService(new Intent(getActivity().getApplicationContext(),
                     AppDetectService.class));
         else

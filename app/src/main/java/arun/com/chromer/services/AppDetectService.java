@@ -29,7 +29,7 @@ public class AppDetectService extends Service {
 
     private static AppDetectService sAppDetectService = null;
 
-    private static BroadcastReceiver mScreenReceiver;
+    private static BroadcastReceiver mScreenStateReceiver;
 
     private static String mLastDetectedApp = "";
 
@@ -47,10 +47,10 @@ public class AppDetectService extends Service {
                     String packageName = "";
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { // Lollipop above
-                        long t = System.currentTimeMillis();
+                        long time = System.currentTimeMillis();
 
                         UsageStatsManager usageMan = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
-                        List<UsageStats> stats = usageMan.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, t - 1000 * 1000, t);
+                        List<UsageStats> stats = usageMan.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 1000 * 1000, time);
 
                         if (stats == null) continue;
 
@@ -62,7 +62,9 @@ public class AppDetectService extends Service {
 
                         if (sortedMap.size() == 0) continue;
 
-                        packageName = sortedMap.get(sortedMap.lastKey()).getPackageName();
+                        final UsageStats usageStats = sortedMap.get(sortedMap.lastKey());
+
+                        if (usageStats != null) packageName = usageStats.getPackageName();
                     } else {
                         ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
                         ActivityManager.RunningTaskInfo runningTaskInfo = am.getRunningTasks(1).get(0);
@@ -73,7 +75,7 @@ public class AppDetectService extends Service {
 
                     if (!mLastDetectedApp.equalsIgnoreCase(packageName) && !isBlacklistedPackage(packageName)) {
                         mLastDetectedApp = packageName;
-                        Timber.d("Current app " + packageName);
+                        Timber.d("Current app %s", packageName);
                     }
 
                     // Sleep and continue again.
@@ -133,7 +135,7 @@ public class AppDetectService extends Service {
         mShouldStopPolling = true;
 
         Timber.d("Destroying");
-        unregisterReceiver(mScreenReceiver);
+        unregisterReceiver(mScreenStateReceiver);
         sAppDetectService = null;
         super.onDestroy();
     }
@@ -146,21 +148,20 @@ public class AppDetectService extends Service {
     }
 
     private void registerScreenReceiver() {
-        // We should prevent the same receiver from registering again, to do thi we will attempt to
+        // We should prevent the same receiver from registering again, to do this we will attempt to
         // register a existing instance of Screen receiver and check if IllegalArgumentException
         // is thrown.
-        if (mScreenReceiver != null) {
+        if (mScreenStateReceiver != null) {
             try {
-                unregisterReceiver(mScreenReceiver);
+                unregisterReceiver(mScreenStateReceiver);
             } catch (Exception ignored) {
-                Timber.d("Un registering receiver exception message: %s", ignored.getMessage());
             }
         }
 
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
-        mScreenReceiver = new ScreenReceiver();
-        registerReceiver(mScreenReceiver, filter);
+        mScreenStateReceiver = new ScreenStateReceiver();
+        registerReceiver(mScreenStateReceiver, filter);
     }
 
     void toast(String toast) {
@@ -180,21 +181,20 @@ public class AppDetectService extends Service {
 
         // There can also be cases where there is no default provider set, so lets ignore all possible
         // custom tab providers to be sure. This is safe since browsers don't call our app anyways.
+
         // Commenting, research needed
         // if (mCustomTabPackages.contains(packageName)) return true;
 
         return false;
     }
 
-    public class ScreenReceiver extends BroadcastReceiver {
+    public class ScreenStateReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
-                // Timber.d("Screen off");
                 mShouldStopPolling = true;
             } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
-                // Timber.d("Screen on");
                 mShouldStopPolling = false;
                 startDetection();
             }

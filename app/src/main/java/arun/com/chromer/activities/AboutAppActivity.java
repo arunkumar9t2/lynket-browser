@@ -24,11 +24,12 @@ public class AboutAppActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getString(R.string.about));
 
         // Replace the fragment
-        getSupportFragmentManager().beginTransaction()
+        getSupportFragmentManager()
+                .beginTransaction()
                 .replace(R.id.about_fragment, AboutFragment.newInstance())
                 .commit();
 
-        // Color status bar for lollipop
+        // Color status bar for lollipop above
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.primary_dark));
         }

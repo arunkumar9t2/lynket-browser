@@ -22,8 +22,8 @@ public class AddHomeShortcutReceiver extends BroadcastReceiver {
         if (intent != null) {
             final String urlToAdd = intent.getDataString();
             if (urlToAdd != null) {
-
                 Timber.d("Attempting to add for %s", urlToAdd);
+
                 Intent openTabIntent = new Intent(context, BrowserInterceptActivity.class);
                 openTabIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 openTabIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -31,18 +31,17 @@ public class AddHomeShortcutReceiver extends BroadcastReceiver {
 
                 String shortcutName = Uri.parse(urlToAdd).getHost() == null
                         ? urlToAdd : Uri.parse(urlToAdd).getHost();
+
                 Intent addIntent = new Intent();
                 addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, openTabIntent);
                 addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, shortcutName);
                 addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
-                        Intent.ShortcutIconResource.fromContext(context,
-                                R.mipmap.ic_launcher));
+                        Intent.ShortcutIconResource.fromContext(context, R.mipmap.ic_launcher));
                 addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+
                 context.sendBroadcast(addIntent);
 
-                Toast.makeText(
-                        context,
-                        context.getString(R.string.added) + " " + shortcutName,
+                Toast.makeText(context, context.getString(R.string.added) + " " + shortcutName,
                         LENGTH_SHORT).show();
             }
         }
