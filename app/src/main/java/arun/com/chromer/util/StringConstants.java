@@ -14,6 +14,7 @@ public class StringConstants {
     public static final String TOOLBAR_COLOR = "TOOLBAR_COLOR";
     public static final String WEBHEAD_COLOR = "WEBHEAD_COLOR";
     public static final String COLOR_SELECTION = "COLOR_SELECTION";
+    public static final String FROM_WEBHEAD = "FROM_WEBHEAD";
 
     private StringConstants() {
         throw new UnsupportedOperationException("Cannot instantiate");

@@ -638,7 +638,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private void launchCustomTab(String url) {
         if (url != null) {
-            CustomTabsIntent customTabsIntent = CustomTabDelegate.getCustomizedTabIntent(getApplicationContext(), url);
+            CustomTabsIntent customTabsIntent = CustomTabDelegate.getCustomizedTabIntent(getApplicationContext(), url, false);
             CustomActivityHelper.openCustomTab(this, customTabsIntent, Uri.parse(url), Util.CUSTOM_TABS_FALLBACK);
         }
     }

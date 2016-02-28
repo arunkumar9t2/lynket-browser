@@ -9,6 +9,7 @@ import android.widget.Toast;
 import arun.com.chromer.R;
 import arun.com.chromer.chrometabutilites.CustomActivityHelper;
 import arun.com.chromer.chrometabutilites.CustomTabDelegate;
+import arun.com.chromer.util.StringConstants;
 import arun.com.chromer.util.Util;
 
 public class CustomTabActivity extends AppCompatActivity {
@@ -24,14 +25,11 @@ public class CustomTabActivity extends AppCompatActivity {
         }
 
         final String url = getIntent().getData().toString();
-        CustomTabsIntent mCustomTabsIntent = CustomTabDelegate.getWebHeadIntent(
-                getApplicationContext(),
-                url);
+        final boolean isWebhead = getIntent().getBooleanExtra(StringConstants.FROM_WEBHEAD, false);
+        CustomTabsIntent tabIntent = CustomTabDelegate.getCustomizedTabIntent(getApplicationContext(), url, isWebhead);
 
-        CustomActivityHelper.openCustomTab(this,
-                mCustomTabsIntent,
-                Uri.parse(getIntent().getData().toString()),
-                Util.CUSTOM_TABS_FALLBACK);
+        CustomActivityHelper.openCustomTab(this, tabIntent,
+                Uri.parse(getIntent().getData().toString()), Util.CUSTOM_TABS_FALLBACK);
 
         finish();
     }

@@ -33,11 +33,11 @@ import timber.log.Timber;
  * Created by Arun on 06/01/2016.
  */
 public class CustomTabDelegate {
-    public static CustomTabsIntent getCustomizedTabIntent(Context ctx, String url) {
+    public static CustomTabsIntent getCustomizedTabIntent(Context ctx, String url, boolean isWebhead) {
 
         CustomTabsIntent.Builder builder;
 
-        CustomTabsSession session = getAvailableSessions(ctx);
+        CustomTabsSession session = getAvailableSessions(ctx, isWebhead);
 
         if (session != null) {
             builder = new CustomTabsIntent.Builder(session);
@@ -70,53 +70,7 @@ public class CustomTabDelegate {
                 break;
         }
 
-        addCopyItem(ctx, url, builder);
-
-        addShortcutToHomescreen(ctx, url, builder);
-
-        addOpenInMainBrowser(ctx, url, builder);
-
-        return builder.build();
-    }
-
-
-    public static CustomTabsIntent getWebHeadIntent(Context ctx, String url) {
-
-        CustomTabsIntent.Builder builder;
-
-        if (WebHeadService.getInstance() != null && WebHeadService.getInstance().getTabSession() != null) {
-            CustomTabsSession session = WebHeadService.getInstance().getTabSession();
-            builder = new CustomTabsIntent.Builder(session);
-        } else
-            builder = new CustomTabsIntent.Builder();
-
-        builder.setShowTitle(true);
-
-        builder.enableUrlBarHiding();
-
-        handleAnimations(ctx, builder);
-
-        handleToolbarColor(ctx, url, builder);
-
-        addShareIntent(ctx, url, builder);
-
-        switch (Preferences.preferredAction(ctx)) {
-            // TODO handle cases of uninstalling packages
-            case 1:
-                addActionButtonSecondary(ctx, url, builder);
-                addMenuFavShareApp(ctx, url, builder);
-                break;
-            case 2:
-                addMenuSecondaryBrowser(ctx, url, builder);
-                addActionBtnFavShareApp(ctx, url, builder);
-                break;
-            default:
-                addActionButtonSecondary(ctx, url, builder);
-                addMenuFavShareApp(ctx, url, builder);
-                break;
-        }
-
-        addCopyItem(ctx, url, builder);
+        addCopyLink(ctx, url, builder);
 
         addShortcutToHomescreen(ctx, url, builder);
 
@@ -148,7 +102,6 @@ public class CustomTabDelegate {
             }
         }
     }
-
 
     private static void handleAnimations(Context ctx, CustomTabsIntent.Builder builder) {
         if (Preferences.isAnimationEnabled(ctx)) {
@@ -312,15 +265,20 @@ public class CustomTabDelegate {
         }
     }
 
-    private static CustomTabsSession getAvailableSessions(Context ctx) {
+    private static CustomTabsSession getAvailableSessions(Context ctx, boolean isWebhead) {
+        if (isWebhead && WebHeadService.getInstance() != null) {
+            Timber.d("Using webhead session");
+            return WebHeadService.getInstance().getTabSession();
+        }
+
         ScannerService sService = ScannerService.getInstance();
         if (sService != null && Preferences.preFetch(ctx)) {
-            Timber.d("Using scanner service");
+            Timber.d("Using scanner session");
             return sService.getTabSession();
         }
         WarmupService service = WarmupService.getInstance();
         if (service != null) {
-            Timber.d("Using warmup service");
+            Timber.d("Using warmup session");
             return service.getTabSession();
         }
         Timber.d("No existing sessions present");
@@ -336,7 +294,7 @@ public class CustomTabDelegate {
         }
     }
 
-    private static void addCopyItem(Context c, String url, CustomTabsIntent.Builder builder) {
+    private static void addCopyLink(Context c, String url, CustomTabsIntent.Builder builder) {
         if (url != null) {
             Intent clipboardIntent = new Intent(c, ClipboardService.class);
             PendingIntent serviceIntent = PendingIntent.getService(c, 0, clipboardIntent,
