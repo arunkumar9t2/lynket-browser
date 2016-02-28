@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+import arun.com.chromer.R;
 import arun.com.chromer.util.Preferences;
 
 public class FavShareBroadcastReceiver extends BroadcastReceiver {
@@ -41,17 +42,17 @@ public class FavShareBroadcastReceiver extends BroadcastReceiver {
                 defaultShare(context, url);
             }
         } else {
-            Toast.makeText(context, "Try again!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getString(R.string.unsupported_link), Toast.LENGTH_SHORT).show();
         }
     }
 
     private void defaultShare(Context context, String url) {
-        Toast.makeText(context, "Couldn't share, defaulting to normal share", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, context.getString(R.string.share_failed_msg), Toast.LENGTH_SHORT).show();
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
         shareIntent.putExtra(Intent.EXTRA_TEXT, url);
 
-        Intent chooserIntent = Intent.createChooser(shareIntent, "Share url..");
+        Intent chooserIntent = Intent.createChooser(shareIntent, context.getString(R.string.share_via));
         chooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         context.startActivity(chooserIntent);
