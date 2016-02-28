@@ -43,18 +43,17 @@ public class CustomActivityHelper implements ServiceConnectionCallback {
         // The package name to use
         String packageName;
 
-        // first check user preferred custom provider is there
-        String userPrefProvider = Preferences.customTabApp(activity);
-        if (userPrefProvider != null && Util.isPackageInstalled(activity, userPrefProvider)) {
-            Timber.d("Valid user preferred custom tab provider present");
-            packageName = userPrefProvider;
+        // first check user preferred custom provider is valid
+        String defaultCustomTabProvider = Preferences.customTabApp(activity);
+        if (isUserChosenAppValidProvider(activity, defaultCustomTabProvider)) {
+            packageName = defaultCustomTabProvider;
         } else {
             // getting all the packages here
             Timber.d("Valid user choice not present, defaulting to conventional method");
             packageName = CustomTabHelper.getPackageNameToUse(activity);
         }
         //If we cant find a package name, it means there's no browser that supports
-        //Chrome Custom Tabs installed. So, we fallback to the webview
+        //Chrome Custom Tabs installed.
         if (packageName == null) {
             Timber.d("Called fallback since no package found!");
             callFallback(activity, uri, fallback);
@@ -62,12 +61,17 @@ public class CustomActivityHelper implements ServiceConnectionCallback {
             customTabsIntent.intent.setPackage(packageName);
             try {
                 customTabsIntent.launchUrl(activity, uri);
-                Timber.d("Launched url: " + uri.toString());
+                Timber.d("Launched url: %s", uri.toString());
             } catch (Exception e) {
                 callFallback(activity, uri, fallback);
-                Timber.d("Called fallback even though package was found, weird Exception :" + e.toString());
+                Timber.d("Called fallback even though package was found, weird Exception : %s", e.toString());
             }
         }
+    }
+
+    private static boolean isUserChosenAppValidProvider(Activity activity, String userPrefProvider) {
+        return userPrefProvider != null && Util.isPackageInstalled(activity, userPrefProvider)
+                && CustomTabHelper.isPackageSupportCustomTabs(activity, userPrefProvider);
     }
 
     private static void callFallback(Activity activity, Uri uri, CustomTabsFallback fallback) {
@@ -77,12 +81,11 @@ public class CustomActivityHelper implements ServiceConnectionCallback {
     }
 
     /**
-     * Unbinds the Activity from the Custom Tabs Service.
+     * Unbinds the component from the Custom Tabs Service.
      *
-     * @param context the activity that is connected to the service.
+     * @param context the component that is connected to the service.
      */
     public void unbindCustomTabsService(Context context) {
-        Timber.d("Attempting to unbind service!");
         if (mConnection == null) return;
         context.unbindService(mConnection);
         mClient = null;
@@ -125,9 +128,9 @@ public class CustomActivityHelper implements ServiceConnectionCallback {
     }
 
     /**
-     * Binds the Activity to the Custom Tabs Service.
+     * Binds the component to the Custom Tabs Service.
      *
-     * @param context the activity to be bound to the service.
+     * @param context the component to be bound to the service.
      */
     public boolean bindCustomTabsService(Context context) {
         if (mClient != null) return false;
@@ -138,7 +141,7 @@ public class CustomActivityHelper implements ServiceConnectionCallback {
         mConnection = new ServiceConnection(this);
         boolean ok = CustomTabsClient.bindCustomTabsService(context, packageName, mConnection);
         if (ok) {
-            Timber.d("Bound successfully with " + packageName);
+            Timber.d("Bound successfully with %s", packageName);
         } else
             Timber.d("Did not bind, something wrong");
         return ok;
@@ -154,9 +157,9 @@ public class CustomActivityHelper implements ServiceConnectionCallback {
 
         boolean ok = session.mayLaunchUrl(uri, extras, otherLikelyBundles);
         if (ok) {
-            Timber.d("Successfully warmed up with may launch URL:" + uri.toString());
+            Timber.d("Successfully warmed up with may launch URL: %s", uri.toString());
         } else {
-            Timber.d("May launch url was a failure for " + uri.toString());
+            Timber.d("May launch url was a failure for %s", uri.toString());
         }
         return ok;
     }
@@ -170,10 +173,10 @@ public class CustomActivityHelper implements ServiceConnectionCallback {
 
 
     public boolean requestWarmUp() {
-        boolean x;
+        boolean ok;
         if (mClient != null) {
-            x = mClient.warmup(0L);
-            Timber.d("Warmup status " + x);
+            ok = mClient.warmup(0L);
+            Timber.d("Warmup status %s", ok);
         }
         return false;
     }
@@ -216,7 +219,6 @@ public class CustomActivityHelper implements ServiceConnectionCallback {
     public static class NavigationCallback extends CustomTabsCallback {
         @Override
         public void onNavigationEvent(int navigationEvent, Bundle extras) {
-            // Log.w(TAG, "onNavigationEvent: Code = " + navigationEvent);
         }
     }
 }
