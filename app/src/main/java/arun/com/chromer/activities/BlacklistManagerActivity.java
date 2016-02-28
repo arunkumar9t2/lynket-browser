@@ -155,5 +155,24 @@ public class BlacklistManagerActivity extends AppCompatActivity implements Black
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            // For finishing activity on clicking up caret
+            finishWithTransition();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
+    @Override
+    public void onBackPressed() {
+        finishWithTransition();
+        super.onBackPressed();
+    }
+
+    private void finishWithTransition() {
+        finish();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
 }
