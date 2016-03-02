@@ -44,16 +44,17 @@
                 android:inputType="textUri"
                 android:singleLine="true"
                 android:textColor="@color/material_dark_color"
-                android:textSize="16sp" />
+                android:textSize="15sp" />
 
             <ImageView
                 android:id="@+id/msv_right_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:foreground="?android:attr/selectableItemBackground"
+                android:scaleType="center"
                 tools:ignore="ContentDescription" />
         </LinearLayout>
 

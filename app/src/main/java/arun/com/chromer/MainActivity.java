@@ -196,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 return false;
             }
         });
-        mMaterialSearchView.setVoiceIconClickListener(new View.OnClickListener() {
+        mMaterialSearchView.setVoiceIconClickListener(new MaterialSearchView.VoiceIconClickListener() {
             @Override
             public void onClick(View v) {
                 if (Util.isVoiceRecognizerPresent(getApplicationContext())) {

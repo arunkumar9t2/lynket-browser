@@ -1,6 +1,7 @@
 package arun.com.chromer.views;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -8,6 +9,8 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,10 +29,21 @@ public class MaterialSearchView extends FrameLayout {
     private final int mNormalColor = ContextCompat.getColor(getContext(), R.color.accent_icon_nofocus);
     private final int mFocusedColor = ContextCompat.getColor(getContext(), R.color.accent);
     private boolean mAnimated = false;
-    private ImageView mSearchIcon;
-    private ImageView mVoiceIcon;
+    private ImageView mSearchIconView;
+    private ImageView mVoiceIconView;
     private TextView mLabel;
     private EditText mEditText;
+    private boolean mShouldClearText;
+    private IconicsDrawable mXIcon = new IconicsDrawable(getContext())
+            .icon(GoogleMaterial.Icon.gmd_clear)
+            .color(mNormalColor)
+            .sizeDp(16);
+    private IconicsDrawable mVoiceIcon = new IconicsDrawable(getContext())
+            .icon(GoogleMaterial.Icon.gmd_keyboard_voice)
+            .color(mNormalColor)
+            .sizeDp(18);
+
+    private VoiceIconClickListener mVoiceClickListener;
 
     public MaterialSearchView(Context context) {
         super(context);
@@ -56,13 +70,23 @@ public class MaterialSearchView extends FrameLayout {
     private void loseFocus() {
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(
-                getColorChangeAnimatorOnImageView(mSearchIcon, mFocusedColor, mNormalColor, 400),
-                getColorChangeAnimatorOnImageView(mVoiceIcon, mFocusedColor, mNormalColor, 400),
+                getColorChangeAnimatorOnImageView(mSearchIconView, mFocusedColor, mNormalColor, 400),
+                getColorChangeAnimatorOnImageView(mVoiceIconView, mFocusedColor, mNormalColor, 400),
                 ObjectAnimator.ofFloat(mLabel, "scaleX", 1),
                 ObjectAnimator.ofFloat(mLabel, "scaleY", 1),
                 ObjectAnimator.ofFloat(mLabel, "alpha", 1),
                 ObjectAnimator.ofFloat(mEditText, "alpha", 0).setDuration(300)
         );
+
+        animatorSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (mShouldClearText) {
+                    mVoiceIconView.setImageDrawable(mVoiceIcon.color(mNormalColor));
+                    mShouldClearText = false;
+                }
+            }
+        });
 
         animatorSet.start();
         mEditText.clearFocus();
@@ -80,13 +104,19 @@ public class MaterialSearchView extends FrameLayout {
     private void gainFocus() {
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(
-                getColorChangeAnimatorOnImageView(mSearchIcon, mNormalColor, mFocusedColor, 300),
-                getColorChangeAnimatorOnImageView(mVoiceIcon, mNormalColor, mFocusedColor, 300),
+                getColorChangeAnimatorOnImageView(mSearchIconView, mNormalColor, mFocusedColor, 400),
+                getColorChangeAnimatorOnImageView(mVoiceIconView, mNormalColor, mFocusedColor, 400),
                 ObjectAnimator.ofFloat(mLabel, "scaleX", 0.6f),
                 ObjectAnimator.ofFloat(mLabel, "scaleY", 0.6f),
                 ObjectAnimator.ofFloat(mLabel, "alpha", 0.5f),
                 ObjectAnimator.ofFloat(mEditText, "alpha", 1).setDuration(300)
         );
+        animatorSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                handleVoiceIcon();
+            }
+        });
         animatorSet.start();
 
         mAnimated = true;
@@ -113,18 +143,42 @@ public class MaterialSearchView extends FrameLayout {
                 else loseFocus();
             }
         });
+        mEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-        mSearchIcon = (ImageView) findViewById(R.id.msv_left_icon);
-        mSearchIcon.setImageDrawable(new IconicsDrawable(getContext())
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                handleVoiceIcon();
+            }
+        });
+
+        mSearchIconView = (ImageView) findViewById(R.id.msv_left_icon);
+        mSearchIconView.setImageDrawable(new IconicsDrawable(getContext())
                 .icon(GoogleMaterial.Icon.gmd_search)
                 .color(mNormalColor)
-                .sizeDp(24));
+                .sizeDp(18));
 
-        mVoiceIcon = (ImageView) findViewById(R.id.msv_right_icon);
-        mVoiceIcon.setImageDrawable(new IconicsDrawable(getContext())
-                .icon(GoogleMaterial.Icon.gmd_keyboard_voice)
-                .color(mNormalColor)
-                .sizeDp(24));
+        mVoiceIconView = (ImageView) findViewById(R.id.msv_right_icon);
+        mVoiceIconView.setImageDrawable(mVoiceIcon);
+        mVoiceIconView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mShouldClearText) {
+                    mEditText.setText("");
+                    loseFocus();
+                } else {
+                    if (mVoiceClickListener != null) mVoiceClickListener.onClick(v);
+                }
+            }
+        });
 
         mLabel = (TextView) findViewById(R.id.msv_label);
         mLabel.setPivotX(0);
@@ -136,6 +190,24 @@ public class MaterialSearchView extends FrameLayout {
                 if (!mAnimated) gainFocus();
             }
         });
+    }
+
+    private void handleVoiceIcon() {
+        if (mEditText.getText() != null && mEditText.getText().length() != 0) {
+            if (!mShouldClearText) {
+                if (mAnimated)
+                    mVoiceIconView.setImageDrawable(mXIcon.color(mFocusedColor));
+                else mVoiceIconView.setImageDrawable(mXIcon.color(mNormalColor));
+            }
+            mShouldClearText = true;
+        } else {
+            if (mShouldClearText) {
+                if (mAnimated)
+                    mVoiceIconView.setImageDrawable(mVoiceIcon.color(mNormalColor));
+                else mVoiceIconView.setImageDrawable(mVoiceIcon.color(mFocusedColor));
+            }
+            mShouldClearText = false;
+        }
     }
 
     private Animator getColorChangeAnimatorOnImageView(final ImageView viewToAnimate, int fromColor, int toColor, int duration) {
@@ -184,7 +256,11 @@ public class MaterialSearchView extends FrameLayout {
         return mEditText.getText() == null ? "" : mEditText.getText().toString();
     }
 
-    public void setVoiceIconClickListener(OnClickListener listener) {
-        mVoiceIcon.setOnClickListener(listener);
+    public void setVoiceIconClickListener(VoiceIconClickListener listener) {
+        mVoiceClickListener = listener;
+    }
+
+    public interface VoiceIconClickListener {
+        void onClick(View v);
     }
 }
