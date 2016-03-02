@@ -21,7 +21,7 @@ import arun.com.chromer.util.Preferences;
 import arun.com.chromer.util.ServicesUtil;
 import arun.com.chromer.util.Util;
 
-public class PersonalizationPreferenceFragment extends PreferenceFragmentCompat
+public class PersonalizationPreferenceFragment extends DividerLessPreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public PersonalizationPreferenceFragment() {

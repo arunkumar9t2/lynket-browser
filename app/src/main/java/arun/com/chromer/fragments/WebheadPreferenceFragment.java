@@ -10,7 +10,6 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.SwitchPreferenceCompat;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -19,7 +18,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import arun.com.chromer.R;
 import arun.com.chromer.util.Preferences;
 
-public class WebHeadPreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public WebHeadPreferenceFragment() {
         // Required empty public constructor
