@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         super.onResume();
         updatePrefetchIfPermissionGranted();
         setupDefaultBrowser();
+        setIconWithPackageName(mSecondaryBrowserIcon, Preferences.secondaryBrowserPackage(this));
     }
 
     @Override

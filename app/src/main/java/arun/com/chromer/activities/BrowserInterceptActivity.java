@@ -1,6 +1,10 @@
 package arun.com.chromer.activities;
 
+import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +18,7 @@ import arun.com.chromer.R;
 import arun.com.chromer.db.BlacklistedApps;
 import arun.com.chromer.services.AppDetectService;
 import arun.com.chromer.util.Preferences;
+import arun.com.chromer.util.Util;
 import timber.log.Timber;
 
 public class BrowserInterceptActivity extends AppCompatActivity {
@@ -36,10 +41,11 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                     Timber.d("Checking if %s should be blacklisted", lastApp);
                     List<BlacklistedApps> blacklisted = BlacklistedApps.find(BlacklistedApps.class, "package_name = ?", lastApp);
                     if (blacklisted.size() > 0) {
-                        // The calling app was found in blacklisted table in DB, so lets show an intent
-                        // chooser and kill this activity
-                        Toast.makeText(this, getString(R.string.blacklist_message), Toast.LENGTH_LONG).show();
-                        showIntentChooserAndFinish();
+                        // The calling app was found in blacklisted table in DB, attempt to launch in secondary browser,
+                        // if failed then show a chooser
+                        performBlacklistAction();
+                        // End this
+                        finish();
                         return;
                     }
                 }
@@ -76,13 +82,30 @@ public class BrowserInterceptActivity extends AppCompatActivity {
         finish();
     }
 
-    private void showIntentChooserAndFinish() {
+    private void performBlacklistAction() {
+        String componentFlatten = Preferences.secondaryBrowserComponent(this);
+        if (componentFlatten != null && Util.isPackageInstalled(this, Preferences.secondaryBrowserPackage(this))) {
+            Intent webIntentExplicit = new Intent(Intent.ACTION_VIEW, getIntent().getData());
+            webIntentExplicit.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            webIntentExplicit.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            ComponentName cN = ComponentName.unflattenFromString(componentFlatten);
+            webIntentExplicit.setComponent(cN);
+
+            try {
+                startActivity(webIntentExplicit);
+            } catch (ActivityNotFoundException e) {
+                launchSecondaryBrowserWithIteration();
+            }
+        } else showIntentChooser();
+    }
+
+    private void showIntentChooser() {
+        Toast.makeText(this, getString(R.string.blacklist_message), Toast.LENGTH_LONG).show();
         Intent defaultIntent = new Intent(Intent.ACTION_VIEW, getIntent().getData());
-        Intent chooserIntent = Intent.createChooser(defaultIntent, "Open with..");
-        chooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        chooserIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        Intent chooserIntent = Intent.createChooser(defaultIntent, getString(R.string.open_with));
+        chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        chooserIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(chooserIntent);
-        finish();
     }
 
     private void launchWebHead() {
@@ -91,5 +114,34 @@ public class BrowserInterceptActivity extends AppCompatActivity {
         webHeadLauncher.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         webHeadLauncher.setData(getIntent().getData());
         startActivity(webHeadLauncher);
+    }
+
+    private void launchSecondaryBrowserWithIteration() {
+        Intent webIntentImplicit = new Intent(Intent.ACTION_VIEW, getIntent().getData());
+        webIntentImplicit.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        webIntentImplicit.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        List<ResolveInfo> resolvedActivityList = getPackageManager()
+                .queryIntentActivities(webIntentImplicit, PackageManager.MATCH_ALL);
+
+        String secondaryPackage = Preferences.secondaryBrowserPackage(this);
+
+        if (secondaryPackage != null) {
+            boolean found = false;
+            for (ResolveInfo info : resolvedActivityList) {
+                if (info.activityInfo.packageName.equalsIgnoreCase(secondaryPackage)) {
+                    found = true;
+
+                    ComponentName componentName = new ComponentName(info.activityInfo.packageName,
+                            info.activityInfo.name);
+                    webIntentImplicit.setComponent(componentName);
+
+                    // This will be the new component, so write it to preferences
+                    Preferences.secondaryBrowserComponent(this, componentName.flattenToString());
+
+                    startActivity(webIntentImplicit);
+                }
+            }
+            if (!found) showIntentChooser();
+        }
     }
 }
