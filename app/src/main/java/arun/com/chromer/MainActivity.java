@@ -68,6 +68,7 @@ import arun.com.chromer.util.Util;
 import arun.com.chromer.views.IntentPickerSheetView;
 import arun.com.chromer.views.MaterialSearchView;
 import arun.com.chromer.views.adapter.AppRenderAdapter;
+import arun.com.chromer.webheads.WebHeadService;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback {
@@ -638,8 +639,15 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private void launchCustomTab(String url) {
         if (url != null) {
-            CustomTabsIntent customTabsIntent = CustomTabDelegate.getCustomizedTabIntent(getApplicationContext(), url, false);
-            CustomActivityHelper.openCustomTab(this, customTabsIntent, Uri.parse(url), Util.CUSTOM_TABS_FALLBACK);
+            if (Preferences.webHeads(this)) {
+                Intent webHeadService = new Intent(this, WebHeadService.class);
+                webHeadService.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                webHeadService.setData(Uri.parse(url));
+                startService(webHeadService);
+            } else {
+                CustomTabsIntent customTabsIntent = CustomTabDelegate.getCustomizedTabIntent(getApplicationContext(), url, false);
+                CustomActivityHelper.openCustomTab(this, customTabsIntent, Uri.parse(url), Util.CUSTOM_TABS_FALLBACK);
+            }
         }
     }
 
