@@ -24,6 +24,7 @@ public class DividerLessPreferenceFragment extends PreferenceFragmentCompat {
     @Override
     public RecyclerView onCreateRecyclerView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         RecyclerView recyclerView = super.onCreateRecyclerView(inflater, parent, savedInstanceState);
+        recyclerView.setNestedScrollingEnabled(false);
         return recyclerView;
     }
 }
