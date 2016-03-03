@@ -23,17 +23,21 @@ public class ShareInterceptActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        if (intent != null) {
-            if (intent.getAction().equalsIgnoreCase(Intent.ACTION_SEND)) {
-                @SuppressWarnings("ConstantConditions") String text = intent.hasExtra(Intent.EXTRA_TEXT) ?
-                        intent.getExtras().getCharSequence(Intent.EXTRA_TEXT).toString() : null;
-                Timber.d("Intent. Text: %s", text);
-                findAndOpenLink(text);
-            } else if (intent.getAction().equalsIgnoreCase(Intent.ACTION_PROCESS_TEXT)) {
-                final String text = intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT);
-                Timber.d("Process Text Intent. Text: %s", text);
-                findAndOpenLink(text);
+        try {
+            if (intent != null) {
+                if (intent.getAction().equalsIgnoreCase(Intent.ACTION_SEND)) {
+                    @SuppressWarnings("ConstantConditions") String text = intent.hasExtra(Intent.EXTRA_TEXT) ?
+                            intent.getExtras().getCharSequence(Intent.EXTRA_TEXT).toString() : null;
+                    Timber.d("Intent. Text: %s", text);
+                    findAndOpenLink(text);
+                } else if (intent.getAction().equalsIgnoreCase(Intent.ACTION_PROCESS_TEXT)) {
+                    final String text = intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT);
+                    Timber.d("Process Text Intent. Text: %s", text);
+                    findAndOpenLink(text);
+                }
             }
+        } catch (NullPointerException npe) {
+            invalidLink();
         }
     }
 
@@ -55,7 +59,6 @@ public class ShareInterceptActivity extends AppCompatActivity {
         if (url == null) {
             invalidLink();
         }
-        Timber.d("Opening %s", url);
         Intent tabActivity = new Intent(this, BrowserInterceptActivity.class);
         tabActivity.setData(Uri.parse(url));
 
