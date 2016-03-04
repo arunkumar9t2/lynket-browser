@@ -7,14 +7,16 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsService;
 import android.support.customtabs.CustomTabsSession;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,44 +30,41 @@ import timber.log.Timber;
  */
 public class ScannerService extends AccessibilityService implements CustomActivityHelper.ConnectionCallback {
 
-    private static ScannerService mScannerService = null;
-    private final int MAX_URL = 4;
-    private final Stack<AccessibilityNodeInfo> mTraversalTree = new Stack<>();
-    private final List<String> mExtractedUrls = new ArrayList<>();
-    private CustomActivityHelper mCustomActivityHelper;
+    private static ScannerService sInstance = null;
+    private final int MAX_URL = 3;
+    private final Stack<AccessibilityNodeInfo> mTreeTraversingStack = new Stack<>();
+    private final Queue<String> mExtractedUrlStack = new LinkedList<>();
     private String mLastFetchedUrl = "";
-    private int mExtractedCount = 0;
+    private String mLastPriorityUrl;
+    private boolean mShouldStopExtraction = false;
+    private CustomActivityHelper mCustomActivityHelper;
 
     public static ScannerService getInstance() {
-        return mScannerService;
+        return sInstance;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        sInstance = this;
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (mCustomActivityHelper != null) {
-            Timber.d("Updating connections");
+            Timber.d("Severing existing connection");
             mCustomActivityHelper.unbindCustomTabsService(this);
-            mCustomActivityHelper = new CustomActivityHelper();
-            mCustomActivityHelper.bindCustomTabsService(this);
-            mCustomActivityHelper.setConnectionCallback(this);
         }
-
-        return super.onStartCommand(intent, flags, startId);
-    }
-
-    @Override
-    protected void onServiceConnected() {
-        super.onServiceConnected();
-        mScannerService = this;
         mCustomActivityHelper = new CustomActivityHelper();
         mCustomActivityHelper.setConnectionCallback(this);
         boolean success = mCustomActivityHelper.bindCustomTabsService(this);
         Timber.d("Was bound %b", success);
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
-        mScannerService = null;
+        sInstance = null;
         mCustomActivityHelper.unbindCustomTabsService(this);
         Timber.d("Unbinding");
         return super.onUnbind(intent);
@@ -83,99 +82,96 @@ public class ScannerService extends AccessibilityService implements CustomActivi
         if (!Preferences.preFetch(this)) return false;
 
         boolean ok = mCustomActivityHelper.mayLaunchUrl(uri, null, possibleUrls);
-        Timber.d("Warmup %b", ok);
+        Timber.d("Warm up %b", ok);
         return ok;
     }
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        mScannerService = this;
+        sInstance = this;
+        mShouldStopExtraction = false;
+        // Clear extraction helper stacks before starting new extractions
+        emptyStacks();
 
-        mExtractedCount = 0;
+        if (shouldIgnoreEvent(event)) return;
 
-        if (event == null) return;
-
-        String packageName = "";
         try {
-            // Crash fix, some times package name is null.
-            if (event.getPackageName() != null)
-                packageName = event.getPackageName().toString();
+            stopWarmUpService();
 
-            // Stop extraction once custom tab is opened.
-            if (packageName.equalsIgnoreCase(Preferences.customTabApp(this))) return;
+            AccessibilityNodeInfo activeWindowRoot = getRootInActiveWindow();
 
-            if (Preferences.preFetch(this) && isWifiConditionsMet()) {
-                stopWarmUpService();
-
-                // Traverse the tree and find urls
-                mTraversalTree.push(getRootInActiveWindow());
-                while (!mTraversalTree.empty() && mExtractedCount < MAX_URL) {
-                    AccessibilityNodeInfo currNode = mTraversalTree.pop();
-                    if (currNode != null) {
-                        actOnCurrentNode(currNode);
-                        for (int i = 0; i < currNode.getChildCount(); i++) {
-                            mTraversalTree.push(currNode.getChild(i));
-                        }
+            // Traverse the tree and act on every text
+            mTreeTraversingStack.push(activeWindowRoot);
+            while (!mTreeTraversingStack.empty() && mExtractedUrlStack.size() < MAX_URL && !mShouldStopExtraction) {
+                AccessibilityNodeInfo currNode = mTreeTraversingStack.pop();
+                if (currNode != null) {
+                    processNode(currNode);
+                    for (int i = 0; i < currNode.getChildCount() && !mShouldStopExtraction; i++) {
+                        mTreeTraversingStack.push(currNode.getChild(i));
                     }
                 }
-
-                mTraversalTree.clear();
-
-                if (mExtractedUrls.size() != 0) {
-
-                    Collections.reverse(mExtractedUrls);
-
-                    int first = 0;
-                    String priorityUrl = null;
-                    List<Bundle> possibleUrls = new ArrayList<>();
-                    for (String url : mExtractedUrls) {
-                        if (first == 0) {
-                            priorityUrl = url;
-                            first++;
-                        } else {
-                            Bundle bundle = new Bundle();
-                            bundle.putParcelable(CustomTabsService.KEY_URL, Uri.parse(url));
-                            possibleUrls.add(bundle);
-                        }
-                    }
-
-                    boolean success;
-                    if (priorityUrl != null) {
-                        if (!priorityUrl.equalsIgnoreCase(mLastFetchedUrl)) {
-                            success = mCustomActivityHelper.mayLaunchUrl(Uri.parse(priorityUrl), null, possibleUrls);
-                            if (success) mLastFetchedUrl = priorityUrl;
-                        } else {
-                            Timber.d("Ignored, already fetched");
-                        }
-                    }
-                }
-
             }
+            mTreeTraversingStack.clear();
+            // Don't need the root node anymore, recycle it.
+            if (activeWindowRoot != null) activeWindowRoot.recycle();
 
-            //getRootInActiveWindow().recycle();
-            mExtractedUrls.clear();
+            if (mExtractedUrlStack.size() > 0 && !mShouldStopExtraction) {
+                mLastPriorityUrl = mExtractedUrlStack.poll();
+
+                Timber.d("Priority : %s", mLastPriorityUrl);
+
+                List<Bundle> possibleUrls = new ArrayList<>();
+
+                for (String url : mExtractedUrlStack) {
+                    if (url == null) continue;
+
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable(CustomTabsService.KEY_URL, Uri.parse(url));
+                    possibleUrls.add(bundle);
+                    Timber.d("Others : %s", url);
+                }
+
+                boolean success;
+                if (mLastPriorityUrl != null) {
+                    if (!mLastPriorityUrl.equalsIgnoreCase(mLastFetchedUrl)) {
+                        success = mCustomActivityHelper.mayLaunchUrl(Uri.parse(mLastPriorityUrl), null, possibleUrls);
+                        if (success) mLastFetchedUrl = mLastPriorityUrl;
+                    } else {
+                        Timber.d("Ignored, already fetched");
+                    }
+                }
+            }
+            mExtractedUrlStack.clear();
         } catch (Exception e) {
+            emptyStacks();
             e.printStackTrace();
         }
     }
 
-    private void actOnCurrentNode(AccessibilityNodeInfo node) {
-        if (node != null && node.getText() != null) {
-            String currNodeText;
-            currNodeText = node.getText().toString();
-            // Timber.d(currNodeText);
-            extractURL(currNodeText);
-            if (mExtractedUrls != null && mExtractedUrls.size() != 0) {
-                mExtractedCount += mExtractedUrls.size();
-            }
+    private void emptyStacks() {
+        mTreeTraversingStack.clear();
+        mExtractedUrlStack.clear();
+    }
+
+    private boolean shouldIgnoreEvent(AccessibilityEvent event) {
+        if (!Preferences.preFetch(this)) return true;
+        if (!isWifiConditionsMet()) return true;
+        String packageName = "";
+        if (event.getPackageName() != null) {
+            packageName = event.getPackageName().toString();
+            return packageName.equalsIgnoreCase(Preferences.customTabApp(this));
+        }
+        return false;
+    }
+
+    private void processNode(@NonNull AccessibilityNodeInfo node) {
+        if (node.getText() != null) {
+            extractURL(node.getText().toString());
         }
     }
 
 
-    private void extractURL(String string) {
-        if (string == null) {
-            return;
-        }
+    private void extractURL(@NonNull String string) {
         Matcher m = Pattern.compile("\\b((?:[a-z][\\w-]+:(?:/{1,3}|[a-z0-9%])|www\\d{0,3}[.]|[a-z0-9.\\-]+[.][a-z]{2,4}/)(?:[^\\s()<>]+|\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\))+(?:\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))", Pattern.CASE_INSENSITIVE)
                 .matcher(string);
         while (m.find()) {
@@ -183,10 +179,13 @@ public class ScannerService extends AccessibilityService implements CustomActivi
             if (!url.toLowerCase().matches("^\\w+://.*")) {
                 url = "http://" + url;
             }
-
-            //Timber.d(url);
-
-            mExtractedUrls.add(url);
+            mExtractedUrlStack.add(url);
+            if (mExtractedUrlStack.size() == 1 && url.equalsIgnoreCase(mLastPriorityUrl)) {
+                // This means the new extraction is giving the same urls as last extraction did.
+                // In this case, we will explicitly stop the tree traversal by setting a flag variable.
+                Timber.d("Encountered same priority url twice, stopping extraction");
+                mShouldStopExtraction = true;
+            }
         }
     }
 
@@ -224,4 +223,11 @@ public class ScannerService extends AccessibilityService implements CustomActivi
 
     }
 
+    @Override
+    public void onDestroy() {
+        if (mCustomActivityHelper != null)
+            mCustomActivityHelper.unbindCustomTabsService(this);
+        emptyStacks();
+        super.onDestroy();
+    }
 }
