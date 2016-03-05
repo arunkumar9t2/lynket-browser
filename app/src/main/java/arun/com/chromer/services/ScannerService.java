@@ -1,6 +1,9 @@
 package arun.com.chromer.services;
 
 import android.accessibilityservice.AccessibilityService;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -10,6 +13,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsService;
 import android.support.customtabs.CustomTabsSession;
+import android.support.v7.app.NotificationCompat;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
@@ -21,6 +25,7 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import arun.com.chromer.R;
 import arun.com.chromer.chrometabutilites.CustomActivityHelper;
 import arun.com.chromer.util.Preferences;
 import timber.log.Timber;
@@ -31,13 +36,22 @@ import timber.log.Timber;
 public class ScannerService extends AccessibilityService implements CustomActivityHelper.ConnectionCallback {
 
     private static ScannerService sInstance = null;
-    private final int MAX_URL = 3;
-    private final Stack<AccessibilityNodeInfo> mTreeTraversingStack = new Stack<>();
-    private final Queue<String> mExtractedUrlStack = new LinkedList<>();
+
+    private static final String SCANNER_SERVICE_NOTIFICATION = "SCANNER_SERVICE_NOTIFICATION";
+    private static final String NOTIFICATION_TITLE = "Chromer Scanning Service";
+    private static final int NOTIFICATION_ID = 10001;
+    private static final int MAX_URL = 3;
+    private static final int URL_PREDICTION_DEPTH = 3;
+
     private String mLastFetchedUrl = "";
     private String mLastPriorityUrl;
     private boolean mShouldStopExtraction = false;
     private CustomActivityHelper mCustomActivityHelper;
+
+    private final Stack<AccessibilityNodeInfo> mTreeTraversingStack = new Stack<>();
+    private final Queue<String> mExtractedUrlQueue = new LinkedList<>();
+    private final LinkedList<CharSequence> mLastTopTexts = new LinkedList<>();
+    private final LinkedList<CharSequence> mLocalTopTexts = new LinkedList<>();
 
     public static ScannerService getInstance() {
         return sInstance;
@@ -86,14 +100,49 @@ public class ScannerService extends AccessibilityService implements CustomActivi
         return ok;
     }
 
+    private void updateNotification() {
+        if (mLastFetchedUrl != null) {
+            Timber.d("Posting notification");
+            PendingIntent contentIntent = PendingIntent.getBroadcast(this,
+                    0,
+                    new Intent(SCANNER_SERVICE_NOTIFICATION),
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+
+            final String summary = String.format("Last fetched url: %s", mLastFetchedUrl);
+
+            NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+            inboxStyle.setBigContentTitle(NOTIFICATION_TITLE);
+            inboxStyle.addLine(summary);
+            for (String url : mExtractedUrlQueue) {
+                inboxStyle.addLine(url);
+            }
+
+            Notification notification = new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.ic_chromer_notification)
+                    .setPriority(NotificationCompat.PRIORITY_MIN)
+                    .setContentTitle(NOTIFICATION_TITLE)
+                    .setContentText(summary)
+                    .setContentIntent(contentIntent)
+                    .setAutoCancel(false)
+                    .setStyle(inboxStyle)
+                    .setLocalOnly(true)
+                    .build();
+
+            NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            mNotifyMgr.notify(NOTIFICATION_ID, notification);
+        }
+    }
+
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
         sInstance = this;
         mShouldStopExtraction = false;
         // Clear extraction helper stacks before starting new extractions
-        emptyStacks();
+        clearHolders();
 
         if (shouldIgnoreEvent(event)) return;
+
+        Timber.d("NEW EVENT");
 
         try {
             stopWarmUpService();
@@ -102,7 +151,7 @@ public class ScannerService extends AccessibilityService implements CustomActivi
 
             // Traverse the tree and act on every text
             mTreeTraversingStack.push(activeWindowRoot);
-            while (!mTreeTraversingStack.empty() && mExtractedUrlStack.size() < MAX_URL && !mShouldStopExtraction) {
+            while (!mTreeTraversingStack.empty() && mExtractedUrlQueue.size() < MAX_URL && !mShouldStopExtraction) {
                 AccessibilityNodeInfo currNode = mTreeTraversingStack.pop();
                 if (currNode != null) {
                     processNode(currNode);
@@ -115,14 +164,14 @@ public class ScannerService extends AccessibilityService implements CustomActivi
             // Don't need the root node anymore, recycle it.
             if (activeWindowRoot != null) activeWindowRoot.recycle();
 
-            if (mExtractedUrlStack.size() > 0 && !mShouldStopExtraction) {
-                mLastPriorityUrl = mExtractedUrlStack.poll();
+            if (mExtractedUrlQueue.size() > 0 && !mShouldStopExtraction) {
+                mLastPriorityUrl = mExtractedUrlQueue.poll();
 
                 Timber.d("Priority : %s", mLastPriorityUrl);
 
                 List<Bundle> possibleUrls = new ArrayList<>();
 
-                for (String url : mExtractedUrlStack) {
+                for (String url : mExtractedUrlQueue) {
                     if (url == null) continue;
 
                     Bundle bundle = new Bundle();
@@ -140,17 +189,19 @@ public class ScannerService extends AccessibilityService implements CustomActivi
                         Timber.d("Ignored, already fetched");
                     }
                 }
+                updateNotification();
             }
-            mExtractedUrlStack.clear();
+            mExtractedUrlQueue.clear();
         } catch (Exception e) {
-            emptyStacks();
+            clearHolders();
             e.printStackTrace();
         }
     }
 
-    private void emptyStacks() {
+    private void clearHolders() {
         mTreeTraversingStack.clear();
-        mExtractedUrlStack.clear();
+        mExtractedUrlQueue.clear();
+        mLocalTopTexts.clear();
     }
 
     private boolean shouldIgnoreEvent(AccessibilityEvent event) {
@@ -159,6 +210,7 @@ public class ScannerService extends AccessibilityService implements CustomActivi
         String packageName = "";
         if (event.getPackageName() != null) {
             packageName = event.getPackageName().toString();
+            // Timber.d(packageName);
             return packageName.equalsIgnoreCase(Preferences.customTabApp(this));
         }
         return false;
@@ -166,7 +218,29 @@ public class ScannerService extends AccessibilityService implements CustomActivi
 
     private void processNode(@NonNull AccessibilityNodeInfo node) {
         if (node.getText() != null) {
-            extractURL(node.getText().toString());
+            String text = node.getText().toString();
+            // Timber.d(text);
+
+            if (mLocalTopTexts.size() < URL_PREDICTION_DEPTH) mLocalTopTexts.add(node.getText());
+            if (mLastTopTexts.size() < URL_PREDICTION_DEPTH) mLastTopTexts.add(node.getText());
+
+            // Timber.d("Last top: %s, Local: %s", mLastTopTexts, mLocalTopTexts);
+
+            if (mLastTopTexts.equals(mLocalTopTexts) && mLastTopTexts.size() == URL_PREDICTION_DEPTH) {
+                Timber.d("Predicted no url in current screen, stopping.");
+                mShouldStopExtraction = true;
+                return;
+            } else if (mLocalTopTexts.size() == URL_PREDICTION_DEPTH) {
+                // Timber.d("Updated stored prediction values");
+                mLastTopTexts.clear();
+            }
+
+            if (text.equalsIgnoreCase(NOTIFICATION_TITLE)) {
+                Timber.d("Ignoring extraction from our own notification");
+                mShouldStopExtraction = true;
+            } else {
+                extractURL(text);
+            }
         }
     }
 
@@ -179,8 +253,10 @@ public class ScannerService extends AccessibilityService implements CustomActivi
             if (!url.toLowerCase().matches("^\\w+://.*")) {
                 url = "http://" + url;
             }
-            mExtractedUrlStack.add(url);
-            if (mExtractedUrlStack.size() == 1 && url.equalsIgnoreCase(mLastPriorityUrl)) {
+            mLastTopTexts.clear();
+
+            mExtractedUrlQueue.add(url);
+            if (mExtractedUrlQueue.size() == 1 && url.equalsIgnoreCase(mLastPriorityUrl)) {
                 // This means the new extraction is giving the same urls as last extraction did.
                 // In this case, we will explicitly stop the tree traversal by setting a flag variable.
                 Timber.d("Encountered same priority url twice, stopping extraction");
@@ -227,7 +303,7 @@ public class ScannerService extends AccessibilityService implements CustomActivi
     public void onDestroy() {
         if (mCustomActivityHelper != null)
             mCustomActivityHelper.unbindCustomTabsService(this);
-        emptyStacks();
+        clearHolders();
         super.onDestroy();
     }
 }
