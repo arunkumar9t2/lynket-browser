@@ -285,10 +285,15 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 }
                 Preferences.preFetch(getApplicationContext(), isChecked);
 
-                if (!isChecked)
+                if (!isChecked) {
                     // Since pre fetch is not active, the  warm up preference should properly reflect what's on the
                     // UI, hence setting the preference to the checked value of the warm up switch.
                     Preferences.warmUp(getApplicationContext(), mWarmUpSwitch.isChecked());
+
+                    // Ask user to revoke accessibility permission
+                    Toast.makeText(getApplicationContext(), R.string.revoke_accessibility_permission, Toast.LENGTH_LONG).show();
+                    startActivityForResult(new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS), 0);
+                }
 
                 ServicesUtil.takeCareOfServices(getApplicationContext());
             }

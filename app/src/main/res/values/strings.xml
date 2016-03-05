@@ -153,4 +153,5 @@
     <string name="blacklist_message">You have blacklisted this app from launching in Chromer and have not set a secondary browser. Please choose a browser to continue.</string>
     <string name="share_failed_msg">Could not share to the app, defaulting to normal share</string>
     <string name="blacklist_explanation">Launching links from a blacklisted app will open them in your secondary browser</string>
+    <string name="revoke_accessibility_permission">You can now revoke Chromer\'s accessibility service permission.</string>
 </resources>
