@@ -84,6 +84,10 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         return sInstance;
     }
 
+    private RemoveWebHead getRemoveWebHead() {
+        return RemoveWebHead.get(this);
+    }
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -117,6 +121,36 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         registerReceiver(mStopServiceReceiver, new IntentFilter(CLOSE_SERVICE));
     }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        processIntentAndLaunchBubble(intent);
+
+        showNotification();
+
+        // addTestWebHeads();
+        return START_STICKY;
+    }
+
+    private void processIntentAndLaunchBubble(Intent intent) {
+        if (intent == null) return; // don't do anything
+
+        String urlToLoad = intent.getDataString();
+
+        if (urlToLoad == null) return;
+
+        if (!isLinkAlreadyLoaded(urlToLoad)) {
+            WebHead webHead = new WebHead(this, urlToLoad, mWindowManager);
+            webHead.setWebHeadInteractionListener(this);
+            addWebHead(webHead);
+
+            if (mCustomTabConnected)
+                mCustomActivityHelper.mayLaunchUrl(Uri.parse(urlToLoad), null, null);
+            else
+                deferMayLaunchUntilConnected(urlToLoad);
+        } else
+            Toast.makeText(this, "Already loaded", Toast.LENGTH_SHORT).show();
+    }
+
     private void addWebHead(WebHead webHead) {
         // Before adding new web heads, call move self to stack distance on existing web heads to move
         // them a little such that they appear to be stacked
@@ -128,9 +162,15 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         mWebHeads.put(webHead.getUrl(), webHead);
     }
 
+    private void stackPreviousWebHeads() {
+        for (WebHead webhead : mWebHeads.values()) {
+            webhead.moveSelfToStackDistance();
+        }
+    }
+
     private void beginFaviconLoading(final WebHead webHead) {
         Glide.with(this)
-                .load("https://github.com/apple-touch-icon-180x180.png")
+                .load("http://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/ic_product_inbox_16dp_r2_2x.png")
                 .asBitmap()
                 .into(new BitmapImageViewTarget(webHead.getFaviconView()) {
                     @Override
@@ -141,27 +181,6 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
                         webHead.setFaviconDrawable(roundedBitmapDrawable);
                     }
                 });
-    }
-
-    private void stackPreviousWebHeads() {
-        for (WebHead webhead : mWebHeads.values()) {
-            webhead.moveSelfToStackDistance();
-        }
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-
-        processIntentAndLaunchBubble(intent);
-
-        showNotification();
-
-        // addTestWebHeads();
-        return START_STICKY;
-    }
-
-    private RemoveWebHead getRemoveWebHead() {
-        return RemoveWebHead.get(this);
     }
 
     private void showNotification() {
@@ -195,26 +214,6 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         webHead = new WebHead(this, "http://www.androidpolice.com", mWindowManager);
         webHead.setWebHeadInteractionListener(this);
         addWebHead(webHead);
-    }
-
-    private void processIntentAndLaunchBubble(Intent intent) {
-        if (intent == null) return; // don't do anything
-
-        String urlToLoad = intent.getDataString();
-
-        if (urlToLoad == null) return;
-
-        if (!isLinkAlreadyLoaded(urlToLoad)) {
-            WebHead webHead = new WebHead(this, urlToLoad, mWindowManager);
-            webHead.setWebHeadInteractionListener(this);
-            addWebHead(webHead);
-
-            if (mCustomTabConnected)
-                mCustomActivityHelper.mayLaunchUrl(Uri.parse(urlToLoad), null, null);
-            else
-                deferMayLaunchUntilConnected(urlToLoad);
-        } else
-            Toast.makeText(this, "Already loaded", Toast.LENGTH_SHORT).show();
     }
 
     private boolean isLinkAlreadyLoaded(String urlToLoad) {
@@ -314,27 +313,6 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         if (ok) Timber.d("Binding successful");
     }
 
-    @Override
-    public void onDestroy() {
-        Timber.d("Exiting webhead service");
-
-        closeAllWebHeads();
-
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRebindReceiver);
-
-        if (mCustomActivityHelper != null) mCustomActivityHelper.unbindCustomTabsService(this);
-
-        sInstance = null;
-
-        unregisterReceiver(mStopServiceReceiver);
-
-        stopForeground(true);
-
-        RemoveWebHead.destroy();
-
-        super.onDestroy();
-    }
-
     private void closeAllWebHeads() {
         if (mWebHeads != null) {
             for (WebHead webhead : mWebHeads.values()) {
@@ -382,6 +360,27 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
             // other urls
             prepareNextSetOfUrls(webHead.getUrl());
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        Timber.d("Exiting webhead service");
+
+        closeAllWebHeads();
+
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRebindReceiver);
+
+        if (mCustomActivityHelper != null) mCustomActivityHelper.unbindCustomTabsService(this);
+
+        sInstance = null;
+
+        unregisterReceiver(mStopServiceReceiver);
+
+        stopForeground(true);
+
+        RemoveWebHead.destroy();
+
+        super.onDestroy();
     }
 
     @Override
