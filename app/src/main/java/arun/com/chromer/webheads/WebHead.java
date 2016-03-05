@@ -4,19 +4,24 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringConfig;
 import com.facebook.rebound.SpringSystem;
 
+import arun.com.chromer.R;
 import arun.com.chromer.util.Preferences;
 import arun.com.chromer.util.Util;
 import timber.log.Timber;
@@ -69,6 +74,8 @@ public class WebHead extends FrameLayout {
 
     private static Point mCentreLockPoint;
 
+    private ImageView mFavicon;
+
     public WebHead(Context context, String url, WindowManager windowManager) {
         super(context);
         mUrl = url;
@@ -81,10 +88,6 @@ public class WebHead extends FrameLayout {
         Timber.d("Created %d webheads", WEB_HEAD_COUNT);
     }
 
-
-    public WindowManager.LayoutParams getWindowParams() {
-        return mWindowParams;
-    }
 
     private void init(Context context, String url) {
         contentView = new WebHeadCircle(context, url);
@@ -100,6 +103,13 @@ public class WebHead extends FrameLayout {
         setDisplayMetrics();
         setSpawnLocation();
         setUpSprings();
+    }
+
+    private void initFavicon() {
+        if (mFavicon == null) {
+            mFavicon = (ImageView) LayoutInflater.from(getContext()).inflate(R.layout.favicon_layout, this, false);
+            addView(mFavicon);
+        }
     }
 
     private void setUpSprings() {
@@ -273,39 +283,26 @@ public class WebHead extends FrameLayout {
         }
     }
 
-    public void moveSelfToStackDistance() {
-        if (!mUserManuallyMoved) {
-            mYSpring.setCurrentValue(mWindowParams.y);
-            mYSpring.setEndValue(mWindowParams.y + Util.dpToPx(STACKING_GAP_DP));
-        }
-    }
-
-    public void dim() {
-        if (!mDimmed) {
-            contentView.setAlpha(0.3f);
-            mDimmed = true;
-        }
-    }
-
-    public void bright() {
-        if (mDimmed) {
-            contentView.setAlpha(1f);
-            mDimmed = false;
-        }
-    }
-
     private void setReleaseScale() {
         mScaleSpring.setEndValue(1f);
     }
 
     private void setReleaseAlpha() {
-        if (!mDimmed)
+        if (!mDimmed) {
             contentView.setAlpha(1f);
+            if (mFavicon != null) {
+                mFavicon.setAlpha(1f);
+            }
+        }
     }
 
     private void setTouchingAlpha() {
-        if (!mDimmed)
+        if (!mDimmed) {
             contentView.setAlpha(0.7f);
+            if (mFavicon != null) {
+                mFavicon.setAlpha(0.7f);
+            }
+        }
     }
 
     private void setTouchingScale() {
@@ -330,10 +327,75 @@ public class WebHead extends FrameLayout {
         }
     }
 
+    private Point getCentreLockPoint() {
+        if (mCentreLockPoint == null) {
+            Point removeCentre = getRemoveWebHead().getCenterCoordinates();
+            int offset = getWidth() / 2;
+            int x = removeCentre.x - offset;
+            int y = removeCentre.y - offset - (offset / 2) - (offset / 4);
+            mCentreLockPoint = new Point(x, y);
+        }
+        return mCentreLockPoint;
+    }
+
     private double getEuclideanDistance(int x1, int y1, int x2, int y2) {
         double x = x1 - x2;
         double y = y1 - y2;
         return Math.sqrt(x * x + y * y);
+    }
+
+    public void moveSelfToStackDistance() {
+        if (!mUserManuallyMoved) {
+            mYSpring.setCurrentValue(mWindowParams.y);
+            mYSpring.setEndValue(mWindowParams.y + Util.dpToPx(STACKING_GAP_DP));
+        }
+    }
+
+    public void dim() {
+        if (!mDimmed) {
+            contentView.setAlpha(0.3f);
+            if (mFavicon != null) {
+                mFavicon.setAlpha(0.3f);
+            }
+            mDimmed = true;
+        }
+    }
+
+    public void bright() {
+        if (mDimmed) {
+            contentView.setAlpha(1f);
+            if (mFavicon != null) {
+                mFavicon.setAlpha(0.1f);
+            }
+            mDimmed = false;
+        }
+    }
+
+    public void setWebHeadInteractionListener(WebHeadInteractionListener listener) {
+        mInteractionListener = listener;
+    }
+
+    public void setFaviconDrawable(@NonNull Drawable drawable) {
+        initFavicon();
+        mFavicon.setImageDrawable(drawable);
+    }
+
+    private boolean isLastWebHead() {
+        return WEB_HEAD_COUNT - 1 == 0;
+    }
+
+    @NonNull
+    public ImageView getFaviconView() {
+        initFavicon();
+        return mFavicon;
+    }
+
+    public WindowManager.LayoutParams getWindowParams() {
+        return mWindowParams;
+    }
+
+    public String getUrl() {
+        return mUrl;
     }
 
     public void destroySelf(boolean shouldReceiveCallback) {
@@ -371,31 +433,11 @@ public class WebHead extends FrameLayout {
 
         removeView(contentView);
 
+        if (mFavicon != null) removeView(mFavicon);
+
         contentView = null;
+        mFavicon = null;
         sWindowManager.removeView(this);
-    }
-
-    private boolean isLastWebHead() {
-        return WEB_HEAD_COUNT - 1 == 0;
-    }
-
-    public void setWebHeadInteractionListener(WebHeadInteractionListener listener) {
-        mInteractionListener = listener;
-    }
-
-    public String getUrl() {
-        return mUrl;
-    }
-
-    private Point getCentreLockPoint() {
-        if (mCentreLockPoint == null) {
-            Point removeCentre = getRemoveWebHead().getCenterCoordinates();
-            int offset = getWidth() / 2;
-            int x = removeCentre.x - offset;
-            int y = removeCentre.y - offset - (offset / 2) - (offset / 4);
-            mCentreLockPoint = new Point(x, y);
-        }
-        return mCentreLockPoint;
     }
 
     public interface WebHeadInteractionListener {
@@ -411,6 +453,10 @@ public class WebHead extends FrameLayout {
             float value = (float) spring.getCurrentValue();
             contentView.setScaleX(value);
             contentView.setScaleY(value);
+            if (mFavicon != null) {
+                mFavicon.setScaleY(value);
+                mFavicon.setScaleX(value);
+            }
         }
     }
 

@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,9 +18,15 @@ import android.provider.Settings;
 import android.support.customtabs.CustomTabsService;
 import android.support.customtabs.CustomTabsSession;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.NotificationCompat;
 import android.view.WindowManager;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -115,8 +122,25 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         // them a little such that they appear to be stacked
         stackPreviousWebHeads();
 
+        beginFaviconLoading(webHead);
+
         mWindowManager.addView(webHead, webHead.getWindowParams());
         mWebHeads.put(webHead.getUrl(), webHead);
+    }
+
+    private void beginFaviconLoading(final WebHead webHead) {
+        Glide.with(this)
+                .load("https://github.com/apple-touch-icon-180x180.png")
+                .asBitmap()
+                .into(new BitmapImageViewTarget(webHead.getFaviconView()) {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), resource);
+                        roundedBitmapDrawable.setAntiAlias(true);
+                        roundedBitmapDrawable.setCircular(true);
+                        webHead.setFaviconDrawable(roundedBitmapDrawable);
+                    }
+                });
     }
 
     private void stackPreviousWebHeads() {
