@@ -108,7 +108,7 @@ public class BlacklistManagerActivity extends AppCompatActivity implements Black
 
     private void setIconWithPackageName(String packageName) {
         try {
-            mSecondaryBrowserIcon.setImageDrawable(getPackageManager().getApplicationIcon(packageName));
+            mSecondaryBrowserIcon.setImageDrawable(getApplicationContext().getPackageManager().getApplicationIcon(packageName));
         } catch (PackageManager.NameNotFoundException e) {
             mSecondaryBrowserIcon.setImageDrawable(new IconicsDrawable(this)
                     .icon(GoogleMaterial.Icon.gmd_error_outline)
@@ -191,7 +191,7 @@ public class BlacklistManagerActivity extends AppCompatActivity implements Black
         @Override
         protected Void doInBackground(Void... params) {
             getBlacklistedPkgsFromDB();
-            final PackageManager pm = getPackageManager();
+            final PackageManager pm = getApplicationContext().getPackageManager();
 
             Intent intent = new Intent(Intent.ACTION_MAIN, null);
             intent.addCategory(Intent.CATEGORY_LAUNCHER);

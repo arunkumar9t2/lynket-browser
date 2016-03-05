@@ -330,12 +330,12 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         if (Util.isAccessibilityServiceEnabled(this)) {
             Timber.d("Scanning permission granted");
             if (mPrefetchSwitch != null)
-                mPrefetchSwitch.setChecked(Preferences.preFetch(this));
+                mPrefetchSwitch.setChecked(Preferences.preFetch(getApplicationContext()));
         } else {
             // Turn off preference
             if (mPrefetchSwitch != null)
                 mPrefetchSwitch.setChecked(false);
-            Preferences.preFetch(MainActivity.this, false);
+            Preferences.preFetch(getApplicationContext(), false);
         }
     }
 
@@ -757,7 +757,9 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         if (imageView == null || packageName == null) return;
 
         try {
-            imageView.setImageDrawable(getPackageManager().getApplicationIcon(packageName));
+            // Calling getPackageManager directly from activity causes leak in UsageManager when accessibility is turned on.
+            // Refer https://github.com/square/leakcanary/issues/62#issuecomment-101414452
+            imageView.setImageDrawable(getApplicationContext().getPackageManager().getApplicationIcon(packageName));
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }

@@ -23,7 +23,7 @@ public class App implements Comparable {
         this.packageName = packageName;
         this.appName = Util.getAppNameWithPackage(context, packageName);
         try {
-            this.appIcon = context.getPackageManager().getApplicationIcon(packageName);
+            this.appIcon = context.getApplicationContext().getPackageManager().getApplicationIcon(packageName);
         } catch (PackageManager.NameNotFoundException e) {
             this.appIcon = null;
         }

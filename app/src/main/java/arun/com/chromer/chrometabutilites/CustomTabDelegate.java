@@ -89,7 +89,7 @@ public class CustomTabDelegate {
             if (currentDefaultProvider.equalsIgnoreCase(CustomTabHelper.BETA_PACKAGE)
                     || currentDefaultProvider.equalsIgnoreCase(CustomTabHelper.DEV_PACKAGE)) {
                 if (Util.isPackageInstalled(ctx, currentDefaultProvider)) {
-                    Intent intent = ctx.getPackageManager().getLaunchIntentForPackage(currentDefaultProvider);
+                    Intent intent = ctx.getApplicationContext().getPackageManager().getLaunchIntentForPackage(currentDefaultProvider);
                     PendingIntent openBrowser = PendingIntent.getActivity(ctx, 0, intent,
                             PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -195,7 +195,7 @@ public class CustomTabDelegate {
 
             Bitmap icon;
             try {
-                icon = Util.drawableToBitmap(ctx.getPackageManager().getApplicationIcon(pakage));
+                icon = Util.drawableToBitmap(ctx.getApplicationContext().getPackageManager().getApplicationIcon(pakage));
             } catch (PackageManager.NameNotFoundException e) {
                 return;
             }
@@ -256,7 +256,7 @@ public class CustomTabDelegate {
 
             Bitmap icon;
             try {
-                icon = Util.drawableToBitmap(ctx.getPackageManager().getApplicationIcon(pakage));
+                icon = Util.drawableToBitmap(ctx.getApplicationContext().getPackageManager().getApplicationIcon(pakage));
             } catch (PackageManager.NameNotFoundException e) {
                 return;
             }

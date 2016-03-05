@@ -120,7 +120,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
         Intent webIntentImplicit = new Intent(Intent.ACTION_VIEW, getIntent().getData());
         webIntentImplicit.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         webIntentImplicit.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        List<ResolveInfo> resolvedActivityList = getPackageManager()
+        List<ResolveInfo> resolvedActivityList = getApplicationContext().getPackageManager()
                 .queryIntentActivities(webIntentImplicit, PackageManager.MATCH_ALL);
 
         String secondaryPackage = Preferences.secondaryBrowserPackage(this);

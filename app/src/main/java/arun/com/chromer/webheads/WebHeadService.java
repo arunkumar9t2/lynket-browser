@@ -249,7 +249,8 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
             }
 
             // Now let's prepare urls
-            mCustomActivityHelper.mayLaunchUrl(Uri.parse(priorityUrl), null, possibleUrls);
+            boolean ok = mCustomActivityHelper.mayLaunchUrl(Uri.parse(priorityUrl), null, possibleUrls);
+            Timber.d("May launch was %b", ok);
         }
     }
 

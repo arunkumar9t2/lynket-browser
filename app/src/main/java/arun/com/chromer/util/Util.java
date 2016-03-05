@@ -97,6 +97,7 @@ public class Util {
         String versionName;
         try {
             versionName = context
+                    .getApplicationContext()
                     .getPackageManager()
                     .getPackageInfo(context.getPackageName(), 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
@@ -106,7 +107,7 @@ public class Util {
     }
 
     public static boolean isPackageInstalled(Context c, String packagename) {
-        PackageManager pm = c.getPackageManager();
+        PackageManager pm = c.getApplicationContext().getPackageManager();
         try {
             pm.getPackageInfo(packagename, PackageManager.GET_ACTIVITIES);
             return true;
@@ -116,7 +117,7 @@ public class Util {
     }
 
     public static String getAppNameWithPackage(Context context, String pack) {
-        final PackageManager pm = context.getPackageManager();
+        final PackageManager pm = context.getApplicationContext().getPackageManager();
         ApplicationInfo ai;
         try {
             ai = pm.getApplicationInfo(pack, 0);
@@ -155,7 +156,7 @@ public class Util {
 
     public static String getDefaultBrowserPackage(Context context) {
         Intent launchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(MainActivity.GOOGLE_URL));
-        ResolveInfo resolveInfo = context.getPackageManager().resolveActivity(launchIntent,
+        ResolveInfo resolveInfo = context.getApplicationContext().getPackageManager().resolveActivity(launchIntent,
                 PackageManager.MATCH_DEFAULT_ONLY);
 
         return resolveInfo != null ? resolveInfo.activityInfo.packageName : "";
@@ -163,7 +164,7 @@ public class Util {
 
     public static List<App> getCustomTabApps(Context context) {
         List<App> apps = new ArrayList<>();
-        PackageManager pm = context.getPackageManager();
+        PackageManager pm = context.getApplicationContext().getPackageManager();
         Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));
         List<ResolveInfo> resolvedActivityList = pm.queryIntentActivities(activityIntent, PackageManager.MATCH_ALL);
         for (ResolveInfo info : resolvedActivityList) {
@@ -207,7 +208,7 @@ public class Util {
     public static boolean canReadUsageStats(Context context) {
         // http://stackoverflow.com/questions/27215013/check-if-my-application-has-usage-access-enabled
         try {
-            PackageManager packageManager = context.getPackageManager();
+            PackageManager packageManager = context.getApplicationContext().getPackageManager();
             ApplicationInfo applicationInfo = packageManager.getApplicationInfo(context.getPackageName(), 0);
             AppOpsManager appOpsManager = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
             int mode = appOpsManager.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, applicationInfo.uid, applicationInfo.packageName);
@@ -229,7 +230,7 @@ public class Util {
     }
 
     public static boolean isVoiceRecognizerPresent(Context context) {
-        PackageManager pm = context.getPackageManager();
+        PackageManager pm = context.getApplicationContext().getPackageManager();
         List<ResolveInfo> activities = pm.queryIntentActivities(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
         return (activities != null) && (activities.size() > 0);
     }

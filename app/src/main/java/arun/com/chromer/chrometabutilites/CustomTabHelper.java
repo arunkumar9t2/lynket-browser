@@ -71,7 +71,7 @@ public class CustomTabHelper {
             return sPackageNameToUse;
         }
 
-        PackageManager pm = context.getPackageManager();
+        PackageManager pm = context.getApplicationContext().getPackageManager();
         // Get default VIEW intent handler.
         Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));
         ResolveInfo defaultViewHandlerInfo = pm.resolveActivity(activityIntent, 0);
@@ -116,7 +116,7 @@ public class CustomTabHelper {
 
     @TargetApi(Build.VERSION_CODES.M)
     public static List<String> getCustomTabSupportingPackages(Context context) {
-        PackageManager pm = context.getPackageManager();
+        PackageManager pm = context.getApplicationContext().getPackageManager();
         Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));
         // Get all apps that can handle VIEW intents.
         List<ResolveInfo> resolvedActivityList = pm.queryIntentActivities(activityIntent, PackageManager.MATCH_ALL);
@@ -130,7 +130,7 @@ public class CustomTabHelper {
     }
 
     public static boolean isPackageSupportCustomTabs(Context context, String packageName) {
-        PackageManager pm = context.getPackageManager();
+        PackageManager pm = context.getApplicationContext().getPackageManager();
         Intent serviceIntent = new Intent();
         serviceIntent.setAction(ACTION_CUSTOM_TABS_CONNECTION);
         serviceIntent.setPackage(packageName);
@@ -145,7 +145,7 @@ public class CustomTabHelper {
      */
     private static boolean hasSpecializedHandlerIntents(Context context, Intent intent) {
         try {
-            PackageManager pm = context.getPackageManager();
+            PackageManager pm = context.getApplicationContext().getPackageManager();
             List<ResolveInfo> handlers = pm.queryIntentActivities(
                     intent,
                     PackageManager.GET_RESOLVED_FILTER);
