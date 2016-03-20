@@ -28,6 +28,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -102,6 +104,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
             if (!Settings.canDrawOverlays(this)) {
                 Timber.d("Exited webhead service since overlay permission was revoked");
                 stopSelf();
+                return;
             }
         }
 
@@ -156,7 +159,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         // them a little such that they appear to be stacked
         stackPreviousWebHeads();
 
-        beginFaviconLoading(webHead);
+        // beginFaviconLoading(webHead);
 
         mWindowManager.addView(webHead, webHead.getWindowParams());
         mWebHeads.put(webHead.getUrl(), webHead);
@@ -169,18 +172,24 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     }
 
     private void beginFaviconLoading(final WebHead webHead) {
-        Glide.with(this)
-                .load("http://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/ic_product_inbox_16dp_r2_2x.png")
-                .asBitmap()
-                .into(new BitmapImageViewTarget(webHead.getFaviconView()) {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), resource);
-                        roundedBitmapDrawable.setAntiAlias(true);
-                        roundedBitmapDrawable.setCircular(true);
-                        webHead.setFaviconDrawable(roundedBitmapDrawable);
-                    }
-                });
+        String url;
+        try {
+            url = new URL(webHead.getUrl()).getHost();
+            Glide.with(this)
+                    .load(String.format("http://icons.better-idea.org/icon?url=%s&size=120", url))
+                    .asBitmap()
+                    .into(new BitmapImageViewTarget(webHead.getFaviconView()) {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                            RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), resource);
+                            roundedBitmapDrawable.setAntiAlias(true);
+                            roundedBitmapDrawable.setCircular(true);
+                            webHead.setFaviconDrawable(roundedBitmapDrawable);
+                        }
+                    });
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showNotification() {

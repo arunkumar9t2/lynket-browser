@@ -76,6 +76,8 @@ public class WebHead extends FrameLayout {
 
     private ImageView mFavicon;
 
+    private ImageView mAppIcon;
+
     public WebHead(Context context, String url, WindowManager windowManager) {
         super(context);
         mUrl = url;
@@ -109,6 +111,13 @@ public class WebHead extends FrameLayout {
         if (mFavicon == null) {
             mFavicon = (ImageView) LayoutInflater.from(getContext()).inflate(R.layout.favicon_layout, this, false);
             addView(mFavicon);
+        }
+    }
+
+    private void initAppIcon() {
+        if (mAppIcon == null) {
+            mAppIcon = (ImageView) LayoutInflater.from(getContext()).inflate(R.layout.web_head_app_indicator_layout, this, false);
+            addView(mAppIcon);
         }
     }
 
@@ -376,9 +385,45 @@ public class WebHead extends FrameLayout {
     }
 
     public void setFaviconDrawable(@NonNull Drawable drawable) {
+        contentView.clearUrlIndicator();
         initFavicon();
         mFavicon.setImageDrawable(drawable);
+        initAppIcon();
     }
+
+    /*
+    Really bad method, need to refactor.
+    private Bitmap getAppIcon() {
+        String packageName = getContext().getPackageName();
+        final int appIconSize = getContext().getResources().getDimensionPixelSize(R.dimen.web_head_app_indicator_icon);
+        final int size = getContext().getResources().getDimensionPixelSize(R.dimen.web_head_app_indicator_circle);
+        Bitmap appIconBitmap;
+        Bitmap resultBitmap = null;
+        try {
+            Drawable appIconDrawable = getContext().getApplicationContext().getPackageManager().getApplicationIcon(packageName);
+            if (appIconDrawable instanceof BitmapDrawable) {
+                BitmapDrawable bitmapDrawable = (BitmapDrawable) appIconDrawable;
+                appIconBitmap = Bitmap.createScaledBitmap(bitmapDrawable.getBitmap(), appIconSize, appIconSize, false);
+            } else return null;
+        } catch (PackageManager.NameNotFoundException e) {
+            return null;
+        }
+
+        if (appIconBitmap != null) {
+            resultBitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(resultBitmap);
+            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            paint.setColor(Color.WHITE);
+            paint.setStyle(Paint.Style.FILL);
+            // canvas.drawCircle(size / 2, size / 2, size / 2, paint);
+            int left = (size - appIconBitmap.getWidth()) / 2;
+            int top = (size - appIconBitmap.getHeight()) / 2;
+            ColorFilter filter = new LightingColorFilter(Color.parseColor("#9E9E9E"), 0);
+            paint.setColorFilter(filter);
+            canvas.drawBitmap(appIconBitmap, left, top, null);
+        }
+        return resultBitmap;
+    }*/
 
     private boolean isLastWebHead() {
         return WEB_HEAD_COUNT - 1 == 0;
@@ -434,9 +479,11 @@ public class WebHead extends FrameLayout {
         removeView(contentView);
 
         if (mFavicon != null) removeView(mFavicon);
+        if (mAppIcon != null) removeView(mAppIcon);
 
         contentView = null;
         mFavicon = null;
+        mAppIcon = null;
         sWindowManager.removeView(this);
     }
 

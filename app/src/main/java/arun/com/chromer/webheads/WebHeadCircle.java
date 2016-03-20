@@ -25,6 +25,7 @@ public class WebHeadCircle extends View {
     private final String mUrl;
     private final Paint mBgPaint;
     private final Paint textPaint;
+    private boolean mShouldDrawText = true;
 
     public WebHeadCircle(Context context, String mUrl) {
         super(context);
@@ -63,7 +64,23 @@ public class WebHeadCircle extends View {
         canvas.drawColor(0, PorterDuff.Mode.CLEAR);
         canvas.drawCircle(getWidth() / 2, getHeight() / 2, (float) (getWidth() / 2.4), mBgPaint);
 
-        drawText(canvas);
+        if (mShouldDrawText) {
+            drawText(canvas);
+        }
+    }
+
+    public void clearUrlIndicator() {
+        if (mShouldDrawText) {
+            mShouldDrawText = false;
+            invalidate();
+        }
+    }
+
+    public void showUrlIndicator() {
+        if (!mShouldDrawText) {
+            mShouldDrawText = true;
+            invalidate();
+        }
     }
 
     private void drawText(Canvas canvas) {
