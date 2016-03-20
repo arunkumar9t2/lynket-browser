@@ -146,13 +146,12 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
             addWebHead(webHead);
 
             if (mCustomTabConnected)
-                mCustomActivityHelper.mayLaunchUrl(Uri.parse(urlToLoad), null, null);
+                mCustomActivityHelper.mayLaunchUrl(Uri.parse(urlToLoad), null, getPossibleUrls());
             else
                 deferMayLaunchUntilConnected(urlToLoad);
         } else
             Toast.makeText(this, "Already loaded", Toast.LENGTH_SHORT).show();
     }
-
 
     private void stackPreviousWebHeads() {
         for (WebHead webhead : mWebHeads.values()) {
@@ -234,20 +233,23 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         Thread deferThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                while (true) {
+                int i = 0;
+                while (i < 10) {
+                    Timber.d("Trying to command may launch");
                     try {
                         if (mCustomTabConnected) {
                             Thread.sleep(300);
                             boolean ok = mCustomActivityHelper.mayLaunchUrl(Uri.parse(urlToLoad),
                                     null,
-                                    null);
+                                    getPossibleUrls());
                             Timber.d("Deferred may launch was %b", ok);
-                            break;
+                            if (ok) break;
                         }
-                        Thread.sleep(100);
+                        Thread.sleep(300);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    i++;
                 }
             }
         });
@@ -285,6 +287,20 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
             Timber.d("May launch was %b", ok);
         }
     }
+
+    private List<Bundle> getPossibleUrls() {
+        List<Bundle> possibleUrls = new ArrayList<>();
+        for (WebHead webHead : mWebHeads.values()) {
+            String url = webHead.getUrl();
+            if (url == null) continue;
+
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(CustomTabsService.KEY_URL, Uri.parse(url));
+            possibleUrls.add(bundle);
+        }
+        return possibleUrls;
+    }
+
 
     private Stack<String> getUrlStack(String sLastOpenedUrl) {
         Stack<String> urlStack = new Stack<>();
