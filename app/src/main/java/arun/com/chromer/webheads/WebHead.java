@@ -32,11 +32,15 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class WebHead extends FrameLayout {
 
+    private static int WEB_HEAD_COUNT = 0;
+
     private static final int STACKING_GAP_DP = 6;
 
     private static WindowManager sWindowManager;
 
-    private static int WEB_HEAD_COUNT = 0;
+    private static final double MAGNETISM_THRESHOLD = Util.dpToPx(120);
+
+    private static Point mCentreLockPoint;
 
     private final String mUrl;
 
@@ -70,18 +74,17 @@ public class WebHead extends FrameLayout {
 
     private boolean isBeingDestroyed;
 
-    private static final double MAGNETISM_THRESHOLD = Util.dpToPx(120);
-
-    private static Point mCentreLockPoint;
-
     private ImageView mFavicon;
 
     private ImageView mAppIcon;
 
-    public WebHead(Context context, String url, WindowManager windowManager) {
+    public WebHead(Context context, String url) {
         super(context);
         mUrl = url;
-        sWindowManager = windowManager;
+
+        if (sWindowManager == null) {
+            sWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        }
 
         init(context, url);
 
@@ -185,8 +188,8 @@ public class WebHead extends FrameLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        // Don't react to any touch event when we are being destroyed
-        if (isBeingDestroyed) return super.onTouchEvent(event);
+        // Don't react to any touch event and consume it when we are being destroyed
+        if (isBeingDestroyed) return true;
 
         mGestDetector.onTouchEvent(event);
         switch (event.getAction()) {
@@ -221,8 +224,8 @@ public class WebHead extends FrameLayout {
                 // Go to the nearest side and rest there
                 stickToWall();
 
-                // show remove view
-                getRemoveWebHead().hide();
+                // hide remove view
+                RemoveWebHead.hideSelf();
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (Math.hypot(event.getRawX() - posX, event.getRawY() - posY) > mTouchSlop) {
@@ -266,15 +269,10 @@ public class WebHead extends FrameLayout {
     }
 
     private void move(MotionEvent event) {
-        // if (initialDownX == 0) {
-        mWindowParams.x = (int) (initialDownX + (event.getRawX() - posX));
-        // } else {
-        // mWindowParams.x = (int) (initialDownX + (event.getRawX() - posX)) - getWidth();
-        // }
-        mWindowParams.y = (int) (initialDownY + (event.getRawY() - posY));
-
-
         mUserManuallyMoved = true;
+
+        mWindowParams.x = (int) (initialDownX + (event.getRawX() - posX));
+        mWindowParams.y = (int) (initialDownY + (event.getRawY() - posY));
 
         if (isNearRemoveCircle()) {
             getRemoveWebHead().grow();
@@ -470,7 +468,7 @@ public class WebHead extends FrameLayout {
         mXSpring.destroy();
         mXSpring = null;
 
-        getRemoveWebHead().hide();
+        RemoveWebHead.hideSelf();
 
         mSpringSystem = null;
 
@@ -488,9 +486,9 @@ public class WebHead extends FrameLayout {
     }
 
     public interface WebHeadInteractionListener {
-        void onWebHeadClick(WebHead webHead);
+        void onWebHeadClick(@NonNull WebHead webHead);
 
-        void onWebHeadDestroy(WebHead webHead, boolean isLastWebHead);
+        void onWebHeadDestroy(@NonNull WebHead webHead, boolean isLastWebHead);
     }
 
     private class ScaleSpringListener extends SimpleSpringListener {
@@ -512,7 +510,7 @@ public class WebHead extends FrameLayout {
         public boolean onSingleTapConfirmed(MotionEvent e) {
             if (mInteractionListener != null) mInteractionListener.onWebHeadClick(WebHead.this);
 
-            getRemoveWebHead().hide();
+            RemoveWebHead.hideSelf();
 
             return super.onSingleTapConfirmed(e);
         }

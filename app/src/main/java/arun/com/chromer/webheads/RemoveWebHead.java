@@ -91,6 +91,12 @@ public class RemoveWebHead extends FrameLayout {
         }
     }
 
+    public static void hideSelf() {
+        if (ourInstance != null) {
+            ourInstance.hide();
+        }
+    }
+
     private void destroySelf() {
         mScaleSpring.setAtRest();
         mScaleSpring.destroy();

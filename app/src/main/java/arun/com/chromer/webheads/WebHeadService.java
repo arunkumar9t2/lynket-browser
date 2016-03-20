@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -15,6 +16,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsService;
 import android.support.customtabs.CustomTabsSession;
 import android.support.v4.content.LocalBroadcastManager;
@@ -100,7 +102,6 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         super.onCreate();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            // TODO Test scenario properly
             if (!Settings.canDrawOverlays(this)) {
                 Timber.d("Exited webhead service since overlay permission was revoked");
                 stopSelf();
@@ -135,14 +136,12 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     }
 
     private void processIntentAndLaunchBubble(Intent intent) {
-        if (intent == null) return; // don't do anything
+        if (intent == null || intent.getDataString() == null) return; // don't do anything
 
         String urlToLoad = intent.getDataString();
 
-        if (urlToLoad == null) return;
-
         if (!isLinkAlreadyLoaded(urlToLoad)) {
-            WebHead webHead = new WebHead(this, urlToLoad, mWindowManager);
+            WebHead webHead = new WebHead(this, urlToLoad);
             webHead.setWebHeadInteractionListener(this);
             addWebHead(webHead);
 
@@ -154,6 +153,13 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
             Toast.makeText(this, "Already loaded", Toast.LENGTH_SHORT).show();
     }
 
+
+    private void stackPreviousWebHeads() {
+        for (WebHead webhead : mWebHeads.values()) {
+            webhead.moveSelfToStackDistance();
+        }
+    }
+
     private void addWebHead(WebHead webHead) {
         // Before adding new web heads, call move self to stack distance on existing web heads to move
         // them a little such that they appear to be stacked
@@ -163,12 +169,6 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
 
         mWindowManager.addView(webHead, webHead.getWindowParams());
         mWebHeads.put(webHead.getUrl(), webHead);
-    }
-
-    private void stackPreviousWebHeads() {
-        for (WebHead webhead : mWebHeads.values()) {
-            webhead.moveSelfToStackDistance();
-        }
     }
 
     private void beginFaviconLoading(final WebHead webHead) {
@@ -212,15 +212,15 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     }
 
     private void addTestWebHeads() {
-        WebHead webHead = new WebHead(this, "http://www.google.com", mWindowManager);
+        WebHead webHead = new WebHead(this, "http://www.google.com");
         webHead.setWebHeadInteractionListener(this);
         addWebHead(webHead);
 
-        webHead = new WebHead(this, "http://www.twitter.com", mWindowManager);
+        webHead = new WebHead(this, "http://www.twitter.com");
         webHead.setWebHeadInteractionListener(this);
         addWebHead(webHead);
 
-        webHead = new WebHead(this, "http://www.androidpolice.com", mWindowManager);
+        webHead = new WebHead(this, "http://www.androidpolice.com");
         webHead.setWebHeadInteractionListener(this);
         addWebHead(webHead);
     }
@@ -316,7 +316,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
 
         mCustomActivityHelper = new CustomActivityHelper();
         mCustomActivityHelper.setConnectionCallback(this);
-        mCustomActivityHelper.setNavigationCallback(new CustomTabNavigationCallback());
+        mCustomActivityHelper.setNavigationCallback(new WebHeadNavigationCallback());
 
         boolean ok = mCustomActivityHelper.bindCustomTabsService(this);
         if (ok) Timber.d("Binding successful");
@@ -334,7 +334,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     }
 
     @Override
-    public void onWebHeadClick(WebHead webHead) {
+    public void onWebHeadClick(@NonNull WebHead webHead) {
         if (webHead.getUrl() != null && webHead.getUrl().length() != 0) {
             Intent webHeadActivity = new Intent(this, CustomTabActivity.class);
             webHeadActivity.setData(Uri.parse(webHead.getUrl()));
@@ -359,7 +359,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     }
 
     @Override
-    public void onWebHeadDestroy(WebHead webHead, boolean isLastWebHead) {
+    public void onWebHeadDestroy(@NonNull WebHead webHead, boolean isLastWebHead) {
         mWebHeads.remove(webHead.getUrl());
 
         if (isLastWebHead) {
@@ -393,6 +393,12 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Timber.d(newConfig.toString());
+    }
+
+    @Override
     public void onCustomTabsConnected() {
         mCustomTabConnected = true;
         Timber.d("Connected to custom tabs successfully");
@@ -410,30 +416,8 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         return null;
     }
 
-    private void dimAllWebHeads() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                for (WebHead webhead : mWebHeads.values()) {
-                    webhead.dim();
-                }
-            }
-        });
-    }
-
-    private void brightAllWebHeads() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                for (WebHead webhead : mWebHeads.values()) {
-                    webhead.bright();
-                }
-            }
-        });
-    }
-
     private void hideRemoveView() {
-        getRemoveWebHead().hide();
+        RemoveWebHead.hideSelf();
     }
 
 
@@ -441,17 +425,14 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         new Handler(Looper.getMainLooper()).post(r);
     }
 
-    private class CustomTabNavigationCallback extends CustomActivityHelper.NavigationCallback {
+    private class WebHeadNavigationCallback extends CustomActivityHelper.NavigationCallback {
         @Override
         public void onNavigationEvent(int navigationEvent, Bundle extras) {
             switch (navigationEvent) {
                 case TAB_SHOWN:
-                    // dimAllWebHeads();
 
                     break;
                 case TAB_HIDDEN:
-                    // brightAllWebHeads();
-
                     // When a tab is exited, prepare the other urls.
                     prepareNextSetOfUrls(sLastOpenedUrl);
 
