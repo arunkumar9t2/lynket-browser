@@ -1,5 +1,6 @@
 package arun.com.chromer.webheads;
 
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PixelFormat;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.view.WindowManager;
+import android.view.animation.BounceInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -34,7 +36,7 @@ public class WebHead extends FrameLayout {
 
     private static int WEB_HEAD_COUNT = 0;
 
-    private static final int STACKING_GAP_DP = 6;
+    private static final int STACKING_GAP_PX = Util.dpToPx(6);
 
     private static WindowManager sWindowManager;
 
@@ -351,11 +353,21 @@ public class WebHead extends FrameLayout {
         return Math.sqrt(x * x + y * y);
     }
 
-    public void moveSelfToStackDistance() {
+    public ValueAnimator getStackDistanceAnimator() {
+        ValueAnimator animator = null;
         if (!mUserManuallyMoved) {
-            mYSpring.setCurrentValue(mWindowParams.y);
-            mYSpring.setEndValue(mWindowParams.y + Util.dpToPx(STACKING_GAP_DP));
+            animator = ValueAnimator.ofInt(mWindowParams.y, mWindowParams.y + STACKING_GAP_PX);
+            animator.setInterpolator(new BounceInterpolator());
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    int y = (int) animation.getAnimatedValue();
+                    mWindowParams.y = y;
+                    sWindowManager.updateViewLayout(WebHead.this, mWindowParams);
+                }
+            });
         }
+        return animator;
     }
 
     public void dim() {

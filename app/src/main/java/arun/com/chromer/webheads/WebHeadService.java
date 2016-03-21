@@ -1,5 +1,7 @@
 package arun.com.chromer.webheads;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -34,6 +36,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
@@ -141,9 +144,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         String urlToLoad = intent.getDataString();
 
         if (!isLinkAlreadyLoaded(urlToLoad)) {
-            WebHead webHead = new WebHead(this, urlToLoad);
-            webHead.setWebHeadInteractionListener(this);
-            addWebHead(webHead);
+            addWebHead(urlToLoad);
 
             if (mCustomTabConnected)
                 mCustomActivityHelper.mayLaunchUrl(Uri.parse(urlToLoad), null, getPossibleUrls());
@@ -153,21 +154,23 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
             Toast.makeText(this, "Already loaded", Toast.LENGTH_SHORT).show();
     }
 
-    private void stackPreviousWebHeads() {
-        for (WebHead webhead : mWebHeads.values()) {
-            webhead.moveSelfToStackDistance();
-        }
-    }
-
-    private void addWebHead(WebHead webHead) {
+    private void addWebHead(final String webHeadUrl) {
         // Before adding new web heads, call move self to stack distance on existing web heads to move
         // them a little such that they appear to be stacked
-        stackPreviousWebHeads();
+        AnimatorSet animatorSet = new AnimatorSet();
+        List<Animator> animators = new LinkedList<>();
+        for (WebHead webhead : mWebHeads.values()) {
+            Animator anim = webhead.getStackDistanceAnimator();
+            if (anim != null) animators.add(anim);
+        }
+        animatorSet.playTogether(animators);
+        animatorSet.start();
 
-        // beginFaviconLoading(webHead);
-
+        WebHead webHead = new WebHead(WebHeadService.this, webHeadUrl);
+        webHead.setWebHeadInteractionListener(WebHeadService.this);
         mWindowManager.addView(webHead, webHead.getWindowParams());
         mWebHeads.put(webHead.getUrl(), webHead);
+        // beginFaviconLoading(webHead);
     }
 
     private void beginFaviconLoading(final WebHead webHead) {
@@ -211,17 +214,11 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     }
 
     private void addTestWebHeads() {
-        WebHead webHead = new WebHead(this, "http://www.google.com");
-        webHead.setWebHeadInteractionListener(this);
-        addWebHead(webHead);
+        addWebHead("http://www.google.com");
 
-        webHead = new WebHead(this, "http://www.twitter.com");
-        webHead.setWebHeadInteractionListener(this);
-        addWebHead(webHead);
+        addWebHead("http://www.twitter.com");
 
-        webHead = new WebHead(this, "http://www.androidpolice.com");
-        webHead.setWebHeadInteractionListener(this);
-        addWebHead(webHead);
+        addWebHead("http://www.androidpolice.com");
     }
 
     private boolean isLinkAlreadyLoaded(String urlToLoad) {
