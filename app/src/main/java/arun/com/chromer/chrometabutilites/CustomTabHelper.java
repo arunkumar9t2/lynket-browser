@@ -37,7 +37,7 @@ import arun.com.chromer.util.Util;
 public class CustomTabHelper {
     public static final String ACTION_CUSTOM_TABS_CONNECTION =
             "android.support.customtabs.action.CustomTabsService";
-    private static final String STABLE_PACKAGE = "com.android.chrome";
+    public static final String STABLE_PACKAGE = "com.android.chrome";
     public static final String BETA_PACKAGE = "com.chrome.beta";
     public static final String DEV_PACKAGE = "com.chrome.dev";
     private static final String LOCAL_PACKAGE = "com.google.android.apps.chrome";

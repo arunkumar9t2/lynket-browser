@@ -87,7 +87,8 @@ public class CustomTabDelegate {
 
             // TODO add normal chrome also when it implements the open in <default> behaviour
             if (currentDefaultProvider.equalsIgnoreCase(CustomTabHelper.BETA_PACKAGE)
-                    || currentDefaultProvider.equalsIgnoreCase(CustomTabHelper.DEV_PACKAGE)) {
+                    || currentDefaultProvider.equalsIgnoreCase(CustomTabHelper.DEV_PACKAGE)
+                    || currentDefaultProvider.equalsIgnoreCase(CustomTabHelper.STABLE_PACKAGE)) {
                 if (Util.isPackageInstalled(ctx, currentDefaultProvider)) {
                     Intent intent = ctx.getApplicationContext().getPackageManager().getLaunchIntentForPackage(currentDefaultProvider);
                     PendingIntent openBrowser = PendingIntent.getActivity(ctx, 0, intent,
@@ -188,11 +189,8 @@ public class CustomTabDelegate {
 
             PendingIntent openBrowser = PendingIntent.getBroadcast(ctx, 0, activityIntent,
                     PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
-
             String pakage = Preferences.secondaryBrowserPackage(ctx);
-
             if (pakage == null || !Util.isPackageInstalled(ctx, pakage)) return;
-
             Bitmap icon;
             try {
                 icon = Util.drawableToBitmap(ctx.getApplicationContext().getPackageManager().getApplicationIcon(pakage));
@@ -212,13 +210,9 @@ public class CustomTabDelegate {
                         PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
 
                 String pakage = Preferences.secondaryBrowserPackage(ctx);
-
                 if (pakage == null || !Util.isPackageInstalled(ctx, pakage)) return;
-
                 String app = Util.getAppNameWithPackage(ctx, pakage);
-
                 String label = String.format(ctx.getString(R.string.open_in_browser), app);
-
                 builder.addMenuItem(label, openBrowser);
             } catch (Exception e) {
                 Timber.d("Was not able to set secondary browser");
@@ -233,13 +227,9 @@ public class CustomTabDelegate {
                     PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
 
             String pakage = Preferences.favSharePackage(ctx);
-
             if (pakage == null || !Util.isPackageInstalled(ctx, pakage)) return;
-
             String app = Util.getAppNameWithPackage(ctx, pakage);
-
             String label = String.format(ctx.getString(R.string.share_with), app);
-
             builder.addMenuItem(label, pendingShareIntent);
         }
     }
@@ -251,16 +241,13 @@ public class CustomTabDelegate {
                     PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
 
             String pakage = Preferences.favSharePackage(ctx);
-
             if (pakage == null || !Util.isPackageInstalled(ctx, pakage)) return;
-
             Bitmap icon;
             try {
                 icon = Util.drawableToBitmap(ctx.getApplicationContext().getPackageManager().getApplicationIcon(pakage));
             } catch (PackageManager.NameNotFoundException e) {
                 return;
             }
-
             builder.setActionButton(icon, "Fav share app", pendingShareIntent);
         }
     }
