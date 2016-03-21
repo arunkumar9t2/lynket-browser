@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsService;
 import android.support.customtabs.CustomTabsSession;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
@@ -101,18 +102,16 @@ public class ScannerService extends AccessibilityService implements CustomActivi
     }
 
     private void updateNotification() {
-        if (mLastFetchedUrl != null) {
+        if (mLastFetchedUrl != null && mLastFetchedUrl.length() > 0) {
             Timber.d("Posting notification");
             PendingIntent contentIntent = PendingIntent.getBroadcast(this,
                     0,
                     new Intent(SCANNER_SERVICE_NOTIFICATION),
                     PendingIntent.FLAG_UPDATE_CURRENT);
 
-            final String summary = String.format("Last fetched url: %s", mLastFetchedUrl);
-
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
             inboxStyle.setBigContentTitle(NOTIFICATION_TITLE);
-            inboxStyle.addLine(summary);
+            inboxStyle.addLine(getString(R.string.last_fetched_urls));
             for (String url : mExtractedUrlQueue) {
                 inboxStyle.addLine(url);
             }
@@ -120,16 +119,18 @@ public class ScannerService extends AccessibilityService implements CustomActivi
             Notification notification = new NotificationCompat.Builder(this)
                     .setSmallIcon(R.drawable.ic_chromer_notification)
                     .setPriority(NotificationCompat.PRIORITY_MIN)
+                    .setCategory(NotificationCompat.CATEGORY_STATUS)
+                    .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
                     .setContentTitle(NOTIFICATION_TITLE)
-                    .setContentText(summary)
+                    .setContentText(mLastFetchedUrl)
                     .setContentIntent(contentIntent)
                     .setAutoCancel(false)
                     .setStyle(inboxStyle)
                     .setLocalOnly(true)
                     .build();
 
-            NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            mNotifyMgr.notify(NOTIFICATION_ID, notification);
+            NotificationManager notifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            notifyMgr.notify(NOTIFICATION_ID, notification);
         }
     }
 
