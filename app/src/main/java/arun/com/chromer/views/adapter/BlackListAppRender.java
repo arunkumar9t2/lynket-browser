@@ -98,10 +98,10 @@ public class BlackListAppRender extends RecyclerView.Adapter<BlackListAppRender.
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView title;
-        public TextView subtitle;
-        public ImageView icon;
-        public AppCompatCheckBox checkBox;
+        public final TextView title;
+        public final TextView subtitle;
+        public final ImageView icon;
+        public final AppCompatCheckBox checkBox;
 
         public ViewHolder(View view) {
             super(view);
@@ -127,7 +127,7 @@ public class BlackListAppRender extends RecyclerView.Adapter<BlackListAppRender.
     }
 
     // see https://groups.google.com/forum/#!topic/glidelibrary/MAqPfuHpjr4
-    class PassThroughModelLoader<T> implements ModelLoader<T, T> {
+    private class PassThroughModelLoader<T> implements ModelLoader<T, T> {
         @Override
         public DataFetcher<T> getResourceFetcher(final T model, int width, int height) {
             return new DataFetcher<T>() {

@@ -139,6 +139,7 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
 
         final String error = getString(R.string.couldnt_load_price);
 
+        //noinspection ConstantConditions
         donateList.setAdapter(new ExtendedBaseAdapter() {
             final Context context = getApplicationContext();
 

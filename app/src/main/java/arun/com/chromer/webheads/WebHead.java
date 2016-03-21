@@ -364,8 +364,7 @@ public class WebHead extends FrameLayout {
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
-                    int y = (int) animation.getAnimatedValue();
-                    mWindowParams.y = y;
+                    mWindowParams.y = (int) animation.getAnimatedValue();
                     sWindowManager.updateViewLayout(WebHead.this, mWindowParams);
                 }
             });

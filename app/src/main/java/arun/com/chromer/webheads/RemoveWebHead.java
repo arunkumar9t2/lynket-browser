@@ -155,11 +155,11 @@ public class RemoveWebHead extends FrameLayout {
         mDispHeight = metrics.heightPixels;
     }
 
-    public WindowManager.LayoutParams getWindowParams() {
+    private WindowManager.LayoutParams getWindowParams() {
         return mWindowParams;
     }
 
-    public void hide() {
+    private void hide() {
         if (!mHidden) {
             mScaleSpring.setEndValue(0.0f);
             mHidden = true;

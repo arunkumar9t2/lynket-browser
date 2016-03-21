@@ -47,8 +47,8 @@ import timber.log.Timber;
 
 public class BlacklistManagerActivity extends AppCompatActivity implements BlackListAppRender.ItemClickListener {
 
-    private List<App> mApps = new ArrayList<>();
-    private List<String> sBlacklistedApps = new ArrayList<>();
+    private final List<App> mApps = new ArrayList<>();
+    private final List<String> sBlacklistedApps = new ArrayList<>();
     private MaterialDialog mProgress;
     private RecyclerView mRecyclerView;
     private ImageView mSecondaryBrowserIcon;
@@ -103,6 +103,7 @@ public class BlacklistManagerActivity extends AppCompatActivity implements Black
                 return !info.componentName.getPackageName().equalsIgnoreCase(getPackageName());
             }
         });
+        //noinspection ConstantConditions
         findViewById(R.id.secondary_browser).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

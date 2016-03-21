@@ -34,11 +34,11 @@ public class MaterialSearchView extends FrameLayout {
     private TextView mLabel;
     private EditText mEditText;
     private boolean mShouldClearText;
-    private IconicsDrawable mXIcon = new IconicsDrawable(getContext())
+    private final IconicsDrawable mXIcon = new IconicsDrawable(getContext())
             .icon(GoogleMaterial.Icon.gmd_clear)
             .color(mNormalColor)
             .sizeDp(16);
-    private IconicsDrawable mVoiceIcon = new IconicsDrawable(getContext())
+    private final IconicsDrawable mVoiceIcon = new IconicsDrawable(getContext())
             .icon(GoogleMaterial.Icon.gmd_keyboard_voice)
             .color(mNormalColor)
             .sizeDp(18);
