@@ -192,54 +192,57 @@ public class WebHead extends FrameLayout {
     public boolean onTouchEvent(MotionEvent event) {
         // Don't react to any touch event and consume it when we are being destroyed
         if (isBeingDestroyed) return true;
+        try {
+            mGestDetector.onTouchEvent(event);
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    initialDownX = mWindowParams.x;
+                    initialDownY = mWindowParams.y;
 
-        mGestDetector.onTouchEvent(event);
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                initialDownX = mWindowParams.x;
-                initialDownY = mWindowParams.y;
+                    posX = event.getRawX();
+                    posY = event.getRawY();
 
-                posX = event.getRawX();
-                posY = event.getRawY();
+                    // Shrink on touch
+                    setTouchingScale();
 
-                // Shrink on touch
-                setTouchingScale();
+                    // transparent on touch
+                    setTouchingAlpha();
+                    break;
+                case MotionEvent.ACTION_UP:
+                    mDragging = false;
 
-                // transparent on touch
-                setTouchingAlpha();
-                break;
-            case MotionEvent.ACTION_UP:
-                mDragging = false;
+                    if (mWasRemoveLocked) {
+                        // If head was locked onto a remove bubble before, then kill ourselves
+                        destroySelf(true);
+                        return true;
+                    }
 
-                if (mWasRemoveLocked) {
-                    // If head was locked onto a remove bubble before, then kill ourselves
-                    destroySelf(true);
-                    return true;
-                }
+                    // Expand on release
+                    setReleaseScale();
 
-                // Expand on release
-                setReleaseScale();
+                    // opaque on release
+                    setReleaseAlpha();
 
-                // opaque on release
-                setReleaseAlpha();
+                    // Go to the nearest side and rest there
+                    stickToWall();
 
-                // Go to the nearest side and rest there
-                stickToWall();
+                    // hide remove view
+                    RemoveWebHead.hideSelf();
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    if (Math.hypot(event.getRawX() - posX, event.getRawY() - posY) > mTouchSlop) {
+                        mDragging = true;
+                    }
 
-                // hide remove view
-                RemoveWebHead.hideSelf();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                if (Math.hypot(event.getRawX() - posX, event.getRawY() - posY) > mTouchSlop) {
-                    mDragging = true;
-                }
-
-                if (mDragging) {
-                    move(event);
-                    getRemoveWebHead().reveal();
-                }
-            default:
-                break;
+                    if (mDragging) {
+                        move(event);
+                        getRemoveWebHead().reveal();
+                    }
+                default:
+                    break;
+            }
+        } catch (NullPointerException e) {
+            destroySelf(true);
         }
         return true;
     }
