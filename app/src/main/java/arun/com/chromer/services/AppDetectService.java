@@ -44,34 +44,7 @@ public class AppDetectService extends Service {
             // Timber.d("Detection thread started");
             while (!mShouldStopPolling) {
                 try {
-                    String packageName = "";
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { // Lollipop above
-                        long time = System.currentTimeMillis();
-
-                        UsageStatsManager usageMan = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
-                        List<UsageStats> stats = usageMan.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 1000 * 1000, time);
-
-                        if (stats == null) continue;
-
-                        SortedMap<Long, UsageStats> sortedMap = new TreeMap<>();
-                        for (UsageStats usageStats : stats) {
-                            // Store the list in a sorted map, will be used to retrieve the recent app later
-                            sortedMap.put(usageStats.getLastTimeUsed(), usageStats);
-                        }
-
-                        if (sortedMap.size() == 0) continue;
-
-                        final UsageStats usageStats = sortedMap.get(sortedMap.lastKey());
-
-                        if (usageStats != null) packageName = usageStats.getPackageName();
-                    } else {
-                        ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-                        ActivityManager.RunningTaskInfo runningTaskInfo = am.getRunningTasks(1).get(0);
-                        if (runningTaskInfo != null) {
-                            packageName = runningTaskInfo.topActivity.getPackageName();
-                        }
-                    }
+                    String packageName = getCurrentForegroundApp();
 
                     if (!mLastDetectedApp.equalsIgnoreCase(packageName) && !isBlacklistedPackage(packageName)) {
                         mLastDetectedApp = packageName;
@@ -87,6 +60,35 @@ public class AppDetectService extends Service {
             // Timber.d("Detection thread stopped");
         }
     };
+
+    private String getCurrentForegroundApp() {
+        String packageName = "";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { // Lollipop above
+            long time = System.currentTimeMillis();
+
+            UsageStatsManager usageMan = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
+            List<UsageStats> stats = usageMan.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 1000 * 1000, time);
+
+            SortedMap<Long, UsageStats> sortedMap = new TreeMap<>();
+            for (UsageStats usageStats : stats) {
+                // Store the list in a sorted map, will be used to retrieve the recent app later
+                if (usageStats != null)
+                    sortedMap.put(usageStats.getLastTimeUsed(), usageStats);
+            }
+
+            if (!sortedMap.isEmpty()) {
+                final UsageStats usageStats = sortedMap.get(sortedMap.lastKey());
+                packageName = usageStats.getPackageName();
+            }
+        } else {
+            ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+            ActivityManager.RunningTaskInfo runningTaskInfo = am.getRunningTasks(1).get(0);
+            if (runningTaskInfo != null) {
+                packageName = runningTaskInfo.topActivity.getPackageName();
+            }
+        }
+        return packageName;
+    }
 
     public AppDetectService() {
     }
@@ -178,6 +180,9 @@ public class AppDetectService extends Service {
         // Chances are that we picked the opening custom tab, so let's ignore our default provider
         // to be safe
         if (packageName.equalsIgnoreCase(Preferences.customTabApp(this))) return true;
+
+        // Ignore google quick search box
+        if (packageName.equalsIgnoreCase("com.google.android.googlequicksearchbox")) return true;
 
         // There can also be cases where there is no default provider set, so lets ignore all possible
         // custom tab providers to be sure. This is safe since browsers don't call our app anyways.
