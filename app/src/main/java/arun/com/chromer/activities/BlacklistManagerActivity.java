@@ -135,9 +135,11 @@ public class BlacklistManagerActivity extends AppCompatActivity implements Black
             SwitchCompat blackListSwitch = (SwitchCompat) item.getActionView().findViewById(R.id.blacklist_switch);
             if (blackListSwitch != null) {
                 blackListSwitch.setChecked(Preferences.blacklist(this));
+                snack(String.format(getString(R.string.blacklist_on), Preferences.blacklist(this) ? "on" : "off"));
                 blackListSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        snack(String.format(getString(R.string.blacklist_on), isChecked ? "on" : "off"));
                         Preferences.blacklist(getApplicationContext(), isChecked);
                         ServicesUtil.takeCareOfServices(getApplicationContext());
                     }
