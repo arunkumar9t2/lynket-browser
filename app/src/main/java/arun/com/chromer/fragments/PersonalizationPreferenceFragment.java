@@ -9,7 +9,6 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.SwitchPreferenceCompat;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -141,7 +140,7 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
                 && !Util.canReadUsageStats(getActivity().getApplicationContext())) {
             new MaterialDialog.Builder(getActivity())
                     .title(R.string.permission_required)
-                    .content(R.string.usage_permission_explanation)
+                    .content(R.string.usage_permission_explanation_appcolor)
                     .positiveText(R.string.grant)
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @TargetApi(Build.VERSION_CODES.LOLLIPOP)

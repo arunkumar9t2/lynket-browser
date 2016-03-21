@@ -124,7 +124,8 @@
     <string name="dynamic_summary_web">Color will be based on the launched website</string>
     <string name="no_option_selected">No options selected</string>
     <string name="permission_required">Permission required</string>
-    <string name="usage_permission_explanation">To enable dynamic coloring of toolbar based on apps, Chromer needs your permission to know the apps you are using. Would you like to grant this permission now?</string>
+    <string name="usage_permission_explanation_appcolor">To enable dynamic coloring of toolbar based on apps, Chromer needs your permission to know the apps you are using. Would you like to grant this permission now?</string>
+    <string name="usage_permission_explanation_blacklist">To enable blacklisting of apps, Chromer needs your permission to know the apps you are using. Would like to grant usage access permission now?</string>
     <string name="grant">Grant</string>
     <string name="open_source_contributions">Open source stuff</string>
     <string name="search_or_type_url">Search or type URL</string>
