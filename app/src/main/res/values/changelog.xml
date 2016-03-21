@@ -4,6 +4,22 @@
 <strong>You can view this again in the about screen.</strong>
 <br></br>
 <br></br>
+<strong>1.5.4</strong>
+<ul>
+    <li><b>NEW:</b> Blacklisting: ability to launch your secondary browser instead of Chromer in certain apps.</li>
+    <li><b>NEW:</b> \'X\' will be shown in search bar to quickly clear text while typing.</li>
+    <li><b>NEW:</b> Launching url from main screen now respects web heads preference.</li>
+    <li><b>NEW:</b> Much improved pre-fetch content. Optimized for memory and battery and shows a notification when links are pre-fetched. </li>
+    <li><b>NEW:</b> OneSky translation link in about screen; do help translate Chromer to your language by contributing as a translator.</li>
+    <li><b>FIX:</b> "Open in Chromer" issue. Separate Open in Chrome entry will be shown now.</li>
+    <li><b>IMPROVE:</b> Tablet layout.</li>
+    <li><b>FIX:</b> Janky scrolling in Chromer main screen.</li>
+    <li><b>FIX:</b> Layout issues when font size is increased.</li>
+    <li><b>FIX:</b> Secondary browser opening link twice.</li>
+    <li><b>FIX:</b> Major optimizations and memory leak fixes.</li>
+</ul>
+<br></br>
+<br></br>
 <strong>1.5.3</strong>
 <ul>
     <li><b>FIX:</b> Chromer not shown in recents on some devices.</li>
