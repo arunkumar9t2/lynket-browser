@@ -4,8 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="arun.com.chromer.activities.BlacklistManagerActivity"
@@ -19,8 +17,8 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingBottom="8dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp">
+        android:paddingLeft="@dimen/card_margin"
+        android:paddingRight="@dimen/card_margin">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -58,6 +56,8 @@
         android:layout_height="match_parent"
         android:layout_below="@id/secondary_browser"
         android:clipToPadding="false"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="8dp"
         android:scrollbars="vertical" />
 
