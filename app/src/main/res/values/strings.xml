@@ -157,4 +157,5 @@
     <string name="revoke_accessibility_permission">You can now revoke Chromer\'s accessibility service permission.</string>
     <string name="last_fetched_urls">Last fetched urls</string>
     <string name="blacklist_on">Blacklisting apps turned %s</string>
+    <string name="translations">Translations</string>
 </resources>

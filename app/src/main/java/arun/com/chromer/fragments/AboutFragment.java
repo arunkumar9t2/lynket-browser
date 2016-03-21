@@ -89,7 +89,7 @@ public class AboutFragment extends Fragment {
 
             @Override
             public int getCount() {
-                return 4;
+                return 5;
             }
 
             @Override
@@ -138,6 +138,14 @@ public class AboutFragment extends Fragment {
                         holder.subtitle.setVisibility(View.GONE);
                         holder.imageView.setBackground(new IconicsDrawable(context)
                                 .icon(GoogleMaterial.Icon.gmd_card_membership)
+                                .color(materialdarkColor)
+                                .sizeDp(24));
+                        break;
+                    case 4:
+                        holder.title.setText(R.string.translations);
+                        holder.subtitle.setVisibility(View.GONE);
+                        holder.imageView.setBackground(new IconicsDrawable(context)
+                                .icon(GoogleMaterial.Icon.gmd_translate)
                                 .color(materialdarkColor)
                                 .sizeDp(24));
                         break;
@@ -238,6 +246,11 @@ public class AboutFragment extends Fragment {
                                 .setTitle(R.string.licenses)
                                 .build()
                                 .showAppCompat();
+                        break;
+                    case 4:
+                        Intent oneSkyIntent = new Intent(Intent.ACTION_VIEW,
+                                Uri.parse("http://os0l2aw.oneskyapp.com/collaboration/project/62112"));
+                        getActivity().startActivity(oneSkyIntent);
                         break;
                 }
             }
