@@ -6,6 +6,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -53,6 +55,7 @@ public class ScannerService extends AccessibilityService implements CustomActivi
     private final Queue<String> mExtractedUrlQueue = new LinkedList<>();
     private final LinkedList<CharSequence> mLastTopTexts = new LinkedList<>();
     private final LinkedList<CharSequence> mLocalTopTexts = new LinkedList<>();
+    private final List<String> mBrowserList = new LinkedList<>();
 
     public static ScannerService getInstance() {
         return sInstance;
@@ -212,9 +215,24 @@ public class ScannerService extends AccessibilityService implements CustomActivi
         if (event.getPackageName() != null) {
             packageName = event.getPackageName().toString();
             // Timber.d(packageName);
-            return packageName.equalsIgnoreCase(Preferences.customTabApp(this));
+            return packageName.equalsIgnoreCase(Preferences.customTabApp(this))
+                    || getBrowserPackageList().contains(packageName);
         }
         return false;
+    }
+
+    private List<String> getBrowserPackageList() {
+        if (mBrowserList.isEmpty()) {
+            Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));
+            List<ResolveInfo> resolvedActivityList = getApplicationContext()
+                    .getPackageManager().queryIntentActivities(activityIntent, PackageManager.MATCH_ALL);
+            for (ResolveInfo info : resolvedActivityList) {
+                if (info != null) {
+                    mBrowserList.add(info.activityInfo.packageName);
+                }
+            }
+        }
+        return mBrowserList;
     }
 
     private void processNode(@NonNull AccessibilityNodeInfo node) {
