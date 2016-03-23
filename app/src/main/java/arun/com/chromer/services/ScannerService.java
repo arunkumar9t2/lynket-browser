@@ -42,19 +42,26 @@ public class ScannerService extends AccessibilityService implements CustomActivi
 
     private static final String SCANNER_SERVICE_NOTIFICATION = "SCANNER_SERVICE_NOTIFICATION";
     private static final String NOTIFICATION_TITLE = "Chromer Scanning Service";
+
     private static final int NOTIFICATION_ID = 10001;
     private static final int MAX_URL = 3;
     private static final int URL_PREDICTION_DEPTH = 3;
 
-    private String mLastFetchedUrl = "";
-    private String mLastPriorityUrl;
-    private boolean mShouldStopExtraction = false;
     private CustomActivityHelper mCustomActivityHelper;
 
+    private String mLastFetchedUrl = "";
+    private String mLastPriorityUrl;
+
+    private boolean mShouldStopExtraction = false;
+
     private final Stack<AccessibilityNodeInfo> mTreeTraversingStack = new Stack<>();
+
     private final Queue<String> mExtractedUrlQueue = new LinkedList<>();
+
     private final LinkedList<CharSequence> mLastTopTexts = new LinkedList<>();
+
     private final LinkedList<CharSequence> mLocalTopTexts = new LinkedList<>();
+
     private final List<String> mBrowserList = new LinkedList<>();
 
     public static ScannerService getInstance() {
@@ -73,18 +80,22 @@ public class ScannerService extends AccessibilityService implements CustomActivi
             Timber.d("Severing existing connection");
             mCustomActivityHelper.unbindCustomTabsService(this);
         }
+
         mCustomActivityHelper = new CustomActivityHelper();
         mCustomActivityHelper.setConnectionCallback(this);
+
         boolean success = mCustomActivityHelper.bindCustomTabsService(this);
         Timber.d("Was bound %b", success);
+
         return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
         sInstance = null;
-        mCustomActivityHelper.unbindCustomTabsService(this);
-        Timber.d("Unbinding");
+
+        if (mCustomActivityHelper != null) mCustomActivityHelper.unbindCustomTabsService(this);
+
         return super.onUnbind(intent);
     }
 
@@ -101,6 +112,7 @@ public class ScannerService extends AccessibilityService implements CustomActivi
 
         boolean ok = mCustomActivityHelper.mayLaunchUrl(uri, null, possibleUrls);
         Timber.d("Warm up %b", ok);
+
         return ok;
     }
 
@@ -141,6 +153,7 @@ public class ScannerService extends AccessibilityService implements CustomActivi
     public void onAccessibilityEvent(AccessibilityEvent event) {
         sInstance = this;
         mShouldStopExtraction = false;
+
         // Clear extraction helper stacks before starting new extractions
         clearHolders();
 
@@ -155,16 +168,21 @@ public class ScannerService extends AccessibilityService implements CustomActivi
 
             // Traverse the tree and act on every text
             mTreeTraversingStack.push(activeWindowRoot);
+
             while (!mTreeTraversingStack.empty() && mExtractedUrlQueue.size() < MAX_URL && !mShouldStopExtraction) {
                 AccessibilityNodeInfo currNode = mTreeTraversingStack.pop();
                 if (currNode != null) {
+
                     processNode(currNode);
+
                     for (int i = 0; i < currNode.getChildCount() && !mShouldStopExtraction; i++) {
                         mTreeTraversingStack.push(currNode.getChild(i));
                     }
                 }
             }
+
             mTreeTraversingStack.clear();
+
             // Don't need the root node anymore, recycle it.
             if (activeWindowRoot != null) activeWindowRoot.recycle();
 
@@ -186,6 +204,7 @@ public class ScannerService extends AccessibilityService implements CustomActivi
 
                 boolean success;
                 if (mLastPriorityUrl != null) {
+
                     if (!mLastPriorityUrl.equalsIgnoreCase(mLastFetchedUrl)) {
                         success = mCustomActivityHelper.mayLaunchUrl(Uri.parse(mLastPriorityUrl), null, possibleUrls);
                         if (success) mLastFetchedUrl = mLastPriorityUrl;
@@ -210,14 +229,16 @@ public class ScannerService extends AccessibilityService implements CustomActivi
 
     private boolean shouldIgnoreEvent(AccessibilityEvent event) {
         if (!Preferences.preFetch(this)) return true;
+
         if (!isWifiConditionsMet()) return true;
+
         String packageName = "";
         if (event.getPackageName() != null) {
             packageName = event.getPackageName().toString();
-            // Timber.d(packageName);
             return packageName.equalsIgnoreCase(Preferences.customTabApp(this))
                     || getBrowserPackageList().contains(packageName);
         }
+
         return false;
     }
 
@@ -238,7 +259,6 @@ public class ScannerService extends AccessibilityService implements CustomActivi
     private void processNode(@NonNull AccessibilityNodeInfo node) {
         if (node.getText() != null) {
             String text = node.getText().toString();
-            // Timber.d(text);
 
             if (mLocalTopTexts.size() < URL_PREDICTION_DEPTH) mLocalTopTexts.add(node.getText());
             if (mLastTopTexts.size() < URL_PREDICTION_DEPTH) mLastTopTexts.add(node.getText());
@@ -250,7 +270,6 @@ public class ScannerService extends AccessibilityService implements CustomActivi
                 mShouldStopExtraction = true;
                 return;
             } else if (mLocalTopTexts.size() == URL_PREDICTION_DEPTH) {
-                // Timber.d("Updated stored prediction values");
                 mLastTopTexts.clear();
             }
 
@@ -272,9 +291,10 @@ public class ScannerService extends AccessibilityService implements CustomActivi
             if (!url.toLowerCase().matches("^\\w+://.*")) {
                 url = "http://" + url;
             }
-            mLastTopTexts.clear();
 
+            mLastTopTexts.clear();
             mExtractedUrlQueue.add(url);
+
             if (mExtractedUrlQueue.size() == 1 && url.equalsIgnoreCase(mLastPriorityUrl)) {
                 // This means the new extraction is giving the same urls as last extraction did.
                 // In this case, we will explicitly stop the tree traversal by setting a flag variable.
