@@ -104,7 +104,7 @@ public class WebHead extends FrameLayout {
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 PixelFormat.TRANSLUCENT);
 
         setDisplayMetrics();
@@ -177,10 +177,11 @@ public class WebHead extends FrameLayout {
     @SuppressLint("RtlHardcoded")
     private void setSpawnLocation() {
         mWindowParams.gravity = Gravity.TOP | Gravity.LEFT;
-        mWindowParams.x =
-                Preferences.webHeadsSpawnLocation(getContext()) == 1 ?
-                        mDispWidth - WebHeadCircle.getSizePx()
-                        : 0;
+        if (Preferences.webHeadsSpawnLocation(getContext()) == 1) {
+            mWindowParams.x = (int) (mDispWidth - WebHeadCircle.getSizePx() * 0.8);
+        } else {
+            mWindowParams.x = (int) (0 - WebHeadCircle.getSizePx() * 0.2);
+        }
         mWindowParams.y = mDispHeight / 3;
     }
 
@@ -266,10 +267,10 @@ public class WebHead extends FrameLayout {
 
         if ((x + xOffset) >= dispCentre) {
             // move to right wall
-            mWallAttachSpring.setEndValue(mDispWidth - getWidth());
+            mWallAttachSpring.setEndValue(mDispWidth - (getWidth() * 0.8));
         } else {
             // move to left wall
-            mWallAttachSpring.setEndValue(0);
+            mWallAttachSpring.setEndValue(0 - (getWidth() * 0.2));
         }
     }
 
@@ -328,7 +329,7 @@ public class WebHead extends FrameLayout {
 
         int offset = getWidth() / 2;
         int x = mWindowParams.x + offset;
-        int y = mWindowParams.y + +offset + (offset / 2);
+        int y = mWindowParams.y + offset + (offset / 2);
 
         if (getEuclideanDistance(rX, rY, x, y) < MAGNETISM_THRESHOLD) {
             mWasRemoveLocked = true;

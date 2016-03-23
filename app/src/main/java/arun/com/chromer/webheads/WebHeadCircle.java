@@ -121,6 +121,6 @@ public class WebHeadCircle extends View {
     }
 
     public static int getSizePx() {
-        return Util.dpToPx(WEB_HEAD_SIZE_DP);
+        return Util.dpToPx(WEB_HEAD_SIZE_DP + 10);
     }
 }
