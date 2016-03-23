@@ -133,7 +133,7 @@ public class WebHead extends FrameLayout {
         mScaleSpring.addListener(new ScaleSpringListener());
 
         mWallAttachSpring = mSpringSystem.createSpring();
-        mWallAttachSpring.setSpringConfig(SpringConfig.fromOrigamiTensionAndFriction(40, 10));
+        mWallAttachSpring.setSpringConfig(SpringConfig.fromOrigamiTensionAndFriction(40, 6));
         mWallAttachSpring.addListener(new SimpleSpringListener() {
             @Override
             public void onSpringUpdate(Spring spring) {
