@@ -51,7 +51,7 @@ public class WebColorExtractorService extends IntentService {
             // Test string for checking extraction logic
             // String test = "<meta name=\"theme-color\" content=\"#0041C8\">";
 
-            Matcher matcher = Pattern.compile("<meta name=\\\"theme-color\\\"(.*?)>").matcher(page);
+            Matcher matcher = Pattern.compile("<meta name=\"theme-color\"(.*?)>").matcher(page);
 
             while (matcher.find()) {
                 for (int i = 0; i < matcher.groupCount(); i++) {

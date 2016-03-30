@@ -19,12 +19,6 @@ import com.github.paolorotolo.appintro.R.id;
 import com.github.paolorotolo.appintro.R.layout;
 
 public class AppIntroFragment extends Fragment {
-    private static final String ARG_TITLE = "title";
-    private static final String ARG_DESC = "desc";
-    private static final String ARG_DRAWABLE = "drawable";
-    private static final String ARG_BG_COLOR = "bg_color";
-    private static final String ARG_TITLE_COLOR = "title_color";
-    private static final String ARG_DESC_COLOR = "desc_color";
     private int drawable;
     private int bgColor;
     private int titleColor;
@@ -39,6 +33,7 @@ public class AppIntroFragment extends Fragment {
         return newInstance(title, description, imageDrawable, bgColor, 0, 0);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static AppIntroFragment newInstance(CharSequence title, CharSequence description, int imageDrawable, int bgColor, int titleColor, int descColor) {
         AppIntroFragment sampleSlide = new AppIntroFragment();
         Bundle args = new Bundle();

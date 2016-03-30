@@ -232,7 +232,7 @@ public class ScannerService extends AccessibilityService implements CustomActivi
 
         if (!isWifiConditionsMet()) return true;
 
-        String packageName = "";
+        String packageName;
         if (event.getPackageName() != null) {
             packageName = event.getPackageName().toString();
             return packageName.equalsIgnoreCase(Preferences.customTabApp(this))
@@ -317,6 +317,7 @@ public class ScannerService extends AccessibilityService implements CustomActivi
         if (Preferences.wifiOnlyPrefetch(this)) {
             ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             // TODO fix this deprecated call
+            //noinspection deprecation
             NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
             return mWifi.isConnected();
         } else

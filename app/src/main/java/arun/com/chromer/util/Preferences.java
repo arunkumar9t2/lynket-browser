@@ -15,27 +15,27 @@ import arun.com.chromer.chrometabutilites.CustomTabHelper;
  * Created by Arun on 05/01/2016.
  */
 public class Preferences {
-    public static final String PREFERRED_PACKAGE = "preferred_package";
-    public static final String TOOLBAR_COLOR = "toolbar_color";
-    public static final String WEBHEADS_COLOR = "webhead_color";
-    public static final String TOOLBAR_COLOR_PREF = "toolbar_color_pref";
+    private static final String PREFERRED_PACKAGE = "preferred_package";
+    private static final String TOOLBAR_COLOR = "toolbar_color";
+    private static final String WEBHEADS_COLOR = "webhead_color";
+    private static final String TOOLBAR_COLOR_PREF = "toolbar_color_pref";
     public static final String ANIMATION_TYPE = "animation_preference";
     // Changed key for 1.5 build which will force intro to show
-    public static final String FIRST_RUN = "firstrun_1";
-    public static final String WARM_UP = "warm_up_preference";
-    public static final String BLACKLIST = "blacklist_preference";
-    public static final String PRE_FETCH = "pre_fetch_preference";
-    public static final String WIFI_PREFETCH = "wifi_preference";
-    public static final String SECONDARY_PREF = "secondary_preference";
-    public static final String FAV_SHARE_PREF = "fav_share_preference";
+    private static final String FIRST_RUN = "firstrun_1";
+    private static final String WARM_UP = "warm_up_preference";
+    private static final String BLACKLIST = "blacklist_preference";
+    private static final String PRE_FETCH = "pre_fetch_preference";
+    private static final String WIFI_PREFETCH = "wifi_preference";
+    private static final String SECONDARY_PREF = "secondary_preference";
+    private static final String FAV_SHARE_PREF = "fav_share_preference";
     public static final String DYNAMIC_COLOR = "dynamic_color";
-    public static final String CLEAN_DATABASE = "clean_database";
-    public static final String DYNAMIC_COLOR_APP = "dynamic_color_app";
-    public static final String DYNAMIC_COLOR_WEB = "dynamic_color_web";
+    private static final String CLEAN_DATABASE = "clean_database";
+    private static final String DYNAMIC_COLOR_APP = "dynamic_color_app";
+    private static final String DYNAMIC_COLOR_WEB = "dynamic_color_web";
     public static final String PREFERRED_ACTION = "preferred_action_preference";
     public static final String WEB_HEAD_ENABLED = "webhead_enabled_pref";
     public static final String WEB_HEAD_SPAWN_LOCATION = "webhead_spawn_preference";
-    public static final String WEB_HEAD_CLOSE_ON_OPEN = "webhead_close_onclick_pref";
+    private static final String WEB_HEAD_CLOSE_ON_OPEN = "webhead_close_onclick_pref";
 
     private static SharedPreferences preferences(Context context) {
         return context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
@@ -214,6 +214,7 @@ public class Preferences {
                 .getBoolean(DYNAMIC_COLOR, false);
     }
 
+    @SuppressWarnings("unused")
     public static void dynamicToolbar(Context context, boolean preference) {
         PreferenceManager
                 .getDefaultSharedPreferences(context)
@@ -233,7 +234,7 @@ public class Preferences {
         return preferences(context).getBoolean(DYNAMIC_COLOR_APP, false);
     }
 
-    public static void dynamicToolbarOnApp(Context context, boolean preference) {
+    private static void dynamicToolbarOnApp(Context context, boolean preference) {
         preferences(context).edit().putBoolean(DYNAMIC_COLOR_APP, preference).commit();
     }
 
@@ -241,11 +242,11 @@ public class Preferences {
         return preferences(context).getBoolean(DYNAMIC_COLOR_WEB, false);
     }
 
-    public static void dynamicToolbarOnWeb(Context context, boolean preference) {
+    private static void dynamicToolbarOnWeb(Context context, boolean preference) {
         preferences(context).edit().putBoolean(DYNAMIC_COLOR_WEB, preference).commit();
     }
 
-    public static void dynamicToolbarOptions(Context context, boolean app, boolean web) {
+    private static void dynamicToolbarOptions(Context context, boolean app, boolean web) {
         dynamicToolbarOnApp(context, app);
         dynamicToolbarOnWeb(context, web);
     }
@@ -295,6 +296,7 @@ public class Preferences {
                 .getBoolean(WEB_HEAD_ENABLED, false);
     }
 
+    @SuppressWarnings("unused")
     public static void webHeads(Context context, boolean preference) {
         PreferenceManager
                 .getDefaultSharedPreferences(context)
@@ -314,6 +316,7 @@ public class Preferences {
                 .getBoolean(WEB_HEAD_CLOSE_ON_OPEN, false);
     }
 
+    @SuppressWarnings("unused")
     public static void webHeadsCloseOnOpen(Context context, boolean preference) {
         PreferenceManager
                 .getDefaultSharedPreferences(context)

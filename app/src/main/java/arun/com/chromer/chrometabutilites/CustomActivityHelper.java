@@ -172,6 +172,7 @@ public class CustomActivityHelper implements ServiceConnectionCallback {
     }
 
 
+    @SuppressWarnings({"SameReturnValue", "unused"})
     public boolean requestWarmUp() {
         boolean ok;
         if (mClient != null) {

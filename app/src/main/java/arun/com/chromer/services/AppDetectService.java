@@ -46,7 +46,7 @@ public class AppDetectService extends Service {
                 try {
                     String packageName = getCurrentForegroundApp();
 
-                    if (!mLastDetectedApp.equalsIgnoreCase(packageName) && !isBlacklistedPackage(packageName)) {
+                    if (!mLastDetectedApp.equalsIgnoreCase(packageName) && isAllowedPackage(packageName)) {
                         mLastDetectedApp = packageName;
                         Timber.d("Current app %s", packageName);
                     }
@@ -82,6 +82,7 @@ public class AppDetectService extends Service {
             }
         } else {
             ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+            //noinspection deprecation
             ActivityManager.RunningTaskInfo runningTaskInfo = am.getRunningTasks(1).get(0);
             if (runningTaskInfo != null) {
                 packageName = runningTaskInfo.topActivity.getPackageName();
@@ -166,23 +167,24 @@ public class AppDetectService extends Service {
         registerReceiver(mScreenStateReceiver, filter);
     }
 
+    @SuppressWarnings("unused")
     void toast(String toast) {
         Toast.makeText(this, toast, Toast.LENGTH_SHORT).show();
     }
 
-    private boolean isBlacklistedPackage(String packageName) {
+    private boolean isAllowedPackage(String packageName) {
         // Ignore system pop ups
-        if (packageName.equalsIgnoreCase("android")) return true;
+        if (packageName.equalsIgnoreCase("android")) return false;
 
         // Ignore our app
-        if (packageName.equalsIgnoreCase(getPackageName())) return true;
+        if (packageName.equalsIgnoreCase(getPackageName())) return false;
 
         // Chances are that we picked the opening custom tab, so let's ignore our default provider
         // to be safe
-        if (packageName.equalsIgnoreCase(Preferences.customTabApp(this))) return true;
+        if (packageName.equalsIgnoreCase(Preferences.customTabApp(this))) return false;
 
         // Ignore google quick search box
-        if (packageName.equalsIgnoreCase("com.google.android.googlequicksearchbox")) return true;
+        if (packageName.equalsIgnoreCase("com.google.android.googlequicksearchbox")) return false;
 
         // There can also be cases where there is no default provider set, so lets ignore all possible
         // custom tab providers to be sure. This is safe since browsers don't call our app anyways.
@@ -190,7 +192,7 @@ public class AppDetectService extends Service {
         // Commenting, research needed
         // if (mCustomTabPackages.contains(packageName)) return true;
 
-        return false;
+        return true;
     }
 
     public class ScreenStateReceiver extends BroadcastReceiver {

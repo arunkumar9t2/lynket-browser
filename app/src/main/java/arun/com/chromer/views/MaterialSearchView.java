@@ -175,7 +175,7 @@ public class MaterialSearchView extends FrameLayout {
                     mEditText.setText("");
                     loseFocus();
                 } else {
-                    if (mVoiceClickListener != null) mVoiceClickListener.onClick(v);
+                    if (mVoiceClickListener != null) mVoiceClickListener.onClick();
                 }
             }
         });
@@ -261,6 +261,6 @@ public class MaterialSearchView extends FrameLayout {
     }
 
     public interface VoiceIconClickListener {
-        void onClick(View v);
+        void onClick();
     }
 }

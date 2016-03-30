@@ -94,7 +94,7 @@ public class BlackListAppRender extends RecyclerView.Adapter<BlackListAppRender.
     }
 
     public interface ItemClickListener {
-        void onClick(int position, App app, boolean checked);
+        void onClick(App app, boolean checked);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -121,7 +121,7 @@ public class BlackListAppRender extends RecyclerView.Adapter<BlackListAppRender.
             App app = apps.get(position);
             app.setBlackListed(checkBox.isChecked());
             if (mExternalListener != null) {
-                mExternalListener.onClick(position, app, checkBox.isChecked());
+                mExternalListener.onClick(app, checkBox.isChecked());
             }
         }
     }

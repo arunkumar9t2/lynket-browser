@@ -75,12 +75,12 @@ public class CustomTabDelegate {
 
         addShortcutToHomeScreen(ctx, builder);
 
-        addOpenInMainBrowser(ctx, url, builder);
+        addOpenInMainBrowser(ctx, builder);
 
         return builder.build();
     }
 
-    private static void addOpenInMainBrowser(@NonNull Context ctx, @NonNull String url, @NonNull CustomTabsIntent.Builder builder) {
+    private static void addOpenInMainBrowser(@NonNull Context ctx, @NonNull CustomTabsIntent.Builder builder) {
         final String currentDefaultProvider = Preferences.customTabApp(ctx);
 
         if (currentDefaultProvider != null && Util.isPackageInstalled(ctx, currentDefaultProvider)) {

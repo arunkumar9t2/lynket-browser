@@ -78,6 +78,7 @@ public class App implements Comparable {
         return compareApps(this, (App) another);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static class AppComparator implements Comparator<App> {
 
         @Override
@@ -97,6 +98,7 @@ public class App implements Comparable {
 
         if (lhsName == null ^ rhsName == null) return lhs == null ? -1 : 1;
 
+        //noinspection ConstantConditions
         if (lhsName == null && rhsName == null) return 0;
 
         return lhsName.compareToIgnoreCase(rhsName);

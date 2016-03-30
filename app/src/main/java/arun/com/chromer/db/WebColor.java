@@ -6,6 +6,7 @@ import com.orm.dsl.Unique;
 /**
  * Created by Arun on 25/01/2016.
  */
+@SuppressWarnings("ALL")
 public class WebColor extends SugarRecord {
     @Unique
     String url;

@@ -76,6 +76,7 @@ public class WebHeadCircle extends View {
         }
     }
 
+    @SuppressWarnings("unused")
     public void showUrlIndicator() {
         if (!mShouldDrawText) {
             mShouldDrawText = true;

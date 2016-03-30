@@ -241,6 +241,7 @@ public class Util {
         return (int) ((dp * displayMetrics.density) + 0.5);
     }
 
+    @SuppressWarnings("unused")
     public static int pxToDp(int px) {
         return (int) (px / Resources.getSystem().getDisplayMetrics().density);
     }
@@ -251,8 +252,8 @@ public class Util {
     @TargetApi(21)
     public static class ShadowOutline extends ViewOutlineProvider {
 
-        int width;
-        int height;
+        final int width;
+        final int height;
 
         public ShadowOutline(int width, int height) {
             this.width = width;
@@ -278,6 +279,7 @@ public class Util {
             return ColorUtils.setAlphaComponent(Color.BLACK, blackColorAlpha);
         }
 
+        //noinspection ConstantConditions
         return whiteColorAlpha != -1 ? ColorUtils.setAlphaComponent(Color.WHITE, whiteColorAlpha)
                 : ColorUtils.setAlphaComponent(Color.BLACK, blackColorAlpha);
     }

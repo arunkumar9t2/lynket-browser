@@ -6,6 +6,7 @@ import com.orm.dsl.Unique;
 /**
  * Created by Arun on 21/02/2016.
  */
+@SuppressWarnings("ALL")
 public class BlacklistedApps extends SugarRecord {
     @Unique
     String packageName;

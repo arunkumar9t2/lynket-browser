@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         });
         mMaterialSearchView.setVoiceIconClickListener(new MaterialSearchView.VoiceIconClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick() {
                 if (Util.isVoiceRecognizerPresent(getApplicationContext())) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                     intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
@@ -768,9 +768,9 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     private void cleanOldDbs() {
         if (Preferences.shouldCleanDB(this)) {
             boolean ok = deleteDatabase(DatabaseConstants.DATABASE_NAME);
-            Timber.d("Deleted " + DatabaseConstants.DATABASE_NAME + ": " + ok);
+            Timber.d("Deleted %s : %b", DatabaseConstants.DATABASE_NAME, ok);
             ok = deleteDatabase(DatabaseConstants.OLD_DATABASE_NAME);
-            Timber.d("Deleted " + DatabaseConstants.OLD_DATABASE_NAME + ": " + ok);
+            Timber.d("Deleted %s : %b", DatabaseConstants.OLD_DATABASE_NAME, ok);
         }
     }
 

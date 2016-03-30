@@ -173,6 +173,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         // beginFaviconLoading(webHead);
     }
 
+    @SuppressWarnings("unused")
     private void beginFaviconLoading(final WebHead webHead) {
         String url;
         try {
@@ -213,6 +214,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         startForeground(1, notification);
     }
 
+    @SuppressWarnings("unused")
     private void addTestWebHeads() {
         addWebHead("http://www.google.com");
 
@@ -222,7 +224,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     }
 
     private boolean isLinkAlreadyLoaded(String urlToLoad) {
-        return urlToLoad == null || mWebHeads != null && mWebHeads.containsKey(urlToLoad);
+        return urlToLoad == null || mWebHeads.containsKey(urlToLoad);
     }
 
     private void deferMayLaunchUntilConnected(final String urlToLoad) {
@@ -433,6 +435,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     }
 
 
+    @SuppressWarnings("unused")
     private void runOnUiThread(Runnable r) {
         new Handler(Looper.getMainLooper()).post(r);
     }

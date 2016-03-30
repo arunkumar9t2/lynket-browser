@@ -151,8 +151,8 @@ class MyTagHandler implements Html.TagHandler {
                 String parentList = lists.peek();
                 if (parentList.equalsIgnoreCase("ol")) {
                     start(output, new Ol());
-                    output.append(olNextIndex.peek().toString() + ". ");
-                    olNextIndex.push(olNextIndex.pop().intValue() + 1);
+                    output.append(olNextIndex.peek().toString()).append(". ");
+                    olNextIndex.push(olNextIndex.pop() + 1);
                 } else if (parentList.equalsIgnoreCase("ul")) {
                     start(output, new Ul());
                 }

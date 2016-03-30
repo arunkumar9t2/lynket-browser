@@ -129,7 +129,7 @@ public class BlacklistManagerActivity extends AppCompatActivity implements Black
     }
 
     @Override
-    public void onClick(int position, App app, boolean checked) {
+    public void onClick(App app, boolean checked) {
         updateBlacklists(app.getPackageName(), checked);
     }
 

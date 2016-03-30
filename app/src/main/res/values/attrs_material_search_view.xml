@@ -1,3 +1,3 @@
 <resources>
-    <declare-styleable name="MaterialSearchView"></declare-styleable>
+    <declare-styleable name="MaterialSearchView"/>
 </resources>

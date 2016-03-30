@@ -34,13 +34,13 @@ import flipboard.bottomsheet.commons.R;
 @SuppressLint("ViewConstructor")
 public class IntentPickerSheetView extends FrameLayout {
 
-    protected final Intent intent;
-    protected final GridView appGrid;
-    protected final TextView titleView;
-    protected final List<ActivityInfo> mixins = new ArrayList<>();
-    protected Adapter adapter;
-    protected Filter filter = new FilterNone();
-    protected Comparator<ActivityInfo> sortMethod = new SortAlphabetically();
+    private final Intent intent;
+    private final GridView appGrid;
+    private final TextView titleView;
+    private final List<ActivityInfo> mixins = new ArrayList<>();
+    private Adapter adapter;
+    private Filter filter = new FilterNone();
+    private Comparator<ActivityInfo> sortMethod = new SortAlphabetically();
     private int columnWidthDp = 100;
 
     public IntentPickerSheetView(Context context, Intent intent, @StringRes int titleRes, OnIntentPickedListener listener) {
@@ -184,7 +184,7 @@ public class IntentPickerSheetView extends FrameLayout {
 
         final List<ActivityInfo> activityInfos;
         final LayoutInflater inflater;
-        private PackageManager packageManager;
+        private final PackageManager packageManager;
 
         public Adapter(Context context, Intent intent, List<ActivityInfo> mixins) {
             inflater = LayoutInflater.from(context);
@@ -237,6 +237,7 @@ public class IntentPickerSheetView extends FrameLayout {
             if (info.icon != null) {
                 holder.icon.setImageDrawable(info.icon);
             } else {
+                //noinspection deprecation
                 holder.icon.setImageDrawable(getResources().getDrawable(R.color.divider_gray));
                 info.iconLoadTask = new AsyncTask<Void, Void, Drawable>() {
                     @Override

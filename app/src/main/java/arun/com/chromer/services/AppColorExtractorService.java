@@ -112,7 +112,7 @@ public class AppColorExtractorService extends IntentService {
             int extractColor = getPreferredColorFromSwatches(palette);
 
             if (extractColor != -1) {
-                Timber.d("Extracted " + extractColor + " for " + app);
+                Timber.d("Extracted %d for %s", extractColor, app);
                 try {
                     // Save this color to DB
                     saveColorToDb(app, extractColor);

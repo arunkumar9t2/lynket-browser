@@ -47,7 +47,7 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
     // Callback for when a purchase is finished
     private final IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
         public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
-            Timber.d("Purchase finished: " + result + ", purchase: " + purchase);
+            Timber.d("Purchase finished: %s, purchase: %s", result, purchase);
 
             // if we were disposed of in the meantime, quit.
             if (mHelper == null) return;
@@ -113,7 +113,7 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
             public void onIabSetupFinished(IabResult result) {
                 Timber.d("Setup finished.");
                 if (!result.isSuccess()) {
-                    Timber.d("Problem setting up In-app Billing: " + result);
+                    Timber.d("Problem setting up In-app Billing: %s", result);
                     return;
                 }
                 // Have we been disposed of in the meantime? If so, quit.
@@ -274,7 +274,6 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Timber.d("onActivityResult(" + requestCode + "," + resultCode + "," + data);
         if (mHelper == null) return;
 
         // Pass on the activity result to the helper for handling
