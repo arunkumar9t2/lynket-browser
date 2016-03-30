@@ -4,6 +4,16 @@
 <strong>You can view this again in the about screen.</strong>
 <br></br>
 <br></br>
+<strong>1.5.5</strong>
+<ul>
+    <li><b>FIX:</b> Pre-fetching crash fixes for Samsung devices.</li>
+    <li><b>FIX:</b> Crash when enabling dynamic toolbar for < 5.0 devices.</li>
+    <li><b>FIX:</b> Blacklisting issues on Custom Tab enabled apps. Thanks to user - SpaceBison.</li>
+    <li><b>FIX:</b> Springy animation when web heads attach to screen sides.</li>
+    <li><b>FIX:</b> Open in Chrome menu taking to Chrome home screen.</li>
+    <li><b>IMPROVED:</b> Faster custom tab opening animation.</li>
+</ul>
+<br></br>
 <strong>1.5.4</strong>
 <ul>
     <li><b>NEW:</b> Blacklisting: ability to launch your secondary browser instead of Chromer in certain apps.</li>
@@ -11,14 +21,13 @@
     <li><b>NEW:</b> Launching url from main screen now respects web heads preference.</li>
     <li><b>NEW:</b> Much improved pre-fetch content. Optimized for memory and battery and shows a notification when links are pre-fetched. </li>
     <li><b>NEW:</b> OneSky translation link in about screen; do help translate Chromer to your language by contributing as a translator.</li>
-    <li><b>FIX:</b> "Open in Chromer" issue. Separate Open in Chrome entry will be shown now.</li>
-    <li><b>IMPROVE:</b> Tablet layout.</li>
+    <li><b>FIX:</b> “Open in Chromer” issue. Separate Open in Chrome entry will be shown now.</li>
+    <li><b>IMPROVED:</b> Tablet layout.</li>
     <li><b>FIX:</b> Janky scrolling in Chromer main screen.</li>
     <li><b>FIX:</b> Layout issues when font size is increased.</li>
     <li><b>FIX:</b> Secondary browser opening link twice.</li>
     <li><b>FIX:</b> Major optimizations and memory leak fixes.</li>
 </ul>
-<br></br>
 <br></br>
 <strong>1.5.3</strong>
 <ul>
@@ -29,7 +38,7 @@
 <strong>1.5.2</strong>
 <ul>
     <li><b>NEW:</b> Option to join beta program. Please join if you would like to contribute to Chromer\'s development.</li>
-    <li><b>IMPROVE:</b> Minor improvements to web heads snapping to trash and webhead physics.</li>
+    <li><b>IMPROVED:</b> Minor improvements to web heads snapping to trash and webhead physics.</li>
     <li><b>FIX:</b> Chromer getting disappeared from recents view.</li>
     <li><b>FIX:</b> Open in Chromer is shown in Chrome beta and dev versions. Now a separate Open in Chrome will be shown.</li>
     <li><b>FIX:</b> Crashes and minor bugs.</li>
@@ -39,8 +48,8 @@
 <ul>
     <li><b>NEW:</b> Ability to choose color of web heads.</li>
     <li><b>NEW:</b> Ability to close all webheads from notification bar.</li>
-    <li><b>IMPROVE:</b> Webheads dragging. Webheads now snap to trash when near.</li>
-    <li><b>IMPROVE:</b> Scrolling behaviour in Chromer settings screen.</li>
+    <li><b>IMPROVED:</b> Webheads dragging. Webheads now snap to trash when near.</li>
+    <li><b>IMPROVED:</b> Scrolling behaviour in Chromer settings screen.</li>
     <li><b>FIX:</b> Not able to perform search on some keyboards. Now <b>search icon</b> will be shown on your keyboard, press that to launch URL or search.</li>
     <li><b>FIX:</b> Crash when trying to install Chrome from dialog.</li>
     <li><b>FIX:</b> Multiple crashes related to webheads.</li>
@@ -99,13 +108,13 @@
 <br></br>
 <strong>1.2</strong>
 <ul>
-   <li>Change Toolbar color to your liking</li>
-   <li>Configure animations</li>
-   <li>Link to read about chrome custom tabs</li>
-   <li>Option to share Chromer link to others</li>
-   <li>Licenses dialog</li>
-   <li>Tutorial flow performance fixes</li>
-   <li>Icons and imagery updated</li>
+   <li>Change Toolbar color to your liking.</li>
+   <li>Configure animations.</li>
+   <li>Link to read about chrome custom tabs.</li>
+   <li>Option to share Chromer link to others.</li>
+   <li>Licenses dialog.</li>
+   <li>Tutorial flow performance fixes.</li>
+   <li>Icons and imagery updated.</li>
 </ul>
 <br></br>
 <strong>1.1</strong>
@@ -115,7 +124,7 @@
 <br></br>
 <strong>1.0</strong>
 <ul>
-   <li>Fixed "no custom tab compatible browser found" issue.</li>
+   <li>Initial release.</li>
 </ul>
 ]]></string>
 </resources>
