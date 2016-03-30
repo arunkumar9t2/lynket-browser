@@ -26,10 +26,10 @@ public class CustomTabActivity extends AppCompatActivity {
 
         final String url = getIntent().getData().toString();
         final boolean isWebhead = getIntent().getBooleanExtra(StringConstants.FROM_WEBHEAD, false);
+
         CustomTabsIntent tabIntent = CustomTabDelegate.getCustomizedTabIntent(getApplicationContext(), url, isWebhead);
 
-        CustomActivityHelper.openCustomTab(this, tabIntent,
-                Uri.parse(getIntent().getData().toString()), Util.CUSTOM_TABS_FALLBACK);
+        CustomActivityHelper.openCustomTab(this, tabIntent, Uri.parse(url), Util.CUSTOM_TABS_FALLBACK);
 
         finish();
     }
