@@ -467,27 +467,31 @@ public class WebHead extends FrameLayout {
 
         Timber.d("%d Webheads remaining", WEB_HEAD_COUNT);
 
-        mWallAttachSpring.setAtRest();
-        mWallAttachSpring.destroy();
-        mWallAttachSpring = null;
+        if (mWallAttachSpring != null) {
+            mWallAttachSpring.setAtRest().destroy();
+            mWallAttachSpring = null;
+        }
 
-        mScaleSpring.setAtRest();
-        mScaleSpring.destroy();
-        mScaleSpring = null;
+        if (mScaleSpring != null) {
+            mScaleSpring.setAtRest().destroy();
+            mScaleSpring = null;
+        }
 
-        mYSpring.setAtRest();
-        mYSpring.destroy();
-        mYSpring = null;
+        if (mYSpring != null) {
+            mYSpring.setAtRest().destroy();
+            mYSpring = null;
+        }
 
-        mXSpring.setAtRest();
-        mXSpring.destroy();
-        mXSpring = null;
-
-        RemoveWebHead.hideSelf();
+        if (mXSpring != null) {
+            mXSpring.setAtRest().destroy();
+            mXSpring = null;
+        }
 
         mSpringSystem = null;
 
         setWebHeadInteractionListener(null);
+
+        RemoveWebHead.hideSelf();
 
         removeView(contentView);
 
@@ -497,7 +501,9 @@ public class WebHead extends FrameLayout {
         contentView = null;
         mFavicon = null;
         mAppIcon = null;
-        sWindowManager.removeView(this);
+
+        if (sWindowManager != null)
+            sWindowManager.removeView(this);
     }
 
     public interface WebHeadInteractionListener {
