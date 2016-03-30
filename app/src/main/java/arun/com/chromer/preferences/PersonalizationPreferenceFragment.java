@@ -16,7 +16,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import arun.com.chromer.R;
 import arun.com.chromer.services.AppDetectService;
-import arun.com.chromer.util.ServicesUtil;
+import arun.com.chromer.services.util.ServicesUtil;
 import arun.com.chromer.util.Util;
 
 public class PersonalizationPreferenceFragment extends DividerLessPreferenceFragment

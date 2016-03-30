@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsService;
 import android.support.design.widget.FloatingActionButton;
@@ -61,9 +62,8 @@ import arun.com.chromer.payments.DonateActivity;
 import arun.com.chromer.preferences.PersonalizationPreferenceFragment;
 import arun.com.chromer.preferences.Preferences;
 import arun.com.chromer.preferences.WebHeadPreferenceFragment;
-import arun.com.chromer.util.DatabaseConstants;
-import arun.com.chromer.util.ServicesUtil;
-import arun.com.chromer.util.StringConstants;
+import arun.com.chromer.services.util.ServicesUtil;
+import arun.com.chromer.util.Constants;
 import arun.com.chromer.util.Util;
 import arun.com.chromer.views.IntentPickerSheetView;
 import arun.com.chromer.views.MaterialSearchView;
@@ -168,13 +168,13 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         cleanOldDbs();
 
         if (savedInstanceState != null) {
-            mColorSelection = savedInstanceState.getString(StringConstants.COLOR_SELECTION);
+            mColorSelection = savedInstanceState.getString(Constants.COLOR_SELECTION);
         }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putString(StringConstants.COLOR_SELECTION, mColorSelection);
+        outState.putString(Constants.COLOR_SELECTION, mColorSelection);
         super.onSaveInstanceState(outState);
     }
 
@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         });
     }
 
-    private void snack(String textToSnack) {
+    private void snack(@NonNull String textToSnack) {
         // Have to provide a view for view traversal, so providing the set default button.
         Snackbar.make(mSetDefaultButton, textToSnack, Snackbar.LENGTH_SHORT).show();
     }
@@ -279,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
                 if (!Util.isAccessibilityServiceEnabled(getApplicationContext())) {
                     mPrefetchSwitch.setChecked(false);
-                    guideUserToSettings();
+                    guideUserToAccessibilitySettings();
                 } else {
                     mWarmUpSwitch.setChecked(!warmUp);
                     Preferences.warmUp(getApplicationContext(), warmUp);
@@ -313,7 +313,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         });
     }
 
-    private void guideUserToSettings() {
+    private void guideUserToAccessibilitySettings() {
         new MaterialDialog.Builder(MainActivity.this)
                 .title(R.string.accessibility_dialog_title)
                 .content(R.string.accessibility_dialog_desc)
@@ -417,7 +417,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         findViewById(R.id.color_picker_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mColorSelection = StringConstants.TOOLBAR_COLOR;
+                mColorSelection = Constants.TOOLBAR_COLOR;
                 showColorChooser(toolbarColor);
             }
         });
@@ -431,7 +431,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         findViewById(R.id.color_picker_button_webheads).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mColorSelection = StringConstants.WEBHEAD_COLOR;
+                mColorSelection = Constants.WEBHEAD_COLOR;
                 showColorChooser(webHeadColor);
             }
         });
@@ -544,7 +544,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         switch (i) {
                             case 2:
                                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO,
-                                        Uri.fromParts("mailto", StringConstants.MAILID, null));
+                                        Uri.fromParts("mailto", Constants.MAILID, null));
                                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
                                 startActivity(Intent.createChooser(emailIntent, getString(R.string.send_email)));
                                 break;
@@ -733,11 +733,11 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     @Override
     public void onColorSelection(@NonNull ColorChooserDialog dialog, @ColorInt int selectedColor) {
-        if (mColorSelection.equalsIgnoreCase(StringConstants.TOOLBAR_COLOR)) {
+        if (mColorSelection.equalsIgnoreCase(Constants.TOOLBAR_COLOR)) {
             Timber.d("Setting toolbar color");
             mColorViewToolbar.setBackgroundColor(selectedColor);
             Preferences.toolbarColor(this, selectedColor);
-        } else if (mColorSelection.equalsIgnoreCase(StringConstants.WEBHEAD_COLOR)) {
+        } else if (mColorSelection.equalsIgnoreCase(Constants.WEBHEAD_COLOR)) {
             Timber.d("Setting webheads color");
             mColorViewWebHeads.setBackgroundColor(selectedColor);
             Preferences.webHeadColor(this, selectedColor);
@@ -756,13 +756,13 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             dialog.dismiss();
-                            Util.openPlayStore(MainActivity.this, StringConstants.CHROME_PACKAGE);
+                            Util.openPlayStore(MainActivity.this, Constants.CHROME_PACKAGE);
                         }
                     }).show();
         }
     }
 
-    private void setIconWithPackageName(ImageView imageView, String packageName) {
+    private void setIconWithPackageName(@Nullable ImageView imageView, @Nullable String packageName) {
         if (imageView == null || packageName == null) return;
 
         try {
@@ -776,10 +776,10 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private void cleanOldDbs() {
         if (Preferences.shouldCleanDB(this)) {
-            boolean ok = deleteDatabase(DatabaseConstants.DATABASE_NAME);
-            Timber.d("Deleted %s : %b", DatabaseConstants.DATABASE_NAME, ok);
-            ok = deleteDatabase(DatabaseConstants.OLD_DATABASE_NAME);
-            Timber.d("Deleted %s : %b", DatabaseConstants.OLD_DATABASE_NAME, ok);
+            boolean ok = deleteDatabase(Constants.DATABASE_NAME);
+            Timber.d("Deleted %s : %b", Constants.DATABASE_NAME, ok);
+            ok = deleteDatabase(Constants.OLD_DATABASE_NAME);
+            Timber.d("Deleted %s : %b", Constants.OLD_DATABASE_NAME, ok);
         }
     }
 

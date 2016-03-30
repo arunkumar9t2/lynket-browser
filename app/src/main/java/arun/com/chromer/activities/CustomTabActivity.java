@@ -9,7 +9,7 @@ import android.widget.Toast;
 import arun.com.chromer.R;
 import arun.com.chromer.customtabs.CustomActivityHelper;
 import arun.com.chromer.customtabs.CustomTabDelegate;
-import arun.com.chromer.util.StringConstants;
+import arun.com.chromer.util.Constants;
 import arun.com.chromer.util.Util;
 
 public class CustomTabActivity extends AppCompatActivity {
@@ -25,7 +25,7 @@ public class CustomTabActivity extends AppCompatActivity {
         }
 
         final String url = getIntent().getData().toString();
-        final boolean isWebhead = getIntent().getBooleanExtra(StringConstants.FROM_WEBHEAD, false);
+        final boolean isWebhead = getIntent().getBooleanExtra(Constants.FROM_WEBHEAD, false);
 
         CustomTabsIntent tabIntent = CustomTabDelegate.getCustomizedTabIntent(getApplicationContext(), url, isWebhead);
 

@@ -11,7 +11,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import arun.com.chromer.R;
-import arun.com.chromer.util.StringConstants;
+import arun.com.chromer.util.Constants;
 import arun.com.chromer.util.Util;
 import timber.log.Timber;
 
@@ -50,7 +50,7 @@ public class ShareInterceptActivity extends AppCompatActivity {
             openInTabActivity(url);
         } else {
             // No urls were found, so lets do a google search with the text received.
-            text = StringConstants.SEARCH_URL + text.replace(" ", "+");
+            text = Constants.SEARCH_URL + text.replace(" ", "+");
             openInTabActivity(text);
         }
     }

@@ -44,7 +44,7 @@ import arun.com.chromer.R;
 import arun.com.chromer.activities.CustomTabActivity;
 import arun.com.chromer.customtabs.CustomActivityHelper;
 import arun.com.chromer.preferences.Preferences;
-import arun.com.chromer.util.StringConstants;
+import arun.com.chromer.util.Constants;
 import timber.log.Timber;
 
 public class WebHeadService extends Service implements WebHead.WebHeadInteractionListener,
@@ -91,8 +91,8 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         return sInstance;
     }
 
-    private RemoveWebHead getRemoveWebHead() {
-        return RemoveWebHead.get(this);
+    private void initRemoveWebhead() {
+        RemoveWebHead.get(this);
     }
 
     @Override
@@ -117,7 +117,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
 
         // create a remove view
-        getRemoveWebHead();
+        initRemoveWebhead();
 
         // bind to custom tab session
         bindToCustomTabSession();
@@ -350,7 +350,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         if (webHead.getUrl() != null && webHead.getUrl().length() != 0) {
             Intent webHeadActivity = new Intent(this, CustomTabActivity.class);
             webHeadActivity.setData(Uri.parse(webHead.getUrl()));
-            webHeadActivity.putExtra(StringConstants.FROM_WEBHEAD, true);
+            webHeadActivity.putExtra(Constants.FROM_WEBHEAD, true);
             webHeadActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(webHeadActivity);
 

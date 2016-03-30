@@ -4,13 +4,14 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 
 import java.util.List;
 
 import arun.com.chromer.R;
 import arun.com.chromer.customtabs.CustomTabHelper;
-import arun.com.chromer.util.StringConstants;
+import arun.com.chromer.util.Constants;
 import arun.com.chromer.util.Util;
 
 /**
@@ -116,10 +117,11 @@ public class Preferences {
         return packageName;
     }
 
+    @Nullable
     private static String getDefaultCustomTabApp(Context context) {
-        if (Util.isPackageInstalled(context, StringConstants.CHROME_PACKAGE) &&
-                CustomTabHelper.isPackageSupportCustomTabs(context, StringConstants.CHROME_PACKAGE))
-            return StringConstants.CHROME_PACKAGE;
+        if (Util.isPackageInstalled(context, Constants.CHROME_PACKAGE) &&
+                CustomTabHelper.isPackageSupportCustomTabs(context, Constants.CHROME_PACKAGE))
+            return Constants.CHROME_PACKAGE;
 
         List<String> supportingPackages = CustomTabHelper.getCustomTabSupportingPackages(context);
         if (supportingPackages.size() > 0) {
@@ -148,6 +150,7 @@ public class Preferences {
                 .putString(SECONDARY_PREF, string).apply();
     }
 
+    @Nullable
     public static String secondaryBrowserPackage(Context context) {
         String flatString = secondaryBrowserComponent(context);
         if (flatString == null) {
@@ -174,6 +177,7 @@ public class Preferences {
                 .putString(FAV_SHARE_PREF, string).apply();
     }
 
+    @Nullable
     public static String favSharePackage(Context context) {
         String flatString = favShareComponent(context);
         if (flatString == null) {
@@ -253,6 +257,7 @@ public class Preferences {
         dynamicToolbarOnWeb(context, web);
     }
 
+    @Nullable
     public static Integer[] dynamicToolbarSelections(Context context) {
         if (dynamicToolbarOnApp(context) && dynamicToolbarOnWeb(context))
             return new Integer[]{0, 1};

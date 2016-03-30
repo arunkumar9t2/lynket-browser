@@ -26,7 +26,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 import arun.com.chromer.R;
 import arun.com.chromer.about.changelog.ChangelogUtil;
 import arun.com.chromer.about.licenses.Licenses;
-import arun.com.chromer.util.StringConstants;
+import arun.com.chromer.util.Constants;
 import arun.com.chromer.util.Util;
 import arun.com.chromer.views.adapter.ExtendedBaseAdapter;
 import de.psdev.licensesdialog.LicensesDialog;
@@ -178,8 +178,8 @@ public class AboutFragment extends Fragment {
                 }
                 switch (position) {
                     case 0:
-                        holder.title.setText(StringConstants.ME);
-                        holder.subtitle.setText(StringConstants.LOCATION);
+                        holder.title.setText(Constants.ME);
+                        holder.subtitle.setText(Constants.LOCATION);
                         holder.imageView.getLayoutParams().height = (int) getResources().getDimension(R.dimen.arun_height);
                         holder.imageView.getLayoutParams().width = (int) getResources().getDimension(R.dimen.arun_width);
                         Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.arun);

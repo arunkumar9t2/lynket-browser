@@ -39,7 +39,7 @@ import arun.com.chromer.R;
 import arun.com.chromer.db.BlacklistedApps;
 import arun.com.chromer.model.App;
 import arun.com.chromer.preferences.Preferences;
-import arun.com.chromer.util.ServicesUtil;
+import arun.com.chromer.services.util.ServicesUtil;
 import arun.com.chromer.util.Util;
 import arun.com.chromer.views.IntentPickerSheetView;
 import arun.com.chromer.views.adapter.BlackListAppRender;

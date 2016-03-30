@@ -3,7 +3,7 @@ package arun.com.chromer.util;
 /**
  * Created by Arun on 04/01/2016.
  */
-public class StringConstants {
+public class Constants {
 
     public static final String MAILID = "arunk.beece@gmail.com";
     public static final String ME = "Arunkumar";
@@ -16,7 +16,10 @@ public class StringConstants {
     public static final String COLOR_SELECTION = "COLOR_SELECTION";
     public static final String FROM_WEBHEAD = "FROM_WEBHEAD";
 
-    private StringConstants() {
+    public static final String DATABASE_NAME = "database.db";
+    public static final String OLD_DATABASE_NAME = "Chromer_database.db";
+
+    private Constants() {
         throw new UnsupportedOperationException("Cannot instantiate");
     }
 }

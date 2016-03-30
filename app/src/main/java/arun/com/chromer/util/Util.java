@@ -236,7 +236,7 @@ public class Util {
             }
             return text;
         } else
-            return StringConstants.SEARCH_URL + text.replace(" ", "+");
+            return Constants.SEARCH_URL + text.replace(" ", "+");
     }
 
     public static boolean isVoiceRecognizerPresent(@NonNull Context context) {

@@ -1,13 +1,15 @@
-package arun.com.chromer.util;
+package arun.com.chromer.services.util;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 
 import arun.com.chromer.customtabs.prefetch.ScannerService;
 import arun.com.chromer.customtabs.warmup.WarmupService;
 import arun.com.chromer.preferences.Preferences;
 import arun.com.chromer.services.AppDetectService;
+import arun.com.chromer.util.Constants;
 import arun.com.chromer.webheads.WebHeadService;
 import timber.log.Timber;
 
@@ -20,7 +22,7 @@ public class ServicesUtil {
         throw new AssertionError("Cannot instantiate");
     }
 
-    public static void takeCareOfServices(Context context) {
+    public static void takeCareOfServices(@NonNull Context context) {
         if (Preferences.warmUp(context))
             context.startService(new Intent(context, WarmupService.class));
         else
@@ -43,20 +45,20 @@ public class ServicesUtil {
         }
     }
 
-    public static boolean isAppBasedToolbarColor(Context ctx) {
+    public static boolean isAppBasedToolbarColor(@NonNull Context ctx) {
         return Preferences.dynamicToolbarOnApp(ctx) && Preferences.dynamicToolbar(ctx);
     }
 
-    public static void refreshCustomTabBindings(Context context) {
+    public static void refreshCustomTabBindings(@NonNull Context context) {
         if (WarmupService.getInstance() != null) {
             Intent warmUpService = new Intent(context, WarmupService.class);
-            warmUpService.putExtra(StringConstants.SHOULD_REFRESH_BINDING, true);
+            warmUpService.putExtra(Constants.SHOULD_REFRESH_BINDING, true);
             context.startService(warmUpService);
         }
 
         if (ScannerService.getInstance() != null) {
             Intent scanService = new Intent(context, ScannerService.class);
-            scanService.putExtra(StringConstants.SHOULD_REFRESH_BINDING, true);
+            scanService.putExtra(Constants.SHOULD_REFRESH_BINDING, true);
             context.startService(scanService);
         }
 
