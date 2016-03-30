@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
@@ -85,7 +86,8 @@ public class BrowserInterceptActivity extends AppCompatActivity {
     private void performBlacklistAction() {
         String componentFlatten = Preferences.secondaryBrowserComponent(this);
         if (componentFlatten != null && Util.isPackageInstalled(this, Preferences.secondaryBrowserPackage(this))) {
-            Intent webIntentExplicit = new Intent(Intent.ACTION_VIEW, getIntent().getData());
+            final Intent originalIntent = getIntent();
+            Intent webIntentExplicit = getOriginalIntentCopy(originalIntent);
             webIntentExplicit.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             webIntentExplicit.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             ComponentName cN = ComponentName.unflattenFromString(componentFlatten);
@@ -101,7 +103,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
 
     private void showIntentChooser() {
         Toast.makeText(this, getString(R.string.blacklist_message), Toast.LENGTH_LONG).show();
-        Intent defaultIntent = new Intent(Intent.ACTION_VIEW, getIntent().getData());
+        Intent defaultIntent = getOriginalIntentCopy(getIntent());
         Intent chooserIntent = Intent.createChooser(defaultIntent, getString(R.string.open_with));
         chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         chooserIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -117,7 +119,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
     }
 
     private void launchSecondaryBrowserWithIteration() {
-        Intent webIntentImplicit = new Intent(Intent.ACTION_VIEW, getIntent().getData());
+        Intent webIntentImplicit = getOriginalIntentCopy(getIntent());
         webIntentImplicit.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         webIntentImplicit.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         List<ResolveInfo> resolvedActivityList = getApplicationContext().getPackageManager()
@@ -143,5 +145,12 @@ public class BrowserInterceptActivity extends AppCompatActivity {
             }
             if (!found) showIntentChooser();
         }
+    }
+
+    @NonNull
+    private Intent getOriginalIntentCopy(Intent originalIntent) {
+        Intent copy = new Intent(Intent.ACTION_VIEW, originalIntent.getData());
+        copy.putExtras(originalIntent.getExtras());
+        return copy;
     }
 }
