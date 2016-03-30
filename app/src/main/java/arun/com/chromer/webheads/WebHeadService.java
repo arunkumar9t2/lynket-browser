@@ -21,6 +21,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsService;
 import android.support.customtabs.CustomTabsSession;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -205,6 +206,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
                 .setSmallIcon(R.drawable.ic_chromer_notification)
                 .setPriority(NotificationCompat.PRIORITY_MIN)
                 .setContentText(getString(R.string.tap_close_all))
+                .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
                 .setContentTitle(getString(R.string.web_heads_service))
                 .setContentIntent(contentIntent)
                 .setAutoCancel(false)
