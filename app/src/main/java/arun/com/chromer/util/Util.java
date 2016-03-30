@@ -20,6 +20,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
+import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.graphics.ColorUtils;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -66,7 +69,7 @@ public class Util {
                 }
             };
 
-    public static void openPlayStore(Context context, String appPackageName) {
+    public static void openPlayStore(@NonNull Context context, @NonNull String appPackageName) {
         try {
             context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
         } catch (android.content.ActivityNotFoundException anfe) {
@@ -74,8 +77,8 @@ public class Util {
         }
     }
 
-
-    public static List<String> findURLs(String string) {
+    @Nullable
+    public static List<String> findURLs(@Nullable String string) {
         if (string == null) {
             return null;
         }
@@ -93,7 +96,7 @@ public class Util {
         return links;
     }
 
-    public static String getPackageVersion(Context context) {
+    public static String getPackageVersion(@NonNull Context context) {
         String versionName;
         try {
             versionName = context
@@ -106,17 +109,17 @@ public class Util {
         return versionName;
     }
 
-    public static boolean isPackageInstalled(Context c, String packagename) {
+    public static boolean isPackageInstalled(@NonNull Context c, @NonNull String pkgName) {
         PackageManager pm = c.getApplicationContext().getPackageManager();
         try {
-            pm.getPackageInfo(packagename, PackageManager.GET_ACTIVITIES);
+            pm.getPackageInfo(pkgName, PackageManager.GET_ACTIVITIES);
             return true;
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
     }
 
-    public static String getAppNameWithPackage(Context context, String pack) {
+    public static String getAppNameWithPackage(@NonNull Context context, @NonNull String pack) {
         final PackageManager pm = context.getApplicationContext().getPackageManager();
         ApplicationInfo ai;
         try {
@@ -127,7 +130,7 @@ public class Util {
         return (String) (ai != null ? pm.getApplicationLabel(ai) : "(unknown)");
     }
 
-    public static boolean isAccessibilityServiceEnabled(Context context) {
+    public static boolean isAccessibilityServiceEnabled(@NonNull Context context) {
         int accesEnbld = 0;
         final String service = BuildConfig.APPLICATION_ID + "/arun.com.chromer.services.ScannerService";
         try {
@@ -154,7 +157,8 @@ public class Util {
         return false;
     }
 
-    public static String getDefaultBrowserPackage(Context context) {
+    @NonNull
+    public static String getDefaultBrowserPackage(@NonNull Context context) {
         Intent launchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(MainActivity.GOOGLE_URL));
         ResolveInfo resolveInfo = context.getApplicationContext().getPackageManager().resolveActivity(launchIntent,
                 PackageManager.MATCH_DEFAULT_ONLY);
@@ -162,7 +166,8 @@ public class Util {
         return resolveInfo != null ? resolveInfo.activityInfo.packageName : "";
     }
 
-    public static List<App> getCustomTabApps(Context context) {
+    @NonNull
+    public static List<App> getCustomTabApps(@NonNull Context context) {
         List<App> apps = new ArrayList<>();
         PackageManager pm = context.getApplicationContext().getPackageManager();
         Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));
@@ -181,7 +186,8 @@ public class Util {
         return apps;
     }
 
-    public static Bitmap drawableToBitmap(Drawable drawable) {
+    @NonNull
+    public static Bitmap drawableToBitmap(@NonNull Drawable drawable) {
         Bitmap bitmap;
 
         if (drawable instanceof BitmapDrawable) {
@@ -205,7 +211,7 @@ public class Util {
 
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public static boolean canReadUsageStats(Context context) {
+    public static boolean canReadUsageStats(@NonNull Context context) {
         // http://stackoverflow.com/questions/27215013/check-if-my-application-has-usage-access-enabled
         try {
             PackageManager packageManager = context.getApplicationContext().getPackageManager();
@@ -218,7 +224,8 @@ public class Util {
         }
     }
 
-    public static String processSearchText(String text) {
+    @Nullable
+    public static String processSearchText(@Nullable String text) {
         if (text == null) return null;
         if (Patterns.WEB_URL.matcher(text).matches()) {
             if (!text.toLowerCase().matches("^\\w+://.*")) {
@@ -229,7 +236,7 @@ public class Util {
             return StringConstants.SEARCH_URL + text.replace(" ", "+");
     }
 
-    public static boolean isVoiceRecognizerPresent(Context context) {
+    public static boolean isVoiceRecognizerPresent(@NonNull Context context) {
         PackageManager pm = context.getApplicationContext().getPackageManager();
         List<ResolveInfo> activities = pm.queryIntentActivities(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
         return (activities != null) && (activities.size() > 0);
@@ -266,6 +273,7 @@ public class Util {
         }
     }
 
+    @ColorInt
     public static int getForegroundTextColor(int backgroundColor) {
         final int whiteColorAlpha = ColorUtils.calculateMinimumAlpha(Color.WHITE, backgroundColor, 4.5f);
 
