@@ -6,7 +6,7 @@
                 android:layout_height="match_parent"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                tools:context="arun.com.chromer.activities.BlacklistManagerActivity"
+                tools:context=".blacklist.BlacklistManagerActivity"
                 tools:showIn="@layout/activity_blacklist_manager">
 
     <LinearLayout

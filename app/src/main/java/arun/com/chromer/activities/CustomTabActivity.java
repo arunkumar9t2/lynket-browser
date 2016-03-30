@@ -7,8 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import arun.com.chromer.R;
-import arun.com.chromer.chrometabutilites.CustomActivityHelper;
-import arun.com.chromer.chrometabutilites.CustomTabDelegate;
+import arun.com.chromer.customtabs.CustomActivityHelper;
+import arun.com.chromer.customtabs.CustomTabDelegate;
 import arun.com.chromer.util.StringConstants;
 import arun.com.chromer.util.Util;
 

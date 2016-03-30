@@ -17,9 +17,10 @@ import java.util.List;
 
 import arun.com.chromer.R;
 import arun.com.chromer.db.BlacklistedApps;
+import arun.com.chromer.preferences.Preferences;
 import arun.com.chromer.services.AppDetectService;
-import arun.com.chromer.util.Preferences;
 import arun.com.chromer.util.Util;
+import arun.com.chromer.webheads.WebHeadLauncherActivity;
 import timber.log.Timber;
 
 public class BrowserInterceptActivity extends AppCompatActivity {

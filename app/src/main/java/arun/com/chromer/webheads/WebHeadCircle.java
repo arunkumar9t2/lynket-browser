@@ -12,7 +12,7 @@ import android.view.View;
 import java.net.URL;
 
 import arun.com.chromer.R;
-import arun.com.chromer.util.Preferences;
+import arun.com.chromer.preferences.Preferences;
 import arun.com.chromer.util.Util;
 
 /**

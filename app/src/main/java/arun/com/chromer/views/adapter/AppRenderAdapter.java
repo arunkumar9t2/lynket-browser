@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import arun.com.chromer.R;
-import arun.com.chromer.fragments.AboutFragment;
+import arun.com.chromer.about.AboutFragment;
 import arun.com.chromer.model.App;
 
 /**

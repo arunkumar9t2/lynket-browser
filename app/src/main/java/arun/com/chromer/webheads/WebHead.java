@@ -24,7 +24,7 @@ import com.facebook.rebound.SpringConfig;
 import com.facebook.rebound.SpringSystem;
 
 import arun.com.chromer.R;
-import arun.com.chromer.util.Preferences;
+import arun.com.chromer.preferences.Preferences;
 import arun.com.chromer.util.Util;
 import timber.log.Timber;
 

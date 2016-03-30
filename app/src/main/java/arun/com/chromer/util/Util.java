@@ -39,8 +39,9 @@ import java.util.regex.Pattern;
 import arun.com.chromer.BuildConfig;
 import arun.com.chromer.MainActivity;
 import arun.com.chromer.R;
-import arun.com.chromer.chrometabutilites.CustomActivityHelper;
-import arun.com.chromer.chrometabutilites.CustomTabHelper;
+import arun.com.chromer.customtabs.CustomActivityHelper;
+import arun.com.chromer.customtabs.CustomTabHelper;
+import arun.com.chromer.customtabs.prefetch.ScannerService;
 import arun.com.chromer.model.App;
 
 /**
@@ -132,7 +133,7 @@ public class Util {
 
     public static boolean isAccessibilityServiceEnabled(@NonNull Context context) {
         int accesEnbld = 0;
-        final String service = BuildConfig.APPLICATION_ID + "/arun.com.chromer.services.ScannerService";
+        final String service = BuildConfig.APPLICATION_ID + "/" + ScannerService.class.getName();
         try {
             accesEnbld = Settings.Secure.getInt(context.getContentResolver(), android.provider.Settings.Secure.ACCESSIBILITY_ENABLED);
         } catch (Settings.SettingNotFoundException ignored) {

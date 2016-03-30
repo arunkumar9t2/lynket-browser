@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import arun.com.chromer.util.Preferences;
+import arun.com.chromer.preferences.Preferences;
 import timber.log.Timber;
 
 public class AppDetectService extends Service {

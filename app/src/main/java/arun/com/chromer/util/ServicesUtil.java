@@ -4,9 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 
+import arun.com.chromer.customtabs.prefetch.ScannerService;
+import arun.com.chromer.customtabs.warmup.WarmupService;
+import arun.com.chromer.preferences.Preferences;
 import arun.com.chromer.services.AppDetectService;
-import arun.com.chromer.services.ScannerService;
-import arun.com.chromer.services.WarmupService;
 import arun.com.chromer.webheads.WebHeadService;
 import timber.log.Timber;
 

@@ -42,8 +42,8 @@ import java.util.Stack;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.CustomTabActivity;
-import arun.com.chromer.chrometabutilites.CustomActivityHelper;
-import arun.com.chromer.util.Preferences;
+import arun.com.chromer.customtabs.CustomActivityHelper;
+import arun.com.chromer.preferences.Preferences;
 import arun.com.chromer.util.StringConstants;
 import timber.log.Timber;
 
