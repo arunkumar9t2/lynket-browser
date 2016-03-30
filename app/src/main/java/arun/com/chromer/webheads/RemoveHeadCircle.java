@@ -33,9 +33,9 @@ public class RemoveHeadCircle extends View {
         mBgPaint.setColor(ContextCompat.getColor(getContext(), R.color.md_red_500));
         mBgPaint.setStyle(Paint.Style.FILL);
 
-        float shadwR = context.getResources().getDimension(R.dimen.web_head_shadow_radius);
-        float shadwDx = context.getResources().getDimension(R.dimen.web_head_shadow_dx);
-        float shadwDy = context.getResources().getDimension(R.dimen.web_head_shadow_dy);
+        float shadwR = context.getResources().getDimension(R.dimen.remove_head_shadow_radius);
+        float shadwDx = context.getResources().getDimension(R.dimen.remove_head_shadow_dx);
+        float shadwDy = context.getResources().getDimension(R.dimen.remove_head_shadow_dy);
 
         mBgPaint.setShadowLayer(shadwR, shadwDx, shadwDy, 0x85000000);
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);
