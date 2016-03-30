@@ -110,7 +110,9 @@ public class Util {
         return versionName;
     }
 
-    public static boolean isPackageInstalled(@NonNull Context c, @NonNull String pkgName) {
+    public static boolean isPackageInstalled(@NonNull Context c, @Nullable String pkgName) {
+        if (pkgName == null) return false;
+
         PackageManager pm = c.getApplicationContext().getPackageManager();
         try {
             pm.getPackageInfo(pkgName, PackageManager.GET_ACTIVITIES);

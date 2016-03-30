@@ -210,7 +210,7 @@ public class MaterialSearchView extends FrameLayout {
         }
     }
 
-    private Animator getColorChangeAnimatorOnImageView(final ImageView viewToAnimate, int fromColor, int toColor, int duration) {
+    private Animator getColorChangeAnimatorOnImageView(final ImageView viewToAnimate, int fromColor, int toColor, @SuppressWarnings("SameParameterValue") int duration) {
         final float[] from = new float[3],
                 to = new float[3];
 

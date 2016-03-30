@@ -258,7 +258,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
      * Pre-fetches next set of urls for launch with the given parameter url as reference. The first
      * url in web heads order found is considered as the priority url and other url as likely urls.
      *
-     * @param sLastOpenedUrl
+     * @param sLastOpenedUrl The last opened url
      */
     private void prepareNextSetOfUrls(String sLastOpenedUrl) {
         Stack<String> urlStack = getUrlStack(sLastOpenedUrl);
@@ -337,14 +337,12 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     }
 
     private void closeAllWebHeads() {
-        if (mWebHeads != null) {
-            for (WebHead webhead : mWebHeads.values()) {
-                if (webhead != null) webhead.destroySelf(false);
-            }
-            // Since no callback is received clear the map manually.
-            mWebHeads.clear();
-            Timber.d("Webheads: %d", mWebHeads.size());
+        for (WebHead webhead : mWebHeads.values()) {
+            if (webhead != null) webhead.destroySelf(false);
         }
+        // Since no callback is received clear the map manually.
+        mWebHeads.clear();
+        Timber.d("Webheads: %d", mWebHeads.size());
     }
 
     @Override

@@ -111,8 +111,6 @@ public class CustomActivityHelper implements ServiceConnectionCallback {
 
     /**
      * Register a Callback to be called when connected or disconnected from the Custom Tabs Service.
-     *
-     * @param connectionCallback
      */
     public void setConnectionCallback(ConnectionCallback connectionCallback) {
         this.mConnectionCallback = connectionCallback;
@@ -120,8 +118,6 @@ public class CustomActivityHelper implements ServiceConnectionCallback {
 
     /**
      * Register a Callback to be called when Navigation occurs..
-     *
-     * @param navigationCallback
      */
     public void setNavigationCallback(NavigationCallback navigationCallback) {
         this.mNavigationCallback = navigationCallback;

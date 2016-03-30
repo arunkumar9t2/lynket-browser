@@ -33,7 +33,7 @@ public class AppIntroFragment extends Fragment {
         return newInstance(title, description, imageDrawable, bgColor, 0, 0);
     }
 
-    @SuppressWarnings("WeakerAccess")
+    @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
     public static AppIntroFragment newInstance(CharSequence title, CharSequence description, int imageDrawable, int bgColor, int titleColor, int descColor) {
         AppIntroFragment sampleSlide = new AppIntroFragment();
         Bundle args = new Bundle();

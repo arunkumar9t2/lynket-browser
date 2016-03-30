@@ -42,7 +42,7 @@ public class AppColorExtractorService extends IntentService {
 
     private boolean extractColorFromResources(String app) {
         try {
-            int color = -1;
+            int color;
 
             Resources resources = getPackageManager().getResourcesForApplication(app);
 
@@ -68,13 +68,12 @@ public class AppColorExtractorService extends IntentService {
                 }
             }
 
-            // If color is -1 here, then both attempt failed
-            if (color == -1) return false;
+            // If we reached here, then both attempt failed
+            return false;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
             return false;
         }
-        return false;
     }
 
     private int getThemedColor(Resources resources, int attributeId, String app) throws PackageManager.NameNotFoundException {
@@ -103,10 +102,9 @@ public class AppColorExtractorService extends IntentService {
             // Convert to bitmap
             Bitmap iconBitmap = Util.drawableToBitmap(iconDrawable);
 
-            Palette palette = null;
-            if (iconBitmap != null)
-                palette = Palette.from(iconBitmap).generate();
+            Palette palette = Palette.from(iconBitmap).generate();
 
+            //noinspection ConstantConditions
             if (palette == null) return; // No use when there are no colors, so exit
 
             int extractColor = getPreferredColorFromSwatches(palette);

@@ -187,6 +187,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private void setupMaterialSearch() {
         mMaterialSearchView = (MaterialSearchView) findViewById(R.id.material_search_view);
+        //noinspection ConstantConditions
         mMaterialSearchView.clearFocus();
         mMaterialSearchView.setOnKeyListener(new TextView.OnEditorActionListener() {
             @Override
@@ -246,6 +247,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 return !info.componentName.getPackageName().equalsIgnoreCase(getPackageName());
             }
         });
+        //noinspection ConstantConditions
         findViewById(R.id.secondary_browser).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -300,6 +302,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         });
 
         SwitchCompat mWifiSwitch = (SwitchCompat) findViewById(R.id.only_wifi_switch);
+        //noinspection ConstantConditions
         mWifiSwitch.setChecked(Preferences.wifiOnlyPrefetch(this));
         mWifiSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -360,6 +363,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                     .sizeDp(24));
         else setIconWithPackageName(mDefaultProviderIcn, preferredApp);
 
+        //noinspection ConstantConditions
         findViewById(R.id.default_provider).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -395,6 +399,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private void setupFAB() {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        //noinspection ConstantConditions
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -408,6 +413,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private void setupColorPicker() {
         final int toolbarColor = Preferences.toolbarColor(this);
+        //noinspection ConstantConditions
         findViewById(R.id.color_picker_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -416,10 +422,12 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             }
         });
         mColorViewToolbar = findViewById(R.id.color_preview);
+        //noinspection ConstantConditions
         mColorViewToolbar.setBackgroundColor(toolbarColor);
 
         final int webHeadColor = Preferences.webHeadColor(this);
         mColorViewWebHeads = findViewById(R.id.color_preview_webheads);
+        //noinspection ConstantConditions
         findViewById(R.id.color_picker_button_webheads).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -449,29 +457,28 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         mSetDefaultButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (defaultBrowserPackage != null) {
-                    if (defaultBrowserPackage.trim().equalsIgnoreCase(getPackageName())) {
-                        snack(getString(R.string.already_set));
-                    } else if ((defaultBrowserPackage.equalsIgnoreCase("android") || defaultBrowserPackage.startsWith("org.cyanogenmod"))
-                            && Util.isPackageInstalled(getApplicationContext(), defaultBrowserPackage)) {
-                        // TODO Change this detection such that "if defaultBrowserPackage is not a compatible browser" condition is used
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(GOOGLE_URL)));
-                    } else {
-                        Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                        intent.setData(Uri.parse("package:" + defaultBrowserPackage));
-                        Toast.makeText(getApplicationContext(),
-                                Util.getAppNameWithPackage(getApplicationContext(), defaultBrowserPackage)
-                                        + " "
-                                        + getString(R.string.default_clear_msg), Toast.LENGTH_LONG).show();
-                        startActivity(intent);
-                    }
+                if (defaultBrowserPackage.trim().equalsIgnoreCase(getPackageName())) {
+                    snack(getString(R.string.already_set));
+                } else if ((defaultBrowserPackage.equalsIgnoreCase("android") || defaultBrowserPackage.startsWith("org.cyanogenmod"))
+                        && Util.isPackageInstalled(getApplicationContext(), defaultBrowserPackage)) {
+                    // TODO Change this detection such that "if defaultBrowserPackage is not a compatible browser" condition is used
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(GOOGLE_URL)));
+                } else {
+                    Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    intent.setData(Uri.parse("package:" + defaultBrowserPackage));
+                    Toast.makeText(getApplicationContext(),
+                            Util.getAppNameWithPackage(getApplicationContext(), defaultBrowserPackage)
+                                    + " "
+                                    + getString(R.string.default_clear_msg), Toast.LENGTH_LONG).show();
+                    startActivity(intent);
                 }
             }
         });
 
-        if (defaultBrowserPackage != null && defaultBrowserPackage.trim().equalsIgnoreCase(getPackageName())) {
+        if (defaultBrowserPackage.trim().equalsIgnoreCase(getPackageName())) {
             mSetDefaultButton.setVisibility(View.GONE);
             ImageView defaultSuccessIcon = (ImageView) findViewById(R.id.default_icon_c);
+            //noinspection ConstantConditions
             defaultSuccessIcon.setVisibility(View.VISIBLE);
             defaultSuccessIcon.setImageDrawable(
                     new IconicsDrawable(this)
@@ -479,6 +486,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                             .color(ContextCompat.getColor(this, R.color.default_success))
                             .sizeDp(24));
             TextView explanation = (TextView) findViewById(R.id.default_setting_xpln);
+            //noinspection ConstantConditions
             explanation.setText(R.string.chromer_defaulted);
             explanation.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         }
@@ -635,6 +643,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         && !info.componentName.getPackageName().equalsIgnoreCase(getPackageName());
             }
         });
+        //noinspection ConstantConditions
         findViewById(R.id.fav_share_app).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -800,6 +809,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     private void setUpWebHeadsIntro() {
+        //noinspection ConstantConditions
         findViewById(R.id.web_heads_intro).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -809,6 +819,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     private void setupBlacklistedApp() {
+        //noinspection ConstantConditions
         findViewById(R.id.blacklisted_target).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
