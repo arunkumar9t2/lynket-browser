@@ -149,9 +149,11 @@ public class BrowserInterceptActivity extends AppCompatActivity {
     }
 
     @NonNull
-    private Intent getOriginalIntentCopy(Intent originalIntent) {
+    private Intent getOriginalIntentCopy(@NonNull Intent originalIntent) {
         Intent copy = new Intent(Intent.ACTION_VIEW, originalIntent.getData());
-        copy.putExtras(originalIntent.getExtras());
+        if (originalIntent.getExtras() != null) {
+            copy.putExtras(originalIntent.getExtras());
+        }
         return copy;
     }
 }
