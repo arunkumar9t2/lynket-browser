@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AppOpsManager;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -131,6 +132,30 @@ public class Util {
             ai = null;
         }
         return (String) (ai != null ? pm.getApplicationLabel(ai) : "(unknown)");
+    }
+
+    /**
+     * Iterates through available browsers packages and returns the ComponentName for the given
+     * package.
+     *
+     * @param context Context to retrieve package list
+     * @param pkg     The package name
+     * @return
+     */
+    @Nullable
+    public static ComponentName getBrowserComponentForPackage(@NonNull Context context, @NonNull String pkg) {
+        Intent webIntentImplicit = new Intent(Intent.ACTION_VIEW, Uri.parse(MainActivity.GOOGLE_URL));
+        List<ResolveInfo> resolvedActivityList = context.getApplicationContext().getPackageManager()
+                .queryIntentActivities(webIntentImplicit, PackageManager.MATCH_ALL);
+
+        ComponentName componentName = null;
+        for (ResolveInfo info : resolvedActivityList) {
+            if (info.activityInfo.packageName.equalsIgnoreCase(pkg)) {
+                componentName = new ComponentName(info.activityInfo.packageName, info.activityInfo.name);
+                webIntentImplicit.setComponent(componentName);
+            }
+        }
+        return componentName;
     }
 
     public static boolean isAccessibilityServiceEnabled(@NonNull Context context) {

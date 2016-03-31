@@ -17,6 +17,7 @@ import arun.com.chromer.R;
 import arun.com.chromer.customtabs.callbacks.AddHomeShortcutReceiver;
 import arun.com.chromer.customtabs.callbacks.ClipboardService;
 import arun.com.chromer.customtabs.callbacks.FavShareBroadcastReceiver;
+import arun.com.chromer.customtabs.callbacks.OpenInChromeReceiver;
 import arun.com.chromer.customtabs.callbacks.SecondaryBrowserReceiver;
 import arun.com.chromer.customtabs.callbacks.ShareBroadcastReceiver;
 import arun.com.chromer.customtabs.prefetch.ScannerService;
@@ -75,26 +76,25 @@ public class CustomTabDelegate {
 
         addShortcutToHomeScreen(ctx, builder);
 
-        addOpenInMainBrowser(ctx, builder);
+        addOpenInMainBrowser(ctx, url, builder);
 
         return builder.build();
     }
 
-    private static void addOpenInMainBrowser(@NonNull Context ctx, @NonNull CustomTabsIntent.Builder builder) {
-        final String currentDefaultProvider = Preferences.customTabApp(ctx);
+    private static void addOpenInMainBrowser(@NonNull Context ctx, @NonNull String url, @NonNull CustomTabsIntent.Builder builder) {
+        final String customTabPkg = Preferences.customTabApp(ctx);
 
-        if (currentDefaultProvider != null && Util.isPackageInstalled(ctx, currentDefaultProvider)) {
-            if (currentDefaultProvider.equalsIgnoreCase(CustomTabHelper.BETA_PACKAGE)
-                    || currentDefaultProvider.equalsIgnoreCase(CustomTabHelper.DEV_PACKAGE)
-                    || currentDefaultProvider.equalsIgnoreCase(CustomTabHelper.STABLE_PACKAGE)) {
+        if (Util.isPackageInstalled(ctx, customTabPkg)) {
+            if (customTabPkg.equalsIgnoreCase(CustomTabHelper.BETA_PACKAGE)
+                    || customTabPkg.equalsIgnoreCase(CustomTabHelper.DEV_PACKAGE)
+                    || customTabPkg.equalsIgnoreCase(CustomTabHelper.STABLE_PACKAGE)) {
 
-                final Intent intent = ctx.getApplicationContext().getPackageManager().getLaunchIntentForPackage(currentDefaultProvider);
-                // intent.setData(Uri.parse(url));
+                final Intent chromeReceiver = new Intent(ctx, OpenInChromeReceiver.class);
+                final PendingIntent openChromePending = PendingIntent.getBroadcast(ctx, 0, chromeReceiver, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                final PendingIntent openBrowserPending = PendingIntent.getActivity(ctx, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-
-                final String app = Util.getAppNameWithPackage(ctx, currentDefaultProvider);
-                builder.addMenuItem(String.format(ctx.getString(R.string.open_in_browser), app), openBrowserPending);
+                final String app = Util.getAppNameWithPackage(ctx, customTabPkg);
+                final String label = String.format(ctx.getString(R.string.open_in_browser), app);
+                builder.addMenuItem(label, openChromePending);
             }
         }
     }
