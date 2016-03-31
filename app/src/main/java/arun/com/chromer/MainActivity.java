@@ -267,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
         final boolean preFetch = Preferences.preFetch(this);
         final boolean warmUpBrowser = Preferences.warmUp(this);
-        final boolean multipleInstances = Preferences.mergeTabs(this);
+        final boolean mergeTabs = Preferences.mergeTabs(this);
 
         mWarmUpSwitch = (SwitchCompat) findViewById(R.id.warm_up_switch);
         //noinspection ConstantConditions
@@ -318,7 +318,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         // TODO - only allow if API level = 21+
         mMergeTabsSwitch = (SwitchCompat) findViewById(R.id.merge_tabs_switch);
         //noinspection ConstantConditions
-        mMergeTabsSwitch.setChecked(multipleInstances);
+        mMergeTabsSwitch.setChecked(mergeTabs);
         mMergeTabsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
