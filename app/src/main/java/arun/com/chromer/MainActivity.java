@@ -268,6 +268,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         final boolean warmUpBrowser = Preferences.warmUp(this);
 
         mWarmUpSwitch = (SwitchCompat) findViewById(R.id.warm_up_switch);
+        //noinspection ConstantConditions
         mWarmUpSwitch.setChecked(preFetch || warmUpBrowser);
         mWarmUpSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -278,6 +279,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         });
 
         mPrefetchSwitch = (SwitchCompat) findViewById(R.id.pre_fetch_switch);
+        //noinspection ConstantConditions
         mPrefetchSwitch.setChecked(preFetch);
         enableDisableWarmUpSwitch(preFetch);
         updateSubPreferences(preFetch);

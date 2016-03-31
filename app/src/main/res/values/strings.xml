@@ -53,7 +53,7 @@
     <string name="share">Share</string>
     <string name="share_with">Share with %1$s</string>
     <string name="more_custom_tbs">More on custom tabs</string>
-    <string name="rate_play_store">Rate on Playstore</string>
+    <string name="rate_play_store">Rate on Play Store</string>
     <string name="feedback">Feedback</string>
     <string name="intro">Intro</string>
     <string name="send_email">Send email…</string>
@@ -117,7 +117,7 @@
     <string name="accessibility_dialog_desc">To allow Chromer to scan for links in any app, it requires you to grant accessibility service permission. Please grant accessibility permission in the next screen, after which you can enable this option and enjoy quick launches.</string>
     <string name="open_settings">Open Settings</string>
     <string name="only_on_wifi">Scan only on Wi-Fi</string>
-    <string name="show_notification">Show notification when link is pre-fetched</string>
+    <string name="show_notification">Show notification when a link is prefetched</string>
     <string name="default_toolbar_color">Default toolbar color</string>
     <string name="web_heads_color">Web heads color</string>
     <string name="choose_secondary_browser">Secondary browser</string>
