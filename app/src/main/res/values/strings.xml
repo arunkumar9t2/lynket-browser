@@ -116,7 +116,8 @@
     <string name="accessibility_dialog_title">Accessibility permission required</string>
     <string name="accessibility_dialog_desc">To allow Chromer to scan for links in any app, it requires you to grant accessibility service permission. Please grant accessibility permission in the next screen, after which you can enable this option and enjoy quick launches.</string>
     <string name="open_settings">Open Settings</string>
-    <string name="only_on_wifi">Only on Wi-Fi</string>
+    <string name="only_on_wifi">Scan only on Wi-Fi</string>
+    <string name="show_notification">Show notification when link is pre-fetched</string>
     <string name="default_toolbar_color">Default toolbar color</string>
     <string name="web_heads_color">Web heads color</string>
     <string name="choose_secondary_browser">Secondary browser</string>

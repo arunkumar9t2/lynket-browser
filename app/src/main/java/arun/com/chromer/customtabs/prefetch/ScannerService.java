@@ -118,7 +118,7 @@ public class ScannerService extends AccessibilityService implements CustomActivi
     }
 
     private void updateNotification() {
-        if (mLastFetchedUrl != null && mLastFetchedUrl.length() > 0) {
+        if (mLastFetchedUrl != null && mLastFetchedUrl.length() > 0 && Preferences.preFetchNotification(this)) {
             Timber.d("Posting notification");
             PendingIntent contentIntent = PendingIntent.getBroadcast(this,
                     0,

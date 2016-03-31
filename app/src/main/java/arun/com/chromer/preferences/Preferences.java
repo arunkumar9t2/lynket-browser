@@ -30,6 +30,7 @@ public class Preferences {
     private static final String BLACKLIST = "blacklist_preference";
     private static final String PRE_FETCH = "pre_fetch_preference";
     private static final String WIFI_PREFETCH = "wifi_preference";
+    private static final String PRE_FETCH_NOTIFICATION = "pre_fetch_notification_preference";
     private static final String SECONDARY_PREF = "secondary_preference";
     private static final String FAV_SHARE_PREF = "fav_share_preference";
     public static final String DYNAMIC_COLOR = "dynamic_color";
@@ -226,6 +227,14 @@ public class Preferences {
 
     public static void wifiOnlyPrefetch(Context context, boolean preference) {
         preferences(context).edit().putBoolean(WIFI_PREFETCH, preference).commit();
+    }
+
+    public static boolean preFetchNotification(Context context) {
+        return preferences(context).getBoolean(PRE_FETCH_NOTIFICATION, true);
+    }
+
+    public static void preFetchNotification(Context context, boolean preference) {
+        preferences(context).edit().putBoolean(PRE_FETCH_NOTIFICATION, preference).commit();
     }
 
     public static boolean dynamicToolbar(Context context) {

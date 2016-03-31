@@ -17,6 +17,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
@@ -83,6 +84,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     private View mColorViewWebHeads;
     private SwitchCompat mWarmUpSwitch;
     private SwitchCompat mPrefetchSwitch;
+    private AppCompatCheckBox mWifiCheckBox;
+    private AppCompatCheckBox mNotificationCheckBox;
     private ImageView mSecondaryBrowserIcon;
     private ImageView mDefaultProviderIcn;
     private AppCompatButton mSetDefaultButton;
@@ -114,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         updatePrefetchIfPermissionGranted();
         setupDefaultBrowser();
         setIconWithPackageName(mSecondaryBrowserIcon, Preferences.secondaryBrowserPackage(this));
+        updateSubPreferences(Preferences.preFetch(this));
     }
 
     @Override
@@ -258,9 +262,13 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private void setupSwitches() {
         updatePrefetchIfPermissionGranted();
+        setupCheckBoxes();
+
+        final boolean preFetch = Preferences.preFetch(this);
+        final boolean warmUpBrowser = Preferences.warmUp(this);
 
         mWarmUpSwitch = (SwitchCompat) findViewById(R.id.warm_up_switch);
-        mWarmUpSwitch.setChecked(Preferences.preFetch(this) || Preferences.warmUp(this));
+        mWarmUpSwitch.setChecked(preFetch || warmUpBrowser);
         mWarmUpSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -270,8 +278,9 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         });
 
         mPrefetchSwitch = (SwitchCompat) findViewById(R.id.pre_fetch_switch);
-        mPrefetchSwitch.setChecked(Preferences.preFetch(this));
-        enableDisableWarmUpSwitch(Preferences.preFetch(this));
+        mPrefetchSwitch.setChecked(preFetch);
+        enableDisableWarmUpSwitch(preFetch);
+        updateSubPreferences(preFetch);
         mPrefetchSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -298,19 +307,46 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 }
 
                 ServicesUtil.takeCareOfServices(getApplicationContext());
+                updateSubPreferences(isChecked);
             }
         });
+    }
 
-        SwitchCompat mWifiSwitch = (SwitchCompat) findViewById(R.id.only_wifi_switch);
+    private void setupCheckBoxes() {
+        mWifiCheckBox = (AppCompatCheckBox) findViewById(R.id.only_wifi_switch);
         //noinspection ConstantConditions
-        mWifiSwitch.setChecked(Preferences.wifiOnlyPrefetch(this));
-        mWifiSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mWifiCheckBox.setChecked(Preferences.wifiOnlyPrefetch(this));
+        mWifiCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Preferences.wifiOnlyPrefetch(getApplicationContext(), isChecked);
                 ServicesUtil.takeCareOfServices(getApplicationContext());
             }
         });
+
+        mNotificationCheckBox = (AppCompatCheckBox) findViewById(R.id.show_notification_checkbox);
+        //noinspection ConstantConditions
+        mNotificationCheckBox.setChecked(Preferences.preFetchNotification(this));
+        mNotificationCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Preferences.preFetchNotification(getApplicationContext(), isChecked);
+            }
+        });
+    }
+
+    private void updateSubPreferences(boolean isChecked) {
+        if (isChecked && Util.isAccessibilityServiceEnabled(this)) {
+            mWifiCheckBox.setEnabled(true);
+            mWifiCheckBox.setChecked(Preferences.wifiOnlyPrefetch(this));
+            mNotificationCheckBox.setEnabled(true);
+            mNotificationCheckBox.setChecked(Preferences.preFetchNotification(this));
+        } else {
+            mWifiCheckBox.setEnabled(false);
+            mWifiCheckBox.setChecked(false);
+            mNotificationCheckBox.setEnabled(false);
+            mNotificationCheckBox.setChecked(false);
+        }
     }
 
     private void guideUserToAccessibilitySettings() {
