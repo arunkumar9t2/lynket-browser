@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     private View mColorViewWebHeads;
     private SwitchCompat mWarmUpSwitch;
     private SwitchCompat mPrefetchSwitch;
+    private SwitchCompat mMergeTabsSwitch;
     private AppCompatCheckBox mWifiCheckBox;
     private AppCompatCheckBox mNotificationCheckBox;
     private ImageView mSecondaryBrowserIcon;
@@ -266,6 +267,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
         final boolean preFetch = Preferences.preFetch(this);
         final boolean warmUpBrowser = Preferences.warmUp(this);
+        final boolean multipleInstances = Preferences.mergeTabs(this);
 
         mWarmUpSwitch = (SwitchCompat) findViewById(R.id.warm_up_switch);
         //noinspection ConstantConditions
@@ -310,6 +312,18 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
                 ServicesUtil.takeCareOfServices(getApplicationContext());
                 updateSubPreferences(isChecked);
+            }
+        });
+
+        // TODO - only allow if API level = 21+
+        mMergeTabsSwitch = (SwitchCompat) findViewById(R.id.merge_tabs_switch);
+        //noinspection ConstantConditions
+        mMergeTabsSwitch.setChecked(multipleInstances);
+        mMergeTabsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Preferences.mergeTabs(getApplicationContext(), isChecked);
+                //ServicesUtil.takeCareOfServices(getApplicationContext());
             }
         });
     }
