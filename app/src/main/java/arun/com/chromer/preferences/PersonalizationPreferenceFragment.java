@@ -71,6 +71,11 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
         if (preference != null) {
             preference.setSummary(preference.getEntry());
         }
+        // Showing summary for animation speed preference
+        preference = (ListPreference) findPreference(Preferences.ANIMATION_SPEED);
+        if (preference != null) {
+            preference.setSummary(preference.getEntry());
+        }
         // Showing summary for preferred action
         preference = (ListPreference) findPreference(Preferences.PREFERRED_ACTION);
         if (preference != null) {

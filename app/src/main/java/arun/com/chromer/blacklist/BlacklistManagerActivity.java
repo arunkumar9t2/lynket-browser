@@ -273,6 +273,6 @@ public class BlacklistManagerActivity extends AppCompatActivity implements Black
 
     private void finishWithTransition() {
         finish();
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        overridePendingTransition(R.anim.slide_in_left_medium, R.anim.slide_out_right_medium);
     }
 }

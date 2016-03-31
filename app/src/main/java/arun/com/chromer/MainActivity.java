@@ -570,8 +570,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                                 Intent aboutActivityIntent = new Intent(MainActivity.this, AboutAppActivity.class);
                                 startActivity(aboutActivityIntent,
                                         ActivityOptions.makeCustomAnimation(MainActivity.this,
-                                                R.anim.slide_in_right,
-                                                R.anim.slide_out_left).toBundle()
+                                                R.anim.slide_in_right_medium,
+                                                R.anim.slide_out_left_medium).toBundle()
                                 );
                                 break;
                             case 9:
@@ -826,8 +826,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 Intent blackList = new Intent(MainActivity.this, BlacklistManagerActivity.class);
                 startActivity(blackList,
                         ActivityOptions.makeCustomAnimation(MainActivity.this,
-                                R.anim.slide_in_right,
-                                R.anim.slide_out_left).toBundle()
+                                R.anim.slide_in_right_medium,
+                                R.anim.slide_out_left_medium).toBundle()
                 );
             }
         });

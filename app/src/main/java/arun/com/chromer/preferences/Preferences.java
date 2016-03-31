@@ -23,6 +23,7 @@ public class Preferences {
     private static final String WEBHEADS_COLOR = "webhead_color";
     private static final String TOOLBAR_COLOR_PREF = "toolbar_color_pref";
     public static final String ANIMATION_TYPE = "animation_preference";
+    public static final String ANIMATION_SPEED = "animation_speed_preference";
     // Changed key for 1.5 build which will force intro to show
     private static final String FIRST_RUN = "firstrun_1";
     private static final String WARM_UP = "warm_up_preference";
@@ -43,6 +44,9 @@ public class Preferences {
 
     public static final int PREFERRED_ACTION_BROWSER = 1;
     public static final int PREFERRED_ACTION_FAV_SHARE = 2;
+
+    public static final int ANIMATION_MEDIUM = 1;
+    public static final int ANIMATION_SHORT = 2;
 
     private static SharedPreferences preferences(Context context) {
         return context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
@@ -98,6 +102,12 @@ public class Preferences {
         return Integer.parseInt(PreferenceManager
                 .getDefaultSharedPreferences(context)
                 .getString(ANIMATION_TYPE, "1"));
+    }
+
+    public static int animationSpeed(Context context) {
+        return Integer.parseInt(PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .getString(ANIMATION_SPEED, "1"));
     }
 
     public static int preferredAction(Context context) {

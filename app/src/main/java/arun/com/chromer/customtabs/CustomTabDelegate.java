@@ -101,20 +101,38 @@ public class CustomTabDelegate {
 
     private static void addAnimations(@NonNull Context ctx, @NonNull CustomTabsIntent.Builder builder) {
         if (Preferences.isAnimationEnabled(ctx)) {
-            switch (Preferences.animationType(ctx)) {
-                case 1:
-                    builder.setStartAnimations(ctx, R.anim.slide_in_right, R.anim.slide_out_left)
-                            .setExitAnimations(ctx, R.anim.slide_in_left, R.anim.slide_out_right);
+            switch (Preferences.animationSpeed(ctx)) {
+                case Preferences.ANIMATION_MEDIUM:
+                    switch (Preferences.animationType(ctx)) {
+                        case 1:
+                            builder.setStartAnimations(ctx, R.anim.slide_in_right_medium, R.anim.slide_out_left_medium)
+                                    .setExitAnimations(ctx, R.anim.slide_in_left_medium, R.anim.slide_out_right_medium);
+                            break;
+                        case 2:
+                            builder.setStartAnimations(ctx, R.anim.slide_up_right_medium, R.anim.slide_down_left_medium)
+                                    .setExitAnimations(ctx, R.anim.slide_up_left_medium, R.anim.slide_down_right_medium);
+                            break;
+                        default:
+                            builder.setStartAnimations(ctx, R.anim.slide_in_right_medium, R.anim.slide_out_left_medium)
+                                    .setExitAnimations(ctx, R.anim.slide_in_left_medium, R.anim.slide_out_right_medium);
+                    }
                     break;
-                case 2:
-                    builder.setStartAnimations(ctx, R.anim.slide_up_right, R.anim.slide_down_left)
-                            .setExitAnimations(ctx, R.anim.slide_up_left, R.anim.slide_down_right);
+                case Preferences.ANIMATION_SHORT:
+                    switch (Preferences.animationType(ctx)) {
+                        case 1:
+                            builder.setStartAnimations(ctx, R.anim.slide_in_right, R.anim.slide_out_left)
+                                    .setExitAnimations(ctx, R.anim.slide_in_left, R.anim.slide_out_right);
+                            break;
+                        case 2:
+                            builder.setStartAnimations(ctx, R.anim.slide_up_right, R.anim.slide_down_left)
+                                    .setExitAnimations(ctx, R.anim.slide_up_left, R.anim.slide_down_right);
+                            break;
+                        default:
+                            builder.setStartAnimations(ctx, R.anim.slide_in_right, R.anim.slide_out_left)
+                                    .setExitAnimations(ctx, R.anim.slide_in_left, R.anim.slide_out_right);
+                    }
                     break;
-                default:
-                    builder.setStartAnimations(ctx, R.anim.slide_in_right, R.anim.slide_out_left)
-                            .setExitAnimations(ctx, R.anim.slide_in_left, R.anim.slide_out_right);
             }
-
         }
     }
 

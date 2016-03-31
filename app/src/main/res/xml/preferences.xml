@@ -1,31 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:key="settings"
-    android:title="@string/settings">
+                  android:key="settings"
+                  android:title="@string/settings">
 
     <!--suppress AndroidElementNotAllowed -->
     <SwitchPreferenceCompat
         android:defaultValue="false"
         android:key="dynamic_color"
-        android:title="@string/dynamic_toolbar_color" />
+        android:title="@string/dynamic_toolbar_color"/>
 
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="toolbar_color_pref"
-        android:title="@string/colored_toolbar" />
+        android:title="@string/colored_toolbar"/>
 
     <ListPreference
         android:defaultValue="1"
         android:entries="@array/actionValues"
         android:entryValues="@array/actionKeys"
         android:key="preferred_action_preference"
-        android:title="@string/preferred_action" />
+        android:title="@string/preferred_action"/>
 
     <ListPreference
         android:defaultValue="1"
         android:entries="@array/animationValues"
         android:entryValues="@array/animationKeys"
         android:key="animation_preference"
-        android:title="@string/choose_animation" />
+        android:title="@string/choose_animation"/>
+
+    <ListPreference
+        android:defaultValue="1"
+        android:entries="@array/animationSpeedValues"
+        android:entryValues="@array/animationSpeedKeys"
+        android:key="animation_speed_preference"
+        android:title="@string/animation_speed"/>
 
 </PreferenceScreen>

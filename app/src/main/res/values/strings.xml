@@ -11,6 +11,16 @@
         <item>2</item>
     </string-array>
 
+    <string-array name="animationSpeedValues">
+        <item>Medium</item>
+        <item>Short</item>
+    </string-array>
+
+    <string-array name="animationSpeedKeys">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
     <string-array name="actionValues">
         <item>Secondary browser</item>
         <item>Favourite share app</item>
@@ -32,7 +42,7 @@
     </string-array>
 
     <string name="app_name">Chromer</string>
-    <string name="share_text">Hey Checkout \'Chromer\' for quick and secure browsing experience! Download here https://goo.gl/992ils</string>
+    <string name="share_text">Hey Checkout \‘Chromer\’ for quick and secure browsing experience! Download here https://goo.gl/992ils</string>
     <string name="share_via">Share via…</string>
     <string name="custom_tab_provider_not_found">Compatible custom tab provider not found</string>
     <string name="custom_tab_provider_not_found_expln">Chromer requires you to have any Custom tab compatible browser on your phone. Currently there are no browsers on your phone that supports it. Would you like to install Google Chrome (Free) from play store? If you already have it, then please update it to latest version.</string>
@@ -89,6 +99,7 @@
     <string name="settings">Settings</string>
     <string name="colored_toolbar">Colored toolbar</string>
     <string name="choose_animation">Opening animation</string>
+    <string name="animation_speed">Animation speed</string>
     <string name="usage_options">Usage Options</string>
     <string name="default_pref_xpln">Set Chromer as default to open all links, or you can choose Chromer from the list when it is shown</string>
     <string name="personalization">Personalization</string>
