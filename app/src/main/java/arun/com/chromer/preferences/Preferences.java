@@ -35,10 +35,14 @@ public class Preferences {
     private static final String CLEAN_DATABASE = "clean_database";
     private static final String DYNAMIC_COLOR_APP = "dynamic_color_app";
     private static final String DYNAMIC_COLOR_WEB = "dynamic_color_web";
+    private static final String WEB_HEAD_CLOSE_ON_OPEN = "webhead_close_onclick_pref";
+
     public static final String PREFERRED_ACTION = "preferred_action_preference";
     public static final String WEB_HEAD_ENABLED = "webhead_enabled_pref";
     public static final String WEB_HEAD_SPAWN_LOCATION = "webhead_spawn_preference";
-    private static final String WEB_HEAD_CLOSE_ON_OPEN = "webhead_close_onclick_pref";
+
+    public static final int PREFERRED_ACTION_BROWSER = 1;
+    public static final int PREFERRED_ACTION_FAV_SHARE = 2;
 
     private static SharedPreferences preferences(Context context) {
         return context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);

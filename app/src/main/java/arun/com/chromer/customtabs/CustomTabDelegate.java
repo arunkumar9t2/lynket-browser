@@ -58,11 +58,11 @@ public class CustomTabDelegate {
 
         switch (Preferences.preferredAction(ctx)) {
             // TODO handle cases of uninstalling packages
-            case 1:
+            case Preferences.PREFERRED_ACTION_BROWSER:
                 addActionButtonSecondaryBrowser(ctx, builder);
                 addMenuFavShareApp(ctx, builder);
                 break;
-            case 2:
+            case Preferences.PREFERRED_ACTION_FAV_SHARE:
                 addMenuSecondaryBrowser(ctx, builder);
                 addActionBtnFavShareApp(ctx, builder);
                 break;
