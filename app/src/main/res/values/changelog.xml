@@ -4,6 +4,14 @@
 <strong>You can view this again in the about screen.</strong>
 <br></br>
 <br></br>
+<strong>1.5.5.1</strong>
+<ul>
+    <li><b>NEW:</b> Configure animation speed, choose between medium and short.</li>
+    <li><b>NEW:</b> Ability to turn off Chromer Scanning notification.</li>
+    <li><b>FIX:</b> Open in Chrome not working if Merge Tabs and Apps in Chrome was on.</li>
+    <li><b>FIX:</b> Blacklist FC.</li>
+</ul>
+<br></br>
 <strong>1.5.5</strong>
 <ul>
     <li><b>FIX:</b> Pre-fetching crash fixes for Samsung devices.</li>
