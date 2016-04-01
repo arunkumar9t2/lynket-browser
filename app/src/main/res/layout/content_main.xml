@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-       xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,11 +28,11 @@
                     android:layout_height="wrap_content"
                     android:text="@string/usage_options"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/material_dark_color"/>
+                    android:textColor="@color/material_dark_color" />
 
                 <Space
                     android:layout_width="match_parent"
-                    android:layout_height="8dp"/>
+                    android:layout_height="8dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -50,14 +50,14 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/default_pref_xpln"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
                     <ImageView
                         android:id="@+id/default_icon_c"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:visibility="gone"
-                        tools:ignore="ContentDescription"/>
+                        tools:ignore="ContentDescription" />
 
                 </LinearLayout>
 
@@ -75,7 +75,7 @@
                         android:gravity="center"
                         android:text="@string/set_default_chromer"
                         android:textAllCaps="true"
-                        android:theme="@style/BrandButtonStyle"/>
+                        android:theme="@style/BrandButtonStyle" />
                 </RelativeLayout>
 
                 <LinearLayout
@@ -95,13 +95,13 @@
                         android:gravity="start|center"
                         android:text="@string/default_provider"
                         android:textColor="@color/material_dark_color"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
 
                     <ImageView
                         android:id="@+id/default_provider_view"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        tools:ignore="ContentDescription"/>
+                        tools:ignore="ContentDescription" />
 
                 </LinearLayout>
 
@@ -122,13 +122,13 @@
                         android:gravity="start|center"
                         android:text="@string/choose_secondary_browser"
                         android:textColor="@color/material_dark_color"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
 
                     <ImageView
                         android:id="@+id/secondary_browser_view"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        tools:ignore="ContentDescription"/>
+                        tools:ignore="ContentDescription" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -148,13 +148,13 @@
                         android:gravity="start|center"
                         android:text="@string/fav_share_app"
                         android:textColor="@color/material_dark_color"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
 
                     <ImageView
                         android:id="@+id/fav_share_app_view"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        tools:ignore="ContentDescription"/>
+                        tools:ignore="ContentDescription" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -173,13 +173,13 @@
                         android:layout_height="wrap_content"
                         android:text="@string/blacklisted_apps"
                         android:textColor="@color/material_dark_color"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 
                 <Space
                     android:layout_width="match_parent"
-                    android:layout_height="5dp"/>
+                    android:layout_height="5dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -202,14 +202,14 @@
                             android:layout_height="wrap_content"
                             android:text="@string/warmup_browser"
                             android:textColor="@color/material_dark_color"
-                            android:textSize="16sp"/>
+                            android:textSize="16sp" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/keep_chrome_warmedup"
                             android:textColor="?android:textColorSecondary"
-                            android:textSize="13sp"/>
+                            android:textSize="13sp" />
                     </LinearLayout>
 
                     <android.support.v7.widget.SwitchCompat
@@ -218,12 +218,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:layout_marginStart="5dp"
-                        android:checked="false"/>
+                        android:checked="false" />
                 </LinearLayout>
 
                 <Space
                     android:layout_width="match_parent"
-                    android:layout_height="5dp"/>
+                    android:layout_height="5dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -246,14 +246,14 @@
                             android:layout_height="wrap_content"
                             android:text="@string/pre_fetch_content"
                             android:textColor="@color/material_dark_color"
-                            android:textSize="16sp"/>
+                            android:textSize="16sp" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/pre_fetch_desc"
                             android:textColor="?android:textColorSecondary"
-                            android:textSize="13sp"/>
+                            android:textSize="13sp" />
                     </LinearLayout>
 
                     <android.support.v7.widget.SwitchCompat
@@ -262,7 +262,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:layout_marginStart="5dp"
-                        android:checked="false"/>
+                        android:checked="false" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -290,7 +290,7 @@
                             android:gravity="center_vertical"
                             android:text="@string/only_on_wifi"
                             android:textColor="@color/material_dark_color"
-                            android:textSize="14sp"/>
+                            android:textSize="14sp" />
 
                     </LinearLayout>
 
@@ -302,7 +302,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:layout_marginStart="5dp"
-                        android:checked="false"/>
+                        android:checked="false" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -330,7 +330,7 @@
                             android:gravity="center_vertical"
                             android:text="@string/show_notification"
                             android:textColor="@color/material_dark_color"
-                            android:textSize="14sp"/>
+                            android:textSize="14sp" />
 
                     </LinearLayout>
 
@@ -342,14 +342,59 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:layout_marginStart="5dp"
-                        android:checked="false"/>
+                        android:checked="false" />
                 </LinearLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:minHeight="56dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/merge_tabs"
+                            android:textColor="@color/material_dark_color"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/merge_tabs_explanation"
+                            android:textColor="?android:textColorSecondary"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/merge_tabs_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginStart="5dp"
+                        android:checked="false" />
+                </LinearLayout>
+
             </LinearLayout>
 
         </android.support.v7.widget.CardView>
 
-        <include layout="@layout/web_head_preference_layout"/>
+        <include layout="@layout/web_head_preference_layout" />
 
-        <include layout="@layout/personalization_preference_layout"/>
+        <include layout="@layout/personalization_preference_layout" />
     </LinearLayout>
 </merge>
