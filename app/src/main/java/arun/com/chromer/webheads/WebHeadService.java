@@ -235,7 +235,6 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
             public void run() {
                 int i = 0;
                 while (i < 10) {
-                    Timber.d("Trying to command may launch");
                     try {
                         if (mCustomTabConnected) {
                             Thread.sleep(300);
