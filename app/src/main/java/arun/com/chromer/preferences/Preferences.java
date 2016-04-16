@@ -21,7 +21,7 @@ public class Preferences {
     private static final String PREFERRED_PACKAGE = "preferred_package";
     public static final String TOOLBAR_COLOR = "toolbar_color";
     private static final String WEBHEADS_COLOR = "webhead_color";
-    private static final String TOOLBAR_COLOR_PREF = "toolbar_color_pref";
+    public static final String TOOLBAR_COLOR_PREF = "toolbar_color_pref";
     public static final String ANIMATION_TYPE = "animation_preference";
     public static final String ANIMATION_SPEED = "animation_speed_preference";
     // Changed key for 1.5 build which will force intro to show

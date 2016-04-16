@@ -60,8 +60,10 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
-        setupDynamicToolbar();
+
+        // setup preferences after creation
         setupToolbarColorPreference();
+        setupDynamicToolbar();
     }
 
     @Override
@@ -72,18 +74,20 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
     @Override
     public void onResume() {
         super.onResume();
-        getPreferenceScreen()
-                .getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        getPreferenceScreen().getSharedPreferences()
+                .registerOnSharedPreferenceChangeListener(this);
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mColorSelectionReceiver, new IntentFilter(Constants.ACTION_TOOLBAR_COLOR_SET));
+
         updatePreferenceSummary();
     }
 
     @Override
     public void onPause() {
-        getPreferenceManager()
-                .getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mColorSelectionReceiver);
+        getPreferenceManager().getSharedPreferences()
+                .unregisterOnSharedPreferenceChangeListener(this);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(mColorSelectionReceiver);
         super.onPause();
     }
 
@@ -112,6 +116,7 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
         ColorPreference toolbarColorPref = (ColorPreference) findPreference(Preferences.TOOLBAR_COLOR);
         if (toolbarColorPref != null) {
             toolbarColorPref.refreshSummary();
+            toolbarColorPref.setEnabled(Preferences.isColoredToolbar(getActivity().getApplicationContext()));
         }
 
         updateDynamicSummary();
@@ -121,6 +126,7 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
         SwitchPreferenceCompat dynamicColor = (SwitchPreferenceCompat) findPreference(Preferences.DYNAMIC_COLOR);
         if (dynamicColor != null) {
             dynamicColor.setSummary(Preferences.dynamicColorSummary(getActivity().getApplicationContext()));
+            dynamicColor.setEnabled(Preferences.isColoredToolbar(getActivity().getApplicationContext()));
         }
     }
 
@@ -173,9 +179,9 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
 
 
     private void setupToolbarColorPreference() {
-        ColorPreference preference = (ColorPreference) findPreference(Preferences.TOOLBAR_COLOR);
-        if (preference != null) {
-            preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        ColorPreference toolbarColorPref = (ColorPreference) findPreference(Preferences.TOOLBAR_COLOR);
+        if (toolbarColorPref != null) {
+            toolbarColorPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     int chosenColor = ((ColorPreference) preference).getColor();
