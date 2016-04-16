@@ -1,26 +1,49 @@
 package arun.com.chromer.preferences;
 
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.SwitchPreferenceCompat;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.color.ColorChooserDialog;
 
+import arun.com.chromer.MainActivity;
 import arun.com.chromer.R;
+import arun.com.chromer.preferences.widgets.ColorPreference;
 import arun.com.chromer.services.AppDetectService;
 import arun.com.chromer.services.util.ServicesUtil;
+import arun.com.chromer.util.Constants;
 import arun.com.chromer.util.Util;
 
 public class PersonalizationPreferenceFragment extends DividerLessPreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener {
+
+    public static final String TOOLBAR_COLOR_KEY = "TOOLBAR_COLOR_KEY";
+
+    private final BroadcastReceiver mColorSelectionReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int selectedColor = intent.getIntExtra(TOOLBAR_COLOR_KEY, 0);
+            if (selectedColor != 0) {
+                ColorPreference preference = (ColorPreference) findPreference(Preferences.TOOLBAR_COLOR);
+                if (preference != null) {
+                    preference.setColor(selectedColor);
+                }
+            }
+        }
+    };
 
     public PersonalizationPreferenceFragment() {
         // Required empty public constructor
@@ -37,7 +60,8 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
-        configureDynamicToolbar();
+        setupDynamicToolbar();
+        setupToolbarColorPreference();
     }
 
     @Override
@@ -50,6 +74,8 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
         super.onResume();
         getPreferenceScreen()
                 .getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(mColorSelectionReceiver, new IntentFilter(Constants.ACTION_TOOLBAR_COLOR_SET));
         updatePreferenceSummary();
     }
 
@@ -57,6 +83,7 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
     public void onPause() {
         getPreferenceManager()
                 .getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mColorSelectionReceiver);
         super.onPause();
     }
 
@@ -82,6 +109,11 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
             preference.setSummary(preference.getEntry());
         }
 
+        ColorPreference toolbarColorPref = (ColorPreference) findPreference(Preferences.TOOLBAR_COLOR);
+        if (toolbarColorPref != null) {
+            toolbarColorPref.refreshSummary();
+        }
+
         updateDynamicSummary();
     }
 
@@ -92,7 +124,7 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
         }
     }
 
-    private void configureDynamicToolbar() {
+    private void setupDynamicToolbar() {
         SwitchPreferenceCompat switchPreferenceCompat = (SwitchPreferenceCompat) findPreference(Preferences.DYNAMIC_COLOR);
         if (switchPreferenceCompat != null) {
             switchPreferenceCompat.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -115,9 +147,10 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
                                             public boolean onSelection(MaterialDialog dialog,
                                                                        Integer[] which,
                                                                        CharSequence[] text) {
-                                                if (which.length == 0)
+                                                if (which.length == 0) {
                                                     switchCompat.setChecked(false);
-                                                else switchCompat.setChecked(true);
+                                                    Preferences.dynamicToolbar(getActivity(), false);
+                                                } else switchCompat.setChecked(true);
 
                                                 Preferences.updateAppAndWeb(getActivity()
                                                         .getApplicationContext(), which);
@@ -133,6 +166,26 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
                     handleAppDetectionService();
                     updateDynamicSummary();
                     return false;
+                }
+            });
+        }
+    }
+
+
+    private void setupToolbarColorPreference() {
+        ColorPreference preference = (ColorPreference) findPreference(Preferences.TOOLBAR_COLOR);
+        if (preference != null) {
+            preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    int chosenColor = ((ColorPreference) preference).getColor();
+                    new ColorChooserDialog.Builder((MainActivity) getActivity(), R.string.default_toolbar_color)
+                            .titleSub(R.string.default_toolbar_color)
+                            .allowUserColorInputAlpha(false)
+                            .preselect(chosenColor)
+                            .dynamicButtonColor(false)
+                            .show();
+                    return true;
                 }
             });
         }

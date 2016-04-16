@@ -15,6 +15,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatCheckBox;
@@ -80,11 +81,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private CustomActivityHelper mCustomTabActivityHelper;
 
-    private View mColorViewToolbar;
-    private View mColorViewWebHeads;
     private SwitchCompat mWarmUpSwitch;
     private SwitchCompat mPrefetchSwitch;
-    private SwitchCompat mMergeTabsSwitch;
     private AppCompatCheckBox mWifiCheckBox;
     private AppCompatCheckBox mNotificationCheckBox;
     private ImageView mSecondaryBrowserIcon;
@@ -151,8 +149,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         setupSwitches();
 
         setupCustomTab();
-
-        setupColorPicker();
 
         setupDefaultProvider();
 
@@ -316,10 +312,10 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         });
 
         // TODO - only allow if API level = 21+
-        mMergeTabsSwitch = (SwitchCompat) findViewById(R.id.merge_tabs_switch);
+        SwitchCompat mergeTabsSwitch = (SwitchCompat) findViewById(R.id.merge_tabs_switch);
         //noinspection ConstantConditions
-        mMergeTabsSwitch.setChecked(mergeTabs);
-        mMergeTabsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mergeTabsSwitch.setChecked(mergeTabs);
+        mergeTabsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Preferences.mergeTabs(getApplicationContext(), isChecked);
@@ -461,45 +457,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                     launchCustomTab(GOOGLE_URL);
             }
         });
-    }
-
-    private void setupColorPicker() {
-        final int toolbarColor = Preferences.toolbarColor(this);
-        //noinspection ConstantConditions
-        findViewById(R.id.color_picker_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mColorSelection = Constants.TOOLBAR_COLOR;
-                showColorChooser(toolbarColor);
-            }
-        });
-        mColorViewToolbar = findViewById(R.id.color_preview);
-        //noinspection ConstantConditions
-        mColorViewToolbar.setBackgroundColor(toolbarColor);
-
-        final int webHeadColor = Preferences.webHeadColor(this);
-        mColorViewWebHeads = findViewById(R.id.color_preview_webheads);
-        //noinspection ConstantConditions
-        findViewById(R.id.color_picker_button_webheads).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mColorSelection = Constants.WEBHEAD_COLOR;
-                showColorChooser(webHeadColor);
-            }
-        });
-        mColorViewWebHeads.setBackgroundColor(webHeadColor);
-    }
-
-    private void showColorChooser(int chosenColor) {
-        new ColorChooserDialog.Builder(MainActivity.this, R.string.md_choose_label)
-                .titleSub(R.string.md_presets_label)
-                .doneButton(R.string.md_done_label)
-                .cancelButton(R.string.md_cancel_label)
-                .backButton(R.string.md_back_label)
-                .allowUserColorInputAlpha(false)
-                .preselect(chosenColor)
-                .dynamicButtonColor(false)
-                .show();
     }
 
     private void setupDefaultBrowser() {
@@ -785,14 +742,15 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     @Override
     public void onColorSelection(@NonNull ColorChooserDialog dialog, @ColorInt int selectedColor) {
-        if (mColorSelection.equalsIgnoreCase(Constants.TOOLBAR_COLOR)) {
-            Timber.d("Setting toolbar color");
-            mColorViewToolbar.setBackgroundColor(selectedColor);
-            Preferences.toolbarColor(this, selectedColor);
-        } else if (mColorSelection.equalsIgnoreCase(Constants.WEBHEAD_COLOR)) {
-            Timber.d("Setting webheads color");
-            mColorViewWebHeads.setBackgroundColor(selectedColor);
-            Preferences.webHeadColor(this, selectedColor);
+        switch (dialog.getTitle()) {
+            case R.string.default_toolbar_color:
+                Intent intent = new Intent(Constants.ACTION_TOOLBAR_COLOR_SET);
+                intent.putExtra(PersonalizationPreferenceFragment.TOOLBAR_COLOR_KEY, selectedColor);
+                LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+                break;
+            case R.string.web_heads_color:
+                // TODO
+                break;
         }
     }
 

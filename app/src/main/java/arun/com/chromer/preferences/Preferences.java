@@ -19,7 +19,7 @@ import arun.com.chromer.util.Util;
  */
 public class Preferences {
     private static final String PREFERRED_PACKAGE = "preferred_package";
-    private static final String TOOLBAR_COLOR = "toolbar_color";
+    public static final String TOOLBAR_COLOR = "toolbar_color";
     private static final String WEBHEADS_COLOR = "webhead_color";
     private static final String TOOLBAR_COLOR_PREF = "toolbar_color_pref";
     public static final String ANIMATION_TYPE = "animation_preference";

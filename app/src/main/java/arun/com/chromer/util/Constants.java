@@ -11,13 +11,12 @@ public class Constants {
     public static final String SEARCH_URL = "http://www.google.com/search?q=";
     public static final String CHROME_PACKAGE = "com.android.chrome";
     public static final String SHOULD_REFRESH_BINDING = "SHOULD_REFRESH_BINDING";
-    public static final String TOOLBAR_COLOR = "TOOLBAR_COLOR";
-    public static final String WEBHEAD_COLOR = "WEBHEAD_COLOR";
     public static final String COLOR_SELECTION = "COLOR_SELECTION";
     public static final String FROM_WEBHEAD = "FROM_WEBHEAD";
 
     public static final String DATABASE_NAME = "database.db";
     public static final String OLD_DATABASE_NAME = "Chromer_database.db";
+    public static final String ACTION_TOOLBAR_COLOR_SET = "ACTION_TOOLBAR_COLOR_SET";
 
     private Constants() {
         throw new UnsupportedOperationException("Cannot instantiate");
