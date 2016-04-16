@@ -1,6 +1,7 @@
 package arun.com.chromer.webheads;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -26,6 +27,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.NotificationCompat;
+import android.view.ViewPropertyAnimator;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -337,7 +339,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         if (ok) Timber.d("Binding successful");
     }
 
-    private void closeAllWebHeads() {
+    private void destroyAllWebHeads() {
         for (WebHead webhead : mWebHeads.values()) {
             if (webhead != null) webhead.destroySelf(false);
         }
@@ -376,7 +378,19 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         mWebHeads.remove(webHead.getUrl());
 
         if (isLastWebHead) {
-            stopSelf();
+            // animate remove web head before killing this service
+            ViewPropertyAnimator animator = RemoveWebHead.get(this).destroyAnimator();
+            if (animator == null) {
+                stopSelf();
+            } else {
+                animator.setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        stopSelf();
+                    }
+                });
+                animator.start();
+            }
         } else {
             // Now that this web head is destroyed, with this web head as the reference prepare the
             // other urls
@@ -388,7 +402,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     public void onDestroy() {
         Timber.d("Exiting webhead service");
 
-        closeAllWebHeads();
+        destroyAllWebHeads();
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRebindReceiver);
 

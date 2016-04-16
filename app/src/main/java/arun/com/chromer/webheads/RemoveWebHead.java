@@ -9,11 +9,14 @@ import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewPropertyAnimator;
 import android.view.WindowManager;
+import android.view.animation.BounceInterpolator;
 import android.widget.FrameLayout;
 
 import com.facebook.rebound.SimpleSpringListener;
@@ -98,6 +101,18 @@ public class RemoveWebHead extends FrameLayout {
         if (sOurInstance != null) {
             sOurInstance.destroySelf();
         }
+    }
+
+    @Nullable
+    public ViewPropertyAnimator destroyAnimator() {
+        if (sOurInstance == null) return null;
+
+        return sOurInstance.animate()
+                .scaleX(0.0f)
+                .scaleY(0.0f)
+                .alpha(0.5f)
+                .setDuration(300)
+                .setInterpolator(new BounceInterpolator());
     }
 
     public static void hideSelf() {
