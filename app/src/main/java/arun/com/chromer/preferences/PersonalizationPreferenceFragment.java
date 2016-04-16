@@ -126,7 +126,13 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
         SwitchPreferenceCompat dynamicColor = (SwitchPreferenceCompat) findPreference(Preferences.DYNAMIC_COLOR);
         if (dynamicColor != null) {
             dynamicColor.setSummary(Preferences.dynamicColorSummary(getActivity().getApplicationContext()));
-            dynamicColor.setEnabled(Preferences.isColoredToolbar(getActivity().getApplicationContext()));
+
+            boolean isColoredToolbar = Preferences.isColoredToolbar(getActivity().getApplicationContext());
+            dynamicColor.setEnabled(isColoredToolbar);
+
+            if (!isColoredToolbar) {
+                dynamicColor.setChecked(false);
+            }
         }
     }
 
