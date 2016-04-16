@@ -17,6 +17,7 @@ import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.WindowManager;
@@ -52,6 +53,8 @@ public class WebHead extends FrameLayout {
 
     private static Point mCentreLockPoint;
 
+    private static int mDispHeight, mDispWidth;
+
     private final String mUrl;
 
     private final GestureDetector mGestDetector = new GestureDetector(getContext(), new GestureTapListener());
@@ -64,7 +67,7 @@ public class WebHead extends FrameLayout {
 
     private int initialDownX, initialDownY;
 
-    private static int mDispHeight, mDispWidth;
+    private int mXVelocity, mYVelocity;
 
     private WindowManager.LayoutParams mWindowParams;
 
@@ -72,9 +75,9 @@ public class WebHead extends FrameLayout {
 
     private Spring mScaleSpring, mWallAttachSpring, mXSpring, mYSpring;
 
-    private SpringConfig snapSpringConfig = SpringConfig.fromOrigamiTensionAndFriction(100, 7);
+    private SpringConfig mSnapSpringConfig = SpringConfig.fromOrigamiTensionAndFriction(100, 7);
 
-    private SpringConfig flingSpringConfig = SpringConfig.fromOrigamiTensionAndFriction(42, 6);
+    private SpringConfig mFlingSpringConfig = SpringConfig.fromOrigamiTensionAndFriction(20, 5);
 
     private boolean mDragging;
 
@@ -96,7 +99,9 @@ public class WebHead extends FrameLayout {
 
     private MovementTracker mMovementTracker;
 
-    public WebHead(Context context, String url) {
+    private VelocityTracker mVelocityTracker;
+
+    public WebHead(@NonNull Context context, @NonNull String url) {
         super(context);
         mUrl = url;
 
@@ -172,7 +177,7 @@ public class WebHead extends FrameLayout {
         });
 
         mYSpring = mSpringSystem.createSpring();
-        mYSpring.setSpringConfig(snapSpringConfig);
+        mYSpring.setSpringConfig(mSnapSpringConfig);
         mYSpring.addListener(new SimpleSpringListener() {
             @Override
             public void onSpringUpdate(Spring spring) {
@@ -182,7 +187,7 @@ public class WebHead extends FrameLayout {
         });
 
         mXSpring = mSpringSystem.createSpring();
-        mYSpring.setSpringConfig(snapSpringConfig);
+        mYSpring.setSpringConfig(mSnapSpringConfig);
         mXSpring.addListener(new SimpleSpringListener() {
             @Override
             public void onSpringUpdate(Spring spring) {
@@ -229,6 +234,12 @@ public class WebHead extends FrameLayout {
                 case MotionEvent.ACTION_DOWN:
                     mMovementTracker.onDown();
 
+                    if (mVelocityTracker == null) {
+                        mVelocityTracker = VelocityTracker.obtain();
+                    } else {
+                        mVelocityTracker.clear();
+                    }
+
                     initialDownX = mWindowParams.x;
                     initialDownY = mWindowParams.y;
 
@@ -240,11 +251,18 @@ public class WebHead extends FrameLayout {
 
                     // transparent on touch
                     setTouchingAlpha();
+
+                    mVelocityTracker.addMovement(event);
                     break;
                 case MotionEvent.ACTION_UP:
                     mMovementTracker.onUp();
 
                     mDragging = false;
+
+                    mXVelocity = (int) mVelocityTracker.getXVelocity();
+                    mYVelocity = (int) mVelocityTracker.getYVelocity();
+                    mVelocityTracker.recycle();
+                    mVelocityTracker = null;
 
                     if (mWasRemoveLocked) {
                         // If head was locked onto a remove bubble before, then kill ourselves
@@ -267,7 +285,8 @@ public class WebHead extends FrameLayout {
 
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    mMovementTracker.addEvent(event);
+                    mMovementTracker.addMovement(event);
+                    mVelocityTracker.addMovement(event);
 
                     if (Math.hypot(event.getRawX() - posX, event.getRawY() - posY) > mTouchSlop) {
                         mDragging = true;
@@ -275,6 +294,8 @@ public class WebHead extends FrameLayout {
 
                     if (mDragging) {
                         move(event);
+                        // Compute velocity
+                        // mVelocityTracker.computeCurrentVelocity(1000);
                     }
                 default:
                     break;
@@ -324,8 +345,8 @@ public class WebHead extends FrameLayout {
             setReleaseAlpha();
             setReleaseScale();
 
-            mXSpring.setSpringConfig(snapSpringConfig);
-            mYSpring.setSpringConfig(snapSpringConfig);
+            mXSpring.setSpringConfig(mSnapSpringConfig);
+            mYSpring.setSpringConfig(mSnapSpringConfig);
 
             mXSpring.setEndValue(getCentreLockPoint().x);
             mYSpring.setEndValue(getCentreLockPoint().y);
@@ -556,14 +577,6 @@ public class WebHead extends FrameLayout {
         void onWebHeadDestroy(@NonNull WebHead webHead, boolean isLastWebHead);
     }
 
-    private class ScaleSpringListener extends SimpleSpringListener {
-
-        @Override
-        public void onSpringUpdate(Spring spring) {
-
-        }
-    }
-
     private class GestureTapListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
@@ -594,7 +607,7 @@ public class WebHead extends FrameLayout {
          */
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            double velocity = Math.sqrt(velocityX * velocityX + velocityY * velocityY);
+            // double velocity = Math.sqrt(velocityX * velocityX + velocityY * velocityY);
 
             // if (velocity < 500) return false;
 
@@ -610,8 +623,8 @@ public class WebHead extends FrameLayout {
             }
 
             if (projectedPoint != null) {
-                mXSpring.setSpringConfig(flingSpringConfig);
-                mYSpring.setSpringConfig(flingSpringConfig);
+                mXSpring.setSpringConfig(mFlingSpringConfig);
+                mYSpring.setSpringConfig(mFlingSpringConfig);
 
                 mXSpring.setAtRest();
                 mYSpring.setAtRest();
@@ -619,21 +632,14 @@ public class WebHead extends FrameLayout {
                 mXSpring.setCurrentValue(mWindowParams.x);
                 mYSpring.setCurrentValue(mWindowParams.y);
 
-                // mXSpring.setVelocity(velocity);
-                // mYSpring.setVelocity(velocity);
-
                 mXSpring.setEndValue(projectedPoint.x);
                 mYSpring.setEndValue(projectedPoint.y);
-
                 return true;
             }
             return false;
         }
     }
 
-    /**
-     * Created by Arun on 04/02/2016.
-     */
     @SuppressLint("ViewConstructor")
     public static class WebHeadCircle extends View {
 

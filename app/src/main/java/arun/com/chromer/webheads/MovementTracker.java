@@ -43,7 +43,7 @@ public class MovementTracker {
      *
      * @param event The event to be added.
      */
-    public void addEvent(@NonNull MotionEvent event) {
+    public void addMovement(@NonNull MotionEvent event) {
         float x = event.getRawX();
         float y = event.getRawY();
         mPoints.add(new Coordinate(x, y));
