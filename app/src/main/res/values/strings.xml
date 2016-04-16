@@ -170,6 +170,6 @@
     <string name="last_fetched_urls">Last fetched urls</string>
     <string name="blacklist_on">Blacklisting apps turned %s</string>
     <string name="translations">Translations</string>
-    <string name="merge_tabs">(Experimental) Merge tabs and apps</string>
+    <string name="merge_tabs">Merge tabs and apps - Beta</string>
     <string name="merge_tabs_explanation">See your tabs with other recent apps on your phone\'s Overview screen.</string>
 </resources>

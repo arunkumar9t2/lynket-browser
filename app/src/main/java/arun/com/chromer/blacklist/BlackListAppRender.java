@@ -1,4 +1,4 @@
-package arun.com.chromer.views.adapter;
+package arun.com.chromer.blacklist;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -35,10 +35,10 @@ import arun.com.chromer.model.App;
  * Created by Arun on 24/01/2016.
  */
 public class BlackListAppRender extends RecyclerView.Adapter<BlackListAppRender.ViewHolder> {
+    private static Drawable mPlaceholder;
     private final Context mContext;
     private final List<App> apps;
     private ItemClickListener mExternalListener;
-    private static Drawable mPlaceholder;
 
     public BlackListAppRender(Context mContext, List<App> apps) {
         this.apps = apps;

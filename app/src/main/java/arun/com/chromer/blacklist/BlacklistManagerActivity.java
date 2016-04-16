@@ -42,7 +42,6 @@ import arun.com.chromer.preferences.Preferences;
 import arun.com.chromer.services.util.ServicesUtil;
 import arun.com.chromer.util.Util;
 import arun.com.chromer.views.IntentPickerSheetView;
-import arun.com.chromer.views.adapter.BlackListAppRender;
 import timber.log.Timber;
 
 public class BlacklistManagerActivity extends AppCompatActivity implements BlackListAppRender.ItemClickListener {
@@ -213,6 +212,27 @@ public class BlacklistManagerActivity extends AppCompatActivity implements Black
         Timber.d(sBlacklistedApps.toString());
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            // For finishing activity on clicking up caret
+            finishWithTransition();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finishWithTransition();
+        super.onBackPressed();
+    }
+
+    private void finishWithTransition() {
+        finish();
+        overridePendingTransition(R.anim.slide_in_left_medium, R.anim.slide_out_right_medium);
+    }
+
     private class AppProcessorTask extends AsyncTask<Void, Integer, Void> {
         @Override
         protected void onPreExecute() {
@@ -253,26 +273,5 @@ public class BlacklistManagerActivity extends AppCompatActivity implements Black
             mProgress.dismiss();
             initList();
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            // For finishing activity on clicking up caret
-            finishWithTransition();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        finishWithTransition();
-        super.onBackPressed();
-    }
-
-    private void finishWithTransition() {
-        finish();
-        overridePendingTransition(R.anim.slide_in_left_medium, R.anim.slide_out_right_medium);
     }
 }
