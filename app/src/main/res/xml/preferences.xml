@@ -5,7 +5,7 @@
                   android:title="@string/settings">
 
     <!--suppress AndroidElementNotAllowed -->
-    <CheckBoxPreference
+    <SwitchPreferenceCompat
         android:defaultValue="true"
         android:key="toolbar_color_pref"
         android:title="@string/colored_toolbar"/>
