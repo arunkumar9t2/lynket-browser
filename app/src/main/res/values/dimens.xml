@@ -11,10 +11,14 @@
 
     <dimen name="material_search_marginbottom">10dp</dimen>
 
+
+    <dimen name="web_head_size_normal">66dp</dimen>
+    <dimen name="web_head_text_indicator">20dp</dimen>
     <dimen name="web_head_shadow_radius">2dp</dimen>
     <dimen name="web_head_shadow_dx">0dp</dimen>
     <dimen name="web_head_shadow_dy">1dp</dimen>
 
+    <dimen name="remove_head_size">92dp</dimen>
     <dimen name="remove_head_shadow_radius">2dp</dimen>
     <dimen name="remove_head_shadow_dx">0dp</dimen>
     <dimen name="remove_head_shadow_dy">1dp</dimen>

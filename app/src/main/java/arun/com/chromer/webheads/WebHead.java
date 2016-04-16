@@ -17,7 +17,6 @@ import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.WindowManager;
@@ -51,9 +50,9 @@ public class WebHead extends FrameLayout {
 
     private static WindowManager sWindowManager;
 
-    private static Point mCentreLockPoint;
+    private static Point sCentreLockPoint;
 
-    private static int mDispHeight, mDispWidth;
+    private static int sDispHeight, sDispWidth;
 
     private final String mUrl;
 
@@ -98,8 +97,6 @@ public class WebHead extends FrameLayout {
     private WebHeadInteractionListener mInteractionListener;
 
     private MovementTracker mMovementTracker;
-
-    private VelocityTracker mVelocityTracker;
 
     public WebHead(@NonNull Context context, @NonNull String url) {
         super(context);
@@ -200,21 +197,21 @@ public class WebHead extends FrameLayout {
     private void setDisplayMetrics() {
         final DisplayMetrics metrics = new DisplayMetrics();
         sWindowManager.getDefaultDisplay().getMetrics(metrics);
-        mDispWidth = metrics.widthPixels;
-        mDispHeight = metrics.heightPixels;
+        sDispWidth = metrics.widthPixels;
+        sDispHeight = metrics.heightPixels;
 
-        mMovementTracker = new MovementTracker(20, mDispHeight, mDispWidth, WebHeadCircle.getSizePx());
+        mMovementTracker = new MovementTracker(20, sDispHeight, sDispWidth, WebHeadCircle.getSizePx());
     }
 
     @SuppressLint("RtlHardcoded")
     private void setSpawnLocation() {
         mWindowParams.gravity = Gravity.TOP | Gravity.LEFT;
         if (Preferences.webHeadsSpawnLocation(getContext()) == 1) {
-            mWindowParams.x = (int) (mDispWidth - WebHeadCircle.getSizePx() * 0.8);
+            mWindowParams.x = (int) (sDispWidth - WebHeadCircle.getSizePx() * 0.8);
         } else {
             mWindowParams.x = (int) (0 - WebHeadCircle.getSizePx() * 0.2);
         }
-        mWindowParams.y = mDispHeight / 3;
+        mWindowParams.y = sDispHeight / 3;
     }
 
     private RemoveWebHead getRemoveWebHead() {
@@ -234,12 +231,6 @@ public class WebHead extends FrameLayout {
                 case MotionEvent.ACTION_DOWN:
                     mMovementTracker.onDown();
 
-                    if (mVelocityTracker == null) {
-                        mVelocityTracker = VelocityTracker.obtain();
-                    } else {
-                        mVelocityTracker.clear();
-                    }
-
                     initialDownX = mWindowParams.x;
                     initialDownY = mWindowParams.y;
 
@@ -252,17 +243,11 @@ public class WebHead extends FrameLayout {
                     // transparent on touch
                     setTouchingAlpha();
 
-                    mVelocityTracker.addMovement(event);
                     break;
                 case MotionEvent.ACTION_UP:
                     mMovementTracker.onUp();
 
                     mDragging = false;
-
-                    mXVelocity = (int) mVelocityTracker.getXVelocity();
-                    mYVelocity = (int) mVelocityTracker.getYVelocity();
-                    mVelocityTracker.recycle();
-                    mVelocityTracker = null;
 
                     if (mWasRemoveLocked) {
                         // If head was locked onto a remove bubble before, then kill ourselves
@@ -286,7 +271,6 @@ public class WebHead extends FrameLayout {
                     break;
                 case MotionEvent.ACTION_MOVE:
                     mMovementTracker.addMovement(event);
-                    mVelocityTracker.addMovement(event);
 
                     if (Math.hypot(event.getRawX() - posX, event.getRawY() - posY) > mTouchSlop) {
                         mDragging = true;
@@ -317,18 +301,18 @@ public class WebHead extends FrameLayout {
 
     private void stickToWall() {
         int x = mWindowParams.x;
-        int dispCentre = mDispWidth / 2;
+        int dispCentre = sDispWidth / 2;
 
         mWallAttachSpring.setCurrentValue(x, true);
 
-        int xOffset = (getWidth() / 2);
+        int xOffset = (getAdaptWidth() / 2);
 
         if ((x + xOffset) >= dispCentre) {
             // move to right wall
-            mWallAttachSpring.setEndValue(mDispWidth - (getWidth() * 0.8));
+            mWallAttachSpring.setEndValue(sDispWidth - (getAdaptWidth() * 0.8));
         } else {
             // move to left wall
-            mWallAttachSpring.setEndValue(0 - (getWidth() * 0.2));
+            mWallAttachSpring.setEndValue(0 - (getAdaptWidth() * 0.2));
         }
     }
 
@@ -361,6 +345,24 @@ public class WebHead extends FrameLayout {
         }
     }
 
+    private boolean isNearRemoveCircle() {
+        Point p = getRemoveWebHead().getCenterCoordinates();
+        int rX = p.x;
+        int rY = p.y;
+
+        int offset = getAdaptWidth() / 2;
+        int x = mWindowParams.x + offset;
+        int y = mWindowParams.y + offset;
+
+        if (euclideanDist(rX, rY, x, y) < MAGNETISM_THRESHOLD) {
+            mWasRemoveLocked = true;
+            return true;
+        } else {
+            mWasRemoveLocked = false;
+            return false;
+        }
+    }
+
     private void setReleaseScale() {
         mScaleSpring.setEndValue(1f);
     }
@@ -387,36 +389,22 @@ public class WebHead extends FrameLayout {
         mScaleSpring.setEndValue(0.8f);
     }
 
-    private boolean isNearRemoveCircle() {
-        Point p = getRemoveWebHead().getCenterCoordinates();
-        int rX = p.x;
-        int rY = p.y;
-
-        int offset = getWidth() / 2;
-        int x = mWindowParams.x + offset;
-        int y = mWindowParams.y + offset + (offset / 2);
-
-        if (getEuclideanDistance(rX, rY, x, y) < MAGNETISM_THRESHOLD) {
-            mWasRemoveLocked = true;
-            return true;
-        } else {
-            mWasRemoveLocked = false;
-            return false;
-        }
+    private int getAdaptWidth() {
+        return Math.max(getWidth(), WebHeadCircle.getSizePx());
     }
 
     private Point getCentreLockPoint() {
-        if (mCentreLockPoint == null) {
+        if (sCentreLockPoint == null) {
             Point removeCentre = getRemoveWebHead().getCenterCoordinates();
-            int offset = getWidth() / 2;
+            int offset = getAdaptWidth() / 2;
             int x = removeCentre.x - offset;
-            int y = removeCentre.y - offset - (offset / 2) - (offset / 4);
-            mCentreLockPoint = new Point(x, y);
+            int y = removeCentre.y - offset;
+            sCentreLockPoint = new Point(x, y);
         }
-        return mCentreLockPoint;
+        return sCentreLockPoint;
     }
 
-    private double getEuclideanDistance(int x1, int y1, int x2, int y2) {
+    private double euclideanDist(int x1, int y1, int x2, int y2) {
         double x = x1 - x2;
         double y = y1 - y2;
         return Math.sqrt(x * x + y * y);
@@ -436,6 +424,20 @@ public class WebHead extends FrameLayout {
             });
         }
         return animator;
+    }
+
+    @NonNull
+    public ImageView getFaviconView() {
+        initFavicon();
+        return mFavicon;
+    }
+
+    public WindowManager.LayoutParams getWindowParams() {
+        return mWindowParams;
+    }
+
+    public String getUrl() {
+        return mUrl;
     }
 
     public void dim() {
@@ -469,56 +471,8 @@ public class WebHead extends FrameLayout {
         initAppIcon();
     }
 
-    /*
-    Really bad method, need to refactor.
-    private Bitmap getAppIcon() {
-        String packageName = getContext().getPackageName();
-        final int appIconSize = getContext().getResources().getDimensionPixelSize(R.dimen.web_head_app_indicator_icon);
-        final int size = getContext().getResources().getDimensionPixelSize(R.dimen.web_head_app_indicator_circle);
-        Bitmap appIconBitmap;
-        Bitmap resultBitmap = null;
-        try {
-            Drawable appIconDrawable = getContext().getApplicationContext().getPackageManager().getApplicationIcon(packageName);
-            if (appIconDrawable instanceof BitmapDrawable) {
-                BitmapDrawable bitmapDrawable = (BitmapDrawable) appIconDrawable;
-                appIconBitmap = Bitmap.createScaledBitmap(bitmapDrawable.getBitmap(), appIconSize, appIconSize, false);
-            } else return null;
-        } catch (PackageManager.NameNotFoundException e) {
-            return null;
-        }
-
-        if (appIconBitmap != null) {
-            resultBitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(resultBitmap);
-            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            paint.setColor(Color.WHITE);
-            paint.setStyle(Paint.Style.FILL);
-            // canvas.drawCircle(size / 2, size / 2, size / 2, paint);
-            int left = (size - appIconBitmap.getWidth()) / 2;
-            int top = (size - appIconBitmap.getHeight()) / 2;
-            ColorFilter filter = new LightingColorFilter(Color.parseColor("#9E9E9E"), 0);
-            paint.setColorFilter(filter);
-            canvas.drawBitmap(appIconBitmap, left, top, null);
-        }
-        return resultBitmap;
-    }*/
-
     private boolean isLastWebHead() {
         return WEB_HEAD_COUNT - 1 == 0;
-    }
-
-    @NonNull
-    public ImageView getFaviconView() {
-        initFavicon();
-        return mFavicon;
-    }
-
-    public WindowManager.LayoutParams getWindowParams() {
-        return mWindowParams;
-    }
-
-    public String getUrl() {
-        return mUrl;
     }
 
     public void destroySelf(boolean shouldReceiveCallback) {
@@ -643,33 +597,35 @@ public class WebHead extends FrameLayout {
     @SuppressLint("ViewConstructor")
     public static class WebHeadCircle extends View {
 
-        private static final int WEB_HEAD_SIZE_DP = 56;
         private final String mUrl;
         private final Paint mBgPaint;
-        private final Paint textPaint;
+        private final Paint mTextPaint;
         private boolean mShouldDrawText = true;
+        private static int sSizePx;
+        private static int sDiameterPx;
 
         public WebHeadCircle(Context context, String url) {
             super(context);
             mUrl = url;
 
             int webHeadsColor = Preferences.webHeadColor(context);
+            float shadwR = context.getResources().getDimension(R.dimen.web_head_shadow_radius);
+            float shadwDx = context.getResources().getDimension(R.dimen.web_head_shadow_dx);
+            float shadwDy = context.getResources().getDimension(R.dimen.web_head_shadow_dy);
+            float textSize = context.getResources().getDimension(R.dimen.web_head_text_indicator);
 
             mBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             mBgPaint.setColor(webHeadsColor);
             mBgPaint.setStyle(Paint.Style.FILL);
-
-            float shadwR = context.getResources().getDimension(R.dimen.web_head_shadow_radius);
-            float shadwDx = context.getResources().getDimension(R.dimen.web_head_shadow_dx);
-            float shadwDy = context.getResources().getDimension(R.dimen.web_head_shadow_dy);
-
             mBgPaint.setShadowLayer(shadwR, shadwDx, shadwDy, 0x75000000);
 
-            textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            textPaint.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-            textPaint.setTextSize(Util.dpToPx(20));
-            textPaint.setColor(Util.getForegroundTextColor(webHeadsColor));
-            textPaint.setStyle(Paint.Style.FILL);
+            sSizePx = context.getResources().getDimensionPixelSize(R.dimen.web_head_size_normal);
+
+            mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            mTextPaint.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+            mTextPaint.setTextSize(textSize);
+            mTextPaint.setColor(Util.getForegroundTextColor(webHeadsColor));
+            mTextPaint.setStyle(Paint.Style.FILL);
 
             setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
@@ -677,18 +633,18 @@ public class WebHead extends FrameLayout {
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-            int size = Util.dpToPx(WEB_HEAD_SIZE_DP + 10);
-            setMeasuredDimension(size, size);
+            setMeasuredDimension(sSizePx, sSizePx);
         }
 
         @Override
         protected void onDraw(Canvas canvas) {
             canvas.drawColor(0, PorterDuff.Mode.CLEAR);
-            canvas.drawCircle(getWidth() / 2, getHeight() / 2, (float) (getWidth() / 2.4), mBgPaint);
-
+            float radius = (float) (getWidth() / 2.4);
+            canvas.drawCircle(getWidth() / 2, getHeight() / 2, radius, mBgPaint);
             if (mShouldDrawText) {
                 drawText(canvas);
             }
+            sDiameterPx = (int) (2 * radius);
         }
 
         public void clearUrlIndicator() {
@@ -708,7 +664,7 @@ public class WebHead extends FrameLayout {
 
         private void drawText(Canvas canvas) {
             String indicator = getUrlIndicator();
-            if (indicator != null) drawTextInCanvasCentre(canvas, textPaint, indicator);
+            if (indicator != null) drawTextInCanvasCentre(canvas, mTextPaint, indicator);
         }
 
         private String getUrlIndicator() {
@@ -744,7 +700,11 @@ public class WebHead extends FrameLayout {
         }
 
         public static int getSizePx() {
-            return Util.dpToPx(WEB_HEAD_SIZE_DP + 10);
+            return sSizePx;
+        }
+
+        public static int getDiameterPx() {
+            return sDiameterPx;
         }
     }
 }

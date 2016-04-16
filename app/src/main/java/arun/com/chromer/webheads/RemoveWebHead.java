@@ -24,7 +24,6 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
-import arun.com.chromer.util.Util;
 import timber.log.Timber;
 
 /**
@@ -34,7 +33,7 @@ import timber.log.Timber;
 public class RemoveWebHead extends FrameLayout {
 
     private static WindowManager sWindowManager;
-    private static RemoveWebHead ourInstance;
+    private static RemoveWebHead sOurInstance;
 
     private WindowManager.LayoutParams mWindowParams;
 
@@ -74,36 +73,36 @@ public class RemoveWebHead extends FrameLayout {
         mHidden = true;
 
         mWindowParams.gravity = Gravity.LEFT | Gravity.TOP;
-
-        int offset = getOffset();
+        int offset = getAdaptWidth() / 2;
         mWindowParams.x = (mDispWidth / 2) - offset;
         mWindowParams.y = mDispHeight - (mDispHeight / 6) - offset;
 
         setUpSprings();
+        initCentreCoords();
 
         sWindowManager.addView(this, mWindowParams);
     }
 
     public static RemoveWebHead get(Context context) {
-        if (ourInstance != null)
-            return ourInstance;
+        if (sOurInstance != null)
+            return sOurInstance;
         else {
             Timber.d("Creating new instance of remove web head");
             WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-            ourInstance = new RemoveWebHead(context, windowManager);
-            return ourInstance;
+            sOurInstance = new RemoveWebHead(context, windowManager);
+            return sOurInstance;
         }
     }
 
     public static void destroy() {
-        if (ourInstance != null) {
-            ourInstance.destroySelf();
+        if (sOurInstance != null) {
+            sOurInstance.destroySelf();
         }
     }
 
     public static void hideSelf() {
-        if (ourInstance != null) {
-            ourInstance.hide();
+        if (sOurInstance != null) {
+            sOurInstance.hide();
         }
     }
 
@@ -123,23 +122,26 @@ public class RemoveWebHead extends FrameLayout {
 
         mCentrePoint = null;
 
-        ourInstance = null;
+        sOurInstance = null;
         Timber.d("Remove view detached and killed");
     }
 
-    private int getOffset() {
-        int sizePx = Util.dpToPx(RemoveHeadCircle.REMOVE_HEAD_DP + RemoveHeadCircle.EXTRA_DP);
-        return (sizePx / 2);
+    private int getAdaptWidth() {
+        return Math.max(getWidth(), RemoveHeadCircle.getSizePx());
     }
 
     public Point getCenterCoordinates() {
         if (mCentrePoint == null) {
-            int offset = getWidth() / 2;
-            int rX = getWindowParams().x + offset;
-            int rY = getWindowParams().y + offset + (offset / 2);
-            mCentrePoint = new Point(rX, rY);
+            initCentreCoords();
         }
         return mCentrePoint;
+    }
+
+    private void initCentreCoords() {
+        int offset = getAdaptWidth() / 2;
+        int rX = getWindowParams().x + offset;
+        int rY = getWindowParams().y + offset;
+        mCentrePoint = new Point(rX, rY);
     }
 
     private void setUpSprings() {
@@ -179,22 +181,22 @@ public class RemoveWebHead extends FrameLayout {
     public void reveal() {
         setVisibility(VISIBLE);
         if (mHidden) {
-            mScaleSpring.setEndValue(1);
+            mScaleSpring.setEndValue(0.9f);
             mHidden = false;
         }
     }
 
     public void grow() {
         if (!mGrew) {
-            mScaleSpring.setCurrentValue(1f, true);
-            mScaleSpring.setEndValue(1.1f);
+            mScaleSpring.setCurrentValue(0.9f, true);
+            mScaleSpring.setEndValue(1f);
             mGrew = true;
         }
     }
 
     public void shrink() {
         if (mGrew) {
-            mScaleSpring.setEndValue(1);
+            mScaleSpring.setEndValue(0.9f);
             mGrew = false;
         }
     }
@@ -204,12 +206,9 @@ public class RemoveWebHead extends FrameLayout {
      */
     public static class RemoveHeadCircle extends View {
 
-        public static final int REMOVE_HEAD_DP = 72;
-
-        public static final int EXTRA_DP = 20;
-
         private final Paint mBgPaint;
-
+        private static int sSizePx;
+        private static int sDiameterPx;
 
         public RemoveHeadCircle(Context context) {
             super(context);
@@ -222,22 +221,27 @@ public class RemoveWebHead extends FrameLayout {
             float shadwDy = context.getResources().getDimension(R.dimen.remove_head_shadow_dy);
 
             mBgPaint.setShadowLayer(shadwR, shadwDx, shadwDy, 0x85000000);
+
             setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+
+            sSizePx = context.getResources().getDimensionPixelSize(R.dimen.remove_head_size);
         }
 
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-            int size = Util.dpToPx(REMOVE_HEAD_DP + EXTRA_DP);
-            setMeasuredDimension(size, size);
+            setMeasuredDimension(sSizePx, sSizePx);
         }
 
         @Override
         protected void onDraw(Canvas canvas) {
             canvas.drawColor(0, PorterDuff.Mode.CLEAR);
-            canvas.drawCircle(getWidth() / 2, getHeight() / 2, (float) (getWidth() / 2.4), mBgPaint);
+            float radius = (float) (getWidth() / 2.4);
+            canvas.drawCircle(getWidth() / 2, getHeight() / 2, radius, mBgPaint);
 
             drawDeleteIcon(canvas);
+
+            sDiameterPx = (int) (2 * radius);
         }
 
         private void drawDeleteIcon(Canvas canvas) {
@@ -250,6 +254,14 @@ public class RemoveWebHead extends FrameLayout {
             float x = cWidth / 2f - deleteIcon.getWidth() / 2;
             float y = cHeight / 2f - deleteIcon.getHeight() / 2;
             canvas.drawBitmap(deleteIcon, x, y, null);
+        }
+
+        public static int getSizePx() {
+            return sSizePx;
+        }
+
+        public static int getDiameterPx() {
+            return sDiameterPx;
         }
     }
 }
