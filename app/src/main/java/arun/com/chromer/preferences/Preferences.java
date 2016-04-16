@@ -20,7 +20,7 @@ import arun.com.chromer.util.Util;
 public class Preferences {
     private static final String PREFERRED_PACKAGE = "preferred_package";
     public static final String TOOLBAR_COLOR = "toolbar_color";
-    private static final String WEBHEADS_COLOR = "webhead_color";
+    public static final String WEBHEADS_COLOR = "webhead_color";
     public static final String TOOLBAR_COLOR_PREF = "toolbar_color_pref";
     public static final String ANIMATION_TYPE = "animation_preference";
     public static final String ANIMATION_SPEED = "animation_speed_preference";
@@ -38,7 +38,7 @@ public class Preferences {
     private static final String CLEAN_DATABASE = "clean_database";
     private static final String DYNAMIC_COLOR_APP = "dynamic_color_app";
     private static final String DYNAMIC_COLOR_WEB = "dynamic_color_web";
-    private static final String WEB_HEAD_CLOSE_ON_OPEN = "webhead_close_onclick_pref";
+    public static final String WEB_HEAD_CLOSE_ON_OPEN = "webhead_close_onclick_pref";
 
     public static final String PREFERRED_ACTION = "preferred_action_preference";
     public static final String WEB_HEAD_ENABLED = "webhead_enabled_pref";

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:key="settings"
-    android:title="@string/settings">
+                  xmlns:app="http://schemas.android.com/apk/res-auto"
+                  android:key="settings"
+                  android:title="@string/settings">
 
 
     <!--suppress AndroidElementNotAllowed -->
@@ -9,7 +10,12 @@
         android:defaultValue="false"
         android:key="webhead_enabled_pref"
         android:summary="You can stack multiple links and view them later"
-        android:title="Open links in floating bubbles" />
+        android:title="Open links in floating bubbles"/>
+
+    <arun.com.chromer.preferences.widgets.ColorPreference
+        android:key="webhead_color"
+        android:title="@string/web_heads_color"
+        app:color="@color/web_head_bg"/>
 
     <ListPreference
         android:defaultValue="1"
@@ -17,12 +23,12 @@
         android:entries="@array/webHeadsSpawnValues"
         android:entryValues="@array/webHeadsSpawnKeys"
         android:key="webhead_spawn_preference"
-        android:title="@string/webhead_spawn_summary" />
+        android:title="@string/webhead_spawn_summary"/>
 
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="webhead_close_onclick_pref"
         android:summary="Web heads will disappear once you open the link"
-        android:title="Close web heads on link open" />
+        android:title="Close web heads on link open"/>
 
 </PreferenceScreen>
