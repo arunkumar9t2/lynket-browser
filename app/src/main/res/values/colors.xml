@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorPrimaryDarker">#283593</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="card_background_light">#EEEEEE</color>
     <color name="material_dark_color">#212121</color>
     <color name="android_green">#a4c639</color>
     <color name="donate_green">#4CAF50</color>

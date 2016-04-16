@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingTop="?attr/actionBarSize">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingTop="?attr/actionBarSize">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -14,6 +15,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/card_background_light"
             android:orientation="vertical">
 
             <android.support.v7.widget.CardView
@@ -22,7 +24,8 @@
                 android:layout_marginBottom="@dimen/card_margin"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin_top">
+                android:layout_marginTop="@dimen/activity_vertical_margin_top"
+                app:cardElevation="2dp">
 
                 <LinearLayout
                     style="@style/Widget.CardContent"
@@ -34,7 +37,7 @@
                         android:layout_height="wrap_content"
                         android:paddingBottom="16dp"
                         android:text="@string/app_name"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -61,7 +64,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/card_margin"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin">
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                app:cardElevation="2dp">
 
                 <LinearLayout
                     style="@style/Widget.CardContent"
@@ -75,7 +79,7 @@
                         android:paddingBottom="16dp"
                         android:text="@string/author"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textColor="@color/material_dark_color" />
+                        android:textColor="@color/material_dark_color"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -102,7 +106,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/activity_horizontal_margin"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin">
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                app:cardElevation="2dp">
 
                 <LinearLayout
                     style="@style/Widget.CardContent"
@@ -114,11 +119,11 @@
                         android:layout_height="wrap_content"
                         android:text="@string/credits"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textColor="@color/material_dark_color" />
+                        android:textColor="@color/material_dark_color"/>
 
                     <Space
                         android:layout_width="wrap_content"
-                        android:layout_height="5dp" />
+                        android:layout_height="5dp"/>
 
                     <LinearLayout
                         android:id="@+id/patryk"
@@ -135,13 +140,13 @@
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                             android:textColor="@color/material_dark_color"
                             android:textSize="16sp"
-                            tools:ignore="HardcodedText" />
+                            tools:ignore="HardcodedText"/>
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/icon_design"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -159,13 +164,13 @@
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                             android:textColor="@color/material_dark_color"
                             android:textSize="16sp"
-                            tools:ignore="HardcodedText" />
+                            tools:ignore="HardcodedText"/>
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/open_source_contributions"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
                     </LinearLayout>
 
                 </LinearLayout>
