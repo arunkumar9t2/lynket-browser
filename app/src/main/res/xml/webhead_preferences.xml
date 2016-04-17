@@ -12,6 +12,7 @@
         android:summary="You can stack multiple links and view them later"
         android:title="Open links in floating bubbles"/>
 
+    <!--suppress AndroidElementNotAllowed -->
     <arun.com.chromer.preferences.widgets.ColorPreference
         android:key="webhead_color"
         android:title="@string/web_heads_color"

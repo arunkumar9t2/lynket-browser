@@ -15,7 +15,7 @@ import timber.log.Timber;
  * end point on the either sides of the display. By using this end point, it is possible to know
  * where the gesture would end if it was continued along the tangent of the curve.
  */
-public class MovementTracker {
+class MovementTracker {
     private static final int TOP_RIGHT = 1;
     private static final int BOTTOM_RIGHT = 2;
     private static final int BOTTOM_LEFT = 3;
@@ -27,7 +27,7 @@ public class MovementTracker {
     private int mTrackingSize = 0;
     private static int mEndOffset = 0;
 
-    private SizedQueue<Coordinate> mPoints;
+    private final SizedQueue<Coordinate> mPoints;
 
     MovementTracker(int trackingSize, int dispHeight, int dispWidth, int endOffset) {
         mTrackingSize = trackingSize;
@@ -192,7 +192,7 @@ class SizedQueue<E> extends LinkedList<E> {
     /**
      * The maximum size of queue
      */
-    private int limit;
+    private final int limit;
 
     public SizedQueue(int limit) {
         this.limit = limit;

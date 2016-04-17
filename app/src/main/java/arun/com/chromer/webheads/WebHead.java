@@ -78,9 +78,9 @@ public class WebHead extends FrameLayout {
 
     private Spring mScaleSpring, mWallAttachSpring, mXSpring, mYSpring;
 
-    private SpringConfig mSnapSpringConfig = SpringConfig.fromOrigamiTensionAndFriction(100, 7);
+    private final SpringConfig mSnapSpringConfig = SpringConfig.fromOrigamiTensionAndFriction(100, 7);
 
-    private SpringConfig mFlingSpringConfig = SpringConfig.fromOrigamiTensionAndFriction(20, 5);
+    private final SpringConfig mFlingSpringConfig = SpringConfig.fromOrigamiTensionAndFriction(20, 5);
 
     private boolean mDragging;
 
@@ -594,6 +594,7 @@ public class WebHead extends FrameLayout {
             Coordinate up = Coordinate.FromMotionEvent(e2);
             Coordinate projectedPoint = mMovementTracker.getProjection();
 
+            //noinspection StatementWithEmptyBody
             if (projectedPoint == null) {
                 // Timber.v("Calculating projection with fling events");
                 projectedPoint = MovementTracker.calculateTrajectory(down, up);
