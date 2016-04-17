@@ -4,6 +4,15 @@
 <strong>You can view this again in the about screen.</strong>
 <br></br>
 <br></br>
+<strong>1.6 B1</strong>
+<ul>
+    <li><b>NEW:</b> Ability to fling web heads around.</li>
+    <li><b>NEW:</b> For 5.0+ : Experimental merge tab and apps, each tab will appear as separate task.</li>
+    <li><b>IMPROVED:</b> Minor UI interactions.</li>
+    <li><b>NEW:</b> Synced translation updates from OneSky: German, Russian, Portuguese BR, Chinese, Italian.</li>
+    <li><b>FIX:</b> Minor fixes in extracting colors from apps.</li>
+</ul>
+<br></br>
 <strong>1.5.5.1</strong>
 <ul>
     <li><b>NEW:</b> Configure animation speed, choose between medium and short.</li>
