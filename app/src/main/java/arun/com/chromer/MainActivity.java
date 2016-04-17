@@ -170,6 +170,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         cleanOldDbs();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            //noinspection ConstantConditions
             findViewById(R.id.merge_tabs_apps_layout).setVisibility(View.VISIBLE);
         }
 

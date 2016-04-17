@@ -27,7 +27,7 @@
         <item>2</item>
     </string-array>
     <string name="app_name">Chromer</string>
-    <string name="share_text">Ei! Confira o \'Chromer\' para uma experiência de navegação rápida e segura! Baixe aqui https://goo.gl/992ils</string>
+    <string name="share_text">Ei! Confira o \‘Chromer\’ para uma experiência de navegação rápida e segura! Baixe aqui https://goo.gl/992ils</string>
     <string name="share_via">Compartilhar via</string>
     <string name="custom_tab_provider_not_found">Provedor de abas personalizadas não encontrado</string>
     <string name="custom_tab_provider_not_found_expln">O Chromer precisa que você tenha um navegador compatível com Abas customizadas no seu celular. Você pode instalar o Google Chrome gratuitamente pela Play Store.</string>
@@ -142,7 +142,7 @@
     <string name="no_voice_rec_apps">Nenhum app de reconhecimento de voz foi encontrado</string>
     <string name="already_set">Já definido!</string>
     <string name="blacklisted_apps">Apps na lista negra</string>
-    <string name="loading">Carregando...</string>
+    <string name="loading">Carregando…</string>
     <string name="please_wait">Aguarde</string>
     <string name="blacklist_message">Você colocou este app na lista negra do Chromer e não tem um navegador secundário. Escolha um navegador para continuar.</string>
     <string name="share_failed_msg">Não foi possível compartilhar, tentando o compartilhamento normal</string>
