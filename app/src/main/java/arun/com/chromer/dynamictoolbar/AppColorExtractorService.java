@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 
 import java.util.ArrayList;
@@ -14,12 +15,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import arun.com.chromer.R;
 import arun.com.chromer.db.AppColor;
 import arun.com.chromer.util.Util;
 import timber.log.Timber;
 
 
 public class AppColorExtractorService extends IntentService {
+
+    public static final int NOT_VALID_COLOR = -1;
+
     public AppColorExtractorService() {
         super(AppColorExtractorService.class.getSimpleName());
     }
@@ -51,7 +56,7 @@ public class AppColorExtractorService extends IntentService {
             if (appCompatId > 0) {
                 // Successful, let's get the themed value of this attribute
                 color = getThemedColor(resources, appCompatId, app);
-                if (color != -1) {
+                if (color != NOT_VALID_COLOR) {
                     saveColorToDb(app, color);
                     return true;
                 }
@@ -62,7 +67,7 @@ public class AppColorExtractorService extends IntentService {
             if (lollipopAttrId > 0) {
                 // Found
                 color = getThemedColor(resources, lollipopAttrId, app);
-                if (color != -1) {
+                if (color != NOT_VALID_COLOR) {
                     saveColorToDb(app, color);
                     return true;
                 }
@@ -90,9 +95,14 @@ public class AppColorExtractorService extends IntentService {
         TypedArray array = tempTheme.obtainStyledAttributes(new int[]{attributeId});
 
         // Styled color
-        int color = array.getColor(0, -1);
+        int color = array.getColor(0, NOT_VALID_COLOR);
 
         array.recycle();
+
+        if (color == ContextCompat.getColor(this, R.color.md_grey_100)
+                || color == ContextCompat.getColor(this, R.color.md_grey_900)) {
+            color = NOT_VALID_COLOR;
+        }
         return color;
     }
 
