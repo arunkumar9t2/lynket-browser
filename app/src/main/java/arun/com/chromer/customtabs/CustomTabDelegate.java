@@ -158,6 +158,9 @@ public class CustomTabDelegate {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
+                        if (AppDetectService.getInstance() == null) {
+                            ctx.startService(new Intent(ctx, AppDetectService.class));
+                        }
                     }
                 }
 
@@ -262,6 +265,10 @@ public class CustomTabDelegate {
         if (isWebhead && WebHeadService.getInstance() != null) {
             Timber.d("Using webhead session");
             return WebHeadService.getInstance().getTabSession();
+        } else {
+            if (Preferences.warmUp(ctx)) {
+                ctx.startService(new Intent(ctx, WarmupService.class));
+            }
         }
 
         ScannerService sService = ScannerService.getInstance();
