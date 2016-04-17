@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+<resources>
+    <string-array name="animationValues">
+        <item>Nenhum</item>
+        <item>Deslizar para direita</item>
+        <item>Deslizar para cima</item>
+    </string-array>
+    <string-array name="animationKeys">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="actionValues">
+        <item>Navegador secundário</item>
+        <item>App para compartilhar favorito</item>
+    </string-array>
+    <string-array name="actionKeys">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="webHeadsSpawnValues">
+        <item>Direita</item>
+        <item>Esquerda</item>
+    </string-array>
+    <string-array name="webHeadsSpawnKeys">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string name="app_name">Chromer</string>
+    <string name="share_text">Ei! Confira o \'Chromer\' para uma experiência de navegação rápida e segura! Baixe aqui https://goo.gl/992ils</string>
+    <string name="share_via">Compartilhar via</string>
+    <string name="custom_tab_provider_not_found">Provedor de abas personalizadas não encontrado</string>
+    <string name="custom_tab_provider_not_found_expln">O Chromer precisa que você tenha um navegador compatível com Abas customizadas no seu celular. Você pode instalar o Google Chrome gratuitamente pela Play Store.</string>
+    <string name="install">Instalar</string>
+    <string name="licenses">Licenças</string>
+    <string name="about">Sobre</string>
+    <string name="help_chromer_grow">Ajude o Chromer a crescer!</string>
+    <string name="share">Compartilhar</string>
+    <string name="share_with">Compartilhar com %1$s</string>
+    <string name="more_custom_tbs">Mais em Abas customizadas</string>
+    <string name="rate_play_store">Avaliar na Play Store</string>
+    <string name="feedback">Comentários</string>
+    <string name="intro">Introdução</string>
+    <string name="send_email">Enviar e-mail…</string>
+    <string name="choose_default_provider">Escolha o provedor padrão</string>
+    <string name="fallback_msg">Não foi possível abrir a aba customizada, voltando para navegadores normais</string>
+    <string name="open_with">Abrir com…</string>
+    <string name="open_in_browser">Abrir em %1$s</string>
+    <string name="unxp_err">Erro inesperado, tente novamente</string>
+    <string name="unsupported_link">Link não suportado, tente novamente</string>
+    <string name="couldnt_load_price">Não foi possível carregar o preço</string>
+    <string name="coffee">Café</string>
+    <string name="lunch">Almoço</string>
+    <string name="premium_donation">Doação premium</string>
+    <string name="invalid_link">Link inválido</string>
+    <string name="copied">Copiado</string>
+    <string name="copy_link">Copiar link</string>
+    <string name="add_to_homescreen">Adicionar à tela inicial</string>
+    <string name="intro_1">Olá!\nChromer é um navegador leve, seguro e rápido.</string>
+    <string name="intro_2">Ele usa a função Abas customizadas do Google Chrome que é uma aba do Chrome extremante leve projetada para carregar um link rapidamente</string>
+    <string name="intro_3">Isso pode manter o seu navegador preso na memória, assim ele irá iniciar um pouco mais rápido.</string>
+    <string name="intro_5">Escaneia os links na sua tela e os carrega em segundo plano para reduzir o tempo de carregamento!</string>
+    <string name="intro_4">Pode empilhar múltiplos links em bolhas flutuantes quando você os abre e então carregá-los parcialmente em segundo plano!</string>
+    <string name="how_to_use">Como usar isso?</string>
+    <string name="intro_6">Apenas defina o Chromer como o seu navegador padrão, Chromer irá mostrar o link de uma forma não intrusiva.</string>
+    <string name="why_use">Por quê usar?</string>
+    <string name="intro_7">Carregamento mais rápido, não-intrusivo, economiza dados, logins compartilhados do Chrome, formulários completados automaticamente e SEGURO com as últimas atualizações!</string>
+    <string name="thats_it">É personalizável!</string>
+    <string name="intro_8">Você pode escolher facilmente como quer que o Chromer trabalhe abrindo a tela principal!</string>
+    <string name="version">Versão</string>
+    <string name="changelog">Registro de Alterações</string>
+    <string name="join_google_plus">Entrar na Comunidade G+</string>
+    <string name="share_ideas">Compartilhe ideias!</string>
+    <string name="support_development">Apoiar o desenvolvimento</string>
+    <string name="consider_donation">Considere uma doação</string>
+    <string name="add_to_circles">Adicionar aos Círculos do G+</string>
+    <string name="follow_twitter">Seguir no Twitter</string>
+    <string name="connect_linkedIn">Conectar ao LinkedIn</string>
+    <string name="more_apps">Mais apps</string>
+    <string name="author">Autor</string>
+    <string name="added">Adicionado</string>
+    <string name="settings">Configurações</string>
+    <string name="colored_toolbar">Barra de ações colorida</string>
+    <string name="choose_animation">Animação de abertura</string>
+    <string name="usage_options">Opções de uso</string>
+    <string name="default_pref_xpln">Definir o Chromer como padrão para abrir todos os links, ou você pode escolher Chromer na lista abaixo quando aparecer</string>
+    <string name="personalization">Personalização</string>
+    <string name="default_clear_msg">está definido como navegador padrão, por favor redefina isso clicando limpar padrões.</string>
+    <string name="dynamic_toolbar_color">Cor dinâmica na barra de ações</string>
+    <string name="keep_chrome_warmedup">Manter seu navegador na memória para abrir mais rápido</string>
+    <string name="warmup_browser">Aquecer o navegador</string>
+    <string name="set_default_chromer">Definir como Padrão</string>
+    <string name="circle_to_preview_changes">Toque no botão circular para ver as alterações</string>
+    <string name="default_provider">Provedor de abas personalizadas</string>
+    <string name="pre_fetch_content">Antecipar conteúdo</string>
+    <string name="pre_fetch_desc">Escanear sua tela em busca de links e carregá-los em segundo plano para acesso rápido</string>
+    <string name="accessibility_description">Este serviço será usado pelo Chromer para buscar links em textos na sua tela a carregá-los em segundo plano. Nenhuma informação será processada pelo Chromer. Você ainda pode usar o Chromer no modo light se não quiser permitir isso. Para mais informações, abra o app Chromer.</string>
+    <string name="accessibility_dialog_title">Permissão de acessibilidade requerida</string>
+    <string name="accessibility_dialog_desc">Para permitir o Chromer escanear links em qualquer app, é necessário conceder permissão de acessibilidade. Por favor conceda a permissão na próxima tela, depois disso, você pode ativar esta opção e curtir carregamentos mais rápidos!</string>
+    <string name="open_settings">Abrir configurações</string>
+    <string name="only_on_wifi">Apenas em Wi-Fi</string>
+    <string name="default_toolbar_color">Cor padrão da barra</string>
+    <string name="web_heads_color">Cor das web heads</string>
+    <string name="choose_secondary_browser">Navegador secundário</string>
+    <string name="dynamic_toolbar_help">Para ativar a coloração dinâmica da barra de ações, o Chromer aprende as cores em silêncio. Pode demorar para aprender de um app ou site mas vai melhorar com o tempo de uso. Divirta-se!</string>
+    <string name="chromer_defaulted">O Chromer é o navegador padrão atual</string>
+    <string name="secondary_browser_success">%1$s definido como navegador secundário!</string>
+    <string name="fav_share_success">%1$s definido como app de compartilhamento favorito!</string>
+    <string name="default_provider_success">%1$s será usado como fornecedor de Abas Personalizadas!</string>
+    <string name="based_on_app">Baseada no app</string>
+    <string name="based_on_web">Baseada no site</string>
+    <string name="preferred_action">Ação preferida</string>
+    <string name="fav_share_app">App de compartilhar favorito</string>
+    <string name="choose_fav_share_app">Escolha o app de compartilhamento favorito</string>
+    <string name="dynamic_summary_appweb">A cor será baseada no site se o site suportar, caso contrário, será baseada no app</string>
+    <string name="dynamic_summary_app">A cor será baseada no app que solicita o site</string>
+    <string name="dynamic_summary_web">A cor será baseada no site que for aberto</string>
+    <string name="no_option_selected">Nenhuma opção selecionada</string>
+    <string name="permission_required">Permissão exigida</string>
+    <string name="usage_permission_explanation_appcolor">Para ativar a coloração dinâmica da barra de ações baseado nos apps, o Chromer precisa da sua permissão para saber os apps que você está usando. Conceder esta permissão agora?</string>
+    <string name="usage_permission_explanation_blacklist">Para colocar apps na lista, Chromer precisa da sua permissão para saber os apps que você está usando. Conceder permissão de uso agora?</string>
+    <string name="grant">Conceder</string>
+    <string name="open_source_contributions">Material open source</string>
+    <string name="search_or_type_url">Pesquise ou digite a URL</string>
+    <string name="voice_prompt">Diga a sua pesquisa</string>
+    <string name="web_heads">Web Heads</string>
+    <string name="webhead_spawn_summary">Localização inicial</string>
+    <string name="webhead_spawn_title">Escolha onde as web heads aparecem inicialmente</string>
+    <string name="credits">Créditos</string>
+    <string name="icon_design">Design dos Ícones</string>
+    <string name="overlay_permission_content">Para desenhar as web heads na tela, a permissão de sobreposição precisa ser concedida. Conceder agora?</string>
+    <string name="webheads_intro_1">Quando você abre um link em qualquer app, uma bolha flutuante chamada web head será criada na tela e o Chromer tentará carregar o link.</string>
+    <string name="webheads_intro_2">Ao abrir múltiplos links, estas web heads serão automaticamente empilhadas umas sobre as outras conforme exibido. Você pode abrir estes links depois tocando neles.</string>
+    <string name="webheads_intro_3">Quando você começa a arrastar uma web head, uma lixeira será exibida. Arraste a web head para a lixeira para excluí-la.</string>
+    <string name="webheads_intro_4">O Chromer prioriza o último link aberto e o carrega previamente. O método recomendado é clicar nas web heads uma por uma de cima para baixo. Ativar fechar web heads ao lançar vai tornar isso sem igual.</string>
+    <string name="web_head_permission_toast">Para abrir links em bolhas flutuantes, o Chromer precisa da permissão para desenhar sobre outros apps, por favor conceda para continuar ou desative as Web Heads nas configurações do Chromer.</string>
+    <string name="tap_close_all">Toque para fechar tudo</string>
+    <string name="web_heads_service">Serviço de Web Heads</string>
+    <string name="join_beta">Entrar no Beta</string>
+    <string name="become_a_tester">Tornar-se testador</string>
+    <string name="join_beta_content">Versões beta são compilações experimentais e contém as últimas funções mas podem conter bugs. Você pode ajudar no desenvolvimento do app se tornando um testador e reportando problemas e sugestões na comunidade do Google+. \n\nCertifique-se de estar participando da comunidade do Google+, e clique no botão TORNAR-SE TESTADOR no site da Google Play. \n\nNOTA: Você precisa participar da comunidade para se tornar beta tester.</string>
+    <string name="no_voice_rec_apps">Nenhum app de reconhecimento de voz foi encontrado</string>
+    <string name="already_set">Já definido!</string>
+    <string name="blacklisted_apps">Apps na lista negra</string>
+    <string name="loading">Carregando...</string>
+    <string name="please_wait">Aguarde</string>
+    <string name="blacklist_message">Você colocou este app na lista negra do Chromer e não tem um navegador secundário. Escolha um navegador para continuar.</string>
+    <string name="share_failed_msg">Não foi possível compartilhar, tentando o compartilhamento normal</string>
+    <string name="blacklist_explanation">A abertura de links de um app da lista negra irá usar o navegador secundário</string>
+    <string name="revoke_accessibility_permission">Agora você pode revogar a permissão de acessibilidade do Chromer.</string>
+    <string name="last_fetched_urls">Últimas URLs carregadas</string>
+    <string name="blacklist_on">Lista negra de apps %s</string>
+</resources>

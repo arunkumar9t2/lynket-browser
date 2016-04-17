@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<resources>
+    <string-array name="animationValues">
+        <item>Nessuno</item>
+        <item>Scorri a destra</item>
+        <item>Scorri su</item>
+    </string-array>
+    <string-array name="animationKeys">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="actionValues">
+        <item>Browser secondario</item>
+        <item>App di condivisione preferita</item>
+    </string-array>
+    <string-array name="actionKeys">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="webHeadsSpawnValues">
+        <item>Destra</item>
+        <item>Sinistra</item>
+    </string-array>
+    <string-array name="webHeadsSpawnKeys">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string name="app_name">Chromer</string>
+    <string name="share_text">Hey, dai un occhiata a \'Chromer\' per una navigazione sicura e veloce! Scaricala qua http://goo.gl/922ils</string>
+    <string name="share_via">Condividi con...</string>
+    <string name="custom_tab_provider_not_found">Nessun fornitore di custom tab trovato</string>
+    <string name="custom_tab_provider_not_found_expln">Chromer necessita di un browser con custom tab compatibile installato sul tuo telefono. Momentaneamente non ci sono browser installati che le supportano. Vorresti installare Chrome (gratis) dal play store? Se è già installato, allora aggiornalo all\'ultima versione.</string>
+    <string name="install">Installa</string>
+    <string name="licenses">Licenze</string>
+    <string name="about">Informazioni</string>
+    <string name="help_chromer_grow">Aiuta Chromer a crescere!</string>
+    <string name="share">Condividi</string>
+    <string name="share_with">Condividi con %1$s</string>
+    <string name="more_custom_tbs">Piu informazioni su custom tabs</string>
+    <string name="rate_play_store">Vota sul Play store</string>
+    <string name="feedback">Feedback</string>
+    <string name="intro">Intro</string>
+    <string name="send_email">Invia email...</string>
+    <string name="choose_default_provider">Scegli fornitore di default</string>
+    <string name="fallback_msg">Impossibile aprire custom tab, apertura browser normale</string>
+    <string name="open_with">Apri con...</string>
+    <string name="open_in_browser">Apri in %1$s</string>
+    <string name="unxp_err">Errore inaspettato, prova di nuovo</string>
+    <string name="unsupported_link">Link non supportato, prova di nuovo</string>
+    <string name="couldnt_load_price">Impossibile caricare prezzo</string>
+    <string name="coffee">Caffè</string>
+    <string name="lunch">Pranzo</string>
+    <string name="premium_donation">Donazione Premium</string>
+    <string name="invalid_link">link invalido</string>
+    <string name="copied">Copiato</string>
+    <string name="copy_link">Copia link</string>
+    <string name="add_to_homescreen">Aggiungi alla homescreen</string>
+    <string name="intro_1">Ciao!\nChromer è un web browser leggero, sicuro e veloce.</string>
+    <string name="intro_2">Usa le custom tab di Chrome che sono delle pagine leggere sviluppate apposta per caricare velocemente un link.</string>
+    <string name="intro_3">Può bloccare in memoria il browser così da avviarlo più velocemente.</string>
+    <string name="intro_5">Può scansionare i link sul tuo schermo e precaricarli in background per ridurre i tempi di caricamento!</string>
+    <string name="intro_4">Può impilare bolle fluttuanti multiple quando le apri e poi caricarle parzialmente in background!</string>
+    <string name="how_to_use">Come usare questo?</string>
+    <string name="intro_6">Imposta Chromer come broswer definitivo, e visualizzerà i link in maniera non intrusiva. O seleziona Chromer quando necessario.</string>
+    <string name="why_use">Perchè usare?</string>
+    <string name="intro_7">Caricamento più veloce, non intrusivo, risparmia dati, dati di login condivisi con Chrome, auto riempimento dei forms e SICURO con gli ultimi updates!</string>
+    <string name="thats_it">E\' personalizzabile!</string>
+    <string name="intro_8">Può decidere facilmente come vuoi che lavori Chromer avviando la schermata principale!</string>
+    <string name="version">Versione</string>
+    <string name="changelog">Changelog</string>
+    <string name="join_google_plus">Unisciti alla Community Google+</string>
+    <string name="share_ideas">Condividi le tue idee!</string>
+    <string name="support_development">Supporta lo sviluppatore</string>
+    <string name="consider_donation">Considera una donazione</string>
+    <string name="add_to_circles">Aggiungi alle cerchie Google+</string>
+    <string name="follow_twitter">Segui su Twitter</string>
+    <string name="connect_linkedIn">Connetti con LinkedIn</string>
+    <string name="more_apps">Altre app</string>
+    <string name="author">Autore</string>
+    <string name="added">Aggiunto</string>
+    <string name="settings">Impostazioni</string>
+    <string name="colored_toolbar">Toolbar colorata</string>
+    <string name="choose_animation">Animazione d\'apertura</string>
+    <string name="usage_options">Opzioni d\'uso</string>
+    <string name="default_pref_xpln">Imposta Chromer per aprire tutti i link di default, oppure puoi scegliere Chromer nella lista quando appare</string>
+    <string name="personalization">Personalizzazione</string>
+    <string name="default_clear_msg">è impostato come browser di default, per favore cancellalo cliccando su cancella defualt</string>
+    <string name="dynamic_toolbar_color">Colore toolbar dinamico</string>
+    <string name="keep_chrome_warmedup">Mantieni il browser in memoria per un avvio più rapido</string>
+    <string name="warmup_browser">Riscalda browser</string>
+    <string name="set_default_chromer">Imposta come browser di default</string>
+    <string name="circle_to_preview_changes">Schiaccia il tasto rotondo per vedere un anteprima dei cambiamenti</string>
+    <string name="default_provider">Fornitore di custom tab di default</string>
+    <string name="pre_fetch_content">Precarica contenuto</string>
+    <string name="pre_fetch_desc">Rileva link sul tuo schermo e caricali in background per lanciarli istantaneamente</string>
+    <string name="accessibility_description">Questo servizio verrà usato da Chromer per rilevare link sul tuo schermo e caricarli in background. Nessun\'altra informazione sarà processata da Chromer. Puoi sempre usare Chromer normalmente se non autorizzi questo servizio. Per maggiori informazioni, lancia l\'app Chromer.</string>
+    <string name="accessibility_dialog_title">Permesso di accessibilità richiesto</string>
+    <string name="accessibility_dialog_desc">Per permettere a Chromer di rilevare i link in tutte le app, devi concedere il permesso al servizio di accessibilità. Per favore concedi il permesso di accessibilità nella prossima schermata, dopodichè potrai abilitare questa opzione e goderti gli avvii rapidi.</string>
+    <string name="open_settings">Apri impostazioni</string>
+    <string name="default_toolbar_color">Colore toolbar di default</string>
+    <string name="web_heads_color">Colore bolle</string>
+    <string name="choose_secondary_browser">Browser secondario</string>
+    <string name="dynamic_toolbar_help">Per abilitare il colore dinamico della toolbar, Chromer deve imparare i colori. Potrebbe non funzionare inizialmente per un sito o un app, ma migliorerà con il tempo!</string>
+    <string name="chromer_defaulted">Chromer è il browser di default corrente</string>
+    <string name="secondary_browser_success">%1$s impostato come browser secondario!</string>
+    <string name="fav_share_success">%1$s impostato come app di condivisione preferita!</string>
+    <string name="default_provider_success">%$s sarà usato come fornitore di Custom tabs!</string>
+    <string name="based_on_app">Basato dall\'app</string>
+    <string name="based_on_web">Basato dal sito web</string>
+    <string name="preferred_action">Azione preferita</string>
+    <string name="fav_share_app">App di condivisione preferita</string>
+    <string name="choose_fav_share_app">Selezione app di condivisione preferita</string>
+    <string name="dynamic_summary_appweb">Il colore sarà basato dal sito web se lo supporta, altrimenti sarà basato sull\'app</string>
+    <string name="dynamic_summary_app">Il colore sarà basato dall\'app da cui viene lanciato il sito web</string>
+    <string name="dynamic_summary_web">Il colore sarà basato dal sito web aperto</string>
+    <string name="no_option_selected">Nessun opzione selezionata</string>
+    <string name="permission_required">Permesso richiesto</string>
+    <string name="usage_permission_explanation_appcolor">Per abilitare il colore dinamico della toolbar basato sull\'app, Chromer ha bisogno del permesso di sapere che app stai usando. Vorresti dargli questo permesso ora?</string>
+    <string name="usage_permission_explanation_blacklist">Per abilitare il blocco delle app, Chromer ha bisogno del permesso di sapere che app stai usando. Vorresti dargli questo permesso ora?</string>
+    <string name="grant">Concedi</string>
+    <string name="open_source_contributions">materiale open source</string>
+    <string name="search_or_type_url">Cerca o scrivi URL</string>
+    <string name="web_heads">Bolle Web</string>
+</resources>

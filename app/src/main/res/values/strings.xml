@@ -1,46 +1,39 @@
+<?xml version="1.0"?>
 <resources>
     <string-array name="animationValues">
         <item>None</item>
         <item>Slide Right</item>
         <item>Slide Up</item>
     </string-array>
-
     <string-array name="animationKeys">
         <item>0</item>
         <item>1</item>
         <item>2</item>
     </string-array>
-
     <string-array name="animationSpeedValues">
         <item>Medium</item>
         <item>Short</item>
     </string-array>
-
     <string-array name="animationSpeedKeys">
         <item>1</item>
         <item>2</item>
     </string-array>
-
     <string-array name="actionValues">
         <item>Secondary browser</item>
         <item>Favourite share app</item>
     </string-array>
-
     <string-array name="actionKeys">
         <item>1</item>
         <item>2</item>
     </string-array>
-
     <string-array name="webHeadsSpawnValues">
         <item>Right</item>
         <item>Left</item>
     </string-array>
-
     <string-array name="webHeadsSpawnKeys">
         <item>1</item>
         <item>2</item>
     </string-array>
-
     <string name="app_name">Chromer</string>
     <string name="share_text">Hey Checkout \‘Chromer\’ for quick and secure browsing experience! Download here https://goo.gl/992ils</string>
     <string name="share_via">Share via…</string>
@@ -71,7 +64,6 @@
     <string name="copied">Copied</string>
     <string name="copy_link">Copy link</string>
     <string name="add_to_homescreen">Add to homescreen</string>
-
     <string name="intro_1">Hello! \nChromer is a light-weight, secure and a fast web browser.</string>
     <string name="intro_2">It uses Google Chrome\'s Custom Tabs feature which is an extremely light weight Chrome tab designed for quickly loading a link.</string>
     <string name="intro_3">It can keep your browser locked in memory so that your browser launches little faster.</string>
@@ -83,7 +75,6 @@
     <string name="intro_7">Faster loading, non-intrusive, saves data, shared login info from Chrome, auto complete forms and SECURE with latest updates!</string>
     <string name="thats_it">It\'s customizable!</string>
     <string name="intro_8">You can easily choose how you want Chromer to work by launching the main screen!</string>
-
     <string name="version">Version</string>
     <string name="changelog">Changelog</string>
     <string name="join_google_plus">Join Google+ Community</string>

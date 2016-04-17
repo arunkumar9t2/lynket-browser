@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+<resources>
+    <string-array name="animationValues">
+        <item>Ничего</item>
+        <item>Слайд справа</item>
+        <item>Слайд вверх</item>
+    </string-array>
+    <string-array name="animationKeys">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="actionValues">
+        <item>Вторичный браузер</item>
+        <item>Избраное приложение для передачи</item>
+    </string-array>
+    <string-array name="actionKeys">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="webHeadsSpawnValues">
+        <item>Право</item>
+        <item>Лево</item>
+    </string-array>
+    <string-array name="webHeadsSpawnKeys">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string name="app_name">Chromer</string>
+    <string name="share_text">Зацените \"Chromer\" для быстрого и безопасного сёрфинга в интернете! Скачать здесь https://goo.gl/992ils</string>
+    <string name="share_via">Поделиться через...</string>
+    <string name="custom_tab_provider_not_found">Подходящий поставщик вкладок не найден</string>
+    <string name="custom_tab_provider_not_found_expln">Для использования Chromer у Вас должен быть установлен любой другой совместимый браузер. В настоящее время на вашем телефоне нет браузеров, поддерживаемых Chromer. Вы можете установить Google Chrome из Play Маркета. Если он уже установлен, пожалуйста, обновите его до последней версии.</string>
+    <string name="install">Установить</string>
+    <string name="licenses">Лицензии</string>
+    <string name="about">О программе</string>
+    <string name="help_chromer_grow">Помогите развитию Chromer!</string>
+    <string name="share">Поделиться</string>
+    <string name="share_with">Поделится через %1$s</string>
+    <string name="more_custom_tbs">Подробнее о пользовательских вкладках</string>
+    <string name="rate_play_store">Оценить в Play Маркет</string>
+    <string name="feedback">Обратная связь</string>
+    <string name="intro">Вступление</string>
+    <string name="send_email">Отправить e-mail...</string>
+    <string name="choose_default_provider">Выбрать поставщика по умолчанию</string>
+    <string name="fallback_msg">Невозможно открыть вкладку, возврат в обычный браузер</string>
+    <string name="open_with">Открыть через...</string>
+    <string name="open_in_browser">Открыть в %1$s</string>
+    <string name="unxp_err">Непредвиденная ошибка, попробуйте снова</string>
+    <string name="unsupported_link">Ссылка не поддерживается, попробуйте снова</string>
+    <string name="couldnt_load_price">Не удалось загрузить стоимость</string>
+    <string name="coffee">Кофе</string>
+    <string name="lunch">Обед</string>
+    <string name="premium_donation">Премиальное пожертвование</string>
+    <string name="invalid_link">Недействительная ссылка</string>
+    <string name="copied">Скопированно</string>
+    <string name="copy_link">Скопировать ссылку</string>
+    <string name="add_to_homescreen">Добавить на главный экран</string>
+    <string name="intro_1">Привет!\nChromer это легкий, безопасный и быстрый веб-браузер.</string>
+    <string name="intro_2">Он использует пользовательские вкладки Google Chrome для мгновенной загрузки страниц.</string>
+    <string name="intro_3">Он может держать ваш браузер закрепленным в памяти, чтобы повысить скорость его загрузки.</string>
+    <string name="intro_5">Он может сканировать ссылки на экране и обрабатывать их в фоновом режиме, чтобы уменьшить время загрузки!</string>
+    <string name="intro_4">Он может накапливать множество ссылок в плавающих кнопках когда вы открываете их, и потом мгновенно загружает их в фоновом режиме!</string>
+    <string name="how_to_use">Как им пользоваться?</string>
+    <string name="intro_6">Просто установите Chromer в качестве браузера по умолчанию, чтобы он ненавязчиво отображал ссылки. Или выберите Chromer, когда это необходимо.</string>
+    <string name="why_use">Зачем он нужен?</string>
+    <string name="intro_7">Быстрая загрузка, сохранение данных, ненавязчивость, вход через Chrome, автоматическое заполнение форм и БЕЗОПАСНОСТЬ с последними обновлениями!</string>
+    <string name="thats_it">Его можно настроить!</string>
+    <string name="intro_8">Вы можете легко выбирать способ работы Chromer на главном экране!</string>
+    <string name="version">Версия</string>
+    <string name="changelog">Изменения</string>
+    <string name="join_google_plus">"Присоединиться к сообществу Google+ "</string>
+    <string name="share_ideas">Поделитесь своими идеями!</string>
+    <string name="support_development">Поддержать разработку</string>
+    <string name="consider_donation">Рассмотреть пожертвование</string>
+    <string name="add_to_circles">Добавить в Круги Google+</string>
+    <string name="follow_twitter">Подписаться в Twitter</string>
+    <string name="connect_linkedIn">Присоединиться в LinkedIn</string>
+    <string name="more_apps">Больше приложений</string>
+    <string name="author">Автор</string>
+    <string name="added">Добавленно</string>
+    <string name="settings">Настройки</string>
+    <string name="colored_toolbar">Окрашенная панель инструментов</string>
+    <string name="choose_animation">Анимация открытия</string>
+    <string name="usage_options">Пользовательские настройки</string>
+    <string name="default_pref_xpln">Используйте Chromer по умолчанию для открытия ссылок, или вы можете выбирать Chromer из списка предложенных браузеров</string>
+    <string name="personalization">Персонализация</string>
+    <string name="default_clear_msg">установлен в качестве браузера по умолчанию, пожалуйста, уберите его, нажав \"Очистить настройки по умолчанию\".</string>
+    <string name="dynamic_toolbar_color">Динамический цвет панели инструментов</string>
+    <string name="keep_chrome_warmedup">Держать Chromer в памяти для быстрого запуска</string>
+    <string name="warmup_browser">Закрепить в памяти</string>
+    <string name="set_default_chromer">Установить в качестве браузера по умолчанию</string>
+    <string name="circle_to_preview_changes">Нажмите круглую кнопку, чтобы просмотреть изменения</string>
+    <string name="default_provider">"Поставщик вкладок по умолчанию "</string>
+    <string name="pre_fetch_content">Закрепить содержимое</string>
+    <string name="pre_fetch_desc">Сканировать экран на наличие ссылок и загружать их в фоновом режиме для мгновенного запуска</string>
+    <string name="accessibility_description">Этот сервис будет использоваться Chromer для сканирования текстовых ссылок на экране и загрузки их в фоновом режиме. Никакая другая информация не обрабатывается. Вы все ещё можете использовать Chromer в обычном режиме, если вы не предоставите ему возможность сканировать текстовые ссылки. Для получения дополнительной информации, запустите Chromer.</string>
+    <string name="accessibility_dialog_title">Требуется включение \"Спец. возможностей\"</string>
+    <string name="accessibility_dialog_desc">Чтобы разрешить Chromer сканирование ссылок в любом приложении, требуется предоставление \"Спец. возможностей\". Пожалуйста, предоставьте их на следующем экране, после чего вы можете включить эту опцию и наслаждаться быстрым запуском.</string>
+    <string name="open_settings">Открыть настройки</string>
+    <string name="only_on_wifi">Только через Wi-Fi</string>
+    <string name="default_toolbar_color">Цвет панели инструментов по умолчанию</string>
+    <string name="web_heads_color">Цвет плавающей кнопки</string>
+    <string name="choose_secondary_browser">Вторичный браузер</string>
+    <string name="dynamic_toolbar_help">Чтобы включить динамическое окрашивание панели инструментов, Chromer изучает цветовую палитру. Это может происходить не мгновенно, но через некоторое время использования всё нормализуется. Наслаждайтесь!</string>
+    <string name="chromer_defaulted">Chromer является браузером по умолчанию</string>
+    <string name="secondary_browser_success">%1$s установлен в качестве вторичного браузера!</string>
+    <string name="fav_share_success">%1$s установлен в качестве любимого приложения для передачи!</string>
+    <string name="default_provider_success">%1$s будет использоваться для предоставления пользовательских вкладок!</string>
+    <string name="based_on_app">На основе приложения</string>
+    <string name="based_on_web">На основе веб-сайта</string>
+    <string name="preferred_action">Предпочтительные действия</string>
+    <string name="fav_share_app">Любимое приложение для передачи</string>
+    <string name="choose_fav_share_app">Выберите любимое приложение для передачи</string>
+    <string name="dynamic_summary_appweb">Цвет будет основан на веб-сайте, если это поддерживает сайт, или будет основываться на приложении</string>
+    <string name="dynamic_summary_app">Цвет будет определён на основе приложения, которое открывает страницу</string>
+    <string name="dynamic_summary_web">Цвет будет определён на основе веб-сайта</string>
+    <string name="no_option_selected">Параметры не выбраны</string>
+    <string name="permission_required">Необходимо разрешение</string>
+    <string name="usage_permission_explanation_appcolor">Чтобы включить динамический цвет панели инструментов, основанный на приложениях, Chromer нуждается в вашем разрешении на определение используемого приложения. Предоставить доступ сейчас?</string>
+    <string name="usage_permission_explanation_blacklist">Чтобы включить чёрный список приложений, Chromer нуждается в вашем разрешении на определение приложения которое вы используете. Предоставить доступ сейчас?</string>
+    <string name="grant">Предоставить</string>
+    <string name="open_source_contributions">Приложение с открытым исходным кодом</string>
+    <string name="search_or_type_url">Поиск</string>
+    <string name="voice_prompt">Произнесите запрос</string>
+    <string name="web_heads">Плавающие кнопки</string>
+    <string name="webhead_spawn_summary">Исходное положение кнопки</string>
+    <string name="webhead_spawn_title">Выберите, где первоначально должны появляться плавающие кнопки</string>
+    <string name="credits">Благодарности</string>
+    <string name="icon_design">Дизайн иконки</string>
+    <string name="overlay_permission_content">Чтобы перемещать плавающие кнопки по экрану, необходимо разрешение на экранные наложения. Хотите предоставить разрешение сейчас?</string>
+    <string name="webheads_intro_1">Когда вы открываете ссылку в любом приложении, плавающая кнопка будет создана на экране, и Chromer предварительно загрузит ссылку.</string>
+    <string name="webheads_intro_2">При открытии нескольких ссылок, эти кнопки автоматически группируются друг на друге, как показано выше. Вы можете открыть эти ссылки позже, нажимая на кнопки.</string>
+    <string name="webheads_intro_3">Вы можете убрать плавающую кнопку, переместив её в \"Корзину\".</string>
+    <string name="webheads_intro_4">Chromer отдаёт приоритет последней открытой ссылке и загружает её заранее. Рекомендуется открывать плавающие кнопки одну за одной от начала до конца. Плавающие кнопки расположенные рядом открываются без проблем.</string>
+    <string name="web_head_permission_toast">Чтобы открывать ссылки в плавающих кнопках Chromer необходим доступ к другим приложениям, пожалуйста, предоставьте доступ, или отключите плавающие кнопки в настройках Chromer.</string>
+    <string name="tap_close_all">Нажмите, чтобы закрыть всё</string>
+    <string name="web_heads_service">Настройки плавающих кнопок</string>
+    <string name="join_beta">Участвовать в бета-тестировании</string>
+    <string name="become_a_tester">Стать тестером</string>
+    <string name="join_beta_content">Бета-релизы - это экспериментальные версии, в которых представлены самые новые возможности, но в них бывают баги. Вы можете присоединиться к разработке, став тестером и сообщая о найденных багах в сообществе Google+.\n\nПожалуйста, убедитесь в том, что вы присоединились к сообществу в Google+, а затем нажмите кнопку \"Стать тестером\", чтобы вас перенаправило по тестовой ссылке Google Play.\n\nПРИМЕЧАНИЕ: Вы должны присоединиться к сообществу, чтобы стать тестером.</string>
+    <string name="no_voice_rec_apps">Не найдено приложений для распознавания голоса</string>
+    <string name="already_set">Уже установлен!</string>
+    <string name="blacklisted_apps">Приложения в чёрном списке</string>
+    <string name="loading">Загрузка...</string>
+    <string name="please_wait">Пожалуйста, подождите</string>
+    <string name="blacklist_message">Вы добавили это приложение в чёрный список Chromer и не указали вторичный браузер. Пожалуйста, выберите браузер чтобы продолжить.</string>
+    <string name="share_failed_msg">Не удалось поделиться через стандартное приложение</string>
+    <string name="blacklist_explanation">Запуская ссылки через приложение которые вы добавили в чёрный список будет перенаправлено на ваш вторичный браузер</string>
+    <string name="revoke_accessibility_permission">Теперь вы можете отозвать разрешение доступности службы Chromer.</string>
+    <string name="last_fetched_urls">Последние предзагруженные ссылки</string>
+    <string name="blacklist_on">Фильтрование приложений включено %s</string>
+</resources>

@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+<resources>
+    <string-array name="animationValues">
+        <item>无动画</item>
+        <item>向左滑出</item>
+        <item>向上滑出</item>
+    </string-array>
+    <string-array name="animationKeys">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="actionValues">
+        <item>第二浏览器</item>
+        <item>最喜欢的分享应用</item>
+    </string-array>
+    <string-array name="actionKeys">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="webHeadsSpawnValues">
+        <item>右侧</item>
+        <item>左侧</item>
+    </string-array>
+    <string-array name="webHeadsSpawnKeys">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string name="app_name">Chromer</string>
+    <string name="share_text">嘿 来查看下 “Chromer”  它可以让你拥有快速且安全的浏览体验！可以在这里下载 https://goo.gl/992ils</string>
+    <string name="share_via">分享至...</string>
+    <string name="custom_tab_provider_not_found">没有找到可兼容的自定义标签页提供程序</string>
+    <string name="custom_tab_provider_not_found_expln">Chromer 需要你在手机上安装有兼容自定义标签页功能的浏览器。现在在你的手机上没有发现可支持该功能的浏览器。你想在 Play 商店中安装 Chrome浏览器（免费）吗？如果你已经安装了，那么请升级它至当前的最新版本。</string>
+    <string name="install">安装</string>
+    <string name="licenses">开源许可</string>
+    <string name="about">关于</string>
+    <string name="help_chromer_grow">帮助 Chromer 成长！</string>
+    <string name="share">分享</string>
+    <string name="share_with">和 %1$s 分享</string>
+    <string name="more_custom_tbs">详细了解自定义标签页</string>
+    <string name="rate_play_store">在 Play 商店内评价</string>
+    <string name="feedback">反馈</string>
+    <string name="intro">简介</string>
+    <string name="send_email">发送电子邮件...</string>
+    <string name="choose_default_provider">选择默认提供程序</string>
+    <string name="fallback_msg">无法打开自定义标签页，将在浏览器中加载</string>
+    <string name="open_with">选择程序打开...</string>
+    <string name="open_in_browser">在 %1$s 中打开</string>
+    <string name="unxp_err">发生意外错误，请重试</string>
+    <string name="unsupported_link">不支持的链接，请重试</string>
+    <string name="couldnt_load_price">无法加载价格</string>
+    <string name="coffee">一杯咖啡</string>
+    <string name="lunch">一顿午餐</string>
+    <string name="premium_donation">高级捐赠</string>
+    <string name="invalid_link">无效链接</string>
+    <string name="copied">已复制</string>
+    <string name="copy_link">复制链接</string>
+    <string name="add_to_homescreen">添加至主屏幕</string>
+    <string name="intro_1">你好！\nChromer 是一款轻量级，安全且高速的网页浏览器。</string>
+    <string name="intro_2">它使用谷歌 Chrome 浏览器中的自定义标签页功能。这是一种极为轻量化的 Chrome 标签页，可以用来快速的打开一个链接。</string>
+    <string name="intro_3">它可以使你的浏览器常驻内存以便更快速的加载</string>
+    <string name="intro_5">它可以扫描你屏幕内的链接并且在后台加载以缩短打开时的等待时间。</string>
+    <string name="intro_4">它可以在你点击网页链接时创建多个叠加式的悬浮气泡并在后台中加载其中的部分内容。</string>
+    <string name="how_to_use">要如何使用？</string>
+    <string name="intro_6">将 Chromer 设置成你的默认浏览器，Chromer 将会以非入侵式的方式展示你打开的链接。或者你也可以选择仅在需要的时候使用它。</string>
+    <string name="why_use">为什么使用它？</string>
+    <string name="intro_7">更快速的加载，非入侵式，保存数据，从 Chrome 内共享登录信息，自动填充表单并且具备最新版本当中安全性能。</string>
+    <string name="thats_it">它是可定制的！</string>
+    <string name="intro_8">你可以在主界面内轻松选择 Chromer 的工作方式！</string>
+    <string name="version">版本</string>
+    <string name="changelog">更新日志</string>
+    <string name="join_google_plus">加入 Google+ 社群</string>
+    <string name="share_ideas">分享你的想法！</string>
+    <string name="support_development">支持开发</string>
+    <string name="consider_donation">考虑捐赠</string>
+    <string name="add_to_circles">加入到 Google+ 圈子</string>
+    <string name="follow_twitter">在 Twitter 上关注</string>
+    <string name="connect_linkedIn">在 Linkedln 上联系</string>
+    <string name="more_apps">更多应用</string>
+    <string name="author">作者</string>
+    <string name="added">已添加</string>
+    <string name="settings">设置</string>
+    <string name="colored_toolbar">为工具栏上色</string>
+    <string name="choose_animation">打开动画</string>
+    <string name="usage_options">使用选项</string>
+    <string name="default_pref_xpln">将 Chromer 设置为默认浏览器以打开全部链接，或者你也可以在跳出选择程序页面时选择用 Chromer 打开</string>
+    <string name="personalization">个性化</string>
+    <string name="default_clear_msg">被设置为了默认浏览器，请点击清除默认操作来取消它</string>
+    <string name="dynamic_toolbar_color">工具栏动态变色</string>
+    <string name="keep_chrome_warmedup">使你的浏览器常驻内存以便更快速的加载</string>
+    <string name="warmup_browser">预热的浏览器</string>
+    <string name="set_default_chromer">设置为默认浏览器</string>
+    <string name="circle_to_preview_changes">点击右下角的圆形浮动按钮来预览变化</string>
+    <string name="default_provider">默认自定义标签页提供程序</string>
+    <string name="pre_fetch_content">预获取内容</string>
+    <string name="pre_fetch_desc">扫描你屏幕内的链接并且在后台加载它们以便立即打开</string>
+    <string name="accessibility_description">这项服务将被 Chromer 用来扫描你屏幕上的文字链接并选择在后台加载它们。Chromer 将不会处理其他任何形式的信息。如果拒绝启用它你仍然可以使用 Chromer的轻量化模式。想要了解更多信息，请查看 Chromer 应用。</string>
+    <string name="accessibility_dialog_title">需要获取无障碍权限</string>
+    <string name="accessibility_dialog_desc">想要让 Chromer 扫描任何应用内链接将需要你允许接入无障碍服务权限。请在接下来出现的屏幕中允许无障碍权限，在允许过后便可以开启这个选项然后享受快速打开页面的乐趣。</string>
+    <string name="open_settings">打开设置</string>
+    <string name="default_toolbar_color">默认工具栏颜色</string>
+    <string name="web_heads_color">链接气泡颜色</string>
+    <string name="choose_secondary_browser">第二浏览器</string>
+    <string name="dynamic_toolbar_help">开启了动态上色工具栏后，Chromer 将会静默地学习颜色适配。起初它可能无法正确适配一个网页或者一个应用，但随着时间的推移适配效果会不断提高。享受它吧！</string>
+    <string name="chromer_defaulted">Chromer 是当前的默认浏览器</string>
+    <string name="secondary_browser_success">%1$s 已被设定为第二浏览器！</string>
+    <string name="fav_share_success">%1$s 已被设定为最喜欢的分享应用！</string>
+    <string name="default_provider_success">%1$s 将被用来提供自定义标签页！</string>
+    <string name="based_on_app">根据应用</string>
+    <string name="based_on_web">根据网站</string>
+    <string name="preferred_action">优先行为</string>
+    <string name="fav_share_app">最喜欢的分享应用</string>
+    <string name="choose_fav_share_app">选择最喜欢的分享应用</string>
+    <string name="dynamic_summary_appweb">当网站支持时颜色显示将跟随网页的设置否则依据应用</string>
+    <string name="dynamic_summary_app">颜色显示将跟随打开网页的程序</string>
+    <string name="dynamic_summary_web">颜色显示将跟随加载网页内的设置</string>
+    <string name="no_option_selected">没有选择选项</string>
+    <string name="permission_required">需要获取权限</string>
+    <string name="usage_permission_explanation_appcolor">要开启根据应用动态着色工具栏，Chromer 将需要获取你的授权来了解当前正在使用的应用。你要现在允许这项权限吗？</string>
+    <string name="usage_permission_explanation_blacklist">要开启黑名单应用，Chromer 将需要获取你的授权来了解当前正在使用的应用。你要现在允许查看使用情况权限吗？</string>
+    <string name="grant">允许</string>
+    <string name="open_source_contributions">开源项目</string>
+    <string name="search_or_type_url">搜索或输入网址</string>
+    <string name="voice_prompt">说出你的疑问</string>
+    <string name="web_heads">链接气泡</string>
+    <string name="webhead_spawn_summary">起始位置</string>
+    <string name="webhead_spawn_title">选择链接气泡起始在何处显示</string>
+    <string name="credits">致谢</string>
+    <string name="icon_design">图标设计</string>
+    <string name="overlay_permission_content">想在屏幕上绘制链接气泡，需要获取上层显示权限。你要现在允许这项权限吗？</string>
+    <string name="webheads_intro_1">当你在任何应用内打开一个链接，一个浮动的链接气泡都将被创建在你的屏幕上然后 Chromer 将会尝试预先获取链接内的内容。</string>
+    <string name="webheads_intro_2">当打开多个链接时，这些链接气泡会彼此叠加显示。你可以选择稍后点击它们来打开链接。</string>
+    <string name="webheads_intro_3">当你拖动一个链接气泡时，将会出现一个垃圾桶的图标。将气泡拖动到上面可以选择删除它们。</string>
+    <string name="webheads_intro_4">Chromer 会优先对待最后打开的链接并且预先获取里面的信息。推荐的使用方法是从上至下依次点开链接气泡。开启“关闭已点开链接的气泡”功能将让这种操作无缝化。</string>
+    <string name="web_head_permission_toast">想要用链接气泡打开链接，Chromer 需要获取在其他应用上层显示的权限，请点击允许以继续或者在 Chromer 的设置当中选择禁用链接气泡。</string>
+    <string name="tap_close_all">点击关闭全部</string>
+    <string name="web_heads_service">链接气泡服务</string>
+    <string name="join_beta">加入测试版计划</string>
+    <string name="become_a_tester">成为测试人员</string>
+    <string name="join_beta_content">测试版是具备最新功能但会有少量 Bug 存在的实验性版本。你可以通过加入测试人员然后在 Google+ 社群上报告你所遇到问题的方式来为开发做出贡献。\n\n请确保你已经加入了 Google+ 社群，然后点击成为测试人员按钮来获得 Play 商店内的测试版本链接。\n\n注意：你需要先加入社群以成为测试人员。</string>
+    <string name="no_voice_rec_apps">没有找到可兼容的语音识别应用</string>
+    <string name="already_set">设置完成！</string>
+    <string name="blacklisted_apps">黑名单应用</string>
+    <string name="loading">正在加载...</string>
+    <string name="please_wait">请等待</string>
+    <string name="blacklist_message">你已经将这个程序加入到了黑名单中，Chromer将不会被用来打开它里面的链接。当前你还没有设置过第二浏览器，请选择一个浏览器以继续。</string>
+    <string name="share_failed_msg">无法分享到应用，默认返回标准分享</string>
+    <string name="blacklist_explanation">在黑名单应用中打开的链接将会在第二浏览器中加载</string>
+    <string name="revoke_accessibility_permission">你现在可以撤销掉 Chromer 的无障碍服务权限了</string>
+    <string name="last_fetched_urls">最近获取过的网址</string>
+    <string name="blacklist_on">黑名单应用 %s</string>
+</resources>
