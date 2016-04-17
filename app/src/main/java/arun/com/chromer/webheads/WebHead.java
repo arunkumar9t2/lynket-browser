@@ -544,8 +544,8 @@ public class WebHead extends FrameLayout {
     private class SingleTapListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
-            if (Preferences.webHeadsCloseOnOpen(getContext())) {
-                animate()
+            if (Preferences.webHeadsCloseOnOpen(getContext()) && circleView != null) {
+                circleView.animate()
                         .scaleX(0.0f)
                         .scaleY(0.0f)
                         .setDuration(150)

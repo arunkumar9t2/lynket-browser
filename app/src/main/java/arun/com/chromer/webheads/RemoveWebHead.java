@@ -107,7 +107,9 @@ public class RemoveWebHead extends FrameLayout {
     public ViewPropertyAnimator destroyAnimator() {
         if (sOurInstance == null) return null;
 
-        return sOurInstance.animate()
+        if (mRemoveHeadCircle == null) return null;
+
+        return sOurInstance.mRemoveHeadCircle.animate()
                 .scaleX(0.0f)
                 .scaleY(0.0f)
                 .alpha(0.5f)
