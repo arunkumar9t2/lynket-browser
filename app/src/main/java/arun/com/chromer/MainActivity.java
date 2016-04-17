@@ -4,6 +4,7 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.annotation.ColorInt;
@@ -167,6 +168,10 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         ServicesUtil.takeCareOfServices(getApplicationContext());
 
         cleanOldDbs();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            findViewById(R.id.merge_tabs_apps_layout).setVisibility(View.VISIBLE);
+        }
 
         if (savedInstanceState != null) {
             mColorSelection = savedInstanceState.getString(Constants.COLOR_SELECTION);
