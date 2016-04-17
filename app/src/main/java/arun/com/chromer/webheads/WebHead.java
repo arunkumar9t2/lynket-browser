@@ -11,6 +11,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
@@ -600,7 +601,11 @@ public class WebHead extends FrameLayout {
         private final String mUrl;
         private final Paint mBgPaint;
         private final Paint mTextPaint;
+
         private boolean mShouldDrawText = true;
+        @ColorInt
+        private int mWebHeadColor = 0;
+
         private static int sSizePx;
         private static int sDiameterPx;
 
@@ -608,14 +613,13 @@ public class WebHead extends FrameLayout {
             super(context);
             mUrl = url;
 
-            int webHeadsColor = Preferences.webHeadColor(context);
+            mWebHeadColor = Preferences.webHeadColor(context);
             float shadwR = context.getResources().getDimension(R.dimen.web_head_shadow_radius);
             float shadwDx = context.getResources().getDimension(R.dimen.web_head_shadow_dx);
             float shadwDy = context.getResources().getDimension(R.dimen.web_head_shadow_dy);
             float textSize = context.getResources().getDimension(R.dimen.web_head_text_indicator);
 
             mBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            mBgPaint.setColor(webHeadsColor);
             mBgPaint.setStyle(Paint.Style.FILL);
             mBgPaint.setShadowLayer(shadwR, shadwDx, shadwDy, 0x75000000);
 
@@ -624,7 +628,6 @@ public class WebHead extends FrameLayout {
             mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             mTextPaint.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
             mTextPaint.setTextSize(textSize);
-            mTextPaint.setColor(Util.getForegroundTextColor(webHeadsColor));
             mTextPaint.setStyle(Paint.Style.FILL);
 
             setLayerType(View.LAYER_TYPE_SOFTWARE, null);
@@ -639,12 +642,15 @@ public class WebHead extends FrameLayout {
         @Override
         protected void onDraw(Canvas canvas) {
             canvas.drawColor(0, PorterDuff.Mode.CLEAR);
+            mBgPaint.setColor(mWebHeadColor);
+
             float radius = (float) (getWidth() / 2.4);
+            sDiameterPx = (int) (2 * radius);
+
             canvas.drawCircle(getWidth() / 2, getHeight() / 2, radius, mBgPaint);
             if (mShouldDrawText) {
                 drawText(canvas);
             }
-            sDiameterPx = (int) (2 * radius);
         }
 
         public void clearUrlIndicator() {
@@ -662,7 +668,14 @@ public class WebHead extends FrameLayout {
             }
         }
 
+        public void setWebHeadColor(@ColorInt int webHeadColor) {
+            mWebHeadColor = webHeadColor;
+            invalidate();
+        }
+
         private void drawText(Canvas canvas) {
+            mTextPaint.setColor(Util.getForegroundTextColor(mWebHeadColor));
+
             String indicator = getUrlIndicator();
             if (indicator != null) drawTextInCanvasCentre(canvas, mTextPaint, indicator);
         }
