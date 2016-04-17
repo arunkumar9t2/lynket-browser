@@ -1,5 +1,7 @@
 package arun.com.chromer.webheads;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -21,6 +23,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.BounceInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -57,7 +60,7 @@ public class WebHead extends FrameLayout {
 
     private final String mUrl;
 
-    private final GestureDetector mGestDetector = new GestureDetector(getContext(), new GestureTapListener());
+    private final GestureDetector mSingleTapDetector = new GestureDetector(getContext(), new SingleTapListener());
 
     private final GestureDetector mFlingDetector = new GestureDetector(getContext(), new FlingListener());
 
@@ -224,7 +227,13 @@ public class WebHead extends FrameLayout {
         // Don't react to any touch event and consume it when we are being destroyed
         if (isBeingDestroyed) return true;
         try {
-            mGestDetector.onTouchEvent(event);
+            boolean wasSingleTap = mSingleTapDetector.onTouchEvent(event);
+
+            if (wasSingleTap) {
+                // Consume event if it was singe tap
+                Timber.d("Single tap detected and consumed touch event");
+                return true;
+            }
 
             boolean wasFlung = mFlingDetector.onTouchEvent(event);
 
@@ -532,16 +541,31 @@ public class WebHead extends FrameLayout {
         void onWebHeadDestroy(@NonNull WebHead webHead, boolean isLastWebHead);
     }
 
-    private class GestureTapListener extends GestureDetector.SimpleOnGestureListener {
+    private class SingleTapListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
-            if (mInteractionListener != null) mInteractionListener.onWebHeadClick(WebHead.this);
+            if (Preferences.webHeadsCloseOnOpen(getContext())) {
+                animate()
+                        .scaleX(0.0f)
+                        .scaleY(0.0f)
+                        .setDuration(150)
+                        .setInterpolator(new AccelerateDecelerateInterpolator())
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                sendCallback();
+                            }
+                        })
+                        .start();
+            } else sendCallback();
 
             RemoveWebHead.hideSelf();
-
-            return super.onSingleTapConfirmed(e);
+            return true;
         }
 
+        private void sendCallback() {
+            if (mInteractionListener != null) mInteractionListener.onWebHeadClick(WebHead.this);
+        }
     }
 
     /**
