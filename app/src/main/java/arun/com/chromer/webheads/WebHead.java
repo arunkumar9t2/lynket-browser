@@ -50,15 +50,11 @@ import timber.log.Timber;
 public class WebHead extends FrameLayout implements SpringSystemListener, SpringListener {
 
     private static int WEB_HEAD_COUNT = 0;
-
     private static final int STACKING_GAP_PX = Util.dpToPx(6);
-
     private static final double MAGNETISM_THRESHOLD = Util.dpToPx(120);
 
     private static WindowManager sWindowManager;
-
     private static Point sCentreLockPoint;
-
     private static int sDispHeight, sDispWidth;
 
     private final String mUrl;
@@ -68,37 +64,25 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     private final int mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
 
     private float posX, posY;
-
     private int initialDownX, initialDownY;
 
     private WindowManager.LayoutParams mWindowParams;
 
     private SpringSystem mSpringSystem;
-
     private Spring mScaleSpring, mWallAttachSpring, mXSpring, mYSpring;
-
     private final SpringConfig mFlingSpringConfig = SpringConfig.fromOrigamiTensionAndFriction(20, 5);
 
     private boolean mDragging;
-
     private boolean mWasRemoveLocked;
-
     private boolean mWasFlung;
-
     private boolean mWasClicked;
-
     private boolean mDimmed;
-
     private boolean mUserManuallyMoved;
-
     private boolean isBeingDestroyed;
 
     private WebHeadCircle circleView;
-
     private ImageView mFavicon;
-
     private ImageView mAppIcon;
-
     private WebHeadInteractionListener mInteractionListener;
 
     private MovementTracker mMovementTracker;
@@ -266,7 +250,6 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
 
                     // hide remove view
                     RemoveWebHead.hideSelf();
-
                     break;
                 case MotionEvent.ACTION_MOVE:
                     mMovementTracker.addMovement(event);
@@ -323,7 +306,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         int x = (int) (initialDownX + (event.getRawX() - posX));
         int y = (int) (initialDownY + (event.getRawY() - posY));
 
-        if (isNearRemoveCircle()) {
+        if (isNearRemoveCircle(x, y)) {
             getRemoveWebHead().grow();
             setReleaseAlpha();
             setReleaseScale();
@@ -341,16 +324,16 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         }
     }
 
-    private boolean isNearRemoveCircle() {
+    private boolean isNearRemoveCircle(int x, int y) {
         Point p = getRemoveWebHead().getCenterCoordinates();
         int rX = p.x;
         int rY = p.y;
 
         int offset = getAdaptWidth() / 2;
-        int x = mWindowParams.x + offset;
-        int y = mWindowParams.y + offset;
+        x += offset;
+        y += offset;
 
-        if (euclideanDist(rX, rY, x, y) < MAGNETISM_THRESHOLD) {
+        if (dist(rX, rY, x, y) < MAGNETISM_THRESHOLD) {
             mWasRemoveLocked = true;
             return true;
         } else {
@@ -401,10 +384,8 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         return sCentreLockPoint;
     }
 
-    private double euclideanDist(int x1, int y1, int x2, int y2) {
-        double x = x1 - x2;
-        double y = y1 - y2;
-        return Math.sqrt(x * x + y * y);
+    private float dist(double x1, double y1, double x2, double y2) {
+        return (float) Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
 
     public ValueAnimator getStackDistanceAnimator() {
