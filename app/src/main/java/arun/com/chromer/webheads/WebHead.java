@@ -28,10 +28,13 @@ import android.view.animation.BounceInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.facebook.rebound.BaseSpringSystem;
 import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringConfig;
+import com.facebook.rebound.SpringListener;
 import com.facebook.rebound.SpringSystem;
+import com.facebook.rebound.SpringSystemListener;
 
 import java.net.URL;
 
@@ -44,7 +47,7 @@ import timber.log.Timber;
  * Created by Arun on 30/01/2016.
  */
 @SuppressLint("ViewConstructor")
-public class WebHead extends FrameLayout {
+public class WebHead extends FrameLayout implements SpringSystemListener, SpringListener {
 
     private static int WEB_HEAD_COUNT = 0;
 
@@ -60,9 +63,7 @@ public class WebHead extends FrameLayout {
 
     private final String mUrl;
 
-    private final GestureDetector mSingleTapDetector = new GestureDetector(getContext(), new SingleTapListener());
-
-    private final GestureDetector mFlingDetector = new GestureDetector(getContext(), new FlingListener());
+    private final GestureDetector mGestureDetector = new GestureDetector(getContext(), new GestureDetectorListener());
 
     private final int mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
 
@@ -70,21 +71,21 @@ public class WebHead extends FrameLayout {
 
     private int initialDownX, initialDownY;
 
-    private int mXVelocity, mYVelocity;
-
     private WindowManager.LayoutParams mWindowParams;
 
     private SpringSystem mSpringSystem;
 
     private Spring mScaleSpring, mWallAttachSpring, mXSpring, mYSpring;
 
-    private final SpringConfig mSnapSpringConfig = SpringConfig.fromOrigamiTensionAndFriction(100, 7);
-
     private final SpringConfig mFlingSpringConfig = SpringConfig.fromOrigamiTensionAndFriction(20, 5);
 
     private boolean mDragging;
 
     private boolean mWasRemoveLocked;
+
+    private boolean mWasFlung;
+
+    private boolean mWasClicked;
 
     private boolean mDimmed;
 
@@ -150,6 +151,7 @@ public class WebHead extends FrameLayout {
 
     private void setUpSprings() {
         mSpringSystem = SpringSystem.create();
+        mSpringSystem.addListener(this);
 
         mScaleSpring = mSpringSystem.createSpring();
         mScaleSpring.addListener(new SimpleSpringListener() {
@@ -178,24 +180,9 @@ public class WebHead extends FrameLayout {
         });
 
         mYSpring = mSpringSystem.createSpring();
-        mYSpring.setSpringConfig(mSnapSpringConfig);
-        mYSpring.addListener(new SimpleSpringListener() {
-            @Override
-            public void onSpringUpdate(Spring spring) {
-                mWindowParams.y = (int) spring.getCurrentValue();
-                sWindowManager.updateViewLayout(WebHead.this, mWindowParams);
-            }
-        });
-
+        mYSpring.addListener(this);
         mXSpring = mSpringSystem.createSpring();
-        mYSpring.setSpringConfig(mSnapSpringConfig);
-        mXSpring.addListener(new SimpleSpringListener() {
-            @Override
-            public void onSpringUpdate(Spring spring) {
-                mWindowParams.x = (int) spring.getCurrentValue();
-                sWindowManager.updateViewLayout(WebHead.this, mWindowParams);
-            }
-        });
+        mXSpring.addListener(this);
     }
 
     private void setDisplayMetrics() {
@@ -204,16 +191,16 @@ public class WebHead extends FrameLayout {
         sDispWidth = metrics.widthPixels;
         sDispHeight = metrics.heightPixels;
 
-        mMovementTracker = new MovementTracker(20, sDispHeight, sDispWidth, WebHeadCircle.getSizePx());
+        mMovementTracker = new MovementTracker(20, sDispHeight, sDispWidth, getAdaptWidth());
     }
 
     @SuppressLint("RtlHardcoded")
     private void setSpawnLocation() {
         mWindowParams.gravity = Gravity.TOP | Gravity.LEFT;
         if (Preferences.webHeadsSpawnLocation(getContext()) == 1) {
-            mWindowParams.x = (int) (sDispWidth - WebHeadCircle.getSizePx() * 0.8);
+            mWindowParams.x = (int) (sDispWidth - getAdaptWidth() * 0.8);
         } else {
-            mWindowParams.x = (int) (0 - WebHeadCircle.getSizePx() * 0.2);
+            mWindowParams.x = (int) (0 - getAdaptWidth() * 0.2);
         }
         mWindowParams.y = sDispHeight / 3;
     }
@@ -227,15 +214,17 @@ public class WebHead extends FrameLayout {
         // Don't react to any touch event and consume it when we are being destroyed
         if (isBeingDestroyed) return true;
         try {
-            boolean wasSingleTap = mSingleTapDetector.onTouchEvent(event);
+            // Reset gesture flag on each event
+            mWasFlung = false;
+            mWasClicked = false;
 
-            if (wasSingleTap) {
-                // Consume event if it was singe tap
+            // Let gesture detector intercept events
+            mGestureDetector.onTouchEvent(event);
+
+            if (mWasClicked) {
                 Timber.d("Single tap detected and consumed touch event");
                 return true;
             }
-
-            boolean wasFlung = mFlingDetector.onTouchEvent(event);
 
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -272,7 +261,7 @@ public class WebHead extends FrameLayout {
                     setReleaseAlpha();
 
                     // If we were not flung, go to nearest side and rest there
-                    if (!wasFlung)
+                    if (!mWasFlung)
                         stickToWall();
 
                     // hide remove view
@@ -331,24 +320,21 @@ public class WebHead extends FrameLayout {
 
         mUserManuallyMoved = true;
 
-        mWindowParams.x = (int) (initialDownX + (event.getRawX() - posX));
-        mWindowParams.y = (int) (initialDownY + (event.getRawY() - posY));
+        int x = (int) (initialDownX + (event.getRawX() - posX));
+        int y = (int) (initialDownY + (event.getRawY() - posY));
 
         if (isNearRemoveCircle()) {
             getRemoveWebHead().grow();
             setReleaseAlpha();
             setReleaseScale();
 
-            mXSpring.setSpringConfig(mSnapSpringConfig);
-            mYSpring.setSpringConfig(mSnapSpringConfig);
-
             mXSpring.setEndValue(getCentreLockPoint().x);
             mYSpring.setEndValue(getCentreLockPoint().y);
         } else {
             getRemoveWebHead().shrink();
 
-            mXSpring.setCurrentValue(mWindowParams.x);
-            mYSpring.setCurrentValue(mWindowParams.y);
+            mXSpring.setCurrentValue(x).setAtRest();
+            mYSpring.setCurrentValue(y).setAtRest();
 
             setTouchingAlpha();
             setTouchingScale();
@@ -400,6 +386,7 @@ public class WebHead extends FrameLayout {
     }
 
     private int getAdaptWidth() {
+        // TODO Refactor this such that it returns accurate width at all times
         return Math.max(getWidth(), WebHeadCircle.getSizePx());
     }
 
@@ -535,15 +522,54 @@ public class WebHead extends FrameLayout {
             sWindowManager.removeView(this);
     }
 
+    @Override
+    public void onSpringUpdate(Spring spring) {
+        mWindowParams.x = (int) mXSpring.getCurrentValue();
+        mWindowParams.y = (int) mYSpring.getCurrentValue();
+        sWindowManager.updateViewLayout(this, mWindowParams);
+    }
+
+    @Override
+    public void onBeforeIntegrate(BaseSpringSystem springSystem) {
+
+    }
+
+    @Override
+    public void onAfterIntegrate(BaseSpringSystem springSystem) {
+
+    }
+
+
+    @Override
+    public void onSpringAtRest(Spring spring) {
+
+    }
+
+    @Override
+    public void onSpringActivate(Spring spring) {
+
+    }
+
+    @Override
+    public void onSpringEndStateChange(Spring spring) {
+
+    }
+
     public interface WebHeadInteractionListener {
         void onWebHeadClick(@NonNull WebHead webHead);
 
         void onWebHeadDestroy(@NonNull WebHead webHead, boolean isLastWebHead);
     }
 
-    private class SingleTapListener extends GestureDetector.SimpleOnGestureListener {
+    /**
+     * A gesture listener class to monitor standard fling and click events on the web head view.
+     */
+    private class GestureDetectorListener extends GestureDetector.SimpleOnGestureListener {
+
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
+            mWasClicked = true;
+
             if (Preferences.webHeadsCloseOnOpen(getContext()) && circleView != null) {
                 circleView.animate()
                         .scaleX(0.0f)
@@ -566,12 +592,6 @@ public class WebHead extends FrameLayout {
         private void sendCallback() {
             if (mInteractionListener != null) mInteractionListener.onWebHeadClick(WebHead.this);
         }
-    }
-
-    /**
-     * A gesture listener class to monitor standard fling events on the web head view.
-     */
-    private class FlingListener extends GestureDetector.SimpleOnGestureListener {
 
         /**
          * The event is used as a trigger to calculate the fling end point and then animate to
@@ -603,6 +623,8 @@ public class WebHead extends FrameLayout {
             }
 
             if (projectedPoint != null) {
+                mWasFlung = true;
+
                 mXSpring.setSpringConfig(mFlingSpringConfig);
                 mYSpring.setSpringConfig(mFlingSpringConfig);
 
