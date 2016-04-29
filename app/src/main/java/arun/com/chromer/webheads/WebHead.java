@@ -65,12 +65,15 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     private float posX, posY;
     private int initialDownX, initialDownY;
     private VelocityTracker mVelocityTracker = null;
+    private float mXVelocity, mYVelocity;
 
     private WindowManager.LayoutParams mWindowParams;
-
     private SpringSystem mSpringSystem;
     private Spring mScaleSpring, mWallAttachSpring, mXSpring, mYSpring;
-    private final SpringConfig mFlingSpringConfig = SpringConfig.fromOrigamiTensionAndFriction(20, 5);
+    private final SpringConfig FLING_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(20, 5);
+    private final SpringConfig DRAG_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(0, 0.5);
+    private final SpringConfig SNAP_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(100, 7);
+
 
     private boolean mDragging;
     private boolean mWasRemoveLocked;
@@ -78,13 +81,13 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     private boolean mWasClicked;
     private boolean mDimmed;
     private boolean mUserManuallyMoved;
-    private boolean isBeingDestroyed;
 
+    private boolean isBeingDestroyed;
     private WebHeadCircle circleView;
     private ImageView mFavicon;
     private ImageView mAppIcon;
-    private WebHeadInteractionListener mInteractionListener;
 
+    private WebHeadInteractionListener mInteractionListener;
     private MovementTracker mMovementTracker;
 
     public WebHead(@NonNull Context context, @NonNull String url) {
@@ -134,6 +137,8 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     }
 
     private void setUpSprings() {
+        DRAG_CONFIG.tension = 0;
+
         mSpringSystem = SpringSystem.create();
         mSpringSystem.addListener(this);
 
@@ -203,7 +208,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
             mWasClicked = false;
 
             // Let gesture detector intercept events
-            mGestureDetector.onTouchEvent(event);
+            // mGestureDetector.onTouchEvent(event);
 
             if (mWasClicked) {
                 Timber.d("Single tap detected and consumed touch event");
@@ -242,8 +247,8 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
                         mVelocityTracker.addMovement(event);
                         mVelocityTracker.computeCurrentVelocity(1000);
 
-                        Timber.d("X velocity: %f", mVelocityTracker.getXVelocity());
-                        Timber.d("Y velocity: %f", mVelocityTracker.getYVelocity());
+                        mXVelocity = mVelocityTracker.getXVelocity();
+                        mYVelocity = mVelocityTracker.getYVelocity();
 
                         move(event);
                     }
@@ -260,6 +265,12 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
                         return true;
                     }
 
+                    mXSpring.setSpringConfig(DRAG_CONFIG);
+                    mYSpring.setSpringConfig(DRAG_CONFIG);
+
+                    mXSpring.setVelocity(mXVelocity);
+                    mYSpring.setVelocity(mYVelocity);
+
                     // Expand on release
                     setReleaseScale();
                     // opaque on release
@@ -269,7 +280,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
 
                     // If we were not flung, go to nearest side and rest there
                     if (!mWasFlung) {
-                        stickToWall();
+                        // stickToWall();
                     }
 
                     mVelocityTracker.recycle();
@@ -323,10 +334,16 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
             setReleaseAlpha();
             setReleaseScale();
 
+            mXSpring.setSpringConfig(SNAP_CONFIG);
+            mYSpring.setSpringConfig(SNAP_CONFIG);
+
             mXSpring.setEndValue(getCentreLockPoint().x);
             mYSpring.setEndValue(getCentreLockPoint().y);
         } else {
             getRemoveWebHead().shrink();
+
+            mXSpring.setSpringConfig(DRAG_CONFIG);
+            mYSpring.setSpringConfig(DRAG_CONFIG);
 
             mXSpring.setCurrentValue(x).setAtRest();
             mYSpring.setCurrentValue(y).setAtRest();
@@ -586,40 +603,22 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
             if (mInteractionListener != null) mInteractionListener.onWebHeadClick(WebHead.this);
         }
 
-        /**
-         * The event is used as a trigger to calculate the fling end point and then animate to
-         * the end point. If the movement tracker object gives a proper projection then use it.
-         * Else manually calculate projection using @param e1 and @param @e2.
-         *
-         * @param e1        fling starting event
-         * @param e2        fling ending event
-         * @param velocityX velocity in x direction
-         * @param velocityY velocity in y direction
-         * @return true if the fling was successful
-         */
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            // double velocity = Math.sqrt(velocityX * velocityX + velocityY * velocityY);
-
-            // if (velocity < 500) return false;
-
-            Coordinate down = Coordinate.FromMotionEvent(e1);
-            Coordinate up = Coordinate.FromMotionEvent(e2);
             Coordinate projectedPoint = mMovementTracker.getProjection();
 
             //noinspection StatementWithEmptyBody
             if (projectedPoint == null) {
-                // Timber.v("Calculating projection with fling events");
+                Coordinate down = Coordinate.FromMotionEvent(e1);
+                Coordinate up = Coordinate.FromMotionEvent(e2);
                 projectedPoint = MovementTracker.calculateTrajectory(down, up);
-            } else {
-                //  Timber.v("Using predicted trajectory");
             }
 
             if (projectedPoint != null) {
                 mWasFlung = true;
 
-                mXSpring.setSpringConfig(mFlingSpringConfig);
-                mYSpring.setSpringConfig(mFlingSpringConfig);
+                mXSpring.setSpringConfig(FLING_CONFIG);
+                mYSpring.setSpringConfig(FLING_CONFIG);
 
                 mXSpring.setAtRest();
                 mYSpring.setAtRest();
