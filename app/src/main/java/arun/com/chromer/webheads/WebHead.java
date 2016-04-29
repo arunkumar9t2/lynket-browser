@@ -66,6 +66,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     private int initialDownX, initialDownY;
     private VelocityTracker mVelocityTracker = null;
     private float mXVelocity, mYVelocity;
+    private static final int MINIMUM_FLING_VELOCITY = Util.dpToPx(800);
 
     private WindowManager.LayoutParams mWindowParams;
     private SpringSystem mSpringSystem;
@@ -137,7 +138,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     }
 
     private void setUpSprings() {
-        DRAG_CONFIG.tension = 0;
+        // DRAG_CONFIG.tension = 0;
 
         mSpringSystem = SpringSystem.create();
         mSpringSystem.addListener(this);
@@ -208,7 +209,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
             mWasClicked = false;
 
             // Let gesture detector intercept events
-            // mGestureDetector.onTouchEvent(event);
+            mGestureDetector.onTouchEvent(event);
 
             if (mWasClicked) {
                 Timber.d("Single tap detected and consumed touch event");
@@ -265,12 +266,6 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
                         return true;
                     }
 
-                    mXSpring.setSpringConfig(DRAG_CONFIG);
-                    mYSpring.setSpringConfig(DRAG_CONFIG);
-
-                    mXSpring.setVelocity(mXVelocity);
-                    mYSpring.setVelocity(mYVelocity);
-
                     // Expand on release
                     setReleaseScale();
                     // opaque on release
@@ -280,7 +275,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
 
                     // If we were not flung, go to nearest side and rest there
                     if (!mWasFlung) {
-                        // stickToWall();
+                        stickToWall();
                     }
 
                     mVelocityTracker.recycle();
@@ -605,30 +600,26 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            Coordinate projectedPoint = mMovementTracker.getProjection();
+            Timber.d(velocityX + " " + velocityY);
+            if ((Math.abs(velocityY) > MINIMUM_FLING_VELOCITY) || (Math.abs(velocityX) > MINIMUM_FLING_VELOCITY)) {
+                Coordinate adjustedVelocities = mMovementTracker.getAdjustedVelocities(velocityX, velocityY);
 
-            //noinspection StatementWithEmptyBody
-            if (projectedPoint == null) {
-                Coordinate down = Coordinate.FromMotionEvent(e1);
-                Coordinate up = Coordinate.FromMotionEvent(e2);
-                projectedPoint = MovementTracker.calculateTrajectory(down, up);
-            }
+                if (adjustedVelocities == null) {
+                    Coordinate down = Coordinate.FromMotionEvent(e1);
+                    Coordinate up = Coordinate.FromMotionEvent(e2);
+                    adjustedVelocities = MovementTracker.adjustVelocities(down, up, velocityX, velocityY);
+                }
 
-            if (projectedPoint != null) {
-                mWasFlung = true;
+                if (adjustedVelocities != null) {
+                    mWasFlung = true;
 
-                mXSpring.setSpringConfig(FLING_CONFIG);
-                mYSpring.setSpringConfig(FLING_CONFIG);
+                    mXSpring.setSpringConfig(DRAG_CONFIG);
+                    mYSpring.setSpringConfig(DRAG_CONFIG);
 
-                mXSpring.setAtRest();
-                mYSpring.setAtRest();
-
-                mXSpring.setCurrentValue(mWindowParams.x);
-                mYSpring.setCurrentValue(mWindowParams.y);
-
-                mXSpring.setEndValue(projectedPoint.x);
-                mYSpring.setEndValue(projectedPoint.y);
-                return true;
+                    mXSpring.setVelocity(adjustedVelocities.x);
+                    mYSpring.setVelocity(adjustedVelocities.y);
+                    return true;
+                }
             }
             return false;
         }

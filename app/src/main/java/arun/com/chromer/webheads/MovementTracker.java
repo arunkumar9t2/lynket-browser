@@ -150,6 +150,49 @@ class MovementTracker {
         return projectedPoint;
     }
 
+
+    public static Coordinate adjustVelocities(Coordinate p1, Coordinate p2, float xVelocity, float yVelocity) {
+        float downX = p1.x;
+        float downY = p1.y;
+
+        float upX = p2.x;
+        float upY = p2.y;
+
+        Coordinate velocities = new Coordinate();
+
+        if (upX >= downX && upY >= downY) {
+            // Bottom right
+            // Timber.d("BR");
+            velocities.x = positive(xVelocity);
+            velocities.y = positive(yVelocity);
+        } else if (upX >= downX && upY <= downY) {
+            // Top right
+            // Timber.d("TR");
+            velocities.x = positive(xVelocity);
+            velocities.y = negate(yVelocity);
+        } else if (upX <= downX && upY <= downY) {
+            // Top left
+            // Timber.d("TL");
+            velocities.x = negate(xVelocity);
+            velocities.y = negate(yVelocity);
+        } else if (upX <= downX && upY >= downY) {
+            // Bottom left
+            // Timber.d("BL");
+            velocities.x = negate(xVelocity);
+            velocities.y = positive(yVelocity);
+        }
+        Timber.d(velocities.toString());
+        return velocities;
+    }
+
+    private static float negate(float value) {
+        return value > 0 ? -1 * value : value;
+    }
+
+    private static float positive(float value) {
+        return value < 0 ? -1 * value : value;
+    }
+
     /**
      * By using the tracked gesture points, calculates the fling end point. This is done by assuming
      * a line from the 75% of the tracked points to last tracked point. Then calculateTrajectory is
@@ -172,8 +215,21 @@ class MovementTracker {
         } else {
             projectedPoint = null;
         }
-        mPoints.clear();
         return projectedPoint;
+    }
+
+    public Coordinate getAdjustedVelocities(float xVelocity, float yVelocity) {
+        int trackingThreshold = (int) (0.25 * mTrackingSize);
+        Coordinate velocities;
+        if (mPoints.size() >= trackingThreshold) {
+            Coordinate up = mPoints.getLast();
+            Coordinate down = mPoints.get(mPoints.size() - trackingThreshold);
+
+            velocities = adjustVelocities(down, up, xVelocity, yVelocity);
+        } else {
+            velocities = null;
+        }
+        return velocities;
     }
 
     @Override
