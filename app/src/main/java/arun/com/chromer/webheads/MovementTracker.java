@@ -181,7 +181,6 @@ class MovementTracker {
             velocities.x = negate(xVelocity);
             velocities.y = positive(yVelocity);
         }
-        Timber.d(velocities.toString());
         return velocities;
     }
 

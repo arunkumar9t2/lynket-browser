@@ -71,7 +71,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     private WindowManager.LayoutParams mWindowParams;
     private SpringSystem mSpringSystem;
     private Spring mScaleSpring, mWallAttachSpring, mXSpring, mYSpring;
-    private final SpringConfig FLING_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(20, 5);
+    private final SpringConfig FLING_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(40, 7);
     private final SpringConfig DRAG_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(0, 0.5);
     private final SpringConfig SNAP_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(100, 7);
 
@@ -95,19 +95,16 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         super(context);
         mUrl = url;
 
-        if (sWindowManager == null) {
-            sWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        }
-
         init(context, url);
-
-        WEB_HEAD_COUNT++;
-
-        Timber.d("Created %d webheads", WEB_HEAD_COUNT);
     }
 
 
     private void init(Context context, String url) {
+        WEB_HEAD_COUNT++;
+
+        if (sWindowManager == null)
+            sWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+
         circleView = new WebHeadCircle(context, url);
         addView(circleView);
 
@@ -138,8 +135,6 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     }
 
     private void setUpSprings() {
-        // DRAG_CONFIG.tension = 0;
-
         mSpringSystem = SpringSystem.create();
         mSpringSystem.addListener(this);
 
@@ -164,6 +159,9 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
             public void onSpringUpdate(Spring spring) {
                 if (!mDragging) {
                     mWindowParams.x = (int) spring.getCurrentValue();
+                    int yMax = (int) (sDispHeight * 0.85);
+                    int yMin = Util.dpToPx(25);
+                    mWindowParams.y = Math.max(yMin, Math.min(yMax, mWindowParams.y));
                     sWindowManager.updateViewLayout(WebHead.this, mWindowParams);
                 }
             }
@@ -212,7 +210,6 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
             mGestureDetector.onTouchEvent(event);
 
             if (mWasClicked) {
-                Timber.d("Single tap detected and consumed touch event");
                 return true;
             }
 
@@ -304,6 +301,10 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         int dispCentre = sDispWidth / 2;
 
         mWallAttachSpring.setCurrentValue(x, true);
+
+        // Remove velocities from position springs
+        mXSpring.setAtRest();
+        mYSpring.setAtRest();
 
         int xOffset = (getAdaptWidth() / 2);
 
@@ -532,6 +533,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         mWindowParams.x = (int) mXSpring.getCurrentValue();
         mWindowParams.y = (int) mYSpring.getCurrentValue();
         sWindowManager.updateViewLayout(this, mWindowParams);
+        checkBounds();
     }
 
     @Override
@@ -541,7 +543,6 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
 
     @Override
     public void onAfterIntegrate(BaseSpringSystem springSystem) {
-
     }
 
 
@@ -600,8 +601,9 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            Timber.d(velocityX + " " + velocityY);
             if ((Math.abs(velocityY) > MINIMUM_FLING_VELOCITY) || (Math.abs(velocityX) > MINIMUM_FLING_VELOCITY)) {
+                mDragging = false;
+
                 Coordinate adjustedVelocities = mMovementTracker.getAdjustedVelocities(velocityX, velocityY);
 
                 if (adjustedVelocities == null) {
@@ -622,6 +624,42 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
                 }
             }
             return false;
+        }
+    }
+
+    private void checkBounds() {
+        int x = mWindowParams.x;
+        int y = mWindowParams.y;
+
+        int width = getAdaptWidth();
+
+        int rightBound = (int) (sDispWidth - width * 0.8);
+        int leftBound = (int) (0 - width * 0.2);
+        int topBound = Util.dpToPx(25);
+        int bottomBound = (int) (sDispHeight * 0.85);
+
+        if (x + width >= sDispWidth) {
+            mXSpring.setSpringConfig(FLING_CONFIG);
+            mXSpring.setEndValue(rightBound);
+        }
+        if (x - width <= 0) {
+            mXSpring.setSpringConfig(FLING_CONFIG);
+            mXSpring.setEndValue(leftBound);
+        }
+        if (y + width >= sDispHeight) {
+            mYSpring.setSpringConfig(FLING_CONFIG);
+            mYSpring.setEndValue(bottomBound);
+        }
+        if (y - width <= 0) {
+            mYSpring.setSpringConfig(FLING_CONFIG);
+            mYSpring.setEndValue(topBound);
+        }
+
+        int minimumVelocityToReachSides = Util.dpToPx(50);
+        if (!mWasRemoveLocked
+                && Math.abs(mXSpring.getVelocity()) < minimumVelocityToReachSides
+                && Math.abs(mYSpring.getVelocity()) < minimumVelocityToReachSides) {
+            stickToWall();
         }
     }
 
