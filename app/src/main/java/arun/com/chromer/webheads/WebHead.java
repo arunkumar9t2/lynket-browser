@@ -20,7 +20,6 @@ import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.WindowManager;
@@ -64,8 +63,6 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     private final int mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
     private float posX, posY;
     private int initialDownX, initialDownY;
-    private VelocityTracker mVelocityTracker = null;
-    private float mXVelocity, mYVelocity;
     private static final int MINIMUM_FLING_VELOCITY = Util.dpToPx(800);
 
     private WindowManager.LayoutParams mWindowParams;
@@ -215,12 +212,6 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
 
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    if (mVelocityTracker == null) {
-                        mVelocityTracker = VelocityTracker.obtain();
-                    } else {
-                        mVelocityTracker.clear();
-                    }
-                    mVelocityTracker.addMovement(event);
                     mMovementTracker.onDown();
 
                     initialDownX = mWindowParams.x;
@@ -242,12 +233,6 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
                     }
 
                     if (mDragging) {
-                        mVelocityTracker.addMovement(event);
-                        mVelocityTracker.computeCurrentVelocity(1000);
-
-                        mXVelocity = mVelocityTracker.getXVelocity();
-                        mYVelocity = mVelocityTracker.getYVelocity();
-
                         move(event);
                     }
                     break;
@@ -274,9 +259,6 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
                     if (!mWasFlung) {
                         stickToWall();
                     }
-
-                    mVelocityTracker.recycle();
-                    mVelocityTracker = null;
                     break;
                 default:
                     break;
