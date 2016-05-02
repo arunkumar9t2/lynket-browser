@@ -227,6 +227,7 @@ class MovementTracker {
             velocities = adjustVelocities(down, up, xVelocity, yVelocity);
         } else {
             velocities = null;
+            Timber.d("Automatic calculation failed");
         }
         return velocities;
     }

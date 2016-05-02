@@ -63,7 +63,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     private final int mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
     private float posX, posY;
     private int initialDownX, initialDownY;
-    private static final int MINIMUM_FLING_VELOCITY = Util.dpToPx(800);
+    private static final int MINIMUM_FLING_VELOCITY = Util.dpToPx(450);
 
     private WindowManager.LayoutParams mWindowParams;
     private SpringSystem mSpringSystem;
@@ -176,7 +176,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         sDispWidth = metrics.widthPixels;
         sDispHeight = metrics.heightPixels;
 
-        mMovementTracker = new MovementTracker(20, sDispHeight, sDispWidth, getAdaptWidth());
+        mMovementTracker = new MovementTracker(10, sDispHeight, sDispWidth, getAdaptWidth());
     }
 
     @SuppressLint("RtlHardcoded")
