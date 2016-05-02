@@ -237,7 +237,7 @@ public class RemoveWebHead extends FrameLayout {
             float shadwDx = context.getResources().getDimension(R.dimen.remove_head_shadow_dx);
             float shadwDy = context.getResources().getDimension(R.dimen.remove_head_shadow_dy);
 
-            mBgPaint.setShadowLayer(shadwR, shadwDx, shadwDy, 0x85000000);
+            mBgPaint.setShadowLayer(shadwR, shadwDx, shadwDy, 0x75000000);
 
             setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
