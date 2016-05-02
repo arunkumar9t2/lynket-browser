@@ -562,6 +562,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
                 circleView.animate()
                         .scaleX(0.0f)
                         .scaleY(0.0f)
+                        .alpha(0.5f)
                         .setDuration(150)
                         .setInterpolator(new AccelerateDecelerateInterpolator())
                         .setListener(new AnimatorListenerAdapter() {
