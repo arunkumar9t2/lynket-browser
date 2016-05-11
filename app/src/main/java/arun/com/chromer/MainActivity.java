@@ -55,7 +55,7 @@ import arun.com.chromer.about.changelog.ChangelogUtil;
 import arun.com.chromer.activities.intro.ChromerIntro;
 import arun.com.chromer.activities.intro.WebHeadsIntro;
 import arun.com.chromer.blacklist.BlacklistManagerActivity;
-import arun.com.chromer.customtabs.CustomActivityHelper;
+import arun.com.chromer.customtabs.CustomTabBindingHelper;
 import arun.com.chromer.customtabs.CustomTabDelegate;
 import arun.com.chromer.customtabs.CustomTabHelper;
 import arun.com.chromer.customtabs.prefetch.ScannerService;
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     private static final String CUSTOM_TAB_URL = "https://developer.chrome.com/multidevice/android/customtabs#whentouse";
     private static final int VOICE_REQUEST = 10001;
 
-    private CustomActivityHelper mCustomTabActivityHelper;
+    private CustomTabBindingHelper mCustomTabActivityHelper;
 
     private SwitchCompat mWarmUpSwitch;
     private SwitchCompat mPrefetchSwitch;
@@ -122,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Splash screen
         setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -663,7 +664,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 startService(webHeadService);
             } else {
                 CustomTabsIntent customTabsIntent = CustomTabDelegate.getCustomizedTabIntent(getApplicationContext(), url, false);
-                CustomActivityHelper.openCustomTab(this, customTabsIntent, Uri.parse(url), CustomTabHelper.CUSTOM_TABS_FALLBACK);
+                CustomTabBindingHelper.openCustomTab(this, customTabsIntent, Uri.parse(url), CustomTabHelper.CUSTOM_TABS_FALLBACK);
             }
         }
     }
@@ -690,7 +691,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     private void setupCustomTab() {
-        mCustomTabActivityHelper = new CustomActivityHelper();
+        mCustomTabActivityHelper = new CustomTabBindingHelper();
         List<Bundle> possibleUrls = new ArrayList<>();
         Bundle bundle = new Bundle();
         bundle.putParcelable(CustomTabsService.KEY_URL, Uri.parse(CUSTOM_TAB_URL));
@@ -716,7 +717,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         }
 
         mCustomTabActivityHelper.setConnectionCallback(
-                new CustomActivityHelper.ConnectionCallback() {
+                new CustomTabBindingHelper.ConnectionCallback() {
                     @Override
                     public void onCustomTabsConnected() {
                         Timber.d("Connect to custom tab in main activity");
@@ -738,12 +739,12 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         switch (dialog.getTitle()) {
             case R.string.default_toolbar_color:
                 Intent intent = new Intent(Constants.ACTION_TOOLBAR_COLOR_SET);
-                intent.putExtra(PersonalizationPreferenceFragment.TOOLBAR_COLOR_KEY, selectedColor);
+                intent.putExtra(Constants.EXTRA_KEY_TOOLBAR_COLOR, selectedColor);
                 LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
                 break;
             case R.string.web_heads_color:
                 Intent webHeadColorIntent = new Intent(Constants.ACTION_TOOLBAR_COLOR_SET);
-                webHeadColorIntent.putExtra(WebHeadPreferenceFragment.WEBHEADS_COLOR_KEY, selectedColor);
+                webHeadColorIntent.putExtra(Constants.EXTRA_KEY_WEBHEAD_COLOR, selectedColor);
                 LocalBroadcastManager.getInstance(this).sendBroadcast(webHeadColorIntent);
                 break;
         }

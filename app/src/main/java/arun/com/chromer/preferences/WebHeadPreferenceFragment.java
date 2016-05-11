@@ -28,8 +28,6 @@ import arun.com.chromer.util.Constants;
 
 public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    public static final String WEBHEADS_COLOR_KEY = "WEBHEADS_COLOR_KEY";
-
     public WebHeadPreferenceFragment() {
         // Required empty public constructor
     }
@@ -37,7 +35,7 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
     private final BroadcastReceiver mColorSelectionReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            int selectedColor = intent.getIntExtra(WEBHEADS_COLOR_KEY, 0);
+            int selectedColor = intent.getIntExtra(Constants.EXTRA_KEY_WEBHEAD_COLOR, 0);
             if (selectedColor != 0) {
                 ColorPreference preference = (ColorPreference) findPreference(Preferences.WEBHEADS_COLOR);
                 if (preference != null) {

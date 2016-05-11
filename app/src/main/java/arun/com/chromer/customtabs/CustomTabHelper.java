@@ -45,8 +45,8 @@ public class CustomTabHelper {
     public static final String DEV_PACKAGE = "com.chrome.dev";
     private static final String LOCAL_PACKAGE = "com.google.android.apps.chrome";
 
-    public final static CustomActivityHelper.CustomTabsFallback CUSTOM_TABS_FALLBACK =
-            new CustomActivityHelper.CustomTabsFallback() {
+    public final static CustomTabBindingHelper.CustomTabsFallback CUSTOM_TABS_FALLBACK =
+            new CustomTabBindingHelper.CustomTabsFallback() {
                 @Override
                 public void openUri(Activity activity, Uri uri) {
                     if (activity != null) {

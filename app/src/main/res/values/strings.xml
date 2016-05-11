@@ -163,4 +163,5 @@
     <string name="translations">Translations</string>
     <string name="merge_tabs">Merge tabs and apps - Beta</string>
     <string name="merge_tabs_explanation">See your tabs with other recent apps on your phone\'s Overview screen.</string>
+    <string name="already_loaded">Already loaded</string>
 </resources>

@@ -73,6 +73,7 @@ public class Util {
     }
 
     public static String getPackageVersion(@NonNull Context context) {
+        // return BuildConfig.VERSION_NAME;
         String versionName;
         try {
             versionName = context

@@ -30,12 +30,10 @@ import arun.com.chromer.util.Util;
 public class PersonalizationPreferenceFragment extends DividerLessPreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    public static final String TOOLBAR_COLOR_KEY = "TOOLBAR_COLOR_KEY";
-
     private final BroadcastReceiver mColorSelectionReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            int selectedColor = intent.getIntExtra(TOOLBAR_COLOR_KEY, 0);
+            int selectedColor = intent.getIntExtra(Constants.EXTRA_KEY_TOOLBAR_COLOR, 0);
             if (selectedColor != 0) {
                 ColorPreference preference = (ColorPreference) findPreference(Preferences.TOOLBAR_COLOR);
                 if (preference != null) {

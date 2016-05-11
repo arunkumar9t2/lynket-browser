@@ -19,11 +19,10 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import arun.com.chromer.preferences.Preferences;
+import arun.com.chromer.util.Constants;
 import timber.log.Timber;
 
 public class AppDetectService extends Service {
-
-    public static final String CLEAR_LAST_APP = "CLEAR_LAST_APP";
 
     private static final int POLLING_INTERVAL = 350;
 
@@ -106,7 +105,7 @@ public class AppDetectService extends Service {
     }
 
     private void clearLastAppIfNeeded(Intent intent) {
-        if (intent != null && intent.getBooleanExtra(CLEAR_LAST_APP, false)) {
+        if (intent != null && intent.getBooleanExtra(Constants.EXTRA_KEY_CLEAR_LAST_TOP_APP, false)) {
             mLastDetectedApp = "";
             Timber.d("Last app cleared");
         }

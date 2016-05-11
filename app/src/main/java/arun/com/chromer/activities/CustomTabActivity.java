@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import arun.com.chromer.R;
-import arun.com.chromer.customtabs.CustomActivityHelper;
+import arun.com.chromer.customtabs.CustomTabBindingHelper;
 import arun.com.chromer.customtabs.CustomTabDelegate;
 import arun.com.chromer.customtabs.CustomTabHelper;
 import arun.com.chromer.preferences.Preferences;
@@ -27,14 +27,14 @@ public class CustomTabActivity extends AppCompatActivity {
         }
 
         final String url = getIntent().getData().toString();
-        final boolean isWebhead = getIntent().getBooleanExtra(Constants.FROM_WEBHEAD, false);
+        final boolean isWebhead = getIntent().getBooleanExtra(Constants.EXTRA_KEY_FROM_WEBHEAD, false);
 
         CustomTabsIntent tabIntent = CustomTabDelegate.getCustomizedTabIntent(getApplicationContext(), url, isWebhead);
         if (Preferences.mergeTabs(getApplicationContext())) {
             tabIntent.intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         }
 
-        CustomActivityHelper.openCustomTab(this, tabIntent, Uri.parse(url), CustomTabHelper.CUSTOM_TABS_FALLBACK);
+        CustomTabBindingHelper.openCustomTab(this, tabIntent, Uri.parse(url), CustomTabHelper.CUSTOM_TABS_FALLBACK);
 
         finish();
     }

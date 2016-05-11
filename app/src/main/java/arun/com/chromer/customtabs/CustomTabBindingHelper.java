@@ -19,7 +19,7 @@ import timber.log.Timber;
 /**
  * Created by Arun on 18/12/2015.
  */
-public class CustomActivityHelper implements ServiceConnectionCallback {
+public class CustomTabBindingHelper implements ServiceConnectionCallback {
 
     private CustomTabsSession mCustomTabsSession;
     private CustomTabsClient mClient;

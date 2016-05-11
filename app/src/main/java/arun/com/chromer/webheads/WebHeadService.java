@@ -45,36 +45,32 @@ import java.util.Stack;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.CustomTabActivity;
-import arun.com.chromer.customtabs.CustomActivityHelper;
+import arun.com.chromer.customtabs.CustomTabBindingHelper;
 import arun.com.chromer.preferences.Preferences;
 import arun.com.chromer.util.Constants;
 import timber.log.Timber;
 
 public class WebHeadService extends Service implements WebHead.WebHeadInteractionListener,
-        CustomActivityHelper.ConnectionCallback {
-
-    public static final String SHOULD_REBIND = "should_rebind";
-    public static final String REBIND_EVENT = "rebind_event";
-    private static final String CLOSE_SERVICE = "close_service";
+        CustomTabBindingHelper.ConnectionCallback {
 
     private static WebHeadService sInstance = null;
-
     private static String sLastOpenedUrl = "";
 
     private final LinkedHashMap<String, WebHead> mWebHeads = new LinkedHashMap<>();
-
+    private boolean mCustomTabConnected;
     private WindowManager mWindowManager;
+    private CustomTabBindingHelper mCustomTabBindingHelper;
 
-    private CustomActivityHelper mCustomActivityHelper;
+    public WebHeadService() {
+    }
 
     private final BroadcastReceiver mRebindReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            boolean shouldRebind = intent.getBooleanExtra(SHOULD_REBIND, false);
+            boolean shouldRebind = intent.getBooleanExtra(Constants.EXTRA_KEY_REBIND_WEBHEAD_CXN, false);
             if (shouldRebind) bindToCustomTabSession();
         }
     };
-
 
     private final BroadcastReceiver mStopServiceReceiver = new BroadcastReceiver() {
         @Override
@@ -84,18 +80,8 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         }
     };
 
-
-    private boolean mCustomTabConnected;
-
-    public WebHeadService() {
-    }
-
     public static WebHeadService getInstance() {
         return sInstance;
-    }
-
-    private void initRemoveWebhead() {
-        RemoveWebHead.get(this);
     }
 
     @Override
@@ -114,9 +100,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
                 return;
             }
         }
-
         sInstance = this;
-
         mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
 
         // create a remove view
@@ -125,36 +109,38 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         // bind to custom tab session
         bindToCustomTabSession();
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(mRebindReceiver, new IntentFilter(REBIND_EVENT));
+        registerReceivers();
+    }
+
+    private void registerReceivers() {
+        IntentFilter localIntentFilter = new IntentFilter(Constants.ACTION_REBIND_WEBHEAD_TAB_CONNECTION);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRebindReceiver, localIntentFilter);
 
         // Register the receiver which will stop this service.
-        registerReceiver(mStopServiceReceiver, new IntentFilter(CLOSE_SERVICE));
+        registerReceiver(mStopServiceReceiver, new IntentFilter(Constants.ACTION_STOP_WEBHEAD_SERVICE));
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        processIntentAndLaunchBubble(intent);
+        processIntentAndWebHead(intent);
 
         showNotification();
-
         // addTestWebHeads();
         return START_STICKY;
     }
 
-    private void processIntentAndLaunchBubble(Intent intent) {
+    private void processIntentAndWebHead(Intent intent) {
         if (intent == null || intent.getDataString() == null) return; // don't do anything
 
         String urlToLoad = intent.getDataString();
-
         if (!isLinkAlreadyLoaded(urlToLoad)) {
             addWebHead(urlToLoad);
-
             if (mCustomTabConnected)
-                mCustomActivityHelper.mayLaunchUrl(Uri.parse(urlToLoad), null, getPossibleUrls());
+                mCustomTabBindingHelper.mayLaunchUrl(Uri.parse(urlToLoad), null, getPossibleUrls());
             else
                 deferMayLaunchUntilConnected(urlToLoad);
         } else
-            Toast.makeText(this, "Already loaded", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.already_loaded, Toast.LENGTH_SHORT).show();
     }
 
     private void addWebHead(final String webHeadUrl) {
@@ -201,7 +187,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     private void showNotification() {
         PendingIntent contentIntent = PendingIntent.getBroadcast(this,
                 0,
-                new Intent(CLOSE_SERVICE),
+                new Intent(Constants.ACTION_STOP_WEBHEAD_SERVICE),
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification notification = new NotificationCompat.Builder(this)
@@ -240,7 +226,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
                     try {
                         if (mCustomTabConnected) {
                             Thread.sleep(300);
-                            boolean ok = mCustomActivityHelper.mayLaunchUrl(Uri.parse(urlToLoad),
+                            boolean ok = mCustomTabBindingHelper.mayLaunchUrl(Uri.parse(urlToLoad),
                                     null,
                                     getPossibleUrls());
                             Timber.d("Deferred may launch was %b", ok);
@@ -267,7 +253,6 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         Stack<String> urlStack = getUrlStack(sLastOpenedUrl);
         if (urlStack.size() > 0) {
             String priorityUrl = urlStack.pop();
-
             if (priorityUrl == null) return;
 
             Timber.d("Priority : %s", priorityUrl);
@@ -282,9 +267,8 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
                 possibleUrls.add(bundle);
                 Timber.d("Others : %s", url);
             }
-
             // Now let's prepare urls
-            boolean ok = mCustomActivityHelper.mayLaunchUrl(Uri.parse(priorityUrl), null, possibleUrls);
+            boolean ok = mCustomTabBindingHelper.mayLaunchUrl(Uri.parse(priorityUrl), null, possibleUrls);
             Timber.d("May launch was %b", ok);
         }
     }
@@ -324,18 +308,18 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     }
 
     private void bindToCustomTabSession() {
-        if (mCustomActivityHelper != null) {
+        if (mCustomTabBindingHelper != null) {
             // Already an instance exists, so we will un bind the current connection and then
             // bind again.
             Timber.d("Severing existing connection");
-            mCustomActivityHelper.unbindCustomTabsService(this);
+            mCustomTabBindingHelper.unbindCustomTabsService(this);
         }
 
-        mCustomActivityHelper = new CustomActivityHelper();
-        mCustomActivityHelper.setConnectionCallback(this);
-        mCustomActivityHelper.setNavigationCallback(new WebHeadNavigationCallback());
+        mCustomTabBindingHelper = new CustomTabBindingHelper();
+        mCustomTabBindingHelper.setConnectionCallback(this);
+        mCustomTabBindingHelper.setNavigationCallback(new WebHeadNavigationCallback());
 
-        boolean ok = mCustomActivityHelper.bindCustomTabsService(this);
+        boolean ok = mCustomTabBindingHelper.bindCustomTabsService(this);
         if (ok) Timber.d("Binding successful");
     }
 
@@ -351,11 +335,11 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     @Override
     public void onWebHeadClick(@NonNull WebHead webHead) {
         if (webHead.getUrl() != null && webHead.getUrl().length() != 0) {
-            Intent webHeadActivity = new Intent(this, CustomTabActivity.class);
-            webHeadActivity.setData(Uri.parse(webHead.getUrl()));
-            webHeadActivity.putExtra(Constants.FROM_WEBHEAD, true);
-            webHeadActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(webHeadActivity);
+            Intent customTabActivity = new Intent(this, CustomTabActivity.class);
+            customTabActivity.setData(Uri.parse(webHead.getUrl()));
+            customTabActivity.putExtra(Constants.EXTRA_KEY_FROM_WEBHEAD, true);
+            customTabActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(customTabActivity);
 
             // Store the last opened url
             sLastOpenedUrl = webHead.getUrl();
@@ -406,7 +390,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRebindReceiver);
 
-        if (mCustomActivityHelper != null) mCustomActivityHelper.unbindCustomTabsService(this);
+        if (mCustomTabBindingHelper != null) mCustomTabBindingHelper.unbindCustomTabsService(this);
 
         sInstance = null;
 
@@ -415,7 +399,6 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         stopForeground(true);
 
         RemoveWebHead.destroy();
-
         super.onDestroy();
     }
 
@@ -423,6 +406,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Timber.d(newConfig.toString());
+        // TODO handle webhead positions after orientations change.
     }
 
     @Override
@@ -437,25 +421,29 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     }
 
     public CustomTabsSession getTabSession() {
-        if (mCustomActivityHelper != null) {
-            return mCustomActivityHelper.getSession();
+        if (mCustomTabBindingHelper != null) {
+            return mCustomTabBindingHelper.getSession();
         }
         return null;
+    }
+
+    private void initRemoveWebhead() {
+        RemoveWebHead.get(this);
     }
 
     private void hideRemoveView() {
         RemoveWebHead.hideSelf();
     }
 
-
     @SuppressWarnings("unused")
     private void runOnUiThread(Runnable r) {
         new Handler(Looper.getMainLooper()).post(r);
     }
 
-    private class WebHeadNavigationCallback extends CustomActivityHelper.NavigationCallback {
+    private class WebHeadNavigationCallback extends CustomTabBindingHelper.NavigationCallback {
         @Override
         public void onNavigationEvent(int navigationEvent, Bundle extras) {
+            // TODO Implement something useful with this callbacks
             switch (navigationEvent) {
                 case TAB_SHOWN:
 

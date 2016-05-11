@@ -33,7 +33,7 @@ public class AddHomeShortcutReceiver extends BroadcastReceiver {
                 String hostName = Uri.parse(urlToAdd).getHost();
                 String shortcutName = hostName == null ? urlToAdd : hostName;
 
-                Intent addIntent = new Intent(Constants.INSTALL_SHORTCUT_ACTION);
+                Intent addIntent = new Intent(Constants.ACTION_INSTALL_SHORTCUT);
                 addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, webIntent);
                 addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, shortcutName);
                 addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,

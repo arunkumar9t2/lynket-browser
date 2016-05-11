@@ -13,6 +13,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsService;
 import android.support.customtabs.CustomTabsSession;
 import android.support.v4.content.ContextCompat;
@@ -29,7 +30,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import arun.com.chromer.R;
-import arun.com.chromer.customtabs.CustomActivityHelper;
+import arun.com.chromer.customtabs.CustomTabBindingHelper;
 import arun.com.chromer.customtabs.warmup.WarmupService;
 import arun.com.chromer.preferences.Preferences;
 import timber.log.Timber;
@@ -37,7 +38,7 @@ import timber.log.Timber;
 /**
  * Created by Arun on 06/01/2016.
  */
-public class ScannerService extends AccessibilityService implements CustomActivityHelper.ConnectionCallback {
+public class ScannerService extends AccessibilityService implements CustomTabBindingHelper.ConnectionCallback {
 
     private static ScannerService sInstance = null;
 
@@ -48,7 +49,7 @@ public class ScannerService extends AccessibilityService implements CustomActivi
     private static final int MAX_URL = 3;
     private static final int URL_PREDICTION_DEPTH = 3;
 
-    private CustomActivityHelper mCustomActivityHelper;
+    private CustomTabBindingHelper mCustomTabBindingHelper;
 
     private String mLastFetchedUrl = "";
     private String mLastPriorityUrl;
@@ -73,15 +74,15 @@ public class ScannerService extends AccessibilityService implements CustomActivi
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (mCustomActivityHelper != null) {
+        if (mCustomTabBindingHelper != null) {
             Timber.d("Severing existing connection");
-            mCustomActivityHelper.unbindCustomTabsService(this);
+            mCustomTabBindingHelper.unbindCustomTabsService(this);
         }
 
-        mCustomActivityHelper = new CustomActivityHelper();
-        mCustomActivityHelper.setConnectionCallback(this);
+        mCustomTabBindingHelper = new CustomTabBindingHelper();
+        mCustomTabBindingHelper.setConnectionCallback(this);
 
-        boolean success = mCustomActivityHelper.bindCustomTabsService(this);
+        boolean success = mCustomTabBindingHelper.bindCustomTabsService(this);
         Timber.d("Was bound %b", success);
 
         return super.onStartCommand(intent, flags, startId);
@@ -91,15 +92,16 @@ public class ScannerService extends AccessibilityService implements CustomActivi
     public boolean onUnbind(Intent intent) {
         sInstance = null;
 
-        if (mCustomActivityHelper != null)
-            mCustomActivityHelper.unbindCustomTabsService(this);
+        if (mCustomTabBindingHelper != null)
+            mCustomTabBindingHelper.unbindCustomTabsService(this);
 
         return super.onUnbind(intent);
     }
 
+    @Nullable
     public CustomTabsSession getTabSession() {
-        if (mCustomActivityHelper != null) {
-            return mCustomActivityHelper.getSession();
+        if (mCustomTabBindingHelper != null) {
+            return mCustomTabBindingHelper.getSession();
         }
         return null;
     }
@@ -108,7 +110,7 @@ public class ScannerService extends AccessibilityService implements CustomActivi
     public boolean mayLaunchUrl(Uri uri, List<Bundle> possibleUrls) {
         if (!Preferences.preFetch(this)) return false;
 
-        boolean ok = mCustomActivityHelper.mayLaunchUrl(uri, null, possibleUrls);
+        boolean ok = mCustomTabBindingHelper.mayLaunchUrl(uri, null, possibleUrls);
         Timber.d("Warm up %b", ok);
         return ok;
     }
@@ -196,7 +198,7 @@ public class ScannerService extends AccessibilityService implements CustomActivi
                 boolean success;
                 if (mLastPriorityUrl != null) {
                     if (!mLastPriorityUrl.equalsIgnoreCase(mLastFetchedUrl)) {
-                        success = mCustomActivityHelper.mayLaunchUrl(Uri.parse(mLastPriorityUrl), null, possibleUrls);
+                        success = mCustomTabBindingHelper.mayLaunchUrl(Uri.parse(mLastPriorityUrl), null, possibleUrls);
                         if (success) mLastFetchedUrl = mLastPriorityUrl;
                     } else {
                         Timber.d("Ignored, already fetched");
@@ -328,8 +330,8 @@ public class ScannerService extends AccessibilityService implements CustomActivi
 
     @Override
     public void onDestroy() {
-        if (mCustomActivityHelper != null)
-            mCustomActivityHelper.unbindCustomTabsService(this);
+        if (mCustomTabBindingHelper != null)
+            mCustomTabBindingHelper.unbindCustomTabsService(this);
         clearHolders();
         super.onDestroy();
     }
