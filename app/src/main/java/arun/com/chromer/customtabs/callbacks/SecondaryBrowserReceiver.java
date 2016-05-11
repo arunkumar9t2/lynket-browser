@@ -50,8 +50,7 @@ public class SecondaryBrowserReceiver extends BroadcastReceiver {
 
         Intent webIntentImplicit = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         webIntentImplicit.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        List<ResolveInfo> resolvedActivityList = context.getPackageManager()
-                .queryIntentActivities(webIntentImplicit, PackageManager.MATCH_ALL);
+        List<ResolveInfo> resolvedActivityList = context.getPackageManager().queryIntentActivities(webIntentImplicit, PackageManager.MATCH_ALL);
 
         String secondaryPackage = Preferences.secondaryBrowserPackage(context);
 
@@ -61,8 +60,7 @@ public class SecondaryBrowserReceiver extends BroadcastReceiver {
                 if (info.activityInfo.packageName.equalsIgnoreCase(secondaryPackage)) {
                     found = true;
 
-                    ComponentName componentName = new ComponentName(info.activityInfo.packageName,
-                            info.activityInfo.name);
+                    ComponentName componentName = new ComponentName(info.activityInfo.packageName, info.activityInfo.name);
                     webIntentImplicit.setComponent(componentName);
 
                     // This will be the new component, so write it to preferences

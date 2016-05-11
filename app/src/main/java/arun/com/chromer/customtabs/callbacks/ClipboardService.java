@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import arun.com.chromer.R;
 
+// TODO Rewrite this using broadcast receiver
 public class ClipboardService extends IntentService {
     public ClipboardService() {
         super("ClipboardService");
@@ -18,7 +19,6 @@ public class ClipboardService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-
         final String urlToCopy = intent.getDataString();
         if (urlToCopy != null) {
             ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);

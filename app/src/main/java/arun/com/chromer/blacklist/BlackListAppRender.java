@@ -36,6 +36,7 @@ import arun.com.chromer.model.App;
  */
 public class BlackListAppRender extends RecyclerView.Adapter<BlackListAppRender.ViewHolder> {
     private static Drawable mPlaceholder;
+
     private final Context mContext;
     private final List<App> apps;
     private ItemClickListener mExternalListener;

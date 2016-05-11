@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.BrowserInterceptActivity;
+import arun.com.chromer.util.Constants;
 import timber.log.Timber;
 
 import static android.widget.Toast.LENGTH_SHORT;
@@ -24,25 +25,23 @@ public class AddHomeShortcutReceiver extends BroadcastReceiver {
             if (urlToAdd != null) {
                 Timber.d("Attempting to add for %s", urlToAdd);
 
-                Intent openTabIntent = new Intent(context, BrowserInterceptActivity.class);
-                openTabIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                openTabIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                openTabIntent.setData(Uri.parse(urlToAdd));
+                Intent webIntent = new Intent(context, BrowserInterceptActivity.class);
+                webIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                webIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                webIntent.setData(Uri.parse(urlToAdd));
 
-                String shortcutName = Uri.parse(urlToAdd).getHost() == null
-                        ? urlToAdd : Uri.parse(urlToAdd).getHost();
+                String hostName = Uri.parse(urlToAdd).getHost();
+                String shortcutName = hostName == null ? urlToAdd : hostName;
 
-                Intent addIntent = new Intent();
-                addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, openTabIntent);
+                Intent addIntent = new Intent(Constants.INSTALL_SHORTCUT_ACTION);
+                addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, webIntent);
                 addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, shortcutName);
                 addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
                         Intent.ShortcutIconResource.fromContext(context, R.mipmap.ic_launcher));
-                addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
 
                 context.sendBroadcast(addIntent);
 
-                Toast.makeText(context, context.getString(R.string.added) + " " + shortcutName,
-                        LENGTH_SHORT).show();
+                Toast.makeText(context, context.getString(R.string.added) + " " + shortcutName, LENGTH_SHORT).show();
             }
         }
 

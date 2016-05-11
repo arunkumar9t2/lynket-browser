@@ -56,13 +56,9 @@ public class ScannerService extends AccessibilityService implements CustomActivi
     private boolean mShouldStopExtraction = false;
 
     private final Stack<AccessibilityNodeInfo> mTreeTraversingStack = new Stack<>();
-
     private final Queue<String> mExtractedUrlQueue = new LinkedList<>();
-
     private final LinkedList<CharSequence> mLastTopTexts = new LinkedList<>();
-
     private final LinkedList<CharSequence> mLocalTopTexts = new LinkedList<>();
-
     private final List<String> mBrowserList = new LinkedList<>();
 
     public static ScannerService getInstance() {
@@ -95,7 +91,8 @@ public class ScannerService extends AccessibilityService implements CustomActivi
     public boolean onUnbind(Intent intent) {
         sInstance = null;
 
-        if (mCustomActivityHelper != null) mCustomActivityHelper.unbindCustomTabsService(this);
+        if (mCustomActivityHelper != null)
+            mCustomActivityHelper.unbindCustomTabsService(this);
 
         return super.onUnbind(intent);
     }
@@ -113,7 +110,6 @@ public class ScannerService extends AccessibilityService implements CustomActivi
 
         boolean ok = mCustomActivityHelper.mayLaunchUrl(uri, null, possibleUrls);
         Timber.d("Warm up %b", ok);
-
         return ok;
     }
 
@@ -160,8 +156,6 @@ public class ScannerService extends AccessibilityService implements CustomActivi
 
         if (shouldIgnoreEvent(event)) return;
 
-        Timber.d("NEW EVENT");
-
         try {
             stopWarmUpService();
 
@@ -169,13 +163,10 @@ public class ScannerService extends AccessibilityService implements CustomActivi
 
             // Traverse the tree and act on every text
             mTreeTraversingStack.push(activeWindowRoot);
-
             while (!mTreeTraversingStack.empty() && mExtractedUrlQueue.size() < MAX_URL && !mShouldStopExtraction) {
                 AccessibilityNodeInfo currNode = mTreeTraversingStack.pop();
                 if (currNode != null) {
-
                     processNode(currNode);
-
                     for (int i = 0; i < currNode.getChildCount() && !mShouldStopExtraction; i++) {
                         mTreeTraversingStack.push(currNode.getChild(i));
                     }
@@ -193,7 +184,6 @@ public class ScannerService extends AccessibilityService implements CustomActivi
                 Timber.d("Priority : %s", mLastPriorityUrl);
 
                 List<Bundle> possibleUrls = new ArrayList<>();
-
                 for (String url : mExtractedUrlQueue) {
                     if (url == null) continue;
 
@@ -205,7 +195,6 @@ public class ScannerService extends AccessibilityService implements CustomActivi
 
                 boolean success;
                 if (mLastPriorityUrl != null) {
-
                     if (!mLastPriorityUrl.equalsIgnoreCase(mLastFetchedUrl)) {
                         success = mCustomActivityHelper.mayLaunchUrl(Uri.parse(mLastPriorityUrl), null, possibleUrls);
                         if (success) mLastFetchedUrl = mLastPriorityUrl;
@@ -239,7 +228,6 @@ public class ScannerService extends AccessibilityService implements CustomActivi
             return packageName.equalsIgnoreCase(Preferences.customTabApp(this))
                     || getBrowserPackageList().contains(packageName);
         }
-
         return false;
     }
 
@@ -263,8 +251,6 @@ public class ScannerService extends AccessibilityService implements CustomActivi
 
             if (mLocalTopTexts.size() < URL_PREDICTION_DEPTH) mLocalTopTexts.add(node.getText());
             if (mLastTopTexts.size() < URL_PREDICTION_DEPTH) mLastTopTexts.add(node.getText());
-
-            // Timber.d("Last top: %s, Local: %s", mLastTopTexts, mLocalTopTexts);
 
             if (mLastTopTexts.equals(mLocalTopTexts) && mLastTopTexts.size() == URL_PREDICTION_DEPTH) {
                 Timber.d("Predicted no url in current screen, stopping.");

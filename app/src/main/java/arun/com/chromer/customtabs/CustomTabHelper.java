@@ -2,6 +2,8 @@ package arun.com.chromer.customtabs;
 
 
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -10,12 +12,14 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.text.TextUtils;
-import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import arun.com.chromer.R;
 import arun.com.chromer.util.Util;
+import timber.log.Timber;
 
 // Copyright 2015 Google Inc. All Rights Reserved.
 //
@@ -35,15 +39,34 @@ import arun.com.chromer.util.Util;
  * Helper class for Custom Tabs.
  */
 public class CustomTabHelper {
-    public static final String ACTION_CUSTOM_TABS_CONNECTION =
-            "android.support.customtabs.action.CustomTabsService";
+    public static final String ACTION_CUSTOM_TABS_CONNECTION = "android.support.customtabs.action.CustomTabsService";
     public static final String STABLE_PACKAGE = "com.android.chrome";
     public static final String BETA_PACKAGE = "com.chrome.beta";
     public static final String DEV_PACKAGE = "com.chrome.dev";
     private static final String LOCAL_PACKAGE = "com.google.android.apps.chrome";
-    private static final String TAG = CustomTabHelper.class.getSimpleName();
-    private static final String EXTRA_CUSTOM_TABS_KEEP_ALIVE =
-            "android.support.customtabs.extra.KEEP_ALIVE";
+
+    public final static CustomActivityHelper.CustomTabsFallback CUSTOM_TABS_FALLBACK =
+            new CustomActivityHelper.CustomTabsFallback() {
+                @Override
+                public void openUri(Activity activity, Uri uri) {
+                    if (activity != null) {
+                        Toast.makeText(activity,
+                                activity.getString(R.string.fallback_msg),
+                                Toast.LENGTH_SHORT).show();
+                        try {
+                            activity.startActivity(Intent.createChooser(
+                                    new Intent(Intent.ACTION_VIEW, uri),
+                                    activity.getString(R.string.open_with)));
+                        } catch (ActivityNotFoundException e) {
+                            Toast.makeText(activity,
+                                    activity.getString(R.string.unxp_err), Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                    }
+                }
+            };
+
+    private static final String EXTRA_CUSTOM_TABS_KEEP_ALIVE = "android.support.customtabs.extra.KEEP_ALIVE";
     private static String sPackageNameToUse;
 
     private CustomTabHelper() {
@@ -51,7 +74,8 @@ public class CustomTabHelper {
 
     public static void addKeepAliveExtra(Context context, Intent intent) {
         Intent keepAliveIntent = new Intent().setClassName(
-                context.getPackageName(), KeepAliveService.class.getCanonicalName());
+                context.getPackageName(),
+                KeepAliveService.class.getCanonicalName());
         intent.putExtra(EXTRA_CUSTOM_TABS_KEEP_ALIVE, keepAliveIntent);
     }
 
@@ -59,7 +83,7 @@ public class CustomTabHelper {
      * Goes through all apps that handle VIEW intents and have a warmup service. Picks
      * the one chosen by the user if there is one, otherwise makes a best effort to return a
      * valid package name.
-     * <p/>
+     * <p>
      * This is <strong>not</strong> threadsafe.
      *
      * @param context {@link Context} to use for accessing {@link PackageManager}.
@@ -160,7 +184,7 @@ public class CustomTabHelper {
                 return true;
             }
         } catch (RuntimeException e) {
-            Log.e(TAG, "Runtime exception while getting specialized handlers");
+            Timber.e("Runtime exception while getting specialized handlers");
         }
         return false;
     }

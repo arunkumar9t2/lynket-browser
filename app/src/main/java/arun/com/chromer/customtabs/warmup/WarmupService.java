@@ -33,6 +33,12 @@ public class WarmupService extends Service implements CustomActivityHelper.Conne
     }
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        mWarmupService = this;
+    }
+
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (mCustomActivityHelper != null) {
             // Already an instance exists, so we will un bind the current connection and then bind again.
@@ -44,8 +50,7 @@ public class WarmupService extends Service implements CustomActivityHelper.Conne
         mCustomActivityHelper = new CustomActivityHelper();
         mCustomActivityHelper.setConnectionCallback(this);
         boolean success = mCustomActivityHelper.bindCustomTabsService(this);
-        Timber.d("Was binded %b", success);
-        mWarmupService = this;
+        Timber.d("Was bound %b", success);
         return START_STICKY;
     }
 

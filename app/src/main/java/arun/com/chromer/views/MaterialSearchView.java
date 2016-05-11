@@ -98,7 +98,7 @@ public class MaterialSearchView extends FrameLayout {
 
     private void hideKeyboard() {
         ((InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
-                .toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                .hideSoftInputFromWindow(getWindowToken(), 0);
     }
 
     private void gainFocus() {

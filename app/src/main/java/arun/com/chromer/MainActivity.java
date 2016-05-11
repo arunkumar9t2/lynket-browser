@@ -173,16 +173,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             //noinspection ConstantConditions
             findViewById(R.id.merge_tabs_apps_layout).setVisibility(View.VISIBLE);
         }
-
-        if (savedInstanceState != null) {
-            mColorSelection = savedInstanceState.getString(Constants.COLOR_SELECTION);
-        }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putString(Constants.COLOR_SELECTION, mColorSelection);
-        super.onSaveInstanceState(outState);
     }
 
     private void attachFragments() {
@@ -317,7 +307,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             }
         });
 
-        // TODO - only allow if API level = 21+
         SwitchCompat mergeTabsSwitch = (SwitchCompat) findViewById(R.id.merge_tabs_switch);
         //noinspection ConstantConditions
         mergeTabsSwitch.setChecked(mergeTabs);
@@ -325,7 +314,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Preferences.mergeTabs(getApplicationContext(), isChecked);
-                //ServicesUtil.takeCareOfServices(getApplicationContext());
             }
         });
     }
@@ -377,7 +365,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         dialog.dismiss();
                         startActivityForResult(new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS), 0);
-                        // Close the dialog to avoid potential memory leak
                     }
                 })
                 .show();
@@ -676,7 +663,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 startService(webHeadService);
             } else {
                 CustomTabsIntent customTabsIntent = CustomTabDelegate.getCustomizedTabIntent(getApplicationContext(), url, false);
-                CustomActivityHelper.openCustomTab(this, customTabsIntent, Uri.parse(url), Util.CUSTOM_TABS_FALLBACK);
+                CustomActivityHelper.openCustomTab(this, customTabsIntent, Uri.parse(url), CustomTabHelper.CUSTOM_TABS_FALLBACK);
             }
         }
     }

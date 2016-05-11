@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
@@ -13,7 +14,6 @@ import java.util.List;
 import arun.com.chromer.R;
 import arun.com.chromer.util.Constants;
 import arun.com.chromer.util.Util;
-import timber.log.Timber;
 
 public class ShareInterceptActivity extends AppCompatActivity {
 
@@ -26,13 +26,12 @@ public class ShareInterceptActivity extends AppCompatActivity {
         try {
             if (intent != null) {
                 if (intent.getAction().equalsIgnoreCase(Intent.ACTION_SEND)) {
-                    @SuppressWarnings("ConstantConditions") String text = intent.hasExtra(Intent.EXTRA_TEXT) ?
+                    @SuppressWarnings("ConstantConditions")
+                    String text = intent.hasExtra(Intent.EXTRA_TEXT) ?
                             intent.getExtras().getCharSequence(Intent.EXTRA_TEXT).toString() : null;
-                    Timber.d("Intent. Text: %s", text);
                     findAndOpenLink(text);
                 } else if (intent.getAction().equalsIgnoreCase(Intent.ACTION_PROCESS_TEXT)) {
                     final String text = intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT);
-                    Timber.d("Process Text Intent. Text: %s", text);
                     findAndOpenLink(text);
                 }
             }
@@ -47,22 +46,23 @@ public class ShareInterceptActivity extends AppCompatActivity {
             // use only the first link
             String url = urls.get(0);
 
-            openInTabActivity(url);
+            openLink(url);
         } else {
             // No urls were found, so lets do a google search with the text received.
             text = Constants.SEARCH_URL + text.replace(" ", "+");
-            openInTabActivity(text);
+            openLink(text);
         }
     }
 
-    private void openInTabActivity(String url) {
+    private void openLink(@Nullable String url) {
         if (url == null) {
             invalidLink();
         }
-        Intent tabActivity = new Intent(this, BrowserInterceptActivity.class);
-        tabActivity.setData(Uri.parse(url));
 
-        startActivity(tabActivity);
+        Intent websiteIntent = new Intent(this, BrowserInterceptActivity.class);
+        websiteIntent.setData(Uri.parse(url));
+
+        startActivity(websiteIntent);
         finish();
     }
 

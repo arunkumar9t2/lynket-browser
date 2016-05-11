@@ -17,6 +17,7 @@ public class Constants {
     public static final String DATABASE_NAME = "database.db";
     public static final String OLD_DATABASE_NAME = "Chromer_database.db";
     public static final String ACTION_TOOLBAR_COLOR_SET = "ACTION_TOOLBAR_COLOR_SET";
+    public static final String INSTALL_SHORTCUT_ACTION = "com.android.launcher.action.INSTALL_SHORTCUT";
 
     private Constants() {
         throw new UnsupportedOperationException("Cannot instantiate");

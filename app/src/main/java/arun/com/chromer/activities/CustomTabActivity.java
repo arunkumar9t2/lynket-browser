@@ -10,9 +10,9 @@ import android.widget.Toast;
 import arun.com.chromer.R;
 import arun.com.chromer.customtabs.CustomActivityHelper;
 import arun.com.chromer.customtabs.CustomTabDelegate;
+import arun.com.chromer.customtabs.CustomTabHelper;
 import arun.com.chromer.preferences.Preferences;
 import arun.com.chromer.util.Constants;
-import arun.com.chromer.util.Util;
 
 public class CustomTabActivity extends AppCompatActivity {
 
@@ -34,7 +34,7 @@ public class CustomTabActivity extends AppCompatActivity {
             tabIntent.intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         }
 
-        CustomActivityHelper.openCustomTab(this, tabIntent, Uri.parse(url), Util.CUSTOM_TABS_FALLBACK);
+        CustomActivityHelper.openCustomTab(this, tabIntent, Uri.parse(url), CustomTabHelper.CUSTOM_TABS_FALLBACK);
 
         finish();
     }

@@ -150,7 +150,6 @@ public class BlacklistManagerActivity extends AppCompatActivity implements Black
                 blackListSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
                         if (isChecked && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !Util.canReadUsageStats(getApplicationContext())) {
                             buttonView.setChecked(false);
                             requestUsagePermission();
@@ -183,10 +182,10 @@ public class BlacklistManagerActivity extends AppCompatActivity implements Black
 
     private void updateBlacklists(String packageName, boolean checked) {
         if (packageName == null) return;
-        List<BlacklistedApps> blacklisted = BlacklistedApps.find(BlacklistedApps.class, "package_name = ?", packageName);
+        List<BlacklistedApps> blacklistedList = BlacklistedApps.find(BlacklistedApps.class, "package_name = ?", packageName);
         BlacklistedApps blackListedApp = null;
-        if (blacklisted.size() > 0 && blacklisted.get(0).getPackageName().equalsIgnoreCase(packageName)) {
-            blackListedApp = blacklisted.get(0);
+        if (blacklistedList.size() > 0 && blacklistedList.get(0).getPackageName().equalsIgnoreCase(packageName)) {
+            blackListedApp = blacklistedList.get(0);
         }
         if (checked) {
             if (blackListedApp == null) {
