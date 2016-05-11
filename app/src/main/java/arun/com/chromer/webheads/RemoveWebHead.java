@@ -230,7 +230,7 @@ public class RemoveWebHead extends FrameLayout {
         public RemoveHeadCircle(Context context) {
             super(context);
             mBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            mBgPaint.setColor(ContextCompat.getColor(getContext(), R.color.md_red_500));
+            mBgPaint.setColor(ContextCompat.getColor(getContext(), R.color.remove_web_head_color));
             mBgPaint.setStyle(Paint.Style.FILL);
 
             float shadwR = context.getResources().getDimension(R.dimen.remove_head_shadow_radius);
