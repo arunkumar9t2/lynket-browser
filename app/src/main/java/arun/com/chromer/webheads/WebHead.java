@@ -222,10 +222,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
                     posX = event.getRawX();
                     posY = event.getRawY();
 
-                    // Shrink on touch
-                    setTouchingScale();
-                    // transparent on touch
-                    setTouchingAlpha();
+                    updateVisualsTouchDown();
                     break;
                 case MotionEvent.ACTION_MOVE:
                     mMovementTracker.addMovement(event);
@@ -249,11 +246,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
                         destroySelf(true);
                         return true;
                     }
-
-                    // Expand on release
-                    setReleaseScale();
-                    // opaque on release
-                    setReleaseAlpha();
+                    UpdateVisualsTouchUp();
                     // hide remove view
                     RemoveWebHead.hideSelf();
 
@@ -311,8 +304,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
 
         if (isNearRemoveCircle(x, y)) {
             getRemoveWebHead().grow();
-            setReleaseAlpha();
-            setReleaseScale();
+            UpdateVisualsTouchUp();
 
             mXSpring.setSpringConfig(SNAP_CONFIG);
             mYSpring.setSpringConfig(SNAP_CONFIG);
@@ -328,8 +320,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
             mXSpring.setCurrentValue(x).setAtRest();
             mYSpring.setCurrentValue(y).setAtRest();
 
-            setTouchingAlpha();
-            setTouchingScale();
+            updateVisualsTouchDown();
         }
     }
 
@@ -351,11 +342,8 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         }
     }
 
-    private void setReleaseScale() {
+    private void UpdateVisualsTouchUp() {
         mScaleSpring.setEndValue(1f);
-    }
-
-    private void setReleaseAlpha() {
         if (!mDimmed) {
             circleView.setAlpha(1f);
             if (mFavicon != null) {
@@ -364,17 +352,14 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         }
     }
 
-    private void setTouchingAlpha() {
+    private void updateVisualsTouchDown() {
+        mScaleSpring.setEndValue(0.8f);
         if (!mDimmed) {
             circleView.setAlpha(0.7f);
             if (mFavicon != null) {
                 mFavicon.setAlpha(0.7f);
             }
         }
-    }
-
-    private void setTouchingScale() {
-        mScaleSpring.setEndValue(0.8f);
     }
 
     private int getAdaptWidth() {
