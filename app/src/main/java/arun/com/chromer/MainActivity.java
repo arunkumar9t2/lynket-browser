@@ -743,7 +743,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
                 break;
             case R.string.web_heads_color:
-                Intent webHeadColorIntent = new Intent(Constants.ACTION_TOOLBAR_COLOR_SET);
+                Intent webHeadColorIntent = new Intent(Constants.ACTION_WEBHEAD_COLOR_SET);
                 webHeadColorIntent.putExtra(Constants.EXTRA_KEY_WEBHEAD_COLOR, selectedColor);
                 LocalBroadcastManager.getInstance(this).sendBroadcast(webHeadColorIntent);
                 break;

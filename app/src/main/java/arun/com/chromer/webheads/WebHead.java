@@ -2,6 +2,7 @@ package arun.com.chromer.webheads;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -15,6 +16,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -395,6 +397,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         return (float) Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
 
+    @Nullable
     public ValueAnimator getStackDistanceAnimator() {
         ValueAnimator animator = null;
         if (!mUserManuallyMoved) {
@@ -405,6 +408,32 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
                 public void onAnimationUpdate(ValueAnimator animation) {
                     mWindowParams.y = (int) animation.getAnimatedValue();
                     sWindowManager.updateViewLayout(WebHead.this, mWindowParams);
+                }
+            });
+        }
+        return animator;
+    }
+
+    @Nullable
+    public ValueAnimator getColorChangeAnimator(@ColorInt int newColor) {
+        ValueAnimator animator = null;
+        if (circleView != null) {
+            int oldColor = circleView.getWebHeadColor();
+            if (Util.isLollipop()) {
+                animator = ValueAnimator.ofArgb(oldColor, newColor);
+            } else {
+                // TODO Replace with backported color evaluator
+                animator = new ValueAnimator();
+                animator.setIntValues(newColor, oldColor);
+                animator.setEvaluator(new ArgbEvaluator());
+            }
+            animator.setDuration(500);
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    if (circleView != null) {
+                        circleView.setWebHeadColor((Integer) animation.getAnimatedValue());
+                    }
                 }
             });
         }
@@ -722,6 +751,11 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         public void setWebHeadColor(@ColorInt int webHeadColor) {
             mWebHeadColor = webHeadColor;
             invalidate();
+        }
+
+        @ColorInt
+        public int getWebHeadColor() {
+            return mWebHeadColor;
         }
 
         private void drawText(Canvas canvas) {

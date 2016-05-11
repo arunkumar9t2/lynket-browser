@@ -98,6 +98,10 @@ public class Util {
         }
     }
 
+    public static boolean isLollipop() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
+    }
+
     public static String getAppNameWithPackage(@NonNull Context context, @NonNull String pack) {
         final PackageManager pm = context.getApplicationContext().getPackageManager();
         ApplicationInfo ai;

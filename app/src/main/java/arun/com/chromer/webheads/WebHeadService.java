@@ -19,6 +19,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.provider.Settings;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsService;
 import android.support.customtabs.CustomTabsSession;
@@ -41,6 +42,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import arun.com.chromer.R;
@@ -56,7 +58,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     private static WebHeadService sInstance = null;
     private static String sLastOpenedUrl = "";
 
-    private final LinkedHashMap<String, WebHead> mWebHeads = new LinkedHashMap<>();
+    private final Map<String, WebHead> mWebHeads = new LinkedHashMap<>();
     private boolean mCustomTabConnected;
     private WindowManager mWindowManager;
     private CustomTabBindingHelper mCustomTabBindingHelper;
@@ -64,11 +66,22 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     public WebHeadService() {
     }
 
-    private final BroadcastReceiver mRebindReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mLocalReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            boolean shouldRebind = intent.getBooleanExtra(Constants.EXTRA_KEY_REBIND_WEBHEAD_CXN, false);
-            if (shouldRebind) bindToCustomTabSession();
+            switch (intent.getAction()) {
+                case Constants.ACTION_REBIND_WEBHEAD_TAB_CONNECTION:
+                    boolean shouldRebind = intent.getBooleanExtra(Constants.EXTRA_KEY_REBIND_WEBHEAD_CXN, false);
+                    if (shouldRebind) bindToCustomTabSession();
+                    break;
+                case Constants.ACTION_WEBHEAD_COLOR_SET:
+                    // Update web heads colors
+                    int webHeadColor = intent.getIntExtra(Constants.EXTRA_KEY_WEBHEAD_COLOR, 0);
+                    if (webHeadColor != 0) {
+                        updateWebHeadColors(webHeadColor);
+                    }
+                    break;
+            }
         }
     };
 
@@ -114,7 +127,8 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
 
     private void registerReceivers() {
         IntentFilter localIntentFilter = new IntentFilter(Constants.ACTION_REBIND_WEBHEAD_TAB_CONNECTION);
-        LocalBroadcastManager.getInstance(this).registerReceiver(mRebindReceiver, localIntentFilter);
+        localIntentFilter.addAction(Constants.ACTION_WEBHEAD_COLOR_SET);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mLocalReceiver, localIntentFilter);
 
         // Register the receiver which will stop this service.
         registerReceiver(mStopServiceReceiver, new IntentFilter(Constants.ACTION_STOP_WEBHEAD_SERVICE));
@@ -332,6 +346,17 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         Timber.d("Webheads: %d", mWebHeads.size());
     }
 
+    private void updateWebHeadColors(@ColorInt int webHeadColor) {
+        AnimatorSet animatorSet = new AnimatorSet();
+        List<Animator> animators = new LinkedList<>();
+        for (WebHead webhead : mWebHeads.values()) {
+            Animator anim = webhead.getColorChangeAnimator(webHeadColor);
+            if (anim != null) animators.add(anim);
+        }
+        animatorSet.playTogether(animators);
+        animatorSet.start();
+    }
+
     @Override
     public void onWebHeadClick(@NonNull WebHead webHead) {
         if (webHead.getUrl() != null && webHead.getUrl().length() != 0) {
@@ -388,7 +413,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
 
         destroyAllWebHeads();
 
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRebindReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mLocalReceiver);
 
         if (mCustomTabBindingHelper != null) mCustomTabBindingHelper.unbindCustomTabsService(this);
 

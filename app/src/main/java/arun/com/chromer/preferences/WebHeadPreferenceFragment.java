@@ -128,7 +128,7 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
         getPreferenceScreen().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
         LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(mColorSelectionReceiver, new IntentFilter(Constants.ACTION_TOOLBAR_COLOR_SET));
+                .registerReceiver(mColorSelectionReceiver, new IntentFilter(Constants.ACTION_WEBHEAD_COLOR_SET));
         updatePreferenceSummary();
     }
 
