@@ -196,7 +196,7 @@ class MovementTracker {
      * By using the tracked gesture points, calculates the fling end point. This is done by assuming
      * a line from the 75% of the tracked points to last tracked point. Then calculateTrajectory is
      * used to find the end point.
-     * <p/>
+     * <p>
      * The threshold is assumed to be at 75% of the tracked length. Increased values would mean
      * accurate direction but can be prone to errors as end points can have spiked data.
      *
@@ -227,7 +227,7 @@ class MovementTracker {
             velocities = adjustVelocities(down, up, xVelocity, yVelocity);
         } else {
             velocities = null;
-            Timber.d("Automatic calculation failed");
+            Timber.e("Automatic calculation failed");
         }
         return velocities;
     }

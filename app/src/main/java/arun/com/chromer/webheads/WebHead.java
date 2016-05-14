@@ -155,13 +155,13 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         mWallAttachSpring.addListener(new SimpleSpringListener() {
             @Override
             public void onSpringUpdate(Spring spring) {
-                /*if (!mDragging) {
+                if (!mDragging) {
                     mWindowParams.x = (int) spring.getCurrentValue();
                     int yMax = (int) (sDispHeight * 0.85);
                     int yMin = Util.dpToPx(25);
                     mWindowParams.y = Math.max(yMin, Math.min(yMax, mWindowParams.y));
                     sWindowManager.updateViewLayout(WebHead.this, mWindowParams);
-                }*/
+                }
             }
         });
 
@@ -317,6 +317,8 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     }
 
     private void stickToWall() {
+        Timber.i("Sticking to wall");
+
         int x = mWindowParams.x;
         int dispCentre = sDispWidth / 2;
 
@@ -588,6 +590,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             //if ((Math.abs(velocityY) > MINIMUM_FLING_VELOCITY) || (Math.abs(velocityX) > MINIMUM_FLING_VELOCITY)) {
+            Timber.d(velocityX + " " + velocityY);
             mDragging = false;
 
             Coordinate adjustedVelocities = mMovementTracker.getAdjustedVelocities(velocityX, velocityY);
@@ -641,7 +644,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
             mYSpring.setEndValue(topBound);
         }
 
-        int minimumVelocityToReachSides = Util.dpToPx(50);
+        int minimumVelocityToReachSides = Util.dpToPx(100);
         if (!mWasRemoveLocked
                 && Math.abs(mXSpring.getVelocity()) < minimumVelocityToReachSides
                 && Math.abs(mYSpring.getVelocity()) < minimumVelocityToReachSides) {
