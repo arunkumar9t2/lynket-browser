@@ -459,7 +459,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     }
 
     private void hideRemoveView() {
-        RemoveWebHead.hideSelf();
+        RemoveWebHead.disappear();
     }
 
     @SuppressWarnings("unused")

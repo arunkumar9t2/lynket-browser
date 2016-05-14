@@ -117,7 +117,7 @@ public class RemoveWebHead extends FrameLayout {
                 .setInterpolator(new BounceInterpolator());
     }
 
-    public static void hideSelf() {
+    public static void disappear() {
         if (sOurInstance != null) {
             sOurInstance.hide();
         }
