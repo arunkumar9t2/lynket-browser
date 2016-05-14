@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
-import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -52,7 +51,7 @@ public class RemoveWebHead extends FrameLayout {
 
     private boolean mGrew;
 
-    private Point mCentrePoint;
+    private int[] mCentrePoint = null;
 
     @SuppressLint("RtlHardcoded")
     private RemoveWebHead(Context context, WindowManager windowManager) {
@@ -147,7 +146,7 @@ public class RemoveWebHead extends FrameLayout {
         return Math.max(getWidth(), RemoveHeadCircle.getSizePx());
     }
 
-    public Point getCenterCoordinates() {
+    public int[] getCenterCoordinates() {
         if (mCentrePoint == null) {
             initCentreCoords();
         }
@@ -158,7 +157,7 @@ public class RemoveWebHead extends FrameLayout {
         int offset = getAdaptWidth() / 2;
         int rX = getWindowParams().x + offset;
         int rY = getWindowParams().y + offset;
-        mCentrePoint = new Point(rX, rY);
+        mCentrePoint = new int[]{rX, rY};
     }
 
     private void setUpSprings() {

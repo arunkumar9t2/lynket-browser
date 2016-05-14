@@ -151,37 +151,37 @@ class MovementTracker {
     }
 
 
-    public static Coordinate adjustVelocities(Coordinate p1, Coordinate p2, float xVelocity, float yVelocity) {
-        float downX = p1.x;
-        float downY = p1.y;
+    public static float[] adjustVelocities(float[] p1, float[] p2, float xVelocity, float yVelocity) {
+        float downX = p1[0];
+        float downY = p1[1];
 
-        float upX = p2.x;
-        float upY = p2.y;
+        float upX = p2[0];
+        float upY = p2[1];
 
-        Coordinate velocities = new Coordinate();
+        float x = 0, y = 0;
 
         if (upX >= downX && upY >= downY) {
             // Bottom right
             // Timber.d("BR");
-            velocities.x = positive(xVelocity);
-            velocities.y = positive(yVelocity);
+            x = positive(xVelocity);
+            y = positive(yVelocity);
         } else if (upX >= downX && upY <= downY) {
             // Top right
             // Timber.d("TR");
-            velocities.x = positive(xVelocity);
-            velocities.y = negate(yVelocity);
+            x = positive(xVelocity);
+            y = negate(yVelocity);
         } else if (upX <= downX && upY <= downY) {
             // Top left
             // Timber.d("TL");
-            velocities.x = negate(xVelocity);
-            velocities.y = negate(yVelocity);
+            x = negate(xVelocity);
+            y = negate(yVelocity);
         } else if (upX <= downX && upY >= downY) {
             // Bottom left
             // Timber.d("BL");
-            velocities.x = negate(xVelocity);
-            velocities.y = positive(yVelocity);
+            x = negate(xVelocity);
+            y = positive(yVelocity);
         }
-        return velocities;
+        return new float[]{x, y};
     }
 
     private static float negate(float value) {
@@ -196,7 +196,7 @@ class MovementTracker {
      * By using the tracked gesture points, calculates the fling end point. This is done by assuming
      * a line from the 75% of the tracked points to last tracked point. Then calculateTrajectory is
      * used to find the end point.
-     * <p>
+     * <p/>
      * The threshold is assumed to be at 75% of the tracked length. Increased values would mean
      * accurate direction but can be prone to errors as end points can have spiked data.
      *
@@ -217,12 +217,14 @@ class MovementTracker {
         return projectedPoint;
     }
 
-    public Coordinate getAdjustedVelocities(float xVelocity, float yVelocity) {
+    public float[] getAdjustedVelocities(float xVelocity, float yVelocity) {
         int trackingThreshold = (int) (0.25 * mTrackingSize);
-        Coordinate velocities;
+        float[] velocities;
         if (mPoints.size() >= trackingThreshold) {
-            Coordinate up = mPoints.getLast();
-            Coordinate down = mPoints.get(mPoints.size() - trackingThreshold);
+            Coordinate downEvent = mPoints.get(mPoints.size() - trackingThreshold);
+
+            float[] up = new float[]{mPoints.getLast().x, mPoints.getLast().y};
+            float[] down = new float[]{downEvent.x, downEvent.y};
 
             velocities = adjustVelocities(down, up, xVelocity, yVelocity);
         } else {

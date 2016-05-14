@@ -9,7 +9,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
-import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -56,7 +55,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     private static final double MAGNETISM_THRESHOLD = Util.dpToPx(120);
 
     private static WindowManager sWindowManager;
-    private static Point sCentreLockPoint;
+    private static int[] sTrashLockCoordinate;
     private static int sDispHeight, sDispWidth;
 
     private final String mUrl;
@@ -273,8 +272,8 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
                 mXSpring.setSpringConfig(SNAP_CONFIG);
                 mYSpring.setSpringConfig(SNAP_CONFIG);
 
-                mXSpring.setEndValue(getCentreLockPoint().x);
-                mYSpring.setEndValue(getCentreLockPoint().y);
+                mXSpring.setEndValue(trashLockCoord()[0]);
+                mYSpring.setEndValue(trashLockCoord()[1]);
             } else {
                 getRemoveWebHead().shrink();
 
@@ -342,9 +341,9 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     }
 
     private boolean isNearRemoveCircle(int x, int y) {
-        Point p = getRemoveWebHead().getCenterCoordinates();
-        int rX = p.x;
-        int rY = p.y;
+        int[] p = getRemoveWebHead().getCenterCoordinates();
+        int rX = p[0];
+        int rY = p[1];
 
         int offset = getAdaptWidth() / 2;
         x += offset;
@@ -381,15 +380,15 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         } else return getWidth();
     }
 
-    private Point getCentreLockPoint() {
-        if (sCentreLockPoint == null) {
-            Point removeCentre = getRemoveWebHead().getCenterCoordinates();
+    private int[] trashLockCoord() {
+        if (sTrashLockCoordinate == null) {
+            int[] removeCentre = getRemoveWebHead().getCenterCoordinates();
             int offset = getAdaptWidth() / 2;
-            int x = removeCentre.x - offset;
-            int y = removeCentre.y - offset;
-            sCentreLockPoint = new Point(x, y);
+            int x = removeCentre[0] - offset;
+            int y = removeCentre[1] - offset;
+            sTrashLockCoordinate = new int[]{x, y};
         }
-        return sCentreLockPoint;
+        return sTrashLockCoordinate;
     }
 
     private float dist(double x1, double y1, double x2, double y2) {
@@ -597,11 +596,11 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
             // Timber.d(String.valueOf(MINIMUM_HORIZONTAL_FLING_VELOCITY));
             velocityX = Math.max(Math.abs(velocityX), MINIMUM_HORIZONTAL_FLING_VELOCITY);
 
-            Coordinate adjustedVelocities = mMovementTracker.getAdjustedVelocities(velocityX, velocityY);
+            float[] adjustedVelocities = mMovementTracker.getAdjustedVelocities(velocityX, velocityY);
 
             if (adjustedVelocities == null) {
-                Coordinate down = Coordinate.FromMotionEvent(e1);
-                Coordinate up = Coordinate.FromMotionEvent(e2);
+                float[] down = new float[]{e1.getRawX(), e1.getRawY()};
+                float[] up = new float[]{e2.getRawX(), e2.getRawY()};
                 adjustedVelocities = MovementTracker.adjustVelocities(down, up, velocityX, velocityY);
             }
 
@@ -611,8 +610,8 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
                 mXSpring.setSpringConfig(DRAG_CONFIG);
                 mYSpring.setSpringConfig(DRAG_CONFIG);
 
-                mXSpring.setVelocity(adjustedVelocities.x);
-                mYSpring.setVelocity(adjustedVelocities.y);
+                mXSpring.setVelocity(adjustedVelocities[0]);
+                mYSpring.setVelocity(adjustedVelocities[1]);
                 return true;
             }
             return false;
