@@ -361,17 +361,17 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
 
     private void updateVisualsTouchUp() {
         mScaleSpring.setEndValue(1f);
-        circleView.setAlpha(1f);
+        // circleView.setAlpha(1f);
         if (mFavicon != null) {
-            mFavicon.setAlpha(1f);
+            // mFavicon.setAlpha(1f);
         }
     }
 
     private void updateVisualsTouchDown() {
         mScaleSpring.setEndValue(0.8f);
-        circleView.setAlpha(0.7f);
+        // circleView.setAlpha(0.7f);
         if (mFavicon != null) {
-            mFavicon.setAlpha(0.7f);
+            // mFavicon.setAlpha(0.7f);
         }
     }
 
