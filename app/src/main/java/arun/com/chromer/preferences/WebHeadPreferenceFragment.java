@@ -165,5 +165,10 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
         if (closeWebHeadsPref != null) {
             closeWebHeadsPref.setEnabled(webHeadsEnabled);
         }
+
+        CheckBoxPreference faviconPref = (CheckBoxPreference) findPreference(Preferences.WEB_HEAD_FAVICON);
+        if (faviconPref != null) {
+            faviconPref.setEnabled(webHeadsEnabled);
+        }
     }
 }

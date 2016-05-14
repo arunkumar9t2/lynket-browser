@@ -32,4 +32,10 @@
         android:summary="Web heads will disappear once you open the link"
         android:title="Close web heads on link open"/>
 
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="webhead_favicons_pref"
+        android:summary="Small icons extracted from websites will be shown"
+        android:title="Show Favicons"/>
+
 </PreferenceScreen>

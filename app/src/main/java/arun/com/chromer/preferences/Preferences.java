@@ -43,6 +43,7 @@ public class Preferences {
     public static final String PREFERRED_ACTION = "preferred_action_preference";
     public static final String WEB_HEAD_ENABLED = "webhead_enabled_pref";
     public static final String WEB_HEAD_SPAWN_LOCATION = "webhead_spawn_preference";
+    public static final String WEB_HEAD_FAVICON = "webhead_favicons_pref";
 
     public static final int PREFERRED_ACTION_BROWSER = 1;
     public static final int PREFERRED_ACTION_FAV_SHARE = 2;
@@ -333,6 +334,20 @@ public class Preferences {
                 .getDefaultSharedPreferences(context)
                 .edit()
                 .putBoolean(WEB_HEAD_ENABLED, preference).apply();
+    }
+
+    public static boolean favicons(Context context) {
+        return PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .getBoolean(WEB_HEAD_FAVICON, false);
+    }
+
+    @SuppressWarnings("unused")
+    public static void favicons(Context context, boolean preference) {
+        PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(WEB_HEAD_FAVICON, preference).apply();
     }
 
     public static int webHeadsSpawnLocation(Context context) {

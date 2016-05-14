@@ -173,7 +173,9 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         webHead.setWebHeadInteractionListener(WebHeadService.this);
         mWindowManager.addView(webHead, webHead.getWindowParams());
         mWebHeads.put(webHead.getUrl(), webHead);
-        // beginFaviconLoading(webHead);
+
+        if (Preferences.favicons(this))
+            beginFaviconLoading(webHead);
     }
 
     @SuppressWarnings("unused")
