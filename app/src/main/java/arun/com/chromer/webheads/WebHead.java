@@ -421,7 +421,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
                 animator = ValueAnimator.ofArgb(oldColor, newColor);
             } else {
                 animator = new ValueAnimator();
-                animator.setIntValues(newColor, oldColor);
+                animator.setIntValues(oldColor, newColor);
                 animator.setEvaluator(new ArgbEvaluator());
             }
             animator.setDuration(500);
