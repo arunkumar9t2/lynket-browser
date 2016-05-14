@@ -63,9 +63,9 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
 
     private final GestureDetector mGestureDetector = new GestureDetector(getContext(), new GestureDetectorListener());
     private final int mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
-    private static final int MINIMUM_FLING_VELOCITY = Util.dpToPx(450);
     private float posX, posY;
     private int initialDownX, initialDownY;
+    private int MINIMUM_HORIZONTAL_FLING_VELOCITY;
 
     private WindowManager.LayoutParams mWindowParams;
     private SpringSystem mSpringSystem;
@@ -178,6 +178,10 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         sDispHeight = metrics.heightPixels;
 
         mMovementTracker = new MovementTracker(10, sDispHeight, sDispWidth, getAdaptWidth());
+
+        // TODO Possibly remove hardcoded 5
+        int scaledScreenWidthDp = getResources().getConfiguration().screenWidthDp * 5;
+        MINIMUM_HORIZONTAL_FLING_VELOCITY = Util.dpToPx(scaledScreenWidthDp);
     }
 
     @SuppressLint("RtlHardcoded")
@@ -317,8 +321,6 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     }
 
     private void stickToWall() {
-        Timber.i("Sticking to wall");
-
         int x = mWindowParams.x;
         int dispCentre = sDispWidth / 2;
 
@@ -589,9 +591,11 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            //if ((Math.abs(velocityY) > MINIMUM_FLING_VELOCITY) || (Math.abs(velocityX) > MINIMUM_FLING_VELOCITY)) {
-            Timber.d(velocityX + " " + velocityY);
             mDragging = false;
+
+            // Ignore polarity. Velocity tracker's velocity directions are wrong anyways.
+            // Timber.d(String.valueOf(MINIMUM_HORIZONTAL_FLING_VELOCITY));
+            velocityX = Math.max(Math.abs(velocityX), MINIMUM_HORIZONTAL_FLING_VELOCITY);
 
             Coordinate adjustedVelocities = mMovementTracker.getAdjustedVelocities(velocityX, velocityY);
 
@@ -611,7 +615,6 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
                 mYSpring.setVelocity(adjustedVelocities.y);
                 return true;
             }
-            //}
             return false;
         }
     }
