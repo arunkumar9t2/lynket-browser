@@ -23,6 +23,7 @@
         android:theme="@style/AppTheme">
         <service android:name=".dynamictoolbar.WebColorExtractorService"/>
         <service android:name=".customtabs.callbacks.ClipboardService"/>
+        <service android:name=".customtabs.callbacks.AddHomeShortcutService"/>
         <service android:name=".customtabs.warmup.WarmupService"/>
         <service
             android:name=".customtabs.prefetch.ScannerService"
@@ -54,7 +55,6 @@
 
         <receiver android:name=".customtabs.callbacks.ShareBroadcastReceiver"/>
         <receiver android:name=".customtabs.callbacks.FavShareBroadcastReceiver"/>
-        <receiver android:name=".customtabs.callbacks.AddHomeShortcutReceiver"/>
         <receiver android:name=".customtabs.callbacks.SecondaryBrowserReceiver"/>
         <receiver android:name=".customtabs.callbacks.OpenInChromeReceiver"/>
 

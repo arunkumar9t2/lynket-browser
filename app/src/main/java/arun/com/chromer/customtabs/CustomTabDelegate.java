@@ -14,7 +14,7 @@ import android.support.customtabs.CustomTabsSession;
 import java.util.List;
 
 import arun.com.chromer.R;
-import arun.com.chromer.customtabs.callbacks.AddHomeShortcutReceiver;
+import arun.com.chromer.customtabs.callbacks.AddHomeShortcutService;
 import arun.com.chromer.customtabs.callbacks.ClipboardService;
 import arun.com.chromer.customtabs.callbacks.FavShareBroadcastReceiver;
 import arun.com.chromer.customtabs.callbacks.OpenInChromeReceiver;
@@ -286,8 +286,8 @@ public class CustomTabDelegate {
     }
 
     private static void addShortcutToHomeScreen(@NonNull Context c, @NonNull CustomTabsIntent.Builder builder) {
-        final Intent addShortcutIntent = new Intent(c, AddHomeShortcutReceiver.class);
-        final PendingIntent addShortcutPending = PendingIntent.getBroadcast(c, 0, addShortcutIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        final Intent addShortcutIntent = new Intent(c, AddHomeShortcutService.class);
+        final PendingIntent addShortcutPending = PendingIntent.getService(c, 0, addShortcutIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.addMenuItem(c.getString(R.string.add_to_homescreen), addShortcutPending);
     }
 

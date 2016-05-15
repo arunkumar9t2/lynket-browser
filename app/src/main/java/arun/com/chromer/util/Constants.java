@@ -5,6 +5,8 @@ package arun.com.chromer.util;
  */
 public class Constants {
 
+    public static final int NO_COLOR = -1;
+
     private Constants() {
         throw new UnsupportedOperationException("Cannot instantiate");
     }

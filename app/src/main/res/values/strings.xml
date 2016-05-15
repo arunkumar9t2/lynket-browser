@@ -63,7 +63,7 @@
     <string name="invalid_link">Invalid link</string>
     <string name="copied">Copied</string>
     <string name="copy_link">Copy link</string>
-    <string name="add_to_homescreen">Add to homescreen</string>
+    <string name="add_to_homescreen">Add to Home Screen</string>
     <string name="intro_1">Hello! \nChromer is a light-weight, secure and a fast web browser.</string>
     <string name="intro_2">It uses Google Chrome\'s Custom Tabs feature which is an extremely light weight Chrome tab designed for quickly loading a link.</string>
     <string name="intro_3">It can keep your browser locked in memory so that your browser launches little faster.</string>
@@ -164,4 +164,5 @@
     <string name="merge_tabs">Merge tabs and apps - Beta</string>
     <string name="merge_tabs_explanation">See your tabs with other recent apps on your phone\'s Overview screen.</string>
     <string name="already_loaded">Already loaded</string>
+    <string name="add_home_screen_begun">Shortcut will be added shortly</string>
 </resources>

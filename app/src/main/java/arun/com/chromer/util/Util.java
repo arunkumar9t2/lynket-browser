@@ -31,6 +31,8 @@ import android.view.View;
 import android.view.ViewOutlineProvider;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -250,7 +252,7 @@ public class Util {
         return (activities != null) && (activities.size() > 0);
     }
 
-    public static int dpToPx(int dp) {
+    public static int dpToPx(double dp) {
         // resources instead of context !!
         DisplayMetrics displayMetrics = Resources.getSystem().getDisplayMetrics();
         return (int) ((dp * displayMetrics.density) + 0.5);
@@ -279,6 +281,45 @@ public class Util {
         swatchList.add(mutedDarkSwatch);
         swatchList.add(mutedLightSwatch);
         return swatchList;
+    }
+
+    @ColorInt
+    public static int getBestFaviconColor(@Nullable Palette palette) {
+        if (palette != null) {
+            List<Palette.Swatch> sortedSwatch = getSwatchList(palette);
+            // Descending
+            Collections.sort(sortedSwatch,
+                    new Comparator<Palette.Swatch>() {
+                        @Override
+                        public int compare(Palette.Swatch swatch1, Palette.Swatch swatch2) {
+                            int a = swatch1 == null ? 0 : swatch1.getPopulation();
+                            int b = swatch2 == null ? 0 : swatch2.getPopulation();
+                            return b - a;
+                        }
+                    });
+
+            // We want the vibrant color but we will avoid it if it is the most prominent one.
+            // Instead we will choose the next prominent color
+            int vibrantColor = palette.getVibrantColor(Constants.NO_COLOR);
+            int prominentColor = sortedSwatch.get(0).getRgb();
+            if (vibrantColor == Constants.NO_COLOR || vibrantColor == prominentColor) {
+                int darkVibrantColor = palette.getDarkVibrantColor(Constants.NO_COLOR);
+                if (darkVibrantColor != Constants.NO_COLOR) {
+                    return darkVibrantColor;
+                } else {
+                    int mutedColor = palette.getMutedColor(Constants.NO_COLOR);
+                    if (mutedColor != Constants.NO_COLOR) {
+                        return mutedColor;
+                    } else {
+                        int lightVibrantColor = palette.getLightVibrantColor(Constants.NO_COLOR);
+                        if (lightVibrantColor != Constants.NO_COLOR) {
+                            return lightVibrantColor;
+                        } else return prominentColor;
+                    }
+                }
+            } else return vibrantColor;
+        }
+        return Constants.NO_COLOR;
     }
 
     /**
