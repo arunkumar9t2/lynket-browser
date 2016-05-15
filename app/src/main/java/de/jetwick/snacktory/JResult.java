@@ -211,6 +211,6 @@ public class JResult implements Serializable {
 
     @Override
     public String toString() {
-        return "title:" + getTitle() + " imageUrl:" + getImageUrl() + " text:" + text;
+        return "title:" + getTitle() + " imageUrl:" + getFaviconUrl() + " text:" + text;
     }
 }

@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.Proxy;
+import java.net.URI;
 import java.net.URL;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -349,12 +350,11 @@ public class HtmlFetcher {
             HttpURLConnection hConn = createUrlConnection(urlAsString, timeout, true);
             // force no follow
             hConn.setInstanceFollowRedirects(false);
-            // the program doesn't care what the content actually is !!
-            // http://java.sun.com/developer/JDCTechTips/2003/tt0422.html
             hConn.setRequestMethod("HEAD");
             hConn.connect();
             responseCode = hConn.getResponseCode();
             hConn.getInputStream().close();
+
             //if (responseCode == HttpURLConnection.HTTP_OK)
             //return  urlAsString;
 
@@ -369,7 +369,10 @@ public class HtmlFetcher {
                 if (furtherResolveNecessary.contains(SHelper.extractDomain(newUrl, true)))
                     newUrl = getResolvedUrl(newUrl, timeout);
 
-                return newUrl;
+                URI uri = new URI(newUrl);
+                if (uri.getHost() != null) {
+                    return newUrl;
+                } else return urlAsString;
             } else
                 return urlAsString;
 

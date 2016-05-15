@@ -36,8 +36,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -50,12 +48,14 @@ import arun.com.chromer.activities.CustomTabActivity;
 import arun.com.chromer.customtabs.CustomTabBindingHelper;
 import arun.com.chromer.preferences.Preferences;
 import arun.com.chromer.util.Constants;
+import arun.com.chromer.webheads.tasks.ExtractionTasksManager;
 import arun.com.chromer.webheads.ui.RemoveWebHead;
 import arun.com.chromer.webheads.ui.WebHead;
+import de.jetwick.snacktory.JResult;
 import timber.log.Timber;
 
 public class WebHeadService extends Service implements WebHead.WebHeadInteractionListener,
-        CustomTabBindingHelper.ConnectionCallback {
+        CustomTabBindingHelper.ConnectionCallback, ExtractionTasksManager.ProgressListener {
 
     private static WebHeadService sInstance = null;
     private static String sLastOpenedUrl = "";
@@ -125,6 +125,8 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         bindToCustomTabSession();
 
         registerReceivers();
+
+        ExtractionTasksManager.registerListener(this);
     }
 
     private void registerReceivers() {
@@ -151,10 +153,6 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         String urlToLoad = intent.getDataString();
         if (!isLinkAlreadyLoaded(urlToLoad)) {
             addWebHead(urlToLoad);
-            if (mCustomTabConnected)
-                mCustomTabBindingHelper.mayLaunchUrl(Uri.parse(urlToLoad), null, getPossibleUrls());
-            else
-                deferMayLaunchUntilConnected(urlToLoad);
         } else
             Toast.makeText(this, R.string.already_loaded, Toast.LENGTH_SHORT).show();
     }
@@ -174,31 +172,46 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         WebHead webHead = new WebHead(WebHeadService.this, webHeadUrl);
         webHead.setWebHeadInteractionListener(WebHeadService.this);
         mWindowManager.addView(webHead, webHead.getWindowParams());
-        mWebHeads.put(webHead.getUrl(), webHead);
+        mWebHeads.put(webHeadUrl, webHead);
 
-        if (Preferences.favicons(this))
-            beginFaviconLoading(webHead);
+
+        ExtractionTasksManager.startDownload(webHeadUrl);
     }
 
-    @SuppressWarnings("unused")
-    private void beginFaviconLoading(final WebHead webHead) {
-        String url;
-        try {
-            url = new URL(webHead.getUrl()).getHost();
-            Glide.with(this)
-                    .load(String.format("http://icons.better-idea.org/icon?url=%s&size=120", url))
-                    .asBitmap()
-                    .into(new BitmapImageViewTarget(webHead.getFaviconView()) {
-                        @Override
-                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                            RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), resource);
-                            roundedBitmapDrawable.setAntiAlias(true);
-                            roundedBitmapDrawable.setCircular(true);
-                            webHead.setFaviconDrawable(roundedBitmapDrawable);
-                        }
-                    });
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+    @Override
+    public void onUrlUnShortened(String originalUrl, String unShortenedUrl) {
+        // First check if the associated web head is active
+        WebHead webHead = mWebHeads.get(originalUrl);
+
+        if (webHead != null) {
+            if (mCustomTabConnected)
+                mCustomTabBindingHelper.mayLaunchUrl(Uri.parse(unShortenedUrl), null, getPossibleUrls());
+            else
+                deferMayLaunchUntilConnected(unShortenedUrl);
+        }
+    }
+
+    @Override
+    public void onUrlExtracted(String originalUrl, JResult result) {
+        final WebHead webHead = mWebHeads.get(originalUrl);
+        if (webHead != null && (Preferences.favicons(this))) {
+            String faviconUrl = result.getFaviconUrl();
+            try {
+                Glide.with(this)
+                        .load(faviconUrl)
+                        .asBitmap()
+                        .into(new BitmapImageViewTarget(webHead.getFaviconView()) {
+                            @Override
+                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), resource);
+                                roundedBitmapDrawable.setAntiAlias(true);
+                                roundedBitmapDrawable.setCircular(true);
+                                webHead.setFaviconDrawable(roundedBitmapDrawable);
+                            }
+                        });
+            } catch (Exception e) {
+                Timber.e(e.getMessage());
+            }
         }
     }
 
@@ -417,13 +430,15 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
 
         destroyAllWebHeads();
 
+        ExtractionTasksManager.cancelAll();
+        ExtractionTasksManager.unRegisterListener(this);
+
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mLocalReceiver);
+        unregisterReceiver(mStopServiceReceiver);
 
         if (mCustomTabBindingHelper != null) mCustomTabBindingHelper.unbindCustomTabsService(this);
 
         sInstance = null;
-
-        unregisterReceiver(mStopServiceReceiver);
 
         stopForeground(true);
 

@@ -60,6 +60,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     private static int sDispHeight, sDispWidth;
 
     private final String mUrl;
+    private String mUnShortenedUrl;
 
     private final GestureDetector mGestureDetector = new GestureDetector(getContext(), new GestureDetectorListener());
     private final int mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
@@ -450,6 +451,14 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
 
     public String getUrl() {
         return mUrl;
+    }
+
+    public void setUnShortenedUrl(String unShortenedUrl) {
+        mUnShortenedUrl = unShortenedUrl;
+    }
+
+    public String getUnShortenedUrl() {
+        return mUnShortenedUrl;
     }
 
     public void setWebHeadInteractionListener(WebHeadInteractionListener listener) {
