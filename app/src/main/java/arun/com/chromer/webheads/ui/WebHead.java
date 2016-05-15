@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.BounceInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -595,12 +596,27 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
                         .scaleX(0.0f)
                         .scaleY(0.0f)
                         .alpha(0.5f)
+                        .withLayer()
                         .setDuration(150)
                         .setInterpolator(new AccelerateDecelerateInterpolator())
                         .setListener(new AnimatorListenerAdapter() {
                             @Override
                             public void onAnimationEnd(Animator animation) {
-                                sendCallback();
+                                if (mFavicon != null) {
+                                    mFavicon.animate()
+                                            .alpha(0.5f)
+                                            .scaleX(0.0f)
+                                            .withLayer()
+                                            .scaleY(0.0f)
+                                            .setDuration(100)
+                                            .setInterpolator(new BounceInterpolator())
+                                            .setListener(new AnimatorListenerAdapter() {
+                                                @Override
+                                                public void onAnimationEnd(Animator animation) {
+                                                    sendCallback();
+                                                }
+                                            });
+                                } else sendCallback();
                             }
                         })
                         .start();
