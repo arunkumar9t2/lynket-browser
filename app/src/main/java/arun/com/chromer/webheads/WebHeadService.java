@@ -48,6 +48,7 @@ import arun.com.chromer.activities.CustomTabActivity;
 import arun.com.chromer.customtabs.CustomTabBindingHelper;
 import arun.com.chromer.preferences.Preferences;
 import arun.com.chromer.util.Constants;
+import arun.com.chromer.webheads.helper.ColorExtractionTask;
 import arun.com.chromer.webheads.tasks.ExtractionTasksManager;
 import arun.com.chromer.webheads.ui.RemoveWebHead;
 import arun.com.chromer.webheads.ui.WebHead;
@@ -67,33 +68,6 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
 
     public WebHeadService() {
     }
-
-    private final BroadcastReceiver mLocalReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            switch (intent.getAction()) {
-                case Constants.ACTION_REBIND_WEBHEAD_TAB_CONNECTION:
-                    boolean shouldRebind = intent.getBooleanExtra(Constants.EXTRA_KEY_REBIND_WEBHEAD_CXN, false);
-                    if (shouldRebind) bindToCustomTabSession();
-                    break;
-                case Constants.ACTION_WEBHEAD_COLOR_SET:
-                    // Update web heads colors
-                    int webHeadColor = intent.getIntExtra(Constants.EXTRA_KEY_WEBHEAD_COLOR, 0);
-                    if (webHeadColor != 0) {
-                        updateWebHeadColors(webHeadColor);
-                    }
-                    break;
-            }
-        }
-    };
-
-    private final BroadcastReceiver mStopServiceReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Timber.d("Closing from notification");
-            stopSelf();
-        }
-    };
 
     public static WebHeadService getInstance() {
         return sInstance;
@@ -194,7 +168,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     @Override
     public void onUrlExtracted(String originalUrl, JResult result) {
         final WebHead webHead = mWebHeads.get(originalUrl);
-        if (webHead != null && (Preferences.favicons(this))) {
+        if (webHead != null && Preferences.favicons(this)) {
             String faviconUrl = result.getFaviconUrl();
             Timber.d(faviconUrl);
             try {
@@ -204,6 +178,9 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
                         .into(new BitmapImageViewTarget(webHead.getFaviconView()) {
                             @Override
                             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                // dispatch color extraction task
+                                new ColorExtractionTask(webHead, resource).execute();
+
                                 RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), resource);
                                 roundedBitmapDrawable.setAntiAlias(true);
                                 roundedBitmapDrawable.setCircular(true);
@@ -508,5 +485,32 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         }
 
     }
+
+    private final BroadcastReceiver mLocalReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch (intent.getAction()) {
+                case Constants.ACTION_REBIND_WEBHEAD_TAB_CONNECTION:
+                    boolean shouldRebind = intent.getBooleanExtra(Constants.EXTRA_KEY_REBIND_WEBHEAD_CXN, false);
+                    if (shouldRebind) bindToCustomTabSession();
+                    break;
+                case Constants.ACTION_WEBHEAD_COLOR_SET:
+                    // Update web heads colors
+                    int webHeadColor = intent.getIntExtra(Constants.EXTRA_KEY_WEBHEAD_COLOR, 0);
+                    if (webHeadColor != 0) {
+                        updateWebHeadColors(webHeadColor);
+                    }
+                    break;
+            }
+        }
+    };
+
+    private final BroadcastReceiver mStopServiceReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Timber.d("Closing from notification");
+            stopSelf();
+        }
+    };
 
 }

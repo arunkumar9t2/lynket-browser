@@ -23,6 +23,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.graphics.ColorUtils;
+import android.support.v7.graphics.Palette;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Patterns;
@@ -258,6 +259,26 @@ public class Util {
     @SuppressWarnings("unused")
     public static int pxToDp(int px) {
         return (int) (px / Resources.getSystem().getDisplayMetrics().density);
+    }
+
+    @NonNull
+    public static List<Palette.Swatch> getSwatchList(@NonNull Palette palette) {
+        List<Palette.Swatch> swatchList = new ArrayList<>();
+
+        Palette.Swatch vibrantSwatch = palette.getVibrantSwatch();
+        Palette.Swatch vibrantDarkSwatch = palette.getDarkVibrantSwatch();
+        Palette.Swatch vibrantLightSwatch = palette.getLightVibrantSwatch();
+        Palette.Swatch mutedSwatch = palette.getMutedSwatch();
+        Palette.Swatch mutedDarkSwatch = palette.getDarkMutedSwatch();
+        Palette.Swatch mutedLightSwatch = palette.getLightMutedSwatch();
+
+        swatchList.add(vibrantSwatch);
+        swatchList.add(vibrantDarkSwatch);
+        swatchList.add(vibrantLightSwatch);
+        swatchList.add(mutedSwatch);
+        swatchList.add(mutedDarkSwatch);
+        swatchList.add(mutedLightSwatch);
+        return swatchList;
     }
 
     /**

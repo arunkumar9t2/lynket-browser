@@ -414,6 +414,14 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         return animator;
     }
 
+    public void setWebHeadColor(@ColorInt int newColor) {
+        if (!isBeingDestroyed) {
+            ValueAnimator animator = getColorChangeAnimator(newColor);
+            if (animator != null)
+                animator.start();
+        }
+    }
+
     @Nullable
     public ValueAnimator getColorChangeAnimator(@ColorInt int newColor) {
         ValueAnimator animator = null;

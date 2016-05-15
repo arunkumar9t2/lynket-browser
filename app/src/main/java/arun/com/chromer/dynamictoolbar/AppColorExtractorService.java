@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -139,7 +138,7 @@ public class AppColorExtractorService extends IntentService {
     }
 
     private int getPreferredColorFromSwatches(Palette palette) {
-        List<Palette.Swatch> swatchList = getSwatchList(palette);
+        List<Palette.Swatch> swatchList = Util.getSwatchList(palette);
         Palette.Swatch prominentSwatch = Collections.max(swatchList,
                 new Comparator<Palette.Swatch>() {
                     @Override
@@ -154,22 +153,4 @@ public class AppColorExtractorService extends IntentService {
         else return -1;
     }
 
-    private List<Palette.Swatch> getSwatchList(Palette palette) {
-        List<Palette.Swatch> swatchList = new ArrayList<>();
-
-        Palette.Swatch vibrantSwatch = palette.getVibrantSwatch();
-        Palette.Swatch vibrantDarkSwatch = palette.getDarkVibrantSwatch();
-        Palette.Swatch vibrantLightSwatch = palette.getLightVibrantSwatch();
-        Palette.Swatch mutedSwatch = palette.getMutedSwatch();
-        Palette.Swatch mutedDarkSwatch = palette.getDarkMutedSwatch();
-        Palette.Swatch mutedLightSwatch = palette.getLightMutedSwatch();
-
-        swatchList.add(vibrantSwatch);
-        swatchList.add(vibrantDarkSwatch);
-        swatchList.add(vibrantLightSwatch);
-        swatchList.add(mutedSwatch);
-        swatchList.add(mutedDarkSwatch);
-        swatchList.add(mutedLightSwatch);
-        return swatchList;
-    }
 }
