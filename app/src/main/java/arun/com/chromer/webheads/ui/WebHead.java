@@ -474,10 +474,14 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     }
 
     public void setFaviconDrawable(@NonNull Drawable drawable) {
-        circleView.clearUrlIndicator();
-        initFavicon();
-        mFavicon.setImageDrawable(drawable);
-        initAppIcon();
+        try {
+            circleView.clearUrlIndicator();
+            initFavicon();
+            mFavicon.setImageDrawable(drawable);
+            initAppIcon();
+        } catch (Exception ignore) {
+            Timber.d(ignore.getMessage());
+        }
     }
 
     private boolean isLastWebHead() {

@@ -16,15 +16,16 @@ import timber.log.Timber;
 /**
  * Created by Arun on 15/05/2016.
  */
-public class ExtractionTasksManager {
-    private static final ExtractionTasksManager sInstance;
+public class ParsingTasksManager {
+    private static final ParsingTasksManager sInstance;
 
-    // A queue of Runnables for page extraction task
-    private final BlockingQueue<Runnable> mDownloadWorkQueue;
+    private final BlockingQueue<Runnable> mParseWorkQueue;
     private final Queue<PageExtractTask> mPageExtractTaskQueue;
-    // Pool executor
-    private final ThreadPoolExecutor mExtractThreadPool;
 
+    // Pool executor
+    private final ThreadPoolExecutor mParseThreadPool;
+
+    private static int NUMBER_OF_CORES = Runtime.getRuntime().availableProcessors();
     private static final int CORE_POOL_SIZE = 8;
     private static final int MAXIMUM_POOL_SIZE = 8;
     private static final int KEEP_ALIVE_TIME = 1;
@@ -45,19 +46,18 @@ public class ExtractionTasksManager {
 
     static {
         KEEP_ALIVE_TIME_UNIT = TimeUnit.SECONDS;
-        sInstance = new ExtractionTasksManager();
+        sInstance = new ParsingTasksManager();
     }
 
-    private ExtractionTasksManager() {
-        mDownloadWorkQueue = new LinkedBlockingQueue<>();
-        mExtractThreadPool = new ThreadPoolExecutor(
-                CORE_POOL_SIZE,
-                MAXIMUM_POOL_SIZE,
+    private ParsingTasksManager() {
+        mParseWorkQueue = new LinkedBlockingQueue<>();
+        mParseThreadPool = new ThreadPoolExecutor(
+                NUMBER_OF_CORES + 1,
+                NUMBER_OF_CORES + 1,
                 KEEP_ALIVE_TIME,
                 KEEP_ALIVE_TIME_UNIT,
-                mDownloadWorkQueue);
+                mParseWorkQueue);
         mPageExtractTaskQueue = new LinkedBlockingQueue<>();
-
         mHandler = new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message msg) {
@@ -86,7 +86,7 @@ public class ExtractionTasksManager {
         };
     }
 
-    public static ExtractionTasksManager getInstance() {
+    public static ParsingTasksManager getInstance() {
         return sInstance;
     }
 
@@ -113,7 +113,7 @@ public class ExtractionTasksManager {
                 }
 
                 if (alsoRemove) {
-                    sInstance.mExtractThreadPool.remove(task.getPageExtractRunnable());
+                    sInstance.mParseThreadPool.remove(task.getPageExtractRunnable());
                     Timber.d("Removed task %s", task.toString());
                 }
             }
@@ -138,7 +138,7 @@ public class ExtractionTasksManager {
                 if (null != thread)
                     thread.interrupt();
 
-                sInstance.mExtractThreadPool.remove(pageExtractTask.getPageExtractRunnable());
+                sInstance.mParseThreadPool.remove(pageExtractTask.getPageExtractRunnable());
                 Timber.d("Removed task %s", pageExtractTask.toString());
             }
         }
@@ -155,7 +155,7 @@ public class ExtractionTasksManager {
         // Initializes the task
         downloadTask.initializeDownloaderTask(url);
 
-        sInstance.mExtractThreadPool.execute(downloadTask.getPageExtractRunnable());
+        sInstance.mParseThreadPool.execute(downloadTask.getPageExtractRunnable());
 
         return downloadTask;
     }

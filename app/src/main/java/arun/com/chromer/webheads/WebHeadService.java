@@ -49,14 +49,14 @@ import arun.com.chromer.customtabs.CustomTabBindingHelper;
 import arun.com.chromer.preferences.Preferences;
 import arun.com.chromer.util.Constants;
 import arun.com.chromer.webheads.helper.ColorExtractionTask;
-import arun.com.chromer.webheads.tasks.ExtractionTasksManager;
+import arun.com.chromer.webheads.tasks.ParsingTasksManager;
 import arun.com.chromer.webheads.ui.RemoveWebHead;
 import arun.com.chromer.webheads.ui.WebHead;
 import de.jetwick.snacktory.JResult;
 import timber.log.Timber;
 
 public class WebHeadService extends Service implements WebHead.WebHeadInteractionListener,
-        CustomTabBindingHelper.ConnectionCallback, ExtractionTasksManager.ProgressListener {
+        CustomTabBindingHelper.ConnectionCallback, ParsingTasksManager.ProgressListener {
 
     private static WebHeadService sInstance = null;
     private static String sLastOpenedUrl = "";
@@ -100,7 +100,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
 
         registerReceivers();
 
-        ExtractionTasksManager.registerListener(this);
+        ParsingTasksManager.registerListener(this);
     }
 
     private void registerReceivers() {
@@ -148,8 +148,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         mWindowManager.addView(webHead, webHead.getWindowParams());
         mWebHeads.put(webHeadUrl, webHead);
 
-
-        ExtractionTasksManager.startDownload(webHeadUrl);
+        ParsingTasksManager.startDownload(webHeadUrl);
     }
 
     @Override
@@ -412,8 +411,8 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
 
         destroyAllWebHeads();
 
-        ExtractionTasksManager.cancelAll(true);
-        ExtractionTasksManager.unRegisterListener();
+        ParsingTasksManager.cancelAll(true);
+        ParsingTasksManager.unRegisterListener();
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mLocalReceiver);
         unregisterReceiver(mStopServiceReceiver);

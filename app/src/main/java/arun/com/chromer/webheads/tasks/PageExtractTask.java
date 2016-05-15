@@ -6,7 +6,7 @@ import de.jetwick.snacktory.JResult;
  * Created by Arun on 15/05/2016.
  */
 public class PageExtractTask implements PageExtractRunnable.PageExtractTaskMethods {
-    private static ExtractionTasksManager sTaskManager;
+    private static ParsingTasksManager sTaskManager;
 
     private String mRawUrl;
     private String mUnShortenedUrl;
@@ -19,7 +19,7 @@ public class PageExtractTask implements PageExtractRunnable.PageExtractTaskMetho
     PageExtractTask() {
         // Create the runnables
         mPageExtractRunnable = new PageExtractRunnable(this);
-        sTaskManager = ExtractionTasksManager.getInstance();
+        sTaskManager = ParsingTasksManager.getInstance();
     }
 
     @Override

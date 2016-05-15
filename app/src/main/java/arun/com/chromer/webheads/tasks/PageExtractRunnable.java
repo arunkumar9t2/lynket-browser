@@ -48,13 +48,13 @@ public class PageExtractRunnable implements Runnable {
             HtmlFetcher fetcher = new HtmlFetcher();
             String url = fetcher.getResolvedUrl(mPageTask.getRawUrl(), 1000 * 10);
             mPageTask.setUnShortenedUrl(url);
-            mPageTask.handleDownloadState(ExtractionTasksManager.URL_UN_SHORTENED);
+            mPageTask.handleDownloadState(ParsingTasksManager.URL_UN_SHORTENED);
 
             JResult res = fetcher.fetchAndExtract(url, 1000 * 10, false);
             cancelIfNeeded();
 
             mPageTask.setResult(res);
-            mPageTask.handleDownloadState(ExtractionTasksManager.EXTRACTION_COMPLETE);
+            mPageTask.handleDownloadState(ParsingTasksManager.EXTRACTION_COMPLETE);
 
             cancelIfNeeded();
         } catch (InterruptedException ignore) {
