@@ -196,6 +196,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         final WebHead webHead = mWebHeads.get(originalUrl);
         if (webHead != null && (Preferences.favicons(this))) {
             String faviconUrl = result.getFaviconUrl();
+            Timber.d(faviconUrl);
             try {
                 Glide.with(this)
                         .load(faviconUrl)
@@ -237,11 +238,15 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
 
     @SuppressWarnings("unused")
     private void addTestWebHeads() {
-        addWebHead("http://www.google.com");
+        //addWebHead("http://www.medium.com");
 
-        addWebHead("http://www.twitter.com");
+        //addWebHead("https://www.linkedin.com/");
 
-        addWebHead("http://www.androidpolice.com");
+        addWebHead("http://www.github.com");
+
+        // addWebHead("http://www.androidpolice.com");
+
+        // addWebHead("https://bitbucket.org/");
     }
 
     private boolean isLinkAlreadyLoaded(String urlToLoad) {

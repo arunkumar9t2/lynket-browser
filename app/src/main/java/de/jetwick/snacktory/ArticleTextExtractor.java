@@ -1,6 +1,8 @@
 package de.jetwick.snacktory;
 
 import android.annotation.SuppressLint;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -134,7 +136,7 @@ public class ArticleTextExtractor {
         prepareDocument(doc);
 
         // init elements
-        Collection<Element> nodes = getNodes(doc);
+        /* Collection<Element> nodes = getNodes(doc);
         int maxWeight = 0;
         Element bestMatchElement = null;
         for (Element entry : nodes) {
@@ -164,19 +166,18 @@ public class ArticleTextExtractor {
             // this fails for short facebook post and probably tweets: text.length() > res.getDescription().length()
             if (text.length() > res.getTitle().length()) {
                 res.setText(text);
-//                print("best element:", bestMatchElement);
             }
             res.setTextList(formatter.getTextList(bestMatchElement));
         }
 
         if (res.getImageUrl().isEmpty()) {
-            res.setImageUrl(extractImageUrl(doc));
-        }
+             res.setImageUrl(extractImageUrl(doc));
+        } */
 
-        res.setRssUrl(extractRssUrl(doc));
-        res.setVideoUrl(extractVideoUrl(doc));
-        res.setFaviconUrl(extractFaviconUrl(doc));
-        res.setKeywords(extractKeywords(doc));
+        // res.setRssUrl(extractRssUrl(doc));
+        // res.setVideoUrl(extractVideoUrl(doc));
+        res.setFaviconUrl(extractFaviconUrlEnhanced(doc));
+        // res.setKeywords(extractKeywords(doc));
         return res;
     }
 
@@ -267,6 +268,87 @@ public class ArticleTextExtractor {
             faviconUrl = SHelper.replaceSpaces(doc.select("head link[rel^=shortcut],link[rel$=icon]").attr("href"));
         }
         return faviconUrl;
+    }
+
+    protected String extractFaviconUrlEnhanced(Document doc) {
+        int maxAppleIcon = 0;
+        Elements linksEl = doc.select("head").select("link[rel^=apple-touch-icon],link[rel^=shortcut],link[rel$=icon]");
+
+        Element bestGuessIcon = null;
+        Element anyIconEl = null;
+        Element appleIconEl = null;
+        Element shortcutEl = null;
+        for (Element link : linksEl) {
+
+            if (link.attr("rel").contains("mask")) {
+                continue;
+            }
+
+            if (link.attr("rel").contains("apple")) {
+                appleIconEl = link;
+            }
+
+            if (link.attr("rel").contains("shortcut")) {
+                shortcutEl = link;
+            }
+
+            anyIconEl = link;
+
+            int size = parseSize(link.attr("sizes"));
+            if (size > maxAppleIcon) {
+                maxAppleIcon = size;
+                bestGuessIcon = link;
+            }
+        }
+
+        String bestGuessUrl = getHref(bestGuessIcon);
+        if (bestGuessUrl.length() != 0) {
+            return SHelper.replaceSpaces(bestGuessUrl);
+        }
+
+        String appleIconUrl = getHref(appleIconEl);
+        if (appleIconUrl.length() != 0) {
+            return SHelper.replaceSpaces(appleIconUrl);
+        }
+
+        String shortcutUrl = getHref(shortcutEl);
+        if (shortcutUrl.length() != 0) {
+            return SHelper.replaceSpaces(shortcutUrl);
+        }
+
+        String anyIconUrl = getHref(anyIconEl);
+        if (anyIconUrl.length() != 0) {
+            return SHelper.replaceSpaces(anyIconUrl);
+        }
+
+        String imageMetaUrl = doc.select("head meta[property=og:image]").attr("content");
+        if (!imageMetaUrl.isEmpty()) {
+            return SHelper.innerTrim(imageMetaUrl);
+        }
+
+        return extractFaviconUrl(doc);
+    }
+
+    @NonNull
+    private String getHref(Element bestGuessIcon) {
+        if (bestGuessIcon == null) {
+            return "";
+        }
+        return bestGuessIcon.attr("href");
+    }
+
+    private int parseSize(@Nullable String size) {
+        if (size == null) return 0;
+        if (size.length() == 0) return 0;
+        String[] dimen = size.split("x");
+        if (dimen.length != 0) {
+            try {
+                return Integer.parseInt(dimen[0]);
+            } catch (Exception e) {
+                return 0;
+            }
+        }
+        return 0;
     }
 
     /**

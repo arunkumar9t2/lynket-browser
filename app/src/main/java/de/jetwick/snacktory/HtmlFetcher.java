@@ -15,6 +15,8 @@
  */
 package de.jetwick.snacktory;
 
+import android.annotation.SuppressLint;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -326,9 +328,7 @@ public class HtmlFetcher {
         }
 
         String enc = Converter.extractEncoding(hConn.getContentType());
-        String res = createConverter(urlAsString).streamToString(is, enc);
-        Timber.d(res.length() + " FetchAsString:" + urlAsString);
-        return res;
+        return createConverter(urlAsString).streamToString(is, enc);
     }
 
     public Converter createConverter(String url) {
@@ -343,22 +343,21 @@ public class HtmlFetcher {
      * @return the resolved url if any. Or null if it couldn't resolve the url
      * (within the specified time) or the same url if response code is OK
      */
+    @SuppressLint("CustomWarning")
     public String getResolvedUrl(String urlAsString, int timeout) {
         String newUrl = null;
         int responseCode = -1;
         try {
-            HttpURLConnection hConn = createUrlConnection(urlAsString, timeout, true);
-            // force no follow
-            hConn.setInstanceFollowRedirects(false);
-            hConn.setRequestMethod("HEAD");
-            hConn.connect();
-            responseCode = hConn.getResponseCode();
-            hConn.getInputStream().close();
+            HttpURLConnection urlConnection = createSimpleConnection(urlAsString, timeout);
+            urlConnection.setInstanceFollowRedirects(false);
+            urlConnection.setRequestMethod("HEAD");
+            urlConnection.connect();
+            responseCode = urlConnection.getResponseCode();
 
             //if (responseCode == HttpURLConnection.HTTP_OK)
             //return  urlAsString;
 
-            newUrl = hConn.getHeaderField("Location");
+            newUrl = urlConnection.getHeaderField("Location");
             if (responseCode / 100 == 3 && newUrl != null) {
                 newUrl = newUrl.replaceAll(" ", "+");
                 // some services use (none-standard) utf8 in their location header
@@ -377,11 +376,18 @@ public class HtmlFetcher {
                 return urlAsString;
 
         } catch (Exception ex) {
-            Timber.w("getResolvedUrl:" + urlAsString + " Error:" + ex.getMessage(), ex);
-            return "";
+            Timber.e("getResolvedUrl:" + urlAsString + " Error:" + ex.getMessage(), ex);
+            return urlAsString;
         } finally {
-            Timber.d(responseCode + " url:" + urlAsString + " resolved:" + newUrl);
         }
+    }
+
+    private HttpURLConnection createSimpleConnection(String urlAsString, int timeout) throws IOException {
+        URL url = new URL(urlAsString);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setConnectTimeout(timeout);
+        connection.setReadTimeout(timeout);
+        return connection;
     }
 
     /**
