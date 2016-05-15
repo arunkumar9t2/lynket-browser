@@ -86,4 +86,9 @@ public class PageExtractTask implements PageExtractRunnable.PageExtractTaskMetho
         mUnShortenedUrl = null;
         mExtractionResult = null;
     }
+
+    @Override
+    public String toString() {
+        return mRawUrl == null ? mRawUrl : "empty";
+    }
 }

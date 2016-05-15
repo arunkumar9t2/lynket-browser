@@ -11,6 +11,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import de.jetwick.snacktory.JResult;
+import timber.log.Timber;
 
 /**
  * Created by Arun on 15/05/2016.
@@ -92,11 +93,11 @@ public class ExtractionTasksManager {
     /**
      * Cancels all Threads in the ThreadPool
      */
-    public static void cancelAll() {
-        PageExtractTask[] tasks = new PageExtractTask[sInstance.mDownloadWorkQueue.size()];
+    public static void cancelAll(boolean alsoRemove) {
+        PageExtractTask[] tasks = new PageExtractTask[sInstance.mPageExtractTaskQueue.size()];
 
         //noinspection SuspiciousToArrayCall
-        sInstance.mDownloadWorkQueue.toArray(tasks);
+        sInstance.mPageExtractTaskQueue.toArray(tasks);
 
         synchronized (sInstance) {
 
@@ -110,6 +111,11 @@ public class ExtractionTasksManager {
                 if (null != thread) {
                     thread.interrupt();
                 }
+
+                if (alsoRemove) {
+                    sInstance.mExtractThreadPool.remove(task.getPageExtractRunnable());
+                    Timber.d("Removed task %s", task.toString());
+                }
             }
         }
     }
@@ -117,22 +123,23 @@ public class ExtractionTasksManager {
     /**
      * Stops an extraction thread and removes it from the thread pool
      *
-     * @param downloaderTask The page extract task associated with the Thread
-     * @param pageUrl        The url to be extracted
+     * @param pageExtractTask The page extract task associated with the Thread
+     * @param pageUrl         The url to be extracted
      */
-    static public void removeDownload(PageExtractTask downloaderTask, String pageUrl) {
+    static public void removeDownload(PageExtractTask pageExtractTask, String pageUrl) {
         // If the Thread object still exists and the download matches the specified URL
 
-        if (downloaderTask != null && downloaderTask.getRawUrl().equals(pageUrl)) {
+        if (pageExtractTask != null && pageExtractTask.getRawUrl().equals(pageUrl)) {
             synchronized (sInstance) {
                 // Gets the Thread that the downloader task is running on
-                Thread thread = downloaderTask.getCurrentThread();
+                Thread thread = pageExtractTask.getCurrentThread();
 
                 // If the Thread exists, posts an interrupt to it
                 if (null != thread)
                     thread.interrupt();
 
-                sInstance.mExtractThreadPool.remove(downloaderTask.getPageExtractRunnable());
+                sInstance.mExtractThreadPool.remove(pageExtractTask.getPageExtractRunnable());
+                Timber.d("Removed task %s", pageExtractTask.toString());
             }
         }
     }
