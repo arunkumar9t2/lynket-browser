@@ -1,4 +1,4 @@
-package arun.com.chromer.webheads;
+package arun.com.chromer.webheads.ui;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -42,6 +42,7 @@ import java.net.URL;
 import arun.com.chromer.R;
 import arun.com.chromer.preferences.Preferences;
 import arun.com.chromer.util.Util;
+import arun.com.chromer.webheads.physics.MovementTracker;
 import timber.log.Timber;
 
 /**

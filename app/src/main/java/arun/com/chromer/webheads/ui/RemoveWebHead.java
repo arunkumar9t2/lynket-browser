@@ -1,4 +1,4 @@
-package arun.com.chromer.webheads;
+package arun.com.chromer.webheads.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

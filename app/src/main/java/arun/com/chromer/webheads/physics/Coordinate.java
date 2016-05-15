@@ -1,4 +1,4 @@
-package arun.com.chromer.webheads;
+package arun.com.chromer.webheads.physics;
 
 import android.support.annotation.NonNull;
 import android.view.MotionEvent;

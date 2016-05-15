@@ -1,4 +1,4 @@
-package arun.com.chromer.webheads;
+package arun.com.chromer.webheads.physics;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,7 +15,7 @@ import timber.log.Timber;
  * end point on the either sides of the display. By using this end point, it is possible to know
  * where the gesture would end if it was continued along the tangent of the curve.
  */
-class MovementTracker {
+public class MovementTracker {
     private static final int TOP_RIGHT = 1;
     private static final int BOTTOM_RIGHT = 2;
     private static final int BOTTOM_LEFT = 3;
@@ -29,7 +29,7 @@ class MovementTracker {
 
     private final SizedQueue<Coordinate> mPoints;
 
-    MovementTracker(int trackingSize, int dispHeight, int dispWidth, int endOffset) {
+    public MovementTracker(int trackingSize, int dispHeight, int dispWidth, int endOffset) {
         mTrackingSize = trackingSize;
         mPoints = new SizedQueue<>(mTrackingSize);
         mDispHeight = dispHeight;
@@ -196,7 +196,7 @@ class MovementTracker {
      * By using the tracked gesture points, calculates the fling end point. This is done by assuming
      * a line from the 75% of the tracked points to last tracked point. Then calculateTrajectory is
      * used to find the end point.
-     * <p/>
+     * <p>
      * The threshold is assumed to be at 75% of the tracked length. Increased values would mean
      * accurate direction but can be prone to errors as end points can have spiked data.
      *

@@ -118,7 +118,7 @@
             android:name=".about.AboutAppActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".webheads.WebHeadLauncherActivity"
+            android:name=".webheads.helper.WebHeadLauncherActivity"
             android:theme="@style/Transparent"/>
         <activity
             android:name=".payments.DonateActivity"

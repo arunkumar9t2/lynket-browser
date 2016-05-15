@@ -50,6 +50,8 @@ import arun.com.chromer.activities.CustomTabActivity;
 import arun.com.chromer.customtabs.CustomTabBindingHelper;
 import arun.com.chromer.preferences.Preferences;
 import arun.com.chromer.util.Constants;
+import arun.com.chromer.webheads.ui.RemoveWebHead;
+import arun.com.chromer.webheads.ui.WebHead;
 import timber.log.Timber;
 
 public class WebHeadService extends Service implements WebHead.WebHeadInteractionListener,
