@@ -25,7 +25,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.BounceInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -91,14 +91,14 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     private WebHeadInteractionListener mInteractionListener;
     private MovementTracker mMovementTracker;
 
-    public WebHead(@NonNull Context context, @NonNull String url) {
+    public WebHead(@NonNull Context context, @NonNull String url, @Nullable WebHeadInteractionListener listener) {
         super(context);
         mUrl = url;
-        init(context, url);
+        init(context, url, listener);
     }
 
 
-    private void init(Context context, String url) {
+    private void init(Context context, String url, WebHeadInteractionListener listener) {
         WEB_HEAD_COUNT++;
 
         if (sWindowManager == null)
@@ -117,6 +117,10 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         setDisplayMetrics();
         setSpawnLocation();
         setUpSprings();
+
+        setWebHeadInteractionListener(listener);
+
+        sWindowManager.addView(this, mWindowParams);
     }
 
     private void initFavicon() {
@@ -150,6 +154,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
                 }
             }
         });
+        setVisibility(INVISIBLE); // To be made visible on reveal
 
         mWallAttachSpring = mSpringSystem.createSpring();
         mWallAttachSpring.setSpringConfig(SpringConfig.fromOrigamiTensionAndFriction(40, 6));
@@ -312,12 +317,10 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         return false;
     }
 
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
 
-        // Spring scale animation when getting attached to window
+    public void reveal() {
         mScaleSpring.setCurrentValue(0);
+        setVisibility(VISIBLE);
         mScaleSpring.setEndValue(1f);
     }
 
@@ -402,7 +405,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         ValueAnimator animator = null;
         if (!mUserManuallyMoved) {
             animator = ValueAnimator.ofInt(mWindowParams.y, mWindowParams.y + STACKING_GAP_PX);
-            animator.setInterpolator(new BounceInterpolator());
+            animator.setInterpolator(new OvershootInterpolator());
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {

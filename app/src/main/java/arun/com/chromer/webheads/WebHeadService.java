@@ -132,6 +132,8 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     }
 
     private void addWebHead(final String webHeadUrl) {
+        final WebHead webHead = new WebHead(/*Service*/ this, webHeadUrl,/*Interaction listener*/ this);
+        mWebHeads.put(webHeadUrl, webHead);
         // Before adding new web heads, call move self to stack distance on existing web heads to move
         // them a little such that they appear to be stacked
         AnimatorSet animatorSet = new AnimatorSet();
@@ -141,12 +143,13 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
             if (anim != null) animators.add(anim);
         }
         animatorSet.playTogether(animators);
+        animatorSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (webHead != null) webHead.reveal();
+            }
+        });
         animatorSet.start();
-
-        WebHead webHead = new WebHead(WebHeadService.this, webHeadUrl);
-        webHead.setWebHeadInteractionListener(WebHeadService.this);
-        mWindowManager.addView(webHead, webHead.getWindowParams());
-        mWebHeads.put(webHeadUrl, webHead);
 
         ParsingTasksManager.startDownload(webHeadUrl);
     }
