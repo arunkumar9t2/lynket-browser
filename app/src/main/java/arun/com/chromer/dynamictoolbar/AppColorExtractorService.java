@@ -23,7 +23,7 @@ import timber.log.Timber;
 
 public class AppColorExtractorService extends IntentService {
 
-    public static final int NOT_VALID_COLOR = -1;
+    private static final int NOT_VALID_COLOR = -1;
 
     public AppColorExtractorService() {
         super(AppColorExtractorService.class.getSimpleName());

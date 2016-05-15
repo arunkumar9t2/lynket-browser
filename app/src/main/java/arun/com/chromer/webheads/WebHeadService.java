@@ -431,7 +431,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         destroyAllWebHeads();
 
         ExtractionTasksManager.cancelAll();
-        ExtractionTasksManager.unRegisterListener(this);
+        ExtractionTasksManager.unRegisterListener();
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mLocalReceiver);
         unregisterReceiver(mStopServiceReceiver);

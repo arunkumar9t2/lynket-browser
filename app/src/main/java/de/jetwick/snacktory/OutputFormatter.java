@@ -71,7 +71,7 @@ public class OutputFormatter {
      * Takes an element and returns a list of texts extracted from the P tags
      */
     public List<String> getTextList(Element topNode) {
-        List<String> texts = new ArrayList<String>();
+        List<String> texts = new ArrayList<>();
         for (Element element : topNode.select(this.nodesToKeepCssSelector)) {
             if (element.hasText()) {
                 texts.add(element.text());
@@ -145,9 +145,7 @@ public class OutputFormatter {
     }
 
     boolean lastCharIsWhitespace(StringBuilder accum) {
-        if (accum.length() == 0)
-            return false;
-        return Character.isWhitespace(accum.charAt(accum.length() - 1));
+        return accum.length() != 0 && Character.isWhitespace(accum.charAt(accum.length() - 1));
     }
 
     protected String node2TextOld(Element el) {

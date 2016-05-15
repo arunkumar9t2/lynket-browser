@@ -22,7 +22,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URI;
 import java.net.URL;
@@ -48,10 +47,11 @@ public class HtmlFetcher {
         SHelper.enableAnySSL();
     }
 
+    @SuppressWarnings("Convert2Diamond")
     public static void main(String[] args) throws Exception {
         BufferedReader reader = new BufferedReader(new FileReader("urls.txt"));
         String line = null;
-        Set<String> existing = new LinkedHashSet<String>();
+        Set<String> existing = new LinkedHashSet<>();
         while ((line = reader.readLine()) != null) {
             int index1 = line.indexOf("\"");
             int index2 = line.indexOf("\"", index1 + 1);
@@ -81,10 +81,10 @@ public class HtmlFetcher {
     private String charset = "UTF-8";
     private SCache cache;
     private Proxy proxy = null;
-    private AtomicInteger cacheCounter = new AtomicInteger(0);
+    private final AtomicInteger cacheCounter = new AtomicInteger(0);
     private int maxTextLength = -1;
     private ArticleTextExtractor extractor = new ArticleTextExtractor();
-    private Set<String> furtherResolveNecessary = new LinkedHashSet<String>() {
+    private final Set<String> furtherResolveNecessary = new LinkedHashSet<String>() {
         {
             add("bit.ly");
             add("cli.gs");
@@ -243,7 +243,7 @@ public class HtmlFetcher {
             }
 
             // if resolved url is longer then use it!
-            if (resUrl != null && resUrl.trim().length() > url.length()) {
+            if (resUrl.trim().length() > url.length()) {
                 // this is necessary e.g. for some homebaken url resolvers which return
                 // the resolved url relative to url!
                 url = SHelper.useDomainOfFirstArg4Second(url, resUrl);
@@ -307,12 +307,12 @@ public class HtmlFetcher {
     }
 
     public String fetchAsString(String urlAsString, int timeout)
-            throws MalformedURLException, IOException {
+            throws IOException {
         return fetchAsString(urlAsString, timeout, true);
     }
 
     public String fetchAsString(String urlAsString, int timeout, boolean includeSomeGooseOptions)
-            throws MalformedURLException, IOException {
+            throws IOException {
         HttpURLConnection hConn = createUrlConnection(urlAsString, timeout, includeSomeGooseOptions);
         hConn.setInstanceFollowRedirects(true);
         String encoding = hConn.getContentEncoding();
@@ -405,7 +405,7 @@ public class HtmlFetcher {
     }
 
     protected HttpURLConnection createUrlConnection(String urlAsStr, int timeout,
-                                                    boolean includeSomeGooseOptions) throws MalformedURLException, IOException {
+                                                    boolean includeSomeGooseOptions) throws IOException {
         URL url = new URL(urlAsStr);
         //using proxy may increase latency
         Proxy proxy = getProxy();

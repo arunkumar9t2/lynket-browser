@@ -16,7 +16,7 @@ import de.jetwick.snacktory.JResult;
  * Created by Arun on 15/05/2016.
  */
 public class ExtractionTasksManager {
-    private static ExtractionTasksManager sInstance = null;
+    private static final ExtractionTasksManager sInstance;
 
     // A queue of Runnables for page extraction task
     private final BlockingQueue<Runnable> mDownloadWorkQueue;
@@ -34,7 +34,7 @@ public class ExtractionTasksManager {
 
     private static ProgressListener mProgressListener;
 
-    private Handler mHandler;
+    private final Handler mHandler;
 
     public interface ProgressListener {
         void onUrlUnShortened(String originalUrl, String unShortenedUrl);
@@ -95,17 +95,16 @@ public class ExtractionTasksManager {
     public static void cancelAll() {
         PageExtractTask[] tasks = new PageExtractTask[sInstance.mDownloadWorkQueue.size()];
 
+        //noinspection SuspiciousToArrayCall
         sInstance.mDownloadWorkQueue.toArray(tasks);
-
-        int arrayLen = tasks.length;
 
         synchronized (sInstance) {
 
             // Iterates over the array of tasks
-            for (int taskArrayIndex = 0; taskArrayIndex < arrayLen; taskArrayIndex++) {
+            for (PageExtractTask task : tasks) {
 
                 // Gets the task's current thread
-                Thread thread = tasks[taskArrayIndex].getCurrentThread();
+                Thread thread = task.getCurrentThread();
 
                 // if the Thread exists, post an interrupt to it
                 if (null != thread) {
@@ -154,7 +153,7 @@ public class ExtractionTasksManager {
         return downloadTask;
     }
 
-    void recycleTask(PageExtractTask downloadTask) {
+    private void recycleTask(PageExtractTask downloadTask) {
         downloadTask.recycle();
 
         // Puts the task object back into the queue for re-use.
@@ -165,7 +164,7 @@ public class ExtractionTasksManager {
         mProgressListener = listener;
     }
 
-    static public void unRegisterListener(ProgressListener listener) {
+    static public void unRegisterListener() {
         mProgressListener = null;
     }
 

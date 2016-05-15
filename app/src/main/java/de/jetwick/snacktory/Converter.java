@@ -15,12 +15,13 @@
  */
 package de.jetwick.snacktory;
 
+import android.annotation.SuppressLint;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.SocketTimeoutException;
 import java.nio.charset.Charset;
 
 import timber.log.Timber;
@@ -96,6 +97,7 @@ public class Converter {
      * @param maxBytes The max bytes that we want to read from the input stream
      * @return String
      */
+    @SuppressLint("CustomWarning")
     public String streamToString(InputStream is, int maxBytes, String enc) {
         encoding = enc;
         // Http 1.1. standard is iso-8859-1 not utf8 :(
@@ -151,8 +153,6 @@ public class Converter {
             }
 
             return output.toString(encoding);
-        } catch (SocketTimeoutException e) {
-            Timber.e(e.toString() + " url:" + url);
         } catch (IOException e) {
             Timber.e(e.toString() + " url:" + url);
         } finally {
@@ -173,6 +173,7 @@ public class Converter {
      *
      * @throws IOException
      */
+    @SuppressLint("CustomWarning")
     protected String detectCharset(String key, ByteArrayOutputStream bos, BufferedInputStream in,
                                    String enc) throws IOException {
 

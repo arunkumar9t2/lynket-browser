@@ -1,5 +1,7 @@
 package de.jetwick.snacktory;
 
+import android.annotation.SuppressLint;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -146,7 +148,7 @@ public class ArticleTextExtractor {
         }
 
         if (bestMatchElement != null) {
-            List<ImageResult> images = new ArrayList<ImageResult>();
+            List<ImageResult> images = new ArrayList<>();
             Element imgEl = determineImageSource(bestMatchElement, images);
             if (imgEl != null) {
                 res.setImageUrl(SHelper.replaceSpaces(imgEl.attr("src")));
@@ -220,14 +222,12 @@ public class ArticleTextExtractor {
     protected Collection<String> extractKeywords(Document doc) {
         String content = SHelper.innerTrim(doc.select("head meta[name=keywords]").attr("content"));
 
-        if (content != null) {
-            if (content.startsWith("[") && content.endsWith("]"))
-                content = content.substring(1, content.length() - 1);
+        if (content.startsWith("[") && content.endsWith("]"))
+            content = content.substring(1, content.length() - 1);
 
-            String[] split = content.split("\\s*,\\s*");
-            if (split.length > 1 || (split.length > 0 && !"".equals(split[0])))
-                return Arrays.asList(split);
-        }
+        String[] split = content.split("\\s*,\\s*");
+        if (split.length > 1 || (split.length > 0 && !"".equals(split[0])))
+            return Arrays.asList(split);
         return Collections.emptyList();
     }
 
@@ -299,7 +299,7 @@ public class ArticleTextExtractor {
     protected int weightChildNodes(Element rootEl) {
         int weight = 0;
         Element caption = null;
-        List<Element> pEls = new ArrayList<Element>(5);
+        List<Element> pEls = new ArrayList<>(5);
         for (Element child : rootEl.children()) {
             String ownText = child.ownText();
 
@@ -529,6 +529,7 @@ public class ArticleTextExtractor {
         print(add, child, "");
     }
 
+    @SuppressLint("CustomWarning")
     private void print(String add1, Element child, String add2) {
         Timber.i(add1 + " " + child.nodeName() + " id=" + child.id()
                 + " class=" + child.className() + " text=" + child.text() + " " + add2);
@@ -580,7 +581,7 @@ public class ArticleTextExtractor {
      * @return a set of all important nodes
      */
     public Collection<Element> getNodes(Document doc) {
-        Map<Element, Object> nodes = new LinkedHashMap<Element, Object>(64);
+        Map<Element, Object> nodes = new LinkedHashMap<>(64);
         int score = 100;
         for (Element el : doc.select("body").select("*")) {
             if (NODES.matcher(el.tagName()).matches()) {

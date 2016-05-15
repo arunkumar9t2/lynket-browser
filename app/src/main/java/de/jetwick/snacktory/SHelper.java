@@ -15,6 +15,8 @@
  */
 package de.jetwick.snacktory;
 
+import android.annotation.SuppressLint;
+
 import org.jsoup.nodes.Element;
 
 import java.io.UnsupportedEncodingException;
@@ -261,11 +263,10 @@ public class SHelper {
         if (url.startsWith("http://www.google.com/url?")) {
             url = url.substring("http://www.google.com/url?".length());
             String arr[] = urlDecode(url).split("\\&");
-            if (arr != null)
-                for (String str : arr) {
-                    if (str.startsWith("q="))
-                        return str.substring("q=".length());
-                }
+            for (String str : arr) {
+                if (str.startsWith("q="))
+                    return str.substring("q=".length());
+            }
         }
 
         return null;
@@ -415,6 +416,7 @@ public class SHelper {
      * keep in mind: simpleDateFormatter is not thread safe! call completeDate
      * before applying this formatter.
      */
+    @SuppressLint("SimpleDateFormat")
     public static SimpleDateFormat createDateFormatter() {
         return new SimpleDateFormat("yyyy/MM/dd");
     }
@@ -432,6 +434,7 @@ public class SHelper {
 
     private static class DefaultTrustManager implements X509TrustManager {
 
+        @SuppressLint("TrustAllX509TrustManager")
         @Override
         public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
         }
