@@ -54,4 +54,5 @@ dependencies {
     compile 'com.flipboard:bottomsheet-core:1.5.0'
     compile 'com.flipboard:bottomsheet-commons:1.5.0'
     compile 'com.facebook.rebound:rebound:0.3.8'
+    compile 'org.jsoup:jsoup:1.8.3'
 }
