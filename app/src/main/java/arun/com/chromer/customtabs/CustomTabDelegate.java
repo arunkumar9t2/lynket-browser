@@ -13,6 +13,7 @@ import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsSession;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.List;
@@ -44,6 +45,7 @@ import timber.log.Timber;
 public class CustomTabDelegate {
 
     private static final int OPEN_TAB = 1;
+    private static final int SHARE_TAB = 2;
     private static int sToolbarColor;
 
     public static CustomTabsIntent getCustomizedTabIntent(@NonNull Context ctx, @NonNull String url, boolean isWebhead) {
@@ -311,6 +313,10 @@ public class CustomTabDelegate {
     }
 
     private static void addShareIntent(@NonNull Context c, @NonNull CustomTabsIntent.Builder builder) {
+        if (Preferences.bottomBar(c)) {
+            return;
+        }
+
         final Intent shareIntent = new Intent(c, ShareBroadcastReceiver.class);
         final PendingIntent pendingShareIntent = PendingIntent.getBroadcast(c, 0, shareIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.addMenuItem(c.getString(R.string.share), pendingShareIntent);
@@ -322,14 +328,28 @@ public class CustomTabDelegate {
         }
 
         builder.setSecondaryToolbarColor(sToolbarColor);
-        final Intent shareIntent = new Intent(c, OpenInNewTabReceiver.class);
-        final PendingIntent pendingOpenTabIntent = PendingIntent.getBroadcast(c, 0, shareIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Bitmap openTabIcon = new IconicsDrawable(c)
-                .icon(CommunityMaterial.Icon.cmd_plus_box)
-                .color(Util.getForegroundTextColor(sToolbarColor))
+        int iconColor = Util.getForegroundTextColor(sToolbarColor);
+
+        if (Util.isLollipop()) {
+            final Intent openInNewTabIntent = new Intent(c, OpenInNewTabReceiver.class);
+            final PendingIntent pendingOpenTabIntent = PendingIntent.getBroadcast(c, 0, openInNewTabIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            Bitmap openTabIcon = new IconicsDrawable(c)
+                    .icon(CommunityMaterial.Icon.cmd_plus_box)
+                    .color(iconColor)
+                    .sizeDp(24).toBitmap();
+            builder.addToolbarItem(OPEN_TAB, openTabIcon, c.getString(R.string.open_in_new_tab), pendingOpenTabIntent);
+        }
+
+        final Intent shareIntent = new Intent(c, ShareBroadcastReceiver.class);
+        final PendingIntent pendingShareIntent = PendingIntent.getBroadcast(c, 0, shareIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Bitmap shareIcon = new IconicsDrawable(c)
+                .icon(GoogleMaterial.Icon.gmd_share)
+                .color(iconColor)
                 .sizeDp(24).toBitmap();
-        builder.addToolbarItem(OPEN_TAB, openTabIcon, c.getString(R.string.open_in_new_tab), pendingOpenTabIntent);
+        builder.addToolbarItem(SHARE_TAB, shareIcon, c.getString(R.string.share), pendingShareIntent);
     }
 
 }
