@@ -26,6 +26,7 @@ public class Preferences {
     public static final String ANIMATION_SPEED = "animation_speed_preference";
     // Changed key for 1.5 build which will force intro to show
     private static final String FIRST_RUN = "firstrun_1";
+    private static final String USER_KNOWS_BOTTOM_BAR = "user_learnt_bottom_bar";
     private static final String WARM_UP = "warm_up_preference";
     private static final String BLACKLIST = "blacklist_preference";
     private static final String PRE_FETCH = "pre_fetch_preference";
@@ -60,6 +61,15 @@ public class Preferences {
     public static boolean isFirstRun(Context context) {
         if (preferences(context).getBoolean(FIRST_RUN, true)) {
             preferences(context).edit().putBoolean(FIRST_RUN, false).apply();
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isUserLearntBottomBar(Context context) {
+        // TODO Fix this and make learnt flag persistable
+        if (preferences(context).getBoolean(USER_KNOWS_BOTTOM_BAR, false)) {
+            // preferences(context).edit().putBoolean(USER_KNOWS_BOTTOM_BAR, true).apply();
             return true;
         }
         return false;
