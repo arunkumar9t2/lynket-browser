@@ -75,8 +75,8 @@ public class HtmlFetcher {
         reader.close();
     }
 
-    private String referrer = "https://github.com/karussell/snacktory";
-    private String userAgent = "Mozilla/5.0 (compatible; Snacktory; +" + referrer + ")";
+    private String referrer = "Chromer";
+    private String userAgent = "Mozilla/5.0 (iPad; CPU OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3";
     private String cacheControl = "max-age=0";
     private String language = "en-us";
     private String accept = "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
@@ -310,29 +310,47 @@ public class HtmlFetcher {
 
     public String fetchAsString(String urlAsString, int timeout)
             throws IOException {
-        return fetchAsString(urlAsString, timeout, true);
+        return fetchAsString(urlAsString, timeout, false);
     }
 
     public String fetchAsString(String urlAsString, int timeout, boolean includeSomeGooseOptions)
             throws IOException {
-        HttpURLConnection hConn = createUrlConnection(urlAsString, timeout, includeSomeGooseOptions);
-        hConn.setInstanceFollowRedirects(true);
-        String encoding = hConn.getContentEncoding();
+        HttpURLConnection connection = createUrlConnection(urlAsString, timeout, false);
+        connection.setInstanceFollowRedirects(true);
+        connection.connect();
+
+        String encoding = connection.getContentEncoding();
         InputStream is;
         if (encoding != null && encoding.equalsIgnoreCase("gzip")) {
-            is = new GZIPInputStream(hConn.getInputStream());
+            is = new GZIPInputStream(connection.getInputStream());
         } else if (encoding != null && encoding.equalsIgnoreCase("deflate")) {
-            is = new InflaterInputStream(hConn.getInputStream(), new Inflater(true));
+            is = new InflaterInputStream(connection.getInputStream(), new Inflater(true));
         } else {
-            is = hConn.getInputStream();
+            is = connection.getInputStream();
         }
 
-        String enc = Converter.extractEncoding(hConn.getContentType());
+        String enc = Converter.extractEncoding(connection.getContentType());
         return createConverter(urlAsString).streamToString(is, enc);
     }
 
     public Converter createConverter(String url) {
         return new Converter(url);
+    }
+
+
+    public String unShortenUrl(String originalUrl) {
+        int maxRedirects = 5;
+        String unShortenedUrl = originalUrl;
+        for (int i = 0; i < maxRedirects; i++) {
+            originalUrl = getResolvedUrl(originalUrl, 1000 * 10);
+            if (originalUrl != null) {
+                if (originalUrl.equalsIgnoreCase(unShortenedUrl)) {
+                    return unShortenedUrl;
+                }
+                unShortenedUrl = originalUrl;
+            } else return unShortenedUrl;
+        }
+        return unShortenedUrl;
     }
 
     /**
@@ -344,50 +362,39 @@ public class HtmlFetcher {
      * (within the specified time) or the same url if response code is OK
      */
     @SuppressLint("CustomWarning")
-    public String getResolvedUrl(String urlAsString, int timeout) {
-        String newUrl = null;
+    public String getResolvedUrl(String originalUrl, int timeout) {
+        String redirectedUrl = null;
         int responseCode = -1;
+        HttpURLConnection connection = null;
         try {
-            HttpURLConnection urlConnection = createSimpleConnection(urlAsString, timeout);
-            urlConnection.setInstanceFollowRedirects(false);
-            urlConnection.setRequestMethod("HEAD");
-            urlConnection.connect();
-            responseCode = urlConnection.getResponseCode();
+            connection = createUrlConnection(originalUrl, timeout, false);
+            connection.setInstanceFollowRedirects(false);
+            connection.setRequestMethod("HEAD");
+            connection.connect();
 
-            //if (responseCode == HttpURLConnection.HTTP_OK)
-            //return  urlAsString;
+            responseCode = connection.getResponseCode();
 
-            newUrl = urlConnection.getHeaderField("Location");
-            if (responseCode / 100 == 3 && newUrl != null) {
-                newUrl = newUrl.replaceAll(" ", "+");
+            redirectedUrl = connection.getHeaderField("Location");
+            if (responseCode > 300 && responseCode < 400) {
+                redirectedUrl = redirectedUrl.replaceAll(" ", "+");
                 // some services use (none-standard) utf8 in their location header
-                if (urlAsString.startsWith("http://bit.ly") || urlAsString.startsWith("http://is.gd"))
-                    newUrl = encodeUriFromHeader(newUrl);
+                if (originalUrl.startsWith("http://bit.ly") || originalUrl.startsWith("http://is.gd"))
+                    redirectedUrl = encodeUriFromHeader(redirectedUrl);
 
-                // fix problems if shortened twice. as it is often the case after twitters' t.co bullshit
-                if (furtherResolveNecessary.contains(SHelper.extractDomain(newUrl, true)))
-                    newUrl = getResolvedUrl(newUrl, timeout);
-
-                URI uri = new URI(newUrl);
+                URI uri = new URI(redirectedUrl);
                 if (uri.getHost() != null) {
-                    return newUrl;
-                } else return urlAsString;
+                    return redirectedUrl;
+                } else return originalUrl;
             } else
-                return urlAsString;
-
+                return originalUrl;
         } catch (Exception ex) {
-            Timber.e("getResolvedUrl:" + urlAsString + " Error:" + ex.getMessage(), ex);
-            return urlAsString;
+            Timber.e("getResolvedUrl:" + originalUrl + " Error:" + ex.getMessage(), ex);
+            return originalUrl;
         } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
         }
-    }
-
-    private HttpURLConnection createSimpleConnection(String urlAsString, int timeout) throws IOException {
-        URL url = new URL(urlAsString);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setConnectTimeout(timeout);
-        connection.setReadTimeout(timeout);
-        return connection;
     }
 
     /**

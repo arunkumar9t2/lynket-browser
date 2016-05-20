@@ -46,7 +46,7 @@ public class PageExtractRunnable implements Runnable {
             cancelIfNeeded();
 
             HtmlFetcher fetcher = new HtmlFetcher();
-            String url = fetcher.getResolvedUrl(mPageTask.getRawUrl(), 1000 * 10);
+            String url = fetcher.unShortenUrl(mPageTask.getRawUrl());
             mPageTask.setUnShortenedUrl(url);
             mPageTask.handleDownloadState(ParsingTasksManager.URL_UN_SHORTENED);
 
