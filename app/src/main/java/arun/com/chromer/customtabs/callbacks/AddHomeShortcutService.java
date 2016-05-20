@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 import android.widget.Toast;
@@ -28,7 +29,6 @@ import arun.com.chromer.util.Constants;
 import arun.com.chromer.util.Util;
 import de.jetwick.snacktory.HtmlFetcher;
 import de.jetwick.snacktory.JResult;
-import timber.log.Timber;
 
 public class AddHomeShortcutService extends IntentService {
 
@@ -41,43 +41,23 @@ public class AddHomeShortcutService extends IntentService {
         if (intent != null) {
             final String urlToAdd = intent.getDataString();
             if (urlToAdd != null) {
-                Timber.d("Attempting to add for %s", urlToAdd);
-
                 showToast(getString(R.string.add_home_screen_begun));
 
                 HtmlFetcher fetcher = new HtmlFetcher();
                 String unShortenedUrl = fetcher.getResolvedUrl(urlToAdd, 1000 * 10);
-                JResult res = null;
-                try {
-                    res = fetcher.fetchAndExtract(unShortenedUrl, 1000 * 10, false);
-                } catch (Exception e) {
-                }
 
-                if (unShortenedUrl.length() == 0) {
-                    unShortenedUrl = urlToAdd;
-                }
+                JResult res = extractWebsiteData(fetcher, unShortenedUrl);
+
+                if (unShortenedUrl.length() == 0) unShortenedUrl = urlToAdd;
 
                 if (res == null) {
                     legacyAdd(unShortenedUrl);
                     return;
                 }
 
-                String shortCutName = res.getTitle() != null && res.getTitle().length() != 0
-                        ? res.getTitle() : res.getOriginalUrl() != null && res.getOriginalUrl().length() != 0
-                        ? res.getOriginalUrl() : unShortenedUrl;
-
+                String shortCutName = getShortcutName(unShortenedUrl, res);
                 String faviconUrl = res.getFaviconUrl();
-
-                Bitmap favicon = null;
-                try {
-                    favicon = Glide.with(this)
-                            .load(faviconUrl)
-                            .asBitmap()
-                            .into(-1, -1)
-                            .get();
-                } catch (InterruptedException | ExecutionException ignored) {
-
-                }
+                Bitmap favicon = getFaviconBitmap(faviconUrl);
 
                 if (favicon != null) {
                     if (!isValidFavicon(favicon)) {
@@ -101,10 +81,40 @@ public class AddHomeShortcutService extends IntentService {
                 addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, favicon);
 
                 sendBroadcast(addIntent);
-
                 showToast(getString(R.string.added) + " " + shortCutName);
             }
         }
+    }
+
+    @Nullable
+    private JResult extractWebsiteData(HtmlFetcher fetcher, String unShortenedUrl) {
+        JResult res = null;
+        try {
+            res = fetcher.fetchAndExtract(unShortenedUrl, 1000 * 10, false);
+        } catch (Exception ignored) {
+        }
+        return res;
+    }
+
+    private String getShortcutName(String unShortenedUrl, JResult res) {
+        return res.getTitle() != null && res.getTitle().length() != 0
+                ? res.getTitle() : res.getOriginalUrl() != null && res.getOriginalUrl().length() != 0
+                ? res.getOriginalUrl() : unShortenedUrl;
+    }
+
+    @Nullable
+    private Bitmap getFaviconBitmap(String faviconUrl) {
+        Bitmap favicon = null;
+        try {
+            favicon = Glide.with(this)
+                    .load(faviconUrl)
+                    .asBitmap()
+                    .into(-1, -1)
+                    .get();
+        } catch (InterruptedException | ExecutionException ignored) {
+
+        }
+        return favicon;
     }
 
     @NonNull
