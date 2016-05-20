@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+<resources>
+    <string-array name="animationValues">
+        <item>Žiadna</item>
+        <item>Vysunúť z prava</item>
+        <item>Vysunúť z dola</item>
+    </string-array>
+    <string-array name="animationSpeedValues">
+        <item>Stredná</item>
+        <item>Krátka</item>
+    </string-array>
+    <string-array name="animationSpeedKeys">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="actionValues">
+        <item>Sekundárny prehliadač</item>
+        <item>Aplikácia pre zdieľanie</item>
+    </string-array>
+    <string-array name="webHeadsSpawnValues">
+        <item>Vpravo</item>
+        <item>Vľavo</item>
+    </string-array>
+    <string name="app_name">Chromer</string>
+    <string name="share_text">Hej, vyskúšaj \‘Chromer\’ pre rýchle a bezpečné surfovanie! Stiahni si ho tu https://goo.gl/992ils</string>
+    <string name="share_via">Zdieľať pomocou…</string>
+    <string name="custom_tab_provider_not_found">Kompatibilný poskytovateľ Custom Tabs nebol nájdený</string>
+    <string name="custom_tab_provider_not_found_expln">Chromer vyžaduje aby ste mali nainštalovaný prehliadač podporujúci Custom Tabs. Momentálne na vašom zariadení nemáte prehliadač, ktorý to podporuje. Chceli by ste nainštalovať Google Chrome z Obchodu Play? Ak ho už máte, prosím, aktualizujte na najnovšiu verziu.</string>
+    <string name="install">Inštalovať</string>
+    <string name="licenses">Licencie</string>
+    <string name="about">O aplikácii</string>
+    <string name="help_chromer_grow">Pomôžte Chromer rásť!</string>
+    <string name="share">Zdieľať</string>
+    <string name="share_with">Zdieľať s %1$s</string>
+    <string name="more_custom_tbs">Viac o Custom Tabs</string>
+    <string name="rate_play_store">Hodnotiť v Obchode Play</string>
+    <string name="feedback">Spätná väzba</string>
+    <string name="intro">Úvod</string>
+    <string name="send_email">Poslať e-mail…</string>
+    <string name="choose_default_provider">Zvoľte predvoleného poskytovateľa</string>
+    <string name="fallback_msg">Nie je možné otvoriť Custom Tab, presmerovanie do normálneho prehliadača</string>
+    <string name="open_with">Otvoriť s…</string>
+    <string name="open_in_browser">Otvoriť v %1$s</string>
+    <string name="unxp_err">Neočakávaná chyba, skúste znova</string>
+    <string name="unsupported_link">Odkaz nie je podporovaný, skúste znova</string>
+    <string name="couldnt_load_price">Cenu nie je možné načítať</string>
+    <string name="coffee">Káva</string>
+    <string name="lunch">Obed</string>
+    <string name="premium_donation">Prémiový dar</string>
+    <string name="invalid_link">Neplatný odkaz</string>
+    <string name="copied">Skopírované</string>
+    <string name="copy_link">Skopírovať odkaz</string>
+    <string name="add_to_homescreen">Pridať na domovskú stránku</string>
+    <string name="intro_1">Ahoj! \nChromer je ľahký, bezpečný a rýchly webový prehliadač.</string>
+    <string name="intro_2">Používa funkciu Custom Tabs z Google Chrome, ktorá je extrémne odľahčená karta z Chrome, určená pre rýchle otvorenie odkazu.</string>
+    <string name="intro_3">Môže ponechať prehliadač uzamknutý v pamäti a tak sa prehliadač spúšťa rýchlejšie.</string>
+    <string name="intro_5">Môže skenovať odkazy na vašej obrazovke a načítať ich na pozadí pre skrátenie času načítania!</string>
+    <string name="intro_4">Môže zoskupiť viacero odkazov do plávajúcich bublín pri ich otvorení a potom ich čiastočne načítať na pozadí!</string>
+    <string name="how_to_use">Ako používať Chromer?</string>
+    <string name="intro_6">Stačí nastaviť Chromer ako predvolený prehliadač, Chromer zobrazí odkaz nerušivým spôsobom. Alebo si vyberte Chromer v prípade potreby.</string>
+    <string name="why_use">Prečo používať Chromer?</string>
+    <string name="intro_7">Rýchlejšie načítanie, nerušivý, šetrý dáta, zdieľané prihlasovacie údaje z Chrome, automatické vypĺňanie formulárov a BEZPEČNÝ s najnovšími aktualizáciami!</string>
+    <string name="thats_it">Je prispôsobiteľný!</string>
+    <string name="intro_8">Môžete si jednoducho zvoliť ako má Chromer fungovať spustením aplikácie!</string>
+    <string name="version">Verzia</string>
+    <string name="changelog">Zoznam zmien</string>
+    <string name="join_google_plus">Pripojiť sa do Google+ komunity</string>
+    <string name="share_ideas">Zdieľajte svoje nápady!</string>
+    <string name="support_development">Podporiť vývoj</string>
+    <string name="consider_donation">Pošlite nám finančný dar</string>
+    <string name="add_to_circles">Pridať do Google+ kruhov</string>
+    <string name="follow_twitter">Sledovať na Twitteri</string>
+    <string name="connect_linkedIn">Pripojiť sa na LinkedIn</string>
+    <string name="more_apps">Viac aplikácií</string>
+    <string name="author">Autor</string>
+    <string name="added">Pridané</string>
+    <string name="settings">Nastavenia</string>
+    <string name="colored_toolbar">Farebná lišta</string>
+    <string name="choose_animation">Animácia otvorenia</string>
+    <string name="animation_speed">Rýchlosť animácie</string>
+    <string name="usage_options">Možnosti použitia</string>
+    <string name="default_pref_xpln">Nastavte si Chromer ako predvolený aby otváral všetky odkazy alebo si môžete vybrať Chromer zo zoznamu keď sa zobrazí</string>
+    <string name="personalization">Personalizácia</string>
+    <string name="default_clear_msg">prehliadač je nastavený ako predvolený, prosím, zrušte ho kliknutím na vymazať predvolené nastavenia.</string>
+    <string name="dynamic_toolbar_color">Dynamická farba lišty</string>
+    <string name="keep_chrome_warmedup">Ponechá prehliadač v pamäti pre rýchlejšie spustenie</string>
+    <string name="warmup_browser">Nažhaviť prehliadač</string>
+    <string name="set_default_chromer">Nastaviť ako predvolený prehliadač</string>
+    <string name="circle_to_preview_changes">Kliknite na okrúhle tlačidlo pre náhľad zmien</string>
+    <string name="default_provider">Predvolený poskytovateľ Custom Tabs</string>
+    <string name="pre_fetch_content">Prednačítanie obsahu</string>
+    <string name="pre_fetch_desc">Vyhľadáva odkazy na vašej obrazovke a načítava ich na pozadí pre rýchle spustenie</string>
+    <string name="accessibility_description">Túto službu využíva Chromer pre skenovanie textových odkazov na vašej obrazovke a ich načítanie na pozadí. Žiadne ďalšie informácie nie sú spracovávané. Stále môžete používať Chromer v odľahčenom režime ak sa rozhodnete nepovoliť túto možnosť. Pre viac informácii spustite aplikáciu Chromer.</string>
+    <string name="accessibility_dialog_title">Služba Dostupnosť je vyžadovaná</string>
+    <string name="accessibility_dialog_desc">Aby Chromer mohol skenovať odkazy v ktorejkoľvek aplikácii, potrebuje povolenie pre službu Dostupnosť. Prosím, povoľte to na nasledujúcej obrazovke, potom budete môcť povoliť túto funkciu a užívať si rýchle spustenie.</string>
+    <string name="open_settings">Otvoriť nastavenia</string>
+    <string name="only_on_wifi">Skenovať iba cez Wi-Fi</string>
+    <string name="show_notification">Zobraziť upozornenie, keď je odkaz prednačítaný</string>
+    <string name="default_toolbar_color">Predvolená farba lišty</string>
+    <string name="web_heads_color">Farba webových hlavičiek</string>
+    <string name="choose_secondary_browser">Sekundárny prehliadač</string>
+    <string name="dynamic_toolbar_help">Pre dynamické zafarbenie lišty, sa Chromer učí farby bez zásahu užívateľa. To spočiatku nemusí byť správne pre webové stránky alebo aplikáciu, ale to sa  používaním a časom zlepší. Užite si to!</string>
+    <string name="chromer_defaulted">Chromer je predvolený prehliadač</string>
+    <string name="secondary_browser_success">Aplikácia %1$s je nastavená ako sekundárny prehliadač!</string>
+    <string name="fav_share_success">Aplikácia %1$s je nastavená ako aplikácia pre zdieľanie!</string>
+    <string name="default_provider_success">Aplikácia %1$s bude použitá ako poskytovateľ Custom Tabs!</string>
+    <string name="based_on_app">Podľa aplikácie</string>
+    <string name="based_on_web">Podľa web stránky</string>
+    <string name="preferred_action">Preferovaná akcia</string>
+    <string name="fav_share_app">Aplikácia pre zdieľanie</string>
+    <string name="choose_fav_share_app">Zvoľte aplikáciu pre zdieľanie</string>
+    <string name="dynamic_summary_appweb">Farba bude určená podľa web stránky, ak ju stránka podporuje, inak bude určená podľa aplikácie</string>
+    <string name="dynamic_summary_app">Farba bude zvolená podľa aplikácie, ktorú spustí odkaz</string>
+    <string name="dynamic_summary_web">Farba bude zvolená podľa spustenej stránky</string>
+    <string name="no_option_selected">Nie sú vybrané žiadne voľby</string>
+    <string name="permission_required">Je požadované povolenie</string>
+    <string name="usage_permission_explanation_appcolor">Pre povolenie dynamického zafarbenia lišty podľa aplikácie, Chromer potrebuje vaše povolenie vedieť, aké aplikácie používate. Chcete to teraz povoliť?</string>
+    <string name="usage_permission_explanation_blacklist">Pre blokovanie aplikácií, Chromer potrebuje vaše povolenie vedieť, aké aplikácie používate. Chcete to teraz povoliť?</string>
+    <string name="grant">Povoliť</string>
+    <string name="open_source_contributions">Open source veci</string>
+    <string name="search_or_type_url">Vyhľadajte alebo zadajte adresu</string>
+    <string name="voice_prompt">Povedzte svoju požiadavku</string>
+    <string name="web_heads">Webové hlavičky</string>
+    <string name="webhead_spawn_summary">Predvolená poloha zobrazenia</string>
+    <string name="webhead_spawn_title">Zvoľte kde sa webové hlavičky zobrazia</string>
+    <string name="credits">Zásluhy</string>
+    <string name="icon_design">Dizajn ikony</string>
+    <string name="overlay_permission_content">Pre vykreslenie webových hlavičiek na obrazovke, je potrebné povoliť vykreslenie cez ďalšie aplikácie. Chcete to teraz povoliť?</string>
+    <string name="webheads_intro_1">Keď otvoríte odkaz v akejkoľvek aplikácii, na obrazovke sa zobrazí plávajúca bublina nazývaná webová hlavička a Chromer sa pokúsi prednačítať odkaz.</string>
+    <string name="webheads_intro_2">Pri otvorení viacerých odkazov, webové hlavičky budú automaticky zoskupené jedna nad druhú. Tieto odkazy môžete neskôr otvoriť kliknutím.</string>
+    <string name="webheads_intro_3">Keď potiahnete webovú hlavičku, zobrazí sa kôš. Presunutím webovej hlavičky na kôš sa odstráni.</string>
+    <string name="webheads_intro_4">Chromer uprednostňuje posledne otvorený odkaz a prednačíta ho. Odporúčaná metóda je otvárať webové hlavičky jednu po druhej odhora až dole. Ak povolíte zatváranie webových hlavičiek po otvorení bude to bezproblémové.</string>
+    <string name="web_head_permission_toast">Pre otvorenie odkazov v plávajúcich bublinách, Chromer potrebuje povolenie Vykresliť cez ďalšie aplikácie. Prosím, povoľte to pre pokračovanie alebo zakážte webové hlavičky v nastaveniach aplikácie.</string>
+    <string name="tap_close_all">Kliknite pre zatvorenie všetkých</string>
+    <string name="web_heads_service">Slúžba pre webové hlavičky</string>
+    <string name="join_beta">Pripojte sa k beta testu</string>
+    <string name="become_a_tester">Staňte sa testerom</string>
+    <string name="join_beta_content">Beta verzie sú experimentálne, ktoré majú najnovšie funkcie ale môžu mať chyby.  Môžete prispieť k vývoju pripojením sa ako tester a nahlasovaním chýb, ktoré nájdete v komunite Google+.\n\nProsím, uistite sa, že ste sa pripojili do Google+ komunity, a potom kliknite na tlačidlo Staňte sa testerom a prejdite na odkaz pre testovanie Google Play. \n\nPOZNÁMKA: Musíte sa pripojiť do komunity pre sprístupnenie možnosti testovania.</string>
+    <string name="no_voice_rec_apps">Nebola nájdená kompatibilná aplikácia pre rozoznávanie hlasu</string>
+    <string name="already_set">Už nastavené!</string>
+    <string name="blacklisted_apps">Blokované aplikácie</string>
+    <string name="loading">Načítavanie…</string>
+    <string name="please_wait">Prosím, počkajte</string>
+    <string name="blacklist_message">Zablokovali ste túto aplikáciu pre spúšťanie v Chromer a nenastavili ste sekundárny prehliadač. Prosím, zvoľte prehliadač.</string>
+    <string name="share_failed_msg">Do aplikácie nie je možné zdieľať, presmerované do normálneho zdieľania</string>
+    <string name="blacklist_explanation">Odkazy z blokovaniej aplikácie budú otvorené v sekundárnom prehliadači.</string>
+    <string name="revoke_accessibility_permission">Teraz môžete zakázať službu Dostupnosť pre Chromer.</string>
+    <string name="last_fetched_urls">Naposledy načínané adresy</string>
+    <string name="blacklist_on">Blokované aplikácie sú %s</string>
+    <string name="translations">Prekladatelia</string>
+    <string name="merge_tabs">Zlúčenie kariet a aplikácií - Beta</string>
+    <string name="merge_tabs_explanation">Zobrazí karty s ďalšími nedávnymi aplikáciami na obrazovne nedávnych aplikácií.</string>
+</resources>

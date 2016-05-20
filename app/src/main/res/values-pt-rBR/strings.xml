@@ -10,6 +10,14 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+    <string-array name="animationSpeedValues">
+        <item>Média</item>
+        <item>Curta</item>
+    </string-array>
+    <string-array name="animationSpeedKeys">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
     <string-array name="actionValues">
         <item>Navegador secundário</item>
         <item>App para compartilhar favorito</item>
@@ -27,7 +35,7 @@
         <item>2</item>
     </string-array>
     <string name="app_name">Chromer</string>
-    <string name="share_text">Ei! Confira o \‘Chromer\’ para uma experiência de navegação rápida e segura! Baixe aqui https://goo.gl/992ils</string>
+    <string name="share_text">Oi! Experimente o \'Chromer\' para uma experiência de navegação rápida e segura! Baixe aqui https://goo.gl/992ils</string>
     <string name="share_via">Compartilhar via</string>
     <string name="custom_tab_provider_not_found">Provedor de abas personalizadas não encontrado</string>
     <string name="custom_tab_provider_not_found_expln">O Chromer precisa que você tenha um navegador compatível com Abas customizadas no seu celular. Você pode instalar o Google Chrome gratuitamente pela Play Store.</string>
@@ -38,7 +46,7 @@
     <string name="share">Compartilhar</string>
     <string name="share_with">Compartilhar com %1$s</string>
     <string name="more_custom_tbs">Mais em Abas customizadas</string>
-    <string name="rate_play_store">Avaliar na Play Store</string>
+    <string name="rate_play_store">"Avaliar na Play Store "</string>
     <string name="feedback">Comentários</string>
     <string name="intro">Introdução</string>
     <string name="send_email">Enviar e-mail…</string>
@@ -82,6 +90,7 @@
     <string name="settings">Configurações</string>
     <string name="colored_toolbar">Barra de ações colorida</string>
     <string name="choose_animation">Animação de abertura</string>
+    <string name="animation_speed">Velocidade das animações</string>
     <string name="usage_options">Opções de uso</string>
     <string name="default_pref_xpln">Definir o Chromer como padrão para abrir todos os links, ou você pode escolher Chromer na lista abaixo quando aparecer</string>
     <string name="personalization">Personalização</string>
@@ -98,7 +107,8 @@
     <string name="accessibility_dialog_title">Permissão de acessibilidade requerida</string>
     <string name="accessibility_dialog_desc">Para permitir o Chromer escanear links em qualquer app, é necessário conceder permissão de acessibilidade. Por favor conceda a permissão na próxima tela, depois disso, você pode ativar esta opção e curtir carregamentos mais rápidos!</string>
     <string name="open_settings">Abrir configurações</string>
-    <string name="only_on_wifi">Apenas em Wi-Fi</string>
+    <string name="only_on_wifi">Buscar apenas em Wi-Fi</string>
+    <string name="show_notification">Exibir notificação quando um link é precarregado</string>
     <string name="default_toolbar_color">Cor padrão da barra</string>
     <string name="web_heads_color">Cor das web heads</string>
     <string name="choose_secondary_browser">Navegador secundário</string>
@@ -142,7 +152,7 @@
     <string name="no_voice_rec_apps">Nenhum app de reconhecimento de voz foi encontrado</string>
     <string name="already_set">Já definido!</string>
     <string name="blacklisted_apps">Apps na lista negra</string>
-    <string name="loading">Carregando…</string>
+    <string name="loading">Carregando...</string>
     <string name="please_wait">Aguarde</string>
     <string name="blacklist_message">Você colocou este app na lista negra do Chromer e não tem um navegador secundário. Escolha um navegador para continuar.</string>
     <string name="share_failed_msg">Não foi possível compartilhar, tentando o compartilhamento normal</string>
@@ -150,4 +160,7 @@
     <string name="revoke_accessibility_permission">Agora você pode revogar a permissão de acessibilidade do Chromer.</string>
     <string name="last_fetched_urls">Últimas URLs carregadas</string>
     <string name="blacklist_on">Lista negra de apps %s</string>
+    <string name="translations">Traduções</string>
+    <string name="merge_tabs">Mesclar abas e apps - Beta</string>
+    <string name="merge_tabs_explanation">Ver suas abas junto com outros apps na tela de apps Recentes.</string>
 </resources>

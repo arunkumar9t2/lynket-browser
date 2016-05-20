@@ -2,7 +2,7 @@
 <resources>
     <string-array name="animationValues">
         <item>Keine</item>
-        <item>Rechts wischen</item>
+        <item>Nach rechts wischen</item>
         <item>Nach oben wischen</item>
     </string-array>
     <string-array name="animationKeys">
@@ -10,9 +10,17 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+    <string-array name="animationSpeedValues">
+        <item>Mittel</item>
+        <item>Schnell</item>
+    </string-array>
+    <string-array name="animationSpeedKeys">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
     <string-array name="actionValues">
         <item>Sekundärer Browser</item>
-        <item>Lieblings App zum Teilen</item>
+        <item>Lieblings-Teil-App</item>
     </string-array>
     <string-array name="actionKeys">
         <item>1</item>
@@ -27,10 +35,10 @@
         <item>2</item>
     </string-array>
     <string name="app_name">Chromer</string>
-    <string name="share_text">Hey,  teste \‘Chromer\’ für schnelles und sicheres surfen. Hier runterladen: https://goo.gl/992ils</string>
-    <string name="share_via">Teilen mit…</string>
-    <string name="custom_tab_provider_not_found">Kein kompatibler Custom Tab Provider gefunden</string>
-    <string name="custom_tab_provider_not_found_expln">"Chromer benötigt einen Custom Tab kompatiblen Browser auf deinem Smartphone. Momentan sind keine kompatiblen Browser installiert. Möchtest du Google Chrome (gratis) aus dem Play Store installieren? Wenn es bereits installiert ist, dann aktualisiere bitte auf die neueste Version. "</string>
+    <string name="share_text">Hey,  teste \'Chromer\' für schnelles und sicheres surfen. Hier runterladen: https://goo.gl/992ils</string>
+    <string name="share_via">Teilen mit...</string>
+    <string name="custom_tab_provider_not_found">Kein kompatibler Custom-Tab-Anbieter gefunden</string>
+    <string name="custom_tab_provider_not_found_expln">Chrome benötigt einen Custom-Tab-kompatiblen Browser auf deinem Gerät. Momentan sind keine solchen Browser installiert. Würdest du Google Chrome (kostenlos) aus dem Play Store installieren? Wenn du es bereits hast, bitte aktualidiere es auf die neueste Version.</string>
     <string name="install">Installieren</string>
     <string name="licenses">Lizenzen</string>
     <string name="about">Über</string>
@@ -41,28 +49,28 @@
     <string name="rate_play_store">Im Play Store bewerten</string>
     <string name="feedback">Feedback</string>
     <string name="intro">Einführung</string>
-    <string name="send_email">Email senden…</string>
-    <string name="choose_default_provider">Standard Provider wählen</string>
-    <string name="fallback_msg">Konnte Custom Tab nicht öffnen, nutze stattdessen normalen Browser</string>
-    <string name="open_with">Öffnen mit…</string>
+    <string name="send_email">Email senden...</string>
+    <string name="choose_default_provider">Standardprovider wählen</string>
+    <string name="fallback_msg">Konnte Custom-Tab nicht öffnen, ausweichen auf normalen Browser</string>
+    <string name="open_with">Öffnen mit...</string>
     <string name="open_in_browser">Öffne in %1$s</string>
     <string name="unxp_err">Unerwarteter Fehler, erneut versuchen</string>
     <string name="unsupported_link">Kein unterstützter Link, erneut versuchen</string>
     <string name="couldnt_load_price">Konnte Preis nicht laden</string>
     <string name="coffee">Kaffee</string>
     <string name="lunch">Mittagessen</string>
-    <string name="premium_donation">Premium Spende</string>
+    <string name="premium_donation">Premiumspende</string>
     <string name="invalid_link">Ungültiger Link</string>
     <string name="copied">Kopiert</string>
     <string name="copy_link">Link kopieren</string>
     <string name="add_to_homescreen">Zum Startbildschirm hinzufügen</string>
     <string name="intro_1">"Hallo! \nChromer ist ein schlanker, sicherer und schneller Browser. "</string>
-    <string name="intro_2">"Es benutzt Chromes Custom Tabs Funktion, die ein extrem schlankes Chrome Tab bereitstellt um einen Link schnell zu laden.  "</string>
+    <string name="intro_2">Es nutzt Chromes Custom-Tab-Funktion, die einen extrem schlanken Chrome-Tab bereitsstellt, um einen Link schnell zu laden.</string>
     <string name="intro_3">"Dein Browser kann im Speicher behalten werden, damit er ein wenig schneller startet. "</string>
     <string name="intro_5">Links auf deinem Bildschirm können gescannt und im Hintergrund geladen werden um Ladezeiten zu verringern!</string>
     <string name="intro_4">Mehrere Links können in schwebenden Blasen gestapelt werden wenn du sie anklickst. Sie werden dann teilweise im Hintergrund geladen!</string>
     <string name="how_to_use">Wie funktioniert das?</string>
-    <string name="intro_6">Du musst lediglich Chromer als deinen Standard Browser festlegen. Chromer wird den Link unaufdringlich anzeigen. Oder wähle Chromer nur bei Bedarf.</string>
+    <string name="intro_6">Du musst nur Chromer als deinen Standardbrowser festlegen. Chromer wird dir den Link dann unaufdringlich anzeigen. Oder du wählst Chromer nur bei Bedarf.</string>
     <string name="why_use">Warum Chromer?</string>
     <string name="intro_7">Schnelleres Laden, unaufdringlich, schont dein Datenvolumen, Login Daten aus Chrome inklusive Auto-Fill Daten und sicher mit den neuesten Updates.</string>
     <string name="thats_it">Es ist anpassbar!</string>
@@ -82,10 +90,11 @@
     <string name="settings">Einstellungen</string>
     <string name="colored_toolbar">Farbige Aktionsleiste</string>
     <string name="choose_animation">Animation beim Öffnen</string>
+    <string name="animation_speed">Animationsgeschwindigkeit</string>
     <string name="usage_options">Benutzereinstellungen</string>
     <string name="default_pref_xpln">Lege Chromer als Standard für das Öffnen von Links fest oder wähle Chromer aus der Liste aus wenn es angezeigt wird</string>
     <string name="personalization">Personalisieren</string>
-    <string name="default_clear_msg">ist als Standard Browser festgelegt. Bitte ändern indem du \“Auf Standard zurücksetzen\” drückst.</string>
+    <string name="default_clear_msg">ist als Standard Browser festgelegt. Bitte ändern indem du \"Auf Standard zurücksetzen\" drückst.</string>
     <string name="dynamic_toolbar_color">Dynamische Aktionsleistensfarbe</string>
     <string name="keep_chrome_warmedup">Browser im Speicher behalten für schnelleres Starten</string>
     <string name="warmup_browser">Browser aufwärmen</string>
@@ -98,6 +107,7 @@
     <string name="accessibility_dialog_title">Bedienungshilfe muss aktiviert sein</string>
     <string name="accessibility_dialog_desc">Um Chromer das Scannen nach Links zu erlauben musst du die Bedienungshilfe aktivieren. Bitte aktiviere die Funktion auf dem nächsten Bildschirm. Danach kannst du die Option aktiveren und das schnellere Starten genießen.</string>
     <string name="open_settings">Einstellungen öffnen</string>
+    <string name="show_notification">Zeige eine Benachrichtigung, während ein Link vorgeladen wird</string>
     <string name="default_toolbar_color">Standard Aktionsleistenfarbe</string>
     <string name="web_heads_color">Web Heads Farbe</string>
     <string name="choose_secondary_browser">Sekundärer Browser</string>
@@ -112,7 +122,7 @@
     <string name="fav_share_app">Lieblingsapp zum Teilen</string>
     <string name="choose_fav_share_app">Wähle deine Lieblingsapp zum Teilen</string>
     <string name="dynamic_summary_appweb">Die Farbe basiert auf der Webseite (falls unterstützt). Ansonsten wird die App Farbe genutzt.</string>
-    <string name="dynamic_summary_app">Die Farbe basiert auf der App, die Webseite startet</string>
+    <string name="dynamic_summary_app">Die Farbe basiert auf der App, die die Webseite startet</string>
     <string name="dynamic_summary_web">Die Farbe basiert auf der geöffnete Webseite</string>
     <string name="no_option_selected">Keine Option ausgewählt</string>
     <string name="permission_required">Berechtigung erforderlich</string>
@@ -128,7 +138,7 @@
     <string name="credits">Credits</string>
     <string name="icon_design">Icon Design</string>
     <string name="overlay_permission_content">Um die Web Heads anzuzeigen wird die Berechtigung, etwas über anderen Apps einzublenden benötigt. Möchtest du die Berechtigung gewähren?</string>
-    <string name="webheads_intro_1">Wenn du irgendeinen Link öffnest wird eine \“schwebende Blase\” (Web Head) erstellt und Chromer versucht den Link vorab zu laden.</string>
+    <string name="webheads_intro_1">Wenn du irgendeinen Link öffnest wird eine \"schwebende Blase\" (Web Head) erstellt und Chromer versucht den Link vorab zu laden.</string>
     <string name="webheads_intro_2">Wenn du mehrere Links öffnest, werden die Web Heads automatisch gestapelt. Du kannst die Links später öffnen, indem du darauf tippst.</string>
     <string name="webheads_intro_3">Wenn du einen Web Head ziehst, erscheint eine Mülltonne. Lass den Web Head darüber los um ihn zu schließen.</string>
     <string name="webheads_intro_4">"Chromer priorisiert den zuletzt geöffneten Link und lädt ihn vorab. Die beste Methode ist, die Web Heads nacheinander von oben nach unten auszuwählen. Die beste Erfahrung wird gewährleistet, wenn die Web Heads automatisch geschlossen werden beim Antippen. "</string>
@@ -137,11 +147,11 @@
     <string name="web_heads_service">Web Heads Dienst</string>
     <string name="join_beta">Beta beitreten</string>
     <string name="become_a_tester">Tester werden</string>
-    <string name="join_beta_content">“Beta Versionen sind experimentell. Sie haben die neuesten Funktionen, enthalten jedoch auch Fehler. Du kannst bei der Entwicklung helfen, indem du als Tester mitmachst und Fehler in der Google+ Community meldest. \n\nBitte stelle sicher,  dass du der Community beigetreten bist und klicke dann auf den Button \”Tester werden\". \n\nBEACHTE: Du musst der Community beitreten um Tester zu werden. "</string>
+    <string name="join_beta_content">"Beta Versionen sind experimentell. Sie haben die neuesten Funktionen, enthalten jedoch auch Fehler. Du kannst bei der Entwicklung helfen, indem du als Tester mitmachst und Fehler in der Google+ Community meldest. \n\nBitte stelle sicher,  dass du der Community beigetreten bist und klicke dann auf den Button \"Tester werden\". \n\nBEACHTE: Du musst der Community beitreten um Tester zu werden. "</string>
     <string name="no_voice_rec_apps">Keine kompatible Spracherkennungs App gefunden</string>
     <string name="already_set">Bereits eingestellt!</string>
     <string name="blacklisted_apps">Ausgeschlossene Apps (Blacklist)</string>
-    <string name="loading">Laden…</string>
+    <string name="loading">Laden...</string>
     <string name="please_wait">Bitte warten</string>
     <string name="blacklist_message">Du hast diese App in Chromer ausgeschlossen und keinen sekundären Browser festgelegt. Bitte wähle zum Fortfahren einen Browser.</string>
     <string name="share_failed_msg">Konnte nicht geteilt werden. Benutze stattdessen die Standard App</string>
@@ -149,4 +159,7 @@
     <string name="revoke_accessibility_permission">Du kannst die Berechtigung für die Bedienungshilfe jetzt deaktivieren.</string>
     <string name="last_fetched_urls">Letzte geladene URLs</string>
     <string name="blacklist_on">Ausgeschlossene Apps %s</string>
+    <string name="translations">Übersetzungen</string>
+    <string name="merge_tabs">Tabs und Apps zusammen anzeigen - Beta</string>
+    <string name="merge_tabs_explanation">Zeige Tabs zusammen mit Apps im \"Zuletzt geöffnet\"-Screen an</string>
 </resources>
