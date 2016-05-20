@@ -311,10 +311,10 @@ public class Util {
                     if (mutedColor != Constants.NO_COLOR) {
                         return mutedColor;
                     } else {
-                        int lightVibrantColor = palette.getLightVibrantColor(Constants.NO_COLOR);
-                        if (lightVibrantColor != Constants.NO_COLOR) {
-                            return lightVibrantColor;
-                        } else return prominentColor;
+                        if (vibrantColor != Constants.NO_COLOR) {
+                            return vibrantColor;
+                        } else
+                            return prominentColor;
                     }
                 }
             } else return vibrantColor;
