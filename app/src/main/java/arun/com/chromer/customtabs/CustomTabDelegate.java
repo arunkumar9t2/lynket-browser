@@ -5,11 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsSession;
+
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.List;
 
@@ -18,6 +22,7 @@ import arun.com.chromer.customtabs.callbacks.AddHomeShortcutService;
 import arun.com.chromer.customtabs.callbacks.ClipboardService;
 import arun.com.chromer.customtabs.callbacks.FavShareBroadcastReceiver;
 import arun.com.chromer.customtabs.callbacks.OpenInChromeReceiver;
+import arun.com.chromer.customtabs.callbacks.OpenInNewTabReceiver;
 import arun.com.chromer.customtabs.callbacks.SecondaryBrowserReceiver;
 import arun.com.chromer.customtabs.callbacks.ShareBroadcastReceiver;
 import arun.com.chromer.customtabs.prefetch.ScannerService;
@@ -35,7 +40,11 @@ import timber.log.Timber;
 /**
  * Created by Arun on 06/01/2016.
  */
+// TODO REWRITE THIS UGLY CODE :'(
 public class CustomTabDelegate {
+
+    private static final int OPEN_TAB = 1;
+    private static int sToolbarColor;
 
     public static CustomTabsIntent getCustomizedTabIntent(@NonNull Context ctx, @NonNull String url, boolean isWebhead) {
         final CustomTabsSession session = getAvailableSessions(ctx, isWebhead);
@@ -77,6 +86,8 @@ public class CustomTabDelegate {
         addShortcutToHomeScreen(ctx, builder);
 
         addOpenInMainBrowser(ctx, builder);
+
+        prepareBottomBar(ctx, builder);
 
         return builder.build();
     }
@@ -137,6 +148,7 @@ public class CustomTabDelegate {
     }
 
     private static void setToolbarColor(@NonNull Context ctx, @NonNull String url, @NonNull CustomTabsIntent.Builder builder) {
+        sToolbarColor = Color.WHITE;
         if (Preferences.isColoredToolbar(ctx)) {
             // Get the user chosen color first
             int toolbarColor = Preferences.toolbarColor(ctx);
@@ -181,6 +193,7 @@ public class CustomTabDelegate {
                     }
                 }
             }
+            sToolbarColor = toolbarColor;
             builder.setToolbarColor(toolbarColor);
         }
     }
@@ -301,6 +314,22 @@ public class CustomTabDelegate {
         final Intent shareIntent = new Intent(c, ShareBroadcastReceiver.class);
         final PendingIntent pendingShareIntent = PendingIntent.getBroadcast(c, 0, shareIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.addMenuItem(c.getString(R.string.share), pendingShareIntent);
+    }
+
+    private static void prepareBottomBar(@NonNull Context c, @NonNull CustomTabsIntent.Builder builder) {
+        if (!Preferences.bottomBar(c)) {
+            return;
+        }
+
+        builder.setSecondaryToolbarColor(sToolbarColor);
+        final Intent shareIntent = new Intent(c, OpenInNewTabReceiver.class);
+        final PendingIntent pendingOpenTabIntent = PendingIntent.getBroadcast(c, 0, shareIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Bitmap openTabIcon = new IconicsDrawable(c)
+                .icon(CommunityMaterial.Icon.cmd_plus_box)
+                .color(Util.getForegroundTextColor(sToolbarColor))
+                .sizeDp(24).toBitmap();
+        builder.addToolbarItem(OPEN_TAB, openTabIcon, c.getString(R.string.open_in_new_tab), pendingOpenTabIntent);
     }
 
 }

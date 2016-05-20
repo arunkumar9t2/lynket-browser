@@ -165,4 +165,9 @@
     <string name="merge_tabs_explanation">See your tabs with other recent apps on your phone\'s Overview screen.</string>
     <string name="already_loaded">Already loaded</string>
     <string name="add_home_screen_begun">Shortcut will be added shortly</string>
+    <string name="bottom_bar_pref_summary">Shows an additional toolbar with extra options</string>
+    <string name="bottom_bar_pref_title">Show bottom bar</string>
+    <string name="bottom_bar">Bottom Bar</string>
+    <string name="open_in_new_tab">Open in new tab</string>
+    <string name="open_in_new_tab_error">Invalid link, have you copied any text or link by long pressing the page?</string>
 </resources>

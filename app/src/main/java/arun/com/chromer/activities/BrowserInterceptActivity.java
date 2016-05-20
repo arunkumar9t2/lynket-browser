@@ -19,6 +19,7 @@ import arun.com.chromer.R;
 import arun.com.chromer.db.BlacklistedApps;
 import arun.com.chromer.preferences.Preferences;
 import arun.com.chromer.services.AppDetectService;
+import arun.com.chromer.util.Constants;
 import arun.com.chromer.util.Util;
 import arun.com.chromer.webheads.helper.WebHeadLauncherActivity;
 import timber.log.Timber;
@@ -34,6 +35,8 @@ public class BrowserInterceptActivity extends AppCompatActivity {
             finish();
             return;
         }
+
+        boolean isFromNewTab = getIntent().getBooleanExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, false);
 
         // Check if we should blacklist the launching app
         if (Preferences.blacklist(this)) {
@@ -77,7 +80,12 @@ public class BrowserInterceptActivity extends AppCompatActivity {
             Intent customTabActivity = new Intent(this, CustomTabActivity.class);
             customTabActivity.setData(getIntent().getData());
             customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            customTabActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            if (isFromNewTab) {
+                customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+            } else {
+                customTabActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            }
+            customTabActivity.putExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, isFromNewTab);
             startActivity(customTabActivity);
         }
 

@@ -45,6 +45,8 @@ public class Preferences {
     public static final String WEB_HEAD_SPAWN_LOCATION = "webhead_spawn_preference";
     public static final String WEB_HEAD_FAVICON = "webhead_favicons_pref";
 
+    public static final String BOTTTOM_BAR_ENABLED = "bottombar_enabled_pref";
+
     public static final int PREFERRED_ACTION_BROWSER = 1;
     public static final int PREFERRED_ACTION_FAV_SHARE = 2;
 
@@ -384,5 +386,19 @@ public class Preferences {
 
     public static void mergeTabs(Context context, boolean preference) {
         preferences(context).edit().putBoolean(MERGE, preference).commit();
+    }
+
+    public static boolean bottomBar(Context context) {
+        return PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .getBoolean(BOTTTOM_BAR_ENABLED, false);
+    }
+
+    @SuppressWarnings("unused")
+    public static void bottomBar(Context context, boolean preference) {
+        PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(BOTTTOM_BAR_ENABLED, preference).apply();
     }
 }

@@ -62,6 +62,7 @@ import arun.com.chromer.customtabs.prefetch.ScannerService;
 import arun.com.chromer.customtabs.warmup.WarmupService;
 import arun.com.chromer.model.App;
 import arun.com.chromer.payments.DonateActivity;
+import arun.com.chromer.preferences.BottomBarPreferenceFragment;
 import arun.com.chromer.preferences.PersonalizationPreferenceFragment;
 import arun.com.chromer.preferences.Preferences;
 import arun.com.chromer.preferences.WebHeadPreferenceFragment;
@@ -180,6 +181,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.webhead_container, WebHeadPreferenceFragment.newInstance());
         ft.replace(R.id.preference_container, PersonalizationPreferenceFragment.newInstance());
+        ft.replace(R.id.bottom_bar_container, BottomBarPreferenceFragment.newInstance());
         ft.commit();
     }
 

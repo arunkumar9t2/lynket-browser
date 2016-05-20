@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-    <!--suppress DeprecatedClassUsageInspection -->
+    <!-- suppress DeprecatedClassUsageInspection -->
     <uses-permission android:name="android.permission.GET_TASKS"/>
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
@@ -57,6 +57,7 @@
         <receiver android:name=".customtabs.callbacks.FavShareBroadcastReceiver"/>
         <receiver android:name=".customtabs.callbacks.SecondaryBrowserReceiver"/>
         <receiver android:name=".customtabs.callbacks.OpenInChromeReceiver"/>
+        <receiver android:name=".customtabs.callbacks.OpenInNewTabReceiver"/>
 
         <activity
             android:name=".MainActivity"

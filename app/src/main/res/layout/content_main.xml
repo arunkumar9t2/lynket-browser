@@ -400,6 +400,8 @@
 
         <include layout="@layout/web_head_preference_layout"/>
 
+        <include layout="@layout/bottom_bar_preference_layout"/>
+
         <include layout="@layout/personalization_preference_layout"/>
     </LinearLayout>
 </merge>
