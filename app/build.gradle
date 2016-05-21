@@ -8,8 +8,8 @@ android {
         applicationId "arun.com.chromer"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 18
-        versionName "1.6 B2"
+        versionCode 19
+        versionName "1.6 B2.1"
     }
     buildTypes {
         release {
