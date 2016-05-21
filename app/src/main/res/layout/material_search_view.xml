@@ -10,7 +10,7 @@
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="50dp"
         android:background="@drawable/cell"
         app:cardBackgroundColor="@color/cardview_light_background">
 
@@ -23,8 +23,8 @@
 
             <ImageView
                 android:id="@+id/msv_left_icon"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
                 android:layout_gravity="center_vertical"
                 android:scaleType="center"
                 tools:ignore="ContentDescription"/>
@@ -59,8 +59,8 @@
 
             <ImageView
                 android:id="@+id/msv_right_icon"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
                 android:layout_gravity="center_vertical"
                 android:scaleType="center"
                 tools:ignore="ContentDescription"/>
