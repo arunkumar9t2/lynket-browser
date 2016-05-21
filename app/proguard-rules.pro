@@ -28,3 +28,6 @@
 -keepclasseswithmembernames public class * extends com.orm.SugarRecord { *; }
 -keepclasseswithmembernames class com.orm.* { *; }
 -dontwarn com.google.common.**
+-keep public class org.jsoup.** {
+    public *;
+}
