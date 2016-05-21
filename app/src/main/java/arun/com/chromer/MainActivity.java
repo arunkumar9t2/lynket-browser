@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    launchCustomTab(Util.processSearchText(mMaterialSearchView.getText()));
+                    launchCustomTab(mMaterialSearchView.getURL());
                     return true;
                 }
                 return false;
@@ -448,7 +448,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             @Override
             public void onClick(View view) {
                 if (mMaterialSearchView.hasFocus() && mMaterialSearchView.getText().length() > 0) {
-                    launchCustomTab(Util.processSearchText(mMaterialSearchView.getText()));
+                    launchCustomTab(mMaterialSearchView.getURL());
                 } else
                     launchCustomTab(GOOGLE_URL);
             }

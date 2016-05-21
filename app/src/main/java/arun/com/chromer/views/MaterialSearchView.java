@@ -22,6 +22,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
+import arun.com.chromer.util.Util;
 
 public class MaterialSearchView extends FrameLayout {
     @ColorInt
@@ -250,6 +251,10 @@ public class MaterialSearchView extends FrameLayout {
 
     public String getText() {
         return mEditText.getText() == null ? "" : mEditText.getText().toString();
+    }
+
+    public String getURL() {
+        return Util.processSearchText(getText());
     }
 
     public void setVoiceIconClickListener(VoiceIconClickListener listener) {
