@@ -14,7 +14,7 @@ public class PageExtractTask implements PageExtractRunnable.PageExtractTaskMetho
 
     private Thread mCurrentThread;
 
-    private Runnable mPageExtractRunnable;
+    private final Runnable mPageExtractRunnable;
 
     PageExtractTask() {
         // Create the runnables
@@ -37,7 +37,7 @@ public class PageExtractTask implements PageExtractRunnable.PageExtractTaskMetho
         mExtractionResult = result;
     }
 
-    void handleState(int state) {
+    private void handleState(int state) {
         sTaskManager.handleState(this, state);
     }
 
@@ -61,12 +61,14 @@ public class PageExtractTask implements PageExtractRunnable.PageExtractTaskMetho
     }
 
     public Thread getCurrentThread() {
+        //noinspection SynchronizeOnNonFinalField
         synchronized (sTaskManager) {
             return mCurrentThread;
         }
     }
 
-    public void setCurrentThread(Thread thread) {
+    private void setCurrentThread(Thread thread) {
+        //noinspection SynchronizeOnNonFinalField
         synchronized (sTaskManager) {
             mCurrentThread = thread;
         }
@@ -89,6 +91,6 @@ public class PageExtractTask implements PageExtractRunnable.PageExtractTaskMetho
 
     @Override
     public String toString() {
-        return mRawUrl == null ? mRawUrl : "empty";
+        return mRawUrl == null ? null : "empty";
     }
 }

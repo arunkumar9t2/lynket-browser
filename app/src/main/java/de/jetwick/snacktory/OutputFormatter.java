@@ -14,10 +14,11 @@ import java.util.regex.Pattern;
 /**
  * @author goose | jim
  * @author karussell
- *         <p>
+ *         <p/>
  *         this class will be responsible for taking our top node and stripping out junk
  *         we don't want and getting it ready for how we want it presented to the user
  */
+@SuppressWarnings("WeakerAccess")
 public class OutputFormatter {
 
     public static final int MIN_PARAGRAPH_TEXT = 50;
@@ -35,6 +36,7 @@ public class OutputFormatter {
         this(minParagraphText, NODES_TO_REPLACE);
     }
 
+    @SuppressWarnings("SameParameterValue")
     public OutputFormatter(int minParagraphText, List<String> nodesToReplace) {
         this.minParagraphText = minParagraphText;
         this.nodesToReplace = nodesToReplace;
@@ -120,9 +122,7 @@ public class OutputFormatter {
 
         String style = e.attr("style");
         String clazz = e.attr("class");
-        if (unlikelyPattern.matcher(style).find() || unlikelyPattern.matcher(clazz).find())
-            return true;
-        return false;
+        return unlikelyPattern.matcher(style).find() || unlikelyPattern.matcher(clazz).find();
     }
 
     void appendTextSkipHidden(Element e, StringBuilder accum) {

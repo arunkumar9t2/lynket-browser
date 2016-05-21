@@ -27,8 +27,8 @@
         <item>2</item>
     </string-array>
     <string name="app_name">Chromer</string>
-    <string name="share_text">Hey, dai un occhiata a \'Chromer\' per una navigazione sicura e veloce! Scaricala qua http://goo.gl/922ils</string>
-    <string name="share_via">Condividi con...</string>
+    <string name="share_text">Hey, dai un occhiata a \‘Chromer\’ per una navigazione sicura e veloce! Scaricala qua http://goo.gl/922ils</string>
+    <string name="share_via">Condividi con…</string>
     <string name="custom_tab_provider_not_found">Nessun fornitore di custom tab trovato</string>
     <string name="custom_tab_provider_not_found_expln">Chromer necessita di un browser con custom tab compatibile installato sul tuo telefono. Momentaneamente non ci sono browser installati che le supportano. Vorresti installare Chrome (gratis) dal play store? Se è già installato, allora aggiornalo all\'ultima versione.</string>
     <string name="install">Installa</string>
@@ -37,14 +37,14 @@
     <string name="help_chromer_grow">Aiuta Chromer a crescere!</string>
     <string name="share">Condividi</string>
     <string name="share_with">Condividi con %1$s</string>
-    <string name="more_custom_tbs">Piu informazioni su custom tabs</string>
+    <string name="more_custom_tbs">Più informazioni su custom tabs</string>
     <string name="rate_play_store">Vota sul Play store</string>
     <string name="feedback">Feedback</string>
     <string name="intro">Intro</string>
-    <string name="send_email">Invia email...</string>
+    <string name="send_email">Invia email…</string>
     <string name="choose_default_provider">Scegli fornitore di default</string>
     <string name="fallback_msg">Impossibile aprire custom tab, apertura browser normale</string>
-    <string name="open_with">Apri con...</string>
+    <string name="open_with">Apri con…</string>
     <string name="open_in_browser">Apri in %1$s</string>
     <string name="unxp_err">Errore inaspettato, prova di nuovo</string>
     <string name="unsupported_link">Link non supportato, prova di nuovo</string>
@@ -63,7 +63,7 @@
     <string name="intro_4">Può impilare bolle fluttuanti multiple quando le apri e poi caricarle parzialmente in background!</string>
     <string name="how_to_use">Come usare questo?</string>
     <string name="intro_6">Imposta Chromer come broswer definitivo, e visualizzerà i link in maniera non intrusiva. O seleziona Chromer quando necessario.</string>
-    <string name="why_use">Perchè usare?</string>
+    <string name="why_use">Perché usare?</string>
     <string name="intro_7">Caricamento più veloce, non intrusivo, risparmia dati, dati di login condivisi con Chrome, auto riempimento dei forms e SICURO con gli ultimi updates!</string>
     <string name="thats_it">E\' personalizzabile!</string>
     <string name="intro_8">Può decidere facilmente come vuoi che lavori Chromer avviando la schermata principale!</string>

@@ -7,9 +7,10 @@ import timber.log.Timber;
 /**
  * Created by Arun on 15/05/2016.
  */
+@SuppressWarnings("WeakerAccess")
 public class PageExtractRunnable implements Runnable {
 
-    final PageExtractTaskMethods mPageTask;
+    private final PageExtractTaskMethods mPageTask;
 
     PageExtractRunnable(PageExtractTaskMethods pageTask) {
         mPageTask = pageTask;

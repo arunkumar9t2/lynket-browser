@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/material_dark_color"
             android:textSize="16sp"
-            tools:ignore="HardcodedText"/>
+            tools:ignore="HardcodedText,SelectableText"/>
 
         <TextView
             android:id="@+id/about_app_subtitle"
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/material_dark_color"
             android:textSize="12sp"
-            tools:ignore="HardcodedText"/>
+            tools:ignore="HardcodedText,SelectableText"/>
     </LinearLayout>
 
 </LinearLayout>

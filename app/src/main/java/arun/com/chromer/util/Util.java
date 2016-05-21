@@ -46,6 +46,7 @@ import arun.com.chromer.model.App;
 /**
  * Created by Arun on 17/12/2015.
  */
+@SuppressWarnings("JavaDoc")
 public class Util {
 
     public static void openPlayStore(@NonNull Context context, @NonNull String appPackageName) {

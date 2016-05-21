@@ -66,13 +66,9 @@ public class Preferences {
         return false;
     }
 
-    public static boolean isUserLearntBottomBar(Context context) {
+    public static boolean dummyBottomBar(Context context) {
         // TODO Fix this and make learnt flag persistable
-        if (preferences(context).getBoolean(USER_KNOWS_BOTTOM_BAR, false)) {
-            // preferences(context).edit().putBoolean(USER_KNOWS_BOTTOM_BAR, true).apply();
-            return true;
-        }
-        return false;
+        return !preferences(context).getBoolean(USER_KNOWS_BOTTOM_BAR, false);
     }
 
     public static boolean isColoredToolbar(Context context) {

@@ -41,6 +41,7 @@ import timber.log.Timber;
  *
  * @author Peter Karich
  */
+@SuppressWarnings({"WeakerAccess", "UnusedParameters"})
 public class HtmlFetcher {
 
     static {
@@ -52,7 +53,7 @@ public class HtmlFetcher {
     @SuppressWarnings("Convert2Diamond")
     public static void main(String[] args) throws Exception {
         BufferedReader reader = new BufferedReader(new FileReader("urls.txt"));
-        String line = null;
+        String line;
         Set<String> existing = new LinkedHashSet<>();
         while ((line = reader.readLine()) != null) {
             int index1 = line.indexOf("\"");
@@ -86,6 +87,7 @@ public class HtmlFetcher {
     private final AtomicInteger cacheCounter = new AtomicInteger(0);
     private int maxTextLength = -1;
     private ArticleTextExtractor extractor = new ArticleTextExtractor();
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private final Set<String> furtherResolveNecessary = new LinkedHashSet<String>() {
         {
             add("bit.ly");
@@ -216,6 +218,8 @@ public class HtmlFetcher {
         return getProxy() != null;
     }
 
+    @SuppressLint("CustomWarning")
+    @SuppressWarnings({"SameParameterValue", "StatementWithEmptyBody"})
     public JResult fetchAndExtract(String url, int timeout, boolean resolve) throws Exception {
         String originalUrl = url;
         url = SHelper.removeHashbang(url);
@@ -288,6 +292,7 @@ public class HtmlFetcher {
             result.setRssUrl(fixUrl(url, result.getRssUrl()));
         }
         result.setText(lessText(result.getText()));
+        //noinspection SynchronizationOnLocalVariableOrMethodParameter
         synchronized (result) {
             result.notifyAll();
         }
@@ -313,6 +318,7 @@ public class HtmlFetcher {
         return fetchAsString(urlAsString, timeout, false);
     }
 
+    @SuppressWarnings("SameParameterValue")
     public String fetchAsString(String urlAsString, int timeout, boolean includeSomeGooseOptions)
             throws IOException {
         HttpURLConnection connection = createUrlConnection(urlAsString, timeout, false);
@@ -363,8 +369,8 @@ public class HtmlFetcher {
      */
     @SuppressLint("CustomWarning")
     public String getResolvedUrl(String originalUrl, int timeout) {
-        String redirectedUrl = null;
-        int responseCode = -1;
+        String redirectedUrl;
+        int responseCode;
         HttpURLConnection connection = null;
         try {
             connection = createUrlConnection(originalUrl, timeout, false);
@@ -417,6 +423,7 @@ public class HtmlFetcher {
         return sb.toString();
     }
 
+    @SuppressWarnings("SameParameterValue")
     protected HttpURLConnection createUrlConnection(String urlAsStr, int timeout,
                                                     boolean includeSomeGooseOptions) throws IOException {
         URL url = new URL(urlAsStr);
@@ -442,7 +449,7 @@ public class HtmlFetcher {
         return hConn;
     }
 
-    private JResult getFromCache(String url, String originalUrl) throws Exception {
+    private JResult getFromCache(String url, String originalUrl) {
         if (cache != null) {
             JResult res = cache.get(url);
             if (res != null) {

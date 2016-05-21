@@ -32,6 +32,7 @@ import timber.log.Timber;
  *
  * @author Peter Karich
  */
+@SuppressWarnings({"WeakerAccess", "JavaDoc"})
 public class Converter {
 
     public final static String UTF8 = "UTF-8";
@@ -157,6 +158,7 @@ public class Converter {
             Timber.e(e.toString() + " url:" + url);
         } finally {
             if (in != null) {
+                //noinspection EmptyCatchBlock
                 try {
                     in.close();
                 } catch (Exception e) {

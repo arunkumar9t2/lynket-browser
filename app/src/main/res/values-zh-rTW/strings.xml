@@ -23,7 +23,7 @@
     </string-array>
     <string name="app_name">Chromer</string>
     <string name="share_text">嘿，快來體驗 \‘Chromer\’ 提供的快速和安全瀏覽功能！ 可以在這裡下載 https://goo.gl/992ils</string>
-    <string name="share_via">分享至...</string>
+    <string name="share_via">分享至…</string>
     <string name="custom_tab_provider_not_found">找不到兼容自訂標籤頁功能的提供程序</string>
     <string name="custom_tab_provider_not_found_expln">Chromer需要您在手機上安裝可兼容自訂標籤頁功能的瀏覽器，目前在您的手機上沒有發現可支持該功能的瀏覽器。您要在play store上安裝Google Chrome（免費）嗎？如果您已安裝了，請更新它至最新版本。</string>
     <string name="install">安裝</string>
@@ -36,10 +36,10 @@
     <string name="rate_play_store">在Play Store中評分</string>
     <string name="feedback">意見回饋</string>
     <string name="intro">簡介</string>
-    <string name="send_email">發送電郵...</string>
+    <string name="send_email">發送電郵…</string>
     <string name="choose_default_provider">選擇預設提供程序</string>
     <string name="fallback_msg">無法打開自訂標籤頁，將以瀏覽器開啟</string>
-    <string name="open_with">選擇應用程式打開...</string>
+    <string name="open_with">選擇應用程式打開…</string>
     <string name="open_in_browser">在 %1$s 中打開</string>
     <string name="unxp_err">異常錯誤，請重試</string>
     <string name="unsupported_link">不支持的連結，請重試</string>
@@ -129,7 +129,7 @@
     <string name="webheads_intro_1">當您在任何應用程式打開連結時，一個浮動氣泡將被創建於屏幕上，然後Chromer會嘗試預先載入連結內容。</string>
     <string name="webheads_intro_2">當打開多個連結時，這些浮動氣泡會疊加在一起，您可以稍後點擊它們來打開連結。</string>
     <string name="webheads_intro_3">當您拖動浮動氣泡時，將會出現一個垃圾桶圖標。拖動浮動氣泡到上面便可以刪除它。</string>
-    <string name="webheads_intro_4">Chromer會優先對待最後打開的連結並預載它。推薦的使用方法是由上至下依次點開浮動氣泡。啟用\"關閉已點開的浮動氣泡\"功能可使這操作更流暢。</string>
+    <string name="webheads_intro_4">Chromer會優先對待最後打開的連結並預載它。推薦的使用方法是由上至下依次點開浮動氣泡。啟用\“關閉已點開的浮動氣泡\”功能可使這操作更流暢。</string>
     <string name="web_head_permission_toast">要使用浮動氣泡打開連結，Chromer需要在其他應用程式上顯示的權限，請授予權限以繼續，或在Chromer設定中停用浮動氣泡功能。</string>
     <string name="tap_close_all">點擊以關閉全部</string>
     <string name="web_heads_service">浮動氣泡服務</string>
@@ -139,7 +139,7 @@
     <string name="no_voice_rec_apps">找不到相容的語音辨識應用程式</string>
     <string name="already_set">已設定好了！</string>
     <string name="blacklisted_apps">黑名單應用程式</string>
-    <string name="loading">載入中...</string>
+    <string name="loading">載入中…</string>
     <string name="please_wait">請稍等</string>
     <string name="blacklist_message">您已將這個應用程式加入黑名單中，Chromer將不會被用來打開它裡面的連結，但您還未設定第二瀏覽器，請選擇第二瀏覽器以繼續。</string>
     <string name="share_failed_msg">無法分享至應用程式，預設返回標準分享</string>

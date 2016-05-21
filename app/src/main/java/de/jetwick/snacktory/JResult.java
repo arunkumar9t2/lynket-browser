@@ -26,6 +26,7 @@ import java.util.List;
  *
  * @author Peter Karich
  */
+@SuppressWarnings("UnusedReturnValue")
 public class JResult implements Serializable {
 
     private String title;

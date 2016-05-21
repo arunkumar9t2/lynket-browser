@@ -23,6 +23,7 @@ import java.util.Map;
  *
  * @author Peter Karich, peat_hal ‘at’ users ‘dot’ sourceforge ‘dot’ net
  */
+@SuppressWarnings({"WeakerAccess", "CanBeFinal"})
 public class MapEntry<K, V> implements Map.Entry<K, V>, Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -62,9 +63,7 @@ public class MapEntry<K, V> implements Map.Entry<K, V>, Serializable {
         if (getClass() != obj.getClass())
             return false;
         @SuppressWarnings("unchecked") final MapEntry<K, V> other = (MapEntry<K, V>) obj;
-        if (this.key != other.key && (this.key == null || !this.key.equals(other.key)))
-            return false;
-        return !(this.value != other.value && (this.value == null || !this.value.equals(other.value)));
+        return !(this.key != other.key && (this.key == null || !this.key.equals(other.key))) && !(this.value != other.value && (this.value == null || !this.value.equals(other.value)));
     }
 
     @Override

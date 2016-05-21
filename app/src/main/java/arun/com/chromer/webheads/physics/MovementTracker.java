@@ -15,6 +15,7 @@ import timber.log.Timber;
  * end point on the either sides of the display. By using this end point, it is possible to know
  * where the gesture would end if it was continued along the tangent of the curve.
  */
+@SuppressWarnings("JavaDoc")
 public class MovementTracker {
     private static final int TOP_RIGHT = 1;
     private static final int BOTTOM_RIGHT = 2;
@@ -29,6 +30,7 @@ public class MovementTracker {
 
     private final SizedQueue<Coordinate> mPoints;
 
+    @SuppressWarnings("SameParameterValue")
     public MovementTracker(int trackingSize, int dispHeight, int dispWidth, int endOffset) {
         mTrackingSize = trackingSize;
         mPoints = new SizedQueue<>(mTrackingSize);
@@ -118,7 +120,8 @@ public class MovementTracker {
      * @param p2 Ending of the directional line
      * @return Interception point on the Y axis if the line proceeds indefinitely.
      */
-    public static Coordinate calculateTrajectory(Coordinate p1, Coordinate p2) {
+    @Deprecated
+    private static Coordinate calculateTrajectory(Coordinate p1, Coordinate p2) {
         // Timber.v("From %s to %s", p1.toString(), p2.toString());
 
         float downX = p1.x;
@@ -196,7 +199,7 @@ public class MovementTracker {
      * By using the tracked gesture points, calculates the fling end point. This is done by assuming
      * a line from the 75% of the tracked points to last tracked point. Then calculateTrajectory is
      * used to find the end point.
-     * <p>
+     * <p/>
      * The threshold is assumed to be at 75% of the tracked length. Increased values would mean
      * accurate direction but can be prone to errors as end points can have spiked data.
      *
@@ -210,6 +213,7 @@ public class MovementTracker {
             Coordinate up = mPoints.getLast();
             Coordinate down = mPoints.get(mPoints.size() - trackingThreshold);
 
+            //noinspection deprecation
             projectedPoint = calculateTrajectory(down, up);
         } else {
             projectedPoint = null;

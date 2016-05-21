@@ -29,6 +29,7 @@ import timber.log.Timber;
  * @author Alex P (ifesdjeen from jreadability)
  * @author Peter Karich
  */
+@SuppressWarnings("ALL")
 public class ArticleTextExtractor {
 
     // Interessting nodes
@@ -65,6 +66,7 @@ public class ArticleTextExtractor {
                 + "sidebar|sponsor|tags|tool|widget|player|disclaimer|toc|infobox|vcard|post-ratings");
     }
 
+    @SuppressWarnings("WeakerAccess")
     public ArticleTextExtractor setUnlikely(String unlikelyStr) {
         this.unlikelyStr = unlikelyStr;
         UNLIKELY = Pattern.compile(unlikelyStr);
@@ -100,11 +102,11 @@ public class ArticleTextExtractor {
         this.formatter = formatter;
     }
 
-    public JResult extractContent(Document doc) throws Exception {
+    public JResult extractContent(Document doc) {
         return extractContent(new JResult(), doc, formatter);
     }
 
-    public JResult extractContent(Document doc, OutputFormatter formatter) throws Exception {
+    public JResult extractContent(Document doc, OutputFormatter formatter) {
         return extractContent(new JResult(), doc, formatter);
     }
 
@@ -116,7 +118,7 @@ public class ArticleTextExtractor {
         return extractContent(res, html, formatter);
     }
 
-    public JResult extractContent(JResult res, String html, OutputFormatter formatter) throws Exception {
+    public JResult extractContent(JResult res, String html, OutputFormatter formatter) {
         if (html.isEmpty())
             throw new IllegalArgumentException("html string is empty!?");
 
@@ -124,7 +126,7 @@ public class ArticleTextExtractor {
         return extractContent(res, Jsoup.parse(html), formatter);
     }
 
-    public JResult extractContent(JResult res, Document doc, OutputFormatter formatter) throws Exception {
+    public JResult extractContent(JResult res, Document doc, OutputFormatter formatter) {
         if (doc == null)
             throw new NullPointerException("missing document");
 
@@ -436,7 +438,7 @@ public class ArticleTextExtractor {
         int old = 0;
         try {
             old = Integer.parseInt(el.attr("gravityScore"));
-        } catch (Exception ex) {
+        } catch (Exception ignored) {
         }
         return old;
     }
@@ -507,7 +509,7 @@ public class ArticleTextExtractor {
                     weight += 20;
                 else
                     weight -= 20;
-            } catch (Exception ex) {
+            } catch (Exception ignored) {
             }
 
             int width = 0;
@@ -517,7 +519,7 @@ public class ArticleTextExtractor {
                     weight += 20;
                 else
                     weight -= 20;
-            } catch (Exception ex) {
+            } catch (Exception ignored) {
             }
             String alt = e.attr("alt");
             if (alt.length() > 35)
@@ -527,7 +529,7 @@ public class ArticleTextExtractor {
             if (title.length() > 35)
                 weight += 20;
 
-            String rel = null;
+            String rel;
             boolean noFollow = false;
             if (e.parent() != null) {
                 rel = e.parent().attr("rel");
@@ -612,7 +614,7 @@ public class ArticleTextExtractor {
     }
 
     @SuppressLint("CustomWarning")
-    private void print(String add1, Element child, String add2) {
+    private void print(String add1, Element child, @SuppressWarnings("SameParameterValue") String add2) {
         Timber.i(add1 + " " + child.nodeName() + " id=" + child.id()
                 + " class=" + child.className() + " text=" + child.text() + " " + add2);
     }

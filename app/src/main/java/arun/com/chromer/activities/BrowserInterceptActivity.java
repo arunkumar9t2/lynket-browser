@@ -1,5 +1,7 @@
 package arun.com.chromer.activities;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -24,8 +26,10 @@ import arun.com.chromer.util.Util;
 import arun.com.chromer.webheads.helper.WebHeadLauncherActivity;
 import timber.log.Timber;
 
+@SuppressLint("GoogleAppIndexingApiWarning")
 public class BrowserInterceptActivity extends AppCompatActivity {
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

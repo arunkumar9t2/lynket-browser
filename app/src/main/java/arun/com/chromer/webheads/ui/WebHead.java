@@ -363,6 +363,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         }
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
     private void updateVisualsTouchUp() {
         mScaleSpring.setEndValue(1f);
         // circleView.setAlpha(1f);
@@ -371,6 +372,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         }
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
     private void updateVisualsTouchDown() {
         mScaleSpring.setEndValue(0.8f);
         // circleView.setAlpha(0.7f);
@@ -480,6 +482,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         isNewTab = newTab;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void setWebHeadInteractionListener(WebHeadInteractionListener listener) {
         mInteractionListener = listener;
     }

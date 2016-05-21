@@ -40,7 +40,7 @@ public class BottomBarPreferenceFragment extends DividerLessPreferenceFragment i
                     final SwitchPreferenceCompat switchCompat = (SwitchPreferenceCompat) preference;
                     boolean isChecked = switchCompat.isChecked();
 
-                    if (isChecked && !Preferences.isUserLearntBottomBar(getActivity().getApplicationContext())) {
+                    if (isChecked && Preferences.dummyBottomBar(getActivity().getApplicationContext())) {
                         new MaterialDialog.Builder(getActivity())
                                 .title(R.string.bottom_bar)
                                 .content(R.string.bottom_bar_expln)
@@ -64,7 +64,6 @@ public class BottomBarPreferenceFragment extends DividerLessPreferenceFragment i
         super.onResume();
         getPreferenceScreen().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
-        updatePreferences();
     }
 
     @Override
@@ -76,10 +75,6 @@ public class BottomBarPreferenceFragment extends DividerLessPreferenceFragment i
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        updatePreferences();
     }
 
-    private void updatePreferences() {
-
-    }
 }

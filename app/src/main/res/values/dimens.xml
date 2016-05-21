@@ -23,5 +23,4 @@
     <dimen name="remove_head_shadow_dy">1dp</dimen>
 
     <dimen name="web_head_app_indicator_circle">22dp</dimen>
-    <dimen name="web_head_app_indicator_icon">16dp</dimen>
 </resources>

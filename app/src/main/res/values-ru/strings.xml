@@ -36,7 +36,7 @@
     </string-array>
     <string name="app_name">Chromer</string>
     <string name="share_text">Зацените \‘Chromer\’ для быстрого и безопасного сёрфинга в интернете! Скачать здесь https://goo.gl/992ils</string>
-    <string name="share_via">Поделиться через...</string>
+    <string name="share_via">Поделиться через…</string>
     <string name="custom_tab_provider_not_found">Подходящий поставщик вкладок не найден</string>
     <string name="custom_tab_provider_not_found_expln">Для использования Chromer у Вас должен быть установлен любой другой совместимый браузер. В настоящее время на вашем телефоне нет браузеров, поддерживаемых Chromer. Вы можете установить Google Chrome из Play Маркета. Если он уже установлен, пожалуйста, обновите его до последней версии.</string>
     <string name="install">Установить</string>
@@ -49,10 +49,10 @@
     <string name="rate_play_store">Оценить в Play Маркет</string>
     <string name="feedback">Обратная связь</string>
     <string name="intro">Вступление</string>
-    <string name="send_email">Отправить e-mail...</string>
+    <string name="send_email">Отправить e-mail…</string>
     <string name="choose_default_provider">Выбрать поставщика по умолчанию</string>
     <string name="fallback_msg">Невозможно открыть вкладку, возврат в обычный браузер</string>
-    <string name="open_with">Открыть через...</string>
+    <string name="open_with">Открыть через…</string>
     <string name="open_in_browser">Открыть в %1$s</string>
     <string name="unxp_err">Непредвиденная ошибка, попробуйте снова</string>
     <string name="unsupported_link">Ссылка не поддерживается, попробуйте снова</string>
@@ -94,7 +94,7 @@
     <string name="usage_options">Пользовательские настройки</string>
     <string name="default_pref_xpln">Используйте Chromer по умолчанию для открытия ссылок, или вы можете выбирать Chromer из списка предложенных браузеров</string>
     <string name="personalization">Персонализация</string>
-    <string name="default_clear_msg">установлен в качестве браузера по умолчанию, пожалуйста, уберите его, нажав \"Очистить настройки по умолчанию\".</string>
+    <string name="default_clear_msg">установлен в качестве браузера по умолчанию, пожалуйста, уберите его, нажав \“Очистить настройки по умолчанию\”.</string>
     <string name="dynamic_toolbar_color">Динамический цвет панели инструментов</string>
     <string name="keep_chrome_warmedup">Держать Chromer в памяти для быстрого запуска</string>
     <string name="warmup_browser">Закрепить в памяти</string>
@@ -104,8 +104,8 @@
     <string name="pre_fetch_content">Закрепить содержимое</string>
     <string name="pre_fetch_desc">Сканировать экран на наличие ссылок и загружать их в фоновом режиме для мгновенного запуска</string>
     <string name="accessibility_description">Этот сервис будет использоваться Chromer для сканирования текстовых ссылок на экране и загрузки их в фоновом режиме. Никакая другая информация не обрабатывается. Вы все ещё можете использовать Chromer в обычном режиме, если вы не предоставите ему возможность сканировать текстовые ссылки. Для получения дополнительной информации, запустите Chromer.</string>
-    <string name="accessibility_dialog_title">Требуется включение \"Спец. возможностей\"</string>
-    <string name="accessibility_dialog_desc">Чтобы разрешить Chromer сканирование ссылок в любом приложении, требуется предоставление \"Спец. возможностей\". Пожалуйста, предоставьте их на следующем экране, после чего вы можете включить эту опцию и наслаждаться быстрым запуском.</string>
+    <string name="accessibility_dialog_title">Требуется включение \“Спец. возможностей\”</string>
+    <string name="accessibility_dialog_desc">Чтобы разрешить Chromer сканирование ссылок в любом приложении, требуется предоставление \“Спец. возможностей\”. Пожалуйста, предоставьте их на следующем экране, после чего вы можете включить эту опцию и наслаждаться быстрым запуском.</string>
     <string name="open_settings">Открыть настройки</string>
     <string name="only_on_wifi">Только через Wi-Fi</string>
     <string name="show_notification">Показать уведомление, когда ссылка загружена</string>
@@ -141,18 +141,18 @@
     <string name="overlay_permission_content">Чтобы перемещать плавающие кнопки по экрану, необходимо разрешение на экранные наложения. Хотите предоставить разрешение сейчас?</string>
     <string name="webheads_intro_1">Когда вы открываете ссылку в любом приложении, плавающая кнопка будет создана на экране, и Chromer предварительно загрузит ссылку.</string>
     <string name="webheads_intro_2">При открытии нескольких ссылок, эти кнопки автоматически группируются друг на друге, как показано выше. Вы можете открыть эти ссылки позже, нажимая на кнопки.</string>
-    <string name="webheads_intro_3">Вы можете убрать плавающую кнопку, переместив её в \"Корзину\".</string>
+    <string name="webheads_intro_3">Вы можете убрать плавающую кнопку, переместив её в \“Корзину\”.</string>
     <string name="webheads_intro_4">Chromer отдаёт приоритет последней открытой ссылке и загружает её заранее. Рекомендуется открывать плавающие кнопки одну за одной от начала до конца. Плавающие кнопки расположенные рядом открываются без проблем.</string>
     <string name="web_head_permission_toast">Чтобы открывать ссылки в плавающих кнопках Chromer необходим доступ к другим приложениям, пожалуйста, предоставьте доступ, или отключите плавающие кнопки в настройках Chromer.</string>
     <string name="tap_close_all">Нажмите, чтобы закрыть всё</string>
     <string name="web_heads_service">Настройки плавающих кнопок</string>
     <string name="join_beta">Участвовать в бета-тестировании</string>
     <string name="become_a_tester">Стать тестером</string>
-    <string name="join_beta_content">Бета-релизы - это экспериментальные версии, в которых представлены самые новые возможности, но в них бывают баги. Вы можете присоединиться к разработке, став тестером и сообщая о найденных багах в сообществе Google+.\n\nПожалуйста, убедитесь в том, что вы присоединились к сообществу в Google+, а затем нажмите кнопку \"Стать тестером\", чтобы вас перенаправило по тестовой ссылке Google Play.\n\nПРИМЕЧАНИЕ: Вы должны присоединиться к сообществу, чтобы стать тестером.</string>
+    <string name="join_beta_content">Бета-релизы - это экспериментальные версии, в которых представлены самые новые возможности, но в них бывают баги. Вы можете присоединиться к разработке, став тестером и сообщая о найденных багах в сообществе Google+.\n\nПожалуйста, убедитесь в том, что вы присоединились к сообществу в Google+, а затем нажмите кнопку \“Стать тестером\”, чтобы вас перенаправило по тестовой ссылке Google Play.\n\nПРИМЕЧАНИЕ: Вы должны присоединиться к сообществу, чтобы стать тестером.</string>
     <string name="no_voice_rec_apps">Не найдено приложений для распознавания голоса</string>
     <string name="already_set">Уже установлен!</string>
     <string name="blacklisted_apps">Приложения в чёрном списке</string>
-    <string name="loading">Загрузка...</string>
+    <string name="loading">Загрузка…</string>
     <string name="please_wait">Пожалуйста, подождите</string>
     <string name="blacklist_message">Вы добавили это приложение в чёрный список Chromer и не указали вторичный браузер. Пожалуйста, выберите браузер чтобы продолжить.</string>
     <string name="share_failed_msg">Не удалось поделиться через стандартное приложение</string>

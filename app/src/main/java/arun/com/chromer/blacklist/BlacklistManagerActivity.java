@@ -239,6 +239,7 @@ public class BlacklistManagerActivity extends AppCompatActivity implements Black
             mProgress = new MaterialDialog.Builder(BlacklistManagerActivity.this)
                     .title(R.string.loading)
                     .content(R.string.please_wait)
+                    .cancelable(false)
                     .progress(true, 0).show();
         }
 

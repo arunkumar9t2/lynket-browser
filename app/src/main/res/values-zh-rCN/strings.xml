@@ -36,7 +36,7 @@
     </string-array>
     <string name="app_name">Chromer</string>
     <string name="share_text">嘿 来查看下 “Chromer”  它可以让你拥有快速且安全的浏览体验！可以在这里下载 https://goo.gl/992ils</string>
-    <string name="share_via">分享至...</string>
+    <string name="share_via">分享至…</string>
     <string name="custom_tab_provider_not_found">没有找到可兼容的自定义标签页提供程序</string>
     <string name="custom_tab_provider_not_found_expln">Chromer 需要你在手机上安装有兼容自定义标签页功能的浏览器。现在在你的手机上没有发现可支持该功能的浏览器。你想在 Play 商店中安装 Chrome浏览器（免费）吗？如果你已经安装了，那么请升级它至当前的最新版本。</string>
     <string name="install">安装</string>
@@ -49,10 +49,10 @@
     <string name="rate_play_store">在 Play 商店内评价</string>
     <string name="feedback">反馈</string>
     <string name="intro">简介</string>
-    <string name="send_email">发送电子邮件...</string>
+    <string name="send_email">发送电子邮件…</string>
     <string name="choose_default_provider">选择默认提供程序</string>
     <string name="fallback_msg">无法打开自定义标签页，将在浏览器中加载</string>
-    <string name="open_with">选择程序打开...</string>
+    <string name="open_with">选择程序打开…</string>
     <string name="open_in_browser">在 %1$s 中打开</string>
     <string name="unxp_err">发生意外错误，请重试</string>
     <string name="unsupported_link">不支持的链接，请重试</string>
@@ -152,7 +152,7 @@
     <string name="no_voice_rec_apps">没有找到可兼容的语音识别应用</string>
     <string name="already_set">设置完成！</string>
     <string name="blacklisted_apps">黑名单应用</string>
-    <string name="loading">正在加载...</string>
+    <string name="loading">正在加载…</string>
     <string name="please_wait">请等待</string>
     <string name="blacklist_message">你已经将这个程序加入到了黑名单中，Chromer将不会被用来打开它里面的链接。当前你还没有设置过第二浏览器，请选择一个浏览器以继续。</string>
     <string name="share_failed_msg">无法分享到应用，默认返回标准分享</string>

@@ -1,5 +1,6 @@
 package arun.com.chromer.activities;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.net.Uri;
@@ -15,6 +16,7 @@ import arun.com.chromer.R;
 import arun.com.chromer.util.Constants;
 import arun.com.chromer.util.Util;
 
+@SuppressLint("GoogleAppIndexingApiWarning")
 public class ShareInterceptActivity extends AppCompatActivity {
 
 

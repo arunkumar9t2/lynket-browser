@@ -29,7 +29,6 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.NotificationCompat;
 import android.view.ViewPropertyAnimator;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -63,7 +62,6 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
 
     private final Map<String, WebHead> mWebHeads = new LinkedHashMap<>();
     private boolean mCustomTabConnected;
-    private WindowManager mWindowManager;
     private CustomTabBindingHelper mCustomTabBindingHelper;
 
     public WebHeadService() {
@@ -90,8 +88,6 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
             }
         }
         sInstance = this;
-        mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-
         // create a remove view
         initRemoveWebhead();
 
@@ -149,6 +145,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         animatorSet.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
+                //noinspection ConstantConditions
                 if (webHead != null) webHead.reveal();
             }
         });

@@ -7,6 +7,7 @@ import org.jsoup.nodes.Element;
  *
  * @author Chris Alexander, chris@chris-alexander.co.uk
  */
+@SuppressWarnings({"WeakerAccess", "CanBeFinal"})
 public class ImageResult {
 
     public String src;

@@ -1,7 +1,9 @@
 package arun.com.chromer.activities;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +18,7 @@ import arun.com.chromer.util.Constants;
 
 public class CustomTabActivity extends AppCompatActivity {
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

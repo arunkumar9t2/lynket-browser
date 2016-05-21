@@ -19,13 +19,14 @@ import timber.log.Timber;
 public class ParsingTasksManager {
     private static final ParsingTasksManager sInstance;
 
+    @SuppressWarnings("FieldCanBeLocal")
     private final BlockingQueue<Runnable> mParseWorkQueue;
     private final Queue<PageExtractTask> mPageExtractTaskQueue;
 
     // Pool executor
     private final ThreadPoolExecutor mParseThreadPool;
 
-    private static int NUMBER_OF_CORES = Runtime.getRuntime().availableProcessors();
+    private static final int NUMBER_OF_CORES = Runtime.getRuntime().availableProcessors();
     private static final int CORE_POOL_SIZE = 8;
     private static final int MAXIMUM_POOL_SIZE = 8;
     private static final int KEEP_ALIVE_TIME = 1;
@@ -93,6 +94,7 @@ public class ParsingTasksManager {
     /**
      * Cancels all Threads in the ThreadPool
      */
+    @SuppressWarnings("SameParameterValue")
     public static void cancelAll(boolean alsoRemove) {
         PageExtractTask[] tasks = new PageExtractTask[sInstance.mPageExtractTaskQueue.size()];
 
@@ -144,7 +146,7 @@ public class ParsingTasksManager {
         }
     }
 
-    static public PageExtractTask startDownload(String url) {
+    static public void startDownload(String url) {
         PageExtractTask downloadTask = sInstance.mPageExtractTaskQueue.poll();
 
         // If the queue was empty, create a new task instead.
@@ -156,8 +158,6 @@ public class ParsingTasksManager {
         downloadTask.initializeDownloaderTask(url);
 
         sInstance.mParseThreadPool.execute(downloadTask.getPageExtractRunnable());
-
-        return downloadTask;
     }
 
     private void recycleTask(PageExtractTask downloadTask) {

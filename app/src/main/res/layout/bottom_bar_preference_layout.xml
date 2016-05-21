@@ -16,7 +16,6 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
-            android:id="@+id/web_heads_intro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"

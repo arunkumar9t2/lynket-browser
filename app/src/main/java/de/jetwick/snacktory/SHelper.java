@@ -40,6 +40,7 @@ import javax.net.ssl.X509TrustManager;
 /**
  * @author Peter Karich
  */
+@SuppressWarnings("ALL")
 public class SHelper {
 
     public static final String UTF8 = "UTF-8";
@@ -364,7 +365,7 @@ public class SHelper {
                 } else if (counter == monthCounter + 1) {
                     try {
                         day = Integer.parseInt(str);
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
                     }
                     if (day < 1 || day > 31) {
                         day = -1;
@@ -439,6 +440,7 @@ public class SHelper {
         public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
         }
 
+        @SuppressLint("TrustAllX509TrustManager")
         @Override
         public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
         }
