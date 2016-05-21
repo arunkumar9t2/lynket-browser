@@ -4,6 +4,17 @@
 <strong>You can view this again in the about screen.</strong>
 <br></br>
 <br></br>
+<strong>1.6 B2</strong> (Beta Release)
+<ul>
+    <li><b>NEW:</b> Much improved web heads\' physics based animations.</li>
+    <li><b>NEW:</b> Favicon support for web heads.</li>
+    <li><b>NEW:</b> Custom Tab Bottom bar.</li>
+    <li><b>NEW:</b> Open in new tab (5.0+): Copy a link or text while browsing and press the + icon to launch in a new tab.</li>
+    <li><b>FIX:</b> Lots of internal optimizations.</li>
+    <li><b>IMPROVED:</b> Home screen shortcuts will now have title and icon extracted from the website.</li>
+    <li><b>IMPROVED:</b> Synced translation updates.</li>
+</ul>
+<br></br>
 <strong>1.6 B1</strong> (Beta Release)
 <ul>
     <li><b>NEW:</b> Ability to fling web heads around.</li>
