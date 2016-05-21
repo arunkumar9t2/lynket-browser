@@ -124,15 +124,18 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     private void processIntentAndWebHead(Intent intent) {
         if (intent == null || intent.getDataString() == null) return; // don't do anything
 
+        boolean isFromNewTab = intent.getBooleanExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, false);
+
         String urlToLoad = intent.getDataString();
         if (!isLinkAlreadyLoaded(urlToLoad)) {
-            addWebHead(urlToLoad);
+            addWebHead(urlToLoad, isFromNewTab);
         } else
             Toast.makeText(this, R.string.already_loaded, Toast.LENGTH_SHORT).show();
     }
 
-    private void addWebHead(final String webHeadUrl) {
+    private void addWebHead(final String webHeadUrl, boolean isNewTab) {
         final WebHead webHead = new WebHead(/*Service*/ this, webHeadUrl,/*Interaction listener*/ this);
+        webHead.setNewTab(isNewTab);
         mWebHeads.put(webHeadUrl, webHead);
         // Before adding new web heads, call move self to stack distance on existing web heads to move
         // them a little such that they appear to be stacked
@@ -221,7 +224,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
 
         //addWebHead("https://www.linkedin.com/");
 
-        addWebHead("http://www.github.com");
+        addWebHead("http://www.github.com", false);
 
         // addWebHead("http://www.androidpolice.com");
 
@@ -365,6 +368,9 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
             customTabActivity.setData(Uri.parse(webHead.getUrl()));
             customTabActivity.putExtra(Constants.EXTRA_KEY_FROM_WEBHEAD, true);
             customTabActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            if (webHead.isNewTab()) {
+                customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+            }
             startActivity(customTabActivity);
 
             // Store the last opened url

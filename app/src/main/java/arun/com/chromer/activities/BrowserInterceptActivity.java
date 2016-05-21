@@ -71,10 +71,10 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                             Uri.parse("package:" + getPackageName()));
                     startActivity(intent);
                 } else {
-                    launchWebHead();
+                    launchWebHead(isFromNewTab);
                 }
             } else {
-                launchWebHead();
+                launchWebHead(isFromNewTab);
             }
         } else {
             Intent customTabActivity = new Intent(this, CustomTabActivity.class);
@@ -119,10 +119,13 @@ public class BrowserInterceptActivity extends AppCompatActivity {
         startActivity(chooserIntent);
     }
 
-    private void launchWebHead() {
+    private void launchWebHead(boolean isNewTab) {
         Intent webHeadLauncher = new Intent(this, WebHeadLauncherActivity.class);
         webHeadLauncher.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        webHeadLauncher.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        if (!isNewTab)
+            webHeadLauncher.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        webHeadLauncher.putExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, isNewTab);
         webHeadLauncher.setData(getIntent().getData());
         startActivity(webHeadLauncher);
     }

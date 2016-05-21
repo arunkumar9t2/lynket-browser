@@ -82,7 +82,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     private boolean mWasClicked;
     private boolean mUserManuallyMoved;
     private boolean isBeingDestroyed;
-
+    private boolean isNewTab;
 
     private WebHeadCircle circleView;
     private ImageView mFavicon;
@@ -470,6 +470,14 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
 
     public String getUnShortenedUrl() {
         return mUnShortenedUrl;
+    }
+
+    public boolean isNewTab() {
+        return isNewTab;
+    }
+
+    public void setNewTab(boolean newTab) {
+        isNewTab = newTab;
     }
 
     public void setWebHeadInteractionListener(WebHeadInteractionListener listener) {
