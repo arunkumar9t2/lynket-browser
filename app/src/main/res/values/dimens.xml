@@ -8,8 +8,8 @@
     <dimen name="arun_width">48dp</dimen>
     <dimen name="arun_height">48dp</dimen>
 
-    <dimen name="material_search_marginbottom">10dp</dimen>
-
+    <dimen name="material_search_margin_bottom">10dp</dimen>
+    <dimen name="material_search_margin_top">10dp</dimen>
 
     <dimen name="web_head_size_normal">66dp</dimen>
     <dimen name="web_head_text_indicator">20dp</dimen>
