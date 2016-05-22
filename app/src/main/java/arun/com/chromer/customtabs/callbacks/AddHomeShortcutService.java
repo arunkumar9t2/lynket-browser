@@ -44,7 +44,7 @@ public class AddHomeShortcutService extends IntentService {
                 showToast(getString(R.string.add_home_screen_begun));
 
                 HtmlFetcher fetcher = new HtmlFetcher();
-                String unShortenedUrl = fetcher.getResolvedUrl(urlToAdd, 1000 * 10);
+                String unShortenedUrl = fetcher.unShortenUrl(urlToAdd);
 
                 JResult res = extractWebsiteData(fetcher, unShortenedUrl);
 

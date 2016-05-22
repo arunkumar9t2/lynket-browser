@@ -368,7 +368,7 @@ public class HtmlFetcher {
      * (within the specified time) or the same url if response code is OK
      */
     @SuppressLint("CustomWarning")
-    public String getResolvedUrl(String originalUrl, int timeout) {
+    private String getResolvedUrl(String originalUrl, int timeout) {
         String redirectedUrl;
         int responseCode;
         HttpURLConnection connection = null;
