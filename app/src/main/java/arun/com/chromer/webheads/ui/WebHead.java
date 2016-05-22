@@ -7,15 +7,19 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -25,7 +29,6 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -84,7 +87,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     private boolean isBeingDestroyed;
     private boolean isNewTab;
 
-    private WebHeadCircle circleView;
+    private WebHeadCircle mCircleView;
     private ImageView mFavicon;
     private ImageView mAppIcon;
 
@@ -104,8 +107,8 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         if (sWindowManager == null)
             sWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 
-        circleView = new WebHeadCircle(context, url);
-        addView(circleView);
+        mCircleView = new WebHeadCircle(context, url);
+        addView(mCircleView);
 
         mWindowParams = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -130,12 +133,12 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         }
     }
 
-    private void initAppIcon() {
+    /*private void initAppIcon() {
         if (mAppIcon == null) {
             mAppIcon = (ImageView) LayoutInflater.from(getContext()).inflate(R.layout.web_head_app_indicator_layout, this, false);
             addView(mAppIcon);
         }
-    }
+    }*/
 
     private void setUpSprings() {
         mSpringSystem = SpringSystem.create();
@@ -146,8 +149,8 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
             @Override
             public void onSpringUpdate(Spring spring) {
                 float value = (float) spring.getCurrentValue();
-                circleView.setScaleX(value);
-                circleView.setScaleY(value);
+                mCircleView.setScaleX(value);
+                mCircleView.setScaleY(value);
                 if (mFavicon != null) {
                     mFavicon.setScaleY(value);
                     mFavicon.setScaleX(value);
@@ -194,8 +197,10 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     private void setSpawnLocation() {
         mWindowParams.gravity = Gravity.TOP | Gravity.LEFT;
         if (Preferences.webHeadsSpawnLocation(getContext()) == 1) {
+            // Right
             mWindowParams.x = (int) (sDispWidth - getAdaptWidth() * 0.8);
         } else {
+            // Left
             mWindowParams.x = (int) (0 - getAdaptWidth() * 0.2);
         }
         mWindowParams.y = sDispHeight / 3;
@@ -366,7 +371,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     @SuppressWarnings("StatementWithEmptyBody")
     private void updateVisualsTouchUp() {
         mScaleSpring.setEndValue(1f);
-        // circleView.setAlpha(1f);
+        // mCircleView.setAlpha(1f);
         if (mFavicon != null) {
             // mFavicon.setAlpha(1f);
         }
@@ -375,7 +380,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     @SuppressWarnings("StatementWithEmptyBody")
     private void updateVisualsTouchDown() {
         mScaleSpring.setEndValue(0.8f);
-        // circleView.setAlpha(0.7f);
+        // mCircleView.setAlpha(0.7f);
         if (mFavicon != null) {
             // mFavicon.setAlpha(0.7f);
         }
@@ -407,7 +412,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         ValueAnimator animator = null;
         if (!mUserManuallyMoved) {
             animator = ValueAnimator.ofInt(mWindowParams.y, mWindowParams.y + STACKING_GAP_PX);
-            animator.setInterpolator(new OvershootInterpolator());
+            animator.setInterpolator(new FastOutLinearInInterpolator());
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
@@ -430,8 +435,8 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     @Nullable
     public ValueAnimator getColorChangeAnimator(@ColorInt int newColor) {
         ValueAnimator animator = null;
-        if (circleView != null) {
-            int oldColor = circleView.getWebHeadColor();
+        if (mCircleView != null) {
+            int oldColor = mCircleView.getWebHeadColor();
             if (Util.isLollipop()) {
                 animator = ValueAnimator.ofArgb(oldColor, newColor);
             } else {
@@ -443,8 +448,8 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
-                    if (circleView != null) {
-                        circleView.setWebHeadColor((Integer) animation.getAnimatedValue());
+                    if (mCircleView != null) {
+                        mCircleView.setWebHeadColor((Integer) animation.getAnimatedValue());
                     }
                 }
             });
@@ -489,10 +494,15 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
 
     public void setFaviconDrawable(@NonNull Drawable drawable) {
         try {
-            circleView.clearUrlIndicator();
+            mCircleView.clearUrlIndicator();
             initFavicon();
-            mFavicon.setImageDrawable(drawable);
-            initAppIcon();
+            TransitionDrawable transitionDrawable = new TransitionDrawable(
+                    new Drawable[]{
+                            new ColorDrawable(Color.TRANSPARENT), drawable
+                    });
+            mFavicon.setImageDrawable(transitionDrawable);
+            transitionDrawable.setCrossFadeEnabled(true);
+            transitionDrawable.startTransition(500);
         } catch (Exception ignore) {
             Timber.d(ignore.getMessage());
         }
@@ -540,12 +550,12 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
 
         RemoveWebHead.disappear();
 
-        removeView(circleView);
+        removeView(mCircleView);
 
         if (mFavicon != null) removeView(mFavicon);
         if (mAppIcon != null) removeView(mAppIcon);
 
-        circleView = null;
+        mCircleView = null;
         mFavicon = null;
         mAppIcon = null;
 
@@ -601,11 +611,11 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         public boolean onSingleTapConfirmed(MotionEvent e) {
             mWasClicked = true;
 
-            if (Preferences.webHeadsCloseOnOpen(getContext()) && circleView != null) {
+            if (Preferences.webHeadsCloseOnOpen(getContext()) && mCircleView != null) {
                 if (mFavicon != null) {
                     mFavicon.setAlpha(0.0f);
                 }
-                circleView.animate()
+                mCircleView.animate()
                         .scaleX(0.0f)
                         .scaleY(0.0f)
                         .alpha(0.5f)
@@ -687,7 +697,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         }
 
         int minimumVelocityToReachSides = Util.dpToPx(100);
-        if (!mWasRemoveLocked
+        if (!mWasRemoveLocked && !mDragging
                 && Math.abs(mXSpring.getVelocity()) < minimumVelocityToReachSides
                 && Math.abs(mYSpring.getVelocity()) < minimumVelocityToReachSides) {
             stickToWall();
@@ -780,12 +790,12 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         private void drawText(Canvas canvas) {
             mTextPaint.setColor(Util.getForegroundTextColor(mWebHeadColor));
 
-            String indicator = getUrlIndicator();
-            if (indicator != null) drawTextInCanvasCentre(canvas, mTextPaint, indicator);
+            drawTextInCanvasCentre(canvas, mTextPaint, getUrlIndicator());
         }
 
+        @NonNull
         private String getUrlIndicator() {
-            String result = "x";
+            String result = "X";
             if (mUrl != null) {
                 try {
                     URL url = new URL(mUrl);
