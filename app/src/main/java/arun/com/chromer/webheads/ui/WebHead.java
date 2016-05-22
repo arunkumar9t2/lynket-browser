@@ -697,7 +697,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         }
 
         int minimumVelocityToReachSides = Util.dpToPx(100);
-        if (!mWasRemoveLocked && !mDragging
+        if (!mWasRemoveLocked
                 && Math.abs(mXSpring.getVelocity()) < minimumVelocityToReachSides
                 && Math.abs(mYSpring.getVelocity()) < minimumVelocityToReachSides) {
             stickToWall();
