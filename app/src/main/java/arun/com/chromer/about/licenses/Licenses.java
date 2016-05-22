@@ -55,6 +55,13 @@ public class Licenses {
         notice = new Notice(name, url, copyright, license);
         notices.addNotice(notice);
 
+        name = "ButterKnife";
+        url = "https://github.com/JakeWharton/butterknife";
+        copyright = "Copyright 2013 Jake Wharton";
+        license = new ApacheSoftwareLicense20();
+        notice = new Notice(name, url, copyright, license);
+        notices.addNotice(notice);
+
         name = "Glide";
         url = "https://github.com/bumptech/glide";
         copyright = "Copyright 2014 Google, Inc";
@@ -79,7 +86,13 @@ public class Licenses {
         name = "Bottomsheet";
         url = "https://github.com/Flipboard/bottomsheet";
         copyright = "Copyright (c) 2015, Flipboard";
-        notice = new Notice(name, url, copyright, null);
+        notice = new Notice(name, url, copyright, new BSD2ClauseLicense());
+        notices.addNotice(notice);
+
+        name = "Snacktory";
+        url = "https://github.com/karussell/snacktory";
+        copyright = "Copyright (c) 2015, karussell";
+        notice = new Notice(name, url, copyright, new ApacheSoftwareLicense20());
         notices.addNotice(notice);
 
         return notices;
