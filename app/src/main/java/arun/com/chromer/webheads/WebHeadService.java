@@ -3,6 +3,7 @@ package arun.com.chromer.webheads;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -358,6 +359,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         animatorSet.start();
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onWebHeadClick(@NonNull WebHead webHead) {
         if (webHead.getUrl() != null && webHead.getUrl().length() != 0) {
@@ -365,8 +367,9 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
             customTabActivity.setData(Uri.parse(webHead.getUrl()));
             customTabActivity.putExtra(Constants.EXTRA_KEY_FROM_WEBHEAD, true);
             customTabActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            if (webHead.isNewTab()) {
-                customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+            if (webHead.isNewTab() || Preferences.mergeTabs(this)) {
+                customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+                customTabActivity.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
             }
             startActivity(customTabActivity);
 

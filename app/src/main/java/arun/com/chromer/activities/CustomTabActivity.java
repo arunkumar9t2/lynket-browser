@@ -1,7 +1,6 @@
 package arun.com.chromer.activities;
 
 import android.annotation.TargetApi;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,10 +12,11 @@ import arun.com.chromer.R;
 import arun.com.chromer.customtabs.CustomTabBindingHelper;
 import arun.com.chromer.customtabs.CustomTabDelegate;
 import arun.com.chromer.customtabs.CustomTabHelper;
-import arun.com.chromer.preferences.Preferences;
 import arun.com.chromer.util.Constants;
+import timber.log.Timber;
 
 public class CustomTabActivity extends AppCompatActivity {
+    private boolean isLoaded = false;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -33,12 +33,25 @@ public class CustomTabActivity extends AppCompatActivity {
         final boolean isWebhead = getIntent().getBooleanExtra(Constants.EXTRA_KEY_FROM_WEBHEAD, false);
 
         CustomTabsIntent tabIntent = CustomTabDelegate.getCustomizedTabIntent(getApplicationContext(), url, isWebhead);
-        if (Preferences.mergeTabs(getApplicationContext())) {
-            tabIntent.intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-        }
 
         CustomTabBindingHelper.openCustomTab(this, tabIntent, Uri.parse(url), CustomTabHelper.CUSTOM_TABS_FALLBACK);
 
-        finish();
+        // finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isLoaded) {
+            Timber.d("Finishing on CTA exit");
+            // HACK
+            finish();
+        }
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        isLoaded = true;
     }
 }

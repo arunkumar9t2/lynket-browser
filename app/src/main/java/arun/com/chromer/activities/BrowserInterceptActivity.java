@@ -84,8 +84,9 @@ public class BrowserInterceptActivity extends AppCompatActivity {
             Intent customTabActivity = new Intent(this, CustomTabActivity.class);
             customTabActivity.setData(getIntent().getData());
             customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            if (isFromNewTab) {
-                customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+            if (isFromNewTab || Preferences.mergeTabs(this)) {
+                customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+                customTabActivity.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
             } else {
                 customTabActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             }
