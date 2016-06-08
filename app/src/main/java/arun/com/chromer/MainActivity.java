@@ -193,6 +193,15 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     private void updateDefaultBrowserCard() {
         if (!Util.isDefaultBrowser(this)) {
             mSetDefaultCard.setVisibility(View.VISIBLE);
+            if (Util.isLollipop()) {
+                float elevation = Util.dpToPx(6);
+                mSetDefaultCard
+                        .animate()
+                        .withLayer()
+                        .z(elevation)
+                        .translationZ(elevation)
+                        .start();
+            }
         } else
             mSetDefaultCard.setVisibility(View.GONE);
     }
