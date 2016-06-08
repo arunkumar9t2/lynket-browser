@@ -40,4 +40,6 @@ public class Constants {
     public static final String EXTRA_KEY_CLEAR_LAST_TOP_APP = "EXTRA_KEY_CLEAR_LAST_TOP_APP";
     public static final String EXTRA_KEY_REBIND_WEBHEAD_CXN = "EXTRA_KEY_REBIND_WEBHEAD_CXN";
     public static final String EXTRA_KEY_FROM_NEW_TAB = "EXTRA_KEY_FROM_NEW_TAB";
+    public static final String EXTRA_KEY_WEBHEAD_TITLE = "EXTRA_KEY_WEBHEAD_TITLE";
+    public static final String EXTRA_KEY_WEBHEAD_ICON = "EXTRA_KEY_WEBHEAD_ICON";
 }

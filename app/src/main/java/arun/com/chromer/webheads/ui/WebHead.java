@@ -6,6 +6,7 @@ import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -19,6 +20,7 @@ import android.graphics.drawable.TransitionDrawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
@@ -44,6 +46,7 @@ import java.net.URL;
 
 import arun.com.chromer.R;
 import arun.com.chromer.preferences.Preferences;
+import arun.com.chromer.util.Constants;
 import arun.com.chromer.util.Util;
 import arun.com.chromer.webheads.physics.MovementTracker;
 import timber.log.Timber;
@@ -64,6 +67,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
 
     private final String mUrl;
     private String mUnShortenedUrl;
+    private String mTitle;
 
     private final GestureDetector mGestureDetector = new GestureDetector(getContext(), new GestureDetectorListener());
     private final int mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
@@ -432,6 +436,13 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         }
     }
 
+    @ColorInt
+    public int getWebHeadColor() {
+        if (mCircleView != null) {
+            return mCircleView.getWebHeadColor();
+        } else return Constants.NO_COLOR;
+    }
+
     @Nullable
     public ValueAnimator getColorChangeAnimator(@ColorInt int newColor) {
         ValueAnimator animator = null;
@@ -476,7 +487,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     }
 
     public String getUnShortenedUrl() {
-        return mUnShortenedUrl;
+        return mUnShortenedUrl == null ? getUrl() : mUnShortenedUrl;
     }
 
     public boolean isNewTab() {
@@ -485,6 +496,14 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
 
     public void setNewTab(boolean newTab) {
         isNewTab = newTab;
+    }
+
+    public String getTitle() {
+        return mTitle;
+    }
+
+    public void setTitle(String title) {
+        mTitle = title;
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -506,6 +525,18 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         } catch (Exception ignore) {
             Timber.d(ignore.getMessage());
         }
+    }
+
+    @Nullable
+    public Bitmap getFaviconBitmap() {
+        if (mFavicon != null) {
+            TransitionDrawable drawable = (TransitionDrawable) mFavicon.getDrawable();
+            if (drawable != null && drawable.getDrawable(1) instanceof RoundedBitmapDrawable) {
+                RoundedBitmapDrawable roundedBitmapDrawable = (RoundedBitmapDrawable) drawable.getDrawable(1);
+                return roundedBitmapDrawable.getBitmap();
+            }
+        } else return null;
+        return null;
     }
 
     private boolean isLastWebHead() {

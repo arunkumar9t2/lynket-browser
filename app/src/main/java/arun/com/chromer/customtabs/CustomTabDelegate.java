@@ -7,10 +7,12 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsSession;
+import android.support.v4.graphics.ColorUtils;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -34,6 +36,7 @@ import arun.com.chromer.dynamictoolbar.AppColorExtractorService;
 import arun.com.chromer.dynamictoolbar.WebColorExtractorService;
 import arun.com.chromer.preferences.Preferences;
 import arun.com.chromer.services.AppDetectService;
+import arun.com.chromer.util.Constants;
 import arun.com.chromer.util.Util;
 import arun.com.chromer.webheads.WebHeadService;
 import timber.log.Timber;
@@ -48,7 +51,7 @@ public class CustomTabDelegate {
     private static final int SHARE_TAB = 2;
     private static int sToolbarColor;
 
-    public static CustomTabsIntent getCustomizedTabIntent(@NonNull Context ctx, @NonNull String url, boolean isWebhead) {
+    public static CustomTabsIntent getCustomizedTabIntent(@NonNull Context ctx, @NonNull String url, boolean isWebhead, @ColorInt int color) {
         final CustomTabsSession session = getAvailableSessions(ctx, isWebhead);
 
         final CustomTabsIntent.Builder builder;
@@ -63,7 +66,13 @@ public class CustomTabDelegate {
 
         addAnimations(ctx, builder);
 
-        setToolbarColor(ctx, url, builder);
+        if (color != Constants.NO_COLOR) {
+            color = ColorUtils.setAlphaComponent(color, 0xFF);
+            builder.setToolbarColor(color);
+            sToolbarColor = color;
+        } else {
+            setToolbarColor(ctx, url, builder);
+        }
 
         addShareIntent(ctx, builder);
 

@@ -171,16 +171,20 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     @Override
     public void onUrlExtracted(String originalUrl, JResult result) {
         final WebHead webHead = mWebHeads.get(originalUrl);
-        if (webHead != null && Preferences.favicons(this)) {
-            String faviconUrl = result.getFaviconUrl();
-            Timber.d(faviconUrl);
+        if (webHead != null && Preferences.favicons(this) && result != null) {
             try {
+                String faviconUrl = result.getFaviconUrl();
+                webHead.setTitle(result.getTitle());
                 Glide.with(this)
                         .load(faviconUrl)
                         .asBitmap()
                         .into(new BitmapImageViewTarget(webHead.getFaviconView()) {
                             @Override
                             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                if (resource == null) {
+                                    return;
+                                }
+
                                 // dispatch color extraction task
                                 new ColorExtractionTask(webHead, resource).execute();
 
@@ -362,15 +366,18 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onWebHeadClick(@NonNull WebHead webHead) {
-        if (webHead.getUrl() != null && webHead.getUrl().length() != 0) {
+        if (webHead.getUnShortenedUrl() != null && webHead.getUnShortenedUrl().length() != 0) {
             Intent customTabActivity = new Intent(this, CustomTabActivity.class);
-            customTabActivity.setData(Uri.parse(webHead.getUrl()));
-            customTabActivity.putExtra(Constants.EXTRA_KEY_FROM_WEBHEAD, true);
+            customTabActivity.setData(Uri.parse(webHead.getUnShortenedUrl()));
             customTabActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             if (webHead.isNewTab() || Preferences.mergeTabs(this)) {
                 customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
                 customTabActivity.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
             }
+            customTabActivity.putExtra(Constants.EXTRA_KEY_FROM_WEBHEAD, true);
+            customTabActivity.putExtra(Constants.EXTRA_KEY_WEBHEAD_TITLE, webHead.getTitle());
+            customTabActivity.putExtra(Constants.EXTRA_KEY_WEBHEAD_ICON, webHead.getFaviconBitmap());
+            customTabActivity.putExtra(Constants.EXTRA_KEY_WEBHEAD_COLOR, webHead.getWebHeadColor());
             startActivity(customTabActivity);
 
             // Store the last opened url
