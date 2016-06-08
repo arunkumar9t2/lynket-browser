@@ -34,12 +34,12 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import arun.com.chromer.MainActivity;
 import arun.com.chromer.R;
 import arun.com.chromer.db.BlacklistedApps;
 import arun.com.chromer.model.App;
 import arun.com.chromer.preferences.Preferences;
 import arun.com.chromer.services.util.ServicesUtil;
+import arun.com.chromer.util.Constants;
 import arun.com.chromer.util.Util;
 import arun.com.chromer.views.IntentPickerSheetView;
 import timber.log.Timber;
@@ -80,7 +80,7 @@ public class BlacklistManagerActivity extends AppCompatActivity implements Black
 
         setIconWithPackageName(Preferences.secondaryBrowserPackage(this));
 
-        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(MainActivity.GOOGLE_URL));
+        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.GOOGLE_URL));
         final IntentPickerSheetView browserPicker = new IntentPickerSheetView(this,
                 webIntent,
                 getString(R.string.choose_secondary_browser),

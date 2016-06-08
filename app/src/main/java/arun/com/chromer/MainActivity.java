@@ -17,11 +17,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatCheckBox;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -80,11 +79,9 @@ import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback {
 
-    public static final String GOOGLE_URL = "http://www.google.com/";
-    private static final String CUSTOM_TAB_URL = "https://developer.chrome.com/multidevice/android/customtabs#whentouse";
     private static final int VOICE_REQUEST = 10001;
 
-    private CustomTabBindingHelper mCustomTabActivityHelper;
+    private CustomTabBindingHelper mCustomTabBindingHelper;
 
     @BindView(R.id.warm_up_switch)
     public SwitchCompat mWarmUpSwitch;
@@ -100,12 +97,10 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     public ImageView mSecondaryBrowserIcon;
     @BindView(R.id.default_provider_view)
     public ImageView mDefaultProviderIcn;
-    @BindView(R.id.default_icon_c)
-    public ImageView mDefaultSuccessIcn;
     @BindView(R.id.fav_share_app_view)
     public ImageView mFavShareAppIcon;
-    @BindView(R.id.set_default)
-    public AppCompatButton mSetDefaultButton;
+    @BindView(R.id.set_default_image)
+    public ImageView mSetDefaultIcon;
     @BindView(R.id.bottomsheet)
     public BottomSheetLayout mBottomSheet;
     @BindView(R.id.material_search_view)
@@ -116,33 +111,32 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     public LinearLayout mMergeTabsLayout;
     @BindView(R.id.secondary_browser)
     public LinearLayout mSecondaryBrowser;
-    @BindView(R.id.default_setting_xpln)
-    public TextView mDefaultExplanation;
     @BindView(R.id.fav_share_app)
     public LinearLayout mFavShareLayout;
+    @BindView(R.id.set_default_card)
+    public CardView mSetDefaultCard;
 
     @Override
     protected void onStart() {
         super.onStart();
         if (shouldBind()) {
-            mCustomTabActivityHelper.bindCustomTabsService(this);
+            mCustomTabBindingHelper.bindCustomTabsService(this);
         }
-
         // startService(new Intent(this, WebHeadService.class));
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        mCustomTabActivityHelper.unbindCustomTabsService(this);
+        mCustomTabBindingHelper.unbindCustomTabsService(this);
         // stopService(new Intent(this, WebHeadService.class));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        updateDefaultBrowserCard();
         updatePrefetchIfPermissionGranted();
-        setupDefaultBrowser();
         setIconWithPackageName(mSecondaryBrowserIcon, Preferences.secondaryBrowserPackage(this));
         updateSubPreferences(Preferences.preFetch(this));
     }
@@ -184,6 +178,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
         checkAndEducateUser();
 
+        updateDefaultBrowserCard();
+
         ServicesUtil.takeCareOfServices(getApplicationContext());
 
         cleanOldDbs();
@@ -192,6 +188,13 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             //noinspection ConstantConditions
             mMergeTabsLayout.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void updateDefaultBrowserCard() {
+        if (!Util.isDefaultBrowser(this)) {
+            mSetDefaultCard.setVisibility(View.VISIBLE);
+        } else
+            mSetDefaultCard.setVisibility(View.GONE);
     }
 
     private void attachFragments() {
@@ -232,14 +235,14 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private void snack(@NonNull String textToSnack) {
         // Have to provide a view for view traversal, so providing the set default button.
-        Snackbar.make(mSetDefaultButton, textToSnack, Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(mMaterialSearchView, textToSnack, Snackbar.LENGTH_SHORT).show();
     }
 
 
     private void setupSecondaryBrowser() {
         setIconWithPackageName(mSecondaryBrowserIcon, Preferences.secondaryBrowserPackage(this));
 
-        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(GOOGLE_URL));
+        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.GOOGLE_URL));
         final IntentPickerSheetView browserPicker = new IntentPickerSheetView(this,
                 webIntent,
                 getString(R.string.choose_secondary_browser),
@@ -413,19 +416,12 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     private void setupDefaultBrowser() {
-        final String defaultBrowserPackage = Util.getDefaultBrowserPackage(this);
-        if (defaultBrowserPackage.trim().equalsIgnoreCase(getPackageName())) {
-            mSetDefaultButton.setVisibility(View.GONE);
-            mDefaultSuccessIcn.setVisibility(View.VISIBLE);
-            mDefaultSuccessIcn.setImageDrawable(
-                    new IconicsDrawable(this)
-                            .icon(GoogleMaterial.Icon.gmd_check_circle)
-                            .color(ContextCompat.getColor(this, R.color.default_success))
-                            .sizeDp(24));
-            mDefaultExplanation.setText(R.string.chromer_defaulted);
-            mDefaultExplanation.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-        }
+        mSetDefaultIcon.setImageDrawable(new IconicsDrawable(this)
+                .icon(GoogleMaterial.Icon.gmd_new_releases)
+                .color(ContextCompat.getColor(this, R.color.colorAccentText))
+                .sizeDp(30));
     }
+
 
     private void setupDrawer() {
         Drawer drawer = new DrawerBuilder()
@@ -490,7 +486,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                                 startActivity(new Intent(MainActivity.this, ChromerIntro.class));
                                 break;
                             case 5:
-                                launchCustomTab(CUSTOM_TAB_URL);
+                                launchCustomTab(Constants.CUSTOM_TAB_URL);
                                 break;
                             case 6:
                                 startActivity(new Intent(MainActivity.this, DonateActivity.class));
@@ -611,30 +607,30 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private void refreshCustomTabBindings() {
         // Unbind from currently bound service
-        mCustomTabActivityHelper.unbindCustomTabsService(this);
+        mCustomTabBindingHelper.unbindCustomTabsService(this);
         setupCustomTab();
-        mCustomTabActivityHelper.bindCustomTabsService(this);
+        mCustomTabBindingHelper.bindCustomTabsService(this);
 
         // Restarting services will make them update their bindings.
         ServicesUtil.refreshCustomTabBindings(getApplicationContext());
     }
 
     private void setupCustomTab() {
-        mCustomTabActivityHelper = new CustomTabBindingHelper();
+        mCustomTabBindingHelper = new CustomTabBindingHelper();
         List<Bundle> possibleUrls = new ArrayList<>();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(CustomTabsService.KEY_URL, Uri.parse(CUSTOM_TAB_URL));
+        bundle.putParcelable(CustomTabsService.KEY_URL, Uri.parse(Constants.CUSTOM_TAB_URL));
         possibleUrls.add(bundle);
 
         if (!shouldBind()) {
             try {
                 boolean ok;
                 if (ScannerService.getInstance() != null) {
-                    ok = ScannerService.getInstance().mayLaunchUrl(Uri.parse(GOOGLE_URL), possibleUrls);
+                    ok = ScannerService.getInstance().mayLaunchUrl(Uri.parse(Constants.GOOGLE_URL), possibleUrls);
                     if (ok) return;
                 }
                 if (WarmupService.getInstance() != null) {
-                    ok = WarmupService.getInstance().mayLaunchUrl(Uri.parse(GOOGLE_URL), possibleUrls);
+                    ok = WarmupService.getInstance().mayLaunchUrl(Uri.parse(Constants.GOOGLE_URL), possibleUrls);
                     if (ok) return;
                 }
             } catch (Exception e) {
@@ -645,13 +641,13 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             }
         }
 
-        mCustomTabActivityHelper.setConnectionCallback(
+        mCustomTabBindingHelper.setConnectionCallback(
                 new CustomTabBindingHelper.ConnectionCallback() {
                     @Override
                     public void onCustomTabsConnected() {
                         Timber.d("Connect to custom tab in main activity");
                         try {
-                            mCustomTabActivityHelper.mayLaunchUrl(Uri.parse(GOOGLE_URL), null, null);
+                            mCustomTabBindingHelper.mayLaunchUrl(Uri.parse(Constants.GOOGLE_URL), null, null);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -667,9 +663,9 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     public void onColorSelection(@NonNull ColorChooserDialog dialog, @ColorInt int selectedColor) {
         switch (dialog.getTitle()) {
             case R.string.default_toolbar_color:
-                Intent intent = new Intent(Constants.ACTION_TOOLBAR_COLOR_SET);
-                intent.putExtra(Constants.EXTRA_KEY_TOOLBAR_COLOR, selectedColor);
-                LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+                Intent toolbarColorIntent = new Intent(Constants.ACTION_TOOLBAR_COLOR_SET);
+                toolbarColorIntent.putExtra(Constants.EXTRA_KEY_TOOLBAR_COLOR, selectedColor);
+                LocalBroadcastManager.getInstance(this).sendBroadcast(toolbarColorIntent);
                 break;
             case R.string.web_heads_color:
                 Intent webHeadColorIntent = new Intent(Constants.ACTION_WEBHEAD_COLOR_SET);
@@ -743,15 +739,13 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @OnClick(R.id.set_default)
+    @OnClick(R.id.set_default_card)
     public void setDefaultClick() {
         final String defaultBrowser = Util.getDefaultBrowserPackage(this);
-        if (defaultBrowser.trim().equalsIgnoreCase(getPackageName())) {
-            snack(getString(R.string.already_set));
-        } else if ((defaultBrowser.equalsIgnoreCase("android") || defaultBrowser.startsWith("org.cyanogenmod"))
-                && Util.isPackageInstalled(getApplicationContext(), defaultBrowser)) {
+        if (defaultBrowser.equalsIgnoreCase("android")
+                || defaultBrowser.startsWith("org.cyanogenmod")) {
             // TODO Change this detection such that "if defaultBrowserPackage is not a compatible browser" condition is used
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(GOOGLE_URL)));
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.GOOGLE_URL)));
         } else {
             Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
             intent.setData(Uri.parse("package:" + defaultBrowser));
@@ -784,7 +778,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         if (mMaterialSearchView.hasFocus() && mMaterialSearchView.getText().length() > 0) {
             launchCustomTab(mMaterialSearchView.getURL());
         } else
-            launchCustomTab(GOOGLE_URL);
+            launchCustomTab(Constants.GOOGLE_URL);
     }
 
     @OnClick(R.id.default_provider)

@@ -38,7 +38,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import arun.com.chromer.BuildConfig;
-import arun.com.chromer.MainActivity;
 import arun.com.chromer.customtabs.CustomTabHelper;
 import arun.com.chromer.customtabs.prefetch.ScannerService;
 import arun.com.chromer.model.App;
@@ -127,7 +126,7 @@ public class Util {
      */
     @Nullable
     public static ComponentName getBrowserComponentForPackage(@NonNull Context context, @NonNull String pkg) {
-        Intent webIntentImplicit = new Intent(Intent.ACTION_VIEW, Uri.parse(MainActivity.GOOGLE_URL));
+        Intent webIntentImplicit = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.GOOGLE_URL));
         List<ResolveInfo> resolvedActivityList = context.getApplicationContext().getPackageManager()
                 .queryIntentActivities(webIntentImplicit, PackageManager.MATCH_ALL);
 
@@ -170,11 +169,15 @@ public class Util {
 
     @NonNull
     public static String getDefaultBrowserPackage(@NonNull Context context) {
-        Intent launchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(MainActivity.GOOGLE_URL));
+        Intent launchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.GOOGLE_URL));
         ResolveInfo resolveInfo = context.getApplicationContext().getPackageManager().resolveActivity(launchIntent,
                 PackageManager.MATCH_DEFAULT_ONLY);
 
-        return resolveInfo != null ? resolveInfo.activityInfo.packageName : "";
+        return resolveInfo != null ? resolveInfo.activityInfo.packageName.trim() : "";
+    }
+
+    public static boolean isDefaultBrowser(@NonNull Context context) {
+        return getDefaultBrowserPackage(context).equalsIgnoreCase(context.getPackageName());
     }
 
     @NonNull

@@ -6,6 +6,8 @@ package arun.com.chromer.util;
 public class Constants {
 
     public static final int NO_COLOR = -1;
+    public static final String GOOGLE_URL = "http://www.google.com/";
+    public static final String CUSTOM_TAB_URL = "https://developer.chrome.com/multidevice/android/customtabs#whentouse";
 
     private Constants() {
         throw new UnsupportedOperationException("Cannot instantiate");
