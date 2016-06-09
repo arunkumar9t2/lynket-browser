@@ -16,6 +16,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.CardView;
@@ -185,7 +186,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         cleanOldDbs();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            //noinspection ConstantConditions
             mMergeTabsLayout.setVisibility(View.VISIBLE);
         }
     }
@@ -194,7 +194,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         if (!Util.isDefaultBrowser(this)) {
             mSetDefaultCard.setVisibility(View.VISIBLE);
             if (Util.isLollipop()) {
-                float elevation = Util.dpToPx(6);
+                float elevation = Util.dpToPx(3);
+                ViewCompat.setElevation(mSetDefaultCard, 0);
                 mSetDefaultCard
                         .animate()
                         .withLayer()
@@ -215,7 +216,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     private void setupMaterialSearch() {
-        //noinspection ConstantConditions
         mMaterialSearchView.clearFocus();
         mMaterialSearchView.setOnKeyListener(new TextView.OnEditorActionListener() {
             @Override
@@ -273,7 +273,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 return !info.componentName.getPackageName().equalsIgnoreCase(getPackageName());
             }
         });
-        //noinspection ConstantConditions
         mSecondaryBrowser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -290,7 +289,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         final boolean warmUpBrowser = Preferences.warmUp(this);
         final boolean mergeTabs = Preferences.mergeTabs(this);
 
-        //noinspection ConstantConditions
         mWarmUpSwitch.setChecked(preFetch || warmUpBrowser);
         mWarmUpSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -300,7 +298,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             }
         });
 
-        //noinspection ConstantConditions
         mPrefetchSwitch.setChecked(preFetch);
         enableDisableWarmUpSwitch(preFetch);
         updateSubPreferences(preFetch);
@@ -581,7 +578,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         && !info.componentName.getPackageName().equalsIgnoreCase(getPackageName());
             }
         });
-        //noinspection ConstantConditions
         mFavShareLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
