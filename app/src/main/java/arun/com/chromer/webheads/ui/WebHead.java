@@ -82,18 +82,16 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     private final SpringConfig DRAG_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(0, 1.5);
     private final SpringConfig SNAP_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(100, 7);
 
-
     private boolean mDragging;
     private boolean mWasRemoveLocked;
     private boolean mWasFlung;
     private boolean mWasClicked;
     private boolean mUserManuallyMoved;
-    private boolean isBeingDestroyed;
-    private boolean isNewTab;
+    private boolean mIsBeingDestroyed;
+    private boolean mIsFromNewTab;
 
     private WebHeadCircle mCircleView;
     private ImageView mFavicon;
-    private ImageView mAppIcon;
 
     private WebHeadInteractionListener mInteractionListener;
     private MovementTracker mMovementTracker;
@@ -217,7 +215,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // Don't react to any touch event and consume it when we are being destroyed
-        if (isBeingDestroyed) return true;
+        if (mIsBeingDestroyed) return true;
         try {
             // Reset gesture flag on each event
             mWasFlung = false;
@@ -429,7 +427,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     }
 
     public void setWebHeadColor(@ColorInt int newColor) {
-        if (!isBeingDestroyed) {
+        if (!mIsBeingDestroyed) {
             ValueAnimator animator = getColorChangeAnimator(newColor);
             if (animator != null)
                 animator.start();
@@ -490,12 +488,12 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         return mUnShortenedUrl == null ? getUrl() : mUnShortenedUrl;
     }
 
-    public boolean isNewTab() {
-        return isNewTab;
+    public boolean isFromNewTab() {
+        return mIsFromNewTab;
     }
 
-    public void setNewTab(boolean newTab) {
-        isNewTab = newTab;
+    public void setFromNewTab(boolean fromNewTab) {
+        mIsFromNewTab = fromNewTab;
     }
 
     public String getTitle() {
@@ -506,7 +504,6 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         mTitle = title;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public void setWebHeadInteractionListener(WebHeadInteractionListener listener) {
         mInteractionListener = listener;
     }
@@ -517,7 +514,8 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
             initFavicon();
             TransitionDrawable transitionDrawable = new TransitionDrawable(
                     new Drawable[]{
-                            new ColorDrawable(Color.TRANSPARENT), drawable
+                            new ColorDrawable(Color.TRANSPARENT),
+                            drawable
                     });
             mFavicon.setImageDrawable(transitionDrawable);
             transitionDrawable.setCrossFadeEnabled(true);
@@ -544,14 +542,11 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     }
 
     public void destroySelf(boolean shouldReceiveCallback) {
-        isBeingDestroyed = true;
-
+        mIsBeingDestroyed = true;
+        WEB_HEAD_COUNT--;
         if (mInteractionListener != null && shouldReceiveCallback) {
             mInteractionListener.onWebHeadDestroy(this, isLastWebHead());
         }
-
-        WEB_HEAD_COUNT--;
-
         Timber.d("%d Webheads remaining", WEB_HEAD_COUNT);
 
         if (mWallAttachSpring != null) {
@@ -584,11 +579,9 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         removeView(mCircleView);
 
         if (mFavicon != null) removeView(mFavicon);
-        if (mAppIcon != null) removeView(mAppIcon);
 
         mCircleView = null;
         mFavicon = null;
-        mAppIcon = null;
 
         if (sWindowManager != null)
             sWindowManager.removeView(this);
@@ -754,14 +747,14 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
             mUrl = url;
 
             mWebHeadColor = Preferences.webHeadColor(context);
-            float shadwR = context.getResources().getDimension(R.dimen.web_head_shadow_radius);
-            float shadwDx = context.getResources().getDimension(R.dimen.web_head_shadow_dx);
-            float shadwDy = context.getResources().getDimension(R.dimen.web_head_shadow_dy);
+            float shadowR = context.getResources().getDimension(R.dimen.web_head_shadow_radius);
+            float shadowDx = context.getResources().getDimension(R.dimen.web_head_shadow_dx);
+            float shadowDy = context.getResources().getDimension(R.dimen.web_head_shadow_dy);
             float textSize = context.getResources().getDimension(R.dimen.web_head_text_indicator);
 
             mBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             mBgPaint.setStyle(Paint.Style.FILL);
-            mBgPaint.setShadowLayer(shadwR, shadwDx, shadwDy, 0x75000000);
+            mBgPaint.setShadowLayer(shadowR, shadowDx, shadowDy, 0x55000000);
 
             sSizePx = context.getResources().getDimensionPixelSize(R.dimen.web_head_size_normal);
 

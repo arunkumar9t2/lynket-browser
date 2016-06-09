@@ -132,7 +132,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
 
     private void addWebHead(final String webHeadUrl, boolean isNewTab) {
         final WebHead webHead = new WebHead(/*Service*/ this, webHeadUrl,/*Interaction listener*/ this);
-        webHead.setNewTab(isNewTab);
+        webHead.setFromNewTab(isNewTab);
         mWebHeads.put(webHeadUrl, webHead);
         // Before adding new web heads, call move self to stack distance on existing web heads to move
         // them a little such that they appear to be stacked
@@ -370,7 +370,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
             Intent customTabActivity = new Intent(this, CustomTabActivity.class);
             customTabActivity.setData(Uri.parse(webHead.getUnShortenedUrl()));
             customTabActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            if (webHead.isNewTab() || Preferences.mergeTabs(this)) {
+            if (webHead.isFromNewTab() || Preferences.mergeTabs(this)) {
                 customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
                 customTabActivity.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
             }

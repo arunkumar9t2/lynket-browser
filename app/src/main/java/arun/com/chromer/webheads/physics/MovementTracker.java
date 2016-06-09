@@ -7,8 +7,6 @@ import android.view.MotionEvent;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import timber.log.Timber;
-
 /**
  * A helper class for tracking web heads movements. It uses a size limited queue structure to log
  * user's move coordinates. The sized queue is then used to analyze the gesture performed and provide a
@@ -28,16 +26,17 @@ public class MovementTracker {
     private int mTrackingSize = 0;
     private static int mEndOffset = 0;
 
-    private final SizedQueue<Coordinate> mPoints;
+    private final SizedQueue<Float> mXPoints;
+    private final SizedQueue<Float> mYPoints;
 
     @SuppressWarnings("SameParameterValue")
     public MovementTracker(int trackingSize, int dispHeight, int dispWidth, int endOffset) {
         mTrackingSize = trackingSize;
-        mPoints = new SizedQueue<>(mTrackingSize);
+        mXPoints = new SizedQueue<>(mTrackingSize);
+        mYPoints = new SizedQueue<>(mTrackingSize);
         mDispHeight = dispHeight;
         mDispWidth = dispWidth;
         mEndOffset = endOffset;
-        Timber.d("Created tracker of size %d", trackingSize);
     }
 
     /**
@@ -48,21 +47,24 @@ public class MovementTracker {
     public void addMovement(@NonNull MotionEvent event) {
         float x = event.getRawX();
         float y = event.getRawY();
-        mPoints.add(new Coordinate(x, y));
+        mXPoints.add(x);
+        mYPoints.add(y);
     }
 
     /**
      * Clear the tracking queue when user begins the gesture.
      */
     public void onDown() {
-        mPoints.clear();
+        mXPoints.clear();
+        mYPoints.clear();
     }
 
     /**
      * Clear the tracking queue when user ends the gesture.
      */
     public void onUp() {
-        mPoints.clear();
+        mXPoints.clear();
+        mYPoints.clear();
     }
 
     /**
@@ -79,6 +81,7 @@ public class MovementTracker {
      * @param direction Direction of line between start and end point
      * @return
      */
+    @Deprecated
     private static Coordinate getProjection(double upX, double upY, double angle, int direction) {
         Coordinate point = new Coordinate();
 
@@ -206,10 +209,9 @@ public class MovementTracker {
      * @return Point where the fling would have ended on Y axis.
      */
     @Nullable
+    @Deprecated
     public Coordinate getProjection() {
-        int trackingThreshold = (int) (0.25 * mTrackingSize);
-        Coordinate projectedPoint;
-        if (mPoints.size() >= trackingThreshold) {
+        /*if (mPoints.size() >= trackingThreshold) {
             Coordinate up = mPoints.getLast();
             Coordinate down = mPoints.get(mPoints.size() - trackingThreshold);
 
@@ -217,30 +219,29 @@ public class MovementTracker {
             projectedPoint = calculateTrajectory(down, up);
         } else {
             projectedPoint = null;
-        }
-        return projectedPoint;
+        }*/
+        return null;
     }
 
     public float[] getAdjustedVelocities(float xVelocity, float yVelocity) {
         int trackingThreshold = (int) (0.25 * mTrackingSize);
         float[] velocities;
-        if (mPoints.size() >= trackingThreshold) {
-            Coordinate downEvent = mPoints.get(mPoints.size() - trackingThreshold);
+        if (mXPoints.size() >= trackingThreshold) {
+            int downIndex = mXPoints.size() - trackingThreshold;
 
-            float[] up = new float[]{mPoints.getLast().x, mPoints.getLast().y};
-            float[] down = new float[]{downEvent.x, downEvent.y};
+            float[] up = new float[]{mXPoints.getLast(), mYPoints.getLast()};
+            float[] down = new float[]{mXPoints.get(downIndex), mYPoints.get(downIndex)};
 
             velocities = adjustVelocities(down, up, xVelocity, yVelocity);
         } else {
             velocities = null;
-            Timber.e("Automatic calculation failed");
         }
         return velocities;
     }
 
     @Override
     public String toString() {
-        return mPoints != null && mPoints.size() != 0 ? mPoints.toString() : "EMPTY";
+        return mXPoints.toString() + mYPoints.toString();
     }
 }
 
