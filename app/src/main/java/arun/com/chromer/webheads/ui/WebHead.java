@@ -99,11 +99,6 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     public WebHead(@NonNull Context context, @NonNull String url, @Nullable WebHeadInteractionListener listener) {
         super(context);
         mUrl = url;
-        init(context, url, listener);
-    }
-
-
-    private void init(Context context, String url, WebHeadInteractionListener listener) {
         WEB_HEAD_COUNT++;
 
         if (sWindowManager == null)
@@ -134,13 +129,6 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
             addView(mFavicon);
         }
     }
-
-    /*private void initAppIcon() {
-        if (mAppIcon == null) {
-            mAppIcon = (ImageView) LayoutInflater.from(getContext()).inflate(R.layout.web_head_app_indicator_layout, this, false);
-            addView(mAppIcon);
-        }
-    }*/
 
     private void setUpSprings() {
         mSpringSystem = SpringSystem.create();
@@ -538,7 +526,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     }
 
     private boolean isLastWebHead() {
-        return WEB_HEAD_COUNT - 1 == 0;
+        return WEB_HEAD_COUNT == 0;
     }
 
     public void destroySelf(boolean shouldReceiveCallback) {
