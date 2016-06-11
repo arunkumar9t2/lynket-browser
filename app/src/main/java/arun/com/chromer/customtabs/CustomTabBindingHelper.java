@@ -33,13 +33,11 @@ public class CustomTabBindingHelper implements ServiceConnectionCallback {
      * @param activity         The host activity.
      * @param customTabsIntent a CustomTabsIntent to be used if Custom Tabs is available.
      * @param uri              the Uri to be opened.
-     * @param fallback         a CustomTabsFallback to be used if Custom Tabs is not available.
      */
     @SuppressWarnings("SameParameterValue")
     public static void openCustomTab(Activity activity,
                                      CustomTabsIntent customTabsIntent,
-                                     Uri uri,
-                                     CustomTabsFallback fallback) {
+                                     Uri uri) {
         // The package name to use
         String packageName;
 
@@ -54,6 +52,7 @@ public class CustomTabBindingHelper implements ServiceConnectionCallback {
         }
         //If we cant find a package name, it means there's no browser that supports
         //Chrome Custom Tabs installed.
+        CustomTabsFallback fallback = CustomTabHelper.CUSTOM_TABS_FALLBACK;
         if (packageName == null) {
             Timber.d("Called fallback since no package found!");
             callFallback(activity, uri, fallback);

@@ -595,7 +595,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 startService(webHeadService);
             } else {
                 final CustomTabsIntent customTabsIntent = CustomTabDelegate.getCustomizedTabIntent(getApplicationContext(), url, false, Constants.NO_COLOR);
-                CustomTabBindingHelper.openCustomTab(this, customTabsIntent, Uri.parse(url), CustomTabHelper.CUSTOM_TABS_FALLBACK);
+                CustomTabBindingHelper.openCustomTab(this, customTabsIntent, Uri.parse(url));
             }
         }
     }

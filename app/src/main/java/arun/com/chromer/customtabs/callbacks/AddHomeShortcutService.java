@@ -29,6 +29,7 @@ import arun.com.chromer.util.Constants;
 import arun.com.chromer.util.Util;
 import de.jetwick.snacktory.HtmlFetcher;
 import de.jetwick.snacktory.JResult;
+import timber.log.Timber;
 
 public class AddHomeShortcutService extends IntentService {
 
@@ -72,8 +73,9 @@ public class AddHomeShortcutService extends IntentService {
                     favicon = createIcon(ContextCompat.getColor(this, R.color.primary), shortCutName);
                 }
 
+                Timber.i("Creating shortcut: %s", shortCutName);
 
-                Intent webIntent = getWebIntent(urlToAdd);
+                Intent webIntent = getWebIntent(unShortenedUrl);
 
                 Intent addIntent = new Intent(Constants.ACTION_INSTALL_SHORTCUT);
                 addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, webIntent);
