@@ -745,7 +745,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     @OnClick(R.id.set_default_card)
-    public void setDefaultClick() {
+    public void onSetDefaultClick() {
         final String defaultBrowser = Util.getDefaultBrowserPackage(this);
         if (defaultBrowser.equalsIgnoreCase("android")
                 || defaultBrowser.startsWith("org.cyanogenmod")) {

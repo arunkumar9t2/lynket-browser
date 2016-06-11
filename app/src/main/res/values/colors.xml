@@ -4,9 +4,12 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorPrimaryDarker">#283593</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorAccentLighter">#EC407A</color>
     <color name="colorAccentDarker">#C2185B</color>
     <color name="colorAccentText">#cbFFFFFF</color>
     <color name="colorAccentTextSecondary">#9dFFFFFF</color>
+
+
     <color name="card_background_light">#EEEEEE</color>
     <color name="material_dark_color">#212121</color>
     <color name="android_green">#a4c639</color>
