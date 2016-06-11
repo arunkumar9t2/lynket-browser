@@ -36,6 +36,7 @@ import arun.com.chromer.dynamictoolbar.AppColorExtractorService;
 import arun.com.chromer.dynamictoolbar.WebColorExtractorService;
 import arun.com.chromer.preferences.Preferences;
 import arun.com.chromer.services.AppDetectService;
+import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Constants;
 import arun.com.chromer.util.Util;
 import arun.com.chromer.webheads.WebHeadService;
@@ -338,7 +339,7 @@ public class CustomTabDelegate {
 
         builder.setSecondaryToolbarColor(sToolbarColor);
 
-        int iconColor = Util.getForegroundTextColor(sToolbarColor);
+        int iconColor = ColorUtil.getForegroundTextColor(sToolbarColor);
 
         if (Util.isLollipop()) {
             final Intent openInNewTabIntent = new Intent(c, OpenInNewTabReceiver.class);

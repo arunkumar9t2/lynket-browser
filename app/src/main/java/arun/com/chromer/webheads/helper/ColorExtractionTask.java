@@ -6,8 +6,8 @@ import android.support.v7.graphics.Palette;
 
 import java.lang.ref.WeakReference;
 
+import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Constants;
-import arun.com.chromer.util.Util;
 import arun.com.chromer.webheads.ui.WebHead;
 import timber.log.Timber;
 
@@ -31,7 +31,7 @@ public class ColorExtractionTask extends AsyncTask<Void, Void, Integer> {
             Bitmap favicon = mFaviconReference.get();
             Palette palette = Palette.from(favicon).generate();
 
-            bestColor = Util.getBestFaviconColor(palette);
+            bestColor = ColorUtil.getBestFaviconColor(palette);
         }
 
         return bestColor;

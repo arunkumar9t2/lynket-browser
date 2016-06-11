@@ -23,11 +23,11 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
+import arun.com.chromer.BuildConfig;
 import arun.com.chromer.R;
 import arun.com.chromer.about.changelog.ChangelogUtil;
 import arun.com.chromer.about.licenses.Licenses;
 import arun.com.chromer.util.Constants;
-import arun.com.chromer.util.Util;
 import arun.com.chromer.views.adapter.ExtendedBaseAdapter;
 import de.psdev.licensesdialog.LicensesDialog;
 
@@ -111,7 +111,7 @@ public class AboutFragment extends Fragment {
                 switch (position) {
                     case 0:
                         holder.title.setText(R.string.version);
-                        holder.subtitle.setText(Util.getPackageVersion(context));
+                        holder.subtitle.setText(BuildConfig.VERSION_NAME);
                         holder.imageView.setBackground(new IconicsDrawable(context)
                                 .icon(GoogleMaterial.Icon.gmd_info_outline)
                                 .color(materialdarkColor)

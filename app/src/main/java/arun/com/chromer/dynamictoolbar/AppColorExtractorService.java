@@ -16,6 +16,7 @@ import java.util.List;
 
 import arun.com.chromer.R;
 import arun.com.chromer.db.AppColor;
+import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Util;
 import timber.log.Timber;
 
@@ -138,7 +139,7 @@ public class AppColorExtractorService extends IntentService {
     }
 
     private int getPreferredColorFromSwatches(Palette palette) {
-        List<Palette.Swatch> swatchList = Util.getSwatchList(palette);
+        List<Palette.Swatch> swatchList = ColorUtil.getSwatchListFromPalette(palette);
         Palette.Swatch prominentSwatch = Collections.max(swatchList,
                 new Comparator<Palette.Swatch>() {
                     @Override

@@ -735,7 +735,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 case RESULT_OK:
                     List<String> resultList = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     if (resultList != null && !resultList.isEmpty()) {
-                        launchCustomTab(Util.processSearchText(resultList.get(0)));
+                        launchCustomTab(Util.getSearchUrl(resultList.get(0)));
                     }
                     break;
                 default:

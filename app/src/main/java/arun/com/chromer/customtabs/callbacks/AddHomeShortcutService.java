@@ -25,6 +25,7 @@ import java.util.concurrent.ExecutionException;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.BrowserInterceptActivity;
+import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Constants;
 import arun.com.chromer.util.Util;
 import de.jetwick.snacktory.HtmlFetcher;
@@ -63,7 +64,7 @@ public class AddHomeShortcutService extends IntentService {
                 if (favicon != null) {
                     if (!isValidFavicon(favicon)) {
                         Palette palette = Palette.from(favicon).generate();
-                        int iconColor = Util.getBestFaviconColor(palette);
+                        int iconColor = ColorUtil.getBestFaviconColor(palette);
                         if (iconColor == -1) {
                             iconColor = ContextCompat.getColor(this, R.color.primary);
                         }
@@ -151,7 +152,7 @@ public class AddHomeShortcutService extends IntentService {
         Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
         textPaint.setTextSize(textSize);
-        textPaint.setColor(Util.getForegroundTextColor(color));
+        textPaint.setColor(ColorUtil.getForegroundTextColor(color));
         textPaint.setStyle(Paint.Style.FILL);
 
         drawTextInCanvasCentre(canvas, textPaint, getLetter(shortCutName));

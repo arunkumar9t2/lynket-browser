@@ -46,6 +46,7 @@ import java.net.URL;
 
 import arun.com.chromer.R;
 import arun.com.chromer.preferences.Preferences;
+import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Constants;
 import arun.com.chromer.util.Util;
 import arun.com.chromer.webheads.physics.MovementTracker;
@@ -800,7 +801,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         }
 
         private void drawText(Canvas canvas) {
-            mTextPaint.setColor(Util.getForegroundTextColor(mWebHeadColor));
+            mTextPaint.setColor(ColorUtil.getForegroundTextColor(mWebHeadColor));
 
             drawTextInCanvasCentre(canvas, mTextPaint, getUrlIndicator());
         }

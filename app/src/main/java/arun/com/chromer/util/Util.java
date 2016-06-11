@@ -11,7 +11,6 @@ import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -19,11 +18,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
-import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.graphics.ColorUtils;
-import android.support.v7.graphics.Palette;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Patterns;
@@ -31,8 +27,6 @@ import android.view.View;
 import android.view.ViewOutlineProvider;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -75,20 +69,6 @@ public class Util {
         return links;
     }
 
-    public static String getPackageVersion(@NonNull Context context) {
-        // return BuildConfig.VERSION_NAME;
-        String versionName;
-        try {
-            versionName = context
-                    .getApplicationContext()
-                    .getPackageManager()
-                    .getPackageInfo(context.getPackageName(), 0).versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-            return "";
-        }
-        return versionName;
-    }
-
     public static boolean isPackageInstalled(@NonNull Context c, @Nullable String pkgName) {
         if (pkgName == null) return false;
 
@@ -105,6 +85,7 @@ public class Util {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
     }
 
+    @NonNull
     public static String getAppNameWithPackage(@NonNull Context context, @NonNull String pack) {
         final PackageManager pm = context.getApplicationContext().getPackageManager();
         ApplicationInfo ai;
@@ -239,7 +220,7 @@ public class Util {
     }
 
     @Nullable
-    public static String processSearchText(@Nullable String text) {
+    public static String getSearchUrl(@Nullable String text) {
         if (text == null) return null;
         if (Patterns.WEB_URL.matcher(text).matches()) {
             if (!text.toLowerCase().matches("^\\w+://.*")) {
@@ -267,65 +248,6 @@ public class Util {
         return (int) (px / Resources.getSystem().getDisplayMetrics().density);
     }
 
-    @NonNull
-    public static List<Palette.Swatch> getSwatchList(@NonNull Palette palette) {
-        List<Palette.Swatch> swatchList = new ArrayList<>();
-
-        Palette.Swatch vibrantSwatch = palette.getVibrantSwatch();
-        Palette.Swatch vibrantDarkSwatch = palette.getDarkVibrantSwatch();
-        Palette.Swatch vibrantLightSwatch = palette.getLightVibrantSwatch();
-        Palette.Swatch mutedSwatch = palette.getMutedSwatch();
-        Palette.Swatch mutedDarkSwatch = palette.getDarkMutedSwatch();
-        Palette.Swatch mutedLightSwatch = palette.getLightMutedSwatch();
-
-        swatchList.add(vibrantSwatch);
-        swatchList.add(vibrantDarkSwatch);
-        swatchList.add(vibrantLightSwatch);
-        swatchList.add(mutedSwatch);
-        swatchList.add(mutedDarkSwatch);
-        swatchList.add(mutedLightSwatch);
-        return swatchList;
-    }
-
-    @ColorInt
-    public static int getBestFaviconColor(@Nullable Palette palette) {
-        if (palette != null) {
-            List<Palette.Swatch> sortedSwatch = getSwatchList(palette);
-            // Descending
-            Collections.sort(sortedSwatch,
-                    new Comparator<Palette.Swatch>() {
-                        @Override
-                        public int compare(Palette.Swatch swatch1, Palette.Swatch swatch2) {
-                            int a = swatch1 == null ? 0 : swatch1.getPopulation();
-                            int b = swatch2 == null ? 0 : swatch2.getPopulation();
-                            return b - a;
-                        }
-                    });
-
-            // We want the vibrant color but we will avoid it if it is the most prominent one.
-            // Instead we will choose the next prominent color
-            int vibrantColor = palette.getVibrantColor(Constants.NO_COLOR);
-            int prominentColor = sortedSwatch.get(0).getRgb();
-            if (vibrantColor == Constants.NO_COLOR || vibrantColor == prominentColor) {
-                int darkVibrantColor = palette.getDarkVibrantColor(Constants.NO_COLOR);
-                if (darkVibrantColor != Constants.NO_COLOR) {
-                    return darkVibrantColor;
-                } else {
-                    int mutedColor = palette.getMutedColor(Constants.NO_COLOR);
-                    if (mutedColor != Constants.NO_COLOR) {
-                        return mutedColor;
-                    } else {
-                        if (vibrantColor != Constants.NO_COLOR) {
-                            return vibrantColor;
-                        } else
-                            return prominentColor;
-                    }
-                }
-            } else return vibrantColor;
-        }
-        return Constants.NO_COLOR;
-    }
-
     /**
      * A helper class for providing a shadow on sheets
      */
@@ -346,22 +268,4 @@ public class Util {
         }
     }
 
-    @ColorInt
-    public static int getForegroundTextColor(int backgroundColor) {
-        final int whiteColorAlpha = ColorUtils.calculateMinimumAlpha(Color.WHITE, backgroundColor, 4.5f);
-
-        if (whiteColorAlpha != -1) {
-            return ColorUtils.setAlphaComponent(Color.WHITE, whiteColorAlpha);
-        }
-
-        final int blackColorAlpha = ColorUtils.calculateMinimumAlpha(Color.BLACK, backgroundColor, 4.5f);
-
-        if (blackColorAlpha != -1) {
-            return ColorUtils.setAlphaComponent(Color.BLACK, blackColorAlpha);
-        }
-
-        //noinspection ConstantConditions
-        return whiteColorAlpha != -1 ? ColorUtils.setAlphaComponent(Color.WHITE, whiteColorAlpha)
-                : ColorUtils.setAlphaComponent(Color.BLACK, blackColorAlpha);
-    }
 }

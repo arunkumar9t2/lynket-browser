@@ -254,7 +254,7 @@ public class MaterialSearchView extends FrameLayout {
     }
 
     public String getURL() {
-        return Util.processSearchText(getText());
+        return Util.getSearchUrl(getText());
     }
 
     public void setVoiceIconClickListener(VoiceIconClickListener listener) {
