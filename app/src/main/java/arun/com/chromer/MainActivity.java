@@ -3,6 +3,7 @@ package arun.com.chromer;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsService;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -116,6 +118,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     public LinearLayout mFavShareLayout;
     @BindView(R.id.set_default_card)
     public CardView mSetDefaultCard;
+    @BindView(R.id.tab_layout)
+    public TabLayout mTabLayout;
 
     @Override
     protected void onStart() {
@@ -151,6 +155,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         ButterKnife.bind(this);
 
         setSupportActionBar(mToolbar);
+
+        setUpTabs();
 
         if (Preferences.isFirstRun(this)) {
             startActivity(new Intent(this, ChromerIntro.class));
@@ -188,6 +194,33 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mMergeTabsLayout.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void setUpTabs() {
+        TabLayout.Tab optionsTab = mTabLayout.newTab();
+        optionsTab.setText(R.string.options);
+        optionsTab.setIcon(new IconicsDrawable(this)
+                .icon(GoogleMaterial.Icon.gmd_settings)
+                .color(Color.WHITE)
+                .sizeDp(12));
+
+        TabLayout.Tab webHeadsTab = mTabLayout.newTab();
+        webHeadsTab.setText(R.string.web_heads);
+        webHeadsTab.setIcon(new IconicsDrawable(this)
+                .icon(GoogleMaterial.Icon.gmd_phone_android)
+                .color(Color.WHITE)
+                .sizeDp(12));
+
+        TabLayout.Tab customizeTab = mTabLayout.newTab();
+        customizeTab.setText(R.string.customize);
+        customizeTab.setIcon(new IconicsDrawable(this)
+                .icon(GoogleMaterial.Icon.gmd_format_paint)
+                .color(Color.WHITE)
+                .sizeDp(12));
+
+        mTabLayout.addTab(optionsTab, 0, true);
+        mTabLayout.addTab(webHeadsTab, 1);
+        mTabLayout.addTab(customizeTab, 2);
     }
 
     private void updateDefaultBrowserCard() {

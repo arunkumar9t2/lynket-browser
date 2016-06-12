@@ -172,4 +172,6 @@
     <string name="open_in_new_tab_error">Invalid link, have you copied any text or link by long pressing the page?</string>
     <string name="bottom_bar_expln">To ensure bottom bar works properly, setting <b>latest Chrome version</b> as custom tab provider is recommended. Older versions and other browsers may not work. \n
     \nBottom bar provides two actions: \n\n<b>Open in new tab (5.0+) -</b> Copy a link or text on screen and press this icon to launch the link or search the text in a new custom tab.\n<b>Share -</b> Quickly perform Android share action. \n\n More actions coming soon.</string>
+    <string name="options">Options</string>
+    <string name="customize">Customize</string>
 </resources>
