@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
@@ -41,7 +42,7 @@ public class CustomTabActivity extends AppCompatActivity {
             return;
         }
 
-        final String url = getIntent().getData().toString();
+        final String url = getIntent().getDataString();
         final boolean isWebhead = getIntent().getBooleanExtra(Constants.EXTRA_KEY_FROM_WEBHEAD, false);
         final int color = getIntent().getIntExtra(Constants.EXTRA_KEY_WEBHEAD_COLOR, Constants.NO_COLOR);
 
@@ -62,7 +63,7 @@ public class CustomTabActivity extends AppCompatActivity {
             if (title != null) {
                 setTaskDescription(new ActivityManager.TaskDescription(title, icon));
             } else {
-                mExtractionTask = new ExtractionTask(getIntent().getData().toString());
+                mExtractionTask = new ExtractionTask(getIntent().getDataString());
                 mExtractionTask.execute();
             }
         }
@@ -98,8 +99,15 @@ public class CustomTabActivity extends AppCompatActivity {
         String mTitle;
         Bitmap mIcon;
 
-        ExtractionTask(String url) {
+        ExtractionTask(@Nullable String url) {
             mUrl = url;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            if (mUrl != null && mUrl.length() > 0) {
+                setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.loading)));
+            }
         }
 
         @Override
@@ -126,14 +134,16 @@ public class CustomTabActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            String label;
+            String label = "";
             if (mTitle != null && mTitle.length() > 0) {
                 label = mTitle;
             } else {
                 try {
                     label = new URL(mUrl).getHost().toUpperCase();
                 } catch (MalformedURLException e) {
-                    label = mUrl.toUpperCase();
+                    if (mUrl != null) {
+                        label = mUrl.toUpperCase();
+                    }
                 }
             }
             Timber.d("Setting task description %s", label);

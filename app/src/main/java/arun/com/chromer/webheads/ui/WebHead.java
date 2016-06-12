@@ -425,7 +425,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
 
     @ColorInt
     public int getWebHeadColor() {
-        if (mCircleView != null) {
+        if (mCircleView != null && mFavicon != null) {
             return mCircleView.getWebHeadColor();
         } else return Constants.NO_COLOR;
     }
