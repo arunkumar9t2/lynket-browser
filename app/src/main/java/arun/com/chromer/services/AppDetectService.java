@@ -10,7 +10,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
@@ -20,11 +22,12 @@ import java.util.TreeMap;
 
 import arun.com.chromer.preferences.Preferences;
 import arun.com.chromer.util.Constants;
+import arun.com.chromer.util.Util;
 import timber.log.Timber;
 
 public class AppDetectService extends Service {
 
-    private static final int POLLING_INTERVAL = 350;
+    private static final int POLLING_INTERVAL = 400;
 
     private static AppDetectService sAppDetectService = null;
 
@@ -40,14 +43,21 @@ public class AppDetectService extends Service {
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         @Override
         public void run() {
-            // Timber.d("Detection thread started");
             while (!mShouldStopPolling) {
                 try {
-                    String packageName = getCurrentForegroundApp();
-
-                    if (!mLastDetectedApp.equalsIgnoreCase(packageName) && isAllowedPackage(packageName)) {
+                    AppDetection appDetection;
+                    if (Util.isLollipop()) {
+                        appDetection = new PostLDetection();
+                    } else {
+                        appDetection = new PreLDetection();
+                    }
+                    String packageName = appDetection.getForegroundApp();
+                    if (!mLastDetectedApp.equalsIgnoreCase(packageName)
+                            && isAllowedPackage(packageName)
+                            && packageName.length() > 0) {
                         mLastDetectedApp = packageName;
-                        Timber.d("Current app %s", packageName);
+                        Timber.i("Current app %s", packageName);
+                        // toast(packageName);
                     }
 
                     // Sleep and continue again.
@@ -56,42 +66,8 @@ public class AppDetectService extends Service {
                     e.printStackTrace();
                 }
             }
-            // Timber.d("Detection thread stopped");
         }
     };
-
-    private String getCurrentForegroundApp() {
-        String packageName = "";
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { // Lollipop above
-            long time = System.currentTimeMillis();
-
-            UsageStatsManager usageMan = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
-            List<UsageStats> stats = usageMan.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 1000 * 1000, time);
-
-            SortedMap<Long, UsageStats> sortedMap = new TreeMap<>();
-            for (UsageStats usageStats : stats) {
-                // Store the list in a sorted map, will be used to retrieve the recent app later
-                if (usageStats != null)
-                    sortedMap.put(usageStats.getLastTimeUsed(), usageStats);
-            }
-
-            if (!sortedMap.isEmpty()) {
-                final UsageStats usageStats = sortedMap.get(sortedMap.lastKey());
-                packageName = usageStats.getPackageName();
-            }
-        } else {
-            ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-            //noinspection deprecation
-            ActivityManager.RunningTaskInfo runningTaskInfo = am.getRunningTasks(1).get(0);
-            if (runningTaskInfo != null) {
-                packageName = runningTaskInfo.topActivity.getPackageName();
-            }
-        }
-        return packageName;
-    }
-
-    public AppDetectService() {
-    }
 
     public static AppDetectService getInstance() {
         return sAppDetectService;
@@ -112,18 +88,22 @@ public class AppDetectService extends Service {
     }
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        if (Util.isLollipop() && !Util.canReadUsageStats(this)) {
+            Timber.e("Attempted to poll without usage permission");
+            stopSelf();
+        }
+    }
+
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
-
-        Timber.d("Started");
-        sAppDetectService = this;
-
-        registerScreenReceiver();
-
         clearLastAppIfNeeded(intent);
-
+        sAppDetectService = this;
+        registerScreenReceiver();
         startDetection();
-
+        Timber.d("Started");
         return START_STICKY;
     }
 
@@ -167,8 +147,13 @@ public class AppDetectService extends Service {
     }
 
     @SuppressWarnings("unused")
-    void toast(String toast) {
-        Toast.makeText(this, toast, Toast.LENGTH_SHORT).show();
+    void toast(final String toast) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(AppDetectService.this, toast, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private boolean isAllowedPackage(String packageName) {
@@ -204,6 +189,53 @@ public class AppDetectService extends Service {
                 mShouldStopPolling = false;
                 startDetection();
             }
+        }
+    }
+
+    private interface AppDetection {
+        @NonNull
+        String getForegroundApp();
+    }
+
+    private class PreLDetection implements AppDetection {
+
+        @NonNull
+        @Override
+        public String getForegroundApp() {
+            ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+            //noinspection deprecation
+            ActivityManager.RunningTaskInfo runningTaskInfo = am.getRunningTasks(1).get(0);
+            if (runningTaskInfo != null) {
+                return runningTaskInfo.topActivity.getPackageName();
+            }
+            return "";
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
+    private class PostLDetection implements AppDetection {
+
+        @NonNull
+        @Override
+        public String getForegroundApp() {
+            long time = System.currentTimeMillis();
+            UsageStatsManager usageMan = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
+            List<UsageStats> stats = usageMan.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 1000, time);
+
+            SortedMap<Long, UsageStats> sortedMap = new TreeMap<>();
+            for (UsageStats usageStats : stats) {
+                // Store the list in a sorted map, will be used to retrieve the recent app later
+                if (usageStats != null) {
+                    sortedMap.put(usageStats.getLastTimeUsed(), usageStats);
+                    // Timber.d(usageStats.getPackageName());
+                }
+            }
+
+            if (!sortedMap.isEmpty()) {
+                final UsageStats usageStats = sortedMap.get(sortedMap.lastKey());
+                return usageStats.getPackageName();
+            }
+            return "";
         }
     }
 }
