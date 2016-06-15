@@ -3,7 +3,6 @@ package arun.com.chromer;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -73,6 +72,7 @@ import arun.com.chromer.util.Constants;
 import arun.com.chromer.util.Util;
 import arun.com.chromer.views.IntentPickerSheetView;
 import arun.com.chromer.views.MaterialSearchView;
+import arun.com.chromer.views.TabView;
 import arun.com.chromer.views.adapter.AppRenderAdapter;
 import arun.com.chromer.webheads.WebHeadService;
 import butterknife.BindView;
@@ -198,29 +198,39 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private void setUpTabs() {
         TabLayout.Tab optionsTab = mTabLayout.newTab();
-        optionsTab.setText(R.string.options);
-        optionsTab.setIcon(new IconicsDrawable(this)
-                .icon(GoogleMaterial.Icon.gmd_settings)
-                .color(Color.WHITE)
-                .sizeDp(12));
+        optionsTab.setCustomView(new TabView(this, TabView.TAB_TYPE_OPTIONS));
 
         TabLayout.Tab webHeadsTab = mTabLayout.newTab();
-        webHeadsTab.setText(R.string.web_heads);
-        webHeadsTab.setIcon(new IconicsDrawable(this)
-                .icon(GoogleMaterial.Icon.gmd_phone_android)
-                .color(Color.WHITE)
-                .sizeDp(12));
+        webHeadsTab.setCustomView(new TabView(this, TabView.TAB_TYPE_WEB_HEADS));
 
         TabLayout.Tab customizeTab = mTabLayout.newTab();
-        customizeTab.setText(R.string.customize);
-        customizeTab.setIcon(new IconicsDrawable(this)
-                .icon(GoogleMaterial.Icon.gmd_format_paint)
-                .color(Color.WHITE)
-                .sizeDp(12));
+        customizeTab.setCustomView(new TabView(this, TabView.TAB_TYPE_CUSTOMIZE));
 
         mTabLayout.addTab(optionsTab, 0, true);
         mTabLayout.addTab(webHeadsTab, 1);
         mTabLayout.addTab(customizeTab, 2);
+        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                TabView tabView = (TabView) tab.getCustomView();
+                if (tabView != null) {
+                    tabView.setSelected(true);
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                TabView tabView = (TabView) tab.getCustomView();
+                if (tabView != null) {
+                    tabView.setSelected(false);
+                }
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     private void updateDefaultBrowserCard() {
