@@ -116,7 +116,7 @@ public class TabView extends FrameLayout {
                 int layoutWidth = getWidth();
                 initialIconX = (layoutWidth / 2) - (totalWidth / 2);
                 mTabIcon.setX(initialIconX);
-                initialTextX = initialIconX + mTabIcon.getWidth() + Util.dpToPx(5);
+                initialTextX = initialIconX + mTabIcon.getWidth() + Util.dpToPx(10);
                 mTabText.setX(initialTextX);
 
                 mTabText.setPivotX(0);

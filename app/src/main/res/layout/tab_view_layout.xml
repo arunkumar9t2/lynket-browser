@@ -10,19 +10,19 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:gravity="center"
+        android:gravity="center_vertical"
         android:scaleType="fitCenter"
         android:scaleX="0.75"
         android:scaleY="0.75"/>
 
     <TextView
         android:id="@+id/tab_view_text"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@id/tab_view_icon"
         android:fontFamily="sans-serif-medium"
-        android:gravity="center"
+        android:gravity="center_vertical"
         android:singleLine="true"
         android:textColor="@android:color/white"/>
 </RelativeLayout>
