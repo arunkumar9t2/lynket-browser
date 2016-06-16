@@ -206,9 +206,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         TabLayout.Tab customizeTab = mTabLayout.newTab();
         customizeTab.setCustomView(new TabView(this, TabView.TAB_TYPE_CUSTOMIZE));
 
-        mTabLayout.addTab(optionsTab, 0, true);
-        mTabLayout.addTab(webHeadsTab, 1);
-        mTabLayout.addTab(customizeTab, 2);
         mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -231,6 +228,9 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
             }
         });
+        mTabLayout.addTab(optionsTab, 0, true);
+        mTabLayout.addTab(webHeadsTab, 1);
+        mTabLayout.addTab(customizeTab, 2);
     }
 
     private void updateDefaultBrowserCard() {
