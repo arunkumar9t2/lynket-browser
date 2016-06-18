@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 
@@ -18,12 +19,23 @@ import arun.com.chromer.util.Util;
  * Created by Arun on 05/01/2016.
  */
 public class Preferences {
-    private static final String PREFERRED_PACKAGE = "preferred_package";
     public static final String TOOLBAR_COLOR = "toolbar_color";
     public static final String WEBHEADS_COLOR = "webhead_color";
-    private static final String TOOLBAR_COLOR_PREF = "toolbar_color_pref";
     public static final String ANIMATION_TYPE = "animation_preference";
     public static final String ANIMATION_SPEED = "animation_speed_preference";
+    public static final String DYNAMIC_COLOR = "dynamic_color";
+    public static final String WEB_HEAD_CLOSE_ON_OPEN = "webhead_close_onclick_pref";
+    public static final String PREFERRED_ACTION = "preferred_action_preference";
+    public static final String WEB_HEAD_ENABLED = "webhead_enabled_pref";
+    public static final String WEB_HEAD_SPAWN_LOCATION = "webhead_spawn_preference";
+    public static final String WEB_HEAD_FAVICON = "webhead_favicons_pref";
+    public static final String BOTTTOM_BAR_ENABLED = "bottombar_enabled_pref";
+    public static final int PREFERRED_ACTION_BROWSER = 1;
+    public static final int PREFERRED_ACTION_FAV_SHARE = 2;
+    public static final int ANIMATION_MEDIUM = 1;
+    public static final int ANIMATION_SHORT = 2;
+    private static final String PREFERRED_PACKAGE = "preferred_package";
+    private static final String TOOLBAR_COLOR_PREF = "toolbar_color_pref";
     // Changed key for 1.5 build which will force intro to show
     private static final String FIRST_RUN = "firstrun_1";
     private static final String USER_KNOWS_BOTTOM_BAR = "user_learnt_bottom_bar";
@@ -35,24 +47,9 @@ public class Preferences {
     private static final String MERGE = "merge_tabs_and_apps_preference";
     private static final String SECONDARY_PREF = "secondary_preference";
     private static final String FAV_SHARE_PREF = "fav_share_preference";
-    public static final String DYNAMIC_COLOR = "dynamic_color";
     private static final String CLEAN_DATABASE = "clean_database";
     private static final String DYNAMIC_COLOR_APP = "dynamic_color_app";
     private static final String DYNAMIC_COLOR_WEB = "dynamic_color_web";
-    public static final String WEB_HEAD_CLOSE_ON_OPEN = "webhead_close_onclick_pref";
-
-    public static final String PREFERRED_ACTION = "preferred_action_preference";
-    public static final String WEB_HEAD_ENABLED = "webhead_enabled_pref";
-    public static final String WEB_HEAD_SPAWN_LOCATION = "webhead_spawn_preference";
-    public static final String WEB_HEAD_FAVICON = "webhead_favicons_pref";
-
-    public static final String BOTTTOM_BAR_ENABLED = "bottombar_enabled_pref";
-
-    public static final int PREFERRED_ACTION_BROWSER = 1;
-    public static final int PREFERRED_ACTION_FAV_SHARE = 2;
-
-    public static final int ANIMATION_MEDIUM = 1;
-    public static final int ANIMATION_SHORT = 2;
 
     private static SharedPreferences preferences(Context context) {
         return context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
@@ -127,6 +124,7 @@ public class Preferences {
                 .getString(PREFERRED_ACTION, "1"));
     }
 
+    @Nullable
     public static String customTabApp(Context context) {
         String packageName = PreferenceManager
                 .getDefaultSharedPreferences(context)
@@ -162,17 +160,18 @@ public class Preferences {
                 .putString(PREFERRED_PACKAGE, string).apply();
     }
 
+    @Nullable
     public static String secondaryBrowserComponent(Context context) {
         return PreferenceManager
                 .getDefaultSharedPreferences(context)
                 .getString(SECONDARY_PREF, null);
     }
 
-    public static void secondaryBrowserComponent(Context context, String string) {
+    public static void secondaryBrowserComponent(Context context, String flattenChomponentString) {
         PreferenceManager
                 .getDefaultSharedPreferences(context)
                 .edit()
-                .putString(SECONDARY_PREF, string).apply();
+                .putString(SECONDARY_PREF, flattenChomponentString).apply();
     }
 
     @Nullable
@@ -188,7 +187,7 @@ public class Preferences {
         return cN.getPackageName();
     }
 
-
+    @Nullable
     public static String favShareComponent(Context context) {
         return PreferenceManager
                 .getDefaultSharedPreferences(context)
@@ -319,6 +318,7 @@ public class Preferences {
         }
     }
 
+    @NonNull
     public static CharSequence dynamicColorSummary(Context context) {
         if (dynamicToolbarOnApp(context) && dynamicToolbarOnWeb(context)) {
             return context.getString(R.string.dynamic_summary_appweb);

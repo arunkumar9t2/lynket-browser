@@ -1,5 +1,6 @@
 package arun.com.chromer.util;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AppOpsManager;
 import android.content.ComponentName;
@@ -34,13 +35,17 @@ import java.util.regex.Pattern;
 import arun.com.chromer.BuildConfig;
 import arun.com.chromer.customtabs.CustomTabHelper;
 import arun.com.chromer.customtabs.prefetch.ScannerService;
-import arun.com.chromer.model.App;
+import arun.com.chromer.views.IntentPickerSheetView;
 
 /**
  * Created by Arun on 17/12/2015.
  */
 @SuppressWarnings("JavaDoc")
 public class Util {
+
+    public static boolean isLollipop() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
+    }
 
     public static void openPlayStore(@NonNull Context context, @NonNull String appPackageName) {
         try {
@@ -81,10 +86,6 @@ public class Util {
         }
     }
 
-    public static boolean isLollipop() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
-    }
-
     @NonNull
     public static String getAppNameWithPackage(@NonNull Context context, @NonNull String pack) {
         final PackageManager pm = context.getApplicationContext().getPackageManager();
@@ -108,7 +109,7 @@ public class Util {
     @Nullable
     public static ComponentName getBrowserComponentForPackage(@NonNull Context context, @NonNull String pkg) {
         Intent webIntentImplicit = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.GOOGLE_URL));
-        List<ResolveInfo> resolvedActivityList = context.getApplicationContext().getPackageManager()
+        @SuppressLint("InlinedApi") List<ResolveInfo> resolvedActivityList = context.getApplicationContext().getPackageManager()
                 .queryIntentActivities(webIntentImplicit, PackageManager.MATCH_ALL);
 
         ComponentName componentName = null;
@@ -150,9 +151,10 @@ public class Util {
 
     @NonNull
     public static String getDefaultBrowserPackage(@NonNull Context context) {
-        Intent launchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.GOOGLE_URL));
-        ResolveInfo resolveInfo = context.getApplicationContext().getPackageManager().resolveActivity(launchIntent,
-                PackageManager.MATCH_DEFAULT_ONLY);
+        ResolveInfo resolveInfo = context.getApplicationContext()
+                .getPackageManager()
+                .resolveActivity(Constants.WEB_INTENT,
+                        PackageManager.MATCH_DEFAULT_ONLY);
 
         return resolveInfo != null ? resolveInfo.activityInfo.packageName.trim() : "";
     }
@@ -162,20 +164,16 @@ public class Util {
     }
 
     @NonNull
-    public static List<App> getCustomTabApps(@NonNull Context context) {
-        List<App> apps = new ArrayList<>();
+    public static List<IntentPickerSheetView.ActivityInfo> getCustomTabApps(@NonNull Context context) {
+        List<IntentPickerSheetView.ActivityInfo> apps = new ArrayList<>();
         PackageManager pm = context.getApplicationContext().getPackageManager();
-        Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));
-        List<ResolveInfo> resolvedActivityList = pm.queryIntentActivities(activityIntent, PackageManager.MATCH_ALL);
+        @SuppressLint("InlinedApi") List<ResolveInfo> resolvedActivityList = pm.queryIntentActivities(Constants.WEB_INTENT, PackageManager.MATCH_ALL);
         for (ResolveInfo info : resolvedActivityList) {
-            Intent serviceIntent = new Intent();
-            serviceIntent.setAction(CustomTabHelper.ACTION_CUSTOM_TABS_CONNECTION);
-            serviceIntent.setPackage(info.activityInfo.packageName);
-            if (pm.resolveService(serviceIntent, 0) != null) {
-                String packageName = info.activityInfo.packageName;
-                if (packageName.equalsIgnoreCase(context.getPackageName()))
-                    continue;
-                apps.add(new App(context, packageName));
+            final String packageName = info.activityInfo.packageName;
+            if (CustomTabHelper.isPackageSupportCustomTabs(context, packageName)) {
+                ComponentName componentName = new ComponentName(info.activityInfo.packageName, info.activityInfo.name);
+                IntentPickerSheetView.ActivityInfo activityInfo = new IntentPickerSheetView.ActivityInfo(info, info.loadLabel(pm), componentName);
+                apps.add(activityInfo);
             }
         }
         return apps;

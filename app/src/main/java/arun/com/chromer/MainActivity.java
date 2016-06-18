@@ -2,14 +2,13 @@ package arun.com.chromer;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsService;
 import android.support.design.widget.Snackbar;
@@ -61,19 +60,18 @@ import arun.com.chromer.customtabs.CustomTabDelegate;
 import arun.com.chromer.customtabs.CustomTabHelper;
 import arun.com.chromer.customtabs.prefetch.ScannerService;
 import arun.com.chromer.customtabs.warmup.WarmupService;
-import arun.com.chromer.model.App;
 import arun.com.chromer.payments.DonateActivity;
 import arun.com.chromer.preferences.BottomBarPreferenceFragment;
 import arun.com.chromer.preferences.PersonalizationPreferenceFragment;
 import arun.com.chromer.preferences.Preferences;
 import arun.com.chromer.preferences.WebHeadPreferenceFragment;
+import arun.com.chromer.preferences.widgets.AppPreferenceCardView;
 import arun.com.chromer.services.util.ServicesUtil;
 import arun.com.chromer.util.Constants;
 import arun.com.chromer.util.Util;
 import arun.com.chromer.views.IntentPickerSheetView;
 import arun.com.chromer.views.MaterialSearchView;
 import arun.com.chromer.views.TabView;
-import arun.com.chromer.views.adapter.AppRenderAdapter;
 import arun.com.chromer.webheads.WebHeadService;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -83,9 +81,6 @@ import timber.log.Timber;
 public class MainActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback {
 
     private static final int VOICE_REQUEST = 10001;
-
-    private CustomTabBindingHelper mCustomTabBindingHelper;
-
     @BindView(R.id.warm_up_switch)
     public SwitchCompat mWarmUpSwitch;
     @BindView(R.id.pre_fetch_switch)
@@ -96,14 +91,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     public AppCompatCheckBox mWifiCheckBox;
     @BindView(R.id.show_notification_checkbox)
     public AppCompatCheckBox mNotificationCheckBox;
-    @BindView(R.id.secondary_browser_view)
-    public ImageView mSecondaryBrowserIcon;
-    @BindView(R.id.default_provider_view)
-    public ImageView mDefaultProviderIcn;
-    @BindView(R.id.fav_share_app_view)
-    public ImageView mFavShareAppIcon;
-    @BindView(R.id.set_default_image)
-    public ImageView mSetDefaultIcon;
     @BindView(R.id.bottomsheet)
     public BottomSheetLayout mBottomSheet;
     @BindView(R.id.material_search_view)
@@ -112,14 +99,19 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     public Toolbar mToolbar;
     @BindView(R.id.merge_tabs_apps_layout)
     public LinearLayout mMergeTabsLayout;
-    @BindView(R.id.secondary_browser)
-    public LinearLayout mSecondaryBrowser;
-    @BindView(R.id.fav_share_app)
-    public LinearLayout mFavShareLayout;
     @BindView(R.id.set_default_card)
     public CardView mSetDefaultCard;
+    @BindView(R.id.set_default_image)
+    public ImageView mSetDefaultIcon;
     @BindView(R.id.tab_layout)
     public TabLayout mTabLayout;
+    @BindView(R.id.customtab_preference_view)
+    public AppPreferenceCardView mCustomTabPreferenceView;
+    @BindView(R.id.browser_preference_view)
+    public AppPreferenceCardView mBrowserPreferenceView;
+    @BindView(R.id.favshare_preference_view)
+    public AppPreferenceCardView mFavSharePreferenceView;
+    private CustomTabBindingHelper mCustomTabBindingHelper;
 
     @Override
     protected void onStart() {
@@ -142,7 +134,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         super.onResume();
         updateDefaultBrowserCard();
         updatePrefetchIfPermissionGranted();
-        setIconWithPackageName(mSecondaryBrowserIcon, Preferences.secondaryBrowserPackage(this));
         updateSubPreferences(Preferences.preFetch(this));
     }
 
@@ -174,12 +165,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         setupSwitches();
 
         setupCustomTab();
-
-        setupDefaultProvider();
-
-        setupSecondaryBrowser();
-
-        setupFavShareApp();
 
         attachFragments();
 
@@ -288,40 +273,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     private void snack(@NonNull String textToSnack) {
         // Have to provide a view for view traversal, so providing the set default button.
         Snackbar.make(mMaterialSearchView, textToSnack, Snackbar.LENGTH_SHORT).show();
-    }
-
-
-    private void setupSecondaryBrowser() {
-        setIconWithPackageName(mSecondaryBrowserIcon, Preferences.secondaryBrowserPackage(this));
-
-        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.GOOGLE_URL));
-        final IntentPickerSheetView browserPicker = new IntentPickerSheetView(this,
-                webIntent,
-                getString(R.string.choose_secondary_browser),
-                new IntentPickerSheetView.OnIntentPickedListener() {
-                    @Override
-                    public void onIntentPicked(IntentPickerSheetView.ActivityInfo activityInfo) {
-                        mBottomSheet.dismissSheet();
-                        String componentNameFlatten = activityInfo.componentName.flattenToString();
-                        if (componentNameFlatten != null) {
-                            Preferences.secondaryBrowserComponent(getApplicationContext(), componentNameFlatten);
-                        }
-                        setIconWithPackageName(mSecondaryBrowserIcon, activityInfo.componentName.getPackageName());
-                        snack(String.format(getString(R.string.secondary_browser_success), activityInfo.label));
-                    }
-                });
-        browserPicker.setFilter(new IntentPickerSheetView.Filter() {
-            @Override
-            public boolean include(IntentPickerSheetView.ActivityInfo info) {
-                return !info.componentName.getPackageName().equalsIgnoreCase(getPackageName());
-            }
-        });
-        mSecondaryBrowser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mBottomSheet != null) mBottomSheet.showWithSheetView(browserPicker);
-            }
-        });
     }
 
     private void setupSwitches() {
@@ -452,18 +403,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         }
     }
 
-    private void setupDefaultProvider() {
-        final String preferredApp = Preferences.customTabApp(MainActivity.this);
-
-        if (preferredApp == null || preferredApp.length() == 0)
-            // Setting an error icon
-            mDefaultProviderIcn.setImageDrawable(new IconicsDrawable(this)
-                    .icon(GoogleMaterial.Icon.gmd_error_outline)
-                    .color(ContextCompat.getColor(this, R.color.error))
-                    .sizeDp(24));
-        else setIconWithPackageName(mDefaultProviderIcn, preferredApp);
-    }
-
     private void setupDefaultBrowser() {
         mSetDefaultIcon.setImageDrawable(new IconicsDrawable(this)
                 .icon(GoogleMaterial.Icon.gmd_new_releases)
@@ -591,44 +530,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 .show();
     }
 
-    private void setupFavShareApp() {
-        setIconWithPackageName(mFavShareAppIcon, Preferences.favSharePackage(this));
-
-        final Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, "");
-        final IntentPickerSheetView picker = new IntentPickerSheetView(this,
-                shareIntent,
-                getString(R.string.choose_fav_share_app),
-                new IntentPickerSheetView.OnIntentPickedListener() {
-                    @Override
-                    public void onIntentPicked(IntentPickerSheetView.ActivityInfo activityInfo) {
-                        mBottomSheet.dismissSheet();
-                        String componentNameFlatten = activityInfo.componentName.flattenToString();
-                        if (componentNameFlatten != null) {
-                            Preferences.favShareComponent(getApplicationContext(), componentNameFlatten);
-                        }
-                        setIconWithPackageName(mFavShareAppIcon,
-                                activityInfo.componentName.getPackageName());
-                        snack(String.format(getString(R.string.fav_share_success),
-                                activityInfo.label));
-                    }
-                });
-        picker.setFilter(new IntentPickerSheetView.Filter() {
-            @Override
-            public boolean include(IntentPickerSheetView.ActivityInfo info) {
-                return !info.componentName.getPackageName().startsWith("com.android")
-                        && !info.componentName.getPackageName().equalsIgnoreCase(getPackageName());
-            }
-        });
-        mFavShareLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mBottomSheet != null) mBottomSheet.showWithSheetView(picker);
-            }
-        });
-    }
-
     private void launchCustomTab(String url) {
         if (url != null) {
             if (Preferences.webHeads(this)) {
@@ -741,18 +642,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         }
     }
 
-    private void setIconWithPackageName(@Nullable ImageView imageView, @Nullable String packageName) {
-        if (imageView == null || packageName == null) return;
-
-        try {
-            // Calling getPackageManager directly from activity causes leak in UsageManager when accessibility is turned on.
-            // Refer https://github.com/square/leakcanary/issues/62#issuecomment-101414452
-            imageView.setImageDrawable(getApplicationContext().getPackageManager().getApplicationIcon(packageName));
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void cleanOldDbs() {
         if (Preferences.shouldCleanDB(this)) {
             boolean ok = deleteDatabase(Constants.DATABASE_NAME);
@@ -829,33 +718,74 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             launchCustomTab(Constants.GOOGLE_URL);
     }
 
-    @OnClick(R.id.default_provider)
-    public void OnDefaultProviderClick() {
-        final List<App> customTabApps = Util.getCustomTabApps(getApplicationContext());
-
-        if (customTabApps.size() == 0) {
+    @OnClick(R.id.customtab_preference_view)
+    public void onDefaultProviderClick() {
+        final List<IntentPickerSheetView.ActivityInfo> customTabApps = Util.getCustomTabApps(getApplicationContext());
+        if (customTabApps.isEmpty()) {
             checkAndEducateUser();
             return;
         }
-        new MaterialDialog.Builder(MainActivity.this)
-                .title(getString(R.string.choose_default_provider))
-                .adapter(new AppRenderAdapter(getApplicationContext(), customTabApps),
-                        new MaterialDialog.ListCallback() {
-                            @Override
-                            public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-                                App app = customTabApps.get(which);
-                                if (app != null) {
-                                    String packageName = app.getPackageName();
-                                    Preferences.customTabApp(getApplicationContext(), packageName);
-                                    setIconWithPackageName(mDefaultProviderIcn, packageName);
-                                    snack(String.format(getString(R.string.default_provider_success), app.getAppName()));
 
-                                    // Refresh bindings so as to reflect changed custom tab package
-                                    refreshCustomTabBindings();
-                                }
-                                if (dialog != null) dialog.dismiss();
-                            }
-                        })
-                .show();
+        final IntentPickerSheetView browserPicker = new IntentPickerSheetView(this,
+                Constants.DUMMY_INTENT,
+                R.string.default_provider,
+                new IntentPickerSheetView.OnIntentPickedListener() {
+                    @Override
+                    public void onIntentPicked(IntentPickerSheetView.ActivityInfo activityInfo) {
+                        mBottomSheet.dismissSheet();
+                        mCustomTabPreferenceView.updatePreference(activityInfo.componentName);
+                        refreshCustomTabBindings();
+                        snack(String.format(getString(R.string.default_provider_success),
+                                activityInfo.label));
+                    }
+                });
+        browserPicker.setFilter(IntentPickerSheetView.selfPackageExcludeFilter(this));
+        browserPicker.setMixins(customTabApps);
+        showPicker(browserPicker);
+    }
+
+    @OnClick(R.id.browser_preference_view)
+    public void onSecondaryBrowserPreferenceClicked() {
+        final IntentPickerSheetView browserPicker = new IntentPickerSheetView(this,
+                Constants.WEB_INTENT,
+                R.string.choose_secondary_browser,
+                new IntentPickerSheetView.OnIntentPickedListener() {
+                    @Override
+                    public void onIntentPicked(IntentPickerSheetView.ActivityInfo activityInfo) {
+                        mBottomSheet.dismissSheet();
+                        mBrowserPreferenceView.updatePreference(activityInfo.componentName);
+                        snack(String.format(getString(R.string.secondary_browser_success),
+                                activityInfo.label));
+                    }
+                });
+        browserPicker.setFilter(IntentPickerSheetView.selfPackageExcludeFilter(this));
+        showPicker(browserPicker);
+    }
+
+    @OnClick(R.id.favshare_preference_view)
+    public void onFavSharePreferenceClicked() {
+        final IntentPickerSheetView favSharePicker = new IntentPickerSheetView(this,
+                Constants.TEXT_SHARE_INTENT,
+                R.string.choose_fav_share_app,
+                new IntentPickerSheetView.OnIntentPickedListener() {
+                    @Override
+                    public void onIntentPicked(IntentPickerSheetView.ActivityInfo activityInfo) {
+                        mBottomSheet.dismissSheet();
+                        mFavSharePreferenceView.updatePreference(activityInfo.componentName);
+                        snack(String.format(getString(R.string.fav_share_success),
+                                activityInfo.label));
+                    }
+                });
+        favSharePicker.setFilter(IntentPickerSheetView.selfPackageExcludeFilter(this));
+        showPicker(favSharePicker);
+    }
+
+    private void showPicker(final IntentPickerSheetView browserPicker) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mBottomSheet.showWithSheetView(browserPicker);
+            }
+        }, 150);
     }
 }

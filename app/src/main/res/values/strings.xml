@@ -100,7 +100,7 @@
     <string name="warmup_browser">Warm up browser</string>
     <string name="set_default_chromer">Set As Default Browser</string>
     <string name="circle_to_preview_changes">Tap the circle button to preview changes</string>
-    <string name="default_provider">Default custom tab provider</string>
+    <string name="default_provider">Custom tab provider</string>
     <string name="pre_fetch_content">Prefetch content</string>
     <string name="pre_fetch_desc">Scan your screen for links and load them in background for instant launch</string>
     <string name="accessibility_description">This service will be used by Chromer to scan text links on your screen and load them in the background. No other information is processed by Chromer. You can still use Chromer in light mode if you choose to not grant this. For more information, launch Chromer app.</string>
@@ -174,4 +174,7 @@
     \nBottom bar provides two actions: \n\n<b>Open in new tab (5.0+) -</b> Copy a link or text on screen and press this icon to launch the link or search the text in a new custom tab.\n<b>Share -</b> Quickly perform Android share action. \n\n More actions coming soon.</string>
     <string name="options">Options</string>
     <string name="customize">Customize</string>
+    <string name="not_set">Not Set</string>
+    <string name="not_found">Not Found</string>
+    <string name="app_preferences">App Preferences</string>
 </resources>

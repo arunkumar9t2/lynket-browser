@@ -83,7 +83,7 @@ public class BlacklistManagerActivity extends AppCompatActivity implements Black
         Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.GOOGLE_URL));
         final IntentPickerSheetView browserPicker = new IntentPickerSheetView(this,
                 webIntent,
-                getString(R.string.choose_secondary_browser),
+                R.string.choose_secondary_browser,
                 new IntentPickerSheetView.OnIntentPickedListener() {
                     @Override
                     public void onIntentPicked(IntentPickerSheetView.ActivityInfo activityInfo) {

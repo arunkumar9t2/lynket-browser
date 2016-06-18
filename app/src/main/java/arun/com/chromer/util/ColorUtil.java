@@ -94,4 +94,21 @@ public class ColorUtil {
         return whiteColorAlpha != -1 ? ColorUtils.setAlphaComponent(Color.WHITE, whiteColorAlpha)
                 : ColorUtils.setAlphaComponent(Color.BLACK, blackColorAlpha);
     }
+
+    public static int getBestColorFromPalette(@Nullable Palette palette) {
+        if (palette == null) {
+            return Constants.NO_COLOR;
+        }
+        int vibrantColor = palette.getVibrantColor(Constants.NO_COLOR);
+        if (vibrantColor != Constants.NO_COLOR) {
+            return vibrantColor;
+        } else {
+            int darkVibrantColor = palette.getDarkVibrantColor(Constants.NO_COLOR);
+            if (darkVibrantColor != Constants.NO_COLOR) {
+                return darkVibrantColor;
+            } else {
+                return palette.getDarkMutedColor(Constants.NO_COLOR);
+            }
+        }
+    }
 }

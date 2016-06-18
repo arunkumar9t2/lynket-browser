@@ -40,7 +40,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"/>
+                    android:layout_marginRight="10dp"
+                    tools:ignore="ContentDescription"/>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -67,6 +68,69 @@
 
         </android.support.v7.widget.CardView>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="10dp"
+            android:gravity="center|left"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="@string/app_preferences"
+            android:textAllCaps="true"
+            android:textColor="@color/accent"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:ignore="RtlHardcoded"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:orientation="horizontal"
+            android:weightSum="1.5">
+
+            <arun.com.chromer.preferences.widgets.AppPreferenceCardView
+                android:id="@+id/customtab_preference_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="0.5"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="2dp"
+                app:preferenceType="customTabProvider"/>
+
+            <arun.com.chromer.preferences.widgets.AppPreferenceCardView
+                android:id="@+id/browser_preference_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="0.5"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="2dp"
+                app:preferenceType="secondaryBrowser"/>
+
+            <arun.com.chromer.preferences.widgets.AppPreferenceCardView
+                android:id="@+id/favshare_preference_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="0.5"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="2dp"
+                app:preferenceType="favoriteShare"/>
+        </LinearLayout>
+
+
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -90,85 +154,6 @@
                 <Space
                     android:layout_width="match_parent"
                     android:layout_height="8dp"/>
-
-                <LinearLayout
-                    android:id="@+id/default_provider"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="start|center"
-                        android:text="@string/default_provider"
-                        android:textColor="@color/material_dark_color"
-                        android:textSize="16sp"/>
-
-                    <ImageView
-                        android:id="@+id/default_provider_view"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        tools:ignore="ContentDescription"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/secondary_browser"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="start|center"
-                        android:text="@string/choose_secondary_browser"
-                        android:textColor="@color/material_dark_color"
-                        android:textSize="16sp"/>
-
-                    <ImageView
-                        android:id="@+id/secondary_browser_view"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        tools:ignore="ContentDescription"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/fav_share_app"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="start|center"
-                        android:text="@string/fav_share_app"
-                        android:textColor="@color/material_dark_color"
-                        android:textSize="16sp"/>
-
-                    <ImageView
-                        android:id="@+id/fav_share_app_view"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        tools:ignore="ContentDescription"/>
-                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/blacklisted_target"

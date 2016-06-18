@@ -47,6 +47,7 @@ public class IntentPickerSheetView extends FrameLayout {
         this(context, intent, context.getString(titleRes), listener);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public IntentPickerSheetView(Context context, final Intent intent, final String title, final OnIntentPickedListener listener) {
         super(context);
         this.intent = intent;
@@ -64,6 +65,16 @@ public class IntentPickerSheetView extends FrameLayout {
         });
 
         ViewCompat.setElevation(this, Util.dpToPx(16));
+    }
+
+    @NonNull
+    public static Filter selfPackageExcludeFilter(@NonNull final Context context) {
+        return new Filter() {
+            @Override
+            public boolean include(ActivityInfo info) {
+                return !info.componentName.getPackageName().equalsIgnoreCase(context.getPackageName());
+            }
+        };
     }
 
     @Override
@@ -153,7 +164,7 @@ public class IntentPickerSheetView extends FrameLayout {
             this.componentName = new ComponentName(context, clazz.getName());
         }
 
-        ActivityInfo(ResolveInfo resolveInfo, CharSequence label, ComponentName componentName) {
+        public ActivityInfo(ResolveInfo resolveInfo, CharSequence label, ComponentName componentName) {
             this.resolveInfo = resolveInfo;
             this.label = label.toString();
             this.componentName = componentName;
@@ -189,7 +200,7 @@ public class IntentPickerSheetView extends FrameLayout {
         public Adapter(Context context, Intent intent, List<ActivityInfo> mixins) {
             inflater = LayoutInflater.from(context);
             packageManager = context.getPackageManager();
-            List<ResolveInfo> infos = packageManager.queryIntentActivities(intent, PackageManager.MATCH_ALL);
+            @SuppressLint("InlinedApi") List<ResolveInfo> infos = packageManager.queryIntentActivities(intent, PackageManager.MATCH_ALL);
             activityInfos = new ArrayList<>(infos.size() + mixins.size());
             activityInfos.addAll(mixins);
             for (ResolveInfo info : infos) {
@@ -270,5 +281,4 @@ public class IntentPickerSheetView extends FrameLayout {
         }
 
     }
-
 }
