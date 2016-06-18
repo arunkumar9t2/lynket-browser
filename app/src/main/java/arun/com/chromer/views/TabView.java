@@ -35,8 +35,6 @@ import butterknife.Unbinder;
  * Created by Arun on 16/06/2016.
  */
 public class TabView extends FrameLayout {
-
-
     @ColorInt
     private static final int SELECTED_COLOR = Color.WHITE;
     @ColorInt
@@ -57,7 +55,7 @@ public class TabView extends FrameLayout {
     private boolean mSelected;
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({TAB_TYPE_OPTIONS, TAB_TYPE_WEB_HEADS, TAB_TYPE_CUSTOMIZE,})
+    @IntDef({TAB_TYPE_OPTIONS, TAB_TYPE_WEB_HEADS, TAB_TYPE_CUSTOMIZE})
     public @interface TabType {
     }
 
@@ -201,12 +199,12 @@ public class TabView extends FrameLayout {
         transformAnimator.setDuration(275);
         transformAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
 
-        final AnimatorSet sequentialAnimator = new AnimatorSet();
-        sequentialAnimator.playSequentially(
+        final AnimatorSet togetherAnimator = new AnimatorSet();
+        togetherAnimator.playSequentially(
                 transformAnimator,
                 getIconSelectionAnimator()
         );
-        sequentialAnimator.start();
+        togetherAnimator.start();
     }
 
     private Animator getIconSelectionAnimator() {
