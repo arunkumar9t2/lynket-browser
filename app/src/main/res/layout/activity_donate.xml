@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
         android:text="@string/support_development"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,6 +26,6 @@
             android:id="@+id/donate_item_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:divider="@null" />
+            android:divider="@null"/>
     </LinearLayout>
 </LinearLayout>
