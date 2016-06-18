@@ -45,9 +45,9 @@ import com.facebook.rebound.SpringSystemListener;
 import java.net.URL;
 
 import arun.com.chromer.R;
-import arun.com.chromer.preferences.Preferences;
+import arun.com.chromer.preferences.manager.Preferences;
+import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.ColorUtil;
-import arun.com.chromer.util.Constants;
 import arun.com.chromer.util.Util;
 import arun.com.chromer.webheads.physics.MovementTracker;
 import timber.log.Timber;
@@ -58,31 +58,27 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class WebHead extends FrameLayout implements SpringSystemListener, SpringListener {
 
-    private static int WEB_HEAD_COUNT = 0;
     private static final int STACKING_GAP_PX = Util.dpToPx(6);
     private static final double MAGNETISM_THRESHOLD = Util.dpToPx(120);
-
+    private static int WEB_HEAD_COUNT = 0;
     private static WindowManager sWindowManager;
     private static int[] sTrashLockCoordinate;
     private static int sDispHeight, sDispWidth;
 
     private final String mUrl;
-    private String mUnShortenedUrl;
-    private String mTitle;
-
     private final GestureDetector mGestureDetector = new GestureDetector(getContext(), new GestureDetectorListener());
     private final int mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
-    private float posX, posY;
-    private int initialDownX, initialDownY;
-    private int MINIMUM_HORIZONTAL_FLING_VELOCITY;
-
-    private WindowManager.LayoutParams mWindowParams;
-    private SpringSystem mSpringSystem;
-    private Spring mScaleSpring, mWallAttachSpring, mXSpring, mYSpring;
+    private final WindowManager.LayoutParams mWindowParams;
     private final SpringConfig FLING_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(40, 7);
     private final SpringConfig DRAG_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(0, 1.5);
     private final SpringConfig SNAP_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(100, 7);
-
+    private String mUnShortenedUrl;
+    private String mTitle;
+    private float posX, posY;
+    private int initialDownX, initialDownY;
+    private int MINIMUM_HORIZONTAL_FLING_VELOCITY;
+    private SpringSystem mSpringSystem;
+    private Spring mScaleSpring, mWallAttachSpring, mXSpring, mYSpring;
     private boolean mDragging;
     private boolean mWasRemoveLocked;
     private boolean mWasFlung;
@@ -415,19 +411,19 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         return animator;
     }
 
+    @ColorInt
+    public int getWebHeadColor() {
+        if (mCircleView != null && mFavicon != null) {
+            return mCircleView.getWebHeadColor();
+        } else return Constants.NO_COLOR;
+    }
+
     public void setWebHeadColor(@ColorInt int newColor) {
         if (!mIsBeingDestroyed) {
             ValueAnimator animator = getColorChangeAnimator(newColor);
             if (animator != null)
                 animator.start();
         }
-    }
-
-    @ColorInt
-    public int getWebHeadColor() {
-        if (mCircleView != null && mFavicon != null) {
-            return mCircleView.getWebHeadColor();
-        } else return Constants.NO_COLOR;
     }
 
     @Nullable
@@ -469,12 +465,12 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         return mUrl;
     }
 
-    public void setUnShortenedUrl(String unShortenedUrl) {
-        mUnShortenedUrl = unShortenedUrl;
-    }
-
     public String getUnShortenedUrl() {
         return mUnShortenedUrl == null ? getUrl() : mUnShortenedUrl;
+    }
+
+    public void setUnShortenedUrl(String unShortenedUrl) {
+        mUnShortenedUrl = unShortenedUrl;
     }
 
     public boolean isFromNewTab() {
@@ -493,7 +489,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         mTitle = title;
     }
 
-    public void setWebHeadInteractionListener(WebHeadInteractionListener listener) {
+    private void setWebHeadInteractionListener(WebHeadInteractionListener listener) {
         mInteractionListener = listener;
     }
 
@@ -609,10 +605,175 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
 
     }
 
+    private void checkBounds() {
+        int x = mWindowParams.x;
+        int y = mWindowParams.y;
+
+        int width = getAdaptWidth();
+
+        int rightBound = (int) (sDispWidth - width * 0.8);
+        int leftBound = (int) (0 - width * 0.2);
+        int topBound = Util.dpToPx(25);
+        int bottomBound = (int) (sDispHeight * 0.85);
+
+        if (x + width >= sDispWidth) {
+            mXSpring.setSpringConfig(FLING_CONFIG);
+            mXSpring.setEndValue(rightBound);
+        }
+        if (x - width <= 0) {
+            mXSpring.setSpringConfig(FLING_CONFIG);
+            mXSpring.setEndValue(leftBound);
+        }
+        if (y + width >= sDispHeight) {
+            mYSpring.setSpringConfig(FLING_CONFIG);
+            mYSpring.setEndValue(bottomBound);
+        }
+        if (y - width <= 0) {
+            mYSpring.setSpringConfig(FLING_CONFIG);
+            mYSpring.setEndValue(topBound);
+        }
+
+        int minimumVelocityToReachSides = Util.dpToPx(100);
+        if (!mWasRemoveLocked
+                && Math.abs(mXSpring.getVelocity()) < minimumVelocityToReachSides
+                && Math.abs(mYSpring.getVelocity()) < minimumVelocityToReachSides) {
+            stickToWall();
+        }
+    }
+
     public interface WebHeadInteractionListener {
         void onWebHeadClick(@NonNull WebHead webHead);
 
         void onWebHeadDestroy(@NonNull WebHead webHead, boolean isLastWebHead);
+    }
+
+    @SuppressLint("ViewConstructor")
+    public static class WebHeadCircle extends View {
+
+        private static int sSizePx;
+        private static int sDiameterPx;
+        private final String mUrl;
+        private final Paint mBgPaint;
+        private final Paint mTextPaint;
+        private boolean mShouldDrawText = true;
+        @ColorInt
+        private int mWebHeadColor = 0;
+
+        public WebHeadCircle(Context context, String url) {
+            super(context);
+            mUrl = url;
+
+            mWebHeadColor = Preferences.webHeadColor(context);
+            float shadowR = context.getResources().getDimension(R.dimen.web_head_shadow_radius);
+            float shadowDx = context.getResources().getDimension(R.dimen.web_head_shadow_dx);
+            float shadowDy = context.getResources().getDimension(R.dimen.web_head_shadow_dy);
+            float textSize = context.getResources().getDimension(R.dimen.web_head_text_indicator);
+
+            mBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            mBgPaint.setStyle(Paint.Style.FILL);
+            mBgPaint.setShadowLayer(shadowR, shadowDx, shadowDy, 0x55000000);
+
+            sSizePx = context.getResources().getDimensionPixelSize(R.dimen.web_head_size_normal);
+
+            mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            mTextPaint.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+            mTextPaint.setTextSize(textSize);
+            mTextPaint.setStyle(Paint.Style.FILL);
+
+            setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        }
+
+        public static int getSizePx() {
+            return sSizePx;
+        }
+
+        public static int getDiameterPx() {
+            return sDiameterPx;
+        }
+
+        @Override
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            setMeasuredDimension(sSizePx, sSizePx);
+        }
+
+        @Override
+        protected void onDraw(Canvas canvas) {
+            canvas.drawColor(0, PorterDuff.Mode.CLEAR);
+            mBgPaint.setColor(mWebHeadColor);
+
+            float radius = (float) (getWidth() / 2.4);
+            sDiameterPx = (int) (2 * radius);
+
+            canvas.drawCircle(getWidth() / 2, getHeight() / 2, radius, mBgPaint);
+            if (mShouldDrawText) {
+                drawText(canvas);
+            }
+        }
+
+        public void clearUrlIndicator() {
+            if (mShouldDrawText) {
+                mShouldDrawText = false;
+                invalidate();
+            }
+        }
+
+        @SuppressWarnings("unused")
+        public void showUrlIndicator() {
+            if (!mShouldDrawText) {
+                mShouldDrawText = true;
+                invalidate();
+            }
+        }
+
+        @ColorInt
+        public int getWebHeadColor() {
+            return mWebHeadColor;
+        }
+
+        public void setWebHeadColor(@ColorInt int webHeadColor) {
+            mWebHeadColor = webHeadColor;
+            invalidate();
+        }
+
+        private void drawText(Canvas canvas) {
+            mTextPaint.setColor(ColorUtil.getForegroundTextColor(mWebHeadColor));
+
+            drawTextInCanvasCentre(canvas, mTextPaint, getUrlIndicator());
+        }
+
+        @NonNull
+        private String getUrlIndicator() {
+            String result = "X";
+            if (mUrl != null) {
+                try {
+                    URL url = new URL(mUrl);
+                    String host = url.getHost();
+                    if (host != null && host.length() != 0) {
+                        if (host.startsWith("www")) {
+                            String[] splits = host.split("\\.");
+                            if (splits.length > 1) result = String.valueOf(splits[1].charAt(0));
+                            else result = String.valueOf(splits[0].charAt(0));
+                        } else
+                            result = String.valueOf(host.charAt(0));
+                    }
+                } catch (Exception e) {
+                    return result;
+                }
+            }
+            return result.toUpperCase();
+        }
+
+        private void drawTextInCanvasCentre(Canvas canvas, Paint paint, String text) {
+            int cH = canvas.getClipBounds().height();
+            int cW = canvas.getClipBounds().width();
+            Rect rect = new Rect();
+            paint.setTextAlign(Paint.Align.LEFT);
+            paint.getTextBounds(text, 0, text.length(), rect);
+            float x = cW / 2f - rect.width() / 2f - rect.left;
+            float y = cH / 2f + rect.height() / 2f - rect.bottom;
+            canvas.drawText(text, x, y, paint);
+        }
     }
 
     /**
@@ -678,173 +839,6 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
                 return true;
             }
             return false;
-        }
-    }
-
-    private void checkBounds() {
-        int x = mWindowParams.x;
-        int y = mWindowParams.y;
-
-        int width = getAdaptWidth();
-
-        int rightBound = (int) (sDispWidth - width * 0.8);
-        int leftBound = (int) (0 - width * 0.2);
-        int topBound = Util.dpToPx(25);
-        int bottomBound = (int) (sDispHeight * 0.85);
-
-        if (x + width >= sDispWidth) {
-            mXSpring.setSpringConfig(FLING_CONFIG);
-            mXSpring.setEndValue(rightBound);
-        }
-        if (x - width <= 0) {
-            mXSpring.setSpringConfig(FLING_CONFIG);
-            mXSpring.setEndValue(leftBound);
-        }
-        if (y + width >= sDispHeight) {
-            mYSpring.setSpringConfig(FLING_CONFIG);
-            mYSpring.setEndValue(bottomBound);
-        }
-        if (y - width <= 0) {
-            mYSpring.setSpringConfig(FLING_CONFIG);
-            mYSpring.setEndValue(topBound);
-        }
-
-        int minimumVelocityToReachSides = Util.dpToPx(100);
-        if (!mWasRemoveLocked
-                && Math.abs(mXSpring.getVelocity()) < minimumVelocityToReachSides
-                && Math.abs(mYSpring.getVelocity()) < minimumVelocityToReachSides) {
-            stickToWall();
-        }
-    }
-
-    @SuppressLint("ViewConstructor")
-    public static class WebHeadCircle extends View {
-
-        private final String mUrl;
-        private final Paint mBgPaint;
-        private final Paint mTextPaint;
-
-        private boolean mShouldDrawText = true;
-        @ColorInt
-        private int mWebHeadColor = 0;
-
-        private static int sSizePx;
-        private static int sDiameterPx;
-
-        public WebHeadCircle(Context context, String url) {
-            super(context);
-            mUrl = url;
-
-            mWebHeadColor = Preferences.webHeadColor(context);
-            float shadowR = context.getResources().getDimension(R.dimen.web_head_shadow_radius);
-            float shadowDx = context.getResources().getDimension(R.dimen.web_head_shadow_dx);
-            float shadowDy = context.getResources().getDimension(R.dimen.web_head_shadow_dy);
-            float textSize = context.getResources().getDimension(R.dimen.web_head_text_indicator);
-
-            mBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            mBgPaint.setStyle(Paint.Style.FILL);
-            mBgPaint.setShadowLayer(shadowR, shadowDx, shadowDy, 0x55000000);
-
-            sSizePx = context.getResources().getDimensionPixelSize(R.dimen.web_head_size_normal);
-
-            mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            mTextPaint.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-            mTextPaint.setTextSize(textSize);
-            mTextPaint.setStyle(Paint.Style.FILL);
-
-            setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        }
-
-        @Override
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-            setMeasuredDimension(sSizePx, sSizePx);
-        }
-
-        @Override
-        protected void onDraw(Canvas canvas) {
-            canvas.drawColor(0, PorterDuff.Mode.CLEAR);
-            mBgPaint.setColor(mWebHeadColor);
-
-            float radius = (float) (getWidth() / 2.4);
-            sDiameterPx = (int) (2 * radius);
-
-            canvas.drawCircle(getWidth() / 2, getHeight() / 2, radius, mBgPaint);
-            if (mShouldDrawText) {
-                drawText(canvas);
-            }
-        }
-
-        public void clearUrlIndicator() {
-            if (mShouldDrawText) {
-                mShouldDrawText = false;
-                invalidate();
-            }
-        }
-
-        @SuppressWarnings("unused")
-        public void showUrlIndicator() {
-            if (!mShouldDrawText) {
-                mShouldDrawText = true;
-                invalidate();
-            }
-        }
-
-        public void setWebHeadColor(@ColorInt int webHeadColor) {
-            mWebHeadColor = webHeadColor;
-            invalidate();
-        }
-
-        @ColorInt
-        public int getWebHeadColor() {
-            return mWebHeadColor;
-        }
-
-        private void drawText(Canvas canvas) {
-            mTextPaint.setColor(ColorUtil.getForegroundTextColor(mWebHeadColor));
-
-            drawTextInCanvasCentre(canvas, mTextPaint, getUrlIndicator());
-        }
-
-        @NonNull
-        private String getUrlIndicator() {
-            String result = "X";
-            if (mUrl != null) {
-                try {
-                    URL url = new URL(mUrl);
-                    String host = url.getHost();
-                    if (host != null && host.length() != 0) {
-                        if (host.startsWith("www")) {
-                            String[] splits = host.split("\\.");
-                            if (splits.length > 1) result = String.valueOf(splits[1].charAt(0));
-                            else result = String.valueOf(splits[0].charAt(0));
-                        } else
-                            result = String.valueOf(host.charAt(0));
-                    }
-                } catch (Exception e) {
-                    return result;
-                }
-            }
-            return result.toUpperCase();
-        }
-
-        private void drawTextInCanvasCentre(Canvas canvas, Paint paint, String text) {
-            int cH = canvas.getClipBounds().height();
-            int cW = canvas.getClipBounds().width();
-            Rect rect = new Rect();
-            paint.setTextAlign(Paint.Align.LEFT);
-            paint.getTextBounds(text, 0, text.length(), rect);
-            float x = cW / 2f - rect.width() / 2f - rect.left;
-            float y = cH / 2f + rect.height() / 2f - rect.bottom;
-            canvas.drawText(text, x, y, paint);
-        }
-
-        public static int getSizePx() {
-            return sSizePx;
-        }
-
-        public static int getDiameterPx() {
-            return sDiameterPx;
         }
     }
 }

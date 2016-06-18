@@ -28,11 +28,11 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
-import arun.com.chromer.blacklist.BlacklistManagerActivity;
-import arun.com.chromer.preferences.Preferences;
+import arun.com.chromer.activities.blacklist.BlacklistManagerActivity;
+import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.preferences.widgets.AppPreferenceCardView;
-import arun.com.chromer.services.util.ServicesUtil;
-import arun.com.chromer.util.Constants;
+import arun.com.chromer.shared.Constants;
+import arun.com.chromer.util.ServiceUtil;
 import arun.com.chromer.util.Util;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -160,7 +160,7 @@ public class OptionsFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Preferences.warmUp(mAppContext, isChecked);
-                ServicesUtil.takeCareOfServices(mAppContext);
+                ServiceUtil.takeCareOfServices(mAppContext);
             }
         });
 
@@ -192,7 +192,7 @@ public class OptionsFragment extends Fragment {
                     startActivityForResult(new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS), 0);
                 }
 
-                ServicesUtil.takeCareOfServices(mAppContext);
+                ServiceUtil.takeCareOfServices(mAppContext);
                 updateSubPreferences(isChecked);
             }
         });
@@ -212,7 +212,7 @@ public class OptionsFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Preferences.wifiOnlyPrefetch(mAppContext, isChecked);
-                ServicesUtil.takeCareOfServices(mAppContext);
+                ServiceUtil.takeCareOfServices(mAppContext);
             }
         });
 

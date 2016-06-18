@@ -25,7 +25,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
-import arun.com.chromer.preferences.Preferences;
+import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Util;
 import butterknife.BindView;
@@ -120,7 +120,7 @@ public class AppPreferenceCardView extends CardView {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        addView(LayoutInflater.from(getContext()).inflate(R.layout.app_preference_view_layout, this, false));
+        addView(LayoutInflater.from(getContext()).inflate(R.layout.app_preference_cardview_content, this, false));
         mUnBinder = ButterKnife.bind(this);
         updateUI();
     }

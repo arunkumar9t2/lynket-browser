@@ -43,9 +43,10 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import java.util.ArrayList;
 import java.util.List;
 
-import arun.com.chromer.about.AboutAppActivity;
-import arun.com.chromer.about.changelog.ChangelogUtil;
+import arun.com.chromer.activities.about.AboutAppActivity;
+import arun.com.chromer.activities.about.changelog.ChangelogUtil;
 import arun.com.chromer.activities.intro.ChromerIntro;
+import arun.com.chromer.activities.payments.DonateActivity;
 import arun.com.chromer.customtabs.CustomTabBindingHelper;
 import arun.com.chromer.customtabs.CustomTabDelegate;
 import arun.com.chromer.customtabs.CustomTabHelper;
@@ -54,11 +55,10 @@ import arun.com.chromer.customtabs.warmup.WarmupService;
 import arun.com.chromer.fragments.CustomizeFragment;
 import arun.com.chromer.fragments.OptionsFragment;
 import arun.com.chromer.fragments.WebHeadsFragment;
-import arun.com.chromer.payments.DonateActivity;
-import arun.com.chromer.preferences.Preferences;
+import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.preferences.widgets.AppPreferenceCardView;
-import arun.com.chromer.services.util.ServicesUtil;
-import arun.com.chromer.util.Constants;
+import arun.com.chromer.shared.Constants;
+import arun.com.chromer.util.ServiceUtil;
 import arun.com.chromer.util.Util;
 import arun.com.chromer.views.IntentPickerSheetView;
 import arun.com.chromer.views.MaterialSearchView;
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_activity);
 
         ButterKnife.bind(this);
 
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         checkAndEducateUser();
 
         cleanOldDbs();
-        ServicesUtil.takeCareOfServices(getApplicationContext());
+        ServiceUtil.takeCareOfServices(getApplicationContext());
     }
 
     private void setUpAppBarLayout() {
@@ -345,7 +345,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         mCustomTabBindingHelper.bindCustomTabsService(this);
 
         // Restarting services will make them update their bindings.
-        ServicesUtil.refreshCustomTabBindings(getApplicationContext());
+        ServiceUtil.refreshCustomTabBindings(getApplicationContext());
     }
 
     private void setupCustomTab() {

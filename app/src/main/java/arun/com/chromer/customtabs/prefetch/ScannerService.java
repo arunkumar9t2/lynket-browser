@@ -1,6 +1,7 @@
 package arun.com.chromer.customtabs.prefetch;
 
 import android.accessibilityservice.AccessibilityService;
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -32,7 +33,7 @@ import java.util.regex.Pattern;
 import arun.com.chromer.R;
 import arun.com.chromer.customtabs.CustomTabBindingHelper;
 import arun.com.chromer.customtabs.warmup.WarmupService;
-import arun.com.chromer.preferences.Preferences;
+import arun.com.chromer.preferences.manager.Preferences;
 import timber.log.Timber;
 
 /**
@@ -40,27 +41,21 @@ import timber.log.Timber;
  */
 public class ScannerService extends AccessibilityService implements CustomTabBindingHelper.ConnectionCallback {
 
-    private static ScannerService sInstance = null;
-
     private static final String SCANNER_SERVICE_NOTIFICATION = "SCANNER_SERVICE_NOTIFICATION";
     private static final String NOTIFICATION_TITLE = "Chromer Scanning Service";
-
     private static final int NOTIFICATION_ID = 10001;
     private static final int MAX_URL = 3;
     private static final int URL_PREDICTION_DEPTH = 3;
-
-    private CustomTabBindingHelper mCustomTabBindingHelper;
-
-    private String mLastFetchedUrl = "";
-    private String mLastPriorityUrl;
-
-    private boolean mShouldStopExtraction = false;
-
+    private static ScannerService sInstance = null;
     private final Stack<AccessibilityNodeInfo> mTreeTraversingStack = new Stack<>();
     private final Queue<String> mExtractedUrlQueue = new LinkedList<>();
     private final LinkedList<CharSequence> mLastTopTexts = new LinkedList<>();
     private final LinkedList<CharSequence> mLocalTopTexts = new LinkedList<>();
     private final List<String> mBrowserList = new LinkedList<>();
+    private CustomTabBindingHelper mCustomTabBindingHelper;
+    private String mLastFetchedUrl = "";
+    private String mLastPriorityUrl;
+    private boolean mShouldStopExtraction = false;
 
     public static ScannerService getInstance() {
         return sInstance;
@@ -236,7 +231,7 @@ public class ScannerService extends AccessibilityService implements CustomTabBin
     private List<String> getBrowserPackageList() {
         if (mBrowserList.isEmpty()) {
             Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));
-            List<ResolveInfo> resolvedActivityList = getApplicationContext()
+            @SuppressLint("InlinedApi") List<ResolveInfo> resolvedActivityList = getApplicationContext()
                     .getPackageManager().queryIntentActivities(activityIntent, PackageManager.MATCH_ALL);
             for (ResolveInfo info : resolvedActivityList) {
                 if (info != null) {

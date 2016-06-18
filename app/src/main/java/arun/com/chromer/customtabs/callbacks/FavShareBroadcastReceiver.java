@@ -21,7 +21,7 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import arun.com.chromer.R;
-import arun.com.chromer.preferences.Preferences;
+import arun.com.chromer.preferences.manager.Preferences;
 
 public class FavShareBroadcastReceiver extends BroadcastReceiver {
 

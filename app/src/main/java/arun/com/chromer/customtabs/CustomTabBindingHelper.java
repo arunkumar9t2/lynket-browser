@@ -12,7 +12,7 @@ import android.support.customtabs.CustomTabsSession;
 
 import java.util.List;
 
-import arun.com.chromer.preferences.Preferences;
+import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.util.Util;
 import timber.log.Timber;
 

@@ -7,7 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
-import arun.com.chromer.preferences.Preferences;
+import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.util.Util;
 
 public class OpenInChromeReceiver extends BroadcastReceiver {

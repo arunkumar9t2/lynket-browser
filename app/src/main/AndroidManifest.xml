@@ -38,7 +38,7 @@
                 android:resource="@xml/service"/>
         </service>
         <service
-            android:name=".services.AppDetectService"
+            android:name=".shared.AppDetectService"
             android:enabled="true"
             android:exported="false"/>
         <service
@@ -116,17 +116,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".about.AboutAppActivity"
+            android:name=".activities.about.AboutAppActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".webheads.helper.WebHeadLauncherActivity"
             android:theme="@style/Transparent"/>
         <activity
-            android:name=".payments.DonateActivity"
+            android:name=".activities.payments.DonateActivity"
             android:excludeFromRecents="true"
             android:theme="@style/DonatePopUp"/>
         <activity
-            android:name=".blacklist.BlacklistManagerActivity"
+            android:name=".activities.blacklist.BlacklistManagerActivity"
             android:label="@string/blacklisted_apps"
             android:launchMode="singleInstance"
             android:parentActivityName=".MainActivity"

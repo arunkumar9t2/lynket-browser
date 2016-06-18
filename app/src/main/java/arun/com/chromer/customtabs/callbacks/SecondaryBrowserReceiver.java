@@ -1,5 +1,6 @@
 package arun.com.chromer.customtabs.callbacks;
 
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -13,7 +14,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import arun.com.chromer.R;
-import arun.com.chromer.preferences.Preferences;
+import arun.com.chromer.preferences.manager.Preferences;
 import timber.log.Timber;
 
 public class SecondaryBrowserReceiver extends BroadcastReceiver {
@@ -50,7 +51,7 @@ public class SecondaryBrowserReceiver extends BroadcastReceiver {
 
         Intent webIntentImplicit = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         webIntentImplicit.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        List<ResolveInfo> resolvedActivityList = context.getPackageManager().queryIntentActivities(webIntentImplicit, PackageManager.MATCH_ALL);
+        @SuppressLint("InlinedApi") List<ResolveInfo> resolvedActivityList = context.getPackageManager().queryIntentActivities(webIntentImplicit, PackageManager.MATCH_ALL);
 
         String secondaryPackage = Preferences.secondaryBrowserPackage(context);
 

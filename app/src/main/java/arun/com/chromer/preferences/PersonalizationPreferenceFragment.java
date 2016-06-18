@@ -21,10 +21,11 @@ import com.afollestad.materialdialogs.color.ColorChooserDialog;
 
 import arun.com.chromer.MainActivity;
 import arun.com.chromer.R;
+import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.preferences.widgets.ColorPreference;
-import arun.com.chromer.services.AppDetectService;
-import arun.com.chromer.services.util.ServicesUtil;
-import arun.com.chromer.util.Constants;
+import arun.com.chromer.shared.AppDetectService;
+import arun.com.chromer.shared.Constants;
+import arun.com.chromer.util.ServiceUtil;
 import arun.com.chromer.util.Util;
 
 public class PersonalizationPreferenceFragment extends DividerLessPreferenceFragment
@@ -222,7 +223,7 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
     }
 
     private void handleAppDetectionService() {
-        if (ServicesUtil.isAppBasedToolbarColor(getActivity()) || Preferences.blacklist(getActivity()))
+        if (ServiceUtil.isAppBasedToolbarColor(getActivity()) || Preferences.blacklist(getActivity()))
             getActivity().startService(new Intent(getActivity().getApplicationContext(),
                     AppDetectService.class));
         else

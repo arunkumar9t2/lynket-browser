@@ -19,9 +19,9 @@ import java.util.List;
 
 import arun.com.chromer.R;
 import arun.com.chromer.db.BlacklistedApps;
-import arun.com.chromer.preferences.Preferences;
-import arun.com.chromer.services.AppDetectService;
-import arun.com.chromer.util.Constants;
+import arun.com.chromer.preferences.manager.Preferences;
+import arun.com.chromer.shared.AppDetectService;
+import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Util;
 import arun.com.chromer.webheads.helper.WebHeadLauncherActivity;
 import timber.log.Timber;
@@ -139,7 +139,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
         Intent webIntentImplicit = getOriginalIntentCopy(getIntent());
         webIntentImplicit.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         webIntentImplicit.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        List<ResolveInfo> resolvedActivityList = getApplicationContext().getPackageManager()
+        @SuppressLint("InlinedApi") List<ResolveInfo> resolvedActivityList = getApplicationContext().getPackageManager()
                 .queryIntentActivities(webIntentImplicit, PackageManager.MATCH_ALL);
 
         String secondaryPackage = Preferences.secondaryBrowserPackage(this);

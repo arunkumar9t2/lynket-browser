@@ -13,7 +13,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import arun.com.chromer.R;
-import arun.com.chromer.util.Constants;
+import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Util;
 
 @SuppressLint("GoogleAppIndexingApiWarning")

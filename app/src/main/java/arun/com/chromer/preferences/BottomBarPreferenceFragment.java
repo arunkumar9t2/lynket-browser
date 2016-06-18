@@ -8,6 +8,7 @@ import android.support.v7.preference.SwitchPreferenceCompat;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import arun.com.chromer.R;
+import arun.com.chromer.preferences.manager.Preferences;
 
 public class BottomBarPreferenceFragment extends DividerLessPreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 

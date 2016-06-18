@@ -3,4 +3,11 @@
     <declare-styleable name="ColorPreference">
         <attr name="color"/>
     </declare-styleable>
+    <declare-styleable name="AppPreferenceCardView">
+        <attr name="preferenceType" format="enum">
+            <enum name="customTabProvider" value="0"/>
+            <enum name="secondaryBrowser" value="1"/>
+            <enum name="favoriteShare" value="2"/>
+        </attr>
+    </declare-styleable>
 </resources>

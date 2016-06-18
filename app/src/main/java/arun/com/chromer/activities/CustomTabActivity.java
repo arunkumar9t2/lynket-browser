@@ -21,7 +21,7 @@ import java.net.URL;
 import arun.com.chromer.R;
 import arun.com.chromer.customtabs.CustomTabBindingHelper;
 import arun.com.chromer.customtabs.CustomTabDelegate;
-import arun.com.chromer.util.Constants;
+import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Util;
 import de.jetwick.snacktory.HtmlFetcher;
 import de.jetwick.snacktory.JResult;

@@ -35,6 +35,7 @@ import java.util.regex.Pattern;
 import arun.com.chromer.BuildConfig;
 import arun.com.chromer.customtabs.CustomTabHelper;
 import arun.com.chromer.customtabs.prefetch.ScannerService;
+import arun.com.chromer.shared.Constants;
 import arun.com.chromer.views.IntentPickerSheetView;
 
 /**

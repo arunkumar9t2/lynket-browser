@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import arun.com.chromer.util.Constants;
+import arun.com.chromer.shared.Constants;
 import arun.com.chromer.webheads.WebHeadService;
 
 public class WebHeadLauncherActivity extends AppCompatActivity {

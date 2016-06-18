@@ -23,14 +23,11 @@ import com.afollestad.materialdialogs.color.ColorChooserDialog;
 
 import arun.com.chromer.MainActivity;
 import arun.com.chromer.R;
+import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.preferences.widgets.ColorPreference;
-import arun.com.chromer.util.Constants;
+import arun.com.chromer.shared.Constants;
 
 public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
-
-    public WebHeadPreferenceFragment() {
-        // Required empty public constructor
-    }
 
     private final BroadcastReceiver mColorSelectionReceiver = new BroadcastReceiver() {
         @Override
@@ -44,6 +41,10 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
             }
         }
     };
+
+    public WebHeadPreferenceFragment() {
+        // Required empty public constructor
+    }
 
     public static WebHeadPreferenceFragment newInstance() {
         WebHeadPreferenceFragment fragment = new WebHeadPreferenceFragment();

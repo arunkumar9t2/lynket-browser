@@ -6,8 +6,8 @@ import android.support.v7.graphics.Palette;
 
 import java.lang.ref.WeakReference;
 
+import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.ColorUtil;
-import arun.com.chromer.util.Constants;
 import arun.com.chromer.webheads.ui.WebHead;
 import timber.log.Timber;
 

@@ -6,20 +6,17 @@ import de.jetwick.snacktory.JResult;
  * Created by Arun on 15/05/2016.
  */
 public class PageExtractTask implements PageExtractRunnable.PageExtractTaskMethods {
-    private static ParsingTasksManager sTaskManager;
-
+    private static PageExtractTasksManager sTaskManager;
+    private final Runnable mPageExtractRunnable;
     private String mRawUrl;
     private String mUnShortenedUrl;
     private JResult mExtractionResult;
-
     private Thread mCurrentThread;
-
-    private final Runnable mPageExtractRunnable;
 
     PageExtractTask() {
         // Create the runnables
         mPageExtractRunnable = new PageExtractRunnable(this);
-        sTaskManager = ParsingTasksManager.getInstance();
+        sTaskManager = PageExtractTasksManager.getInstance();
     }
 
     @Override
@@ -51,13 +48,13 @@ public class PageExtractTask implements PageExtractRunnable.PageExtractTaskMetho
     }
 
     @Override
-    public void setUnShortenedUrl(String url) {
-        mUnShortenedUrl = url;
+    public String getUnShortenedUrl() {
+        return mUnShortenedUrl;
     }
 
     @Override
-    public String getUnShortenedUrl() {
-        return mUnShortenedUrl;
+    public void setUnShortenedUrl(String url) {
+        mUnShortenedUrl = url;
     }
 
     public Thread getCurrentThread() {

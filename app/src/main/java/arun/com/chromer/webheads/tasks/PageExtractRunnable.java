@@ -16,6 +16,39 @@ public class PageExtractRunnable implements Runnable {
         mPageTask = pageTask;
     }
 
+    @Override
+    public void run() {
+        mPageTask.setDownloadThread(Thread.currentThread());
+
+        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+        try {
+            cancelIfNeeded();
+
+            HtmlFetcher fetcher = new HtmlFetcher();
+            String url = fetcher.unShortenUrl(mPageTask.getRawUrl());
+            mPageTask.setUnShortenedUrl(url);
+            mPageTask.handleDownloadState(PageExtractTasksManager.URL_UN_SHORTENED);
+
+            JResult res = fetcher.fetchAndExtract(url, 1000 * 10, false);
+            cancelIfNeeded();
+
+            mPageTask.setResult(res);
+            mPageTask.handleDownloadState(PageExtractTasksManager.EXTRACTION_COMPLETE);
+
+            cancelIfNeeded();
+        } catch (InterruptedException ignore) {
+            Timber.v("Thread interrupted");
+        } catch (Exception e) {
+            Timber.e(e.getMessage());
+        }
+    }
+
+    private void cancelIfNeeded() throws InterruptedException {
+        if (Thread.interrupted()) {
+            throw new InterruptedException();
+        }
+    }
+
     interface PageExtractTaskMethods {
 
         /**
@@ -33,41 +66,8 @@ public class PageExtractRunnable implements Runnable {
 
         String getRawUrl();
 
-        void setUnShortenedUrl(String url);
-
         String getUnShortenedUrl();
-    }
 
-    @Override
-    public void run() {
-        mPageTask.setDownloadThread(Thread.currentThread());
-
-        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
-        try {
-            cancelIfNeeded();
-
-            HtmlFetcher fetcher = new HtmlFetcher();
-            String url = fetcher.unShortenUrl(mPageTask.getRawUrl());
-            mPageTask.setUnShortenedUrl(url);
-            mPageTask.handleDownloadState(ParsingTasksManager.URL_UN_SHORTENED);
-
-            JResult res = fetcher.fetchAndExtract(url, 1000 * 10, false);
-            cancelIfNeeded();
-
-            mPageTask.setResult(res);
-            mPageTask.handleDownloadState(ParsingTasksManager.EXTRACTION_COMPLETE);
-
-            cancelIfNeeded();
-        } catch (InterruptedException ignore) {
-            Timber.v("Thread interrupted");
-        } catch (Exception e) {
-            Timber.e(e.getMessage());
-        }
-    }
-
-    private void cancelIfNeeded() throws InterruptedException {
-        if (Thread.interrupted()) {
-            throw new InterruptedException();
-        }
+        void setUnShortenedUrl(String url);
     }
 }

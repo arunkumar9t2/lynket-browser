@@ -31,7 +31,7 @@ public class WebHeadsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mAppContext = getActivity().getApplicationContext();
-        View view = inflater.inflate(R.layout.web_head_preference_layout, container, false);
+        View view = inflater.inflate(R.layout.web_head_fragment, container, false);
         mUnbinder = ButterKnife.bind(this, view);
         return view;
     }
