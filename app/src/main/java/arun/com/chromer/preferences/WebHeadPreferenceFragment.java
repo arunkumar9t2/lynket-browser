@@ -12,8 +12,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.preference.CheckBoxPreference;
-import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.SwitchPreferenceCompat;
 
@@ -41,6 +39,11 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
             }
         }
     };
+    private final String[] PREFERENCE_GROUP = new String[]{
+            Preferences.WEB_HEAD_SPAWN_LOCATION,
+            Preferences.WEBHEADS_COLOR
+    };
+    private IntentFilter mWebHeadColorFilter = new IntentFilter(Constants.ACTION_WEBHEAD_COLOR_SET);
 
     public WebHeadPreferenceFragment() {
         // Required empty public constructor
@@ -62,9 +65,9 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
     }
 
     private void setupWebHeadColorPreference() {
-        ColorPreference webheadsColorPref = (ColorPreference) findPreference(Preferences.WEBHEADS_COLOR);
-        if (webheadsColorPref != null) {
-            webheadsColorPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        ColorPreference webHeadsColorPref = (ColorPreference) findPreference(Preferences.WEBHEADS_COLOR);
+        if (webHeadsColorPref != null) {
+            webHeadsColorPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     int chosenColor = ((ColorPreference) preference).getColor();
@@ -88,7 +91,7 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     final SwitchPreferenceCompat switchCompat = (SwitchPreferenceCompat) preference;
-                    boolean isChecked = switchCompat.isChecked();
+                    final boolean isChecked = switchCompat.isChecked();
                     if (isChecked) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             if (!Settings.canDrawOverlays(getActivity())) {
@@ -119,57 +122,42 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
     }
 
     @Override
-    public void onCreatePreferences(Bundle bundle, String s) {
-
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
-        getPreferenceScreen().getSharedPreferences()
-                .registerOnSharedPreferenceChangeListener(this);
         LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(mColorSelectionReceiver, new IntentFilter(Constants.ACTION_WEBHEAD_COLOR_SET));
-        updatePreferenceSummary();
+                .registerReceiver(mColorSelectionReceiver, mWebHeadColorFilter);
+        getPreferenceManager()
+                .getSharedPreferences()
+                .registerOnSharedPreferenceChangeListener(this);
+        updatePreferenceStates(Preferences.WEB_HEAD_ENABLED);
+        updatePreferenceSummary(PREFERENCE_GROUP);
     }
 
     @Override
     public void onPause() {
-        getPreferenceManager().getSharedPreferences()
-                .unregisterOnSharedPreferenceChangeListener(this);
         LocalBroadcastManager.getInstance(getActivity())
                 .unregisterReceiver(mColorSelectionReceiver);
+        getPreferenceManager()
+                .getSharedPreferences()
+                .unregisterOnSharedPreferenceChangeListener(this);
         super.onPause();
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        updatePreferenceSummary();
+        updatePreferenceStates(key);
+        updatePreferenceSummary(PREFERENCE_GROUP);
     }
 
-    private void updatePreferenceSummary() {
-        boolean webHeadsEnabled = Preferences.webHeads(getActivity().getApplicationContext());
-
-        ListPreference spawnPreference = (ListPreference) findPreference(Preferences.WEB_HEAD_SPAWN_LOCATION);
-        if (spawnPreference != null) {
-            spawnPreference.setSummary(spawnPreference.getEntry());
-            spawnPreference.setEnabled(webHeadsEnabled);
-        }
-
-        ColorPreference webheadColorPref = (ColorPreference) findPreference(Preferences.WEBHEADS_COLOR);
-        if (webheadColorPref != null) {
-            webheadColorPref.refreshSummary();
-            webheadColorPref.setEnabled(webHeadsEnabled);
-        }
-
-        CheckBoxPreference closeWebHeadsPref = (CheckBoxPreference) findPreference(Preferences.WEB_HEAD_CLOSE_ON_OPEN);
-        if (closeWebHeadsPref != null) {
-            closeWebHeadsPref.setEnabled(webHeadsEnabled);
-        }
-
-        CheckBoxPreference faviconPref = (CheckBoxPreference) findPreference(Preferences.WEB_HEAD_FAVICON);
-        if (faviconPref != null) {
-            faviconPref.setEnabled(webHeadsEnabled);
+    private void updatePreferenceStates(String key) {
+        if (key.equalsIgnoreCase(Preferences.WEB_HEAD_ENABLED)) {
+            final boolean webHeadsEnabled = Preferences.webHeads(getActivity());
+            enableDisablePreference(webHeadsEnabled,
+                    Preferences.WEB_HEAD_SPAWN_LOCATION,
+                    Preferences.WEBHEADS_COLOR,
+                    Preferences.WEB_HEAD_CLOSE_ON_OPEN,
+                    Preferences.WEB_HEAD_FAVICON
+            );
         }
     }
 }

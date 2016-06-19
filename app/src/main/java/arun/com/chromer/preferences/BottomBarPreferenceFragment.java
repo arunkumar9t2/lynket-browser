@@ -27,7 +27,6 @@ public class BottomBarPreferenceFragment extends DividerLessPreferenceFragment i
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.bottombar_preferences);
-
         // setup bottom bar preference
         setupBottomBarPreference();
     }
@@ -63,19 +62,21 @@ public class BottomBarPreferenceFragment extends DividerLessPreferenceFragment i
     @Override
     public void onResume() {
         super.onResume();
-        getPreferenceScreen().getSharedPreferences()
+        getPreferenceManager()
+                .getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     public void onPause() {
-        getPreferenceManager().getSharedPreferences()
+        getPreferenceManager()
+                .getSharedPreferences()
                 .unregisterOnSharedPreferenceChangeListener(this);
         super.onPause();
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-    }
 
+    }
 }

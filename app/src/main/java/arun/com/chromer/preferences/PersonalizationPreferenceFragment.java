@@ -3,6 +3,7 @@ package arun.com.chromer.preferences;
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -11,7 +12,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.SwitchPreferenceCompat;
 
@@ -28,8 +28,7 @@ import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.ServiceUtil;
 import arun.com.chromer.util.Util;
 
-public class PersonalizationPreferenceFragment extends DividerLessPreferenceFragment
-        implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class PersonalizationPreferenceFragment extends DividerLessPreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private final BroadcastReceiver mColorSelectionReceiver = new BroadcastReceiver() {
         @Override
@@ -43,6 +42,13 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
             }
         }
     };
+    private final String[] PREFERENCE_GROUP = new String[]{
+            Preferences.ANIMATION_SPEED,
+            Preferences.ANIMATION_TYPE,
+            Preferences.PREFERRED_ACTION,
+            Preferences.TOOLBAR_COLOR
+    };
+    private IntentFilter mToolBarColorFilter = new IntentFilter(Constants.ACTION_TOOLBAR_COLOR_SET);
 
     public PersonalizationPreferenceFragment() {
         // Required empty public constructor
@@ -73,62 +79,48 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
     @Override
     public void onResume() {
         super.onResume();
-        getPreferenceScreen().getSharedPreferences()
-                .registerOnSharedPreferenceChangeListener(this);
         LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(mColorSelectionReceiver, new IntentFilter(Constants.ACTION_TOOLBAR_COLOR_SET));
-
-        updatePreferenceSummary();
+                .registerReceiver(mColorSelectionReceiver, mToolBarColorFilter);
+        getPreferenceManager()
+                .getSharedPreferences()
+                .registerOnSharedPreferenceChangeListener(this);
+        updatePreferenceStates(Preferences.TOOLBAR_COLOR_PREF);
+        updatePreferenceSummary(PREFERENCE_GROUP);
     }
 
     @Override
     public void onPause() {
-        getPreferenceManager().getSharedPreferences()
-                .unregisterOnSharedPreferenceChangeListener(this);
         LocalBroadcastManager.getInstance(getActivity())
                 .unregisterReceiver(mColorSelectionReceiver);
+        getPreferenceManager()
+                .getSharedPreferences()
+                .unregisterOnSharedPreferenceChangeListener(this);
         super.onPause();
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        updatePreferenceSummary();
+        updatePreferenceStates(key);
+        updatePreferenceSummary(PREFERENCE_GROUP);
     }
 
-    private void updatePreferenceSummary() {
-        // Showing summary for animation preference
-        ListPreference preference = (ListPreference) findPreference(Preferences.ANIMATION_TYPE);
-        if (preference != null) {
-            preference.setSummary(preference.getEntry());
-        }
-        // Showing summary for animation speed preference
-        preference = (ListPreference) findPreference(Preferences.ANIMATION_SPEED);
-        if (preference != null) {
-            preference.setSummary(preference.getEntry());
-        }
-        // Showing summary for preferred action
-        preference = (ListPreference) findPreference(Preferences.PREFERRED_ACTION);
-        if (preference != null) {
-            preference.setSummary(preference.getEntry());
-        }
-
-        ColorPreference toolbarColorPref = (ColorPreference) findPreference(Preferences.TOOLBAR_COLOR);
-        if (toolbarColorPref != null) {
-            toolbarColorPref.refreshSummary();
-            toolbarColorPref.setEnabled(Preferences.isColoredToolbar(getActivity().getApplicationContext()));
+    private void updatePreferenceStates(String key) {
+        if (key.equalsIgnoreCase(Preferences.TOOLBAR_COLOR_PREF)) {
+            final boolean webHeadsEnabled = Preferences.isColoredToolbar(getActivity());
+            enableDisablePreference(webHeadsEnabled,
+                    Preferences.TOOLBAR_COLOR,
+                    Preferences.DYNAMIC_COLOR
+            );
         }
 
         updateDynamicSummary();
     }
 
     private void updateDynamicSummary() {
-        SwitchPreferenceCompat dynamicColor = (SwitchPreferenceCompat) findPreference(Preferences.DYNAMIC_COLOR);
+        final SwitchPreferenceCompat dynamicColor = (SwitchPreferenceCompat) findPreference(Preferences.DYNAMIC_COLOR);
         if (dynamicColor != null) {
-            dynamicColor.setSummary(Preferences.dynamicColorSummary(getActivity().getApplicationContext()));
-
-            boolean isColoredToolbar = Preferences.isColoredToolbar(getActivity().getApplicationContext());
-            dynamicColor.setEnabled(isColoredToolbar);
-
+            dynamicColor.setSummary(Preferences.dynamicColorSummary(getActivity()));
+            boolean isColoredToolbar = Preferences.isColoredToolbar(getActivity());
             if (!isColoredToolbar) {
                 dynamicColor.setChecked(false);
             }
@@ -136,13 +128,13 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
     }
 
     private void setupDynamicToolbar() {
-        SwitchPreferenceCompat switchPreferenceCompat = (SwitchPreferenceCompat) findPreference(Preferences.DYNAMIC_COLOR);
+        final SwitchPreferenceCompat switchPreferenceCompat = (SwitchPreferenceCompat) findPreference(Preferences.DYNAMIC_COLOR);
         if (switchPreferenceCompat != null) {
             switchPreferenceCompat.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     final SwitchPreferenceCompat switchCompat = (SwitchPreferenceCompat) preference;
-                    boolean isChecked = switchCompat.isChecked();
+                    final boolean isChecked = switchCompat.isChecked();
                     if (isChecked) {
                         new MaterialDialog.Builder(getActivity())
                                 .title(R.string.dynamic_toolbar_color)
@@ -152,7 +144,7 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
                                         getString(R.string.based_on_web)})
                                 .positiveText(android.R.string.ok)
                                 .alwaysCallMultiChoiceCallback()
-                                .itemsCallbackMultiChoice(Preferences.dynamicToolbarSelections(getActivity().getApplicationContext()),
+                                .itemsCallbackMultiChoice(Preferences.dynamicToolbarSelections(getActivity()),
                                         new MaterialDialog.ListCallbackMultiChoice() {
                                             @Override
                                             public boolean onSelection(MaterialDialog dialog,
@@ -163,14 +155,19 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
                                                     Preferences.dynamicToolbar(getActivity(), false);
                                                 } else switchCompat.setChecked(true);
 
-                                                Preferences.updateAppAndWeb(getActivity()
-                                                        .getApplicationContext(), which);
+                                                Preferences.updateAppAndWeb(getActivity(), which);
                                                 requestUsagePermissionIfNeeded();
                                                 handleAppDetectionService();
                                                 updateDynamicSummary();
                                                 return true;
                                             }
                                         })
+                                .dismissListener(new DialogInterface.OnDismissListener() {
+                                    @Override
+                                    public void onDismiss(DialogInterface dialog) {
+                                        switchCompat.setChecked(Preferences.dynamicToolbar(getActivity()));
+                                    }
+                                })
                                 .show();
                         requestUsagePermissionIfNeeded();
                     }
@@ -184,7 +181,7 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
 
 
     private void setupToolbarColorPreference() {
-        ColorPreference toolbarColorPref = (ColorPreference) findPreference(Preferences.TOOLBAR_COLOR);
+        final ColorPreference toolbarColorPref = (ColorPreference) findPreference(Preferences.TOOLBAR_COLOR);
         if (toolbarColorPref != null) {
             toolbarColorPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
@@ -203,9 +200,9 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
     }
 
     private void requestUsagePermissionIfNeeded() {
-        if (Preferences.dynamicToolbarOnApp(getActivity().getApplicationContext())
+        if (Preferences.dynamicToolbarOnApp(getActivity())
                 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-                && !Util.canReadUsageStats(getActivity().getApplicationContext())) {
+                && !Util.canReadUsageStats(getActivity())) {
             new MaterialDialog.Builder(getActivity())
                     .title(R.string.permission_required)
                     .content(R.string.usage_permission_explanation_appcolor)

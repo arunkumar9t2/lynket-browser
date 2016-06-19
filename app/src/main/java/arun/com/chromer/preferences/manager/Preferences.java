@@ -34,8 +34,8 @@ public class Preferences {
     public static final int PREFERRED_ACTION_FAV_SHARE = 2;
     public static final int ANIMATION_MEDIUM = 1;
     public static final int ANIMATION_SHORT = 2;
+    public static final String TOOLBAR_COLOR_PREF = "toolbar_color_pref";
     private static final String PREFERRED_PACKAGE = "preferred_package";
-    private static final String TOOLBAR_COLOR_PREF = "toolbar_color_pref";
     // Changed key for 1.5 build which will force intro to show
     private static final String FIRST_RUN = "firstrun_1";
     private static final String USER_KNOWS_BOTTOM_BAR = "user_learnt_bottom_bar";
@@ -303,6 +303,7 @@ public class Preferences {
     private static void dynamicToolbarOptions(Context context, boolean app, boolean web) {
         dynamicToolbarOnApp(context, app);
         dynamicToolbarOnWeb(context, web);
+        dynamicToolbar(context, app || web);
     }
 
     @Nullable

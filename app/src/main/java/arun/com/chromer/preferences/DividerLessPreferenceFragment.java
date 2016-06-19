@@ -2,15 +2,22 @@ package arun.com.chromer.preferences;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v7.preference.ListPreference;
+import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import arun.com.chromer.preferences.widgets.ColorPreference;
+import timber.log.Timber;
+
 /**
  * Created by Arun on 02/03/2016.
  */
-public class DividerLessPreferenceFragment extends PreferenceFragmentCompat {
+public abstract class DividerLessPreferenceFragment extends PreferenceFragmentCompat {
+    private boolean mDebug = true;
+
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
         // To be used by deriving classes
@@ -26,5 +33,34 @@ public class DividerLessPreferenceFragment extends PreferenceFragmentCompat {
         RecyclerView recyclerView = super.onCreateRecyclerView(inflater, parent, savedInstanceState);
         recyclerView.setNestedScrollingEnabled(false);
         return recyclerView;
+    }
+
+    protected void enableDisablePreference(boolean enabled, String... preferenceKeys) {
+        for (String preferenceKey : preferenceKeys) {
+            final Preference preference = findPreference(preferenceKey);
+            if (preference != null) {
+                preference.setEnabled(enabled);
+            }
+        }
+    }
+
+    protected void updatePreferenceSummary(String... preferenceKeys) {
+        for (String key : preferenceKeys) {
+            final Preference preference = getPreferenceScreen().findPreference(key);
+            if (preference instanceof ListPreference) {
+                final ListPreference listPreference = (ListPreference) preference;
+                listPreference.setSummary(listPreference.getEntry());
+                debug("Set %s preference to %s", listPreference.getTitle(), listPreference.getEntry());
+            } else if (preference instanceof ColorPreference) {
+                final ColorPreference colorPreference = (ColorPreference) preference;
+                colorPreference.refreshSummary();
+            }
+        }
+    }
+
+    private void debug(String string, Object... args) {
+        if (mDebug) {
+            Timber.d(string, args);
+        }
     }
 }
