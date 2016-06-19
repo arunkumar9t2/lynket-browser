@@ -16,7 +16,7 @@ import timber.log.Timber;
  * Created by Arun on 02/03/2016.
  */
 public abstract class DividerLessPreferenceFragment extends PreferenceFragmentCompat {
-    private boolean mDebug = true;
+    private boolean mDebug = false;
 
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {

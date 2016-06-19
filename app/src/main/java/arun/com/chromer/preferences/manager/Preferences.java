@@ -35,15 +35,15 @@ public class Preferences {
     public static final int ANIMATION_MEDIUM = 1;
     public static final int ANIMATION_SHORT = 2;
     public static final String TOOLBAR_COLOR_PREF = "toolbar_color_pref";
+    public static final String WARM_UP = "warm_up_preference";
+    public static final String PRE_FETCH = "pre_fetch_preference";
+    public static final String WIFI_PREFETCH = "wifi_preference";
+    public static final String PRE_FETCH_NOTIFICATION = "pre_fetch_notification_preference";
     private static final String PREFERRED_PACKAGE = "preferred_package";
     // Changed key for 1.5 build which will force intro to show
     private static final String FIRST_RUN = "firstrun_1";
     private static final String USER_KNOWS_BOTTOM_BAR = "user_learnt_bottom_bar";
-    private static final String WARM_UP = "warm_up_preference";
     private static final String BLACKLIST = "blacklist_preference";
-    private static final String PRE_FETCH = "pre_fetch_preference";
-    private static final String WIFI_PREFETCH = "wifi_preference";
-    private static final String PRE_FETCH_NOTIFICATION = "pre_fetch_notification_preference";
     private static final String MERGE = "merge_tabs_and_apps_preference";
     private static final String SECONDARY_PREF = "secondary_preference";
     private static final String FAV_SHARE_PREF = "fav_share_preference";

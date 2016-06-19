@@ -6,12 +6,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
@@ -22,8 +20,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
@@ -33,7 +29,6 @@ import arun.com.chromer.preferences.PrefetchPreferenceFragment;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.preferences.widgets.AppPreferenceCardView;
 import arun.com.chromer.shared.Constants;
-import arun.com.chromer.util.ServiceUtil;
 import arun.com.chromer.util.Util;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,16 +43,8 @@ public class OptionsFragment extends Fragment {
     public AppPreferenceCardView mBrowserPreferenceView;
     @BindView(R.id.favshare_preference_view)
     public AppPreferenceCardView mFavSharePreferenceView;
-    @BindView(R.id.warm_up_switch)
-    public SwitchCompat mWarmUpSwitch;
-    @BindView(R.id.pre_fetch_switch)
-    public SwitchCompat mPrefetchSwitch;
     @BindView(R.id.merge_tabs_switch)
     public SwitchCompat mMergeSwitch;
-    @BindView(R.id.only_wifi_switch)
-    public AppCompatCheckBox mWifiCheckBox;
-    @BindView(R.id.show_notification_checkbox)
-    public AppCompatCheckBox mNotificationCheckBox;
     @BindView(R.id.merge_tabs_apps_layout)
     public LinearLayout mMergeTabsLayout;
     @BindView(R.id.set_default_card)
@@ -115,8 +102,6 @@ public class OptionsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        updatePrefetchIfPermissionGranted();
-        updateSubPreferences(Preferences.preFetch(getActivity()));
         updateDefaultBrowserCard();
     }
 
@@ -149,55 +134,7 @@ public class OptionsFragment extends Fragment {
     }
 
     private void setupSwitches() {
-        updatePrefetchIfPermissionGranted();
-        setupCheckBoxes();
-
-        final boolean preFetch = Preferences.preFetch(mAppContext);
-        final boolean warmUpBrowser = Preferences.warmUp(mAppContext);
         final boolean mergeTabs = Preferences.mergeTabs(mAppContext);
-
-        mWarmUpSwitch.setChecked(preFetch || warmUpBrowser);
-        mWarmUpSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Preferences.warmUp(mAppContext, isChecked);
-                ServiceUtil.takeCareOfServices(mAppContext);
-            }
-        });
-
-        mPrefetchSwitch.setChecked(preFetch);
-        enableDisableWarmUpSwitch(preFetch);
-        updateSubPreferences(preFetch);
-        mPrefetchSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                boolean warmUp = !isChecked && Preferences.warmUp(mAppContext);
-
-                if (!Util.isAccessibilityServiceEnabled(mAppContext)) {
-                    mPrefetchSwitch.setChecked(false);
-                    guideUserToAccessibilitySettings();
-                } else {
-                    mWarmUpSwitch.setChecked(!warmUp);
-                    Preferences.warmUp(mAppContext, warmUp);
-                    enableDisableWarmUpSwitch(isChecked);
-                }
-                Preferences.preFetch(mAppContext, isChecked);
-
-                if (!isChecked) {
-                    // Since pre fetch is not active, the  warm up preference should properly reflect what's on the
-                    // UI, hence setting the preference to the checked value of the warm up switch.
-                    Preferences.warmUp(mAppContext, mWarmUpSwitch.isChecked());
-
-                    // Ask user to revoke accessibility permission
-                    Toast.makeText(mAppContext, R.string.revoke_accessibility_permission, Toast.LENGTH_LONG).show();
-                    startActivityForResult(new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS), 0);
-                }
-
-                ServiceUtil.takeCareOfServices(mAppContext);
-                updateSubPreferences(isChecked);
-            }
-        });
-
         mMergeSwitch.setChecked(mergeTabs);
         mMergeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -205,75 +142,6 @@ public class OptionsFragment extends Fragment {
                 Preferences.mergeTabs(mAppContext, isChecked);
             }
         });
-    }
-
-    private void setupCheckBoxes() {
-        mWifiCheckBox.setChecked(Preferences.wifiOnlyPrefetch(getActivity()));
-        mWifiCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Preferences.wifiOnlyPrefetch(mAppContext, isChecked);
-                ServiceUtil.takeCareOfServices(mAppContext);
-            }
-        });
-
-        mNotificationCheckBox.setChecked(Preferences.preFetchNotification(getActivity()));
-        mNotificationCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Preferences.preFetchNotification(mAppContext, isChecked);
-            }
-        });
-    }
-
-    private void updateSubPreferences(boolean isChecked) {
-        if (isChecked && Util.isAccessibilityServiceEnabled(getActivity())) {
-            mWifiCheckBox.setEnabled(true);
-            mWifiCheckBox.setChecked(Preferences.wifiOnlyPrefetch(getActivity()));
-            mNotificationCheckBox.setEnabled(true);
-            mNotificationCheckBox.setChecked(Preferences.preFetchNotification(getActivity()));
-        } else {
-            mWifiCheckBox.setEnabled(false);
-            mWifiCheckBox.setChecked(false);
-            mNotificationCheckBox.setEnabled(false);
-            mNotificationCheckBox.setChecked(false);
-        }
-    }
-
-    private void enableDisableWarmUpSwitch(boolean isChecked) {
-        if (isChecked) {
-            mWarmUpSwitch.setEnabled(false);
-        } else {
-            mWarmUpSwitch.setEnabled(true);
-        }
-    }
-
-    private void updatePrefetchIfPermissionGranted() {
-        if (Util.isAccessibilityServiceEnabled(getActivity())) {
-            Timber.d("Scanning permission granted");
-            if (mPrefetchSwitch != null)
-                mPrefetchSwitch.setChecked(Preferences.preFetch(mAppContext));
-        } else {
-            // Turn off preference
-            if (mPrefetchSwitch != null)
-                mPrefetchSwitch.setChecked(false);
-            Preferences.preFetch(mAppContext, false);
-        }
-    }
-
-    private void guideUserToAccessibilitySettings() {
-        new MaterialDialog.Builder(getActivity())
-                .title(R.string.accessibility_dialog_title)
-                .content(R.string.accessibility_dialog_desc)
-                .positiveText(R.string.open_settings)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
-                        startActivityForResult(new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS), 0);
-                    }
-                })
-                .show();
     }
 
     @OnClick(R.id.customtab_preference_view)
