@@ -29,6 +29,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.blacklist.BlacklistManagerActivity;
+import arun.com.chromer.preferences.PrefetchPreferenceFragment;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.preferences.widgets.AppPreferenceCardView;
 import arun.com.chromer.shared.Constants;
@@ -92,8 +93,15 @@ public class OptionsFragment extends Fragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mMergeTabsLayout.setVisibility(View.VISIBLE);
         }
+        mSetDefaultIcon.setImageDrawable(new IconicsDrawable(mAppContext)
+                .icon(GoogleMaterial.Icon.gmd_new_releases)
+                .color(ContextCompat.getColor(mAppContext, R.color.colorAccentText))
+                .sizeDp(30));
+        getChildFragmentManager()
+                .beginTransaction()
+                .replace(R.id.prefetch_fragment_container, PrefetchPreferenceFragment.newInstance())
+                .commit();
         setupSwitches();
-        setupDefaultBrowser();
         updateDefaultBrowserCard();
     }
 
@@ -121,13 +129,6 @@ public class OptionsFragment extends Fragment {
             throw new ClassCastException("Must implement FragmentInteractionListener");
         }
         super.onAttach(context);
-    }
-
-    private void setupDefaultBrowser() {
-        mSetDefaultIcon.setImageDrawable(new IconicsDrawable(mAppContext)
-                .icon(GoogleMaterial.Icon.gmd_new_releases)
-                .color(ContextCompat.getColor(mAppContext, R.color.colorAccentText))
-                .sizeDp(30));
     }
 
     private void updateDefaultBrowserCard() {
@@ -277,23 +278,17 @@ public class OptionsFragment extends Fragment {
 
     @OnClick(R.id.customtab_preference_view)
     public void onDefaultProviderClick() {
-        if (mListener != null) {
-            mListener.onDefaultCustomTabProviderClick(mCustomTabPreferenceView);
-        }
+        mListener.onDefaultCustomTabProviderClick(mCustomTabPreferenceView);
     }
 
     @OnClick(R.id.browser_preference_view)
     public void onSecondaryBrowserPreferenceClicked() {
-        if (mListener != null) {
-            mListener.onSecondaryBrowserClick(mBrowserPreferenceView);
-        }
+        mListener.onSecondaryBrowserClick(mBrowserPreferenceView);
     }
 
     @OnClick(R.id.favshare_preference_view)
     public void onFavSharePreferenceClicked() {
-        if (mListener != null) {
-            mListener.onFavoriteShareAppClick(mFavSharePreferenceView);
-        }
+        mListener.onFavoriteShareAppClick(mFavSharePreferenceView);
     }
 
     @OnClick(R.id.blacklisted_target)

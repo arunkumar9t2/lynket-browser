@@ -177,4 +177,5 @@
     <string name="not_set">Not Set</string>
     <string name="not_found">Not Found</string>
     <string name="app_preferences">App Preferences</string>
+    <string name="notifications">Notifications</string>
 </resources>

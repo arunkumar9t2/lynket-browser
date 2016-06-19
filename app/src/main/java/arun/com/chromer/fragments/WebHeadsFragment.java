@@ -49,5 +49,6 @@ public class WebHeadsFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
+        mAppContext = null;
     }
 }

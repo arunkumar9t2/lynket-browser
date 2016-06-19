@@ -34,8 +34,8 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
     private final BroadcastReceiver mColorSelectionReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            int selectedColor = intent.getIntExtra(Constants.EXTRA_KEY_TOOLBAR_COLOR, 0);
-            if (selectedColor != 0) {
+            int selectedColor = intent.getIntExtra(Constants.EXTRA_KEY_TOOLBAR_COLOR, Constants.NO_COLOR);
+            if (selectedColor != Constants.NO_COLOR) {
                 ColorPreference preference = (ColorPreference) findPreference(Preferences.TOOLBAR_COLOR);
                 if (preference != null) {
                     preference.setColor(selectedColor);
@@ -58,7 +58,7 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.preferences);
+        addPreferencesFromResource(R.xml.personalization_preferences);
 
         // setup preferences after creation
         setupToolbarColorPreference();

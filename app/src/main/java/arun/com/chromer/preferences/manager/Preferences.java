@@ -215,35 +215,51 @@ public class Preferences {
     }
 
     public static boolean warmUp(Context context) {
-        return preferences(context).getBoolean(WARM_UP, false);
+        return PreferenceManager
+                .getDefaultSharedPreferences(context).getBoolean(WARM_UP, false);
     }
 
     public static void warmUp(Context context, boolean preference) {
-        preferences(context).edit().putBoolean(WARM_UP, preference).commit();
+        PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(WARM_UP, preference).commit();
     }
 
     public static boolean preFetch(Context context) {
-        return preferences(context).getBoolean(PRE_FETCH, false);
+        return PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .getBoolean(PRE_FETCH, false);
     }
 
     public static void preFetch(Context context, boolean preference) {
-        preferences(context).edit().putBoolean(PRE_FETCH, preference).commit();
+        PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .edit().putBoolean(PRE_FETCH, preference).commit();
     }
 
     public static boolean wifiOnlyPrefetch(Context context) {
-        return preferences(context).getBoolean(WIFI_PREFETCH, false);
+        return PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .getBoolean(WIFI_PREFETCH, false);
     }
 
     public static void wifiOnlyPrefetch(Context context, boolean preference) {
-        preferences(context).edit().putBoolean(WIFI_PREFETCH, preference).commit();
+        PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .edit().putBoolean(WIFI_PREFETCH, preference).commit();
     }
 
     public static boolean preFetchNotification(Context context) {
-        return preferences(context).getBoolean(PRE_FETCH_NOTIFICATION, true);
+        return PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .getBoolean(PRE_FETCH_NOTIFICATION, true);
     }
 
     public static void preFetchNotification(Context context, boolean preference) {
-        preferences(context).edit().putBoolean(PRE_FETCH_NOTIFICATION, preference).commit();
+        PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .edit().putBoolean(PRE_FETCH_NOTIFICATION, preference).commit();
     }
 
     public static boolean dynamicToolbar(Context context) {
