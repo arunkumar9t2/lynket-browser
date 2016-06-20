@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
@@ -14,9 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
 import arun.com.chromer.preferences.BehaviorPreferenceFragment;
@@ -67,10 +63,6 @@ public class OptionsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mSetDefaultIcon.setImageDrawable(new IconicsDrawable(mAppContext)
-                .icon(GoogleMaterial.Icon.gmd_new_releases)
-                .color(ContextCompat.getColor(mAppContext, R.color.colorAccentText))
-                .sizeDp(30));
         getChildFragmentManager()
                 .beginTransaction()
                 .replace(R.id.behaviour_fragment_container, BehaviorPreferenceFragment.newInstance())
