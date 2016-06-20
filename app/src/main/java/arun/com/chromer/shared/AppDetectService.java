@@ -45,7 +45,7 @@ public class AppDetectService extends Service {
             while (!mShouldStopPolling) {
                 try {
                     AppDetection appDetection;
-                    if (Util.isLollipop()) {
+                    if (Util.isLollipopAbove()) {
                         appDetection = new PostLDetection();
                     } else {
                         appDetection = new PreLDetection();
@@ -89,7 +89,7 @@ public class AppDetectService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (Util.isLollipop() && !Util.canReadUsageStats(this)) {
+        if (Util.isLollipopAbove() && !Util.canReadUsageStats(this)) {
             Timber.e("Attempted to poll without usage permission");
             stopSelf();
         }

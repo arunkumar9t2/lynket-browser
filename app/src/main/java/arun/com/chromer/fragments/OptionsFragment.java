@@ -98,7 +98,7 @@ public class OptionsFragment extends Fragment {
     private void updateDefaultBrowserCard() {
         if (!Util.isDefaultBrowser(getActivity())) {
             mSetDefaultCard.setVisibility(View.VISIBLE);
-            if (Util.isLollipop()) {
+            if (Util.isLollipopAbove()) {
                 float elevation = Util.dpToPx(3);
                 ViewCompat.setElevation(mSetDefaultCard, 0);
                 mSetDefaultCard

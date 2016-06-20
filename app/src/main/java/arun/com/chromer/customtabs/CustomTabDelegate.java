@@ -341,7 +341,7 @@ public class CustomTabDelegate {
 
         int iconColor = ColorUtil.getForegroundTextColor(sToolbarColor);
 
-        if (Util.isLollipop()) {
+        if (Util.isLollipopAbove()) {
             final Intent openInNewTabIntent = new Intent(c, OpenInNewTabReceiver.class);
             final PendingIntent pendingOpenTabIntent = PendingIntent.getBroadcast(c, 0, openInNewTabIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 

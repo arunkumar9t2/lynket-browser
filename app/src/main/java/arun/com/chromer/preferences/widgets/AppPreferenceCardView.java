@@ -163,7 +163,7 @@ public class AppPreferenceCardView extends CardView {
                                     @Override
                                     public void onGenerated(Palette palette) {
                                         int bestColor = ColorUtil.getBestColorFromPalette(palette);
-                                        if (Util.isLollipop()) {
+                                        if (Util.isLollipopAbove()) {
                                             Drawable rippleDrawable = new RippleDrawable(
                                                     ColorStateList.valueOf(bestColor),
                                                     null,

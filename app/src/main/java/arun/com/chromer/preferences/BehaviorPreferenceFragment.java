@@ -12,6 +12,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 import arun.com.chromer.R;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.preferences.widgets.IconSwitchPreference;
+import arun.com.chromer.util.Util;
 
 /**
  * Created by Arun on 21/06/2016.
@@ -68,6 +69,9 @@ public class BehaviorPreferenceFragment extends DividerLessPreferenceFragment im
     public void onResume() {
         super.onResume();
         getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        if (!Util.isLollipopAbove()) {
+            mMergeTabsPreference.setVisible(false);
+        }
     }
 
     @Override

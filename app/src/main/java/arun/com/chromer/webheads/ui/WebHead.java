@@ -431,7 +431,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         ValueAnimator animator = null;
         if (mCircleView != null) {
             int oldColor = mCircleView.getWebHeadColor();
-            if (Util.isLollipop()) {
+            if (Util.isLollipopAbove()) {
                 animator = ValueAnimator.ofArgb(oldColor, newColor);
             } else {
                 animator = new ValueAnimator();

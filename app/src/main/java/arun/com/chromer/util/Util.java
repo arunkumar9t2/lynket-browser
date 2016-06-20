@@ -44,7 +44,7 @@ import arun.com.chromer.views.IntentPickerSheetView;
 @SuppressWarnings("JavaDoc")
 public class Util {
 
-    public static boolean isLollipop() {
+    public static boolean isLollipopAbove() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
     }
 
