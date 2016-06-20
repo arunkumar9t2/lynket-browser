@@ -33,20 +33,16 @@ public class MaterialSearchView extends FrameLayout {
     private boolean mInFocus = false;
     private boolean mShouldClearText;
 
-    private ImageView mSearchIconView;
+    private ImageView mMenuIconView;
     private ImageView mVoiceIconView;
     private TextView mLabel;
     private EditText mEditText;
 
     private IconicsDrawable mXIcon;
     private IconicsDrawable mVoiceIcon;
-    private IconicsDrawable mSearchIcon;
+    private IconicsDrawable mMenuIcon;
 
     private VoiceIconClickListener mVoiceClickListener;
-
-    public interface VoiceIconClickListener {
-        void onClick();
-    }
 
     public MaterialSearchView(Context context) {
         super(context);
@@ -72,8 +68,8 @@ public class MaterialSearchView extends FrameLayout {
                 .icon(GoogleMaterial.Icon.gmd_keyboard_voice)
                 .color(mNormalColor)
                 .sizeDp(18);
-        mSearchIcon = new IconicsDrawable(context)
-                .icon(GoogleMaterial.Icon.gmd_search)
+        mMenuIcon = new IconicsDrawable(context)
+                .icon(GoogleMaterial.Icon.gmd_menu)
                 .color(mNormalColor)
                 .sizeDp(18);
     }
@@ -117,8 +113,8 @@ public class MaterialSearchView extends FrameLayout {
             }
         });
 
-        mSearchIconView = (ImageView) findViewById(R.id.msv_left_icon);
-        mSearchIconView.setImageDrawable(mSearchIcon);
+        mMenuIconView = (ImageView) findViewById(R.id.msv_left_icon);
+        mMenuIconView.setImageDrawable(mMenuIcon);
 
         mVoiceIconView = (ImageView) findViewById(R.id.msv_right_icon);
         mVoiceIconView.setImageDrawable(mVoiceIcon);
@@ -205,12 +201,12 @@ public class MaterialSearchView extends FrameLayout {
     }
 
     private void setFocusedColor() {
-        mSearchIconView.setImageDrawable(mSearchIcon.color(mFocusedColor));
+        mMenuIconView.setImageDrawable(mMenuIcon.color(mFocusedColor));
         mVoiceIconView.setImageDrawable(mVoiceIcon.color(mFocusedColor));
     }
 
     private void setNormalColor() {
-        mSearchIconView.setImageDrawable(mSearchIcon.color(mNormalColor));
+        mMenuIconView.setImageDrawable(mMenuIcon.color(mNormalColor));
         mVoiceIconView.setImageDrawable(mVoiceIcon.color(mNormalColor));
     }
 
@@ -264,5 +260,13 @@ public class MaterialSearchView extends FrameLayout {
     @Override
     public void setOnClickListener(OnClickListener l) {
         // noop
+    }
+
+    public void setOnMenuClickListener(OnClickListener listener) {
+        mMenuIconView.setOnClickListener(listener);
+    }
+
+    public interface VoiceIconClickListener {
+        void onClick();
     }
 }

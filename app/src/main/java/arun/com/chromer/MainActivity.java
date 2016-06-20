@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     public CoordinatorLayout mCoordinatorLayout;
 
     private CustomTabBindingHelper mCustomTabBindingHelper;
+    private Drawer mDrawer;
 
     @Override
     protected void onStart() {
@@ -202,6 +203,16 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
             }
         });
+        mMaterialSearchView.setOnMenuClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mDrawer.isDrawerOpen()) {
+                    mDrawer.closeDrawer();
+                } else {
+                    mDrawer.openDrawer();
+                }
+            }
+        });
     }
 
     private void snack(@NonNull String textToSnack) {
@@ -209,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     private void setupDrawer() {
-        final Drawer drawer = new DrawerBuilder()
+        mDrawer = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(mToolbar)
                 .withAccountHeader(new AccountHeaderBuilder()
@@ -298,7 +309,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                     }
                 })
                 .build();
-        drawer.setSelection(-1);
+        mDrawer.setSelection(-1);
     }
 
     private void showJoinBetaDialog() {
