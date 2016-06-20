@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.SwitchPreferenceCompat;
 
@@ -72,29 +71,18 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
     }
 
     @Override
-    public void onCreatePreferences(Bundle bundle, String s) {
-
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(mColorSelectionReceiver, mToolBarColorFilter);
-        getPreferenceManager()
-                .getSharedPreferences()
-                .registerOnSharedPreferenceChangeListener(this);
+        registerReceiver(mColorSelectionReceiver, mToolBarColorFilter);
+        getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         updatePreferenceStates(Preferences.TOOLBAR_COLOR_PREF);
         updatePreferenceSummary(PREFERENCE_GROUP);
     }
 
     @Override
     public void onPause() {
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(mColorSelectionReceiver);
-        getPreferenceManager()
-                .getSharedPreferences()
-                .unregisterOnSharedPreferenceChangeListener(this);
+        unregisterReceiver(mColorSelectionReceiver);
+        getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
         super.onPause();
     }
 

@@ -20,7 +20,7 @@ import arun.com.chromer.util.Util;
  */
 public class Preferences {
     public static final String TOOLBAR_COLOR = "toolbar_color";
-    public static final String WEBHEADS_COLOR = "webhead_color";
+    public static final String WEB_HEADS_COLOR = "webhead_color";
     public static final String ANIMATION_TYPE = "animation_preference";
     public static final String ANIMATION_SPEED = "animation_speed_preference";
     public static final String DYNAMIC_COLOR = "dynamic_color";
@@ -91,7 +91,7 @@ public class Preferences {
     public static int webHeadColor(Context context) {
         return PreferenceManager
                 .getDefaultSharedPreferences(context)
-                .getInt(WEBHEADS_COLOR,
+                .getInt(WEB_HEADS_COLOR,
                         ContextCompat.getColor(context, R.color.web_head_bg));
     }
 
@@ -99,7 +99,7 @@ public class Preferences {
         PreferenceManager
                 .getDefaultSharedPreferences(context)
                 .edit()
-                .putInt(WEBHEADS_COLOR, selectedColor).apply();
+                .putInt(WEB_HEADS_COLOR, selectedColor).apply();
     }
 
     public static boolean isAnimationEnabled(Context context) {

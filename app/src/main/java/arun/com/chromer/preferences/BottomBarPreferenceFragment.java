@@ -55,11 +55,6 @@ public class BottomBarPreferenceFragment extends DividerLessPreferenceFragment i
 
 
     @Override
-    public void onCreatePreferences(Bundle bundle, String s) {
-
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         getPreferenceManager()

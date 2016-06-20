@@ -1,7 +1,13 @@
 package arun.com.chromer.preferences;
 
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
@@ -62,5 +68,27 @@ public abstract class DividerLessPreferenceFragment extends PreferenceFragmentCo
         if (mDebug) {
             Timber.d(string, args);
         }
+    }
+
+    @NonNull
+    protected LocalBroadcastManager getLocalBroadcastManager() {
+        return LocalBroadcastManager.getInstance(getActivity());
+    }
+
+    protected void registerReceiver(@Nullable BroadcastReceiver receiver, @Nullable IntentFilter filter) {
+        if (receiver != null && filter != null) {
+            getLocalBroadcastManager().registerReceiver(receiver, filter);
+        }
+    }
+
+    protected void unregisterReceiver(@Nullable BroadcastReceiver receiver) {
+        if (receiver != null) {
+            getLocalBroadcastManager().unregisterReceiver(receiver);
+        }
+    }
+
+    @NonNull
+    protected SharedPreferences getSharedPreferences() {
+        return getPreferenceManager().getSharedPreferences();
     }
 }

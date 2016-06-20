@@ -12,6 +12,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import arun.com.chromer.R;
+import arun.com.chromer.customtabs.warmup.WarmupService;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.util.ServiceUtil;
 import arun.com.chromer.util.Util;
@@ -73,28 +74,31 @@ public class PrefetchPreferenceFragment extends DividerLessPreferenceFragment im
     @Override
     public void onResume() {
         super.onResume();
-        getPreferenceManager()
-                .getSharedPreferences()
-                .registerOnSharedPreferenceChangeListener(this);
-        ServiceUtil.takeCareOfServices(getActivity());
+        getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         final boolean isPrefetchEnabled = isPrefetchEnabled();
         mPrefetchPreference.setChecked(isPrefetchEnabled);
         mWarmupPreference.setEnabled(!isPrefetchEnabled);
-        enableDisablePreference(isPrefetchEnabled(), PREFERENCE_GROUP);
+        enableDisablePreference(isPrefetchEnabled, PREFERENCE_GROUP);
     }
 
     @Override
     public void onPause() {
-        getPreferenceManager()
-                .getSharedPreferences()
-                .unregisterOnSharedPreferenceChangeListener(this);
+        getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
         super.onPause();
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         enableDisablePreference(isPrefetchEnabled(), PREFERENCE_GROUP);
-        ServiceUtil.takeCareOfServices(getActivity());
+
+        // Start stop warm up service
+        if (key.equalsIgnoreCase(Preferences.WARM_UP)) {
+            if (Preferences.warmUp(getActivity())) {
+                getActivity().startService(new Intent(getActivity(), WarmupService.class));
+            } else {
+                getActivity().stopService(new Intent(getActivity(), WarmupService.class));
+            }
+        }
     }
 
     public boolean isPrefetchEnabled() {

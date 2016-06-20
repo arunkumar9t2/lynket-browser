@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.SwitchPreferenceCompat;
 
@@ -32,16 +31,16 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
         public void onReceive(Context context, Intent intent) {
             int selectedColor = intent.getIntExtra(Constants.EXTRA_KEY_WEBHEAD_COLOR, 0);
             if (selectedColor != 0) {
-                ColorPreference preference = (ColorPreference) findPreference(Preferences.WEBHEADS_COLOR);
+                ColorPreference preference = (ColorPreference) findPreference(Preferences.WEB_HEADS_COLOR);
                 if (preference != null) {
                     preference.setColor(selectedColor);
                 }
             }
         }
     };
-    private final String[] PREFERENCE_GROUP = new String[]{
+    private final String[] WEBHEAD_PREFERENCE_GROUP = new String[]{
             Preferences.WEB_HEAD_SPAWN_LOCATION,
-            Preferences.WEBHEADS_COLOR
+            Preferences.WEB_HEADS_COLOR
     };
     private IntentFilter mWebHeadColorFilter = new IntentFilter(Constants.ACTION_WEBHEAD_COLOR_SET);
 
@@ -65,7 +64,7 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
     }
 
     private void setupWebHeadColorPreference() {
-        ColorPreference webHeadsColorPref = (ColorPreference) findPreference(Preferences.WEBHEADS_COLOR);
+        ColorPreference webHeadsColorPref = (ColorPreference) findPreference(Preferences.WEB_HEADS_COLOR);
         if (webHeadsColorPref != null) {
             webHeadsColorPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
@@ -124,29 +123,23 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
     @Override
     public void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(mColorSelectionReceiver, mWebHeadColorFilter);
-        getPreferenceManager()
-                .getSharedPreferences()
-                .registerOnSharedPreferenceChangeListener(this);
+        registerReceiver(mColorSelectionReceiver, mWebHeadColorFilter);
+        getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         updatePreferenceStates(Preferences.WEB_HEAD_ENABLED);
-        updatePreferenceSummary(PREFERENCE_GROUP);
+        updatePreferenceSummary(WEBHEAD_PREFERENCE_GROUP);
     }
 
     @Override
     public void onPause() {
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(mColorSelectionReceiver);
-        getPreferenceManager()
-                .getSharedPreferences()
-                .unregisterOnSharedPreferenceChangeListener(this);
+        unregisterReceiver(mColorSelectionReceiver);
+        getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
         super.onPause();
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         updatePreferenceStates(key);
-        updatePreferenceSummary(PREFERENCE_GROUP);
+        updatePreferenceSummary(WEBHEAD_PREFERENCE_GROUP);
     }
 
     private void updatePreferenceStates(String key) {
@@ -154,7 +147,7 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
             final boolean webHeadsEnabled = Preferences.webHeads(getActivity());
             enableDisablePreference(webHeadsEnabled,
                     Preferences.WEB_HEAD_SPAWN_LOCATION,
-                    Preferences.WEBHEADS_COLOR,
+                    Preferences.WEB_HEADS_COLOR,
                     Preferences.WEB_HEAD_CLOSE_ON_OPEN,
                     Preferences.WEB_HEAD_FAVICON
             );
