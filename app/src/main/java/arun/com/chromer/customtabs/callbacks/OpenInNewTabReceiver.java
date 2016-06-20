@@ -47,7 +47,7 @@ public class OpenInNewTabReceiver extends BroadcastReceiver {
         } else {
             // No urls were found, so lets do a google search with the text received.
             if (text.length() != 0) {
-                text = Constants.SEARCH_URL + text.replace(" ", "+");
+                text = Constants.G_SEARCH_URL + text.replace(" ", "+");
                 openLink(context, text);
             } else
                 invalidLink(context);

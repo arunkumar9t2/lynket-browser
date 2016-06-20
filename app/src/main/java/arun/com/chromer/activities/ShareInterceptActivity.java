@@ -51,7 +51,7 @@ public class ShareInterceptActivity extends AppCompatActivity {
             openLink(url);
         } else {
             // No urls were found, so lets do a google search with the text received.
-            text = Constants.SEARCH_URL + text.replace(" ", "+");
+            text = Constants.G_SEARCH_URL + text.replace(" ", "+");
             openLink(text);
         }
     }

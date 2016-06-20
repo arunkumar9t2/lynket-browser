@@ -10,6 +10,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -49,8 +50,6 @@ import arun.com.chromer.activities.payments.DonateActivity;
 import arun.com.chromer.customtabs.CustomTabBindingHelper;
 import arun.com.chromer.customtabs.CustomTabDelegate;
 import arun.com.chromer.customtabs.CustomTabHelper;
-import arun.com.chromer.customtabs.prefetch.ScannerService;
-import arun.com.chromer.customtabs.warmup.WarmupService;
 import arun.com.chromer.fragments.CustomizeFragment;
 import arun.com.chromer.fragments.OptionsFragment;
 import arun.com.chromer.fragments.WebHeadsFragment;
@@ -81,6 +80,9 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     public TabLayout mTabLayout;
     @BindView(R.id.view_pager)
     public ViewPager mViewPager;
+    @BindView(R.id.coordinator_layout)
+    public CoordinatorLayout mCoordinatorLayout;
+
     private CustomTabBindingHelper mCustomTabBindingHelper;
 
     @Override
@@ -107,6 +109,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
         setUpAppBarLayout();
 
+        setupMaterialSearch();
+
         if (Preferences.isFirstRun(this)) {
             startActivity(new Intent(this, ChromerIntro.class));
         }
@@ -122,12 +126,12 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         checkAndEducateUser();
 
         cleanOldDbs();
+
         ServiceUtil.takeCareOfServices(getApplicationContext());
     }
 
     private void setUpAppBarLayout() {
         setSupportActionBar(mToolbar);
-        setupMaterialSearch();
 
         mViewPager.setAdapter(new PagerAdapter(getSupportFragmentManager()));
         mTabLayout.setupWithViewPager(mViewPager);
@@ -154,19 +158,19 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
             }
         });
-        TabLayout.Tab optionsTab = mTabLayout.getTabAt(0);
+        final TabLayout.Tab optionsTab = mTabLayout.getTabAt(0);
         if (optionsTab != null) {
-            TabView tabView = new TabView(this, TabView.TAB_TYPE_OPTIONS);
+            final TabView tabView = new TabView(this, TabView.TAB_TYPE_OPTIONS);
             optionsTab.setCustomView(tabView);
             tabView.setSelected(true);
         }
 
-        TabLayout.Tab webHeadsTab = mTabLayout.getTabAt(1);
+        final TabLayout.Tab webHeadsTab = mTabLayout.getTabAt(1);
         if (webHeadsTab != null) {
             webHeadsTab.setCustomView(new TabView(this, TabView.TAB_TYPE_WEB_HEADS));
         }
 
-        TabLayout.Tab customizeTab = mTabLayout.getTabAt(2);
+        final TabLayout.Tab customizeTab = mTabLayout.getTabAt(2);
         if (customizeTab != null) {
             customizeTab.setCustomView(new TabView(this, TabView.TAB_TYPE_CUSTOMIZE));
         }
@@ -200,12 +204,11 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     private void snack(@NonNull String textToSnack) {
-        // Have to provide a view for view traversal, so providing the set default button.
-        Snackbar.make(mMaterialSearchView, textToSnack, Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(mCoordinatorLayout, textToSnack, Snackbar.LENGTH_SHORT).show();
     }
 
     private void setupDrawer() {
-        Drawer drawer = new DrawerBuilder()
+        final Drawer drawer = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(mToolbar)
                 .withAccountHeader(new AccountHeaderBuilder()
@@ -308,15 +311,14 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        Intent googleIntent = new Intent(Intent.ACTION_VIEW,
-                                Uri.parse("https://plus.google.com/communities/109754631011301174504"));
+                        Intent googleIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.G_COMMUNITY_URL));
                         startActivity(googleIntent);
                     }
                 })
                 .onNeutral(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        launchCustomTab("https://play.google.com/apps/testing/arun.com.chromer");
+                        launchCustomTab(Constants.APP_TESTING_URL);
                     }
                 })
                 .build()
@@ -327,7 +329,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         if (url != null) {
             if (Preferences.webHeads(this)) {
                 final Intent webHeadService = new Intent(this, WebHeadService.class);
-                webHeadService.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 webHeadService.setData(Uri.parse(url));
                 startService(webHeadService);
             } else {
@@ -349,28 +350,11 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private void setupCustomTab() {
         mCustomTabBindingHelper = new CustomTabBindingHelper();
-        try {
-            boolean ok;
-            if (ScannerService.getInstance() != null) {
-                ok = ScannerService.getInstance().mayLaunchUrl(Uri.parse(Constants.GOOGLE_URL), null);
-                if (ok) return;
-            }
-            if (WarmupService.getInstance() != null) {
-                ok = WarmupService.getInstance().mayLaunchUrl(Uri.parse(Constants.GOOGLE_URL), null);
-                if (ok) return;
-            }
-        } catch (Exception e) {
-            // Ignored - best effort
-            // If mayLaunch with a service failed, then we will bind a connection with this activity
-            // and pre fetch the google url.
-            e.printStackTrace();
-        }
-
         mCustomTabBindingHelper.setConnectionCallback(
                 new CustomTabBindingHelper.ConnectionCallback() {
                     @Override
                     public void onCustomTabsConnected() {
-                        Timber.d("Connect to custom tab in main activity");
+                        Timber.d("Connected to custom tabs");
                         try {
                             mCustomTabBindingHelper.mayLaunchUrl(Uri.parse(Constants.GOOGLE_URL), null, null);
                         } catch (Exception e) {
@@ -478,7 +462,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             return;
         }
 
-        final IntentPickerSheetView browserPicker = new IntentPickerSheetView(this,
+        final IntentPickerSheetView customTabPicker = new IntentPickerSheetView(this,
                 Constants.DUMMY_INTENT,
                 R.string.default_provider,
                 new IntentPickerSheetView.OnIntentPickedListener() {
@@ -487,13 +471,12 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         mBottomSheet.dismissSheet();
                         customTabPreferenceCard.updatePreference(activityInfo.componentName);
                         refreshCustomTabBindings();
-                        snack(String.format(getString(R.string.default_provider_success),
-                                activityInfo.label));
+                        snack(String.format(getString(R.string.default_provider_success), activityInfo.label));
                     }
                 });
-        browserPicker.setFilter(IntentPickerSheetView.selfPackageExcludeFilter(this));
-        browserPicker.setMixins(customTabApps);
-        showPicker(browserPicker);
+        customTabPicker.setFilter(IntentPickerSheetView.selfPackageExcludeFilter(this));
+        customTabPicker.setMixins(customTabApps);
+        showPicker(customTabPicker);
     }
 
     @Override
@@ -506,8 +489,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                     public void onIntentPicked(IntentPickerSheetView.ActivityInfo activityInfo) {
                         mBottomSheet.dismissSheet();
                         browserPreferenceCard.updatePreference(activityInfo.componentName);
-                        snack(String.format(getString(R.string.secondary_browser_success),
-                                activityInfo.label));
+                        snack(String.format(getString(R.string.secondary_browser_success), activityInfo.label));
                     }
                 });
         browserPicker.setFilter(IntentPickerSheetView.selfPackageExcludeFilter(this));
@@ -524,8 +506,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                     public void onIntentPicked(IntentPickerSheetView.ActivityInfo activityInfo) {
                         mBottomSheet.dismissSheet();
                         favShareAppPreferenceCard.updatePreference(activityInfo.componentName);
-                        snack(String.format(getString(R.string.fav_share_success),
-                                activityInfo.label));
+                        snack(String.format(getString(R.string.fav_share_success), activityInfo.label));
                     }
                 });
         favSharePicker.setFilter(IntentPickerSheetView.selfPackageExcludeFilter(this));
