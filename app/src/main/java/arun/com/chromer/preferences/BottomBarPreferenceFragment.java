@@ -57,16 +57,12 @@ public class BottomBarPreferenceFragment extends DividerLessPreferenceFragment i
     @Override
     public void onResume() {
         super.onResume();
-        getPreferenceManager()
-                .getSharedPreferences()
-                .registerOnSharedPreferenceChangeListener(this);
+        getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     public void onPause() {
-        getPreferenceManager()
-                .getSharedPreferences()
-                .unregisterOnSharedPreferenceChangeListener(this);
+        getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
         super.onPause();
     }
 
