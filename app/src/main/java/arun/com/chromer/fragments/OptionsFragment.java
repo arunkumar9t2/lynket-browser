@@ -1,32 +1,26 @@
 package arun.com.chromer.fragments;
 
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.blacklist.BlacklistManagerActivity;
+import arun.com.chromer.preferences.BehaviorPreferenceFragment;
 import arun.com.chromer.preferences.PrefetchPreferenceFragment;
-import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.preferences.widgets.AppPreferenceCardView;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Util;
@@ -43,10 +37,6 @@ public class OptionsFragment extends Fragment {
     public AppPreferenceCardView mBrowserPreferenceView;
     @BindView(R.id.favshare_preference_view)
     public AppPreferenceCardView mFavSharePreferenceView;
-    @BindView(R.id.merge_tabs_switch)
-    public SwitchCompat mMergeSwitch;
-    @BindView(R.id.merge_tabs_apps_layout)
-    public LinearLayout mMergeTabsLayout;
     @BindView(R.id.set_default_card)
     public CardView mSetDefaultCard;
     @BindView(R.id.set_default_image)
@@ -77,18 +67,15 @@ public class OptionsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mMergeTabsLayout.setVisibility(View.VISIBLE);
-        }
         mSetDefaultIcon.setImageDrawable(new IconicsDrawable(mAppContext)
                 .icon(GoogleMaterial.Icon.gmd_new_releases)
                 .color(ContextCompat.getColor(mAppContext, R.color.colorAccentText))
                 .sizeDp(30));
         getChildFragmentManager()
                 .beginTransaction()
+                .replace(R.id.behaviour_fragment_container, BehaviorPreferenceFragment.newInstance())
                 .replace(R.id.prefetch_fragment_container, PrefetchPreferenceFragment.newInstance())
                 .commit();
-        setupSwitches();
         updateDefaultBrowserCard();
     }
 
@@ -133,17 +120,6 @@ public class OptionsFragment extends Fragment {
             mSetDefaultCard.setVisibility(View.GONE);
     }
 
-    private void setupSwitches() {
-        final boolean mergeTabs = Preferences.mergeTabs(mAppContext);
-        mMergeSwitch.setChecked(mergeTabs);
-        mMergeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Preferences.mergeTabs(mAppContext, isChecked);
-            }
-        });
-    }
-
     @OnClick(R.id.customtab_preference_view)
     public void onDefaultProviderClick() {
         mListener.onDefaultCustomTabProviderClick(mCustomTabPreferenceView);
@@ -157,16 +133,6 @@ public class OptionsFragment extends Fragment {
     @OnClick(R.id.favshare_preference_view)
     public void onFavSharePreferenceClicked() {
         mListener.onFavoriteShareAppClick(mFavSharePreferenceView);
-    }
-
-    @OnClick(R.id.blacklisted_target)
-    public void blacklistClick() {
-        Intent blackList = new Intent(getActivity(), BlacklistManagerActivity.class);
-        startActivity(blackList,
-                ActivityOptions.makeCustomAnimation(getActivity(),
-                        R.anim.slide_in_right_medium,
-                        R.anim.slide_out_left_medium).toBundle()
-        );
     }
 
     @OnClick(R.id.set_default_card)

@@ -39,12 +39,12 @@ public class Preferences {
     public static final String PRE_FETCH = "pre_fetch_preference";
     public static final String WIFI_PREFETCH = "wifi_preference";
     public static final String PRE_FETCH_NOTIFICATION = "pre_fetch_notification_preference";
+    public static final String BLACKLIST = "blacklist_preference";
+    public static final String MERGE_TABS_AND_APPS = "merge_tabs_and_apps_preference";
     private static final String PREFERRED_PACKAGE = "preferred_package";
     // Changed key for 1.5 build which will force intro to show
     private static final String FIRST_RUN = "firstrun_1";
     private static final String USER_KNOWS_BOTTOM_BAR = "user_learnt_bottom_bar";
-    private static final String BLACKLIST = "blacklist_preference";
-    private static final String MERGE = "merge_tabs_and_apps_preference";
     private static final String SECONDARY_PREF = "secondary_preference";
     private static final String FAV_SHARE_PREF = "fav_share_preference";
     private static final String CLEAN_DATABASE = "clean_database";
@@ -396,19 +396,28 @@ public class Preferences {
     }
 
     public static boolean blacklist(Context context) {
-        return preferences(context).getBoolean(BLACKLIST, false);
+        return PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .getBoolean(BLACKLIST, false);
     }
 
     public static void blacklist(Context context, boolean preference) {
-        preferences(context).edit().putBoolean(BLACKLIST, preference).commit();
+        PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .edit().putBoolean(BLACKLIST, preference).commit();
     }
 
     public static boolean mergeTabs(Context context) {
-        return preferences(context).getBoolean(MERGE, false);
+        return PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .getBoolean(MERGE_TABS_AND_APPS, false);
     }
 
     public static void mergeTabs(Context context, boolean preference) {
-        preferences(context).edit().putBoolean(MERGE, preference).commit();
+        PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(MERGE_TABS_AND_APPS, preference).commit();
     }
 
     public static boolean bottomBar(Context context) {

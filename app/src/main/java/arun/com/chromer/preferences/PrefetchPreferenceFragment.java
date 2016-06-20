@@ -4,16 +4,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.preference.Preference;
-import android.support.v7.preference.SwitchPreferenceCompat;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
 import arun.com.chromer.customtabs.warmup.WarmupService;
 import arun.com.chromer.preferences.manager.Preferences;
+import arun.com.chromer.preferences.widgets.IconSwitchPreference;
 import arun.com.chromer.util.ServiceUtil;
 import arun.com.chromer.util.Util;
 
@@ -25,8 +29,8 @@ public class PrefetchPreferenceFragment extends DividerLessPreferenceFragment im
             Preferences.WIFI_PREFETCH,
             Preferences.PRE_FETCH_NOTIFICATION,
     };
-    SwitchPreferenceCompat mWarmupPreference;
-    SwitchPreferenceCompat mPrefetchPreference;
+    IconSwitchPreference mWarmupPreference;
+    IconSwitchPreference mPrefetchPreference;
 
     public PrefetchPreferenceFragment() {
         // Required empty public constructor
@@ -43,8 +47,16 @@ public class PrefetchPreferenceFragment extends DividerLessPreferenceFragment im
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.prefetch_preferences);
-        mPrefetchPreference = (SwitchPreferenceCompat) findPreference(Preferences.PRE_FETCH);
-        mWarmupPreference = (SwitchPreferenceCompat) findPreference(Preferences.WARM_UP);
+        mPrefetchPreference = (IconSwitchPreference) findPreference(Preferences.PRE_FETCH);
+        mWarmupPreference = (IconSwitchPreference) findPreference(Preferences.WARM_UP);
+        mWarmupPreference.setIcon(new IconicsDrawable(getActivity())
+                .icon(CommunityMaterial.Icon.cmd_lightbulb)
+                .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
+                .sizeDp(24));
+        mPrefetchPreference.setIcon(new IconicsDrawable(getActivity())
+                .icon(GoogleMaterial.Icon.gmd_settings_overscan)
+                .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
+                .sizeDp(24));
 
         mPrefetchPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override

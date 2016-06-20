@@ -128,100 +128,20 @@
                 app:preferenceType="favoriteShare"/>
         </LinearLayout>
 
-
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin_top"
+            android:layout_marginTop="5dp"
             app:cardElevation="2dp">
 
-            <LinearLayout
-                style="@style/Widget.CardContent"
+            <FrameLayout
+                android:id="@+id/behaviour_fragment_container"
+                style="@style/Widget.CardContent.Small"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/usage_options"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/material_dark_color"/>
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="8dp"/>
-
-                <LinearLayout
-                    android:id="@+id/blacklisted_target"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:gravity="center_vertical"
-                    android:minHeight="56dp"
-                    android:orientation="vertical"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/blacklisted_apps"
-                        android:textColor="@color/material_dark_color"
-                        android:textSize="16sp"/>
-
-                </LinearLayout>
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp"/>
-
-                <LinearLayout
-                    android:id="@+id/merge_tabs_apps_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:visibility="gone">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:minHeight="56dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/merge_tabs"
-                            android:textColor="@color/material_dark_color"
-                            android:textSize="16sp"/>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/merge_tabs_explanation"
-                            android:textColor="?android:textColorSecondary"
-                            android:textSize="13sp"/>
-                    </LinearLayout>
-
-                    <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/merge_tabs_switch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginStart="5dp"
-                        android:checked="false"/>
-                </LinearLayout>
-
-            </LinearLayout>
-
+                android:layout_height="wrap_content"/>
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
@@ -234,7 +154,7 @@
 
             <FrameLayout
                 android:id="@+id/prefetch_fragment_container"
-                style="@style/Widget.CardContent"
+                style="@style/Widget.CardContent.Small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </android.support.v7.widget.CardView>

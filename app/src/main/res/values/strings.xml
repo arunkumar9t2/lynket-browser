@@ -152,6 +152,7 @@
     <string name="no_voice_rec_apps">No compatible voice recognition apps found</string>
     <string name="already_set">Already set!</string>
     <string name="blacklisted_apps">Blacklisted apps</string>
+    <string name="blacklisted_explanation">Exclude Chromer from handling links from certain apps</string>
     <string name="loading">Loading…</string>
     <string name="please_wait">Please wait</string>
     <string name="blacklist_message">You have blacklisted this app from launching in Chromer and have not set a secondary browser. Please choose a browser to continue.</string>
@@ -161,7 +162,7 @@
     <string name="last_fetched_urls">Last fetched urls</string>
     <string name="blacklist_on">Blacklisting apps turned %s</string>
     <string name="translations">Translations</string>
-    <string name="merge_tabs">Merge tabs and apps - Beta</string>
+    <string name="merge_tabs">Merge tabs and apps</string>
     <string name="merge_tabs_explanation">See your tabs with other recent apps on your phone\'s Overview screen.</string>
     <string name="already_loaded">Already loaded</string>
     <string name="add_home_screen_begun">Shortcut will be added shortly</string>

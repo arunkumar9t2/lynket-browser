@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--suppress AndroidElementNotAllowed -->
+    <arun.com.chromer.preferences.widgets.IconSwitchPreference
+        android:defaultValue="true"
+        android:key="merge_tabs_and_apps_preference"
+        android:summary="@string/merge_tabs_explanation"
+        android:title="@string/merge_tabs"/>
+    <!--suppress AndroidElementNotAllowed -->
+    <arun.com.chromer.preferences.widgets.IconSwitchPreference
+        android:key="blacklist_preference"
+        android:summary="@string/blacklisted_explanation"
+        android:title="@string/blacklisted_apps"/>
+
+</PreferenceScreen>

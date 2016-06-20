@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <!--suppress AndroidElementNotAllowed -->
-    <SwitchPreferenceCompat
+    <arun.com.chromer.preferences.widgets.IconSwitchPreference
         android:defaultValue="true"
         android:key="warm_up_preference"
         android:summary="@string/keep_chrome_warmedup"
         android:title="@string/warmup_browser"/>
     <!--suppress AndroidElementNotAllowed -->
-    <SwitchPreferenceCompat
+    <arun.com.chromer.preferences.widgets.IconSwitchPreference
         android:defaultValue="false"
         android:key="pre_fetch_preference"
         android:summary="@string/pre_fetch_desc"
