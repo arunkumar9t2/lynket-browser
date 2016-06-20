@@ -37,7 +37,7 @@ public class SubCheckBoxPreference extends CheckBoxPreference {
 
         title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         summary.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-        title.setPadding(Util.dpToPx(10), 0, 0, 0);
-        summary.setPadding(Util.dpToPx(10), 0, 0, 0);
+        title.setPadding(Util.dpToPx(30), 0, 0, 0);
+        summary.setPadding(Util.dpToPx(30), 0, 0, 0);
     }
 }
