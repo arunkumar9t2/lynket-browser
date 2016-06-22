@@ -41,6 +41,7 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import arun.com.chromer.activities.about.AboutAppActivity;
@@ -124,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
         setupCustomTab();
 
-        checkAndEducateUser();
+        checkAndEducateUser(false);
 
         cleanOldDbs();
 
@@ -396,9 +397,14 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         }
     }
 
-    private void checkAndEducateUser() {
-        List packages = CustomTabHelper.getCustomTabSupportingPackages(this);
-        if (packages.size() == 0) {
+    private void checkAndEducateUser(boolean forceShow) {
+        List packages;
+        if (!forceShow) {
+            packages = CustomTabHelper.getCustomTabSupportingPackages(this);
+        } else {
+            packages = new ArrayList();
+        }
+        if (packages.size() == 0 || forceShow) {
             new MaterialDialog.Builder(this)
                     .title(getString(R.string.custom_tab_provider_not_found))
                     .content(getString(R.string.custom_tab_provider_not_found_expln))
@@ -470,7 +476,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     public void onDefaultCustomTabProviderClick(final AppPreferenceCardView customTabPreferenceCard) {
         final List<IntentPickerSheetView.ActivityInfo> customTabApps = Util.getCustomTabApps(getApplicationContext());
         if (customTabApps.isEmpty()) {
-            checkAndEducateUser();
+            checkAndEducateUser(true);
             return;
         }
 

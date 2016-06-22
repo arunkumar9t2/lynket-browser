@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -43,8 +44,6 @@ public class CustomTabHelper {
     public static final String STABLE_PACKAGE = "com.android.chrome";
     public static final String BETA_PACKAGE = "com.chrome.beta";
     public static final String DEV_PACKAGE = "com.chrome.dev";
-    private static final String LOCAL_PACKAGE = "com.google.android.apps.chrome";
-
     public final static CustomTabBindingHelper.CustomTabsFallback CUSTOM_TABS_FALLBACK =
             new CustomTabBindingHelper.CustomTabsFallback() {
                 @Override
@@ -65,7 +64,7 @@ public class CustomTabHelper {
                     }
                 }
             };
-
+    private static final String LOCAL_PACKAGE = "com.google.android.apps.chrome";
     private static final String EXTRA_CUSTOM_TABS_KEEP_ALIVE = "android.support.customtabs.extra.KEEP_ALIVE";
     private static String sPackageNameToUse;
 
@@ -83,7 +82,7 @@ public class CustomTabHelper {
      * Goes through all apps that handle VIEW intents and have a warmup service. Picks
      * the one chosen by the user if there is one, otherwise makes a best effort to return a
      * valid package name.
-     * <p/>
+     * <p>
      * This is <strong>not</strong> threadsafe.
      *
      * @param context {@link Context} to use for accessing {@link PackageManager}.
@@ -139,6 +138,7 @@ public class CustomTabHelper {
     }
 
     @TargetApi(Build.VERSION_CODES.M)
+    @NonNull
     public static List<String> getCustomTabSupportingPackages(Context context) {
         PackageManager pm = context.getApplicationContext().getPackageManager();
         Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));
