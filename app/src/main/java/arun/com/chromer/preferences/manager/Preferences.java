@@ -40,6 +40,7 @@ public class Preferences {
     public static final String WIFI_PREFETCH = "wifi_preference";
     public static final String PRE_FETCH_NOTIFICATION = "pre_fetch_notification_preference";
     public static final String BLACKLIST = "blacklist_preference";
+    public static final String BLACKLIST_DUMMY = "blacklist_preference_dummy";
     public static final String MERGE_TABS_AND_APPS = "merge_tabs_and_apps_preference";
     private static final String PREFERRED_PACKAGE = "preferred_package";
     // Changed key for 1.5 build which will force intro to show

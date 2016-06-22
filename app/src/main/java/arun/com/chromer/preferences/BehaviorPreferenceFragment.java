@@ -1,15 +1,19 @@
 package arun.com.chromer.preferences;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.preference.Preference;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
+import arun.com.chromer.activities.blacklist.BlacklistManagerActivity;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.preferences.widgets.IconSwitchPreference;
 import arun.com.chromer.util.Util;
@@ -43,7 +47,7 @@ public class BehaviorPreferenceFragment extends DividerLessPreferenceFragment im
     }
 
     private void setupBlacklistPreference() {
-        mBlackListPreference = (IconSwitchPreference) findPreference(Preferences.BLACKLIST);
+        mBlackListPreference = (IconSwitchPreference) findPreference(Preferences.BLACKLIST_DUMMY);
         if (mBlackListPreference != null) {
             Drawable recentImg = new IconicsDrawable(getActivity())
                     .icon(GoogleMaterial.Icon.gmd_filter_list)
@@ -51,6 +55,18 @@ public class BehaviorPreferenceFragment extends DividerLessPreferenceFragment im
                     .sizeDp(24);
             mBlackListPreference.setIcon(recentImg);
             mBlackListPreference.hideSwitch();
+            mBlackListPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent blacklistedApps = new Intent(getActivity(), BlacklistManagerActivity.class);
+                    startActivity(blacklistedApps,
+                            ActivityOptions.makeCustomAnimation(getActivity(),
+                                    R.anim.slide_in_right_medium,
+                                    R.anim.slide_out_left_medium).toBundle()
+                    );
+                    return false;
+                }
+            });
         }
     }
 
