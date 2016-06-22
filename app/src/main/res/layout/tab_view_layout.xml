@@ -24,5 +24,6 @@
         android:fontFamily="sans-serif-medium"
         android:gravity="center_vertical"
         android:singleLine="true"
-        android:textColor="@android:color/white"/>
+        android:textColor="@android:color/white"
+        android:textSize="14sp"/>
 </RelativeLayout>

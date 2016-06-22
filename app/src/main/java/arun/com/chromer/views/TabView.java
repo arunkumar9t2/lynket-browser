@@ -35,30 +35,21 @@ import butterknife.Unbinder;
  * Created by Arun on 16/06/2016.
  */
 public class TabView extends FrameLayout {
+    public static final int TAB_TYPE_OPTIONS = 0;
+    public static final int TAB_TYPE_WEB_HEADS = 1;
+    public static final int TAB_TYPE_CUSTOMIZE = 2;
     @ColorInt
     private static final int SELECTED_COLOR = Color.WHITE;
     @ColorInt
-    private static final int UN_SELECTED_COLOR = ColorUtils.setAlphaComponent(SELECTED_COLOR, 191);
-
-    private float initialIconX = 0;
-    private float initialTextX = 0;
-
+    private static final int UN_SELECTED_COLOR = ColorUtils.setAlphaComponent(SELECTED_COLOR, 178);
     @BindView(R.id.tab_view_icon)
     public ImageView mTabIcon;
     @BindView(R.id.tab_view_text)
     public TextView mTabText;
     Unbinder mUnBinder;
-
-    public static final int TAB_TYPE_OPTIONS = 0;
-    public static final int TAB_TYPE_WEB_HEADS = 1;
-    public static final int TAB_TYPE_CUSTOMIZE = 2;
+    private float initialIconX = 0;
+    private float initialTextX = 0;
     private boolean mSelected;
-
-    @Retention(RetentionPolicy.SOURCE)
-    @IntDef({TAB_TYPE_OPTIONS, TAB_TYPE_WEB_HEADS, TAB_TYPE_CUSTOMIZE})
-    public @interface TabType {
-    }
-
     @TabType
     private int mTabType = TAB_TYPE_OPTIONS;
 
@@ -244,5 +235,10 @@ public class TabView extends FrameLayout {
         if (animator != null)
             animator.setDuration(250);
         return animator;
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({TAB_TYPE_OPTIONS, TAB_TYPE_WEB_HEADS, TAB_TYPE_CUSTOMIZE})
+    public @interface TabType {
     }
 }
