@@ -42,6 +42,18 @@
         <item name="android:orientation">vertical</item>
     </style>
 
+    <style name="Preference.Headers" parent="android:Widget.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:paddingRight">5dp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/material_dark_color</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center|left</item>
+    </style>
+
 
     <style name="DonatePopUp" parent="Base.Theme.AppCompat.Light.Dialog">
         <item name="windowNoTitle">true</item>

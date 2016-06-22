@@ -15,20 +15,12 @@
         tools:showIn="@layout/main_activity">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/Preference.Headers"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginTop="10dp"
-            android:gravity="center|left"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
             android:text="@string/web_heads"
-            android:textAllCaps="true"
-            android:textColor="@color/material_dark_color"
-            android:textSize="14sp"
-            android:textStyle="bold"
             tools:ignore="RtlHardcoded"/>
 
         <android.support.v7.widget.CardView
