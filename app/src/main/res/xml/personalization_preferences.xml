@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--suppress AndroidElementNotAllowed -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
                   xmlns:app="http://schemas.android.com/apk/res-auto"
                   android:key="settings"
@@ -22,21 +23,21 @@
         android:key="dynamic_color"
         android:title="@string/dynamic_toolbar_color"/>
 
-    <ListPreference
+    <arun.com.chromer.preferences.widgets.IconListPreference
         android:defaultValue="1"
         android:entries="@array/actionValues"
         android:entryValues="@array/actionKeys"
         android:key="preferred_action_preference"
         android:title="@string/preferred_action"/>
 
-    <ListPreference
+    <arun.com.chromer.preferences.widgets.IconListPreference
         android:defaultValue="1"
         android:entries="@array/animationValues"
         android:entryValues="@array/animationKeys"
         android:key="animation_preference"
         android:title="@string/choose_animation"/>
 
-    <ListPreference
+    <arun.com.chromer.preferences.widgets.IconListPreference
         android:defaultValue="1"
         android:entries="@array/animationSpeedValues"
         android:entryValues="@array/animationSpeedKeys"

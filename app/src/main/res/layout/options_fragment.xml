@@ -78,7 +78,7 @@
             android:paddingRight="5dp"
             android:text="@string/app_preferences"
             android:textAllCaps="true"
-            android:textColor="@color/accent"
+            android:textColor="@color/material_dark_color"
             android:textSize="14sp"
             android:textStyle="bold"
             tools:ignore="RtlHardcoded"/>
@@ -140,7 +140,7 @@
             android:paddingRight="5dp"
             android:text="@string/behavior_preferences"
             android:textAllCaps="true"
-            android:textColor="@color/accent"
+            android:textColor="@color/material_dark_color"
             android:textSize="14sp"
             android:textStyle="bold"
             tools:ignore="RtlHardcoded"/>
@@ -172,7 +172,7 @@
             android:paddingRight="5dp"
             android:text="@string/additional_preferences"
             android:textAllCaps="true"
-            android:textColor="@color/accent"
+            android:textColor="@color/material_dark_color"
             android:textSize="14sp"
             android:textStyle="bold"
             tools:ignore="RtlHardcoded"/>

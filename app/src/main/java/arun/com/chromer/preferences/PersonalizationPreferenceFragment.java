@@ -19,6 +19,7 @@ import android.support.v7.preference.SwitchPreferenceCompat;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
@@ -26,6 +27,8 @@ import arun.com.chromer.MainActivity;
 import arun.com.chromer.R;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.preferences.widgets.ColorPreference;
+import arun.com.chromer.preferences.widgets.IconListPreference;
+import arun.com.chromer.preferences.widgets.IconSwitchPreference;
 import arun.com.chromer.shared.AppDetectService;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.ServiceUtil;
@@ -52,6 +55,12 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
             Preferences.TOOLBAR_COLOR
     };
     private final IntentFilter mToolBarColorFilter = new IntentFilter(Constants.ACTION_TOOLBAR_COLOR_SET);
+    private IconSwitchPreference mDynamicColor;
+    private IconSwitchPreference mIsColoredToolbar;
+    private ColorPreference mToolbarColorPref;
+    private IconListPreference mAnimationSpeed;
+    private IconListPreference mOpeningAnimation;
+    private IconListPreference mPreferredAction;
 
     public PersonalizationPreferenceFragment() {
         // Required empty public constructor
@@ -68,6 +77,9 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.personalization_preferences);
+        // init and set icon
+        init();
+        setupIcons();
 
         // setup preferences after creation
         setupToolbarColorPreference();
@@ -96,6 +108,41 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
         updatePreferenceSummary(PREFERENCE_GROUP);
     }
 
+    private void init() {
+        mDynamicColor = (IconSwitchPreference) findPreference(Preferences.DYNAMIC_COLOR);
+        mIsColoredToolbar = (IconSwitchPreference) findPreference(Preferences.TOOLBAR_COLOR_PREF);
+        mToolbarColorPref = (ColorPreference) findPreference(Preferences.TOOLBAR_COLOR);
+        mPreferredAction = (IconListPreference) findPreference(Preferences.PREFERRED_ACTION);
+        mOpeningAnimation = (IconListPreference) findPreference(Preferences.ANIMATION_TYPE);
+        mAnimationSpeed = (IconListPreference) findPreference(Preferences.ANIMATION_SPEED);
+    }
+
+    private void setupIcons() {
+        Drawable palette = new IconicsDrawable(getActivity())
+                .icon(GoogleMaterial.Icon.gmd_color_lens)
+                .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
+                .sizeDp(24);
+        mToolbarColorPref.setIcon(palette);
+        mIsColoredToolbar.setIcon(palette);
+        mDynamicColor.setIcon(new IconicsDrawable(getActivity())
+                .icon(CommunityMaterial.Icon.cmd_format_color_fill)
+                .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
+                .sizeDp(24));
+        mPreferredAction.setIcon(new IconicsDrawable(getActivity())
+                .icon(CommunityMaterial.Icon.cmd_heart)
+                .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
+                .sizeDp(24));
+        mOpeningAnimation.setIcon(new IconicsDrawable(getActivity())
+                .icon(CommunityMaterial.Icon.cmd_image_filter_none)
+                .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
+                .sizeDp(24));
+        mAnimationSpeed.setIcon(new IconicsDrawable(getActivity())
+                .icon(CommunityMaterial.Icon.cmd_speedometer)
+                .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
+                .sizeDp(24));
+    }
+
+
     private void updatePreferenceStates(String key) {
         if (key.equalsIgnoreCase(Preferences.TOOLBAR_COLOR_PREF)) {
             final boolean webHeadsEnabled = Preferences.isColoredToolbar(getActivity());
@@ -109,91 +156,77 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
     }
 
     private void updateDynamicSummary() {
-        final SwitchPreferenceCompat dynamicColor = (SwitchPreferenceCompat) findPreference(Preferences.DYNAMIC_COLOR);
-        if (dynamicColor != null) {
-            dynamicColor.setSummary(Preferences.dynamicColorSummary(getActivity()));
-            boolean isColoredToolbar = Preferences.isColoredToolbar(getActivity());
-            if (!isColoredToolbar) {
-                dynamicColor.setChecked(false);
-            }
+        mDynamicColor.setSummary(Preferences.dynamicColorSummary(getActivity()));
+        boolean isColoredToolbar = Preferences.isColoredToolbar(getActivity());
+        if (!isColoredToolbar) {
+            mDynamicColor.setChecked(false);
         }
     }
 
     private void setupDynamicToolbar() {
-        final SwitchPreferenceCompat switchPreferenceCompat = (SwitchPreferenceCompat) findPreference(Preferences.DYNAMIC_COLOR);
-        if (switchPreferenceCompat != null) {
-            switchPreferenceCompat.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    final SwitchPreferenceCompat switchCompat = (SwitchPreferenceCompat) preference;
-                    final boolean isChecked = switchCompat.isChecked();
-                    if (isChecked) {
-                        new MaterialDialog.Builder(getActivity())
-                                .title(R.string.dynamic_toolbar_color)
-                                .content(R.string.dynamic_toolbar_help)
-                                .items(new String[]{
-                                        getString(R.string.based_on_app),
-                                        getString(R.string.based_on_web)})
-                                .positiveText(android.R.string.ok)
-                                .alwaysCallMultiChoiceCallback()
-                                .itemsCallbackMultiChoice(Preferences.dynamicToolbarSelections(getActivity()),
-                                        new MaterialDialog.ListCallbackMultiChoice() {
-                                            @Override
-                                            public boolean onSelection(MaterialDialog dialog,
-                                                                       Integer[] which,
-                                                                       CharSequence[] text) {
-                                                if (which.length == 0) {
-                                                    switchCompat.setChecked(false);
-                                                    Preferences.dynamicToolbar(getActivity(), false);
-                                                } else switchCompat.setChecked(true);
+        mIsColoredToolbar.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                final SwitchPreferenceCompat switchCompat = (SwitchPreferenceCompat) preference;
+                final boolean isChecked = switchCompat.isChecked();
+                if (isChecked) {
+                    new MaterialDialog.Builder(getActivity())
+                            .title(R.string.dynamic_toolbar_color)
+                            .content(R.string.dynamic_toolbar_help)
+                            .items(new String[]{
+                                    getString(R.string.based_on_app),
+                                    getString(R.string.based_on_web)})
+                            .positiveText(android.R.string.ok)
+                            .alwaysCallMultiChoiceCallback()
+                            .itemsCallbackMultiChoice(Preferences.dynamicToolbarSelections(getActivity()),
+                                    new MaterialDialog.ListCallbackMultiChoice() {
+                                        @Override
+                                        public boolean onSelection(MaterialDialog dialog,
+                                                                   Integer[] which,
+                                                                   CharSequence[] text) {
+                                            if (which.length == 0) {
+                                                switchCompat.setChecked(false);
+                                                Preferences.dynamicToolbar(getActivity(), false);
+                                            } else switchCompat.setChecked(true);
 
-                                                Preferences.updateAppAndWeb(getActivity(), which);
-                                                requestUsagePermissionIfNeeded();
-                                                handleAppDetectionService();
-                                                updateDynamicSummary();
-                                                return true;
-                                            }
-                                        })
-                                .dismissListener(new DialogInterface.OnDismissListener() {
-                                    @Override
-                                    public void onDismiss(DialogInterface dialog) {
-                                        switchCompat.setChecked(Preferences.dynamicToolbar(getActivity()));
-                                    }
-                                })
-                                .show();
-                        requestUsagePermissionIfNeeded();
-                    }
-                    handleAppDetectionService();
-                    updateDynamicSummary();
-                    return false;
+                                            Preferences.updateAppAndWeb(getActivity(), which);
+                                            requestUsagePermissionIfNeeded();
+                                            handleAppDetectionService();
+                                            updateDynamicSummary();
+                                            return true;
+                                        }
+                                    })
+                            .dismissListener(new DialogInterface.OnDismissListener() {
+                                @Override
+                                public void onDismiss(DialogInterface dialog) {
+                                    switchCompat.setChecked(Preferences.dynamicToolbar(getActivity()));
+                                }
+                            })
+                            .show();
+                    requestUsagePermissionIfNeeded();
                 }
-            });
-        }
+                handleAppDetectionService();
+                updateDynamicSummary();
+                return false;
+            }
+        });
     }
 
 
     private void setupToolbarColorPreference() {
-        final ColorPreference toolbarColorPref = (ColorPreference) findPreference(Preferences.TOOLBAR_COLOR);
-        if (toolbarColorPref != null) {
-            toolbarColorPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    int chosenColor = ((ColorPreference) preference).getColor();
-                    new ColorChooserDialog.Builder((MainActivity) getActivity(), R.string.default_toolbar_color)
-                            .titleSub(R.string.default_toolbar_color)
-                            .allowUserColorInputAlpha(false)
-                            .preselect(chosenColor)
-                            .dynamicButtonColor(false)
-                            .show();
-                    return true;
-                }
-            });
-            Drawable palette = new IconicsDrawable(getActivity())
-                    .icon(GoogleMaterial.Icon.gmd_color_lens)
-                    .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
-                    .sizeDp(24);
-            toolbarColorPref.setIcon(palette);
-        }
+        mToolbarColorPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                int chosenColor = ((ColorPreference) preference).getColor();
+                new ColorChooserDialog.Builder((MainActivity) getActivity(), R.string.default_toolbar_color)
+                        .titleSub(R.string.default_toolbar_color)
+                        .allowUserColorInputAlpha(false)
+                        .preselect(chosenColor)
+                        .dynamicButtonColor(false)
+                        .show();
+                return true;
+            }
+        });
     }
 
     private void requestUsagePermissionIfNeeded() {
