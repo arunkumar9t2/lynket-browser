@@ -71,6 +71,7 @@ public class ColorPreference extends Preference {
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
         mColorIndicator = holder.findViewById(R.id.color_preview);
+        IconLayoutHelper.applyLayoutChanges(holder);
         invalidate();
     }
 

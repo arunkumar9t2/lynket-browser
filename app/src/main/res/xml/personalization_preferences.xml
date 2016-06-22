@@ -5,7 +5,7 @@
                   android:title="@string/settings">
 
     <!--suppress AndroidElementNotAllowed -->
-    <SwitchPreferenceCompat
+    <arun.com.chromer.preferences.widgets.IconSwitchPreference
         android:defaultValue="true"
         android:key="toolbar_color_pref"
         android:title="@string/colored_toolbar"/>
@@ -17,7 +17,7 @@
         app:color="@color/colorPrimary"/>
 
     <!--suppress AndroidElementNotAllowed -->
-    <SwitchPreferenceCompat
+    <arun.com.chromer.preferences.widgets.IconSwitchPreference
         android:defaultValue="false"
         android:key="dynamic_color"
         android:title="@string/dynamic_toolbar_color"/>

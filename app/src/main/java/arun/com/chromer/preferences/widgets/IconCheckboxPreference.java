@@ -11,23 +11,23 @@ import android.view.View;
  * A helper preference view without weird margin on preference icon. Attempts to alter properties on
  * icon frame and icon itself so that it looks better
  */
-public class IconSwitchPreference extends SwitchPreferenceCompat {
+public class IconCheckboxPreference extends SwitchPreferenceCompat {
     private View mSwitchView;
     private boolean mHideIcon;
 
-    public IconSwitchPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public IconCheckboxPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    public IconSwitchPreference(Context context, AttributeSet attrs, int defStyleAttr) {
+    public IconCheckboxPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    public IconSwitchPreference(Context context, AttributeSet attrs) {
+    public IconCheckboxPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public IconSwitchPreference(Context context) {
+    public IconCheckboxPreference(Context context) {
         super(context);
     }
 

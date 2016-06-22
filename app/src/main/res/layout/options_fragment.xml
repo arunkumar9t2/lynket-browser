@@ -9,7 +9,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/card_background_light"
         android:orientation="vertical"
         tools:context="arun.com.chromer.MainActivity"
         tools:showIn="@layout/main_activity">

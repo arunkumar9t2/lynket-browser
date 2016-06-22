@@ -7,16 +7,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.SwitchPreferenceCompat;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.MainActivity;
 import arun.com.chromer.R;
@@ -47,7 +51,7 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
             Preferences.PREFERRED_ACTION,
             Preferences.TOOLBAR_COLOR
     };
-    private IntentFilter mToolBarColorFilter = new IntentFilter(Constants.ACTION_TOOLBAR_COLOR_SET);
+    private final IntentFilter mToolBarColorFilter = new IntentFilter(Constants.ACTION_TOOLBAR_COLOR_SET);
 
     public PersonalizationPreferenceFragment() {
         // Required empty public constructor
@@ -184,6 +188,11 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
                     return true;
                 }
             });
+            Drawable palette = new IconicsDrawable(getActivity())
+                    .icon(GoogleMaterial.Icon.gmd_color_lens)
+                    .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
+                    .sizeDp(24);
+            toolbarColorPref.setIcon(palette);
         }
     }
 

@@ -11,17 +11,24 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.SwitchPreferenceCompat;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.MainActivity;
 import arun.com.chromer.R;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.preferences.widgets.ColorPreference;
+import arun.com.chromer.preferences.widgets.IconCheckboxPreference;
+import arun.com.chromer.preferences.widgets.IconListPreference;
+import arun.com.chromer.preferences.widgets.IconSwitchPreference;
 import arun.com.chromer.shared.Constants;
 
 public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -38,11 +45,19 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
             }
         }
     };
+
     private final String[] WEBHEAD_PREFERENCE_GROUP = new String[]{
             Preferences.WEB_HEAD_SPAWN_LOCATION,
             Preferences.WEB_HEADS_COLOR
     };
-    private IntentFilter mWebHeadColorFilter = new IntentFilter(Constants.ACTION_WEBHEAD_COLOR_SET);
+
+    private final IntentFilter mWebHeadColorFilter = new IntentFilter(Constants.ACTION_WEBHEAD_COLOR_SET);
+
+    private ColorPreference mWebHeadsColor;
+    private IconSwitchPreference mWebHeadSwitch;
+    private IconListPreference mSpawnLocation;
+    private IconCheckboxPreference mFavicons;
+    private IconCheckboxPreference mCloseOnOpen;
 
     public WebHeadPreferenceFragment() {
         // Required empty public constructor
@@ -59,66 +74,12 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.webhead_preferences);
+        init();
+        setIcons();
         setUpWebHeadSwitch();
         setupWebHeadColorPreference();
     }
 
-    private void setupWebHeadColorPreference() {
-        ColorPreference webHeadsColorPref = (ColorPreference) findPreference(Preferences.WEB_HEADS_COLOR);
-        if (webHeadsColorPref != null) {
-            webHeadsColorPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    int chosenColor = ((ColorPreference) preference).getColor();
-                    new ColorChooserDialog.Builder((MainActivity) getActivity(), R.string.web_heads_color)
-                            .titleSub(R.string.web_heads_color)
-                            .allowUserColorInputAlpha(false)
-                            .preselect(chosenColor)
-                            .dynamicButtonColor(false)
-                            .show();
-                    return true;
-                }
-            });
-        }
-
-    }
-
-    private void setUpWebHeadSwitch() {
-        SwitchPreferenceCompat webHeadSwitch = (SwitchPreferenceCompat) findPreference(Preferences.WEB_HEAD_ENABLED);
-        if (webHeadSwitch != null) {
-            webHeadSwitch.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    final SwitchPreferenceCompat switchCompat = (SwitchPreferenceCompat) preference;
-                    final boolean isChecked = switchCompat.isChecked();
-                    if (isChecked) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            if (!Settings.canDrawOverlays(getActivity())) {
-                                // Don't check the switch until permission is granted
-                                switchCompat.setChecked(false);
-                                new MaterialDialog.Builder(getActivity())
-                                        .title(R.string.permission_required)
-                                        .content(R.string.overlay_permission_content)
-                                        .positiveText(R.string.grant)
-                                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                            @TargetApi(Build.VERSION_CODES.M)
-                                            @Override
-                                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                                dialog.dismiss();
-                                                final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                                        Uri.parse("package:" + getActivity().getPackageName()));
-                                                getActivity().startActivityForResult(intent, 0);
-                                            }
-                                        })
-                                        .show();
-                            }
-                        }
-                    }
-                    return false;
-                }
-            });
-        }
-    }
 
     @Override
     public void onResume() {
@@ -140,6 +101,89 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         updatePreferenceStates(key);
         updatePreferenceSummary(WEBHEAD_PREFERENCE_GROUP);
+    }
+
+    private void init() {
+        mWebHeadSwitch = (IconSwitchPreference) findPreference(Preferences.WEB_HEAD_ENABLED);
+        mWebHeadsColor = (ColorPreference) findPreference(Preferences.WEB_HEADS_COLOR);
+        mSpawnLocation = (IconListPreference) findPreference(Preferences.WEB_HEAD_SPAWN_LOCATION);
+        mFavicons = (IconCheckboxPreference) findPreference(Preferences.WEB_HEAD_FAVICON);
+        mCloseOnOpen = (IconCheckboxPreference) findPreference(Preferences.WEB_HEAD_CLOSE_ON_OPEN);
+    }
+
+
+    private void setIcons() {
+        int materialLight = ContextCompat.getColor(getActivity(), R.color.material_dark_light);
+        mWebHeadsColor.setIcon(new IconicsDrawable(getActivity())
+                .icon(GoogleMaterial.Icon.gmd_color_lens)
+                .color(materialLight)
+                .sizeDp(24));
+        mWebHeadSwitch.setIcon(new IconicsDrawable(getActivity())
+                .icon(GoogleMaterial.Icon.gmd_hdr_strong)
+                .color(materialLight)
+                .sizeDp(24));
+        mSpawnLocation.setIcon(new IconicsDrawable(getActivity())
+                .icon(GoogleMaterial.Icon.gmd_code)
+                .color(materialLight)
+                .sizeDp(24));
+        mFavicons.setIcon(new IconicsDrawable(getActivity())
+                .icon(GoogleMaterial.Icon.gmd_radio_button_checked)
+                .color(materialLight)
+                .sizeDp(24));
+        mCloseOnOpen.setIcon(new IconicsDrawable(getActivity())
+                .icon(CommunityMaterial.Icon.cmd_close_circle_outline)
+                .color(materialLight)
+                .sizeDp(24));
+    }
+
+    private void setupWebHeadColorPreference() {
+        mWebHeadsColor.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                int chosenColor = ((ColorPreference) preference).getColor();
+                new ColorChooserDialog.Builder((MainActivity) getActivity(), R.string.web_heads_color)
+                        .titleSub(R.string.web_heads_color)
+                        .allowUserColorInputAlpha(false)
+                        .preselect(chosenColor)
+                        .dynamicButtonColor(false)
+                        .show();
+                return true;
+            }
+        });
+    }
+
+    private void setUpWebHeadSwitch() {
+        mWebHeadSwitch.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                final SwitchPreferenceCompat switchCompat = (SwitchPreferenceCompat) preference;
+                final boolean isChecked = switchCompat.isChecked();
+                if (isChecked) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (!Settings.canDrawOverlays(getActivity())) {
+                            // Don't check the switch until permission is granted
+                            switchCompat.setChecked(false);
+                            new MaterialDialog.Builder(getActivity())
+                                    .title(R.string.permission_required)
+                                    .content(R.string.overlay_permission_content)
+                                    .positiveText(R.string.grant)
+                                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                        @TargetApi(Build.VERSION_CODES.M)
+                                        @Override
+                                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                            dialog.dismiss();
+                                            final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                                    Uri.parse("package:" + getActivity().getPackageName()));
+                                            getActivity().startActivityForResult(intent, 0);
+                                        }
+                                    })
+                                    .show();
+                        }
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     private void updatePreferenceStates(String key) {
