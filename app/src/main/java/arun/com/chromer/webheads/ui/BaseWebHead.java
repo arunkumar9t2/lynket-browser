@@ -18,7 +18,6 @@ import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -60,17 +59,17 @@ public abstract class BaseWebHead extends FrameLayout {
      */
     private final String mUrl;
     /**
-     * Butter knife unbinder to release references;
+     * Butter knife un binder to release references;
      */
-    private final Unbinder mUnbinder;
+    private final Unbinder mUnBinder;
     @BindView(R.id.favicon)
     protected ImageView mFavicon;
     @BindView(R.id.indicator)
     protected TextView mIndicator;
     @BindView(R.id.circleBackground)
-    protected View mCircleBackground;
+    protected ElevatedCircleView mCircleBackground;
     @BindView(R.id.revealView)
-    protected View mRevealView;
+    protected ElevatedCircleView mRevealView;
     int sDispWidth;
     int sDispHeight;
     /**
@@ -82,6 +81,11 @@ public abstract class BaseWebHead extends FrameLayout {
      */
     boolean mDestroyed;
     /**
+     * Color of the web head
+     */
+    @ColorInt
+    int mWebHeadColor;
+    /**
      * The un shortened url resolved from @link mUrl
      */
     private String mUnShortenedUrl;
@@ -89,11 +93,6 @@ public abstract class BaseWebHead extends FrameLayout {
      * Title of the website
      */
     private String mTitle;
-    /**
-     * Color of the web head
-     */
-    @ColorInt
-    private int mWebHeadColor;
     /**
      * Flag to know if this web head was created for opening in new tab
      */
@@ -106,7 +105,7 @@ public abstract class BaseWebHead extends FrameLayout {
 
         mContentGroup = (FrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.web_head_layout, this, false);
         addView(mContentGroup);
-        mUnbinder = ButterKnife.bind(this);
+        mUnBinder = ButterKnife.bind(this);
         initContent();
 
         mWindowParams = new WindowManager.LayoutParams(
@@ -114,7 +113,8 @@ public abstract class BaseWebHead extends FrameLayout {
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                        | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                        | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                        | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
                 PixelFormat.TRANSLUCENT);
 
         initDisplayMetrics();
@@ -159,8 +159,8 @@ public abstract class BaseWebHead extends FrameLayout {
      */
     private void initContent() {
         mWebHeadColor = Preferences.webHeadColor(getContext());
-        mCircleBackground.setBackgroundColor(mWebHeadColor);
         mIndicator.setText(Util.getFirstLetter(mUrl));
+        mRevealView.setVisibility(GONE);
     }
 
     /**
@@ -182,7 +182,7 @@ public abstract class BaseWebHead extends FrameLayout {
     /**
      * @return true if current web head is the last active one
      */
-    private boolean isLastWebHead() {
+    protected boolean isLastWebHead() {
         return WEB_HEAD_COUNT == 0;
     }
 
@@ -213,6 +213,11 @@ public abstract class BaseWebHead extends FrameLayout {
     @ColorInt
     public int getWebHeadColor() {
         return mWebHeadColor;
+    }
+
+    public void setWebHeadColor(@ColorInt int webHeadColor) {
+        mWebHeadColor = webHeadColor;
+        mCircleBackground.setColor(webHeadColor);
     }
 
     @NonNull
@@ -268,6 +273,7 @@ public abstract class BaseWebHead extends FrameLayout {
                             new ColorDrawable(Color.TRANSPARENT),
                             drawable
                     });
+            mFavicon.setVisibility(VISIBLE);
             mFavicon.setImageDrawable(transitionDrawable);
             transitionDrawable.setCrossFadeEnabled(true);
             transitionDrawable.startTransition(500);
@@ -279,7 +285,7 @@ public abstract class BaseWebHead extends FrameLayout {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        mUnbinder.unbind();
+        mUnBinder.unbind();
     }
 
     @CallSuper
