@@ -35,9 +35,7 @@ public class CustomTabBindingHelper implements ServiceConnectionCallback {
      * @param uri              the Uri to be opened.
      */
     @SuppressWarnings("SameParameterValue")
-    public static void openCustomTab(Activity activity,
-                                     CustomTabsIntent customTabsIntent,
-                                     Uri uri) {
+    public static void openCustomTab(Activity activity, CustomTabsIntent customTabsIntent, Uri uri) {
         // The package name to use
         String packageName;
 
@@ -69,8 +67,7 @@ public class CustomTabBindingHelper implements ServiceConnectionCallback {
     }
 
     private static boolean isUserChosenAppValidProvider(Activity activity, String userPrefProvider) {
-        return userPrefProvider != null && Util.isPackageInstalled(activity, userPrefProvider)
-                && CustomTabHelper.isPackageSupportCustomTabs(activity, userPrefProvider);
+        return Util.isPackageInstalled(activity, userPrefProvider) && CustomTabHelper.isPackageSupportCustomTabs(activity, userPrefProvider);
     }
 
     private static void callFallback(Activity activity, Uri uri, CustomTabsFallback fallback) {

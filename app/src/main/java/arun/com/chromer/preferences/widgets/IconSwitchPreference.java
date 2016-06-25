@@ -1,7 +1,6 @@
 package arun.com.chromer.preferences.widgets;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.support.v7.preference.PreferenceViewHolder;
 import android.support.v7.preference.SwitchPreferenceCompat;
 import android.util.AttributeSet;
@@ -13,7 +12,7 @@ import android.view.View;
  */
 public class IconSwitchPreference extends SwitchPreferenceCompat {
     private View mSwitchView;
-    private boolean mHideIcon;
+    private boolean mHideSwitch;
 
     public IconSwitchPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
@@ -36,21 +35,16 @@ public class IconSwitchPreference extends SwitchPreferenceCompat {
         super.onBindViewHolder(holder);
         IconLayoutHelper.applyLayoutChanges(holder);
         mSwitchView = holder.findViewById(android.support.v7.preference.R.id.switchWidget);
-        if (mHideIcon && mSwitchView != null) {
+        if (mHideSwitch && mSwitchView != null) {
             mSwitchView.setVisibility(View.GONE);
         }
     }
 
-    @Nullable
-    public View getSwitchView() {
-        return mSwitchView;
-    }
-
     public void hideSwitch() {
-        mHideIcon = true;
+        mHideSwitch = true;
     }
 
     public void showSwitch() {
-        mHideIcon = false;
+        mHideSwitch = false;
     }
 }

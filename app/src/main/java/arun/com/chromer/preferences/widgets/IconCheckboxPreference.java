@@ -1,7 +1,6 @@
 package arun.com.chromer.preferences.widgets;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
@@ -12,8 +11,8 @@ import android.view.View;
  * icon frame and icon itself so that it looks better
  */
 public class IconCheckboxPreference extends CheckBoxPreference {
-    private View mSwitchView;
-    private boolean mHideIcon;
+    private View mCheckboxView;
+    private boolean mHideCheckBox;
 
     public IconCheckboxPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
@@ -35,22 +34,17 @@ public class IconCheckboxPreference extends CheckBoxPreference {
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
         IconLayoutHelper.applyLayoutChanges(holder);
-        mSwitchView = holder.findViewById(android.support.v7.preference.R.id.switchWidget);
-        if (mHideIcon && mSwitchView != null) {
-            mSwitchView.setVisibility(View.GONE);
+        mCheckboxView = holder.findViewById(android.support.v7.preference.R.id.checkbox);
+        if (mHideCheckBox && mCheckboxView != null) {
+            mCheckboxView.setVisibility(View.GONE);
         }
     }
 
-    @Nullable
-    public View getSwitchView() {
-        return mSwitchView;
+    public void hideCheckbox() {
+        mHideCheckBox = true;
     }
 
-    public void hideSwitch() {
-        mHideIcon = true;
-    }
-
-    public void showSwitch() {
-        mHideIcon = false;
+    public void showCheckbox() {
+        mHideCheckBox = false;
     }
 }

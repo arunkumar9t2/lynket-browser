@@ -29,7 +29,7 @@ public class Preferences {
     public static final String WEB_HEAD_ENABLED = "webhead_enabled_pref";
     public static final String WEB_HEAD_SPAWN_LOCATION = "webhead_spawn_preference";
     public static final String WEB_HEAD_FAVICON = "webhead_favicons_pref";
-    public static final String BOTTTOM_BAR_ENABLED = "bottombar_enabled_pref";
+    public static final String BOTTOM_BAR_ENABLED = "bottombar_enabled_pref";
     public static final int PREFERRED_ACTION_BROWSER = 1;
     public static final int PREFERRED_ACTION_FAV_SHARE = 2;
     public static final int ANIMATION_MEDIUM = 1;
@@ -43,7 +43,6 @@ public class Preferences {
     public static final String BLACKLIST_DUMMY = "blacklist_preference_dummy";
     public static final String MERGE_TABS_AND_APPS = "merge_tabs_and_apps_preference";
     private static final String PREFERRED_PACKAGE = "preferred_package";
-    // Changed key for 1.5 build which will force intro to show
     private static final String FIRST_RUN = "firstrun_1";
     private static final String USER_KNOWS_BOTTOM_BAR = "user_learnt_bottom_bar";
     private static final String SECONDARY_PREF = "secondary_preference";
@@ -424,7 +423,7 @@ public class Preferences {
     public static boolean bottomBar(Context context) {
         return PreferenceManager
                 .getDefaultSharedPreferences(context)
-                .getBoolean(BOTTTOM_BAR_ENABLED, false);
+                .getBoolean(BOTTOM_BAR_ENABLED, false);
     }
 
     @SuppressWarnings("unused")
@@ -432,6 +431,6 @@ public class Preferences {
         PreferenceManager
                 .getDefaultSharedPreferences(context)
                 .edit()
-                .putBoolean(BOTTTOM_BAR_ENABLED, preference).apply();
+                .putBoolean(BOTTOM_BAR_ENABLED, preference).apply();
     }
 }

@@ -135,7 +135,7 @@ public class AppPreferenceCardView extends CardView {
 
     private void applyIcon() {
         if (Util.isPackageInstalled(getContext(), mAppPackage)) {
-            final Context context = getContext();
+            final Context context = getContext().getApplicationContext();
             new AsyncTask<Void, Void, Drawable>() {
 
                 @Override

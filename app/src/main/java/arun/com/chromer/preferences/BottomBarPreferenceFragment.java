@@ -32,7 +32,7 @@ public class BottomBarPreferenceFragment extends DividerLessPreferenceFragment i
     }
 
     private void setupBottomBarPreference() {
-        SwitchPreferenceCompat bottomBarSwitch = (SwitchPreferenceCompat) findPreference(Preferences.BOTTTOM_BAR_ENABLED);
+        SwitchPreferenceCompat bottomBarSwitch = (SwitchPreferenceCompat) findPreference(Preferences.BOTTOM_BAR_ENABLED);
         if (bottomBarSwitch != null) {
             bottomBarSwitch.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
