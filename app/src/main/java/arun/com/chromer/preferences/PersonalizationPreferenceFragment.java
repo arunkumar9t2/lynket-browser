@@ -164,7 +164,7 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
     }
 
     private void setupDynamicToolbar() {
-        mIsColoredToolbar.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        mDynamicColor.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 final SwitchPreferenceCompat switchCompat = (SwitchPreferenceCompat) preference;
