@@ -27,6 +27,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -245,6 +246,34 @@ public class Util {
     @SuppressWarnings("unused")
     public static int pxToDp(int px) {
         return (int) (px / Resources.getSystem().getDisplayMetrics().density);
+    }
+
+    @NonNull
+    public static String getFirstLetter(@Nullable String address) {
+        String result = "X";
+        if (address != null) {
+            try {
+                URL url = new URL(address);
+                String host = url.getHost();
+                if (host != null && host.length() != 0) {
+                    if (host.startsWith("www")) {
+                        String[] splits = host.split("\\.");
+                        if (splits.length > 1) result = String.valueOf(splits[1].charAt(0));
+                        else result = String.valueOf(splits[0].charAt(0));
+                    } else
+                        result = String.valueOf(host.charAt(0));
+                } else {
+                    if (address.length() != 0) {
+                        return String.valueOf(address.charAt(0));
+                    }
+                }
+            } catch (Exception e) {
+                if (address.length() != 0) {
+                    return String.valueOf(address.charAt(0));
+                } else return result;
+            }
+        }
+        return result;
     }
 
     /**

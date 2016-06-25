@@ -59,7 +59,6 @@ import timber.log.Timber;
 public class WebHead extends FrameLayout implements SpringSystemListener, SpringListener {
 
     private static final int STACKING_GAP_PX = Util.dpToPx(6);
-    private static final double MAGNETISM_THRESHOLD = Util.dpToPx(120);
     private static int WEB_HEAD_COUNT = 0;
     private static WindowManager sWindowManager;
     private static int[] sTrashLockCoordinate;
@@ -346,7 +345,7 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
         x += offset;
         y += offset;
 
-        if (dist(rX, rY, x, y) < MAGNETISM_THRESHOLD) {
+        if (dist(rX, rY, x, y) < RemoveWebHead.MAGNETISM_THRESHOLD) {
             mWasRemoveLocked = true;
             return true;
         } else {
@@ -455,10 +454,6 @@ public class WebHead extends FrameLayout implements SpringSystemListener, Spring
     public ImageView getFaviconView() {
         initFavicon();
         return mFavicon;
-    }
-
-    public WindowManager.LayoutParams getWindowParams() {
-        return mWindowParams;
     }
 
     public String getUrl() {

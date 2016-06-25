@@ -26,6 +26,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
+import arun.com.chromer.util.Util;
 import timber.log.Timber;
 
 /**
@@ -34,6 +35,7 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class RemoveWebHead extends FrameLayout {
 
+    static final double MAGNETISM_THRESHOLD = Util.dpToPx(120);
     private static WindowManager sWindowManager;
     private static RemoveWebHead sOurInstance;
 
@@ -102,6 +104,12 @@ public class RemoveWebHead extends FrameLayout {
         }
     }
 
+    public static void disappear() {
+        if (sOurInstance != null) {
+            sOurInstance.hide();
+        }
+    }
+
     @Nullable
     public ViewPropertyAnimator destroyAnimator() {
         if (sOurInstance == null) return null;
@@ -114,12 +122,6 @@ public class RemoveWebHead extends FrameLayout {
                 .alpha(0.5f)
                 .setDuration(300)
                 .setInterpolator(new BounceInterpolator());
-    }
-
-    public static void disappear() {
-        if (sOurInstance != null) {
-            sOurInstance.hide();
-        }
     }
 
     private void destroySelf() {
@@ -222,9 +224,9 @@ public class RemoveWebHead extends FrameLayout {
      */
     public static class RemoveHeadCircle extends View {
 
-        private final Paint mBgPaint;
         private static int sSizePx;
         private static int sDiameterPx;
+        private final Paint mBgPaint;
 
         public RemoveHeadCircle(Context context) {
             super(context);
@@ -241,6 +243,14 @@ public class RemoveWebHead extends FrameLayout {
             setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
             sSizePx = context.getResources().getDimensionPixelSize(R.dimen.remove_head_size);
+        }
+
+        public static int getSizePx() {
+            return sSizePx;
+        }
+
+        public static int getDiameterPx() {
+            return sDiameterPx;
         }
 
         @Override
@@ -270,14 +280,6 @@ public class RemoveWebHead extends FrameLayout {
             float x = cWidth / 2f - deleteIcon.getWidth() / 2;
             float y = cHeight / 2f - deleteIcon.getHeight() / 2;
             canvas.drawBitmap(deleteIcon, x, y, null);
-        }
-
-        public static int getSizePx() {
-            return sSizePx;
-        }
-
-        public static int getDiameterPx() {
-            return sDiameterPx;
         }
     }
 }

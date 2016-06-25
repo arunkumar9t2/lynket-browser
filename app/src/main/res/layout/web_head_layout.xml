@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="66dp"
+             android:layout_height="66dp"
+             android:background="@color/coffee_color"
+             android:orientation="vertical">
+
+    <View
+        android:id="@+id/circleBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:padding="10dp"/>
+
+    <View
+        android:id="@+id/revealView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:padding="10dp"/>
+
+    <TextView
+        android:id="@+id/indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textAllCaps="true"
+        android:textColor="@color/md_black_1000"
+        android:textSize="20sp"
+        tools:ignore="SelectableText"/>
+
+    <ImageView
+        android:id="@+id/favicon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:scaleType="fitCenter"
+        android:src="@drawable/arun"
+        android:visibility="invisible"
+        tools:ignore="ContentDescription"/>
+</FrameLayout>
