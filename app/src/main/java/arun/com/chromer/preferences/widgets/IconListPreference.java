@@ -30,6 +30,6 @@ public class IconListPreference extends ListPreference {
     @Override
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
-        IconLayoutHelper.applyLayoutChanges(holder);
+        PreferenceIconLayoutHelper.applyLayoutChanges(holder, isEnabled());
     }
 }

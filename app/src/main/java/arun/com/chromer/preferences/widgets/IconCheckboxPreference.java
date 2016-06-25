@@ -11,7 +11,6 @@ import android.view.View;
  * icon frame and icon itself so that it looks better
  */
 public class IconCheckboxPreference extends CheckBoxPreference {
-    private View mCheckboxView;
     private boolean mHideCheckBox;
 
     public IconCheckboxPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
@@ -33,10 +32,10 @@ public class IconCheckboxPreference extends CheckBoxPreference {
     @Override
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
-        IconLayoutHelper.applyLayoutChanges(holder);
-        mCheckboxView = holder.findViewById(android.support.v7.preference.R.id.checkbox);
-        if (mHideCheckBox && mCheckboxView != null) {
-            mCheckboxView.setVisibility(View.GONE);
+        PreferenceIconLayoutHelper.applyLayoutChanges(holder, isEnabled());
+        View checkboxView = holder.findViewById(android.support.v7.preference.R.id.checkbox);
+        if (mHideCheckBox && checkboxView != null) {
+            checkboxView.setVisibility(View.GONE);
         }
     }
 
