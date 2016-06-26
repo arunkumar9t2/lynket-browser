@@ -77,6 +77,9 @@ public class AppPreferenceCardView extends CardView {
         mPreferenceType = a.getInt(R.styleable.AppPreferenceCardView_preferenceType, 0);
         setInitialValues();
         a.recycle();
+
+        addView(LayoutInflater.from(getContext()).inflate(R.layout.app_preference_cardview_content, this, false));
+        mUnBinder = ButterKnife.bind(this);
     }
 
     private void setInitialValues() {
@@ -120,8 +123,6 @@ public class AppPreferenceCardView extends CardView {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        addView(LayoutInflater.from(getContext()).inflate(R.layout.app_preference_cardview_content, this, false));
-        mUnBinder = ButterKnife.bind(this);
         updateUI();
     }
 
@@ -205,27 +206,28 @@ public class AppPreferenceCardView extends CardView {
     }
 
     private void setIconDrawable(final Drawable iconDrawable, final boolean overrideScaleType) {
-        mIcon.animate()
-                .scaleX(0f)
-                .scaleY(0f)
-                .setDuration(225)
-                .alpha(0)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        if (mIcon == null) return;
-                        if (mIcon.getScaleType() != ImageView.ScaleType.FIT_CENTER && overrideScaleType) {
-                            mIcon.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        if (mIcon != null)
+            mIcon.animate()
+                    .scaleX(0f)
+                    .scaleY(0f)
+                    .setDuration(225)
+                    .alpha(0)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            if (mIcon == null) return;
+                            if (mIcon.getScaleType() != ImageView.ScaleType.FIT_CENTER && overrideScaleType) {
+                                mIcon.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                            }
+                            mIcon.setImageDrawable(iconDrawable);
+                            mIcon.animate()
+                                    .scaleX(1f)
+                                    .scaleY(1f)
+                                    .setDuration(225)
+                                    .alpha(1f)
+                                    .start();
                         }
-                        mIcon.setImageDrawable(iconDrawable);
-                        mIcon.animate()
-                                .scaleX(1f)
-                                .scaleY(1f)
-                                .setDuration(225)
-                                .alpha(1f)
-                                .start();
-                    }
-                }).start();
+                    }).start();
     }
 
     public void updatePreference(@Nullable final ComponentName componentName) {
