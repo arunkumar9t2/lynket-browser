@@ -29,23 +29,24 @@ public class ColorExtractionTask extends AsyncTask<Void, Void, Integer> {
         int bestColor = Constants.NO_COLOR;
         if (mFaviconReference.get() != null) {
             Bitmap favicon = mFaviconReference.get();
-            Palette palette = Palette.from(favicon).generate();
-
+            Palette palette = Palette.from(favicon)
+                    .clearFilters()
+                    .generate();
             bestColor = ColorUtil.getBestFaviconColor(palette);
         }
-
         return bestColor;
     }
 
     @Override
     protected void onPostExecute(Integer bestColor) {
         if (bestColor != Constants.NO_COLOR) {
-            Timber.d("Got %d for favicon", bestColor);
             if (mWebHeadReference.get() != null) {
                 WebHead webHead = mWebHeadReference.get();
                 webHead.setWebHeadColor(bestColor);
             }
         } else Timber.e("Color extraction failed");
+        mWebHeadReference.clear();
+        mFaviconReference.clear();
     }
 
 }

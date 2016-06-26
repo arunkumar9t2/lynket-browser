@@ -130,11 +130,6 @@ public class WebHead extends BaseWebHead implements SpringListener {
     }
 
     @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-    }
-
-    @Override
     public boolean onTouchEvent(MotionEvent event) {
         // Don't react to any touch event and consume it when we are being destroyed
         if (mDestroyed) return true;
@@ -368,7 +363,8 @@ public class WebHead extends BaseWebHead implements SpringListener {
         int minimumVelocityToReachSides = Util.dpToPx(100);
         if (!mWasRemoveLocked
                 && Math.abs(mXSpring.getVelocity()) < minimumVelocityToReachSides
-                && Math.abs(mYSpring.getVelocity()) < minimumVelocityToReachSides) {
+                && Math.abs(mYSpring.getVelocity()) < minimumVelocityToReachSides
+                && !mDragging) {
             stickToWall();
         }
     }
@@ -403,14 +399,13 @@ public class WebHead extends BaseWebHead implements SpringListener {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
             mWasClicked = true;
-
             if (Preferences.webHeadsCloseOnOpen(getContext()) && mContentGroup != null) {
                 mContentGroup.animate()
                         .scaleX(0.0f)
                         .scaleY(0.0f)
                         .alpha(0.5f)
                         .withLayer()
-                        .setDuration(150)
+                        .setDuration(300)
                         .setInterpolator(new AccelerateDecelerateInterpolator())
                         .setListener(new AnimatorListenerAdapter() {
                             @Override

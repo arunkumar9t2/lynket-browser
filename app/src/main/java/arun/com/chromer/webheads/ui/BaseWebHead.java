@@ -2,6 +2,8 @@ package arun.com.chromer.webheads.ui;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -20,14 +22,17 @@ import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.ViewPropertyAnimator;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import arun.com.chromer.R;
 import arun.com.chromer.preferences.manager.Preferences;
+import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Util;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -78,7 +83,7 @@ public abstract class BaseWebHead extends FrameLayout {
     @BindView(R.id.circleBackground)
     protected ElevatedCircleView mCircleBackground;
     @BindView(R.id.revealView)
-    protected ElevatedCircleView mRevealView;
+    protected CircleView mRevealView;
     int sDispWidth, sDispHeight;
     /**
      * Flag to know if the user moved manually or if the web heads is still resting
@@ -172,7 +177,8 @@ public abstract class BaseWebHead extends FrameLayout {
     private void initContent() {
         mWebHeadColor = Preferences.webHeadColor(getContext());
         mIndicator.setText(Util.getFirstLetter(mUrl));
-        mRevealView.setVisibility(GONE);
+        mIndicator.setTextColor(ColorUtil.getForegroundWhiteOrBlack(mWebHeadColor));
+        initRevealView(mWebHeadColor);
     }
 
     /**
@@ -199,33 +205,31 @@ public abstract class BaseWebHead extends FrameLayout {
     }
 
     /**
-     * Removes url indicator with an animation
+     * Returns an animation instance that smoothly clear the url indicator
      */
-    private void clearUrlIndicator() {
-        mIndicator.animate()
+    private ViewPropertyAnimator getIndicatorClearAnimation() {
+        return mIndicator.animate()
                 .alpha(0.0f)
                 .withLayer()
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mIndicator.setVisibility(GONE);
-                    }
-                })
-                .start();
+                .setDuration(150);
     }
 
-    public void setFaviconDrawable(@NonNull Drawable drawable) {
+    public void setFaviconDrawable(@NonNull final Drawable faviconDrawable) {
         try {
-            clearUrlIndicator();
-            TransitionDrawable transitionDrawable = new TransitionDrawable(
-                    new Drawable[]{
-                            new ColorDrawable(Color.TRANSPARENT),
-                            drawable
-                    });
-            mFavicon.setVisibility(VISIBLE);
-            mFavicon.setImageDrawable(transitionDrawable);
-            transitionDrawable.setCrossFadeEnabled(true);
-            transitionDrawable.startTransition(500);
+            getIndicatorClearAnimation().setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    TransitionDrawable transitionDrawable = new TransitionDrawable(
+                            new Drawable[]{
+                                    new ColorDrawable(Color.TRANSPARENT),
+                                    faviconDrawable
+                            });
+                    mFavicon.setVisibility(VISIBLE);
+                    mFavicon.setImageDrawable(transitionDrawable);
+                    transitionDrawable.setCrossFadeEnabled(true);
+                    transitionDrawable.startTransition(500);
+                }
+            });
         } catch (Exception ignore) {
             Timber.d(ignore.getMessage());
         }
@@ -233,7 +237,7 @@ public abstract class BaseWebHead extends FrameLayout {
 
     @Nullable
     public ValueAnimator getStackDistanceAnimator() {
-        ValueAnimator animator = null;
+        ValueAnimator animator;
         if (!mUserManuallyMoved) {
             animator = ValueAnimator.ofInt(mWindowParams.y, mWindowParams.y + STACKING_GAP_PX);
             animator.setInterpolator(new FastOutLinearInInterpolator());
@@ -248,14 +252,56 @@ public abstract class BaseWebHead extends FrameLayout {
         return null;
     }
 
+    @NonNull
+    public Animator getColorChangeAnimator(@ColorInt final int newWebHeadColor) {
+        initRevealView(newWebHeadColor);
+
+        AnimatorSet animator = new AnimatorSet();
+        animator.playTogether(
+                ObjectAnimator.ofFloat(mRevealView, "scaleX", 1f),
+                ObjectAnimator.ofFloat(mRevealView, "scaleY", 1f),
+                ObjectAnimator.ofFloat(mRevealView, "alpha", 1f)
+        );
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mWebHeadColor = newWebHeadColor;
+                mCircleBackground.setColor(newWebHeadColor);
+                mIndicator.setTextColor(ColorUtil.getForegroundWhiteOrBlack(newWebHeadColor));
+                mRevealView.setLayerType(LAYER_TYPE_NONE, null);
+                mRevealView.setScaleX(0f);
+                mRevealView.setScaleY(0f);
+            }
+
+            @Override
+            public void onAnimationStart(Animator animation) {
+                mRevealView.setLayerType(LAYER_TYPE_HARDWARE, null);
+            }
+        });
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+        animator.setDuration(250);
+        return animator;
+    }
+
+    /**
+     * Resets the reveal color so that it is ready to being reveal animation
+     *
+     * @param revealColor The color to appear during animation
+     */
+    private void initRevealView(@ColorInt int revealColor) {
+        mRevealView.setColor(revealColor);
+        mRevealView.setScaleX(0f);
+        mRevealView.setScaleY(0f);
+        mRevealView.setAlpha(0.8f);
+    }
+
     @ColorInt
     public int getWebHeadColor() {
         return mWebHeadColor;
     }
 
     public void setWebHeadColor(@ColorInt int webHeadColor) {
-        mWebHeadColor = webHeadColor;
-        mCircleBackground.setColor(webHeadColor);
+        getColorChangeAnimator(webHeadColor).start();
     }
 
     @NonNull
@@ -285,13 +331,13 @@ public abstract class BaseWebHead extends FrameLayout {
 
     @Nullable
     public Bitmap getFaviconBitmap() {
-        if (mFavicon != null) {
+        try {
             TransitionDrawable drawable = (TransitionDrawable) mFavicon.getDrawable();
-            if (drawable != null && drawable.getDrawable(1) instanceof RoundedBitmapDrawable) {
-                RoundedBitmapDrawable roundedBitmapDrawable = (RoundedBitmapDrawable) drawable.getDrawable(1);
-                return roundedBitmapDrawable.getBitmap();
-            }
-        } else return null;
+            RoundedBitmapDrawable roundedBitmapDrawable = (RoundedBitmapDrawable) drawable.getDrawable(1);
+            return roundedBitmapDrawable.getBitmap();
+        } catch (Exception e) {
+            Timber.e("Error while getting favicon bitmap: %s", e.getMessage());
+        }
         return null;
     }
 

@@ -12,15 +12,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:elevation="5dp"
+        android:elevation="6dp"
         tools:ignore="UnusedAttribute"/>
 
-    <arun.com.chromer.webheads.ui.ElevatedCircleView
+    <arun.com.chromer.webheads.ui.CircleView
         android:id="@+id/revealView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:elevation="5dp"
+        android:elevation="7dp"
         tools:ignore="UnusedAttribute"/>
 
     <TextView
@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:elevation="6dp"
+        android:elevation="7.1dp"
         android:gravity="center"
         android:maxLines="1"
         android:textAllCaps="true"
@@ -41,10 +41,9 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_gravity="center"
-        android:elevation="7dp"
+        android:elevation="7.2dp"
         android:gravity="center"
         android:scaleType="fitCenter"
-        android:src="@drawable/arun"
         android:visibility="invisible"
         tools:ignore="ContentDescription,UnusedAttribute"/>
 </FrameLayout>

@@ -58,7 +58,7 @@ public class ColorUtil {
             // Instead we will choose the next prominent color
             int vibrantColor = palette.getVibrantColor(Constants.NO_COLOR);
             int prominentColor = sortedSwatch.get(0).getRgb();
-            if (vibrantColor == Constants.NO_COLOR || vibrantColor == prominentColor) {
+            if (vibrantColor == Constants.NO_COLOR) {
                 int darkVibrantColor = palette.getDarkVibrantColor(Constants.NO_COLOR);
                 if (darkVibrantColor != Constants.NO_COLOR) {
                     return darkVibrantColor;
@@ -67,10 +67,7 @@ public class ColorUtil {
                     if (mutedColor != Constants.NO_COLOR) {
                         return mutedColor;
                     } else {
-                        if (vibrantColor != Constants.NO_COLOR) {
-                            return vibrantColor;
-                        } else
-                            return prominentColor;
+                        return prominentColor;
                     }
                 }
             } else return vibrantColor;
@@ -79,7 +76,7 @@ public class ColorUtil {
     }
 
     @ColorInt
-    public static int getForegroundTextColor(int backgroundColor) {
+    public static int getForegroundTextColor(@ColorInt int backgroundColor) {
         final int whiteColorAlpha = ColorUtils.calculateMinimumAlpha(Color.WHITE, backgroundColor, 4.5f);
 
         if (whiteColorAlpha != -1) {
@@ -97,6 +94,25 @@ public class ColorUtil {
                 : ColorUtils.setAlphaComponent(Color.BLACK, blackColorAlpha);
     }
 
+    /**
+     * Returns white or black based on color luminance
+     *
+     * @param backgroundColor the color to get foreground for
+     * @return White for darker colors and black for ligher colors
+     */
+    @ColorInt
+    public static int getForegroundWhiteOrBlack(@ColorInt int backgroundColor) {
+        float hsl[] = new float[3];
+        ColorUtils.colorToHSL(backgroundColor, hsl);
+        float l = hsl[2];
+        if (l < .5) {
+            return Color.WHITE;
+        } else
+            return Color.BLACK;
+    }
+
+
+    @ColorInt
     public static int getBestColorFromPalette(@Nullable Palette palette) {
         if (palette == null) {
             return Constants.NO_COLOR;
