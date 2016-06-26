@@ -44,8 +44,8 @@ public class WebHead extends BaseWebHead implements SpringListener {
      * Gesture detector to recognize fling and click on web heads
      */
     private final GestureDetector mGestureDetector = new GestureDetector(getContext(), new GestureDetectorListener());
-    private final SpringConfig FLING_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(40, 7);
-    private final SpringConfig DRAG_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(0, 1.5);
+    private final SpringConfig FLING_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(50, 7);
+    private final SpringConfig DRAG_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(0, 1.8);
     private final SpringConfig SNAP_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(100, 7);
     /**
      * Minimum horizontal velocity that we need to move the web head from one end of the screen

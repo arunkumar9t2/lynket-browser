@@ -22,12 +22,10 @@ public class MovementTracker {
 
     private static int mDispHeight = 0;
     private static int mDispWidth = 0;
-
-    private int mTrackingSize = 0;
     private static int mEndOffset = 0;
-
     private final SizedQueue<Float> mXPoints;
     private final SizedQueue<Float> mYPoints;
+    private int mTrackingSize = 0;
 
     @SuppressWarnings("SameParameterValue")
     public MovementTracker(int trackingSize, int dispHeight, int dispWidth, int endOffset) {
@@ -37,34 +35,6 @@ public class MovementTracker {
         mDispHeight = dispHeight;
         mDispWidth = dispWidth;
         mEndOffset = endOffset;
-    }
-
-    /**
-     * Adds a motion event to the tracker.
-     *
-     * @param event The event to be added.
-     */
-    public void addMovement(@NonNull MotionEvent event) {
-        float x = event.getRawX();
-        float y = event.getRawY();
-        mXPoints.add(x);
-        mYPoints.add(y);
-    }
-
-    /**
-     * Clear the tracking queue when user begins the gesture.
-     */
-    public void onDown() {
-        mXPoints.clear();
-        mYPoints.clear();
-    }
-
-    /**
-     * Clear the tracking queue when user ends the gesture.
-     */
-    public void onUp() {
-        mXPoints.clear();
-        mYPoints.clear();
     }
 
     /**
@@ -156,7 +126,6 @@ public class MovementTracker {
         return projectedPoint;
     }
 
-
     public static float[] adjustVelocities(float[] p1, float[] p2, float xVelocity, float yVelocity) {
         float downX = p1[0];
         float downY = p1[1];
@@ -195,7 +164,35 @@ public class MovementTracker {
     }
 
     private static float positive(float value) {
-        return value < 0 ? -1 * value : value;
+        return Math.abs(value);
+    }
+
+    /**
+     * Adds a motion event to the tracker.
+     *
+     * @param event The event to be added.
+     */
+    public void addMovement(@NonNull MotionEvent event) {
+        float x = event.getRawX();
+        float y = event.getRawY();
+        mXPoints.add(x);
+        mYPoints.add(y);
+    }
+
+    /**
+     * Clear the tracking queue when user begins the gesture.
+     */
+    public void onDown() {
+        mXPoints.clear();
+        mYPoints.clear();
+    }
+
+    /**
+     * Clear the tracking queue when user ends the gesture.
+     */
+    public void onUp() {
+        mXPoints.clear();
+        mYPoints.clear();
     }
 
     /**
