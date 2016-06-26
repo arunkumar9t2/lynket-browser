@@ -11,13 +11,15 @@ import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.OvershootInterpolator;
+import android.widget.Toast;
 
+import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringConfig;
 import com.facebook.rebound.SpringListener;
 import com.facebook.rebound.SpringSystem;
 
+import arun.com.chromer.BuildConfig;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.util.Util;
 import arun.com.chromer.webheads.physics.MovementTracker;
@@ -28,6 +30,8 @@ import arun.com.chromer.webheads.physics.MovementTracker;
 @SuppressLint("ViewConstructor")
 public class WebHead extends BaseWebHead implements SpringListener {
 
+    private static final float TOUCH_DOWN_SCALE = 0.9f;
+    private static final float TOUCH_UP_SCALE = 1f;
     /**
      * Coordinate of remove web head that we can lock on to.
      */
@@ -40,7 +44,6 @@ public class WebHead extends BaseWebHead implements SpringListener {
      * Gesture detector to recognize fling and click on web heads
      */
     private final GestureDetector mGestureDetector = new GestureDetector(getContext(), new GestureDetectorListener());
-
     private final SpringConfig FLING_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(40, 7);
     private final SpringConfig DRAG_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(0, 1.5);
     private final SpringConfig SNAP_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(100, 7);
@@ -50,13 +53,16 @@ public class WebHead extends BaseWebHead implements SpringListener {
      */
     private final int MINIMUM_HORIZONTAL_FLING_VELOCITY;
     /**
-     * Flag to know if web head is being dragged
+     * True when being dragged, otherwise false
      */
     private boolean mDragging;
     /**
-     * Whether we are currently locked on to remove web head.
+     * True when attached to remove view, otherwise false
      */
     private boolean mWasRemoveLocked;
+    /**
+     * True when click was detected, and false on new touch event
+     */
     private boolean mWasClicked;
     //-------------------------------------------------------------------------------------------
     private float posX, posY;
@@ -66,18 +72,31 @@ public class WebHead extends BaseWebHead implements SpringListener {
      */
     private WebHeadInteractionListener mInteractionListener;
     /**
-     * Flag to know there was a fling operation before.
+     * True when fling detected and false on new touch event
      */
     private boolean mWasFlung;
     private SpringSystem mSpringSystem;
-    private Spring mXSpring, mYSpring;
-    private MovementTracker mMovementTracker;
     //-------------------------------------------------------------------------------------------
+    private Spring mXSpring, mYSpring, mScaleSpring;
+    private MovementTracker mMovementTracker;
+    /**
+     * True when touched down and false otherwise
+     */
+    private boolean mScaledDown;
 
+    /**
+     * Inits the web head and attaches to the system window. It is assumed that draw over other apps permission is
+     * granted for 6.0+.
+     *
+     * @param context  Service
+     * @param url      Url the web head will carry
+     * @param listener for listening to events on the webhead
+     */
     public WebHead(@NonNull Context context, @NonNull String url, @Nullable WebHeadInteractionListener listener) {
         super(context, url);
         mInteractionListener = listener;
-        setUpSprings();
+
+        setupSprings();
 
         int scaledScreenWidthDp = (int) (getResources().getConfiguration().screenWidthDp * 5.5);
         MINIMUM_HORIZONTAL_FLING_VELOCITY = Util.dpToPx(scaledScreenWidthDp);
@@ -92,25 +111,27 @@ public class WebHead extends BaseWebHead implements SpringListener {
         });
     }
 
-    private void setUpSprings() {
+    private void setupSprings() {
         mSpringSystem = SpringSystem.create();
-        mContentGroup.setVisibility(INVISIBLE); // To be made visible on reveal
         mYSpring = mSpringSystem.createSpring();
         mYSpring.addListener(this);
         mXSpring = mSpringSystem.createSpring();
         mXSpring.addListener(this);
+        mScaleSpring = mSpringSystem.createSpring();
+        mScaleSpring.addListener(new SimpleSpringListener() {
+            @Override
+            public void onSpringUpdate(Spring spring) {
+                float howMuch = (float) spring.getCurrentValue();
+                mContentGroup.setScaleX(howMuch);
+                mContentGroup.setScaleY(howMuch);
+            }
+        });
+        mScaleSpring.setCurrentValue(0.0f, true);
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        mContentGroup.setVisibility(VISIBLE);
-        mContentGroup.animate()
-                .scaleX(1.0f)
-                .scaleY(1.0f)
-                .withLayer()
-                .setInterpolator(new OvershootInterpolator())
-                .start();
     }
 
     @Override
@@ -122,7 +143,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
             mWasFlung = false;
             mWasClicked = false;
 
-            // Let gesture detector intercept events
+            // Let gesture detector intercept events, needed for fling and click
             mGestureDetector.onTouchEvent(event);
 
             if (mWasClicked) return true;
@@ -143,6 +164,10 @@ public class WebHead extends BaseWebHead implements SpringListener {
                     break;
             }
         } catch (NullPointerException e) {
+            String msg = "NPE on web heads " + e.getMessage();
+            if (BuildConfig.DEBUG) {
+                Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+            }
             destroySelf(true);
         }
         return true;
@@ -160,6 +185,12 @@ public class WebHead extends BaseWebHead implements SpringListener {
         touchDown();
     }
 
+    /**
+     * Responsible for moving the web heads around and for locking/unlocking the web head to
+     * remove view.
+     *
+     * @param event the touch event
+     */
     private void handleMove(@NonNull MotionEvent event) {
         mMovementTracker.addMovement(event);
 
@@ -216,12 +247,19 @@ public class WebHead extends BaseWebHead implements SpringListener {
             // stickToWall();
         }
 
+        touchUp();
+
         // hide remove view
         RemoveWebHead.disappear();
-        touchUp();
         return false;
     }
 
+    /**
+     * Returns the coordinate where the web head should lock to the remove web heads.
+     * Calculated once and reused there after.
+     *
+     * @return array of x and y.
+     */
     private int[] trashLockCoOrd() {
         if (sTrashLockCoordinate == null) {
             int[] removeCentre = getRemoveWebHead().getCenterCoordinates();
@@ -233,6 +271,13 @@ public class WebHead extends BaseWebHead implements SpringListener {
         return sTrashLockCoordinate;
     }
 
+    /**
+     * Used to determine if the web head is in vicinity of remove web head view.
+     *
+     * @param x Current x position of web head
+     * @param y Current y position of web head
+     * @return true if near, false other wise
+     */
     private boolean isNearRemoveCircle(int x, int y) {
         int[] p = getRemoveWebHead().getCenterCoordinates();
         int rX = p[0];
@@ -256,25 +301,22 @@ public class WebHead extends BaseWebHead implements SpringListener {
     }
 
     public void reveal() {
-
+        mScaleSpring.setEndValue(TOUCH_UP_SCALE);
+        mScaledDown = false;
     }
 
     private void touchDown() {
-     /*   mContentGroup.animate()
-                .scaleX(0.8f)
-                .scaleY(0.8f)
-                .withLayer()
-                .setInterpolator(new OvershootInterpolator())
-                .start();*/
+        if (!mScaledDown) {
+            mScaleSpring.setEndValue(TOUCH_DOWN_SCALE);
+            mScaledDown = true;
+        }
     }
 
     private void touchUp() {
-      /*  mContentGroup.animate()
-                .scaleX(1f)
-                .scaleY(1f)
-                .withLayer()
-                .setInterpolator(new OvershootInterpolator())
-                .start();*/
+        if (mScaledDown) {
+            mScaleSpring.setEndValue(TOUCH_UP_SCALE);
+            mScaledDown = false;
+        }
     }
 
     @Override

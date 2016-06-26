@@ -245,7 +245,7 @@ public abstract class BaseWebHead extends FrameLayout {
                 }
             });
         }
-        return animator;
+        return null;
     }
 
     @ColorInt
