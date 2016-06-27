@@ -1,5 +1,7 @@
 package arun.com.chromer.webheads.ui;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -34,10 +36,17 @@ import timber.log.Timber;
 
 /**
  * ViewGroup that holds the web head UI elements. Allows configuring various parameters in relation
- * to UI like favicon, indicator and is responsible for inflating all the content.
+ * to UI like favicon, text indicator and is responsible for inflating all the content.
  */
 public abstract class BaseWebHead extends FrameLayout {
+    /**
+     * Distance in pixels to be displaced when web heads are getting stacked
+     */
     private static final int STACKING_GAP_PX = Util.dpToPx(6);
+    /**
+     * Helper instance to know screen boundaries that web head is allowed to travel
+     */
+    static ScreenBounds sScreenBounds;
     /**
      * Counter to keep count of active web heads
      */
@@ -70,8 +79,7 @@ public abstract class BaseWebHead extends FrameLayout {
     protected ElevatedCircleView mCircleBackground;
     @BindView(R.id.revealView)
     protected ElevatedCircleView mRevealView;
-    int sDispWidth;
-    int sDispHeight;
+    int sDispWidth, sDispHeight;
     /**
      * Flag to know if the user moved manually or if the web heads is still resting
      */
@@ -84,7 +92,7 @@ public abstract class BaseWebHead extends FrameLayout {
      * Color of the web head
      */
     @ColorInt
-    int mWebHeadColor;
+    private int mWebHeadColor;
     /**
      * The un shortened url resolved from @link mUrl
      */
@@ -98,6 +106,7 @@ public abstract class BaseWebHead extends FrameLayout {
      */
     private boolean mIsFromNewTab;
 
+    @SuppressLint("RtlHardcoded")
     BaseWebHead(@NonNull Context context, @NonNull String url) {
         super(context);
         mUrl = url;
@@ -116,6 +125,7 @@ public abstract class BaseWebHead extends FrameLayout {
                         | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
                         | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
                 PixelFormat.TRANSLUCENT);
+        mWindowParams.gravity = Gravity.TOP | Gravity.LEFT;
 
         initDisplayMetrics();
         setSpawnLocation();
@@ -141,11 +151,13 @@ public abstract class BaseWebHead extends FrameLayout {
             @SuppressLint("RtlHardcoded")
             @Override
             public void onGlobalLayout() {
-                mWindowParams.gravity = Gravity.TOP | Gravity.LEFT;
+                if (sScreenBounds == null)
+                    sScreenBounds = new ScreenBounds(sDispWidth, sDispHeight, getWidth());
+
                 if (Preferences.webHeadsSpawnLocation(getContext()) == 1) {
-                    mWindowParams.x = (int) (sDispWidth - getWidth() * 0.8);
+                    mWindowParams.x = sScreenBounds.right;
                 } else {
-                    mWindowParams.x = (int) (0 - getWidth() * 0.2);
+                    mWindowParams.x = sScreenBounds.left;
                 }
                 mWindowParams.y = sDispHeight / 3;
                 updateView();
@@ -166,7 +178,7 @@ public abstract class BaseWebHead extends FrameLayout {
     /**
      * Used to get an instance of remove web head
      *
-     * @return RemoveWebHead instance
+     * @return an instance of {@link RemoveWebHead}
      */
     RemoveWebHead getRemoveWebHead() {
         return RemoveWebHead.get(getContext());
@@ -182,7 +194,7 @@ public abstract class BaseWebHead extends FrameLayout {
     /**
      * @return true if current web head is the last active one
      */
-    protected boolean isLastWebHead() {
+    boolean isLastWebHead() {
         return WEB_HEAD_COUNT == 0;
     }
 
@@ -190,7 +202,33 @@ public abstract class BaseWebHead extends FrameLayout {
      * Removes url indicator with an animation
      */
     private void clearUrlIndicator() {
-        mIndicator.animate().alpha(0.0f).withLayer().start();
+        mIndicator.animate()
+                .alpha(0.0f)
+                .withLayer()
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mIndicator.setVisibility(GONE);
+                    }
+                })
+                .start();
+    }
+
+    public void setFaviconDrawable(@NonNull Drawable drawable) {
+        try {
+            clearUrlIndicator();
+            TransitionDrawable transitionDrawable = new TransitionDrawable(
+                    new Drawable[]{
+                            new ColorDrawable(Color.TRANSPARENT),
+                            drawable
+                    });
+            mFavicon.setVisibility(VISIBLE);
+            mFavicon.setImageDrawable(transitionDrawable);
+            transitionDrawable.setCrossFadeEnabled(true);
+            transitionDrawable.startTransition(500);
+        } catch (Exception ignore) {
+            Timber.d(ignore.getMessage());
+        }
     }
 
     @Nullable
@@ -265,23 +303,6 @@ public abstract class BaseWebHead extends FrameLayout {
         mIsFromNewTab = fromNewTab;
     }
 
-    public void setFaviconDrawable(@NonNull Drawable drawable) {
-        try {
-            clearUrlIndicator();
-            TransitionDrawable transitionDrawable = new TransitionDrawable(
-                    new Drawable[]{
-                            new ColorDrawable(Color.TRANSPARENT),
-                            drawable
-                    });
-            mFavicon.setVisibility(VISIBLE);
-            mFavicon.setImageDrawable(transitionDrawable);
-            transitionDrawable.setCrossFadeEnabled(true);
-            transitionDrawable.startTransition(500);
-        } catch (Exception ignore) {
-            Timber.d(ignore.getMessage());
-        }
-    }
-
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
@@ -298,5 +319,28 @@ public abstract class BaseWebHead extends FrameLayout {
             sWindowManager.removeView(this);
     }
 
+    /**
+     * Helper class to hold screen boundaries
+     */
+    class ScreenBounds {
+        /**
+         * Amount of web head that will be displaced off of the screen horizontally
+         */
+        private static final double DISPLACE_PERC = 0.7;
 
+        public int left;
+        public int right;
+        public int top;
+        public int bottom;
+
+        public ScreenBounds(int dispWidth, int dispHeight, int webHeadWidth) {
+            if (webHeadWidth == 0 || dispWidth == 0 || dispHeight == 0) {
+                throw new IllegalArgumentException("Width of web head or screen size cannot be 0");
+            }
+            right = (int) (dispWidth - (webHeadWidth * DISPLACE_PERC));
+            left = (int) (webHeadWidth * (1 - DISPLACE_PERC)) * -1;
+            top = Util.dpToPx(25);
+            bottom = (int) (dispHeight * 0.85);
+        }
+    }
 }

@@ -40,9 +40,15 @@ public class WebHead extends BaseWebHead implements SpringListener {
      * Gesture detector to recognize fling and click on web heads
      */
     private final GestureDetector mGestureDetector = new GestureDetector(getContext(), new GestureDetectorListener());
+
     private final SpringConfig FLING_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(40, 7);
     private final SpringConfig DRAG_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(0, 1.5);
     private final SpringConfig SNAP_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(100, 7);
+    /**
+     * Minimum horizontal velocity that we need to move the web head from one end of the screen
+     * to another
+     */
+    private final int MINIMUM_HORIZONTAL_FLING_VELOCITY;
     /**
      * Flag to know if web head is being dragged
      */
@@ -52,7 +58,6 @@ public class WebHead extends BaseWebHead implements SpringListener {
      */
     private boolean mWasRemoveLocked;
     private boolean mWasClicked;
-
     //-------------------------------------------------------------------------------------------
     private float posX, posY;
     private int initialDownX, initialDownY;
@@ -60,11 +65,6 @@ public class WebHead extends BaseWebHead implements SpringListener {
      * The interaction listener that clients can provide to listen for events on webhead
      */
     private WebHeadInteractionListener mInteractionListener;
-    /**
-     * Minimum horizontal velocity that we need to move the web head from one end of the screen
-     * to another
-     */
-    private int MINIMUM_HORIZONTAL_FLING_VELOCITY;
     /**
      * Flag to know there was a fling operation before.
      */
@@ -306,26 +306,21 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
         int width = getWidth();
 
-        int rightBound = (int) (sDispWidth - width * 0.8);
-        int leftBound = (int) (0 - width * 0.2);
-        int topBound = Util.dpToPx(25);
-        int bottomBound = (int) (sDispHeight * 0.85);
-
         if (x + width >= sDispWidth) {
             mXSpring.setSpringConfig(FLING_CONFIG);
-            mXSpring.setEndValue(rightBound);
+            mXSpring.setEndValue(sScreenBounds.right);
         }
         if (x - width <= 0) {
             mXSpring.setSpringConfig(FLING_CONFIG);
-            mXSpring.setEndValue(leftBound);
+            mXSpring.setEndValue(sScreenBounds.left);
         }
         if (y + width >= sDispHeight) {
             mYSpring.setSpringConfig(FLING_CONFIG);
-            mYSpring.setEndValue(bottomBound);
+            mYSpring.setEndValue(sScreenBounds.bottom);
         }
         if (y - width <= 0) {
             mYSpring.setSpringConfig(FLING_CONFIG);
-            mYSpring.setEndValue(topBound);
+            mYSpring.setEndValue(sScreenBounds.top);
         }
 
         int minimumVelocityToReachSides = Util.dpToPx(100);
@@ -368,9 +363,6 @@ public class WebHead extends BaseWebHead implements SpringListener {
             mWasClicked = true;
 
             if (Preferences.webHeadsCloseOnOpen(getContext()) && mContentGroup != null) {
-                if (mFavicon != null) {
-                    mFavicon.setAlpha(0.0f);
-                }
                 mContentGroup.animate()
                         .scaleX(0.0f)
                         .scaleY(0.0f)
