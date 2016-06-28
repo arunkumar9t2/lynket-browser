@@ -29,7 +29,7 @@ import arun.com.chromer.customtabs.callbacks.OpenInNewTabReceiver;
 import arun.com.chromer.customtabs.callbacks.SecondaryBrowserReceiver;
 import arun.com.chromer.customtabs.callbacks.ShareBroadcastReceiver;
 import arun.com.chromer.customtabs.prefetch.ScannerService;
-import arun.com.chromer.customtabs.warmup.WarmupService;
+import arun.com.chromer.customtabs.warmup.WarmUpService;
 import arun.com.chromer.db.AppColor;
 import arun.com.chromer.db.WebColor;
 import arun.com.chromer.dynamictoolbar.AppColorExtractorService;
@@ -292,7 +292,7 @@ public class CustomTabDelegate {
             return WebHeadService.getInstance().getTabSession();
         } else {
             if (Preferences.warmUp(ctx)) {
-                ctx.startService(new Intent(ctx, WarmupService.class));
+                ctx.startService(new Intent(ctx, WarmUpService.class));
             }
         }
 
@@ -301,7 +301,7 @@ public class CustomTabDelegate {
             Timber.d("Using scanner session");
             return sService.getTabSession();
         }
-        WarmupService service = WarmupService.getInstance();
+        WarmUpService service = WarmUpService.getInstance();
         if (service != null) {
             Timber.d("Using warmup session");
             return service.getTabSession();

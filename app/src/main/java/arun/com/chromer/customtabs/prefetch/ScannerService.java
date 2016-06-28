@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
 
 import arun.com.chromer.R;
 import arun.com.chromer.customtabs.CustomTabBindingHelper;
-import arun.com.chromer.customtabs.warmup.WarmupService;
+import arun.com.chromer.customtabs.warmup.WarmUpService;
 import arun.com.chromer.preferences.manager.Preferences;
 import timber.log.Timber;
 
@@ -291,7 +291,7 @@ public class ScannerService extends AccessibilityService implements CustomTabBin
 
     private void stopWarmUpService() {
         try {
-            stopService(new Intent(this, WarmupService.class));
+            stopService(new Intent(this, WarmUpService.class));
         } catch (Exception e) {
             e.printStackTrace();
         }

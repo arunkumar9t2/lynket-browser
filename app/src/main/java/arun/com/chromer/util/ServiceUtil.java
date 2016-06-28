@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 
 import arun.com.chromer.customtabs.prefetch.ScannerService;
-import arun.com.chromer.customtabs.warmup.WarmupService;
+import arun.com.chromer.customtabs.warmup.WarmUpService;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.shared.AppDetectService;
 import arun.com.chromer.shared.Constants;
@@ -23,9 +23,9 @@ public class ServiceUtil {
 
     public static void takeCareOfServices(@NonNull Context context) {
         if (Preferences.warmUp(context))
-            context.startService(new Intent(context, WarmupService.class));
+            context.startService(new Intent(context, WarmUpService.class));
         else
-            context.stopService(new Intent(context, WarmupService.class));
+            context.stopService(new Intent(context, WarmUpService.class));
 
         if (isAppBasedToolbarColor(context) || Preferences.blacklist(context)) {
             Intent appDetectService = new Intent(context, AppDetectService.class);
@@ -49,8 +49,8 @@ public class ServiceUtil {
     }
 
     public static void refreshCustomTabBindings(@NonNull Context context) {
-        if (WarmupService.getInstance() != null) {
-            Intent warmUpService = new Intent(context, WarmupService.class);
+        if (WarmUpService.getInstance() != null) {
+            Intent warmUpService = new Intent(context, WarmUpService.class);
             warmUpService.putExtra(Constants.EXTRA_KEY_SHOULD_REFRESH_BINDING, true);
             context.startService(warmUpService);
         }

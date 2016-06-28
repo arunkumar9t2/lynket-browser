@@ -24,7 +24,7 @@
         <service android:name=".dynamictoolbar.WebColorExtractorService"/>
         <service android:name=".customtabs.callbacks.ClipboardService"/>
         <service android:name=".customtabs.callbacks.AddHomeShortcutService"/>
-        <service android:name=".customtabs.warmup.WarmupService"/>
+        <service android:name=".customtabs.warmup.WarmUpService"/>
         <service
             android:name=".customtabs.prefetch.ScannerService"
             android:exported="true"

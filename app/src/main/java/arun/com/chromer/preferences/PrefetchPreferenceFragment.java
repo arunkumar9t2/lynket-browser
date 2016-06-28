@@ -15,7 +15,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
-import arun.com.chromer.customtabs.warmup.WarmupService;
+import arun.com.chromer.customtabs.warmup.WarmUpService;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.preferences.widgets.IconSwitchPreference;
 import arun.com.chromer.util.ServiceUtil;
@@ -106,9 +106,9 @@ public class PrefetchPreferenceFragment extends DividerLessPreferenceFragment im
         // Start stop warm up service
         if (key.equalsIgnoreCase(Preferences.WARM_UP)) {
             if (Preferences.warmUp(getActivity())) {
-                getActivity().startService(new Intent(getActivity(), WarmupService.class));
+                getActivity().startService(new Intent(getActivity(), WarmUpService.class));
             } else {
-                getActivity().stopService(new Intent(getActivity(), WarmupService.class));
+                getActivity().stopService(new Intent(getActivity(), WarmUpService.class));
             }
         }
     }
