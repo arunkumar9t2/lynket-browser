@@ -4,11 +4,10 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.RippleDrawable;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -31,6 +30,7 @@ import arun.com.chromer.util.Util;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import timber.log.Timber;
 
 public class AppPreferenceCardView extends CardView {
     private static final int CUSTOM_TAB_PROVIDER = 0;
@@ -130,25 +130,22 @@ public class AppPreferenceCardView extends CardView {
         mAppNameTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.material_dark_color));
         mCategoryTextView.setText(mCategoryText);
         mAppNameTextView.setText(mAppName);
-        // mAppNameTextView.setTypeface(FontCache.get(FontCache.ROBOTO_MONO, getContext()));
         applyIcon();
     }
 
     private void applyIcon() {
         if (Util.isPackageInstalled(getContext(), mAppPackage)) {
-            final Context context = getContext().getApplicationContext();
+            final PackageManager pm = getContext().getApplicationContext().getPackageManager();
             new AsyncTask<Void, Void, Drawable>() {
 
                 @Override
                 protected Drawable doInBackground(Void... params) {
                     Drawable appIcon = null;
-                    if (context != null) {
-                        try {
-                            appIcon = context.getPackageManager().getApplicationIcon(mAppPackage);
-                        } catch (PackageManager.NameNotFoundException e) {
-                            e.printStackTrace();
-                            return null;
-                        }
+                    try {
+                        ApplicationInfo ai = pm.getApplicationInfo(mAppPackage, 0);
+                        appIcon = ai.loadIcon(pm);
+                    } catch (PackageManager.NameNotFoundException e) {
+                        Timber.e("Failed to load icon for %s", mAppName);
                     }
                     return appIcon;
 
@@ -164,16 +161,10 @@ public class AppPreferenceCardView extends CardView {
                                     @Override
                                     public void onGenerated(Palette palette) {
                                         int bestColor = ColorUtil.getBestColorFromPalette(palette);
-                                        if (Util.isLollipopAbove()) {
-                                            Drawable rippleDrawable = new RippleDrawable(
-                                                    ColorStateList.valueOf(bestColor),
-                                                    null,
-                                                    null
-                                            );
-                                            // Bug in SDK requires redundant cast
-                                            //noinspection RedundantCast
-                                            ((FrameLayout) AppPreferenceCardView.this).setForeground(rippleDrawable);
-                                        }
+                                        Drawable foreground = ColorUtil.getRippleDrawableCompat(bestColor);
+                                        // Bug in SDK requires redundant cast
+                                        //noinspection RedundantCast
+                                        ((FrameLayout) AppPreferenceCardView.this).setForeground(foreground);
                                     }
                                 });
                     }

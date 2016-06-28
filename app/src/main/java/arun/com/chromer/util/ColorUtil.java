@@ -1,6 +1,11 @@
 package arun.com.chromer.util;
 
+import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.RippleDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -128,5 +133,20 @@ public class ColorUtil {
                 return palette.getDarkMutedColor(Constants.NO_COLOR);
             }
         }
+    }
+
+    @NonNull
+    public static Drawable getRippleDrawableCompat(final @ColorInt int color) {
+        if (Util.isLollipopAbove()) {
+            return new RippleDrawable(ColorStateList.valueOf(color),
+                    null,
+                    null
+            );
+        }
+        int translucentColor = ColorUtils.setAlphaComponent(color, 0x44);
+        StateListDrawable stateListDrawable = new StateListDrawable();
+        int[] states = new int[]{android.R.attr.state_pressed};
+        stateListDrawable.addState(states, new ColorDrawable(translucentColor));
+        return stateListDrawable;
     }
 }
