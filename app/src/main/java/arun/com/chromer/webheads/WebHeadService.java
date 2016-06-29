@@ -186,6 +186,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         WebHead webHead = mWebHeads.get(originalUrl);
 
         if (webHead != null) {
+            webHead.setUnShortenedUrl(unShortenedUrl);
             if (mCustomTabConnected)
                 mCustomTabBindingHelper.mayLaunchUrl(Uri.parse(unShortenedUrl), null, getPossibleUrls());
             else
@@ -209,7 +210,6 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
                                 if (resource == null) {
                                     return;
                                 }
-
                                 // dispatch color extraction task
                                 new ColorExtractionTask(webHead, resource).execute();
 
@@ -390,6 +390,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     @Override
     public void onWebHeadClick(@NonNull WebHead webHead) {
         if (webHead.getUnShortenedUrl() != null && webHead.getUnShortenedUrl().length() != 0) {
+
             Intent customTabActivity = new Intent(this, CustomTabActivity.class);
             customTabActivity.setData(Uri.parse(webHead.getUnShortenedUrl()));
             customTabActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -401,6 +402,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
             customTabActivity.putExtra(Constants.EXTRA_KEY_WEBHEAD_TITLE, webHead.getTitle());
             customTabActivity.putExtra(Constants.EXTRA_KEY_WEBHEAD_ICON, webHead.getFaviconBitmap());
             customTabActivity.putExtra(Constants.EXTRA_KEY_WEBHEAD_COLOR, webHead.getWebHeadColor());
+
             startActivity(customTabActivity);
 
             // Store the last opened url
