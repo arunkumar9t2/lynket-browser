@@ -400,6 +400,11 @@ public class WebHead extends BaseWebHead implements SpringListener {
         public boolean onSingleTapConfirmed(MotionEvent e) {
             mWasClicked = true;
             if (Preferences.webHeadsCloseOnOpen(getContext()) && mContentGroup != null) {
+                if (mWindowParams.x < sDispWidth / 2) {
+                    mContentGroup.setPivotX(0);
+                } else {
+                    mContentGroup.setPivotX(mContentGroup.getWidth());
+                }
                 mContentGroup.animate()
                         .scaleX(0.0f)
                         .scaleY(0.0f)
