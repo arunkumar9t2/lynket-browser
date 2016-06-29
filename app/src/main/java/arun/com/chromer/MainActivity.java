@@ -9,7 +9,6 @@ import android.speech.RecognizerIntent;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -49,14 +48,15 @@ import arun.com.chromer.activities.about.changelog.ChangelogUtil;
 import arun.com.chromer.activities.intro.ChromerIntro;
 import arun.com.chromer.activities.payments.DonateActivity;
 import arun.com.chromer.customtabs.CustomTabBindingHelper;
-import arun.com.chromer.customtabs.CustomTabDelegate;
 import arun.com.chromer.customtabs.CustomTabHelper;
+import arun.com.chromer.customtabs.CustomTabs;
 import arun.com.chromer.fragments.CustomizeFragment;
 import arun.com.chromer.fragments.OptionsFragment;
 import arun.com.chromer.fragments.WebHeadsFragment;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.preferences.widgets.AppPreferenceCardView;
 import arun.com.chromer.shared.Constants;
+import arun.com.chromer.util.Benchmark;
 import arun.com.chromer.util.ServiceUtil;
 import arun.com.chromer.util.Util;
 import arun.com.chromer.views.IntentPickerSheetView;
@@ -345,10 +345,13 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 webHeadService.setData(Uri.parse(url));
                 startService(webHeadService);
             } else {
-                // Benchmark.start("Custom tab launching");
-                final CustomTabsIntent customTabsIntent = CustomTabDelegate.getCustomizedTabIntent(getApplicationContext(), url, false, Constants.NO_COLOR);
-                CustomTabBindingHelper.openCustomTab(this, customTabsIntent, Uri.parse(url));
-                // Benchmark.end();
+                Benchmark.start("Custom tab launching");
+                CustomTabs.from(this)
+                        .withSession(mCustomTabBindingHelper.getSession())
+                        .prepare()
+                        .forUrl(url)
+                        .launch();
+                Benchmark.end();
             }
         }
     }

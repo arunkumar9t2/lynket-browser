@@ -4,12 +4,10 @@ import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
@@ -19,9 +17,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import arun.com.chromer.R;
-import arun.com.chromer.customtabs.CustomTabBindingHelper;
-import arun.com.chromer.customtabs.CustomTabDelegate;
+import arun.com.chromer.customtabs.CustomTabs;
 import arun.com.chromer.shared.Constants;
+import arun.com.chromer.util.Benchmark;
 import arun.com.chromer.util.Util;
 import de.jetwick.snacktory.HtmlFetcher;
 import de.jetwick.snacktory.JResult;
@@ -46,12 +44,16 @@ public class CustomTabActivity extends AppCompatActivity {
         final boolean isWebhead = getIntent().getBooleanExtra(Constants.EXTRA_KEY_FROM_WEBHEAD, false);
         final int color = getIntent().getIntExtra(Constants.EXTRA_KEY_WEBHEAD_COLOR, Constants.NO_COLOR);
 
-        final CustomTabsIntent tabIntent = CustomTabDelegate.getCustomizedTabIntent(getApplicationContext(), url, isWebhead, color);
-
-        CustomTabBindingHelper.openCustomTab(this, tabIntent, Uri.parse(url));
+        Benchmark.start("Custom tab launching in CTA");
+        CustomTabs.from(this)
+                .forUrl(url)
+                .forWebHead(isWebhead)
+                .overrideToolbarColor(color)
+                .prepare()
+                .launch();
+        Benchmark.end();
 
         setDescription();
-        // finish();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

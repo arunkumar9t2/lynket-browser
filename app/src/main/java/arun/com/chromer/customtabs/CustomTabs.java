@@ -125,8 +125,9 @@ public class CustomTabs {
      *
      * @param overrideColor color to override
      */
-    public void overrideToolbarColor(@ColorInt int overrideColor) {
+    public CustomTabs overrideToolbarColor(@ColorInt int overrideColor) {
         mToolbarColorOverride = ColorUtils.setAlphaComponent(overrideColor, 0xFF);
+        return this;
     }
 
     /**
@@ -176,6 +177,10 @@ public class CustomTabs {
         if (mCustomTabsSession != null) {
             return mCustomTabsSession;
         }
+        if (mForWebHead && WebHeadService.getInstance() != null) {
+            Timber.d("Using webhead session");
+            return WebHeadService.getInstance().getTabSession();
+        }
 
         ScannerService sService = ScannerService.getInstance();
         if (sService != null && sService.getTabSession() != null && Preferences.preFetch(mActivity)) {
@@ -186,10 +191,6 @@ public class CustomTabs {
         if (service != null) {
             Timber.d("Using warm up session");
             return service.getTabSession();
-        }
-        if (mForWebHead && WebHeadService.getInstance() != null) {
-            Timber.d("Using webhead session");
-            return WebHeadService.getInstance().getTabSession();
         }
         return null;
     }
