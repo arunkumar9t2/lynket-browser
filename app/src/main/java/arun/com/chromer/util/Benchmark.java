@@ -2,6 +2,7 @@ package arun.com.chromer.util;
 
 import android.support.annotation.Nullable;
 
+import arun.com.chromer.BuildConfig;
 import timber.log.Timber;
 
 /**
@@ -23,6 +24,8 @@ public class Benchmark {
     public static void end() {
         long endNs = System.nanoTime();
         long duration = (endNs - startNs);
-        Timber.i("%s took : %d ms", process, duration / 1000000);
+        if (BuildConfig.DEBUG) {
+            Timber.i("%s took : %d ms", process, duration / 1000000);
+        }
     }
 }
