@@ -16,15 +16,14 @@ import timber.log.Timber;
 /**
  * Created by Arun on 06/01/2016.
  */
-public class WarmupService extends Service implements CustomTabBindingHelper.ConnectionCallback {
+public class WarmUpService extends Service implements CustomTabBindingHelper.ConnectionCallback {
 
-    private static WarmupService sWarmupService = null;
-
-    public static WarmupService getInstance() {
-        return sWarmupService;
-    }
-
+    private static WarmUpService sWarmUpService = null;
     private CustomTabBindingHelper mCustomTabBindingHelper;
+
+    public static WarmUpService getInstance() {
+        return sWarmUpService;
+    }
 
     @Nullable
     @Override
@@ -35,7 +34,7 @@ public class WarmupService extends Service implements CustomTabBindingHelper.Con
     @Override
     public void onCreate() {
         super.onCreate();
-        sWarmupService = this;
+        sWarmUpService = this;
     }
 
     @Override
@@ -59,14 +58,14 @@ public class WarmupService extends Service implements CustomTabBindingHelper.Con
         if (mCustomTabBindingHelper != null)
             mCustomTabBindingHelper.unbindCustomTabsService(this);
         mCustomTabBindingHelper = null;
-        sWarmupService = null;
+        sWarmUpService = null;
         Timber.d("Died");
         super.onDestroy();
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
-        sWarmupService = null;
+        sWarmUpService = null;
         if (mCustomTabBindingHelper != null)
             mCustomTabBindingHelper.unbindCustomTabsService(this);
 
