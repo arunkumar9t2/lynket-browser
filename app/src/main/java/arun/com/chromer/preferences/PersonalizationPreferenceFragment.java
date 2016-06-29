@@ -92,6 +92,7 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
         registerReceiver(mColorSelectionReceiver, mToolBarColorFilter);
         getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         updatePreferenceStates(Preferences.TOOLBAR_COLOR_PREF);
+        updatePreferenceStates(Preferences.ANIMATION_TYPE);
         updatePreferenceSummary(PREFERENCE_GROUP);
     }
 
@@ -150,6 +151,9 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
                     Preferences.TOOLBAR_COLOR,
                     Preferences.DYNAMIC_COLOR
             );
+        } else if (key.equalsIgnoreCase(Preferences.ANIMATION_TYPE)) {
+            final boolean animationEnabled = Preferences.isAnimationEnabled(getActivity());
+            enableDisablePreference(animationEnabled, Preferences.ANIMATION_SPEED);
         }
 
         updateDynamicSummary();
