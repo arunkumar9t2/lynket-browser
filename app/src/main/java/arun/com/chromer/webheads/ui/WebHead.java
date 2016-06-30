@@ -22,6 +22,7 @@ import arun.com.chromer.BuildConfig;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.util.Util;
 import arun.com.chromer.webheads.physics.MovementTracker;
+import timber.log.Timber;
 
 /**
  * Web head object which adds draggable and gesture functionality.
@@ -36,6 +37,11 @@ public class WebHead extends BaseWebHead implements SpringListener {
      */
     private static int[] sTrashLockCoordinate;
     /**
+     * Minimum horizontal velocity that we need to move the web head from one end of the screen
+     * to another
+     */
+    private static int MINIMUM_HORIZONTAL_FLING_VELOCITY = 0;
+    /**
      * Touch slop of the device
      */
     private final int mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
@@ -43,14 +49,9 @@ public class WebHead extends BaseWebHead implements SpringListener {
      * Gesture detector to recognize fling and click on web heads
      */
     private final GestureDetector mGestureDetector = new GestureDetector(getContext(), new GestureDetectorListener());
-    private final SpringConfig FLING_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(50, 7);
+    private final SpringConfig FLING_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(50, 5);
     private final SpringConfig DRAG_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(0, 1.8);
     private final SpringConfig SNAP_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(100, 7);
-    /**
-     * Minimum horizontal velocity that we need to move the web head from one end of the screen
-     * to another
-     */
-    private final int MINIMUM_HORIZONTAL_FLING_VELOCITY;
     /**
      * True when being dragged, otherwise false
      */
@@ -96,10 +97,16 @@ public class WebHead extends BaseWebHead implements SpringListener {
         mInteractionListener = listener;
         mMovementTracker = MovementTracker.obtain();
 
-        int scaledScreenWidthDp = (int) (getResources().getConfiguration().screenWidthDp * 5.5);
-        MINIMUM_HORIZONTAL_FLING_VELOCITY = Util.dpToPx(scaledScreenWidthDp);
+        calcVelocities();
 
         setupSprings();
+    }
+
+    private void calcVelocities() {
+        if (MINIMUM_HORIZONTAL_FLING_VELOCITY == 0) {
+            int scaledScreenWidthDp = (getResources().getConfiguration().screenWidthDp * 7);
+            MINIMUM_HORIZONTAL_FLING_VELOCITY = Util.dpToPx(scaledScreenWidthDp);
+        }
     }
 
     private void setupSprings() {
@@ -170,6 +177,8 @@ public class WebHead extends BaseWebHead implements SpringListener {
     }
 
     private void handleTouchDown(@NonNull MotionEvent event) {
+        mDragging = false;
+
         mMovementTracker.onDown();
 
         initialDownX = mWindowParams.x;
@@ -238,13 +247,10 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
         mMovementTracker.onUp();
 
-        // If we were not flung, go to nearest side and rest there
         if (!mWasFlung) {
-            // stickToWall();
+            stickToWall();
         }
-
         touchUp();
-
         // hide remove view
         RemoveWebHead.disappear();
         return false;
@@ -339,6 +345,11 @@ public class WebHead extends BaseWebHead implements SpringListener {
     }
 
     private void checkBounds() {
+        // Only check when free
+        if (mDragging) {
+            return;
+        }
+
         int x = mWindowParams.x;
         int y = mWindowParams.y;
 
@@ -362,16 +373,39 @@ public class WebHead extends BaseWebHead implements SpringListener {
         }
 
         int minimumVelocityToReachSides = Util.dpToPx(100);
+        //noinspection StatementWithEmptyBody
         if (!mWasRemoveLocked
                 && Math.abs(mXSpring.getVelocity()) < minimumVelocityToReachSides
                 && Math.abs(mYSpring.getVelocity()) < minimumVelocityToReachSides
                 && !mDragging) {
-            stickToWall();
+            // Commenting temporarily TODO investigate if causing any issue
+            // stickToWall();
         }
     }
 
+    /**
+     * Makes the web head stick to either side of the wall.
+     */
     private void stickToWall() {
+        if (mWindowParams.x > sDispWidth / 2) {
+            mXSpring.setSpringConfig(FLING_CONFIG);
+            mXSpring.setEndValue(sScreenBounds.right);
+            Timber.e("Restored X");
+        } else {
+            mXSpring.setSpringConfig(FLING_CONFIG);
+            mXSpring.setEndValue(sScreenBounds.left);
+            Timber.e("Restored X");
+        }
 
+        if (mWindowParams.y < sScreenBounds.top) {
+            mYSpring.setSpringConfig(FLING_CONFIG);
+            mYSpring.setEndValue(sScreenBounds.top);
+            Timber.e("Restored Y");
+        } else if (mWindowParams.y > sScreenBounds.bottom) {
+            mYSpring.setSpringConfig(FLING_CONFIG);
+            mYSpring.setEndValue(sScreenBounds.bottom);
+            Timber.e("Restored Y");
+        }
     }
 
     @Override
@@ -398,7 +432,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
     private class GestureDetectorListener extends GestureDetector.SimpleOnGestureListener {
 
         @Override
-        public boolean onSingleTapConfirmed(MotionEvent e) {
+        public boolean onSingleTapConfirmed(MotionEvent event) {
             mWasClicked = true;
             if (Preferences.webHeadsCloseOnOpen(getContext()) && mContentGroup != null) {
                 if (mWindowParams.x < sDispWidth / 2) {
@@ -406,12 +440,18 @@ public class WebHead extends BaseWebHead implements SpringListener {
                 } else {
                     mContentGroup.setPivotX(mContentGroup.getWidth());
                 }
+                mContentGroup.setPivotY((float) (mContentGroup.getHeight() * 0.75));
+                try {
+                    mScaleSpring.setAtRest();
+                } catch (Exception e) {
+                    Timber.e("Error : %s", e.getMessage());
+                }
                 mContentGroup.animate()
                         .scaleX(0.0f)
                         .scaleY(0.0f)
                         .alpha(0.5f)
                         .withLayer()
-                        .setDuration(300)
+                        .setDuration(250)
                         .setInterpolator(new AccelerateDecelerateInterpolator())
                         .setListener(new AnimatorListenerAdapter() {
                             @Override
@@ -432,7 +472,6 @@ public class WebHead extends BaseWebHead implements SpringListener {
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             mDragging = false;
-            velocityX = Math.max(Math.abs(velocityX), MINIMUM_HORIZONTAL_FLING_VELOCITY);
 
             float[] adjustedVelocities = mMovementTracker.getAdjustedVelocities(velocityX, velocityY);
 
@@ -445,14 +484,37 @@ public class WebHead extends BaseWebHead implements SpringListener {
             if (adjustedVelocities != null) {
                 mWasFlung = true;
 
+                velocityX = interpolateXVelocity(e2, adjustedVelocities[0]);
+
                 mXSpring.setSpringConfig(DRAG_CONFIG);
                 mYSpring.setSpringConfig(DRAG_CONFIG);
 
-                mXSpring.setVelocity(adjustedVelocities[0]);
+                mXSpring.setVelocity(velocityX);
                 mYSpring.setVelocity(adjustedVelocities[1]);
                 return true;
             }
             return false;
         }
+
+        /**
+         * Attempts to figure out the correct X velocity by using {@link #MINIMUM_HORIZONTAL_FLING_VELOCITY}
+         * This is needed since if we blindly upscale the velocity, web heads will jump too quickly
+         * when near screen edges. This method proportionally upscales the velocity based on where the
+         * web head was released to prevent quick  jumps.
+         *
+         * @param upEvent   Motion event of last touch release
+         * @param velocityX original velocity
+         * @return Scaled velocity
+         */
+        private float interpolateXVelocity(MotionEvent upEvent, float velocityX) {
+            float x = upEvent.getRawX() / sDispWidth;
+            if (velocityX > 0) {
+                velocityX = Math.max(velocityX, MINIMUM_HORIZONTAL_FLING_VELOCITY * (1 - x));
+            } else {
+                velocityX = -Math.max(velocityX, MINIMUM_HORIZONTAL_FLING_VELOCITY * x);
+            }
+            return velocityX;
+        }
     }
+
 }
