@@ -15,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import arun.com.chromer.MainActivity;
 import arun.com.chromer.preferences.widgets.ColorPreference;
 import timber.log.Timber;
 
@@ -84,6 +85,16 @@ public abstract class DividerLessPreferenceFragment extends PreferenceFragmentCo
     protected void unregisterReceiver(@Nullable BroadcastReceiver receiver) {
         if (receiver != null) {
             getLocalBroadcastManager().unregisterReceiver(receiver);
+        }
+    }
+
+    /**
+     * Shows a {@link android.support.design.widget.Snackbar} by calling activity methods.
+     */
+    protected void showSnack(@NonNull String textToSnack, int duration) {
+        if (getActivity() instanceof MainActivity) {
+            MainActivity activity = (MainActivity) getActivity();
+            activity.snack(textToSnack, duration);
         }
     }
 

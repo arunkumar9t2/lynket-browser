@@ -181,4 +181,5 @@
     <string name="behavior_preferences">Behavior</string>
     <string name="additional_preferences">Additional</string>
     <string name="notifications">Notifications</string>
+    <string name="web_heads_enabled">Web heads enabled! You can now queue multiple links and view them later.</string>
 </resources>

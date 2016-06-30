@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                     intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.voice_prompt));
                     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
                     startActivityForResult(intent, VOICE_REQUEST);
-                } else snack(getString(R.string.no_voice_rec_apps));
+                } else snack(getString(R.string.no_voice_rec_apps), -10);
 
             }
         });
@@ -216,8 +216,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         });
     }
 
-    private void snack(@NonNull String textToSnack) {
-        Snackbar.make(mCoordinatorLayout, textToSnack, Snackbar.LENGTH_SHORT).show();
+    public void snack(@NonNull String textToSnack, int duration) {
+        Snackbar.make(mCoordinatorLayout, textToSnack, duration != -10 ? duration : Snackbar.LENGTH_SHORT).show();
     }
 
     private void setupDrawer() {
@@ -494,7 +494,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         mBottomSheet.dismissSheet();
                         customTabPreferenceCard.updatePreference(activityInfo.componentName);
                         refreshCustomTabBindings();
-                        snack(String.format(getString(R.string.default_provider_success), activityInfo.label));
+                        snack(String.format(getString(R.string.default_provider_success), activityInfo.label), -10);
                     }
                 });
         customTabPicker.setFilter(IntentPickerSheetView.selfPackageExcludeFilter(this));
@@ -512,7 +512,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                     public void onIntentPicked(IntentPickerSheetView.ActivityInfo activityInfo) {
                         mBottomSheet.dismissSheet();
                         browserPreferenceCard.updatePreference(activityInfo.componentName);
-                        snack(String.format(getString(R.string.secondary_browser_success), activityInfo.label));
+                        snack(String.format(getString(R.string.secondary_browser_success), activityInfo.label), -10);
                     }
                 });
         browserPicker.setFilter(IntentPickerSheetView.selfPackageExcludeFilter(this));
@@ -529,7 +529,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                     public void onIntentPicked(IntentPickerSheetView.ActivityInfo activityInfo) {
                         mBottomSheet.dismissSheet();
                         favShareAppPreferenceCard.updatePreference(activityInfo.componentName);
-                        snack(String.format(getString(R.string.fav_share_success), activityInfo.label));
+                        snack(String.format(getString(R.string.fav_share_success), activityInfo.label), -10);
                     }
                 });
         favSharePicker.setFilter(IntentPickerSheetView.selfPackageExcludeFilter(this));
