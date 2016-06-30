@@ -30,7 +30,7 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class WebHead extends BaseWebHead implements SpringListener {
 
-    private static final float TOUCH_DOWN_SCALE = 0.9f;
+    private static final float TOUCH_DOWN_SCALE = 0.85f;
     private static final float TOUCH_UP_SCALE = 1f;
     /**
      * Coordinate of remove web head that we can lock on to.
@@ -247,7 +247,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
         mMovementTracker.onUp();
 
-        if (!mWasFlung) {
+        if (!mWasFlung && mUserManuallyMoved) {
             stickToWall();
         }
         touchUp();

@@ -159,6 +159,8 @@ public abstract class BaseWebHead extends FrameLayout {
                 if (sScreenBounds == null)
                     sScreenBounds = new ScreenBounds(sDispWidth, sDispHeight, getWidth());
 
+                getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
                 if (Preferences.webHeadsSpawnLocation(getContext()) == 1) {
                     mWindowParams.x = sScreenBounds.right;
                 } else {
@@ -166,7 +168,6 @@ public abstract class BaseWebHead extends FrameLayout {
                 }
                 mWindowParams.y = sDispHeight / 3;
                 updateView();
-                getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
     }
