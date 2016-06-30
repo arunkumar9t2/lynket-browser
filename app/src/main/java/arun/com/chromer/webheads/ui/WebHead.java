@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
-import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Toast;
 
@@ -95,20 +94,12 @@ public class WebHead extends BaseWebHead implements SpringListener {
     public WebHead(@NonNull Context context, @NonNull String url, @Nullable WebHeadInteractionListener listener) {
         super(context, url);
         mInteractionListener = listener;
-
-        setupSprings();
+        mMovementTracker = MovementTracker.obtain();
 
         int scaledScreenWidthDp = (int) (getResources().getConfiguration().screenWidthDp * 5.5);
         MINIMUM_HORIZONTAL_FLING_VELOCITY = Util.dpToPx(scaledScreenWidthDp);
 
-        getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @SuppressLint("RtlHardcoded")
-            @Override
-            public void onGlobalLayout() {
-                mMovementTracker = new MovementTracker(10, sDispHeight, sDispWidth, getWidth());
-                getViewTreeObserver().removeOnGlobalLayoutListener(this);
-            }
-        });
+        setupSprings();
     }
 
     private void setupSprings() {
@@ -120,10 +111,20 @@ public class WebHead extends BaseWebHead implements SpringListener {
         mScaleSpring = mSpringSystem.createSpring();
         mScaleSpring.addListener(new SimpleSpringListener() {
             @Override
+            public void onSpringActivate(Spring spring) {
+                setLayerType(LAYER_TYPE_HARDWARE, null);
+            }
+
+            @Override
             public void onSpringUpdate(Spring spring) {
                 float howMuch = (float) spring.getCurrentValue();
                 mContentGroup.setScaleX(howMuch);
                 mContentGroup.setScaleY(howMuch);
+            }
+
+            @Override
+            public void onSpringAtRest(Spring spring) {
+                setLayerType(LAYER_TYPE_NONE, null);
             }
         });
         mScaleSpring.setCurrentValue(0.0f, true);
@@ -324,12 +325,12 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
     @Override
     public void onSpringAtRest(Spring spring) {
-
+        setLayerType(LAYER_TYPE_NONE, null);
     }
 
     @Override
     public void onSpringActivate(Spring spring) {
-
+        setLayerType(LAYER_TYPE_HARDWARE, null);
     }
 
     @Override
