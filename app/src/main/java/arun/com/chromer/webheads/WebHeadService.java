@@ -401,7 +401,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
             customTabActivity.putExtra(Constants.EXTRA_KEY_FROM_WEBHEAD, true);
             customTabActivity.putExtra(Constants.EXTRA_KEY_WEBHEAD_TITLE, webHead.getTitle());
             customTabActivity.putExtra(Constants.EXTRA_KEY_WEBHEAD_ICON, webHead.getFaviconBitmap());
-            customTabActivity.putExtra(Constants.EXTRA_KEY_WEBHEAD_COLOR, webHead.getWebHeadColor());
+            customTabActivity.putExtra(Constants.EXTRA_KEY_WEBHEAD_COLOR, webHead.getWebHeadColor(false));
 
             startActivity(customTabActivity);
 

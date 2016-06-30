@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="76dp"
-             android:layout_height="76dp"
+             android:layout_width="@dimen/web_head_size_normal"
+             android:layout_height="@dimen/web_head_size_normal"
              android:clipToPadding="false"
              android:orientation="vertical"
              android:padding="10dp">

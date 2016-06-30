@@ -32,6 +32,7 @@ import android.widget.TextView;
 
 import arun.com.chromer.R;
 import arun.com.chromer.preferences.manager.Preferences;
+import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Util;
 import butterknife.BindView;
@@ -296,9 +297,16 @@ public abstract class BaseWebHead extends FrameLayout {
         mRevealView.setAlpha(0.8f);
     }
 
+    @SuppressWarnings("SameParameterValue")
     @ColorInt
-    public int getWebHeadColor() {
-        return mWebHeadColor;
+    public int getWebHeadColor(boolean ignoreFavicons) {
+        if (ignoreFavicons) {
+            return mWebHeadColor;
+        } else {
+            if (getFaviconBitmap() != null) {
+                return mWebHeadColor;
+            } else return Constants.NO_COLOR;
+        }
     }
 
     public void setWebHeadColor(@ColorInt int webHeadColor) {
@@ -356,6 +364,7 @@ public abstract class BaseWebHead extends FrameLayout {
         mUnBinder.unbind();
     }
 
+    @SuppressWarnings("UnusedParameters")
     @CallSuper
     void destroySelf(boolean receiveCallback) {
         mDestroyed = true;

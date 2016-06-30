@@ -31,6 +31,7 @@ public class ElevatedCircleView extends CircleView {
             float shadowDx = context.getResources().getDimension(R.dimen.web_head_shadow_dx);
             float shadowDy = context.getResources().getDimension(R.dimen.web_head_shadow_dy);
             mBgPaint.setShadowLayer(shadowR, shadowDx, shadowDy, 0x55000000);
+            setLayerType(LAYER_TYPE_SOFTWARE, null);
         }
     }
 
