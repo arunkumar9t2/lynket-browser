@@ -197,7 +197,10 @@ public class AppPreferenceCardView extends CardView {
     }
 
     private void setIconDrawable(final Drawable iconDrawable, final boolean overrideScaleType) {
-        if (mIcon != null)
+        if (mIcon != null) {
+            mIcon.setPivotX(mIcon.getWidth() / 2);
+            mIcon.setPivotY((float) (mIcon.getHeight() * 0.70));
+            mIcon.clearAnimation();
             mIcon.animate()
                     .scaleX(0f)
                     .scaleY(0f)
@@ -219,6 +222,7 @@ public class AppPreferenceCardView extends CardView {
                                     .start();
                         }
                     }).start();
+        }
     }
 
     public void updatePreference(@Nullable final ComponentName componentName) {
