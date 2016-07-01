@@ -3,11 +3,12 @@ package arun.com.chromer.webheads.ui;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
@@ -21,7 +22,6 @@ import com.facebook.rebound.SpringListener;
 import com.facebook.rebound.SpringSystem;
 
 import arun.com.chromer.BuildConfig;
-import arun.com.chromer.R;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.util.Util;
 import arun.com.chromer.webheads.physics.MovementTracker;
@@ -55,6 +55,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
     private final SpringConfig FLING_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(50, 5);
     private final SpringConfig DRAG_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(0, 1.8);
     private final SpringConfig SNAP_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(100, 7);
+    private final MovementTracker mMovementTracker;
     /**
      * True when being dragged, otherwise false
      */
@@ -91,7 +92,6 @@ public class WebHead extends BaseWebHead implements SpringListener {
     private SpringSystem mSpringSystem;
     //-------------------------------------------------------------------------------------------
     private Spring mXSpring, mYSpring, mScaleSpring;
-    private MovementTracker mMovementTracker;
     /**
      * True when touched down and false otherwise
      */
@@ -133,20 +133,10 @@ public class WebHead extends BaseWebHead implements SpringListener {
         mScaleSpring = mSpringSystem.createSpring();
         mScaleSpring.addListener(new SimpleSpringListener() {
             @Override
-            public void onSpringActivate(Spring spring) {
-                setLayerType(LAYER_TYPE_HARDWARE, null);
-            }
-
-            @Override
             public void onSpringUpdate(Spring spring) {
                 float howMuch = (float) spring.getCurrentValue();
                 mContentGroup.setScaleX(howMuch);
                 mContentGroup.setScaleY(howMuch);
-            }
-
-            @Override
-            public void onSpringAtRest(Spring spring) {
-                setLayerType(LAYER_TYPE_NONE, null);
             }
         });
         mScaleSpring.setCurrentValue(0.0f, true);
@@ -347,12 +337,10 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
     @Override
     public void onSpringAtRest(Spring spring) {
-        setLayerType(LAYER_TYPE_NONE, null);
     }
 
     @Override
     public void onSpringActivate(Spring spring) {
-        setLayerType(LAYER_TYPE_HARDWARE, null);
     }
 
     @Override
@@ -427,40 +415,52 @@ public class WebHead extends BaseWebHead implements SpringListener {
     @Override
     public void destroySelf(final boolean receiveCallback) {
         mDestroyed = true;
+        WEB_HEAD_COUNT--;
         destroySprings();
         if (isCurrentlyAtRemoveWeb()) {
-            Animator animator = getColorChangeAnimator(ContextCompat.getColor(getContext(), R.color.remove_web_head_color));
-            mContentGroup.setLayerType(LAYER_TYPE_HARDWARE, null);
-            animator.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-                    if (Util.isLollipopAbove()) mCircleBackground.animate().z(0);
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mContentGroup.setLayerType(LAYER_TYPE_NONE, null);
-                    if (receiveCallback) {
-                        mInteractionListener.onWebHeadDestroy(WebHead.this, isLastWebHead());
-                    }
-                    mInteractionListener = null;
-                    mFavicon.animate().scaleX(0f).scaleY(0f).start();
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            WebHead.super.destroySelf(receiveCallback);
-                        }
-                    }, 200);
-                }
-            });
-            animator.start();
+            if (Util.isLollipopAbove()) {
+                closeWithAnimationL(receiveCallback);
+            } else
+                closeWithAnimation(receiveCallback);
         } else {
-            if (receiveCallback) {
-                mInteractionListener.onWebHeadDestroy(this, isLastWebHead());
-            }
-            mInteractionListener = null;
+            if (receiveCallback) mInteractionListener.onWebHeadDestroy(this, isLastWebHead());
             super.destroySelf(receiveCallback);
         }
+    }
+
+    private void closeWithAnimation(boolean receiveCallback) {
+
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void closeWithAnimationL(final boolean receiveCallback) {
+        final Animator reveal = getColorChangeAnimator(mDeleteColor);
+        mCircleBackground
+                .animate()
+                .setDuration(100)
+                .withLayer()
+                .translationZ(0)
+                .z(0)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        reveal.addListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                crossFadeFaviconToX();
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (receiveCallback)
+                                            mInteractionListener.onWebHeadDestroy(WebHead.this, isLastWebHead());
+                                        WebHead.super.destroySelf(receiveCallback);
+                                    }
+                                }, 500);
+                            }
+                        });
+                        reveal.start();
+                    }
+                });
     }
 
     /**

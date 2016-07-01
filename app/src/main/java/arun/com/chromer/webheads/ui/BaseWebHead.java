@@ -16,18 +16,22 @@ import android.graphics.drawable.TransitionDrawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
+import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.ViewPropertyAnimator;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
 import arun.com.chromer.preferences.manager.Preferences;
@@ -55,11 +59,12 @@ public abstract class BaseWebHead extends FrameLayout {
     /**
      * Counter to keep count of active web heads
      */
-    private static int WEB_HEAD_COUNT = 0;
+    static int WEB_HEAD_COUNT = 0;
     /**
      * Static window manager instance to update, add and remove web heads
      */
     private static WindowManager sWindowManager;
+    private static Drawable sXDrawable;
     /**
      * Window parameters used to track and update web heads post creation;
      */
@@ -68,6 +73,10 @@ public abstract class BaseWebHead extends FrameLayout {
      * The content view group which host all our elements
      */
     final FrameLayout mContentGroup;
+    /**
+     * Color of web head when removed
+     */
+    final int mDeleteColor;
     /**
      * The url of the website that this web head represents, not allowed to change
      */
@@ -138,6 +147,12 @@ public abstract class BaseWebHead extends FrameLayout {
         sWindowManager.addView(this, mWindowParams);
 
         WEB_HEAD_COUNT++;
+
+        sXDrawable = new IconicsDrawable(context)
+                .icon(GoogleMaterial.Icon.gmd_clear)
+                .color(Color.WHITE)
+                .sizeDp(18);
+        mDeleteColor = ContextCompat.getColor(context, R.color.remove_web_head_color);
     }
 
     private void initDisplayMetrics() {
@@ -215,27 +230,6 @@ public abstract class BaseWebHead extends FrameLayout {
                 .setDuration(150);
     }
 
-    public void setFaviconDrawable(@NonNull final Drawable faviconDrawable) {
-        try {
-            getIndicatorClearAnimation().setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    TransitionDrawable transitionDrawable = new TransitionDrawable(
-                            new Drawable[]{
-                                    new ColorDrawable(Color.TRANSPARENT),
-                                    faviconDrawable
-                            });
-                    mFavicon.setVisibility(VISIBLE);
-                    mFavicon.setImageDrawable(transitionDrawable);
-                    transitionDrawable.setCrossFadeEnabled(true);
-                    transitionDrawable.startTransition(500);
-                }
-            });
-        } catch (Exception ignore) {
-            Timber.d(ignore.getMessage());
-        }
-    }
-
     @Nullable
     public ValueAnimator getStackDistanceAnimator() {
         ValueAnimator animator;
@@ -273,11 +267,10 @@ public abstract class BaseWebHead extends FrameLayout {
                 mRevealView.setLayerType(LAYER_TYPE_NONE, null);
                 mRevealView.setScaleX(0f);
                 mRevealView.setScaleY(0f);
-                mRevealView.setLayerType(LAYER_TYPE_NONE, null);
             }
 
         });
-        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+        animator.setInterpolator(new LinearOutSlowInInterpolator());
         animator.setDuration(250);
         return animator;
     }
@@ -292,6 +285,32 @@ public abstract class BaseWebHead extends FrameLayout {
         mRevealView.setScaleX(0f);
         mRevealView.setScaleY(0f);
         mRevealView.setAlpha(0.8f);
+    }
+
+    /**
+     * Applies a cross fade animation to transform the current favicon to an X icon. Ensures favicon
+     * is visible by hiding indicators.
+     */
+    void crossFadeFaviconToX() {
+        mIndicator.setVisibility(GONE);
+        mFavicon.setVisibility(VISIBLE);
+        mFavicon.clearAnimation();
+        mFavicon.setScaleType(ImageView.ScaleType.CENTER);
+        final TransitionDrawable icon = new TransitionDrawable(
+                new Drawable[]{
+                        new ColorDrawable(Color.TRANSPARENT),
+                        sXDrawable
+                });
+        mFavicon.setImageDrawable(icon);
+        icon.setCrossFadeEnabled(true);
+        icon.startTransition(50);
+        mFavicon
+                .animate()
+                .withLayer()
+                .rotation(180)
+                .setDuration(200)
+                .setInterpolator(new LinearOutSlowInInterpolator())
+                .start();
     }
 
     @SuppressWarnings("SameParameterValue")
@@ -338,13 +357,47 @@ public abstract class BaseWebHead extends FrameLayout {
     @Nullable
     public Bitmap getFaviconBitmap() {
         try {
-            TransitionDrawable drawable = (TransitionDrawable) mFavicon.getDrawable();
-            RoundedBitmapDrawable roundedBitmapDrawable = (RoundedBitmapDrawable) drawable.getDrawable(1);
-            return roundedBitmapDrawable.getBitmap();
+            RoundedBitmapDrawable roundedBitmapDrawable = (RoundedBitmapDrawable) getFaviconDrawable();
+            return roundedBitmapDrawable != null ? roundedBitmapDrawable.getBitmap() : null;
         } catch (Exception e) {
             Timber.e("Error while getting favicon bitmap: %s", e.getMessage());
         }
         return null;
+    }
+
+    @Nullable
+    private Drawable getFaviconDrawable() {
+        try {
+            TransitionDrawable drawable = (TransitionDrawable) mFavicon.getDrawable();
+            if (drawable != null) {
+                return drawable.getDrawable(1);
+            } else
+                return null;
+        } catch (ClassCastException e) {
+            Timber.e("Error while getting favicon drawable: %s", e.getMessage());
+        }
+        return null;
+    }
+
+    public void setFaviconDrawable(@NonNull final Drawable faviconDrawable) {
+        try {
+            getIndicatorClearAnimation().setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    TransitionDrawable transitionDrawable = new TransitionDrawable(
+                            new Drawable[]{
+                                    new ColorDrawable(Color.TRANSPARENT),
+                                    faviconDrawable
+                            });
+                    mFavicon.setVisibility(VISIBLE);
+                    mFavicon.setImageDrawable(transitionDrawable);
+                    transitionDrawable.setCrossFadeEnabled(true);
+                    transitionDrawable.startTransition(500);
+                }
+            });
+        } catch (Exception ignore) {
+            Timber.d(ignore.getMessage());
+        }
     }
 
     public boolean isFromNewTab() {
@@ -364,7 +417,6 @@ public abstract class BaseWebHead extends FrameLayout {
     @SuppressWarnings("UnusedParameters")
     void destroySelf(boolean receiveCallback) {
         mDestroyed = true;
-        WEB_HEAD_COUNT--;
         RemoveWebHead.disappear();
         removeView(mContentGroup);
         if (sWindowManager != null)
