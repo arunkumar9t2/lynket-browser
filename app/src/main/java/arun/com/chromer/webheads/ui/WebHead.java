@@ -4,8 +4,10 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
@@ -19,6 +21,7 @@ import com.facebook.rebound.SpringListener;
 import com.facebook.rebound.SpringSystem;
 
 import arun.com.chromer.BuildConfig;
+import arun.com.chromer.R;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.util.Util;
 import arun.com.chromer.webheads.physics.MovementTracker;
@@ -68,9 +71,19 @@ public class WebHead extends BaseWebHead implements SpringListener {
     private float posX, posY;
     private int initialDownX, initialDownY;
     /**
-     * The interaction listener that clients can provide to listen for events on webhead
+     * The interaction listener that clients can provide to listen for events on webhead.
      */
-    private WebHeadInteractionListener mInteractionListener;
+    private WebHeadInteractionListener mInteractionListener = new WebHeadInteractionListener() {
+        @Override
+        public void onWebHeadClick(@NonNull WebHead webHead) {
+            // noop
+        }
+
+        @Override
+        public void onWebHeadDestroy(@NonNull WebHead webHead, boolean isLastWebHead) {
+            // noop
+        }
+    };
     /**
      * True when fling detected and false on new touch event
      */
@@ -94,7 +107,9 @@ public class WebHead extends BaseWebHead implements SpringListener {
      */
     public WebHead(@NonNull Context context, @NonNull String url, @Nullable WebHeadInteractionListener listener) {
         super(context, url);
-        mInteractionListener = listener;
+        if (listener != null) {
+            mInteractionListener = listener;
+        }
         mMovementTracker = MovementTracker.obtain();
 
         calcVelocities();
@@ -223,6 +238,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
                 mXSpring.setEndValue(trashLockCoOrd()[0]);
                 mYSpring.setEndValue(trashLockCoOrd()[1]);
+
             } else {
                 getRemoveWebHead().shrink();
 
@@ -409,12 +425,68 @@ public class WebHead extends BaseWebHead implements SpringListener {
     }
 
     @Override
-    public void destroySelf(boolean receiveCallback) {
-        super.destroySelf(receiveCallback);
-        if (mInteractionListener != null && receiveCallback) {
-            mInteractionListener.onWebHeadDestroy(this, isLastWebHead());
+    public void destroySelf(final boolean receiveCallback) {
+        mDestroyed = true;
+        destroySprings();
+        if (isCurrentlyAtRemoveWeb()) {
+            Animator animator = getColorChangeAnimator(ContextCompat.getColor(getContext(), R.color.remove_web_head_color));
+            mContentGroup.setLayerType(LAYER_TYPE_HARDWARE, null);
+            animator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    if (Util.isLollipopAbove()) mCircleBackground.animate().z(0);
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mContentGroup.setLayerType(LAYER_TYPE_NONE, null);
+                    if (receiveCallback) {
+                        mInteractionListener.onWebHeadDestroy(WebHead.this, isLastWebHead());
+                    }
+                    mInteractionListener = null;
+                    mFavicon.animate().scaleX(0f).scaleY(0f).start();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            WebHead.super.destroySelf(receiveCallback);
+                        }
+                    }, 200);
+                }
+            });
+            animator.start();
+        } else {
+            if (receiveCallback) {
+                mInteractionListener.onWebHeadDestroy(this, isLastWebHead());
+            }
+            mInteractionListener = null;
+            super.destroySelf(receiveCallback);
         }
-        mInteractionListener = null;
+    }
+
+    /**
+     * Helper to know if the web head is currently locked in place with remove web head.
+     *
+     * @return true if locked, else false.
+     */
+    private boolean isCurrentlyAtRemoveWeb() {
+        int rx = trashLockCoOrd()[0];
+        int ry = trashLockCoOrd()[1];
+
+        if (mWindowParams.x == rx && mWindowParams.y == ry) {
+            return true;
+        } else {
+            double dist = dist(mWindowParams.x, mWindowParams.y, rx, ry);
+            if (dist < Util.dpToPx(15)) {
+                Timber.d("Adjusting positions");
+                mWindowParams.x = rx;
+                mWindowParams.y = ry;
+                updateView();
+                return true;
+            } else return false;
+        }
+    }
+
+    private void destroySprings() {
         mSpringSystem.removeAllListeners();
         mXSpring.destroy();
         mYSpring.destroy();

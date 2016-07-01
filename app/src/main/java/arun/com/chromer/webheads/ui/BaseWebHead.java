@@ -13,7 +13,6 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
-import android.support.annotation.CallSuper;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -264,6 +263,7 @@ public abstract class BaseWebHead extends FrameLayout {
                 ObjectAnimator.ofFloat(mRevealView, "scaleY", 1f),
                 ObjectAnimator.ofFloat(mRevealView, "alpha", 1f)
         );
+        mRevealView.setLayerType(LAYER_TYPE_HARDWARE, null);
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -273,12 +273,9 @@ public abstract class BaseWebHead extends FrameLayout {
                 mRevealView.setLayerType(LAYER_TYPE_NONE, null);
                 mRevealView.setScaleX(0f);
                 mRevealView.setScaleY(0f);
+                mRevealView.setLayerType(LAYER_TYPE_NONE, null);
             }
 
-            @Override
-            public void onAnimationStart(Animator animation) {
-                mRevealView.setLayerType(LAYER_TYPE_HARDWARE, null);
-            }
         });
         animator.setInterpolator(new AccelerateDecelerateInterpolator());
         animator.setDuration(250);
@@ -365,7 +362,6 @@ public abstract class BaseWebHead extends FrameLayout {
     }
 
     @SuppressWarnings("UnusedParameters")
-    @CallSuper
     void destroySelf(boolean receiveCallback) {
         mDestroyed = true;
         WEB_HEAD_COUNT--;
