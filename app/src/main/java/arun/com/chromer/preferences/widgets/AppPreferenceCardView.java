@@ -1,14 +1,15 @@
 package arun.com.chromer.preferences.widgets;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
+import android.graphics.drawable.TransitionDrawable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
@@ -136,40 +137,28 @@ public class AppPreferenceCardView extends CardView {
     private void applyIcon() {
         if (Util.isPackageInstalled(getContext(), mAppPackage)) {
             final PackageManager pm = getContext().getApplicationContext().getPackageManager();
-            new AsyncTask<Void, Void, Drawable>() {
-
-                @Override
-                protected Drawable doInBackground(Void... params) {
-                    Drawable appIcon = null;
-                    try {
-                        ApplicationInfo ai = pm.getApplicationInfo(mAppPackage, 0);
-                        appIcon = ai.loadIcon(pm);
-                    } catch (PackageManager.NameNotFoundException e) {
-                        Timber.e("Failed to load icon for %s", mAppName);
-                    }
-                    return appIcon;
-
-                }
-
-                @Override
-                protected void onPostExecute(final Drawable iconDrawable) {
-                    if (iconDrawable != null) {
-                        setIconDrawable(iconDrawable, true);
-                        Palette.from(Util.drawableToBitmap(iconDrawable))
-                                .clearFilters()
-                                .generate(new Palette.PaletteAsyncListener() {
-                                    @Override
-                                    public void onGenerated(Palette palette) {
-                                        int bestColor = ColorUtil.getBestColorFromPalette(palette);
-                                        Drawable foreground = ColorUtil.getRippleDrawableCompat(bestColor);
-                                        // Bug in SDK requires redundant cast
-                                        //noinspection RedundantCast
-                                        ((FrameLayout) AppPreferenceCardView.this).setForeground(foreground);
-                                    }
-                                });
-                    }
-                }
-            }.execute();
+            Drawable appIcon = null;
+            try {
+                ApplicationInfo ai = pm.getApplicationInfo(mAppPackage, 0);
+                appIcon = ai.loadIcon(pm);
+            } catch (PackageManager.NameNotFoundException e) {
+                Timber.e("Failed to load icon for %s", mAppName);
+            }
+            if (appIcon != null) {
+                setIconDrawable(appIcon, true);
+                Palette.from(Util.drawableToBitmap(appIcon))
+                        .clearFilters()
+                        .generate(new Palette.PaletteAsyncListener() {
+                            @Override
+                            public void onGenerated(Palette palette) {
+                                int bestColor = ColorUtil.getBestColorFromPalette(palette);
+                                Drawable foreground = ColorUtil.getRippleDrawableCompat(bestColor);
+                                // Bug in SDK requires redundant cast
+                                //noinspection RedundantCast
+                                ((FrameLayout) AppPreferenceCardView.this).setForeground(foreground);
+                            }
+                        });
+            }
         } else {
             mIcon.setScaleType(ImageView.ScaleType.CENTER);
             switch (mPreferenceType) {
@@ -196,33 +185,30 @@ public class AppPreferenceCardView extends CardView {
         }
     }
 
-    private void setIconDrawable(final Drawable iconDrawable, final boolean overrideScaleType) {
+    private void setIconDrawable(final Drawable newIconDrawable, final boolean overrideScaleType) {
         if (mIcon != null) {
-            mIcon.setPivotX(mIcon.getWidth() / 2);
-            mIcon.setPivotY((float) (mIcon.getHeight() * 0.70));
-            mIcon.clearAnimation();
-            mIcon.animate()
-                    .scaleX(0f)
-                    .scaleY(0f)
-                    .setDuration(225)
-                    .alpha(0)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            if (mIcon == null) return;
-                            if (mIcon.getScaleType() != ImageView.ScaleType.FIT_CENTER && overrideScaleType) {
-                                mIcon.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                            }
-                            mIcon.setImageDrawable(iconDrawable);
-                            mIcon.animate()
-                                    .scaleX(1f)
-                                    .scaleY(1f)
-                                    .setDuration(225)
-                                    .alpha(1f)
-                                    .start();
-                        }
-                    }).start();
+            TransitionDrawable transitionDrawable = new TransitionDrawable(
+                    new Drawable[]{
+                            getCurrentIcon(),
+                            newIconDrawable
+                    });
+            mIcon.setImageDrawable(transitionDrawable);
+            if (mIcon.getScaleType() != ImageView.ScaleType.FIT_CENTER && overrideScaleType) {
+                mIcon.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            }
+            transitionDrawable.setCrossFadeEnabled(true);
+            transitionDrawable.startTransition(300);
         }
+    }
+
+    /**
+     * Returns the current icon present in the view or returns an empty icon
+     *
+     * @return Icon drawable
+     */
+    @NonNull
+    private Drawable getCurrentIcon() {
+        return mIcon.getDrawable() == null ? new ColorDrawable(Color.TRANSPARENT) : mIcon.getDrawable();
     }
 
     public void updatePreference(@Nullable final ComponentName componentName) {
