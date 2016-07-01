@@ -428,10 +428,40 @@ public class WebHead extends BaseWebHead implements SpringListener {
         }
     }
 
-    private void closeWithAnimation(boolean receiveCallback) {
+    /**
+     * Animates and closes web head for pre L.
+     *
+     * @param receiveCallback True if clients should be notified
+     */
+    private void closeWithAnimation(final boolean receiveCallback) {
+        final Animator reveal = getColorChangeAnimator(mDeleteColor);
+        reveal.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                mCircleBackground.clearElevation();
+            }
 
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                crossFadeFaviconToX();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (receiveCallback)
+                            mInteractionListener.onWebHeadDestroy(WebHead.this, isLastWebHead());
+                        WebHead.super.destroySelf(receiveCallback);
+                    }
+                }, 500);
+            }
+        });
+        reveal.start();
     }
 
+    /**
+     * Animates and closes the web head. For android L and above so as to use elevation animations.
+     *
+     * @param receiveCallback True if clients should be notified
+     */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void closeWithAnimationL(final boolean receiveCallback) {
         final Animator reveal = getColorChangeAnimator(mDeleteColor);

@@ -210,7 +210,11 @@ public abstract class BaseWebHead extends FrameLayout {
      * Wrapper around window manager to update this view. Called to move the web head usually.
      */
     void updateView() {
-        sWindowManager.updateViewLayout(this, mWindowParams);
+        try {
+            sWindowManager.updateViewLayout(this, mWindowParams);
+        } catch (IllegalArgumentException e) {
+            Timber.e("Update called after view was removed");
+        }
     }
 
     /**
