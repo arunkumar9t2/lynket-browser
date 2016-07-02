@@ -34,7 +34,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import arun.com.chromer.BuildConfig;
-import arun.com.chromer.customtabs.CustomTabHelper;
+import arun.com.chromer.customtabs.CustomTabs;
 import arun.com.chromer.customtabs.prefetch.ScannerService;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.views.IntentPickerSheetView;
@@ -166,13 +166,14 @@ public class Util {
     }
 
     @NonNull
-    public static List<IntentPickerSheetView.ActivityInfo> getCustomTabApps(@NonNull Context context) {
+    public static List<IntentPickerSheetView.ActivityInfo> getCustomTabActivityInfos(@NonNull Context context) {
         List<IntentPickerSheetView.ActivityInfo> apps = new ArrayList<>();
         PackageManager pm = context.getApplicationContext().getPackageManager();
-        @SuppressLint("InlinedApi") List<ResolveInfo> resolvedActivityList = pm.queryIntentActivities(Constants.WEB_INTENT, PackageManager.MATCH_ALL);
+        @SuppressLint("InlinedApi")
+        List<ResolveInfo> resolvedActivityList = pm.queryIntentActivities(Constants.WEB_INTENT, PackageManager.MATCH_ALL);
         for (ResolveInfo info : resolvedActivityList) {
             final String packageName = info.activityInfo.packageName;
-            if (CustomTabHelper.isPackageSupportCustomTabs(context, packageName)) {
+            if (CustomTabs.isPackageSupportCustomTabs(context, packageName)) {
                 ComponentName componentName = new ComponentName(info.activityInfo.packageName, info.activityInfo.name);
                 IntentPickerSheetView.ActivityInfo activityInfo = new IntentPickerSheetView.ActivityInfo(info, info.loadLabel(pm), componentName);
                 apps.add(activityInfo);

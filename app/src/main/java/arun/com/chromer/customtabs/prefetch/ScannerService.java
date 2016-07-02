@@ -31,7 +31,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import arun.com.chromer.R;
-import arun.com.chromer.customtabs.CustomTabBindingHelper;
+import arun.com.chromer.customtabs.CustomTabManager;
 import arun.com.chromer.customtabs.warmup.WarmUpService;
 import arun.com.chromer.preferences.manager.Preferences;
 import timber.log.Timber;
@@ -39,7 +39,7 @@ import timber.log.Timber;
 /**
  * Created by Arun on 06/01/2016.
  */
-public class ScannerService extends AccessibilityService implements CustomTabBindingHelper.ConnectionCallback {
+public class ScannerService extends AccessibilityService implements CustomTabManager.ConnectionCallback {
 
     private static final String SCANNER_SERVICE_NOTIFICATION = "SCANNER_SERVICE_NOTIFICATION";
     private static final String NOTIFICATION_TITLE = "Chromer Scanning Service";
@@ -52,7 +52,7 @@ public class ScannerService extends AccessibilityService implements CustomTabBin
     private final LinkedList<CharSequence> mLastTopTexts = new LinkedList<>();
     private final LinkedList<CharSequence> mLocalTopTexts = new LinkedList<>();
     private final List<String> mBrowserList = new LinkedList<>();
-    private CustomTabBindingHelper mCustomTabBindingHelper;
+    private CustomTabManager mCustomTabManager;
     private String mLastFetchedUrl = "";
     private String mLastPriorityUrl;
     private boolean mShouldStopExtraction = false;
@@ -69,15 +69,15 @@ public class ScannerService extends AccessibilityService implements CustomTabBin
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (mCustomTabBindingHelper != null) {
+        if (mCustomTabManager != null) {
             Timber.d("Severing existing connection");
-            mCustomTabBindingHelper.unbindCustomTabsService(this);
+            mCustomTabManager.unbindCustomTabsService(this);
         }
 
-        mCustomTabBindingHelper = new CustomTabBindingHelper();
-        mCustomTabBindingHelper.setConnectionCallback(this);
+        mCustomTabManager = new CustomTabManager();
+        mCustomTabManager.setConnectionCallback(this);
 
-        boolean success = mCustomTabBindingHelper.bindCustomTabsService(this);
+        boolean success = mCustomTabManager.bindCustomTabsService(this);
         Timber.d("Was bound %b", success);
 
         return super.onStartCommand(intent, flags, startId);
@@ -87,27 +87,18 @@ public class ScannerService extends AccessibilityService implements CustomTabBin
     public boolean onUnbind(Intent intent) {
         sInstance = null;
 
-        if (mCustomTabBindingHelper != null)
-            mCustomTabBindingHelper.unbindCustomTabsService(this);
+        if (mCustomTabManager != null)
+            mCustomTabManager.unbindCustomTabsService(this);
 
         return super.onUnbind(intent);
     }
 
     @Nullable
     public CustomTabsSession getTabSession() {
-        if (mCustomTabBindingHelper != null) {
-            return mCustomTabBindingHelper.getSession();
+        if (mCustomTabManager != null) {
+            return mCustomTabManager.getSession();
         }
         return null;
-    }
-
-
-    public boolean mayLaunchUrl(Uri uri, List<Bundle> possibleUrls) {
-        if (!Preferences.preFetch(this)) return false;
-
-        boolean ok = mCustomTabBindingHelper.mayLaunchUrl(uri, null, possibleUrls);
-        Timber.d("Warm up %b", ok);
-        return ok;
     }
 
     private void updateNotification() {
@@ -193,7 +184,7 @@ public class ScannerService extends AccessibilityService implements CustomTabBin
                 boolean success;
                 if (mLastPriorityUrl != null) {
                     if (!mLastPriorityUrl.equalsIgnoreCase(mLastFetchedUrl)) {
-                        success = mCustomTabBindingHelper.mayLaunchUrl(Uri.parse(mLastPriorityUrl), null, possibleUrls);
+                        success = mCustomTabManager.mayLaunchUrl(Uri.parse(mLastPriorityUrl), null, possibleUrls);
                         if (success) mLastFetchedUrl = mLastPriorityUrl;
                     } else {
                         Timber.d("Ignored, already fetched");
@@ -325,8 +316,8 @@ public class ScannerService extends AccessibilityService implements CustomTabBin
 
     @Override
     public void onDestroy() {
-        if (mCustomTabBindingHelper != null)
-            mCustomTabBindingHelper.unbindCustomTabsService(this);
+        if (mCustomTabManager != null)
+            mCustomTabManager.unbindCustomTabsService(this);
         clearHolders();
         super.onDestroy();
     }

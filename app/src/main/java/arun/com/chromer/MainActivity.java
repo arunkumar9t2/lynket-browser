@@ -47,8 +47,7 @@ import arun.com.chromer.activities.about.AboutAppActivity;
 import arun.com.chromer.activities.about.changelog.ChangelogUtil;
 import arun.com.chromer.activities.intro.ChromerIntro;
 import arun.com.chromer.activities.payments.DonateActivity;
-import arun.com.chromer.customtabs.CustomTabBindingHelper;
-import arun.com.chromer.customtabs.CustomTabHelper;
+import arun.com.chromer.customtabs.CustomTabManager;
 import arun.com.chromer.customtabs.CustomTabs;
 import arun.com.chromer.fragments.CustomizeFragment;
 import arun.com.chromer.fragments.OptionsFragment;
@@ -84,20 +83,20 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     @BindView(R.id.coordinator_layout)
     public CoordinatorLayout mCoordinatorLayout;
 
-    private CustomTabBindingHelper mCustomTabBindingHelper;
+    private CustomTabManager mCustomTabManager;
     private Drawer mDrawer;
 
     @Override
     protected void onStart() {
         super.onStart();
-        mCustomTabBindingHelper.bindCustomTabsService(this);
+        mCustomTabManager.bindCustomTabsService(this);
         // startService(new Intent(this, WebHeadService.class));
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        mCustomTabBindingHelper.unbindCustomTabsService(this);
+        mCustomTabManager.unbindCustomTabsService(this);
         // stopService(new Intent(this, WebHeadService.class));
     }
 
@@ -347,7 +346,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             } else {
                 Benchmark.start("Custom tab launching");
                 CustomTabs.from(this)
-                        .withSession(mCustomTabBindingHelper.getSession())
+                        .withSession(mCustomTabManager.getSession())
                         .prepare()
                         .forUrl(url)
                         .launch();
@@ -358,23 +357,23 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private void refreshCustomTabBindings() {
         // Unbind from currently bound service
-        mCustomTabBindingHelper.unbindCustomTabsService(this);
+        mCustomTabManager.unbindCustomTabsService(this);
         setupCustomTab();
-        mCustomTabBindingHelper.bindCustomTabsService(this);
+        mCustomTabManager.bindCustomTabsService(this);
 
         // Restarting services will make them update their bindings.
         ServiceUtil.refreshCustomTabBindings(getApplicationContext());
     }
 
     private void setupCustomTab() {
-        mCustomTabBindingHelper = new CustomTabBindingHelper();
-        mCustomTabBindingHelper.setConnectionCallback(
-                new CustomTabBindingHelper.ConnectionCallback() {
+        mCustomTabManager = new CustomTabManager();
+        mCustomTabManager.setConnectionCallback(
+                new CustomTabManager.ConnectionCallback() {
                     @Override
                     public void onCustomTabsConnected() {
                         Timber.d("Connected to custom tabs");
                         try {
-                            mCustomTabBindingHelper.mayLaunchUrl(Uri.parse(Constants.GOOGLE_URL), null, null);
+                            mCustomTabManager.mayLaunchUrl(Uri.parse(Constants.GOOGLE_URL), null, null);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -405,7 +404,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     private void checkAndEducateUser(boolean forceShow) {
         List packages;
         if (!forceShow) {
-            packages = CustomTabHelper.getCustomTabSupportingPackages(this);
+            packages = CustomTabs.getCustomTabSupportingPackages(this);
         } else {
             packages = new ArrayList();
         }
@@ -479,7 +478,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     @Override
     public void onDefaultCustomTabProviderClick(final AppPreferenceCardView customTabPreferenceCard) {
-        final List<IntentPickerSheetView.ActivityInfo> customTabApps = Util.getCustomTabApps(getApplicationContext());
+        final List<IntentPickerSheetView.ActivityInfo> customTabApps = Util.getCustomTabActivityInfos(this);
         if (customTabApps.isEmpty()) {
             checkAndEducateUser(true);
             return;

@@ -1,19 +1,30 @@
 package arun.com.chromer.customtabs;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsSession;
 import android.support.v4.graphics.ColorUtils;
+import android.widget.Toast;
 
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import arun.com.chromer.R;
@@ -21,7 +32,9 @@ import arun.com.chromer.customtabs.callbacks.AddHomeShortcutService;
 import arun.com.chromer.customtabs.callbacks.ClipboardService;
 import arun.com.chromer.customtabs.callbacks.FavShareBroadcastReceiver;
 import arun.com.chromer.customtabs.callbacks.OpenInChromeReceiver;
+import arun.com.chromer.customtabs.callbacks.OpenInNewTabReceiver;
 import arun.com.chromer.customtabs.callbacks.SecondaryBrowserReceiver;
+import arun.com.chromer.customtabs.callbacks.ShareBroadcastReceiver;
 import arun.com.chromer.customtabs.prefetch.ScannerService;
 import arun.com.chromer.customtabs.warmup.WarmUpService;
 import arun.com.chromer.db.AppColor;
@@ -31,6 +44,7 @@ import arun.com.chromer.dynamictoolbar.WebColorExtractorService;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.shared.AppDetectService;
 import arun.com.chromer.shared.Constants;
+import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Util;
 import arun.com.chromer.webheads.WebHeadService;
 import timber.log.Timber;
@@ -40,9 +54,33 @@ import timber.log.Timber;
  * launches custom tab.
  */
 public class CustomTabs {
+    private static final String ACTION_CUSTOM_TABS_CONNECTION = "android.support.customtabs.action.CustomTabsService";
+    private static final String EXTRA_CUSTOM_TABS_KEEP_ALIVE = "android.support.customtabs.extra.KEEP_ALIVE";
+    private static final String LOCAL_PACKAGE = "com.google.android.apps.chrome";
     private static final String STABLE_PACKAGE = "com.android.chrome";
     private static final String BETA_PACKAGE = "com.chrome.beta";
     private static final String DEV_PACKAGE = "com.chrome.dev";
+    private static final int BOTTOM_OPEN_TAB = 11;
+    private static final int BOTTOM_SHARE_TAB = 12;
+    /**
+     * Fallback in case there was en error launching custom tabs
+     */
+    private final static CustomTabsFallback CUSTOM_TABS_FALLBACK =
+            new CustomTabsFallback() {
+                @Override
+                public void openUri(Activity activity, Uri uri) {
+                    if (activity != null) {
+                        final String string = activity.getString(R.string.fallback_msg);
+                        Toast.makeText(activity, string, Toast.LENGTH_SHORT).show();
+                        try {
+                            final Intent target = new Intent(Intent.ACTION_VIEW, uri);
+                            activity.startActivity(Intent.createChooser(target, activity.getString(R.string.open_with)));
+                        } catch (ActivityNotFoundException e) {
+                            Toast.makeText(activity, activity.getString(R.string.unxp_err), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            };
     /**
      * The context to work with
      */
@@ -76,6 +114,7 @@ public class CustomTabs {
      *
      * @param context the context to work with
      */
+
     private CustomTabs(Activity context) {
         mActivity = context;
     }
@@ -90,13 +129,104 @@ public class CustomTabs {
         return new CustomTabs(activity);
     }
 
+    /**
+     * Opens the URL on a Custom Tab if possible. Otherwise fallsback to opening it on a WebView.
+     *
+     * @param activity         The host activity.
+     * @param customTabsIntent a CustomTabsIntent to be used if Custom Tabs is available.
+     * @param uri              the Uri to be opened.
+     */
+    private static void openCustomTab(Activity activity, CustomTabsIntent customTabsIntent, Uri uri) {
+        final String packageName = getCustomTabPackage(activity);
+
+        if (packageName != null) {
+            customTabsIntent.intent.setPackage(packageName);
+            Intent keepAliveIntent = new Intent()
+                    .setClassName(activity.getPackageName(), KeepAliveService.class.getCanonicalName());
+            customTabsIntent.intent.putExtra(EXTRA_CUSTOM_TABS_KEEP_ALIVE, keepAliveIntent);
+            try {
+                customTabsIntent.launchUrl(activity, uri);
+                Timber.d("Launched url: %s", uri.toString());
+            } catch (Exception e) {
+                CUSTOM_TABS_FALLBACK.openUri(activity, uri);
+                Timber.e("Called fallback even though a package was found, weird Exception : %s", e.toString());
+            }
+        } else {
+            Timber.e("Called fallback since no package found!");
+            CUSTOM_TABS_FALLBACK.openUri(activity, uri);
+        }
+    }
+
+    /**
+     * Attempts to find the custom the best custom tab package to use.
+     *
+     * @return A package that supports custom tab, null if not present
+     */
+    @Nullable
+    private static String getCustomTabPackage(Context context) {
+        final String userPackage = Preferences.customTabApp(context);
+        if (userPackage != null && userPackage.length() > 0) {
+            return userPackage;
+        }
+        if (isPackageSupportCustomTabs(context, STABLE_PACKAGE))
+            return STABLE_PACKAGE;
+        if (isPackageSupportCustomTabs(context, LOCAL_PACKAGE))
+            return LOCAL_PACKAGE;
+
+        List<String> supportingPackages = getCustomTabSupportingPackages(context);
+        if (!supportingPackages.isEmpty()) {
+            return supportingPackages.get(0);
+        } else
+            return null;
+    }
+
+    /**
+     * Returns all valid custom tab supporting browser packages on the system. Does not respect if
+     * the package is default or not.
+     *
+     * @param context context to work with
+     * @return list of packages supporting CCT
+     */
+    @TargetApi(Build.VERSION_CODES.M)
+    @NonNull
+    public static List<String> getCustomTabSupportingPackages(Context context) {
+        PackageManager pm = context.getApplicationContext().getPackageManager();
+        Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));
+        // Get all apps that can handle VIEW intents.
+        List<ResolveInfo> resolvedActivityList = pm.queryIntentActivities(activityIntent, PackageManager.MATCH_ALL);
+        List<String> packagesSupportingCustomTabs = new ArrayList<>();
+        for (ResolveInfo info : resolvedActivityList) {
+            if (isPackageSupportCustomTabs(context, info.activityInfo.packageName)) {
+                packagesSupportingCustomTabs.add(info.activityInfo.packageName);
+            }
+        }
+        return packagesSupportingCustomTabs;
+    }
+
+    /**
+     * Determines if the provided package name is a valid custom tab provider or not.
+     *
+     * @param context     Context to work with
+     * @param packageName Package name of the app
+     * @return true if a provider, false otherwise
+     */
+    public static boolean isPackageSupportCustomTabs(Context context, @Nullable String packageName) {
+        if (packageName == null) {
+            return false;
+        }
+        PackageManager pm = context.getApplicationContext().getPackageManager();
+        Intent serviceIntent = new Intent();
+        serviceIntent.setAction(ACTION_CUSTOM_TABS_CONNECTION);
+        serviceIntent.setPackage(packageName);
+        return pm.resolveService(serviceIntent, 0) != null;
+    }
+
     public CustomTabs withSession(@Nullable CustomTabsSession session) {
         if (session != null) {
             mCustomTabsSession = session;
         }
         return this;
     }
-
 
     /**
      * Exposed method to set the url for which this CCT should be launched
@@ -151,6 +281,8 @@ public class CustomTabs {
         prepareActionButton();
         // prepare all the menu items
         prepareMenuItems();
+        // prepare all bottom bar item
+        prepareBottomBar();
         return this;
     }
 
@@ -160,7 +292,7 @@ public class CustomTabs {
     public void launch() {
         assertBuilderInitialized();
         CustomTabsIntent customTabsIntent = mIntentBuilder.build();
-        CustomTabBindingHelper.openCustomTab(mActivity, customTabsIntent, Uri.parse(mUrl));
+        openCustomTab(mActivity, customTabsIntent, Uri.parse(mUrl));
 
         // Dispose reference
         mActivity = null;
@@ -415,6 +547,37 @@ public class CustomTabs {
     }
 
     /**
+     * Add all bottom bar actions
+     */
+    private void prepareBottomBar() {
+        if (!Preferences.bottomBar(mActivity)) {
+            return;
+        }
+        mIntentBuilder.setSecondaryToolbarColor(mToolbarColor);
+
+        int iconColor = ColorUtil.getForegroundWhiteOrBlack(mToolbarColor);
+        if (Util.isLollipopAbove()) {
+            final Intent openInNewTabIntent = new Intent(mActivity, OpenInNewTabReceiver.class);
+            final PendingIntent pendingOpenTabIntent = PendingIntent.getBroadcast(mActivity, 0, openInNewTabIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            Bitmap openTabIcon = new IconicsDrawable(mActivity)
+                    .icon(CommunityMaterial.Icon.cmd_plus_box)
+                    .color(iconColor)
+                    .sizeDp(24).toBitmap();
+            mIntentBuilder.addToolbarItem(BOTTOM_OPEN_TAB, openTabIcon, mActivity.getString(R.string.open_in_new_tab), pendingOpenTabIntent);
+        }
+
+        final Intent shareIntent = new Intent(mActivity, ShareBroadcastReceiver.class);
+        final PendingIntent pendingShareIntent = PendingIntent.getBroadcast(mActivity, 0, shareIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Bitmap shareIcon = new IconicsDrawable(mActivity)
+                .icon(GoogleMaterial.Icon.gmd_share)
+                .color(iconColor)
+                .sizeDp(24).toBitmap();
+        mIntentBuilder.addToolbarItem(BOTTOM_SHARE_TAB, shareIcon, mActivity.getString(R.string.share), pendingShareIntent);
+    }
+
+    /**
      * Method to check if the builder was initialized. Will fail fast if not.
      */
     private void assertBuilderInitialized() {
@@ -438,5 +601,17 @@ public class CustomTabs {
             Timber.e("App icon fetching for %s failed", packageName);
         }
         return null;
+    }
+
+
+    /**
+     * To be used as a fallback to open the Uri when Custom Tabs is not available.
+     */
+    public interface CustomTabsFallback {
+        /**
+         * @param activity The Activity that wants to open the Uri.
+         * @param uri      The uri to be opened by the fallback.
+         */
+        void openUri(Activity activity, Uri uri);
     }
 }

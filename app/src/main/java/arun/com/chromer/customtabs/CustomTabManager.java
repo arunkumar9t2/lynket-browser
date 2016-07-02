@@ -1,80 +1,29 @@
 package arun.com.chromer.customtabs;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsCallback;
 import android.support.customtabs.CustomTabsClient;
-import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsServiceConnection;
 import android.support.customtabs.CustomTabsSession;
 
 import java.util.List;
 
 import arun.com.chromer.preferences.manager.Preferences;
-import arun.com.chromer.util.Util;
 import timber.log.Timber;
 
 /**
  * Created by Arun on 18/12/2015.
+ * Helper class to maintain connection with custom tab provider. Responsible to connection with
+ * the service and issuing warm up and other optimizations.
  */
-public class CustomTabBindingHelper implements ServiceConnectionCallback {
-
+public class CustomTabManager implements ServiceConnectionCallback {
     private CustomTabsSession mCustomTabsSession;
     private CustomTabsClient mClient;
     private CustomTabsServiceConnection mConnection;
     private ConnectionCallback mConnectionCallback;
     private NavigationCallback mNavigationCallback;
-
-    /**
-     * Opens the URL on a Custom Tab if possible. Otherwise fallsback to opening it on a WebView.
-     *
-     * @param activity         The host activity.
-     * @param customTabsIntent a CustomTabsIntent to be used if Custom Tabs is available.
-     * @param uri              the Uri to be opened.
-     */
-    @SuppressWarnings("SameParameterValue")
-    public static void openCustomTab(Activity activity, CustomTabsIntent customTabsIntent, Uri uri) {
-        // The package name to use
-        String packageName;
-
-        // first check user preferred custom provider is valid
-        String defaultCustomTabProvider = Preferences.customTabApp(activity);
-        if (isUserChosenAppValidProvider(activity, defaultCustomTabProvider)) {
-            packageName = defaultCustomTabProvider;
-        } else {
-            // getting all the packages here
-            Timber.d("Valid user choice not present, defaulting to conventional method");
-            packageName = CustomTabHelper.getPackageNameToUse(activity);
-        }
-        //If we cant find a package name, it means there's no browser that supports
-        //Chrome Custom Tabs installed.
-        CustomTabsFallback fallback = CustomTabHelper.CUSTOM_TABS_FALLBACK;
-        if (packageName == null) {
-            Timber.d("Called fallback since no package found!");
-            callFallback(activity, uri, fallback);
-        } else {
-            customTabsIntent.intent.setPackage(packageName);
-            try {
-                customTabsIntent.launchUrl(activity, uri);
-                Timber.d("Launched url: %s", uri.toString());
-            } catch (Exception e) {
-                callFallback(activity, uri, fallback);
-                Timber.d("Called fallback even though package was found, weird Exception : %s", e.toString());
-            }
-        }
-    }
-
-    private static boolean isUserChosenAppValidProvider(Activity activity, String userPrefProvider) {
-        return Util.isPackageInstalled(activity, userPrefProvider) && CustomTabHelper.isPackageSupportCustomTabs(activity, userPrefProvider);
-    }
-
-    private static void callFallback(Activity activity, Uri uri, CustomTabsFallback fallback) {
-        if (fallback != null) {
-            fallback.openUri(activity, uri);
-        }
-    }
 
     /**
      * Unbinds the component from the Custom Tabs Service.
@@ -95,7 +44,6 @@ public class CustomTabBindingHelper implements ServiceConnectionCallback {
      *
      * @return a CustomTabsSession.
      */
-    @SuppressWarnings("WeakerAccess")
     public CustomTabsSession getSession() {
         if (mClient == null) {
             mCustomTabsSession = null;
@@ -164,14 +112,13 @@ public class CustomTabBindingHelper implements ServiceConnectionCallback {
     }
 
 
-    @SuppressWarnings({"SameReturnValue", "unused"})
     public boolean requestWarmUp() {
-        boolean ok;
+        boolean ok = false;
         if (mClient != null) {
             ok = mClient.warmup(0L);
             Timber.d("Warmup status %s", ok);
         }
-        return false;
+        return ok;
     }
 
     @Override
@@ -196,17 +143,6 @@ public class CustomTabBindingHelper implements ServiceConnectionCallback {
          * Called when the service is disconnected.
          */
         void onCustomTabsDisconnected();
-    }
-
-    /**
-     * To be used as a fallback to open the Uri when Custom Tabs is not available.
-     */
-    public interface CustomTabsFallback {
-        /**
-         * @param activity The Activity that wants to open the Uri.
-         * @param uri      The uri to be opened by the fallback.
-         */
-        void openUri(Activity activity, Uri uri);
     }
 
     public static class NavigationCallback extends CustomTabsCallback {

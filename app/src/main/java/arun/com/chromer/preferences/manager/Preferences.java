@@ -11,7 +11,7 @@ import android.support.v4.content.ContextCompat;
 import java.util.List;
 
 import arun.com.chromer.R;
-import arun.com.chromer.customtabs.CustomTabHelper;
+import arun.com.chromer.customtabs.CustomTabs;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Util;
 
@@ -39,9 +39,9 @@ public class Preferences {
     public static final String PRE_FETCH = "pre_fetch_preference";
     public static final String WIFI_PREFETCH = "wifi_preference";
     public static final String PRE_FETCH_NOTIFICATION = "pre_fetch_notification_preference";
-    public static final String BLACKLIST = "blacklist_preference";
     public static final String BLACKLIST_DUMMY = "blacklist_preference_dummy";
     public static final String MERGE_TABS_AND_APPS = "merge_tabs_and_apps_preference";
+    private static final String BLACKLIST = "blacklist_preference";
     private static final String PREFERRED_PACKAGE = "preferred_package";
     private static final String FIRST_RUN = "firstrun_1";
     private static final String USER_KNOWS_BOTTOM_BAR = "user_learnt_bottom_bar";
@@ -143,10 +143,10 @@ public class Preferences {
     @Nullable
     private static String getDefaultCustomTabApp(Context context) {
         if (Util.isPackageInstalled(context, Constants.CHROME_PACKAGE) &&
-                CustomTabHelper.isPackageSupportCustomTabs(context, Constants.CHROME_PACKAGE))
+                CustomTabs.isPackageSupportCustomTabs(context, Constants.CHROME_PACKAGE))
             return Constants.CHROME_PACKAGE;
 
-        List<String> supportingPackages = CustomTabHelper.getCustomTabSupportingPackages(context);
+        List<String> supportingPackages = CustomTabs.getCustomTabSupportingPackages(context);
         if (supportingPackages.size() > 0) {
             return supportingPackages.get(0);
         } else
