@@ -146,6 +146,8 @@ public abstract class BaseWebHead extends FrameLayout {
         initDisplayMetrics();
         setSpawnLocation();
 
+        WEB_HEAD_COUNT++;
+
         sWindowManager.addView(this, mWindowParams);
 
         sXDrawable = new IconicsDrawable(context)
