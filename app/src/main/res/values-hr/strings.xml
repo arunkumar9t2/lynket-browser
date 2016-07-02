@@ -32,7 +32,6 @@
     <string name="feedback">Povratne informacije</string>
     <string name="intro">Uvod</string>
     <string name="send_email">Pošaljite e-poruku…</string>
-    <string name="choose_default_provider">Odaberite zadanog pružatelja</string>
     <string name="fallback_msg">Nije moguće otvoriti prilagođenu karticu, otvorit će se normalni preglednik.</string>
     <string name="open_with">Otvori s pomoću aplikacije…</string>
     <string name="open_in_browser">Otvori u %1$s</string>
@@ -73,7 +72,6 @@
     <string name="colored_toolbar">Obojena alatna traka</string>
     <string name="choose_animation">Animacija otvaranja</string>
     <string name="animation_speed">Brzina animacije</string>
-    <string name="usage_options">Opcije korištenja</string>
     <string name="default_pref_xpln">Postavite Chromer kao zadani preglednik da bi mogao otvarati sve poveznice ili možete odabrati Chromer s popisa kada se prikaže.</string>
     <string name="personalization">Prilagodba</string>
     <string name="default_clear_msg">je postavljen kao zadani preglednik. Molimo vas da izbrišete zadane postavke tog preglednika.</string>

@@ -16,7 +16,6 @@
 
     <dimen name="web_head_size_normal">86dp</dimen>
     <dimen name="web_head_size_small">76dp</dimen>
-    <dimen name="web_head_text_indicator">20dp</dimen>
     <dimen name="web_head_shadow_radius">2.5dp</dimen>
     <dimen name="web_head_shadow_dx">0.1dp</dimen>
     <dimen name="web_head_shadow_dy">1.5dp</dimen>

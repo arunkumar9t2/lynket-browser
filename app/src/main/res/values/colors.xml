@@ -5,9 +5,6 @@
     <color name="colorPrimaryDarker">#283593</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorAccentLighter">#EC407A</color>
-    <color name="colorAccentDarker">#C2185B</color>
-    <color name="colorAccentText">#cbFFFFFF</color>
-    <color name="colorAccentTextSecondary">#9dFFFFFF</color>
 
 
     <color name="card_background_light">#EEEEEE</color>
@@ -22,7 +19,6 @@
     <color name="twitter">#55acee</color>
     <color name="linkedin">#0077b5</color>
     <color name="playstore_green">#0f9d58</color>
-    <color name="default_success">#4CAF50</color>
     <color name="accent_icon_nofocus">#616161</color>
     <color name="web_head_bg">#00BCD4</color>
     <color name="error">#DD2C00</color>

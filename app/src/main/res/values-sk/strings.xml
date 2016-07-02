@@ -37,7 +37,6 @@
     <string name="feedback">Spätná väzba</string>
     <string name="intro">Úvod</string>
     <string name="send_email">Poslať e-mail…</string>
-    <string name="choose_default_provider">Zvoľte predvoleného poskytovateľa</string>
     <string name="fallback_msg">Nie je možné otvoriť Custom Tab, presmerovanie do normálneho prehliadača</string>
     <string name="open_with">Otvoriť s…</string>
     <string name="open_in_browser">Otvoriť v %1$s</string>
@@ -78,7 +77,6 @@
     <string name="colored_toolbar">Farebná lišta</string>
     <string name="choose_animation">Animácia otvorenia</string>
     <string name="animation_speed">Rýchlosť animácie</string>
-    <string name="usage_options">Možnosti použitia</string>
     <string name="default_pref_xpln">Nastavte si Chromer ako predvolený aby otváral všetky odkazy alebo si môžete vybrať Chromer zo zoznamu keď sa zobrazí</string>
     <string name="personalization">Personalizácia</string>
     <string name="default_clear_msg">prehliadač je nastavený ako predvolený, prosím, zrušte ho kliknutím na vymazať predvolené nastavenia.</string>
@@ -86,7 +84,6 @@
     <string name="keep_chrome_warmedup">Ponechá prehliadač v pamäti pre rýchlejšie spustenie</string>
     <string name="warmup_browser">Nažhaviť prehliadač</string>
     <string name="set_default_chromer">Nastaviť ako predvolený prehliadač</string>
-    <string name="circle_to_preview_changes">Kliknite na okrúhle tlačidlo pre náhľad zmien</string>
     <string name="default_provider">Predvolený poskytovateľ Custom Tabs</string>
     <string name="pre_fetch_content">Prednačítanie obsahu</string>
     <string name="pre_fetch_desc">Vyhľadáva odkazy na vašej obrazovke a načítava ich na pozadí pre rýchle spustenie</string>
@@ -100,7 +97,6 @@
     <string name="web_heads_color">Farba webových hlavičiek</string>
     <string name="choose_secondary_browser">Sekundárny prehliadač</string>
     <string name="dynamic_toolbar_help">Pre dynamické zafarbenie lišty, sa Chromer učí farby bez zásahu užívateľa. To spočiatku nemusí byť správne pre webové stránky alebo aplikáciu, ale to sa  používaním a časom zlepší. Užite si to!</string>
-    <string name="chromer_defaulted">Chromer je predvolený prehliadač</string>
     <string name="secondary_browser_success">Aplikácia %1$s je nastavená ako sekundárny prehliadač!</string>
     <string name="fav_share_success">Aplikácia %1$s je nastavená ako aplikácia pre zdieľanie!</string>
     <string name="default_provider_success">Aplikácia %1$s bude použitá ako poskytovateľ Custom Tabs!</string>
@@ -137,7 +133,6 @@
     <string name="become_a_tester">Staňte sa testerom</string>
     <string name="join_beta_content">Beta verzie sú experimentálne, ktoré majú najnovšie funkcie ale môžu mať chyby.  Môžete prispieť k vývoju pripojením sa ako tester a nahlasovaním chýb, ktoré nájdete v komunite Google+.\n\nProsím, uistite sa, že ste sa pripojili do Google+ komunity, a potom kliknite na tlačidlo Staňte sa testerom a prejdite na odkaz pre testovanie Google Play. \n\nPOZNÁMKA: Musíte sa pripojiť do komunity pre sprístupnenie možnosti testovania.</string>
     <string name="no_voice_rec_apps">Nebola nájdená kompatibilná aplikácia pre rozoznávanie hlasu</string>
-    <string name="already_set">Už nastavené!</string>
     <string name="blacklisted_apps">Blokované aplikácie</string>
     <string name="loading">Načítavanie…</string>
     <string name="please_wait">Prosím, počkajte</string>

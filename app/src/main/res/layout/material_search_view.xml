@@ -9,7 +9,6 @@
 
 
     <android.support.v7.widget.CardView
-        android:id="@+id/msv_card"
         android:layout_width="match_parent"
         android:layout_height="@dimen/material_search_height"
         android:foreground="?attr/selectableItemBackground"

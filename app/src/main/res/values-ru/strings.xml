@@ -50,7 +50,6 @@
     <string name="feedback">Обратная связь</string>
     <string name="intro">Вступление</string>
     <string name="send_email">Отправить e-mail…</string>
-    <string name="choose_default_provider">Выбрать поставщика по умолчанию</string>
     <string name="fallback_msg">Невозможно открыть вкладку, возврат в обычный браузер</string>
     <string name="open_with">Открыть через…</string>
     <string name="open_in_browser">Открыть в %1$s</string>
@@ -91,7 +90,6 @@
     <string name="colored_toolbar">Окрашенная панель инструментов</string>
     <string name="choose_animation">Анимация открытия</string>
     <string name="animation_speed">Скорость анимации</string>
-    <string name="usage_options">Пользовательские настройки</string>
     <string name="default_pref_xpln">Используйте Chromer по умолчанию для открытия ссылок, или вы можете выбирать Chromer из списка предложенных браузеров</string>
     <string name="personalization">Персонализация</string>
     <string name="default_clear_msg">установлен в качестве браузера по умолчанию, пожалуйста, уберите его, нажав \“Очистить настройки по умолчанию\”.</string>
@@ -99,7 +97,6 @@
     <string name="keep_chrome_warmedup">Держать Chromer в памяти для быстрого запуска</string>
     <string name="warmup_browser">Закрепить в памяти</string>
     <string name="set_default_chromer">Установить в качестве браузера по умолчанию</string>
-    <string name="circle_to_preview_changes">Нажмите круглую кнопку, чтобы просмотреть изменения</string>
     <string name="default_provider">"Поставщик вкладок по умолчанию "</string>
     <string name="pre_fetch_content">Закрепить содержимое</string>
     <string name="pre_fetch_desc">Сканировать экран на наличие ссылок и загружать их в фоновом режиме для мгновенного запуска</string>
@@ -113,7 +110,6 @@
     <string name="web_heads_color">Цвет плавающей кнопки</string>
     <string name="choose_secondary_browser">Вторичный браузер</string>
     <string name="dynamic_toolbar_help">Чтобы включить динамическое окрашивание панели инструментов, Chromer изучает цветовую палитру. Это может происходить не мгновенно, но через некоторое время использования всё нормализуется. Наслаждайтесь!</string>
-    <string name="chromer_defaulted">Chromer является браузером по умолчанию</string>
     <string name="secondary_browser_success">%1$s установлен в качестве вторичного браузера!</string>
     <string name="fav_share_success">%1$s установлен в качестве любимого приложения для передачи!</string>
     <string name="default_provider_success">%1$s будет использоваться для предоставления пользовательских вкладок!</string>
@@ -150,7 +146,6 @@
     <string name="become_a_tester">Стать тестером</string>
     <string name="join_beta_content">Бета-релизы - это экспериментальные версии, в которых представлены самые новые возможности, но в них бывают баги. Вы можете присоединиться к разработке, став тестером и сообщая о найденных багах в сообществе Google+.\n\nПожалуйста, убедитесь в том, что вы присоединились к сообществу в Google+, а затем нажмите кнопку \“Стать тестером\”, чтобы вас перенаправило по тестовой ссылке Google Play.\n\nПРИМЕЧАНИЕ: Вы должны присоединиться к сообществу, чтобы стать тестером.</string>
     <string name="no_voice_rec_apps">Не найдено приложений для распознавания голоса</string>
-    <string name="already_set">Уже установлен!</string>
     <string name="blacklisted_apps">Приложения в чёрном списке</string>
     <string name="loading">Загрузка…</string>
     <string name="please_wait">Пожалуйста, подождите</string>

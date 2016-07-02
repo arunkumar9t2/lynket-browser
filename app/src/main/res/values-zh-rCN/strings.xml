@@ -50,7 +50,6 @@
     <string name="feedback">反馈</string>
     <string name="intro">简介</string>
     <string name="send_email">发送电子邮件…</string>
-    <string name="choose_default_provider">选择默认提供程序</string>
     <string name="fallback_msg">无法打开自定义标签页，将在浏览器中加载</string>
     <string name="open_with">选择程序打开…</string>
     <string name="open_in_browser">在 %1$s 中打开</string>
@@ -91,7 +90,6 @@
     <string name="colored_toolbar">为工具栏上色</string>
     <string name="choose_animation">打开动画</string>
     <string name="animation_speed">动画速度</string>
-    <string name="usage_options">使用选项</string>
     <string name="default_pref_xpln">将 Chromer 设置为默认浏览器以打开全部链接，或者还可以在弹出程序列表时选择用 Chromer 打开</string>
     <string name="personalization">个性化</string>
     <string name="default_clear_msg">被设置为了默认浏览器，请点击清除默认操作来取消它</string>
@@ -99,7 +97,6 @@
     <string name="keep_chrome_warmedup">使你的浏览器常驻内存以便更快速的加载</string>
     <string name="warmup_browser">预热的浏览器</string>
     <string name="set_default_chromer">设置为默认浏览器</string>
-    <string name="circle_to_preview_changes">点击右下角的圆形浮动按钮来预览变化</string>
     <string name="default_provider">自定义标签页提供程序</string>
     <string name="pre_fetch_content">预读取内容</string>
     <string name="pre_fetch_desc">扫描你屏幕上的链接并于后台加载内容以便立即打开</string>
@@ -113,7 +110,6 @@
     <string name="web_heads_color">链接气泡颜色</string>
     <string name="choose_secondary_browser">第二浏览器</string>
     <string name="dynamic_toolbar_help">开启工具栏动态变色后，Chromer 将会开始静默化学习颜色适配。起初它可能无法正确的适配一个网站或一个应用，但随着时间的推移适配效果将会不断提高。开始享受它吧！</string>
-    <string name="chromer_defaulted">Chromer 是当前的默认浏览器</string>
     <string name="secondary_browser_success">%1$s 已被设为第二浏览器！</string>
     <string name="fav_share_success">%1$s 已被设为喜爱的分享应用！</string>
     <string name="default_provider_success">%1$s 将被用来提供自定义标签页！</string>
@@ -150,7 +146,6 @@
     <string name="become_a_tester">成为测试人员</string>
     <string name="join_beta_content">测试版是具备最新功能但会有少量 Bug 存在的实验性版本。你可以通过加入测试人员并在 Google+ 社群内汇报相关问题的方式来为开发做出贡献。\n\n请确保你已经加入了 Google+ 社群，然后点击成为测试人员按钮来获取 Play 商店内的测试版本链接。\n\n注意：你需要先加入社群以成为测试人员。</string>
     <string name="no_voice_rec_apps">没有找到可兼容的语音识别应用</string>
-    <string name="already_set">设置完成！</string>
     <string name="blacklisted_apps">黑名单应用</string>
     <string name="loading">正在加载…</string>
     <string name="please_wait">请等待</string>

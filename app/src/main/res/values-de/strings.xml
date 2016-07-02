@@ -50,7 +50,6 @@
     <string name="feedback">Feedback</string>
     <string name="intro">Einführung</string>
     <string name="send_email">Email senden…</string>
-    <string name="choose_default_provider">Standardprovider wählen</string>
     <string name="fallback_msg">Konnte Custom-Tab nicht öffnen, ausweichen auf normalen Browser</string>
     <string name="open_with">Öffnen mit…</string>
     <string name="open_in_browser">Öffne in %1$s</string>
@@ -91,7 +90,6 @@
     <string name="colored_toolbar">Farbige Aktionsleiste</string>
     <string name="choose_animation">Animation beim Öffnen</string>
     <string name="animation_speed">Animationsgeschwindigkeit</string>
-    <string name="usage_options">Benutzereinstellungen</string>
     <string name="default_pref_xpln">Lege Chromer als Standard für das Öffnen von Links fest oder wähle Chromer aus der Liste aus wenn es angezeigt wird</string>
     <string name="personalization">Personalisieren</string>
     <string name="default_clear_msg">ist als Standard Browser festgelegt. Bitte ändern indem du \“Auf Standard zurücksetzen\” drückst.</string>
@@ -99,7 +97,6 @@
     <string name="keep_chrome_warmedup">Browser im Speicher behalten für schnelleres Starten</string>
     <string name="warmup_browser">Browser aufwärmen</string>
     <string name="set_default_chromer">Als Standard Browser festlegen</string>
-    <string name="circle_to_preview_changes">Drücke den Kreis für eine Vorschau</string>
     <string name="default_provider">Standard Custom Tab Provider</string>
     <string name="pre_fetch_content">Inhalt Vorabrufen</string>
     <string name="pre_fetch_desc">Scanne deinen Bildschirm nach Links und lade sie im Hintergrund für einen sofortigen Start</string>
@@ -112,7 +109,6 @@
     <string name="web_heads_color">Web Heads Farbe</string>
     <string name="choose_secondary_browser">Sekundärer Browser</string>
     <string name="dynamic_toolbar_help">Um das dynamische Färben der Aktionsleiste zu ermöglichen, lernt Chromer im Hintergrund. Manchmal funktioniert es nicht sofort, sondern erst nach einiger Zeit.</string>
-    <string name="chromer_defaulted">Chromer ist der Standard Browser</string>
     <string name="secondary_browser_success">%1$s als sekundärer Browser festgelegt!</string>
     <string name="fav_share_success">%1$s als Lieblingsapp zum Teilen festgelegt!</string>
     <string name="default_provider_success">%1$s wird für das bereitstellen von Custom Tabs genutzt!</string>
@@ -149,7 +145,6 @@
     <string name="become_a_tester">Tester werden</string>
     <string name="join_beta_content">“Beta Versionen sind experimentell. Sie haben die neuesten Funktionen, enthalten jedoch auch Fehler. Du kannst bei der Entwicklung helfen, indem du als Tester mitmachst und Fehler in der Google+ Community meldest. \n\nBitte stelle sicher,  dass du der Community beigetreten bist und klicke dann auf den Button \”Tester werden\". \n\nBEACHTE: Du musst der Community beitreten um Tester zu werden. "</string>
     <string name="no_voice_rec_apps">Keine kompatible Spracherkennungs App gefunden</string>
-    <string name="already_set">Bereits eingestellt!</string>
     <string name="blacklisted_apps">Ausgeschlossene Apps (Blacklist)</string>
     <string name="loading">Laden…</string>
     <string name="please_wait">Bitte warten</string>

@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:elevation="9dp"
+        android:elevation="6dp"
         tools:ignore="UnusedAttribute"/>
 
     <arun.com.chromer.webheads.ui.CircleView
@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:elevation="9.1dp"
+        android:elevation="6.1dp"
         tools:ignore="UnusedAttribute"/>
 
     <TextView

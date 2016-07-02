@@ -34,7 +34,6 @@ U kunt Google Chrome (Gratis) installeren vanuit de Play Store. Als U dat al ged
     <string name="feedback">"Feedback "</string>
     <string name="intro">Intro</string>
     <string name="send_email">Verstuur E-mail…</string>
-    <string name="choose_default_provider">Kies standaardbrowser.</string>
     <string name="fallback_msg">Kan aangepast tabblad niet open, terugkeren naar normale browser.</string>
     <string name="open_with">Openen met…</string>
     <string name="open_in_browser">Open in %1$s</string>
@@ -75,7 +74,6 @@ U kunt Google Chrome (Gratis) installeren vanuit de Play Store. Als U dat al ged
     <string name="colored_toolbar">Gekleurde toolbar</string>
     <string name="choose_animation">Openanimatie</string>
     <string name="animation_speed">Animatiesnelheid</string>
-    <string name="usage_options">Gebruiksinstellingen</string>
     <string name="default_pref_xpln">Stel Chromer in als standaardbrowser om alle links te openen, of kies Chromer uit de lijst wanneer de lijst zichtbaar is</string>
     <string name="personalization">Personalisatie</string>
     <string name="default_clear_msg">is ingesteld als standaardbrowser, verwijder dit door op App-voorkeuren resetten te drukken.</string>
@@ -83,7 +81,6 @@ U kunt Google Chrome (Gratis) installeren vanuit de Play Store. Als U dat al ged
     <string name="keep_chrome_warmedup">Houdt je browser in het geheugen om sneller te starten</string>
     <string name="warmup_browser">"Browser opwarmen "</string>
     <string name="set_default_chromer">"Stel in als standaardbrowser "</string>
-    <string name="circle_to_preview_changes">Druk op de ronde knop om de veranderingen te zien voordat ze worden doorgevoerd.</string>
     <string name="default_provider">"Standaard aangepaste tabbladen leverancier "</string>
     <string name="pre_fetch_content">Links van tevoren laden</string>
     <string name="pre_fetch_desc">Scan het scherm naar links en laad ze in de achtergrond om ze meteen te openen</string>
@@ -97,7 +94,6 @@ U kunt Google Chrome (Gratis) installeren vanuit de Play Store. Als U dat al ged
     <string name="web_heads_color">Webheadkleuren</string>
     <string name="choose_secondary_browser">Tweede browser</string>
     <string name="dynamic_toolbar_help">Om een dynamisch kleuren van de toolbar in te schakelen leert Chromer de kleuren onzichtbaar. Dit is niet meteen zichtbaar bij een website of app, maar verbeterd terwijl het gebruikt wordt. Veel plezier!</string>
-    <string name="chromer_defaulted">"Chromer is momenteel de standaardbrowser "</string>
     <string name="secondary_browser_success">%1$s is ingesteld als tweede browser!</string>
     <string name="fav_share_success">%1$s is ingesteld als favoriete deelapp!</string>
     <string name="default_provider_success">%1$s zal worden gebruikt om aangepaste tabbladen te leveren!</string>
@@ -134,7 +130,6 @@ U kunt Google Chrome (Gratis) installeren vanuit de Play Store. Als U dat al ged
     <string name="become_a_tester">Wordt een tester</string>
     <string name="join_beta_content">Bètareleases zijn experimenteel en hebben de nieuwste functies maar wel een paar bugs. Je kan bijdragen aan de ontwikkeling van Chromer door tester te worden en dan alle bugs die je ziet in de Google+ Community te delen.\n\nWordt eerst lid van de Google+ Community en klik dan op de wordt tester knop om naar de Google Play testlink te gaan.\n\nNOTITIE: Je moet lid worden van de Google+ Community om een tester te worden.</string>
     <string name="no_voice_rec_apps">Geen compitabele stemherkenningsapps gevonden.</string>
-    <string name="already_set">Al ingesteld!</string>
     <string name="blacklisted_apps">Apps op de zwarte lijst</string>
     <string name="loading">Laden…</string>
     <string name="please_wait">"Wacht alstublieft "</string>

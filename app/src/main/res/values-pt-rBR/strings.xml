@@ -50,7 +50,6 @@
     <string name="feedback">Comentários</string>
     <string name="intro">Introdução</string>
     <string name="send_email">Enviar e-mail…</string>
-    <string name="choose_default_provider">Escolha o provedor padrão</string>
     <string name="fallback_msg">Não foi possível abrir a aba customizada, voltando para navegadores normais</string>
     <string name="open_with">Abrir com…</string>
     <string name="open_in_browser">Abrir em %1$s</string>
@@ -91,7 +90,6 @@
     <string name="colored_toolbar">Barra de ações colorida</string>
     <string name="choose_animation">Animação de abertura</string>
     <string name="animation_speed">Velocidade das animações</string>
-    <string name="usage_options">Opções de uso</string>
     <string name="default_pref_xpln">Definir o Chromer como padrão para abrir todos os links, ou você pode escolher Chromer na lista abaixo quando aparecer</string>
     <string name="personalization">Personalização</string>
     <string name="default_clear_msg">está definido como navegador padrão, por favor redefina isso clicando limpar padrões.</string>
@@ -99,7 +97,6 @@
     <string name="keep_chrome_warmedup">Manter seu navegador na memória para abrir mais rápido</string>
     <string name="warmup_browser">Aquecer o navegador</string>
     <string name="set_default_chromer">Definir como Padrão</string>
-    <string name="circle_to_preview_changes">Toque no botão circular para ver as alterações</string>
     <string name="default_provider">Provedor de abas personalizadas</string>
     <string name="pre_fetch_content">Antecipar conteúdo</string>
     <string name="pre_fetch_desc">Escanear sua tela em busca de links e carregá-los em segundo plano para acesso rápido</string>
@@ -113,7 +110,6 @@
     <string name="web_heads_color">Cor das web heads</string>
     <string name="choose_secondary_browser">Navegador secundário</string>
     <string name="dynamic_toolbar_help">Para ativar a coloração dinâmica da barra de ações, o Chromer aprende as cores em silêncio. Pode demorar para aprender de um app ou site mas vai melhorar com o tempo de uso. Divirta-se!</string>
-    <string name="chromer_defaulted">O Chromer é o navegador padrão atual</string>
     <string name="secondary_browser_success">%1$s definido como navegador secundário!</string>
     <string name="fav_share_success">%1$s definido como app de compartilhamento favorito!</string>
     <string name="default_provider_success">%1$s será usado como fornecedor de Abas Personalizadas!</string>
@@ -150,7 +146,6 @@
     <string name="become_a_tester">Tornar-se testador</string>
     <string name="join_beta_content">Versões beta são compilações experimentais e contém as últimas funções mas podem conter bugs. Você pode ajudar no desenvolvimento do app se tornando um testador e reportando problemas e sugestões na comunidade do Google+. \n\nCertifique-se de estar participando da comunidade do Google+, e clique no botão TORNAR-SE TESTADOR no site da Google Play. \n\nNOTA: Você precisa participar da comunidade para se tornar beta tester.</string>
     <string name="no_voice_rec_apps">Nenhum app de reconhecimento de voz foi encontrado</string>
-    <string name="already_set">Já definido!</string>
     <string name="blacklisted_apps">Apps na lista negra</string>
     <string name="loading">Carregando…</string>
     <string name="please_wait">Aguarde</string>

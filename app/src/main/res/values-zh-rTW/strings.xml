@@ -37,7 +37,6 @@
     <string name="feedback">意見回饋</string>
     <string name="intro">簡介</string>
     <string name="send_email">發送電郵…</string>
-    <string name="choose_default_provider">選擇預設提供程序</string>
     <string name="fallback_msg">無法打開自訂標籤頁，將以瀏覽器開啟</string>
     <string name="open_with">選擇應用程式打開…</string>
     <string name="open_in_browser">在 %1$s 中打開</string>
@@ -78,7 +77,6 @@
     <string name="colored_toolbar">為工具欄上色</string>
     <string name="choose_animation">開啟動畫</string>
     <string name="animation_speed">動畫速度</string>
-    <string name="usage_options">使用選項</string>
     <string name="default_pref_xpln">將 Chromer 設定為預設瀏覽器以打開所有連結，或您可以在選擇應用程式列表出現時選擇使用 Chromer</string>
     <string name="personalization">個人化</string>
     <string name="default_clear_msg">被設為預設瀏覽器，請點擊清除預設操作以取消它。</string>
@@ -86,7 +84,6 @@
     <string name="keep_chrome_warmedup">在內存常駐您的瀏覽器以更快速開啟</string>
     <string name="warmup_browser">預載瀏覽器</string>
     <string name="set_default_chromer">設為預設瀏覽器</string>
-    <string name="circle_to_preview_changes">點擊圖形浮動按鈕以預覽變更</string>
     <string name="default_provider">預設自訂標籤頁提供應用</string>
     <string name="pre_fetch_content">預載內容</string>
     <string name="pre_fetch_desc">掃瞄畫面上的連結並在背景載入，以便可即時打開</string>
@@ -100,7 +97,6 @@
     <string name="web_heads_color">浮動氣泡顏色</string>
     <string name="choose_secondary_browser">第二瀏覽器</string>
     <string name="dynamic_toolbar_help">啟動了動態工具欄變色，Chromer會靜靜地學習顏色適配。起初它可能無法正確適配網頁或應用程式的顏色，但它會隨使用時間不斷優化，享受它吧！</string>
-    <string name="chromer_defaulted">Chromer是當前的預設瀏覽器</string>
     <string name="secondary_browser_success">%1$s 被設定為第二瀏覽器</string>
     <string name="fav_share_success">%1$s 被設定為您的喜好分享應用程式！</string>
     <string name="default_provider_success">%1$s 將被用於提供自訂標籤頁！</string>
@@ -137,7 +133,6 @@
     <string name="become_a_tester">成為測試人員</string>
     <string name="join_beta_content">測試版是具有最新功能但可能有少量 Bug 的實驗性版本，您可以透過加入成為測試人員及在 Google+ 社群上回報您遇到的問題來為開發做出貢獻。\n\n請確定您已加入 Google+ 社群，然後點擊成為測試人員按鈕以獲得 Google Play 的測試連結。\n\n注意：您必需加入社群才能成為測試人員。</string>
     <string name="no_voice_rec_apps">找不到相容的語音辨識應用程式</string>
-    <string name="already_set">已設定好了！</string>
     <string name="blacklisted_apps">黑名單應用程式</string>
     <string name="loading">載入中…</string>
     <string name="please_wait">請稍等</string>

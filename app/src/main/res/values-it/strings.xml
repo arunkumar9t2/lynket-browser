@@ -42,7 +42,6 @@
     <string name="feedback">Feedback</string>
     <string name="intro">Intro</string>
     <string name="send_email">Invia email…</string>
-    <string name="choose_default_provider">Scegli fornitore di default</string>
     <string name="fallback_msg">Impossibile aprire custom tab, apertura browser normale</string>
     <string name="open_with">Apri con…</string>
     <string name="open_in_browser">Apri in %1$s</string>
@@ -82,7 +81,6 @@
     <string name="settings">Impostazioni</string>
     <string name="colored_toolbar">Toolbar colorata</string>
     <string name="choose_animation">Animazione d\'apertura</string>
-    <string name="usage_options">Opzioni d\'uso</string>
     <string name="default_pref_xpln">Imposta Chromer per aprire tutti i link di default, oppure puoi scegliere Chromer nella lista quando appare</string>
     <string name="personalization">Personalizzazione</string>
     <string name="default_clear_msg">è impostato come browser di default, per favore cancellalo cliccando su cancella defualt</string>
@@ -90,7 +88,6 @@
     <string name="keep_chrome_warmedup">Mantieni il browser in memoria per un avvio più rapido</string>
     <string name="warmup_browser">Riscalda browser</string>
     <string name="set_default_chromer">Imposta come browser di default</string>
-    <string name="circle_to_preview_changes">Schiaccia il tasto rotondo per vedere un anteprima dei cambiamenti</string>
     <string name="default_provider">Fornitore di custom tab di default</string>
     <string name="pre_fetch_content">Precarica contenuto</string>
     <string name="pre_fetch_desc">Rileva link sul tuo schermo e caricali in background per lanciarli istantaneamente</string>
@@ -102,7 +99,6 @@
     <string name="web_heads_color">Colore bolle</string>
     <string name="choose_secondary_browser">Browser secondario</string>
     <string name="dynamic_toolbar_help">Per abilitare il colore dinamico della toolbar, Chromer deve imparare i colori. Potrebbe non funzionare inizialmente per un sito o un app, ma migliorerà con il tempo!</string>
-    <string name="chromer_defaulted">Chromer è il browser di default corrente</string>
     <string name="secondary_browser_success">%1$s impostato come browser secondario!</string>
     <string name="fav_share_success">%1$s impostato come app di condivisione preferita!</string>
     <string name="default_provider_success">%$s sarà usato come fornitore di Custom tabs!</string>
