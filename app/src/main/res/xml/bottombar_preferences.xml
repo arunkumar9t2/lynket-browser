@@ -4,7 +4,7 @@
                   android:key="settings"
                   android:title="@string/settings">
 
-    <SwitchPreferenceCompat
+    <arun.com.chromer.preferences.widgets.IconSwitchPreference
         android:defaultValue="true"
         android:key="bottombar_enabled_pref"
         android:summary="@string/bottom_bar_pref_summary"

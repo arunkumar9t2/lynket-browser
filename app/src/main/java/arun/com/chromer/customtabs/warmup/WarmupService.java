@@ -2,24 +2,20 @@ package arun.com.chromer.customtabs.warmup;
 
 import android.app.Service;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsSession;
 
-import java.util.List;
-
-import arun.com.chromer.customtabs.CustomTabBindingHelper;
+import arun.com.chromer.customtabs.CustomTabManager;
 import timber.log.Timber;
 
 /**
  * Created by Arun on 06/01/2016.
  */
-public class WarmUpService extends Service implements CustomTabBindingHelper.ConnectionCallback {
+public class WarmUpService extends Service implements CustomTabManager.ConnectionCallback {
 
     private static WarmUpService sWarmUpService = null;
-    private CustomTabBindingHelper mCustomTabBindingHelper;
+    private CustomTabManager mCustomTabManager;
 
     public static WarmUpService getInstance() {
         return sWarmUpService;
@@ -39,25 +35,25 @@ public class WarmUpService extends Service implements CustomTabBindingHelper.Con
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (mCustomTabBindingHelper != null) {
+        if (mCustomTabManager != null) {
             // Already an instance exists, so we will un bind the current connection and then bind again.
             Timber.d("Severing existing connection");
-            mCustomTabBindingHelper.unbindCustomTabsService(this);
+            mCustomTabManager.unbindCustomTabsService(this);
         }
 
 
-        mCustomTabBindingHelper = new CustomTabBindingHelper();
-        mCustomTabBindingHelper.setConnectionCallback(this);
-        boolean success = mCustomTabBindingHelper.bindCustomTabsService(this);
+        mCustomTabManager = new CustomTabManager();
+        mCustomTabManager.setConnectionCallback(this);
+        boolean success = mCustomTabManager.bindCustomTabsService(this);
         Timber.d("Was bound %b", success);
         return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
-        if (mCustomTabBindingHelper != null)
-            mCustomTabBindingHelper.unbindCustomTabsService(this);
-        mCustomTabBindingHelper = null;
+        if (mCustomTabManager != null)
+            mCustomTabManager.unbindCustomTabsService(this);
+        mCustomTabManager = null;
         sWarmUpService = null;
         Timber.d("Died");
         super.onDestroy();
@@ -66,8 +62,8 @@ public class WarmUpService extends Service implements CustomTabBindingHelper.Con
     @Override
     public boolean onUnbind(Intent intent) {
         sWarmUpService = null;
-        if (mCustomTabBindingHelper != null)
-            mCustomTabBindingHelper.unbindCustomTabsService(this);
+        if (mCustomTabManager != null)
+            mCustomTabManager.unbindCustomTabsService(this);
 
         return super.onUnbind(intent);
     }
@@ -82,15 +78,9 @@ public class WarmUpService extends Service implements CustomTabBindingHelper.Con
 
     }
 
-    public boolean mayLaunchUrl(Uri uri, List<Bundle> possibleUrls) {
-        boolean ok = mCustomTabBindingHelper.mayLaunchUrl(uri, null, possibleUrls);
-        Timber.d("Warmup %b", ok);
-        return ok;
-    }
-
     public CustomTabsSession getTabSession() {
-        if (mCustomTabBindingHelper != null) {
-            return mCustomTabBindingHelper.getSession();
+        if (mCustomTabManager != null) {
+            return mCustomTabManager.getSession();
         }
         return null;
     }
