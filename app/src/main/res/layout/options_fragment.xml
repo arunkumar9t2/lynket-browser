@@ -30,16 +30,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="1">
 
-                <com.mikepenz.iconics.view.IconicsImageView
+                <ImageView
                     android:id="@+id/set_default_image"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    app:iiv_color="@color/accent"
-                    app:iiv_icon="gmd_new_releases"
                     tools:ignore="ContentDescription"/>
 
                 <LinearLayout
