@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<resources>
+    <string-array name="animationValues">
+        <item>Nijedna</item>
+        <item>Klizanje udesno</item>
+        <item>Klizanje prema gore</item>
+    </string-array>
+    <string-array name="animationSpeedValues">
+        <item>Srednja</item>
+        <item>Kratka</item>
+    </string-array>
+    <string-array name="actionValues">
+        <item>Sekundarni preglednik</item>
+        <item>Omiljena aplikacija za dijeljenje</item>
+    </string-array>
+    <string-array name="webHeadsSpawnValues">
+        <item>Desno</item>
+        <item>Lijevo</item>
+    </string-array>
+    <string name="app_name">Chromer</string>
+    <string name="share_text">Hej, pogledajte \“Chromer\” za brzo i sigurno iskustvo pregledavanja interneta. Preuzmite ga ovdje: https://goo.gl/992ils</string>
+    <string name="share_via">Podijelite putem…</string>
+    <string name="custom_tab_provider_not_found">Nije pronađen kompatibilan pružatelj prilagođenih kartica.</string>
+    <string name="install">Instaliraj</string>
+    <string name="licenses">Licence</string>
+    <string name="about">O aplikaciji</string>
+    <string name="help_chromer_grow">Pomozite proširiti Chromer!</string>
+    <string name="share">Podijeli</string>
+    <string name="share_with">Podijeli s pomoću aplikacije %1$s</string>
+    <string name="more_custom_tbs">Više o prilagođenim karticama</string>
+    <string name="rate_play_store">Ocijeni na Trgovini Play</string>
+    <string name="feedback">Povratne informacije</string>
+    <string name="intro">Uvod</string>
+    <string name="send_email">Pošaljite e-poruku…</string>
+    <string name="choose_default_provider">Odaberite zadanog pružatelja</string>
+    <string name="fallback_msg">Nije moguće otvoriti prilagođenu karticu, otvorit će se normalni preglednik.</string>
+    <string name="open_with">Otvori s pomoću aplikacije…</string>
+    <string name="open_in_browser">Otvori u %1$s</string>
+    <string name="unxp_err">Došlo je do neočekivane greške, pokušajte ponovno.</string>
+    <string name="unsupported_link">Poveznica nije podržana, pokušajte ponovno.</string>
+    <string name="couldnt_load_price">Nije moguće učitati cijenu.</string>
+    <string name="coffee">Kava</string>
+    <string name="lunch">Ručak</string>
+    <string name="premium_donation">Premium donacija</string>
+    <string name="invalid_link">Nevažeća poveznica</string>
+    <string name="copied">Kopirano</string>
+    <string name="copy_link">Kopiraj poveznicu</string>
+    <string name="add_to_homescreen">Dodaj na početni zaslon</string>
+    <string name="intro_1">Pozdrav!\nChromer je lagan, siguran i brz mrežni preglednik.</string>
+    <string name="intro_2">Koristi se Chromeovom značajkom prilagođenih kartica što je izuzetno laka Chromeova kartica dizajnirana za brzo učitavanje poveznica.</string>
+    <string name="intro_3">Može zadržati preglednik zaključanim u memoriji tako da se preglednik pokreće malo brže.</string>
+    <string name="intro_5">Može i pretražiti poveznice na vašem zaslonu i učitati ih u pozadini da bi se smanjilo vrijeme učitavanja!</string>
+    <string name="intro_4">Može naslagati više poveznica u plutajuće mjehuriće kada ih otvorite te ih zatim djelomično učitati u pozadini!</string>
+    <string name="how_to_use">Kako upotrebljavati?</string>
+    <string name="intro_6">Jednostavno postavite Chromer kao zadani preglednik. Chromer će prikazati poveznicu na nenametljiv način. Ili odaberite Chromer kada vam bude potreban.</string>
+    <string name="why_use">Zašto upotrebljavati?</string>
+    <string name="intro_7">Brže se učitava, nenametljiv je, štedi podatke, sadržava podijeljene informacije o prijavi iz Chromea, automatski ispunjava obrasce i SIGURAN je s najnovijim ažuriranjima!</string>
+    <string name="thats_it">Prilagodljiv je!</string>
+    <string name="intro_8">Možete jednostavno odabrati način na koji želite da Chromer radi pokretanjem glavnog zaslona!</string>
+    <string name="version">Verzija</string>
+    <string name="changelog">Popis promjena</string>
+    <string name="join_google_plus">Pridružite se Google+ zajednici</string>
+    <string name="share_ideas">Podijelite svoje ideje!</string>
+    <string name="support_development">Podrži razvoj</string>
+    <string name="consider_donation">Razmislite o donaciji.</string>
+    <string name="add_to_circles">Dodajte u krugove na Google+</string>
+    <string name="follow_twitter">Pratite na Twitteru</string>
+    <string name="connect_linkedIn">Povežite se na LinkedInu</string>
+    <string name="more_apps">Više aplikacija</string>
+    <string name="author">Autor</string>
+    <string name="added">Dodano</string>
+    <string name="settings">Postavke</string>
+    <string name="colored_toolbar">Obojena alatna traka</string>
+    <string name="choose_animation">Animacija otvaranja</string>
+    <string name="animation_speed">Brzina animacije</string>
+    <string name="usage_options">Opcije korištenja</string>
+    <string name="default_pref_xpln">Postavite Chromer kao zadani preglednik da bi mogao otvarati sve poveznice ili možete odabrati Chromer s popisa kada se prikaže.</string>
+    <string name="personalization">Prilagodba</string>
+    <string name="default_clear_msg">je postavljen kao zadani preglednik. Molimo vas da izbrišete zadane postavke tog preglednika.</string>
+    <string name="dynamic_toolbar_color">Dinamička boja alatne trake</string>
+    <string name="keep_chrome_warmedup">Zadržite preglednik u memoriji za brže pokretanje.</string>
+    <string name="warmup_browser">Zagrij preglednik</string>
+    <string name="set_default_chromer">Postavi kao zadani preglednik</string>
+</resources>

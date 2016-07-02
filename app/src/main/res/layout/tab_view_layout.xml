@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
@@ -13,7 +14,8 @@
         android:gravity="center_vertical"
         android:scaleType="fitCenter"
         android:scaleX="0.75"
-        android:scaleY="0.75"/>
+        android:scaleY="0.75"
+        tools:ignore="ContentDescription"/>
 
     <TextView
         android:id="@+id/tab_view_text"
@@ -25,5 +27,6 @@
         android:gravity="center_vertical"
         android:singleLine="true"
         android:textColor="@android:color/white"
-        android:textSize="14sp"/>
+        android:textSize="14sp"
+        tools:ignore="RtlHardcoded,SelectableText"/>
 </RelativeLayout>

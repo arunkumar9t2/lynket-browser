@@ -147,7 +147,17 @@
     <string name="revoke_accessibility_permission">Teraz môžete zakázať službu Dostupnosť pre Chromer.</string>
     <string name="last_fetched_urls">Naposledy načínané adresy</string>
     <string name="blacklist_on">Blokované aplikácie sú %s</string>
-    <string name="translations">Prekladatelia</string>
+    <string name="translations">Preklad aplikácie</string>
     <string name="merge_tabs">Zlúčenie kariet a aplikácií - Beta</string>
     <string name="merge_tabs_explanation">Zobrazí karty s ďalšími nedávnymi aplikáciami na obrazovne nedávnych aplikácií.</string>
+    <string name="already_loaded">Už načítané</string>
+    <string name="add_home_screen_begun">Skratka bude čoskoro pridaná</string>
+    <string name="bottom_bar_pref_summary">Zobrazí lištu s ďalšími možnosťami</string>
+    <string name="bottom_bar_pref_title">Zobraziť dolnú lištu</string>
+    <string name="bottom_bar">Dolná lišta</string>
+    <string name="open_in_new_tab">Otvoriť na novej karte</string>
+    <string name="open_in_new_tab_error">Neplatný odkaz, skopírovali ste text alebo odkaz dlhým podržaním?</string>
+    <string name="bottom_bar_expln">Pre zaistenie funkčnosti dolnej lišty, je potrebné nastaviť <b>najnovšiu verziu Chrome</b> ako poskytovateľa Custom Tabs. Staršie verzie a iné prehliadače nemusia fungovať. \n 
+    \nDolná lišta poskytuje dve akcie:
+\n\n<b>Otvoriť na novej karte (5.0+) -</b> Skopírujte odkaz alebo text na obrazovke a kliknite na túto ikonu pre otvorenie odkazu alebo vyhľadanie textu na novej karte.\n<b>Zdieľať -</b> Rýchle spustenie akcie zdieľania. \n\nViac akcií neskôr.</string>
 </resources>
