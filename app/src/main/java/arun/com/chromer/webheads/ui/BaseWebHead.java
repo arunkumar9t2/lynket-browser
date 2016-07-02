@@ -252,7 +252,8 @@ public abstract class BaseWebHead extends FrameLayout {
     }
 
     @NonNull
-    public Animator getColorChangeAnimator(@ColorInt final int newWebHeadColor) {
+    public Animator getRevealAnimator(@ColorInt final int newWebHeadColor) {
+        mRevealView.clearAnimation();
         initRevealView(newWebHeadColor);
 
         AnimatorSet animator = new AnimatorSet();
@@ -276,6 +277,43 @@ public abstract class BaseWebHead extends FrameLayout {
         });
         animator.setInterpolator(new LinearOutSlowInInterpolator());
         animator.setDuration(250);
+        return animator;
+    }
+
+    /**
+     * Opposite of {@link #getRevealAnimator(int)}. Reveal goes from max scale to 0 appearing to be
+     * revealing in.
+     *
+     * @param newWebHeadColor The color to apply to circle background after animation is done
+     * @return animator
+     */
+    @NonNull
+    Animator getRevealInAnimator(@ColorInt final int newWebHeadColor) {
+        mRevealView.clearAnimation();
+        mRevealView.setColor(mCircleBackground.getColor());
+        mRevealView.setScaleX(1f);
+        mRevealView.setScaleY(1f);
+        mRevealView.setAlpha(1f);
+        mCircleBackground.setColor(newWebHeadColor);
+        AnimatorSet animator = new AnimatorSet();
+        animator.playTogether(
+                ObjectAnimator.ofFloat(mRevealView, "scaleX", 0f),
+                ObjectAnimator.ofFloat(mRevealView, "scaleY", 0f)
+        );
+        mRevealView.setLayerType(LAYER_TYPE_HARDWARE, null);
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mWebHeadColor = newWebHeadColor;
+                mIndicator.setTextColor(ColorUtil.getForegroundWhiteOrBlack(newWebHeadColor));
+                mRevealView.setLayerType(LAYER_TYPE_NONE, null);
+                mRevealView.setScaleX(0f);
+                mRevealView.setScaleY(0f);
+            }
+
+        });
+        animator.setInterpolator(new LinearOutSlowInInterpolator());
+        animator.setDuration(400);
         return animator;
     }
 
@@ -312,7 +350,7 @@ public abstract class BaseWebHead extends FrameLayout {
                 .animate()
                 .withLayer()
                 .rotation(180)
-                .setDuration(200)
+                .setDuration(250)
                 .setInterpolator(new LinearOutSlowInInterpolator())
                 .start();
     }
@@ -330,7 +368,7 @@ public abstract class BaseWebHead extends FrameLayout {
     }
 
     public void setWebHeadColor(@ColorInt int webHeadColor) {
-        getColorChangeAnimator(webHeadColor).start();
+        getRevealAnimator(webHeadColor).start();
     }
 
     @NonNull
@@ -384,24 +422,27 @@ public abstract class BaseWebHead extends FrameLayout {
     }
 
     public void setFaviconDrawable(@NonNull final Drawable faviconDrawable) {
-        try {
-            getIndicatorClearAnimation().setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    TransitionDrawable transitionDrawable = new TransitionDrawable(
-                            new Drawable[]{
-                                    new ColorDrawable(Color.TRANSPARENT),
-                                    faviconDrawable
-                            });
-                    mFavicon.setVisibility(VISIBLE);
-                    mFavicon.setImageDrawable(transitionDrawable);
-                    transitionDrawable.setCrossFadeEnabled(true);
-                    transitionDrawable.startTransition(500);
-                }
-            });
-        } catch (Exception ignore) {
-            Timber.d(ignore.getMessage());
-        }
+        getIndicatorClearAnimation()
+                .setListener(new AnimatorListenerAdapter() {
+                                 @Override
+                                 public void onAnimationEnd(Animator animation) {
+                                     try {
+                                         TransitionDrawable transitionDrawable = new TransitionDrawable(
+                                                 new Drawable[]{
+                                                         new ColorDrawable(Color.TRANSPARENT),
+                                                         faviconDrawable
+                                                 });
+                                         mFavicon.setVisibility(VISIBLE);
+                                         mFavicon.setImageDrawable(transitionDrawable);
+                                         transitionDrawable.setCrossFadeEnabled(true);
+                                         transitionDrawable.startTransition(500);
+                                     } catch (Exception ignore) {
+                                         Timber.d(ignore.getMessage());
+                                     }
+                                 }
+                             }
+
+                );
     }
 
     public boolean isFromNewTab() {

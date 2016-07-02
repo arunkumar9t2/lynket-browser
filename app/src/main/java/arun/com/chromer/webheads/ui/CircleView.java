@@ -20,6 +20,9 @@ public class CircleView extends View {
      */
     final Paint mBgPaint;
 
+    @ColorInt
+    private int mColor;
+
     public CircleView(Context context) {
         this(context, null, 0);
     }
@@ -32,7 +35,8 @@ public class CircleView extends View {
         super(context, attrs, defStyleAttr);
         mBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mBgPaint.setStyle(Paint.Style.FILL);
-        mBgPaint.setColor(Preferences.webHeadColor(getContext()));
+        mColor = Preferences.webHeadColor(getContext());
+        mBgPaint.setColor(mColor);
     }
 
     @Override
@@ -60,7 +64,13 @@ public class CircleView extends View {
         }
     }
 
+    @ColorInt
+    public int getColor() {
+        return mColor;
+    }
+
     public void setColor(@ColorInt int color) {
+        mColor = color;
         mBgPaint.setColor(color);
         invalidate();
     }

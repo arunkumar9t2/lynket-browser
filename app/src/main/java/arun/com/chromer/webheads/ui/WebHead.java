@@ -434,7 +434,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
      * @param receiveCallback True if clients should be notified
      */
     private void closeWithAnimation(final boolean receiveCallback) {
-        final Animator reveal = getColorChangeAnimator(mDeleteColor);
+        final Animator reveal = getRevealInAnimator(mDeleteColor);
         reveal.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -451,7 +451,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
                             mInteractionListener.onWebHeadDestroy(WebHead.this, isLastWebHead());
                         WebHead.super.destroySelf(receiveCallback);
                     }
-                }, 500);
+                }, 400);
             }
         });
         reveal.start();
@@ -464,10 +464,10 @@ public class WebHead extends BaseWebHead implements SpringListener {
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void closeWithAnimationL(final boolean receiveCallback) {
-        final Animator reveal = getColorChangeAnimator(mDeleteColor);
+        final Animator reveal = getRevealInAnimator(mDeleteColor);
         mCircleBackground
                 .animate()
-                .setDuration(100)
+                .setDuration(200)
                 .withLayer()
                 .translationZ(0)
                 .z(0)
@@ -476,8 +476,12 @@ public class WebHead extends BaseWebHead implements SpringListener {
                     public void onAnimationEnd(Animator animation) {
                         reveal.addListener(new AnimatorListenerAdapter() {
                             @Override
-                            public void onAnimationEnd(Animator animation) {
+                            public void onAnimationStart(Animator animation) {
                                 crossFadeFaviconToX();
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
@@ -485,9 +489,10 @@ public class WebHead extends BaseWebHead implements SpringListener {
                                             mInteractionListener.onWebHeadDestroy(WebHead.this, isLastWebHead());
                                         WebHead.super.destroySelf(receiveCallback);
                                     }
-                                }, 500);
+                                }, 300);
                             }
                         });
+                        reveal.setStartDelay(100);
                         reveal.start();
                     }
                 });

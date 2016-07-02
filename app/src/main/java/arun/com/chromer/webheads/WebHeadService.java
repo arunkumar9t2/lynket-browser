@@ -380,7 +380,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         AnimatorSet animatorSet = new AnimatorSet();
         List<Animator> animators = new LinkedList<>();
         for (WebHead webhead : mWebHeads.values()) {
-            animators.add(webhead.getColorChangeAnimator(webHeadColor));
+            animators.add(webhead.getRevealAnimator(webHeadColor));
         }
         animatorSet.playTogether(animators);
         animatorSet.start();
