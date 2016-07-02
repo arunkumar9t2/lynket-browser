@@ -441,11 +441,11 @@ public class WebHead extends BaseWebHead implements SpringListener {
             @Override
             public void onAnimationStart(Animator animation) {
                 mIndicator.setVisibility(GONE);
+                crossFadeFaviconToX();
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                crossFadeFaviconToX();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -481,6 +481,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
                             @Override
                             public void onAnimationStart(Animator animation) {
                                 crossFadeFaviconToX();
+                                mIndicator.setVisibility(GONE);
                             }
 
                             @Override
