@@ -22,7 +22,7 @@ public class ServiceUtil {
     }
 
     public static void takeCareOfServices(@NonNull Context context) {
-        if (Preferences.warmUp(context))
+        if (Preferences.warmUp(context) && !Preferences.preFetch(context))
             context.startService(new Intent(context, WarmUpService.class));
         else
             context.stopService(new Intent(context, WarmUpService.class));

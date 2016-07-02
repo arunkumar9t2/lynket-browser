@@ -38,6 +38,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
     /**
      * Coordinate of remove web head that we can lock on to.
      */
+    @SuppressWarnings("FieldCanBeLocal")
     private static int[] sTrashLockCoordinate;
     /**
      * Minimum horizontal velocity that we need to move the web head from one end of the screen
@@ -269,13 +270,13 @@ public class WebHead extends BaseWebHead implements SpringListener {
      * @return array of x and y.
      */
     private int[] trashLockCoOrd() {
-        if (sTrashLockCoordinate == null) {
-            int[] removeCentre = getRemoveWebHead().getCenterCoordinates();
-            int offset = getWidth() / 2;
-            int x = removeCentre[0] - offset;
-            int y = removeCentre[1] - offset;
-            sTrashLockCoordinate = new int[]{x, y};
-        }
+        //if (sTrashLockCoordinate == null) {
+        int[] removeCentre = getRemoveWebHead().getCenterCoordinates();
+        int offset = getWidth() / 2;
+        int x = removeCentre[0] - offset;
+        int y = removeCentre[1] - offset;
+        sTrashLockCoordinate = new int[]{x, y};
+        //}
         return sTrashLockCoordinate;
     }
 
@@ -435,10 +436,11 @@ public class WebHead extends BaseWebHead implements SpringListener {
      */
     private void closeWithAnimation(final boolean receiveCallback) {
         final Animator reveal = getRevealInAnimator(mDeleteColor);
+        mCircleBackground.clearElevation();
         reveal.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
-                mCircleBackground.clearElevation();
+                mIndicator.setVisibility(GONE);
             }
 
             @Override
@@ -454,6 +456,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
                 }, 200);
             }
         });
+        reveal.setStartDelay(100);
         reveal.start();
     }
 

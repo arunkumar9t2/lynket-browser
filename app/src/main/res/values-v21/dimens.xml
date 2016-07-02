@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="web_head_size_small">66dp</dimen>
     <dimen name="web_head_size_normal">76dp</dimen>
     <dimen name="material_search_height">50dp</dimen>
 </resources>

@@ -34,6 +34,14 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+    <string-array name="webHeadsSizeValues">
+        <item>Normal</item>
+        <item>Small</item>
+    </string-array>
+    <string-array name="webHeadsSizeKeys">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
     <string name="app_name">Chromer</string>
     <string name="share_text">Hey Checkout \‘Chromer\’ for quick and secure browsing experience! Download here https://goo.gl/992ils</string>
     <string name="share_via">Share via…</string>
@@ -182,4 +190,10 @@
     <string name="additional_preferences">Additional</string>
     <string name="notifications">Notifications</string>
     <string name="web_heads_enabled">Web heads enabled! You can now queue multiple links and view them later.</string>
+    <string name="web_heads_title">You can stack multiple links and view them later</string>
+    <string name="web_heads_description">Open links in floating bubbles</string>
+    <string name="favicon_title">Show Favicons</string>
+    <string name="favicon_description">Small icons extracted from websites will be shown</string>
+    <string name="webhead_size_title">Size</string>
+    <string name="webhead_size_dialog">Choose the size of web heads</string>
 </resources>

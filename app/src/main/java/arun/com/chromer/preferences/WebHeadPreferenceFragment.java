@@ -49,7 +49,8 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
 
     private final String[] WEBHEAD_PREFERENCE_GROUP = new String[]{
             Preferences.WEB_HEAD_SPAWN_LOCATION,
-            Preferences.WEB_HEADS_COLOR
+            Preferences.WEB_HEADS_COLOR,
+            Preferences.WEB_HEAD_SIZE
     };
 
     private final IntentFilter mWebHeadColorFilter = new IntentFilter(Constants.ACTION_WEBHEAD_COLOR_SET);
@@ -59,6 +60,7 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
     private IconListPreference mSpawnLocation;
     private IconCheckboxPreference mFavicons;
     private IconCheckboxPreference mCloseOnOpen;
+    private IconListPreference mSize;
 
     public WebHeadPreferenceFragment() {
         // Required empty public constructor
@@ -108,6 +110,7 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
         mWebHeadSwitch = (IconSwitchPreference) findPreference(Preferences.WEB_HEAD_ENABLED);
         mWebHeadsColor = (ColorPreference) findPreference(Preferences.WEB_HEADS_COLOR);
         mSpawnLocation = (IconListPreference) findPreference(Preferences.WEB_HEAD_SPAWN_LOCATION);
+        mSize = (IconListPreference) findPreference(Preferences.WEB_HEAD_SIZE);
         mFavicons = (IconCheckboxPreference) findPreference(Preferences.WEB_HEAD_FAVICON);
         mCloseOnOpen = (IconCheckboxPreference) findPreference(Preferences.WEB_HEAD_CLOSE_ON_OPEN);
     }
@@ -125,6 +128,10 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
                 .sizeDp(24));
         mSpawnLocation.setIcon(new IconicsDrawable(getActivity())
                 .icon(GoogleMaterial.Icon.gmd_code)
+                .color(materialLight)
+                .sizeDp(24));
+        mSize.setIcon(new IconicsDrawable(getActivity())
+                .icon(CommunityMaterial.Icon.cmd_crop_free)
                 .color(materialLight)
                 .sizeDp(24));
         mFavicons.setIcon(new IconicsDrawable(getActivity())
@@ -196,7 +203,8 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
                     Preferences.WEB_HEAD_SPAWN_LOCATION,
                     Preferences.WEB_HEADS_COLOR,
                     Preferences.WEB_HEAD_CLOSE_ON_OPEN,
-                    Preferences.WEB_HEAD_FAVICON
+                    Preferences.WEB_HEAD_FAVICON,
+                    Preferences.WEB_HEAD_SIZE
             );
         }
     }

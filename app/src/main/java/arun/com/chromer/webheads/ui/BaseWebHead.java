@@ -69,10 +69,6 @@ public abstract class BaseWebHead extends FrameLayout {
      */
     final WindowManager.LayoutParams mWindowParams;
     /**
-     * The content view group which host all our elements
-     */
-    final FrameLayout mContentGroup;
-    /**
      * Color of web head when removed
      */
     final int mDeleteColor;
@@ -87,7 +83,6 @@ public abstract class BaseWebHead extends FrameLayout {
     /**
      * Integer to keep track of web head creation order.
      */
-    private final int mCount;
     @BindView(R.id.favicon)
     protected ImageView mFavicon;
     @BindView(R.id.indicator)
@@ -96,6 +91,10 @@ public abstract class BaseWebHead extends FrameLayout {
     protected ElevatedCircleView mCircleBackground;
     @BindView(R.id.revealView)
     protected CircleView mRevealView;
+    /**
+     * The content view group which host all our elements
+     */
+    FrameLayout mContentGroup;
     int sDispWidth, sDispHeight;
     /**
      * Flag to know if the user moved manually or if the web heads is still resting
@@ -129,8 +128,8 @@ public abstract class BaseWebHead extends FrameLayout {
         mUrl = url;
         sWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 
-        mContentGroup = (FrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.web_head_layout, this, false);
-        addView(mContentGroup);
+        inflateContent(context);
+
         mUnBinder = ButterKnife.bind(this);
         initContent();
 
@@ -149,13 +148,20 @@ public abstract class BaseWebHead extends FrameLayout {
 
         sWindowManager.addView(this, mWindowParams);
 
-        mCount = ++WEB_HEAD_COUNT;
-
         sXDrawable = new IconicsDrawable(context)
                 .icon(GoogleMaterial.Icon.gmd_clear)
                 .color(Color.WHITE)
                 .sizeDp(18);
         mDeleteColor = ContextCompat.getColor(context, R.color.remove_web_head_color);
+    }
+
+    private void inflateContent(@NonNull Context context) {
+        // size
+        if (Preferences.webHeadsSize(context) == 2) {
+            mContentGroup = (FrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.web_head_layout_small, this, false);
+        } else
+            mContentGroup = (FrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.web_head_layout, this, false);
+        addView(mContentGroup);
     }
 
     private void initDisplayMetrics() {
@@ -228,7 +234,7 @@ public abstract class BaseWebHead extends FrameLayout {
         return WEB_HEAD_COUNT == 0;
     }
 
-    void setWebHeadElevation(int elevationPX) {
+    private void setWebHeadElevation(int elevationPX) {
         if (Util.isLollipopAbove()) {
             if (mCircleBackground != null && mRevealView != null) {
                 mCircleBackground.setElevation(elevationPX);
@@ -341,7 +347,6 @@ public abstract class BaseWebHead extends FrameLayout {
      * is visible by hiding indicators.
      */
     void crossFadeFaviconToX() {
-        mIndicator.setVisibility(GONE);
         mFavicon.setVisibility(VISIBLE);
         mFavicon.clearAnimation();
         mFavicon.setScaleType(ImageView.ScaleType.CENTER);

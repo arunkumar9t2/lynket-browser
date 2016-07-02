@@ -28,6 +28,7 @@ public class Preferences {
     public static final String PREFERRED_ACTION = "preferred_action_preference";
     public static final String WEB_HEAD_ENABLED = "webhead_enabled_pref";
     public static final String WEB_HEAD_SPAWN_LOCATION = "webhead_spawn_preference";
+    public static final String WEB_HEAD_SIZE = "webhead_size_preference";
     public static final String WEB_HEAD_FAVICON = "webhead_favicons_pref";
     public static final String BOTTOM_BAR_ENABLED = "bottombar_enabled_pref";
     public static final int PREFERRED_ACTION_BROWSER = 1;
@@ -379,6 +380,12 @@ public class Preferences {
         return Integer.parseInt(PreferenceManager
                 .getDefaultSharedPreferences(context)
                 .getString(WEB_HEAD_SPAWN_LOCATION, "1"));
+    }
+
+    public static int webHeadsSize(Context context) {
+        return Integer.parseInt(PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .getString(WEB_HEAD_SIZE, "1"));
     }
 
     public static boolean webHeadsCloseOnOpen(Context context) {
