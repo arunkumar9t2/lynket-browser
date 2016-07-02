@@ -23,7 +23,6 @@ import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.ViewPropertyAnimator;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -224,16 +223,6 @@ public abstract class BaseWebHead extends FrameLayout {
         return WEB_HEAD_COUNT == 0;
     }
 
-    /**
-     * Returns an animation instance that smoothly clear the url indicator
-     */
-    private ViewPropertyAnimator getIndicatorClearAnimation() {
-        return mIndicator.animate()
-                .alpha(0.0f)
-                .withLayer()
-                .setDuration(150);
-    }
-
     @Nullable
     public ValueAnimator getStackDistanceAnimator() {
         ValueAnimator animator;
@@ -267,13 +256,14 @@ public abstract class BaseWebHead extends FrameLayout {
             @Override
             public void onAnimationEnd(Animator animation) {
                 mWebHeadColor = newWebHeadColor;
-                mCircleBackground.setColor(newWebHeadColor);
-                mIndicator.setTextColor(ColorUtil.getForegroundWhiteOrBlack(newWebHeadColor));
-                mRevealView.setLayerType(LAYER_TYPE_NONE, null);
-                mRevealView.setScaleX(0f);
-                mRevealView.setScaleY(0f);
+                if (mIndicator != null && mCircleBackground != null && mRevealView != null) {
+                    mCircleBackground.setColor(newWebHeadColor);
+                    mIndicator.setTextColor(ColorUtil.getForegroundWhiteOrBlack(newWebHeadColor));
+                    mRevealView.setLayerType(LAYER_TYPE_NONE, null);
+                    mRevealView.setScaleX(0f);
+                    mRevealView.setScaleY(0f);
+                }
             }
-
         });
         animator.setInterpolator(new LinearOutSlowInInterpolator());
         animator.setDuration(250);
@@ -422,27 +412,18 @@ public abstract class BaseWebHead extends FrameLayout {
     }
 
     public void setFaviconDrawable(@NonNull final Drawable faviconDrawable) {
-        getIndicatorClearAnimation()
-                .setListener(new AnimatorListenerAdapter() {
-                                 @Override
-                                 public void onAnimationEnd(Animator animation) {
-                                     try {
-                                         TransitionDrawable transitionDrawable = new TransitionDrawable(
-                                                 new Drawable[]{
-                                                         new ColorDrawable(Color.TRANSPARENT),
-                                                         faviconDrawable
-                                                 });
-                                         mFavicon.setVisibility(VISIBLE);
-                                         mFavicon.setImageDrawable(transitionDrawable);
-                                         transitionDrawable.setCrossFadeEnabled(true);
-                                         transitionDrawable.startTransition(500);
-                                     } catch (Exception ignore) {
-                                         Timber.d(ignore.getMessage());
-                                     }
-                                 }
-                             }
-
-                );
+        if (mIndicator != null && mFavicon != null) {
+            mIndicator.animate().alpha(0).withLayer().start();
+            TransitionDrawable transitionDrawable = new TransitionDrawable(
+                    new Drawable[]{
+                            new ColorDrawable(Color.TRANSPARENT),
+                            faviconDrawable
+                    });
+            mFavicon.setVisibility(VISIBLE);
+            mFavicon.setImageDrawable(transitionDrawable);
+            transitionDrawable.setCrossFadeEnabled(true);
+            transitionDrawable.startTransition(500);
+        }
     }
 
     public boolean isFromNewTab() {

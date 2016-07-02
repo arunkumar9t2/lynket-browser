@@ -24,7 +24,6 @@ import arun.com.chromer.shared.AppDetectService;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Util;
 import arun.com.chromer.webheads.helper.WebHeadLauncherActivity;
-import timber.log.Timber;
 
 @SuppressLint("GoogleAppIndexingApiWarning")
 public class BrowserInterceptActivity extends AppCompatActivity {
@@ -40,14 +39,13 @@ public class BrowserInterceptActivity extends AppCompatActivity {
             return;
         }
 
-        boolean isFromNewTab = getIntent().getBooleanExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, false);
+        final boolean isFromNewTab = getIntent().getBooleanExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, false);
 
         // Check if we should blacklist the launching app
         if (Preferences.blacklist(this)) {
             if (AppDetectService.getInstance() != null) {
                 String lastApp = AppDetectService.getInstance().getLastApp();
                 if (lastApp.length() > 0) {
-                    Timber.d("Checking if %s should be blacklisted", lastApp);
                     List<BlacklistedApps> blacklisted = BlacklistedApps.find(BlacklistedApps.class, "package_name = ?", lastApp);
                     if (blacklisted.size() > 0) {
                         // The calling app was found in blacklisted table in DB, attempt to launch in secondary browser,
@@ -65,8 +63,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
         }
 
         // If user prefers to open in bubbles, then start the web head service which will take care
-        // of pre fetching and loading the bubble. We don't need this activity anymore, so we will
-        // finish this silently.
+        // of pre fetching and loading the bubble.
         if (Preferences.webHeads(this)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (!Settings.canDrawOverlays(this)) {
@@ -83,11 +80,11 @@ public class BrowserInterceptActivity extends AppCompatActivity {
         } else {
             Intent customTabActivity = new Intent(this, CustomTabActivity.class);
             customTabActivity.setData(getIntent().getData());
-            customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             if (isFromNewTab || Preferences.mergeTabs(this)) {
                 customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
                 customTabActivity.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
             } else {
+                customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 customTabActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             }
             customTabActivity.putExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, isFromNewTab);
@@ -106,7 +103,6 @@ public class BrowserInterceptActivity extends AppCompatActivity {
             webIntentExplicit.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             ComponentName cN = ComponentName.unflattenFromString(componentFlatten);
             webIntentExplicit.setComponent(cN);
-
             try {
                 startActivity(webIntentExplicit);
             } catch (ActivityNotFoundException e) {
@@ -139,7 +135,8 @@ public class BrowserInterceptActivity extends AppCompatActivity {
         Intent webIntentImplicit = getOriginalIntentCopy(getIntent());
         webIntentImplicit.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         webIntentImplicit.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        @SuppressLint("InlinedApi") List<ResolveInfo> resolvedActivityList = getApplicationContext().getPackageManager()
+        @SuppressLint("InlinedApi")
+        List<ResolveInfo> resolvedActivityList = getApplicationContext().getPackageManager()
                 .queryIntentActivities(webIntentImplicit, PackageManager.MATCH_ALL);
 
         String secondaryPackage = Preferences.secondaryBrowserPackage(this);
@@ -149,14 +146,13 @@ public class BrowserInterceptActivity extends AppCompatActivity {
             for (ResolveInfo info : resolvedActivityList) {
                 if (info.activityInfo.packageName.equalsIgnoreCase(secondaryPackage)) {
                     found = true;
-
-                    ComponentName componentName = new ComponentName(info.activityInfo.packageName,
+                    ComponentName componentName = new ComponentName(
+                            info.activityInfo.packageName,
                             info.activityInfo.name);
                     webIntentImplicit.setComponent(componentName);
 
                     // This will be the new component, so write it to preferences
                     Preferences.secondaryBrowserComponent(this, componentName.flattenToString());
-
                     startActivity(webIntentImplicit);
                 }
             }

@@ -1,5 +1,6 @@
 package arun.com.chromer.activities.intro;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 
@@ -67,7 +68,12 @@ public class ChromerIntro extends AppIntro {
 
         //noinspection deprecation
         showDoneButton(true);
-        showStatusBar(false);
+        showStatusBar(true);
+        // Color status bar for lollipop above
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDarker));
+            getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDarker));
+        }
     }
 
     @Override

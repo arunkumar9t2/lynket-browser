@@ -81,7 +81,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
         }
 
         @Override
-        public void onWebHeadDestroy(@NonNull WebHead webHead, boolean isLastWebHead) {
+        public void onWebHeadDestroyed(@NonNull WebHead webHead, boolean isLastWebHead) {
             // noop
         }
     };
@@ -423,7 +423,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
             } else
                 closeWithAnimation(receiveCallback);
         } else {
-            if (receiveCallback) mInteractionListener.onWebHeadDestroy(this, isLastWebHead());
+            if (receiveCallback) mInteractionListener.onWebHeadDestroyed(this, isLastWebHead());
             super.destroySelf(receiveCallback);
         }
     }
@@ -448,7 +448,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
                     @Override
                     public void run() {
                         if (receiveCallback)
-                            mInteractionListener.onWebHeadDestroy(WebHead.this, isLastWebHead());
+                            mInteractionListener.onWebHeadDestroyed(WebHead.this, isLastWebHead());
                         WebHead.super.destroySelf(receiveCallback);
                     }
                 }, 400);
@@ -486,7 +486,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
                                     @Override
                                     public void run() {
                                         if (receiveCallback)
-                                            mInteractionListener.onWebHeadDestroy(WebHead.this, isLastWebHead());
+                                            mInteractionListener.onWebHeadDestroyed(WebHead.this, isLastWebHead());
                                         WebHead.super.destroySelf(receiveCallback);
                                     }
                                 }, 300);
@@ -530,7 +530,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
     public interface WebHeadInteractionListener {
         void onWebHeadClick(@NonNull WebHead webHead);
 
-        void onWebHeadDestroy(@NonNull WebHead webHead, boolean isLastWebHead);
+        void onWebHeadDestroyed(@NonNull WebHead webHead, boolean isLastWebHead);
     }
 
     /**

@@ -377,6 +377,7 @@ public class CustomTabs {
     private void prepareToolbar() {
         assertBuilderInitialized();
         if (mToolbarColorOverride != Constants.NO_COLOR) {
+            mToolbarColor = mToolbarColorOverride;
             mIntentBuilder
                     .setToolbarColor(mToolbarColorOverride)
                     .setSecondaryToolbarColor(mToolbarColorOverride);
@@ -553,8 +554,6 @@ public class CustomTabs {
         if (!Preferences.bottomBar(mActivity)) {
             return;
         }
-        mIntentBuilder.setSecondaryToolbarColor(mToolbarColor);
-
         int iconColor = ColorUtil.getForegroundWhiteOrBlack(mToolbarColor);
         if (Util.isLollipopAbove()) {
             final Intent openInNewTabIntent = new Intent(mActivity, OpenInNewTabReceiver.class);

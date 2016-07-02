@@ -117,9 +117,9 @@ public class CustomTabActivity extends AppCompatActivity {
             if (mUrl != null && mUrl.length() > 0) {
                 Timber.d("Beginning extraction");
                 try {
-                    HtmlFetcher fetcher = new HtmlFetcher();
-                    String unShortenedUrl = fetcher.unShortenUrl(mUrl);
-                    JResult res = fetcher.fetchAndExtract(unShortenedUrl, 1000 * 10, false);
+                    final HtmlFetcher fetcher = new HtmlFetcher();
+                    final String unShortenedUrl = fetcher.unShortenUrl(mUrl);
+                    final JResult res = fetcher.fetchAndExtract(unShortenedUrl, 1000 * 10, false);
                     mTitle = res.getTitle();
 
                     mIcon = Glide.with(CustomTabActivity.this)

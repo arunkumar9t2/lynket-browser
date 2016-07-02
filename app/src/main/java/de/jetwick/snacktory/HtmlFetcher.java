@@ -17,10 +17,6 @@ package de.jetwick.snacktory;
 
 import android.annotation.SuppressLint;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -50,43 +46,7 @@ public class HtmlFetcher {
         SHelper.enableAnySSL();
     }
 
-    @SuppressWarnings("Convert2Diamond")
-    public static void main(String[] args) throws Exception {
-        BufferedReader reader = new BufferedReader(new FileReader("urls.txt"));
-        String line;
-        Set<String> existing = new LinkedHashSet<>();
-        while ((line = reader.readLine()) != null) {
-            int index1 = line.indexOf("\"");
-            int index2 = line.indexOf("\"", index1 + 1);
-            String url = line.substring(index1 + 1, index2);
-            String domainStr = SHelper.extractDomain(url, true);
-            String counterStr = "";
-            // TODO more similarities
-            if (existing.contains(domainStr))
-                counterStr = "2";
-            else
-                existing.add(domainStr);
-
-            String html = new HtmlFetcher().fetchAsString(url, 20000);
-            String outFile = domainStr + counterStr + ".html";
-            BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
-            writer.write(html);
-            writer.close();
-        }
-        reader.close();
-    }
-
-    private String referrer = "Chromer";
-    private String userAgent = "Mozilla/5.0 (iPad; CPU OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3";
-    private String cacheControl = "max-age=0";
-    private String language = "en-us";
-    private String accept = "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
-    private String charset = "UTF-8";
-    private SCache cache;
-    private Proxy proxy = null;
     private final AtomicInteger cacheCounter = new AtomicInteger(0);
-    private int maxTextLength = -1;
-    private ArticleTextExtractor extractor = new ArticleTextExtractor();
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private final Set<String> furtherResolveNecessary = new LinkedHashSet<String>() {
         {
@@ -118,25 +78,59 @@ public class HtmlFetcher {
             add("twurl.nl");
         }
     };
+    private String referrer = "Chromer";
+    private String userAgent = "Mozilla/5.0 (iPad; CPU OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3";
+    private String cacheControl = "max-age=0";
+    private String language = "en-us";
+    private String accept = "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
+    private String charset = "UTF-8";
+    private SCache cache;
+    private Proxy proxy = null;
+    private int maxTextLength = -1;
+    private ArticleTextExtractor extractor = new ArticleTextExtractor();
 
     public HtmlFetcher() {
     }
 
-    public void setExtractor(ArticleTextExtractor extractor) {
-        this.extractor = extractor;
+    private static String fixUrl(String url, String urlOrPath) {
+        return SHelper.useDomainOfFirstArg4Second(url, urlOrPath);
+    }
+
+    /**
+     * Takes a URI that was decoded as ISO-8859-1 and applies percent-encoding
+     * to non-ASCII characters. Workaround for broken origin servers that send
+     * UTF-8 in the Location: header.
+     */
+    static String encodeUriFromHeader(String badLocation) {
+        StringBuilder sb = new StringBuilder();
+
+        for (char ch : badLocation.toCharArray()) {
+            if (ch < (char) 128) {
+                sb.append(ch);
+            } else {
+                // this is ONLY valid if the uri was decoded using ISO-8859-1
+                sb.append(String.format("%%%02X", (int) ch));
+            }
+        }
+
+        return sb.toString();
     }
 
     public ArticleTextExtractor getExtractor() {
         return extractor;
     }
 
-    public HtmlFetcher setCache(SCache cache) {
-        this.cache = cache;
-        return this;
+    public void setExtractor(ArticleTextExtractor extractor) {
+        this.extractor = extractor;
     }
 
     public SCache getCache() {
         return cache;
+    }
+
+    public HtmlFetcher setCache(SCache cache) {
+        this.cache = cache;
+        return this;
     }
 
     public int getCacheCounter() {
@@ -148,25 +142,13 @@ public class HtmlFetcher {
         return this;
     }
 
-    public HtmlFetcher setMaxTextLength(int maxTextLength) {
-        this.maxTextLength = maxTextLength;
-        return this;
-    }
-
     public int getMaxTextLength() {
         return maxTextLength;
     }
 
-    public void setAccept(String accept) {
-        this.accept = accept;
-    }
-
-    public void setCharset(String charset) {
-        this.charset = charset;
-    }
-
-    public void setCacheControl(String cacheControl) {
-        this.cacheControl = cacheControl;
+    public HtmlFetcher setMaxTextLength(int maxTextLength) {
+        this.maxTextLength = maxTextLength;
+        return this;
     }
 
     public String getLanguage() {
@@ -198,20 +180,32 @@ public class HtmlFetcher {
         return accept;
     }
 
+    public void setAccept(String accept) {
+        this.accept = accept;
+    }
+
     public String getCacheControl() {
         return cacheControl;
+    }
+
+    public void setCacheControl(String cacheControl) {
+        this.cacheControl = cacheControl;
     }
 
     public String getCharset() {
         return charset;
     }
 
-    public void setProxy(Proxy proxy) {
-        this.proxy = proxy;
+    public void setCharset(String charset) {
+        this.charset = charset;
     }
 
     public Proxy getProxy() {
         return (proxy != null ? proxy : Proxy.NO_PROXY);
+    }
+
+    public void setProxy(Proxy proxy) {
+        this.proxy = proxy;
     }
 
     public boolean isProxySet() {
@@ -240,7 +234,7 @@ public class HtmlFetcher {
 
             String resUrl = getResolvedUrl(url, timeout);
             if (resUrl.isEmpty()) {
-                Timber.w("resolved url is empty. Url is: " + url);
+                Timber.w("resolved url is empty. Url is: %s", url);
 
                 JResult result = new JResult();
                 if (cache != null)
@@ -309,10 +303,6 @@ public class HtmlFetcher {
         return text;
     }
 
-    private static String fixUrl(String url, String urlOrPath) {
-        return SHelper.useDomainOfFirstArg4Second(url, urlOrPath);
-    }
-
     public String fetchAsString(String urlAsString, int timeout)
             throws IOException {
         return fetchAsString(urlAsString, timeout, false);
@@ -342,7 +332,6 @@ public class HtmlFetcher {
     public Converter createConverter(String url) {
         return new Converter(url);
     }
-
 
     public String unShortenUrl(String originalUrl) {
         int maxRedirects = 5;
@@ -401,26 +390,6 @@ public class HtmlFetcher {
                 connection.disconnect();
             }
         }
-    }
-
-    /**
-     * Takes a URI that was decoded as ISO-8859-1 and applies percent-encoding
-     * to non-ASCII characters. Workaround for broken origin servers that send
-     * UTF-8 in the Location: header.
-     */
-    static String encodeUriFromHeader(String badLocation) {
-        StringBuilder sb = new StringBuilder();
-
-        for (char ch : badLocation.toCharArray()) {
-            if (ch < (char) 128) {
-                sb.append(ch);
-            } else {
-                // this is ONLY valid if the uri was decoded using ISO-8859-1
-                sb.append(String.format("%%%02X", (int) ch));
-            }
-        }
-
-        return sb.toString();
     }
 
     @SuppressWarnings("SameParameterValue")

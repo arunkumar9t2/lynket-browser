@@ -85,7 +85,7 @@
         <activity
             android:name=".activities.ShareInterceptActivity"
             android:excludeFromRecents="true"
-            android:label="Chromer - Open/Search">
+            android:label="Open/Search with Chromer">
             <intent-filter>
                 <action android:name="android.intent.action.SEND"/>
 
