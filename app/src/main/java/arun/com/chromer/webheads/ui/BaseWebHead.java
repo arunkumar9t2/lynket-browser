@@ -84,6 +84,10 @@ public abstract class BaseWebHead extends FrameLayout {
      * Butter knife un binder to release references;
      */
     private final Unbinder mUnBinder;
+    /**
+     * Integer to keep track of web head creation order.
+     */
+    private final int mCount;
     @BindView(R.id.favicon)
     protected ImageView mFavicon;
     @BindView(R.id.indicator)
@@ -145,7 +149,7 @@ public abstract class BaseWebHead extends FrameLayout {
 
         sWindowManager.addView(this, mWindowParams);
 
-        WEB_HEAD_COUNT++;
+        mCount = ++WEB_HEAD_COUNT;
 
         sXDrawable = new IconicsDrawable(context)
                 .icon(GoogleMaterial.Icon.gmd_clear)
@@ -159,6 +163,8 @@ public abstract class BaseWebHead extends FrameLayout {
         sWindowManager.getDefaultDisplay().getMetrics(metrics);
         sDispWidth = metrics.widthPixels;
         sDispHeight = metrics.heightPixels;
+
+        mWindowParams.y = sDispHeight / 3;
     }
 
     /**
@@ -180,7 +186,6 @@ public abstract class BaseWebHead extends FrameLayout {
                 } else {
                     mWindowParams.x = sScreenBounds.left;
                 }
-                mWindowParams.y = sDispHeight / 3;
                 updateView();
             }
         });
@@ -223,9 +228,18 @@ public abstract class BaseWebHead extends FrameLayout {
         return WEB_HEAD_COUNT == 0;
     }
 
+    void setWebHeadElevation(int elevationPX) {
+        if (Util.isLollipopAbove()) {
+            if (mCircleBackground != null && mRevealView != null) {
+                mCircleBackground.setElevation(elevationPX);
+                mRevealView.setElevation(elevationPX + 1);
+            }
+        }
+    }
+
     @Nullable
     public ValueAnimator getStackDistanceAnimator() {
-        ValueAnimator animator;
+        ValueAnimator animator = null;
         if (!mUserManuallyMoved) {
             animator = ValueAnimator.ofInt(mWindowParams.y, mWindowParams.y + STACKING_GAP_PX);
             animator.setInterpolator(new FastOutLinearInInterpolator());
@@ -236,8 +250,11 @@ public abstract class BaseWebHead extends FrameLayout {
                     updateView();
                 }
             });
+            if (WEB_HEAD_COUNT > 2) {
+                setWebHeadElevation(Util.dpToPx(4));
+            }
         }
-        return null;
+        return animator;
     }
 
     @NonNull

@@ -451,7 +451,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
                             mInteractionListener.onWebHeadDestroyed(WebHead.this, isLastWebHead());
                         WebHead.super.destroySelf(receiveCallback);
                     }
-                }, 400);
+                }, 200);
             }
         });
         reveal.start();
@@ -489,7 +489,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
                                             mInteractionListener.onWebHeadDestroyed(WebHead.this, isLastWebHead());
                                         WebHead.super.destroySelf(receiveCallback);
                                     }
-                                }, 300);
+                                }, 200);
                             }
                         });
                         reveal.setStartDelay(100);
