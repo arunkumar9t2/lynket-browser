@@ -346,9 +346,9 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             } else {
                 Benchmark.start("Custom tab launching");
                 CustomTabs.from(this)
+                        .forUrl(url)
                         .withSession(mCustomTabManager.getSession())
                         .prepare()
-                        .forUrl(url)
                         .launch();
                 Benchmark.end();
             }
