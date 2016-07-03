@@ -4,6 +4,12 @@
 <strong>You can view this again in the about screen.</strong>
 <br></br>
 <br></br>
+<strong>1.6 B3.1</strong> (Beta Release)
+<ul>
+    <li><b>FIXED:</b> Crash when dynamic toolbar enabled</li>
+    <li><b>IMPROVE:</b> Minor reduction in APK size</li>
+</ul>
+<br></br>
 <strong>1.6 B3</strong> (Beta Release)
 <ul>
     <li><b>NEW:</b> Complete redesign of settings - Now tabbed and easier to access</li>
@@ -15,6 +21,7 @@
     <li><b>IMPROVED:</b> Smoother fling animations</li>
     <li><b>IMPROVED:</b> Tweaked web head close and reveal animations</li>
     <li><b>IMPROVED:</b> Search view UI.</li>
+    <li><b>IMPROVED:</b> Synced translations</li>
     <li><b>FIXED:</b> Icons getting cut on N</li>
 </ul>
 <br></br>
