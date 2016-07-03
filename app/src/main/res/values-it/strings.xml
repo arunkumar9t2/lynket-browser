@@ -101,7 +101,7 @@
     <string name="dynamic_toolbar_help">Per abilitare il colore dinamico della toolbar, Chromer deve imparare i colori. Potrebbe non funzionare inizialmente per un sito o un app, ma migliorerà con il tempo!</string>
     <string name="secondary_browser_success">%1$s impostato come browser secondario!</string>
     <string name="fav_share_success">%1$s impostato come app di condivisione preferita!</string>
-    <string name="default_provider_success">%$s sarà usato come fornitore di Custom tabs!</string>
+    <string name="default_provider_success">%1$s sarà usato come fornitore di Custom tabs!</string>
     <string name="based_on_app">Basato dall\'app</string>
     <string name="based_on_web">Basato dal sito web</string>
     <string name="preferred_action">Azione preferita</string>
