@@ -2,6 +2,8 @@ package arun.com.chromer.activities.intro;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 
 import com.github.paolorotolo.appintro.AppIntro;
@@ -13,9 +15,9 @@ import arun.com.chromer.R;
  */
 public class ChromerIntro extends AppIntro {
 
-    // Please DO NOT override onCreate. Use init
     @Override
-    public void init(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
 
         int bgColor = ContextCompat.getColor(this, R.color.colorPrimaryDarker);
 
@@ -77,18 +79,15 @@ public class ChromerIntro extends AppIntro {
     }
 
     @Override
-    public void onSkipPressed() {
+    public void onSkipPressed(Fragment currentFragment) {
+        super.onSkipPressed(currentFragment);
         // Do something when users tap on Skip button.
         finish();
     }
 
     @Override
-    public void onNextPressed() {
-
-    }
-
-    @Override
-    public void onDonePressed() {
+    public void onDonePressed(Fragment currentFragment) {
+        super.onDonePressed(currentFragment);
         // Do something when users tap on Done button.
         finish();
     }
@@ -97,10 +96,5 @@ public class ChromerIntro extends AppIntro {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
-    }
-
-    @Override
-    public void onSlideChanged() {
-
     }
 }
