@@ -135,21 +135,25 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         setSupportActionBar(mToolbar);
 
         mViewPager.setAdapter(new PagerAdapter(getSupportFragmentManager()));
-        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                final TabView tabView = (TabView) tab.getCustomView();
-                if (tabView != null) {
-                    tabView.setSelected(true);
+                if (tab != null) {
+                    final TabView tabView = (TabView) tab.getCustomView();
+                    if (tabView != null) {
+                        tabView.setSelected(true);
+                    }
+                    mViewPager.setCurrentItem(tab.getPosition());
                 }
-                mViewPager.setCurrentItem(tab.getPosition());
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                final TabView tabView = (TabView) tab.getCustomView();
-                if (tabView != null) {
-                    tabView.setSelected(false);
+                if (tab != null) {
+                    final TabView tabView = (TabView) tab.getCustomView();
+                    if (tabView != null) {
+                        tabView.setSelected(false);
+                    }
                 }
             }
 

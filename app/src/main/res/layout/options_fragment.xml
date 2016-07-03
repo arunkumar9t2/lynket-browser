@@ -4,8 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/card_background_light">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,7 +22,7 @@
             android:layout_marginTop="@dimen/activity_vertical_margin_top"
             android:background="@color/card_background_light"
             android:foreground="?android:attr/selectableItemBackground"
-            app:cardElevation="3dp"
+            app:cardElevation="2dp"
             app:contentPadding="7dp">
 
             <LinearLayout

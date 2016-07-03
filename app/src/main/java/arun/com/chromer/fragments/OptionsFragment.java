@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -106,16 +105,6 @@ public class OptionsFragment extends Fragment {
     private void updateDefaultBrowserCard() {
         if (!Util.isDefaultBrowser(getActivity())) {
             mSetDefaultCard.setVisibility(View.VISIBLE);
-            if (Util.isLollipopAbove()) {
-                float elevation = Util.dpToPx(3);
-                ViewCompat.setElevation(mSetDefaultCard, 0);
-                mSetDefaultCard
-                        .animate()
-                        .withLayer()
-                        .z(elevation)
-                        .translationZ(elevation)
-                        .start();
-            }
         } else
             mSetDefaultCard.setVisibility(View.GONE);
     }

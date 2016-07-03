@@ -23,6 +23,7 @@ import timber.log.Timber;
  * Created by Arun on 02/03/2016.
  */
 public abstract class DividerLessPreferenceFragment extends PreferenceFragmentCompat {
+    @SuppressWarnings("FieldCanBeLocal")
     private final boolean mDebug = false;
 
     @Override
@@ -66,6 +67,7 @@ public abstract class DividerLessPreferenceFragment extends PreferenceFragmentCo
     }
 
     private void debug(String string, Object... args) {
+        //noinspection ConstantConditions
         if (mDebug) {
             Timber.d(string, args);
         }
