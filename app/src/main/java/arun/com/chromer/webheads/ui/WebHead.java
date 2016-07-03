@@ -66,12 +66,19 @@ public class WebHead extends BaseWebHead implements SpringListener {
      */
     private boolean mWasRemoveLocked;
     /**
+     * True when fling detected and false on new touch event
+     */
+    private boolean mWasFlung;
+    /**
      * True when click was detected, and false on new touch event
      */
     private boolean mWasClicked;
     //-------------------------------------------------------------------------------------------
     private float posX, posY;
     private int initialDownX, initialDownY;
+    private SpringSystem mSpringSystem;
+    private Spring mXSpring, mYSpring, mScaleSpring;
+    //-------------------------------------------------------------------------------------------
     /**
      * The interaction listener that clients can provide to listen for events on webhead.
      */
@@ -86,13 +93,6 @@ public class WebHead extends BaseWebHead implements SpringListener {
             // noop
         }
     };
-    /**
-     * True when fling detected and false on new touch event
-     */
-    private boolean mWasFlung;
-    private SpringSystem mSpringSystem;
-    //-------------------------------------------------------------------------------------------
-    private Spring mXSpring, mYSpring, mScaleSpring;
     /**
      * True when touched down and false otherwise
      */
