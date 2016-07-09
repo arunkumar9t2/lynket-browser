@@ -34,6 +34,10 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+    <string-array name="webHeadsSizeValues">
+        <item>Klein</item>
+        <item>Normal</item>
+    </string-array>
     <string name="app_name">Chromer</string>
     <string name="share_text">Hey,  teste \‘Chromer\’ für schnelles und sicheres surfen. Hier runterladen: https://goo.gl/992ils</string>
     <string name="share_via">Teilen mit…</string>
@@ -97,13 +101,14 @@
     <string name="keep_chrome_warmedup">Browser im Speicher behalten für schnelleres Starten</string>
     <string name="warmup_browser">Browser aufwärmen</string>
     <string name="set_default_chromer">Als Standard Browser festlegen</string>
-    <string name="default_provider">Standard Custom Tab Provider</string>
+    <string name="default_provider">Custom-Tab-Anbieter</string>
     <string name="pre_fetch_content">Inhalt Vorabrufen</string>
     <string name="pre_fetch_desc">Scanne deinen Bildschirm nach Links und lade sie im Hintergrund für einen sofortigen Start</string>
     <string name="accessibility_description">Dieser Dienst wird genutzt um Chromer Text nach Links scannen zu lassen, um diese im Hintergrund zu laden. Es werden keine anderen Informationen durch Chromer verarbeitet. Du kannst Chromer weiterhin im einfachen Modus benutzen wenn du dies nicht möchtest. Starte die Chromer app für mehr Informationen.</string>
     <string name="accessibility_dialog_title">Bedienungshilfe muss aktiviert sein</string>
     <string name="accessibility_dialog_desc">Um Chromer das Scannen nach Links zu erlauben musst du die Bedienungshilfe aktivieren. Bitte aktiviere die Funktion auf dem nächsten Bildschirm. Danach kannst du die Option aktiveren und das schnellere Starten genießen.</string>
     <string name="open_settings">Einstellungen öffnen</string>
+    <string name="only_on_wifi">Nur bei WLAN-Verbindung scannen</string>
     <string name="show_notification">Zeige eine Benachrichtigung, während ein Link vorgeladen wird</string>
     <string name="default_toolbar_color">Standard Aktionsleistenfarbe</string>
     <string name="web_heads_color">Web Heads Farbe</string>
@@ -143,9 +148,10 @@
     <string name="web_heads_service">Web Heads Dienst</string>
     <string name="join_beta">Beta beitreten</string>
     <string name="become_a_tester">Tester werden</string>
-    <string name="join_beta_content">“Beta Versionen sind experimentell. Sie haben die neuesten Funktionen, enthalten jedoch auch Fehler. Du kannst bei der Entwicklung helfen, indem du als Tester mitmachst und Fehler in der Google+ Community meldest. \n\nBitte stelle sicher,  dass du der Community beigetreten bist und klicke dann auf den Button \”Tester werden\“. \n\nBEACHTE: Du musst der Community beitreten um Tester zu werden. ”</string>
+    <string name="join_beta_content">“Beta Versionen sind experimentell. Sie haben die neuesten Funktionen, enthalten jedoch auch Fehler. Du kannst bei der Entwicklung helfen, indem du als Tester mitmachst und Fehler in der Google+ Community meldest. \n\nBitte stelle sicher,  dass du der Community beigetreten bist und klicke dann auf den Button \”Tester werden\". \n\nBEACHTE: Du musst der Community beitreten um Tester zu werden. "</string>
     <string name="no_voice_rec_apps">Keine kompatible Spracherkennungs App gefunden</string>
     <string name="blacklisted_apps">Ausgeschlossene Apps (Blacklist)</string>
+    <string name="blacklisted_explanation">Verhindere, dass Chromer Links von bestimmten Apps verarbeitet</string>
     <string name="loading">Laden…</string>
     <string name="please_wait">Bitte warten</string>
     <string name="blacklist_message">Du hast diese App in Chromer ausgeschlossen und keinen sekundären Browser festgelegt. Bitte wähle zum Fortfahren einen Browser.</string>
@@ -155,6 +161,30 @@
     <string name="last_fetched_urls">Letzte geladene URLs</string>
     <string name="blacklist_on">Ausgeschlossene Apps %s</string>
     <string name="translations">Übersetzungen</string>
-    <string name="merge_tabs">Tabs und Apps zusammen anzeigen - Beta</string>
+    <string name="merge_tabs">Tabs und Apps zusammen anzeigen</string>
     <string name="merge_tabs_explanation">Zeige Tabs zusammen mit Apps im \“Zuletzt geöffnet\”-Screen an</string>
+    <string name="already_loaded">Bereits geladen</string>
+    <string name="add_home_screen_begun">Die Verknüpfung wird gleich angelegt</string>
+    <string name="bottom_bar_pref_summary">Zeigt eine zusätzliche Toolbar mit mehr Optionen</string>
+    <string name="bottom_bar_pref_title">Zeige die Bottom-Bar</string>
+    <string name="bottom_bar">Bottom-Bar</string>
+    <string name="open_in_new_tab">In neuem Tab öffnen</string>
+    <string name="open_in_new_tab_error">Ungültiger Link. Hast du Text oder einen Link durch langes Drücken auf die Seite kopiert?</string>
+    <string name="bottom_bar_expln">Um sicherzugehen, dass die Bottom-Bar korrekt funktioniert wird empfohlen, die <b>aktuelle Chrome Version</b> als Custom-Tab-Anbieter zu verwenden. Ältere Versionen und andere Browser können Probleme verursachen.\n
+\nDie Bottom-Bar bietet 2 Optionen:\n\n<b>In neuem Tab öffnen (5.0+) -</b> Kopiere Text oder einen Link vom Bildschirm und drücke auf dieses Icon, um den Link oder eine Suchen nach dem Text in einem neuen Custom Tab zu öffnen.\n<b>Teilen -</b> Öffne Android\'s Teilen-Dialog.\n\nMehr Aktionen kommen bald!</string>
+    <string name="options">Einstellungen</string>
+    <string name="customize">Anpassen</string>
+    <string name="not_set">nicht gesetzt</string>
+    <string name="not_found">Nicht gefunden</string>
+    <string name="app_preferences">App Einstellungen</string>
+    <string name="behavior_preferences">Verhalten</string>
+    <string name="additional_preferences">Weiteres</string>
+    <string name="notifications">Benachrichtigungen</string>
+    <string name="web_heads_enabled">Web Heads aktiviert! Du kannst jetzt mehrere Links im Hintergrund laden und nachher ansehen.</string>
+    <string name="web_heads_title">Du kannst mehrere Links laden und später ansehen</string>
+    <string name="web_heads_description">Öffne Links in schwebenden Blasen.</string>
+    <string name="favicon_title">Favicons anzeigen</string>
+    <string name="favicon_description">Kleine, aus der Website extrahierte Icons werden angezeigt</string>
+    <string name="webhead_size_title">Größe</string>
+    <string name="webhead_size_dialog">Wähle die Größe der Web Heads</string>
 </resources>

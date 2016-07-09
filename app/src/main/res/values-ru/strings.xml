@@ -34,6 +34,10 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+    <string-array name="webHeadsSizeValues">
+        <item>Мелкий</item>
+        <item>Нормальный</item>
+    </string-array>
     <string name="app_name">Chromer</string>
     <string name="share_text">Зацените \‘Chromer\’ для быстрого и безопасного сёрфинга в интернете! Скачать здесь https://goo.gl/992ils</string>
     <string name="share_via">Поделиться через…</string>
@@ -147,6 +151,7 @@
     <string name="join_beta_content">Бета-релизы - это экспериментальные версии, в которых представлены самые новые возможности, но в них бывают баги. Вы можете присоединиться к разработке, став тестером и сообщая о найденных багах в сообществе Google+.\n\nПожалуйста, убедитесь в том, что вы присоединились к сообществу в Google+, а затем нажмите кнопку \“Стать тестером\”, чтобы вас перенаправило по тестовой ссылке Google Play.\n\nПРИМЕЧАНИЕ: Вы должны присоединиться к сообществу, чтобы стать тестером.</string>
     <string name="no_voice_rec_apps">Не найдено приложений для распознавания голоса</string>
     <string name="blacklisted_apps">Приложения в чёрном списке</string>
+    <string name="blacklisted_explanation">Запретить Chromer обрабатывать ссылки для определенных приложений</string>
     <string name="loading">Загрузка…</string>
     <string name="please_wait">Пожалуйста, подождите</string>
     <string name="blacklist_message">Вы добавили это приложение в чёрный список Chromer и не указали вторичный браузер. Пожалуйста, выберите браузер чтобы продолжить.</string>
@@ -156,6 +161,30 @@
     <string name="last_fetched_urls">Последние предзагруженные ссылки</string>
     <string name="blacklist_on">Фильтрование приложений включено %s</string>
     <string name="translations">Переводы</string>
-    <string name="merge_tabs">Вкладки в списке недавних приложений - Beta</string>
+    <string name="merge_tabs">Вкладки в списке недавних приложений</string>
     <string name="merge_tabs_explanation">Вкладки Chromer будут раздельно отображены в списке недавно запущенных приложений.</string>
+    <string name="already_loaded">Уже загружено</string>
+    <string name="add_home_screen_begun">Ярлык скоро будет добавлен</string>
+    <string name="bottom_bar_pref_summary">Показывать панель с дополнительными опциями</string>
+    <string name="bottom_bar_pref_title">Показать нижнюю панель</string>
+    <string name="bottom_bar">Нижняя панель</string>
+    <string name="open_in_new_tab">Открыть в новой вкладке</string>
+    <string name="open_in_new_tab_error">Неверная ссылка, вы точно скопировали текст или ссылку долгим нажатием на странице?</string>
+    <string name="bottom_bar_expln">Чтобы нижняя панель работала корректно, установите<b>актуальную версию Chrome</b>это рекомендуемый браузер для быстрых вкладок (custom tab). С более старыми версиями и другими браузерами может не работать. \n
+\nНижняя панель обеспечивает две функции: \n\n<b>Открытие в новой вкладке (Андроид 5.0+) -</b>Копирование ссылки или текста на экране с последующим нажатием иконки на панели для перехода по ссылке или выполнения поиска выделенного текста в новой быстрой вкладке.\n<b>Поделиться -</b> Быстро выполнить стандартное Андроид действие Поделиться. \n\n Больше функций появится со временем.</string>
+    <string name="options">Опции</string>
+    <string name="customize">Настроить</string>
+    <string name="not_set">Не задано</string>
+    <string name="not_found">Не найдено</string>
+    <string name="app_preferences">Параметры</string>
+    <string name="behavior_preferences">Поведение</string>
+    <string name="additional_preferences">Дополнительно</string>
+    <string name="notifications">Уведомления</string>
+    <string name="web_heads_enabled">Webheads включен! Теперь вы можете открыть в фоне несколько ссылок и просматривать их позже.</string>
+    <string name="web_heads_title">Вы можете открывать несколько ссылок и просматривать их позже</string>
+    <string name="web_heads_description">Открывать ссылки в плавающих пузырьках</string>
+    <string name="favicon_title">Значки веб-сайтов</string>
+    <string name="favicon_description">Будут показаны небольшие иконки, извлеченные из веб-сайтов</string>
+    <string name="webhead_size_title">Размер</string>
+    <string name="webhead_size_dialog">Выберите размер плавающей иконки</string>
 </resources>

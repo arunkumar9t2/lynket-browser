@@ -34,6 +34,10 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+    <string-array name="webHeadsSizeValues">
+        <item>小</item>
+        <item>正常</item>
+    </string-array>
     <string name="app_name">Chromer</string>
     <string name="share_text">嘿 来查看下 “Chromer”  它可以让你拥有快速且安全的浏览体验！可以在这里下载 https://goo.gl/992ils</string>
     <string name="share_via">分享至…</string>
@@ -147,6 +151,7 @@
     <string name="join_beta_content">测试版是具备最新功能但会有少量 Bug 存在的实验性版本。你可以通过加入测试人员并在 Google+ 社群内汇报相关问题的方式来为开发做出贡献。\n\n请确保你已经加入了 Google+ 社群，然后点击成为测试人员按钮来获取 Play 商店内的测试版本链接。\n\n注意：你需要先加入社群以成为测试人员。</string>
     <string name="no_voice_rec_apps">没有找到可兼容的语音识别应用</string>
     <string name="blacklisted_apps">黑名单应用</string>
+    <string name="blacklisted_explanation">阻止 Chromer 打开来自特定应用的链接</string>
     <string name="loading">正在加载…</string>
     <string name="please_wait">请等待</string>
     <string name="blacklist_message">你已经将这个程序加入到了黑名单中，Chromer将不会被用来打开它里面的链接。当前你还没有设置过第二浏览器，请选择一个浏览器以继续。</string>
@@ -156,7 +161,7 @@
     <string name="last_fetched_urls">最近获取过的网址</string>
     <string name="blacklist_on">黑名单应用 %s</string>
     <string name="translations">翻译</string>
-    <string name="merge_tabs">一并显示标签页和应用 - Beta</string>
+    <string name="merge_tabs">合并标签页和应用</string>
     <string name="merge_tabs_explanation">你所打开的标签页和应用程序都将显示在最近任务列表内</string>
     <string name="already_loaded">已加载</string>
     <string name="add_home_screen_begun">快捷方式稍后会被添加</string>
@@ -167,4 +172,19 @@
     <string name="open_in_new_tab_error">无效的链接，你是否已通过长按页面操作复制了文本或者链接？</string>
     <string name="bottom_bar_expln">为了确保底栏功能正常工作，建议使用 <b>最新版本的 Chrome 浏览器</b>作为自定义标签页的提供程序。较旧版本或其他的浏览器将可能导致无法正常工作。\n
 \n底栏内提供两种操作：\n\n<b>在新标签页中打开 (需安卓 5.0+) -</b> 复制屏幕上的链接或文本后点击图标来选择在新打开的标签页内加载链接或搜索关键词。\n<b>分享 -</b> 快速执行安卓系统内的分享操作。 \n\n 后续还将添加更多操作。</string>
+    <string name="options">选项</string>
+    <string name="customize">自定义</string>
+    <string name="not_set">未设置</string>
+    <string name="not_found">未找到</string>
+    <string name="app_preferences">应用首选项</string>
+    <string name="behavior_preferences">行为</string>
+    <string name="additional_preferences">其他</string>
+    <string name="notifications">通知</string>
+    <string name="web_heads_enabled">链接气泡已启用! 您可以同时打开多条链接以便稍后查看</string>
+    <string name="web_heads_title">您可同时堆叠多条链接以便稍后查看</string>
+    <string name="web_heads_description">在浮动气泡中打开链接</string>
+    <string name="favicon_title">显示网页图标</string>
+    <string name="favicon_description">显示来自网页的小图标</string>
+    <string name="webhead_size_title">尺寸</string>
+    <string name="webhead_size_dialog">选择链接气泡尺寸</string>
 </resources>

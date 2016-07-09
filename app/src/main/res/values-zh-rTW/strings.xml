@@ -143,6 +143,6 @@
     <string name="last_fetched_urls">最近獲取的網址</string>
     <string name="blacklist_on">黑名單應用程式 %s</string>
     <string name="translations">翻譯</string>
-    <string name="merge_tabs">合併顯示標籤頁和應用程式 - Beta</string>
+    <string name="merge_tabs">合併顯示標籤頁和應用程式</string>
     <string name="merge_tabs_explanation">將您打開的標籤頁顯示於您手機上的最近的應用程式列表內。</string>
 </resources>

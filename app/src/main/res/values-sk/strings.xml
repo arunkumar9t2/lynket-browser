@@ -21,6 +21,10 @@
         <item>Vpravo</item>
         <item>Vľavo</item>
     </string-array>
+    <string-array name="webHeadsSizeValues">
+        <item>Malé</item>
+        <item>Normálne</item>
+    </string-array>
     <string name="app_name">Chromer</string>
     <string name="share_text">Hej, vyskúšaj \‘Chromer\’ pre rýchle a bezpečné surfovanie! Stiahni si ho tu https://goo.gl/992ils</string>
     <string name="share_via">Zdieľať pomocou…</string>
@@ -84,7 +88,7 @@
     <string name="keep_chrome_warmedup">Ponechá prehliadač v pamäti pre rýchlejšie spustenie</string>
     <string name="warmup_browser">Nažhaviť prehliadač</string>
     <string name="set_default_chromer">Nastaviť ako predvolený prehliadač</string>
-    <string name="default_provider">Predvolený poskytovateľ Custom Tabs</string>
+    <string name="default_provider">Poskytovateľ Custom Tabs</string>
     <string name="pre_fetch_content">Prednačítanie obsahu</string>
     <string name="pre_fetch_desc">Vyhľadáva odkazy na vašej obrazovke a načítava ich na pozadí pre rýchle spustenie</string>
     <string name="accessibility_description">Túto službu využíva Chromer pre skenovanie textových odkazov na vašej obrazovke a ich načítanie na pozadí. Žiadne ďalšie informácie nie sú spracovávané. Stále môžete používať Chromer v odľahčenom režime ak sa rozhodnete nepovoliť túto možnosť. Pre viac informácii spustite aplikáciu Chromer.</string>
@@ -134,6 +138,7 @@
     <string name="join_beta_content">Beta verzie sú experimentálne, ktoré majú najnovšie funkcie ale môžu mať chyby.  Môžete prispieť k vývoju pripojením sa ako tester a nahlasovaním chýb, ktoré nájdete v komunite Google+.\n\nProsím, uistite sa, že ste sa pripojili do Google+ komunity, a potom kliknite na tlačidlo Staňte sa testerom a prejdite na odkaz pre testovanie Google Play. \n\nPOZNÁMKA: Musíte sa pripojiť do komunity pre sprístupnenie možnosti testovania.</string>
     <string name="no_voice_rec_apps">Nebola nájdená kompatibilná aplikácia pre rozoznávanie hlasu</string>
     <string name="blacklisted_apps">Blokované aplikácie</string>
+    <string name="blacklisted_explanation">Vylúčiť Chromer zo spracovávania odkazov určitých aplikácií</string>
     <string name="loading">Načítavanie…</string>
     <string name="please_wait">Prosím, počkajte</string>
     <string name="blacklist_message">Zablokovali ste túto aplikáciu pre spúšťanie v Chromer a nenastavili ste sekundárny prehliadač. Prosím, zvoľte prehliadač.</string>
@@ -143,7 +148,7 @@
     <string name="last_fetched_urls">Naposledy načínané adresy</string>
     <string name="blacklist_on">Blokované aplikácie sú %s</string>
     <string name="translations">Preklad aplikácie</string>
-    <string name="merge_tabs">Zlúčenie kariet a aplikácií - Beta</string>
+    <string name="merge_tabs">Zlúčenie kariet a aplikácií</string>
     <string name="merge_tabs_explanation">Zobrazí karty s ďalšími nedávnymi aplikáciami na obrazovne nedávnych aplikácií.</string>
     <string name="already_loaded">Už načítané</string>
     <string name="add_home_screen_begun">Skratka bude čoskoro pridaná</string>
@@ -155,4 +160,19 @@
     <string name="bottom_bar_expln">Pre zaistenie funkčnosti dolnej lišty, je potrebné nastaviť <b>najnovšiu verziu Chrome</b> ako poskytovateľa Custom Tabs. Staršie verzie a iné prehliadače nemusia fungovať. \n 
     \nDolná lišta poskytuje dve akcie:
 \n\n<b>Otvoriť na novej karte (5.0+) -</b> Skopírujte odkaz alebo text na obrazovke a kliknite na túto ikonu pre otvorenie odkazu alebo vyhľadanie textu na novej karte.\n<b>Zdieľať -</b> Rýchle spustenie akcie zdieľania. \n\nViac akcií neskôr.</string>
+    <string name="options">Možnosti</string>
+    <string name="customize">Prispôsobiť</string>
+    <string name="not_set">Nenastavené</string>
+    <string name="not_found">Nenájdené</string>
+    <string name="app_preferences">Nastavenia aplikácie</string>
+    <string name="behavior_preferences">Správanie</string>
+    <string name="additional_preferences">Ďalšie</string>
+    <string name="notifications">Upozornenia</string>
+    <string name="web_heads_enabled">Webové hlavičky sú povolené! Môžete zaradiť odkazy do fronty a zobraziť ich neskôr.</string>
+    <string name="web_heads_title">Môže zoskupiť viacero odkazov a zobraziť ich neskôr.</string>
+    <string name="web_heads_description">Otvoriť odkazy v plávajúcich bublinách</string>
+    <string name="favicon_title">Zobraziť Favicons</string>
+    <string name="favicon_description">Malé ikony webových stránok budú zobrazené</string>
+    <string name="webhead_size_title">Veľkosť</string>
+    <string name="webhead_size_dialog">Zvoľte veľkosť webových hlavičiek</string>
 </resources>

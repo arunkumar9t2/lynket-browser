@@ -34,6 +34,10 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+    <string-array name="webHeadsSizeValues">
+        <item>Pequeno</item>
+        <item>Normal</item>
+    </string-array>
     <string name="app_name">Chromer</string>
     <string name="share_text">Oi! Experimente o \‘Chromer\’ para uma experiência de navegação rápida e segura! Baixe aqui https://goo.gl/992ils</string>
     <string name="share_via">Compartilhar via</string>
@@ -62,7 +66,7 @@
     <string name="invalid_link">Link inválido</string>
     <string name="copied">Copiado</string>
     <string name="copy_link">Copiar link</string>
-    <string name="add_to_homescreen">Adicionar à tela inicial</string>
+    <string name="add_to_homescreen">Adicionar à Tela Inicial</string>
     <string name="intro_1">Olá!\nChromer é um navegador leve, seguro e rápido.</string>
     <string name="intro_2">Ele usa a função Abas customizadas do Google Chrome que é uma aba do Chrome extremante leve projetada para carregar um link rapidamente</string>
     <string name="intro_3">Isso pode manter o seu navegador preso na memória, assim ele irá iniciar um pouco mais rápido.</string>
@@ -147,6 +151,7 @@
     <string name="join_beta_content">Versões beta são compilações experimentais e contém as últimas funções mas podem conter bugs. Você pode ajudar no desenvolvimento do app se tornando um testador e reportando problemas e sugestões na comunidade do Google+. \n\nCertifique-se de estar participando da comunidade do Google+, e clique no botão TORNAR-SE TESTADOR no site da Google Play. \n\nNOTA: Você precisa participar da comunidade para se tornar beta tester.</string>
     <string name="no_voice_rec_apps">Nenhum app de reconhecimento de voz foi encontrado</string>
     <string name="blacklisted_apps">Apps na lista negra</string>
+    <string name="blacklisted_explanation">Excluir a intervenção do Chromer em certos apps</string>
     <string name="loading">Carregando…</string>
     <string name="please_wait">Aguarde</string>
     <string name="blacklist_message">Você colocou este app na lista negra do Chromer e não tem um navegador secundário. Escolha um navegador para continuar.</string>
@@ -156,6 +161,30 @@
     <string name="last_fetched_urls">Últimas URLs carregadas</string>
     <string name="blacklist_on">Lista negra de apps %s</string>
     <string name="translations">Traduções</string>
-    <string name="merge_tabs">Mesclar abas e apps - Beta</string>
+    <string name="merge_tabs">Mesclar abas e apps</string>
     <string name="merge_tabs_explanation">Ver suas abas junto com outros apps na tela de apps Recentes.</string>
+    <string name="already_loaded">Já carregado</string>
+    <string name="add_home_screen_begun">O atalho será adicionado em instantes</string>
+    <string name="bottom_bar_pref_summary">Exibir uma barra de ferramentas adicional com opções extras</string>
+    <string name="bottom_bar_pref_title">Exibir barra inferior</string>
+    <string name="bottom_bar">Barra Inferior</string>
+    <string name="open_in_new_tab">Abrir em nova aba</string>
+    <string name="open_in_new_tab_error">Link inválido, você copiou algum texto ou link dando um toque longo na página?</string>
+    <string name="bottom_bar_expln">Para assegurar que a barra funciona bem, definir a versão <b>mais recente do Chrome</b> como provedor de abas padrão é recomendado. Versões antigas e outros navegadores podem não funcionar. \n
+    \nA barra inferior fornece duas ações: \n\n<b>Abrir nova aba (5.0+) -</b>Copiar um link ou texto da tela e pressionar o botão para abrir o link ou pesquisar o texto em uma nova aba.\n<b>Compartilhar -</b> Usar rapidamente a ação de compartilhar nativa do Android. \n\n Mais ações virão em breve.</string>
+    <string name="options">Opções</string>
+    <string name="customize">Personalizar</string>
+    <string name="not_set">Não Definido</string>
+    <string name="not_found">Não Encontrado</string>
+    <string name="app_preferences">Preferências</string>
+    <string name="behavior_preferences">Comportamento</string>
+    <string name="additional_preferences">Adicionais</string>
+    <string name="notifications">Notificações</string>
+    <string name="web_heads_enabled">Web heads ativadas! Agora pode enfileirar múltiplos links e visualizá-los depois.</string>
+    <string name="web_heads_title">Você pode empilhar múltiplos links e visualizá-los depois.</string>
+    <string name="web_heads_description">Abrir links em bolhas flutuantes</string>
+    <string name="favicon_title">Exibir Favicons</string>
+    <string name="favicon_description">Pequenos ícones serão extraídos dos sites e exibidos</string>
+    <string name="webhead_size_title">Tamanho</string>
+    <string name="webhead_size_dialog">Escolha o tamanho das web heads</string>
 </resources>

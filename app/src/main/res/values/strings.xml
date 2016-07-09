@@ -191,4 +191,5 @@
     <string name="favicon_description">Small icons extracted from websites will be shown</string>
     <string name="webhead_size_title">Size</string>
     <string name="webhead_size_dialog">Choose the size of web heads</string>
+    <string name="changelog_skipped">Changelog skipped due to an error</string>
 </resources>
