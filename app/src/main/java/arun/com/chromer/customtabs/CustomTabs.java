@@ -60,6 +60,7 @@ public class CustomTabs {
     private static final String STABLE_PACKAGE = "com.android.chrome";
     private static final String BETA_PACKAGE = "com.chrome.beta";
     private static final String DEV_PACKAGE = "com.chrome.dev";
+
     private static final int BOTTOM_OPEN_TAB = 11;
     private static final int BOTTOM_SHARE_TAB = 12;
     /**

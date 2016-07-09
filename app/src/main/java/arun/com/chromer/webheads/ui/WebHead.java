@@ -41,23 +41,6 @@ public class WebHead extends BaseWebHead implements SpringListener {
     @SuppressWarnings("FieldCanBeLocal")
     private static int[] sTrashLockCoordinate;
     /**
-     * Minimum horizontal velocity that we need to move the web head from one end of the screen
-     * to another
-     */
-    private static int MINIMUM_HORIZONTAL_FLING_VELOCITY = 0;
-    /**
-     * Touch slop of the device
-     */
-    private final int mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
-    /**
-     * Gesture detector to recognize fling and click on web heads
-     */
-    private final GestureDetector mGestureDetector = new GestureDetector(getContext(), new GestureDetectorListener());
-    private final SpringConfig FLING_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(50, 5);
-    private final SpringConfig DRAG_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(0, 1.8);
-    private final SpringConfig SNAP_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(100, 7);
-    private final MovementTracker mMovementTracker;
-    /**
      * True when being dragged, otherwise false
      */
     private boolean mDragging;
@@ -76,8 +59,25 @@ public class WebHead extends BaseWebHead implements SpringListener {
     //-------------------------------------------------------------------------------------------
     private float posX, posY;
     private int initialDownX, initialDownY;
+    /**
+     * Minimum horizontal velocity that we need to move the web head from one end of the screen
+     * to another
+     */
+    private static int MINIMUM_HORIZONTAL_FLING_VELOCITY = 0;
+    /**
+     * Touch slop of the device
+     */
+    private final int mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
+    /**
+     * Gesture detector to recognize fling and click on web heads
+     */
+    private final GestureDetector mGestureDetector = new GestureDetector(getContext(), new GestureDetectorListener());
     private SpringSystem mSpringSystem;
     private Spring mXSpring, mYSpring, mScaleSpring;
+    private final SpringConfig FLING_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(50, 5);
+    private final SpringConfig DRAG_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(0, 1.8);
+    private final SpringConfig SNAP_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(100, 7);
+    private final MovementTracker mMovementTracker;
     //-------------------------------------------------------------------------------------------
     /**
      * The interaction listener that clients can provide to listen for events on webhead.
