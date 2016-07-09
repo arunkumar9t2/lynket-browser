@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
         <string name="changelog_text"><![CDATA[
+<html>
+<head>
+<style>
+body {
+   font-size: 0.915em;
+}
+</style>
+</head>
+<body>
 <strong>You can view this again in the about screen.</strong>
-<br></br>
 <br></br>
 <strong>1.6 B3.1</strong> (Beta Release)
 <ul>
     <li><b>FIXED:</b> Crash when dynamic toolbar enabled</li>
     <li><b>IMPROVE:</b> Minor reduction in APK size</li>
 </ul>
-<br></br>
 <strong>1.6 B3</strong> (Beta Release)
 <ul>
     <li><b>NEW:</b> Complete redesign of settings - Now tabbed and easier to access</li>
@@ -24,7 +31,6 @@
     <li><b>IMPROVED:</b> Synced translations</li>
     <li><b>FIXED:</b> Icons getting cut on N</li>
 </ul>
-<br></br>
 <strong>1.6 B2</strong> (Beta Release)
 <ul>
     <li><b>NEW:</b> Much improved web heads\' physics based animations.</li>
@@ -35,7 +41,6 @@
     <li><b>IMPROVED:</b> Home screen shortcuts will now have title and icon extracted from the website.</li>
     <li><b>IMPROVED:</b> Synced translation updates.</li>
 </ul>
-<br></br>
 <strong>1.6 B1</strong> (Beta Release)
 <ul>
     <li><b>NEW:</b> Ability to fling web heads around.</li>
@@ -44,7 +49,6 @@
     <li><b>NEW:</b> Synced translation updates from OneSky: German, Russian, Portuguese BR, Chinese, Italian.</li>
     <li><b>FIX:</b> Minor fixes in extracting colors from apps.</li>
 </ul>
-<br></br>
 <strong>1.5.5.1</strong>
 <ul>
     <li><b>NEW:</b> Configure animation speed, choose between medium and short.</li>
@@ -52,7 +56,6 @@
     <li><b>FIX:</b> Open in Chrome not working if Merge Tabs and Apps in Chrome was on.</li>
     <li><b>FIX:</b> Blacklist FC.</li>
 </ul>
-<br></br>
 <strong>1.5.5</strong>
 <ul>
     <li><b>FIX:</b> Pre-fetching crash fixes for Samsung devices.</li>
@@ -62,7 +65,6 @@
     <li><b>FIX:</b> Open in Chrome menu taking to Chrome home screen.</li>
     <li><b>IMPROVED:</b> Faster custom tab opening animation.</li>
 </ul>
-<br></br>
 <strong>1.5.4</strong>
 <ul>
     <li><b>NEW:</b> Blacklisting: ability to launch your secondary browser instead of Chromer in certain apps.</li>
@@ -77,13 +79,11 @@
     <li><b>FIX:</b> Secondary browser opening link twice.</li>
     <li><b>FIX:</b> Major optimizations and memory leak fixes.</li>
 </ul>
-<br></br>
 <strong>1.5.3</strong>
 <ul>
     <li><b>FIX:</b> Chromer not shown in recents on some devices.</li>
     <li><b>FIX:</b> Crashes and minor bugs.</li>
 </ul>
-<br></br>
 <strong>1.5.2</strong>
 <ul>
     <li><b>NEW:</b> Option to join beta program. Please join if you would like to contribute to Chromer\'s development.</li>
@@ -92,7 +92,6 @@
     <li><b>FIX:</b> Open in Chromer is shown in Chrome beta and dev versions. Now a separate Open in Chrome will be shown.</li>
     <li><b>FIX:</b> Crashes and minor bugs.</li>
 </ul>
-<br></br>
 <strong>1.5.1</strong>
 <ul>
     <li><b>NEW:</b> Ability to choose color of web heads.</li>
@@ -105,7 +104,6 @@
     <li><b>FIX:</b> Chromer settings appearing randomly when closing custom tabs.</li>
     <li><b>FIX:</b> For 6.0+, re ask permission to draw on other apps if it was revoked with webheads turned on.</li>
 </ul>
-<br></br>
 <strong>1.5</strong>
 <ul>
     <li><b>NEW: WEBHEADS -</b> Ability to stack multiple links in floating bubbles and open them later. See the separate Intro in main screen.</li>
@@ -120,12 +118,10 @@
     <li><b>IMPROVED:</b> Reduced memory consumptions and general crash fixes</li>
     <li><b>IMPROVED:</b> UI layout changes</li>
 </ul>
-<br></br>
 <strong>1.4.1</strong>
 <ul>
     <li>Rewritten affected code to avoid potential license violations.</li>
 </ul>
-<br></br>
 <strong>1.4</strong>
 <ul>
     <li><b>NEW:</b> Pre fetching. Chromer can scan links on screen and pre load them in background for you.</li>
@@ -137,7 +133,6 @@
     <li><b>IMPROVED:</b> Better setting default behaviour.</li>
     <li><b>IMPROVED:</b> Copy and share actions now target the current open page instead of first open page.</li>
 </ul>
-<br></br>
 <strong>1.3</strong>
 <ul>
    <li><b>DONATE option.</b> Please donate if you like this app and to support development:)</li>
@@ -149,12 +144,10 @@
    <li>Changelog screen</li>
    <li>Link to Chrome in case no custom tab provider is found</li>
 </ul>
-<br></br>
 <strong>1.2.1</strong>
 <ul>
    <li>Reworked share menu. Direct share enabled for 6.0</li>
 </ul>
-<br></br>
 <strong>1.2</strong>
 <ul>
    <li>Change Toolbar color to your liking.</li>
@@ -165,15 +158,15 @@
    <li>Tutorial flow performance fixes.</li>
    <li>Icons and imagery updated.</li>
 </ul>
-<br></br>
 <strong>1.1</strong>
 <ul>
    <li>Much requested copy and share options</li>
 </ul>
-<br></br>
 <strong>1.0</strong>
 <ul>
    <li>Initial release.</li>
 </ul>
+</body>
+</html>
 ]]></string>
 </resources>
