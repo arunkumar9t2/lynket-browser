@@ -1,6 +1,5 @@
 package arun.com.chromer.activities.about;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,12 +10,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
@@ -28,7 +27,10 @@ import arun.com.chromer.R;
 import arun.com.chromer.activities.about.changelog.Changelog;
 import arun.com.chromer.activities.about.licenses.Licenses;
 import arun.com.chromer.shared.Constants;
-import arun.com.chromer.views.adapter.ExtendedBaseAdapter;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 import de.psdev.licensesdialog.LicensesDialog;
 
 /**
@@ -36,13 +38,19 @@ import de.psdev.licensesdialog.LicensesDialog;
  */
 public class AboutFragment extends Fragment {
 
+    @BindView(R.id.about_app_version_list)
+    public RecyclerView mChromerList;
+    @BindView(R.id.about_author_version_list)
+    public RecyclerView mAuthorList;
+    private Unbinder mUnBinder;
+
     public AboutFragment() {
         // Required empty public constructor
     }
 
     public static AboutFragment newInstance() {
-        AboutFragment fragment = new AboutFragment();
-        Bundle args = new Bundle();
+        final AboutFragment fragment = new AboutFragment();
+        final Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,185 +58,116 @@ public class AboutFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_about, container, false);
-
-        setupCredits(rootView);
-        populateData(rootView);
+        final View rootView = inflater.inflate(R.layout.fragment_about, container, false);
+        mUnBinder = ButterKnife.bind(this, rootView);
+        populateData();
         return rootView;
     }
 
-    private void setupCredits(View rootView) {
-        View daniel = rootView.findViewById(R.id.daniel);
-        daniel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent danielProfile = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://plus.google.com/u/0/+DanielCiao/about"));
-                getActivity().startActivity(danielProfile);
-            }
-        });
-
-        View patryk = rootView.findViewById(R.id.patryk);
-        patryk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent patrykProfile = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://plus.google.com/u/0/109304801957014561872/about"));
-                getActivity().startActivity(patrykProfile);
-            }
-        });
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mUnBinder.unbind();
     }
 
-    private void populateData(View rootView) {
-        ListView chromerList = (ListView) rootView.findViewById(R.id.about_app_version_list);
-        ListView authorList = (ListView) rootView.findViewById(R.id.about_author_version_list);
+    @OnClick(R.id.patryk)
+    public void patrtykClick() {
+        Intent patrykProfile = new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/u/0/109304801957014561872/about"));
+        getActivity().startActivity(patrykProfile);
+    }
 
-        // Loading the header
-        chromerList.setAdapter(new ExtendedBaseAdapter() {
-            final Context context = getActivity().getApplicationContext();
+    @OnClick(R.id.daniel)
+    public void danielClick() {
+        Intent danielProfile = new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/u/0/+DanielCiao/about"));
+        getActivity().startActivity(danielProfile);
+    }
 
-            @Override
-            public int getCount() {
-                return 5;
+    private void populateData() {
+        mChromerList.setNestedScrollingEnabled(false);
+        mChromerList.setLayoutManager(new LinearLayoutManager(getContext()));
+        mChromerList.setAdapter(new AppAdapter());
+        mAuthorList.setNestedScrollingEnabled(false);
+        mAuthorList.setLayoutManager(new LinearLayoutManager(getContext()));
+        mAuthorList.setAdapter(new AuthorAdapter());
+    }
+
+    class AppAdapter extends RecyclerView.Adapter<AppAdapter.ItemHolder> {
+        @Override
+        public ItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            final View view = LayoutInflater.from(getActivity()).inflate(R.layout.about_fragment_listview_template, parent, false);
+            return new ItemHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(ItemHolder holder, int position) {
+            int materialDark = ContextCompat.getColor(getActivity(), R.color.accent);
+            holder.subtitle.setVisibility(View.VISIBLE);
+            switch (position) {
+                case 0:
+                    holder.title.setText(R.string.version);
+                    holder.subtitle.setText(BuildConfig.VERSION_NAME);
+                    holder.imageView.setBackground(new IconicsDrawable(getActivity())
+                            .icon(GoogleMaterial.Icon.gmd_info_outline)
+                            .color(materialDark)
+                            .sizeDp(24));
+                    break;
+                case 1:
+                    holder.title.setText(R.string.changelog);
+                    holder.subtitle.setText(R.string.see_whats_new);
+                    holder.imageView.setBackground(new IconicsDrawable(getActivity())
+                            .icon(GoogleMaterial.Icon.gmd_track_changes)
+                            .color(materialDark)
+                            .sizeDp(24));
+                    break;
+                case 2:
+                    holder.title.setText(R.string.join_google_plus);
+                    holder.subtitle.setText(R.string.share_ideas);
+                    holder.imageView.setBackground(new IconicsDrawable(getActivity())
+                            .icon(CommunityMaterial.Icon.cmd_google_circles_communities)
+                            .color(materialDark)
+                            .sizeDp(24));
+                    break;
+                case 3:
+                    holder.title.setText(R.string.licenses);
+                    holder.subtitle.setVisibility(View.GONE);
+                    holder.imageView.setBackground(new IconicsDrawable(getActivity())
+                            .icon(GoogleMaterial.Icon.gmd_card_membership)
+                            .color(materialDark)
+                            .sizeDp(24));
+                    break;
+                case 4:
+                    holder.title.setText(R.string.translations);
+                    holder.subtitle.setText(R.string.help_translations);
+                    holder.imageView.setBackground(new IconicsDrawable(getActivity())
+                            .icon(GoogleMaterial.Icon.gmd_translate)
+                            .color(materialDark)
+                            .sizeDp(24));
+                    break;
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return 5;
+        }
+
+        class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+            @BindView(R.id.about_row_item_image)
+            public ImageView imageView;
+            @BindView(R.id.about_app_subtitle)
+            public TextView subtitle;
+            @BindView(R.id.about_app_title)
+            public TextView title;
+
+            ItemHolder(View itemView) {
+                super(itemView);
+                ButterKnife.bind(this, itemView);
+                itemView.setOnClickListener(this);
             }
 
             @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                ViewHolder holder;
-                if (convertView == null) {
-                    holder = new ViewHolder();
-                    convertView = mInflater.inflate(R.layout.about_fragment_listview_template, parent, false);
-                    holder.imageView = (ImageView) convertView.findViewById(R.id.about_row_item_image);
-                    holder.subtitle = (TextView) convertView.findViewById(R.id.about_app_subtitle);
-                    holder.title = (TextView) convertView.findViewById(R.id.about_app_title);
-                    convertView.setTag(holder);
-                } else {
-                    holder = (ViewHolder) convertView.getTag();
-                }
-                int materialdarkColor = ContextCompat.getColor(context, R.color.accent);
-                holder.subtitle.setVisibility(View.VISIBLE);
-                switch (position) {
-                    case 0:
-                        holder.title.setText(R.string.version);
-                        holder.subtitle.setText(BuildConfig.VERSION_NAME);
-                        holder.imageView.setBackground(new IconicsDrawable(context)
-                                .icon(GoogleMaterial.Icon.gmd_info_outline)
-                                .color(materialdarkColor)
-                                .sizeDp(24));
-                        break;
-                    case 1:
-                        holder.title.setText(R.string.changelog);
-                        holder.subtitle.setVisibility(View.GONE);
-                        holder.imageView.setBackground(new IconicsDrawable(context)
-                                .icon(GoogleMaterial.Icon.gmd_track_changes)
-                                .color(materialdarkColor)
-                                .sizeDp(24));
-                        break;
-                    case 2:
-                        holder.title.setText(R.string.join_google_plus);
-                        holder.subtitle.setText(R.string.share_ideas);
-                        holder.imageView.setBackground(new IconicsDrawable(context)
-                                .icon(CommunityMaterial.Icon.cmd_google_circles_communities)
-                                .color(materialdarkColor)
-                                .sizeDp(24));
-                        break;
-                    case 3:
-                        holder.title.setText(R.string.licenses);
-                        holder.subtitle.setVisibility(View.GONE);
-                        holder.imageView.setBackground(new IconicsDrawable(context)
-                                .icon(GoogleMaterial.Icon.gmd_card_membership)
-                                .color(materialdarkColor)
-                                .sizeDp(24));
-                        break;
-                    case 4:
-                        holder.title.setText(R.string.translations);
-                        holder.subtitle.setVisibility(View.GONE);
-                        holder.imageView.setBackground(new IconicsDrawable(context)
-                                .icon(GoogleMaterial.Icon.gmd_translate)
-                                .color(materialdarkColor)
-                                .sizeDp(24));
-                        break;
-                }
-                return convertView;
-            }
-        });
-
-        authorList.setAdapter(new ExtendedBaseAdapter() {
-            final Context context = getActivity().getApplicationContext();
-
-            @Override
-            public int getCount() {
-                return 5;
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                final ViewHolder holder;
-                if (convertView == null) {
-                    holder = new ViewHolder();
-                    convertView = mInflater.inflate(R.layout.about_fragment_listview_template, parent, false);
-                    holder.imageView = (ImageView) convertView.findViewById(R.id.about_row_item_image);
-                    holder.subtitle = (TextView) convertView.findViewById(R.id.about_app_subtitle);
-                    holder.title = (TextView) convertView.findViewById(R.id.about_app_title);
-                    convertView.setTag(holder);
-                } else {
-                    holder = (ViewHolder) convertView.getTag();
-                }
-                switch (position) {
-                    case 0:
-                        holder.title.setText(Constants.ME);
-                        holder.subtitle.setText(Constants.LOCATION);
-                        holder.imageView.getLayoutParams().height = (int) getResources().getDimension(R.dimen.arun_height);
-                        holder.imageView.getLayoutParams().width = (int) getResources().getDimension(R.dimen.arun_width);
-                        Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.arun);
-                        RoundedBitmapDrawable roundedBitmapDrawable =
-                                RoundedBitmapDrawableFactory.create(getResources(), imageBitmap);
-                        roundedBitmapDrawable.setAntiAlias(true);
-                        roundedBitmapDrawable.setCircular(true);
-                        holder.imageView.setImageDrawable(roundedBitmapDrawable);
-                        break;
-                    case 1:
-                        holder.title.setText(R.string.add_to_circles);
-                        holder.subtitle.setVisibility(View.GONE);
-                        holder.imageView.setBackground(new IconicsDrawable(context)
-                                .icon(CommunityMaterial.Icon.cmd_google_circles)
-                                .color(ContextCompat.getColor(getActivity(), R.color.google_plus))
-                                .sizeDp(24));
-                        break;
-                    case 2:
-                        holder.title.setText(R.string.follow_twitter);
-                        holder.subtitle.setVisibility(View.GONE);
-                        holder.imageView.setBackground(new IconicsDrawable(context)
-                                .icon(CommunityMaterial.Icon.cmd_twitter)
-                                .color(ContextCompat.getColor(getActivity(), R.color.twitter))
-                                .sizeDp(24));
-                        break;
-                    case 3:
-                        holder.title.setText(R.string.connect_linkedIn);
-                        holder.subtitle.setVisibility(View.GONE);
-                        holder.imageView.setBackground(new IconicsDrawable(context)
-                                .icon(CommunityMaterial.Icon.cmd_linkedin_box)
-                                .color(ContextCompat.getColor(getActivity(), R.color.linkedin))
-                                .sizeDp(24));
-                        break;
-                    case 4:
-                        holder.title.setText(R.string.more_apps);
-                        holder.subtitle.setVisibility(View.GONE);
-                        holder.imageView.setBackground(new IconicsDrawable(context)
-                                .icon(CommunityMaterial.Icon.cmd_google_play)
-                                .color(ContextCompat.getColor(getActivity(), R.color.playstore_green))
-                                .sizeDp(24));
-                        break;
-                }
-                return convertView;
-            }
-        });
-
-        chromerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onClick(View view) {
+                int position = getAdapterPosition();
                 switch (position) {
                     case 0:
                         return;
@@ -236,8 +175,7 @@ public class AboutFragment extends Fragment {
                         Changelog.show(getActivity());
                         break;
                     case 2:
-                        Intent communityIntent = new Intent(Intent.ACTION_VIEW,
-                                Uri.parse("https://plus.google.com/communities/109754631011301174504"));
+                        Intent communityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/communities/109754631011301174504"));
                         getActivity().startActivity(communityIntent);
                         break;
                     case 3:
@@ -248,17 +186,92 @@ public class AboutFragment extends Fragment {
                                 .showAppCompat();
                         break;
                     case 4:
-                        Intent oneSkyIntent = new Intent(Intent.ACTION_VIEW,
-                                Uri.parse("http://os0l2aw.oneskyapp.com/collaboration/project/62112"));
+                        Intent oneSkyIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://os0l2aw.oneskyapp.com/collaboration/project/62112"));
                         getActivity().startActivity(oneSkyIntent);
                         break;
                 }
             }
-        });
+        }
+    }
 
-        authorList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    class AuthorAdapter extends RecyclerView.Adapter<AuthorAdapter.ItemHolder> {
+        @Override
+        public ItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            final View view = LayoutInflater.from(getActivity()).inflate(R.layout.about_fragment_listview_template, parent, false);
+            return new ItemHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(ItemHolder holder, int position) {
+            switch (position) {
+                case 0:
+                    holder.title.setText(Constants.ME);
+                    holder.subtitle.setText(Constants.LOCATION);
+                    holder.imageView.getLayoutParams().height = (int) getResources().getDimension(R.dimen.arun_height);
+                    holder.imageView.getLayoutParams().width = (int) getResources().getDimension(R.dimen.arun_width);
+                    final Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.arun);
+                    final RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), imageBitmap);
+                    roundedBitmapDrawable.setAntiAlias(true);
+                    roundedBitmapDrawable.setCircular(true);
+                    holder.imageView.setImageDrawable(roundedBitmapDrawable);
+                    break;
+                case 1:
+                    holder.title.setText(R.string.add_to_circles);
+                    holder.subtitle.setVisibility(View.GONE);
+                    holder.imageView.setBackground(new IconicsDrawable(getActivity())
+                            .icon(CommunityMaterial.Icon.cmd_google_circles)
+                            .color(ContextCompat.getColor(getActivity(), R.color.google_plus))
+                            .sizeDp(24));
+                    break;
+                case 2:
+                    holder.title.setText(R.string.follow_twitter);
+                    holder.subtitle.setVisibility(View.GONE);
+                    holder.imageView.setBackground(new IconicsDrawable(getActivity())
+                            .icon(CommunityMaterial.Icon.cmd_twitter)
+                            .color(ContextCompat.getColor(getActivity(), R.color.twitter))
+                            .sizeDp(24));
+                    break;
+                case 3:
+                    holder.title.setText(R.string.connect_linkedIn);
+                    holder.subtitle.setVisibility(View.GONE);
+                    holder.imageView.setBackground(new IconicsDrawable(getActivity())
+                            .icon(CommunityMaterial.Icon.cmd_linkedin_box)
+                            .color(ContextCompat.getColor(getActivity(), R.color.linkedin))
+                            .sizeDp(24));
+                    break;
+                case 4:
+                    holder.title.setText(R.string.more_apps);
+                    holder.subtitle.setVisibility(View.GONE);
+                    holder.imageView.setBackground(new IconicsDrawable(getActivity())
+                            .icon(CommunityMaterial.Icon.cmd_google_play)
+                            .color(ContextCompat.getColor(getActivity(), R.color.playstore_green))
+                            .sizeDp(24));
+                    break;
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return 5;
+        }
+
+        class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+            @BindView(R.id.about_row_item_image)
+            public ImageView imageView;
+            @BindView(R.id.about_app_subtitle)
+            public TextView subtitle;
+            @BindView(R.id.about_app_title)
+            public TextView title;
+
+            public ItemHolder(View itemView) {
+                super(itemView);
+                ButterKnife.bind(this, itemView);
+                itemView.setOnClickListener(this);
+            }
+
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onClick(View view) {
+                int position = getAdapterPosition();
                 switch (position) {
                     case 0:
                         return;
@@ -271,8 +284,8 @@ public class AboutFragment extends Fragment {
                         getActivity().startActivity(twitterIntent);
                         break;
                     case 3:
-                        Intent linkedinIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://in.linkedin.com/in/arunkumar9t2"));
-                        getActivity().startActivity(linkedinIntent);
+                        Intent linkedInIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://in.linkedin.com/in/arunkumar9t2"));
+                        getActivity().startActivity(linkedInIntent);
                         break;
                     case 4:
                         try {
@@ -283,8 +296,7 @@ public class AboutFragment extends Fragment {
                         break;
                 }
             }
-        });
-
+        }
     }
 
     public static class ViewHolder {

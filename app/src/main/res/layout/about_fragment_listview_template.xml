@@ -3,9 +3,10 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:foreground="?android:attr/selectableItemBackground"
-              android:gravity="center|left"
-              android:minHeight="50dp"
+              android:background="?android:attr/selectableItemBackground"
+              android:focusable="true"
+              android:gravity="center_vertical"
+              android:minHeight="56dp"
               android:orientation="horizontal"
               android:padding="5dp"
               tools:ignore="RtlHardcoded">
@@ -17,31 +18,31 @@
         android:layout_gravity="center"
         tools:ignore="ContentDescription"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
+        android:layout_weight="1"
         android:paddingLeft="30dp"
         tools:ignore="RtlSymmetry">
 
         <TextView
             android:id="@+id/about_app_title"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Title"
-            android:textColor="@color/material_dark_color"
-            android:textSize="16sp"
-            tools:ignore="HardcodedText"/>
+            android:ellipsize="marquee"
+            android:maxLines="1"
+            android:textAppearance="@style/Preference_TextAppearanceMaterialSubhead"/>
 
         <TextView
             android:id="@+id/about_app_subtitle"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Subtitle"
-            android:textColor="@color/material_dark_color"
-            android:textSize="12sp"
-            tools:ignore="HardcodedText"/>
-    </LinearLayout>
+            android:layout_alignLeft="@id/about_app_title"
+            android:layout_below="@id/about_app_title"
+            android:maxLines="2"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="?android:attr/textColorSecondary"
+            tools:ignore="SelectableText"/>
 
+    </RelativeLayout>
 </LinearLayout>

@@ -192,4 +192,6 @@
     <string name="webhead_size_title">Size</string>
     <string name="webhead_size_dialog">Choose the size of web heads</string>
     <string name="changelog_skipped">Changelog skipped due to an error</string>
+    <string name="see_whats_new">See what\'s new</string>
+    <string name="help_translations">Help translate app to your language</string>
 </resources>
