@@ -79,7 +79,7 @@ public abstract class BaseWebHead extends FrameLayout {
     /**
      * Butter knife un binder to release references;
      */
-    private final Unbinder mUnBinder;
+    private Unbinder mUnBinder;
     /**
      * Integer to keep track of web head creation order.
      */
@@ -129,8 +129,6 @@ public abstract class BaseWebHead extends FrameLayout {
         sWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 
         inflateContent(context);
-
-        mUnBinder = ButterKnife.bind(this);
         initContent();
 
         mWindowParams = new WindowManager.LayoutParams(
@@ -164,6 +162,7 @@ public abstract class BaseWebHead extends FrameLayout {
         } else
             mContentGroup = (FrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.web_head_layout, this, false);
         addView(mContentGroup);
+        mUnBinder = ButterKnife.bind(this);
     }
 
     private void initDisplayMetrics() {
@@ -304,6 +303,7 @@ public abstract class BaseWebHead extends FrameLayout {
      */
     @NonNull
     Animator getRevealInAnimator(@ColorInt final int newWebHeadColor) {
+        // TODO Fix NPE
         mRevealView.clearAnimation();
         mRevealView.setColor(mCircleBackground.getColor());
         mRevealView.setScaleX(1f);

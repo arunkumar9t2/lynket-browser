@@ -56,9 +56,10 @@ public class WebHead extends BaseWebHead implements SpringListener {
      * True when click was detected, and false on new touch event
      */
     private boolean mWasClicked;
-    //-------------------------------------------------------------------------------------------
-    private float posX, posY;
-    private int initialDownX, initialDownY;
+    /**
+     * True when touched down and false otherwise
+     */
+    private boolean mScaledDown;
     /**
      * Minimum horizontal velocity that we need to move the web head from one end of the screen
      * to another
@@ -72,13 +73,28 @@ public class WebHead extends BaseWebHead implements SpringListener {
      * Gesture detector to recognize fling and click on web heads
      */
     private final GestureDetector mGestureDetector = new GestureDetector(getContext(), new GestureDetectorListener());
+    /**
+     * The base spring system to create our springs.
+     */
     private SpringSystem mSpringSystem;
+    /**
+     * Individual springs to control X, Y and scale of the web head
+     */
     private Spring mXSpring, mYSpring, mScaleSpring;
-    private final SpringConfig FLING_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(50, 5);
-    private final SpringConfig DRAG_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(0, 1.8);
-    private final SpringConfig SNAP_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(100, 7);
+
+    private static final SpringConfig FLING_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(50, 5);
+    private static final SpringConfig DRAG_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(0, 1.8);
+    private static final SpringConfig SNAP_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(100, 7);
+    /**
+     * Movement tracker instance, that is used to adjust X and Y velocity calculated by {@link #mGestureDetector}.
+     * This is needed since sometimes velocities coming from {@link GestureDetectorListener#onFling(MotionEvent, MotionEvent, float, float)}
+     * has wrong polarity.
+     */
     private final MovementTracker mMovementTracker;
-    //-------------------------------------------------------------------------------------------
+
+    private float posX, posY;
+    private int initialDownX, initialDownY;
+
     /**
      * The interaction listener that clients can provide to listen for events on webhead.
      */
@@ -93,10 +109,6 @@ public class WebHead extends BaseWebHead implements SpringListener {
             // noop
         }
     };
-    /**
-     * True when touched down and false otherwise
-     */
-    private boolean mScaledDown;
 
     /**
      * Inits the web head and attaches to the system window. It is assumed that draw over other apps permission is
@@ -577,7 +589,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
         private void sendCallback() {
             RemoveWebHead.disappear();
-            if (mInteractionListener != null) mInteractionListener.onWebHeadClick(WebHead.this);
+            mInteractionListener.onWebHeadClick(WebHead.this);
         }
 
         @Override
