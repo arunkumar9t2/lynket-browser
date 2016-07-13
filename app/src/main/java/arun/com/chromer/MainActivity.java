@@ -44,7 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import arun.com.chromer.activities.about.AboutAppActivity;
-import arun.com.chromer.activities.about.changelog.ChangelogUtil;
+import arun.com.chromer.activities.about.changelog.Changelog;
 import arun.com.chromer.activities.intro.ChromerIntro;
 import arun.com.chromer.activities.payments.DonateActivity;
 import arun.com.chromer.customtabs.CustomTabManager;
@@ -116,8 +116,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             startActivity(new Intent(this, ChromerIntro.class));
         }
 
-        if (ChangelogUtil.shouldShowChangelog(this)) {
-            ChangelogUtil.showChangelogDialog(this);
+        if (Changelog.shouldShow(this)) {
+            Changelog.show(this);
         }
 
         setupDrawer();

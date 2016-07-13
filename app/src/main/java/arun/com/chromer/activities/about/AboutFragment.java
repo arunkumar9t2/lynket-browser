@@ -25,7 +25,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.BuildConfig;
 import arun.com.chromer.R;
-import arun.com.chromer.activities.about.changelog.ChangelogUtil;
+import arun.com.chromer.activities.about.changelog.Changelog;
 import arun.com.chromer.activities.about.licenses.Licenses;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.views.adapter.ExtendedBaseAdapter;
@@ -233,7 +233,7 @@ public class AboutFragment extends Fragment {
                     case 0:
                         return;
                     case 1:
-                        ChangelogUtil.showChangelogDialog(getActivity());
+                        Changelog.show(getActivity());
                         break;
                     case 2:
                         Intent communityIntent = new Intent(Intent.ACTION_VIEW,

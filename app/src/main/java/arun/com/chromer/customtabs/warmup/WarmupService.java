@@ -40,10 +40,9 @@ public class WarmUpService extends Service implements CustomTabManager.Connectio
             Timber.d("Severing existing connection");
             mCustomTabManager.unbindCustomTabsService(this);
         }
-
-
         mCustomTabManager = new CustomTabManager();
         mCustomTabManager.setConnectionCallback(this);
+
         boolean success = mCustomTabManager.bindCustomTabsService(this);
         Timber.d("Was bound %b", success);
         return START_STICKY;
@@ -64,7 +63,6 @@ public class WarmUpService extends Service implements CustomTabManager.Connectio
         sWarmUpService = null;
         if (mCustomTabManager != null)
             mCustomTabManager.unbindCustomTabsService(this);
-
         return super.onUnbind(intent);
     }
 
