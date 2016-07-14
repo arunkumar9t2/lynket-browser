@@ -15,39 +15,51 @@ import java.util.List;
 import arun.com.chromer.R;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Util;
+import timber.log.Timber;
 
 @SuppressLint("GoogleAppIndexingApiWarning")
 public class ShareInterceptActivity extends AppCompatActivity {
 
 
+    @SuppressWarnings("ConstantConditions")
     @TargetApi(Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         try {
             if (intent != null) {
-                if (intent.getAction().equalsIgnoreCase(Intent.ACTION_SEND)) {
-                    @SuppressWarnings("ConstantConditions")
-                    String text = intent.hasExtra(Intent.EXTRA_TEXT) ?
-                            intent.getExtras().getCharSequence(Intent.EXTRA_TEXT).toString() : null;
-                    findAndOpenLink(text);
-                } else if (intent.getAction().equalsIgnoreCase(Intent.ACTION_PROCESS_TEXT)) {
-                    final String text = intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT);
-                    findAndOpenLink(text);
+                final String action = intent.getAction();
+                String text = null;
+                switch (action) {
+                    case Intent.ACTION_SEND:
+                        if (intent.hasExtra(Intent.EXTRA_TEXT)) {
+                            text = intent.getExtras().getCharSequence(Intent.EXTRA_TEXT).toString();
+                        }
+                        break;
+                    case Intent.ACTION_PROCESS_TEXT:
+                        text = intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT);
+                        break;
                 }
+                findAndOpenLink(text);
             }
-        } catch (NullPointerException npe) {
+        } catch (Exception exception) {
             invalidLink();
+            Timber.e(exception.getMessage());
+        } finally {
+            finish();
         }
     }
 
-    private void findAndOpenLink(String text) {
-        List<String> urls = Util.findURLs(text);
-        if (urls != null && urls.size() != 0) {
-            // use only the first link
-            String url = urls.get(0);
 
+    private void findAndOpenLink(@Nullable String text) {
+        if (text == null) return;
+
+        final List<String> urls = Util.findURLs(text);
+        if (!urls.isEmpty()) {
+            // use only the first link
+            final String url = urls.get(0);
+            // TODO launch group of web heads if web heads enabled
             openLink(url);
         } else {
             // No urls were found, so lets do a google search with the text received.
@@ -60,10 +72,8 @@ public class ShareInterceptActivity extends AppCompatActivity {
         if (url == null) {
             invalidLink();
         }
-
-        Intent websiteIntent = new Intent(this, BrowserInterceptActivity.class);
+        final Intent websiteIntent = new Intent(this, BrowserInterceptActivity.class);
         websiteIntent.setData(Uri.parse(url));
-
         startActivity(websiteIntent);
         finish();
     }
