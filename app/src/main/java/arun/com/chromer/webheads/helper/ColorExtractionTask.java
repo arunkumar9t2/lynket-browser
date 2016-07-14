@@ -28,8 +28,8 @@ public class ColorExtractionTask extends AsyncTask<Void, Void, Integer> {
     protected Integer doInBackground(Void... params) {
         int bestColor = Constants.NO_COLOR;
         if (mFaviconReference.get() != null) {
-            Bitmap favicon = mFaviconReference.get();
-            Palette palette = Palette.from(favicon)
+            final Bitmap favicon = mFaviconReference.get();
+            final Palette palette = Palette.from(favicon)
                     .clearFilters()
                     .generate();
             bestColor = ColorUtil.getBestFaviconColor(palette);

@@ -3,7 +3,7 @@ apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion '23.0.2'
+    buildToolsVersion '23.0.3'
 
     defaultConfig {
         applicationId "arun.com.chromer"
@@ -11,19 +11,23 @@ android {
         targetSdkVersion 24
         versionCode 22
         versionName "1.6 B3.1"
+
+        buildConfigField "String", "BASE_64", getBase64()
     }
     buildTypes {
         release {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            resValue "string", "app_name", "Chromer"
             lintOptions {
                 disable 'MissingTranslation'
             }
         }
         debug {
             applicationIdSuffix '.debug'
-            versionNameSuffix '-DEBUG'
+            versionNameSuffix '- Debug'
+            resValue "string", "app_name", "Chromer - Debug"
         }
     }
 }
@@ -55,8 +59,8 @@ dependencies {
     compile 'com.github.afollestad.material-dialogs:commons:0.8.6.1'
 
     compile 'com.jakewharton.timber:timber:4.1.2'
-    compile 'com.jakewharton:butterknife:8.1.0'
-    apt 'com.jakewharton:butterknife-compiler:8.1.0'
+    compile 'com.jakewharton:butterknife:8.2.1'
+    apt 'com.jakewharton:butterknife-compiler:8.2.1'
 
     compile 'com.github.satyan:sugar:1.5'
     compile 'com.github.bumptech.glide:glide:3.7.0'
@@ -67,4 +71,14 @@ dependencies {
     compile 'com.facebook.rebound:rebound:0.3.8'
 
     compile 'org.jsoup:jsoup:1.9.2'
+}
+
+def getBase64() {
+    try {
+        Properties properties = new Properties()
+        properties.load(new FileInputStream("values.properties"))
+        return "\"" + properties.getProperty("BASE_64") + "\""
+    } catch (Exception e) {
+        return ""
+    }
 }

@@ -36,25 +36,15 @@ import arun.com.chromer.util.Util;
 
 public class PersonalizationPreferenceFragment extends DividerLessPreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private final BroadcastReceiver mColorSelectionReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int selectedColor = intent.getIntExtra(Constants.EXTRA_KEY_TOOLBAR_COLOR, Constants.NO_COLOR);
-            if (selectedColor != Constants.NO_COLOR) {
-                ColorPreference preference = (ColorPreference) findPreference(Preferences.TOOLBAR_COLOR);
-                if (preference != null) {
-                    preference.setColor(selectedColor);
-                }
-            }
-        }
-    };
     private final String[] PREFERENCE_GROUP = new String[]{
             Preferences.ANIMATION_SPEED,
             Preferences.ANIMATION_TYPE,
             Preferences.PREFERRED_ACTION,
             Preferences.TOOLBAR_COLOR
     };
+
     private final IntentFilter mToolBarColorFilter = new IntentFilter(Constants.ACTION_TOOLBAR_COLOR_SET);
+
     private IconSwitchPreference mDynamicColor;
     private IconSwitchPreference mIsColoredToolbar;
     private ColorPreference mToolbarColorPref;
@@ -177,9 +167,8 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
                     new MaterialDialog.Builder(getActivity())
                             .title(R.string.dynamic_toolbar_color)
                             .content(R.string.dynamic_toolbar_help)
-                            .items(new String[]{
-                                    getString(R.string.based_on_app),
-                                    getString(R.string.based_on_web)})
+                            .items(getString(R.string.based_on_app),
+                                    getString(R.string.based_on_web))
                             .positiveText(android.R.string.ok)
                             .alwaysCallMultiChoiceCallback()
                             .itemsCallbackMultiChoice(Preferences.dynamicToolbarSelections(getActivity()),
@@ -234,9 +223,7 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
     }
 
     private void requestUsagePermissionIfNeeded() {
-        if (Preferences.dynamicToolbarOnApp(getActivity())
-                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-                && !Util.canReadUsageStats(getActivity())) {
+        if (Preferences.dynamicToolbarOnApp(getActivity()) && !Util.canReadUsageStats(getActivity())) {
             new MaterialDialog.Builder(getActivity())
                     .title(R.string.permission_required)
                     .content(R.string.usage_permission_explanation_appcolor)
@@ -255,10 +242,21 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
 
     private void handleAppDetectionService() {
         if (ServiceUtil.isAppBasedToolbarColor(getActivity()) || Preferences.blacklist(getActivity()))
-            getActivity().startService(new Intent(getActivity().getApplicationContext(),
-                    AppDetectService.class));
+            getActivity().startService(new Intent(getActivity().getApplicationContext(), AppDetectService.class));
         else
-            getActivity().stopService(new Intent(getActivity().getApplicationContext(),
-                    AppDetectService.class));
+            getActivity().stopService(new Intent(getActivity().getApplicationContext(), AppDetectService.class));
     }
+
+    private final BroadcastReceiver mColorSelectionReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int selectedColor = intent.getIntExtra(Constants.EXTRA_KEY_TOOLBAR_COLOR, Constants.NO_COLOR);
+            if (selectedColor != Constants.NO_COLOR) {
+                ColorPreference preference = (ColorPreference) findPreference(Preferences.TOOLBAR_COLOR);
+                if (preference != null) {
+                    preference.setColor(selectedColor);
+                }
+            }
+        }
+    };
 }

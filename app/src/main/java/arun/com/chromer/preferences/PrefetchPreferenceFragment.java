@@ -29,8 +29,8 @@ public class PrefetchPreferenceFragment extends DividerLessPreferenceFragment im
             Preferences.WIFI_PREFETCH,
             Preferences.PRE_FETCH_NOTIFICATION,
     };
-    IconSwitchPreference mWarmupPreference;
-    IconSwitchPreference mPrefetchPreference;
+    private IconSwitchPreference mWarmupPreference;
+    private IconSwitchPreference mPrefetchPreference;
 
     public PrefetchPreferenceFragment() {
         // Required empty public constructor

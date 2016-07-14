@@ -148,7 +148,7 @@
     <string name="web_heads_service">Web Heads Dienst</string>
     <string name="join_beta">Beta beitreten</string>
     <string name="become_a_tester">Tester werden</string>
-    <string name="join_beta_content">“Beta Versionen sind experimentell. Sie haben die neuesten Funktionen, enthalten jedoch auch Fehler. Du kannst bei der Entwicklung helfen, indem du als Tester mitmachst und Fehler in der Google+ Community meldest. \n\nBitte stelle sicher,  dass du der Community beigetreten bist und klicke dann auf den Button \”Tester werden\". \n\nBEACHTE: Du musst der Community beitreten um Tester zu werden. "</string>
+    <string name="join_beta_content">“Beta Versionen sind experimentell. Sie haben die neuesten Funktionen, enthalten jedoch auch Fehler. Du kannst bei der Entwicklung helfen, indem du als Tester mitmachst und Fehler in der Google+ Community meldest. \n\nBitte stelle sicher,  dass du der Community beigetreten bist und klicke dann auf den Button \”Tester werden\“. \n\nBEACHTE: Du musst der Community beitreten um Tester zu werden. ”</string>
     <string name="no_voice_rec_apps">Keine kompatible Spracherkennungs App gefunden</string>
     <string name="blacklisted_apps">Ausgeschlossene Apps (Blacklist)</string>
     <string name="blacklisted_explanation">Verhindere, dass Chromer Links von bestimmten Apps verarbeitet</string>

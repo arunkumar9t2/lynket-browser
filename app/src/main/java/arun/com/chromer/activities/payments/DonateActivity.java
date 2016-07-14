@@ -21,6 +21,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 import java.util.ArrayList;
 import java.util.List;
 
+import arun.com.chromer.BuildConfig;
 import arun.com.chromer.R;
 import arun.com.chromer.activities.about.AboutFragment;
 import arun.com.chromer.activities.payments.util.IabBroadcastReceiver;
@@ -98,10 +99,8 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
         super.onCreate(savedInstanceState);
         setContentView(R.layout.donate_activity);
 
-        String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAp0P1CS2wKf3jnu/BUnolJcejH84v4M1uAGKFcj3Cn+OzC1aOxxPk6rlVhOPQiExpyuWYXTKutDeHUIixdp5G1oaoa8Ak8caoYRSWCB3bfZzoQivVIvPvRl6fibukHqSAnlG7Ueq0qassHtaxGN7MaHUBDc2jNYJ6GnWlTeqczdfS8lVMddlU8rp6yzSVOvXOl5/Eao6PXjDl0dpCAu1gIx5TPJXioBkgCI+NgSSLEGWPpq+sqacYCi6R+YEgwi+5w1erwBcdIU4/70ROFTtGt5+PDPNkDWi6V9hjUmTBp7EajXccNVGkzqW3opSPaH1rUtRz+sFqUHLPJemXb29xIQIDAQAB";
-
         // compute your public key and store it in base64EncodedPublicKey
-        mHelper = new IabHelper(this, base64EncodedPublicKey);
+        mHelper = new IabHelper(this, BuildConfig.BASE_64);
 
         // enable debug logging (for a production application, you should set this to false).
         mHelper.enableDebugLogging(false);

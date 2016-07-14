@@ -13,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import arun.com.chromer.db.WebColor;
+import arun.com.chromer.shared.Constants;
 import timber.log.Timber;
 
 /**
@@ -26,19 +27,16 @@ public class WebColorExtractorService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        String urlToExtract = intent.getDataString();
-
+        final String urlToExtract = intent.getDataString();
         URL url = null;
-
-        int color = 0;
+        int color = Constants.NO_COLOR;
         try {
             url = new URL(urlToExtract);
 
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             // attempt to connect
-            InputStream inputStream = connection.getInputStream();
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+            final InputStream inputStream = connection.getInputStream();
+            final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
 
             String temp;
             String page = "";
@@ -48,35 +46,29 @@ public class WebColorExtractorService extends IntentService {
                     break;
                 }
             }
-            // Test string for checking extraction logic
-            // String test = "<meta name=\"theme-color\" content=\"#0041C8\">";
-
-            Matcher matcher = Pattern.compile("<meta name=\"theme-color\"(.*?)>").matcher(page);
-
+            final Matcher matcher = Pattern.compile("<meta name=\"theme-color\"(.*?)>").matcher(page);
             while (matcher.find()) {
                 for (int i = 0; i < matcher.groupCount(); i++) {
-                    String splitter = "content=\"";
-                    String content = matcher.group().split(splitter)[1];
+                    final String splitter = "content=\"";
+                    final String content = matcher.group().split(splitter)[1];
                     color = Color.parseColor(content.split("\">")[0]);
                 }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        Timber.d("Extracted color %d", color);
-
-        if (color != 0) {
+        if (color != Constants.NO_COLOR) {
             // successful extraction
-            Timber.d(url.getHost());
             try {
-                // Save this color to DB
-                WebColor webColor = new WebColor(url.getHost(), color);
+                Timber.d("Extracted color %d for %s", color, url.getHost());
+
+                final WebColor webColor = new WebColor(url.getHost(), color);
                 webColor.save();
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        } else {
+            Timber.d("Color extraction failed");
         }
     }
 }

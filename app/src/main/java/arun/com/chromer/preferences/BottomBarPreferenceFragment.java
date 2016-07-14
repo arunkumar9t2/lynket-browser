@@ -22,7 +22,7 @@ public class BottomBarPreferenceFragment extends DividerLessPreferenceFragment i
     }
 
     public static BottomBarPreferenceFragment newInstance() {
-        BottomBarPreferenceFragment fragment = new BottomBarPreferenceFragment();
+        final BottomBarPreferenceFragment fragment = new BottomBarPreferenceFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;

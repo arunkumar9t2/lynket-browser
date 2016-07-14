@@ -1,6 +1,5 @@
 package arun.com.chromer.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,7 +17,6 @@ import butterknife.Unbinder;
  * Created by Arun on 19/06/2016.
  */
 public class CustomizeFragment extends Fragment {
-    private Context mAppContext;
     private Unbinder mUnbinder;
 
     public static CustomizeFragment newInstance() {
@@ -31,8 +29,7 @@ public class CustomizeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mAppContext = getActivity().getApplicationContext();
-        View view = inflater.inflate(R.layout.customize_fragment, container, false);
+        final View view = inflater.inflate(R.layout.customize_fragment, container, false);
         mUnbinder = ButterKnife.bind(this, view);
         return view;
     }
@@ -51,6 +48,5 @@ public class CustomizeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
-        mAppContext = null;
     }
 }

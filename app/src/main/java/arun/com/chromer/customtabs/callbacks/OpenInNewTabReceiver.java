@@ -39,7 +39,7 @@ public class OpenInNewTabReceiver extends BroadcastReceiver {
 
     private void findAndOpenLink(Context context, String text) {
         List<String> urls = Util.findURLs(text);
-        if (urls != null && urls.size() != 0) {
+        if (urls.size() != 0) {
             // use only the first link
             String url = urls.get(0);
 

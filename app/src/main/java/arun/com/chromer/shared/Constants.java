@@ -30,9 +30,6 @@ public class Constants {
     public static final String LOCATION = "Tamilnadu, India";
     public static final String CHROME_PACKAGE = "com.android.chrome";
 
-    // DB Names
-    public static final String DATABASE_NAME = "database.db";
-    public static final String OLD_DATABASE_NAME = "Chromer_database.db";
     // Intent Actions
     public static final String ACTION_TOOLBAR_COLOR_SET = "ACTION_TOOLBAR_COLOR_SET";
     public static final String ACTION_WEBHEAD_COLOR_SET = "ACTION_WEBHEAD_COLOR_SET";
@@ -49,6 +46,8 @@ public class Constants {
     public static final String EXTRA_KEY_FROM_NEW_TAB = "EXTRA_KEY_FROM_NEW_TAB";
     public static final String EXTRA_KEY_WEBHEAD_TITLE = "EXTRA_KEY_WEBHEAD_TITLE";
     public static final String EXTRA_KEY_WEBHEAD_ICON = "EXTRA_KEY_WEBHEAD_ICON";
+    // Request codes
+    public static final int REQUEST_CODE_VOICE = 10001;
 
     private Constants() {
         throw new UnsupportedOperationException("Cannot instantiate");

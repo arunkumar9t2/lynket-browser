@@ -193,7 +193,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         });
         animatorSet.start();
 
-        PageExtractTasksManager.startDownload(webHeadUrl);
+        PageExtractTasksManager.startExtraction(webHeadUrl);
     }
 
     @Override

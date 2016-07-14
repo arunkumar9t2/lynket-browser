@@ -12,7 +12,6 @@ public class BlacklistedApps extends SugarRecord {
     String packageName;
 
     public BlacklistedApps() {
-
     }
 
     public BlacklistedApps(String packageName) {

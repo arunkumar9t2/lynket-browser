@@ -39,7 +39,7 @@ public class PageExtractTask implements PageExtractRunnable.PageExtractTaskMetho
     }
 
     @Override
-    public void handleDownloadState(int state) {
+    public void handleExtractionState(int state) {
         handleState(state);
     }
 

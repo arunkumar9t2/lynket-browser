@@ -13,7 +13,6 @@ public class WebColor extends SugarRecord {
     int color;
 
     public WebColor() {
-
     }
 
     public WebColor(String url, int color) {

@@ -148,7 +148,7 @@ public class RemoveWebHead extends FrameLayout {
         return Math.max(getWidth(), RemoveHeadCircle.getSizePx());
     }
 
-    public int[] getCenterCoordinates() {
+    int[] getCenterCoordinates() {
         if (mCentrePoint == null) {
             initCentreCoords();
         }
@@ -196,7 +196,7 @@ public class RemoveWebHead extends FrameLayout {
         }
     }
 
-    public void reveal() {
+    void reveal() {
         setVisibility(VISIBLE);
         if (mHidden) {
             mScaleSpring.setEndValue(0.9f);
@@ -204,7 +204,7 @@ public class RemoveWebHead extends FrameLayout {
         }
     }
 
-    public void grow() {
+    void grow() {
         if (!mGrew) {
             mScaleSpring.setCurrentValue(0.9f, true);
             mScaleSpring.setEndValue(1f);
@@ -212,7 +212,7 @@ public class RemoveWebHead extends FrameLayout {
         }
     }
 
-    public void shrink() {
+    void shrink() {
         if (mGrew) {
             mScaleSpring.setEndValue(0.9f);
             mGrew = false;
@@ -222,7 +222,7 @@ public class RemoveWebHead extends FrameLayout {
     /**
      * Created by Arun on 04/02/2016.
      */
-    public static class RemoveHeadCircle extends View {
+    private static class RemoveHeadCircle extends View {
 
         private static int sSizePx;
         private static int sDiameterPx;
@@ -245,7 +245,7 @@ public class RemoveWebHead extends FrameLayout {
             sSizePx = context.getResources().getDimensionPixelSize(R.dimen.remove_head_size);
         }
 
-        public static int getSizePx() {
+        static int getSizePx() {
             return sSizePx;
         }
 

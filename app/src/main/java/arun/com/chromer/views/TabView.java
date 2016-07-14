@@ -46,7 +46,7 @@ public class TabView extends FrameLayout {
     public ImageView mTabIcon;
     @BindView(R.id.tab_view_text)
     public TextView mTabText;
-    Unbinder mUnBinder;
+    private Unbinder mUnBinder;
     private float initialIconX = 0;
     private float initialTextX = 0;
     private boolean mSelected;
@@ -115,11 +115,6 @@ public class TabView extends FrameLayout {
                 getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
-    }
-
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
     }
 
     @Override

@@ -4,14 +4,14 @@ import android.support.annotation.NonNull;
 import android.view.MotionEvent;
 
 public class Coordinate {
-    public float x;
-    public float y;
+    private float x;
+    private float y;
 
     Coordinate() {
 
     }
 
-    Coordinate(float x, float y) {
+    private Coordinate(float x, float y) {
         this.x = x;
         this.y = y;
     }

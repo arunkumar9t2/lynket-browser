@@ -209,6 +209,7 @@ public class Util {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static boolean canReadUsageStats(@NonNull Context context) {
         // http://stackoverflow.com/questions/27215013/check-if-my-application-has-usage-access-enabled
+        if (!isLollipopAbove()) return true;
         try {
             PackageManager packageManager = context.getApplicationContext().getPackageManager();
             ApplicationInfo applicationInfo = packageManager.getApplicationInfo(context.getPackageName(), 0);

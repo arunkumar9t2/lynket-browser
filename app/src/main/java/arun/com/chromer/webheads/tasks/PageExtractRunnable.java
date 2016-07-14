@@ -1,5 +1,7 @@
 package arun.com.chromer.webheads.tasks;
 
+import android.os.Process;
+
 import de.jetwick.snacktory.HtmlFetcher;
 import de.jetwick.snacktory.JResult;
 import timber.log.Timber;
@@ -20,20 +22,19 @@ public class PageExtractRunnable implements Runnable {
     public void run() {
         mPageTask.setDownloadThread(Thread.currentThread());
 
-        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+        Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
         try {
             cancelIfNeeded();
 
-            HtmlFetcher fetcher = new HtmlFetcher();
+            final HtmlFetcher fetcher = new HtmlFetcher();
             String url = fetcher.unShortenUrl(mPageTask.getRawUrl());
             mPageTask.setUnShortenedUrl(url);
-            mPageTask.handleDownloadState(PageExtractTasksManager.URL_UN_SHORTENED);
+            mPageTask.handleExtractionState(PageExtractTasksManager.URL_UN_SHORTENED);
 
-            JResult res = fetcher.fetchAndExtract(url, 1000 * 10, false);
-            cancelIfNeeded();
+            final JResult res = fetcher.fetchAndExtract(url, 1000 * 10, false);
 
             mPageTask.setResult(res);
-            mPageTask.handleDownloadState(PageExtractTasksManager.EXTRACTION_COMPLETE);
+            mPageTask.handleExtractionState(PageExtractTasksManager.EXTRACTION_COMPLETE);
 
             cancelIfNeeded();
         } catch (InterruptedException ignore) {
@@ -50,7 +51,6 @@ public class PageExtractRunnable implements Runnable {
     }
 
     interface PageExtractTaskMethods {
-
         /**
          * Sets the Thread that this instance is running on
          *
@@ -62,7 +62,7 @@ public class PageExtractRunnable implements Runnable {
 
         void setResult(JResult result);
 
-        void handleDownloadState(int state);
+        void handleExtractionState(int state);
 
         String getRawUrl();
 

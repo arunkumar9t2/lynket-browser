@@ -6,7 +6,8 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorInt;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 
@@ -16,14 +17,13 @@ import java.util.List;
 
 import arun.com.chromer.R;
 import arun.com.chromer.db.AppColor;
+import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Util;
 import timber.log.Timber;
 
 
 public class AppColorExtractorService extends IntentService {
-
-    private static final int NOT_VALID_COLOR = -1;
 
     public AppColorExtractorService() {
         super(AppColorExtractorService.class.getSimpleName());
@@ -32,47 +32,44 @@ public class AppColorExtractorService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
-            String app = intent.getStringExtra("app");
+            final String app = intent.getStringExtra("app");
             if (app != null) {
-                // TODO find all exclusions by testing thoroughly
-                if (app.equalsIgnoreCase(getPackageName()) | app.equalsIgnoreCase("android"))
+                if (app.equalsIgnoreCase(getPackageName())
+                        | app.equalsIgnoreCase("android")
+                        | app.isEmpty())
                     return;
 
                 if (extractColorFromResources(app)) {
-                    Timber.d("Successful extraction from resources");
                 } else extractColorFromAppIcon(app);
             }
         }
     }
 
-    private boolean extractColorFromResources(String app) {
+    private boolean extractColorFromResources(final String app) {
         try {
             int color;
 
-            Resources resources = getPackageManager().getResourcesForApplication(app);
-
+            final Resources resources = getPackageManager().getResourcesForApplication(app);
             // Try to extract appcompat primary color value
             int appCompatId = resources.getIdentifier("colorPrimary", "attr", app);
             if (appCompatId > 0) {
                 // Successful, let's get the themed value of this attribute
                 color = getThemedColor(resources, appCompatId, app);
-                if (color != NOT_VALID_COLOR) {
+                if (color != Constants.NO_COLOR) {
                     saveColorToDb(app, color);
                     return true;
                 }
             }
-
             // If above was not successful, then attempt to get lollipop colorPrimary attribute
             int lollipopAttrId = resources.getIdentifier("android:colorPrimary", "attr", app);
             if (lollipopAttrId > 0) {
                 // Found
                 color = getThemedColor(resources, lollipopAttrId, app);
-                if (color != NOT_VALID_COLOR) {
+                if (color != Constants.NO_COLOR) {
                     saveColorToDb(app, color);
                     return true;
                 }
             }
-
             // If we reached here, then both attempt failed
             return false;
         } catch (PackageManager.NameNotFoundException e) {
@@ -81,49 +78,41 @@ public class AppColorExtractorService extends IntentService {
         }
     }
 
-    private int getThemedColor(Resources resources, int attributeId, String app) throws PackageManager.NameNotFoundException {
+    private int getThemedColor(@Nullable Resources resources, int attributeId, @Nullable String app) throws PackageManager.NameNotFoundException {
         if (resources == null || attributeId == 0 || app == null) return -1;
 
         // Create dummy theme
-        Resources.Theme tempTheme = resources.newTheme();
+        final Resources.Theme tempTheme = resources.newTheme();
         // Need the theme id to apply the theme, so let's get it.
         int themeId = getPackageManager().getPackageInfo(app, PackageManager.GET_META_DATA).applicationInfo.theme;
         // Apply the theme
         tempTheme.applyStyle(themeId, false);
-
         // Attempt to get styled values now
-        TypedArray array = tempTheme.obtainStyledAttributes(new int[]{attributeId});
-
+        final TypedArray array = tempTheme.obtainStyledAttributes(new int[]{attributeId});
         // Styled color
-        int color = array.getColor(0, NOT_VALID_COLOR);
-
+        int color = array.getColor(0, Constants.NO_COLOR);
         array.recycle();
-
         if (color == ContextCompat.getColor(this, R.color.md_grey_100)
                 || color == ContextCompat.getColor(this, R.color.md_grey_900)) {
-            color = NOT_VALID_COLOR;
+            color = Constants.NO_COLOR;
         }
         return color;
     }
 
-    private void extractColorFromAppIcon(String app) {
+    private void extractColorFromAppIcon(final String app) {
         try {
-            Drawable iconDrawable = getPackageManager().getApplicationIcon(app);
-            // Convert to bitmap
-            Bitmap iconBitmap = Util.drawableToBitmap(iconDrawable);
-
-            Palette palette = Palette.from(iconBitmap).generate();
+            final Bitmap iconBitmap = Util.drawableToBitmap(getPackageManager().getApplicationIcon(app));
+            final Palette palette = Palette.from(iconBitmap)
+                    .clearFilters()
+                    .generate();
 
             //noinspection ConstantConditions
-            if (palette == null) return; // No use when there are no colors, so exit
-
             int extractColor = getPreferredColorFromSwatches(palette);
-
-            if (extractColor != -1) {
+            if (extractColor != Constants.NO_COLOR) {
                 Timber.d("Extracted %d for %s", extractColor, app);
                 try {
-                    // Save this color to DB
                     saveColorToDb(app, extractColor);
+                    iconBitmap.recycle();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -133,14 +122,14 @@ public class AppColorExtractorService extends IntentService {
         }
     }
 
-    private void saveColorToDb(String app, int extractColor) {
-        AppColor appColor = new AppColor(app, extractColor);
+    private void saveColorToDb(final String app, @ColorInt int extractColor) {
+        final AppColor appColor = new AppColor(app, extractColor);
         appColor.save();
     }
 
     private int getPreferredColorFromSwatches(Palette palette) {
-        List<Palette.Swatch> swatchList = ColorUtil.getSwatchListFromPalette(palette);
-        Palette.Swatch prominentSwatch = Collections.max(swatchList,
+        final List<Palette.Swatch> swatchList = ColorUtil.getSwatchListFromPalette(palette);
+        final Palette.Swatch prominentSwatch = Collections.max(swatchList,
                 new Comparator<Palette.Swatch>() {
                     @Override
                     public int compare(Palette.Swatch swatch1, Palette.Swatch swatch2) {

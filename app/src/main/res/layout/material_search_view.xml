@@ -48,9 +48,9 @@
                     android:gravity="center|start"
                     android:imeOptions="actionSearch"
                     android:inputType="textUri"
-                    android:singleLine="true"
                     android:textColor="@color/material_dark_color"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp"
+                    android:maxLines="1"/>
 
                 <TextView
                     android:id="@+id/msv_label"

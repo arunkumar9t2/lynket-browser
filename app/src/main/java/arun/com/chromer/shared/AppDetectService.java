@@ -89,7 +89,7 @@ public class AppDetectService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (Util.isLollipopAbove() && !Util.canReadUsageStats(this)) {
+        if (!Util.canReadUsageStats(this)) {
             Timber.e("Attempted to poll without usage permission");
             stopSelf();
         }

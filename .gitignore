@@ -20,6 +20,9 @@ build/
 local.properties
 keystore.properties
 
+# Values file
+values.properties
+
 # Windows thumbnail db
 .DS_Store
 

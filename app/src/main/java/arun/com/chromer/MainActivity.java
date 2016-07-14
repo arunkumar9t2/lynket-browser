@@ -69,7 +69,6 @@ import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback, OptionsFragment.FragmentInteractionListener {
 
-    private static final int VOICE_REQUEST = 10001;
     @BindView(R.id.bottomsheet)
     public BottomSheetLayout mBottomSheet;
     @BindView(R.id.material_search_view)
@@ -104,29 +103,25 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.main_activity);
-
         ButterKnife.bind(this);
-
-        setUpAppBarLayout();
-
-        setupMaterialSearch();
 
         if (Preferences.isFirstRun(this)) {
             startActivity(new Intent(this, ChromerIntro.class));
         }
 
-        if (Changelog.shouldShow(this)) {
-            Changelog.show(this);
-        }
+        Changelog.conditionalShow(this);
+
+        setUpAppBarLayout();
+
+        setupMaterialSearch();
 
         setupDrawer();
 
         setupCustomTab();
 
         checkAndEducateUser(false);
-
-        cleanOldDbs();
 
         ServiceUtil.takeCareOfServices(getApplicationContext());
     }
@@ -202,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                     intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
                     intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.voice_prompt));
                     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
-                    startActivityForResult(intent, VOICE_REQUEST);
+                    startActivityForResult(intent, Constants.REQUEST_CODE_VOICE);
                 } else snack(getString(R.string.no_voice_rec_apps), -10);
 
             }
@@ -428,15 +423,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         }
     }
 
-    private void cleanOldDbs() {
-        if (Preferences.shouldCleanDB(this)) {
-            boolean ok = deleteDatabase(Constants.DATABASE_NAME);
-            Timber.d("Deleted %s : %b", Constants.DATABASE_NAME, ok);
-            ok = deleteDatabase(Constants.OLD_DATABASE_NAME);
-            Timber.d("Deleted %s : %b", Constants.OLD_DATABASE_NAME, ok);
-        }
-    }
-
     @Override
     public void onBackPressed() {
         if (mMaterialSearchView.hasFocus()) {
@@ -448,10 +434,10 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == VOICE_REQUEST) {
+        if (requestCode == Constants.REQUEST_CODE_VOICE) {
             switch (resultCode) {
                 case RESULT_OK:
-                    List<String> resultList = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    final List<String> resultList = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     if (resultList != null && !resultList.isEmpty()) {
                         launchCustomTab(Util.getSearchUrl(resultList.get(0)));
                     }

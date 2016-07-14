@@ -17,18 +17,27 @@ import timber.log.Timber;
  * Created by Arun on 15/05/2016.
  */
 public class PageExtractTasksManager {
+
+    private static final PageExtractTasksManager sInstance;
+
+    private static final int NUMBER_OF_CORES = Runtime.getRuntime().availableProcessors();
+
     static final int URL_UN_SHORTENED = 1;
     static final int EXTRACTION_COMPLETE = 2;
-    private static final PageExtractTasksManager sInstance;
-    private static final int NUMBER_OF_CORES = Runtime.getRuntime().availableProcessors();
-    private static final int CORE_POOL_SIZE = 8;
-    private static final int MAXIMUM_POOL_SIZE = 8;
-    private static final int KEEP_ALIVE_TIME = 1;
-    private static final TimeUnit KEEP_ALIVE_TIME_UNIT;
-    private static ProgressListener mProgressListener;
+
+    private static ProgressListener mProgressListener = new ProgressListener() {
+        @Override
+        public void onUrlUnShortened(String originalUrl, String unShortenedUrl) {
+            // no op
+        }
+
+        @Override
+        public void onUrlExtracted(String originalUrl, JResult result) {
+            // no op
+        }
+    };
 
     static {
-        KEEP_ALIVE_TIME_UNIT = TimeUnit.SECONDS;
         sInstance = new PageExtractTasksManager();
     }
 
@@ -42,16 +51,17 @@ public class PageExtractTasksManager {
     private PageExtractTasksManager() {
         mParseWorkQueue = new LinkedBlockingQueue<>();
         mParseThreadPool = new ThreadPoolExecutor(
-                NUMBER_OF_CORES + 1,
-                NUMBER_OF_CORES + 1,
-                KEEP_ALIVE_TIME,
-                KEEP_ALIVE_TIME_UNIT,
+                NUMBER_OF_CORES * 2,
+                NUMBER_OF_CORES * 2,
+                60L,
+                TimeUnit.SECONDS,
                 mParseWorkQueue);
+
         mPageExtractTaskQueue = new LinkedBlockingQueue<>();
         mHandler = new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message msg) {
-                PageExtractTask pageExtractTask = (PageExtractTask) msg.obj;
+                final PageExtractTask pageExtractTask = (PageExtractTask) msg.obj;
 
                 if (pageExtractTask == null) {
                     return;
@@ -59,14 +69,10 @@ public class PageExtractTasksManager {
 
                 switch (msg.what) {
                     case URL_UN_SHORTENED:
-                        if (mProgressListener != null) {
-                            mProgressListener.onUrlUnShortened(pageExtractTask.getRawUrl(), pageExtractTask.getUnShortenedUrl());
-                        }
+                        mProgressListener.onUrlUnShortened(pageExtractTask.getRawUrl(), pageExtractTask.getUnShortenedUrl());
                         break;
                     case EXTRACTION_COMPLETE:
-                        if (mProgressListener != null) {
-                            mProgressListener.onUrlExtracted(pageExtractTask.getRawUrl(), pageExtractTask.getResult());
-                        }
+                        mProgressListener.onUrlExtracted(pageExtractTask.getRawUrl(), pageExtractTask.getResult());
                         recycleTask(pageExtractTask);
                         break;
                     default:
@@ -85,24 +91,20 @@ public class PageExtractTasksManager {
      */
     @SuppressWarnings("SameParameterValue")
     public static void cancelAll(boolean alsoRemove) {
-        PageExtractTask[] tasks = new PageExtractTask[sInstance.mPageExtractTaskQueue.size()];
+        final PageExtractTask[] tasks = new PageExtractTask[sInstance.mPageExtractTaskQueue.size()];
 
         //noinspection SuspiciousToArrayCall
         sInstance.mPageExtractTaskQueue.toArray(tasks);
 
         synchronized (sInstance) {
-
             // Iterates over the array of tasks
             for (PageExtractTask task : tasks) {
-
                 // Gets the task's current thread
                 Thread thread = task.getCurrentThread();
-
                 // if the Thread exists, post an interrupt to it
                 if (null != thread) {
                     thread.interrupt();
                 }
-
                 if (alsoRemove) {
                     sInstance.mParseThreadPool.remove(task.getPageExtractRunnable());
                     Timber.d("Removed task %s", task.toString());
@@ -117,9 +119,8 @@ public class PageExtractTasksManager {
      * @param pageExtractTask The page extract task associated with the Thread
      * @param pageUrl         The url to be extracted
      */
-    static public void removeDownload(PageExtractTask pageExtractTask, String pageUrl) {
+    static public void removeExtraction(PageExtractTask pageExtractTask, String pageUrl) {
         // If the Thread object still exists and the download matches the specified URL
-
         if (pageExtractTask != null && pageExtractTask.getRawUrl().equals(pageUrl)) {
             synchronized (sInstance) {
                 // Gets the Thread that the downloader task is running on
@@ -135,7 +136,7 @@ public class PageExtractTasksManager {
         }
     }
 
-    static public void startDownload(String url) {
+    static public void startExtraction(String url) {
         PageExtractTask downloadTask = sInstance.mPageExtractTaskQueue.poll();
 
         // If the queue was empty, create a new task instead.
@@ -149,14 +150,6 @@ public class PageExtractTasksManager {
         sInstance.mParseThreadPool.execute(downloadTask.getPageExtractRunnable());
     }
 
-    static public void registerListener(ProgressListener listener) {
-        mProgressListener = listener;
-    }
-
-    static public void unRegisterListener() {
-        mProgressListener = null;
-    }
-
     private void recycleTask(PageExtractTask downloadTask) {
         downloadTask.recycle();
 
@@ -164,7 +157,7 @@ public class PageExtractTasksManager {
         mPageExtractTaskQueue.offer(downloadTask);
     }
 
-    public void handleState(PageExtractTask photoTask, int state) {
+    void handleState(PageExtractTask photoTask, int state) {
         switch (state) {
             case URL_UN_SHORTENED:
                 // Later
@@ -175,6 +168,14 @@ public class PageExtractTasksManager {
                 break;
         }
         mHandler.obtainMessage(state, photoTask).sendToTarget();
+    }
+
+    static public void registerListener(ProgressListener listener) {
+        mProgressListener = listener;
+    }
+
+    static public void unRegisterListener() {
+        mProgressListener = null;
     }
 
     public interface ProgressListener {

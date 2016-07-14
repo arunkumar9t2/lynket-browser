@@ -27,11 +27,11 @@
         android:layout_gravity="center"
         android:fontFamily="sans-serif-condensed"
         android:gravity="center"
-        android:singleLine="true"
         android:textColor="@color/material_dark_color"
         android:textStyle="bold"
         tools:ignore="SelectableText"
-        tools:text="Firefox"/>
+        tools:text="Firefox"
+        android:maxLines="1"/>
 
     <Space
         android:layout_width="match_parent"

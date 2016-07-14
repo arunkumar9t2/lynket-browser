@@ -34,19 +34,6 @@ import arun.com.chromer.shared.Constants;
 
 public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private final BroadcastReceiver mColorSelectionReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int selectedColor = intent.getIntExtra(Constants.EXTRA_KEY_WEBHEAD_COLOR, 0);
-            if (selectedColor != 0) {
-                ColorPreference preference = (ColorPreference) findPreference(Preferences.WEB_HEADS_COLOR);
-                if (preference != null) {
-                    preference.setColor(selectedColor);
-                }
-            }
-        }
-    };
-
     private final String[] WEBHEAD_PREFERENCE_GROUP = new String[]{
             Preferences.WEB_HEAD_SPAWN_LOCATION,
             Preferences.WEB_HEADS_COLOR,
@@ -208,4 +195,17 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
             );
         }
     }
+
+    private final BroadcastReceiver mColorSelectionReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int selectedColor = intent.getIntExtra(Constants.EXTRA_KEY_WEBHEAD_COLOR, 0);
+            if (selectedColor != 0) {
+                final ColorPreference preference = (ColorPreference) findPreference(Preferences.WEB_HEADS_COLOR);
+                if (preference != null) {
+                    preference.setColor(selectedColor);
+                }
+            }
+        }
+    };
 }

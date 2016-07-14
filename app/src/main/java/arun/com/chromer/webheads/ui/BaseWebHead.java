@@ -63,7 +63,6 @@ public abstract class BaseWebHead extends FrameLayout {
      * Static window manager instance to update, add and remove web heads
      */
     private static WindowManager sWindowManager;
-    private static Drawable sXDrawable;
     /**
      * Window parameters used to track and update web heads post creation;
      */
@@ -121,6 +120,10 @@ public abstract class BaseWebHead extends FrameLayout {
      * Flag to know if this web head was created for opening in new tab
      */
     private boolean mIsFromNewTab;
+    /**
+     * X icon drawable used when closing
+     */
+    private static Drawable sXDrawable;
 
     @SuppressLint("RtlHardcoded")
     BaseWebHead(@NonNull Context context, @NonNull String url) {

@@ -139,9 +139,7 @@ public class BlacklistManagerActivity extends AppCompatActivity implements Black
         if (item != null) {
             SwitchCompat blackListSwitch = (SwitchCompat) item.getActionView().findViewById(R.id.blacklist_switch);
             if (blackListSwitch != null) {
-                boolean shouldCheck = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-                        ? Preferences.blacklist(this) && Util.canReadUsageStats(this)
-                        : Preferences.blacklist(this);
+                final boolean shouldCheck = Preferences.blacklist(this) && Util.canReadUsageStats(this);
 
                 Preferences.blacklist(this, shouldCheck);
 
@@ -150,7 +148,7 @@ public class BlacklistManagerActivity extends AppCompatActivity implements Black
                 blackListSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (isChecked && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !Util.canReadUsageStats(getApplicationContext())) {
+                        if (isChecked && !Util.canReadUsageStats(getApplicationContext())) {
                             buttonView.setChecked(false);
                             requestUsagePermission();
                         } else {

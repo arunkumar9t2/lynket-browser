@@ -3,7 +3,6 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:background="?android:attr/selectableItemBackground"
               android:focusable="true"
               android:gravity="center_vertical"
               android:minHeight="56dp"
@@ -31,7 +30,8 @@
             android:layout_height="wrap_content"
             android:ellipsize="marquee"
             android:maxLines="1"
-            android:textAppearance="@style/Preference_TextAppearanceMaterialSubhead"/>
+            android:textAppearance="@style/Preference_TextAppearanceMaterialSubhead"
+            tools:ignore="SelectableText"/>
 
         <TextView
             android:id="@+id/about_app_subtitle"

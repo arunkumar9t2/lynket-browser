@@ -65,7 +65,18 @@ public class Changelog {
         }
     }
 
-    public static boolean shouldShow(final Context context) {
+    /**
+     * Shows the changelog dialog if necessary
+     *
+     * @param activity Activty for which it should be shown
+     */
+    public static void conditionalShow(@NonNull final Activity activity) {
+        if (shouldShow(activity)) {
+            show(activity);
+        }
+    }
+
+    private static boolean shouldShow(@NonNull final Context context) {
         final String PREF_VERSION_CODE_KEY = "version_code";
         final int DOES_NT_EXIST = -1;
         // Get current version code

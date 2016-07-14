@@ -25,8 +25,8 @@
         android:layout_toRightOf="@id/tab_view_icon"
         android:fontFamily="sans-serif-medium"
         android:gravity="center_vertical"
-        android:singleLine="true"
         android:textColor="@android:color/white"
         android:textSize="14sp"
-        tools:ignore="RtlHardcoded,SelectableText"/>
+        tools:ignore="RtlHardcoded,SelectableText"
+        android:maxLines="1"/>
 </RelativeLayout>
