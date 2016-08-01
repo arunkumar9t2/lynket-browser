@@ -22,7 +22,7 @@ import com.bumptech.glide.load.engine.Resource;
 import com.bumptech.glide.load.model.ModelLoader;
 import com.bumptech.glide.load.resource.drawable.DrawableResource;
 import com.bumptech.glide.util.Util;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import java.io.IOException;
@@ -45,7 +45,7 @@ public class BlackListAppRender extends RecyclerView.Adapter<BlackListAppRender.
         this.apps = apps;
         this.mContext = mContext;
         mPlaceholder = new IconicsDrawable(mContext)
-                .icon(GoogleMaterial.Icon.gmd_android)
+                .icon(CommunityMaterial.Icon.cmd_android)
                 .color(ContextCompat.getColor(mContext, R.color.android_green))
                 .sizeDp(48);
     }

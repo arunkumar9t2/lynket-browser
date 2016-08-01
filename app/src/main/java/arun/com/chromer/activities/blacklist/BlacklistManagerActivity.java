@@ -26,7 +26,7 @@ import android.widget.ImageView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.flipboard.bottomsheet.BottomSheetLayout;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.ArrayList;
@@ -116,7 +116,7 @@ public class BlacklistManagerActivity extends AppCompatActivity implements Black
             mSecondaryBrowserIcon.setImageDrawable(getApplicationContext().getPackageManager().getApplicationIcon(packageName));
         } catch (PackageManager.NameNotFoundException e) {
             mSecondaryBrowserIcon.setImageDrawable(new IconicsDrawable(this)
-                    .icon(GoogleMaterial.Icon.gmd_error_outline)
+                    .icon(CommunityMaterial.Icon.cmd_alert_circle_outline)
                     .color(ContextCompat.getColor(this, R.color.error))
                     .sizeDp(24));
         }

@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.BuildConfig;
@@ -107,7 +106,7 @@ public class AboutFragment extends Fragment {
                     holder.title.setText(R.string.version);
                     holder.subtitle.setText(BuildConfig.VERSION_NAME);
                     holder.imageView.setBackground(new IconicsDrawable(getActivity())
-                            .icon(GoogleMaterial.Icon.gmd_info_outline)
+                            .icon(CommunityMaterial.Icon.cmd_information_outline)
                             .color(materialDark)
                             .sizeDp(24));
                     break;
@@ -115,7 +114,7 @@ public class AboutFragment extends Fragment {
                     holder.title.setText(R.string.changelog);
                     holder.subtitle.setText(R.string.see_whats_new);
                     holder.imageView.setBackground(new IconicsDrawable(getActivity())
-                            .icon(GoogleMaterial.Icon.gmd_track_changes)
+                            .icon(CommunityMaterial.Icon.cmd_chart_line)
                             .color(materialDark)
                             .sizeDp(24));
                     break;
@@ -131,7 +130,7 @@ public class AboutFragment extends Fragment {
                     holder.title.setText(R.string.licenses);
                     holder.subtitle.setVisibility(View.GONE);
                     holder.imageView.setBackground(new IconicsDrawable(getActivity())
-                            .icon(GoogleMaterial.Icon.gmd_card_membership)
+                            .icon(CommunityMaterial.Icon.cmd_wallet_membership)
                             .color(materialDark)
                             .sizeDp(24));
                     break;
@@ -139,7 +138,7 @@ public class AboutFragment extends Fragment {
                     holder.title.setText(R.string.translations);
                     holder.subtitle.setText(R.string.help_translations);
                     holder.imageView.setBackground(new IconicsDrawable(getActivity())
-                            .icon(GoogleMaterial.Icon.gmd_translate)
+                            .icon(CommunityMaterial.Icon.cmd_translate)
                             .color(materialDark)
                             .sizeDp(24));
                     break;

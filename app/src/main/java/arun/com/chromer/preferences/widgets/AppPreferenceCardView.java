@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
@@ -171,13 +170,13 @@ public class AppPreferenceCardView extends CardView {
                     break;
                 case SECONDARY_BROWSER:
                     setIconDrawable(new IconicsDrawable(getContext())
-                            .icon(GoogleMaterial.Icon.gmd_open_in_browser)
+                            .icon(CommunityMaterial.Icon.cmd_open_in_app)
                             .colorRes(R.color.material_dark_light)
                             .sizeDp(30), false);
                     break;
                 case FAVORITE_SHARE:
                     setIconDrawable(new IconicsDrawable(getContext())
-                            .icon(GoogleMaterial.Icon.gmd_share)
+                            .icon(CommunityMaterial.Icon.cmd_share_variant)
                             .colorRes(R.color.material_dark_light)
                             .sizeDp(30), false);
                     break;

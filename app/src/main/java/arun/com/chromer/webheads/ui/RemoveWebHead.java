@@ -22,7 +22,7 @@ import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringConfig;
 import com.facebook.rebound.SpringSystem;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
@@ -272,7 +272,7 @@ public class RemoveWebHead extends FrameLayout {
 
         private void drawDeleteIcon(Canvas canvas) {
             Bitmap deleteIcon = new IconicsDrawable(getContext())
-                    .icon(GoogleMaterial.Icon.gmd_delete)
+                    .icon(CommunityMaterial.Icon.cmd_delete)
                     .color(Color.WHITE)
                     .sizeDp(18).toBitmap();
             int cHeight = canvas.getClipBounds().height();

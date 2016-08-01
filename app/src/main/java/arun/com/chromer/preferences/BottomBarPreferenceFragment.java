@@ -7,7 +7,7 @@ import android.support.v7.preference.Preference;
 import android.support.v7.preference.SwitchPreferenceCompat;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
@@ -39,7 +39,7 @@ public class BottomBarPreferenceFragment extends DividerLessPreferenceFragment i
     private void setupBottomBarPreference() {
         mBottomBarPreference = (SwitchPreferenceCompat) findPreference(Preferences.BOTTOM_BAR_ENABLED);
         mBottomBarPreference.setIcon(new IconicsDrawable(getActivity())
-                .icon(GoogleMaterial.Icon.gmd_space_bar)
+                .icon(CommunityMaterial.Icon.cmd_more)
                 .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
                 .sizeDp(24));
         if (mBottomBarPreference != null) {

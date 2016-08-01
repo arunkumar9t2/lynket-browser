@@ -9,7 +9,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.preference.Preference;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
@@ -50,7 +49,7 @@ public class BehaviorPreferenceFragment extends DividerLessPreferenceFragment im
         mBlackListPreference = (IconSwitchPreference) findPreference(Preferences.BLACKLIST_DUMMY);
         if (mBlackListPreference != null) {
             Drawable recentImg = new IconicsDrawable(getActivity())
-                    .icon(GoogleMaterial.Icon.gmd_filter_list)
+                    .icon(CommunityMaterial.Icon.cmd_filter_variant)
                     .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
                     .sizeDp(24);
             mBlackListPreference.setIcon(recentImg);

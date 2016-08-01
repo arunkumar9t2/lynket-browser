@@ -18,7 +18,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
@@ -61,15 +61,15 @@ public class MaterialSearchView extends FrameLayout {
 
     private void init(Context context) {
         mXIcon = new IconicsDrawable(context)
-                .icon(GoogleMaterial.Icon.gmd_clear)
+                .icon(CommunityMaterial.Icon.cmd_close)
                 .color(mNormalColor)
                 .sizeDp(16);
         mVoiceIcon = new IconicsDrawable(context)
-                .icon(GoogleMaterial.Icon.gmd_keyboard_voice)
+                .icon(CommunityMaterial.Icon.cmd_microphone)
                 .color(mNormalColor)
                 .sizeDp(18);
         mMenuIcon = new IconicsDrawable(context)
-                .icon(GoogleMaterial.Icon.gmd_menu)
+                .icon(CommunityMaterial.Icon.cmd_menu)
                 .color(mNormalColor)
                 .sizeDp(18);
     }

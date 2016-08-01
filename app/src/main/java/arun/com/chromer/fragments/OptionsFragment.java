@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
@@ -67,7 +67,7 @@ public class OptionsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mSetDefaultIcon.setImageDrawable(new IconicsDrawable(mAppContext)
-                .icon(GoogleMaterial.Icon.gmd_new_releases)
+                .icon(CommunityMaterial.Icon.cmd_auto_fix)
                 .color(ContextCompat.getColor(mAppContext, R.color.colorAccent))
                 .sizeDp(30));
         getChildFragmentManager()

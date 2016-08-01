@@ -19,7 +19,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import java.lang.annotation.Retention;
@@ -75,7 +75,7 @@ public class TabView extends FrameLayout {
         switch (mTabType) {
             case TAB_TYPE_OPTIONS:
                 mTabIcon.setImageDrawable(new IconicsDrawable(getContext())
-                        .icon(GoogleMaterial.Icon.gmd_settings)
+                        .icon(CommunityMaterial.Icon.cmd_settings)
                         .color(SELECTED_COLOR)
                         .sizeDp(23));
                 mTabText.setText(R.string.options);
@@ -83,7 +83,7 @@ public class TabView extends FrameLayout {
                 break;
             case TAB_TYPE_WEB_HEADS:
                 mTabIcon.setImageDrawable(new IconicsDrawable(getContext())
-                        .icon(GoogleMaterial.Icon.gmd_hdr_strong)
+                        .icon(CommunityMaterial.Icon.cmd_chart_bubble)
                         .color(UN_SELECTED_COLOR)
                         .sizeDp(23));
                 mTabText.setText(R.string.web_heads);
@@ -91,7 +91,7 @@ public class TabView extends FrameLayout {
                 break;
             case TAB_TYPE_CUSTOMIZE:
                 mTabIcon.setImageDrawable(new IconicsDrawable(getContext())
-                        .icon(GoogleMaterial.Icon.gmd_format_paint)
+                        .icon(CommunityMaterial.Icon.cmd_format_paint)
                         .color(UN_SELECTED_COLOR)
                         .sizeDp(23));
                 mTabText.setText(R.string.customize);

@@ -20,7 +20,6 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.MainActivity;
@@ -106,15 +105,15 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
     private void setIcons() {
         int materialLight = ContextCompat.getColor(getActivity(), R.color.material_dark_light);
         mWebHeadsColor.setIcon(new IconicsDrawable(getActivity())
-                .icon(GoogleMaterial.Icon.gmd_color_lens)
+                .icon(CommunityMaterial.Icon.cmd_palette)
                 .color(materialLight)
                 .sizeDp(24));
         mWebHeadSwitch.setIcon(new IconicsDrawable(getActivity())
-                .icon(GoogleMaterial.Icon.gmd_hdr_strong)
+                .icon(CommunityMaterial.Icon.cmd_chart_bubble)
                 .color(materialLight)
                 .sizeDp(24));
         mSpawnLocation.setIcon(new IconicsDrawable(getActivity())
-                .icon(GoogleMaterial.Icon.gmd_code)
+                .icon(CommunityMaterial.Icon.cmd_resize_bottom_right)
                 .color(materialLight)
                 .sizeDp(24));
         mSize.setIcon(new IconicsDrawable(getActivity())
@@ -122,7 +121,7 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
                 .color(materialLight)
                 .sizeDp(24));
         mFavicons.setIcon(new IconicsDrawable(getActivity())
-                .icon(GoogleMaterial.Icon.gmd_radio_button_checked)
+                .icon(CommunityMaterial.Icon.cmd_image_filter_vintage)
                 .color(materialLight)
                 .sizeDp(24));
         mCloseOnOpen.setIcon(new IconicsDrawable(getActivity())

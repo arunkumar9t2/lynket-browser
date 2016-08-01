@@ -31,7 +31,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
@@ -230,13 +229,13 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         .build())
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName(getString(R.string.intro)).withIdentifier(4)
-                                .withIcon(GoogleMaterial.Icon.gmd_assignment)
+                                .withIcon(CommunityMaterial.Icon.cmd_clipboard_text)
                                 .withSelectable(false),
                         new PrimaryDrawerItem().withName(getString(R.string.feedback)).withIdentifier(2)
-                                .withIcon(GoogleMaterial.Icon.gmd_feedback)
+                                .withIcon(CommunityMaterial.Icon.cmd_message_text)
                                 .withSelectable(false),
                         new PrimaryDrawerItem().withName(getString(R.string.rate_play_store)).withIdentifier(3)
-                                .withIcon(GoogleMaterial.Icon.gmd_rate_review)
+                                .withIcon(CommunityMaterial.Icon.cmd_comment_text)
                                 .withSelectable(false),
                         new PrimaryDrawerItem().withName(R.string.join_beta)
                                 .withIdentifier(9)
@@ -244,21 +243,21 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                                 .withSelectable(false),
                         new DividerDrawerItem(),
                         new SecondaryDrawerItem().withName(getString(R.string.more_custom_tbs))
-                                .withIcon(GoogleMaterial.Icon.gmd_open_in_new)
+                                .withIcon(CommunityMaterial.Icon.cmd_open_in_new)
                                 .withIdentifier(5)
                                 .withSelectable(false),
                         new SecondaryDrawerItem().withName(getString(R.string.share))
-                                .withIcon(GoogleMaterial.Icon.gmd_share)
+                                .withIcon(CommunityMaterial.Icon.cmd_share_variant)
                                 .withDescription(getString(R.string.help_chromer_grow))
                                 .withIdentifier(7)
                                 .withSelectable(false),
                         new SecondaryDrawerItem().withName(getString(R.string.support_development))
                                 .withDescription(R.string.consider_donation)
-                                .withIcon(GoogleMaterial.Icon.gmd_favorite)
+                                .withIcon(CommunityMaterial.Icon.cmd_heart)
                                 .withIdentifier(6)
                                 .withSelectable(false),
                         new SecondaryDrawerItem().withName(getString(R.string.about))
-                                .withIcon(GoogleMaterial.Icon.gmd_info_outline)
+                                .withIcon(CommunityMaterial.Icon.cmd_information)
                                 .withIdentifier(8)
                                 .withSelectable(false)
                 ).withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {

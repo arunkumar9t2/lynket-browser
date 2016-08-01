@@ -11,7 +11,6 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
@@ -54,7 +53,7 @@ public class PrefetchPreferenceFragment extends DividerLessPreferenceFragment im
                 .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
                 .sizeDp(24));
         mPrefetchPreference.setIcon(new IconicsDrawable(getActivity())
-                .icon(GoogleMaterial.Icon.gmd_settings_overscan)
+                .icon(CommunityMaterial.Icon.cmd_relative_scale)
                 .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
                 .sizeDp(24));
 

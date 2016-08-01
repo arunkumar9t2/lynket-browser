@@ -20,7 +20,6 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.MainActivity;
@@ -110,7 +109,7 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
 
     private void setupIcons() {
         Drawable palette = new IconicsDrawable(getActivity())
-                .icon(GoogleMaterial.Icon.gmd_color_lens)
+                .icon(CommunityMaterial.Icon.cmd_palette)
                 .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
                 .sizeDp(24);
         mToolbarColorPref.setIcon(palette);

@@ -29,7 +29,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
@@ -152,7 +152,7 @@ public abstract class BaseWebHead extends FrameLayout {
         sWindowManager.addView(this, mWindowParams);
 
         sXDrawable = new IconicsDrawable(context)
-                .icon(GoogleMaterial.Icon.gmd_clear)
+                .icon(CommunityMaterial.Icon.cmd_close)
                 .color(Color.WHITE)
                 .sizeDp(18);
         mDeleteColor = ContextCompat.getColor(context, R.color.remove_web_head_color);

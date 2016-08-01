@@ -47,9 +47,8 @@ dependencies {
 
     compile 'com.github.paolorotolo:appintro:4.0.0'
 
-    compile 'com.mikepenz:google-material-typeface:2.2.0.2.original@aar'
     compile 'com.mikepenz:community-material-typeface:1.5.54.2@aar'
-    compile('com.mikepenz:materialdrawer:5.3.3@aar') {
+    compile('com.mikepenz:materialdrawer:5.3.6@aar') {
         transitive = true
     }
 

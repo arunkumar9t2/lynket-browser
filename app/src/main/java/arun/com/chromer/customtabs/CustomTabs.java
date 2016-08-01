@@ -21,7 +21,6 @@ import android.support.v4.graphics.ColorUtils;
 import android.widget.Toast;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.ArrayList;
@@ -571,7 +570,7 @@ public class CustomTabs {
         final PendingIntent pendingShareIntent = PendingIntent.getBroadcast(mActivity, 0, shareIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Bitmap shareIcon = new IconicsDrawable(mActivity)
-                .icon(GoogleMaterial.Icon.gmd_share)
+                .icon(CommunityMaterial.Icon.cmd_share_variant)
                 .color(iconColor)
                 .sizeDp(24).toBitmap();
         mIntentBuilder.addToolbarItem(BOTTOM_SHARE_TAB, shareIcon, mActivity.getString(R.string.share), pendingShareIntent);
