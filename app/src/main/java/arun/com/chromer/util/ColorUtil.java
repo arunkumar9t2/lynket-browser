@@ -80,7 +80,7 @@ public class ColorUtil {
         return Constants.NO_COLOR;
     }
 
-    @ColorInt
+    /*@ColorInt
     public static int getForegroundTextColor(@ColorInt int backgroundColor) {
         final int whiteColorAlpha = ColorUtils.calculateMinimumAlpha(Color.WHITE, backgroundColor, 4.5f);
 
@@ -97,7 +97,7 @@ public class ColorUtil {
         //noinspection ConstantConditions
         return whiteColorAlpha != -1 ? ColorUtils.setAlphaComponent(Color.WHITE, whiteColorAlpha)
                 : ColorUtils.setAlphaComponent(Color.BLACK, blackColorAlpha);
-    }
+    }*/
 
     /**
      * Returns white or black based on color luminance

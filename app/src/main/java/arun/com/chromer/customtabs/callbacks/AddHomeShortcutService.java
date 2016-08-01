@@ -152,7 +152,7 @@ public class AddHomeShortcutService extends IntentService {
         Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
         textPaint.setTextSize(textSize);
-        textPaint.setColor(ColorUtil.getForegroundTextColor(color));
+        textPaint.setColor(ColorUtil.getForegroundWhiteOrBlack(color));
         textPaint.setStyle(Paint.Style.FILL);
 
         drawTextInCanvasCentre(canvas, textPaint, getLetter(shortCutName));
