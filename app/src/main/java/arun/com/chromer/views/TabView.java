@@ -120,7 +120,8 @@ public class TabView extends FrameLayout {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        mUnBinder.unbind();
+        // Causing issues with multi window.
+        // mUnBinder.unbind();
     }
 
     @Override
