@@ -16,12 +16,17 @@
 package de.jetwick.snacktory;
 
 import android.annotation.SuppressLint;
+import android.support.annotation.NonNull;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.Proxy;
-import java.net.URI;
 import java.net.URL;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -39,6 +44,7 @@ import timber.log.Timber;
  */
 @SuppressWarnings({"WeakerAccess", "UnusedParameters"})
 public class HtmlFetcher {
+    private static final int TIMEOUT = 10000;
 
     static {
         SHelper.enableCookieMgmt();
@@ -214,7 +220,7 @@ public class HtmlFetcher {
 
     @SuppressLint("CustomWarning")
     @SuppressWarnings({"SameParameterValue", "StatementWithEmptyBody"})
-    public JResult fetchAndExtract(String url, int timeout, boolean resolve) throws Exception {
+    public JResult fetchAndExtract(String url, boolean resolve) throws Exception {
         String originalUrl = url;
         url = SHelper.removeHashbang(url);
         String gUrl = SHelper.getUrlFromUglyGoogleRedirect(url);
@@ -226,46 +232,13 @@ public class HtmlFetcher {
                 url = gUrl;
         }
 
-        if (resolve) {
-            // check if we can avoid resolving the URL (which hits the website!)
-            JResult res = getFromCache(url, originalUrl);
-            if (res != null)
-                return res;
+        if (resolve) url = unShortenUrl(url);
 
-            String resUrl = getResolvedUrl(url, timeout);
-            if (resUrl.isEmpty()) {
-                Timber.w("resolved url is empty. Url is: %s", url);
-
-                JResult result = new JResult();
-                if (cache != null)
-                    cache.put(url, result);
-                return result.setUrl(url);
-            }
-
-            // if resolved url is longer then use it!
-            if (resUrl.trim().length() > url.length()) {
-                // this is necessary e.g. for some homebaken url resolvers which return
-                // the resolved url relative to url!
-                url = SHelper.useDomainOfFirstArg4Second(url, resUrl);
-            }
-        }
-
-        // check if we have the (resolved) URL in cache
-        JResult res = getFromCache(url, originalUrl);
-        if (res != null)
-            return res;
-
-        JResult result = new JResult();
+        final JResult result = new JResult();
         // or should we use? <link rel="canonical" href="http://www.N24.de/news/newsitem_6797232.html"/>
         result.setUrl(url);
         result.setOriginalUrl(originalUrl);
         result.setDate(SHelper.estimateDate(url));
-
-        // Immediately put the url into the cache as extracting content takes time.
-        if (cache != null) {
-            cache.put(originalUrl, result);
-            cache.put(url, result);
-        }
 
         String lowerUrl = url.toLowerCase();
         if (SHelper.isDoc(lowerUrl) || SHelper.isApp(lowerUrl) || SHelper.isPackage(lowerUrl)) {
@@ -275,7 +248,8 @@ public class HtmlFetcher {
         } else if (SHelper.isImage(lowerUrl)) {
             result.setImageUrl(url);
         } else {
-            extractor.extractContent(result, fetchAsString(url, timeout));
+            extractor.extractContent(result, fetchAsString(url));
+
             if (result.getFaviconUrl().isEmpty())
                 result.setFaviconUrl(SHelper.getDefaultFavicon(url));
 
@@ -303,9 +277,9 @@ public class HtmlFetcher {
         return text;
     }
 
-    public String fetchAsString(String urlAsString, int timeout)
+    public String fetchAsString(String urlAsString)
             throws IOException {
-        return fetchAsString(urlAsString, timeout, false);
+        return fetchAsString(urlAsString, TIMEOUT, false);
     }
 
     @SuppressWarnings("SameParameterValue")
@@ -333,70 +307,58 @@ public class HtmlFetcher {
         return new Converter(url);
     }
 
-    public String unShortenUrl(String originalUrl) {
-        int maxRedirects = 5;
-        String unShortenedUrl = originalUrl;
+    public String unShortenUrl(String url) {
+        final int maxRedirects = 5;
+        String unShortenedUrl = url;
         for (int i = 0; i < maxRedirects; i++) {
-            originalUrl = getResolvedUrl(originalUrl, 1000 * 10);
-            if (originalUrl != null) {
-                if (originalUrl.equalsIgnoreCase(unShortenedUrl)) {
-                    return unShortenedUrl;
-                }
-                unShortenedUrl = originalUrl;
-            } else return unShortenedUrl;
+            url = getRedirectUrl(url);
+            Timber.d("Redirect: %s", url);
+            if (url.equalsIgnoreCase(unShortenedUrl)) {
+                return unShortenedUrl;
+            }
+            unShortenedUrl = url;
         }
         return unShortenedUrl;
     }
 
-    /**
-     * On some devices we have to hack:
-     * http://developers.sun.com/mobility/reference/techart/design_guidelines/http_redirection.html
-     *
-     * @param timeout Sets a specified timeout value, in milliseconds
-     * @return the resolved url if any. Or null if it couldn't resolve the url
-     * (within the specified time) or the same url if response code is OK
-     */
-    @SuppressLint("CustomWarning")
-    private String getResolvedUrl(String originalUrl, int timeout) {
-        String redirectedUrl;
-        int responseCode;
-        HttpURLConnection connection = null;
+    @NonNull  // https://github.com/GermainZ/CrappaLinks
+    private String getRedirectUrl(@NonNull final String url) {
+        HttpURLConnection conn = null;
         try {
-            connection = createUrlConnection(originalUrl, timeout, false);
-            connection.setInstanceFollowRedirects(false);
-            connection.setRequestMethod("HEAD");
-            connection.connect();
-
-            responseCode = connection.getResponseCode();
-
-            redirectedUrl = connection.getHeaderField("Location");
-            if (responseCode > 300 && responseCode < 400) {
-                redirectedUrl = redirectedUrl.replaceAll(" ", "+");
-                // some services use (none-standard) utf8 in their location header
-                if (originalUrl.startsWith("http://bit.ly") || originalUrl.startsWith("http://is.gd"))
-                    redirectedUrl = encodeUriFromHeader(redirectedUrl);
-
-                URI uri = new URI(redirectedUrl);
-                if (uri.getHost() != null) {
-                    return redirectedUrl;
-                } else return originalUrl;
-            } else
-                return originalUrl;
+            conn = createUrlConnection(url, 10000, false);
+            conn.setInstanceFollowRedirects(false);
+            conn.setRequestMethod("HEAD");
+            conn.connect();
+            int responseCode = conn.getResponseCode();
+            if (responseCode >= 300 && responseCode < 400) {
+                return fixUrl(url, conn.getHeaderField("Location"));
+            } else if (responseCode >= 200 && responseCode < 300) {
+                final String html = fetchAsString(url);
+                final Document doc = Jsoup.parse(html);
+                final Elements refresh = doc.select("meta[http-equiv=Refresh]");
+                if (!refresh.isEmpty()) {
+                    final Element refreshElement = refresh.first();
+                    if (refreshElement.hasAttr("url"))
+                        return fixUrl(url, refreshElement.attr("url"));
+                    else if (refreshElement.hasAttr("content") && refreshElement.attr("content").contains("URL="))
+                        return fixUrl(url, refreshElement.attr("content").split("URL=")[1].replaceAll("^'|'$", ""));
+                    else if (refreshElement.hasAttr("content") && refreshElement.attr("content").contains("url="))
+                        return fixUrl(url, refreshElement.attr("content").split("url=")[1].replaceAll("^'|'$", ""));
+                }
+            }
         } catch (Exception ex) {
-            Timber.e("getResolvedUrl:" + originalUrl + " Error:" + ex.getMessage(), ex);
-            return originalUrl;
+            return url;
         } finally {
-            if (connection != null) {
-                connection.disconnect();
+            if (conn != null) {
+                conn.disconnect();
             }
         }
+        return url;
     }
 
     @SuppressWarnings("SameParameterValue")
-    protected HttpURLConnection createUrlConnection(String urlAsStr, int timeout,
-                                                    boolean includeSomeGooseOptions) throws IOException {
+    protected HttpURLConnection createUrlConnection(String urlAsStr, int timeout, boolean includeSomeGooseOptions) throws IOException {
         URL url = new URL(urlAsStr);
-        //using proxy may increase latency
         Proxy proxy = getProxy();
         HttpURLConnection hConn = (HttpURLConnection) url.openConnection(proxy);
         hConn.setRequestProperty("User-Agent", userAgent);
@@ -416,21 +378,5 @@ public class HtmlFetcher {
         hConn.setConnectTimeout(timeout);
         hConn.setReadTimeout(timeout);
         return hConn;
-    }
-
-    private JResult getFromCache(String url, String originalUrl) {
-        if (cache != null) {
-            JResult res = cache.get(url);
-            if (res != null) {
-                // e.g. the cache returned a shortened url as original url now we want to store the
-                // current original url! Also it can be that the cache response to url but the JResult
-                // does not contain it so overwrite it:
-                res.setUrl(url);
-                res.setOriginalUrl(originalUrl);
-                cacheCounter.addAndGet(1);
-                return res;
-            }
-        }
-        return null;
     }
 }

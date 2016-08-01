@@ -93,7 +93,7 @@ public class AddHomeShortcutService extends IntentService {
     private JResult extractWebsiteData(HtmlFetcher fetcher, String unShortenedUrl) {
         JResult res = null;
         try {
-            res = fetcher.fetchAndExtract(unShortenedUrl, 1000 * 10, false);
+            res = fetcher.fetchAndExtract(unShortenedUrl, false);
         } catch (Exception ignored) {
         }
         return res;

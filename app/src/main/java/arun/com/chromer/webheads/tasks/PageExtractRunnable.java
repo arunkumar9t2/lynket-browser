@@ -31,7 +31,7 @@ public class PageExtractRunnable implements Runnable {
             mPageTask.setUnShortenedUrl(url);
             mPageTask.handleExtractionState(PageExtractTasksManager.URL_UN_SHORTENED);
 
-            final JResult res = fetcher.fetchAndExtract(url, 1000 * 10, false);
+            final JResult res = fetcher.fetchAndExtract(url, false);
 
             mPageTask.setResult(res);
             mPageTask.handleExtractionState(PageExtractTasksManager.EXTRACTION_COMPLETE);
