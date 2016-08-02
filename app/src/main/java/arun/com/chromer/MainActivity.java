@@ -175,24 +175,21 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private void setupMaterialSearch() {
         mMaterialSearchView.clearFocus();
-        mMaterialSearchView.setOnSearchPerformedListener(new MaterialSearchView.SearchListener() {
+        mMaterialSearchView.setInteractionListener(new MaterialSearchView.InteractionListener() {
+            @Override
+            public void onVoiceIconClick() {
+                if (Util.isVoiceRecognizerPresent(getApplicationContext())) {
+                    startActivityForResult(Util.getRecognizerIntent(MainActivity.this), Constants.REQUEST_CODE_VOICE);
+                } else snack(getString(R.string.no_voice_rec_apps), -10);
+            }
+
             @Override
             public void onSearchPerformed(@NonNull String query) {
                 launchCustomTab(query);
             }
-        });
-        mMaterialSearchView.setVoiceIconClickListener(new MaterialSearchView.VoiceIconClickListener() {
-            @Override
-            public void onClick() {
-                if (Util.isVoiceRecognizerPresent(getApplicationContext())) {
-                    startActivityForResult(Util.getRecognizerIntent(MainActivity.this), Constants.REQUEST_CODE_VOICE);
-                } else snack(getString(R.string.no_voice_rec_apps), -10);
 
-            }
-        });
-        mMaterialSearchView.setOnMenuClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onMenuClick() {
                 if (mDrawer.isDrawerOpen()) {
                     mDrawer.closeDrawer();
                 } else {

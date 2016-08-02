@@ -9,6 +9,8 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -18,10 +20,9 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -30,9 +31,11 @@ import java.util.List;
 
 import arun.com.chromer.R;
 import arun.com.chromer.search.SearchSuggestions;
+import arun.com.chromer.search.SuggestionAdapter;
 import arun.com.chromer.util.Util;
+import butterknife.ButterKnife;
 
-public class MaterialSearchView extends FrameLayout implements SearchSuggestions.SuggestionsCallback {
+public class MaterialSearchView extends LinearLayout implements SearchSuggestions.SuggestionsCallback, SuggestionAdapter.SuggestionClickListener {
     @ColorInt
     private final int mNormalColor = ContextCompat.getColor(getContext(), R.color.accent_icon_nofocus);
     @ColorInt
@@ -50,10 +53,27 @@ public class MaterialSearchView extends FrameLayout implements SearchSuggestions
     private IconicsDrawable mVoiceIcon;
     private IconicsDrawable mMenuIcon;
 
-    private VoiceIconClickListener mVoiceClickListener;
-
     private SearchSuggestions mSearchSuggestions;
-    private Toast mToast;
+    private SuggestionAdapter mSuggestionAdapter;
+    private RecyclerView mSuggestionList;
+    private View mSuggestionsRoot;
+
+    private InteractionListener mInteractionListener = new InteractionListener() {
+        @Override
+        public void onVoiceIconClick() {
+            // no op
+        }
+
+        @Override
+        public void onSearchPerformed(@NonNull String query) {
+            // no op
+        }
+
+        @Override
+        public void onMenuClick() {
+            // no op
+        }
+    };
 
     public MaterialSearchView(Context context) {
         super(context);
@@ -84,12 +104,17 @@ public class MaterialSearchView extends FrameLayout implements SearchSuggestions
                 .icon(CommunityMaterial.Icon.cmd_menu)
                 .color(mNormalColor)
                 .sizeDp(18);
+        mSuggestionAdapter = new SuggestionAdapter(getContext(), this);
+        setOrientation(VERTICAL);
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        addView(LayoutInflater.from(getContext()).inflate(R.layout.material_search_view, this, false));
+        final LayoutInflater inflater = LayoutInflater.from(getContext());
+        addView(inflater.inflate(R.layout.material_search_view, this, false));
+
+        initSuggestionsView(inflater);
 
         mEditText = (EditText) findViewById(R.id.msv_edittext);
         mEditText.setOnClickListener(new OnClickListener() {
@@ -125,9 +150,25 @@ public class MaterialSearchView extends FrameLayout implements SearchSuggestions
                 } else mLabel.setAlpha(0.5f);
             }
         });
+        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    mInteractionListener.onSearchPerformed(getURL());
+                    return true;
+                }
+                return false;
+            }
+        });
 
         mMenuIconView = (ImageView) findViewById(R.id.msv_left_icon);
         mMenuIconView.setImageDrawable(mMenuIcon);
+        mMenuIconView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mInteractionListener.onMenuClick();
+            }
+        });
 
         mVoiceIconView = (ImageView) findViewById(R.id.msv_right_icon);
         mVoiceIconView.setImageDrawable(mVoiceIcon);
@@ -138,7 +179,7 @@ public class MaterialSearchView extends FrameLayout implements SearchSuggestions
                     mEditText.setText("");
                     loseFocus();
                 } else {
-                    if (mVoiceClickListener != null) mVoiceClickListener.onClick();
+                    if (mInteractionListener != null) mInteractionListener.onVoiceIconClick();
                 }
             }
         });
@@ -150,6 +191,14 @@ public class MaterialSearchView extends FrameLayout implements SearchSuggestions
                 if (!mInFocus) gainFocus();
             }
         });
+    }
+
+    private void initSuggestionsView(LayoutInflater inflater) {
+        mSuggestionsRoot = inflater.inflate(R.layout.search_suggestions_recycler_view, this, false);
+        mSuggestionList = ButterKnife.findById(mSuggestionsRoot, R.id.search_suggestions);
+        mSuggestionList.setLayoutManager(new LinearLayoutManager(getContext()));
+        mSuggestionList.setAdapter(mSuggestionAdapter);
+        addView(mSuggestionsRoot);
     }
 
     private void gainFocus() {
@@ -166,6 +215,7 @@ public class MaterialSearchView extends FrameLayout implements SearchSuggestions
                 clearLayerTypes();
                 handleVoiceIconState();
                 setFocusedColor();
+                hideSuggestions();
             }
         });
         animatorSet.start();
@@ -191,6 +241,7 @@ public class MaterialSearchView extends FrameLayout implements SearchSuggestions
             public void onAnimationEnd(Animator animation) {
                 clearLayerTypes();
                 hideKeyboard();
+                hideSuggestions();
             }
         });
         animatorSet.start();
@@ -254,19 +305,6 @@ public class MaterialSearchView extends FrameLayout implements SearchSuggestions
         return mInFocus && super.hasFocus();
     }
 
-    public void setOnSearchPerformedListener(@NonNull final SearchListener listener) {
-        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    listener.onSearchPerformed(getURL());
-                    return true;
-                }
-                return false;
-            }
-        });
-    }
-
     @NonNull
     public String getText() {
         return mEditText.getText() == null ? "" : mEditText.getText().toString();
@@ -277,8 +315,8 @@ public class MaterialSearchView extends FrameLayout implements SearchSuggestions
         return Util.getSearchUrl(getText());
     }
 
-    public void setVoiceIconClickListener(VoiceIconClickListener listener) {
-        mVoiceClickListener = listener;
+    public void setInteractionListener(@NonNull InteractionListener listener) {
+        mInteractionListener = listener;
     }
 
     @Override
@@ -286,25 +324,33 @@ public class MaterialSearchView extends FrameLayout implements SearchSuggestions
         // no op
     }
 
-    public void setOnMenuClickListener(OnClickListener listener) {
-        mMenuIconView.setOnClickListener(listener);
+    private void showSuggestions() {
+        mSuggestionsRoot.setVisibility(mSuggestionAdapter.getItemCount() > 0 ? VISIBLE : GONE);
+    }
+
+    private void hideSuggestions() {
+        mSuggestionAdapter.clear();
+        mSuggestionsRoot.setVisibility(GONE);
     }
 
     @UiThread
     @Override
     public void onFetchSuggestions(@NonNull List<String> suggestions) {
-        /*if (mToast != null) {
-            mToast.cancel();
-        }
-        mToast = Toast.makeText(getContext(), suggestions.toString(), Toast.LENGTH_SHORT);
-        mToast.show();*/
+        mSuggestionsRoot.setVisibility(suggestions.isEmpty() ? GONE : VISIBLE);
+        mSuggestionAdapter.updateSuggestions(suggestions);
     }
 
-    public interface VoiceIconClickListener {
-        void onClick();
+    @Override
+    public void onSuggestionClicked(@NonNull String suggestion) {
+        clearFocus();
+        mInteractionListener.onSearchPerformed(Util.getSearchUrl(suggestion));
     }
 
-    public interface SearchListener {
-        void onSearchPerformed(@NonNull final String query);
+    public interface InteractionListener {
+        void onVoiceIconClick();
+
+        void onSearchPerformed(@NonNull String query);
+
+        void onMenuClick();
     }
 }
