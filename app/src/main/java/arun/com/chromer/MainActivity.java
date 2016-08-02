@@ -19,11 +19,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
@@ -178,25 +175,17 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private void setupMaterialSearch() {
         mMaterialSearchView.clearFocus();
-        mMaterialSearchView.setOnKeyListener(new TextView.OnEditorActionListener() {
+        mMaterialSearchView.setOnSearchPerformedListener(new MaterialSearchView.SearchListener() {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    launchCustomTab(mMaterialSearchView.getURL());
-                    return true;
-                }
-                return false;
+            public void onSearchPerformed(@NonNull String query) {
+                launchCustomTab(query);
             }
         });
         mMaterialSearchView.setVoiceIconClickListener(new MaterialSearchView.VoiceIconClickListener() {
             @Override
             public void onClick() {
                 if (Util.isVoiceRecognizerPresent(getApplicationContext())) {
-                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                    intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
-                    intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.voice_prompt));
-                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
-                    startActivityForResult(intent, Constants.REQUEST_CODE_VOICE);
+                    startActivityForResult(Util.getRecognizerIntent(MainActivity.this), Constants.REQUEST_CODE_VOICE);
                 } else snack(getString(R.string.no_voice_rec_apps), -10);
 
             }

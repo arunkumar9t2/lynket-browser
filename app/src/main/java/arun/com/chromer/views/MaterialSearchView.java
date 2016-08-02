@@ -6,12 +6,15 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -241,14 +244,25 @@ public class MaterialSearchView extends FrameLayout {
         return mInFocus && super.hasFocus();
     }
 
-    public void setOnKeyListener(TextView.OnEditorActionListener listener) {
-        mEditText.setOnEditorActionListener(listener);
+    public void setOnSearchPerformedListener(@NonNull final SearchListener listener) {
+        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    listener.onSearchPerformed(getURL());
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
+    @NonNull
     public String getText() {
         return mEditText.getText() == null ? "" : mEditText.getText().toString();
     }
 
+    @NonNull
     public String getURL() {
         return Util.getSearchUrl(getText());
     }
@@ -268,5 +282,9 @@ public class MaterialSearchView extends FrameLayout {
 
     public interface VoiceIconClickListener {
         void onClick();
+    }
+
+    public interface SearchListener {
+        void onSearchPerformed(@NonNull final String query);
     }
 }

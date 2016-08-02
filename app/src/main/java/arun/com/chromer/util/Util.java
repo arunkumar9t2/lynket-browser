@@ -34,6 +34,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import arun.com.chromer.BuildConfig;
+import arun.com.chromer.R;
 import arun.com.chromer.customtabs.CustomTabs;
 import arun.com.chromer.customtabs.prefetch.ScannerService;
 import arun.com.chromer.shared.Constants;
@@ -221,9 +222,9 @@ public class Util {
         }
     }
 
-    @Nullable
+    @NonNull
     public static String getSearchUrl(@Nullable String text) {
-        if (text == null) return null;
+        if (text == null) text = "";
         if (Patterns.WEB_URL.matcher(text).matches()) {
             if (!text.toLowerCase().matches("^\\w+://.*")) {
                 text = "http://" + text;
@@ -276,6 +277,15 @@ public class Util {
             }
         }
         return result;
+    }
+
+    @NonNull
+    public static Intent getRecognizerIntent(@NonNull final Context context) {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.getPackageName());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, context.getString(R.string.voice_prompt));
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
+        return intent;
     }
 
     /**
