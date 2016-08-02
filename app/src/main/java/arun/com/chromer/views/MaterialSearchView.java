@@ -127,7 +127,7 @@ public class MaterialSearchView extends LinearLayout implements SearchSuggestion
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) gainFocus();
-                else loseFocus();
+                else loseFocus(null);
             }
         });
         mEditText.addTextChangedListener(new TextWatcher() {
@@ -177,7 +177,7 @@ public class MaterialSearchView extends LinearLayout implements SearchSuggestion
             public void onClick(View v) {
                 if (mShouldClearText) {
                     mEditText.setText("");
-                    loseFocus();
+                    loseFocus(null);
                 } else {
                     if (mInteractionListener != null) mInteractionListener.onVoiceIconClick();
                 }
@@ -223,7 +223,7 @@ public class MaterialSearchView extends LinearLayout implements SearchSuggestion
         mInFocus = true;
     }
 
-    private void loseFocus() {
+    private void loseFocus(final Runnable endAction) {
         final AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(
                 ObjectAnimator.ofFloat(mLabel, "alpha", 1),
@@ -242,6 +242,8 @@ public class MaterialSearchView extends LinearLayout implements SearchSuggestion
                 clearLayerTypes();
                 hideKeyboard();
                 hideSuggestions();
+                if (endAction != null)
+                    endAction.run();
             }
         });
         animatorSet.start();
@@ -294,7 +296,14 @@ public class MaterialSearchView extends LinearLayout implements SearchSuggestion
 
     @Override
     public void clearFocus() {
-        loseFocus();
+        loseFocus(null);
+        View view = findFocus();
+        if (view != null) view.clearFocus();
+        super.clearFocus();
+    }
+
+    public void clearFocus(@NonNull Runnable endAction) {
+        loseFocus(endAction);
         View view = findFocus();
         if (view != null) view.clearFocus();
         super.clearFocus();
@@ -341,9 +350,13 @@ public class MaterialSearchView extends LinearLayout implements SearchSuggestion
     }
 
     @Override
-    public void onSuggestionClicked(@NonNull String suggestion) {
-        clearFocus();
-        mInteractionListener.onSearchPerformed(Util.getSearchUrl(suggestion));
+    public void onSuggestionClicked(@NonNull final String suggestion) {
+        clearFocus(new Runnable() {
+            @Override
+            public void run() {
+                mInteractionListener.onSearchPerformed(Util.getSearchUrl(suggestion));
+            }
+        });
     }
 
     public interface InteractionListener {
