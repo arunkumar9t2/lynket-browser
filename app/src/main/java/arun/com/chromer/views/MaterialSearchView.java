@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.annotation.UiThread;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,14 +21,18 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
+import java.util.List;
+
 import arun.com.chromer.R;
+import arun.com.chromer.search.SearchSuggestions;
 import arun.com.chromer.util.Util;
 
-public class MaterialSearchView extends FrameLayout {
+public class MaterialSearchView extends FrameLayout implements SearchSuggestions.SuggestionsCallback {
     @ColorInt
     private final int mNormalColor = ContextCompat.getColor(getContext(), R.color.accent_icon_nofocus);
     @ColorInt
@@ -47,6 +52,9 @@ public class MaterialSearchView extends FrameLayout {
 
     private VoiceIconClickListener mVoiceClickListener;
 
+    private SearchSuggestions mSearchSuggestions;
+    private Toast mToast;
+
     public MaterialSearchView(Context context) {
         super(context);
         init(context);
@@ -63,6 +71,7 @@ public class MaterialSearchView extends FrameLayout {
     }
 
     private void init(Context context) {
+        mSearchSuggestions = new SearchSuggestions(context, this);
         mXIcon = new IconicsDrawable(context)
                 .icon(CommunityMaterial.Icon.cmd_close)
                 .color(mNormalColor)
@@ -104,15 +113,16 @@ public class MaterialSearchView extends FrameLayout {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 handleVoiceIconState();
 
-                if (s.length() != 0) mLabel.setAlpha(0f);
-                else mLabel.setAlpha(0.5f);
+                if (s.length() != 0) {
+                    mLabel.setAlpha(0f);
+                    mSearchSuggestions.fetchForQuery(s.toString());
+                } else mLabel.setAlpha(0.5f);
             }
         });
 
@@ -273,11 +283,21 @@ public class MaterialSearchView extends FrameLayout {
 
     @Override
     public void setOnClickListener(OnClickListener l) {
-        // noop
+        // no op
     }
 
     public void setOnMenuClickListener(OnClickListener listener) {
         mMenuIconView.setOnClickListener(listener);
+    }
+
+    @UiThread
+    @Override
+    public void onFetchSuggestions(@NonNull List<String> suggestions) {
+        /*if (mToast != null) {
+            mToast.cancel();
+        }
+        mToast = Toast.makeText(getContext(), suggestions.toString(), Toast.LENGTH_SHORT);
+        mToast.show();*/
     }
 
     public interface VoiceIconClickListener {
