@@ -132,7 +132,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
     private void calcVelocities() {
         if (MINIMUM_HORIZONTAL_FLING_VELOCITY == 0) {
-            int scaledScreenWidthDp = (getResources().getConfiguration().screenWidthDp * 7);
+            int scaledScreenWidthDp = (getResources().getConfiguration().screenWidthDp * 10);
             MINIMUM_HORIZONTAL_FLING_VELOCITY = Util.dpToPx(scaledScreenWidthDp);
         }
     }
