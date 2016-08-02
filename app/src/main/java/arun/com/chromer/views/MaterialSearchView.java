@@ -215,7 +215,7 @@ public class MaterialSearchView extends LinearLayout implements SearchSuggestion
                 clearLayerTypes();
                 handleVoiceIconState();
                 setFocusedColor();
-                hideSuggestions();
+                showSuggestions();
             }
         });
         animatorSet.start();
