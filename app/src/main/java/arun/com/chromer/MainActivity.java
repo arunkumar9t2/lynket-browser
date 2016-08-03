@@ -184,8 +184,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             }
 
             @Override
-            public void onSearchPerformed(@NonNull String searchUrl) {
-                launchCustomTab(searchUrl);
+            public void onSearchPerformed(@NonNull String url) {
+                launchCustomTab(url);
             }
 
             @Override

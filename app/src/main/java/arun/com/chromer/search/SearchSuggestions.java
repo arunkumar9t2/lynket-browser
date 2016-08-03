@@ -19,6 +19,7 @@ import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 
+import arun.com.chromer.util.Util;
 import timber.log.Timber;
 
 /**
@@ -31,13 +32,15 @@ public class SearchSuggestions {
     private static final String CLIENT = "client=toolbar";
     private static final String SEARCH_URL = BASE + CLIENT + "&q=";
 
+    private static final int MAX_SUGGESTIONS = 6;
+
     @SuppressWarnings("FieldCanBeLocal")
     private final Context mContext;
     private SuggestionTask mSuggestionTask;
     private SuggestionsCallback mSuggestionsCallback = new SuggestionsCallback() {
         @Override
-        public void onFetchSuggestions(@NonNull List<String> suggestions) {
-            // no op
+        public void onFetchSuggestions(@NonNull List<SuggestionItem> suggestions) {
+
         }
     };
 
@@ -75,42 +78,47 @@ public class SearchSuggestions {
          * Query to fetch suggestions for.
          */
         private final String mQuery;
+        private final List<SuggestionItem> mSuggestions;
 
         SuggestionTask(@NonNull String query) {
             mQuery = query;
+            mSuggestions = new LinkedList<>();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            addCopySuggestion();
         }
 
         @Override
         protected String doInBackground(Void... voids) {
-            final List<String> suggestions = new LinkedList<>();
             final String suggestUrl = SEARCH_URL + mQuery;
             HttpURLConnection connection = null;
             try {
-                final URL url = new URL(suggestUrl);
-                connection = (HttpURLConnection) url.openConnection();
-                connection.connect();
+                if (Util.isNetworkAvailable(mContext)) {
+                    final URL url = new URL(suggestUrl);
+                    connection = (HttpURLConnection) url.openConnection();
+                    connection.connect();
 
-                final InputStream inputStream = connection.getInputStream();
-                final XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-                factory.setNamespaceAware(false);
-                final XmlPullParser xmlParser = factory.newPullParser();
-                xmlParser.setInput(inputStream, null);
+                    final InputStream inputStream = connection.getInputStream();
+                    final XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+                    factory.setNamespaceAware(false);
+                    final XmlPullParser xmlParser = factory.newPullParser();
+                    xmlParser.setInput(inputStream, null);
 
-                int suggestionsCount = 0;
-                int eventType = xmlParser.getEventType();
-                while (eventType != XmlPullParser.END_DOCUMENT && suggestionsCount < 6 && !isCancelled()) {
-                    if (eventType == XmlPullParser.START_TAG && xmlParser.getName().equalsIgnoreCase("suggestion")) {
-                        final String suggestion = xmlParser.getAttributeValue(0);
-                        suggestions.add(suggestion);
-                        suggestionsCount++;
+                    int eventType = xmlParser.getEventType();
+                    while (eventType != XmlPullParser.END_DOCUMENT && mSuggestions.size() < MAX_SUGGESTIONS && !isCancelled()) {
+                        if (eventType == XmlPullParser.START_TAG && xmlParser.getName().equalsIgnoreCase("suggestion")) {
+                            final String suggestion = xmlParser.getAttributeValue(0);
+                            mSuggestions.add(new SuggestionItem(suggestion));
+                        }
+                        eventType = xmlParser.next();
                     }
-                    eventType = xmlParser.next();
-                }
-                if (!isCancelled()) {
-                    postCallbackOnUiThread(suggestions);
                 } else {
-                    Timber.d("Skipped callback due to cancelled task");
+                    Timber.e("Suggestion fetching skipped due to network");
                 }
+
+                postCallbackOnUiThread();
             } catch (IOException | XmlPullParserException e) {
                 Timber.e(e.getMessage());
             } finally {
@@ -121,18 +129,29 @@ public class SearchSuggestions {
             return null;
         }
 
-        private void postCallbackOnUiThread(final List<String> suggestions) {
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    mSuggestionsCallback.onFetchSuggestions(suggestions);
-                }
-            });
+        private void addCopySuggestion() {
+            final String copyText = Util.getClipBoardText(mContext);
+            if (copyText != null && copyText.length() > 0) {
+                mSuggestions.add(new SuggestionItem(copyText, SuggestionItem.COPY));
+            }
+        }
+
+        private void postCallbackOnUiThread() {
+            if (!isCancelled()) {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSuggestionsCallback.onFetchSuggestions(mSuggestions);
+                    }
+                });
+            } else {
+                Timber.d("Skipped callback due to cancelled task");
+            }
         }
     }
 
     public interface SuggestionsCallback {
         @UiThread
-        void onFetchSuggestions(@NonNull List<String> suggestions);
+        void onFetchSuggestions(@NonNull List<SuggestionItem> suggestions);
     }
 }

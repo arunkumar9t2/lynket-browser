@@ -11,7 +11,7 @@
     <dimen name="arun_height">48dp</dimen>
 
     <dimen name="material_search_height">56dp</dimen>
-    <dimen name="material_search_margin_bottom">5dp</dimen>
+    <dimen name="material_search_margin_bottom">10dp</dimen>
     <dimen name="material_search_margin_top">10dp</dimen>
 
     <dimen name="web_head_size_normal">86dp</dimen>

@@ -7,7 +7,6 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
-import android.support.annotation.UiThread;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,6 +31,7 @@ import java.util.List;
 import arun.com.chromer.R;
 import arun.com.chromer.search.SearchSuggestions;
 import arun.com.chromer.search.SuggestionAdapter;
+import arun.com.chromer.search.SuggestionItem;
 import arun.com.chromer.util.Util;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -73,7 +73,7 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
         }
 
         @Override
-        public void onSearchPerformed(@NonNull String query) {
+        public void onSearchPerformed(@NonNull String url) {
             // no op
         }
 
@@ -112,16 +112,18 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
                 .icon(CommunityMaterial.Icon.cmd_menu)
                 .color(mNormalColor)
                 .sizeDp(18);
-        mSuggestionAdapter = new SuggestionAdapter(getContext(), this);
+
         addView(LayoutInflater.from(getContext()).inflate(R.layout.material_search_view, this, false));
         mUnBinder = ButterKnife.bind(this);
+        mSuggestionAdapter = new SuggestionAdapter(getContext(), this);
+        mSuggestionList.setLayoutManager(new LinearLayoutManager(getContext()));
+        mSuggestionList.setAdapter(mSuggestionAdapter);
+        mSuggestionList.addItemDecoration(new DividerItemDecoration(getContext()));
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mSuggestionList.setLayoutManager(new LinearLayoutManager(getContext()));
-        mSuggestionList.setAdapter(mSuggestionAdapter);
         mEditText.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -327,12 +329,6 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
         // no op
     }
 
-    @UiThread
-    @Override
-    public void onFetchSuggestions(@NonNull List<String> suggestions) {
-        mSuggestionAdapter.updateSuggestions(suggestions);
-    }
-
     @Override
     public void onSuggestionClicked(@NonNull final String suggestion) {
         clearFocus(new Runnable() {
@@ -347,10 +343,16 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
         mSuggestionAdapter.clear();
     }
 
+    @Override
+    public void onFetchSuggestions(@NonNull List<SuggestionItem> suggestions) {
+        mSuggestionAdapter.updateSuggestions(suggestions);
+    }
+
     public interface InteractionListener {
         void onVoiceIconClick();
 
-        void onSearchPerformed(@NonNull String query);
+        @SuppressWarnings("UnusedParameters")
+        void onSearchPerformed(@NonNull String url);
 
         void onMenuClick();
     }
