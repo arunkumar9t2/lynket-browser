@@ -4,10 +4,13 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -19,6 +22,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -56,6 +60,8 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
     public EditText mEditText;
     @BindView(R.id.search_suggestions)
     public RecyclerView mSuggestionList;
+    @BindView(R.id.msv_card)
+    public CardView mCard;
 
     private IconicsDrawable mXIcon;
     private IconicsDrawable mVoiceIcon;
@@ -341,11 +347,49 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
 
     private void hideSuggestions() {
         mSuggestionAdapter.clear();
+        animateCardToHeight(Util.dpToPx(50) /* guess: minimum search bar height*/);
     }
 
     @Override
     public void onFetchSuggestions(@NonNull List<SuggestionItem> suggestions) {
+        final boolean shouldReveal = mSuggestionAdapter.getItemCount() == 0 && suggestions.size() > 0;
+        final boolean shouldShrink = mSuggestionAdapter.getItemCount() != 0 && suggestions.size() == 0;
+
         mSuggestionAdapter.updateSuggestions(suggestions);
+
+        if (shouldShrink) {
+            animateCardToHeight(Util.dpToPx(50) /* guess: minimum search bar height*/);
+            return;
+        }
+        if (shouldReveal) {
+            animateCardToHeight(getPredictedSuggestionHeight());
+        }
+    }
+
+    private void animateCardToHeight(final int heightPx) {
+        final ValueAnimator anim = ValueAnimator.ofInt(mCard.getHeight(), heightPx);
+        anim.setDuration(300);
+        anim.setInterpolator(new FastOutSlowInInterpolator());
+        mCard.setLayerType(LAYER_TYPE_HARDWARE, null);
+        anim.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mCard.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+                mCard.requestLayout();
+                mCard.setLayerType(LAYER_TYPE_NONE, null);
+            }
+        });
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            public void onAnimationUpdate(ValueAnimator animation) {
+                mCard.getLayoutParams().height = (int) animation.getAnimatedValue();
+                mCard.requestLayout();
+            }
+        });
+        anim.start();
+    }
+
+    private int getPredictedSuggestionHeight() {
+        return mCard.getHeight() + (mSearchSuggestions.getMaxSuggestions() * Util.dpToPx(48));
     }
 
     public interface InteractionListener {

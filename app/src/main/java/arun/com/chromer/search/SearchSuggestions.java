@@ -69,6 +69,10 @@ public class SearchSuggestions {
         }
     }
 
+    public int getMaxSuggestions() {
+        return MAX_SUGGESTIONS;
+    }
+
     /**
      * Hits the suggest API with the given string as query parameter. Parses the xml from the API and
      * notifies the client with a list of strings(suggestions).
