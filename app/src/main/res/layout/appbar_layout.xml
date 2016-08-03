@@ -9,22 +9,18 @@
     android:theme="@style/AppTheme.AppBarOverlay"
     tools:showIn="@layout/main_activity">
 
-    <arun.com.chromer.views.MaterialSearchView
-        android:id="@+id/material_search_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_scrollFlags="scroll|exitUntilCollapsed"/>
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="66dp"
         android:background="?attr/colorPrimary"
-        android:visibility="gone"
+        android:visibility="invisible"
+        app:layout_scrollFlags="scroll|enterAlways"
         app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        app:layout_scrollFlags="scroll|enterAlways"/>
 </android.support.design.widget.AppBarLayout>

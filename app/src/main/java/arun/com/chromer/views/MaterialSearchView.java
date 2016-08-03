@@ -21,7 +21,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
@@ -33,9 +33,11 @@ import arun.com.chromer.R;
 import arun.com.chromer.search.SearchSuggestions;
 import arun.com.chromer.search.SuggestionAdapter;
 import arun.com.chromer.util.Util;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
-public class MaterialSearchView extends LinearLayout implements SearchSuggestions.SuggestionsCallback, SuggestionAdapter.SuggestionClickListener {
+public class MaterialSearchView extends RelativeLayout implements SearchSuggestions.SuggestionsCallback, SuggestionAdapter.SuggestionClickListener {
     @ColorInt
     private final int mNormalColor = ContextCompat.getColor(getContext(), R.color.accent_icon_nofocus);
     @ColorInt
@@ -44,10 +46,16 @@ public class MaterialSearchView extends LinearLayout implements SearchSuggestion
     private boolean mInFocus = false;
     private boolean mShouldClearText;
 
-    private ImageView mMenuIconView;
-    private ImageView mVoiceIconView;
-    private TextView mLabel;
-    private EditText mEditText;
+    @BindView(R.id.msv_left_icon)
+    public ImageView mMenuIconView;
+    @BindView(R.id.msv_right_icon)
+    public ImageView mVoiceIconView;
+    @BindView(R.id.msv_label)
+    public TextView mLabel;
+    @BindView(R.id.msv_edittext)
+    public EditText mEditText;
+    @BindView(R.id.search_suggestions)
+    public RecyclerView mSuggestionList;
 
     private IconicsDrawable mXIcon;
     private IconicsDrawable mVoiceIcon;
@@ -55,8 +63,8 @@ public class MaterialSearchView extends LinearLayout implements SearchSuggestion
 
     private SearchSuggestions mSearchSuggestions;
     private SuggestionAdapter mSuggestionAdapter;
-    private RecyclerView mSuggestionList;
-    private View mSuggestionsRoot;
+
+    private Unbinder mUnBinder;
 
     private InteractionListener mInteractionListener = new InteractionListener() {
         @Override
@@ -105,18 +113,15 @@ public class MaterialSearchView extends LinearLayout implements SearchSuggestion
                 .color(mNormalColor)
                 .sizeDp(18);
         mSuggestionAdapter = new SuggestionAdapter(getContext(), this);
-        setOrientation(VERTICAL);
+        addView(LayoutInflater.from(getContext()).inflate(R.layout.material_search_view, this, false));
+        mUnBinder = ButterKnife.bind(this);
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        final LayoutInflater inflater = LayoutInflater.from(getContext());
-        addView(inflater.inflate(R.layout.material_search_view, this, false));
-
-        initSuggestionsView(inflater);
-
-        mEditText = (EditText) findViewById(R.id.msv_edittext);
+        mSuggestionList.setLayoutManager(new LinearLayoutManager(getContext()));
+        mSuggestionList.setAdapter(mSuggestionAdapter);
         mEditText.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,7 +166,6 @@ public class MaterialSearchView extends LinearLayout implements SearchSuggestion
             }
         });
 
-        mMenuIconView = (ImageView) findViewById(R.id.msv_left_icon);
         mMenuIconView.setImageDrawable(mMenuIcon);
         mMenuIconView.setOnClickListener(new OnClickListener() {
             @Override
@@ -170,7 +174,6 @@ public class MaterialSearchView extends LinearLayout implements SearchSuggestion
             }
         });
 
-        mVoiceIconView = (ImageView) findViewById(R.id.msv_right_icon);
         mVoiceIconView.setImageDrawable(mVoiceIcon);
         mVoiceIconView.setOnClickListener(new OnClickListener() {
             @Override
@@ -184,7 +187,6 @@ public class MaterialSearchView extends LinearLayout implements SearchSuggestion
             }
         });
 
-        mLabel = (TextView) findViewById(R.id.msv_label);
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -193,12 +195,10 @@ public class MaterialSearchView extends LinearLayout implements SearchSuggestion
         });
     }
 
-    private void initSuggestionsView(LayoutInflater inflater) {
-        mSuggestionsRoot = inflater.inflate(R.layout.search_suggestions_recycler_view, this, false);
-        mSuggestionList = ButterKnife.findById(mSuggestionsRoot, R.id.search_suggestions);
-        mSuggestionList.setLayoutManager(new LinearLayoutManager(getContext()));
-        mSuggestionList.setAdapter(mSuggestionAdapter);
-        addView(mSuggestionsRoot);
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mUnBinder.unbind();
     }
 
     private void gainFocus() {
@@ -215,11 +215,9 @@ public class MaterialSearchView extends LinearLayout implements SearchSuggestion
                 clearLayerTypes();
                 handleVoiceIconState();
                 setFocusedColor();
-                showSuggestions();
             }
         });
         animatorSet.start();
-
         mInFocus = true;
     }
 
@@ -278,18 +276,14 @@ public class MaterialSearchView extends LinearLayout implements SearchSuggestion
 
     private void handleVoiceIconState() {
         if (mEditText.getText() != null && mEditText.getText().length() != 0) {
-            if (!mShouldClearText) {
-                if (mInFocus)
-                    mVoiceIconView.setImageDrawable(mXIcon.color(mFocusedColor));
-                else mVoiceIconView.setImageDrawable(mXIcon.color(mNormalColor));
-            }
+            if (mInFocus)
+                mVoiceIconView.setImageDrawable(mXIcon.color(mFocusedColor));
+            else mVoiceIconView.setImageDrawable(mXIcon.color(mNormalColor));
             mShouldClearText = true;
         } else {
-            if (mShouldClearText) {
-                if (mInFocus)
-                    mVoiceIconView.setImageDrawable(mVoiceIcon.color(mFocusedColor));
-                else mVoiceIconView.setImageDrawable(mVoiceIcon.color(mNormalColor));
-            }
+            if (mInFocus)
+                mVoiceIconView.setImageDrawable(mVoiceIcon.color(mFocusedColor));
+            else mVoiceIconView.setImageDrawable(mVoiceIcon.color(mNormalColor));
             mShouldClearText = false;
         }
     }
@@ -302,7 +296,7 @@ public class MaterialSearchView extends LinearLayout implements SearchSuggestion
         super.clearFocus();
     }
 
-    public void clearFocus(@NonNull Runnable endAction) {
+    private void clearFocus(@NonNull Runnable endAction) {
         loseFocus(endAction);
         View view = findFocus();
         if (view != null) view.clearFocus();
@@ -333,19 +327,9 @@ public class MaterialSearchView extends LinearLayout implements SearchSuggestion
         // no op
     }
 
-    private void showSuggestions() {
-        mSuggestionsRoot.setVisibility(mSuggestionAdapter.getItemCount() > 0 ? VISIBLE : GONE);
-    }
-
-    private void hideSuggestions() {
-        mSuggestionAdapter.clear();
-        mSuggestionsRoot.setVisibility(GONE);
-    }
-
     @UiThread
     @Override
     public void onFetchSuggestions(@NonNull List<String> suggestions) {
-        mSuggestionsRoot.setVisibility(suggestions.isEmpty() ? GONE : VISIBLE);
         mSuggestionAdapter.updateSuggestions(suggestions);
     }
 
@@ -357,6 +341,10 @@ public class MaterialSearchView extends LinearLayout implements SearchSuggestion
                 mInteractionListener.onSearchPerformed(Util.getSearchUrl(suggestion));
             }
         });
+    }
+
+    private void hideSuggestions() {
+        mSuggestionAdapter.clear();
     }
 
     public interface InteractionListener {
