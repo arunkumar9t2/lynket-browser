@@ -414,6 +414,11 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             mMaterialSearchView.clearFocus();
             return;
         }
+
+        if (mBottomSheet.isSheetShowing()) {
+            mBottomSheet.dismissSheet();
+            return;
+        }
         super.onBackPressed();
     }
 
