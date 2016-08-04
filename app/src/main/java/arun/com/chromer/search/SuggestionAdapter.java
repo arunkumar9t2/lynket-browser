@@ -105,7 +105,10 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mCallback.onSuggestionClicked(mSuggestions.get(getAdapterPosition()).suggestion);
+                    final int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        mCallback.onSuggestionClicked(mSuggestions.get(position).suggestion);
+                    }
                 }
             });
         }

@@ -137,24 +137,24 @@ public class PageExtractTasksManager {
     }
 
     static public void startExtraction(String url) {
-        PageExtractTask downloadTask = sInstance.mPageExtractTaskQueue.poll();
+        PageExtractTask pageExtractTask = sInstance.mPageExtractTaskQueue.poll();
 
         // If the queue was empty, create a new task instead.
-        if (null == downloadTask) {
-            downloadTask = new PageExtractTask();
+        if (null == pageExtractTask) {
+            pageExtractTask = new PageExtractTask();
         }
 
         // Initializes the task
-        downloadTask.initializeDownloaderTask(url);
+        pageExtractTask.initializeDownloaderTask(url);
 
-        sInstance.mParseThreadPool.execute(downloadTask.getPageExtractRunnable());
+        sInstance.mParseThreadPool.execute(pageExtractTask.getPageExtractRunnable());
     }
 
-    private void recycleTask(PageExtractTask downloadTask) {
-        downloadTask.recycle();
+    private void recycleTask(PageExtractTask pageExtractTask) {
+        pageExtractTask.recycle();
 
         // Puts the task object back into the queue for re-use.
-        mPageExtractTaskQueue.offer(downloadTask);
+        mPageExtractTaskQueue.offer(pageExtractTask);
     }
 
     void handleState(PageExtractTask photoTask, int state) {
@@ -175,7 +175,17 @@ public class PageExtractTasksManager {
     }
 
     static public void unRegisterListener() {
-        mProgressListener = null;
+        mProgressListener = new ProgressListener() {
+            @Override
+            public void onUrlUnShortened(String originalUrl, String unShortenedUrl) {
+
+            }
+
+            @Override
+            public void onUrlExtracted(String originalUrl, JResult result) {
+
+            }
+        };
     }
 
     public interface ProgressListener {

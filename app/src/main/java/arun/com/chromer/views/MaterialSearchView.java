@@ -206,7 +206,7 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        mUnBinder.unbind();
+        // mUnBinder.unbind();
     }
 
     private void gainFocus() {

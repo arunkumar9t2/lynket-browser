@@ -142,8 +142,9 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     }
 
     private void registerReceivers() {
-        IntentFilter localIntentFilter = new IntentFilter(Constants.ACTION_REBIND_WEBHEAD_TAB_CONNECTION);
+        final IntentFilter localIntentFilter = new IntentFilter();
         localIntentFilter.addAction(Constants.ACTION_WEBHEAD_COLOR_SET);
+        localIntentFilter.addAction(Constants.ACTION_REBIND_WEBHEAD_TAB_CONNECTION);
         LocalBroadcastManager.getInstance(this).registerReceiver(mLocalReceiver, localIntentFilter);
 
         // Register the receiver which will stop this service.
@@ -161,10 +162,9 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
 
     private void processIntentAndWebHead(Intent intent) {
         if (intent == null || intent.getDataString() == null) return; // don't do anything
+        final boolean isFromNewTab = intent.getBooleanExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, false);
 
-        boolean isFromNewTab = intent.getBooleanExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, false);
-
-        String urlToLoad = intent.getDataString();
+        final String urlToLoad = intent.getDataString();
         if (!isLinkAlreadyLoaded(urlToLoad)) {
             addWebHead(urlToLoad, isFromNewTab);
         } else
@@ -215,7 +215,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         final WebHead webHead = mWebHeads.get(originalUrl);
         if (webHead != null && Preferences.favicons(this) && result != null) {
             try {
-                String faviconUrl = result.getFaviconUrl();
+                final String faviconUrl = result.getFaviconUrl();
                 webHead.setTitle(result.getTitle());
                 Glide.with(this)
                         .load(faviconUrl)
@@ -242,12 +242,12 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     }
 
     private void showNotification() {
-        PendingIntent contentIntent = PendingIntent.getBroadcast(this,
+        final PendingIntent contentIntent = PendingIntent.getBroadcast(this,
                 0,
                 new Intent(Constants.ACTION_STOP_WEBHEAD_SERVICE),
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Notification notification = new NotificationCompat.Builder(this)
+        final Notification notification = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_chromer_notification)
                 .setPriority(NotificationCompat.PRIORITY_MIN)
                 .setContentText(getString(R.string.tap_close_all))

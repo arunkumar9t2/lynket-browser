@@ -464,7 +464,7 @@ public abstract class BaseWebHead extends FrameLayout {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        mUnBinder.unbind();
+        // mUnBinder.unbind();
     }
 
     @SuppressWarnings("UnusedParameters")
@@ -473,7 +473,10 @@ public abstract class BaseWebHead extends FrameLayout {
         RemoveWebHead.disappear();
         removeView(mContentGroup);
         if (sWindowManager != null)
-            sWindowManager.removeView(this);
+            try {
+                sWindowManager.removeView(this);
+            } catch (Exception ignored) {
+            }
     }
 
     /**
