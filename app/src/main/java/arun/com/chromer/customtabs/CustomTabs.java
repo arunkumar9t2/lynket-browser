@@ -309,9 +309,9 @@ public class CustomTabs {
         if (mCustomTabsSession != null) {
             return mCustomTabsSession;
         }
-        if (mForWebHead && WebHeadService.getInstance() != null) {
+        if (WebHeadService.getTabSession() != null) {
             Timber.d("Using webhead session");
-            return WebHeadService.getInstance().getTabSession();
+            return WebHeadService.getTabSession();
         }
 
         ScannerService sService = ScannerService.getInstance();

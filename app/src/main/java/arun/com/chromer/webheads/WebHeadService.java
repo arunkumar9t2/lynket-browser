@@ -22,6 +22,7 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsService;
 import android.support.customtabs.CustomTabsSession;
 import android.support.v4.content.ContextCompat;
@@ -58,34 +59,18 @@ import timber.log.Timber;
 public class WebHeadService extends Service implements WebHead.WebHeadInteractionListener,
         CustomTabManager.ConnectionCallback, PageExtractTasksManager.ProgressListener {
 
-    private static WebHeadService sInstance = null;
-    /**
-     * Will have the last opened url.
-     */
     private static String sLastOpenedUrl = "";
-    /**
-     * Reference to all the web heads created on screen. Ordered in the order of creation by using {@link LinkedHashMap}.
-     * The key must be unique and is usually the url the web head represents.
-     */
-    private final Map<String, WebHead> mWebHeads = new LinkedHashMap<>();
-    /**
-     * Receiver to stop the web head service
-     */
-    private final BroadcastReceiver mStopServiceReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Timber.d("Closing from notification");
-            stopSelf();
-        }
-    };
-    /**
-     * Flag to determine if connection to custom tab was established.
-     */
-    private boolean mCustomTabConnected;
     /**
      * Connection manager instance to connect and warm up custom tab providers
      */
-    private CustomTabManager mCustomTabManager;
+    private static CustomTabManager mCustomTabManager;
+    /**
+     * Reference to all the web heads created on screen. Ordered in the order of creation by using
+     * {@link LinkedHashMap}. The key must be unique and is usually the url the web head represents.
+     */
+    private final Map<String, WebHead> mWebHeads = new LinkedHashMap<>();
+
+    private boolean mCustomTabConnected;
     /**
      * Receiver to get notified about local events.
      */
@@ -94,24 +79,28 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
                 case Constants.ACTION_REBIND_WEBHEAD_TAB_CONNECTION:
-                    boolean shouldRebind = intent.getBooleanExtra(Constants.EXTRA_KEY_REBIND_WEBHEAD_CXN, false);
-                    if (shouldRebind) bindToCustomTabSession();
+                    final boolean shouldRebind = intent.getBooleanExtra(Constants.EXTRA_KEY_REBIND_WEBHEAD_CXN, false);
+                    if (shouldRebind) {
+                        bindToCustomTabSession();
+                    }
                     break;
                 case Constants.ACTION_WEBHEAD_COLOR_SET:
-                    int webHeadColor = intent.getIntExtra(Constants.EXTRA_KEY_WEBHEAD_COLOR, 0);
-                    if (webHeadColor != 0) {
+                    final int webHeadColor = intent.getIntExtra(Constants.EXTRA_KEY_WEBHEAD_COLOR, Constants.NO_COLOR);
+                    if (webHeadColor != Constants.NO_COLOR) {
                         updateWebHeadColors(webHeadColor);
                     }
                     break;
             }
         }
     };
+    private final BroadcastReceiver mStopServiceReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            stopSelf();
+        }
+    };
 
     public WebHeadService() {
-    }
-
-    public static WebHeadService getInstance() {
-        return sInstance;
     }
 
     @Override
@@ -122,7 +111,6 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     @Override
     public void onCreate() {
         super.onCreate();
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(this)) {
                 Timber.d("Exited webhead service since overlay permission was revoked");
@@ -130,25 +118,34 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
                 return;
             }
         }
-        sInstance = this;
         RemoveWebHead.get(this);
 
         // bind to custom tab session
         bindToCustomTabSession();
-
         registerReceivers();
-
         PageExtractTasksManager.registerListener(this);
     }
 
+    public static CustomTabsSession getTabSession() {
+        if (mCustomTabManager != null) {
+            return mCustomTabManager.getSession();
+        }
+        return null;
+    }
+
     private void registerReceivers() {
-        final IntentFilter localIntentFilter = new IntentFilter();
-        localIntentFilter.addAction(Constants.ACTION_WEBHEAD_COLOR_SET);
-        localIntentFilter.addAction(Constants.ACTION_REBIND_WEBHEAD_TAB_CONNECTION);
-        LocalBroadcastManager.getInstance(this).registerReceiver(mLocalReceiver, localIntentFilter);
+        final IntentFilter filter = new IntentFilter();
+        filter.addAction(Constants.ACTION_WEBHEAD_COLOR_SET);
+        filter.addAction(Constants.ACTION_REBIND_WEBHEAD_TAB_CONNECTION);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mLocalReceiver, filter);
 
         // Register the receiver which will stop this service.
         registerReceiver(mStopServiceReceiver, new IntentFilter(Constants.ACTION_STOP_WEBHEAD_SERVICE));
+    }
+
+    private void unregisterReceivers() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mLocalReceiver);
+        unregisterReceiver(mStopServiceReceiver);
     }
 
     @Override
@@ -177,7 +174,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         mWebHeads.put(webHeadUrl, webHead);
         // Before adding new web heads, call move self to stack distance on existing web heads to move
         // them a little such that they appear to be stacked
-        AnimatorSet animatorSet = new AnimatorSet();
+        final AnimatorSet animatorSet = new AnimatorSet();
         List<Animator> animators = new LinkedList<>();
         for (WebHead webhead : mWebHeads.values()) {
             Animator anim = webhead.getStackDistanceAnimator();
@@ -199,8 +196,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     @Override
     public void onUrlUnShortened(String originalUrl, String unShortenedUrl) {
         // First check if the associated web head is active
-        WebHead webHead = mWebHeads.get(originalUrl);
-
+        final WebHead webHead = mWebHeads.get(originalUrl);
         if (webHead != null) {
             webHead.setUnShortenedUrl(unShortenedUrl);
             if (mCustomTabConnected)
@@ -211,7 +207,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     }
 
     @Override
-    public void onUrlExtracted(String originalUrl, JResult result) {
+    public void onUrlExtracted(String originalUrl, @Nullable JResult result) {
         final WebHead webHead = mWebHeads.get(originalUrl);
         if (webHead != null && Preferences.favicons(this) && result != null) {
             try {
@@ -264,22 +260,18 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     @SuppressWarnings("unused")
     private void addTestWebHeads() {
         //addWebHead("http://www.medium.com");
-
         //addWebHead("https://www.linkedin.com/");
-
         addWebHead("http://www.github.com", false);
-
         // addWebHead("http://www.androidpolice.com");
-
         // addWebHead("https://bitbucket.org/");
     }
 
-    private boolean isLinkAlreadyLoaded(String urlToLoad) {
+    private boolean isLinkAlreadyLoaded(@Nullable String urlToLoad) {
         return urlToLoad == null || mWebHeads.containsKey(urlToLoad);
     }
 
     private void deferMayLaunchUntilConnected(final String urlToLoad) {
-        Thread deferThread = new Thread(new Runnable() {
+        final Thread deferThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 int i = 0;
@@ -383,17 +375,17 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         if (ok) Timber.d("Binding successful");
     }
 
-    private void destroyAllWebHeads() {
+    private void removeWebHeads() {
         for (WebHead webhead : mWebHeads.values()) {
             if (webhead != null) webhead.destroySelf(false);
         }
         // Since no callback is received clear the map manually.
         mWebHeads.clear();
-        Timber.d("Webheads: %d", mWebHeads.size());
+        Timber.d("WebHeads: %d", mWebHeads.size());
     }
 
     private void updateWebHeadColors(@ColorInt int webHeadColor) {
-        AnimatorSet animatorSet = new AnimatorSet();
+        final AnimatorSet animatorSet = new AnimatorSet();
         List<Animator> animators = new LinkedList<>();
         for (WebHead webhead : mWebHeads.values()) {
             animators.add(webhead.getRevealAnimator(webHeadColor));
@@ -406,8 +398,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     @Override
     public void onWebHeadClick(@NonNull WebHead webHead) {
         if (webHead.getUnShortenedUrl() != null && webHead.getUnShortenedUrl().length() != 0) {
-            Intent customTabActivity = new Intent(this, CustomTabActivity.class);
-
+            final Intent customTabActivity = new Intent(this, CustomTabActivity.class);
             customTabActivity.setData(Uri.parse(webHead.getUnShortenedUrl()));
             customTabActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             if (webHead.isFromNewTab() || Preferences.mergeTabs(this)) {
@@ -423,16 +414,13 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
 
             // Store the last opened url
             sLastOpenedUrl = webHead.getUrl();
-
             // If user prefers to the close the head on opening the link, then call destroySelf()
             // which will take care of closing and detaching the web head
             if (Preferences.webHeadsCloseOnOpen(WebHeadService.this)) {
                 webHead.destroySelf(true);
             }
-
             // Since the current url is opened, lets prepare the next set of urls
             prepareNextSetOfUrls(sLastOpenedUrl);
-
             hideRemoveView();
         }
     }
@@ -442,14 +430,13 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         mWebHeads.remove(webHead.getUrl());
         if (isLastWebHead) {
             // animate remove web head before killing this service
-            ViewPropertyAnimator animator = RemoveWebHead.get(this).destroyAnimator();
+            final ViewPropertyAnimator animator = RemoveWebHead.get(this).destroyAnimator();
             if (animator == null) {
                 stopSelf();
             } else {
                 animator.setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        Timber.d("Closed with animation");
                         stopSelf();
                     }
                 });
@@ -465,20 +452,17 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     @Override
     public void onDestroy() {
         Timber.d("Exiting webhead service");
-        destroyAllWebHeads();
+        removeWebHeads();
 
         PageExtractTasksManager.cancelAll(true);
         PageExtractTasksManager.unRegisterListener();
 
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mLocalReceiver);
-        unregisterReceiver(mStopServiceReceiver);
+        unregisterReceivers();
 
         if (mCustomTabManager != null) mCustomTabManager.unbindCustomTabsService(this);
 
         stopForeground(true);
-
         RemoveWebHead.destroy();
-        sInstance = null;
         super.onDestroy();
     }
 
@@ -498,13 +482,6 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     @Override
     public void onCustomTabsDisconnected() {
         mCustomTabConnected = false;
-    }
-
-    public CustomTabsSession getTabSession() {
-        if (mCustomTabManager != null) {
-            return mCustomTabManager.getSession();
-        }
-        return null;
     }
 
     private void hideRemoveView() {
@@ -527,7 +504,6 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
                 case TAB_HIDDEN:
                     // When a tab is exited, prepare the other urls.
                     prepareNextSetOfUrls(sLastOpenedUrl);
-
                     // Clear the last opened url flag
                     sLastOpenedUrl = "";
                     break;

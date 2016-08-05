@@ -224,7 +224,7 @@ public class Preferences {
         PreferenceManager
                 .getDefaultSharedPreferences(context)
                 .edit()
-                .putBoolean(WARM_UP, preference).commit();
+                .putBoolean(WARM_UP, preference).apply();
     }
 
     public static boolean preFetch(Context context) {
@@ -236,7 +236,7 @@ public class Preferences {
     public static void preFetch(Context context, boolean preference) {
         PreferenceManager
                 .getDefaultSharedPreferences(context)
-                .edit().putBoolean(PRE_FETCH, preference).commit();
+                .edit().putBoolean(PRE_FETCH, preference).apply();
     }
 
     public static boolean wifiOnlyPrefetch(Context context) {
@@ -248,7 +248,7 @@ public class Preferences {
     public static void wifiOnlyPrefetch(Context context, boolean preference) {
         PreferenceManager
                 .getDefaultSharedPreferences(context)
-                .edit().putBoolean(WIFI_PREFETCH, preference).commit();
+                .edit().putBoolean(WIFI_PREFETCH, preference).apply();
     }
 
     public static boolean preFetchNotification(Context context) {
@@ -260,7 +260,7 @@ public class Preferences {
     public static void preFetchNotification(Context context, boolean preference) {
         PreferenceManager
                 .getDefaultSharedPreferences(context)
-                .edit().putBoolean(PRE_FETCH_NOTIFICATION, preference).commit();
+                .edit().putBoolean(PRE_FETCH_NOTIFICATION, preference).apply();
     }
 
     public static boolean dynamicToolbar(Context context) {
@@ -290,7 +290,7 @@ public class Preferences {
     }
 
     private static void dynamicToolbarOnApp(Context context, boolean preference) {
-        preferences(context).edit().putBoolean(DYNAMIC_COLOR_APP, preference).commit();
+        preferences(context).edit().putBoolean(DYNAMIC_COLOR_APP, preference).apply();
     }
 
     public static boolean dynamicToolbarOnWeb(Context context) {
@@ -298,7 +298,7 @@ public class Preferences {
     }
 
     private static void dynamicToolbarOnWeb(Context context, boolean preference) {
-        preferences(context).edit().putBoolean(DYNAMIC_COLOR_WEB, preference).commit();
+        preferences(context).edit().putBoolean(DYNAMIC_COLOR_WEB, preference).apply();
     }
 
     private static void dynamicToolbarOptions(Context context, boolean app, boolean web) {
@@ -411,20 +411,21 @@ public class Preferences {
     public static void blacklist(Context context, boolean preference) {
         PreferenceManager
                 .getDefaultSharedPreferences(context)
-                .edit().putBoolean(BLACKLIST, preference).commit();
+                .edit().putBoolean(BLACKLIST, preference).apply();
     }
 
     public static boolean mergeTabs(Context context) {
-        return PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getBoolean(MERGE_TABS_AND_APPS, false);
+        return Util.isLollipopAbove() &&
+                PreferenceManager
+                        .getDefaultSharedPreferences(context)
+                        .getBoolean(MERGE_TABS_AND_APPS, false);
     }
 
     public static void mergeTabs(Context context, boolean preference) {
         PreferenceManager
                 .getDefaultSharedPreferences(context)
                 .edit()
-                .putBoolean(MERGE_TABS_AND_APPS, preference).commit();
+                .putBoolean(MERGE_TABS_AND_APPS, preference).apply();
     }
 
     public static boolean bottomBar(Context context) {

@@ -62,11 +62,9 @@ public class PageExtractTasksManager {
             @Override
             public void handleMessage(Message msg) {
                 final PageExtractTask pageExtractTask = (PageExtractTask) msg.obj;
-
                 if (pageExtractTask == null) {
                     return;
                 }
-
                 switch (msg.what) {
                     case URL_UN_SHORTENED:
                         mProgressListener.onUrlUnShortened(pageExtractTask.getRawUrl(), pageExtractTask.getUnShortenedUrl());
@@ -152,7 +150,6 @@ public class PageExtractTasksManager {
 
     private void recycleTask(PageExtractTask pageExtractTask) {
         pageExtractTask.recycle();
-
         // Puts the task object back into the queue for re-use.
         mPageExtractTaskQueue.offer(pageExtractTask);
     }
@@ -189,8 +186,8 @@ public class PageExtractTasksManager {
     }
 
     public interface ProgressListener {
-        void onUrlUnShortened(String originalUrl, String unShortenedUrl);
+        void onUrlUnShortened(final String originalUrl, final String unShortenedUrl);
 
-        void onUrlExtracted(String originalUrl, JResult result);
+        void onUrlExtracted(final String originalUrl, final JResult result);
     }
 }
