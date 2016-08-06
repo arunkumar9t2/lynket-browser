@@ -124,6 +124,10 @@ public abstract class BaseWebHead extends FrameLayout {
      * X icon drawable used when closing
      */
     private static Drawable sXDrawable;
+    /**
+     * Master Wayne
+     */
+    boolean mMaster = false;
 
     @SuppressLint("RtlHardcoded")
     BaseWebHead(@NonNull Context context, @NonNull String url) {
@@ -157,6 +161,13 @@ public abstract class BaseWebHead extends FrameLayout {
                 .sizeDp(18);
         mDeleteColor = ContextCompat.getColor(context, R.color.remove_web_head_color);
     }
+
+    public void setMaster(boolean master) {
+        this.mMaster = master;
+        onMasterChanged(master);
+    }
+
+    protected abstract void onMasterChanged(boolean master);
 
     private void inflateContent(@NonNull Context context) {
         // size
@@ -196,10 +207,16 @@ public abstract class BaseWebHead extends FrameLayout {
                 } else {
                     mWindowParams.x = sScreenBounds.left;
                 }
+                onSpawnLocationSet();
                 updateView();
             }
         });
     }
+
+    /**
+     * Event for sub class to get notified once spawn location is set.
+     */
+    protected abstract void onSpawnLocationSet();
 
     /**
      * Initializes web head from user preferences

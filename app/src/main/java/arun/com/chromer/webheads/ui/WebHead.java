@@ -8,7 +8,6 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
@@ -19,11 +18,11 @@ import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringConfig;
 import com.facebook.rebound.SpringListener;
-import com.facebook.rebound.SpringSystem;
 
 import arun.com.chromer.BuildConfig;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.util.Util;
+import arun.com.chromer.webheads.SpringConfigs;
 import arun.com.chromer.webheads.physics.MovementTracker;
 import timber.log.Timber;
 
@@ -33,7 +32,7 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class WebHead extends BaseWebHead implements SpringListener {
 
-    private static final float TOUCH_DOWN_SCALE = 0.85f;
+    private static final float TOUCH_DOWN_SCALE = 1f;
     private static final float TOUCH_UP_SCALE = 1f;
     /**
      * Coordinate of remove web head that we can lock on to.
@@ -74,17 +73,9 @@ public class WebHead extends BaseWebHead implements SpringListener {
      */
     private final GestureDetector mGestureDetector = new GestureDetector(getContext(), new GestureDetectorListener());
     /**
-     * The base spring system to create our springs.
-     */
-    private SpringSystem mSpringSystem;
-    /**
      * Individual springs to control X, Y and scale of the web head
      */
     private Spring mXSpring, mYSpring, mScaleSpring;
-
-    private static final SpringConfig FLING_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(50, 5);
-    private static final SpringConfig DRAG_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(0, 1.8);
-    private static final SpringConfig SNAP_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(100, 7);
     /**
      * Movement tracker instance, that is used to adjust X and Y velocity calculated by {@link #mGestureDetector}.
      * This is needed since sometimes velocities coming from {@link GestureDetectorListener#onFling(MotionEvent, MotionEvent, float, float)}
@@ -94,21 +85,10 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
     private float posX, posY;
     private int initialDownX, initialDownY;
-
     /**
      * The interaction listener that clients can provide to listen for events on webhead.
      */
-    private WebHeadInteractionListener mInteractionListener = new WebHeadInteractionListener() {
-        @Override
-        public void onWebHeadClick(@NonNull WebHead webHead) {
-            // noop
-        }
-
-        @Override
-        public void onWebHeadDestroyed(@NonNull WebHead webHead, boolean isLastWebHead) {
-            // noop
-        }
-    };
+    private final WebHeadContract mContract;
 
     /**
      * Inits the web head and attaches to the system window. It is assumed that draw over other apps permission is
@@ -116,17 +96,14 @@ public class WebHead extends BaseWebHead implements SpringListener {
      *
      * @param context  Service
      * @param url      Url the web head will carry
-     * @param listener for listening to events on the webhead
+     * @param contract for communicating to events on the webhead
      */
-    public WebHead(@NonNull Context context, @NonNull String url, @Nullable WebHeadInteractionListener listener) {
+    public WebHead(@NonNull Context context, @NonNull String url, @NonNull WebHeadContract contract) {
         super(context, url);
-        if (listener != null) {
-            mInteractionListener = listener;
-        }
+        mContract = contract;
+        mMaster = true;
         mMovementTracker = MovementTracker.obtain();
-
         calcVelocities();
-
         setupSprings();
     }
 
@@ -138,12 +115,11 @@ public class WebHead extends BaseWebHead implements SpringListener {
     }
 
     private void setupSprings() {
-        mSpringSystem = SpringSystem.create();
-        mYSpring = mSpringSystem.createSpring();
+        mYSpring = mContract.newSpring();
         mYSpring.addListener(this);
-        mXSpring = mSpringSystem.createSpring();
+        mXSpring = mContract.newSpring();
         mXSpring.addListener(this);
-        mScaleSpring = mSpringSystem.createSpring();
+        mScaleSpring = mContract.newSpring();
         mScaleSpring.addListener(new SimpleSpringListener() {
             @Override
             public void onSpringUpdate(Spring spring) {
@@ -158,7 +134,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // Don't react to any touch event and consume it when we are being destroyed
-        if (mDestroyed) return true;
+        if (mDestroyed || !mMaster) return true;
         try {
             // Reset gesture flag on each event
             mWasFlung = false;
@@ -236,8 +212,8 @@ public class WebHead extends BaseWebHead implements SpringListener {
                 getRemoveWebHead().grow();
                 touchUp();
 
-                mXSpring.setSpringConfig(SNAP_CONFIG);
-                mYSpring.setSpringConfig(SNAP_CONFIG);
+                mXSpring.setSpringConfig(SpringConfigs.SNAP);
+                mYSpring.setSpringConfig(SpringConfigs.SNAP);
 
                 mXSpring.setEndValue(trashLockCoOrd()[0]);
                 mYSpring.setEndValue(trashLockCoOrd()[1]);
@@ -245,8 +221,8 @@ public class WebHead extends BaseWebHead implements SpringListener {
             } else {
                 getRemoveWebHead().shrink();
 
-                mXSpring.setSpringConfig(DRAG_CONFIG);
-                mYSpring.setSpringConfig(DRAG_CONFIG);
+                mXSpring.setSpringConfig(SpringConfigs.DRAG);
+                mYSpring.setSpringConfig(SpringConfigs.DRAG);
 
                 mXSpring.setCurrentValue(x);
                 mYSpring.setCurrentValue(y);
@@ -340,12 +316,30 @@ public class WebHead extends BaseWebHead implements SpringListener {
         }
     }
 
+    @NonNull
+    public Spring getXSpring() {
+        return mXSpring;
+    }
+
+    @NonNull
+    public Spring getYSpring() {
+        return mYSpring;
+    }
+
+    public void setSpringConfig(@NonNull SpringConfig config) {
+        mXSpring.setSpringConfig(config);
+        mYSpring.setSpringConfig(config);
+    }
+
     @Override
     public void onSpringUpdate(Spring spring) {
         mWindowParams.x = (int) mXSpring.getCurrentValue();
         mWindowParams.y = (int) mYSpring.getCurrentValue();
         updateView();
-        checkBounds();
+        if (mMaster) {
+            checkBounds();
+            mContract.onMasterWebHeadMoved(mWindowParams.x, mWindowParams.y);
+        }
     }
 
     @Override
@@ -373,19 +367,19 @@ public class WebHead extends BaseWebHead implements SpringListener {
         int width = getWidth();
 
         if (x + width >= sDispWidth) {
-            mXSpring.setSpringConfig(FLING_CONFIG);
+            mXSpring.setSpringConfig(SpringConfigs.FLING);
             mXSpring.setEndValue(sScreenBounds.right);
         }
         if (x - width <= 0) {
-            mXSpring.setSpringConfig(FLING_CONFIG);
+            mXSpring.setSpringConfig(SpringConfigs.FLING);
             mXSpring.setEndValue(sScreenBounds.left);
         }
         if (y + width >= sDispHeight) {
-            mYSpring.setSpringConfig(FLING_CONFIG);
+            mYSpring.setSpringConfig(SpringConfigs.FLING);
             mYSpring.setEndValue(sScreenBounds.bottom);
         }
         if (y - width <= 0) {
-            mYSpring.setSpringConfig(FLING_CONFIG);
+            mYSpring.setSpringConfig(SpringConfigs.FLING);
             mYSpring.setEndValue(sScreenBounds.top);
         }
 
@@ -405,23 +399,36 @@ public class WebHead extends BaseWebHead implements SpringListener {
      */
     private void stickToWall() {
         if (mWindowParams.x > sDispWidth / 2) {
-            mXSpring.setSpringConfig(FLING_CONFIG);
+            mXSpring.setSpringConfig(SpringConfigs.FLING);
             mXSpring.setEndValue(sScreenBounds.right);
             Timber.e("Restored X");
         } else {
-            mXSpring.setSpringConfig(FLING_CONFIG);
+            mXSpring.setSpringConfig(SpringConfigs.FLING);
             mXSpring.setEndValue(sScreenBounds.left);
             Timber.e("Restored X");
         }
 
         if (mWindowParams.y < sScreenBounds.top) {
-            mYSpring.setSpringConfig(FLING_CONFIG);
+            mYSpring.setSpringConfig(SpringConfigs.FLING);
             mYSpring.setEndValue(sScreenBounds.top);
             Timber.e("Restored Y");
         } else if (mWindowParams.y > sScreenBounds.bottom) {
-            mYSpring.setSpringConfig(FLING_CONFIG);
+            mYSpring.setSpringConfig(SpringConfigs.FLING);
             mYSpring.setEndValue(sScreenBounds.bottom);
             Timber.e("Restored Y");
+        }
+    }
+
+    @Override
+    protected void onMasterChanged(boolean master) {
+        final String result = master ? "master" : "slave";
+        Timber.d("%s became %s", getUrl(), result);
+    }
+
+    @Override
+    protected void onSpawnLocationSet() {
+        if (mMaster) {
+            mContract.onMasterWebHeadMoved(mWindowParams.x, mWindowParams.y);
         }
     }
 
@@ -436,7 +443,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
             } else
                 closeWithAnimation(receiveCallback);
         } else {
-            if (receiveCallback) mInteractionListener.onWebHeadDestroyed(this, isLastWebHead());
+            if (receiveCallback) mContract.onWebHeadDestroyed(this, isLastWebHead());
             super.destroySelf(receiveCallback);
         }
     }
@@ -462,7 +469,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
                     @Override
                     public void run() {
                         if (receiveCallback)
-                            mInteractionListener.onWebHeadDestroyed(WebHead.this, isLastWebHead());
+                            mContract.onWebHeadDestroyed(WebHead.this, isLastWebHead());
                         WebHead.super.destroySelf(receiveCallback);
                     }
                 }, 200);
@@ -502,7 +509,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
                                     @Override
                                     public void run() {
                                         if (receiveCallback)
-                                            mInteractionListener.onWebHeadDestroyed(WebHead.this, isLastWebHead());
+                                            mContract.onWebHeadDestroyed(WebHead.this, isLastWebHead());
                                         WebHead.super.destroySelf(receiveCallback);
                                     }
                                 }, 200);
@@ -538,15 +545,18 @@ public class WebHead extends BaseWebHead implements SpringListener {
     }
 
     private void destroySprings() {
-        mSpringSystem.removeAllListeners();
         mXSpring.destroy();
         mYSpring.destroy();
     }
 
-    public interface WebHeadInteractionListener {
+    public interface WebHeadContract {
         void onWebHeadClick(@NonNull WebHead webHead);
 
         void onWebHeadDestroyed(@NonNull WebHead webHead, boolean isLastWebHead);
+
+        void onMasterWebHeadMoved(int x, int y);
+
+        Spring newSpring();
     }
 
     /**
@@ -589,7 +599,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
         private void sendCallback() {
             RemoveWebHead.disappear();
-            mInteractionListener.onWebHeadClick(WebHead.this);
+            mContract.onWebHeadClick(WebHead.this);
         }
 
         @Override
@@ -609,8 +619,8 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
                 velocityX = interpolateXVelocity(e2, adjustedVelocities[0]);
 
-                mXSpring.setSpringConfig(DRAG_CONFIG);
-                mYSpring.setSpringConfig(DRAG_CONFIG);
+                mXSpring.setSpringConfig(SpringConfigs.DRAG);
+                mYSpring.setSpringConfig(SpringConfigs.DRAG);
 
                 mXSpring.setVelocity(velocityX);
                 mYSpring.setVelocity(adjustedVelocities[1]);

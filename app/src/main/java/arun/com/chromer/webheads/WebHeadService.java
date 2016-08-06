@@ -36,6 +36,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.facebook.rebound.Spring;
+import com.facebook.rebound.SpringSystem;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -50,13 +52,14 @@ import arun.com.chromer.customtabs.CustomTabManager;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.webheads.helper.ColorExtractionTask;
+import arun.com.chromer.webheads.physics.SpringChain2D;
 import arun.com.chromer.webheads.tasks.PageExtractTasksManager;
 import arun.com.chromer.webheads.ui.RemoveWebHead;
 import arun.com.chromer.webheads.ui.WebHead;
 import de.jetwick.snacktory.JResult;
 import timber.log.Timber;
 
-public class WebHeadService extends Service implements WebHead.WebHeadInteractionListener,
+public class WebHeadService extends Service implements WebHead.WebHeadContract,
         CustomTabManager.ConnectionCallback, PageExtractTasksManager.ProgressListener {
 
     private static String sLastOpenedUrl = "";
@@ -69,36 +72,16 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
      * {@link LinkedHashMap}. The key must be unique and is usually the url the web head represents.
      */
     private final Map<String, WebHead> mWebHeads = new LinkedHashMap<>();
+    /**
+     * The base spring system to create our springs.
+     */
+    private final SpringSystem mSpringSystem = SpringSystem.create();
+    /**
+     * Clubbed movement manager
+     */
+    private final SpringChain2D mSpringChain2D = SpringChain2D.create();
 
     private boolean mCustomTabConnected;
-    /**
-     * Receiver to get notified about local events.
-     */
-    private final BroadcastReceiver mLocalReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            switch (intent.getAction()) {
-                case Constants.ACTION_REBIND_WEBHEAD_TAB_CONNECTION:
-                    final boolean shouldRebind = intent.getBooleanExtra(Constants.EXTRA_KEY_REBIND_WEBHEAD_CXN, false);
-                    if (shouldRebind) {
-                        bindToCustomTabSession();
-                    }
-                    break;
-                case Constants.ACTION_WEBHEAD_COLOR_SET:
-                    final int webHeadColor = intent.getIntExtra(Constants.EXTRA_KEY_WEBHEAD_COLOR, Constants.NO_COLOR);
-                    if (webHeadColor != Constants.NO_COLOR) {
-                        updateWebHeadColors(webHeadColor);
-                    }
-                    break;
-            }
-        }
-    };
-    private final BroadcastReceiver mStopServiceReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            stopSelf();
-        }
-    };
 
     public WebHeadService() {
     }
@@ -133,21 +116,6 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         return null;
     }
 
-    private void registerReceivers() {
-        final IntentFilter filter = new IntentFilter();
-        filter.addAction(Constants.ACTION_WEBHEAD_COLOR_SET);
-        filter.addAction(Constants.ACTION_REBIND_WEBHEAD_TAB_CONNECTION);
-        LocalBroadcastManager.getInstance(this).registerReceiver(mLocalReceiver, filter);
-
-        // Register the receiver which will stop this service.
-        registerReceiver(mStopServiceReceiver, new IntentFilter(Constants.ACTION_STOP_WEBHEAD_SERVICE));
-    }
-
-    private void unregisterReceivers() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mLocalReceiver);
-        unregisterReceiver(mStopServiceReceiver);
-    }
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         processIntentAndWebHead(intent);
@@ -155,6 +123,26 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         showNotification();
         // addTestWebHeads();
         return START_STICKY;
+    }
+
+    private void showNotification() {
+        final PendingIntent contentIntent = PendingIntent.getBroadcast(this,
+                0,
+                new Intent(Constants.ACTION_STOP_WEBHEAD_SERVICE),
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        final Notification notification = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_chromer_notification)
+                .setPriority(NotificationCompat.PRIORITY_MIN)
+                .setContentText(getString(R.string.tap_close_all))
+                .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                .setContentTitle(getString(R.string.web_heads_service))
+                .setContentIntent(contentIntent)
+                .setAutoCancel(false)
+                .setLocalOnly(true)
+                .build();
+
+        startForeground(1, notification);
     }
 
     private void processIntentAndWebHead(Intent intent) {
@@ -169,28 +157,20 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     }
 
     private void addWebHead(final String webHeadUrl, boolean isNewTab) {
-        final WebHead webHead = new WebHead(/*Service*/ this, webHeadUrl,/*Interaction listener*/ this);
-        webHead.setFromNewTab(isNewTab);
-        mWebHeads.put(webHeadUrl, webHead);
-        // Before adding new web heads, call move self to stack distance on existing web heads to move
-        // them a little such that they appear to be stacked
-        final AnimatorSet animatorSet = new AnimatorSet();
-        List<Animator> animators = new LinkedList<>();
-        for (WebHead webhead : mWebHeads.values()) {
-            Animator anim = webhead.getStackDistanceAnimator();
-            if (anim != null) animators.add(anim);
-        }
-        animatorSet.playTogether(animators);
-        animatorSet.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                //noinspection ConstantConditions
-                if (webHead != null) webHead.reveal();
-            }
-        });
-        animatorSet.start();
-
         PageExtractTasksManager.startExtraction(webHeadUrl);
+
+        final WebHead newWebHead = new WebHead(/*Service*/ this, webHeadUrl, /*listener*/ this);
+        newWebHead.setFromNewTab(isNewTab);
+
+        mSpringChain2D.setMasterSprings(newWebHead.getXSpring(), newWebHead.getYSpring());
+
+        for (WebHead oldWebHead : mWebHeads.values()) {
+            oldWebHead.setMaster(false);
+            oldWebHead.setSpringConfig(SpringConfigs.ATTACHMENT);
+            mSpringChain2D.addSlaveSprings(oldWebHead.getXSpring(), oldWebHead.getYSpring());
+        }
+        newWebHead.reveal();
+        mWebHeads.put(webHeadUrl, newWebHead);
     }
 
     @Override
@@ -237,32 +217,12 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
         }
     }
 
-    private void showNotification() {
-        final PendingIntent contentIntent = PendingIntent.getBroadcast(this,
-                0,
-                new Intent(Constants.ACTION_STOP_WEBHEAD_SERVICE),
-                PendingIntent.FLAG_UPDATE_CURRENT);
-
-        final Notification notification = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_chromer_notification)
-                .setPriority(NotificationCompat.PRIORITY_MIN)
-                .setContentText(getString(R.string.tap_close_all))
-                .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
-                .setContentTitle(getString(R.string.web_heads_service))
-                .setContentIntent(contentIntent)
-                .setAutoCancel(false)
-                .setLocalOnly(true)
-                .build();
-
-        startForeground(1, notification);
-    }
-
     @SuppressWarnings("unused")
     private void addTestWebHeads() {
         //addWebHead("http://www.medium.com");
         //addWebHead("https://www.linkedin.com/");
         addWebHead("http://www.github.com", false);
-        // addWebHead("http://www.androidpolice.com");
+        addWebHead("http://www.androidpolice.com", false);
         // addWebHead("https://bitbucket.org/");
     }
 
@@ -450,6 +410,16 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
     }
 
     @Override
+    public void onMasterWebHeadMoved(int x, int y) {
+        mSpringChain2D.performMove(x, y);
+    }
+
+    @Override
+    public Spring newSpring() {
+        return mSpringSystem.createSpring();
+    }
+
+    @Override
     public void onDestroy() {
         Timber.d("Exiting webhead service");
         removeWebHeads();
@@ -459,7 +429,9 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
 
         unregisterReceivers();
 
-        if (mCustomTabManager != null) mCustomTabManager.unbindCustomTabsService(this);
+        if (mCustomTabManager != null) {
+            mCustomTabManager.unbindCustomTabsService(this);
+        }
 
         stopForeground(true);
         RemoveWebHead.destroy();
@@ -509,6 +481,45 @@ public class WebHeadService extends Service implements WebHead.WebHeadInteractio
                     break;
             }
         }
-
     }
+
+    private void registerReceivers() {
+        final IntentFilter filter = new IntentFilter();
+        filter.addAction(Constants.ACTION_WEBHEAD_COLOR_SET);
+        filter.addAction(Constants.ACTION_REBIND_WEBHEAD_TAB_CONNECTION);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mLocalReceiver, filter);
+        registerReceiver(mStopServiceReceiver, new IntentFilter(Constants.ACTION_STOP_WEBHEAD_SERVICE));
+    }
+
+    private void unregisterReceivers() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mLocalReceiver);
+        unregisterReceiver(mStopServiceReceiver);
+    }
+
+    private final BroadcastReceiver mLocalReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch (intent.getAction()) {
+                case Constants.ACTION_REBIND_WEBHEAD_TAB_CONNECTION:
+                    final boolean shouldRebind = intent.getBooleanExtra(Constants.EXTRA_KEY_REBIND_WEBHEAD_CXN, false);
+                    if (shouldRebind) {
+                        bindToCustomTabSession();
+                    }
+                    break;
+                case Constants.ACTION_WEBHEAD_COLOR_SET:
+                    final int webHeadColor = intent.getIntExtra(Constants.EXTRA_KEY_WEBHEAD_COLOR, Constants.NO_COLOR);
+                    if (webHeadColor != Constants.NO_COLOR) {
+                        updateWebHeadColors(webHeadColor);
+                    }
+                    break;
+            }
+        }
+    };
+
+    private final BroadcastReceiver mStopServiceReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            stopSelf();
+        }
+    };
 }
