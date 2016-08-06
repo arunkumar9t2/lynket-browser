@@ -22,8 +22,8 @@ import com.facebook.rebound.SpringListener;
 import arun.com.chromer.BuildConfig;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.util.Util;
-import arun.com.chromer.webheads.SpringConfigs;
 import arun.com.chromer.webheads.physics.MovementTracker;
+import arun.com.chromer.webheads.physics.SpringConfigs;
 import timber.log.Timber;
 
 /**

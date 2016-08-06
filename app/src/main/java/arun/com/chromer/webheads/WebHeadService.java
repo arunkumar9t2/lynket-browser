@@ -37,6 +37,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.facebook.rebound.Spring;
+import com.facebook.rebound.SpringConfig;
 import com.facebook.rebound.SpringSystem;
 
 import java.util.ArrayList;
@@ -164,10 +165,12 @@ public class WebHeadService extends Service implements WebHead.WebHeadContract,
 
         mSpringChain2D.setMasterSprings(newWebHead.getXSpring(), newWebHead.getYSpring());
 
+        int index = mWebHeads.values().size();
         for (WebHead oldWebHead : mWebHeads.values()) {
             oldWebHead.setMaster(false);
-            oldWebHead.setSpringConfig(SpringConfigs.ATTACHMENT);
+            oldWebHead.setSpringConfig(SpringConfig.fromOrigamiTensionAndFriction(90, 9 + (index * 5)));
             mSpringChain2D.addSlaveSprings(oldWebHead.getXSpring(), oldWebHead.getYSpring());
+            index--;
         }
         newWebHead.reveal();
         mWebHeads.put(webHeadUrl, newWebHead);
