@@ -1,6 +1,9 @@
 package arun.com.chromer.webheads.physics;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.DisplayMetrics;
+import android.view.WindowManager;
 
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringListener;
@@ -22,13 +25,19 @@ public class SpringChain2D implements SpringListener {
     private Spring mXMasterSpring;
     private Spring mYMasterSpring;
 
+    private int sDispWidth;
+
     private final int DIFF = Util.dpToPx(4);
 
-    private SpringChain2D() {
+    private SpringChain2D(int dispWidth) {
+        this.sDispWidth = dispWidth;
     }
 
-    public static SpringChain2D create() {
-        return new SpringChain2D();
+    public static SpringChain2D create(Context context) {
+        final DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        return new SpringChain2D(metrics.widthPixels);
     }
 
     public void setMasterSprings(@NonNull Spring xMaster, @NonNull Spring yMaster) {
@@ -55,11 +64,20 @@ public class SpringChain2D implements SpringListener {
     public void performMove(int masterX, int masterY) {
         int displacement = 0;
         Iterator lit = mXSprings.descendingIterator();
-        while (lit.hasNext()) {
-            final Spring s = (Spring) lit.next();
-            displacement += DIFF;
-            s.setEndValue(masterX + displacement);
+        if (isRight(masterX)) {
+            while (lit.hasNext()) {
+                final Spring s = (Spring) lit.next();
+                displacement += DIFF;
+                s.setEndValue(masterX + displacement);
+            }
+        } else {
+            while (lit.hasNext()) {
+                final Spring s = (Spring) lit.next();
+                displacement -= DIFF;
+                s.setEndValue(masterX + displacement);
+            }
         }
+
         displacement = 0;
         lit = mYSprings.descendingIterator();
         while (lit.hasNext()) {
@@ -67,6 +85,15 @@ public class SpringChain2D implements SpringListener {
             displacement += DIFF;
             s.setEndValue(masterY + displacement);
         }
+    }
+
+    /**
+     * Used to determine if the given pixel is to the left or the right of the screen.
+     *
+     * @return true if right
+     */
+    private boolean isRight(int x) {
+        return x > (sDispWidth / 2);
     }
 
     @Override

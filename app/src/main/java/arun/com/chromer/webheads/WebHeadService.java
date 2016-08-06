@@ -80,12 +80,9 @@ public class WebHeadService extends Service implements WebHead.WebHeadContract,
     /**
      * Clubbed movement manager
      */
-    private final SpringChain2D mSpringChain2D = SpringChain2D.create();
+    private SpringChain2D mSpringChain2D;
 
     private boolean mCustomTabConnected;
-
-    public WebHeadService() {
-    }
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -102,6 +99,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadContract,
                 return;
             }
         }
+        mSpringChain2D = SpringChain2D.create(this);
         RemoveWebHead.get(this);
 
         // bind to custom tab session
