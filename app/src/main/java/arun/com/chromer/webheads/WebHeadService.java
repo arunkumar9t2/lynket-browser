@@ -170,6 +170,8 @@ public class WebHeadService extends Service implements WebHead.WebHeadContract,
             mSpringChain2D.addSlaveSprings(oldWebHead.getXSpring(), oldWebHead.getYSpring());
             index--;
         }
+        mSpringChain2D.rest();
+        
         newWebHead.reveal();
         mWebHeads.put(webHeadUrl, newWebHead);
     }
@@ -423,6 +425,8 @@ public class WebHeadService extends Service implements WebHead.WebHeadContract,
     @Override
     public void onDestroy() {
         Timber.d("Exiting webhead service");
+        WebHead.clearMasterPosition();
+
         removeWebHeads();
 
         PageExtractTasksManager.cancelAll(true);

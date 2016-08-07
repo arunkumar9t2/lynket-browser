@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -18,12 +17,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -79,9 +76,7 @@ public abstract class BaseWebHead extends FrameLayout {
      * Butter knife un binder to release references;
      */
     private Unbinder mUnBinder;
-    /**
-     * Integer to keep track of web head creation order.
-     */
+
     @BindView(R.id.favicon)
     protected ImageView mFavicon;
     @BindView(R.id.indicator)
@@ -129,6 +124,8 @@ public abstract class BaseWebHead extends FrameLayout {
      */
     boolean mMaster = false;
 
+    private boolean mSpawnSet = false;
+
     private static int masterX;
     private static int masterY;
 
@@ -152,7 +149,6 @@ public abstract class BaseWebHead extends FrameLayout {
         mWindowParams.gravity = Gravity.TOP | Gravity.LEFT;
 
         initDisplayMetrics();
-        setSpawnLocation();
 
         WEB_HEAD_COUNT++;
 
@@ -192,43 +188,41 @@ public abstract class BaseWebHead extends FrameLayout {
         sWindowManager.getDefaultDisplay().getMetrics(metrics);
         sDispWidth = metrics.widthPixels;
         sDispHeight = metrics.heightPixels;
-
-        mWindowParams.y = sDispHeight / 3;
     }
 
-    /**
-     * Listens for layout events and once width is measured, sets the initial spawn location based on
-     * user preference
-     */
-    private void setSpawnLocation() {
-        getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @SuppressLint("RtlHardcoded")
-            @Override
-            public void onGlobalLayout() {
-                getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                if (sScreenBounds == null)
-                    sScreenBounds = new ScreenBounds(sDispWidth, sDispHeight, getWidth());
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        if (!mSpawnSet) {
+            int x, y;
 
-                if (masterX != 0 || masterY != 0) {
-                    mWindowParams.x = masterX;
-                    mWindowParams.y = masterY;
+            y = sDispHeight / 3;
+
+            if (sScreenBounds == null)
+                sScreenBounds = new ScreenBounds(sDispWidth, sDispHeight, w);
+
+            if (masterX != 0 || masterY != 0) {
+                x = masterX;
+                y = masterY;
+            } else {
+                if (Preferences.webHeadsSpawnLocation(getContext()) == 1) {
+                    x = sScreenBounds.right;
                 } else {
-                    if (Preferences.webHeadsSpawnLocation(getContext()) == 1) {
-                        mWindowParams.x = sScreenBounds.right;
-                    } else {
-                        mWindowParams.x = sScreenBounds.left;
-                    }
+                    x = sScreenBounds.left;
                 }
-                updateView();
-                onNewMasterPositionSet();
             }
-        });
+            mSpawnSet = true;
+            onSpawnLocationSet(x, y);
+        }
     }
 
     /**
      * Event for sub class to get notified once spawn location is set.
+     *
+     * @param x
+     * @param y
      */
-    protected abstract void onNewMasterPositionSet();
+    protected abstract void onSpawnLocationSet(int x, int y);
 
     /**
      * Initializes web head from user preferences
@@ -271,6 +265,11 @@ public abstract class BaseWebHead extends FrameLayout {
         return WEB_HEAD_COUNT == 0;
     }
 
+    public static void clearMasterPosition() {
+        masterY = 0;
+        masterX = 0;
+    }
+
     private void setWebHeadElevation(int elevationPX) {
         if (Util.isLollipopAbove()) {
             if (mCircleBackground != null && mRevealView != null) {
@@ -278,23 +277,6 @@ public abstract class BaseWebHead extends FrameLayout {
                 mRevealView.setElevation(elevationPX + 1);
             }
         }
-    }
-
-    @Nullable
-    public ValueAnimator getStackDistanceAnimator() {
-        ValueAnimator animator = null;
-        if (!mUserManuallyMoved) {
-            animator = ValueAnimator.ofInt(mWindowParams.y, mWindowParams.y + STACKING_GAP_PX);
-            animator.setInterpolator(new FastOutLinearInInterpolator());
-            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    mWindowParams.y = (int) animation.getAnimatedValue();
-                    updateView();
-                }
-            });
-        }
-        return animator;
     }
 
     @NonNull

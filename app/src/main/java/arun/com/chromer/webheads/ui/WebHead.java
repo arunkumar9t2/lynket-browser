@@ -357,7 +357,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
     private void checkBounds() {
         // Only check when free
-        if (mDragging) {
+        if (mDragging || sScreenBounds == null || !mMaster) {
             return;
         }
 
@@ -426,11 +426,9 @@ public class WebHead extends BaseWebHead implements SpringListener {
     }
 
     @Override
-    protected void onNewMasterPositionSet() {
-        // TODO As soon as new master is added, we should update spring chain with the new position.
-        /*if (mMaster) {
-            mContract.onMasterWebHeadMoved(masterX, masterX);
-        }*/
+    protected void onSpawnLocationSet(int x, int y) {
+        mXSpring.setCurrentValue(x);
+        mYSpring.setCurrentValue(y);
     }
 
     @Override
