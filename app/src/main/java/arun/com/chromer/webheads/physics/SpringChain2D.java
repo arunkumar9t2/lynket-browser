@@ -41,12 +41,15 @@ public class SpringChain2D implements SpringListener {
     }
 
     public void setMasterSprings(@NonNull Spring xMaster, @NonNull Spring yMaster) {
-        mXSprings.clear();
-        mYSprings.clear();
         mXMasterSpring = xMaster;
         mYMasterSpring = yMaster;
         mXMasterSpring.addListener(this);
         mYMasterSpring.addListener(this);
+    }
+
+    public void clear() {
+        mXSprings.clear();
+        mYSprings.clear();
     }
 
     public void addSlaveSprings(@NonNull Spring xSpring, @NonNull Spring ySpring) {

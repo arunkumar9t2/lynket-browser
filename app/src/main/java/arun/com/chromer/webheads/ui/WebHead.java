@@ -181,6 +181,11 @@ public class WebHead extends BaseWebHead implements SpringListener {
         posX = event.getRawX();
         posY = event.getRawY();
 
+        if (mMaster) {
+            masterDownX = (int) posX;
+            masterDownY = (int) posY;
+        }
+
         touchDown();
     }
 
@@ -419,6 +424,15 @@ public class WebHead extends BaseWebHead implements SpringListener {
         }
     }
 
+    /**
+     * Method to move the current web head to wherever the last master was.
+     */
+    public void goToMasterTouchDownPoint() {
+        setSpringConfig(SpringConfigs.FLING);
+        mXSpring.setEndValue(masterDownX);
+        mYSpring.setEndValue(masterDownY);
+    }
+
     @Override
     protected void onMasterChanged(boolean master) {
         final String result = master ? "master" : "slave";
@@ -488,7 +502,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
         final Animator reveal = getRevealInAnimator(mDeleteColor);
         mCircleBackground
                 .animate()
-                .setDuration(200)
+                .setDuration(50)
                 .withLayer()
                 .translationZ(0)
                 .z(0)
@@ -649,4 +663,8 @@ public class WebHead extends BaseWebHead implements SpringListener {
         }
     }
 
+    @Override
+    public String toString() {
+        return "Webhead " + getUrl() + "master: " + String.valueOf(isMaster());
+    }
 }

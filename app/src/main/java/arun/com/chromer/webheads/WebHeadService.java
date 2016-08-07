@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Stack;
 
@@ -157,6 +158,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadContract,
 
     private void addWebHead(final String webHeadUrl, boolean isNewTab) {
         PageExtractTasksManager.startExtraction(webHeadUrl);
+        mSpringChain2D.clear();
 
         final WebHead newWebHead = new WebHead(/*Service*/ this, webHeadUrl, /*listener*/ this);
         newWebHead.setFromNewTab(isNewTab);
@@ -171,7 +173,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadContract,
             index--;
         }
         mSpringChain2D.rest();
-        
+
         newWebHead.reveal();
         mWebHeads.put(webHeadUrl, newWebHead);
     }
@@ -357,6 +359,23 @@ public class WebHeadService extends Service implements WebHead.WebHeadContract,
         animatorSet.start();
     }
 
+    private void updateSpringChain() {
+        mSpringChain2D.rest();
+        mSpringChain2D.clear();
+        int index = mWebHeads.values().size();
+        for (WebHead webHead : mWebHeads.values()) {
+            if (webHead != null) {
+                if (webHead.isMaster()) {
+                    mSpringChain2D.setMasterSprings(webHead.getXSpring(), webHead.getYSpring());
+                } else {
+                    webHead.setSpringConfig(SpringConfig.fromOrigamiTensionAndFriction(90, 9 + (index * 5)));
+                    mSpringChain2D.addSlaveSprings(webHead.getXSpring(), webHead.getYSpring());
+                    index--;
+                }
+            }
+        }
+    }
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onWebHeadClick(@NonNull WebHead webHead) {
@@ -390,7 +409,9 @@ public class WebHeadService extends Service implements WebHead.WebHeadContract,
 
     @Override
     public void onWebHeadDestroyed(@NonNull WebHead webHead, boolean isLastWebHead) {
+        webHead.setMaster(false);
         mWebHeads.remove(webHead.getUrl());
+
         if (isLastWebHead) {
             // animate remove web head before killing this service
             final ViewPropertyAnimator animator = RemoveWebHead.get(this).destroyAnimator();
@@ -406,9 +427,26 @@ public class WebHeadService extends Service implements WebHead.WebHeadContract,
                 animator.start();
             }
         } else {
+            selectNextMaster();
             // Now that this web head is destroyed, with this web head as the reference prepare the
             // other urls
             prepareNextSetOfUrls(webHead.getUrl());
+        }
+    }
+
+    private void selectNextMaster() {
+        final ListIterator<String> it = new ArrayList<>(mWebHeads.keySet()).listIterator(mWebHeads.size());
+
+        //noinspection LoopStatementThatDoesntLoop
+        while (it.hasPrevious()) {
+            final String key = it.previous();
+            final WebHead toBeMaster = mWebHeads.get(key);
+            if (toBeMaster != null) {
+                toBeMaster.setMaster(true);
+                updateSpringChain();
+                toBeMaster.goToMasterTouchDownPoint();
+            }
+            break;
         }
     }
 

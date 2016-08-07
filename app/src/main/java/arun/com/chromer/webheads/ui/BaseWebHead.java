@@ -45,9 +45,10 @@ import timber.log.Timber;
  */
 public abstract class BaseWebHead extends FrameLayout {
     /**
-     * Distance in pixels to be displaced when web heads are getting stacked
+     * Class variables to keep track of where the master was last touched down
      */
-    private static final int STACKING_GAP_PX = Util.dpToPx(6);
+    static int masterDownX;
+    static int masterDownY;
     /**
      * Helper instance to know screen boundaries that web head is allowed to travel
      */
@@ -61,6 +62,15 @@ public abstract class BaseWebHead extends FrameLayout {
      */
     private static WindowManager sWindowManager;
     /**
+     * X icon drawable used when closing
+     */
+    private static Drawable sXDrawable;
+    /**
+     * Class variables to keep track of master movements
+     */
+    private static int masterX;
+    private static int masterY;
+    /**
      * Window parameters used to track and update web heads post creation;
      */
     final WindowManager.LayoutParams mWindowParams;
@@ -72,11 +82,6 @@ public abstract class BaseWebHead extends FrameLayout {
      * The url of the website that this web head represents, not allowed to change
      */
     private final String mUrl;
-    /**
-     * Butter knife un binder to release references;
-     */
-    private Unbinder mUnBinder;
-
     @BindView(R.id.favicon)
     protected ImageView mFavicon;
     @BindView(R.id.indicator)
@@ -99,6 +104,14 @@ public abstract class BaseWebHead extends FrameLayout {
      */
     boolean mDestroyed;
     /**
+     * Master Wayne
+     */
+    boolean mMaster = false;
+    /**
+     * Butter knife un binder to release references;
+     */
+    private Unbinder mUnBinder;
+    /**
      * Color of the web head
      */
     @ColorInt
@@ -115,19 +128,7 @@ public abstract class BaseWebHead extends FrameLayout {
      * Flag to know if this web head was created for opening in new tab
      */
     private boolean mIsFromNewTab;
-    /**
-     * X icon drawable used when closing
-     */
-    private static Drawable sXDrawable;
-    /**
-     * Master Wayne
-     */
-    boolean mMaster = false;
-
     private boolean mSpawnSet = false;
-
-    private static int masterX;
-    private static int masterY;
 
     @SuppressLint("RtlHardcoded")
     BaseWebHead(@NonNull Context context, @NonNull String url) {
@@ -166,9 +167,9 @@ public abstract class BaseWebHead extends FrameLayout {
         }
     }
 
-    public void setMaster(boolean master) {
-        this.mMaster = master;
-        onMasterChanged(master);
+    public static void clearMasterPosition() {
+        masterY = 0;
+        masterX = 0;
     }
 
     protected abstract void onMasterChanged(boolean master);
@@ -193,13 +194,11 @@ public abstract class BaseWebHead extends FrameLayout {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
+        if (sScreenBounds == null)
+            sScreenBounds = new ScreenBounds(sDispWidth, sDispHeight, w);
+
         if (!mSpawnSet) {
-            int x, y;
-
-            y = sDispHeight / 3;
-
-            if (sScreenBounds == null)
-                sScreenBounds = new ScreenBounds(sDispWidth, sDispHeight, w);
+            int x, y = sDispHeight / 3;
 
             if (masterX != 0 || masterY != 0) {
                 x = masterX;
@@ -263,11 +262,6 @@ public abstract class BaseWebHead extends FrameLayout {
      */
     boolean isLastWebHead() {
         return WEB_HEAD_COUNT == 0;
-    }
-
-    public static void clearMasterPosition() {
-        masterY = 0;
-        masterX = 0;
     }
 
     private void setWebHeadElevation(int elevationPX) {
@@ -489,6 +483,15 @@ public abstract class BaseWebHead extends FrameLayout {
                 sWindowManager.removeView(this);
             } catch (Exception ignored) {
             }
+    }
+
+    public boolean isMaster() {
+        return mMaster;
+    }
+
+    public void setMaster(boolean master) {
+        this.mMaster = master;
+        onMasterChanged(master);
     }
 
     /**
