@@ -27,7 +27,8 @@ public class SpringChain2D implements SpringListener {
 
     private final int sDispWidth;
 
-    private final int DIFF = Util.dpToPx(4);
+    private static final int xDiff = Util.dpToPx(4);
+    private static final int yDiff = Util.dpToPx(2);
 
     private SpringChain2D(int dispWidth) {
         this.sDispWidth = dispWidth;
@@ -83,9 +84,9 @@ public class SpringChain2D implements SpringListener {
         while (lit.hasNext()) {
             final Spring s = (Spring) lit.next();
             if (isRight(masterX)) {
-                displacement += DIFF;
+                displacement += xDiff;
             } else {
-                displacement -= DIFF;
+                displacement -= xDiff;
             }
             s.setEndValue(masterX + displacement);
         }
@@ -94,7 +95,7 @@ public class SpringChain2D implements SpringListener {
         lit = mYSprings.descendingIterator();
         while (lit.hasNext()) {
             final Spring s = (Spring) lit.next();
-            displacement += DIFF;
+            displacement += yDiff;
             s.setEndValue(masterY + displacement);
         }
     }
