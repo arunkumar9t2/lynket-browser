@@ -58,10 +58,11 @@ import arun.com.chromer.webheads.physics.SpringChain2D;
 import arun.com.chromer.webheads.tasks.PageExtractTasksManager;
 import arun.com.chromer.webheads.ui.RemoveWebHead;
 import arun.com.chromer.webheads.ui.WebHead;
+import arun.com.chromer.webheads.ui.WebHeadContract;
 import de.jetwick.snacktory.JResult;
 import timber.log.Timber;
 
-public class WebHeadService extends Service implements WebHead.WebHeadContract,
+public class WebHeadService extends Service implements WebHeadContract,
         CustomTabManager.ConnectionCallback, PageExtractTasksManager.ProgressListener {
 
     private static String sLastOpenedUrl = "";
@@ -107,6 +108,27 @@ public class WebHeadService extends Service implements WebHead.WebHeadContract,
         bindToCustomTabSession();
         registerReceivers();
         PageExtractTasksManager.registerListener(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        Timber.d("Exiting webhead service");
+        WebHead.clearMasterPosition();
+
+        removeWebHeads();
+
+        PageExtractTasksManager.cancelAll(true);
+        PageExtractTasksManager.unRegisterListener();
+
+        unregisterReceivers();
+
+        if (mCustomTabManager != null) {
+            mCustomTabManager.unbindCustomTabsService(this);
+        }
+
+        stopForeground(true);
+        RemoveWebHead.destroy();
+        super.onDestroy();
     }
 
     public static CustomTabsSession getTabSession() {
@@ -362,6 +384,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadContract,
     private void updateSpringChain() {
         mSpringChain2D.rest();
         mSpringChain2D.clear();
+        mSpringChain2D.enableDisplacement();
         int index = mWebHeads.values().size();
         for (WebHead webHead : mWebHeads.values()) {
             if (webHead != null) {
@@ -461,24 +484,13 @@ public class WebHeadService extends Service implements WebHead.WebHeadContract,
     }
 
     @Override
-    public void onDestroy() {
-        Timber.d("Exiting webhead service");
-        WebHead.clearMasterPosition();
+    public void onMasterLockedToRemove() {
+        mSpringChain2D.disableDisplacement();
+    }
 
-        removeWebHeads();
-
-        PageExtractTasksManager.cancelAll(true);
-        PageExtractTasksManager.unRegisterListener();
-
-        unregisterReceivers();
-
-        if (mCustomTabManager != null) {
-            mCustomTabManager.unbindCustomTabsService(this);
-        }
-
-        stopForeground(true);
-        RemoveWebHead.destroy();
-        super.onDestroy();
+    @Override
+    public void onMasterReleasedFromRemove() {
+        mSpringChain2D.enableDisplacement();
     }
 
     @Override

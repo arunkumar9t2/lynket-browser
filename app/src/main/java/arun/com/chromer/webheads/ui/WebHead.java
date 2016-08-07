@@ -291,9 +291,11 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
         if (dist(rX, rY, x, y) < RemoveWebHead.MAGNETISM_THRESHOLD) {
             mWasRemoveLocked = true;
+            mContract.onMasterLockedToRemove();
             return true;
         } else {
             mWasRemoveLocked = false;
+            mContract.onMasterReleasedFromRemove();
             return false;
         }
     }
@@ -560,16 +562,6 @@ public class WebHead extends BaseWebHead implements SpringListener {
     private void destroySprings() {
         mXSpring.destroy();
         mYSpring.destroy();
-    }
-
-    public interface WebHeadContract {
-        void onWebHeadClick(@NonNull WebHead webHead);
-
-        void onWebHeadDestroyed(@NonNull WebHead webHead, boolean isLastWebHead);
-
-        void onMasterWebHeadMoved(int x, int y);
-
-        Spring newSpring();
     }
 
     /**

@@ -30,6 +30,8 @@ public class SpringChain2D implements SpringListener {
     private static final int xDiff = Util.dpToPx(4);
     private static final int yDiff = Util.dpToPx(2);
 
+    private boolean mDisplacementEnabled = true;
+
     private SpringChain2D(int dispWidth) {
         this.sDispWidth = dispWidth;
     }
@@ -83,10 +85,12 @@ public class SpringChain2D implements SpringListener {
         Iterator lit = mXSprings.descendingIterator();
         while (lit.hasNext()) {
             final Spring s = (Spring) lit.next();
-            if (isRight(masterX)) {
-                displacement += xDiff;
-            } else {
-                displacement -= xDiff;
+            if (mDisplacementEnabled) {
+                if (isRight(masterX)) {
+                    displacement += xDiff;
+                } else {
+                    displacement -= xDiff;
+                }
             }
             s.setEndValue(masterX + displacement);
         }
@@ -95,7 +99,9 @@ public class SpringChain2D implements SpringListener {
         lit = mYSprings.descendingIterator();
         while (lit.hasNext()) {
             final Spring s = (Spring) lit.next();
-            displacement += yDiff;
+            if (mDisplacementEnabled) {
+                displacement += yDiff;
+            }
             s.setEndValue(masterY + displacement);
         }
     }
@@ -122,5 +128,13 @@ public class SpringChain2D implements SpringListener {
     @Override
     public void onSpringEndStateChange(Spring spring) {
 
+    }
+
+    public void disableDisplacement() {
+        mDisplacementEnabled = false;
+    }
+
+    public void enableDisplacement() {
+        mDisplacementEnabled = true;
     }
 }
