@@ -18,6 +18,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
+import android.text.SpannableString;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -36,7 +37,7 @@ import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Util;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
+import cn.nekocode.badge.BadgeDrawable;
 import timber.log.Timber;
 
 /**
@@ -44,11 +45,6 @@ import timber.log.Timber;
  * to UI like favicon, text indicator and is responsible for inflating all the content.
  */
 public abstract class BaseWebHead extends FrameLayout {
-    /**
-     * Class variables to keep track of where the master was last touched down
-     */
-    static int masterDownX;
-    static int masterDownY;
     /**
      * Helper instance to know screen boundaries that web head is allowed to travel
      */
@@ -65,11 +61,7 @@ public abstract class BaseWebHead extends FrameLayout {
      * X icon drawable used when closing
      */
     private static Drawable sXDrawable;
-    /**
-     * Class variables to keep track of master movements
-     */
-    private static int masterX;
-    private static int masterY;
+    int sDispWidth, sDispHeight;
     /**
      * Window parameters used to track and update web heads post creation;
      */
@@ -79,9 +71,10 @@ public abstract class BaseWebHead extends FrameLayout {
      */
     final int mDeleteColor;
     /**
-     * The url of the website that this web head represents, not allowed to change
+     * The content view group which host all our elements
      */
-    private final String mUrl;
+    FrameLayout mContentGroup;
+
     @BindView(R.id.favicon)
     protected ImageView mFavicon;
     @BindView(R.id.indicator)
@@ -90,11 +83,22 @@ public abstract class BaseWebHead extends FrameLayout {
     protected ElevatedCircleView mCircleBackground;
     @BindView(R.id.revealView)
     protected CircleView mRevealView;
+    @BindView(R.id.badge)
+    protected TextView mBadgeView;
+
+    private static BadgeDrawable sBadgeDrawable;
     /**
-     * The content view group which host all our elements
+     * The url of the website that this web head represents, not allowed to change
      */
-    FrameLayout mContentGroup;
-    int sDispWidth, sDispHeight;
+    private final String mUrl;
+    /**
+     * The un shortened url resolved from @link mUrl
+     */
+    private String mUnShortenedUrl;
+    /**
+     * Title of the website
+     */
+    private String mTitle;
     /**
      * Flag to know if the user moved manually or if the web heads is still resting
      */
@@ -106,33 +110,34 @@ public abstract class BaseWebHead extends FrameLayout {
     /**
      * Master Wayne
      */
-    boolean mMaster = false;
+    boolean mMaster;
     /**
-     * Butter knife un binder to release references;
+     * Flag to know if this web head was created for opening in new tab
      */
-    private Unbinder mUnBinder;
+    private boolean mIsFromNewTab;
+
+    private boolean mSpawnSet;
     /**
      * Color of the web head
      */
     @ColorInt
     private int mWebHeadColor;
     /**
-     * The un shortened url resolved from @link mUrl
+     * Class variables to keep track of where the master was last touched down
      */
-    private String mUnShortenedUrl;
+    static int masterDownX;
+    static int masterDownY;
     /**
-     * Title of the website
+     * Class variables to keep track of master movements
      */
-    private String mTitle;
-    /**
-     * Flag to know if this web head was created for opening in new tab
-     */
-    private boolean mIsFromNewTab;
-    private boolean mSpawnSet = false;
+    private static int masterX;
+    private static int masterY;
 
     @SuppressLint("RtlHardcoded")
     BaseWebHead(@NonNull Context context, @NonNull String url) {
         super(context);
+        WEB_HEAD_COUNT++;
+
         mUrl = url;
         sWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 
@@ -151,14 +156,15 @@ public abstract class BaseWebHead extends FrameLayout {
 
         initDisplayMetrics();
 
-        WEB_HEAD_COUNT++;
-
         sWindowManager.addView(this, mWindowParams);
 
-        sXDrawable = new IconicsDrawable(context)
-                .icon(CommunityMaterial.Icon.cmd_close)
-                .color(Color.WHITE)
-                .sizeDp(18);
+        if (sXDrawable == null) {
+            sXDrawable = new IconicsDrawable(context)
+                    .icon(CommunityMaterial.Icon.cmd_close)
+                    .color(Color.WHITE)
+                    .sizeDp(18);
+        }
+
         mDeleteColor = ContextCompat.getColor(context, R.color.remove_web_head_color);
 
         // Needed to prevent overly dark shadow.
@@ -181,7 +187,7 @@ public abstract class BaseWebHead extends FrameLayout {
         } else
             mContentGroup = (FrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.web_head_layout, this, false);
         addView(mContentGroup);
-        mUnBinder = ButterKnife.bind(this);
+        ButterKnife.bind(this);
     }
 
     private void initDisplayMetrics() {
@@ -231,6 +237,19 @@ public abstract class BaseWebHead extends FrameLayout {
         mIndicator.setText(Util.getFirstLetter(mUrl));
         mIndicator.setTextColor(ColorUtil.getForegroundWhiteOrBlack(mWebHeadColor));
         initRevealView(mWebHeadColor);
+
+        if (sBadgeDrawable == null) {
+            sBadgeDrawable = new BadgeDrawable.Builder()
+                    .type(BadgeDrawable.TYPE_NUMBER)
+                    .badgeColor(ContextCompat.getColor(getContext(), R.color.accent))
+                    .textColor(Color.WHITE)
+                    .number(WEB_HEAD_COUNT)
+                    .build();
+        } else {
+            sBadgeDrawable.setNumber(WEB_HEAD_COUNT);
+        }
+        mBadgeView.setVisibility(VISIBLE);
+        mBadgeView.setText(new SpannableString(sBadgeDrawable.toSpannable()));
     }
 
     /**
@@ -467,12 +486,6 @@ public abstract class BaseWebHead extends FrameLayout {
         mIsFromNewTab = fromNewTab;
     }
 
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        // mUnBinder.unbind();
-    }
-
     @SuppressWarnings("UnusedParameters")
     void destroySelf(boolean receiveCallback) {
         mDestroyed = true;
@@ -491,6 +504,12 @@ public abstract class BaseWebHead extends FrameLayout {
 
     public void setMaster(boolean master) {
         this.mMaster = master;
+        if (!master) {
+            mBadgeView.setVisibility(INVISIBLE);
+        } else {
+            mBadgeView.setVisibility(VISIBLE);
+            sBadgeDrawable.setNumber(WEB_HEAD_COUNT);
+        }
         onMasterChanged(master);
     }
 

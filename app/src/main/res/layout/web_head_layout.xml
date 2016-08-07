@@ -46,4 +46,15 @@
         android:scaleType="fitCenter"
         android:visibility="invisible"
         tools:ignore="ContentDescription,UnusedAttribute"/>
+
+    <TextView
+        android:id="@+id/badge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|left"
+        android:elevation="9.4dp"
+        android:gravity="center"
+        android:scaleType="fitCenter"
+        android:visibility="invisible"
+        tools:ignore="ContentDescription,UnusedAttribute"/>
 </FrameLayout>

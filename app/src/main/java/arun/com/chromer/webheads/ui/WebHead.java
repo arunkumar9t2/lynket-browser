@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -346,7 +347,19 @@ public class WebHead extends BaseWebHead implements SpringListener {
         if (mMaster) {
             mContract.onMasterWebHeadMoved(mWindowParams.x, mWindowParams.y);
             checkBounds();
+            updateBadgeLocation();
         }
+    }
+
+    @SuppressLint("RtlHardcoded")
+    private void updateBadgeLocation() {
+        final LayoutParams params = (LayoutParams) mBadgeView.getLayoutParams();
+        if (mWindowParams.x > sDispWidth / 2) {
+            params.gravity = Gravity.TOP | Gravity.LEFT;
+        } else {
+            params.gravity = Gravity.TOP | Gravity.RIGHT;
+        }
+        mBadgeView.setLayoutParams(params);
     }
 
     @Override
@@ -439,6 +452,9 @@ public class WebHead extends BaseWebHead implements SpringListener {
     protected void onMasterChanged(boolean master) {
         final String result = master ? "master" : "slave";
         Timber.d("%s became %s", getUrl(), result);
+        if (master) {
+            updateBadgeLocation();
+        }
     }
 
     @Override

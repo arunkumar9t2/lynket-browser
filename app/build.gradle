@@ -70,6 +70,8 @@ dependencies {
     compile 'com.facebook.rebound:rebound:0.3.8'
 
     compile 'org.jsoup:jsoup:1.9.2'
+
+    compile 'com.github.nekocode:Badge:1.2'
 }
 
 def getBase64() {
