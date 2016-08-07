@@ -25,7 +25,7 @@ public class SpringChain2D implements SpringListener {
     private Spring mXMasterSpring;
     private Spring mYMasterSpring;
 
-    private int sDispWidth;
+    private final int sDispWidth;
 
     private final int DIFF = Util.dpToPx(4);
 
@@ -58,10 +58,10 @@ public class SpringChain2D implements SpringListener {
     public void onSpringUpdate(Spring spring) {
         final int masterX = (int) mXMasterSpring.getCurrentValue();
         final int masterY = (int) mYMasterSpring.getCurrentValue();
-        performMove(masterX, masterY);
+        performGroupMove(masterX, masterY);
     }
 
-    public void performMove(int masterX, int masterY) {
+    public void performGroupMove(int masterX, int masterY) {
         int displacement = 0;
         Iterator lit = mXSprings.descendingIterator();
         if (isRight(masterX)) {

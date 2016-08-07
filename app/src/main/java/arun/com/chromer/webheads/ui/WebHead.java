@@ -337,8 +337,8 @@ public class WebHead extends BaseWebHead implements SpringListener {
         mWindowParams.y = (int) mYSpring.getCurrentValue();
         updateView();
         if (mMaster) {
-            checkBounds();
             mContract.onMasterWebHeadMoved(mWindowParams.x, mWindowParams.y);
+            checkBounds();
         }
     }
 
@@ -426,10 +426,11 @@ public class WebHead extends BaseWebHead implements SpringListener {
     }
 
     @Override
-    protected void onSpawnLocationSet() {
-        if (mMaster) {
-            mContract.onMasterWebHeadMoved(mWindowParams.x, mWindowParams.y);
-        }
+    protected void onNewMasterPositionSet() {
+        // TODO As soon as new master is added, we should update spring chain with the new position.
+        /*if (mMaster) {
+            mContract.onMasterWebHeadMoved(masterX, masterX);
+        }*/
     }
 
     @Override

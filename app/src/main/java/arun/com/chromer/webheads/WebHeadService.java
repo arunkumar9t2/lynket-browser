@@ -412,7 +412,7 @@ public class WebHeadService extends Service implements WebHead.WebHeadContract,
 
     @Override
     public void onMasterWebHeadMoved(int x, int y) {
-        mSpringChain2D.performMove(x, y);
+        mSpringChain2D.performGroupMove(x, y);
     }
 
     @Override

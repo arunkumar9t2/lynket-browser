@@ -129,6 +129,9 @@ public abstract class BaseWebHead extends FrameLayout {
      */
     boolean mMaster = false;
 
+    private static int masterX;
+    private static int masterY;
+
     @SuppressLint("RtlHardcoded")
     BaseWebHead(@NonNull Context context, @NonNull String url) {
         super(context);
@@ -160,6 +163,11 @@ public abstract class BaseWebHead extends FrameLayout {
                 .color(Color.WHITE)
                 .sizeDp(18);
         mDeleteColor = ContextCompat.getColor(context, R.color.remove_web_head_color);
+
+        // Needed to prevent overly dark shadow.
+        if (WEB_HEAD_COUNT > 2) {
+            setWebHeadElevation(Util.dpToPx(4));
+        }
     }
 
     public void setMaster(boolean master) {
@@ -197,18 +205,22 @@ public abstract class BaseWebHead extends FrameLayout {
             @SuppressLint("RtlHardcoded")
             @Override
             public void onGlobalLayout() {
+                getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 if (sScreenBounds == null)
                     sScreenBounds = new ScreenBounds(sDispWidth, sDispHeight, getWidth());
 
-                getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-                if (Preferences.webHeadsSpawnLocation(getContext()) == 1) {
-                    mWindowParams.x = sScreenBounds.right;
+                if (masterX != 0 || masterY != 0) {
+                    mWindowParams.x = masterX;
+                    mWindowParams.y = masterY;
                 } else {
-                    mWindowParams.x = sScreenBounds.left;
+                    if (Preferences.webHeadsSpawnLocation(getContext()) == 1) {
+                        mWindowParams.x = sScreenBounds.right;
+                    } else {
+                        mWindowParams.x = sScreenBounds.left;
+                    }
                 }
-                onSpawnLocationSet();
                 updateView();
+                onNewMasterPositionSet();
             }
         });
     }
@@ -216,7 +228,7 @@ public abstract class BaseWebHead extends FrameLayout {
     /**
      * Event for sub class to get notified once spawn location is set.
      */
-    protected abstract void onSpawnLocationSet();
+    protected abstract void onNewMasterPositionSet();
 
     /**
      * Initializes web head from user preferences
@@ -242,6 +254,10 @@ public abstract class BaseWebHead extends FrameLayout {
      */
     void updateView() {
         try {
+            if (mMaster) {
+                masterX = mWindowParams.x;
+                masterY = mWindowParams.y;
+            }
             sWindowManager.updateViewLayout(this, mWindowParams);
         } catch (IllegalArgumentException e) {
             Timber.e("Update called after view was removed");
@@ -277,9 +293,6 @@ public abstract class BaseWebHead extends FrameLayout {
                     updateView();
                 }
             });
-            if (WEB_HEAD_COUNT > 2) {
-                setWebHeadElevation(Util.dpToPx(4));
-            }
         }
         return animator;
     }
