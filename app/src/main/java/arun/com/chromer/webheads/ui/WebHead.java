@@ -20,7 +20,11 @@ import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringConfig;
 import com.facebook.rebound.SpringListener;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import arun.com.chromer.BuildConfig;
+import arun.com.chromer.R;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.util.Util;
 import arun.com.chromer.webheads.physics.MovementTracker;
@@ -61,6 +65,10 @@ public class WebHead extends BaseWebHead implements SpringListener {
      */
     private boolean mScaledDown;
     /**
+     * If this is true, then on releasing the web head, we close all others and clean up.
+     */
+    private boolean mShouldCloseAll;
+    /**
      * Minimum horizontal velocity that we need to move the web head from one end of the screen
      * to another
      */
@@ -69,6 +77,10 @@ public class WebHead extends BaseWebHead implements SpringListener {
      * Touch slop of the device
      */
     private final int mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
+    /**
+     * Touch slop of the device
+     */
+    private final int mLongPressDuration = 1300;
     /**
      * Gesture detector to recognize fling and click on web heads
      */
@@ -90,6 +102,10 @@ public class WebHead extends BaseWebHead implements SpringListener {
      * The interaction listener that clients can provide to listen for events on webhead.
      */
     private final WebHeadContract mContract;
+
+    private static Timer sTimer = new Timer();
+    private static TimerTask sLongPressToCloseAllTask;
+    private static Toast sToast;
 
     /**
      * Inits the web head and attaches to the system window. It is assumed that draw over other apps permission is
@@ -190,6 +206,37 @@ public class WebHead extends BaseWebHead implements SpringListener {
         touchDown();
     }
 
+    private void scheduleLongPressToCloseTask() {
+        if (sLongPressToCloseAllTask != null) {
+            sLongPressToCloseAllTask.cancel();
+        }
+        sLongPressToCloseAllTask = new TimerTask() {
+            @Override
+            public void run() {
+                mShouldCloseAll = true;
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        cancelToast();
+                        sToast = Toast.makeText(getContext(), R.string.close_all_explanation, Toast.LENGTH_SHORT);
+                        sToast.setGravity(Gravity.CENTER, 0, 0);
+                        sToast.show();
+                    }
+                });
+            }
+        };
+        cancelTimer();
+        sTimer = new Timer();
+        sTimer.schedule(sLongPressToCloseAllTask, mLongPressDuration);
+    }
+
+    private void cancelTimer() {
+        if (sTimer != null) {
+            sTimer.cancel();
+            sTimer.purge();
+        }
+    }
+
     /**
      * Responsible for moving the web heads around and for locking/unlocking the web head to
      * remove view.
@@ -239,6 +286,13 @@ public class WebHead extends BaseWebHead implements SpringListener {
     }
 
     private boolean handleTouchUp() {
+        cancelToast();
+        if (mShouldCloseAll) {
+            sTimer.cancel();
+            sTimer.purge();
+            mContract.closeAll();
+            return true;
+        }
         if (mWasRemoveLocked) {
             // If head was locked onto a remove bubble before, then kill ourselves
             destroySelf(true);
@@ -255,6 +309,12 @@ public class WebHead extends BaseWebHead implements SpringListener {
         // hide remove view
         RemoveWebHead.disappear();
         return false;
+    }
+
+    private void cancelToast() {
+        if (sToast != null) {
+            sToast.cancel();
+        }
     }
 
     /**
@@ -294,9 +354,15 @@ public class WebHead extends BaseWebHead implements SpringListener {
             mWasRemoveLocked = true;
             mBadgeView.setVisibility(INVISIBLE);
             mContract.onMasterLockedToRemove();
+            scheduleLongPressToCloseTask();
             return true;
         } else {
             mWasRemoveLocked = false;
+            mShouldCloseAll = false;
+            cancelToast();
+            if (sLongPressToCloseAllTask != null) {
+                sLongPressToCloseAllTask.cancel();
+            }
             mBadgeView.setVisibility(VISIBLE);
             mContract.onMasterReleasedFromRemove();
             return false;

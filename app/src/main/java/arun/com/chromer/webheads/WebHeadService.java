@@ -516,6 +516,11 @@ public class WebHeadService extends Service implements WebHeadContract,
     }
 
     @Override
+    public void closeAll() {
+        stopSelf();
+    }
+
+    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Timber.d(newConfig.toString());

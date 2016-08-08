@@ -19,4 +19,6 @@ public interface WebHeadContract {
     void onMasterLockedToRemove();
 
     void onMasterReleasedFromRemove();
+
+    void closeAll();
 }
