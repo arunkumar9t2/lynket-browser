@@ -54,6 +54,11 @@ public abstract class BaseWebHead extends FrameLayout {
      */
     static int WEB_HEAD_COUNT = 0;
     /**
+     * Class variables to keep track of where the master was last touched down
+     */
+    static int masterDownX;
+    static int masterDownY;
+    /**
      * Static window manager instance to update, add and remove web heads
      */
     private static WindowManager sWindowManager;
@@ -61,7 +66,12 @@ public abstract class BaseWebHead extends FrameLayout {
      * X icon drawable used when closing
      */
     private static Drawable sXDrawable;
-    int sDispWidth, sDispHeight;
+    private static BadgeDrawable sBadgeDrawable;
+    /**
+     * Class variables to keep track of master movements
+     */
+    private static int masterX;
+    private static int masterY;
     /**
      * Window parameters used to track and update web heads post creation;
      */
@@ -71,9 +81,9 @@ public abstract class BaseWebHead extends FrameLayout {
      */
     final int mDeleteColor;
     /**
-     * The content view group which host all our elements
+     * The url of the website that this web head represents, not allowed to change
      */
-    FrameLayout mContentGroup;
+    private final String mUrl;
 
     @BindView(R.id.favicon)
     protected ImageView mFavicon;
@@ -86,19 +96,14 @@ public abstract class BaseWebHead extends FrameLayout {
     @BindView(R.id.badge)
     protected TextView mBadgeView;
 
-    private static BadgeDrawable sBadgeDrawable;
     /**
-     * The url of the website that this web head represents, not allowed to change
+     * Display dimensions
      */
-    private final String mUrl;
+    int sDispWidth, sDispHeight;
     /**
-     * The un shortened url resolved from @link mUrl
+     * The content view group which host all our elements
      */
-    private String mUnShortenedUrl;
-    /**
-     * Title of the website
-     */
-    private String mTitle;
+    FrameLayout mContentGroup;
     /**
      * Flag to know if the user moved manually or if the web heads is still resting
      */
@@ -112,26 +117,23 @@ public abstract class BaseWebHead extends FrameLayout {
      */
     boolean mMaster;
     /**
+     * The un shortened url resolved from @link mUrl
+     */
+    private String mUnShortenedUrl;
+    /**
+     * Title of the website
+     */
+    private String mTitle;
+    /**
      * Flag to know if this web head was created for opening in new tab
      */
     private boolean mIsFromNewTab;
-
     private boolean mSpawnSet;
     /**
      * Color of the web head
      */
     @ColorInt
     private int mWebHeadColor;
-    /**
-     * Class variables to keep track of where the master was last touched down
-     */
-    static int masterDownX;
-    static int masterDownY;
-    /**
-     * Class variables to keep track of master movements
-     */
-    private static int masterX;
-    private static int masterY;
 
     @SuppressLint("RtlHardcoded")
     BaseWebHead(@NonNull Context context, @NonNull String url) {
@@ -250,6 +252,7 @@ public abstract class BaseWebHead extends FrameLayout {
         }
         mBadgeView.setVisibility(VISIBLE);
         mBadgeView.setText(new SpannableString(sBadgeDrawable.toSpannable()));
+        updateBadgeColors(getWebHeadColor(true));
     }
 
     /**
@@ -308,6 +311,7 @@ public abstract class BaseWebHead extends FrameLayout {
             @Override
             public void onAnimationEnd(Animator animation) {
                 mWebHeadColor = newWebHeadColor;
+                updateBadgeColors(mWebHeadColor);
                 if (mIndicator != null && mCircleBackground != null && mRevealView != null) {
                     mCircleBackground.setColor(newWebHeadColor);
                     mIndicator.setTextColor(ColorUtil.getForegroundWhiteOrBlack(newWebHeadColor));
@@ -411,6 +415,13 @@ public abstract class BaseWebHead extends FrameLayout {
 
     public void setWebHeadColor(@ColorInt int webHeadColor) {
         getRevealAnimator(webHeadColor).start();
+    }
+
+    protected void updateBadgeColors(@ColorInt int webHeadColor) {
+        final int badgeColor = ColorUtil.getClosestAccentColor(webHeadColor);
+        sBadgeDrawable.setBadgeColor(badgeColor);
+        sBadgeDrawable.setTextColor(ColorUtil.getForegroundWhiteOrBlack(badgeColor));
+        mBadgeView.invalidate();
     }
 
     @NonNull

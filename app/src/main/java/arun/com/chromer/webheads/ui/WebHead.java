@@ -292,10 +292,12 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
         if (dist(rX, rY, x, y) < RemoveWebHead.MAGNETISM_THRESHOLD) {
             mWasRemoveLocked = true;
+            mBadgeView.setVisibility(INVISIBLE);
             mContract.onMasterLockedToRemove();
             return true;
         } else {
             mWasRemoveLocked = false;
+            mBadgeView.setVisibility(VISIBLE);
             mContract.onMasterReleasedFromRemove();
             return false;
         }
@@ -454,6 +456,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
         Timber.d("%s became %s", getUrl(), result);
         if (master) {
             updateBadgeLocation();
+            updateBadgeColors(getWebHeadColor(true));
         }
     }
 
