@@ -29,7 +29,7 @@ public class SpringChain2D implements SpringListener {
     private final int sDispWidth;
 
     private static final int xDiff = Util.dpToPx(4);
-    private static final int yDiff = Util.dpToPx(2);
+    private static final int yDiff = Util.dpToPx(1.7);
 
     private boolean mDisplacementEnabled = true;
 

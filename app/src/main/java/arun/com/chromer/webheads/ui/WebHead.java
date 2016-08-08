@@ -522,7 +522,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
         Timber.d("%s became %s", getUrl(), result);
         if (master) {
             updateBadgeLocation();
-            updateBadgeColors(getWebHeadColor(true));
+            updateBadgeColors(mWebHeadColor);
         }
     }
 

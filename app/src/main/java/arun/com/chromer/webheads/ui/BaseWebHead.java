@@ -137,7 +137,7 @@ public abstract class BaseWebHead extends FrameLayout {
      * Color of the web head
      */
     @ColorInt
-    private int mWebHeadColor;
+    int mWebHeadColor;
 
     @SuppressLint("RtlHardcoded")
     BaseWebHead(@NonNull Context context, @NonNull String url) {
@@ -256,7 +256,7 @@ public abstract class BaseWebHead extends FrameLayout {
         }
         mBadgeView.setVisibility(VISIBLE);
         mBadgeView.setText(new SpannableString(sBadgeDrawable.toSpannable()));
-        updateBadgeColors(getWebHeadColor(true));
+        updateBadgeColors(mWebHeadColor);
     }
 
     /**
