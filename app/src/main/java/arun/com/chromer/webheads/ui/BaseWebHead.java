@@ -117,6 +117,10 @@ public abstract class BaseWebHead extends FrameLayout {
      */
     boolean mMaster;
     /**
+     * If this web head is being queued to be displayed on screen.
+     */
+    boolean mInQueue;
+    /**
      * The un shortened url resolved from @link mUrl
      */
     private String mUnShortenedUrl;
@@ -520,8 +524,18 @@ public abstract class BaseWebHead extends FrameLayout {
         } else {
             mBadgeView.setVisibility(VISIBLE);
             sBadgeDrawable.setNumber(WEB_HEAD_COUNT);
+            setInQueue(false);
         }
         onMasterChanged(master);
+    }
+
+    public void setInQueue(boolean inQueue) {
+        this.mInQueue = inQueue;
+        if (inQueue) {
+            setVisibility(GONE);
+        } else {
+            setVisibility(VISIBLE);
+        }
     }
 
     /**

@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import arun.com.chromer.util.Util;
+import arun.com.chromer.webheads.WebHeadService;
 
 
 /**
@@ -56,8 +57,10 @@ public class SpringChain2D implements SpringListener {
     }
 
     public void addSlaveSprings(@NonNull Spring xSpring, @NonNull Spring ySpring) {
-        mXSprings.add(xSpring);
-        mYSprings.add(ySpring);
+        if (mXSprings.size() <= WebHeadService.MAX_VISIBLE_WEB_HEADS) {
+            mXSprings.add(xSpring);
+            mYSprings.add(ySpring);
+        }
     }
 
     @Override

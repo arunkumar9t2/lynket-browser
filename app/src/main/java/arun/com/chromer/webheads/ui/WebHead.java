@@ -135,7 +135,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // Don't react to any touch event and consume it when we are being destroyed
-        if (mDestroyed || !mMaster) return true;
+        if (mDestroyed || !mMaster || mInQueue) return true;
         try {
             // Reset gesture flag on each event
             mWasFlung = false;
@@ -379,7 +379,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
     private void checkBounds() {
         // Only check when free
-        if (mDragging || sScreenBounds == null || !mMaster) {
+        if (mDragging || sScreenBounds == null || !mMaster || mInQueue) {
             return;
         }
 

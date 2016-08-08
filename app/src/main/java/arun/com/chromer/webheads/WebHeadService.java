@@ -85,6 +85,10 @@ public class WebHeadService extends Service implements WebHeadContract,
     private SpringChain2D mSpringChain2D;
 
     private boolean mCustomTabConnected;
+    /**
+     * Max visible web heads is set 6 for performance reasons.
+     */
+    public static final int MAX_VISIBLE_WEB_HEADS = 5;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -190,14 +194,22 @@ public class WebHeadService extends Service implements WebHeadContract,
         int index = mWebHeads.values().size();
         for (WebHead oldWebHead : mWebHeads.values()) {
             oldWebHead.setMaster(false);
-            oldWebHead.setSpringConfig(SpringConfig.fromOrigamiTensionAndFriction(90, 9 + (index * 5)));
-            mSpringChain2D.addSlaveSprings(oldWebHead.getXSpring(), oldWebHead.getYSpring());
+            if (shouldQueue(index + 1)) {
+                oldWebHead.setInQueue(true);
+            } else {
+                oldWebHead.setSpringConfig(SpringConfig.fromOrigamiTensionAndFriction(90, 9 + (index * 5)));
+                mSpringChain2D.addSlaveSprings(oldWebHead.getXSpring(), oldWebHead.getYSpring());
+            }
             index--;
         }
         mSpringChain2D.rest();
 
         newWebHead.reveal();
         mWebHeads.put(webHeadUrl, newWebHead);
+    }
+
+    private boolean shouldQueue(int index) {
+        return index > MAX_VISIBLE_WEB_HEADS;
     }
 
     @Override
@@ -385,16 +397,27 @@ public class WebHeadService extends Service implements WebHeadContract,
         mSpringChain2D.rest();
         mSpringChain2D.clear();
         mSpringChain2D.enableDisplacement();
+        // Index that is used to differentiate spring config
+        int springChainIndex = mWebHeads.values().size();
+        // Index that is used to determine if the web hed should be in queue.
         int index = mWebHeads.values().size();
         for (WebHead webHead : mWebHeads.values()) {
             if (webHead != null) {
                 if (webHead.isMaster()) {
+                    // Master will never be in queue, so no check is made.
                     mSpringChain2D.setMasterSprings(webHead.getXSpring(), webHead.getYSpring());
                 } else {
-                    webHead.setSpringConfig(SpringConfig.fromOrigamiTensionAndFriction(90, 9 + (index * 5)));
-                    mSpringChain2D.addSlaveSprings(webHead.getXSpring(), webHead.getYSpring());
-                    index--;
+                    if (shouldQueue(index)) {
+                        webHead.setInQueue(true);
+                    } else {
+                        webHead.setInQueue(false);
+                        // We should add the springs to our chain only if the web head is active
+                        webHead.setSpringConfig(SpringConfig.fromOrigamiTensionAndFriction(90, 9 + (springChainIndex * 5)));
+                        mSpringChain2D.addSlaveSprings(webHead.getXSpring(), webHead.getYSpring());
+                    }
+                    springChainIndex--;
                 }
+                index--;
             }
         }
     }
@@ -459,7 +482,6 @@ public class WebHeadService extends Service implements WebHeadContract,
 
     private void selectNextMaster() {
         final ListIterator<String> it = new ArrayList<>(mWebHeads.keySet()).listIterator(mWebHeads.size());
-
         //noinspection LoopStatementThatDoesntLoop
         while (it.hasPrevious()) {
             final String key = it.previous();
