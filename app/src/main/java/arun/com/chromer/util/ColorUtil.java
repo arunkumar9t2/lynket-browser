@@ -139,25 +139,6 @@ public class ColorUtil {
         return Constants.NO_COLOR;
     }
 
-    /*@ColorInt
-    public static int getForegroundTextColor(@ColorInt int backgroundColor) {
-        final int whiteColorAlpha = ColorUtils.calculateMinimumAlpha(Color.WHITE, backgroundColor, 4.5f);
-
-        if (whiteColorAlpha != -1) {
-            return ColorUtils.setAlphaComponent(Color.WHITE, whiteColorAlpha);
-        }
-
-        final int blackColorAlpha = ColorUtils.calculateMinimumAlpha(Color.BLACK, backgroundColor, 4.5f);
-
-        if (blackColorAlpha != -1) {
-            return ColorUtils.setAlphaComponent(Color.BLACK, blackColorAlpha);
-        }
-
-        //noinspection ConstantConditions
-        return whiteColorAlpha != -1 ? ColorUtils.setAlphaComponent(Color.WHITE, whiteColorAlpha)
-                : ColorUtils.setAlphaComponent(Color.BLACK, blackColorAlpha);
-    }*/
-
     /**
      * Returns white or black based on color luminance
      *
@@ -166,13 +147,11 @@ public class ColorUtil {
      */
     @ColorInt
     public static int getForegroundWhiteOrBlack(@ColorInt int backgroundColor) {
-        float hsl[] = new float[3];
-        ColorUtils.colorToHSL(backgroundColor, hsl);
-        float l = hsl[2];
-        if (l < .5) {
-            return Color.WHITE;
-        } else
+        double l = ColorUtils.calculateLuminance(backgroundColor);
+        if (l > 0.179) {
             return Color.BLACK;
+        } else
+            return Color.WHITE;
     }
 
 
