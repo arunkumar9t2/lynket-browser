@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +26,6 @@ import butterknife.ButterKnife;
 /**
  * Created by Arun on 03/08/2016.
  */
-
 public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.SuggestionItemHolder> {
     private final Context mContext;
 
@@ -44,10 +44,12 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
         mContext = context.getApplicationContext();
         setHasStableIds(true);
         mCallback = listener;
-        sSearch = new IconicsDrawable(context)
-                .icon(CommunityMaterial.Icon.cmd_magnify)
-                .color(ContextCompat.getColor(context, R.color.material_dark_light))
-                .sizeDp(18);
+
+        if (sSearch == null)
+            sSearch = new IconicsDrawable(context)
+                    .icon(CommunityMaterial.Icon.cmd_magnify)
+                    .color(ContextCompat.getColor(context, R.color.material_dark_light))
+                    .sizeDp(18);
     }
 
     @Override
@@ -82,10 +84,17 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
         return mSuggestions.get(position).hashCode();
     }
 
-    public void updateSuggestions(@NonNull List<SuggestionItem> suggestions) {
+    public void updateSuggestions(@NonNull List<SuggestionItem> newSuggestions) {
+        final SuggestionDiff suggestionDiff = new SuggestionDiff(mSuggestions, newSuggestions);
+
+        //Benchmark.start("Diff Calculation");
+        final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(suggestionDiff, true);
+        // Benchmark.end();
+
         mSuggestions.clear();
-        mSuggestions.addAll(suggestions);
-        notifyDataSetChanged();
+        mSuggestions.addAll(newSuggestions);
+
+        diffResult.dispatchUpdatesTo(this);
     }
 
     public void clear() {
@@ -93,13 +102,13 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
         notifyDataSetChanged();
     }
 
-    public class SuggestionItemHolder extends RecyclerView.ViewHolder {
+    class SuggestionItemHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.suggestions_text)
         TextView suggestion;
         @BindView(R.id.suggestion_icon)
         ImageView icon;
 
-        public SuggestionItemHolder(View view) {
+        SuggestionItemHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
             view.setOnClickListener(new View.OnClickListener() {
@@ -116,5 +125,38 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
 
     public interface SuggestionClickListener {
         void onSuggestionClicked(@NonNull final String suggestion);
+    }
+
+    private class SuggestionDiff extends DiffUtil.Callback {
+
+        private final List<SuggestionItem> mNewList;
+        private final List<SuggestionItem> mOldList;
+
+        SuggestionDiff(@NonNull List<SuggestionItem> oldList, @NonNull List<SuggestionItem> newList) {
+            mOldList = oldList;
+            mNewList = newList;
+        }
+
+        @Override
+        public int getOldListSize() {
+            return mOldList.size();
+        }
+
+        @Override
+        public int getNewListSize() {
+            return mNewList.size();
+        }
+
+        @Override
+        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+            return mOldList.get(oldItemPosition).suggestion.
+                    equalsIgnoreCase(mNewList.get(newItemPosition).suggestion);
+        }
+
+        @Override
+        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+            return mOldList.get(oldItemPosition).suggestion.
+                    equalsIgnoreCase(mNewList.get(newItemPosition).suggestion);
+        }
     }
 }
