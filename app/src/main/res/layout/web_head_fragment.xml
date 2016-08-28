@@ -13,22 +13,13 @@
         tools:context="arun.com.chromer.MainActivity"
         tools:showIn="@layout/main_activity">
 
-        <TextView
-            style="@style/Preference.Headers"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="10dp"
-            android:text="@string/web_heads"
-            tools:ignore="RtlHardcoded"/>
-
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/activity_vertical_margin_bottom_fab"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             app:cardElevation="2dp">
 
             <LinearLayout

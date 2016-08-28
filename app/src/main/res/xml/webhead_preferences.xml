@@ -5,44 +5,45 @@
                   android:key="settings"
                   android:title="@string/settings">
 
+    <PreferenceCategory android:title="@string/web_heads">
 
-    <arun.com.chromer.preferences.widgets.IconSwitchPreference
-        android:defaultValue="false"
-        android:key="webhead_enabled_pref"
-        android:summary="@string/web_heads_title"
-        android:title="@string/web_heads_description"/>
+        <arun.com.chromer.preferences.widgets.IconSwitchPreference
+            android:defaultValue="false"
+            android:key="webhead_enabled_pref"
+            android:summary="@string/web_heads_title"
+            android:title="@string/web_heads_description"/>
 
-    <arun.com.chromer.preferences.widgets.ColorPreference
-        android:key="webhead_color"
-        android:title="@string/web_heads_color"
-        app:color="@color/web_head_bg"/>
+        <arun.com.chromer.preferences.widgets.ColorPreference
+            android:key="webhead_color"
+            android:title="@string/web_heads_color"
+            app:color="@color/web_head_bg"/>
 
-    <arun.com.chromer.preferences.widgets.IconListPreference
-        android:defaultValue="1"
-        android:dialogTitle="@string/webhead_spawn_title"
-        android:entries="@array/webHeadsSpawnValues"
-        android:entryValues="@array/webHeadsSpawnKeys"
-        android:key="webhead_spawn_preference"
-        android:title="@string/webhead_spawn_summary"/>
+        <arun.com.chromer.preferences.widgets.IconListPreference
+            android:defaultValue="1"
+            android:dialogTitle="@string/webhead_spawn_title"
+            android:entries="@array/webHeadsSpawnValues"
+            android:entryValues="@array/webHeadsSpawnKeys"
+            android:key="webhead_spawn_preference"
+            android:title="@string/webhead_spawn_summary"/>
 
-    <arun.com.chromer.preferences.widgets.IconListPreference
-        android:defaultValue="1"
-        android:dialogTitle="@string/webhead_size_dialog"
-        android:entries="@array/webHeadsSizeValues"
-        android:entryValues="@array/webHeadsSizeKeys"
-        android:key="webhead_size_preference"
-        android:title="@string/webhead_size_title"/>
+        <arun.com.chromer.preferences.widgets.IconListPreference
+            android:defaultValue="1"
+            android:dialogTitle="@string/webhead_size_dialog"
+            android:entries="@array/webHeadsSizeValues"
+            android:entryValues="@array/webHeadsSizeKeys"
+            android:key="webhead_size_preference"
+            android:title="@string/webhead_size_title"/>
 
-    <arun.com.chromer.preferences.widgets.IconCheckboxPreference
-        android:defaultValue="true"
-        android:key="webhead_close_onclick_pref"
-        android:summary="Web heads will disappear once you open the link"
-        android:title="Close web heads on link open"/>
+        <arun.com.chromer.preferences.widgets.IconCheckboxPreference
+            android:defaultValue="true"
+            android:key="webhead_close_onclick_pref"
+            android:summary="Web heads will disappear once you open the link"
+            android:title="Close web heads on link open"/>
 
-    <arun.com.chromer.preferences.widgets.IconCheckboxPreference
-        android:defaultValue="false"
-        android:key="webhead_favicons_pref"
-        android:summary="@string/favicon_description"
-        android:title="@string/favicon_title"/>
-
+        <arun.com.chromer.preferences.widgets.IconCheckboxPreference
+            android:defaultValue="false"
+            android:key="webhead_favicons_pref"
+            android:summary="@string/favicon_description"
+            android:title="@string/favicon_title"/>
+    </PreferenceCategory>
 </PreferenceScreen>
