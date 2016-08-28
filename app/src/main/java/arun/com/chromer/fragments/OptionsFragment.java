@@ -58,14 +58,14 @@ public class OptionsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mAppContext = getActivity().getApplicationContext();
-        View view = inflater.inflate(R.layout.options_fragment, container, false);
-        mUnbinder = ButterKnife.bind(this, view);
-        return view;
+        return inflater.inflate(R.layout.options_fragment, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mUnbinder = ButterKnife.bind(this, view);
+        
         mSetDefaultIcon.setImageDrawable(new IconicsDrawable(mAppContext)
                 .icon(CommunityMaterial.Icon.cmd_auto_fix)
                 .color(ContextCompat.getColor(mAppContext, R.color.colorAccent))

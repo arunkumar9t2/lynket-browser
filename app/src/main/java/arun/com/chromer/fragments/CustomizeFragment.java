@@ -29,14 +29,13 @@ public class CustomizeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.customize_fragment, container, false);
-        mUnbinder = ButterKnife.bind(this, view);
-        return view;
+        return inflater.inflate(R.layout.customize_fragment, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mUnbinder = ButterKnife.bind(this, view);
         getChildFragmentManager()
                 .beginTransaction()
                 .replace(R.id.preference_container, PersonalizationPreferenceFragment.newInstance())

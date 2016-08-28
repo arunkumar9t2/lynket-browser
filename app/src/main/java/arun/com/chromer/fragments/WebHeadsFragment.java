@@ -1,6 +1,5 @@
 package arun.com.chromer.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,7 +16,6 @@ import butterknife.Unbinder;
  * Created by Arun on 19/06/2016.
  */
 public class WebHeadsFragment extends Fragment {
-    private Context mAppContext;
     private Unbinder mUnbinder;
 
     public static WebHeadsFragment newInstance() {
@@ -30,15 +28,13 @@ public class WebHeadsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mAppContext = getActivity().getApplicationContext();
-        View view = inflater.inflate(R.layout.web_head_fragment, container, false);
-        mUnbinder = ButterKnife.bind(this, view);
-        return view;
+        return inflater.inflate(R.layout.web_head_fragment, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mUnbinder = ButterKnife.bind(this, view);
         getChildFragmentManager()
                 .beginTransaction()
                 .replace(R.id.webhead_container, WebHeadPreferenceFragment.newInstance())
@@ -49,6 +45,5 @@ public class WebHeadsFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
-        mAppContext = null;
     }
 }
