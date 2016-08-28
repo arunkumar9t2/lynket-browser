@@ -201,7 +201,7 @@ public class TabView extends FrameLayout {
                 animator = ObjectAnimator.ofFloat(mTabIcon, "rotation", 180);
                 break;
             case TAB_TYPE_WEB_HEADS:
-                animator = ObjectAnimator.ofFloat(mTabIcon, "rotation", -90);
+                animator = ObjectAnimator.ofFloat(mTabIcon, "rotation", 125);
                 break;
             case TAB_TYPE_CUSTOMIZE:
                 animator = ObjectAnimator.ofFloat(mTabIcon, "scaleY", 1.2f);
@@ -222,7 +222,7 @@ public class TabView extends FrameLayout {
                 animator = ObjectAnimator.ofFloat(mTabIcon, "rotation", -180);
                 break;
             case TAB_TYPE_WEB_HEADS:
-                animator = ObjectAnimator.ofFloat(mTabIcon, "rotation", 90);
+                animator = ObjectAnimator.ofFloat(mTabIcon, "rotation", -90);
                 break;
             case TAB_TYPE_CUSTOMIZE:
                 animator = ObjectAnimator.ofFloat(mTabIcon, "scaleY", 0.75f);

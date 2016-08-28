@@ -127,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
         mViewPager.setAdapter(new PagerAdapter(getSupportFragmentManager()));
         mTabLayout.setupWithViewPager(mViewPager);
-
         final TabLayout.Tab optionsTab = mTabLayout.getTabAt(0);
         if (optionsTab != null) {
             final TabView tabView = new TabView(this, TabView.TAB_TYPE_OPTIONS);
@@ -143,32 +142,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         final TabLayout.Tab customizeTab = mTabLayout.getTabAt(2);
         if (customizeTab != null) {
             customizeTab.setCustomView(new TabView(this, TabView.TAB_TYPE_CUSTOMIZE));
-        }
-        
-        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                setTabSelected(tab, true);
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                setTabSelected(tab, false);
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-    }
-
-    private void setTabSelected(@Nullable TabLayout.Tab tab, boolean selected) {
-        if (tab != null) {
-            final TabView tabView = (TabView) tab.getCustomView();
-            if (tabView != null) {
-                tabView.setSelected(selected);
-            }
         }
     }
 
