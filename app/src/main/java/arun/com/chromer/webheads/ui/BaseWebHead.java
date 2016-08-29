@@ -40,6 +40,8 @@ import butterknife.ButterKnife;
 import cn.nekocode.badge.BadgeDrawable;
 import timber.log.Timber;
 
+import static arun.com.chromer.util.Util.dpToPx;
+
 /**
  * ViewGroup that holds the web head UI elements. Allows configuring various parameters in relation
  * to UI like favicon, text indicator and is responsible for inflating all the content.
@@ -175,7 +177,7 @@ public abstract class BaseWebHead extends FrameLayout {
 
         // Needed to prevent overly dark shadow.
         if (WEB_HEAD_COUNT > 2) {
-            setWebHeadElevation(Util.dpToPx(4));
+            setWebHeadElevation(dpToPx(4));
         }
     }
 
@@ -257,6 +259,11 @@ public abstract class BaseWebHead extends FrameLayout {
         mBadgeView.setVisibility(VISIBLE);
         mBadgeView.setText(new SpannableString(sBadgeDrawable.toSpannable()));
         updateBadgeColors(mWebHeadColor);
+
+        if (!Util.isLollipopAbove()) {
+            final int pad = dpToPx(5);
+            mBadgeView.setPadding(pad, pad, pad, pad);
+        }
     }
 
     /**
@@ -558,7 +565,7 @@ public abstract class BaseWebHead extends FrameLayout {
             }
             right = (int) (dispWidth - (webHeadWidth * DISPLACE_PERC));
             left = (int) (webHeadWidth * (1 - DISPLACE_PERC)) * -1;
-            top = Util.dpToPx(25);
+            top = dpToPx(25);
             bottom = (int) (dispHeight * 0.85);
         }
     }
