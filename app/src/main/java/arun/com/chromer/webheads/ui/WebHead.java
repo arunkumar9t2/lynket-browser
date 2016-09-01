@@ -42,8 +42,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
     /**
      * Coordinate of remove web head that we can lock on to.
      */
-    @SuppressWarnings("FieldCanBeLocal")
-    private static int[] sTrashLockCoordinate;
+    private int[] mTrashLockCoordinate;
     /**
      * True when being dragged, otherwise false
      */
@@ -103,8 +102,11 @@ public class WebHead extends BaseWebHead implements SpringListener {
      */
     private final WebHeadContract mContract;
 
-    private static Timer sTimer = new Timer();
+    private static final Timer sTimer = new Timer();
     private static TimerTask sLongPressToCloseAllTask;
+    private TimerTask mCoastingTask;
+    private boolean mIsCoasting = false;
+
     private static Toast sToast;
 
     /**
@@ -122,6 +124,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
         mMovementTracker = MovementTracker.obtain();
         calcVelocities();
         setupSprings();
+        scheduleCoastingTask();
     }
 
     private void calcVelocities() {
@@ -204,6 +207,11 @@ public class WebHead extends BaseWebHead implements SpringListener {
         }
 
         touchDown();
+
+        mIsCoasting = false;
+        if (mCoastingTask != null) {
+            mCoastingTask.cancel();
+        }
     }
 
     private void scheduleLongPressToCloseTask() {
@@ -225,16 +233,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
                 });
             }
         };
-        cancelTimer();
-        sTimer = new Timer();
         sTimer.schedule(sLongPressToCloseAllTask, mLongPressDuration);
-    }
-
-    private void cancelTimer() {
-        if (sTimer != null) {
-            sTimer.cancel();
-            sTimer.purge();
-        }
     }
 
     /**
@@ -288,7 +287,6 @@ public class WebHead extends BaseWebHead implements SpringListener {
     private boolean handleTouchUp() {
         cancelToast();
         if (mShouldCloseAll) {
-            sTimer.cancel();
             sTimer.purge();
             mContract.closeAll();
             return true;
@@ -308,7 +306,37 @@ public class WebHead extends BaseWebHead implements SpringListener {
         touchUp();
         // hide remove view
         RemoveWebHead.disappear();
+        scheduleCoastingTask();
         return false;
+    }
+
+    /**
+     * Schedules a coasting task that will make the master web head move further away from the screen.
+     */
+    private void scheduleCoastingTask() {
+        mIsCoasting = false;
+
+        if (!isMaster()) {
+            return;
+        }
+        if (mCoastingTask != null) {
+            mCoastingTask.cancel();
+        }
+        mCoastingTask = new TimerTask() {
+            @Override
+            public void run() {
+                Timber.v("Coasting active");
+                mIsCoasting = true;
+                final int halfWidth = getWidth() / 4;
+                if (mWindowParams.x < sDispWidth / 2) {
+                    mXSpring.setEndValue(sScreenBounds.left - halfWidth);
+                } else {
+                    mXSpring.setEndValue(sScreenBounds.right + halfWidth);
+                }
+            }
+        };
+        Timber.v("Scheduled a coasting task");
+        sTimer.schedule(mCoastingTask, 3000);
     }
 
     public static void cancelToast() {
@@ -324,14 +352,14 @@ public class WebHead extends BaseWebHead implements SpringListener {
      * @return array of x and y.
      */
     private int[] trashLockCoOrd() {
-        //if (sTrashLockCoordinate == null) {
-        int[] removeCentre = getRemoveWebHead().getCenterCoordinates();
-        int offset = getWidth() / 2;
-        int x = removeCentre[0] - offset;
-        int y = removeCentre[1] - offset;
-        sTrashLockCoordinate = new int[]{x, y};
-        //}
-        return sTrashLockCoordinate;
+        if (mTrashLockCoordinate == null) {
+            int[] removeCentre = getRemoveWebHead().getCenterCoordinates();
+            int offset = getWidth() / 2;
+            int x = removeCentre[0] - offset;
+            int y = removeCentre[1] - offset;
+            mTrashLockCoordinate = new int[]{x, y};
+        }
+        return mTrashLockCoordinate;
     }
 
     /**
@@ -445,7 +473,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
     private void checkBounds() {
         // Only check when free
-        if (mDragging || sScreenBounds == null || !mMaster || mInQueue) {
+        if (mDragging || sScreenBounds == null || !mMaster || mInQueue || mIsCoasting) {
             return;
         }
 
@@ -523,6 +551,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
         if (master) {
             updateBadgeLocation();
             updateBadgeColors(mWebHeadColor);
+            mIsCoasting = false;
         }
     }
 
@@ -656,6 +685,11 @@ public class WebHead extends BaseWebHead implements SpringListener {
     private class GestureDetectorListener extends GestureDetector.SimpleOnGestureListener {
 
         @Override
+        public void onLongPress(MotionEvent e) {
+            // TODO Expand and show all links if more than one web head is present
+        }
+
+        @Override
         public boolean onSingleTapConfirmed(MotionEvent event) {
             mWasClicked = true;
             if (Preferences.webHeadsCloseOnOpen(getContext()) && mContentGroup != null) {
@@ -691,11 +725,6 @@ public class WebHead extends BaseWebHead implements SpringListener {
                 }
             } else sendCallback();
             return true;
-        }
-
-        private void sendCallback() {
-            RemoveWebHead.disappear();
-            mContract.onWebHeadClick(WebHead.this);
         }
 
         @Override
@@ -743,6 +772,11 @@ public class WebHead extends BaseWebHead implements SpringListener {
                 velocityX = -Math.max(velocityX, MINIMUM_HORIZONTAL_FLING_VELOCITY * x);
             }
             return velocityX;
+        }
+
+        private void sendCallback() {
+            RemoveWebHead.disappear();
+            mContract.onWebHeadClick(WebHead.this);
         }
     }
 
