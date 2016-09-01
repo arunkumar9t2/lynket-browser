@@ -18,11 +18,6 @@ package de.jetwick.snacktory;
 import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -333,7 +328,8 @@ public class HtmlFetcher {
             if (responseCode >= 300 && responseCode < 400) {
                 return fixUrl(url, conn.getHeaderField("Location"));
             } else if (responseCode >= 200 && responseCode < 300) {
-                final String html = fetchAsString(url);
+                return url;
+                /*final String html = fetchAsString(url);
                 final Document doc = Jsoup.parse(html);
                 final Elements refresh = doc.select("meta[http-equiv=Refresh]");
                 if (!refresh.isEmpty()) {
@@ -344,7 +340,7 @@ public class HtmlFetcher {
                         return fixUrl(url, refreshElement.attr("content").split("URL=")[1].replaceAll("^'|'$", ""));
                     else if (refreshElement.hasAttr("content") && refreshElement.attr("content").contains("url="))
                         return fixUrl(url, refreshElement.attr("content").split("url=")[1].replaceAll("^'|'$", ""));
-                }
+                }*/
             }
         } catch (Exception ex) {
             return url;
