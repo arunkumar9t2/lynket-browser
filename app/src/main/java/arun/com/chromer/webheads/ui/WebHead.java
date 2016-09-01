@@ -78,9 +78,9 @@ public class WebHead extends BaseWebHead implements SpringListener {
      */
     private final int mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
     /**
-     * Touch slop of the device
+     * Long press duration of device
      */
-    private final int mLongPressDuration = 1300;
+    private static final int mLongPressDuration = ViewConfiguration.getLongPressTimeout();
     /**
      * Gesture detector to recognize fling and click on web heads
      */
