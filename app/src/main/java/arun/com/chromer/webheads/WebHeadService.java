@@ -118,6 +118,7 @@ public class WebHeadService extends Service implements WebHeadContract,
     public void onDestroy() {
         Timber.d("Exiting webhead service");
         WebHead.clearMasterPosition();
+        WebHead.cancelToast();
 
         removeWebHeads();
 

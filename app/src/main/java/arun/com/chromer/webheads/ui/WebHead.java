@@ -311,7 +311,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
         return false;
     }
 
-    private void cancelToast() {
+    public static void cancelToast() {
         if (sToast != null) {
             sToast.cancel();
         }
@@ -534,6 +534,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
     @Override
     public void destroySelf(final boolean receiveCallback) {
+        cancelToast();
         mDestroyed = true;
         WEB_HEAD_COUNT--;
         destroySprings();
@@ -683,6 +684,11 @@ public class WebHead extends BaseWebHead implements SpringListener {
                             }
                         })
                         .start();
+                // Store the touch down point if its master
+                if (mMaster) {
+                    masterDownX = mWindowParams.x;
+                    masterDownY = mWindowParams.y;
+                }
             } else sendCallback();
             return true;
         }
