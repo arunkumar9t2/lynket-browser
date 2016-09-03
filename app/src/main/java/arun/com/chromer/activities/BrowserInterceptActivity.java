@@ -84,7 +84,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                 customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
                 customTabActivity.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
             } else {
-                //customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                // customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 // customTabActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             }
             customTabActivity.putExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, isFromNewTab);

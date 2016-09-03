@@ -49,10 +49,10 @@ import java.util.Map;
 import java.util.Stack;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.CustomTabActivity;
 import arun.com.chromer.customtabs.CustomTabManager;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.shared.Constants;
+import arun.com.chromer.util.DocumentUtils;
 import arun.com.chromer.webheads.helper.ColorExtractionTask;
 import arun.com.chromer.webheads.physics.SpringChain2D;
 import arun.com.chromer.webheads.tasks.PageExtractTasksManager;
@@ -423,23 +423,13 @@ public class WebHeadService extends Service implements WebHeadContract,
         }
     }
 
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onWebHeadClick(@NonNull WebHead webHead) {
         if (webHead.getUnShortenedUrl() != null && webHead.getUnShortenedUrl().length() != 0) {
-            final Intent customTabActivity = new Intent(this, CustomTabActivity.class);
-            customTabActivity.setData(Uri.parse(webHead.getUnShortenedUrl()));
-            // customTabActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            if (webHead.isFromNewTab() || Preferences.mergeTabs(this)) {
-                customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-                customTabActivity.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-            }
-            customTabActivity.putExtra(Constants.EXTRA_KEY_FROM_WEBHEAD, true);
-            customTabActivity.putExtra(Constants.EXTRA_KEY_WEBHEAD_TITLE, webHead.getTitle());
-            customTabActivity.putExtra(Constants.EXTRA_KEY_WEBHEAD_ICON, webHead.getFaviconBitmap());
-            customTabActivity.putExtra(Constants.EXTRA_KEY_WEBHEAD_COLOR, webHead.getWebHeadColor(false));
 
-            startActivity(customTabActivity);
+            DocumentUtils.smartOpenNewTab(this, webHead);
 
             // Store the last opened url
             sLastOpenedUrl = webHead.getUrl();
