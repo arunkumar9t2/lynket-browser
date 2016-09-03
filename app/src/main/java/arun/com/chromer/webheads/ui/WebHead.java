@@ -209,9 +209,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
         touchDown();
 
         mIsCoasting = false;
-        if (mCoastingTask != null) {
-            mCoastingTask.cancel();
-        }
+        cancelCoastingTask();
     }
 
     private void scheduleLongPressToCloseTask() {
@@ -319,9 +317,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
         if (!isMaster()) {
             return;
         }
-        if (mCoastingTask != null) {
-            mCoastingTask.cancel();
-        }
+        cancelCoastingTask();
         mCoastingTask = new TimerTask() {
             @Override
             public void run() {
@@ -337,6 +333,12 @@ public class WebHead extends BaseWebHead implements SpringListener {
         };
         Timber.v("Scheduled a coasting task");
         sTimer.schedule(mCoastingTask, 3000);
+    }
+
+    private void cancelCoastingTask() {
+        if (mCoastingTask != null) {
+            mCoastingTask.cancel();
+        }
     }
 
     public static void cancelToast() {
@@ -563,6 +565,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
     @Override
     public void destroySelf(final boolean receiveCallback) {
+        cancelCoastingTask();
         cancelToast();
         mDestroyed = true;
         WEB_HEAD_COUNT--;
