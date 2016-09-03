@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.preference.Preference;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
@@ -78,6 +79,20 @@ public class BehaviorPreferenceFragment extends DividerLessPreferenceFragment im
                     .sizeDp(24);
             mMergeTabsPreference.setIcon(recentImg);
         }
+        mMergeTabsPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if (!((Boolean) newValue) && Preferences.aggressiveLoading(getActivity())) {
+                    new MaterialDialog.Builder(getActivity())
+                            .title(R.string.merge_tabs_off_title)
+                            .content(R.string.merget_tabs_off_content)
+                            .positiveText(android.R.string.ok)
+                            .show();
+                    Preferences.aggressiveLoading(getActivity(), false);
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -87,7 +102,6 @@ public class BehaviorPreferenceFragment extends DividerLessPreferenceFragment im
         if (!Util.isLollipopAbove()) {
             mMergeTabsPreference.setVisible(false);
         }
-        mMergeTabsPreference.setChecked(Preferences.mergeTabs(getActivity()));
     }
 
     @Override
@@ -98,6 +112,10 @@ public class BehaviorPreferenceFragment extends DividerLessPreferenceFragment im
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
+        if (key.equalsIgnoreCase(Preferences.AGGRESSIVE_LOADING)) {
+            if (Preferences.aggressiveLoading(getActivity())) {
+                mMergeTabsPreference.setChecked(true);
+            }
+        }
     }
 }

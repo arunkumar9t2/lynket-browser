@@ -94,6 +94,11 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         updatePreferenceStates(key);
         updatePreferenceSummary(WEBHEAD_PREFERENCE_GROUP);
+        if (key.equalsIgnoreCase(Preferences.MERGE_TABS_AND_APPS)) {
+            if (!Preferences.mergeTabs(getActivity())) {
+                mAggressive.setChecked(false);
+            }
+        }
     }
 
     private void init() {

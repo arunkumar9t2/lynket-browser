@@ -309,7 +309,7 @@ public class Preferences {
                 .getDefaultSharedPreferences(context).getBoolean(AGGRESSIVE_LOADING, false);
     }
 
-    private static void aggressiveLoading(Context context, boolean preference) {
+    public static void aggressiveLoading(Context context, boolean preference) {
         PreferenceManager
                 .getDefaultSharedPreferences(context)
                 .edit()
