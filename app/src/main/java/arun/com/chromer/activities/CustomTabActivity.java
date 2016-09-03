@@ -51,6 +51,7 @@ public class CustomTabActivity extends AppCompatActivity {
                 .forUrl(url)
                 .forWebHead(isWebhead)
                 .overrideToolbarColor(color)
+                //.noAnimations(Preferences.aggressiveLoading(this))
                 .prepare()
                 .launch();
         Benchmark.end();

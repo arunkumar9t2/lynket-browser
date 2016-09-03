@@ -108,6 +108,8 @@ public class CustomTabs {
      * True if this tab intent is used for web heads. False otherwise.
      */
     private boolean mForWebHead = false;
+    // Whether to use animations
+    private boolean mNoAnimations = false;
 
     /**
      * Private constructor to init our helper
@@ -333,7 +335,7 @@ public class CustomTabs {
      */
     private void prepareAnimations() {
         assertBuilderInitialized();
-        if (Preferences.isAnimationEnabled(mActivity)) {
+        if (Preferences.isAnimationEnabled(mActivity) && !mNoAnimations) {
             int type = Preferences.animationType(mActivity);
             int speed = Preferences.animationSpeed(mActivity);
             int start[] = new int[]{};
@@ -600,6 +602,11 @@ public class CustomTabs {
             Timber.e("App icon fetching for %s failed", packageName);
         }
         return null;
+    }
+
+    public CustomTabs noAnimations(boolean noAnimations) {
+        mNoAnimations = noAnimations;
+        return this;
     }
 
 
