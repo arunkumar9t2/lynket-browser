@@ -225,7 +225,7 @@ public class WebHeadService extends Service implements WebHeadContract,
     @Override
     public void onUrlExtracted(String originalUrl, @Nullable JResult result) {
         final WebHead webHead = mWebHeads.get(originalUrl);
-        if (webHead != null && Preferences.favicons(this) && result != null) {
+        if (webHead != null && result != null) {
             try {
                 final String faviconUrl = result.getFaviconUrl();
                 webHead.setTitle(result.getTitle());

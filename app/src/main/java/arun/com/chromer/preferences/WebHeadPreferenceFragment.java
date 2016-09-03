@@ -46,7 +46,6 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
     private ColorPreference mWebHeadsColor;
     private IconSwitchPreference mWebHeadSwitch;
     private IconListPreference mSpawnLocation;
-    private IconCheckboxPreference mFavicons;
     private IconCheckboxPreference mCloseOnOpen;
     private IconCheckboxPreference mAggressive;
     private IconListPreference mSize;
@@ -106,7 +105,6 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
         mWebHeadsColor = (ColorPreference) findPreference(Preferences.WEB_HEADS_COLOR);
         mSpawnLocation = (IconListPreference) findPreference(Preferences.WEB_HEAD_SPAWN_LOCATION);
         mSize = (IconListPreference) findPreference(Preferences.WEB_HEAD_SIZE);
-        mFavicons = (IconCheckboxPreference) findPreference(Preferences.WEB_HEAD_FAVICON);
         mCloseOnOpen = (IconCheckboxPreference) findPreference(Preferences.WEB_HEAD_CLOSE_ON_OPEN);
         mAggressive = (IconCheckboxPreference) findPreference(AGGRESSIVE_LOADING);
     }
@@ -128,10 +126,6 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
                 .sizeDp(24));
         mSize.setIcon(new IconicsDrawable(getActivity())
                 .icon(CommunityMaterial.Icon.cmd_crop_free)
-                .color(materialLight)
-                .sizeDp(24));
-        mFavicons.setIcon(new IconicsDrawable(getActivity())
-                .icon(CommunityMaterial.Icon.cmd_image_filter_vintage)
                 .color(materialLight)
                 .sizeDp(24));
         mCloseOnOpen.setIcon(new IconicsDrawable(getActivity())
@@ -220,7 +214,6 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
                     Preferences.WEB_HEAD_SPAWN_LOCATION,
                     Preferences.WEB_HEADS_COLOR,
                     Preferences.WEB_HEAD_CLOSE_ON_OPEN,
-                    Preferences.WEB_HEAD_FAVICON,
                     Preferences.WEB_HEAD_SIZE,
                     AGGRESSIVE_LOADING
             );

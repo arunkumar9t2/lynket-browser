@@ -380,7 +380,7 @@ public class Preferences {
     public static boolean favicons(Context context) {
         return PreferenceManager
                 .getDefaultSharedPreferences(context)
-                .getBoolean(WEB_HEAD_FAVICON, false);
+                .getBoolean(WEB_HEAD_FAVICON, true);
     }
 
     @SuppressWarnings("unused")
