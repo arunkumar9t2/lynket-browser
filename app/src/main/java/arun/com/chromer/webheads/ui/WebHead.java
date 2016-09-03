@@ -324,11 +324,12 @@ public class WebHead extends BaseWebHead implements SpringListener {
                 Timber.v("Coasting active");
                 mIsCoasting = true;
                 final int halfWidth = getWidth() / 4;
-                if (mWindowParams.x < sDispWidth / 2) {
-                    mXSpring.setEndValue(sScreenBounds.left - halfWidth);
-                } else {
-                    mXSpring.setEndValue(sScreenBounds.right + halfWidth);
-                }
+                if (sScreenBounds != null)
+                    if (mWindowParams.x < sDispWidth / 2) {
+                        mXSpring.setEndValue(sScreenBounds.left - halfWidth);
+                    } else {
+                        mXSpring.setEndValue(sScreenBounds.right + halfWidth);
+                    }
             }
         };
         Timber.v("Scheduled a coasting task");

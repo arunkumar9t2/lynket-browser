@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ import java.net.URL;
 
 import arun.com.chromer.R;
 import arun.com.chromer.customtabs.CustomTabs;
+import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Benchmark;
 import arun.com.chromer.util.Util;
@@ -54,6 +56,19 @@ public class CustomTabActivity extends AppCompatActivity {
         Benchmark.end();
 
         dispatchDescriptionTask();
+
+        if (Preferences.aggressiveLoading(this)) {
+            delayedGoToBack();
+        }
+    }
+
+    private void delayedGoToBack() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                moveTaskToBack(true);
+            }
+        }, 650);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

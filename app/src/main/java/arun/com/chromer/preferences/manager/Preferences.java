@@ -51,6 +51,7 @@ public class Preferences {
     private static final String CLEAN_DATABASE = "clean_database";
     private static final String DYNAMIC_COLOR_APP = "dynamic_color_app";
     private static final String DYNAMIC_COLOR_WEB = "dynamic_color_web";
+    public static final String AGGRESSIVE_LOADING = "aggressive_loading";
 
     private static SharedPreferences preferences(Context context) {
         return context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
@@ -299,6 +300,19 @@ public class Preferences {
 
     private static void dynamicToolbarOnWeb(Context context, boolean preference) {
         preferences(context).edit().putBoolean(DYNAMIC_COLOR_WEB, preference).apply();
+    }
+
+    public static boolean aggressiveLoading(Context context) {
+        return Util.isLollipopAbove()
+                && PreferenceManager
+                .getDefaultSharedPreferences(context).getBoolean(AGGRESSIVE_LOADING, false);
+    }
+
+    private static void aggressiveLoading(Context context, boolean preference) {
+        PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(AGGRESSIVE_LOADING, preference).apply();
     }
 
     private static void dynamicToolbarOptions(Context context, boolean app, boolean web) {

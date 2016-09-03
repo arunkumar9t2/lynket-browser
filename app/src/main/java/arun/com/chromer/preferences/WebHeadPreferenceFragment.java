@@ -46,6 +46,7 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
     private IconListPreference mSpawnLocation;
     private IconCheckboxPreference mFavicons;
     private IconCheckboxPreference mCloseOnOpen;
+    private IconCheckboxPreference mAggressive;
     private IconListPreference mSize;
 
     public WebHeadPreferenceFragment() {
@@ -99,6 +100,7 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
         mSize = (IconListPreference) findPreference(Preferences.WEB_HEAD_SIZE);
         mFavicons = (IconCheckboxPreference) findPreference(Preferences.WEB_HEAD_FAVICON);
         mCloseOnOpen = (IconCheckboxPreference) findPreference(Preferences.WEB_HEAD_CLOSE_ON_OPEN);
+        mAggressive = (IconCheckboxPreference) findPreference(Preferences.AGGRESSIVE_LOADING);
     }
 
 
@@ -113,7 +115,7 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
                 .color(materialLight)
                 .sizeDp(24));
         mSpawnLocation.setIcon(new IconicsDrawable(getActivity())
-                .icon(CommunityMaterial.Icon.cmd_resize_bottom_right)
+                .icon(CommunityMaterial.Icon.cmd_code_tags)
                 .color(materialLight)
                 .sizeDp(24));
         mSize.setIcon(new IconicsDrawable(getActivity())
@@ -126,6 +128,10 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
                 .sizeDp(24));
         mCloseOnOpen.setIcon(new IconicsDrawable(getActivity())
                 .icon(CommunityMaterial.Icon.cmd_close_circle_outline)
+                .color(materialLight)
+                .sizeDp(24));
+        mAggressive.setIcon(new IconicsDrawable(getActivity())
+                .icon(CommunityMaterial.Icon.cmd_fast_forward)
                 .color(materialLight)
                 .sizeDp(24));
     }

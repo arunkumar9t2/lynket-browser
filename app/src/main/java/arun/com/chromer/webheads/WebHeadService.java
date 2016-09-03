@@ -207,6 +207,10 @@ public class WebHeadService extends Service implements WebHeadContract,
 
         newWebHead.reveal();
         mWebHeads.put(webHeadUrl, newWebHead);
+
+        if (Preferences.aggressiveLoading(this)) {
+            DocumentUtils.openNewCustomTab(this, newWebHead);
+        }
     }
 
     private boolean shouldQueue(int index) {
