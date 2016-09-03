@@ -8,12 +8,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewPropertyAnimator;
 import android.view.WindowManager;
 import android.view.animation.BounceInterpolator;
 import android.widget.FrameLayout;
@@ -110,18 +108,18 @@ public class RemoveWebHead extends FrameLayout {
         }
     }
 
-    @Nullable
-    public ViewPropertyAnimator destroyAnimator() {
-        if (sOurInstance == null) return null;
+    public void destroyAnimator(final Runnable endAction) {
+        if (sOurInstance == null || mRemoveHeadCircle == null) endAction.run();
 
-        if (mRemoveHeadCircle == null) return null;
-
-        return sOurInstance.mRemoveHeadCircle.animate()
+        sOurInstance.mRemoveHeadCircle.animate()
                 .scaleX(0.0f)
                 .scaleY(0.0f)
                 .alpha(0.5f)
                 .setDuration(300)
-                .setInterpolator(new BounceInterpolator());
+                .withLayer()
+                .withEndAction(endAction)
+                .setInterpolator(new BounceInterpolator())
+                .start();
     }
 
     private void destroySelf() {

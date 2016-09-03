@@ -231,7 +231,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
                 });
             }
         };
-        sTimer.schedule(sLongPressToCloseAllTask, mLongPressDuration);
+        sTimer.schedule(sLongPressToCloseAllTask, 3000);
     }
 
     /**

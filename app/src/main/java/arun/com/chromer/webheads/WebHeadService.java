@@ -1,7 +1,6 @@
 package arun.com.chromer.webheads;
 
 import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.annotation.TargetApi;
 import android.app.Notification;
@@ -16,9 +15,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.provider.Settings;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
@@ -30,7 +27,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.NotificationCompat;
-import android.view.ViewPropertyAnimator;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -64,7 +60,6 @@ import timber.log.Timber;
 
 public class WebHeadService extends Service implements WebHeadContract,
         CustomTabManager.ConnectionCallback, PageExtractTasksManager.ProgressListener {
-
     private static String sLastOpenedUrl = "";
     /**
      * Connection manager instance to connect and warm up custom tab providers
@@ -79,15 +74,10 @@ public class WebHeadService extends Service implements WebHeadContract,
      * The base spring system to create our springs.
      */
     private final SpringSystem mSpringSystem = SpringSystem.create();
-    /**
-     * Clubbed movement manager
-     */
+    // Clubbed movement manager
     private SpringChain2D mSpringChain2D;
-
     private boolean mCustomTabConnected;
-    /**
-     * Max visible web heads is set 6 for performance reasons.
-     */
+    // Max visible web heads is set 6 for performance reasons.
     public static final int MAX_VISIBLE_WEB_HEADS = 5;
 
     @Override
@@ -223,10 +213,12 @@ public class WebHeadService extends Service implements WebHeadContract,
         final WebHead webHead = mWebHeads.get(originalUrl);
         if (webHead != null) {
             webHead.setUnShortenedUrl(unShortenedUrl);
-            if (mCustomTabConnected)
-                mCustomTabManager.mayLaunchUrl(Uri.parse(unShortenedUrl), null, getPossibleUrls());
-            else
-                deferMayLaunchUntilConnected(unShortenedUrl);
+            if (!Preferences.aggressiveLoading(this)) {
+                if (mCustomTabConnected)
+                    mCustomTabManager.mayLaunchUrl(Uri.parse(unShortenedUrl), null, getPossibleUrls());
+                else
+                    deferMayLaunchUntilConnected(unShortenedUrl);
+            }
         }
     }
 
@@ -307,6 +299,8 @@ public class WebHeadService extends Service implements WebHeadContract,
      * @param sLastOpenedUrl The last opened url
      */
     private void prepareNextSetOfUrls(String sLastOpenedUrl) {
+        if (Preferences.aggressiveLoading(this)) return;
+
         Stack<String> urlStack = getUrlStack(sLastOpenedUrl);
         if (urlStack.size() > 0) {
             String priorityUrl = urlStack.pop();
@@ -427,6 +421,20 @@ public class WebHeadService extends Service implements WebHeadContract,
         }
     }
 
+    private void selectNextMaster() {
+        final ListIterator<String> it = new ArrayList<>(mWebHeads.keySet()).listIterator(mWebHeads.size());
+        //noinspection LoopStatementThatDoesntLoop
+        while (it.hasPrevious()) {
+            final String key = it.previous();
+            final WebHead toBeMaster = mWebHeads.get(key);
+            if (toBeMaster != null) {
+                toBeMaster.setMaster(true);
+                updateSpringChain();
+                toBeMaster.goToMasterTouchDownPoint();
+            }
+            break;
+        }
+    }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -454,39 +462,17 @@ public class WebHeadService extends Service implements WebHeadContract,
         mWebHeads.remove(webHead.getUrl());
 
         if (isLastWebHead) {
-            // animate remove web head before killing this service
-            final ViewPropertyAnimator animator = RemoveWebHead.get(this).destroyAnimator();
-            if (animator == null) {
-                stopSelf();
-            } else {
-                animator.setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        stopSelf();
-                    }
-                });
-                animator.start();
-            }
+            RemoveWebHead.get(this).destroyAnimator(new Runnable() {
+                @Override
+                public void run() {
+                    stopSelf();
+                }
+            });
         } else {
             selectNextMaster();
             // Now that this web head is destroyed, with this web head as the reference prepare the
             // other urls
             prepareNextSetOfUrls(webHead.getUrl());
-        }
-    }
-
-    private void selectNextMaster() {
-        final ListIterator<String> it = new ArrayList<>(mWebHeads.keySet()).listIterator(mWebHeads.size());
-        //noinspection LoopStatementThatDoesntLoop
-        while (it.hasPrevious()) {
-            final String key = it.previous();
-            final WebHead toBeMaster = mWebHeads.get(key);
-            if (toBeMaster != null) {
-                toBeMaster.setMaster(true);
-                updateSpringChain();
-                toBeMaster.goToMasterTouchDownPoint();
-            }
-            break;
         }
     }
 
@@ -535,11 +521,6 @@ public class WebHeadService extends Service implements WebHeadContract,
 
     private void hideRemoveView() {
         RemoveWebHead.disappear();
-    }
-
-    @SuppressWarnings("unused")
-    private void runOnUiThread(Runnable r) {
-        new Handler(Looper.getMainLooper()).post(r);
     }
 
     private class WebHeadNavigationCallback extends CustomTabManager.NavigationCallback {
