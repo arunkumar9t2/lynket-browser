@@ -429,7 +429,7 @@ public class WebHeadService extends Service implements WebHeadContract,
         if (webHead.getUnShortenedUrl() != null && webHead.getUnShortenedUrl().length() != 0) {
             final Intent customTabActivity = new Intent(this, CustomTabActivity.class);
             customTabActivity.setData(Uri.parse(webHead.getUnShortenedUrl()));
-            customTabActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            // customTabActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             if (webHead.isFromNewTab() || Preferences.mergeTabs(this)) {
                 customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
                 customTabActivity.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);

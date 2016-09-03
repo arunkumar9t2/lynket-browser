@@ -23,7 +23,7 @@ import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.shared.AppDetectService;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Util;
-import arun.com.chromer.webheads.helper.WebHeadLauncherActivity;
+import arun.com.chromer.webheads.WebHeadService;
 
 @SuppressLint("GoogleAppIndexingApiWarning")
 public class BrowserInterceptActivity extends AppCompatActivity {
@@ -84,8 +84,8 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                 customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
                 customTabActivity.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
             } else {
-                customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                customTabActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                //customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                // customTabActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             }
             customTabActivity.putExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, isFromNewTab);
             startActivity(customTabActivity);
@@ -97,10 +97,9 @@ public class BrowserInterceptActivity extends AppCompatActivity {
     private void performBlacklistAction() {
         String componentFlatten = Preferences.secondaryBrowserComponent(this);
         if (componentFlatten != null && Util.isPackageInstalled(this, Preferences.secondaryBrowserPackage(this))) {
-            final Intent originalIntent = getIntent();
-            Intent webIntentExplicit = getOriginalIntentCopy(originalIntent);
-            webIntentExplicit.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            webIntentExplicit.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            final Intent webIntentExplicit = getOriginalIntentCopy(getIntent());
+            //  webIntentExplicit.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //  webIntentExplicit.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             ComponentName cN = ComponentName.unflattenFromString(componentFlatten);
             webIntentExplicit.setComponent(cN);
             try {
@@ -115,26 +114,22 @@ public class BrowserInterceptActivity extends AppCompatActivity {
         Toast.makeText(this, getString(R.string.blacklist_message), Toast.LENGTH_LONG).show();
         Intent defaultIntent = getOriginalIntentCopy(getIntent());
         Intent chooserIntent = Intent.createChooser(defaultIntent, getString(R.string.open_with));
-        chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        chooserIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        // chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        // chooserIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(chooserIntent);
     }
 
     private void launchWebHead(boolean isNewTab) {
-        Intent webHeadLauncher = new Intent(this, WebHeadLauncherActivity.class);
-        webHeadLauncher.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        if (!isNewTab)
-            webHeadLauncher.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-        webHeadLauncher.putExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, isNewTab);
-        webHeadLauncher.setData(getIntent().getData());
-        startActivity(webHeadLauncher);
+        final Intent webHeadService = new Intent(this, WebHeadService.class);
+        webHeadService.setData(getIntent().getData());
+        webHeadService.putExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, isNewTab);
+        startService(webHeadService);
     }
 
     private void launchSecondaryBrowserWithIteration() {
-        Intent webIntentImplicit = getOriginalIntentCopy(getIntent());
-        webIntentImplicit.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        webIntentImplicit.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        final Intent webIntentImplicit = getOriginalIntentCopy(getIntent());
+        // webIntentImplicit.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        // webIntentImplicit.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         @SuppressLint("InlinedApi")
         List<ResolveInfo> resolvedActivityList = getApplicationContext().getPackageManager()
                 .queryIntentActivities(webIntentImplicit, PackageManager.MATCH_ALL);
@@ -150,7 +145,6 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                             info.activityInfo.packageName,
                             info.activityInfo.name);
                     webIntentImplicit.setComponent(componentName);
-
                     // This will be the new component, so write it to preferences
                     Preferences.secondaryBrowserComponent(this, componentName.flattenToString());
                     startActivity(webIntentImplicit);

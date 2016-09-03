@@ -53,11 +53,11 @@ public class CustomTabActivity extends AppCompatActivity {
                 .launch();
         Benchmark.end();
 
-        setDescription();
+        dispatchDescriptionTask();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void setDescription() {
+    private void dispatchDescriptionTask() {
         if (Util.isLollipopAbove()) {
             final Intent intent = getIntent();
             final Bitmap icon = intent.getParcelableExtra(Constants.EXTRA_KEY_WEBHEAD_ICON);
