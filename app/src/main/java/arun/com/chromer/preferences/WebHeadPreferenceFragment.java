@@ -31,12 +31,14 @@ import arun.com.chromer.preferences.widgets.IconListPreference;
 import arun.com.chromer.preferences.widgets.IconSwitchPreference;
 import arun.com.chromer.shared.Constants;
 
+import static arun.com.chromer.preferences.manager.Preferences.AGGRESSIVE_LOADING;
+
 public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private final String[] WEBHEAD_PREFERENCE_GROUP = new String[]{
             Preferences.WEB_HEAD_SPAWN_LOCATION,
             Preferences.WEB_HEADS_COLOR,
-            Preferences.WEB_HEAD_SIZE
+            Preferences.WEB_HEAD_SIZE,
     };
 
     private final IntentFilter mWebHeadColorFilter = new IntentFilter(Constants.ACTION_WEBHEAD_COLOR_SET);
@@ -100,7 +102,7 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
         mSize = (IconListPreference) findPreference(Preferences.WEB_HEAD_SIZE);
         mFavicons = (IconCheckboxPreference) findPreference(Preferences.WEB_HEAD_FAVICON);
         mCloseOnOpen = (IconCheckboxPreference) findPreference(Preferences.WEB_HEAD_CLOSE_ON_OPEN);
-        mAggressive = (IconCheckboxPreference) findPreference(Preferences.AGGRESSIVE_LOADING);
+        mAggressive = (IconCheckboxPreference) findPreference(AGGRESSIVE_LOADING);
     }
 
 
@@ -196,7 +198,8 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
                     Preferences.WEB_HEADS_COLOR,
                     Preferences.WEB_HEAD_CLOSE_ON_OPEN,
                     Preferences.WEB_HEAD_FAVICON,
-                    Preferences.WEB_HEAD_SIZE
+                    Preferences.WEB_HEAD_SIZE,
+                    AGGRESSIVE_LOADING
             );
         }
     }

@@ -304,6 +304,7 @@ public class Preferences {
 
     public static boolean aggressiveLoading(Context context) {
         return Util.isLollipopAbove()
+                && webHeads(context)
                 && PreferenceManager
                 .getDefaultSharedPreferences(context).getBoolean(AGGRESSIVE_LOADING, false);
     }
