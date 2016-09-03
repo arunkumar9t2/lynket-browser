@@ -87,6 +87,7 @@ public class BehaviorPreferenceFragment extends DividerLessPreferenceFragment im
         if (!Util.isLollipopAbove()) {
             mMergeTabsPreference.setVisible(false);
         }
+        mMergeTabsPreference.setChecked(Preferences.mergeTabs(getActivity()));
     }
 
     @Override

@@ -70,6 +70,7 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
         setIcons();
         setUpWebHeadSwitch();
         setupWebHeadColorPreference();
+        setupAggressivePreference();
     }
 
 
@@ -149,6 +150,23 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
                         .preselect(chosenColor)
                         .dynamicButtonColor(false)
                         .show();
+                return true;
+            }
+        });
+    }
+
+    private void setupAggressivePreference() {
+        mAggressive.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if (((Boolean) newValue) && !Preferences.mergeTabs(getActivity())) {
+                    new MaterialDialog.Builder(getActivity())
+                            .title(R.string.aggresive_dia_title)
+                            .content(R.string.aggresive_dia_content)
+                            .positiveText(android.R.string.ok)
+                            .show();
+                    Preferences.mergeTabs(getActivity(), true);
+                }
                 return true;
             }
         });

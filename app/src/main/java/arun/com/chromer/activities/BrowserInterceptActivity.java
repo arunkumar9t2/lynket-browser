@@ -84,8 +84,8 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                 customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
                 customTabActivity.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
             } else {
-                // customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                // customTabActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                customTabActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             }
             customTabActivity.putExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, isFromNewTab);
             startActivity(customTabActivity);
@@ -98,8 +98,8 @@ public class BrowserInterceptActivity extends AppCompatActivity {
         String componentFlatten = Preferences.secondaryBrowserComponent(this);
         if (componentFlatten != null && Util.isPackageInstalled(this, Preferences.secondaryBrowserPackage(this))) {
             final Intent webIntentExplicit = getOriginalIntentCopy(getIntent());
-            //  webIntentExplicit.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            //  webIntentExplicit.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            webIntentExplicit.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            webIntentExplicit.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             ComponentName cN = ComponentName.unflattenFromString(componentFlatten);
             webIntentExplicit.setComponent(cN);
             try {
@@ -114,13 +114,14 @@ public class BrowserInterceptActivity extends AppCompatActivity {
         Toast.makeText(this, getString(R.string.blacklist_message), Toast.LENGTH_LONG).show();
         Intent defaultIntent = getOriginalIntentCopy(getIntent());
         Intent chooserIntent = Intent.createChooser(defaultIntent, getString(R.string.open_with));
-        // chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        // chooserIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        chooserIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(chooserIntent);
     }
 
     private void launchWebHead(boolean isNewTab) {
         final Intent webHeadService = new Intent(this, WebHeadService.class);
+        webHeadService.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         webHeadService.setData(getIntent().getData());
         webHeadService.putExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, isNewTab);
         startService(webHeadService);
@@ -128,8 +129,8 @@ public class BrowserInterceptActivity extends AppCompatActivity {
 
     private void launchSecondaryBrowserWithIteration() {
         final Intent webIntentImplicit = getOriginalIntentCopy(getIntent());
-        // webIntentImplicit.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        // webIntentImplicit.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        webIntentImplicit.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        webIntentImplicit.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         @SuppressLint("InlinedApi")
         List<ResolveInfo> resolvedActivityList = getApplicationContext().getPackageManager()
                 .queryIntentActivities(webIntentImplicit, PackageManager.MATCH_ALL);
