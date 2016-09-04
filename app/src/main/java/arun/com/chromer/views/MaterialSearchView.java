@@ -39,7 +39,6 @@ import arun.com.chromer.search.SuggestionItem;
 import arun.com.chromer.util.Util;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 public class MaterialSearchView extends RelativeLayout implements SearchSuggestions.SuggestionsCallback, SuggestionAdapter.SuggestionClickListener {
     @ColorInt
@@ -69,8 +68,6 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
 
     private SearchSuggestions mSearchSuggestions;
     private SuggestionAdapter mSuggestionAdapter;
-
-    private Unbinder mUnBinder;
 
     private InteractionListener mInteractionListener = new InteractionListener() {
         @Override
@@ -120,7 +117,7 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
                 .sizeDp(18);
 
         addView(LayoutInflater.from(getContext()).inflate(R.layout.material_search_view, this, false));
-        mUnBinder = ButterKnife.bind(this);
+        ButterKnife.bind(this);
         mSuggestionAdapter = new SuggestionAdapter(getContext(), this);
         mSuggestionList.setLayoutManager(new LinearLayoutManager(getContext()));
         mSuggestionList.setAdapter(mSuggestionAdapter);
@@ -201,12 +198,6 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
                 if (!mInFocus) gainFocus();
             }
         });
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        // mUnBinder.unbind();
     }
 
     private void gainFocus() {

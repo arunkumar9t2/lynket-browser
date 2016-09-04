@@ -10,7 +10,7 @@
               android:minHeight="56dp"
               android:orientation="horizontal"
               android:padding="5dp"
-              tools:ignore="RtlHardcoded">
+              tools:ignore="Overdraw,RtlHardcoded">
 
     <ImageView
         android:id="@+id/about_row_item_image"

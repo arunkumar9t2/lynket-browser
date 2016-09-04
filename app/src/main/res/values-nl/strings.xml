@@ -175,8 +175,6 @@ Binnenkort meer functies.</string>
     <string name="web_heads_enabled">Webheads ingeschakeld! Je kan nu meerdere links in een wachtrij zeggen en ze later bekijken.</string>
     <string name="web_heads_title">Je kan meerdere links opstapelen en ze later bekijken.</string>
     <string name="web_heads_description">Open links in zwevende bellen.</string>
-    <string name="favicon_title">Weergeef Favicons</string>
-    <string name="favicon_description">Kleine iconen van websites worden weergegeven.</string>
     <string name="webhead_size_title">Formaat</string>
     <string name="webhead_size_dialog">Kies het formaat van Webheads.</string>
 </resources>

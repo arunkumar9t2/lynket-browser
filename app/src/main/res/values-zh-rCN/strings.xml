@@ -183,8 +183,6 @@
     <string name="web_heads_enabled">链接气泡已启用! 您可以同时打开多条链接以便稍后查看</string>
     <string name="web_heads_title">您可同时堆叠多条链接以便稍后查看</string>
     <string name="web_heads_description">在浮动气泡中打开链接</string>
-    <string name="favicon_title">显示网页图标</string>
-    <string name="favicon_description">显示来自网页的小图标</string>
     <string name="webhead_size_title">尺寸</string>
     <string name="webhead_size_dialog">选择链接气泡尺寸</string>
 </resources>

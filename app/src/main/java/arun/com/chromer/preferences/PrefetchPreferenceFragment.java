@@ -112,7 +112,7 @@ public class PrefetchPreferenceFragment extends DividerLessPreferenceFragment im
         }
     }
 
-    public boolean isPrefetchEnabled() {
+    private boolean isPrefetchEnabled() {
         return Util.isAccessibilityServiceEnabled(getActivity()) && Preferences.preFetch(getActivity());
     }
 

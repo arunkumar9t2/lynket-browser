@@ -166,8 +166,6 @@
     <string name="web_heads_enabled">Plutajući su mjehurići omogućeni! Sada možete naslagati više poveznica i kasnije ih pogledati.</string>
     <string name="web_heads_title">Možete naslagati više poveznica i kasnije ih pogledati.</string>
     <string name="web_heads_description">Otvaraj poveznice u plutajućim mjehurićima</string>
-    <string name="favicon_title">Prikaži ikone stranica</string>
-    <string name="favicon_description">Prikazivat će se male ikone mrežnih stranica.</string>
     <string name="webhead_size_title">Veličina</string>
     <string name="webhead_size_dialog">Odaberite veličinu plutajućih mjehurića</string>
 </resources>

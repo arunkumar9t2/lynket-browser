@@ -428,7 +428,7 @@ public abstract class BaseWebHead extends FrameLayout {
         getRevealAnimator(webHeadColor).start();
     }
 
-    protected void updateBadgeColors(@ColorInt int webHeadColor) {
+    void updateBadgeColors(@ColorInt int webHeadColor) {
         final int badgeColor = ColorUtil.getClosestAccentColor(webHeadColor);
         sBadgeDrawable.setBadgeColor(badgeColor);
         sBadgeDrawable.setTextColor(ColorUtil.getForegroundWhiteOrBlack(badgeColor));

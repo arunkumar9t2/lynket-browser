@@ -43,7 +43,7 @@ public abstract class DividerLessPreferenceFragment extends PreferenceFragmentCo
         return recyclerView;
     }
 
-    protected void enableDisablePreference(boolean enabled, String... preferenceKeys) {
+    void enableDisablePreference(boolean enabled, String... preferenceKeys) {
         for (String preferenceKey : preferenceKeys) {
             final Preference preference = findPreference(preferenceKey);
             if (preference != null) {
@@ -52,7 +52,7 @@ public abstract class DividerLessPreferenceFragment extends PreferenceFragmentCo
         }
     }
 
-    protected void updatePreferenceSummary(String... preferenceKeys) {
+    void updatePreferenceSummary(String... preferenceKeys) {
         for (String key : preferenceKeys) {
             final Preference preference = getPreferenceScreen().findPreference(key);
             if (preference instanceof ListPreference) {
@@ -78,13 +78,13 @@ public abstract class DividerLessPreferenceFragment extends PreferenceFragmentCo
         return LocalBroadcastManager.getInstance(getActivity());
     }
 
-    protected void registerReceiver(@Nullable BroadcastReceiver receiver, @Nullable IntentFilter filter) {
+    void registerReceiver(@Nullable BroadcastReceiver receiver, @Nullable IntentFilter filter) {
         if (receiver != null && filter != null) {
             getLocalBroadcastManager().registerReceiver(receiver, filter);
         }
     }
 
-    protected void unregisterReceiver(@Nullable BroadcastReceiver receiver) {
+    void unregisterReceiver(@Nullable BroadcastReceiver receiver) {
         if (receiver != null) {
             getLocalBroadcastManager().unregisterReceiver(receiver);
         }
@@ -93,7 +93,7 @@ public abstract class DividerLessPreferenceFragment extends PreferenceFragmentCo
     /**
      * Shows a {@link android.support.design.widget.Snackbar} by calling activity methods.
      */
-    protected void showSnack(@NonNull String textToSnack, int duration) {
+    void showSnack(@NonNull String textToSnack, int duration) {
         if (getActivity() instanceof MainActivity) {
             MainActivity activity = (MainActivity) getActivity();
             activity.snack(textToSnack, duration);
@@ -101,7 +101,7 @@ public abstract class DividerLessPreferenceFragment extends PreferenceFragmentCo
     }
 
     @NonNull
-    protected SharedPreferences getSharedPreferences() {
+    SharedPreferences getSharedPreferences() {
         return getPreferenceManager().getSharedPreferences();
     }
 }

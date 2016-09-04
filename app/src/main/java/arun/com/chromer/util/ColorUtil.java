@@ -45,7 +45,7 @@ public class ColorUtil {
             Color.parseColor("#FF3D00")
     };
 
-    public final static int[] ACCENT_COLORS_700 = new int[]{
+    private final static int[] ACCENT_COLORS_700 = new int[]{
             Color.parseColor("#D32F2F"),
             Color.parseColor("#C2185B"),
             Color.parseColor("#7B1FA2"),
@@ -85,7 +85,7 @@ public class ColorUtil {
         return swatchList;
     }
 
-    public static double colorDifference(@ColorInt int a, @ColorInt int b) {
+    private static double colorDifference(@ColorInt int a, @ColorInt int b) {
         double aLab[] = new double[3];
         double bLab[] = new double[3];
         ColorUtils.colorToLAB(a, aLab);

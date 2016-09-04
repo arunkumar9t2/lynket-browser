@@ -183,8 +183,6 @@
     <string name="web_heads_enabled">Web heads ativadas! Agora pode enfileirar múltiplos links e visualizá-los depois.</string>
     <string name="web_heads_title">Você pode empilhar múltiplos links e visualizá-los depois.</string>
     <string name="web_heads_description">Abrir links em bolhas flutuantes</string>
-    <string name="favicon_title">Exibir Favicons</string>
-    <string name="favicon_description">Pequenos ícones serão extraídos dos sites e exibidos</string>
     <string name="webhead_size_title">Tamanho</string>
     <string name="webhead_size_dialog">Escolha o tamanho das web heads</string>
 </resources>

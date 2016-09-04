@@ -183,8 +183,6 @@
     <string name="web_heads_enabled">Web Heads aktiviert! Du kannst jetzt mehrere Links im Hintergrund laden und nachher ansehen.</string>
     <string name="web_heads_title">Du kannst mehrere Links laden und später ansehen</string>
     <string name="web_heads_description">Öffne Links in schwebenden Blasen.</string>
-    <string name="favicon_title">Favicons anzeigen</string>
-    <string name="favicon_description">Kleine, aus der Website extrahierte Icons werden angezeigt</string>
     <string name="webhead_size_title">Größe</string>
     <string name="webhead_size_dialog">Wähle die Größe der Web Heads</string>
 </resources>

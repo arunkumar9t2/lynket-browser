@@ -29,7 +29,6 @@ import arun.com.chromer.R;
 import arun.com.chromer.util.Util;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * Created by Arun on 16/06/2016.
@@ -46,7 +45,6 @@ public class TabView extends FrameLayout {
     public ImageView mTabIcon;
     @BindView(R.id.tab_view_text)
     public TextView mTabText;
-    private Unbinder mUnBinder;
     private float initialIconX = 0;
     private float initialTextX = 0;
     private boolean mSelected;
@@ -71,7 +69,7 @@ public class TabView extends FrameLayout {
     private void init(@NonNull Context context, @TabType int tabType) {
         mTabType = tabType;
         addView(LayoutInflater.from(context).inflate(R.layout.tab_view_layout, this, false));
-        mUnBinder = ButterKnife.bind(this);
+        ButterKnife.bind(this);
         switch (mTabType) {
             case TAB_TYPE_OPTIONS:
                 mTabIcon.setImageDrawable(new IconicsDrawable(getContext())
@@ -115,13 +113,6 @@ public class TabView extends FrameLayout {
                 getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        // Causing issues with multi window.
-        // mUnBinder.unbind();
     }
 
     @Override

@@ -183,8 +183,6 @@
     <string name="web_heads_enabled">Webheads включен! Теперь вы можете открыть в фоне несколько ссылок и просматривать их позже.</string>
     <string name="web_heads_title">Вы можете открывать несколько ссылок и просматривать их позже</string>
     <string name="web_heads_description">Открывать ссылки в плавающих пузырьках</string>
-    <string name="favicon_title">Значки веб-сайтов</string>
-    <string name="favicon_description">Будут показаны небольшие иконки, извлеченные из веб-сайтов</string>
     <string name="webhead_size_title">Размер</string>
     <string name="webhead_size_dialog">Выберите размер плавающей иконки</string>
 </resources>

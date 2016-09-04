@@ -171,8 +171,6 @@
     <string name="web_heads_enabled">Webové hlavičky sú povolené! Môžete zaradiť odkazy do fronty a zobraziť ich neskôr.</string>
     <string name="web_heads_title">Môže zoskupiť viacero odkazov a zobraziť ich neskôr.</string>
     <string name="web_heads_description">Otvoriť odkazy v plávajúcich bublinách</string>
-    <string name="favicon_title">Zobraziť Favicons</string>
-    <string name="favicon_description">Malé ikony webových stránok budú zobrazené</string>
     <string name="webhead_size_title">Veľkosť</string>
     <string name="webhead_size_dialog">Zvoľte veľkosť webových hlavičiek</string>
 </resources>

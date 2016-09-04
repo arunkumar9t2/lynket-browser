@@ -21,7 +21,7 @@ import timber.log.Timber;
 public class DocumentUtils {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public static ActivityManager.RecentTaskInfo getTaskInfoFromTask(ActivityManager.AppTask task) {
+    private static ActivityManager.RecentTaskInfo getTaskInfoFromTask(ActivityManager.AppTask task) {
         ActivityManager.RecentTaskInfo info = null;
         try {
             info = task.getTaskInfo();
@@ -44,7 +44,7 @@ public class DocumentUtils {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public static boolean reOrderCustomTab(@NonNull Context context, @NonNull WebHead webHead) {
+    private static boolean reOrderCustomTab(@NonNull Context context, @NonNull WebHead webHead) {
         if (!Preferences.mergeTabs(context)) {
             return false;
         }

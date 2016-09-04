@@ -39,8 +39,8 @@ public class AppColorExtractorService extends IntentService {
                         | app.isEmpty())
                     return;
 
-                if (extractColorFromResources(app)) {
-                } else extractColorFromAppIcon(app);
+                if (!extractColorFromResources(app))
+                    extractColorFromAppIcon(app);
             }
         }
     }
