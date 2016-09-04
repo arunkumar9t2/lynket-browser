@@ -1,7 +1,5 @@
 package arun.com.chromer.webheads.ui;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -157,7 +155,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
                     break;
             }
         } catch (NullPointerException e) {
-            String msg = "NPE on web heads " + e.getMessage();
+            final String msg = "NPE on web heads " + e.getMessage();
             if (BuildConfig.DEBUG) {
                 Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
             }
@@ -564,29 +562,29 @@ public class WebHead extends BaseWebHead implements SpringListener {
      * @param receiveCallback True if clients should be notified
      */
     private void closeWithAnimation(final boolean receiveCallback) {
-        final Animator reveal = getRevealInAnimator(mDeleteColor);
-        mCircleBackground.clearElevation();
-        reveal.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                mIndicator.setVisibility(GONE);
-                crossFadeFaviconToX();
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                new Handler().postDelayed(new Runnable() {
+        revealInAnimation(sDeleteColor,
+                new Runnable() {
                     @Override
                     public void run() {
-                        if (receiveCallback)
-                            mContract.onWebHeadDestroyed(WebHead.this, isLastWebHead());
-                        WebHead.super.destroySelf(receiveCallback);
+                        if (mCircleBackground != null && mIndicator != null) {
+                            mCircleBackground.clearElevation();
+                            mIndicator.setVisibility(GONE);
+                        }
+                        crossFadeFaviconToX();
                     }
-                }, 200);
-            }
-        });
-        reveal.setStartDelay(100);
-        reveal.start();
+                }, new Runnable() {
+                    @Override
+                    public void run() {
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (receiveCallback)
+                                    mContract.onWebHeadDestroyed(WebHead.this, isLastWebHead());
+                                WebHead.super.destroySelf(receiveCallback);
+                            }
+                        }, 200);
+                    }
+                });
     }
 
     /**
@@ -596,37 +594,37 @@ public class WebHead extends BaseWebHead implements SpringListener {
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void closeWithAnimationL(final boolean receiveCallback) {
-        final Animator reveal = getRevealInAnimator(mDeleteColor);
         mCircleBackground
                 .animate()
                 .setDuration(50)
                 .withLayer()
                 .translationZ(0)
                 .z(0)
-                .setListener(new AnimatorListenerAdapter() {
+                .withEndAction(new Runnable() {
                     @Override
-                    public void onAnimationEnd(Animator animation) {
-                        reveal.addListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationStart(Animator animation) {
-                                crossFadeFaviconToX();
-                                mIndicator.setVisibility(GONE);
-                            }
-
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        revealInAnimation(sDeleteColor,
+                                new Runnable() {
                                     @Override
                                     public void run() {
-                                        if (receiveCallback)
-                                            mContract.onWebHeadDestroyed(WebHead.this, isLastWebHead());
-                                        WebHead.super.destroySelf(receiveCallback);
+                                        crossFadeFaviconToX();
+                                        if (mIndicator != null)
+                                            mIndicator.setVisibility(GONE);
                                     }
-                                }, 200);
-                            }
-                        });
-                        reveal.setStartDelay(100);
-                        reveal.start();
+                                },
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        new Handler().postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                if (receiveCallback)
+                                                    mContract.onWebHeadDestroyed(WebHead.this, isLastWebHead());
+                                                WebHead.super.destroySelf(receiveCallback);
+                                            }
+                                        }, 200);
+                                    }
+                                });
                     }
                 });
     }
@@ -691,13 +689,12 @@ public class WebHead extends BaseWebHead implements SpringListener {
                         .withLayer()
                         .setDuration(250)
                         .setInterpolator(new AccelerateDecelerateInterpolator())
-                        .setListener(new AnimatorListenerAdapter() {
+                        .withEndAction(new Runnable() {
                             @Override
-                            public void onAnimationEnd(Animator animation) {
+                            public void run() {
                                 sendCallback();
                             }
-                        })
-                        .start();
+                        }).start();
                 // Store the touch down point if its master
                 if (mMaster) {
                     masterDownX = mWindowParams.x;

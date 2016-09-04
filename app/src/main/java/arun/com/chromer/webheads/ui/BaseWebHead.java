@@ -47,44 +47,27 @@ import static arun.com.chromer.util.Util.dpToPx;
  * to UI like favicon, text indicator and is responsible for inflating all the content.
  */
 public abstract class BaseWebHead extends FrameLayout {
-    /**
-     * Helper instance to know screen boundaries that web head is allowed to travel
-     */
+    // Helper instance to know screen boundaries that web head is allowed to travel
     static ScreenBounds sScreenBounds;
-    /**
-     * Counter to keep count of active web heads
-     */
+    // Counter to keep count of active web heads
     static int WEB_HEAD_COUNT = 0;
-    /**
-     * Class variables to keep track of where the master was last touched down
-     */
+    // Class variables to keep track of where the master was last touched down
     static int masterDownX;
     static int masterDownY;
-    /**
-     * Static window manager instance to update, add and remove web heads
-     */
+    // Static window manager instance to update, add and remove web heads
     private static WindowManager sWindowManager;
-    /**
-     * X icon drawable used when closing
-     */
+    // X icon drawable used when closing
     private static Drawable sXDrawable;
+    // Badge indicator
     private static BadgeDrawable sBadgeDrawable;
-    /**
-     * Class variables to keep track of master movements
-     */
+    // Class variables to keep track of master movements
     private static int masterX;
     private static int masterY;
-    /**
-     * Window parameters used to track and update web heads post creation;
-     */
+    // Window parameters used to track and update web heads post creation;
     final WindowManager.LayoutParams mWindowParams;
-    /**
-     * Color of web head when removed
-     */
-    final int mDeleteColor;
-    /**
-     * The url of the website that this web head represents, not allowed to change
-     */
+    // Color of web head when removed
+    int sDeleteColor = Constants.NO_COLOR;
+    // The url of the website that this web head represents, not allowed to change
     private final String mUrl;
 
     @BindView(R.id.favicon)
@@ -98,46 +81,26 @@ public abstract class BaseWebHead extends FrameLayout {
     @BindView(R.id.badge)
     protected TextView mBadgeView;
 
-    /**
-     * Display dimensions
-     */
+    // Display dimensions
     int sDispWidth, sDispHeight;
-    /**
-     * The content view group which host all our elements
-     */
+    // The content view group which host all our elements
     FrameLayout mContentGroup;
-    /**
-     * Flag to know if the user moved manually or if the web heads is still resting
-     */
+    // Flag to know if the user moved manually or if the web heads is still resting
     boolean mUserManuallyMoved;
-    /**
-     * If web head was issued with destroy before.
-     */
+    // If web head was issued with destroy before.
     boolean mDestroyed;
-    /**
-     * Master Wayne
-     */
+    // Master Wayne
     boolean mMaster;
-    /**
-     * If this web head is being queued to be displayed on screen.
-     */
+    // If this web head is being queued to be displayed on screen.
     boolean mInQueue;
-    /**
-     * The un shortened url resolved from @link mUrl
-     */
+    // The un shortened url resolved from @link mUrl
     private String mUnShortenedUrl;
-    /**
-     * Title of the website
-     */
+    // Title of the website
     private String mTitle;
-    /**
-     * Flag to know if this web head was created for opening in new tab
-     */
+    // Flag to know if this web head was created for opening in new tab
     private boolean mIsFromNewTab;
     private boolean mSpawnSet;
-    /**
-     * Color of the web head
-     */
+    // Color of the web head
     @ColorInt
     int mWebHeadColor;
 
@@ -173,7 +136,8 @@ public abstract class BaseWebHead extends FrameLayout {
                     .sizeDp(18);
         }
 
-        mDeleteColor = ContextCompat.getColor(context, R.color.remove_web_head_color);
+        if (sDeleteColor == Constants.NO_COLOR)
+            sDeleteColor = ContextCompat.getColor(context, R.color.remove_web_head_color);
 
         // Needed to prevent overly dark shadow.
         if (WEB_HEAD_COUNT > 2) {
@@ -187,6 +151,14 @@ public abstract class BaseWebHead extends FrameLayout {
     }
 
     protected abstract void onMasterChanged(boolean master);
+
+    /**
+     * Event for sub class to get notified once spawn location is set.
+     *
+     * @param x X
+     * @param y Y
+     */
+    protected abstract void onSpawnLocationSet(int x, int y);
 
     private void inflateContent(@NonNull Context context) {
         // size
@@ -228,14 +200,6 @@ public abstract class BaseWebHead extends FrameLayout {
             onSpawnLocationSet(x, y);
         }
     }
-
-    /**
-     * Event for sub class to get notified once spawn location is set.
-     *
-     * @param x
-     * @param y
-     */
-    protected abstract void onSpawnLocationSet(int x, int y);
 
     /**
      * Initializes web head from user preferences
@@ -341,19 +305,22 @@ public abstract class BaseWebHead extends FrameLayout {
      * Opposite of {@link #getRevealAnimator(int)}. Reveal goes from max scale to 0 appearing to be
      * revealing in.
      *
-     * @param newWebHeadColor The color to apply to circle background after animation is done
-     * @return animator
+     * @param newWebHeadColor New color of reveal
+     * @param start           Runnable to run on start
+     * @param end             Runnable to run on end
      */
-    @NonNull
-    Animator getRevealInAnimator(@ColorInt final int newWebHeadColor) {
-        // TODO Fix NPE
+    void revealInAnimation(@ColorInt final int newWebHeadColor, @NonNull final Runnable start, @NonNull final Runnable end) {
+        if (mRevealView == null || mCircleBackground == null) {
+            start.run();
+            end.run();
+        }
         mRevealView.clearAnimation();
         mRevealView.setColor(mCircleBackground.getColor());
         mRevealView.setScaleX(1f);
         mRevealView.setScaleY(1f);
         mRevealView.setAlpha(1f);
         mCircleBackground.setColor(newWebHeadColor);
-        AnimatorSet animator = new AnimatorSet();
+        final AnimatorSet animator = new AnimatorSet();
         animator.playTogether(
                 ObjectAnimator.ofFloat(mRevealView, "scaleX", 0f),
                 ObjectAnimator.ofFloat(mRevealView, "scaleY", 0f)
@@ -361,18 +328,25 @@ public abstract class BaseWebHead extends FrameLayout {
         mRevealView.setLayerType(LAYER_TYPE_HARDWARE, null);
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
+            public void onAnimationStart(Animator animation) {
+                start.run();
+            }
+
+            @Override
             public void onAnimationEnd(Animator animation) {
                 mWebHeadColor = newWebHeadColor;
                 mIndicator.setTextColor(ColorUtil.getForegroundWhiteOrBlack(newWebHeadColor));
                 mRevealView.setLayerType(LAYER_TYPE_NONE, null);
                 mRevealView.setScaleX(0f);
                 mRevealView.setScaleY(0f);
+                end.run();
             }
 
         });
         animator.setInterpolator(new LinearOutSlowInInterpolator());
         animator.setDuration(400);
-        return animator;
+        animator.setStartDelay(100);
+        animator.start();
     }
 
     /**
@@ -463,7 +437,7 @@ public abstract class BaseWebHead extends FrameLayout {
     @Nullable
     public Bitmap getFaviconBitmap() {
         try {
-            RoundedBitmapDrawable roundedBitmapDrawable = (RoundedBitmapDrawable) getFaviconDrawable();
+            final RoundedBitmapDrawable roundedBitmapDrawable = (RoundedBitmapDrawable) getFaviconDrawable();
             return roundedBitmapDrawable != null ? roundedBitmapDrawable.getBitmap() : null;
         } catch (Exception e) {
             Timber.e("Error while getting favicon bitmap: %s", e.getMessage());
@@ -559,7 +533,7 @@ public abstract class BaseWebHead extends FrameLayout {
         public int top;
         public int bottom;
 
-        public ScreenBounds(int dispWidth, int dispHeight, int webHeadWidth) {
+        ScreenBounds(int dispWidth, int dispHeight, int webHeadWidth) {
             if (webHeadWidth == 0 || dispWidth == 0 || dispHeight == 0) {
                 throw new IllegalArgumentException("Width of web head or screen size cannot be 0");
             }

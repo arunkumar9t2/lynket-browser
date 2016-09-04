@@ -130,7 +130,7 @@ class SizedQueue<E> extends LinkedList<E> {
      */
     private final int limit;
 
-    public SizedQueue(int limit) {
+    SizedQueue(int limit) {
         this.limit = limit;
     }
 
