@@ -39,75 +39,51 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
     private static final float TOUCH_DOWN_SCALE = 1f;
     private static final float TOUCH_UP_SCALE = 1f;
-    /**
-     * Coordinate of remove web head that we can lock on to.
-     */
+    // Coordinate of remove web head that we can lock on to.
     private int[] mTrashLockCoordinate;
-    /**
-     * True when being dragged, otherwise false
-     */
+    // True when being dragged, otherwise false
     private boolean mDragging;
-    /**
-     * True when attached to remove view, otherwise false
-     */
+    // True when attached to remove view, otherwise false
     private boolean mWasRemoveLocked;
-    /**
-     * True when fling detected and false on new touch event
-     */
+    // True when fling detected and false on new touch event
     private boolean mWasFlung;
-    /**
-     * True when click was detected, and false on new touch event
-     */
+    // True when click was detected, and false on new touch event
     private boolean mWasClicked;
-    /**
-     * True when touched down and false otherwise
-     */
+    // True when touched down and false otherwise
     private boolean mScaledDown;
-    /**
-     * If this is true, then on releasing the web head, we close all others and clean up.
-     */
+    // If this is true, then on releasing the web head, we close all others and clean up.
     private boolean mShouldCloseAll;
-    /**
-     * Minimum horizontal velocity that we need to move the web head from one end of the screen
-     * to another
-     */
+    // If web head is resting on the sides
+    private boolean mIsCoasting = false;
+    // Minimum horizontal velocity that we need to move the web head from one end of the scree to another
     private static int MINIMUM_HORIZONTAL_FLING_VELOCITY = 0;
-    /**
-     * Touch slop of the device
-     */
+    // Touch slop of the device
     private final int mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
-    /**
-     * Long press duration of device
-     */
+    // Long press duration of device
     private static final int mLongPressDuration = ViewConfiguration.getLongPressTimeout();
-    /**
-     * Gesture detector to recognize fling and click on web heads
-     */
+    // Gesture detector to recognize fling and click on web heads
     private final GestureDetector mGestureDetector = new GestureDetector(getContext(), new GestureDetectorListener());
-    /**
-     * Individual springs to control X, Y and scale of the web head
-     */
+    // Individual springs to control X, Y and scale of the web head
     private Spring mXSpring, mYSpring, mScaleSpring;
-    /**
-     * Movement tracker instance, that is used to adjust X and Y velocity calculated by {@link #mGestureDetector}.
-     * This is needed since sometimes velocities coming from {@link GestureDetectorListener#onFling(MotionEvent, MotionEvent, float, float)}
-     * has wrong polarity.
-     */
-    private final MovementTracker mMovementTracker;
 
     private float posX, posY;
     private int initialDownX, initialDownY;
-    /**
-     * The interaction listener that clients can provide to listen for events on webhead.
-     */
-    private final WebHeadContract mContract;
 
     private static final Timer sTimer = new Timer();
     private static TimerTask sLongPressToCloseAllTask;
     private TimerTask mCoastingTask;
-    private boolean mIsCoasting = false;
 
     private static Toast sToast;
+
+    // The interaction listener that clients can provide to listen for events on webhead.
+    private final WebHeadContract mContract;
+
+    /**
+     * Movement tracker instance that is used to adjust X and Y velocity calculated by {@link #mGestureDetector}.
+     * This is needed since sometimes velocities coming from {@link GestureDetectorListener#onFling(MotionEvent, MotionEvent, float, float)}
+     * has wrong polarity.
+     */
+    private static MovementTracker sMovementTracker;
 
     /**
      * Inits the web head and attaches to the system window. It is assumed that draw over other apps permission is
@@ -121,7 +97,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
         super(context, url);
         mContract = contract;
         mMaster = true;
-        mMovementTracker = MovementTracker.obtain();
+        sMovementTracker = MovementTracker.obtain();
         calcVelocities();
         setupSprings();
         scheduleCoastingTask();
@@ -193,7 +169,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
     private void handleTouchDown(@NonNull MotionEvent event) {
         mDragging = false;
 
-        mMovementTracker.onDown();
+        sMovementTracker.onDown();
 
         initialDownX = mWindowParams.x;
         initialDownY = mWindowParams.y;
@@ -212,28 +188,6 @@ public class WebHead extends BaseWebHead implements SpringListener {
         cancelCoastingTask();
     }
 
-    private void scheduleLongPressToCloseTask() {
-        if (sLongPressToCloseAllTask != null) {
-            sLongPressToCloseAllTask.cancel();
-        }
-        sLongPressToCloseAllTask = new TimerTask() {
-            @Override
-            public void run() {
-                mShouldCloseAll = true;
-                post(new Runnable() {
-                    @Override
-                    public void run() {
-                        cancelToast();
-                        sToast = Toast.makeText(getContext(), R.string.close_all_explanation, Toast.LENGTH_SHORT);
-                        sToast.setGravity(Gravity.CENTER, 0, 0);
-                        sToast.show();
-                    }
-                });
-            }
-        };
-        sTimer.schedule(sLongPressToCloseAllTask, 3000);
-    }
-
     /**
      * Responsible for moving the web heads around and for locking/unlocking the web head to
      * remove view.
@@ -241,7 +195,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
      * @param event the touch event
      */
     private void handleMove(@NonNull MotionEvent event) {
-        mMovementTracker.addMovement(event);
+        sMovementTracker.addMovement(event);
 
         float offsetX = event.getRawX() - posX;
         float offsetY = event.getRawY() - posY;
@@ -296,7 +250,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
         }
         mDragging = false;
 
-        mMovementTracker.onUp();
+        sMovementTracker.onUp();
 
         if (!mWasFlung && mUserManuallyMoved) {
             stickToWall();
@@ -306,6 +260,28 @@ public class WebHead extends BaseWebHead implements SpringListener {
         RemoveWebHead.disappear();
         scheduleCoastingTask();
         return false;
+    }
+
+    private void scheduleLongPressToCloseTask() {
+        if (sLongPressToCloseAllTask != null) {
+            sLongPressToCloseAllTask.cancel();
+        }
+        sLongPressToCloseAllTask = new TimerTask() {
+            @Override
+            public void run() {
+                mShouldCloseAll = true;
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        cancelToast();
+                        sToast = Toast.makeText(getContext(), R.string.close_all_explanation, Toast.LENGTH_SHORT);
+                        sToast.setGravity(Gravity.CENTER, 0, 0);
+                        sToast.show();
+                    }
+                });
+            }
+        };
+        sTimer.schedule(sLongPressToCloseAllTask, 3000);
     }
 
     /**
@@ -735,7 +711,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             mDragging = false;
 
-            float[] adjustedVelocities = mMovementTracker.getAdjustedVelocities(velocityX, velocityY);
+            float[] adjustedVelocities = sMovementTracker.getAdjustedVelocities(velocityX, velocityY);
 
             if (adjustedVelocities == null) {
                 float[] down = new float[]{e1.getRawX(), e1.getRawY()};
