@@ -22,7 +22,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service android:name=".dynamictoolbar.WebColorExtractorService"/>
+        <service android:name=".customtabs.dynamictoolbar.WebColorExtractorService"/>
         <service android:name=".customtabs.callbacks.ClipboardService"/>
         <service android:name=".customtabs.callbacks.AddHomeShortcutService"/>
         <service android:name=".customtabs.warmup.WarmUpService"/>
@@ -43,7 +43,7 @@
             android:enabled="true"
             android:exported="false"/>
         <service
-            android:name=".dynamictoolbar.AppColorExtractorService"
+            android:name=".customtabs.dynamictoolbar.AppColorExtractorService"
             android:exported="false"/>
         <service
             android:name=".webheads.WebHeadService"

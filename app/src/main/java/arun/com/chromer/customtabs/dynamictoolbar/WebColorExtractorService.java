@@ -1,4 +1,4 @@
-package arun.com.chromer.dynamictoolbar;
+package arun.com.chromer.customtabs.dynamictoolbar;
 
 import android.app.IntentService;
 import android.content.Intent;
