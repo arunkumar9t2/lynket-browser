@@ -69,6 +69,8 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
     private SearchSuggestions mSearchSuggestions;
     private SuggestionAdapter mSuggestionAdapter;
 
+    private int mNormalCardHeight = -1;
+
     private InteractionListener mInteractionListener = new InteractionListener() {
         @Override
         public void onVoiceIconClick() {
@@ -122,6 +124,14 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
         mSuggestionList.setLayoutManager(new LinearLayoutManager(getContext()));
         mSuggestionList.setAdapter(mSuggestionAdapter);
         mSuggestionList.addItemDecoration(new DividerItemDecoration(getContext()));
+        mCard.post(new Runnable() {
+            @Override
+            public void run() {
+                if (mNormalCardHeight == -1) {
+                    mNormalCardHeight = mCard.getHeight();
+                }
+            }
+        });
     }
 
     @Override
@@ -338,7 +348,14 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
 
     private void hideSuggestions() {
         mSuggestionAdapter.clear();
-        animateCardToHeight(Util.dpToPx(50) /* guess: minimum search bar height*/);
+        animateCardToHeight(getNormalHeightPx() /* guess: minimum search bar height*/);
+    }
+
+    private int getNormalHeightPx() {
+        if (mNormalCardHeight != -1) {
+            return mNormalCardHeight;
+        }
+        return Util.dpToPx(50);
     }
 
     @Override
@@ -349,7 +366,7 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
         mSuggestionAdapter.updateSuggestions(suggestions);
 
         if (shouldShrink) {
-            animateCardToHeight(Util.dpToPx(50) /* guess: minimum search bar height*/);
+            animateCardToHeight(getNormalHeightPx() /* guess: minimum search bar height*/);
             return;
         }
         if (shouldReveal) {

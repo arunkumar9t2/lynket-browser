@@ -96,7 +96,7 @@ public class SearchSuggestions {
 
         @Override
         protected String doInBackground(Void... voids) {
-            final String suggestUrl = SEARCH_URL + mQuery;
+            final String suggestUrl = SEARCH_URL.concat(mQuery).replace(" ", "+");
             HttpURLConnection connection = null;
             try {
                 if (Util.isNetworkAvailable(mContext)) {
