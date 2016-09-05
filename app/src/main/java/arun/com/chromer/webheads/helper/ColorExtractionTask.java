@@ -39,14 +39,18 @@ public class ColorExtractionTask extends AsyncTask<Void, Void, Integer> {
 
     @Override
     protected void onPostExecute(Integer bestColor) {
-        if (bestColor != Constants.NO_COLOR) {
-            if (mWebHeadReference.get() != null) {
-                WebHead webHead = mWebHeadReference.get();
-                webHead.setWebHeadColor(bestColor);
-            }
-        } else Timber.e("Color extraction failed");
-        mWebHeadReference.clear();
-        mFaviconReference.clear();
+        try {
+            if (bestColor != Constants.NO_COLOR) {
+                if (mWebHeadReference.get() != null) {
+                    WebHead webHead = mWebHeadReference.get();
+                    webHead.setWebHeadColor(bestColor);
+                }
+            } else Timber.e("Color extraction failed");
+            mWebHeadReference.clear();
+            mFaviconReference.clear();
+        } catch (Exception e) {
+            Timber.e(e.toString());
+        }
     }
 
 }
