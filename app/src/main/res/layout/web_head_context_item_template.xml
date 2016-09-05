@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="?attr/selectableItemBackground"
+              android:clickable="true"
+              android:focusable="true"
+              android:gravity="center_vertical"
+              android:minHeight="56dp"
+              android:orientation="horizontal"
+              android:padding="10dp"
+              tools:ignore="Overdraw,RtlHardcoded">
+
+    <ImageView
+        android:id="@+id/web_site_icon"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_gravity="center"
+        tools:ignore="ContentDescription"/>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_weight="1"
+        tools:ignore="RtlSymmetry">
+
+        <TextView
+            android:id="@+id/web_site_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:maxLines="1"
+            android:textAppearance="@style/Preference_TextAppearanceMaterialSubhead"
+            tools:ignore="SelectableText"/>
+
+        <TextView
+            android:id="@+id/web_site_sub_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/web_site_title"
+            android:layout_below="@id/web_site_title"
+            android:ellipsize="marquee"
+            android:maxLines="2"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="12sp"
+            tools:ignore="SelectableText"/>
+
+    </RelativeLayout>
+</LinearLayout>

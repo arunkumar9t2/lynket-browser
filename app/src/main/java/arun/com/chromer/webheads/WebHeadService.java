@@ -50,11 +50,13 @@ import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.DocumentUtils;
 import arun.com.chromer.webheads.helper.ColorExtractionTask;
+import arun.com.chromer.webheads.helper.WebSite;
 import arun.com.chromer.webheads.physics.SpringChain2D;
 import arun.com.chromer.webheads.tasks.PageExtractTasksManager;
 import arun.com.chromer.webheads.ui.RemoveWebHead;
 import arun.com.chromer.webheads.ui.WebHead;
 import arun.com.chromer.webheads.ui.WebHeadContract;
+import arun.com.chromer.webheads.ui.context.WebHeadContextActivity;
 import de.jetwick.snacktory.JResult;
 import timber.log.Timber;
 
@@ -229,6 +231,7 @@ public class WebHeadService extends Service implements WebHeadContract,
             try {
                 final String faviconUrl = result.getFaviconUrl();
                 webHead.setTitle(result.getTitle());
+                webHead.setFaviconUrl(faviconUrl);
                 Glide.with(this)
                         .load(faviconUrl)
                         .asBitmap()
@@ -328,7 +331,6 @@ public class WebHeadService extends Service implements WebHeadContract,
         List<Bundle> possibleUrls = new ArrayList<>();
         for (WebHead webHead : mWebHeads.values()) {
             String url = webHead.getUrl();
-            if (url == null) continue;
 
             Bundle bundle = new Bundle();
             bundle.putParcelable(CustomTabsService.KEY_URL, Uri.parse(url));
@@ -439,12 +441,12 @@ public class WebHeadService extends Service implements WebHeadContract,
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onWebHeadClick(@NonNull WebHead webHead) {
-        if (webHead.getUnShortenedUrl() != null && webHead.getUnShortenedUrl().length() != 0) {
+        if (webHead.getUnShortenedUrl().length() != 0) {
 
             DocumentUtils.smartOpenNewTab(this, webHead);
 
             // Store the last opened url
-            sLastOpenedUrl = webHead.getUrl();
+            sLastOpenedUrl = webHead.getUnShortenedUrl();
             // If user prefers to the close the head on opening the link, then call destroySelf()
             // which will take care of closing and detaching the web head
             if (Preferences.webHeadsCloseOnOpen(WebHeadService.this)) {
@@ -481,6 +483,7 @@ public class WebHeadService extends Service implements WebHeadContract,
         mSpringChain2D.performGroupMove(x, y);
     }
 
+    @NonNull
     @Override
     public Spring newSpring() {
         return mSpringSystem.createSpring();
@@ -499,6 +502,32 @@ public class WebHeadService extends Service implements WebHeadContract,
     @Override
     public void closeAll() {
         stopSelf();
+    }
+
+    @Override
+    public void onMasterLongClick() {
+        final ListIterator<String> it = new ArrayList<>(mWebHeads.keySet()).listIterator(mWebHeads.size());
+        ArrayList<WebSite> webSites = new ArrayList<>();
+        while (it.hasPrevious()) {
+            final String key = it.previous();
+            final WebHead webHead = mWebHeads.get(key);
+            if (webHead != null) {
+                webSites.add(webHead.getWebsite());
+            }
+        }
+        final Intent intent = new Intent(this, WebHeadContextActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putParcelableArrayListExtra(Constants.EXTRA_KEY_WEBSITE, webSites);
+        startActivity(intent);
+    }
+
+
+    private void closeWebHeadByUrl(String url) {
+        final WebHead webHead = mWebHeads.get(url);
+        if (webHead != null) {
+            webHead.destroySelf(true);
+        }
     }
 
     @Override
@@ -545,6 +574,7 @@ public class WebHeadService extends Service implements WebHeadContract,
         final IntentFilter filter = new IntentFilter();
         filter.addAction(Constants.ACTION_WEBHEAD_COLOR_SET);
         filter.addAction(Constants.ACTION_REBIND_WEBHEAD_TAB_CONNECTION);
+        filter.addAction(Constants.ACTION_CLOSE_WEBHEAD_BY_URL);
         LocalBroadcastManager.getInstance(this).registerReceiver(mLocalReceiver, filter);
         registerReceiver(mStopServiceReceiver, new IntentFilter(Constants.ACTION_STOP_WEBHEAD_SERVICE));
     }
@@ -568,6 +598,12 @@ public class WebHeadService extends Service implements WebHeadContract,
                     final int webHeadColor = intent.getIntExtra(Constants.EXTRA_KEY_WEBHEAD_COLOR, Constants.NO_COLOR);
                     if (webHeadColor != Constants.NO_COLOR) {
                         updateWebHeadColors(webHeadColor);
+                    }
+                    break;
+                case Constants.ACTION_CLOSE_WEBHEAD_BY_URL:
+                    final WebSite webSite = intent.getParcelableExtra(Constants.EXTRA_KEY_WEBSITE);
+                    if (webSite != null) {
+                        closeWebHeadByUrl(webSite.url);
                     }
                     break;
             }

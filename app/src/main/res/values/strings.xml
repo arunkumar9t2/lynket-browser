@@ -198,4 +198,5 @@
     <string name="aggresive_dia_content">Aggressive background loading requires merge tabs and apps preference to be enabled. It is enabled for you now.</string>
     <string name="merge_tabs_off_title">Attention</string>
     <string name="merget_tabs_off_content">Disabling merge tabs and apps will also disable aggressive background loading.</string>
+    <string name="web_sites">Websites</string>
 </resources>

@@ -182,7 +182,6 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
         touchDown();
 
-        mIsCoasting = false;
         cancelCoastingTask();
     }
 
@@ -286,8 +285,6 @@ public class WebHead extends BaseWebHead implements SpringListener {
      * Schedules a coasting task that will make the master web head move further away from the screen.
      */
     private void scheduleCoastingTask() {
-        mIsCoasting = false;
-
         if (!isMaster()) {
             return;
         }
@@ -307,10 +304,11 @@ public class WebHead extends BaseWebHead implements SpringListener {
             }
         };
         Timber.v("Scheduled a coasting task");
-        sTimer.schedule(mCoastingTask, 3000);
+        sTimer.schedule(mCoastingTask, 6000);
     }
 
     private void cancelCoastingTask() {
+        mIsCoasting = false;
         if (mCoastingTask != null) {
             mCoastingTask.cancel();
         }
@@ -664,7 +662,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
         @Override
         public void onLongPress(MotionEvent e) {
-            // TODO Expand and show all links if more than one web head is present
+            mContract.onMasterLongClick();
         }
 
         @Override

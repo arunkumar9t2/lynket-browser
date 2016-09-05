@@ -14,6 +14,7 @@ public interface WebHeadContract {
 
     void onMasterWebHeadMoved(int x, int y);
 
+    @NonNull
     Spring newSpring();
 
     void onMasterLockedToRemove();
@@ -21,4 +22,6 @@ public interface WebHeadContract {
     void onMasterReleasedFromRemove();
 
     void closeAll();
+
+    void onMasterLongClick();
 }

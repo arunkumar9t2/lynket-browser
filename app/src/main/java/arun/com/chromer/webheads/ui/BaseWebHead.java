@@ -35,6 +35,7 @@ import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Util;
+import arun.com.chromer.webheads.helper.WebSite;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.nekocode.badge.BadgeDrawable;
@@ -97,6 +98,9 @@ public abstract class BaseWebHead extends FrameLayout {
     private String mUnShortenedUrl;
     // Title of the website
     private String mTitle;
+
+    // Favicon url
+    private String mFaviconUrl;
     // Flag to know if this web head was created for opening in new tab
     private boolean mIsFromNewTab;
     private boolean mSpawnSet;
@@ -414,10 +418,21 @@ public abstract class BaseWebHead extends FrameLayout {
         return mFavicon;
     }
 
+    @Nullable
+    public String getFaviconUrl() {
+        return mFaviconUrl;
+    }
+
+    public void setFaviconUrl(@Nullable String faviconUrl) {
+        mFaviconUrl = faviconUrl;
+    }
+
+    @NonNull
     public String getUrl() {
         return mUrl;
     }
 
+    @NonNull
     public String getUnShortenedUrl() {
         return mUnShortenedUrl == null ? getUrl() : mUnShortenedUrl;
     }
@@ -426,6 +441,7 @@ public abstract class BaseWebHead extends FrameLayout {
         mUnShortenedUrl = unShortenedUrl;
     }
 
+    @Nullable
     public String getTitle() {
         return mTitle;
     }
@@ -517,6 +533,16 @@ public abstract class BaseWebHead extends FrameLayout {
         } else {
             setVisibility(VISIBLE);
         }
+    }
+
+    /**
+     * Returns website POJO containing useful data.
+     *
+     * @return website data.
+     */
+    @NonNull
+    public WebSite getWebsite() {
+        return WebSite.fromWebHead(this);
     }
 
     /**

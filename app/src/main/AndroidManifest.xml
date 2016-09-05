@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-    <!--suppress DeprecatedClassUsageInspection -->
+    <!-- suppress DeprecatedClassUsageInspection -->
     <uses-permission android:name="android.permission.GET_TASKS"/>
     <uses-permission android:name="android.permission.REORDER_TASKS"/>
     <uses-permission
@@ -122,13 +122,20 @@
         <activity
             android:name=".activities.payments.DonateActivity"
             android:excludeFromRecents="true"
-            android:theme="@style/DonatePopUp"/>
+            android:theme="@style/Theme.AppCompat.Dialog"/>
         <activity
             android:name=".activities.blacklist.BlacklistManagerActivity"
             android:label="@string/blacklisted_apps"
             android:launchMode="singleInstance"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".webheads.ui.context.WebHeadContextActivity"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:theme="@style/DialogTheme">
+        </activity>
 
         <meta-data
             android:name="DOMAIN_PACKAGE_NAME"

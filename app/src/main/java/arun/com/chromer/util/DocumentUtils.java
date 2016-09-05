@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import arun.com.chromer.activities.CustomTabActivity;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.shared.Constants;
+import arun.com.chromer.webheads.helper.WebSite;
 import arun.com.chromer.webheads.ui.WebHead;
 import timber.log.Timber;
 
@@ -38,13 +39,25 @@ public class DocumentUtils {
      * @param webHead
      */
     public static void smartOpenNewTab(@NonNull Context context, @NonNull WebHead webHead) {
-        if (!reOrderCustomTab(context, webHead)) {
+        if (!reOrderCustomTabByUrls(context, webHead.getUrl(), webHead.getUnShortenedUrl())) {
             openNewCustomTab(context, webHead);
         }
     }
 
+    /**
+     * Reorders a old task if it exists else opens a new tab
+     *
+     * @param context
+     * @param webSite
+     */
+    public static void smartOpenNewTab(@NonNull Context context, @NonNull WebSite webSite) {
+        if (!reOrderCustomTabByUrls(context, webSite.url, webSite.longUrl)) {
+            openNewCustomTab(context, webSite);
+        }
+    }
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private static boolean reOrderCustomTab(@NonNull Context context, @NonNull WebHead webHead) {
+    private static boolean reOrderCustomTabByUrls(@NonNull Context context, @NonNull String shortUrl, @Nullable String longUrl) {
         if (!Preferences.mergeTabs(context)) {
             return false;
         }
@@ -54,7 +67,7 @@ public class DocumentUtils {
             try {
                 final Intent intent = info.baseIntent;
                 final String url = intent.getDataString();
-                if (url.equalsIgnoreCase(webHead.getUrl()) || url.equalsIgnoreCase(webHead.getUnShortenedUrl())) {
+                if (url.equalsIgnoreCase(shortUrl) || url.equalsIgnoreCase(longUrl)) {
                     Timber.d("Moved tab to front %s", url);
                     task.moveToFront();
                     return true;
@@ -67,6 +80,20 @@ public class DocumentUtils {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public static void openNewCustomTab(@NonNull Context context, @NonNull WebSite webSite) {
+        final Intent customTabActivity = new Intent(context, CustomTabActivity.class);
+        customTabActivity.setData(Uri.parse(webSite.url));
+        customTabActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (Preferences.mergeTabs(context)) {
+            customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+            customTabActivity.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        }
+        customTabActivity.putExtra(Constants.EXTRA_KEY_FROM_WEBHEAD, true);
+        customTabActivity.putExtra(Constants.EXTRA_KEY_WEBSITE, webSite);
+        context.startActivity(customTabActivity);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static void openNewCustomTab(@NonNull Context context, @NonNull WebHead webHead) {
         final Intent customTabActivity = new Intent(context, CustomTabActivity.class);
         customTabActivity.setData(Uri.parse(webHead.getUnShortenedUrl()));
@@ -76,10 +103,7 @@ public class DocumentUtils {
             customTabActivity.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         }
         customTabActivity.putExtra(Constants.EXTRA_KEY_FROM_WEBHEAD, true);
-        // TODO Use a pojo here
-        customTabActivity.putExtra(Constants.EXTRA_KEY_WEBHEAD_TITLE, webHead.getTitle());
-        customTabActivity.putExtra(Constants.EXTRA_KEY_WEBHEAD_ICON, webHead.getFaviconBitmap());
-        customTabActivity.putExtra(Constants.EXTRA_KEY_WEBHEAD_COLOR, webHead.getWebHeadColor(false));
+        customTabActivity.putExtra(Constants.EXTRA_KEY_WEBSITE, webHead.getWebsite());
         context.startActivity(customTabActivity);
     }
 
