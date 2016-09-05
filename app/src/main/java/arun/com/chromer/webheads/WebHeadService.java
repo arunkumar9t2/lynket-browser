@@ -446,14 +446,14 @@ public class WebHeadService extends Service implements WebHeadContract,
             DocumentUtils.smartOpenNewTab(this, webHead);
 
             // Store the last opened url
-            sLastOpenedUrl = webHead.getUnShortenedUrl();
+            sLastOpenedUrl = webHead.getUrl();
             // If user prefers to the close the head on opening the link, then call destroySelf()
             // which will take care of closing and detaching the web head
             if (Preferences.webHeadsCloseOnOpen(WebHeadService.this)) {
                 webHead.destroySelf(true);
+                // Since the current url is opened, lets prepare the next set of urls
+                prepareNextSetOfUrls(sLastOpenedUrl);
             }
-            // Since the current url is opened, lets prepare the next set of urls
-            prepareNextSetOfUrls(sLastOpenedUrl);
             hideRemoveView();
         }
     }
