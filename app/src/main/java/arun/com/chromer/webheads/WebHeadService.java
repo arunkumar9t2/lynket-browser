@@ -50,6 +50,7 @@ import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.DocumentUtils;
 import arun.com.chromer.webheads.helper.ColorExtractionTask;
+import arun.com.chromer.webheads.helper.ProxyActivity;
 import arun.com.chromer.webheads.helper.WebSite;
 import arun.com.chromer.webheads.physics.SpringChain2D;
 import arun.com.chromer.webheads.tasks.PageExtractTasksManager;
@@ -104,6 +105,14 @@ public class WebHeadService extends Service implements WebHeadContract,
         bindToCustomTabSession();
         registerReceivers();
         PageExtractTasksManager.registerListener(this);
+
+        clearTask();
+    }
+
+    private void clearTask() {
+        final Intent intent = new Intent(this, ProxyActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     @Override

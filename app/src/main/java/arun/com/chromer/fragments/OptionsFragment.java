@@ -65,7 +65,7 @@ public class OptionsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mUnbinder = ButterKnife.bind(this, view);
-        
+
         mSetDefaultIcon.setImageDrawable(new IconicsDrawable(mAppContext)
                 .icon(CommunityMaterial.Icon.cmd_auto_fix)
                 .color(ContextCompat.getColor(mAppContext, R.color.colorAccent))

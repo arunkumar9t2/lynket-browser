@@ -129,7 +129,6 @@
             android:launchMode="singleInstance"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
-
         <activity
             android:name=".webheads.ui.context.WebHeadContextActivity"
             android:excludeFromRecents="true"
@@ -144,6 +143,11 @@
             android:name="VERSION"
             android:value="2"/>
 
+        <activity
+            android:name=".webheads.helper.ProxyActivity"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:theme="@style/Transparent"/>
     </application>
 
 </manifest>
