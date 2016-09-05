@@ -31,3 +31,4 @@
 -keep public class org.jsoup.** {
     public *;
 }
+-keepattributes EnclosingMethod
