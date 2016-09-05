@@ -12,6 +12,17 @@ body {
 <body>
 <strong>You can view this again in the about screen.</strong>
 <br></br>
+<strong>1.6 B4</strong> (Beta Release)
+<ul>
+    <li><b>NEW:</b> Search suggestions in search view.</li>
+    <li><b>NEW:</b> Grouped web heads and smoother animations</li>
+    <li><b>NEW:</b> 5.0+ Aggressive background loading for web heads. Web heads will fully load pages instead of only pre-fetching.</li>
+    <li><b>NEW:</b> Web head badge indicator to show no of active web heads.</li>
+    <li><b>NEW:</b> Web head context menu (accessible by long press) to easily select any web site in group.</li>
+    <li><b>NEW:</b> Web heads if untouched, will hide further away from screen after 6 seconds.</li>
+    <li><b>IMPROVED:</b> 5.0+ Opened web sites will not be reloaded again.</li>
+    <li><b>FIXED:</b> Minor bugs.</li>
+</ul>
 <strong>1.6 B3.1</strong> (Beta Release)
 <ul>
     <li><b>FIXED:</b> Crash when dynamic toolbar enabled</li>
