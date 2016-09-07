@@ -1,6 +1,7 @@
 package arun.com.chromer.webheads.ui.context;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
@@ -17,6 +18,7 @@ import arun.com.chromer.util.DocumentUtils;
 import arun.com.chromer.webheads.helper.WebSite;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class WebHeadContextActivity extends AppCompatActivity implements WebsiteAdapter.InteractionListener {
     @BindView(R.id.web_sites_list)
@@ -52,5 +54,22 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
             intent.putExtra(Constants.EXTRA_KEY_WEBSITE, webSite);
             LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
         }
+    }
+
+    @OnClick(R.id.share_all)
+    public void onShareAllClick() {
+        final ArrayList<Uri> webSites = new ArrayList<>();
+        for (WebSite webSite : mWebsiteAdapter.getWebSites()) {
+            String url = webSite.longUrl != null ? webSite.longUrl : webSite.url;
+            try {
+                webSites.add(Uri.parse(url));
+            } catch (Exception ignored) {
+            }
+        }
+        final Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
+        shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, webSites);
+        shareIntent.setType("text/plain");
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_all)));
     }
 }

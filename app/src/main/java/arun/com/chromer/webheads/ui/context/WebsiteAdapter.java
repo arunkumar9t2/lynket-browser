@@ -77,6 +77,10 @@ class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> 
         notifyDataSetChanged();
     }
 
+    public List<WebSite> getWebSites() {
+        return mWebSites;
+    }
+
     class WebSiteHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.web_site_icon)
         ImageView icon;
