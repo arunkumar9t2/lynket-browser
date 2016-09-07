@@ -23,7 +23,7 @@ import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.shared.AppDetectService;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Util;
-import arun.com.chromer.webheads.WebHeadService;
+import arun.com.chromer.webheads.helper.ProxyActivity;
 
 @SuppressLint("GoogleAppIndexingApiWarning")
 public class BrowserInterceptActivity extends AppCompatActivity {
@@ -120,11 +120,14 @@ public class BrowserInterceptActivity extends AppCompatActivity {
     }
 
     private void launchWebHead(boolean isNewTab) {
-        final Intent webHeadService = new Intent(this, WebHeadService.class);
-        webHeadService.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        webHeadService.setData(getIntent().getData());
-        webHeadService.putExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, isNewTab);
-        startService(webHeadService);
+        Intent webHeadLauncher = new Intent(this, ProxyActivity.class);
+        webHeadLauncher.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (!isNewTab)
+            webHeadLauncher.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        webHeadLauncher.putExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, isNewTab);
+        webHeadLauncher.setData(getIntent().getData());
+        startActivity(webHeadLauncher);
     }
 
     private void launchSecondaryBrowserWithIteration() {
