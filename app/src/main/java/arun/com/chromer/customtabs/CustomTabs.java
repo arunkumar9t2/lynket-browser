@@ -503,11 +503,15 @@ public class CustomTabs {
             case Preferences.PREFERRED_ACTION_FAV_SHARE:
                 pkg = Preferences.secondaryBrowserPackage(mActivity);
                 if (Util.isPackageInstalled(mActivity, pkg)) {
-                    final String app = Util.getAppNameWithPackage(mActivity, pkg);
-                    final String label = String.format(mActivity.getString(R.string.open_in_browser), app);
-                    final Intent browseIntent = new Intent(mActivity, SecondaryBrowserReceiver.class);
-                    final PendingIntent pendingBrowseIntent = PendingIntent.getBroadcast(mActivity, 0, browseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                    mIntentBuilder.addMenuItem(label, pendingBrowseIntent);
+                    if (!pkg.equalsIgnoreCase(STABLE_PACKAGE)) {
+                        final String app = Util.getAppNameWithPackage(mActivity, pkg);
+                        final String label = String.format(mActivity.getString(R.string.open_in_browser), app);
+                        final Intent browseIntent = new Intent(mActivity, SecondaryBrowserReceiver.class);
+                        final PendingIntent pendingBrowseIntent = PendingIntent.getBroadcast(mActivity, 0, browseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        mIntentBuilder.addMenuItem(label, pendingBrowseIntent);
+                    } else {
+                        Timber.d("Excluded secondary browser menu as it was Chrome");
+                    }
                 }
                 break;
         }
