@@ -13,19 +13,30 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
+        android:layout_margin="18dp"
         android:text="@string/support_development"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textSize="15sp"/>
+
+    <TextView
+        android:id="@+id/thank_you"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/thank_you"
+        android:textColor="@color/md_green_500"
+        android:textSize="14sp"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <ListView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/donate_item_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:divider="@null"/>
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </LinearLayout>

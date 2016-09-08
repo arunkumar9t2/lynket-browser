@@ -122,7 +122,7 @@
         <activity
             android:name=".activities.payments.DonateActivity"
             android:excludeFromRecents="true"
-            android:theme="@style/Theme.AppCompat.Dialog"/>
+            android:theme="@style/DialogTheme"/>
         <activity
             android:name=".activities.blacklist.BlacklistManagerActivity"
             android:label="@string/blacklisted_apps"

@@ -1,18 +1,17 @@
 package arun.com.chromer.activities.payments;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
@@ -23,14 +22,14 @@ import java.util.List;
 
 import arun.com.chromer.BuildConfig;
 import arun.com.chromer.R;
-import arun.com.chromer.activities.about.AboutFragment;
 import arun.com.chromer.activities.payments.util.IabBroadcastReceiver;
 import arun.com.chromer.activities.payments.util.IabHelper;
 import arun.com.chromer.activities.payments.util.IabResult;
 import arun.com.chromer.activities.payments.util.Inventory;
 import arun.com.chromer.activities.payments.util.Purchase;
 import arun.com.chromer.activities.payments.util.SkuDetails;
-import arun.com.chromer.views.adapter.ExtendedBaseAdapter;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class DonateActivity extends AppCompatActivity implements IabBroadcastReceiver.IabBroadcastListener,
@@ -88,6 +87,10 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
             mLunchDone = inventory.getPurchase(LUNCH_SKU) != null;
             mPremiumDone = inventory.getPurchase(PREMIUM_SKU) != null;
 
+            if (mCoffeeDone | mLunchDone | mPremiumDone) {
+                findViewById(R.id.thank_you).setVisibility(View.VISIBLE);
+            }
+
             loadData(list);
         }
     };
@@ -134,98 +137,110 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
     }
 
     private void loadData(final List<SkuDetails> details) {
-        ListView donateList = (ListView) findViewById(R.id.donate_item_list);
-
-        final String error = getString(R.string.couldnt_load_price);
-
-        //noinspection ConstantConditions
-        donateList.setAdapter(new ExtendedBaseAdapter() {
-            final Context context = getApplicationContext();
-
-            @Override
-            public int getCount() {
-                return 3;
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                AboutFragment.ViewHolder holder;
-                if (convertView == null) {
-                    holder = new AboutFragment.ViewHolder();
-                    convertView = mInflater.inflate(R.layout.about_fragment_listview_template, parent, false);
-                    holder.imageView = (ImageView) convertView.findViewById(R.id.about_row_item_image);
-                    holder.subtitle = (TextView) convertView.findViewById(R.id.about_app_subtitle);
-                    holder.title = (TextView) convertView.findViewById(R.id.about_app_title);
-                    convertView.setTag(holder);
-                } else {
-                    holder = (AboutFragment.ViewHolder) convertView.getTag();
-                }
-                switch (position) {
-                    case 0:
-                        if (mCoffeeDone) setGreen(holder);
-                        else setBlack(holder);
-                        holder.title.setText(getString(R.string.coffee));
-                        holder.subtitle.setText(details.get(0) != null ?
-                                details.get(0).getPrice() : error);
-                        holder.imageView.setBackground(new IconicsDrawable(context)
-                                .icon(CommunityMaterial.Icon.cmd_coffee)
-                                .color(ContextCompat.getColor(getApplicationContext(),
-                                        R.color.coffee_color))
-                                .sizeDp(ICON_SIZE_DP));
-                        break;
-                    case 1:
-                        if (mLunchDone) setGreen(holder);
-                        else setBlack(holder);
-                        holder.title.setText(getString(R.string.lunch));
-                        holder.subtitle.setText(details.get(1) != null ?
-                                details.get(1).getPrice() : error);
-                        holder.imageView.setBackground(new IconicsDrawable(context)
-                                .icon(CommunityMaterial.Icon.cmd_food)
-                                .color(ContextCompat.getColor(getApplicationContext(),
-                                        R.color.lunch_color))
-                                .sizeDp(ICON_SIZE_DP));
-                        break;
-                    case 2:
-                        if (mPremiumDone) setGreen(holder);
-                        else setBlack(holder);
-                        holder.title.setText(getString(R.string.premium_donation));
-                        holder.subtitle.setText(details.get(2) != null ?
-                                details.get(2).getPrice() : error);
-                        holder.imageView.setBackground(new IconicsDrawable(context)
-                                .icon(CommunityMaterial.Icon.cmd_cash_usd)
-                                .color(ContextCompat.getColor(getApplicationContext(),
-                                        (R.color.premium_color)))
-                                .sizeDp(ICON_SIZE_DP));
-                        break;
-                }
-                return convertView;
-            }
-        });
-
-        donateList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @SuppressWarnings("UnnecessaryReturnStatement")
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        mHelper.launchPurchaseFlow(DonateActivity.this, COFEE_SKU, RC_REQUEST,
-                                mPurchaseFinishedListener, "coffee");
-                        return;
-                    case 1:
-                        mHelper.launchPurchaseFlow(DonateActivity.this, LUNCH_SKU, RC_REQUEST,
-                                mPurchaseFinishedListener, "lunch");
-                        return;
-                    case 2:
-                        mHelper.launchPurchaseFlow(DonateActivity.this, PREMIUM_SKU, RC_REQUEST,
-                                mPurchaseFinishedListener, "premium");
-                        return;
-                }
-            }
-        });
+        final RecyclerView donateList = (RecyclerView) findViewById(R.id.donate_item_list);
+        donateList.setLayoutManager(new LinearLayoutManager(this));
+        donateList.setAdapter(new DonationAdapter(details));
     }
 
-    private void setGreen(AboutFragment.ViewHolder holder) {
+    class DonationAdapter extends RecyclerView.Adapter<DonationAdapter.ViewHolder> {
+        private List<SkuDetails> details = new ArrayList<>();
+
+        DonationAdapter(final List<SkuDetails> details) {
+            if (details != null) {
+                this.details = details;
+            }
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new ViewHolder(LayoutInflater.from(getApplicationContext()).inflate(R.layout.about_fragment_listview_template, parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            final String error = getString(R.string.couldnt_load_price);
+            switch (position) {
+                case 0:
+                    if (mCoffeeDone) setGreen(holder);
+                    else setBlack(holder);
+                    holder.title.setText(getString(R.string.coffee));
+                    holder.subtitle.setText(details.get(0) != null ?
+                            details.get(0).getPrice() : error);
+                    holder.image.setBackground(new IconicsDrawable(getApplicationContext())
+                            .icon(CommunityMaterial.Icon.cmd_coffee)
+                            .color(ContextCompat.getColor(getApplicationContext(),
+                                    R.color.coffee_color))
+                            .sizeDp(ICON_SIZE_DP));
+                    break;
+                case 1:
+                    if (mLunchDone) setGreen(holder);
+                    else setBlack(holder);
+                    holder.title.setText(getString(R.string.lunch));
+                    holder.subtitle.setText(details.get(1) != null ?
+                            details.get(1).getPrice() : error);
+                    holder.image.setBackground(new IconicsDrawable(getApplicationContext())
+                            .icon(CommunityMaterial.Icon.cmd_food)
+                            .color(ContextCompat.getColor(getApplicationContext(),
+                                    R.color.lunch_color))
+                            .sizeDp(ICON_SIZE_DP));
+                    break;
+                case 2:
+                    if (mPremiumDone) setGreen(holder);
+                    else setBlack(holder);
+                    holder.title.setText(getString(R.string.premium_donation));
+                    holder.subtitle.setText(details.get(2) != null ?
+                            details.get(2).getPrice() : error);
+                    holder.image.setBackground(new IconicsDrawable(getApplicationContext())
+                            .icon(CommunityMaterial.Icon.cmd_cash_usd)
+                            .color(ContextCompat.getColor(getApplicationContext(),
+                                    (R.color.premium_color)))
+                            .sizeDp(ICON_SIZE_DP));
+                    break;
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return details.size();
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            @BindView(R.id.about_row_item_image)
+            ImageView image;
+            @BindView(R.id.about_app_title)
+            TextView title;
+            @BindView(R.id.about_app_subtitle)
+            TextView subtitle;
+
+            public ViewHolder(View itemView) {
+                super(itemView);
+                ButterKnife.bind(this, itemView);
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION)
+                            switch (position) {
+                                case 0:
+                                    mHelper.launchPurchaseFlow(DonateActivity.this, COFEE_SKU, RC_REQUEST,
+                                            mPurchaseFinishedListener, "coffee");
+                                    return;
+                                case 1:
+                                    mHelper.launchPurchaseFlow(DonateActivity.this, LUNCH_SKU, RC_REQUEST,
+                                            mPurchaseFinishedListener, "lunch");
+                                    return;
+                                case 2:
+                                    mHelper.launchPurchaseFlow(DonateActivity.this, PREMIUM_SKU, RC_REQUEST,
+                                            mPurchaseFinishedListener, "premium");
+                                    return;
+                            }
+                    }
+                });
+            }
+        }
+    }
+
+    private void setGreen(DonationAdapter.ViewHolder holder) {
         if (holder != null) {
             int color = ContextCompat.getColor(this, R.color.donate_green);
             holder.title.setTextColor(color);
@@ -233,7 +248,7 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
         }
     }
 
-    private void setBlack(AboutFragment.ViewHolder holder) {
+    private void setBlack(DonationAdapter.ViewHolder holder) {
         if (holder != null) {
             int color = ContextCompat.getColor(this, R.color.material_dark_color);
             holder.title.setTextColor(color);
