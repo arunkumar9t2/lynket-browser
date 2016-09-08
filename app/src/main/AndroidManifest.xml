@@ -136,6 +136,23 @@
             android:theme="@style/DialogTheme">
         </activity>
 
+        <activity
+            android:name=".webheads.helper.ProxyActivity"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:theme="@style/Transparent"/>
+
+        <service
+            android:name=".webheads.qs.WebHeadTile"
+            android:icon="@drawable/ic_bubble_chart_white_24dp"
+            android:label="@string/tile_label"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action
+                    android:name="android.service.quicksettings.action.QS_TILE"/>
+            </intent-filter>
+        </service>
+
         <meta-data
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="arun.com.chromer.db"/>
@@ -143,11 +160,6 @@
             android:name="VERSION"
             android:value="2"/>
 
-        <activity
-            android:name=".webheads.helper.ProxyActivity"
-            android:excludeFromRecents="true"
-            android:noHistory="true"
-            android:theme="@style/Transparent"/>
     </application>
 
 </manifest>
