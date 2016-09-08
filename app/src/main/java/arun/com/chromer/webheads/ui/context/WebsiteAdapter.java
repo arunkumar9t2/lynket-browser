@@ -51,6 +51,10 @@ class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> 
                 .icon(CommunityMaterial.Icon.cmd_close)
                 .color(ContextCompat.getColor(mContext, R.color.accent_icon_nofocus))
                 .sizeDp(16));
+        holder.shareIcon.setImageDrawable(new IconicsDrawable(mContext)
+                .icon(CommunityMaterial.Icon.cmd_share_variant)
+                .color(ContextCompat.getColor(mContext, R.color.accent_icon_nofocus))
+                .sizeDp(16));
         if (webSite.title != null && webSite.title.length() > 0) {
             holder.title.setText(webSite.title);
         } else {
@@ -96,6 +100,8 @@ class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> 
         TextView url;
         @BindView(R.id.delete_icon)
         ImageView deleteIcon;
+        @BindView(R.id.share_icon)
+        ImageView shareIcon;
 
         WebSiteHolder(View itemView) {
             super(itemView);
@@ -127,6 +133,19 @@ class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> 
                     }
                 }
             });
+
+            shareIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        final WebSite webSite = mWebSites.get(position);
+                        if (webSite != null) {
+                            listener.onWebSiteShare(webSite);
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -134,5 +153,7 @@ class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> 
         void onWebSiteItemClicked(@NonNull WebSite webSite);
 
         void onWebSiteDelete(@NonNull WebSite webSite);
+
+        void onWebSiteShare(@NonNull WebSite webSite);
     }
 }

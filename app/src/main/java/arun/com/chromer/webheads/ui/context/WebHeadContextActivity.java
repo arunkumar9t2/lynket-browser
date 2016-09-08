@@ -69,6 +69,11 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
         }
     }
 
+    @Override
+    public void onWebSiteShare(@NonNull WebSite webSite) {
+        startActivity(Intent.createChooser(Constants.TEXT_SHARE_INTENT.putExtra(Intent.EXTRA_TEXT, webSite.url), getString(R.string.share)));
+    }
+
     @OnClick(R.id.share_all)
     public void onShareAllClick() {
         final ArrayList<Uri> webSites = new ArrayList<>();

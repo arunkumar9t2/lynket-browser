@@ -10,6 +10,7 @@
               android:minHeight="56dp"
               android:orientation="horizontal"
               android:padding="10dp"
+              android:paddingLeft="15dp"
               tools:ignore="Overdraw,RtlHardcoded">
 
     <ImageView
@@ -49,6 +50,16 @@
             tools:ignore="SelectableText"/>
 
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/share_icon"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:padding="15dp"
+        android:scaleType="fitCenter"
+        tools:ignore="ContentDescription"/>
 
     <ImageView
         android:id="@+id/delete_icon"
