@@ -50,9 +50,22 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
         DocumentUtils.smartOpenNewTab(this, webSite);
 
         if (Preferences.webHeadsCloseOnOpen(this)) {
-            final Intent intent = new Intent(Constants.ACTION_CLOSE_WEBHEAD_BY_URL);
-            intent.putExtra(Constants.EXTRA_KEY_WEBSITE, webSite);
-            LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+            broadcastDeleteWebHead(webSite);
+        }
+    }
+
+    private void broadcastDeleteWebHead(@NonNull WebSite webSite) {
+        final Intent intent = new Intent(Constants.ACTION_CLOSE_WEBHEAD_BY_URL);
+        intent.putExtra(Constants.EXTRA_KEY_WEBSITE, webSite);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    @Override
+    public void onWebSiteDelete(@NonNull WebSite webSite) {
+        broadcastDeleteWebHead(webSite);
+
+        if (mWebsiteAdapter.getWebSites().isEmpty()) {
+            finish();
         }
     }
 

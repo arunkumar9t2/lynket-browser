@@ -49,4 +49,14 @@
             tools:ignore="SelectableText"/>
 
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/delete_icon"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:padding="15dp"
+        android:scaleType="fitCenter"
+        tools:ignore="ContentDescription"/>
 </LinearLayout>

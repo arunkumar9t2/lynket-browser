@@ -72,6 +72,19 @@ public class WebSite implements Parcelable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        WebSite webSite = (WebSite) o;
+        return url.equals(webSite.url);
+    }
+
+    @Override
+    public int hashCode() {
+        return url.hashCode();
+    }
+
+    @Override
     public String toString() {
         return "WebSite{" +
                 "title='" + title + '\'' +

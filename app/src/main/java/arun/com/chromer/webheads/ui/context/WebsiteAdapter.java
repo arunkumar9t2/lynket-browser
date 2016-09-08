@@ -2,6 +2,7 @@ package arun.com.chromer.webheads.ui.context;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +47,10 @@ class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> 
     public void onBindViewHolder(WebSiteHolder holder, int position) {
         final WebSite webSite = mWebSites.get(position);
         holder.url.setText(webSite.url);
-
+        holder.deleteIcon.setImageDrawable(new IconicsDrawable(mContext)
+                .icon(CommunityMaterial.Icon.cmd_close)
+                .color(ContextCompat.getColor(mContext, R.color.accent_icon_nofocus))
+                .sizeDp(16));
         if (webSite.title != null && webSite.title.length() > 0) {
             holder.title.setText(webSite.title);
         } else {
@@ -68,7 +74,7 @@ class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> 
 
     @Override
     public long getItemId(int position) {
-        return mWebSites.get(position).url.hashCode();
+        return mWebSites.get(position).hashCode();
     }
 
     void setWebsites(ArrayList<WebSite> webSites) {
@@ -77,7 +83,7 @@ class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> 
         notifyDataSetChanged();
     }
 
-    public List<WebSite> getWebSites() {
+    List<WebSite> getWebSites() {
         return mWebSites;
     }
 
@@ -88,6 +94,8 @@ class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> 
         TextView title;
         @BindView(R.id.web_site_sub_title)
         TextView url;
+        @BindView(R.id.delete_icon)
+        ImageView deleteIcon;
 
         WebSiteHolder(View itemView) {
             super(itemView);
@@ -104,10 +112,27 @@ class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> 
                     }
                 }
             });
+
+            deleteIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        final WebSite webSite = mWebSites.get(position);
+                        if (webSite != null) {
+                            mWebSites.remove(webSite);
+                            listener.onWebSiteDelete(webSite);
+                            notifyDataSetChanged();
+                        }
+                    }
+                }
+            });
         }
     }
 
-    public interface InteractionListener {
+    interface InteractionListener {
         void onWebSiteItemClicked(@NonNull WebSite webSite);
+
+        void onWebSiteDelete(@NonNull WebSite webSite);
     }
 }
