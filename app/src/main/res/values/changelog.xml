@@ -10,12 +10,16 @@ body {
 .list-heading {
     color: #FF4081;
 }
+a {
+    color: #FF4081;
+}
 </style>
 </head>
 <body>
 <strong>You can view this again in the about screen.</strong>
 <br></br>
 <strong>1.6</strong>
+<a href="https://goo.gl/photos/BzRV69ABov9zJxVu9">  View album</a>
 <h4 class="list-heading">Web heads</h3>
 <ul>
     <li><b>NEW:</b> <b>Grouped web heads</b> and much smoother animations.</li>

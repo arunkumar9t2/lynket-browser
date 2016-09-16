@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +41,16 @@ public class Changelog {
                     super.onPageFinished(view, url);
                     content.removeView(progress);
                     webView.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    if (url.equalsIgnoreCase("https://goo.gl/photos/BzRV69ABov9zJxVu9")) {
+                        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        activity.startActivity(i);
+                        return true;
+                    }
+                    return super.shouldOverrideUrlLoading(view, url);
                 }
             });
             new MaterialDialog.Builder(activity)
