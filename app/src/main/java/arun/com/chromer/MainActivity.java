@@ -216,6 +216,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         new SecondaryDrawerItem().withName(getString(R.string.support_development))
                                 .withDescription(R.string.consider_donation)
                                 .withIcon(CommunityMaterial.Icon.cmd_heart)
+                                .withIconColorRes(R.color.accent)
                                 .withIdentifier(6)
                                 .withSelectable(false),
                         new SecondaryDrawerItem().withName(getString(R.string.about))

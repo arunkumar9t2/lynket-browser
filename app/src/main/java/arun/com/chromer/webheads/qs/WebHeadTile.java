@@ -69,33 +69,35 @@ public class WebHeadTile extends TileService {
     // Changes the appearance of the tile.
     private void updateTile() {
         final Tile tile = getQsTile();
-        boolean isWebHeadActive = Preferences.webHeads(this);
-        Icon newIcon;
-        String newLabel;
-        int newState;
-        // Change the tile to match the service status.
-        if (isWebHeadActive) {
-            newLabel = getString(R.string.web_heads);
-            newIcon = Icon.createWithBitmap(new IconicsDrawable(this)
-                    .icon(CommunityMaterial.Icon.cmd_chart_bubble)
-                    .color(Color.WHITE)
-                    .sizeDp(24).toBitmap());
+        if (tile != null) {
+            boolean isWebHeadActive = Preferences.webHeads(this);
+            Icon newIcon;
+            String newLabel;
+            int newState;
+            // Change the tile to match the service status.
+            if (isWebHeadActive) {
+                newLabel = getString(R.string.web_heads);
+                newIcon = Icon.createWithBitmap(new IconicsDrawable(this)
+                        .icon(CommunityMaterial.Icon.cmd_chart_bubble)
+                        .color(Color.WHITE)
+                        .sizeDp(24).toBitmap());
 
-            newState = Tile.STATE_ACTIVE;
-        } else {
-            newLabel = getString(R.string.web_heads);
-            newIcon = Icon.createWithBitmap(new IconicsDrawable(this)
-                    .icon(CommunityMaterial.Icon.cmd_chart_bubble)
-                    .color(Color.WHITE)
-                    .sizeDp(24).toBitmap());
-            newState = Tile.STATE_INACTIVE;
+                newState = Tile.STATE_ACTIVE;
+            } else {
+                newLabel = getString(R.string.web_heads);
+                newIcon = Icon.createWithBitmap(new IconicsDrawable(this)
+                        .icon(CommunityMaterial.Icon.cmd_chart_bubble)
+                        .color(Color.WHITE)
+                        .sizeDp(24).toBitmap());
+                newState = Tile.STATE_INACTIVE;
+            }
+            // Change the UI of the tile.
+            tile.setLabel(newLabel);
+            tile.setIcon(newIcon);
+            tile.setState(newState);
+
+            // Need to call updateTile for the tile to pick up changes.
+            tile.updateTile();
         }
-        // Change the UI of the tile.
-        tile.setLabel(newLabel);
-        tile.setIcon(newIcon);
-        tile.setState(newState);
-
-        // Need to call updateTile for the tile to pick up changes.
-        tile.updateTile();
     }
 }
