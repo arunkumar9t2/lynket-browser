@@ -207,7 +207,7 @@
     <string name="multiple_links">Multiple links</string>
     <string name="web_heads_intro">Web Heads Intro</string>
     <string name="avoid_back_fatigue">Avoid back press fatigue</string>
-    <string name="intro_back_fatigue">No matter how deep you navigated from a link, you always <b>press X</b> to quickly return to your previous app.</string>
+    <string name="intro_back_fatigue">No matter how deep you navigated from a link, you can always <b>press X</b> to quickly return to your previous app.</string>
     <string name="merge_tabs_explanation_intro">Your apps and web site tabs live together in your recents screen.</string>
     <string name="improves_loading_times">Improves loading times</string>
 </resources>
