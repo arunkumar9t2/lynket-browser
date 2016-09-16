@@ -73,12 +73,12 @@
     <string name="intro_1">Hello! \nChromer is a light-weight, secure and a fast web browser.</string>
     <string name="intro_2">It uses Google Chrome\'s Custom Tabs feature which is an extremely light weight Chrome tab designed for quickly loading a link.</string>
     <string name="intro_3">It can keep your browser locked in memory so that your browser launches little faster.</string>
-    <string name="intro_5">It can scan links on your screen and load them in background to reduce loading times!</string>
-    <string name="intro_4">It can stack multiple links in floating bubbles when you open them and then partially load them in background!</string>
+    <string name="intro_5_new">It can scan links on your screen and load them in background to increase rendering performance. \n \n It can also keep browser in memory to improve launch times.</string>
+    <string name="intro_4_new">It can stack multiple links in floating bubbles when you open them and then load them in background! \n \n<b>LEARN MORE</b></string>
     <string name="how_to_use">How to use this?</string>
     <string name="intro_6">Just set Chromer as your default browser, Chromer will display the link in a non-intrusive way. Or choose Chromer when needed.</string>
     <string name="why_use">Why use?</string>
-    <string name="intro_7">Faster loading, non-intrusive, saves data, shared login info from Chrome, auto complete forms and SECURE with latest updates!</string>
+    <string name="intro_7_new">Non-intrusive and quicker loading, \n reduced data usage, \n shared login info from Chrome hence auto completes forms and SECURE with latest updates. \n\n Your browsing data is automatically synced with your Google account.</string>
     <string name="thats_it">It\'s customizable!</string>
     <string name="intro_8">You can easily choose how you want Chromer to work by launching the main screen!</string>
     <string name="version">Version</string>
@@ -206,4 +206,8 @@
     <string name="save_time">Save time</string>
     <string name="multiple_links">Multiple links</string>
     <string name="web_heads_intro">Web Heads Intro</string>
+    <string name="avoid_back_fatigue">Avoid back press fatigue</string>
+    <string name="intro_back_fatigue">No matter how deep you navigated from a link, you always <b>press X</b> to quickly return to your previous app.</string>
+    <string name="merge_tabs_explanation_intro">Your apps and web site tabs live together in your recents screen.</string>
+    <string name="improves_loading_times">Improves loading times</string>
 </resources>

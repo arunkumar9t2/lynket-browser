@@ -19,7 +19,7 @@ public class WebHeadsIntro extends AppIntro {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        int bgColor = ContextCompat.getColor(this, R.color.colorPrimaryDarker);
+        int bgColor = ContextCompat.getColor(this, R.color.md_cyan_800);
 
         // OPTIONAL METHODS
         // Override bar/separator color
@@ -57,8 +57,8 @@ public class WebHeadsIntro extends AppIntro {
         showStatusBar(true);
         // Color status bar for lollipop above
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDarker));
-            getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDarker));
+            getWindow().setStatusBarColor(bgColor);
+            getWindow().setNavigationBarColor(bgColor);
         }
     }
 
