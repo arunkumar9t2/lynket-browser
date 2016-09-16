@@ -25,8 +25,6 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-        <include layout="@layout/bottom_sheet_layout"/>
-
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
@@ -36,6 +34,8 @@
             android:src="@drawable/ic_launch_white_24dp"/>
 
     </android.support.design.widget.CoordinatorLayout>
+
+    <include layout="@layout/bottom_sheet_layout"/>
 
     <arun.com.chromer.views.MaterialSearchView
         android:id="@+id/material_search_view"
