@@ -44,7 +44,7 @@ public class Preferences {
     public static final String MERGE_TABS_AND_APPS = "merge_tabs_and_apps_preference";
     private static final String BLACKLIST = "blacklist_preference";
     private static final String PREFERRED_PACKAGE = "preferred_package";
-    private static final String FIRST_RUN = "firstrun_1";
+    private static final String FIRST_RUN = "firstrun_2";
     private static final String USER_KNOWS_BOTTOM_BAR = "user_learnt_bottom_bar";
     private static final String SECONDARY_PREF = "secondary_preference";
     private static final String FAV_SHARE_PREF = "fav_share_preference";

@@ -9,8 +9,8 @@ android {
         applicationId "arun.com.chromer"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 23
-        versionName "1.6 B4"
+        versionCode 24
+        versionName "1.6"
 
         buildConfigField "String", "BASE_64", getBase64()
     }

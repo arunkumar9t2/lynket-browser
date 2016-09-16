@@ -7,59 +7,47 @@
 body {
    font-size: 0.915em;
 }
+.list-heading {
+    color: #FF4081;
+}
 </style>
 </head>
 <body>
 <strong>You can view this again in the about screen.</strong>
 <br></br>
-<strong>1.6 B4</strong> (Beta Release)
+<strong>1.6</strong>
+<h4 class="list-heading">Web heads</h3>
 <ul>
-    <li><b>NEW:</b> Search suggestions in search view.</li>
-    <li><b>NEW:</b> Grouped web heads and smoother animations</li>
-    <li><b>NEW:</b> 5.0+ Aggressive background loading for web heads. Web heads will fully load pages instead of only pre-fetching.</li>
-    <li><b>NEW:</b> Web head badge indicator to show no of active web heads.</li>
-    <li><b>NEW:</b> Web head context menu (accessible by long press) to easily select any web site in group.</li>
+    <li><b>NEW:</b> <b>Grouped web heads</b> and much smoother animations.</li>
+    <li><b>NEW:</b> <b>Favicon</b> support for web heads.</li>
+    <li><b>NEW:</b> 5.0+ Aggressive <b>background loading</b> for web heads. Web heads will fully load pages instead of only pre-fetching.</li>
+    <li><b>NEW:</b> Web head <b>badge indicator</b> to show no of active web heads.</li>
+    <li><b>NEW:</b> Web head <b>context menu</b> (accessible by long press) to easily select any web site in group. Provides <b>share all, individual share/close options.</b></li>
     <li><b>NEW:</b> Web heads if untouched, will hide further away from screen after 6 seconds.</li>
-    <li><b>IMPROVED:</b> 5.0+ Opened web sites will not be reloaded again.</li>
-    <li><b>FIXED:</b> Minor bugs.</li>
+    <li><b>NEW:</b> Configure web head <b>size</b> (small, normal).</li>
+    <li><b>NEW:</b> 5.0+ Web head now has realistic <b>drop shadow.</b></li>
+    <li><b>NEW:</b> 7.0+ <b>Quick settings tile</b> to toggle web head preference.</li>
+    <li><b>IMPROVED:</b> 5.0+ Opened web sites will not be reloaded again, instead bought to front.</li>
+    <li><b>IMPROVED:</b> Tweaked web head close and reveal animations.</li>
+    <li><b>IMPROVED:</b> Overall performance.</li>
 </ul>
-<strong>1.6 B3.1</strong> (Beta Release)
+<h4 class="list-heading">Functional</h3>
 <ul>
-    <li><b>FIXED:</b> Crash when dynamic toolbar enabled</li>
-    <li><b>IMPROVE:</b> Minor reduction in APK size</li>
+    <li><b>NEW:</b> Search view overhauled to support <b>search suggestions.</b></li>
+    <li><b>NEW:</b> <b>5.0+ Merge tabs and apps</b> Option to open each web site in its own recents entry.</li>
+    <li><b>NEW:</b> <b>Bottom bar</b> Provides extra options like ability to open link in new tab(5.0+) and quick share.</li>
+    <li><b>NEW:</b> Multi language support.</li>
+    <li><b>IMPROVED:</b> Custom tab launching speed.</li>
+    <li><b>IMPROVED:</b> Custom tab share feature.</li>
+    <li><b>IMPROVED:</b> Home screen shortcuts will now have <b>title and icon</b> extracted from the website.</li>
 </ul>
-<strong>1.6 B3</strong> (Beta Release)
+<h4 class="list-heading">Misc</h3>
 <ul>
-    <li><b>NEW:</b> Complete redesign of settings - Now tabbed and easier to access</li>
-    <li><b>NEW:</b> New material design animations</li>
-    <li><b>NEW:</b> Configure web head size</li>
-    <li><b>NEW:</b> 5.0+ Web head now has realistic drop shadow</li>
-    <li><b>NEW:</b> 5.0+ Merge tabs and tabs - Each recent card will have icon and title of the web site. Other issues fixed.</li>
-    <li><b>IMPROVED:</b> Custom tab opening speed</li>
-    <li><b>IMPROVED:</b> Smoother fling animations</li>
-    <li><b>IMPROVED:</b> Tweaked web head close and reveal animations</li>
-    <li><b>IMPROVED:</b> Search view UI.</li>
-    <li><b>IMPROVED:</b> Synced translations</li>
-    <li><b>FIXED:</b> Icons getting cut on N</li>
+    <li><b>NEW:</b> Overhauled homepage now has simplified <b>tabbed interface.</b></li>
+    <li><b>NEW:</b> Animations > Tab switching, ripple feedback, color change and closing animation in web heads.</li>
+    <li><b>IMPROVED:</b> Many bug fixes and performance improvements.</li>
 </ul>
-<strong>1.6 B2</strong> (Beta Release)
-<ul>
-    <li><b>NEW:</b> Much improved web heads\' physics based animations.</li>
-    <li><b>NEW:</b> Favicon support for web heads.</li>
-    <li><b>NEW:</b> Custom Tab Bottom bar.</li>
-    <li><b>NEW:</b> Open in new tab (5.0+): Copy a link or text while browsing and press the + icon to launch in a new tab.</li>
-    <li><b>FIX:</b> Lots of internal optimizations.</li>
-    <li><b>IMPROVED:</b> Home screen shortcuts will now have title and icon extracted from the website.</li>
-    <li><b>IMPROVED:</b> Synced translation updates.</li>
-</ul>
-<strong>1.6 B1</strong> (Beta Release)
-<ul>
-    <li><b>NEW:</b> Ability to fling web heads around.</li>
-    <li><b>NEW:</b> For 5.0+ : Experimental merge tab and apps, each tab will appear as separate task.</li>
-    <li><b>IMPROVED:</b> Minor UI interactions.</li>
-    <li><b>NEW:</b> Synced translation updates from OneSky: German, Russian, Portuguese BR, Chinese, Italian.</li>
-    <li><b>FIX:</b> Minor fixes in extracting colors from apps.</li>
-</ul>
+<br></br>
 <strong>1.5.5.1</strong>
 <ul>
     <li><b>NEW:</b> Configure animation speed, choose between medium and short.</li>
