@@ -42,6 +42,7 @@ import java.util.List;
 import arun.com.chromer.activities.about.AboutAppActivity;
 import arun.com.chromer.activities.about.changelog.Changelog;
 import arun.com.chromer.activities.intro.ChromerIntro;
+import arun.com.chromer.activities.intro.WebHeadsIntro;
 import arun.com.chromer.activities.payments.DonateActivity;
 import arun.com.chromer.customtabs.CustomTabManager;
 import arun.com.chromer.customtabs.CustomTabs;
@@ -189,6 +190,9 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         new PrimaryDrawerItem().withName(getString(R.string.intro)).withIdentifier(4)
                                 .withIcon(CommunityMaterial.Icon.cmd_clipboard_text)
                                 .withSelectable(false),
+                        new PrimaryDrawerItem().withName(getString(R.string.web_heads_intro)).withIdentifier(10)
+                                .withIcon(CommunityMaterial.Icon.cmd_chart_bubble)
+                                .withSelectable(false),
                         new PrimaryDrawerItem().withName(getString(R.string.feedback)).withIdentifier(2)
                                 .withIcon(CommunityMaterial.Icon.cmd_message_text)
                                 .withSelectable(false),
@@ -260,10 +264,14 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                             case 9:
                                 showJoinBetaDialog();
                                 break;
+                            case 10:
+                                startActivity(new Intent(MainActivity.this, WebHeadsIntro.class));
+                                break;
                         }
                         return false;
                     }
                 })
+                .withDelayDrawerClickEvent(200)
                 .build();
         mDrawer.setSelection(-1);
     }
