@@ -52,15 +52,9 @@
     <string name="add_to_homescreen">添加到主屏幕</string>
     <string name="intro_1">您好！\nChromer是一個輕量、安全以及快速的網頁瀏覽器。</string>
     <string name="intro_2">它使用Google Chrome的自訂標籤頁功能，提供極輕量的Chrome標籤頁以快速載入連結。</string>
-    <string name="intro_3">它可以把瀏覽器常駐於內存以便可更快的載入。</string>
-    <string name="intro_5">它可以掃瞄畫面上的連結，並於背景載入以減少等待時間！</string>
-    <string name="intro_4">它可以在開啟連結時創建多個疊加式的懸浮氣泡，並且於背景載入部份內容！</string>
     <string name="how_to_use">如何使用？</string>
     <string name="intro_6">只需設定Chromer作為您的預設瀏覽器，Chromer將以非入侵的方式顯示連結內容。或者您也可以在需要時選擇使用Chromer。</string>
     <string name="why_use">為何使用？</string>
-    <string name="intro_7">更快速的載入，非入侵式，節省數據量，與Chrome共享登錄訊息，自動完成表單以及具備最新版本中的安全性！</string>
-    <string name="thats_it">它可以自訂的！</string>
-    <string name="intro_8">您可以在主界面內輕鬆選擇Chromer的工作方式！</string>
     <string name="version">版本</string>
     <string name="changelog">更新日誌</string>
     <string name="join_google_plus">加入 Google+ 社群</string>
@@ -123,7 +117,6 @@
     <string name="icon_design">圖標設計</string>
     <string name="overlay_permission_content">要在畫面上顯示浮動氣泡，需要授予屏幕覆蓋權限。您要現在授予權限嗎？</string>
     <string name="webheads_intro_1">當您在任何應用程式打開連結時，一個浮動氣泡將被創建於屏幕上，然後Chromer會嘗試預先載入連結內容。</string>
-    <string name="webheads_intro_2">當打開多個連結時，這些浮動氣泡會疊加在一起，您可以稍後點擊它們來打開連結。</string>
     <string name="webheads_intro_3">當您拖動浮動氣泡時，將會出現一個垃圾桶圖標。拖動浮動氣泡到上面便可以刪除它。</string>
     <string name="webheads_intro_4">Chromer會優先對待最後打開的連結並預載它。推薦的使用方法是由上至下依次點開浮動氣泡。啟用\“關閉已點開的浮動氣泡\”功能可使這操作更流暢。</string>
     <string name="web_head_permission_toast">要使用浮動氣泡打開連結，Chromer需要在其他應用程式上顯示的權限，請授予權限以繼續，或在Chromer設定中停用浮動氣泡功能。</string>

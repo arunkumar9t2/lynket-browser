@@ -69,15 +69,9 @@
     <string name="add_to_homescreen">Adicionar à Tela Inicial</string>
     <string name="intro_1">Olá!\nChromer é um navegador leve, seguro e rápido.</string>
     <string name="intro_2">Ele usa a função Abas customizadas do Google Chrome que é uma aba do Chrome extremante leve projetada para carregar um link rapidamente</string>
-    <string name="intro_3">Isso pode manter o seu navegador preso na memória, assim ele irá iniciar um pouco mais rápido.</string>
-    <string name="intro_5">Escaneia os links na sua tela e os carrega em segundo plano para reduzir o tempo de carregamento!</string>
-    <string name="intro_4">Pode empilhar múltiplos links em bolhas flutuantes quando você os abre e então carregá-los parcialmente em segundo plano!</string>
     <string name="how_to_use">Como usar isso?</string>
     <string name="intro_6">Apenas defina o Chromer como o seu navegador padrão, Chromer irá mostrar o link de uma forma não intrusiva.</string>
     <string name="why_use">Por quê usar?</string>
-    <string name="intro_7">Carregamento mais rápido, não-intrusivo, economiza dados, logins compartilhados do Chrome, formulários completados automaticamente e SEGURO com as últimas atualizações!</string>
-    <string name="thats_it">É personalizável!</string>
-    <string name="intro_8">Você pode escolher facilmente como quer que o Chromer trabalhe abrindo a tela principal!</string>
     <string name="version">Versão</string>
     <string name="changelog">Registro de Alterações</string>
     <string name="join_google_plus">Entrar na Comunidade G+</string>
@@ -140,7 +134,6 @@
     <string name="icon_design">Design dos Ícones</string>
     <string name="overlay_permission_content">Para desenhar as web heads na tela, a permissão de sobreposição precisa ser concedida. Conceder agora?</string>
     <string name="webheads_intro_1">Quando você abre um link em qualquer app, uma bolha flutuante chamada web head será criada na tela e o Chromer tentará carregar o link.</string>
-    <string name="webheads_intro_2">Ao abrir múltiplos links, estas web heads serão automaticamente empilhadas umas sobre as outras conforme exibido. Você pode abrir estes links depois tocando neles.</string>
     <string name="webheads_intro_3">Quando você começa a arrastar uma web head, uma lixeira será exibida. Arraste a web head para a lixeira para excluí-la.</string>
     <string name="webheads_intro_4">O Chromer prioriza o último link aberto e o carrega previamente. O método recomendado é clicar nas web heads uma por uma de cima para baixo. Ativar fechar web heads ao lançar vai tornar isso sem igual.</string>
     <string name="web_head_permission_toast">Para abrir links em bolhas flutuantes, o Chromer precisa da permissão para desenhar sobre outros apps, por favor conceda para continuar ou desative as Web Heads nas configurações do Chromer.</string>

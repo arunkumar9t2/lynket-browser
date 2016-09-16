@@ -57,15 +57,9 @@
     <string name="add_to_homescreen">Aggiungi alla home screen</string>
     <string name="intro_1">Ciao!\nChromer è un web browser leggero, sicuro e veloce.</string>
     <string name="intro_2">Usa le custom tab di Chrome che sono delle pagine leggere sviluppate apposta per caricare velocemente un link.</string>
-    <string name="intro_3">Può bloccare in memoria il browser così da avviarlo più velocemente.</string>
-    <string name="intro_5">Può scansionare i link sul tuo schermo e precaricarli in background per ridurre i tempi di caricamento!</string>
-    <string name="intro_4">Può impilare bolle fluttuanti multiple quando le apri e poi caricarle parzialmente in background!</string>
     <string name="how_to_use">Come usare questo?</string>
     <string name="intro_6">Imposta Chromer come broswer definitivo, e visualizzerà i link in maniera non intrusiva. O seleziona Chromer quando necessario.</string>
     <string name="why_use">Perché usare?</string>
-    <string name="intro_7">Caricamento più veloce, non intrusivo, risparmia dati, dati di login condivisi con Chrome, auto riempimento dei forms e SICURO con gli ultimi updates!</string>
-    <string name="thats_it">E\' personalizzabile!</string>
-    <string name="intro_8">Può decidere facilmente come vuoi che lavori Chromer avviando la schermata principale!</string>
     <string name="version">Versione</string>
     <string name="changelog">Changelog</string>
     <string name="join_google_plus">Unisciti alla Community Google+</string>

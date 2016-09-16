@@ -69,15 +69,9 @@
     <string name="add_to_homescreen">添加至主屏幕</string>
     <string name="intro_1">你好！\nChromer 是一款轻量化，安全且高速的网页浏览器。</string>
     <string name="intro_2">它使用谷歌 Chrome 浏览器中的自定义标签页功能。这是一种极为轻量化的 Chrome 标签页，可以用来快速的加载一个链接。</string>
-    <string name="intro_3">这将可以使你的浏览器常驻内存以便更快速的加载</string>
-    <string name="intro_5">这将可以扫描你屏幕上的链接并于后台加载内容以缩短打开的时间。</string>
-    <string name="intro_4">这将可以在你点击网页链接时创建可叠加的浮动气泡并选择在后台加载网页中的部分内容。</string>
     <string name="how_to_use">要如何使用？</string>
     <string name="intro_6">将 Chromer 设置成你的默认浏览器，Chromer 将会以非入侵的方式显示你所打开的链接。或者你还可以选择仅在需要它时调用。</string>
     <string name="why_use">为什么使用它？</string>
-    <string name="intro_7">更快的加载速度，非入侵式，节省数据流量，与 Chrome 共享登录信息，自动填充表单并且具备最新版本中的安全性。</string>
-    <string name="thats_it">它是可定制的！</string>
-    <string name="intro_8">你可以在主界面内轻松选择 Chromer 的工作方式！</string>
     <string name="version">版本</string>
     <string name="changelog">更新日志</string>
     <string name="join_google_plus">加入 Google+ 社群</string>
@@ -140,7 +134,6 @@
     <string name="icon_design">图标设计</string>
     <string name="overlay_permission_content">想在屏幕上绘制链接气泡，需要获取上层显示权限。你要现在允许这项权限吗？</string>
     <string name="webheads_intro_1">当你在任何应用内打开一个链接时，一个浮动的链接气泡将被创建在你的屏幕上，此时 Chromer 将会尝试预先获取链接里的内容。</string>
-    <string name="webheads_intro_2">当打开多个链接时，这些链接气泡将会彼此叠加。你可以选择在稍后点击打开它们。</string>
     <string name="webheads_intro_3">当拖动一个链接气泡时，屏幕上将出现一个垃圾桶图标。将气泡放置在上面即可选择删除。</string>
     <string name="webheads_intro_4">Chromer 将会优先处理用户最后打开的链接并预先获取其中的内容。推荐的使用方法是自上到下依次的打开链接气泡。启用“关闭已点开链接的气泡”选项将可以使操作变得无缝化。</string>
     <string name="web_head_permission_toast">想要开启链接气泡功能，Chromer 将需要获取在其他应用上层显示内容的权限，请点击允许以继续或者在 Chromer 的设置中禁用链接气泡。</string>

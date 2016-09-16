@@ -69,15 +69,9 @@
     <string name="add_to_homescreen">Zum Startbildschirm hinzufügen</string>
     <string name="intro_1">"Hallo! \nChromer ist ein schlanker, sicherer und schneller Browser. "</string>
     <string name="intro_2">Es nutzt Chromes Custom-Tab-Funktion, die einen extrem schlanken Chrome-Tab bereitsstellt, um einen Link schnell zu laden.</string>
-    <string name="intro_3">"Dein Browser kann im Speicher behalten werden, damit er ein wenig schneller startet. "</string>
-    <string name="intro_5">Links auf deinem Bildschirm können gescannt und im Hintergrund geladen werden um Ladezeiten zu verringern!</string>
-    <string name="intro_4">Mehrere Links können in schwebenden Blasen gestapelt werden wenn du sie anklickst. Sie werden dann teilweise im Hintergrund geladen!</string>
     <string name="how_to_use">Wie funktioniert das?</string>
     <string name="intro_6">Du musst nur Chromer als deinen Standardbrowser festlegen. Chromer wird dir den Link dann unaufdringlich anzeigen. Oder du wählst Chromer nur bei Bedarf.</string>
     <string name="why_use">Warum Chromer?</string>
-    <string name="intro_7">Schnelleres Laden, unaufdringlich, schont dein Datenvolumen, Login Daten aus Chrome inklusive Auto-Fill Daten und sicher mit den neuesten Updates.</string>
-    <string name="thats_it">Es ist anpassbar!</string>
-    <string name="intro_8">Du kannst ganz einfach festlegen wie Chromer funktionieren soll, indem du den Hauptbildschirm aufrufst!</string>
     <string name="version">Version</string>
     <string name="changelog">Neuigkeiten</string>
     <string name="join_google_plus">Google+ Community beitreten</string>
@@ -140,7 +134,6 @@
     <string name="icon_design">Icon Design</string>
     <string name="overlay_permission_content">Um die Web Heads anzuzeigen wird die Berechtigung, etwas über anderen Apps einzublenden benötigt. Möchtest du die Berechtigung gewähren?</string>
     <string name="webheads_intro_1">Wenn du irgendeinen Link öffnest wird eine \“schwebende Blase\” (Web Head) erstellt und Chromer versucht den Link vorab zu laden.</string>
-    <string name="webheads_intro_2">Wenn du mehrere Links öffnest, werden die Web Heads automatisch gestapelt. Du kannst die Links später öffnen, indem du darauf tippst.</string>
     <string name="webheads_intro_3">Wenn du einen Web Head ziehst, erscheint eine Mülltonne. Lass den Web Head darüber los um ihn zu schließen.</string>
     <string name="webheads_intro_4">"Chromer priorisiert den zuletzt geöffneten Link und lädt ihn vorab. Die beste Methode ist, die Web Heads nacheinander von oben nach unten auszuwählen. Die beste Erfahrung wird gewährleistet, wenn die Web Heads automatisch geschlossen werden beim Antippen. "</string>
     <string name="web_head_permission_toast">Um Links in schwebenden Blasen zu öffnen, benötigt Chromer die Berechtigung, etwas über anderen Apps einzublenden. Bitte aktivieren oder die Web Heads deaktivieren.</string>
