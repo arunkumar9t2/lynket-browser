@@ -11,17 +11,16 @@
     </string-array>
     <string-array name="actionValues">
         <item>Sekundarni preglednik</item>
-        <item>Omiljena aplikacija za dijeljenje</item>
+        <item>Aplikacija za dijeljenje</item>
     </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>Desno</item>
         <item>Lijevo</item>
     </string-array>
     <string-array name="webHeadsSizeValues">
-        <item>Mala</item>
         <item>Normalna</item>
+        <item>Mala</item>
     </string-array>
-    <string name="app_name">Chromer</string>
     <string name="share_text">Hej, pogledajte \“Chromer\” za brzo i sigurno iskustvo pregledavanja interneta. Preuzmite ga ovdje: https://goo.gl/992ils</string>
     <string name="share_via">Podijelite putem…</string>
     <string name="custom_tab_provider_not_found">Nije pronađen kompatibilan pružatelj prilagođenih kartica.</string>
@@ -97,7 +96,7 @@
     <string name="based_on_app">Na temelju aplikacije</string>
     <string name="based_on_web">Na temelju mrežne stranice</string>
     <string name="preferred_action">Željena radnja</string>
-    <string name="fav_share_app">Omiljena aplikacija za dijeljenje</string>
+    <string name="fav_share_app">Aplikacija za dijeljenje</string>
     <string name="choose_fav_share_app">Odaberite omiljenu aplikaciju za dijeljenje.</string>
     <string name="dynamic_summary_appweb">Boja će se temeljiti na mrežnoj stranici ako je podržava ili na aplikaciji.</string>
     <string name="dynamic_summary_app">Boja će se temeljiti na aplikaciji koja pokreće mrežnu stranicu.</string>
@@ -116,7 +115,6 @@
     <string name="credits">Zahvale</string>
     <string name="icon_design">Dizajn ikone</string>
     <string name="overlay_permission_content">Da bi se plutajući mjehurići mogli prikazivati na zaslonu potrebno je dopuštenje povlačenja preko drugih aplikacija. Želite li ga odmah odobriti?</string>
-    <string name="webheads_intro_1">Kada otvorite poveznicu u bilo kojoj aplikaciji, na zaslonu će se stvoriti plutajući mjehurić i Chromer će pokušati predučitati poveznicu.</string>
     <string name="webheads_intro_3">Kada počnete povlačiti plutajući mjehurić prikazat će se koš za smeće. Ubacite ga u koš da biste ga izbrisali.</string>
     <string name="webheads_intro_4">Chromer daje prednost posljednje otvorenoj poveznici i predučitava je. Preporučamo vam da dodirnete mjehuriće jedan po jedan od vrha do dna. Ako omogućite zatvaranje plutajućih mjehurića pri otvaranju ovo će biti jednostavnije.</string>
     <string name="web_head_permission_toast">Da bi mogao otvarati poveznice u plutajućim mjehurićima, Chromer treba dopuštenje za povlačenje preko drugih aplikacija. Odobrite to dopuštenje da biste nastavili ili onemogućite plutajuće mjehuriće u postavkama Chromera.</string>

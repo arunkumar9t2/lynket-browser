@@ -2,7 +2,7 @@
 <resources>
     <string-array name="animationValues">
         <item>Ничего</item>
-        <item>Слайд справа</item>
+        <item>Слайд вправо</item>
         <item>Слайд вверх</item>
     </string-array>
     <string-array name="animationKeys">
@@ -20,7 +20,7 @@
     </string-array>
     <string-array name="actionValues">
         <item>Вторичный браузер</item>
-        <item>Избраное приложение для передачи</item>
+        <item>Избранное приложение для передачи</item>
     </string-array>
     <string-array name="actionKeys">
         <item>1</item>
@@ -35,10 +35,9 @@
         <item>2</item>
     </string-array>
     <string-array name="webHeadsSizeValues">
-        <item>Мелкий</item>
         <item>Нормальный</item>
+        <item>Мелкий</item>
     </string-array>
-    <string name="app_name">Chromer</string>
     <string name="share_text">Зацените \‘Chromer\’ для быстрого и безопасного сёрфинга в интернете! Скачать здесь https://goo.gl/992ils</string>
     <string name="share_via">Поделиться через…</string>
     <string name="custom_tab_provider_not_found">Подходящий поставщик вкладок не найден</string>
@@ -163,8 +162,8 @@
     <string name="bottom_bar">Нижняя панель</string>
     <string name="open_in_new_tab">Открыть в новой вкладке</string>
     <string name="open_in_new_tab_error">Неверная ссылка, вы точно скопировали текст или ссылку долгим нажатием на странице?</string>
-    <string name="bottom_bar_expln">Чтобы нижняя панель работала корректно, установите<b>актуальную версию Chrome</b>это рекомендуемый браузер для быстрых вкладок (custom tab). С более старыми версиями и другими браузерами может не работать. \n
-\nНижняя панель обеспечивает две функции: \n\n<b>Открытие в новой вкладке (Андроид 5.0+) -</b>Копирование ссылки или текста на экране с последующим нажатием иконки на панели для перехода по ссылке или выполнения поиска выделенного текста в новой быстрой вкладке.\n<b>Поделиться -</b> Быстро выполнить стандартное Андроид действие Поделиться. \n\n Больше функций появится со временем.</string>
+    <string name="bottom_bar_expln">Чтобы нижняя панель работала корректно, установите <b>актуальную версию Chrome</b> это рекомендуемый браузер для быстрых вкладок (custom tab). С более старыми версиями и другими браузерами может не работать. \n
+\nНижняя панель обеспечивает две функции: \n\n<b>Открытие в новой вкладке (Андроид 5.0+) -</b> Копирование ссылки или текста на экране с последующим нажатием иконки на панели для перехода по ссылке или выполнения поиска выделенного текста в новой быстрой вкладке.\n<b>Поделиться -</b> Быстро выполнить стандартное Андроид действие Поделиться. \n\n Больше функций появится со временем.</string>
     <string name="options">Опции</string>
     <string name="customize">Настроить</string>
     <string name="not_set">Не задано</string>

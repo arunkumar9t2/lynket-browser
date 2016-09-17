@@ -35,10 +35,9 @@
         <item>2</item>
     </string-array>
     <string-array name="webHeadsSizeValues">
-        <item>Pequeno</item>
         <item>Normal</item>
+        <item>Pequeno</item>
     </string-array>
-    <string name="app_name">Chromer</string>
     <string name="share_text">Oi! Experimente o \‘Chromer\’ para uma experiência de navegação rápida e segura! Baixe aqui https://goo.gl/992ils</string>
     <string name="share_via">Compartilhar via</string>
     <string name="custom_tab_provider_not_found">Provedor de abas personalizadas não encontrado</string>

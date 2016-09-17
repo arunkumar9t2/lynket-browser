@@ -26,7 +26,6 @@
         <item>1</item>
         <item>2</item>
     </string-array>
-    <string name="app_name">Chromer</string>
     <string name="share_text">Hey, dai un occhiata a \‘Chromer\’ per una navigazione sicura e veloce! Scaricala qua http://goo.gl/922ils</string>
     <string name="share_via">Condividi con…</string>
     <string name="custom_tab_provider_not_found">Nessun fornitore di custom tab trovato</string>

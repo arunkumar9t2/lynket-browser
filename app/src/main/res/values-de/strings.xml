@@ -35,10 +35,9 @@
         <item>2</item>
     </string-array>
     <string-array name="webHeadsSizeValues">
-        <item>Klein</item>
         <item>Normal</item>
+        <item>Klein</item>
     </string-array>
-    <string name="app_name">Chromer</string>
     <string name="share_text">Hey,  teste \‘Chromer\’ für schnelles und sicheres surfen. Hier runterladen: https://goo.gl/992ils</string>
     <string name="share_via">Teilen mit…</string>
     <string name="custom_tab_provider_not_found">Kein kompatibler Custom-Tab-Anbieter gefunden</string>
@@ -141,7 +140,7 @@
     <string name="web_heads_service">Web Heads Dienst</string>
     <string name="join_beta">Beta beitreten</string>
     <string name="become_a_tester">Tester werden</string>
-    <string name="join_beta_content">“Beta Versionen sind experimentell. Sie haben die neuesten Funktionen, enthalten jedoch auch Fehler. Du kannst bei der Entwicklung helfen, indem du als Tester mitmachst und Fehler in der Google+ Community meldest. \n\nBitte stelle sicher,  dass du der Community beigetreten bist und klicke dann auf den Button \”Tester werden\“. \n\nBEACHTE: Du musst der Community beitreten um Tester zu werden. ”</string>
+    <string name="join_beta_content">“Beta Versionen sind experimentell. Sie haben die neuesten Funktionen, enthalten jedoch auch Fehler. Du kannst bei der Entwicklung helfen, indem du als Tester mitmachst und Fehler in der Google+ Community meldest. \n\nBitte stelle sicher,  dass du der Community beigetreten bist und klicke dann auf den Button \”Tester werden\". \n\nBEACHTE: Du musst der Community beitreten um Tester zu werden. "</string>
     <string name="no_voice_rec_apps">Keine kompatible Spracherkennungs App gefunden</string>
     <string name="blacklisted_apps">Ausgeschlossene Apps (Blacklist)</string>
     <string name="blacklisted_explanation">Verhindere, dass Chromer Links von bestimmten Apps verarbeitet</string>
@@ -152,7 +151,7 @@
     <string name="blacklist_explanation">Öffnest du einen Link aus einer ausgeschlossenen App, dann wird dieser im sekundären Browser geöffnet</string>
     <string name="revoke_accessibility_permission">Du kannst die Berechtigung für die Bedienungshilfe jetzt deaktivieren.</string>
     <string name="last_fetched_urls">Letzte geladene URLs</string>
-    <string name="blacklist_on">Ausgeschlossene Apps %s</string>
+    <string name="blacklist_on">Ausgeschlossene Apps %1$s</string>
     <string name="translations">Übersetzungen</string>
     <string name="merge_tabs">Tabs und Apps zusammen anzeigen</string>
     <string name="merge_tabs_explanation">Zeige Tabs zusammen mit Apps im \“Zuletzt geöffnet\”-Screen an</string>

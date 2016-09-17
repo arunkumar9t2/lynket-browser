@@ -14,38 +14,41 @@
         <item>2</item>
     </string-array>
     <string-array name="actionValues">
-        <item>第二瀏覽器</item>
+        <item>第二順位瀏覽器</item>
         <item>喜好的分享應用程式</item>
     </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>右側</item>
         <item>左側</item>
     </string-array>
-    <string name="app_name">Chromer</string>
+    <string-array name="webHeadsSizeValues">
+        <item>一般</item>
+        <item>小</item>
+    </string-array>
     <string name="share_text">嘿，快來體驗 \‘Chromer\’ 提供的快速和安全瀏覽功能！ 可以在這裡下載 https://goo.gl/992ils</string>
     <string name="share_via">分享至…</string>
-    <string name="custom_tab_provider_not_found">找不到兼容自訂標籤頁功能的提供程序</string>
-    <string name="custom_tab_provider_not_found_expln">Chromer需要您在手機上安裝可兼容自訂標籤頁功能的瀏覽器，目前在您的手機上沒有發現可支持該功能的瀏覽器。您要在play store上安裝Google Chrome（免費）嗎？如果您已安裝了，請更新它至最新版本。</string>
+    <string name="custom_tab_provider_not_found">找不到相容自訂標籤頁功能的提供程式</string>
+    <string name="custom_tab_provider_not_found_expln">Chromer需要您在手機上安裝可相容自訂標籤頁功能的瀏覽器，目前在您的手機上沒有發現可支援該功能的瀏覽器。您要在Play Store上安裝Google Chrome（免費）嗎？如果您已安裝了，請更新它至最新版本。</string>
     <string name="install">安裝</string>
-    <string name="licenses">開源許可</string>
+    <string name="licenses">開放原始碼授權</string>
     <string name="about">關於</string>
     <string name="help_chromer_grow">幫助 Chromer 成長！</string>
     <string name="share">分享</string>
     <string name="share_with">以 %1$s 分享</string>
-    <string name="more_custom_tbs">詳細了解自訂標籤頁</string>
+    <string name="more_custom_tbs">詳細了解自訂分頁</string>
     <string name="rate_play_store">在Play Store中評分</string>
     <string name="feedback">意見回饋</string>
     <string name="intro">簡介</string>
-    <string name="send_email">發送電郵…</string>
-    <string name="fallback_msg">無法打開自訂標籤頁，將以瀏覽器開啟</string>
+    <string name="send_email">發送電子郵件…</string>
+    <string name="fallback_msg">無法打開自訂分頁，將以瀏覽器開啟</string>
     <string name="open_with">選擇應用程式打開…</string>
     <string name="open_in_browser">在 %1$s 中打開</string>
     <string name="unxp_err">異常錯誤，請重試</string>
-    <string name="unsupported_link">不支持的連結，請重試</string>
+    <string name="unsupported_link">不支援的連結，請重試</string>
     <string name="couldnt_load_price">無法載入價格</string>
     <string name="coffee">一杯咖啡</string>
     <string name="lunch">一頓午餐</string>
-    <string name="premium_donation">優質捐贈</string>
+    <string name="premium_donation">額外捐贈</string>
     <string name="invalid_link">無效連結</string>
     <string name="copied">已複製</string>
     <string name="copy_link">複製連結</string>
@@ -54,7 +57,7 @@
     <string name="intro_2">它使用Google Chrome的自訂標籤頁功能，提供極輕量的Chrome標籤頁以快速載入連結。</string>
     <string name="how_to_use">如何使用？</string>
     <string name="intro_6">只需設定Chromer作為您的預設瀏覽器，Chromer將以非入侵的方式顯示連結內容。或者您也可以在需要時選擇使用Chromer。</string>
-    <string name="why_use">為何使用？</string>
+    <string name="why_use">為何要使用？</string>
     <string name="version">版本</string>
     <string name="changelog">更新日誌</string>
     <string name="join_google_plus">加入 Google+ 社群</string>
@@ -75,23 +78,23 @@
     <string name="personalization">個人化</string>
     <string name="default_clear_msg">被設為預設瀏覽器，請點擊清除預設操作以取消它。</string>
     <string name="dynamic_toolbar_color">工具欄動態變色</string>
-    <string name="keep_chrome_warmedup">在內存常駐您的瀏覽器以更快速開啟</string>
-    <string name="warmup_browser">預載瀏覽器</string>
+    <string name="keep_chrome_warmedup">在記憶體常駐您的瀏覽器以更快速開啟</string>
+    <string name="warmup_browser">預先載入瀏覽器</string>
     <string name="set_default_chromer">設為預設瀏覽器</string>
     <string name="default_provider">預設自訂標籤頁提供應用</string>
     <string name="pre_fetch_content">預載內容</string>
     <string name="pre_fetch_desc">掃瞄畫面上的連結並在背景載入，以便可即時打開</string>
-    <string name="accessibility_description">這項服務將被 Chromer 用於掃瞄畫面上的文字連結，並在背景載入內容。Chromer不會處理其他訊息。如果您選擇不授予此權限，您仍可使用 Chromer的輕量化模式。要了解更多資訊，請檢看Chromer應用程式。</string>
-    <string name="accessibility_dialog_title">需要取得無障礙權限</string>
-    <string name="accessibility_dialog_desc">想要讓 Chromer 掃瞄任何應用程式的連結，它需要您授予無障礙服務權限。請在接下來的畫面中授予無障礙權限，授予權限後便可啟用此選項並享受快速的開啟連結。</string>
+    <string name="accessibility_description">這項服務將被 Chromer 用於掃瞄畫面上的文字連結，並在背景載入內容。Chromer不會處理其他訊息。如果您選擇不授予此權限，您仍可使用 Chromer的輕量化模式。要了解更多資訊，請啟動Chromer應用程式。</string>
+    <string name="accessibility_dialog_title">需要取得協助工具權限</string>
+    <string name="accessibility_dialog_desc">想要讓 Chromer 掃瞄任何應用程式的連結，它需要您授予協助工具權限。請在接下來的畫面中授予協助工具權限，授予權限後便可啟用此選項並享受快速的開啟連結。</string>
     <string name="open_settings">開啟設定</string>
     <string name="only_on_wifi">僅在 Wi-Fi 情況下掃瞄</string>
     <string name="show_notification">當預載連結時顯示通知</string>
     <string name="default_toolbar_color">預設工具欄顏色</string>
     <string name="web_heads_color">浮動氣泡顏色</string>
-    <string name="choose_secondary_browser">第二瀏覽器</string>
-    <string name="dynamic_toolbar_help">啟動了動態工具欄變色，Chromer會靜靜地學習顏色適配。起初它可能無法正確適配網頁或應用程式的顏色，但它會隨使用時間不斷優化，享受它吧！</string>
-    <string name="secondary_browser_success">%1$s 被設定為第二瀏覽器</string>
+    <string name="choose_secondary_browser">第二順位瀏覽器</string>
+    <string name="dynamic_toolbar_help">啟動了動態工具欄變色，Chromer會靜靜地學習顏色適配。起初它可能無法正確符合網頁或應用程式的顏色，但它會隨使用時間不斷改善，試試看吧！</string>
+    <string name="secondary_browser_success">%1$s 被設定為第二順位瀏覽器</string>
     <string name="fav_share_success">%1$s 被設定為您的喜好分享應用程式！</string>
     <string name="default_provider_success">%1$s 將被用於提供自訂標籤頁！</string>
     <string name="based_on_app">根據應用程式</string>
@@ -104,29 +107,30 @@
     <string name="dynamic_summary_web">顏色將根據開啟的網頁適配</string>
     <string name="no_option_selected">沒有選擇選項</string>
     <string name="permission_required">需要權限</string>
-    <string name="usage_permission_explanation_appcolor">要啟用動態工具欄根據應用程式變色，Chromer需要您授予獲取正在使用的應用程式權限。您要現在授予權限嗎？</string>
-    <string name="usage_permission_explanation_blacklist">要啟用應用程式黑名單，Chromer需要您授予獲取正在使用的應用程式權限。您要現在授予權限嗎？</string>
+    <string name="usage_permission_explanation_appcolor">要啟用動態工具欄根據應用程式變色，Chromer需要您授予獲取正在使用的應用程式權限。您要授予權限嗎？</string>
+    <string name="usage_permission_explanation_blacklist">要啟用應用程式黑名單，Chromer需要您授予正在使用的應用程式權限。您要現在授予權限嗎？</string>
     <string name="grant">授權</string>
-    <string name="open_source_contributions">開源項目</string>
+    <string name="open_source_contributions">開放原始碼項目</string>
     <string name="search_or_type_url">搜尋或輸入網址</string>
-    <string name="voice_prompt">說出您的查詢</string>
+    <string name="voice_prompt">說話來查詢</string>
     <string name="web_heads">浮動氣泡</string>
     <string name="webhead_spawn_summary">起始位置</string>
     <string name="webhead_spawn_title">選擇浮動氣泡最初出現的位置</string>
-    <string name="credits">致謝</string>
-    <string name="icon_design">圖標設計</string>
-    <string name="overlay_permission_content">要在畫面上顯示浮動氣泡，需要授予屏幕覆蓋權限。您要現在授予權限嗎？</string>
+    <string name="credits">感謝</string>
+    <string name="icon_design">圖示設計</string>
+    <string name="overlay_permission_content">要在畫面上顯示浮動氣泡，需要授予重疊畫面的權限。您要現在授予權限嗎？</string>
     <string name="webheads_intro_1">當您在任何應用程式打開連結時，一個浮動氣泡將被創建於屏幕上，然後Chromer會嘗試預先載入連結內容。</string>
-    <string name="webheads_intro_3">當您拖動浮動氣泡時，將會出現一個垃圾桶圖標。拖動浮動氣泡到上面便可以刪除它。</string>
-    <string name="webheads_intro_4">Chromer會優先對待最後打開的連結並預載它。推薦的使用方法是由上至下依次點開浮動氣泡。啟用\“關閉已點開的浮動氣泡\”功能可使這操作更流暢。</string>
+    <string name="webheads_intro_3">當您拖動浮動氣泡時，將會出現一個垃圾桶圖示。拖動浮動氣泡到上面便可以刪除它。</string>
+    <string name="webheads_intro_4">Chromer會優先讀取最後打開的連結並預載它。建議的使用方法是由上至下依次點開浮動氣泡。啟用\“關閉已點開的浮動氣泡\”功能可使這操作更流暢。</string>
     <string name="web_head_permission_toast">要使用浮動氣泡打開連結，Chromer需要在其他應用程式上顯示的權限，請授予權限以繼續，或在Chromer設定中停用浮動氣泡功能。</string>
     <string name="tap_close_all">點擊以關閉全部</string>
     <string name="web_heads_service">浮動氣泡服務</string>
     <string name="join_beta">加入測試版計劃</string>
     <string name="become_a_tester">成為測試人員</string>
-    <string name="join_beta_content">測試版是具有最新功能但可能有少量 Bug 的實驗性版本，您可以透過加入成為測試人員及在 Google+ 社群上回報您遇到的問題來為開發做出貢獻。\n\n請確定您已加入 Google+ 社群，然後點擊成為測試人員按鈕以獲得 Google Play 的測試連結。\n\n注意：您必需加入社群才能成為測試人員。</string>
+    <string name="join_beta_content">測試版是具有最新功能但可能有少量錯誤的實驗性版本，您可以透過加入成為測試人員及在 Google+ 社群上回報您遇到的問題來為開發做出貢獻。\n\n請確定您已加入 Google+ 社群，然後點擊成為測試人員按鈕以獲得 Google Play 的測試連結。\n\n注意：您必需加入社群才能成為測試人員。</string>
     <string name="no_voice_rec_apps">找不到相容的語音辨識應用程式</string>
     <string name="blacklisted_apps">黑名單應用程式</string>
+    <string name="blacklisted_explanation">在某些App排除以 Chromer 開啟連結</string>
     <string name="loading">載入中…</string>
     <string name="please_wait">請稍等</string>
     <string name="blacklist_message">您已將這個應用程式加入黑名單中，Chromer將不會被用來打開它裡面的連結，但您還未設定第二瀏覽器，請選擇第二瀏覽器以繼續。</string>
@@ -136,6 +140,35 @@
     <string name="last_fetched_urls">最近獲取的網址</string>
     <string name="blacklist_on">黑名單應用程式 %s</string>
     <string name="translations">翻譯</string>
-    <string name="merge_tabs">合併顯示標籤頁和應用程式</string>
-    <string name="merge_tabs_explanation">將您打開的標籤頁顯示於您手機上的最近的應用程式列表內。</string>
+    <string name="merge_tabs">合併顯示分頁和應用程式</string>
+    <string name="merge_tabs_explanation">將您打開的分頁顯示於您手機上的最近的應用程式列表內。</string>
+    <string name="already_loaded">已經載入完畢</string>
+    <string name="add_home_screen_begun">捷徑會立刻加入</string>
+    <string name="bottom_bar_pref_summary">顯示含有額外功能的工具列</string>
+    <string name="bottom_bar_pref_title">顯示底層工具列</string>
+    <string name="bottom_bar">底層工具列</string>
+    <string name="open_in_new_tab">在新分頁中開啟</string>
+    <string name="open_in_new_tab_error">無效的連結。請問您有透過長按頁面來複製任何連結或文字嗎？</string>
+    <string name="bottom_bar_expln">為了確保底部工具列能正常運作，建議您設定<b>最新的 Chrome 版本</b> 做為自訂分頁的提供者。 舊的版本或者其他瀏覽器可能無法正常運作。
+
+底部工具列提供兩個功能：
+
+<b>在新分頁中開啟(Android 5.0或更新版本)-</b>
+複製螢幕中的連結或文字然後點選圖示來開啟連結或在新分頁中搜尋文字。
+<b>分享-</b>快速顯示Android的分享功能。
+
+更多功能即將推出。</string>
+    <string name="options">選項</string>
+    <string name="customize">定制</string>
+    <string name="not_set">尚未設定</string>
+    <string name="not_found">無法找到</string>
+    <string name="app_preferences">App偏好設定</string>
+    <string name="behavior_preferences">行為</string>
+    <string name="additional_preferences">額外的</string>
+    <string name="notifications">通知</string>
+    <string name="web_heads_enabled">懸浮氣泡已開啟！您可以排列它們並在稍後瀏覽</string>
+    <string name="web_heads_title">您可以儲存多個連結以便稍後瀏覽它們</string>
+    <string name="web_heads_description">使用懸浮氣泡開啟連結</string>
+    <string name="webhead_size_title">大小</string>
+    <string name="webhead_size_dialog">選擇懸浮氣泡的大小</string>
 </resources>

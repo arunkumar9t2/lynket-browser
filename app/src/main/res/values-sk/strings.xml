@@ -22,10 +22,13 @@
         <item>Vľavo</item>
     </string-array>
     <string-array name="webHeadsSizeValues">
-        <item>Malé</item>
         <item>Normálne</item>
+        <item>Malé</item>
     </string-array>
-    <string name="app_name">Chromer</string>
+    <string-array name="webHeadsSizeKeys">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
     <string name="share_text">Hej, vyskúšaj \‘Chromer\’ pre rýchle a bezpečné surfovanie! Stiahni si ho tu https://goo.gl/992ils</string>
     <string name="share_via">Zdieľať pomocou…</string>
     <string name="custom_tab_provider_not_found">Kompatibilný poskytovateľ Custom Tabs nebol nájdený</string>
@@ -120,7 +123,6 @@
     <string name="credits">Zásluhy</string>
     <string name="icon_design">Dizajn ikony</string>
     <string name="overlay_permission_content">Pre vykreslenie webových hlavičiek na obrazovke, je potrebné povoliť vykreslenie cez ďalšie aplikácie. Chcete to teraz povoliť?</string>
-    <string name="webheads_intro_1">Keď otvoríte odkaz v akejkoľvek aplikácii, na obrazovke sa zobrazí plávajúca bublina nazývaná webová hlavička a Chromer sa pokúsi prednačítať odkaz.</string>
     <string name="webheads_intro_3">Keď potiahnete webovú hlavičku, zobrazí sa kôš. Presunutím webovej hlavičky na kôš sa odstráni.</string>
     <string name="webheads_intro_4">Chromer uprednostňuje posledne otvorený odkaz a prednačíta ho. Odporúčaná metóda je otvárať webové hlavičky jednu po druhej odhora až dole. Ak povolíte zatváranie webových hlavičiek po otvorení bude to bezproblémové.</string>
     <string name="web_head_permission_toast">Pre otvorenie odkazov v plávajúcich bublinách, Chromer potrebuje povolenie Vykresliť cez ďalšie aplikácie. Prosím, povoľte to pre pokračovanie alebo zakážte webové hlavičky v nastaveniach aplikácie.</string>
@@ -131,7 +133,7 @@
     <string name="join_beta_content">Beta verzie sú experimentálne, ktoré majú najnovšie funkcie ale môžu mať chyby.  Môžete prispieť k vývoju pripojením sa ako tester a nahlasovaním chýb, ktoré nájdete v komunite Google+.\n\nProsím, uistite sa, že ste sa pripojili do Google+ komunity, a potom kliknite na tlačidlo Staňte sa testerom a prejdite na odkaz pre testovanie Google Play. \n\nPOZNÁMKA: Musíte sa pripojiť do komunity pre sprístupnenie možnosti testovania.</string>
     <string name="no_voice_rec_apps">Nebola nájdená kompatibilná aplikácia pre rozoznávanie hlasu</string>
     <string name="blacklisted_apps">Blokované aplikácie</string>
-    <string name="blacklisted_explanation">Vylúčiť Chromer zo spracovávania odkazov určitých aplikácií</string>
+    <string name="blacklisted_explanation">Vylúči Chromer zo spracovávania odkazov určitých aplikácií</string>
     <string name="loading">Načítavanie…</string>
     <string name="please_wait">Prosím, počkajte</string>
     <string name="blacklist_message">Zablokovali ste túto aplikáciu pre spúšťanie v Chromer a nenastavili ste sekundárny prehliadač. Prosím, zvoľte prehliadač.</string>
@@ -166,4 +168,7 @@
     <string name="web_heads_description">Otvoriť odkazy v plávajúcich bublinách</string>
     <string name="webhead_size_title">Veľkosť</string>
     <string name="webhead_size_dialog">Zvoľte veľkosť webových hlavičiek</string>
+    <string name="see_whats_new">Pozrite sa, čo je nové</string>
+    <string name="help_translations">Pomôžte preložiť aplikáciu do vášho jazyka</string>
+    <string name="tile_label">Webové hlavičky</string>
 </resources>
