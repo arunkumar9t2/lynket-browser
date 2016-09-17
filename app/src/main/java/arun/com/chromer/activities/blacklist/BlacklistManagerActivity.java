@@ -144,7 +144,7 @@ public class BlacklistManagerActivity extends AppCompatActivity implements Black
                 Preferences.blacklist(this, shouldCheck);
 
                 blackListSwitch.setChecked(Preferences.blacklist(this));
-                snack(String.format(getString(R.string.blacklist_on), Preferences.blacklist(this) ? "on" : "off"));
+                snack(Preferences.blacklist(this) ? getString(R.string.blacklist_on) : getString(R.string.blacklist_off));
                 blackListSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -152,7 +152,7 @@ public class BlacklistManagerActivity extends AppCompatActivity implements Black
                             buttonView.setChecked(false);
                             requestUsagePermission();
                         } else {
-                            snack(String.format(getString(R.string.blacklist_on), isChecked ? "on" : "off"));
+                            snack(isChecked ? getString(R.string.blacklist_on) : getString(R.string.blacklist_off));
                             Preferences.blacklist(getApplicationContext(), isChecked);
                             ServiceUtil.takeCareOfServices(getApplicationContext());
                         }

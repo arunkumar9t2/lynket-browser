@@ -43,7 +43,7 @@
         <arun.com.chromer.preferences.widgets.IconCheckboxPreference
             android:defaultValue="true"
             android:key="webhead_close_onclick_pref"
-            android:summary="Web heads will disappear once you open the link"
-            android:title="Close web heads on link open"/>
+            android:summary="@string/web_close_on_open_desc"
+            android:title="@string/web_close_on_open_title"/>
     </PreferenceCategory>
 </PreferenceScreen>

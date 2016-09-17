@@ -160,7 +160,8 @@
     <string name="blacklist_explanation">Launching links from a blacklisted app will open them in your secondary browser</string>
     <string name="revoke_accessibility_permission">You can now revoke Chromer\'s accessibility service permission.</string>
     <string name="last_fetched_urls">Last fetched urls</string>
-    <string name="blacklist_on">Blacklisting apps turned %s</string>
+    <string name="blacklist_on">Blacklisting apps turned on</string>
+    <string name="blacklist_off">Blacklisting apps turned off</string>
     <string name="translations">Translations</string>
     <string name="merge_tabs">Merge tabs and apps</string>
     <string name="merge_tabs_explanation">See your tabs with other recent apps on your phone\'s Overview screen.</string>
@@ -207,4 +208,6 @@
     <string name="intro_back_fatigue">No matter how deep you navigated from a link, you can always <b>press X</b> to quickly return to your previous app.</string>
     <string name="merge_tabs_explanation_intro">Your apps and web site tabs live together in your recents screen.</string>
     <string name="improves_loading_times">Improves loading times</string>
+    <string name="web_close_on_open_desc">Web heads will disappear once you open the link</string>
+    <string name="web_close_on_open_title">Close web heads once clicked.</string>
 </resources>
