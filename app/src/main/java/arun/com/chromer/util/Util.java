@@ -43,6 +43,7 @@ import arun.com.chromer.customtabs.CustomTabs;
 import arun.com.chromer.customtabs.prefetch.ScannerService;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.views.IntentPickerSheetView;
+import timber.log.Timber;
 
 /**
  * Created by Arun on 17/12/2015.
@@ -307,11 +308,15 @@ public class Util {
     @Nullable
     public static String getClipBoardText(@NonNull Context context) {
         final ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        if (clipboardManager.hasPrimaryClip()) {
-            final ClipData.Item item = clipboardManager.getPrimaryClip().getItemAt(0);
-            if (item != null) {
-                return item.getText().toString();
+        try {
+            if (clipboardManager.hasPrimaryClip() & clipboardManager.getPrimaryClip().getItemCount() != 0) {
+                final ClipData.Item item = clipboardManager.getPrimaryClip().getItemAt(0);
+                if (item != null && item.getText() != null) {
+                    return item.getText().toString();
+                }
             }
+        } catch (Exception ignored) {
+            Timber.e(ignored.toString());
         }
         return null;
     }
