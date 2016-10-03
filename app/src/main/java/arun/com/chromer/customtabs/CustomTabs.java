@@ -119,6 +119,8 @@ public class CustomTabs {
 
     private CustomTabs(Activity context) {
         mActivity = context;
+        mForWebHead = false;
+        mNoAnimations = false;
     }
 
     /**
@@ -134,28 +136,31 @@ public class CustomTabs {
     /**
      * Opens the URL on a Custom Tab if possible. Otherwise fallsback to opening it on a WebView.
      *
-     * @param activity         The host activity.
      * @param customTabsIntent a CustomTabsIntent to be used if Custom Tabs is available.
      * @param uri              the Uri to be opened.
      */
-    private static void openCustomTab(Activity activity, CustomTabsIntent customTabsIntent, Uri uri) {
-        final String packageName = getCustomTabPackage(activity);
+    private void openCustomTab(CustomTabsIntent customTabsIntent, Uri uri) {
+        final String packageName = getCustomTabPackage(mActivity);
 
         if (packageName != null) {
             customTabsIntent.intent.setPackage(packageName);
             Intent keepAliveIntent = new Intent()
-                    .setClassName(activity.getPackageName(), KeepAliveService.class.getCanonicalName());
+                    .setClassName(mActivity.getPackageName(), KeepAliveService.class.getCanonicalName());
             customTabsIntent.intent.putExtra(EXTRA_CUSTOM_TABS_KEEP_ALIVE, keepAliveIntent);
+
+            if (mNoAnimations) {
+                customTabsIntent.intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            }
             try {
-                customTabsIntent.launchUrl(activity, uri);
+                customTabsIntent.launchUrl(mActivity, uri);
                 Timber.d("Launched url: %s", uri.toString());
             } catch (Exception e) {
-                CUSTOM_TABS_FALLBACK.openUri(activity, uri);
+                CUSTOM_TABS_FALLBACK.openUri(mActivity, uri);
                 Timber.e("Called fallback even though a package was found, weird Exception : %s", e.toString());
             }
         } else {
             Timber.e("Called fallback since no package found!");
-            CUSTOM_TABS_FALLBACK.openUri(activity, uri);
+            CUSTOM_TABS_FALLBACK.openUri(mActivity, uri);
         }
     }
 
@@ -293,8 +298,8 @@ public class CustomTabs {
      */
     public void launch() {
         assertBuilderInitialized();
-        CustomTabsIntent customTabsIntent = mIntentBuilder.build();
-        openCustomTab(mActivity, customTabsIntent, Uri.parse(mUrl));
+        final CustomTabsIntent customTabsIntent = mIntentBuilder.build();
+        openCustomTab(customTabsIntent, Uri.parse(mUrl));
 
         // Dispose reference
         mActivity = null;
