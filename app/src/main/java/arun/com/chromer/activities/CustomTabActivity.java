@@ -183,6 +183,9 @@ public class CustomTabActivity extends AppCompatActivity {
                 label = mUrl.toUpperCase();
             }
             Timber.d("Setting task description %s", label);
+            if (mIcon != null && mIcon.getWidth() < 0) {
+                mIcon = null;
+            }
             if (color != Constants.NO_COLOR) {
                 setTaskDescription(new ActivityManager.TaskDescription(label, mIcon, color));
             } else {
