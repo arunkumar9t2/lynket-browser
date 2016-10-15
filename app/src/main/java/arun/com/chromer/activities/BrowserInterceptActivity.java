@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
@@ -38,6 +39,8 @@ public class BrowserInterceptActivity extends AppCompatActivity {
             finish();
             return;
         }
+
+        signalMainFinish();
 
         final boolean isFromNewTab = getIntent().getBooleanExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, false);
 
@@ -83,15 +86,17 @@ public class BrowserInterceptActivity extends AppCompatActivity {
             if (isFromNewTab || Preferences.mergeTabs(this)) {
                 customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
                 customTabActivity.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-            } else {
-                customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                customTabActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             }
             customTabActivity.putExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, isFromNewTab);
             startActivity(customTabActivity);
         }
 
         finish();
+    }
+
+    private void signalMainFinish() {
+        LocalBroadcastManager.getInstance(this)
+                .sendBroadcast(new Intent(Constants.ACTION_CLOSE_MAIN));
     }
 
     private void performBlacklistAction() {
