@@ -144,12 +144,13 @@ public class CustomTabs {
 
         if (packageName != null) {
             customTabsIntent.intent.setPackage(packageName);
-            Intent keepAliveIntent = new Intent()
-                    .setClassName(mActivity.getPackageName(), KeepAliveService.class.getCanonicalName());
+
+            final Intent keepAliveIntent = new Intent();
+            keepAliveIntent.setClassName(mActivity.getPackageName(), KeepAliveService.class.getCanonicalName());
             customTabsIntent.intent.putExtra(EXTRA_CUSTOM_TABS_KEEP_ALIVE, keepAliveIntent);
 
             if (mNoAnimations) {
-                customTabsIntent.intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                // customTabsIntent.intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             }
             try {
                 customTabsIntent.launchUrl(mActivity, uri);
@@ -278,17 +279,12 @@ public class CustomTabs {
         // set defaults
         mIntentBuilder.setShowTitle(true);
         mIntentBuilder.enableUrlBarHiding();
-        mIntentBuilder.addDefaultShareMenuItem();  // TODO make this conditional
+        mIntentBuilder.addDefaultShareMenuItem();
 
-        // prepare animations
         prepareAnimations();
-        // prepare toolbar color
         prepareToolbar();
-        // prepare action button
         prepareActionButton();
-        // prepare all the menu items
         prepareMenuItems();
-        // prepare all bottom bar item
         prepareBottomBar();
         return this;
     }
