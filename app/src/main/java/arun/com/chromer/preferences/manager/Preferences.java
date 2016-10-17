@@ -33,6 +33,7 @@ public class Preferences {
     public static final String BOTTOM_BAR_ENABLED = "bottombar_enabled_pref";
     public static final int PREFERRED_ACTION_BROWSER = 1;
     public static final int PREFERRED_ACTION_FAV_SHARE = 2;
+    public static final int PREFERRED_ACTION_GEN_SHARE = 3;
     public static final int ANIMATION_MEDIUM = 1;
     public static final int ANIMATION_SHORT = 2;
     public static final String TOOLBAR_COLOR_PREF = "toolbar_color_pref";

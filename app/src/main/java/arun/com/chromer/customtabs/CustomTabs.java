@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -466,6 +467,16 @@ public class CustomTabs {
                     //noinspection ConstantConditions
                     mIntentBuilder.setActionButton(icon, mActivity.getString(R.string.fav_share_app), favSharePending);
                 }
+                break;
+            case Preferences.PREFERRED_ACTION_GEN_SHARE:
+                final Bitmap shareIcon = new IconicsDrawable(mActivity)
+                        .icon(CommunityMaterial.Icon.cmd_share_variant)
+                        .color(Color.WHITE)
+                        .sizeDp(24).toBitmap();
+                final Intent intent = new Intent(mActivity, ShareBroadcastReceiver.class);
+                final PendingIntent sharePending = PendingIntent.getBroadcast(mActivity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                //noinspection ConstantConditions
+                mIntentBuilder.setActionButton(shareIcon, mActivity.getString(R.string.share_via), sharePending, true);
                 break;
         }
     }
