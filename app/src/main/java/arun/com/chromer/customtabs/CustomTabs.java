@@ -135,13 +135,11 @@ public class CustomTabs {
 
     /**
      * Opens the URL on a Custom Tab if possible. Otherwise fallsback to opening it on a WebView.
-     *
-     * @param customTabsIntent a CustomTabsIntent to be used if Custom Tabs is available.
-     * @param uri              the Uri to be opened.
      */
-    private void openCustomTab(CustomTabsIntent customTabsIntent, Uri uri) {
+    private void openCustomTab() {
         final String packageName = getCustomTabPackage(mActivity);
-
+        final CustomTabsIntent customTabsIntent = mIntentBuilder.build();
+        final Uri uri = Uri.parse(mUrl);
         if (packageName != null) {
             customTabsIntent.intent.setPackage(packageName);
 
@@ -294,8 +292,7 @@ public class CustomTabs {
      */
     public void launch() {
         assertBuilderInitialized();
-        final CustomTabsIntent customTabsIntent = mIntentBuilder.build();
-        openCustomTab(customTabsIntent, Uri.parse(mUrl));
+        openCustomTab();
 
         // Dispose reference
         mActivity = null;
