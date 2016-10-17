@@ -21,10 +21,12 @@
     <string-array name="actionValues">
         <item>第二浏览器</item>
         <item>最喜欢的分享应用</item>
+        <item>General share</item>
     </string-array>
     <string-array name="actionKeys">
         <item>1</item>
         <item>2</item>
+        <item>3</item>
     </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>右侧</item>
@@ -161,8 +163,6 @@
     <string name="bottom_bar">底栏</string>
     <string name="open_in_new_tab">在新标签页中打开</string>
     <string name="open_in_new_tab_error">无效的链接，您是否已通过长按页面操作复制了文本或者链接？</string>
-    <string name="bottom_bar_expln">为了确保底栏功能正常工作，建议使用 <b>最新版本的 Chrome 浏览器</b>作为自定义标签页的提供程序。较旧版本或其他的浏览器将可能导致无法正常工作。\n
-\n底栏内提供两种操作：\n\n<b>在新标签页中打开 (需安卓 5.0+) -</b> 复制屏幕上的链接或文本后点击图标来选择在新打开的标签页内加载链接或搜索关键词。\n<b>分享 -</b> 快速执行安卓系统内的分享操作。 \n\n 后续还将添加更多操作。</string>
     <string name="options">选项</string>
     <string name="customize">自定义</string>
     <string name="not_set">未设置</string>

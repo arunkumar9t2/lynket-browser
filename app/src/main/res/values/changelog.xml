@@ -18,8 +18,15 @@ a {
 <body>
 <strong>You can view this again in the about screen.</strong>
 <br></br>
-<strong>1.6</strong>
+<strong>1.6.1</strong>
 <a href="https://goo.gl/photos/BzRV69ABov9zJxVu9">  View album</a>
+<ul>
+    <li><b>NEW:</b> <b>Minimize web heads</b> - added a button in bottom bar to minimize current open page back to web head.</li>
+    <li><b>NEW:</b> <b>General share as preferred action</b></li>
+    <li><b>IMPROVED:</b> Many performance and crash fixes.</li>
+    <li><b>IMPROVED:</b> Translation updates.</li>
+</ul>
+<strong>1.6</strong>
 <h4 class="list-heading">Web heads</h3>
 <ul>
     <li><b>NEW:</b> <b>Grouped web heads</b> and much smoother animations.</li>

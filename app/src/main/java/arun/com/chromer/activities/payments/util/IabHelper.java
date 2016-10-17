@@ -36,6 +36,8 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 
 /**
  * Provides convenience methods for in-app billing. You can create one instance of this
@@ -770,6 +772,10 @@ public class IabHelper {
 
     int queryPurchases(Inventory inv, String itemType) throws JSONException, RemoteException {
         // Query purchases
+        if (mContext == null) {
+            Timber.d("User cancelled");
+            return BILLING_RESPONSE_RESULT_USER_CANCELED;
+        }
         logDebug("Querying owned items, item type: " + itemType);
         logDebug("Package name: " + mContext.getPackageName());
         boolean verificationFailed = false;

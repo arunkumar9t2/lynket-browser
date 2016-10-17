@@ -21,10 +21,12 @@
     <string-array name="actionValues">
         <item>Navegador secundário</item>
         <item>App para compartilhar favorito</item>
+        <item>General share</item>
     </string-array>
     <string-array name="actionKeys">
         <item>1</item>
         <item>2</item>
+        <item>3</item>
     </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>Direita</item>
@@ -162,8 +164,6 @@
     <string name="bottom_bar">Barra Inferior</string>
     <string name="open_in_new_tab">Abrir em nova aba</string>
     <string name="open_in_new_tab_error">Link inválido, você copiou algum texto ou link dando um toque longo na página?</string>
-    <string name="bottom_bar_expln">Para assegurar que a barra funciona bem, definir a versão <b>mais recente do Chrome</b> como provedor de abas padrão é recomendado. Versões antigas e outros navegadores podem não funcionar. \n
-    \nA barra inferior fornece duas ações: \n\n<b>Abrir nova aba (5.0+) -</b>Copiar um link ou texto da tela e pressionar o botão para abrir o link ou pesquisar o texto em uma nova aba.\n<b>Compartilhar -</b> Usar rapidamente a ação de compartilhar nativa do Android. \n\n Mais ações virão em breve.</string>
     <string name="options">Opções</string>
     <string name="customize">Personalizar</string>
     <string name="not_set">Não Definido</string>

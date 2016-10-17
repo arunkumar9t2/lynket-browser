@@ -16,6 +16,7 @@
     <string-array name="actionValues">
         <item>第二順位瀏覽器</item>
         <item>喜好的分享應用程式</item>
+        <item>General share</item>
     </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>右側</item>
@@ -149,15 +150,6 @@
     <string name="bottom_bar">底層工具列</string>
     <string name="open_in_new_tab">在新分頁中開啟</string>
     <string name="open_in_new_tab_error">無效的連結。請問您有透過長按頁面來複製任何連結或文字嗎？</string>
-    <string name="bottom_bar_expln">為了確保底部工具列能正常運作，建議您設定<b>最新的 Chrome 版本</b> 做為自訂分頁的提供者。 舊的版本或者其他瀏覽器可能無法正常運作。
-
-底部工具列提供兩個功能：
-
-<b>在新分頁中開啟(Android 5.0或更新版本)-</b>
-複製螢幕中的連結或文字然後點選圖示來開啟連結或在新分頁中搜尋文字。
-<b>分享-</b>快速顯示Android的分享功能。
-
-更多功能即將推出。</string>
     <string name="options">選項</string>
     <string name="customize">定制</string>
     <string name="not_set">尚未設定</string>

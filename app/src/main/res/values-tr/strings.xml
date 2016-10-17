@@ -12,6 +12,7 @@
     <string-array name="actionValues">
         <item>İkincil tarayıcı</item>
         <item>Sık kullanılan paylaşım uygulaması</item>
+        <item>General share</item>
     </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>Sağ</item>

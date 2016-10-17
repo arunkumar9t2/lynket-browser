@@ -33,10 +33,12 @@ public class Constants {
     // Intent Actions
     public static final String ACTION_TOOLBAR_COLOR_SET = "ACTION_TOOLBAR_COLOR_SET";
     public static final String ACTION_WEBHEAD_COLOR_SET = "ACTION_WEBHEAD_COLOR_SET";
+    public static final String ACTION_CLOSE_MAIN = "ACTION_CLOSE_MAIN";
     public static final String ACTION_INSTALL_SHORTCUT = "com.android.launcher.action.INSTALL_SHORTCUT";
     public static final String ACTION_STOP_WEBHEAD_SERVICE = "close_service";
     public static final String ACTION_REBIND_WEBHEAD_TAB_CONNECTION = "rebind_event";
     public static final String ACTION_CLOSE_WEBHEAD_BY_URL = "ACTION_CLOSE_WEBHEAD_BY_URL";
+    public static final String ACTION_MINIMIZE = "ACTION_MINIMIZE";
     // Extra keys
     public static final String EXTRA_KEY_SHOULD_REFRESH_BINDING = "EXTRA_KEY_SHOULD_REFRESH_BINDING";
     public static final String EXTRA_KEY_FROM_WEBHEAD = "EXTRA_KEY_FROM_WEBHEAD";
@@ -46,6 +48,7 @@ public class Constants {
     public static final String EXTRA_KEY_REBIND_WEBHEAD_CXN = "EXTRA_KEY_REBIND_WEBHEAD_CXN";
     public static final String EXTRA_KEY_FROM_NEW_TAB = "EXTRA_KEY_FROM_NEW_TAB";
     public static final String EXTRA_KEY_WEBSITE = "EXTRA_KEY_WEBSITE";
+    public static final String EXTRA_KEY_MINIMIZE = "EXTRA_KEY_MINIMIZE";
     // Request codes
     public static final int REQUEST_CODE_VOICE = 10001;
 

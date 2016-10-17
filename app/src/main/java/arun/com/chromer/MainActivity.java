@@ -1,7 +1,10 @@
 package arun.com.chromer;
 
 import android.app.ActivityOptions;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -81,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private CustomTabManager mCustomTabManager;
     private Drawer mDrawer;
+    private BroadcastReceiver closeReceiver;
 
     @Override
     protected void onStart() {
@@ -121,6 +125,27 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         checkAndEducateUser(false);
 
         ServiceUtil.takeCareOfServices(getApplicationContext());
+
+        registerCloseReceiver();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(closeReceiver);
+    }
+
+    private void registerCloseReceiver() {
+        closeReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Timber.d("Finished from receiver");
+                MainActivity.this.finish();
+            }
+        };
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                closeReceiver,
+                new IntentFilter(Constants.ACTION_CLOSE_MAIN));
     }
 
     private void setUpAppBarLayout() {
@@ -367,7 +392,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     }
 
     private void checkAndEducateUser(boolean forceShow) {
-        List packages;
+        final List packages;
         if (!forceShow) {
             packages = CustomTabs.getCustomTabSupportingPackages(this);
         } else {
@@ -504,7 +529,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 getString(R.string.customize)
         };
 
-        public PagerAdapter(FragmentManager fm) {
+        PagerAdapter(FragmentManager fm) {
             super(fm);
         }
 

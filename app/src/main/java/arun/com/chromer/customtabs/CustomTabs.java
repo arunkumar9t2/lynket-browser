@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -25,11 +26,13 @@ import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import arun.com.chromer.R;
 import arun.com.chromer.customtabs.callbacks.AddHomeShortcutService;
 import arun.com.chromer.customtabs.callbacks.ClipboardService;
 import arun.com.chromer.customtabs.callbacks.FavShareBroadcastReceiver;
+import arun.com.chromer.customtabs.callbacks.MinimizeBroadcastReceiver;
 import arun.com.chromer.customtabs.callbacks.OpenInChromeReceiver;
 import arun.com.chromer.customtabs.callbacks.OpenInNewTabReceiver;
 import arun.com.chromer.customtabs.callbacks.SecondaryBrowserReceiver;
@@ -62,6 +65,7 @@ public class CustomTabs {
 
     private static final int BOTTOM_OPEN_TAB = 11;
     private static final int BOTTOM_SHARE_TAB = 12;
+    private static final int BOTTOM_MINIMIZE_TAB = 13;
     /**
      * Fallback in case there was en error launching custom tabs
      */
@@ -119,6 +123,8 @@ public class CustomTabs {
 
     private CustomTabs(Activity context) {
         mActivity = context;
+        mForWebHead = false;
+        mNoAnimations = false;
     }
 
     /**
@@ -133,29 +139,31 @@ public class CustomTabs {
 
     /**
      * Opens the URL on a Custom Tab if possible. Otherwise fallsback to opening it on a WebView.
-     *
-     * @param activity         The host activity.
-     * @param customTabsIntent a CustomTabsIntent to be used if Custom Tabs is available.
-     * @param uri              the Uri to be opened.
      */
-    private static void openCustomTab(Activity activity, CustomTabsIntent customTabsIntent, Uri uri) {
-        final String packageName = getCustomTabPackage(activity);
-
+    private void openCustomTab() {
+        final String packageName = getCustomTabPackage(mActivity);
+        final CustomTabsIntent customTabsIntent = mIntentBuilder.build();
+        final Uri uri = Uri.parse(mUrl);
         if (packageName != null) {
             customTabsIntent.intent.setPackage(packageName);
-            Intent keepAliveIntent = new Intent()
-                    .setClassName(activity.getPackageName(), KeepAliveService.class.getCanonicalName());
+
+            final Intent keepAliveIntent = new Intent();
+            keepAliveIntent.setClassName(mActivity.getPackageName(), KeepAliveService.class.getCanonicalName());
             customTabsIntent.intent.putExtra(EXTRA_CUSTOM_TABS_KEEP_ALIVE, keepAliveIntent);
+
+            if (mNoAnimations) {
+                // customTabsIntent.intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            }
             try {
-                customTabsIntent.launchUrl(activity, uri);
+                customTabsIntent.launchUrl(mActivity, uri);
                 Timber.d("Launched url: %s", uri.toString());
             } catch (Exception e) {
-                CUSTOM_TABS_FALLBACK.openUri(activity, uri);
+                CUSTOM_TABS_FALLBACK.openUri(mActivity, uri);
                 Timber.e("Called fallback even though a package was found, weird Exception : %s", e.toString());
             }
         } else {
             Timber.e("Called fallback since no package found!");
-            CUSTOM_TABS_FALLBACK.openUri(activity, uri);
+            CUSTOM_TABS_FALLBACK.openUri(mActivity, uri);
         }
     }
 
@@ -273,17 +281,12 @@ public class CustomTabs {
         // set defaults
         mIntentBuilder.setShowTitle(true);
         mIntentBuilder.enableUrlBarHiding();
-        mIntentBuilder.addDefaultShareMenuItem();  // TODO make this conditional
+        mIntentBuilder.addDefaultShareMenuItem();
 
-        // prepare animations
         prepareAnimations();
-        // prepare toolbar color
         prepareToolbar();
-        // prepare action button
         prepareActionButton();
-        // prepare all the menu items
         prepareMenuItems();
-        // prepare all bottom bar item
         prepareBottomBar();
         return this;
     }
@@ -293,8 +296,7 @@ public class CustomTabs {
      */
     public void launch() {
         assertBuilderInitialized();
-        CustomTabsIntent customTabsIntent = mIntentBuilder.build();
-        openCustomTab(mActivity, customTabsIntent, Uri.parse(mUrl));
+        openCustomTab();
 
         // Dispose reference
         mActivity = null;
@@ -469,6 +471,16 @@ public class CustomTabs {
                     mIntentBuilder.setActionButton(icon, mActivity.getString(R.string.fav_share_app), favSharePending);
                 }
                 break;
+            case Preferences.PREFERRED_ACTION_GEN_SHARE:
+                final Bitmap shareIcon = new IconicsDrawable(mActivity)
+                        .icon(CommunityMaterial.Icon.cmd_share_variant)
+                        .color(Color.WHITE)
+                        .sizeDp(24).toBitmap();
+                final Intent intent = new Intent(mActivity, ShareBroadcastReceiver.class);
+                final PendingIntent sharePending = PendingIntent.getBroadcast(mActivity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                //noinspection ConstantConditions
+                mIntentBuilder.setActionButton(shareIcon, mActivity.getString(R.string.share_via), sharePending, true);
+                break;
         }
     }
 
@@ -560,12 +572,12 @@ public class CustomTabs {
         if (!Preferences.bottomBar(mActivity)) {
             return;
         }
-        int iconColor = ColorUtil.getForegroundWhiteOrBlack(mToolbarColor);
+        final int iconColor = ColorUtil.getForegroundWhiteOrBlack(mToolbarColor);
+
         if (Util.isLollipopAbove()) {
             final Intent openInNewTabIntent = new Intent(mActivity, OpenInNewTabReceiver.class);
             final PendingIntent pendingOpenTabIntent = PendingIntent.getBroadcast(mActivity, 0, openInNewTabIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            Bitmap openTabIcon = new IconicsDrawable(mActivity)
+            final Bitmap openTabIcon = new IconicsDrawable(mActivity)
                     .icon(CommunityMaterial.Icon.cmd_plus_box)
                     .color(iconColor)
                     .sizeDp(24).toBitmap();
@@ -574,12 +586,24 @@ public class CustomTabs {
 
         final Intent shareIntent = new Intent(mActivity, ShareBroadcastReceiver.class);
         final PendingIntent pendingShareIntent = PendingIntent.getBroadcast(mActivity, 0, shareIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Bitmap shareIcon = new IconicsDrawable(mActivity)
+        final Bitmap shareIcon = new IconicsDrawable(mActivity)
                 .icon(CommunityMaterial.Icon.cmd_share_variant)
                 .color(iconColor)
                 .sizeDp(24).toBitmap();
+
         mIntentBuilder.addToolbarItem(BOTTOM_SHARE_TAB, shareIcon, mActivity.getString(R.string.share), pendingShareIntent);
+
+        if (mForWebHead /* &&s Preferences.mergeTabs(mActivity) */) {
+            final Intent minimizeIntent = new Intent(mActivity, MinimizeBroadcastReceiver.class);
+            minimizeIntent.putExtra(Intent.EXTRA_TEXT, mUrl);
+            final PendingIntent pendingMin = PendingIntent.getBroadcast(mActivity, new Random().nextInt(), minimizeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            final Bitmap minimizeIcon = new IconicsDrawable(mActivity)
+                    .icon(CommunityMaterial.Icon.cmd_flip_to_back)
+                    .color(iconColor)
+                    .sizeDp(24).toBitmap();
+
+            mIntentBuilder.addToolbarItem(BOTTOM_MINIMIZE_TAB, minimizeIcon, mActivity.getString(R.string.minimize), pendingMin);
+        }
     }
 
     /**

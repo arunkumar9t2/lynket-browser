@@ -23,7 +23,6 @@ import arun.com.chromer.util.Util;
  */
 public class BehaviorPreferenceFragment extends DividerLessPreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private IconSwitchPreference mBlackListPreference;
     private IconSwitchPreference mMergeTabsPreference;
 
     public BehaviorPreferenceFragment() {
@@ -47,15 +46,15 @@ public class BehaviorPreferenceFragment extends DividerLessPreferenceFragment im
     }
 
     private void setupBlacklistPreference() {
-        mBlackListPreference = (IconSwitchPreference) findPreference(Preferences.BLACKLIST_DUMMY);
-        if (mBlackListPreference != null) {
+        IconSwitchPreference blackListPreference = (IconSwitchPreference) findPreference(Preferences.BLACKLIST_DUMMY);
+        if (blackListPreference != null) {
             Drawable recentImg = new IconicsDrawable(getActivity())
                     .icon(CommunityMaterial.Icon.cmd_filter_variant)
                     .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
                     .sizeDp(24);
-            mBlackListPreference.setIcon(recentImg);
-            mBlackListPreference.hideSwitch();
-            mBlackListPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            blackListPreference.setIcon(recentImg);
+            blackListPreference.hideSwitch();
+            blackListPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     Intent blacklistedApps = new Intent(getActivity(), BlacklistManagerActivity.class);

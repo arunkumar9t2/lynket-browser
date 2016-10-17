@@ -11,7 +11,8 @@
     </string-array>
     <string-array name="actionValues">
         <item>Navegador secundario</item>
-        <item>"Aplicación favorita para compartir "</item>
+        <item>"Aplicación favorita para compartir"</item>
+        <item>General share</item>
     </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>Derecha</item>

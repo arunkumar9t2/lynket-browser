@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
-import java.net.URL;
 import java.util.concurrent.ExecutionException;
 
 import arun.com.chromer.R;
@@ -57,36 +56,39 @@ public class AddHomeShortcutService extends IntentService {
                     return;
                 }
 
-                String shortCutName = getShortcutName(unShortenedUrl, res);
-                String faviconUrl = res.getFaviconUrl();
+                final String shortCutName = getShortcutName(unShortenedUrl, res);
+                final String faviconUrl = res.getFaviconUrl();
                 Bitmap favicon = getFaviconBitmap(faviconUrl);
 
-                if (favicon != null) {
-                    if (!isValidFavicon(favicon)) {
-                        Palette palette = Palette.from(favicon).generate();
-                        int iconColor = ColorUtil.getBestFaviconColor(palette);
-                        if (iconColor == -1) {
-                            iconColor = ContextCompat.getColor(this, R.color.primary);
-                        }
-                        favicon = createIcon(iconColor, shortCutName);
-                    }
-                } else {
+                if (favicon == null) {
                     favicon = createIcon(ContextCompat.getColor(this, R.color.primary), shortCutName);
+                } else if (!isValidFavicon(favicon)) {
+                    final Palette palette = Palette.from(favicon).generate();
+                    int iconColor = ColorUtil.getBestFaviconColor(palette);
+                    if (iconColor == Constants.NO_COLOR) {
+                        iconColor = ContextCompat.getColor(this, R.color.primary);
+                    }
+                    favicon = createIcon(iconColor, shortCutName);
                 }
 
                 Timber.i("Creating shortcut: %s", shortCutName);
+                try {
+                    broadcastShortcutIntent(shortCutName, favicon, getWebIntent(unShortenedUrl));
+                } catch (Exception e) {
+                    Timber.e("Failed to create shortcut");
+                }
 
-                Intent webIntent = getWebIntent(unShortenedUrl);
-
-                Intent addIntent = new Intent(Constants.ACTION_INSTALL_SHORTCUT);
-                addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, webIntent);
-                addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, shortCutName);
-                addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, favicon);
-
-                sendBroadcast(addIntent);
                 showToast(getString(R.string.added) + " " + shortCutName);
             }
         }
+    }
+
+    private void broadcastShortcutIntent(String shortCutName, Bitmap favicon, Intent webIntent) {
+        Intent addIntent = new Intent(Constants.ACTION_INSTALL_SHORTCUT);
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, webIntent);
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, shortCutName);
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, favicon);
+        sendBroadcast(addIntent);
     }
 
     @Nullable
@@ -112,7 +114,7 @@ public class AddHomeShortcutService extends IntentService {
             favicon = Glide.with(this)
                     .load(faviconUrl)
                     .asBitmap()
-                    .into(-1, -1)
+                    .into(192, 192)
                     .get();
         } catch (InterruptedException | ExecutionException ignored) {
 
@@ -155,7 +157,7 @@ public class AddHomeShortcutService extends IntentService {
         textPaint.setColor(ColorUtil.getForegroundWhiteOrBlack(color));
         textPaint.setStyle(Paint.Style.FILL);
 
-        drawTextInCanvasCentre(canvas, textPaint, getLetter(shortCutName));
+        drawTextInCanvasCentre(canvas, textPaint, Util.getFirstLetter(shortCutName));
         return icon;
     }
 
@@ -170,40 +172,13 @@ public class AddHomeShortcutService extends IntentService {
         canvas.drawText(text, x, y, paint);
     }
 
-    private String getLetter(String address) {
-        String result = "X";
-        if (address != null) {
-            try {
-                URL url = new URL(address);
-                String host = url.getHost();
-                if (host != null && host.length() != 0) {
-                    if (host.startsWith("www")) {
-                        String[] splits = host.split("\\.");
-                        if (splits.length > 1) result = String.valueOf(splits[1].charAt(0));
-                        else result = String.valueOf(splits[0].charAt(0));
-                    } else
-                        result = String.valueOf(host.charAt(0));
-                } else {
-                    if (address.length() != 0) {
-                        return String.valueOf(address.charAt(0));
-                    }
-                }
-            } catch (Exception e) {
-                if (address.length() != 0) {
-                    return String.valueOf(address.charAt(0));
-                } else return result;
-            }
-        }
-        return result.toUpperCase();
-    }
-
-    private boolean isValidFavicon(Bitmap favicon) {
+    private boolean isValidFavicon(@NonNull Bitmap favicon) {
         return !(favicon.getWidth() == 16 || favicon.getHeight() == 16
                 || favicon.getWidth() == 32 || favicon.getHeight() == 32);
     }
 
     private void legacyAdd(@NonNull String unShortenedUrl) {
-        Intent webIntent = getWebIntent(unShortenedUrl);
+        final Intent webIntent = getWebIntent(unShortenedUrl);
 
         String hostName = Uri.parse(unShortenedUrl).getHost();
         String shortcutName = hostName == null ? unShortenedUrl : hostName;
@@ -216,20 +191,14 @@ public class AddHomeShortcutService extends IntentService {
                 Intent.ShortcutIconResource.fromContext(
                         getApplicationContext(),
                         R.mipmap.ic_launcher));
-
         sendBroadcast(addIntent);
     }
 
     private void showToast(@NonNull final String msgToShow) {
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(new Runnable() {
-
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(
-                        AddHomeShortcutService.this,
-                        msgToShow,
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddHomeShortcutService.this, msgToShow, Toast.LENGTH_SHORT).show();
             }
         });
     }

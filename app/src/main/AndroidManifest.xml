@@ -60,6 +60,7 @@
         <receiver android:name=".customtabs.callbacks.SecondaryBrowserReceiver"/>
         <receiver android:name=".customtabs.callbacks.OpenInChromeReceiver"/>
         <receiver android:name=".customtabs.callbacks.OpenInNewTabReceiver"/>
+        <receiver android:name=".customtabs.callbacks.MinimizeBroadcastReceiver"/>
 
         <activity
             android:name=".MainActivity"
@@ -74,7 +75,7 @@
         <activity
             android:name=".activities.CustomTabActivity"
             android:label="@string/app_name"
-            android:theme="@style/Transparent"/>
+            android:theme="@style/Theme.AppCompat.Translucent"/>
         <activity
             android:name=".activities.intro.ChromerIntro"
             android:label="Intro"
@@ -105,7 +106,7 @@
         <activity
             android:name=".activities.BrowserInterceptActivity"
             android:label="@string/app_name"
-            android:theme="@style/Transparent">
+            android:theme="@style/Theme.AppCompat.Translucent">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
 
@@ -140,7 +141,7 @@
             android:name=".webheads.helper.ProxyActivity"
             android:excludeFromRecents="true"
             android:noHistory="true"
-            android:theme="@style/Transparent"/>
+            android:theme="@style/Theme.AppCompat.Translucent"/>
 
         <service
             android:name=".webheads.qs.WebHeadTile"
