@@ -21,10 +21,12 @@
     <string-array name="actionValues">
         <item>Sekundärer Browser</item>
         <item>Lieblings-Teil-App</item>
+        <item>General share</item>
     </string-array>
     <string-array name="actionKeys">
         <item>1</item>
         <item>2</item>
+        <item>3</item>
     </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>Rechts</item>
@@ -151,7 +153,6 @@
     <string name="blacklist_explanation">Öffnest du einen Link aus einer ausgeschlossenen App, dann wird dieser im sekundären Browser geöffnet</string>
     <string name="revoke_accessibility_permission">Du kannst die Berechtigung für die Bedienungshilfe jetzt deaktivieren.</string>
     <string name="last_fetched_urls">Letzte geladene URLs</string>
-    <string name="blacklist_on">Ausgeschlossene Apps %1$s</string>
     <string name="translations">Übersetzungen</string>
     <string name="merge_tabs">Tabs und Apps zusammen anzeigen</string>
     <string name="merge_tabs_explanation">Zeige Tabs zusammen mit Apps im \“Zuletzt geöffnet\”-Screen an</string>
@@ -162,7 +163,7 @@
     <string name="bottom_bar">Bottom-Bar</string>
     <string name="open_in_new_tab">In neuem Tab öffnen</string>
     <string name="open_in_new_tab_error">Ungültiger Link. Hast du Text oder einen Link durch langes Drücken auf die Seite kopiert?</string>
-    <string name="bottom_bar_expln">Um sicherzugehen, dass die Bottom-Bar korrekt funktioniert wird empfohlen, die <b>aktuelle Chrome Version</b> als Custom-Tab-Anbieter zu verwenden. Ältere Versionen und andere Browser können Probleme verursachen.\n
+    <string name="bottom_bar_explanation">Um sicherzugehen, dass die Bottom-Bar korrekt funktioniert wird empfohlen, die <b>aktuelle Chrome Version</b> als Custom-Tab-Anbieter zu verwenden. Ältere Versionen und andere Browser können Probleme verursachen.\n
 \nDie Bottom-Bar bietet 2 Optionen:\n\n<b>In neuem Tab öffnen (5.0+) -</b> Kopiere Text oder einen Link vom Bildschirm und drücke auf dieses Icon, um den Link oder eine Suchen nach dem Text in einem neuen Custom Tab zu öffnen.\n<b>Teilen -</b> Öffne Android\'s Teilen-Dialog.\n\nMehr Aktionen kommen bald!</string>
     <string name="options">Einstellungen</string>
     <string name="customize">Anpassen</string>

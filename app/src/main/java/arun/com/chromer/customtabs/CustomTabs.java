@@ -26,11 +26,13 @@ import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import arun.com.chromer.R;
 import arun.com.chromer.customtabs.callbacks.AddHomeShortcutService;
 import arun.com.chromer.customtabs.callbacks.ClipboardService;
 import arun.com.chromer.customtabs.callbacks.FavShareBroadcastReceiver;
+import arun.com.chromer.customtabs.callbacks.MinimizeBroadcastReceiver;
 import arun.com.chromer.customtabs.callbacks.OpenInChromeReceiver;
 import arun.com.chromer.customtabs.callbacks.OpenInNewTabReceiver;
 import arun.com.chromer.customtabs.callbacks.SecondaryBrowserReceiver;
@@ -63,6 +65,7 @@ public class CustomTabs {
 
     private static final int BOTTOM_OPEN_TAB = 11;
     private static final int BOTTOM_SHARE_TAB = 12;
+    private static final int BOTTOM_MINIMIZE_TAB = 13;
     /**
      * Fallback in case there was en error launching custom tabs
      */
@@ -569,12 +572,12 @@ public class CustomTabs {
         if (!Preferences.bottomBar(mActivity)) {
             return;
         }
-        int iconColor = ColorUtil.getForegroundWhiteOrBlack(mToolbarColor);
+        final int iconColor = ColorUtil.getForegroundWhiteOrBlack(mToolbarColor);
+
         if (Util.isLollipopAbove()) {
             final Intent openInNewTabIntent = new Intent(mActivity, OpenInNewTabReceiver.class);
             final PendingIntent pendingOpenTabIntent = PendingIntent.getBroadcast(mActivity, 0, openInNewTabIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            Bitmap openTabIcon = new IconicsDrawable(mActivity)
+            final Bitmap openTabIcon = new IconicsDrawable(mActivity)
                     .icon(CommunityMaterial.Icon.cmd_plus_box)
                     .color(iconColor)
                     .sizeDp(24).toBitmap();
@@ -583,12 +586,24 @@ public class CustomTabs {
 
         final Intent shareIntent = new Intent(mActivity, ShareBroadcastReceiver.class);
         final PendingIntent pendingShareIntent = PendingIntent.getBroadcast(mActivity, 0, shareIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Bitmap shareIcon = new IconicsDrawable(mActivity)
+        final Bitmap shareIcon = new IconicsDrawable(mActivity)
                 .icon(CommunityMaterial.Icon.cmd_share_variant)
                 .color(iconColor)
                 .sizeDp(24).toBitmap();
+
         mIntentBuilder.addToolbarItem(BOTTOM_SHARE_TAB, shareIcon, mActivity.getString(R.string.share), pendingShareIntent);
+
+        if (mForWebHead /* &&s Preferences.mergeTabs(mActivity) */) {
+            final Intent minimizeIntent = new Intent(mActivity, MinimizeBroadcastReceiver.class);
+            minimizeIntent.putExtra(Intent.EXTRA_TEXT, mUrl);
+            final PendingIntent pendingMin = PendingIntent.getBroadcast(mActivity, new Random().nextInt(), minimizeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            final Bitmap minimizeIcon = new IconicsDrawable(mActivity)
+                    .icon(CommunityMaterial.Icon.cmd_flip_to_back)
+                    .color(iconColor)
+                    .sizeDp(24).toBitmap();
+
+            mIntentBuilder.addToolbarItem(BOTTOM_MINIMIZE_TAB, minimizeIcon, mActivity.getString(R.string.minimize), pendingMin);
+        }
     }
 
     /**

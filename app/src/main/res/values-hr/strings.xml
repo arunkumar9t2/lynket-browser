@@ -12,6 +12,7 @@
     <string-array name="actionValues">
         <item>Sekundarni preglednik</item>
         <item>Aplikacija za dijeljenje</item>
+        <item>General share</item>
     </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>Desno</item>
@@ -144,7 +145,7 @@
     <string name="bottom_bar">Donja traka</string>
     <string name="open_in_new_tab">Otvori u novoj kartici</string>
     <string name="open_in_new_tab_error">Poveznica je nevažeća. Jeste li kopirali neki tekst ili poveznicu dugim pritiskom stranice?</string>
-    <string name="bottom_bar_expln">Da biste osigurali da donja traka radi ispravno preporučamo vam da postavite <b>najnoviju verziju Chromea</b> kao pružatelja prilagođenih kartica. Ostale verzije i preglednici možda neće funkcionirati. \n
+    <string name="bottom_bar_explanation">Da biste osigurali da donja traka radi ispravno preporučamo vam da postavite <b>najnoviju verziju Chromea</b> kao pružatelja prilagođenih kartica. Ostale verzije i preglednici možda neće funkcionirati. \n
 \nDonja traka omogućava dvije radnje: \n\n<b>Otvaranje u novoj kartici (5.0+) -</b> kopirajte poveznicu ili tekst na zaslonu i pritisnite ovu ikonu da biste otvorili poveznicu ili pretražili tekst u novoj prilagođenoj kartici.\n<b>Dijeljenje -</b> brzo izvedite Androidovu radnju dijeljenja. \n\n Više radnji dolazi uskoro.</string>
     <string name="options">Opcije</string>
     <string name="customize">Prilagodba</string>

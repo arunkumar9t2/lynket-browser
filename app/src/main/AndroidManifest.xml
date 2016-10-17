@@ -60,6 +60,7 @@
         <receiver android:name=".customtabs.callbacks.SecondaryBrowserReceiver"/>
         <receiver android:name=".customtabs.callbacks.OpenInChromeReceiver"/>
         <receiver android:name=".customtabs.callbacks.OpenInNewTabReceiver"/>
+        <receiver android:name=".customtabs.callbacks.MinimizeBroadcastReceiver"/>
 
         <activity
             android:name=".MainActivity"

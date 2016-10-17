@@ -174,8 +174,7 @@
     <string name="bottom_bar">Bottom Bar</string>
     <string name="open_in_new_tab">Open in new tab</string>
     <string name="open_in_new_tab_error">Invalid link, have you copied any text or link by long pressing the page?</string>
-    <string name="bottom_bar_expln">To ensure bottom bar works properly, setting <b>latest Chrome version</b> as custom tab provider is recommended. Older versions and other browsers may not work. \n
-    \nBottom bar provides two actions: \n\n<b>Open in new tab (5.0+) -</b> Copy a link or text on screen and press this icon to launch the link or search the text in a new custom tab.\n<b>Share -</b> Quickly perform Android share action. \n\n More actions coming soon.</string>
+    <string name="bottom_bar_explanation">To ensure bottom bar works properly, setting <b>latest Chrome version</b> as custom tab provider is recommended. Older versions and other browsers may not work.</string>
     <string name="options">Options</string>
     <string name="customize">Customize</string>
     <string name="not_set">Not Set</string>
@@ -212,4 +211,9 @@
     <string name="improves_loading_times">Improves loading times</string>
     <string name="web_close_on_open_desc">Web heads will disappear once you open the link</string>
     <string name="web_close_on_open_title">Close web heads once clicked.</string>
+    <string name="minimize">Minimize</string>
+    <string name="open_in_new_tab_explanation"><![CDATA[<b>Open in new tab (5.0+) -</b> Copy a link or text on screen and press this icon to launch the link or search the copied text in a new custom or bubble.]]></string>
+    <string name="share_action_explanation"><![CDATA[<b>Share -</b> Quickly perform Android share action.]]></string>
+    <string name="minimize_action_explanation"><![CDATA[<b>Minimize -</b> Will minimize the current page back to a bubble. Only available if web heads is turned on.]]></string>
+    <string name="available_actions">Available actions</string>
 </resources>

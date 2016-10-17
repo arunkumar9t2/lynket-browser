@@ -2,12 +2,17 @@ package arun.com.chromer.activities;
 
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.widget.Toast;
@@ -34,6 +39,8 @@ import timber.log.Timber;
 public class CustomTabActivity extends AppCompatActivity {
     private boolean isLoaded = false;
     private ExtractionTask mExtractionTask;
+    private String mBaseUrl = "";
+    private BroadcastReceiver mMinimizeReceiver;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -46,7 +53,7 @@ public class CustomTabActivity extends AppCompatActivity {
             return;
         }
 
-        final String url = getIntent().getDataString();
+        mBaseUrl = getIntent().getDataString();
         final boolean isWebhead = getIntent().getBooleanExtra(Constants.EXTRA_KEY_FROM_WEBHEAD, false);
 
         final WebSite webSite = getIntent().getParcelableExtra(Constants.EXTRA_KEY_WEBSITE);
@@ -54,7 +61,7 @@ public class CustomTabActivity extends AppCompatActivity {
 
         Benchmark.start("Custom tab launching in CTA");
         CustomTabs.from(this)
-                .forUrl(url)
+                .forUrl(mBaseUrl)
                 .forWebHead(isWebhead)
                 .overrideToolbarColor(color)
                 // .noAnimations(Preferences.aggressiveLoading(this))
@@ -62,11 +69,29 @@ public class CustomTabActivity extends AppCompatActivity {
                 .launch();
         Benchmark.end();
 
-        dispatchDescriptionTask(webSite);
-
         if (Preferences.aggressiveLoading(this)) {
             delayedGoToBack();
         }
+
+        dispatchDescriptionTask(webSite);
+
+        registerMinimizeReceiver();
+    }
+
+    private void registerMinimizeReceiver() {
+        mMinimizeReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Timber.d("Minimize called with %s : %s", mBaseUrl, intent.toString());
+                if (intent.getAction().equalsIgnoreCase(Constants.ACTION_MINIMIZE) && intent.hasExtra(Intent.EXTRA_TEXT)) {
+                    if (mBaseUrl.equalsIgnoreCase(intent.getStringExtra(Intent.EXTRA_TEXT))) {
+                        Timber.d("Minimized %s", intent.getStringExtra(Intent.EXTRA_TEXT));
+                        moveTaskToBack(true);
+                    }
+                }
+            }
+        };
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMinimizeReceiver, new IntentFilter(Constants.ACTION_MINIMIZE));
     }
 
     private void delayedGoToBack() {
@@ -95,7 +120,7 @@ public class CustomTabActivity extends AppCompatActivity {
                             }
                         });
             } else {
-                mExtractionTask = new ExtractionTask(getIntent().getDataString());
+                mExtractionTask = new ExtractionTask(mBaseUrl);
                 mExtractionTask.execute();
             }
         }
@@ -116,6 +141,7 @@ public class CustomTabActivity extends AppCompatActivity {
             mExtractionTask.cancel(true);
         }
         mExtractionTask = null;
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMinimizeReceiver);
     }
 
     @Override

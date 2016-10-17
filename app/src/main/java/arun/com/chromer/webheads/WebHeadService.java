@@ -104,6 +104,8 @@ public class WebHeadService extends Service implements WebHeadContract,
         bindToCustomTabSession();
         registerReceivers();
         PageExtractTasksManager.registerListener(this);
+
+        showNotification();
     }
 
     @Override
@@ -137,10 +139,7 @@ public class WebHeadService extends Service implements WebHeadContract,
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        processIntentAndWebHead(intent);
-
-        showNotification();
-        // addTestWebHeads();
+        processIntent(intent);
         return START_STICKY;
     }
 
@@ -164,18 +163,20 @@ public class WebHeadService extends Service implements WebHeadContract,
         startForeground(1, notification);
     }
 
-    private void processIntentAndWebHead(Intent intent) {
+    private void processIntent(Intent intent) {
         if (intent == null || intent.getDataString() == null) return; // don't do anything
         final boolean isFromNewTab = intent.getBooleanExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, false);
+        final boolean isMinimized = intent.getBooleanExtra(Constants.EXTRA_KEY_MINIMIZE, false);
 
         final String urlToLoad = intent.getDataString();
         if (!isLinkAlreadyLoaded(urlToLoad)) {
-            addWebHead(urlToLoad, isFromNewTab);
-        } else
+            addWebHead(urlToLoad, isFromNewTab, isMinimized);
+        } else if (!isMinimized) {
             Toast.makeText(this, R.string.already_loaded, Toast.LENGTH_SHORT).show();
+        }
     }
 
-    private void addWebHead(final String webHeadUrl, boolean isNewTab) {
+    private void addWebHead(final String webHeadUrl, final boolean isNewTab, final boolean isMinimized) {
         PageExtractTasksManager.startExtraction(webHeadUrl);
         mSpringChain2D.clear();
 
@@ -200,7 +201,7 @@ public class WebHeadService extends Service implements WebHeadContract,
         newWebHead.reveal();
         mWebHeads.put(webHeadUrl, newWebHead);
 
-        if (Preferences.aggressiveLoading(this)) {
+        if (Preferences.aggressiveLoading(this) && !isMinimized) {
             DocumentUtils.openNewCustomTab(this, newWebHead);
         }
     }
@@ -254,15 +255,6 @@ public class WebHeadService extends Service implements WebHeadContract,
                 Timber.e(e.getMessage());
             }
         }
-    }
-
-    @SuppressWarnings("unused")
-    private void addTestWebHeads() {
-        //addWebHead("http://www.medium.com");
-        //addWebHead("https://www.linkedin.com/");
-        addWebHead("http://www.github.com", false);
-        addWebHead("http://www.androidpolice.com", false);
-        // addWebHead("https://bitbucket.org/");
     }
 
     private boolean isLinkAlreadyLoaded(@Nullable String urlToLoad) {

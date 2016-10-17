@@ -19,6 +19,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+import arun.com.chromer.R;
+
 /**
  * A BroadcastReceiver that handles the Action Intent from the Custom Tab and fires a Share Intent.
  */
@@ -37,7 +39,7 @@ public class ShareBroadcastReceiver extends BroadcastReceiver {
 
             context.startActivity(chooserIntent);
         } else {
-            Toast.makeText(context, "Try again!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.invalid_link, Toast.LENGTH_SHORT).show();
         }
     }
 }
