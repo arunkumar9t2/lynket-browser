@@ -174,7 +174,6 @@
     <string name="bottom_bar">Bottom Bar</string>
     <string name="open_in_new_tab">Open in new tab</string>
     <string name="open_in_new_tab_error">Invalid link, have you copied any text or link by long pressing the page?</string>
-    <string name="bottom_bar_explanation">To ensure bottom bar works properly, setting <b>latest Chrome version</b> as custom tab provider is recommended. Older versions and other browsers may not work.</string>
     <string name="options">Options</string>
     <string name="customize">Customize</string>
     <string name="not_set">Not Set</string>

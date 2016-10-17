@@ -153,9 +153,6 @@
     <string name="bottom_bar">Dolná lišta</string>
     <string name="open_in_new_tab">Otvoriť na novej karte</string>
     <string name="open_in_new_tab_error">Neplatný odkaz, skopírovali ste text alebo odkaz dlhým podržaním?</string>
-    <string name="bottom_bar_explanation">Pre zaistenie funkčnosti dolnej lišty, je potrebné nastaviť <b>najnovšiu verziu Chrome</b> ako poskytovateľa Custom Tabs. Staršie verzie a iné prehliadače nemusia fungovať. \n
-    \nDolná lišta poskytuje dve akcie:
-\n\n<b>Otvoriť na novej karte (5.0+) -</b> Skopírujte odkaz alebo text na obrazovke a kliknite na túto ikonu pre otvorenie odkazu alebo vyhľadanie textu na novej karte.\n<b>Zdieľať -</b> Rýchle spustenie akcie zdieľania. \n\nViac akcií neskôr.</string>
     <string name="options">Možnosti</string>
     <string name="customize">Prispôsobiť</string>
     <string name="not_set">Nenastavené</string>

@@ -155,7 +155,6 @@
     <string name="bottom_bar">Bar onderaan</string>
     <string name="open_in_new_tab">Openen op nieuw tabblad</string>
     <string name="open_in_new_tab_error">Ongeldige link, heb je wel tekst of een link gekopieerd door lang op de pagina te drukken?</string>
-    <string name="bottom_bar_explanation">Om ervoor te zorgen dat de bar onderaan goed werkt wordt het aangeraden om <b>de nieuwste versie van Chrome</b> als aangepaste tabbladen-leverancier in te stellen. Oudere versies en andere browsers werken mogelijk niet.\n\nDe bar onderaan levert twee acties:\n\n<b>Openen op nieuw tabblad (5.0+) -</b> kopieer een link of tekst op het scherm en druk op dit icoon om de link te openen of de tekst in een nieuw aangepast tabblad te zoeken.\n<b>Delen-</b> snel de delen-functie van Android gebruiken.\n\nBinnenkort meer functies.</string>
     <string name="options">Opties</string>
     <string name="customize">Aanpassen</string>
     <string name="not_set">"Niet ingesteld "</string>
