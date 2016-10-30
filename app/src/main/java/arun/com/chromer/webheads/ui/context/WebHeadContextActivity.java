@@ -1,6 +1,9 @@
 package arun.com.chromer.webheads.ui.context;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,6 +27,7 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
     @BindView(R.id.web_sites_list)
     RecyclerView mWebSitesList;
     private WebsiteAdapter mWebsiteAdapter;
+    private final WebHeadEventsReceiver mWebHeadEventsReceiver = new WebHeadEventsReceiver();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +46,27 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
 
         mWebSitesList.setLayoutManager(new LinearLayoutManager(this));
         mWebSitesList.setAdapter(mWebsiteAdapter);
+
+        registerEventsReceiver();
+    }
+
+    private void registerEventsReceiver() {
+        final IntentFilter filter = new IntentFilter();
+        filter.addAction(Constants.ACTION_EVENT_WEBHEAD_DELETED);
+        filter.addAction(Constants.ACTION_EVENT_WEBSITE_UPDATED);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mWebHeadEventsReceiver, filter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mWebHeadEventsReceiver);
     }
 
     @Override
     public void onWebSiteItemClicked(@NonNull WebSite webSite) {
         finish();
         DocumentUtils.smartOpenNewTab(this, webSite);
-
         if (Preferences.webHeadsCloseOnOpen(this)) {
             broadcastDeleteWebHead(webSite);
         }
@@ -63,7 +81,6 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
     @Override
     public void onWebSiteDelete(@NonNull WebSite webSite) {
         broadcastDeleteWebHead(webSite);
-
         if (mWebsiteAdapter.getWebSites().isEmpty()) {
             finish();
         }
@@ -89,5 +106,29 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
         shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, webSites);
         shareIntent.setType("text/plain");
         startActivity(Intent.createChooser(shareIntent, getString(R.string.share_all)));
+    }
+
+    /**
+     * This receiver is responsible for receiving events from web head service.
+     */
+    private class WebHeadEventsReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch (intent.getAction()) {
+                case Constants.ACTION_EVENT_WEBHEAD_DELETED:
+                    final WebSite webSite = intent.getParcelableExtra(Constants.EXTRA_KEY_WEBSITE);
+                    if (webSite != null) {
+                        mWebsiteAdapter.delete(webSite);
+                    }
+                    break;
+                case Constants.ACTION_EVENT_WEBSITE_UPDATED:
+                    final WebSite web = intent.getParcelableExtra(Constants.EXTRA_KEY_WEBSITE);
+                    if (web != null) {
+                        mWebsiteAdapter.update(web);
+                    }
+                    break;
+            }
+        }
     }
 }

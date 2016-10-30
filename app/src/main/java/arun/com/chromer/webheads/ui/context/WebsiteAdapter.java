@@ -91,6 +91,24 @@ class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> 
         return mWebSites;
     }
 
+    void delete(@NonNull WebSite webSite) {
+        final int index = mWebSites.indexOf(webSite);
+        if (index != -1) {
+            mWebSites.remove(index);
+            notifyItemRemoved(index);
+            listener.onWebSiteDelete(webSite);
+        }
+    }
+
+    void update(@NonNull WebSite web) {
+        final int index = mWebSites.indexOf(web);
+        if (index != -1) {
+            mWebSites.remove(index);
+            mWebSites.add(index, web);
+            notifyItemChanged(index);
+        }
+    }
+
     class WebSiteHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.web_site_icon)
         ImageView icon;
