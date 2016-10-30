@@ -93,10 +93,10 @@ public abstract class DividerLessPreferenceFragment extends PreferenceFragmentCo
     /**
      * Shows a {@link android.support.design.widget.Snackbar} by calling activity methods.
      */
-    void showSnack(@NonNull String textToSnack, int duration) {
+    void snackLong(@NonNull final String textToSnack) {
         if (getActivity() instanceof MainActivity) {
-            MainActivity activity = (MainActivity) getActivity();
-            activity.snack(textToSnack, duration);
+            final MainActivity activity = (MainActivity) getActivity();
+            activity.snackLong(textToSnack);
         }
     }
 
