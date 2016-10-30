@@ -490,9 +490,23 @@ public class CustomTabs {
     private void prepareMenuItems() {
         assertBuilderInitialized();
         preparePreferredAction();
+        prepareMinimize();
         prepareCopyLink();
         prepareAddToHomeScreen();
         prepareOpenInChrome();
+    }
+
+    /**
+     * Adds a menu item tapping which will minimize the current custom tab back to overview. This requires
+     * merge tabs and apps and
+     */
+    private void prepareMinimize() {
+        if (!Preferences.bottomBar(mActivity) && mForWebHead && Preferences.mergeTabs(mActivity)) {
+            final Intent minimizeIntent = new Intent(mActivity, MinimizeBroadcastReceiver.class);
+            minimizeIntent.putExtra(Intent.EXTRA_TEXT, mUrl);
+            final PendingIntent pendingMin = PendingIntent.getBroadcast(mActivity, new Random().nextInt(), minimizeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            mIntentBuilder.addMenuItem(mActivity.getString(R.string.minimize), pendingMin);
+        }
     }
 
     /**
@@ -593,7 +607,7 @@ public class CustomTabs {
 
         mIntentBuilder.addToolbarItem(BOTTOM_SHARE_TAB, shareIcon, mActivity.getString(R.string.share), pendingShareIntent);
 
-        if (mForWebHead /* &&s Preferences.mergeTabs(mActivity) */) {
+        if (mForWebHead && Preferences.mergeTabs(mActivity)) {
             final Intent minimizeIntent = new Intent(mActivity, MinimizeBroadcastReceiver.class);
             minimizeIntent.putExtra(Intent.EXTRA_TEXT, mUrl);
             final PendingIntent pendingMin = PendingIntent.getBroadcast(mActivity, new Random().nextInt(), minimizeIntent, PendingIntent.FLAG_UPDATE_CURRENT);

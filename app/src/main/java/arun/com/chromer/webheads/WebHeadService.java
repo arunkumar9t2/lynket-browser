@@ -296,7 +296,7 @@ public class WebHeadService extends Service implements WebHeadContract,
     private void prepareNextSetOfUrls(String sLastOpenedUrl) {
         if (Preferences.aggressiveLoading(this)) return;
 
-        Stack<String> urlStack = getUrlStack(sLastOpenedUrl);
+        final Stack<String> urlStack = getUrlStack(sLastOpenedUrl);
         if (urlStack.size() > 0) {
             String priorityUrl = urlStack.pop();
             if (priorityUrl == null) return;
