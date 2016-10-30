@@ -39,7 +39,7 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import arun.com.chromer.activities.about.AboutAppActivity;
@@ -178,7 +178,9 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             public void onVoiceIconClick() {
                 if (Util.isVoiceRecognizerPresent(getApplicationContext())) {
                     startActivityForResult(Util.getRecognizerIntent(MainActivity.this), Constants.REQUEST_CODE_VOICE);
-                } else snack(getString(R.string.no_voice_rec_apps), -10);
+                } else {
+                    snack(getString(R.string.no_voice_rec_apps));
+                }
             }
 
             @Override
@@ -197,9 +199,14 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         });
     }
 
-    public void snack(@NonNull String textToSnack, int duration) {
-        Snackbar.make(mCoordinatorLayout, textToSnack, duration != -10 ? duration : Snackbar.LENGTH_SHORT).show();
+    public void snack(@NonNull String textToSnack) {
+        Snackbar.make(mCoordinatorLayout, textToSnack, Snackbar.LENGTH_SHORT).show();
     }
+
+    public void snackLong(@NonNull String textToSnack) {
+        Snackbar.make(mCoordinatorLayout, textToSnack, Snackbar.LENGTH_LONG).show();
+    }
+
 
     private void setupDrawer() {
         mDrawer = new DrawerBuilder()
@@ -313,7 +320,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        Intent googleIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.G_COMMUNITY_URL));
+                        final Intent googleIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.G_COMMUNITY_URL));
                         startActivity(googleIntent);
                     }
                 })
@@ -396,7 +403,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         if (!forceShow) {
             packages = CustomTabs.getCustomTabSupportingPackages(this);
         } else {
-            packages = new ArrayList();
+            packages = Collections.EMPTY_LIST;
         }
         if (packages.size() == 0 || forceShow) {
             new MaterialDialog.Builder(this)
@@ -479,7 +486,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         mBottomSheet.dismissSheet();
                         customTabPreferenceCard.updatePreference(activityInfo.componentName);
                         refreshCustomTabBindings();
-                        snack(String.format(getString(R.string.default_provider_success), activityInfo.label), -10);
+                        snack(String.format(getString(R.string.default_provider_success), activityInfo.label));
                     }
                 });
         customTabPicker.setFilter(IntentPickerSheetView.selfPackageExcludeFilter(this));
@@ -497,7 +504,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                     public void onIntentPicked(IntentPickerSheetView.ActivityInfo activityInfo) {
                         mBottomSheet.dismissSheet();
                         browserPreferenceCard.updatePreference(activityInfo.componentName);
-                        snack(String.format(getString(R.string.secondary_browser_success), activityInfo.label), -10);
+                        snack(String.format(getString(R.string.secondary_browser_success), activityInfo.label));
                     }
                 });
         browserPicker.setFilter(IntentPickerSheetView.selfPackageExcludeFilter(this));
@@ -514,7 +521,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                     public void onIntentPicked(IntentPickerSheetView.ActivityInfo activityInfo) {
                         mBottomSheet.dismissSheet();
                         favShareAppPreferenceCard.updatePreference(activityInfo.componentName);
-                        snack(String.format(getString(R.string.fav_share_success), activityInfo.label), -10);
+                        snack(String.format(getString(R.string.fav_share_success), activityInfo.label));
                     }
                 });
         favSharePicker.setFilter(IntentPickerSheetView.selfPackageExcludeFilter(this));

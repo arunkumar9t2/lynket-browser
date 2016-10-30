@@ -262,10 +262,13 @@ public class CustomTabs {
     /**
      * Clients can specify a toolbar color that will override whatever {@link #prepareToolbar()} sets.
      * Alpha value of the provided color will be ignored.
+     * <p>
+     * Note: {@link #prepareToolbar()} can choose to ignore this value based on user preference like
+     * dynamic coloring. Refer that method for details.
      *
      * @param overrideColor color to override
      */
-    public CustomTabs overrideToolbarColor(@ColorInt int overrideColor) {
+    public CustomTabs fallbackColor(@ColorInt int overrideColor) {
         mToolbarColorOverride = ColorUtils.setAlphaComponent(overrideColor, 0xFF);
         return this;
     }
@@ -380,22 +383,27 @@ public class CustomTabs {
      */
     private void prepareToolbar() {
         assertBuilderInitialized();
-        if (mToolbarColorOverride != Constants.NO_COLOR) {
-            mToolbarColor = mToolbarColorOverride;
-            mIntentBuilder
-                    .setToolbarColor(mToolbarColorOverride)
-                    .setSecondaryToolbarColor(mToolbarColorOverride);
-        } else if (Preferences.isColoredToolbar(mActivity)) {
-            // Get the user chosen color first
+        if (Preferences.isColoredToolbar(mActivity)) {
             mToolbarColor = Preferences.toolbarColor(mActivity);
+
             if (Preferences.dynamicToolbar(mActivity)) {
+                final boolean overrideRequested = mToolbarColorOverride != Constants.NO_COLOR;
+                boolean dynamicApp = false;
+                boolean dynamicWeb = false;
+
                 if (Preferences.dynamicToolbarOnApp(mActivity)) {
-                    setAppToolbarColor();
+                    dynamicApp = setAppToolbarColor();
                 }
                 if (Preferences.dynamicToolbarOnWeb(mActivity)) {
-                    setWebToolbarColor();
+                    dynamicWeb = setWebToolbarColor();
+                }
+
+                if ((!dynamicApp && !dynamicWeb) && overrideRequested) {
+                    mToolbarColor = mToolbarColorOverride;
+                    Timber.d("Using fallback color");
                 }
             }
+
             if (mToolbarColor != Constants.NO_COLOR) {
                 mIntentBuilder
                         .setToolbarColor(mToolbarColor)
@@ -406,8 +414,10 @@ public class CustomTabs {
 
     /**
      * Sets the toolbar color based on the web site we are launching for
+     *
+     * @return Whether color setting was successful or not.
      */
-    private void setWebToolbarColor() {
+    private boolean setWebToolbarColor() {
         // Check if we have the color extracted for this source
         final String host = Uri.parse(mUrl).getHost();
         if (host != null) {
@@ -415,24 +425,29 @@ public class CustomTabs {
 
             if (!webColors.isEmpty()) {
                 mToolbarColor = webColors.get(0).getColor();
+                return true;
             } else {
                 final Intent extractorService = new Intent(mActivity, WebColorExtractorService.class);
                 extractorService.setData(Uri.parse(mUrl));
                 mActivity.startService(extractorService);
             }
         }
+        return false;
     }
 
     /**
      * Sets the toolbar color based on launching app.
+     *
+     * @return Whether color setting was successful or not.
      */
-    private void setAppToolbarColor() {
+    private boolean setAppToolbarColor() {
         try {
             final String lastApp = AppDetectService.getInstance().getLastApp();
             final List<AppColor> appColors = AppColor.find(AppColor.class, "app = ?", lastApp);
 
             if (!appColors.isEmpty()) {
                 mToolbarColor = appColors.get(0).getColor();
+                return true;
             } else {
                 final Intent extractorService = new Intent(mActivity, AppColorExtractorService.class);
                 extractorService.putExtra("app", lastApp);
@@ -443,6 +458,7 @@ public class CustomTabs {
                 mActivity.startService(new Intent(mActivity, AppDetectService.class));
             }
         }
+        return false;
     }
 
     /**
@@ -490,9 +506,23 @@ public class CustomTabs {
     private void prepareMenuItems() {
         assertBuilderInitialized();
         preparePreferredAction();
+        prepareMinimize();
         prepareCopyLink();
         prepareAddToHomeScreen();
         prepareOpenInChrome();
+    }
+
+    /**
+     * Adds a menu item tapping which will minimize the current custom tab back to overview. This requires
+     * merge tabs and apps and
+     */
+    private void prepareMinimize() {
+        if (!Preferences.bottomBar(mActivity) && mForWebHead && Preferences.mergeTabs(mActivity)) {
+            final Intent minimizeIntent = new Intent(mActivity, MinimizeBroadcastReceiver.class);
+            minimizeIntent.putExtra(Intent.EXTRA_TEXT, mUrl);
+            final PendingIntent pendingMin = PendingIntent.getBroadcast(mActivity, new Random().nextInt(), minimizeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            mIntentBuilder.addMenuItem(mActivity.getString(R.string.minimize), pendingMin);
+        }
     }
 
     /**
@@ -593,7 +623,7 @@ public class CustomTabs {
 
         mIntentBuilder.addToolbarItem(BOTTOM_SHARE_TAB, shareIcon, mActivity.getString(R.string.share), pendingShareIntent);
 
-        if (mForWebHead /* &&s Preferences.mergeTabs(mActivity) */) {
+        if (mForWebHead && Preferences.mergeTabs(mActivity)) {
             final Intent minimizeIntent = new Intent(mActivity, MinimizeBroadcastReceiver.class);
             minimizeIntent.putExtra(Intent.EXTRA_TEXT, mUrl);
             final PendingIntent pendingMin = PendingIntent.getBroadcast(mActivity, new Random().nextInt(), minimizeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -641,7 +671,7 @@ public class CustomTabs {
     /**
      * To be used as a fallback to open the Uri when Custom Tabs is not available.
      */
-    public interface CustomTabsFallback {
+    interface CustomTabsFallback {
         /**
          * @param activity The Activity that wants to open the Uri.
          * @param uri      The uri to be opened by the fallback.

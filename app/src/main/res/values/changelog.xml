@@ -21,10 +21,12 @@ a {
 <strong>1.6.1</strong>
 <a href="https://goo.gl/photos/BzRV69ABov9zJxVu9">  View album</a>
 <ul>
-    <li><b>NEW:</b> <b>Minimize web heads</b> - added a button in bottom bar to minimize current open page back to web head.</li>
+    <li><b>NEW:</b> <b>Minimize web heads</b> - added a button in bottom bar/menu to minimize current open page back to web head. (Needs merge tabs to work)</li>
     <li><b>NEW:</b> <b>General share as preferred action</b></li>
+    <li><b>IMPROVED:</b> Web head context screen now syncs better with active web heads.</li>
     <li><b>IMPROVED:</b> Many performance and crash fixes.</li>
     <li><b>IMPROVED:</b> Translation updates.</li>
+    <li><b>FIX:</b> Dynamic toolbar issues.</li>
 </ul>
 <strong>1.6</strong>
 <h4 class="list-heading">Web heads</h3>

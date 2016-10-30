@@ -245,12 +245,14 @@ public class WebHeadService extends Service implements WebHeadContract,
                                 // dispatch color extraction task
                                 new ColorExtractionTask(webHead, resource).execute();
 
-                                RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), resource);
+                                final RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), resource);
                                 roundedBitmapDrawable.setAntiAlias(true);
                                 roundedBitmapDrawable.setCircular(true);
                                 webHead.setFaviconDrawable(roundedBitmapDrawable);
                             }
                         });
+                // Also signal the context activity so that it can update its data
+                ContextActivityHelper.signalUpdated(this, webHead.getWebsite());
             } catch (Exception e) {
                 Timber.e(e.getMessage());
             }
@@ -296,7 +298,7 @@ public class WebHeadService extends Service implements WebHeadContract,
     private void prepareNextSetOfUrls(String sLastOpenedUrl) {
         if (Preferences.aggressiveLoading(this)) return;
 
-        Stack<String> urlStack = getUrlStack(sLastOpenedUrl);
+        final Stack<String> urlStack = getUrlStack(sLastOpenedUrl);
         if (urlStack.size() > 0) {
             String priorityUrl = urlStack.pop();
             if (priorityUrl == null) return;
@@ -468,6 +470,8 @@ public class WebHeadService extends Service implements WebHeadContract,
             // other urls
             prepareNextSetOfUrls(webHead.getUrl());
         }
+
+        ContextActivityHelper.signalDeleted(this, webHead.getWebsite());
     }
 
     @Override
@@ -507,11 +511,7 @@ public class WebHeadService extends Service implements WebHeadContract,
                 webSites.add(webHead.getWebsite());
             }
         }
-        final Intent intent = new Intent(this, WebHeadContextActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.putParcelableArrayListExtra(Constants.EXTRA_KEY_WEBSITE, webSites);
-        startActivity(intent);
+        ContextActivityHelper.open(this, webSites);
     }
 
 
@@ -608,4 +608,27 @@ public class WebHeadService extends Service implements WebHeadContract,
             stopSelf();
         }
     };
+
+
+    private static class ContextActivityHelper {
+        static void signalUpdated(Context context, WebSite webSite) {
+            final Intent intent = new Intent(Constants.ACTION_EVENT_WEBSITE_UPDATED);
+            intent.putExtra(Constants.EXTRA_KEY_WEBSITE, webSite);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        }
+
+        static void signalDeleted(Context context, WebSite webSite) {
+            final Intent intent = new Intent(Constants.ACTION_EVENT_WEBHEAD_DELETED);
+            intent.putExtra(Constants.EXTRA_KEY_WEBSITE, webSite);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        }
+
+        static void open(Context context, ArrayList<WebSite> webSites) {
+            final Intent intent = new Intent(context, WebHeadContextActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.putParcelableArrayListExtra(Constants.EXTRA_KEY_WEBSITE, webSites);
+            context.startActivity(intent);
+        }
+    }
 }

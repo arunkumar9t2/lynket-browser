@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.SwitchPreferenceCompat;
@@ -201,8 +200,7 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
                                         }
                                     })
                                     .show();
-                        } else {
-                            showSnack(getString(R.string.web_heads_enabled), Snackbar.LENGTH_LONG);
+                            snackLong(getString(R.string.web_heads_enabled));
                         }
                     }
                 }
