@@ -15,6 +15,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -57,13 +58,13 @@ public class CustomTabActivity extends AppCompatActivity {
         final boolean isWebhead = getIntent().getBooleanExtra(Constants.EXTRA_KEY_FROM_WEBHEAD, false);
 
         final WebSite webSite = getIntent().getParcelableExtra(Constants.EXTRA_KEY_WEBSITE);
-        final int color = webSite != null ? webSite.color : Constants.NO_COLOR;
+        final int color = webSite != null && !TextUtils.isEmpty(webSite.faviconUrl) ? webSite.color : Constants.NO_COLOR;
 
         Benchmark.start("Custom tab launching in CTA");
         CustomTabs.from(this)
                 .forUrl(mBaseUrl)
                 .forWebHead(isWebhead)
-                .overrideToolbarColor(color)
+                .fallbackColor(color)
                 // .noAnimations(Preferences.aggressiveLoading(this))
                 .prepare()
                 .launch();
