@@ -59,8 +59,8 @@
         <receiver android:name=".customtabs.callbacks.FavShareBroadcastReceiver"/>
         <receiver android:name=".customtabs.callbacks.SecondaryBrowserReceiver"/>
         <receiver android:name=".customtabs.callbacks.OpenInChromeReceiver"/>
-        <receiver android:name=".customtabs.callbacks.OpenInNewTabReceiver"/>
         <receiver android:name=".customtabs.callbacks.MinimizeBroadcastReceiver"/>
+        <receiver android:name=".customtabs.bottombar.BottomBarReceiver"/>
 
         <activity
             android:name=".MainActivity"

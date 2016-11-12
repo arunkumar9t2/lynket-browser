@@ -32,7 +32,7 @@ public class MinimizeBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        String url = intent.getStringExtra(Intent.EXTRA_TEXT);
+        final String url = intent.getStringExtra(Intent.EXTRA_TEXT);
         if (url != null) {
             sendMinimizeIntent(context, url);
             signalWebHead(context, url);

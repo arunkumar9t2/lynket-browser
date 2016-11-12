@@ -30,6 +30,7 @@ import android.util.DisplayMetrics;
 import android.util.Patterns;
 import android.view.View;
 import android.view.ViewOutlineProvider;
+import android.widget.Toast;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -319,6 +320,20 @@ public class Util {
             Timber.e(ignored.toString());
         }
         return null;
+    }
+
+    public static void shareText(@NonNull Context context, @Nullable String url) {
+        if (url != null) {
+            final Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, url);
+
+            final Intent chooserIntent = Intent.createChooser(shareIntent, "Share url..");
+            chooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(chooserIntent);
+        } else {
+            Toast.makeText(context, R.string.invalid_link, Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
