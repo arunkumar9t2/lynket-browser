@@ -601,8 +601,12 @@ public class CustomTabs {
         if (!Preferences.bottomBar(mActivity)) {
             return;
         }
+        final BottomBarManager.Config config = new BottomBarManager.Config();
+        config.minimize = mForWebHead && Preferences.mergeTabs(mActivity);
+        config.openInNewTab = Util.isLollipopAbove();
+
         mIntentBuilder.setSecondaryToolbarViews(
-                BottomBarManager.createBottomBarRemoteViews(mActivity, mToolbarColor),
+                BottomBarManager.createBottomBarRemoteViews(mActivity, mToolbarColor, config),
                 BottomBarManager.getClickableIDs(),
                 BottomBarManager.getOnClickPendingIntent(mActivity)
         );

@@ -30,6 +30,7 @@ import java.util.List;
 import arun.com.chromer.R;
 import arun.com.chromer.activities.BrowserInterceptActivity;
 import arun.com.chromer.shared.Constants;
+import arun.com.chromer.util.DocumentUtils;
 import arun.com.chromer.util.Util;
 import timber.log.Timber;
 
@@ -53,12 +54,9 @@ public class BottomBarReceiver extends BroadcastReceiver {
                 new ShareUrl(context, url).perform();
                 break;
             case R.id.bottom_bar_minimize_tab:
+                new MinimizeUrl(context, url).perform();
                 break;
         }
-    }
-
-    private void showToast(final Context context, @NonNull String stringToToast) {
-        Toast.makeText(context, stringToToast, Toast.LENGTH_SHORT).show();
     }
 
     private static abstract class Command {
@@ -77,7 +75,7 @@ public class BottomBarReceiver extends BroadcastReceiver {
             mContext = null;
         }
 
-        abstract void onPerform();
+        protected abstract void onPerform();
     }
 
     private static class OpenInNewTab extends Command {
@@ -87,7 +85,7 @@ public class BottomBarReceiver extends BroadcastReceiver {
         }
 
         @Override
-        void onPerform() {
+        protected void onPerform() {
             if (!performCalled) {
                 throw new IllegalStateException("Should call perform() instead of onPerform()");
             }
@@ -97,7 +95,8 @@ public class BottomBarReceiver extends BroadcastReceiver {
                     final ClipData.Item item = clipboardManager.getPrimaryClip().getItemAt(0);
                     findAndOpenLink(item.getText().toString());
                     clipboardManager.setPrimaryClip(ClipData.newPlainText("", ""));
-                }
+                } else
+                    invalidLink();
             } catch (Exception e) {
                 invalidLink();
                 Timber.e(e.getMessage());
@@ -142,7 +141,7 @@ public class BottomBarReceiver extends BroadcastReceiver {
         }
 
         @Override
-        void onPerform() {
+        protected void onPerform() {
             Util.shareText(mContext, mUrl);
         }
     }
@@ -154,8 +153,8 @@ public class BottomBarReceiver extends BroadcastReceiver {
         }
 
         @Override
-        void onPerform() {
-
+        protected void onPerform() {
+            DocumentUtils.minimizeTaskByUrl(mContext, mUrl);
         }
     }
 }
