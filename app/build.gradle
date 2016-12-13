@@ -1,4 +1,19 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
 apply plugin: 'com.neenbedankt.android-apt'
 
 android {
@@ -13,6 +28,7 @@ android {
         versionName "1.6.1"
 
         buildConfigField "String", "BASE_64", getBase64()
+        resValue "string", "fabric_key", getFabricKey()
 
         vectorDrawables.useSupportLibrary = true
     }
@@ -22,14 +38,15 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             resValue "string", "app_name", "Chromer"
+
             lintOptions {
                 disable 'MissingTranslation'
             }
         }
         debug {
             applicationIdSuffix '.debug'
-            versionNameSuffix '- Debug'
-            resValue "string", "app_name", "Chromer - Debug"
+            versionNameSuffix '- dev'
+            resValue "string", "app_name", "Chromer - dev"
         }
     }
 }
@@ -77,6 +94,10 @@ dependencies {
     compile 'org.jsoup:jsoup:1.10.1'
 
     compile 'com.github.nekocode:Badge:1.2'
+
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
+        transitive = true;
+    }
 }
 
 def getBase64() {
@@ -85,6 +106,16 @@ def getBase64() {
         properties.load(new FileInputStream("values.properties"))
         return "\"" + properties.getProperty("BASE_64") + "\""
     } catch (Exception e) {
-        return ""
+        return "\"\""
+    }
+}
+
+def getFabricKey() {
+    try {
+        Properties properties = new Properties()
+        properties.load(new FileInputStream("values.properties"))
+        return "\"" + properties.getProperty("FABRIC_KEY") + "\""
+    } catch (Exception e) {
+        return "\"\""
     }
 }
