@@ -29,12 +29,12 @@ import java.util.List;
 import java.util.Random;
 
 import arun.com.chromer.R;
+import arun.com.chromer.customtabs.bottombar.BottomBarManager;
 import arun.com.chromer.customtabs.callbacks.AddHomeShortcutService;
 import arun.com.chromer.customtabs.callbacks.ClipboardService;
 import arun.com.chromer.customtabs.callbacks.FavShareBroadcastReceiver;
 import arun.com.chromer.customtabs.callbacks.MinimizeBroadcastReceiver;
 import arun.com.chromer.customtabs.callbacks.OpenInChromeReceiver;
-import arun.com.chromer.customtabs.callbacks.OpenInNewTabReceiver;
 import arun.com.chromer.customtabs.callbacks.SecondaryBrowserReceiver;
 import arun.com.chromer.customtabs.callbacks.ShareBroadcastReceiver;
 import arun.com.chromer.customtabs.dynamictoolbar.AppColorExtractorService;
@@ -46,7 +46,6 @@ import arun.com.chromer.db.WebColor;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.shared.AppDetectService;
 import arun.com.chromer.shared.Constants;
-import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Util;
 import arun.com.chromer.webheads.WebHeadService;
 import timber.log.Timber;
@@ -602,18 +601,17 @@ public class CustomTabs {
         if (!Preferences.bottomBar(mActivity)) {
             return;
         }
-        final int iconColor = ColorUtil.getForegroundWhiteOrBlack(mToolbarColor);
+        final BottomBarManager.Config config = new BottomBarManager.Config();
+        config.minimize = mForWebHead && Preferences.mergeTabs(mActivity);
+        config.openInNewTab = Util.isLollipopAbove();
 
-        if (Util.isLollipopAbove()) {
-            final Intent openInNewTabIntent = new Intent(mActivity, OpenInNewTabReceiver.class);
-            final PendingIntent pendingOpenTabIntent = PendingIntent.getBroadcast(mActivity, 0, openInNewTabIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            final Bitmap openTabIcon = new IconicsDrawable(mActivity)
-                    .icon(CommunityMaterial.Icon.cmd_plus_box)
-                    .color(iconColor)
-                    .sizeDp(24).toBitmap();
-            mIntentBuilder.addToolbarItem(BOTTOM_OPEN_TAB, openTabIcon, mActivity.getString(R.string.open_in_new_tab), pendingOpenTabIntent);
-        }
+        mIntentBuilder.setSecondaryToolbarViews(
+                BottomBarManager.createBottomBarRemoteViews(mActivity, mToolbarColor, config),
+                BottomBarManager.getClickableIDs(),
+                BottomBarManager.getOnClickPendingIntent(mActivity)
+        );
 
+        /*
         final Intent shareIntent = new Intent(mActivity, ShareBroadcastReceiver.class);
         final PendingIntent pendingShareIntent = PendingIntent.getBroadcast(mActivity, 0, shareIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         final Bitmap shareIcon = new IconicsDrawable(mActivity)
@@ -634,6 +632,7 @@ public class CustomTabs {
 
             mIntentBuilder.addToolbarItem(BOTTOM_MINIMIZE_TAB, minimizeIcon, mActivity.getString(R.string.minimize), pendingMin);
         }
+    */
     }
 
     /**

@@ -17,9 +17,8 @@ package arun.com.chromer.customtabs.callbacks;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
-import arun.com.chromer.R;
+import arun.com.chromer.util.Util;
 
 /**
  * A BroadcastReceiver that handles the Action Intent from the Custom Tab and fires a Share Intent.
@@ -28,18 +27,6 @@ public class ShareBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        String url = intent.getDataString();
-        if (url != null) {
-            Intent shareIntent = new Intent(Intent.ACTION_SEND);
-            shareIntent.setType("text/plain");
-            shareIntent.putExtra(Intent.EXTRA_TEXT, url);
-
-            Intent chooserIntent = Intent.createChooser(shareIntent, "Share url..");
-            chooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            context.startActivity(chooserIntent);
-        } else {
-            Toast.makeText(context, R.string.invalid_link, Toast.LENGTH_SHORT).show();
-        }
+        Util.shareText(context, intent.getDataString());
     }
 }
