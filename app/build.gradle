@@ -28,7 +28,7 @@ android {
         versionName "1.6.1"
 
         buildConfigField "String", "BASE_64", getBase64()
-        resValue "string", "fabric_key", getFabricKey()
+        manifestPlaceholders = [crashlyticsApiKey: getFabricKey()]
 
         vectorDrawables.useSupportLibrary = true
     }
@@ -114,8 +114,8 @@ def getFabricKey() {
     try {
         Properties properties = new Properties()
         properties.load(new FileInputStream("values.properties"))
-        return "\"" + properties.getProperty("FABRIC_KEY") + "\""
+        return properties.getProperty("FABRIC_KEY")
     } catch (Exception e) {
-        return "\"\""
+        return ""
     }
 }

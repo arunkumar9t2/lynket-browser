@@ -161,7 +161,7 @@
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="@string/fabric_key"
+            android:value="${crashlyticsApiKey}"
             tools:replace="android:value" />
     </application>
 

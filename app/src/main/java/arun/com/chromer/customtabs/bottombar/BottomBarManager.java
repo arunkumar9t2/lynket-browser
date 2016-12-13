@@ -33,6 +33,7 @@ public class BottomBarManager {
             remoteViews.setViewVisibility(R.id.bottom_bar_open_in_new_tab, View.GONE);
         }
 
+        // TODO Cache this
         final Bitmap shareImage = new IconicsDrawable(context)
                 .icon(CommunityMaterial.Icon.cmd_share_variant)
                 .color(iconColor)
