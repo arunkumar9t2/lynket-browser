@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:background="?android:attr/selectableItemBackground"
-              android:clickable="true"
-              android:focusable="true"
-              android:gravity="center_vertical"
-              android:minHeight="56dp"
-              android:orientation="horizontal"
-              android:padding="5dp"
-              tools:ignore="Overdraw,RtlHardcoded">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="center_vertical"
+    android:minHeight="56dp"
+    android:orientation="horizontal"
+    android:padding="5dp"
+    tools:ignore="Overdraw,RtlHardcoded">
 
     <ImageView
         android:id="@+id/about_row_item_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        tools:ignore="ContentDescription"/>
+        tools:ignore="ContentDescription" />
 
     <RelativeLayout
         android:layout_width="0dp"
@@ -33,7 +33,7 @@
             android:ellipsize="marquee"
             android:maxLines="1"
             android:textAppearance="@style/Preference_TextAppearanceMaterialSubhead"
-            tools:ignore="SelectableText"/>
+            tools:ignore="SelectableText" />
 
         <TextView
             android:id="@+id/about_app_subtitle"
@@ -44,7 +44,7 @@
             android:maxLines="2"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="?android:attr/textColorSecondary"
-            tools:ignore="SelectableText"/>
+            tools:ignore="SelectableText" />
 
     </RelativeLayout>
 </LinearLayout>

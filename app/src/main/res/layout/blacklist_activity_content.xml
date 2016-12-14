@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="@dimen/activity_vertical_margin"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                tools:context=".activities.blacklist.BlacklistManagerActivity"
-                tools:showIn="@layout/blacklist_activity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".activities.blacklist.BlacklistManagerActivity"
+    tools:showIn="@layout/blacklist_activity">
 
     <LinearLayout
         android:id="@+id/secondary_browser"
@@ -32,14 +32,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/choose_secondary_browser"
                 android:textColor="@color/material_dark_color"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/blacklist_explanation"
                 android:textColor="?android:textColorSecondary"
-                android:textSize="13sp"/>
+                android:textSize="13sp" />
         </LinearLayout>
 
         <ImageView
@@ -48,7 +48,7 @@
             android:layout_height="30dp"
             android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
-            tools:ignore="ContentDescription"/>
+            tools:ignore="ContentDescription" />
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
@@ -60,6 +60,6 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="8dp"
-        android:scrollbars="vertical"/>
+        android:scrollbars="vertical" />
 
 </RelativeLayout>

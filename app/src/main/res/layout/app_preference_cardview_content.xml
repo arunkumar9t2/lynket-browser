@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical"
-              android:padding="10dp">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <ImageView
         android:id="@+id/app_preference_icon"
@@ -13,11 +13,11 @@
         android:layout_gravity="center"
         android:scaleType="fitCenter"
         tools:ignore="ContentDescription"
-        tools:src="@mipmap/ic_launcher"/>
+        tools:src="@mipmap/ic_launcher" />
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="7dp"/>
+        android:layout_height="7dp" />
 
 
     <TextView
@@ -31,11 +31,11 @@
         android:textStyle="bold"
         tools:ignore="SelectableText"
         tools:text="Firefox"
-        android:maxLines="1"/>
+        android:maxLines="1" />
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="5dp"/>
+        android:layout_height="5dp" />
 
     <TextView
         android:id="@+id/app_preference_category"
@@ -48,6 +48,6 @@
         android:textColor="@color/material_dark_color"
         android:textSize="14sp"
         tools:ignore="SelectableText"
-        tools:text="Custom Tab Provider"/>
+        tools:text="Custom Tab Provider" />
 
 </LinearLayout>
