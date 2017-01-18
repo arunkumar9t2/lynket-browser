@@ -93,7 +93,7 @@ public class BlacklistManagerActivity extends AppCompatActivity implements
 
     @Override
     public void onBlackListItemClick(App app) {
-
+        presenter.updateBlacklist(app);
     }
 
     @Override

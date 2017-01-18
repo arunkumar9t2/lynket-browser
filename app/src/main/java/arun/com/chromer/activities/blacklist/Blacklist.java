@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -79,7 +80,7 @@ interface Blacklist {
                     final String pkg = resolveInfo.activityInfo.packageName;
                     app.setAppName(Utils.getAppNameWithPackage(context, pkg));
                     app.setPackageName(pkg);
-                    app.setBlackListed(false /* query db */);
+                    app.setBlackListed(BlackListManager.isPackageBlackListed(pkg));
                     return app;
                 }
             }).toSortedList()
@@ -108,6 +109,16 @@ interface Blacklist {
                 viewRef = null;
             }
             compositeSubscription.clear();
+        }
+
+        void updateBlacklist(@Nullable App app) {
+            if (app != null && app.getPackageName() != null) {
+                if (app.isBlackListed()) {
+                    BlackListManager.setBlackListed(app.getPackageName());
+                } else {
+                    BlackListManager.deleteBlackListed(app.getPackageName());
+                }
+            }
         }
     }
 }
