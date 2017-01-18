@@ -53,6 +53,9 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
 
+    // Debugging
+    compile 'com.facebook.stetho:stetho:1.4.2'
+
     // Support
     compile 'com.android.support:design:25.1.0'
     compile 'com.android.support:customtabs:25.1.0'
