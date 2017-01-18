@@ -26,7 +26,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import arun.com.chromer.R;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -99,11 +99,11 @@ public class TabView extends FrameLayout {
         getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                int totalWidth = mTabIcon.getWidth() + Util.dpToPx(5) + mTabText.getWidth();
+                int totalWidth = mTabIcon.getWidth() + Utils.dpToPx(5) + mTabText.getWidth();
                 int layoutWidth = getWidth();
                 initialIconX = (layoutWidth / 2) - (totalWidth / 2);
                 mTabIcon.setX(initialIconX);
-                initialTextX = initialIconX + mTabIcon.getWidth() + Util.dpToPx(10);
+                initialTextX = initialIconX + mTabIcon.getWidth() + Utils.dpToPx(10);
                 mTabText.setX(initialTextX);
 
                 mTabText.setPivotX(0);

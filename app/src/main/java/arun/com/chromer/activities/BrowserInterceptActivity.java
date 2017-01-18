@@ -23,7 +23,7 @@ import arun.com.chromer.db.BlacklistedApps;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.shared.AppDetectService;
 import arun.com.chromer.shared.Constants;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.helper.ProxyActivity;
 
 @SuppressLint("GoogleAppIndexingApiWarning")
@@ -101,7 +101,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
 
     private void performBlacklistAction() {
         String componentFlatten = Preferences.secondaryBrowserComponent(this);
-        if (componentFlatten != null && Util.isPackageInstalled(this, Preferences.secondaryBrowserPackage(this))) {
+        if (componentFlatten != null && Utils.isPackageInstalled(this, Preferences.secondaryBrowserPackage(this))) {
             final Intent webIntentExplicit = getOriginalIntentCopy(getIntent());
             webIntentExplicit.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             webIntentExplicit.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

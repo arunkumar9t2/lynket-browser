@@ -29,7 +29,7 @@ import arun.com.chromer.preferences.widgets.IconCheckboxPreference;
 import arun.com.chromer.preferences.widgets.IconListPreference;
 import arun.com.chromer.preferences.widgets.IconSwitchPreference;
 import arun.com.chromer.shared.Constants;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 
 import static arun.com.chromer.preferences.manager.Preferences.AGGRESSIVE_LOADING;
 
@@ -80,7 +80,7 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
         getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         updatePreferenceStates(Preferences.WEB_HEAD_ENABLED);
         updatePreferenceSummary(WEBHEAD_PREFERENCE_GROUP);
-        if (!Util.isLollipopAbove()) {
+        if (!Utils.isLollipopAbove()) {
             mAggressive.setVisible(false);
         }
     }

@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import arun.com.chromer.preferences.manager.Preferences;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 
 /**
  * A simple circle view that fills the canvas with a circle fill color. Padding is given to pre L
@@ -49,7 +49,7 @@ public class CircleView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         float outerRadius;
-        if (Util.isLollipopAbove()) {
+        if (Utils.isLollipopAbove()) {
             outerRadius = getMeasuredWidth() / 2;
             canvas.drawCircle(getMeasuredWidth() / 2,
                     getMeasuredWidth() / 2,

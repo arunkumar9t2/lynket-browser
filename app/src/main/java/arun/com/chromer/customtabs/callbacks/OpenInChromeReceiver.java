@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 
 import arun.com.chromer.preferences.manager.Preferences;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 
 public class OpenInChromeReceiver extends BroadcastReceiver {
     public OpenInChromeReceiver() {
@@ -21,9 +21,9 @@ public class OpenInChromeReceiver extends BroadcastReceiver {
         if (url != null) {
             final String customTabPkg = Preferences.customTabApp(context);
 
-            if (Util.isPackageInstalled(context, customTabPkg)) {
+            if (Utils.isPackageInstalled(context, customTabPkg)) {
                 Intent chromeIntentExplicit = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                final ComponentName cN = Util.getBrowserComponentForPackage(context, customTabPkg);
+                final ComponentName cN = Utils.getBrowserComponentForPackage(context, customTabPkg);
 
                 if (cN != null) {
                     chromeIntentExplicit.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -18,7 +18,7 @@ import arun.com.chromer.customtabs.warmup.WarmUpService;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.preferences.widgets.IconSwitchPreference;
 import arun.com.chromer.util.ServiceUtil;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 
 /**
  * Created by Arun on 19/06/2016.
@@ -62,7 +62,7 @@ public class PrefetchPreferenceFragment extends DividerLessPreferenceFragment im
             public boolean onPreferenceClick(Preference preference) {
                 final boolean isChecked = mPrefetchPreference.isChecked();
                 if (isChecked) {
-                    if (!Util.isAccessibilityServiceEnabled(getActivity())) {
+                    if (!Utils.isAccessibilityServiceEnabled(getActivity())) {
                         mPrefetchPreference.setChecked(false);
                         guideUserToAccessibilitySettings(true);
                         mWarmupPreference.setEnabled(true);
@@ -113,7 +113,7 @@ public class PrefetchPreferenceFragment extends DividerLessPreferenceFragment im
     }
 
     private boolean isPrefetchEnabled() {
-        return Util.isAccessibilityServiceEnabled(getActivity()) && Preferences.preFetch(getActivity());
+        return Utils.isAccessibilityServiceEnabled(getActivity()) && Preferences.preFetch(getActivity());
     }
 
     private void guideUserToAccessibilitySettings(boolean prefetchEnabled) {

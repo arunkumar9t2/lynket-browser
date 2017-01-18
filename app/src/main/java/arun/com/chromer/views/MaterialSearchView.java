@@ -36,7 +36,7 @@ import arun.com.chromer.R;
 import arun.com.chromer.search.SearchSuggestions;
 import arun.com.chromer.search.SuggestionAdapter;
 import arun.com.chromer.search.SuggestionItem;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -324,7 +324,7 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
 
     @NonNull
     public String getURL() {
-        return Util.getSearchUrl(getText());
+        return Utils.getSearchUrl(getText());
     }
 
     public void setInteractionListener(@NonNull InteractionListener listener) {
@@ -341,7 +341,7 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
         clearFocus(new Runnable() {
             @Override
             public void run() {
-                mInteractionListener.onSearchPerformed(Util.getSearchUrl(suggestion));
+                mInteractionListener.onSearchPerformed(Utils.getSearchUrl(suggestion));
             }
         });
     }
@@ -355,7 +355,7 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
         if (mNormalCardHeight != -1) {
             return mNormalCardHeight;
         }
-        return Util.dpToPx(50);
+        return Utils.dpToPx(50);
     }
 
     @Override
@@ -397,7 +397,7 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
     }
 
     private int getPredictedSuggestionHeight() {
-        return mCard.getHeight() + (mSearchSuggestions.getMaxSuggestions() * Util.dpToPx(48));
+        return mCard.getHeight() + (mSearchSuggestions.getMaxSuggestions() * Utils.dpToPx(48));
     }
 
     public interface InteractionListener {

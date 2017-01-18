@@ -11,7 +11,7 @@ import com.facebook.rebound.SpringListener;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.WebHeadService;
 
 
@@ -28,8 +28,8 @@ public class SpringChain2D implements SpringListener {
 
     private final int sDispWidth;
 
-    private static final int xDiff = Util.dpToPx(4);
-    private static final int yDiff = Util.dpToPx(1.7);
+    private static final int xDiff = Utils.dpToPx(4);
+    private static final int yDiff = Utils.dpToPx(1.7);
 
     private boolean mDisplacementEnabled = true;
 

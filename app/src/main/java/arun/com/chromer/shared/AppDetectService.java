@@ -21,7 +21,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import arun.com.chromer.preferences.manager.Preferences;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 import timber.log.Timber;
 
 public class AppDetectService extends Service {
@@ -45,7 +45,7 @@ public class AppDetectService extends Service {
             while (!mShouldStopPolling) {
                 try {
                     AppDetection appDetection;
-                    if (Util.isLollipopAbove()) {
+                    if (Utils.isLollipopAbove()) {
                         appDetection = new PostLDetection();
                     } else {
                         appDetection = new PreLDetection();
@@ -89,7 +89,7 @@ public class AppDetectService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (!Util.canReadUsageStats(this)) {
+        if (!Utils.canReadUsageStats(this)) {
             Timber.e("Attempted to poll without usage permission");
             stopSelf();
         }

@@ -31,7 +31,7 @@ import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Benchmark;
 import arun.com.chromer.util.ColorUtil;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.helper.WebSite;
 import de.jetwick.snacktory.HtmlFetcher;
 import de.jetwick.snacktory.JResult;
@@ -106,7 +106,7 @@ public class CustomTabActivity extends AppCompatActivity {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void dispatchDescriptionTask(@Nullable final WebSite webSite) {
-        if (Util.isLollipopAbove()) {
+        if (Utils.isLollipopAbove()) {
             if (webSite != null && webSite.title != null) {
                 final String title = webSite.title;
                 final String faviconUrl = webSite.faviconUrl;

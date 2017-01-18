@@ -127,7 +127,6 @@
         <activity
             android:name=".activities.blacklist.BlacklistManagerActivity"
             android:label="@string/blacklisted_apps"
-            android:launchMode="singleInstance"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -163,6 +162,10 @@
             android:name="io.fabric.ApiKey"
             android:value="${crashlyticsApiKey}"
             tools:replace="android:value" />
+
+        <meta-data
+            android:name="arun.com.chromer.glide.ChromerGideModule"
+            android:value="GlideModule" />
     </application>
 
 </manifest>

@@ -14,7 +14,7 @@ import java.util.List;
 
 import arun.com.chromer.R;
 import arun.com.chromer.shared.Constants;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 import timber.log.Timber;
 
 @SuppressLint("GoogleAppIndexingApiWarning")
@@ -55,7 +55,7 @@ public class ShareInterceptActivity extends AppCompatActivity {
     private void findAndOpenLink(@Nullable String text) {
         if (text == null) return;
 
-        final List<String> urls = Util.findURLs(text);
+        final List<String> urls = Utils.findURLs(text);
         if (!urls.isEmpty()) {
             // use only the first link
             final String url = urls.get(0);

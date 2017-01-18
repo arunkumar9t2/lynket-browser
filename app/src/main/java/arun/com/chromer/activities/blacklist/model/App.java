@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 
 import java.util.Comparator;
 
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 
 /**
  * Created by Arun on 24/01/2016.
@@ -21,7 +21,7 @@ public class App implements Comparable {
 
     public App(Context context, String packageName) {
         this.packageName = packageName;
-        this.appName = Util.getAppNameWithPackage(context, packageName);
+        this.appName = Utils.getAppNameWithPackage(context, packageName);
         try {
             this.appIcon = context.getApplicationContext().getPackageManager().getApplicationIcon(packageName);
         } catch (PackageManager.NameNotFoundException e) {
