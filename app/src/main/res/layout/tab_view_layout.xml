@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="50dp">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
 
     <ImageView
         android:id="@+id/tab_view_icon"
@@ -15,7 +15,7 @@
         android:scaleType="fitCenter"
         android:scaleX="0.75"
         android:scaleY="0.75"
-        tools:ignore="ContentDescription"/>
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/tab_view_text"
@@ -28,5 +28,5 @@
         android:textColor="@android:color/white"
         android:textSize="14sp"
         tools:ignore="RtlHardcoded,SelectableText"
-        android:maxLines="1"/>
+        android:maxLines="1" />
 </RelativeLayout>

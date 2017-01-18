@@ -5,7 +5,6 @@ import android.app.Application;
 import com.crashlytics.android.Crashlytics;
 import com.orm.SugarContext;
 
-import arun.com.chromer.util.FontCache;
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
@@ -29,6 +28,5 @@ public class Chromer extends Application {
     public void onTerminate() {
         super.onTerminate();
         SugarContext.terminate();
-        FontCache.dropCache();
     }
 }

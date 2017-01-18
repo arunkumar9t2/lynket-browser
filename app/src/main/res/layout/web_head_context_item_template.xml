@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:background="?attr/selectableItemBackground"
-              android:clickable="true"
-              android:focusable="true"
-              android:gravity="center_vertical"
-              android:minHeight="56dp"
-              android:orientation="horizontal"
-              android:padding="10dp"
-              android:paddingLeft="15dp"
-              tools:ignore="Overdraw,RtlHardcoded">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="center_vertical"
+    android:minHeight="56dp"
+    android:orientation="horizontal"
+    android:padding="10dp"
+    android:paddingLeft="15dp"
+    tools:ignore="Overdraw,RtlHardcoded">
 
     <ImageView
         android:id="@+id/web_site_icon"
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_gravity="center"
-        tools:ignore="ContentDescription"/>
+        tools:ignore="ContentDescription" />
 
     <RelativeLayout
         android:layout_width="0dp"
@@ -34,7 +34,7 @@
             android:ellipsize="marquee"
             android:maxLines="1"
             android:textAppearance="@style/Preference_TextAppearanceMaterialSubhead"
-            tools:ignore="SelectableText"/>
+            tools:ignore="SelectableText" />
 
         <TextView
             android:id="@+id/web_site_sub_title"
@@ -47,7 +47,7 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="?android:attr/textColorSecondary"
             android:textSize="12sp"
-            tools:ignore="SelectableText"/>
+            tools:ignore="SelectableText" />
 
     </RelativeLayout>
 
@@ -59,7 +59,7 @@
         android:clickable="true"
         android:padding="15dp"
         android:scaleType="fitCenter"
-        tools:ignore="ContentDescription"/>
+        tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/delete_icon"
@@ -69,5 +69,5 @@
         android:clickable="true"
         android:padding="15dp"
         android:scaleType="fitCenter"
-        tools:ignore="ContentDescription"/>
+        tools:ignore="ContentDescription" />
 </LinearLayout>

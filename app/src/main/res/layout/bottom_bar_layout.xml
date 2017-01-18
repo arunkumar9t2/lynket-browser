@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/bottom_bar_root"
-              android:layout_width="match_parent"
-              android:layout_height="48dp"
-              android:layout_gravity="center"
-              android:gravity="center"
-              android:orientation="horizontal"
-              android:paddingLeft="10dp"
-              android:paddingRight="10dp"
-              android:weightSum="9"
-              android:baselineAligned="false">
+    android:id="@+id/bottom_bar_root"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:weightSum="9"
+    android:baselineAligned="false">
 
     <FrameLayout
         android:id="@+id/bottom_bar_open_in_new_tab"
@@ -28,7 +28,7 @@
             android:contentDescription="@string/open_in_new_tab"
             android:gravity="center"
             android:padding="5dp"
-            android:scaleType="fitCenter"/>
+            android:scaleType="fitCenter" />
     </FrameLayout>
 
     <FrameLayout
@@ -48,8 +48,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:padding="5dp"
-            android:scaleType="fitCenter"
-            />
+            android:scaleType="fitCenter" />
     </FrameLayout>
 
     <FrameLayout
@@ -69,6 +68,6 @@
             android:contentDescription="@string/minimize"
             android:gravity="center"
             android:padding="5dp"
-            android:scaleType="fitCenter"/>
+            android:scaleType="fitCenter" />
     </FrameLayout>
 </LinearLayout>
