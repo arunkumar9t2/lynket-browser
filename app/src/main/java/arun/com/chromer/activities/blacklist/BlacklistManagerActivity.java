@@ -105,12 +105,7 @@ public class BlacklistManagerActivity extends AppCompatActivity implements
             if (blackListSwitch != null) {
                 final boolean blackListActive = Preferences.blacklist(this) && Utils.canReadUsageStats(this);
                 Preferences.blacklist(this, blackListActive);
-
                 blackListSwitch.setChecked(Preferences.blacklist(this));
-
-                showSnack(Preferences.blacklist(this)
-                        ? getString(R.string.blacklist_on)
-                        : getString(R.string.blacklist_off));
                 blackListSwitch.setOnCheckedChangeListener(this);
             }
         }
