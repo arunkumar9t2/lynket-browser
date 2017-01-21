@@ -54,7 +54,7 @@ interface Blacklist {
             if (isViewAttached()) {
                 getView().setRefreshing(true);
             }
-            final PackageManager pm = context.getPackageManager();
+            final PackageManager pm = context.getApplicationContext().getPackageManager();
             final Subscription subscription = Observable.fromCallable(new Callable<List<ResolveInfo>>() {
                 @Override
                 public List<ResolveInfo> call() throws Exception {
@@ -83,7 +83,8 @@ interface Blacklist {
                     app.setBlackListed(BlackListManager.isPackageBlackListed(pkg));
                     return app;
                 }
-            }).toSortedList()
+            }).distinct()
+                    .toSortedList()
                     .compose(RxUtils.<List<App>>applySchedulers())
                     .toSingle()
                     .subscribe(new SingleSubscriber<List<App>>() {

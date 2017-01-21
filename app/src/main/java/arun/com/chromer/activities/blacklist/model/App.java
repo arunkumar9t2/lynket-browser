@@ -34,8 +34,8 @@ public class App implements Comparable {
     }
 
     private static int compareApps(App lhs, App rhs) {
-        String lhsName = lhs != null ? lhs.appName : null;
-        String rhsName = rhs != null ? rhs.appName : null;
+        final String lhsName = lhs != null ? lhs.appName : null;
+        final String rhsName = rhs != null ? rhs.appName : null;
 
         boolean lhsBlacklist = lhs != null && lhs.blackListed;
         boolean rhsBlacklist = rhs != null && rhs.blackListed;
@@ -88,6 +88,22 @@ public class App implements Comparable {
 
     public void setBlackListed(boolean blackListed) {
         this.blackListed = blackListed;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        App app = (App) o;
+
+        return packageName != null ? packageName.equals(app.packageName) : app.packageName == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return packageName != null ? packageName.hashCode() : 0;
     }
 
     @Override
