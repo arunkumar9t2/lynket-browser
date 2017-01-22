@@ -45,6 +45,10 @@ public class AppIconModelLoader implements StreamModelLoader<String> {
 
             @Override
             public void cleanup() {
+                closeStream();
+            }
+
+            private void closeStream() {
                 if (inputStream != null) {
                     try {
                         inputStream.close();
@@ -61,7 +65,7 @@ public class AppIconModelLoader implements StreamModelLoader<String> {
 
             @Override
             public void cancel() {
-
+                closeStream();
             }
         };
     }
@@ -74,13 +78,18 @@ public class AppIconModelLoader implements StreamModelLoader<String> {
     @Nullable
     private InputStream convertPackageNameToIconInputStream(final String packageName) {
         try {
-            final Drawable drawable = context.getPackageManager().getApplicationIcon(packageName);
-            final Bitmap bitmap = Utils.drawableToBitmap(drawable);
+            Drawable drawable = context.getPackageManager().getApplicationIcon(packageName);
+            Bitmap bitmap = Utils.drawableToBitmap(drawable);
 
             final ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
 
-            return new ByteArrayInputStream(stream.toByteArray());
+            final ByteArrayInputStream inputStream = new ByteArrayInputStream(stream.toByteArray());
+
+            bitmap.recycle();
+            bitmap = null;
+            drawable = null;
+            return inputStream;
         } catch (PackageManager.NameNotFoundException e) {
             Timber.e(e.toString());
         }

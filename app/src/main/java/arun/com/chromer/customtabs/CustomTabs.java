@@ -19,6 +19,7 @@ import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsSession;
 import android.support.v4.graphics.ColorUtils;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
@@ -44,7 +45,7 @@ import arun.com.chromer.customtabs.warmup.WarmUpService;
 import arun.com.chromer.db.AppColor;
 import arun.com.chromer.db.WebColor;
 import arun.com.chromer.preferences.manager.Preferences;
-import arun.com.chromer.shared.AppDetectService;
+import arun.com.chromer.shared.AppDetectionManager;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.WebHeadService;
@@ -441,9 +442,9 @@ public class CustomTabs {
      */
     private boolean setAppToolbarColor() {
         try {
-            final String lastApp = AppDetectService.getInstance().getLastApp();
+            final String lastApp = AppDetectionManager.getInstance(mActivity).getFilteredPackage();
+            if (TextUtils.isEmpty(lastApp)) return false;
             final List<AppColor> appColors = AppColor.find(AppColor.class, "app = ?", lastApp);
-
             if (!appColors.isEmpty()) {
                 mToolbarColor = appColors.get(0).getColor();
                 return true;
@@ -453,9 +454,7 @@ public class CustomTabs {
                 mActivity.startService(extractorService);
             }
         } catch (Exception e) {
-            if (AppDetectService.getInstance() == null) {
-                mActivity.startService(new Intent(mActivity, AppDetectService.class));
-            }
+            Timber.e(e.toString());
         }
         return false;
     }

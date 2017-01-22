@@ -20,68 +20,48 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.util.Utils;
 import timber.log.Timber;
 
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_CLEAR_LAST_TOP_APP;
+
 public class AppDetectService extends Service {
-
+    // Gap at which we polling the system for current foreground app.
     private static final int POLLING_INTERVAL = 400;
+    // Needed to turn off polling when screen is turned off.
+    private static BroadcastReceiver screenStateReceiver;
+    // Flag to control polling.
+    private boolean stopPolling = false;
+    // Detector to get current foreground app.
+    AppDetector appDetector = new AppDetector() {
+        @NonNull
+        @Override
+        public String getForegroundPackage() {
+            return "";
+        }
+    };
+    // Handler to run our polling.
+    private final Handler detectorHandler = new Handler();
+    // The runnable which runs out detector.
+    private final Runnable appDetectorRunnable = new Runnable() {
 
-    private static AppDetectService sAppDetectService = null;
-
-    private static BroadcastReceiver mScreenStateReceiver;
-
-    private static String mLastDetectedApp = "";
-
-    private boolean mShouldStopPolling = false;
-
-    private final Runnable mAppDetectRunnable = new Runnable() {
-
-        @SuppressWarnings("deprecation")
-        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         @Override
         public void run() {
-            while (!mShouldStopPolling) {
-                try {
-                    AppDetection appDetection;
-                    if (Utils.isLollipopAbove()) {
-                        appDetection = new PostLDetection();
-                    } else {
-                        appDetection = new PreLDetection();
-                    }
-                    String packageName = appDetection.getForegroundApp();
-                    if (!mLastDetectedApp.equalsIgnoreCase(packageName)
-                            && isAllowedPackage(packageName)
-                            && packageName.length() > 0) {
-                        mLastDetectedApp = packageName;
-                        Timber.i("Current app %s", packageName);
-                        // toast(packageName);
-                    }
-
-                    // Sleep and continue again.
-                    Thread.sleep(POLLING_INTERVAL);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            try {
+                final String packageName = appDetector.getForegroundPackage();
+                AppDetectionManager.getInstance(AppDetectService.this).logPackage(packageName);
+            } catch (Exception e) {
+                Timber.e(e.toString());
+            }
+            if (!stopPolling) {
+                detectorHandler.postDelayed(this, POLLING_INTERVAL);
             }
         }
     };
 
-    public static AppDetectService getInstance() {
-        return sAppDetectService;
-    }
-
-    @NonNull
-    public String getLastApp() {
-        if (mLastDetectedApp != null) {
-            return mLastDetectedApp.trim();
-        } else return "";
-    }
-
     private void clearLastAppIfNeeded(Intent intent) {
-        if (intent != null && intent.getBooleanExtra(Constants.EXTRA_KEY_CLEAR_LAST_TOP_APP, false)) {
-            mLastDetectedApp = "";
+        if (intent != null && intent.getBooleanExtra(EXTRA_KEY_CLEAR_LAST_TOP_APP, false)) {
+            AppDetectionManager.getInstance(this).clear();
             Timber.d("Last app cleared");
         }
     }
@@ -93,14 +73,18 @@ public class AppDetectService extends Service {
             Timber.e("Attempted to poll without usage permission");
             stopSelf();
         }
+        registerScreenReceiver();
+        if (Utils.isLollipopAbove()) {
+            appDetector = new LollipopDetector();
+        } else {
+            appDetector = new PreLollipopDetector();
+        }
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
         clearLastAppIfNeeded(intent);
-        sAppDetectService = this;
-        registerScreenReceiver();
         startDetection();
         Timber.d("Started");
         return START_STICKY;
@@ -113,36 +97,32 @@ public class AppDetectService extends Service {
 
     @Override
     public void onDestroy() {
-        mShouldStopPolling = true;
-
+        stopDetection();
+        unregisterReceiver(screenStateReceiver);
+        AppDetectionManager.getInstance(this).clear();
         Timber.d("Destroying");
-        unregisterReceiver(mScreenStateReceiver);
-        sAppDetectService = null;
         super.onDestroy();
     }
 
     private void startDetection() {
-        Thread mPollThread;
-        // Create a new instance to start thread again
-        mPollThread = new Thread(mAppDetectRunnable);
-        mPollThread.start();
+        stopPolling = false;
+        kickStartDetection();
+    }
+
+    private void kickStartDetection() {
+        Timber.d("Kick starting polling");
+        detectorHandler.post(appDetectorRunnable);
+    }
+
+    private void stopDetection() {
+        stopPolling = true;
     }
 
     private void registerScreenReceiver() {
-        // We should prevent the same receiver from registering again, to do this we will attempt to
-        // register a existing instance of Screen receiver and check if IllegalArgumentException
-        // is thrown.
-        if (mScreenStateReceiver != null) {
-            try {
-                unregisterReceiver(mScreenStateReceiver);
-            } catch (Exception ignored) {
-            }
-        }
-
-        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        final IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
-        mScreenStateReceiver = new ScreenStateReceiver();
-        registerReceiver(mScreenStateReceiver, filter);
+        screenStateReceiver = new ScreenStateReceiver();
+        registerReceiver(screenStateReceiver, filter);
     }
 
     @SuppressWarnings("unused")
@@ -155,55 +135,33 @@ public class AppDetectService extends Service {
         });
     }
 
-    private boolean isAllowedPackage(String packageName) {
-        // Ignore system pop ups
-        if (packageName.equalsIgnoreCase("android")) return false;
-
-        // Ignore our app
-        if (packageName.equalsIgnoreCase(getPackageName())) return false;
-
-        // Chances are that we picked the opening custom tab, so let's ignore our default provider
-        // to be safe
-        if (packageName.equalsIgnoreCase(Preferences.customTabApp(this))) return false;
-
-        // Ignore google quick search box
-        if (packageName.equalsIgnoreCase("com.google.android.googlequicksearchbox")) return false;
-
-        // There can also be cases where there is no default provider set, so lets ignore all possible
-        // custom tab providers to be sure. This is safe since browsers don't call our app anyways.
-
-        // Commenting, research needed
-        // if (mCustomTabPackages.contains(packageName)) return true;
-
-        return true;
-    }
-
-    private interface AppDetection {
+    private interface AppDetector {
         @NonNull
-        String getForegroundApp();
+        String getForegroundPackage();
     }
 
-    public class ScreenStateReceiver extends BroadcastReceiver {
+    private class ScreenStateReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
-                mShouldStopPolling = true;
+                stopDetection();
+                Timber.d("Turned off polling");
             } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
-                mShouldStopPolling = false;
                 startDetection();
+                Timber.d("Turned on polling");
             }
         }
     }
 
-    private class PreLDetection implements AppDetection {
+    private class PreLollipopDetector implements AppDetector {
 
         @NonNull
         @Override
-        public String getForegroundApp() {
-            ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        public String getForegroundPackage() {
+            final ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
             //noinspection deprecation
-            ActivityManager.RunningTaskInfo runningTaskInfo = am.getRunningTasks(1).get(0);
+            final ActivityManager.RunningTaskInfo runningTaskInfo = am.getRunningTasks(1).get(0);
             if (runningTaskInfo != null) {
                 return runningTaskInfo.topActivity.getPackageName();
             }
@@ -212,28 +170,26 @@ public class AppDetectService extends Service {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
-    private class PostLDetection implements AppDetection {
+    private class LollipopDetector implements AppDetector {
 
         @NonNull
         @Override
-        public String getForegroundApp() {
-            long time = System.currentTimeMillis();
-            UsageStatsManager usageMan = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
-            List<UsageStats> stats = usageMan.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 1000, time);
+        public String getForegroundPackage() {
+            final long time = System.currentTimeMillis();
+            final UsageStatsManager usageMan = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
+            final List<UsageStats> stats = usageMan.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 1000, time);
 
-            SortedMap<Long, UsageStats> sortedMap = new TreeMap<>();
+            final SortedMap<Long, UsageStats> sortedMap = new TreeMap<>();
             for (UsageStats usageStats : stats) {
-                // Store the list in a sorted map, will be used to retrieve the recent app later
                 if (usageStats != null) {
                     sortedMap.put(usageStats.getLastTimeUsed(), usageStats);
-                    // Timber.d(usageStats.getPackageName());
                 }
             }
-
             if (!sortedMap.isEmpty()) {
                 final UsageStats usageStats = sortedMap.get(sortedMap.lastKey());
                 return usageStats.getPackageName();
             }
+            sortedMap.clear();
             return "";
         }
     }
