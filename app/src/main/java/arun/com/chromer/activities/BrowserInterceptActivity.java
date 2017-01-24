@@ -2,16 +2,21 @@ package arun.com.chromer.activities;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.widget.Toast;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.blacklist.BlackListManager;
@@ -20,9 +25,11 @@ import arun.com.chromer.shared.AppDetectionManager;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.helper.ProxyActivity;
+import timber.log.Timber;
 
 @SuppressLint("GoogleAppIndexingApiWarning")
 public class BrowserInterceptActivity extends AppCompatActivity {
+    private MaterialDialog dialog;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -91,18 +98,55 @@ public class BrowserInterceptActivity extends AppCompatActivity {
      */
     private void performBlacklistAction() {
         final String secondaryBrowserPackage = Preferences.secondaryBrowserPackage(this);
+
+        if (secondaryBrowserPackage == null) {
+            showSecondaryBrowserHandlingError(R.string.secondary_browser_not_error);
+            return;
+        }
+
         if (Utils.isPackageInstalled(this, secondaryBrowserPackage)) {
             final Intent webIntentExplicit = getOriginalIntentCopy(getIntent());
             webIntentExplicit.setPackage(secondaryBrowserPackage);
             try {
                 startActivity(webIntentExplicit);
+                finish();
             } catch (Exception e) {
-                // TODO Handle exception from secondary browser
+                Timber.e("Secondary browser launch error: %s", e.getMessage());
+                showSecondaryBrowserHandlingError(R.string.secondary_browser_launch_error);
             }
         } else {
-            // TODO Handle browser uninstalled case
+            showSecondaryBrowserHandlingError(R.string.secondary_browser_not_installed);
         }
-        finish();
+    }
+
+    private void showSecondaryBrowserHandlingError(@StringRes int stringRes) {
+        closeDialogs();
+        dialog = new MaterialDialog.Builder(this)
+                .title(R.string.secondary_browser_launching_error_title)
+                .content(stringRes)
+                .iconRes(R.mipmap.ic_launcher)
+                .positiveText(R.string.launch_setting)
+                .negativeText(android.R.string.cancel)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        final Intent chromerIntent = getPackageManager().getLaunchIntentForPackage(getPackageName());
+                        chromerIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(chromerIntent);
+                    }
+                })
+                .dismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        finish();
+                    }
+                }).show();
+    }
+
+    private void closeDialogs() {
+        if (dialog != null) {
+            dialog.dismiss();
+        }
     }
 
     private void launchWebHead(boolean isNewTab) {
