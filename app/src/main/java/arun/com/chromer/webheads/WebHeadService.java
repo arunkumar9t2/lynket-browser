@@ -60,25 +60,26 @@ import arun.com.chromer.webheads.ui.context.WebHeadContextActivity;
 import de.jetwick.snacktory.JResult;
 import timber.log.Timber;
 
+import static android.os.AsyncTask.THREAD_POOL_EXECUTOR;
+
 public class WebHeadService extends Service implements WebHeadContract,
         CustomTabManager.ConnectionCallback, PageExtractTasksManager.ProgressListener {
-    private static String sLastOpenedUrl = "";
-    /**
-     * Connection manager instance to connect and warm up custom tab providers
-     */
-    private static CustomTabManager mCustomTabManager;
+
     /**
      * Reference to all the web heads created on screen. Ordered in the order of creation by using
      * {@link LinkedHashMap}. The key must be unique and is usually the url the web head represents.
      */
-    private final Map<String, WebHead> mWebHeads = new LinkedHashMap<>();
-    /**
-     * The base spring system to create our springs.
-     */
-    private final SpringSystem mSpringSystem = SpringSystem.create();
+    private final Map<String, WebHead> webHeads = new LinkedHashMap<>();
+
+    private static String lastOpenedUrl = "";
+    // Connection manager instance to connect and warm up custom tab providers
+    private static CustomTabManager customTabManager;
+    // The base spring system to create our springs.
+    private final SpringSystem springSystem = SpringSystem.create();
     // Clubbed movement manager
-    private SpringChain2D mSpringChain2D;
-    private boolean mCustomTabConnected;
+    private SpringChain2D springChain2D;
+    private boolean customTabConnected;
+
     // Max visible web heads is set 6 for performance reasons.
     public static final int MAX_VISIBLE_WEB_HEADS = 5;
 
@@ -92,19 +93,19 @@ public class WebHeadService extends Service implements WebHeadContract,
         super.onCreate();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(this)) {
-                Timber.d("Exited webhead service since overlay permission was revoked");
+                Timber.d("Exited web head service since overlay permission was revoked");
                 stopSelf();
                 return;
             }
         }
-        mSpringChain2D = SpringChain2D.create(this);
-        RemoveWebHead.get(this);
+        springChain2D = SpringChain2D.create(this);
+        RemoveWebHead.init(this);
 
         // bind to custom tab session
         bindToCustomTabSession();
         registerReceivers();
-        PageExtractTasksManager.registerListener(this);
 
+        PageExtractTasksManager.registerListener(this);
         showNotification();
     }
 
@@ -121,8 +122,8 @@ public class WebHeadService extends Service implements WebHeadContract,
 
         unregisterReceivers();
 
-        if (mCustomTabManager != null) {
-            mCustomTabManager.unbindCustomTabsService(this);
+        if (customTabManager != null) {
+            customTabManager.unbindCustomTabsService(this);
         }
 
         stopForeground(true);
@@ -131,8 +132,8 @@ public class WebHeadService extends Service implements WebHeadContract,
     }
 
     public static CustomTabsSession getTabSession() {
-        if (mCustomTabManager != null) {
-            return mCustomTabManager.getSession();
+        if (customTabManager != null) {
+            return customTabManager.getSession();
         }
         return null;
     }
@@ -163,7 +164,7 @@ public class WebHeadService extends Service implements WebHeadContract,
         startForeground(1, notification);
     }
 
-    private void processIntent(Intent intent) {
+    private void processIntent(@Nullable Intent intent) {
         if (intent == null || intent.getDataString() == null) return; // don't do anything
         final boolean isFromNewTab = intent.getBooleanExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, false);
         final boolean isMinimized = intent.getBooleanExtra(Constants.EXTRA_KEY_MINIMIZE, false);
@@ -178,28 +179,28 @@ public class WebHeadService extends Service implements WebHeadContract,
 
     private void addWebHead(final String webHeadUrl, final boolean isNewTab, final boolean isMinimized) {
         PageExtractTasksManager.startExtraction(webHeadUrl);
-        mSpringChain2D.clear();
+        springChain2D.clear();
 
         final WebHead newWebHead = new WebHead(/*Service*/ this, webHeadUrl, /*listener*/ this);
         newWebHead.setFromNewTab(isNewTab);
 
-        mSpringChain2D.setMasterSprings(newWebHead.getXSpring(), newWebHead.getYSpring());
+        springChain2D.setMasterSprings(newWebHead.getXSpring(), newWebHead.getYSpring());
 
-        int index = mWebHeads.values().size();
-        for (WebHead oldWebHead : mWebHeads.values()) {
+        int index = webHeads.values().size();
+        for (WebHead oldWebHead : webHeads.values()) {
             oldWebHead.setMaster(false);
             if (shouldQueue(index + 1)) {
                 oldWebHead.setInQueue(true);
             } else {
                 oldWebHead.setSpringConfig(SpringConfig.fromOrigamiTensionAndFriction(90, 9 + (index * 5)));
-                mSpringChain2D.addSlaveSprings(oldWebHead.getXSpring(), oldWebHead.getYSpring());
+                springChain2D.addSlaveSprings(oldWebHead.getXSpring(), oldWebHead.getYSpring());
             }
             index--;
         }
-        mSpringChain2D.rest();
+        springChain2D.rest();
 
         newWebHead.reveal();
-        mWebHeads.put(webHeadUrl, newWebHead);
+        webHeads.put(webHeadUrl, newWebHead);
 
         if (Preferences.aggressiveLoading(this) && !isMinimized) {
             DocumentUtils.openNewCustomTab(this, newWebHead);
@@ -213,12 +214,12 @@ public class WebHeadService extends Service implements WebHeadContract,
     @Override
     public void onUrlUnShortened(String originalUrl, String unShortenedUrl) {
         // First check if the associated web head is active
-        final WebHead webHead = mWebHeads.get(originalUrl);
+        final WebHead webHead = webHeads.get(originalUrl);
         if (webHead != null) {
             webHead.setUnShortenedUrl(unShortenedUrl);
             if (!Preferences.aggressiveLoading(this)) {
-                if (mCustomTabConnected)
-                    mCustomTabManager.mayLaunchUrl(Uri.parse(unShortenedUrl), null, getPossibleUrls());
+                if (customTabConnected)
+                    customTabManager.mayLaunchUrl(Uri.parse(unShortenedUrl), null, getPossibleUrls());
                 else
                     deferMayLaunchUntilConnected(unShortenedUrl);
             }
@@ -227,7 +228,7 @@ public class WebHeadService extends Service implements WebHeadContract,
 
     @Override
     public void onUrlExtracted(String originalUrl, @Nullable JResult result) {
-        final WebHead webHead = mWebHeads.get(originalUrl);
+        final WebHead webHead = webHeads.get(originalUrl);
         if (webHead != null && result != null) {
             try {
                 final String faviconUrl = result.getFaviconUrl();
@@ -243,7 +244,7 @@ public class WebHeadService extends Service implements WebHeadContract,
                                     return;
                                 }
                                 // dispatch color extraction task
-                                new ColorExtractionTask(webHead, resource).execute();
+                                new ColorExtractionTask(webHead, resource).executeOnExecutor(THREAD_POOL_EXECUTOR);
 
                                 final RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), resource);
                                 roundedBitmapDrawable.setAntiAlias(true);
@@ -260,9 +261,10 @@ public class WebHeadService extends Service implements WebHeadContract,
     }
 
     private boolean isLinkAlreadyLoaded(@Nullable String urlToLoad) {
-        return urlToLoad == null || mWebHeads.containsKey(urlToLoad);
+        return urlToLoad == null || webHeads.containsKey(urlToLoad);
     }
 
+    // TODO Rework this crappy logic.
     private void deferMayLaunchUntilConnected(final String urlToLoad) {
         final Thread deferThread = new Thread(new Runnable() {
             @Override
@@ -270,9 +272,9 @@ public class WebHeadService extends Service implements WebHeadContract,
                 int i = 0;
                 while (i < 10) {
                     try {
-                        if (mCustomTabConnected) {
+                        if (customTabConnected) {
                             Thread.sleep(300);
-                            boolean ok = mCustomTabManager.mayLaunchUrl(Uri.parse(urlToLoad),
+                            boolean ok = customTabManager.mayLaunchUrl(Uri.parse(urlToLoad),
                                     null,
                                     getPossibleUrls());
                             Timber.d("Deferred may launch was %b", ok);
@@ -305,7 +307,7 @@ public class WebHeadService extends Service implements WebHeadContract,
 
             Timber.d("Priority : %s", priorityUrl);
 
-            List<Bundle> possibleUrls = new ArrayList<>();
+            final List<Bundle> possibleUrls = new ArrayList<>();
 
             for (String url : urlStack) {
                 if (url == null) continue;
@@ -316,14 +318,14 @@ public class WebHeadService extends Service implements WebHeadContract,
                 Timber.d("Others : %s", url);
             }
             // Now let's prepare urls
-            boolean ok = mCustomTabManager.mayLaunchUrl(Uri.parse(priorityUrl), null, possibleUrls);
+            boolean ok = customTabManager.mayLaunchUrl(Uri.parse(priorityUrl), null, possibleUrls);
             Timber.d("May launch was %b", ok);
         }
     }
 
     private List<Bundle> getPossibleUrls() {
-        List<Bundle> possibleUrls = new ArrayList<>();
-        for (WebHead webHead : mWebHeads.values()) {
+        final List<Bundle> possibleUrls = new ArrayList<>();
+        for (WebHead webHead : webHeads.values()) {
             String url = webHead.getUrl();
 
             Bundle bundle = new Bundle();
@@ -334,10 +336,10 @@ public class WebHeadService extends Service implements WebHeadContract,
     }
 
     private Stack<String> getUrlStack(String sLastOpenedUrl) {
-        Stack<String> urlStack = new Stack<>();
-        if (mWebHeads.containsKey(sLastOpenedUrl)) {
+        final Stack<String> urlStack = new Stack<>();
+        if (webHeads.containsKey(sLastOpenedUrl)) {
             boolean foundWebHead = false;
-            for (WebHead webhead : mWebHeads.values()) {
+            for (WebHead webhead : webHeads.values()) {
                 if (!foundWebHead) {
                     foundWebHead = webhead.getUrl().equalsIgnoreCase(sLastOpenedUrl);
                     if (!foundWebHead) urlStack.push(webhead.getUrl());
@@ -346,7 +348,7 @@ public class WebHeadService extends Service implements WebHeadContract,
                 }
             }
         } else {
-            for (WebHead webhead : mWebHeads.values()) {
+            for (WebHead webhead : webHeads.values()) {
                 urlStack.push(webhead.getUrl());
             }
         }
@@ -354,34 +356,35 @@ public class WebHeadService extends Service implements WebHeadContract,
     }
 
     private void bindToCustomTabSession() {
-        if (mCustomTabManager != null) {
+        if (customTabManager != null) {
             // Already an instance exists, so we will un bind the current connection and then
             // bind again.
             Timber.d("Severing existing connection");
-            mCustomTabManager.unbindCustomTabsService(this);
+            customTabManager.unbindCustomTabsService(this);
         }
 
-        mCustomTabManager = new CustomTabManager();
-        mCustomTabManager.setConnectionCallback(this);
-        mCustomTabManager.setNavigationCallback(new WebHeadNavigationCallback());
+        customTabManager = new CustomTabManager();
+        customTabManager.setConnectionCallback(this);
+        customTabManager.setNavigationCallback(new WebHeadNavigationCallback());
 
-        boolean ok = mCustomTabManager.bindCustomTabsService(this);
+        boolean ok = customTabManager.bindCustomTabsService(this);
         if (ok) Timber.d("Binding successful");
     }
 
     private void removeWebHeads() {
-        for (WebHead webhead : mWebHeads.values()) {
+        for (WebHead webhead : webHeads.values()) {
             if (webhead != null) webhead.destroySelf(false);
         }
         // Since no callback is received clear the map manually.
-        mWebHeads.clear();
-        Timber.d("WebHeads: %d", mWebHeads.size());
+        webHeads.clear();
+        springChain2D.clear();
+        Timber.d("WebHeads: %d", webHeads.size());
     }
 
     private void updateWebHeadColors(@ColorInt int webHeadColor) {
         final AnimatorSet animatorSet = new AnimatorSet();
         List<Animator> animators = new LinkedList<>();
-        for (WebHead webhead : mWebHeads.values()) {
+        for (WebHead webhead : webHeads.values()) {
             animators.add(webhead.getRevealAnimator(webHeadColor));
         }
         animatorSet.playTogether(animators);
@@ -389,18 +392,18 @@ public class WebHeadService extends Service implements WebHeadContract,
     }
 
     private void updateSpringChain() {
-        mSpringChain2D.rest();
-        mSpringChain2D.clear();
-        mSpringChain2D.enableDisplacement();
+        springChain2D.rest();
+        springChain2D.clear();
+        springChain2D.enableDisplacement();
         // Index that is used to differentiate spring config
-        int springChainIndex = mWebHeads.values().size();
+        int springChainIndex = webHeads.values().size();
         // Index that is used to determine if the web hed should be in queue.
-        int index = mWebHeads.values().size();
-        for (WebHead webHead : mWebHeads.values()) {
+        int index = webHeads.values().size();
+        for (WebHead webHead : webHeads.values()) {
             if (webHead != null) {
                 if (webHead.isMaster()) {
                     // Master will never be in queue, so no check is made.
-                    mSpringChain2D.setMasterSprings(webHead.getXSpring(), webHead.getYSpring());
+                    springChain2D.setMasterSprings(webHead.getXSpring(), webHead.getYSpring());
                 } else {
                     if (shouldQueue(index)) {
                         webHead.setInQueue(true);
@@ -408,7 +411,7 @@ public class WebHeadService extends Service implements WebHeadContract,
                         webHead.setInQueue(false);
                         // We should add the springs to our chain only if the web head is active
                         webHead.setSpringConfig(SpringConfig.fromOrigamiTensionAndFriction(90, 9 + (springChainIndex * 5)));
-                        mSpringChain2D.addSlaveSprings(webHead.getXSpring(), webHead.getYSpring());
+                        springChain2D.addSlaveSprings(webHead.getXSpring(), webHead.getYSpring());
                     }
                     springChainIndex--;
                 }
@@ -418,11 +421,11 @@ public class WebHeadService extends Service implements WebHeadContract,
     }
 
     private void selectNextMaster() {
-        final ListIterator<String> it = new ArrayList<>(mWebHeads.keySet()).listIterator(mWebHeads.size());
+        final ListIterator<String> it = new ArrayList<>(webHeads.keySet()).listIterator(webHeads.size());
         //noinspection LoopStatementThatDoesntLoop
         while (it.hasPrevious()) {
             final String key = it.previous();
-            final WebHead toBeMaster = mWebHeads.get(key);
+            final WebHead toBeMaster = webHeads.get(key);
             if (toBeMaster != null) {
                 toBeMaster.setMaster(true);
                 updateSpringChain();
@@ -440,13 +443,13 @@ public class WebHeadService extends Service implements WebHeadContract,
             DocumentUtils.smartOpenNewTab(this, webHead);
 
             // Store the last opened url
-            sLastOpenedUrl = webHead.getUrl();
+            lastOpenedUrl = webHead.getUrl();
             // If user prefers to the close the head on opening the link, then call destroySelf()
             // which will take care of closing and detaching the web head
             if (Preferences.webHeadsCloseOnOpen(WebHeadService.this)) {
                 webHead.destroySelf(true);
                 // Since the current url is opened, lets prepare the next set of urls
-                prepareNextSetOfUrls(sLastOpenedUrl);
+                prepareNextSetOfUrls(lastOpenedUrl);
             }
             hideRemoveView();
         }
@@ -455,7 +458,7 @@ public class WebHeadService extends Service implements WebHeadContract,
     @Override
     public void onWebHeadDestroyed(@NonNull WebHead webHead, boolean isLastWebHead) {
         webHead.setMaster(false);
-        mWebHeads.remove(webHead.getUrl());
+        webHeads.remove(webHead.getUrl());
 
         if (isLastWebHead) {
             RemoveWebHead.get(this).destroyAnimator(new Runnable() {
@@ -476,23 +479,23 @@ public class WebHeadService extends Service implements WebHeadContract,
 
     @Override
     public void onMasterWebHeadMoved(int x, int y) {
-        mSpringChain2D.performGroupMove(x, y);
+        springChain2D.performGroupMove(x, y);
     }
 
     @NonNull
     @Override
     public Spring newSpring() {
-        return mSpringSystem.createSpring();
+        return springSystem.createSpring();
     }
 
     @Override
     public void onMasterLockedToRemove() {
-        mSpringChain2D.disableDisplacement();
+        springChain2D.disableDisplacement();
     }
 
     @Override
     public void onMasterReleasedFromRemove() {
-        mSpringChain2D.enableDisplacement();
+        springChain2D.enableDisplacement();
     }
 
     @Override
@@ -502,11 +505,11 @@ public class WebHeadService extends Service implements WebHeadContract,
 
     @Override
     public void onMasterLongClick() {
-        final ListIterator<String> it = new ArrayList<>(mWebHeads.keySet()).listIterator(mWebHeads.size());
+        final ListIterator<String> it = new ArrayList<>(webHeads.keySet()).listIterator(webHeads.size());
         ArrayList<WebSite> webSites = new ArrayList<>();
         while (it.hasPrevious()) {
             final String key = it.previous();
-            final WebHead webHead = mWebHeads.get(key);
+            final WebHead webHead = webHeads.get(key);
             if (webHead != null) {
                 webSites.add(webHead.getWebsite());
             }
@@ -515,8 +518,8 @@ public class WebHeadService extends Service implements WebHeadContract,
     }
 
 
-    private void closeWebHeadByUrl(String url) {
-        final WebHead webHead = mWebHeads.get(url);
+    private void closeWebHeadByUrl(@NonNull String url) {
+        final WebHead webHead = webHeads.get(url);
         if (webHead != null) {
             webHead.destroySelf(true);
         }
@@ -531,13 +534,13 @@ public class WebHeadService extends Service implements WebHeadContract,
 
     @Override
     public void onCustomTabsConnected() {
-        mCustomTabConnected = true;
+        customTabConnected = true;
         Timber.d("Connected to custom tabs successfully");
     }
 
     @Override
     public void onCustomTabsDisconnected() {
-        mCustomTabConnected = false;
+        customTabConnected = false;
     }
 
     private void hideRemoveView() {
@@ -554,9 +557,9 @@ public class WebHeadService extends Service implements WebHeadContract,
                     break;
                 case TAB_HIDDEN:
                     // When a tab is exited, prepare the other urls.
-                    prepareNextSetOfUrls(sLastOpenedUrl);
+                    prepareNextSetOfUrls(lastOpenedUrl);
                     // Clear the last opened url flag
-                    sLastOpenedUrl = "";
+                    lastOpenedUrl = "";
                     break;
             }
         }

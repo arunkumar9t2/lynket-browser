@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -85,7 +86,19 @@ public class RemoveWebHead extends FrameLayout {
         sWindowManager.addView(this, mWindowParams);
     }
 
-    public static RemoveWebHead get(Context context) {
+    public static void init(@NonNull Context context) {
+        get(context);
+    }
+
+    /**
+     * Returns an instance of this view. If the view is not initialized, then a new view is created
+     * and returned.
+     * The returned view might not have been laid out yet.
+     *
+     * @param context
+     * @return
+     */
+    public synchronized static RemoveWebHead get(@NonNull Context context) {
         if (sOurInstance != null)
             return sOurInstance;
         else {

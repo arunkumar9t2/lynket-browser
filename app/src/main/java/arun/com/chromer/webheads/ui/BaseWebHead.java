@@ -265,11 +265,11 @@ public abstract class BaseWebHead extends FrameLayout {
         return WEB_HEAD_COUNT == 0;
     }
 
-    private void setWebHeadElevation(int elevationPX) {
+    private void setWebHeadElevation(int elevationPx) {
         if (Utils.isLollipopAbove()) {
             if (mCircleBackground != null && mRevealView != null) {
-                mCircleBackground.setElevation(elevationPX);
-                mRevealView.setElevation(elevationPX + 1);
+                mCircleBackground.setElevation(elevationPx);
+                mRevealView.setElevation(elevationPx + 1);
             }
         }
     }
@@ -279,7 +279,7 @@ public abstract class BaseWebHead extends FrameLayout {
         mRevealView.clearAnimation();
         initRevealView(newWebHeadColor);
 
-        AnimatorSet animator = new AnimatorSet();
+        final AnimatorSet animator = new AnimatorSet();
         animator.playTogether(
                 ObjectAnimator.ofFloat(mRevealView, "scaleX", 1f),
                 ObjectAnimator.ofFloat(mRevealView, "scaleY", 1f),

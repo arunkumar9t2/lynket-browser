@@ -22,12 +22,16 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import arun.com.chromer.BuildConfig;
-import arun.com.chromer.R;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.physics.MovementTracker;
 import arun.com.chromer.webheads.physics.SpringConfigs;
 import timber.log.Timber;
+
+import static android.view.MotionEvent.ACTION_CANCEL;
+import static android.view.MotionEvent.ACTION_DOWN;
+import static android.view.MotionEvent.ACTION_MOVE;
+import static android.view.MotionEvent.ACTION_UP;
 
 /**
  * Web head object which adds draggable and gesture functionality.
@@ -49,16 +53,12 @@ public class WebHead extends BaseWebHead implements SpringListener {
     private boolean mWasClicked;
     // True when touched down and false otherwise
     private boolean mScaledDown;
-    // If this is true, then on releasing the web head, we close all others and clean up.
-    private boolean mShouldCloseAll;
     // If web head is resting on the sides
     private boolean mIsCoasting = false;
     // Minimum horizontal velocity that we need to move the web head from one end of the scree to another
     private static int MINIMUM_HORIZONTAL_FLING_VELOCITY = 0;
     // Touch slop of the device
     private final int mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
-    // Long press duration of device
-    private static final int mLongPressDuration = ViewConfiguration.getLongPressTimeout();
     // Gesture detector to recognize fling and click on web heads
     private final GestureDetector mGestureDetector = new GestureDetector(getContext(), new GestureDetectorListener());
     // Individual springs to control X, Y and scale of the web head
@@ -127,7 +127,8 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        // Don't react to any touch event and consume it when we are being destroyed
+        // Don't react to any touch event and consume it when we are being destroyed, if we are a
+        // a slave or if we are in queue.
         if (mDestroyed || !mMaster || mInQueue) return true;
         try {
             // Reset gesture flag on each event
@@ -140,14 +141,14 @@ public class WebHead extends BaseWebHead implements SpringListener {
             if (mWasClicked) return true;
 
             switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
+                case ACTION_DOWN:
                     handleTouchDown(event);
                     break;
-                case MotionEvent.ACTION_MOVE:
+                case ACTION_MOVE:
                     handleMove(event);
                     break;
-                case MotionEvent.ACTION_UP:
-                case MotionEvent.ACTION_CANCEL:
+                case ACTION_UP:
+                case ACTION_CANCEL:
                     if (handleTouchUp())
                         return true;
                     break;
@@ -235,11 +236,6 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
     private boolean handleTouchUp() {
         cancelToast();
-        if (mShouldCloseAll) {
-            sTimer.purge();
-            mContract.closeAll();
-            return true;
-        }
         if (mWasRemoveLocked) {
             // If head was locked onto a remove bubble before, then kill ourselves
             destroySelf(true);
@@ -257,28 +253,6 @@ public class WebHead extends BaseWebHead implements SpringListener {
         RemoveWebHead.disappear();
         scheduleCoastingTask();
         return false;
-    }
-
-    private void scheduleLongPressToCloseTask() {
-        if (sLongPressToCloseAllTask != null) {
-            sLongPressToCloseAllTask.cancel();
-        }
-        sLongPressToCloseAllTask = new TimerTask() {
-            @Override
-            public void run() {
-                mShouldCloseAll = true;
-                post(new Runnable() {
-                    @Override
-                    public void run() {
-                        cancelToast();
-                        sToast = Toast.makeText(getContext(), R.string.close_all_explanation, Toast.LENGTH_SHORT);
-                        sToast.setGravity(Gravity.CENTER, 0, 0);
-                        sToast.show();
-                    }
-                });
-            }
-        };
-        sTimer.schedule(sLongPressToCloseAllTask, 3000);
     }
 
     /**
@@ -357,11 +331,9 @@ public class WebHead extends BaseWebHead implements SpringListener {
             mWasRemoveLocked = true;
             mBadgeView.setVisibility(INVISIBLE);
             mContract.onMasterLockedToRemove();
-            scheduleLongPressToCloseTask();
             return true;
         } else {
             mWasRemoveLocked = false;
-            mShouldCloseAll = false;
             cancelToast();
             if (sLongPressToCloseAllTask != null) {
                 sLongPressToCloseAllTask.cancel();
