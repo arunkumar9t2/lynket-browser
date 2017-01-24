@@ -33,7 +33,7 @@ import butterknife.ButterKnife;
 
 public class BlacklistManagerActivity extends AppCompatActivity implements
         Blacklist.View,
-        BlackListAppsAdapter.BlackListItemClickedListener,
+        BlacklistAdapter.BlackListItemClickedListener,
         CompoundButton.OnCheckedChangeListener, SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.toolbar)
@@ -47,7 +47,7 @@ public class BlacklistManagerActivity extends AppCompatActivity implements
 
     private Blacklist.Presenter presenter;
 
-    private final BlackListAppsAdapter blackListAppsAdapter = new BlackListAppsAdapter(this, this);
+    private final BlacklistAdapter blacklistAdapter = new BlacklistAdapter(this, this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +58,7 @@ public class BlacklistManagerActivity extends AppCompatActivity implements
         setupToolbar();
 
         blackListedAppsList.setLayoutManager(new LinearLayoutManager(this));
-        blackListedAppsList.setAdapter(blackListAppsAdapter);
+        blackListedAppsList.setAdapter(blacklistAdapter);
 
         loadApps();
     }
@@ -81,7 +81,7 @@ public class BlacklistManagerActivity extends AppCompatActivity implements
     @Override
     protected void onDestroy() {
         presenter.cleanUp();
-        blackListAppsAdapter.cleanUp();
+        blacklistAdapter.cleanUp();
         super.onDestroy();
     }
 
@@ -161,7 +161,7 @@ public class BlacklistManagerActivity extends AppCompatActivity implements
 
     @Override
     public void setApps(@NonNull List<App> apps) {
-        blackListAppsAdapter.setApps(apps);
+        blacklistAdapter.setApps(apps);
     }
 
     @Override

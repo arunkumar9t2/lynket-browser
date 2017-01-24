@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Arun on 24/01/2016.
  */
-class BlackListAppsAdapter extends RecyclerView.Adapter<BlackListAppsAdapter.BlackListItemViewHolder> {
+class BlacklistAdapter extends RecyclerView.Adapter<BlacklistAdapter.BlackListItemViewHolder> {
     private WeakReference<Activity> activityRef = new WeakReference<>(null);
     private final List<App> apps = new ArrayList<>();
 
@@ -38,7 +38,7 @@ class BlackListAppsAdapter extends RecyclerView.Adapter<BlackListAppsAdapter.Bla
         }
     };
 
-    BlackListAppsAdapter(@NonNull Activity activity, @Nullable BlackListItemClickedListener listener) {
+    BlacklistAdapter(@NonNull Activity activity, @Nullable BlackListItemClickedListener listener) {
         this.activityRef = new WeakReference<>(activity);
         if (listener != null) {
             this.listener = listener;
@@ -82,7 +82,7 @@ class BlackListAppsAdapter extends RecyclerView.Adapter<BlackListAppsAdapter.Bla
         notifyDataSetChanged();
     }
 
-    public void cleanUp() {
+    void cleanUp() {
         if (activityRef != null) {
             activityRef.clear();
             activityRef = null;
