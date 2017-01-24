@@ -19,27 +19,28 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import arun.com.chromer.activities.blacklist.model.App;
 import arun.com.chromer.util.Utils;
 import timber.log.Timber;
 
-public class AppIconModelLoader implements StreamModelLoader<String> {
+class AppIconModelLoader implements StreamModelLoader<App> {
     private final Context context;
 
-    public AppIconModelLoader(@NonNull Context context) {
+    private AppIconModelLoader(@NonNull Context context) {
         this.context = context.getApplicationContext();
     }
 
     @Override
-    public DataFetcher<InputStream> getResourceFetcher(final String packageName, int width, int height) {
+    public DataFetcher<InputStream> getResourceFetcher(final App app, int width, int height) {
         return new DataFetcher<InputStream>() {
             InputStream inputStream;
 
             @Override
             public InputStream loadData(Priority priority) throws Exception {
-                if (packageName == null) {
+                if (app == null) {
                     return null;
                 }
-                inputStream = convertPackageNameToIconInputStream(packageName);
+                inputStream = convertPackageNameToIconInputStream(app.getPackageName());
                 return inputStream;
             }
 
@@ -60,7 +61,7 @@ public class AppIconModelLoader implements StreamModelLoader<String> {
 
             @Override
             public String getId() {
-                return packageName;
+                return app.getPackageName();
             }
 
             @Override
@@ -95,10 +96,10 @@ public class AppIconModelLoader implements StreamModelLoader<String> {
         return null;
     }
 
-    static class Factory implements ModelLoaderFactory<String, InputStream> {
+    static class Factory implements ModelLoaderFactory<App, InputStream> {
 
         @Override
-        public ModelLoader<String, InputStream> build(Context context, GenericLoaderFactory factories) {
+        public ModelLoader<App, InputStream> build(Context context, GenericLoaderFactory factories) {
             return new AppIconModelLoader(context);
         }
 

@@ -20,7 +20,6 @@ import java.util.List;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.blacklist.model.App;
-import arun.com.chromer.glide.AppIconModelLoader;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -60,8 +59,7 @@ class BlacklistAdapter extends RecyclerView.Adapter<BlacklistAdapter.BlackListIt
 
         if (activityRef.get() != null)
             Glide.with(activityRef.get())
-                    .using(new AppIconModelLoader(activityRef.get()))
-                    .load(currApp.getPackageName())
+                    .load(currApp)
                     .crossFade()
                     .into(holder.appIcon);
     }
