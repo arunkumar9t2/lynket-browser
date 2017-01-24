@@ -20,7 +20,6 @@ import android.provider.Settings;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.customtabs.CustomTabsService;
 import android.support.customtabs.CustomTabsSession;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -42,7 +41,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
-import java.util.Stack;
 
 import arun.com.chromer.R;
 import arun.com.chromer.customtabs.CustomTabManager;
@@ -50,6 +48,7 @@ import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.DocumentUtils;
 import arun.com.chromer.webheads.helper.ColorExtractionTask;
+import arun.com.chromer.webheads.helper.UrlOrganizer;
 import arun.com.chromer.webheads.helper.WebSite;
 import arun.com.chromer.webheads.physics.SpringChain2D;
 import arun.com.chromer.webheads.tasks.PageExtractTasksManager;
@@ -60,7 +59,13 @@ import arun.com.chromer.webheads.ui.context.WebHeadContextActivity;
 import de.jetwick.snacktory.JResult;
 import timber.log.Timber;
 
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.os.AsyncTask.THREAD_POOL_EXECUTOR;
+import static android.support.customtabs.CustomTabsService.KEY_URL;
+import static arun.com.chromer.shared.Constants.ACTION_EVENT_WEBHEAD_DELETED;
+import static arun.com.chromer.shared.Constants.ACTION_EVENT_WEBSITE_UPDATED;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBSITE;
 
 public class WebHeadService extends Service implements WebHeadContract,
         CustomTabManager.ConnectionCallback, PageExtractTasksManager.ProgressListener {
@@ -82,6 +87,8 @@ public class WebHeadService extends Service implements WebHeadContract,
 
     // Max visible web heads is set 6 for performance reasons.
     public static final int MAX_VISIBLE_WEB_HEADS = 5;
+    // Url organizer to take care of pre-fetching.
+    private UrlOrganizer urlOrganizer;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -99,6 +106,7 @@ public class WebHeadService extends Service implements WebHeadContract,
             }
         }
         springChain2D = SpringChain2D.create(this);
+        urlOrganizer = new UrlOrganizer(this);
         RemoveWebHead.init(this);
 
         // bind to custom tab session
@@ -207,7 +215,7 @@ public class WebHeadService extends Service implements WebHeadContract,
         }
     }
 
-    private boolean shouldQueue(int index) {
+    private boolean shouldQueue(final int index) {
         return index > MAX_VISIBLE_WEB_HEADS;
     }
 
@@ -227,7 +235,7 @@ public class WebHeadService extends Service implements WebHeadContract,
     }
 
     @Override
-    public void onUrlExtracted(String originalUrl, @Nullable JResult result) {
+    public void onUrlExtracted(@NonNull final String originalUrl, @Nullable JResult result) {
         final WebHead webHead = webHeads.get(originalUrl);
         if (webHead != null && result != null) {
             try {
@@ -291,68 +299,16 @@ public class WebHeadService extends Service implements WebHeadContract,
         deferThread.start();
     }
 
-    /**
-     * Pre-fetches next set of urls for launch with the given parameter url as reference. The first
-     * url in web heads order found is considered as the priority url and other url as likely urls.
-     *
-     * @param sLastOpenedUrl The last opened url
-     */
-    private void prepareNextSetOfUrls(String sLastOpenedUrl) {
-        if (Preferences.aggressiveLoading(this)) return;
-
-        final Stack<String> urlStack = getUrlStack(sLastOpenedUrl);
-        if (urlStack.size() > 0) {
-            String priorityUrl = urlStack.pop();
-            if (priorityUrl == null) return;
-
-            Timber.d("Priority : %s", priorityUrl);
-
-            final List<Bundle> possibleUrls = new ArrayList<>();
-
-            for (String url : urlStack) {
-                if (url == null) continue;
-
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(CustomTabsService.KEY_URL, Uri.parse(url));
-                possibleUrls.add(bundle);
-                Timber.d("Others : %s", url);
-            }
-            // Now let's prepare urls
-            boolean ok = customTabManager.mayLaunchUrl(Uri.parse(priorityUrl), null, possibleUrls);
-            Timber.d("May launch was %b", ok);
-        }
-    }
-
     private List<Bundle> getPossibleUrls() {
         final List<Bundle> possibleUrls = new ArrayList<>();
         for (WebHead webHead : webHeads.values()) {
             String url = webHead.getUrl();
 
             Bundle bundle = new Bundle();
-            bundle.putParcelable(CustomTabsService.KEY_URL, Uri.parse(url));
+            bundle.putParcelable(KEY_URL, Uri.parse(url));
             possibleUrls.add(bundle);
         }
         return possibleUrls;
-    }
-
-    private Stack<String> getUrlStack(String sLastOpenedUrl) {
-        final Stack<String> urlStack = new Stack<>();
-        if (webHeads.containsKey(sLastOpenedUrl)) {
-            boolean foundWebHead = false;
-            for (WebHead webhead : webHeads.values()) {
-                if (!foundWebHead) {
-                    foundWebHead = webhead.getUrl().equalsIgnoreCase(sLastOpenedUrl);
-                    if (!foundWebHead) urlStack.push(webhead.getUrl());
-                } else {
-                    urlStack.push(webhead.getUrl());
-                }
-            }
-        } else {
-            for (WebHead webhead : webHeads.values()) {
-                urlStack.push(webhead.getUrl());
-            }
-        }
-        return urlStack;
     }
 
     private void bindToCustomTabSession() {
@@ -449,7 +405,7 @@ public class WebHeadService extends Service implements WebHeadContract,
             if (Preferences.webHeadsCloseOnOpen(WebHeadService.this)) {
                 webHead.destroySelf(true);
                 // Since the current url is opened, lets prepare the next set of urls
-                prepareNextSetOfUrls(lastOpenedUrl);
+                urlOrganizer.prepareNextSetOfUrls(webHeads, lastOpenedUrl, customTabManager);
             }
             hideRemoveView();
         }
@@ -471,7 +427,7 @@ public class WebHeadService extends Service implements WebHeadContract,
             selectNextMaster();
             // Now that this web head is destroyed, with this web head as the reference prepare the
             // other urls
-            prepareNextSetOfUrls(webHead.getUrl());
+            urlOrganizer.prepareNextSetOfUrls(webHeads, webHead.getUrl(), customTabManager);
         }
 
         ContextActivityHelper.signalDeleted(this, webHead.getWebsite());
@@ -557,7 +513,7 @@ public class WebHeadService extends Service implements WebHeadContract,
                     break;
                 case TAB_HIDDEN:
                     // When a tab is exited, prepare the other urls.
-                    prepareNextSetOfUrls(lastOpenedUrl);
+                    urlOrganizer.prepareNextSetOfUrls(webHeads, lastOpenedUrl, customTabManager);
                     // Clear the last opened url flag
                     lastOpenedUrl = "";
                     break;
@@ -596,7 +552,7 @@ public class WebHeadService extends Service implements WebHeadContract,
                     }
                     break;
                 case Constants.ACTION_CLOSE_WEBHEAD_BY_URL:
-                    final WebSite webSite = intent.getParcelableExtra(Constants.EXTRA_KEY_WEBSITE);
+                    final WebSite webSite = intent.getParcelableExtra(EXTRA_KEY_WEBSITE);
                     if (webSite != null) {
                         closeWebHeadByUrl(webSite.url);
                     }
@@ -615,22 +571,22 @@ public class WebHeadService extends Service implements WebHeadContract,
 
     private static class ContextActivityHelper {
         static void signalUpdated(Context context, WebSite webSite) {
-            final Intent intent = new Intent(Constants.ACTION_EVENT_WEBSITE_UPDATED);
-            intent.putExtra(Constants.EXTRA_KEY_WEBSITE, webSite);
+            final Intent intent = new Intent(ACTION_EVENT_WEBSITE_UPDATED);
+            intent.putExtra(EXTRA_KEY_WEBSITE, webSite);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         }
 
         static void signalDeleted(Context context, WebSite webSite) {
-            final Intent intent = new Intent(Constants.ACTION_EVENT_WEBHEAD_DELETED);
-            intent.putExtra(Constants.EXTRA_KEY_WEBSITE, webSite);
+            final Intent intent = new Intent(ACTION_EVENT_WEBHEAD_DELETED);
+            intent.putExtra(EXTRA_KEY_WEBSITE, webSite);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         }
 
         static void open(Context context, ArrayList<WebSite> webSites) {
             final Intent intent = new Intent(context, WebHeadContextActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            intent.putParcelableArrayListExtra(Constants.EXTRA_KEY_WEBSITE, webSites);
+            intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(FLAG_ACTIVITY_CLEAR_TASK);
+            intent.putParcelableArrayListExtra(EXTRA_KEY_WEBSITE, webSites);
             context.startActivity(intent);
         }
     }
