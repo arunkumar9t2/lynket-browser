@@ -14,8 +14,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.ArrayList;
 
@@ -115,28 +118,67 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
 
     @Override
     public void onWebSiteLongClicked(@NonNull WebSite webSite) {
-        final ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         final String label = webSite.title == null ? webSite.url : webSite.title;
-        final ClipData clip = ClipData.newPlainText(label, webSite.longUrl);
-        cm.setPrimaryClip(clip);
-        Toast.makeText(this, getString(R.string.copied) + " " + webSite.longUrl, LENGTH_SHORT).show();
+        final String url = webSite.longUrl != null ? webSite.longUrl : webSite.url;
+
+        copyToClipboard(label, url);
+    }
+
+    @OnClick(R.id.copy_all)
+    public void onCopyAllClick() {
+        copyToClipboard("Websites", getCSVUrls().toString());
     }
 
     @OnClick(R.id.share_all)
     public void onShareAllClick() {
-        final ArrayList<Uri> webSites = new ArrayList<>();
+        final CharSequence[] items = new String[]{
+                getString(R.string.comma_seperated),
+                getString(R.string.share_all_list)
+        };
+        new MaterialDialog.Builder(this)
+                .title(R.string.choose_share_method)
+                .items(items)
+                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View itemView,
+                                               int which, CharSequence text) {
+                        if (which == 0) {
+                            startActivity(Intent.createChooser(TEXT_SHARE_INTENT.putExtra(EXTRA_TEXT, getCSVUrls().toString()), getString(R.string.share_all)));
+                        } else {
+                            final ArrayList<Uri> webSites = new ArrayList<>();
+                            for (WebSite webSite : websitesAdapter.getWebSites()) {
+                                final String url = webSite.longUrl != null ? webSite.longUrl : webSite.url;
+                                try {
+                                    webSites.add(Uri.parse(url));
+                                } catch (Exception ignored) {
+                                }
+                            }
+                            final Intent shareIntent = new Intent();
+                            shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
+                            shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, webSites);
+                            shareIntent.setType("text/plain");
+                            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_all)));
+                        }
+                        return false;
+                    }
+                }).show();
+    }
+
+    @NonNull
+    private StringBuilder getCSVUrls() {
+        final StringBuilder builder = new StringBuilder();
         for (WebSite webSite : websitesAdapter.getWebSites()) {
             final String url = webSite.longUrl != null ? webSite.longUrl : webSite.url;
-            try {
-                webSites.add(Uri.parse(url));
-            } catch (Exception ignored) {
-            }
+            builder.append(url).append(',');
         }
-        final Intent shareIntent = new Intent();
-        shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
-        shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, webSites);
-        shareIntent.setType("text/plain");
-        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_all)));
+        return builder;
+    }
+
+    private void copyToClipboard(String label, String url) {
+        final ClipData clip = ClipData.newPlainText(label, url);
+        final ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        cm.setPrimaryClip(clip);
+        Toast.makeText(this, getString(R.string.copied) + " " + url, LENGTH_SHORT).show();
     }
 
     /**

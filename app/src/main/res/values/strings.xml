@@ -221,4 +221,7 @@
     <string name="secondary_browser_launch_error">Could not launch the link with the browser you have chosen. Would you like to edit this setting?</string>
     <string name="secondary_browser_not_error">You have blacklisted this app from handing links to Chromer but have not set a secondary browser. Would you like to set your secondary browser now?</string>
     <string name="copy_all">Copy all</string>
+    <string name="choose_share_method">Choose share method</string>
+    <string name="comma_seperated">Comma separated</string>
+    <string name="share_all_list">List - Limited app support. Eg: Join, Pushbullet etc.</string>
 </resources>
