@@ -85,8 +85,7 @@ public class AppIconModelLoader implements StreamModelLoader<String> {
             bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
 
             final ByteArrayInputStream inputStream = new ByteArrayInputStream(stream.toByteArray());
-
-            bitmap.recycle();
+            // bitmap.recycle();
             bitmap = null;
             drawable = null;
             return inputStream;

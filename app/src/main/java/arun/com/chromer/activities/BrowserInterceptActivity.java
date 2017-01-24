@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.blacklist.BlackListManager;
@@ -127,6 +128,9 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                 .iconRes(R.mipmap.ic_launcher)
                 .positiveText(R.string.launch_setting)
                 .negativeText(android.R.string.cancel)
+                .theme(Theme.LIGHT)
+                .positiveColorRes(R.color.colorAccent)
+                .negativeColorRes(R.color.colorAccent)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
