@@ -19,7 +19,7 @@ import arun.com.chromer.R;
 import arun.com.chromer.db.AppColor;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.ColorUtil;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 import timber.log.Timber;
 
 
@@ -101,7 +101,7 @@ public class AppColorExtractorService extends IntentService {
 
     private void extractColorFromAppIcon(final String app) {
         try {
-            final Bitmap iconBitmap = Util.drawableToBitmap(getPackageManager().getApplicationIcon(app));
+            final Bitmap iconBitmap = Utils.drawableToBitmap(getPackageManager().getApplicationIcon(app));
             final Palette palette = Palette.from(iconBitmap)
                     .clearFilters()
                     .generate();

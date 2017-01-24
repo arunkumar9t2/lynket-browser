@@ -26,7 +26,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 import arun.com.chromer.R;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.util.ColorUtil;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -88,7 +88,7 @@ public class AppPreferenceCardView extends CardView {
                 mCategoryText = getResources().getString(R.string.default_provider);
                 final String customTabProvider = Preferences.customTabApp(getContext());
                 if (customTabProvider != null) {
-                    mAppName = Util.getAppNameWithPackage(getContext(), customTabProvider);
+                    mAppName = Utils.getAppNameWithPackage(getContext(), customTabProvider);
                     mAppPackage = customTabProvider;
                 } else {
                     mAppName = getResources().getString(R.string.not_found);
@@ -99,7 +99,7 @@ public class AppPreferenceCardView extends CardView {
                 mCategoryText = getResources().getString(R.string.choose_secondary_browser);
                 final String secondaryBrowser = Preferences.secondaryBrowserPackage(getContext());
                 if (secondaryBrowser != null) {
-                    mAppName = Util.getAppNameWithPackage(getContext(), secondaryBrowser);
+                    mAppName = Utils.getAppNameWithPackage(getContext(), secondaryBrowser);
                     mAppPackage = secondaryBrowser;
                 } else {
                     mAppName = getResources().getString(R.string.not_set);
@@ -110,7 +110,7 @@ public class AppPreferenceCardView extends CardView {
                 mCategoryText = getResources().getString(R.string.fav_share_app);
                 final String favSharePackage = Preferences.favSharePackage(getContext());
                 if (favSharePackage != null) {
-                    mAppName = Util.getAppNameWithPackage(getContext(), favSharePackage);
+                    mAppName = Utils.getAppNameWithPackage(getContext(), favSharePackage);
                     mAppPackage = favSharePackage;
                 } else {
                     mAppName = getResources().getString(R.string.not_set);
@@ -134,7 +134,7 @@ public class AppPreferenceCardView extends CardView {
     }
 
     private void applyIcon() {
-        if (Util.isPackageInstalled(getContext(), mAppPackage)) {
+        if (Utils.isPackageInstalled(getContext(), mAppPackage)) {
             final PackageManager pm = getContext().getApplicationContext().getPackageManager();
             Drawable appIcon = null;
             try {
@@ -145,7 +145,7 @@ public class AppPreferenceCardView extends CardView {
             }
             if (appIcon != null) {
                 setIconDrawable(appIcon, true);
-                Palette.from(Util.drawableToBitmap(appIcon))
+                Palette.from(Utils.drawableToBitmap(appIcon))
                         .clearFilters()
                         .generate(new Palette.PaletteAsyncListener() {
                             @Override

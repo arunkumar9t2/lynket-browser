@@ -34,14 +34,14 @@ import arun.com.chromer.R;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.ColorUtil;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.helper.WebSite;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.nekocode.badge.BadgeDrawable;
 import timber.log.Timber;
 
-import static arun.com.chromer.util.Util.dpToPx;
+import static arun.com.chromer.util.Utils.dpToPx;
 
 /**
  * ViewGroup that holds the web head UI elements. Allows configuring various parameters in relation
@@ -210,7 +210,7 @@ public abstract class BaseWebHead extends FrameLayout {
      */
     private void initContent() {
         mWebHeadColor = Preferences.webHeadColor(getContext());
-        mIndicator.setText(Util.getFirstLetter(mUrl));
+        mIndicator.setText(Utils.getFirstLetter(mUrl));
         mIndicator.setTextColor(ColorUtil.getForegroundWhiteOrBlack(mWebHeadColor));
         initRevealView(mWebHeadColor);
 
@@ -228,7 +228,7 @@ public abstract class BaseWebHead extends FrameLayout {
         mBadgeView.setText(new SpannableString(sBadgeDrawable.toSpannable()));
         updateBadgeColors(mWebHeadColor);
 
-        if (!Util.isLollipopAbove()) {
+        if (!Utils.isLollipopAbove()) {
             final int pad = dpToPx(5);
             mBadgeView.setPadding(pad, pad, pad, pad);
         }
@@ -266,7 +266,7 @@ public abstract class BaseWebHead extends FrameLayout {
     }
 
     private void setWebHeadElevation(int elevationPX) {
-        if (Util.isLollipopAbove()) {
+        if (Utils.isLollipopAbove()) {
             if (mCircleBackground != null && mRevealView != null) {
                 mCircleBackground.setElevation(elevationPX);
                 mRevealView.setElevation(elevationPX + 1);

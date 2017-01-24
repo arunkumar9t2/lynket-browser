@@ -19,7 +19,7 @@ import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 import timber.log.Timber;
 
 /**
@@ -99,7 +99,7 @@ public class SearchSuggestions {
             final String suggestUrl = SEARCH_URL.concat(mQuery).replace(" ", "+");
             HttpURLConnection connection = null;
             try {
-                if (Util.isNetworkAvailable(mContext)) {
+                if (Utils.isNetworkAvailable(mContext)) {
                     final URL url = new URL(suggestUrl);
                     connection = (HttpURLConnection) url.openConnection();
                     connection.connect();
@@ -134,7 +134,7 @@ public class SearchSuggestions {
         }
 
         private void addCopySuggestion() {
-            final String copyText = Util.getClipBoardText(mContext);
+            final String copyText = Utils.getClipBoardText(mContext);
             if (copyText != null && copyText.length() > 0) {
                 mSuggestions.add(new SuggestionItem(copyText, SuggestionItem.COPY));
             }

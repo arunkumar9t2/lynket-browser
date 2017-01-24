@@ -3,9 +3,9 @@ package arun.com.chromer;
 import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
+import com.facebook.stetho.Stetho;
 import com.orm.SugarContext;
 
-import arun.com.chromer.util.FontCache;
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
@@ -20,6 +20,7 @@ public class Chromer extends Application {
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
+            Stetho.initializeWithDefaults(this);
         }
 
         SugarContext.init(this);
@@ -29,6 +30,5 @@ public class Chromer extends Application {
     public void onTerminate() {
         super.onTerminate();
         SugarContext.terminate();
-        FontCache.dropCache();
     }
 }

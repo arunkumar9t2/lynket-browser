@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -32,12 +31,12 @@
                     android:layout_height="wrap_content"
                     android:paddingBottom="16dp"
                     android:text="@string/app_name"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/about_app_version_list"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
         </android.support.v7.widget.CardView>
@@ -61,12 +60,12 @@
                     android:paddingBottom="16dp"
                     android:text="@string/author"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/material_dark_color"/>
+                    android:textColor="@color/material_dark_color" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/about_author_version_list"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
@@ -90,11 +89,11 @@
                     android:layout_height="wrap_content"
                     android:text="@string/credits"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/material_dark_color"/>
+                    android:textColor="@color/material_dark_color" />
 
                 <Space
                     android:layout_width="wrap_content"
-                    android:layout_height="5dp"/>
+                    android:layout_height="5dp" />
 
                 <LinearLayout
                     android:id="@+id/patryk"
@@ -111,13 +110,13 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         android:textColor="@color/material_dark_color"
                         android:textSize="16sp"
-                        tools:ignore="HardcodedText"/>
+                        tools:ignore="HardcodedText" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/icon_design"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -135,13 +134,13 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         android:textColor="@color/material_dark_color"
                         android:textSize="16sp"
-                        tools:ignore="HardcodedText"/>
+                        tools:ignore="HardcodedText" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/open_source_contributions"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
                 </LinearLayout>
 
             </LinearLayout>

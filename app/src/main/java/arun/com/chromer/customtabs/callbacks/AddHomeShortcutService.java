@@ -26,7 +26,7 @@ import arun.com.chromer.R;
 import arun.com.chromer.activities.BrowserInterceptActivity;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.ColorUtil;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 import de.jetwick.snacktory.HtmlFetcher;
 import de.jetwick.snacktory.JResult;
 import timber.log.Timber;
@@ -133,21 +133,21 @@ public class AddHomeShortcutService extends IntentService {
 
     @NonNull
     private Bitmap createIcon(@ColorInt int color, String shortCutName) {
-        int size = Util.dpToPx(48);
+        int size = Utils.dpToPx(48);
         Bitmap icon = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(icon);
-        float shadwR = Util.dpToPx(2);
-        float shadwDx = Util.dpToPx(0);
-        float shadwDy = Util.dpToPx(1.5);
-        float textSize = Util.dpToPx(20);
+        float shadwR = Utils.dpToPx(2);
+        float shadwDx = Utils.dpToPx(0);
+        float shadwDy = Utils.dpToPx(1.5);
+        float textSize = Utils.dpToPx(20);
 
         Paint bgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         bgPaint.setStyle(Paint.Style.FILL);
         bgPaint.setColor(color);
         bgPaint.setShadowLayer(shadwR, shadwDx, shadwDy, 0x75000000);
 
-        int padding = Util.dpToPx(5);
-        int corner = Util.dpToPx(3);
+        int padding = Utils.dpToPx(5);
+        int corner = Utils.dpToPx(3);
         canvas.drawRoundRect(new RectF(padding, padding, size - padding, size - padding),
                 corner, corner, bgPaint);
 
@@ -157,7 +157,7 @@ public class AddHomeShortcutService extends IntentService {
         textPaint.setColor(ColorUtil.getForegroundWhiteOrBlack(color));
         textPaint.setStyle(Paint.Style.FILL);
 
-        drawTextInCanvasCentre(canvas, textPaint, Util.getFirstLetter(shortCutName));
+        drawTextInCanvasCentre(canvas, textPaint, Utils.getFirstLetter(shortCutName));
         return icon;
     }
 

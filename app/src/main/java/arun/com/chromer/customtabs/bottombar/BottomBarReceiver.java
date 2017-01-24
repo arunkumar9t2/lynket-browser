@@ -31,7 +31,7 @@ import arun.com.chromer.R;
 import arun.com.chromer.activities.BrowserInterceptActivity;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.DocumentUtils;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 import timber.log.Timber;
 
 public class BottomBarReceiver extends BroadcastReceiver {
@@ -104,7 +104,7 @@ public class BottomBarReceiver extends BroadcastReceiver {
         }
 
         private void findAndOpenLink(@NonNull String text) {
-            final List<String> urls = Util.findURLs(text);
+            final List<String> urls = Utils.findURLs(text);
             if (urls.size() != 0) {
                 // use only the first link
                 openLink(urls.get(0));
@@ -142,7 +142,7 @@ public class BottomBarReceiver extends BroadcastReceiver {
 
         @Override
         protected void onPerform() {
-            Util.shareText(mContext, mUrl);
+            Utils.shareText(mContext, mUrl);
         }
     }
 

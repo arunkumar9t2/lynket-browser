@@ -24,7 +24,7 @@ import java.util.TimerTask;
 import arun.com.chromer.BuildConfig;
 import arun.com.chromer.R;
 import arun.com.chromer.preferences.manager.Preferences;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.physics.MovementTracker;
 import arun.com.chromer.webheads.physics.SpringConfigs;
 import timber.log.Timber;
@@ -104,7 +104,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
     private void calcVelocities() {
         if (MINIMUM_HORIZONTAL_FLING_VELOCITY == 0) {
             int scaledScreenWidthDp = (getResources().getConfiguration().screenWidthDp * 10);
-            MINIMUM_HORIZONTAL_FLING_VELOCITY = Util.dpToPx(scaledScreenWidthDp);
+            MINIMUM_HORIZONTAL_FLING_VELOCITY = Utils.dpToPx(scaledScreenWidthDp);
         }
     }
 
@@ -474,7 +474,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
             mYSpring.setEndValue(sScreenBounds.top);
         }
 
-        int minimumVelocityToReachSides = Util.dpToPx(100);
+        int minimumVelocityToReachSides = Utils.dpToPx(100);
         //noinspection StatementWithEmptyBody
         if (!mWasRemoveLocked
                 && Math.abs(mXSpring.getVelocity()) < minimumVelocityToReachSides
@@ -544,7 +544,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
         WEB_HEAD_COUNT--;
         destroySprings();
         if (isCurrentlyAtRemoveWeb()) {
-            if (Util.isLollipopAbove()) {
+            if (Utils.isLollipopAbove()) {
                 closeWithAnimationL(receiveCallback);
             } else
                 closeWithAnimation(receiveCallback);
@@ -640,7 +640,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
             return true;
         } else {
             double dist = dist(mWindowParams.x, mWindowParams.y, rx, ry);
-            if (dist < Util.dpToPx(15)) {
+            if (dist < Utils.dpToPx(15)) {
                 Timber.d("Adjusting positions");
                 mWindowParams.x = rx;
                 mWindowParams.y = ry;

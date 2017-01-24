@@ -18,7 +18,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 
 /**
  * A BroadcastReceiver that handles the Action Intent from the Custom Tab and fires a Share Intent.
@@ -27,6 +27,6 @@ public class ShareBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Util.shareText(context, intent.getDataString());
+        Utils.shareText(context, intent.getDataString());
     }
 }

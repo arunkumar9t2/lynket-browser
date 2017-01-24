@@ -27,7 +27,7 @@ import java.util.List;
 import arun.com.chromer.R;
 import arun.com.chromer.preferences.BottomBarPreferenceFragment;
 import arun.com.chromer.preferences.PersonalizationPreferenceFragment;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -86,7 +86,7 @@ public class CustomizeFragment extends Fragment {
 
         BottomActionsAdapter(Context context) {
             mContext = context;
-            if (Util.isLollipopAbove()) {
+            if (Utils.isLollipopAbove()) {
                 mItems.add(NEW_TAB);
             }
             mItems.add(SHARE);

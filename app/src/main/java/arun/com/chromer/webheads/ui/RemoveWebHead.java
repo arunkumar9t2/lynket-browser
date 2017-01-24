@@ -24,7 +24,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 import timber.log.Timber;
 
 /**
@@ -33,7 +33,7 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class RemoveWebHead extends FrameLayout {
 
-    static final double MAGNETISM_THRESHOLD = Util.dpToPx(120);
+    static final double MAGNETISM_THRESHOLD = Utils.dpToPx(120);
     private static WindowManager sWindowManager;
     private static RemoveWebHead sOurInstance;
 

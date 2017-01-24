@@ -22,7 +22,7 @@ import arun.com.chromer.preferences.BehaviorPreferenceFragment;
 import arun.com.chromer.preferences.PrefetchPreferenceFragment;
 import arun.com.chromer.preferences.widgets.AppPreferenceCardView;
 import arun.com.chromer.shared.Constants;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -103,7 +103,7 @@ public class OptionsFragment extends Fragment {
     }
 
     private void updateDefaultBrowserCard() {
-        if (!Util.isDefaultBrowser(getActivity())) {
+        if (!Utils.isDefaultBrowser(getActivity())) {
             mSetDefaultCard.setVisibility(View.VISIBLE);
         } else
             mSetDefaultCard.setVisibility(View.GONE);
@@ -126,7 +126,7 @@ public class OptionsFragment extends Fragment {
 
     @OnClick(R.id.set_default_card)
     public void onSetDefaultClick() {
-        final String defaultBrowser = Util.getDefaultBrowserPackage(getActivity());
+        final String defaultBrowser = Utils.getDefaultBrowserPackage(getActivity());
         if (defaultBrowser.equalsIgnoreCase("android")
                 || defaultBrowser.startsWith("org.cyanogenmod")) {
             // TODO Change this detection such that "if defaultBrowserPackage is not a compatible browser" condition is used
@@ -135,7 +135,7 @@ public class OptionsFragment extends Fragment {
             Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
             intent.setData(Uri.parse("package:" + defaultBrowser));
             Toast.makeText(getActivity(),
-                    Util.getAppNameWithPackage(getActivity(), defaultBrowser)
+                    Utils.getAppNameWithPackage(getActivity(), defaultBrowser)
                             + " "
                             + getString(R.string.default_clear_msg), Toast.LENGTH_LONG).show();
             startActivity(intent);

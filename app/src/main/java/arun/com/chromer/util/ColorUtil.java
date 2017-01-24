@@ -175,7 +175,7 @@ public class ColorUtil {
 
     @NonNull
     public static Drawable getRippleDrawableCompat(final @ColorInt int color) {
-        if (Util.isLollipopAbove()) {
+        if (Utils.isLollipopAbove()) {
             return new RippleDrawable(ColorStateList.valueOf(color),
                     null,
                     null

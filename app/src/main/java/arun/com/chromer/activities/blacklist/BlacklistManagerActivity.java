@@ -2,16 +2,13 @@ package arun.com.chromer.activities.blacklist;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,194 +16,114 @@ import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.flipboard.bottomsheet.BottomSheetLayout;
-import com.mikepenz.community_material_typeface_library.CommunityMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.blacklist.model.App;
-import arun.com.chromer.db.BlacklistedApps;
 import arun.com.chromer.preferences.manager.Preferences;
-import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.ServiceUtil;
-import arun.com.chromer.util.Util;
-import arun.com.chromer.views.IntentPickerSheetView;
-import timber.log.Timber;
+import arun.com.chromer.util.Utils;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-public class BlacklistManagerActivity extends AppCompatActivity implements BlackListAppRender.ItemClickListener {
+public class BlacklistManagerActivity extends AppCompatActivity implements
+        Blacklist.View,
+        BlacklistAdapter.BlackListItemClickedListener,
+        CompoundButton.OnCheckedChangeListener, SwipeRefreshLayout.OnRefreshListener {
 
-    private final List<App> mApps = new ArrayList<>();
-    private final List<String> sBlacklistedApps = new ArrayList<>();
-    private MaterialDialog mProgress;
-    private RecyclerView mRecyclerView;
-    private ImageView mSecondaryBrowserIcon;
-    private BottomSheetLayout mBottomSheet;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.app_recyclerview)
+    RecyclerView blackListedAppsList;
+    @BindView(R.id.coordinator_layout)
+    CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.swipe_refresh_layout)
+    SwipeRefreshLayout swipeRefreshLayout;
+
+    private Blacklist.Presenter presenter;
+
+    private final BlacklistAdapter blacklistAdapter = new BlacklistAdapter(this, this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        presenter = new Blacklist.Presenter(this);
         setContentView(R.layout.blacklist_activity);
-        setupToolbarAndFab();
+        ButterKnife.bind(this);
+        setupToolbar();
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.app_recyclerview);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        blackListedAppsList.setLayoutManager(new LinearLayoutManager(this));
+        blackListedAppsList.setAdapter(blacklistAdapter);
 
-        mBottomSheet = (BottomSheetLayout) findViewById(R.id.bottomsheet);
-        setupSecondaryBrowser();
-
-        new AppProcessorTask().execute();
+        loadApps();
     }
 
-    private void setupToolbarAndFab() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    private void loadApps() {
+        presenter.loadAppList(this);
+    }
+
+    private void setupToolbar() {
         setSupportActionBar(toolbar);
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    private void setupSecondaryBrowser() {
-        mSecondaryBrowserIcon = (ImageView) findViewById(R.id.secondary_browser_view);
-
-        setIconWithPackageName(Preferences.secondaryBrowserPackage(this));
-
-        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.GOOGLE_URL));
-        final IntentPickerSheetView browserPicker = new IntentPickerSheetView(this,
-                webIntent,
-                R.string.choose_secondary_browser,
-                new IntentPickerSheetView.OnIntentPickedListener() {
-                    @Override
-                    public void onIntentPicked(IntentPickerSheetView.ActivityInfo activityInfo) {
-                        mBottomSheet.dismissSheet();
-                        String componentNameFlatten = activityInfo.componentName.flattenToString();
-                        if (componentNameFlatten != null) {
-                            Preferences.secondaryBrowserComponent(getApplicationContext(), componentNameFlatten);
-                        }
-                        setIconWithPackageName(activityInfo.componentName.getPackageName());
-                        snack(String.format(getString(R.string.secondary_browser_success), activityInfo.label));
-                    }
-                });
-        browserPicker.setFilter(new IntentPickerSheetView.Filter() {
-            @Override
-            public boolean include(IntentPickerSheetView.ActivityInfo info) {
-                return !info.componentName.getPackageName().equalsIgnoreCase(getPackageName());
-            }
-        });
-        //noinspection ConstantConditions
-        findViewById(R.id.secondary_browser).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mBottomSheet != null) mBottomSheet.showWithSheetView(browserPicker);
-            }
-        });
-    }
-
-    private void setIconWithPackageName(String packageName) {
-        try {
-            mSecondaryBrowserIcon.setImageDrawable(getApplicationContext().getPackageManager().getApplicationIcon(packageName));
-        } catch (PackageManager.NameNotFoundException e) {
-            mSecondaryBrowserIcon.setImageDrawable(new IconicsDrawable(this)
-                    .icon(CommunityMaterial.Icon.cmd_alert_circle_outline)
-                    .color(ContextCompat.getColor(this, R.color.error))
-                    .sizeDp(24));
-        }
-    }
-
-    private void snack(String textToSnack) {
-        // Have to provide a view for view traversal, so providing the recycler view.
-        Snackbar.make(mRecyclerView, textToSnack, Snackbar.LENGTH_SHORT).show();
+        swipeRefreshLayout.setColorSchemeResources(
+                R.color.colorPrimary,
+                R.color.colorAccent,
+                R.color.colorPrimaryDarker);
+        swipeRefreshLayout.setOnRefreshListener(this);
     }
 
     @Override
-    public void onClick(App app, boolean checked) {
-        updateBlacklists(app.getPackageName(), checked);
+    protected void onDestroy() {
+        presenter.cleanUp();
+        blacklistAdapter.cleanUp();
+        super.onDestroy();
+    }
+
+
+    private void showSnack(@NonNull String textToSnack) {
+        // Have to provide a view for view traversal, so providing the recycler view.
+        Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBlackListItemClick(App app) {
+        presenter.updateBlacklist(app);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.blacklist_menu, menu);
-        MenuItem item = menu.findItem(R.id.blacklist_switch_item);
-        if (item != null) {
-            SwitchCompat blackListSwitch = (SwitchCompat) item.getActionView().findViewById(R.id.blacklist_switch);
+        final MenuItem menuItem = menu.findItem(R.id.blacklist_switch_item);
+        if (menuItem != null) {
+            final SwitchCompat blackListSwitch = (SwitchCompat) menuItem.getActionView().findViewById(R.id.blacklist_switch);
             if (blackListSwitch != null) {
-                final boolean shouldCheck = Preferences.blacklist(this) && Util.canReadUsageStats(this);
-
-                Preferences.blacklist(this, shouldCheck);
-
+                final boolean blackListActive = Preferences.blacklist(this) && Utils.canReadUsageStats(this);
+                Preferences.blacklist(this, blackListActive);
                 blackListSwitch.setChecked(Preferences.blacklist(this));
-                snack(Preferences.blacklist(this) ? getString(R.string.blacklist_on) : getString(R.string.blacklist_off));
-                blackListSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (isChecked && !Util.canReadUsageStats(getApplicationContext())) {
-                            buttonView.setChecked(false);
-                            requestUsagePermission();
-                        } else {
-                            snack(isChecked ? getString(R.string.blacklist_on) : getString(R.string.blacklist_off));
-                            Preferences.blacklist(getApplicationContext(), isChecked);
-                            ServiceUtil.takeCareOfServices(getApplicationContext());
-                        }
-                    }
-                });
+                blackListSwitch.setOnCheckedChangeListener(this);
             }
         }
         return true;
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void requestUsagePermission() {
         new MaterialDialog.Builder(this)
                 .title(R.string.permission_required)
                 .content(R.string.usage_permission_explanation_blacklist)
                 .positiveText(R.string.grant)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        // TODO Some devices don't have this activity. Should // FIXME: 28/02/2016
                         startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
                     }
                 }).show();
-    }
-
-    private void updateBlacklists(String packageName, boolean checked) {
-        if (packageName == null) return;
-        List<BlacklistedApps> blacklistedList = BlacklistedApps.find(BlacklistedApps.class, "package_name = ?", packageName);
-        BlacklistedApps blackListedApp = null;
-        if (blacklistedList.size() > 0 && blacklistedList.get(0).getPackageName().equalsIgnoreCase(packageName)) {
-            blackListedApp = blacklistedList.get(0);
-        }
-        if (checked) {
-            if (blackListedApp == null) {
-                blackListedApp = new BlacklistedApps(packageName);
-                blackListedApp.save();
-            }
-        } else if (blackListedApp != null) blackListedApp.delete();
-    }
-
-    private void initList() {
-        BlackListAppRender adapter = new BlackListAppRender(BlacklistManagerActivity.this, mApps);
-        adapter.setOnItemClickListener(this);
-        mRecyclerView.setAdapter(adapter);
-    }
-
-    private void getBlacklistedPkgsFromDB() {
-        List<BlacklistedApps> blacklistedApps = BlacklistedApps.listAll(BlacklistedApps.class);
-        for (BlacklistedApps blacklistedApp : blacklistedApps) {
-            if (blacklistedApp.getPackageName() != null) {
-                sBlacklistedApps.add(blacklistedApp.getPackageName());
-            }
-        }
-        Timber.d(sBlacklistedApps.toString());
     }
 
     @Override
@@ -230,46 +147,30 @@ public class BlacklistManagerActivity extends AppCompatActivity implements Black
         overridePendingTransition(R.anim.slide_in_left_medium, R.anim.slide_out_right_medium);
     }
 
-    private class AppProcessorTask extends AsyncTask<Void, Integer, Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mProgress = new MaterialDialog.Builder(BlacklistManagerActivity.this)
-                    .title(R.string.loading)
-                    .content(R.string.please_wait)
-                    .cancelable(false)
-                    .progress(true, 0).show();
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (isChecked && !Utils.canReadUsageStats(getApplicationContext())) {
+            buttonView.setChecked(false);
+            requestUsagePermission();
+        } else {
+            showSnack(isChecked ? getString(R.string.blacklist_on) : getString(R.string.blacklist_off));
+            Preferences.blacklist(getApplicationContext(), isChecked);
+            ServiceUtil.takeCareOfServices(getApplicationContext());
         }
+    }
 
-        @Override
-        protected Void doInBackground(Void... params) {
-            getBlacklistedPkgsFromDB();
-            final PackageManager pm = getApplicationContext().getPackageManager();
+    @Override
+    public void setApps(@NonNull List<App> apps) {
+        blacklistAdapter.setApps(apps);
+    }
 
-            Intent intent = new Intent(Intent.ACTION_MAIN, null);
-            intent.addCategory(Intent.CATEGORY_LAUNCHER);
-            List<ResolveInfo> resolveList = pm.queryIntentActivities(intent, 0);
+    @Override
+    public void setRefreshing(boolean refreshing) {
+        swipeRefreshLayout.setRefreshing(refreshing);
+    }
 
-            SortedSet<App> sortedSet = new TreeSet<>();
-            for (ResolveInfo resolveInfo : resolveList) {
-                String pkg = resolveInfo.activityInfo.packageName;
-
-                if (pkg.equalsIgnoreCase(getPackageName())) continue;
-
-                App app = new App();
-                app.setAppName(Util.getAppNameWithPackage(getApplicationContext(), pkg));
-                app.setPackageName(pkg);
-                app.setBlackListed(sBlacklistedApps.contains(pkg));
-                sortedSet.add(app);
-            }
-            mApps.addAll(sortedSet);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            mProgress.dismiss();
-            initList();
-        }
+    @Override
+    public void onRefresh() {
+        loadApps();
     }
 }

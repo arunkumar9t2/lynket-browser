@@ -13,7 +13,7 @@ import java.util.List;
 import arun.com.chromer.R;
 import arun.com.chromer.customtabs.CustomTabs;
 import arun.com.chromer.shared.Constants;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 
 /**
  * Created by Arun on 05/01/2016.
@@ -133,7 +133,7 @@ public class Preferences {
                 .getDefaultSharedPreferences(context)
                 .getString(PREFERRED_PACKAGE, null);
 
-        if (packageName != null && Util.isPackageInstalled(context, packageName))
+        if (packageName != null && Utils.isPackageInstalled(context, packageName))
             return packageName;
         else {
             packageName = getDefaultCustomTabApp(context);
@@ -145,7 +145,7 @@ public class Preferences {
 
     @Nullable
     private static String getDefaultCustomTabApp(Context context) {
-        if (Util.isPackageInstalled(context, Constants.CHROME_PACKAGE) &&
+        if (Utils.isPackageInstalled(context, Constants.CHROME_PACKAGE) &&
                 CustomTabs.isPackageSupportCustomTabs(context, Constants.CHROME_PACKAGE))
             return Constants.CHROME_PACKAGE;
 
@@ -304,7 +304,7 @@ public class Preferences {
     }
 
     public static boolean aggressiveLoading(Context context) {
-        return Util.isLollipopAbove()
+        return Utils.isLollipopAbove()
                 && webHeads(context)
                 && PreferenceManager
                 .getDefaultSharedPreferences(context).getBoolean(AGGRESSIVE_LOADING, false);
@@ -431,7 +431,7 @@ public class Preferences {
     }
 
     public static boolean mergeTabs(Context context) {
-        return Util.isLollipopAbove() &&
+        return Utils.isLollipopAbove() &&
                 PreferenceManager
                         .getDefaultSharedPreferences(context)
                         .getBoolean(MERGE_TABS_AND_APPS, false);

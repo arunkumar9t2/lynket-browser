@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:clipToPadding="false"
-             android:focusable="true"
-             android:focusableInTouchMode="true"
-             android:paddingBottom="@dimen/material_search_margin_bottom"
-             android:paddingLeft="@dimen/activity_horizontal_margin"
-             android:paddingRight="@dimen/activity_horizontal_margin"
-             android:paddingTop="@dimen/material_search_margin_top">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clipToPadding="false"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:paddingBottom="@dimen/material_search_margin_bottom"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/material_search_margin_top">
 
 
     <android.support.v7.widget.CardView
@@ -41,7 +41,7 @@
                     android:layout_marginRight="3dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:scaleType="center"
-                    tools:ignore="ContentDescription"/>
+                    tools:ignore="ContentDescription" />
 
                 <FrameLayout
                     android:layout_width="0dp"
@@ -61,7 +61,7 @@
                         android:inputType="textUri"
                         android:maxLines="1"
                         android:textColor="@color/material_dark_color"
-                        android:textSize="18sp"/>
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/msv_label"
@@ -70,7 +70,7 @@
                         android:gravity="center_vertical|start"
                         android:text="@string/search_or_type_url"
                         android:textColor="@color/material_dark_color"
-                        android:textSize="18sp"/>
+                        android:textSize="18sp" />
                 </FrameLayout>
 
                 <ImageView
@@ -82,14 +82,14 @@
                     android:layout_marginRight="3dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:scaleType="center"
-                    tools:ignore="ContentDescription"/>
+                    tools:ignore="ContentDescription" />
             </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/search_suggestions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scrollbars="none"/>
+                android:scrollbars="none" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </FrameLayout>

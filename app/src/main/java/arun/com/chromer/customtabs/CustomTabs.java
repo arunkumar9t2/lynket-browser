@@ -19,6 +19,7 @@ import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsSession;
 import android.support.v4.graphics.ColorUtils;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
@@ -44,9 +45,9 @@ import arun.com.chromer.customtabs.warmup.WarmUpService;
 import arun.com.chromer.db.AppColor;
 import arun.com.chromer.db.WebColor;
 import arun.com.chromer.preferences.manager.Preferences;
-import arun.com.chromer.shared.AppDetectService;
+import arun.com.chromer.shared.AppDetectionManager;
 import arun.com.chromer.shared.Constants;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.WebHeadService;
 import timber.log.Timber;
 
@@ -441,9 +442,9 @@ public class CustomTabs {
      */
     private boolean setAppToolbarColor() {
         try {
-            final String lastApp = AppDetectService.getInstance().getLastApp();
+            final String lastApp = AppDetectionManager.getInstance(mActivity).getFilteredPackage();
+            if (TextUtils.isEmpty(lastApp)) return false;
             final List<AppColor> appColors = AppColor.find(AppColor.class, "app = ?", lastApp);
-
             if (!appColors.isEmpty()) {
                 mToolbarColor = appColors.get(0).getColor();
                 return true;
@@ -453,9 +454,7 @@ public class CustomTabs {
                 mActivity.startService(extractorService);
             }
         } catch (Exception e) {
-            if (AppDetectService.getInstance() == null) {
-                mActivity.startService(new Intent(mActivity, AppDetectService.class));
-            }
+            Timber.e(e.toString());
         }
         return false;
     }
@@ -468,7 +467,7 @@ public class CustomTabs {
         switch (Preferences.preferredAction(mActivity)) {
             case Preferences.PREFERRED_ACTION_BROWSER:
                 String pakage = Preferences.secondaryBrowserPackage(mActivity);
-                if (Util.isPackageInstalled(mActivity, pakage)) {
+                if (Utils.isPackageInstalled(mActivity, pakage)) {
                     final Bitmap icon = getAppIconBitmap(pakage);
                     final Intent intent = new Intent(mActivity, SecondaryBrowserReceiver.class);
                     final PendingIntent openBrowserPending = PendingIntent.getBroadcast(mActivity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -478,7 +477,7 @@ public class CustomTabs {
                 break;
             case Preferences.PREFERRED_ACTION_FAV_SHARE:
                 pakage = Preferences.favSharePackage(mActivity);
-                if (Util.isPackageInstalled(mActivity, pakage)) {
+                if (Utils.isPackageInstalled(mActivity, pakage)) {
                     final Bitmap icon = getAppIconBitmap(pakage);
                     final Intent intent = new Intent(mActivity, FavShareBroadcastReceiver.class);
                     final PendingIntent favSharePending = PendingIntent.getBroadcast(mActivity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -533,8 +532,8 @@ public class CustomTabs {
         switch (Preferences.preferredAction(mActivity)) {
             case Preferences.PREFERRED_ACTION_BROWSER:
                 String pkg = Preferences.favSharePackage(mActivity);
-                if (Util.isPackageInstalled(mActivity, pkg)) {
-                    final String app = Util.getAppNameWithPackage(mActivity, pkg);
+                if (Utils.isPackageInstalled(mActivity, pkg)) {
+                    final String app = Utils.getAppNameWithPackage(mActivity, pkg);
                     final String label = String.format(mActivity.getString(R.string.share_with), app);
                     final Intent shareIntent = new Intent(mActivity, FavShareBroadcastReceiver.class);
                     final PendingIntent pendingShareIntent = PendingIntent.getBroadcast(mActivity, 0, shareIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -543,9 +542,9 @@ public class CustomTabs {
                 break;
             case Preferences.PREFERRED_ACTION_FAV_SHARE:
                 pkg = Preferences.secondaryBrowserPackage(mActivity);
-                if (Util.isPackageInstalled(mActivity, pkg)) {
+                if (Utils.isPackageInstalled(mActivity, pkg)) {
                     if (!pkg.equalsIgnoreCase(STABLE_PACKAGE)) {
-                        final String app = Util.getAppNameWithPackage(mActivity, pkg);
+                        final String app = Utils.getAppNameWithPackage(mActivity, pkg);
                         final String label = String.format(mActivity.getString(R.string.open_in_browser), app);
                         final Intent browseIntent = new Intent(mActivity, SecondaryBrowserReceiver.class);
                         final PendingIntent pendingBrowseIntent = PendingIntent.getBroadcast(mActivity, 0, browseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -579,7 +578,7 @@ public class CustomTabs {
     private void prepareOpenInChrome() {
         final String customTabPkg = Preferences.customTabApp(mActivity);
 
-        if (Util.isPackageInstalled(mActivity, customTabPkg)) {
+        if (Utils.isPackageInstalled(mActivity, customTabPkg)) {
             if (customTabPkg.equalsIgnoreCase(BETA_PACKAGE)
                     || customTabPkg.equalsIgnoreCase(DEV_PACKAGE)
                     || customTabPkg.equalsIgnoreCase(STABLE_PACKAGE)) {
@@ -587,7 +586,7 @@ public class CustomTabs {
                 final Intent chromeReceiver = new Intent(mActivity, OpenInChromeReceiver.class);
                 final PendingIntent openChromePending = PendingIntent.getBroadcast(mActivity, 0, chromeReceiver, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                final String app = Util.getAppNameWithPackage(mActivity, customTabPkg);
+                final String app = Utils.getAppNameWithPackage(mActivity, customTabPkg);
                 final String label = String.format(mActivity.getString(R.string.open_in_browser), app);
                 mIntentBuilder.addMenuItem(label, openChromePending);
             }
@@ -603,7 +602,7 @@ public class CustomTabs {
         }
         final BottomBarManager.Config config = new BottomBarManager.Config();
         config.minimize = mForWebHead && Preferences.mergeTabs(mActivity);
-        config.openInNewTab = Util.isLollipopAbove();
+        config.openInNewTab = Utils.isLollipopAbove();
 
         mIntentBuilder.setSecondaryToolbarViews(
                 BottomBarManager.createBottomBarRemoteViews(mActivity, mToolbarColor, config),
@@ -654,7 +653,7 @@ public class CustomTabs {
         try {
             Drawable drawable = mActivity.getApplicationContext()
                     .getPackageManager().getApplicationIcon(packageName);
-            return Util.drawableToBitmap(drawable);
+            return Utils.drawableToBitmap(drawable);
         } catch (PackageManager.NameNotFoundException e) {
             Timber.e("App icon fetching for %s failed", packageName);
         }

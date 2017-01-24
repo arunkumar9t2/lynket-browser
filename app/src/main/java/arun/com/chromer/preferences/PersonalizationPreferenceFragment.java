@@ -31,7 +31,7 @@ import arun.com.chromer.preferences.widgets.IconSwitchPreference;
 import arun.com.chromer.shared.AppDetectService;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.ServiceUtil;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 
 public class PersonalizationPreferenceFragment extends DividerLessPreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -222,7 +222,7 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
     }
 
     private void requestUsagePermissionIfNeeded() {
-        if (Preferences.dynamicToolbarOnApp(getActivity()) && !Util.canReadUsageStats(getActivity())) {
+        if (Preferences.dynamicToolbarOnApp(getActivity()) && !Utils.canReadUsageStats(getActivity())) {
             new MaterialDialog.Builder(getActivity())
                     .title(R.string.permission_required)
                     .content(R.string.usage_permission_explanation_appcolor)
