@@ -44,6 +44,17 @@ public class WebSite implements Parcelable {
         color = in.readInt();
     }
 
+    @NonNull
+    public String url() {
+        return longUrl != null ? longUrl : url;
+    }
+
+    @NonNull
+    public String safeLabel() {
+        return title == null ? url : title;
+    }
+
+
     public static final Creator<WebSite> CREATOR = new Creator<WebSite>() {
         @Override
         public WebSite createFromParcel(Parcel in) {

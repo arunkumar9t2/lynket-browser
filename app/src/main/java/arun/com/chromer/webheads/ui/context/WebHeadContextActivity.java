@@ -118,10 +118,7 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
 
     @Override
     public void onWebSiteLongClicked(@NonNull WebSite webSite) {
-        final String label = webSite.title == null ? webSite.url : webSite.title;
-        final String url = webSite.longUrl != null ? webSite.longUrl : webSite.url;
-
-        copyToClipboard(label, url);
+        copyToClipboard(webSite.safeLabel(), webSite.url());
     }
 
     @OnClick(R.id.copy_all)
@@ -147,9 +144,8 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
                         } else {
                             final ArrayList<Uri> webSites = new ArrayList<>();
                             for (WebSite webSite : websitesAdapter.getWebSites()) {
-                                final String url = webSite.longUrl != null ? webSite.longUrl : webSite.url;
                                 try {
-                                    webSites.add(Uri.parse(url));
+                                    webSites.add(Uri.parse(webSite.url()));
                                 } catch (Exception ignored) {
                                 }
                             }
@@ -168,8 +164,7 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
     private StringBuilder getCSVUrls() {
         final StringBuilder builder = new StringBuilder();
         for (WebSite webSite : websitesAdapter.getWebSites()) {
-            final String url = webSite.longUrl != null ? webSite.longUrl : webSite.url;
-            builder.append(url).append(',');
+            builder.append(webSite.url()).append(',');
         }
         return builder;
     }
