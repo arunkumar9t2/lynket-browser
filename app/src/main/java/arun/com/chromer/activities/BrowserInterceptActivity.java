@@ -25,7 +25,7 @@ import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.shared.AppDetectionManager;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Utils;
-import arun.com.chromer.webheads.helper.ProxyActivity;
+import arun.com.chromer.webheads.ui.ProxyActivity;
 import timber.log.Timber;
 
 @SuppressLint("GoogleAppIndexingApiWarning")

@@ -1,4 +1,4 @@
-package arun.com.chromer.webheads.ui;
+package arun.com.chromer.webheads.ui.views;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -26,6 +26,7 @@ import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.physics.MovementTracker;
 import arun.com.chromer.webheads.physics.SpringConfigs;
+import arun.com.chromer.webheads.ui.WebHeadContract;
 import timber.log.Timber;
 
 import static android.view.MotionEvent.ACTION_CANCEL;

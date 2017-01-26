@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:padding="10dp">
 
-    <arun.com.chromer.webheads.ui.ElevatedCircleView
+    <arun.com.chromer.webheads.ui.views.ElevatedCircleView
         android:id="@+id/circleBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,7 +15,7 @@
         android:elevation="6dp"
         tools:ignore="UnusedAttribute" />
 
-    <arun.com.chromer.webheads.ui.CircleView
+    <arun.com.chromer.webheads.ui.views.CircleView
         android:id="@+id/revealView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

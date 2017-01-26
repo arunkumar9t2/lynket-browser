@@ -1,4 +1,4 @@
-package arun.com.chromer.webheads.ui;
+package arun.com.chromer.webheads.ui.views;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

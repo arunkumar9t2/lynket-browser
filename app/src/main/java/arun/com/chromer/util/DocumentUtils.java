@@ -15,7 +15,7 @@ import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.webheads.WebHeadService;
 import arun.com.chromer.webheads.helper.WebSite;
-import arun.com.chromer.webheads.ui.WebHead;
+import arun.com.chromer.webheads.ui.views.WebHead;
 import timber.log.Timber;
 
 /**

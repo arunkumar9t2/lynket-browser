@@ -88,18 +88,19 @@ dependencies {
 
     compile 'com.facebook.rebound:rebound:0.3.8'
 
-    compile 'org.jsoup:jsoup:1.10.1'
-
     compile 'com.github.nekocode:Badge:1.2'
-
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
-        transitive = true;
-    }
 
     // Reactive
     compile 'io.reactivex:rxjava:1.2.4'
     compile 'com.jakewharton.rxbinding:rxbinding:1.0.0'
     compile 'io.reactivex:rxjava:1.1.6'
+
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
+        transitive = true;
+    }
+
+    compile 'com.squareup.okhttp3:okhttp:3.5.0'
+    compile 'com.github.chimbori:crux:-SNAPSHOT'
 }
 
 static def getBase64() {

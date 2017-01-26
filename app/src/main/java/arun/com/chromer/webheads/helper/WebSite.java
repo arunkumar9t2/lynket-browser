@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 
-import arun.com.chromer.webheads.ui.BaseWebHead;
+import arun.com.chromer.webheads.ui.views.BaseWebHead;
 
 /**
  * Created by Arun on 05/09/2016.

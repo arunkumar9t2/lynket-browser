@@ -48,14 +48,15 @@ import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.DocumentUtils;
 import arun.com.chromer.webheads.helper.ColorExtractionTask;
+import arun.com.chromer.webheads.helper.RxParser;
 import arun.com.chromer.webheads.helper.UrlOrganizer;
 import arun.com.chromer.webheads.helper.WebSite;
 import arun.com.chromer.webheads.physics.SpringChain2D;
 import arun.com.chromer.webheads.tasks.PageExtractTasksManager;
-import arun.com.chromer.webheads.ui.RemoveWebHead;
-import arun.com.chromer.webheads.ui.WebHead;
 import arun.com.chromer.webheads.ui.WebHeadContract;
 import arun.com.chromer.webheads.ui.context.WebHeadContextActivity;
+import arun.com.chromer.webheads.ui.views.RemoveWebHead;
+import arun.com.chromer.webheads.ui.views.WebHead;
 import de.jetwick.snacktory.JResult;
 import timber.log.Timber;
 
@@ -187,6 +188,7 @@ public class WebHeadService extends Service implements WebHeadContract,
 
     private void addWebHead(final String webHeadUrl, final boolean isNewTab, final boolean isMinimized) {
         PageExtractTasksManager.startExtraction(webHeadUrl);
+        RxParser.getInstance().parse(webHeadUrl, null);
         springChain2D.clear();
 
         final WebHead newWebHead = new WebHead(/*Service*/ this, webHeadUrl, /*listener*/ this);
