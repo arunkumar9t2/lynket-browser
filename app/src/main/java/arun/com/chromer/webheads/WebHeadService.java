@@ -31,6 +31,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.chimbori.crux.Article;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringConfig;
 import com.facebook.rebound.SpringSystem;
@@ -52,24 +53,21 @@ import arun.com.chromer.webheads.helper.RxParser;
 import arun.com.chromer.webheads.helper.UrlOrganizer;
 import arun.com.chromer.webheads.helper.WebSite;
 import arun.com.chromer.webheads.physics.SpringChain2D;
-import arun.com.chromer.webheads.tasks.PageExtractTasksManager;
 import arun.com.chromer.webheads.ui.WebHeadContract;
 import arun.com.chromer.webheads.ui.context.WebHeadContextActivity;
 import arun.com.chromer.webheads.ui.views.RemoveWebHead;
 import arun.com.chromer.webheads.ui.views.WebHead;
-import de.jetwick.snacktory.JResult;
 import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.os.AsyncTask.THREAD_POOL_EXECUTOR;
-import static android.support.customtabs.CustomTabsService.KEY_URL;
 import static arun.com.chromer.shared.Constants.ACTION_EVENT_WEBHEAD_DELETED;
 import static arun.com.chromer.shared.Constants.ACTION_EVENT_WEBSITE_UPDATED;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBSITE;
 
 public class WebHeadService extends Service implements WebHeadContract,
-        CustomTabManager.ConnectionCallback, PageExtractTasksManager.ProgressListener {
+        CustomTabManager.ConnectionCallback, RxParser.OnParseListener {
 
     /**
      * Reference to all the web heads created on screen. Ordered in the order of creation by using
@@ -114,8 +112,9 @@ public class WebHeadService extends Service implements WebHeadContract,
         bindToCustomTabSession();
         registerReceivers();
 
-        PageExtractTasksManager.registerListener(this);
         showNotification();
+
+        RxParser.getInstance().setOnParseListener(this);
     }
 
     @Override
@@ -125,9 +124,6 @@ public class WebHeadService extends Service implements WebHeadContract,
         WebHead.cancelToast();
 
         removeWebHeads();
-
-        PageExtractTasksManager.cancelAll(true);
-        PageExtractTasksManager.unRegisterListener();
 
         unregisterReceivers();
 
@@ -187,8 +183,7 @@ public class WebHeadService extends Service implements WebHeadContract,
     }
 
     private void addWebHead(final String webHeadUrl, final boolean isNewTab, final boolean isMinimized) {
-        PageExtractTasksManager.startExtraction(webHeadUrl);
-        RxParser.getInstance().parse(webHeadUrl, null);
+        RxParser.getInstance().parse(webHeadUrl);
         springChain2D.clear();
 
         final WebHead newWebHead = new WebHead(/*Service*/ this, webHeadUrl, /*listener*/ this);
@@ -222,27 +217,20 @@ public class WebHeadService extends Service implements WebHeadContract,
     }
 
     @Override
-    public void onUrlUnShortened(String originalUrl, String unShortenedUrl) {
-        // First check if the associated web head is active
-        final WebHead webHead = webHeads.get(originalUrl);
+    public void onParseComplete(@NonNull String url, @NonNull Article article) {
+        final WebHead webHead = webHeads.get(url);
         if (webHead != null) {
-            webHead.setUnShortenedUrl(unShortenedUrl);
-            if (!Preferences.aggressiveLoading(this)) {
-                if (customTabConnected)
-                    customTabManager.mayLaunchUrl(Uri.parse(unShortenedUrl), null, getPossibleUrls());
-                else
-                    deferMayLaunchUntilConnected(unShortenedUrl);
-            }
-        }
-    }
-
-    @Override
-    public void onUrlExtracted(@NonNull final String originalUrl, @Nullable JResult result) {
-        final WebHead webHead = webHeads.get(originalUrl);
-        if (webHead != null && result != null) {
             try {
-                final String faviconUrl = result.getFaviconUrl();
-                webHead.setTitle(result.getTitle());
+                final String faviconUrl = article.faviconUrl;
+                Timber.d("Favicon: %s", faviconUrl);
+                webHead.setTitle(article.title);
+                webHead.setUnShortenedUrl(article.canonicalUrl);
+                if (!Preferences.aggressiveLoading(this)) {
+                    if (customTabConnected)
+                        customTabManager.mayLaunchUrl(Uri.parse(webHead.getUnShortenedUrl()), null, urlOrganizer.getPossibleUrls(webHeads));
+                    else
+                        deferMayLaunchUntilConnected(webHead.getUnShortenedUrl());
+                }
                 webHead.setFaviconUrl(faviconUrl);
                 Glide.with(this)
                         .load(faviconUrl)
@@ -286,7 +274,7 @@ public class WebHeadService extends Service implements WebHeadContract,
                             Thread.sleep(300);
                             boolean ok = customTabManager.mayLaunchUrl(Uri.parse(urlToLoad),
                                     null,
-                                    getPossibleUrls());
+                                    urlOrganizer.getPossibleUrls(webHeads));
                             Timber.d("Deferred may launch was %b", ok);
                             if (ok) break;
                         }
@@ -299,18 +287,6 @@ public class WebHeadService extends Service implements WebHeadContract,
             }
         });
         deferThread.start();
-    }
-
-    private List<Bundle> getPossibleUrls() {
-        final List<Bundle> possibleUrls = new ArrayList<>();
-        for (WebHead webHead : webHeads.values()) {
-            String url = webHead.getUrl();
-
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(KEY_URL, Uri.parse(url));
-            possibleUrls.add(bundle);
-        }
-        return possibleUrls;
     }
 
     private void bindToCustomTabSession() {

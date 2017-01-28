@@ -83,4 +83,16 @@ public class UrlOrganizer {
         }
         return urlStack;
     }
+
+    public List<Bundle> getPossibleUrls(@NonNull Map<String, WebHead> webHeads) {
+        final List<Bundle> possibleUrls = new ArrayList<>();
+        for (WebHead webHead : webHeads.values()) {
+            String url = webHead.getUrl();
+
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(KEY_URL, Uri.parse(url));
+            possibleUrls.add(bundle);
+        }
+        return possibleUrls;
+    }
 }
