@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -51,6 +50,10 @@ import arun.com.chromer.webheads.WebHeadService;
 import timber.log.Timber;
 
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
+import static android.graphics.Color.WHITE;
+import static arun.com.chromer.customtabs.bottombar.BottomBarManager.createBottomBarRemoteViews;
+import static arun.com.chromer.customtabs.bottombar.BottomBarManager.getClickableIDs;
+import static arun.com.chromer.customtabs.bottombar.BottomBarManager.getOnClickPendingIntent;
 import static arun.com.chromer.preferences.manager.Preferences.ANIMATION_MEDIUM;
 import static arun.com.chromer.preferences.manager.Preferences.ANIMATION_SHORT;
 import static arun.com.chromer.preferences.manager.Preferences.PREFERRED_ACTION_BROWSER;
@@ -69,9 +72,6 @@ public class CustomTabs {
     private static final String BETA_PACKAGE = "com.chrome.beta";
     private static final String DEV_PACKAGE = "com.chrome.dev";
 
-    private static final int BOTTOM_OPEN_TAB = 11;
-    private static final int BOTTOM_SHARE_TAB = 12;
-    private static final int BOTTOM_MINIMIZE_TAB = 13;
     /**
      * Fallback in case there was en error launching custom tabs
      */
@@ -204,11 +204,11 @@ public class CustomTabs {
     @TargetApi(Build.VERSION_CODES.M)
     @NonNull
     public static List<String> getCustomTabSupportingPackages(Context context) {
-        PackageManager pm = context.getApplicationContext().getPackageManager();
-        Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));
+        final PackageManager pm = context.getApplicationContext().getPackageManager();
+        final Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));
         // Get all apps that can handle VIEW intents.
-        List<ResolveInfo> resolvedActivityList = pm.queryIntentActivities(activityIntent, PackageManager.MATCH_ALL);
-        List<String> packagesSupportingCustomTabs = new ArrayList<>();
+        final List<ResolveInfo> resolvedActivityList = pm.queryIntentActivities(activityIntent, PackageManager.MATCH_ALL);
+        final List<String> packagesSupportingCustomTabs = new ArrayList<>();
         for (ResolveInfo info : resolvedActivityList) {
             if (isPackageSupportCustomTabs(context, info.activityInfo.packageName)) {
                 packagesSupportingCustomTabs.add(info.activityInfo.packageName);
@@ -490,7 +490,7 @@ public class CustomTabs {
             case Preferences.PREFERRED_ACTION_GEN_SHARE:
                 final Bitmap shareIcon = new IconicsDrawable(activity)
                         .icon(CommunityMaterial.Icon.cmd_share_variant)
-                        .color(Color.WHITE)
+                        .color(WHITE)
                         .sizeDp(24).toBitmap();
                 final Intent intent = new Intent(activity, ShareBroadcastReceiver.class);
                 final PendingIntent sharePending = PendingIntent.getBroadcast(activity, 0, intent, FLAG_UPDATE_CURRENT);
@@ -607,33 +607,10 @@ public class CustomTabs {
         config.openInNewTab = Utils.isLollipopAbove();
 
         builder.setSecondaryToolbarViews(
-                BottomBarManager.createBottomBarRemoteViews(activity, toolbarColor, config),
-                BottomBarManager.getClickableIDs(),
-                BottomBarManager.getOnClickPendingIntent(activity)
+                createBottomBarRemoteViews(activity, toolbarColor, config),
+                getClickableIDs(),
+                getOnClickPendingIntent(activity)
         );
-
-        /*
-        final Intent shareIntent = new Intent(mActivity, ShareBroadcastReceiver.class);
-        final PendingIntent pendingShareIntent = PendingIntent.getBroadcast(mActivity, 0, shareIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        final Bitmap shareIcon = new IconicsDrawable(mActivity)
-                .icon(CommunityMaterial.Icon.cmd_share_variant)
-                .color(iconColor)
-                .sizeDp(24).toBitmap();
-
-        builder.addToolbarItem(BOTTOM_SHARE_TAB, shareIcon, mActivity.getString(R.string.share), pendingShareIntent);
-
-        if (forWebHead && Preferences.mergeTabs(mActivity)) {
-            final Intent minimizeIntent = new Intent(mActivity, MinimizeBroadcastReceiver.class);
-            minimizeIntent.putExtra(Intent.EXTRA_TEXT, mUrl);
-            final PendingIntent pendingMin = PendingIntent.getBroadcast(mActivity, new Random().nextInt(), minimizeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            final Bitmap minimizeIcon = new IconicsDrawable(mActivity)
-                    .icon(CommunityMaterial.Icon.cmd_flip_to_back)
-                    .color(iconColor)
-                    .sizeDp(24).toBitmap();
-
-            builder.addToolbarItem(BOTTOM_MINIMIZE_TAB, minimizeIcon, mActivity.getString(R.string.minimize), pendingMin);
-        }
-    */
     }
 
     /**
@@ -651,12 +628,12 @@ public class CustomTabs {
      * @return App icon bitmap
      */
     @Nullable
-    private Bitmap getAppIconBitmap(@NonNull String packageName) {
+    private Bitmap getAppIconBitmap(@NonNull final String packageName) {
         try {
-            Drawable drawable = activity.getApplicationContext()
-                    .getPackageManager().getApplicationIcon(packageName);
-            return Utils.drawableToBitmap(drawable);
-        } catch (PackageManager.NameNotFoundException e) {
+            final Drawable drawable = activity.getPackageManager().getApplicationIcon(packageName);
+            final Bitmap appIcon = Utils.drawableToBitmap(drawable);
+            return Utils.scale(appIcon, Utils.dpToPx(24), true);
+        } catch (Exception e) {
             Timber.e("App icon fetching for %s failed", packageName);
         }
         return null;
