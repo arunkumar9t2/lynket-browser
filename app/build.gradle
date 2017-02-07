@@ -47,15 +47,19 @@ android {
             resValue "string", "app_name", "Chromer - dev"
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     // Modules
+
     // Debugging
     compile 'com.facebook.stetho:stetho:1.4.2'
-
     // Support
     compile 'com.android.support:design:25.1.0'
     compile 'com.android.support:customtabs:25.1.0'
@@ -64,43 +68,31 @@ dependencies {
     compile 'com.android.support:palette-v7:25.1.0'
     // ----
     compile 'com.github.paolorotolo:appintro:4.1.0'
-
     compile 'com.mikepenz:community-material-typeface:1.5.54.2@aar'
     compile('com.mikepenz:materialdrawer:5.3.6@aar') {
         transitive = true
     }
-
     compile 'de.psdev.licensesdialog:licensesdialog:1.8.1'
-
     compile 'com.afollestad.material-dialogs:core:0.9.2.3'
     compile 'com.afollestad.material-dialogs:commons:0.9.2.3'
-
     compile 'com.jakewharton.timber:timber:4.3.1'
     compile 'com.jakewharton:butterknife:8.4.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
-
     compile 'com.github.satyan:sugar:1.5'
     compile 'com.github.bumptech.glide:glide:3.7.0'
-
     compile 'com.flipboard:bottomsheet-core:1.5.1'
     compile 'com.flipboard:bottomsheet-commons:1.5.1'
-
     compile 'com.facebook.rebound:rebound:0.3.8'
-
     compile 'com.github.nekocode:Badge:1.2'
-
     // Reactive
     compile 'io.reactivex:rxjava:1.2.4'
     compile 'com.jakewharton.rxbinding:rxbinding:1.0.0'
     compile 'io.reactivex:rxjava:1.1.6'
-
     compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
         transitive = true;
     }
-
     compile 'com.squareup.okhttp3:okhttp:3.5.0'
-
-    compile project(path: ':crux')
+    compile 'com.github.chimbori:crux:-SNAPSHOT'
 }
 
 static def getBase64() {

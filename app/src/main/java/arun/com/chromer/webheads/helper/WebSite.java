@@ -11,7 +11,6 @@ import arun.com.chromer.webheads.ui.views.BaseWebHead;
 /**
  * Created by Arun on 05/09/2016.
  */
-
 public class WebSite implements Parcelable {
     public String title;
     public String url;

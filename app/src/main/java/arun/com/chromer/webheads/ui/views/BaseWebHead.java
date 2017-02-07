@@ -434,7 +434,7 @@ public abstract class BaseWebHead extends FrameLayout {
 
     @NonNull
     public String getUnShortenedUrl() {
-        return mUnShortenedUrl == null ? getUrl() : mUnShortenedUrl;
+        return mUnShortenedUrl == null || mUnShortenedUrl.isEmpty() ? getUrl() : mUnShortenedUrl;
     }
 
     public void setUnShortenedUrl(String unShortenedUrl) {

@@ -64,11 +64,12 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.os.AsyncTask.THREAD_POOL_EXECUTOR;
 import static arun.com.chromer.shared.Constants.ACTION_EVENT_WEBHEAD_DELETED;
 import static arun.com.chromer.shared.Constants.ACTION_EVENT_WEBSITE_UPDATED;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_NEW_TAB;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_MINIMIZE;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBSITE;
 
 public class WebHeadService extends Service implements WebHeadContract,
         CustomTabManager.ConnectionCallback, RxParser.OnParseListener {
-
     /**
      * Reference to all the web heads created on screen. Ordered in the order of creation by using
      * {@link LinkedHashMap}. The key must be unique and is usually the url the web head represents.
@@ -108,31 +109,27 @@ public class WebHeadService extends Service implements WebHeadContract,
         urlOrganizer = new UrlOrganizer(this);
         RemoveWebHead.init(this);
 
-        // bind to custom tab session
         bindToCustomTabSession();
         registerReceivers();
-
         showNotification();
-
         RxParser.getInstance().setOnParseListener(this);
     }
 
     @Override
     public void onDestroy() {
         Timber.d("Exiting webhead service");
+        stopForeground(true);
         WebHead.clearMasterPosition();
         WebHead.cancelToast();
 
         removeWebHeads();
-
         unregisterReceivers();
 
         if (customTabManager != null) {
             customTabManager.unbindCustomTabsService(this);
         }
-
-        stopForeground(true);
         RemoveWebHead.destroy();
+        RxParser.getInstance().unsubscribe();
         super.onDestroy();
     }
 
@@ -171,8 +168,8 @@ public class WebHeadService extends Service implements WebHeadContract,
 
     private void processIntent(@Nullable Intent intent) {
         if (intent == null || intent.getDataString() == null) return; // don't do anything
-        final boolean isFromNewTab = intent.getBooleanExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, false);
-        final boolean isMinimized = intent.getBooleanExtra(Constants.EXTRA_KEY_MINIMIZE, false);
+        final boolean isFromNewTab = intent.getBooleanExtra(EXTRA_KEY_FROM_NEW_TAB, false);
+        final boolean isMinimized = intent.getBooleanExtra(EXTRA_KEY_MINIMIZE, false);
 
         final String urlToLoad = intent.getDataString();
         if (!isLinkAlreadyLoaded(urlToLoad)) {
@@ -217,20 +214,14 @@ public class WebHeadService extends Service implements WebHeadContract,
     }
 
     @Override
-    public void onParseComplete(@NonNull String url, @NonNull Article article) {
+    public void onParseComplete(@NonNull final String url, final @Nullable Article article) {
         final WebHead webHead = webHeads.get(url);
-        if (webHead != null) {
+        if (webHead != null && article != null) {
             try {
                 final String faviconUrl = article.faviconUrl;
-                Timber.d("Favicon: %s", faviconUrl);
                 webHead.setTitle(article.title);
                 webHead.setUnShortenedUrl(article.canonicalUrl);
-                if (!Preferences.aggressiveLoading(this)) {
-                    if (customTabConnected)
-                        customTabManager.mayLaunchUrl(Uri.parse(webHead.getUnShortenedUrl()), null, urlOrganizer.getPossibleUrls(webHeads));
-                    else
-                        deferMayLaunchUntilConnected(webHead.getUnShortenedUrl());
-                }
+                warmUp(webHead);
                 webHead.setFaviconUrl(faviconUrl);
                 Glide.with(this)
                         .load(faviconUrl)
@@ -255,6 +246,17 @@ public class WebHeadService extends Service implements WebHeadContract,
             } catch (Exception e) {
                 Timber.e(e.getMessage());
             }
+        } else if (webHead != null) {
+            warmUp(webHead);
+        }
+    }
+
+    private void warmUp(WebHead webHead) {
+        if (!Preferences.aggressiveLoading(this)) {
+            if (customTabConnected)
+                customTabManager.mayLaunchUrl(Uri.parse(webHead.getUnShortenedUrl()), null, urlOrganizer.getPossibleUrls(webHeads));
+            else
+                deferMayLaunchUntilConnected(webHead.getUnShortenedUrl());
         }
     }
 
@@ -301,8 +303,7 @@ public class WebHeadService extends Service implements WebHeadContract,
         customTabManager.setConnectionCallback(this);
         customTabManager.setNavigationCallback(new WebHeadNavigationCallback());
 
-        boolean ok = customTabManager.bindCustomTabsService(this);
-        if (ok) Timber.d("Binding successful");
+        if (customTabManager.bindCustomTabsService(this)) Timber.d("Binding successful");
     }
 
     private void removeWebHeads() {
