@@ -23,29 +23,40 @@ import arun.com.chromer.R;
 import arun.com.chromer.activities.blacklist.BlackListManager;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.shared.AppDetectionManager;
-import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Utils;
-import arun.com.chromer.webheads.helper.ProxyActivity;
+import arun.com.chromer.webheads.ui.ProxyActivity;
 import timber.log.Timber;
+
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+import static android.content.Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_DOCUMENT;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
+import static android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION;
+import static android.widget.Toast.LENGTH_LONG;
+import static android.widget.Toast.LENGTH_SHORT;
+import static arun.com.chromer.shared.Constants.ACTION_CLOSE_MAIN;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_NEW_TAB;
 
 @SuppressLint("GoogleAppIndexingApiWarning")
 public class BrowserInterceptActivity extends AppCompatActivity {
     private MaterialDialog dialog;
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @TargetApi(LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (getIntent() == null || getIntent().getData() == null) {
-            Toast.makeText(this, getString(R.string.unsupported_link), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.unsupported_link), LENGTH_SHORT).show();
             finish();
             return;
         }
 
         signalMainFinish();
 
-        final boolean isFromNewTab = getIntent().getBooleanExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, false);
+        final boolean isFromNewTab = getIntent().getBooleanExtra(EXTRA_KEY_FROM_NEW_TAB, false);
 
         // Check if we should blacklist the launching app
         if (Preferences.blacklist(this)) {
@@ -62,9 +73,8 @@ public class BrowserInterceptActivity extends AppCompatActivity {
         if (Preferences.webHeads(this)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (!Settings.canDrawOverlays(this)) {
-                    Toast.makeText(this, getString(R.string.web_head_permission_toast), Toast.LENGTH_LONG).show();
-                    final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                            Uri.parse("package:" + getPackageName()));
+                    Toast.makeText(this, getString(R.string.web_head_permission_toast), LENGTH_LONG).show();
+                    final Intent intent = new Intent(ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
                     startActivity(intent);
                 } else {
                     launchWebHead(isFromNewTab);
@@ -73,13 +83,13 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                 launchWebHead(isFromNewTab);
             }
         } else {
-            Intent customTabActivity = new Intent(this, CustomTabActivity.class);
+            final Intent customTabActivity = new Intent(this, CustomTabActivity.class);
             customTabActivity.setData(getIntent().getData());
             if (isFromNewTab || Preferences.mergeTabs(this)) {
-                customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-                customTabActivity.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                customTabActivity.addFlags(FLAG_ACTIVITY_NEW_DOCUMENT);
+                customTabActivity.addFlags(FLAG_ACTIVITY_MULTIPLE_TASK);
             }
-            customTabActivity.putExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, isFromNewTab);
+            customTabActivity.putExtra(EXTRA_KEY_FROM_NEW_TAB, isFromNewTab);
             startActivity(customTabActivity);
         }
 
@@ -88,7 +98,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
 
     private void signalMainFinish() {
         LocalBroadcastManager.getInstance(this)
-                .sendBroadcast(new Intent(Constants.ACTION_CLOSE_MAIN));
+                .sendBroadcast(new Intent(ACTION_CLOSE_MAIN));
     }
 
     /**
@@ -135,7 +145,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         final Intent chromerIntent = getPackageManager().getLaunchIntentForPackage(getPackageName());
-                        chromerIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        chromerIntent.addFlags(FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(chromerIntent);
                     }
                 })
@@ -154,12 +164,12 @@ public class BrowserInterceptActivity extends AppCompatActivity {
     }
 
     private void launchWebHead(boolean isNewTab) {
-        Intent webHeadLauncher = new Intent(this, ProxyActivity.class);
-        webHeadLauncher.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        final Intent webHeadLauncher = new Intent(this, ProxyActivity.class);
+        webHeadLauncher.addFlags(FLAG_ACTIVITY_NEW_TASK);
         if (!isNewTab)
-            webHeadLauncher.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            webHeadLauncher.addFlags(FLAG_ACTIVITY_CLEAR_TASK);
 
-        webHeadLauncher.putExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, isNewTab);
+        webHeadLauncher.putExtra(EXTRA_KEY_FROM_NEW_TAB, isNewTab);
         webHeadLauncher.setData(getIntent().getData());
         startActivity(webHeadLauncher);
     }

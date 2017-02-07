@@ -2,6 +2,7 @@ package arun.com.chromer.webheads.ui.context;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,13 +28,12 @@ import butterknife.ButterKnife;
  */
 
 class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> {
+    private final Context context;
+    private final List<WebSite> webSites = new ArrayList<>();
+    private final WebSiteAdapterListener listener;
 
-    private final Context mContext;
-    private final List<WebSite> mWebSites = new ArrayList<>();
-    private final InteractionListener listener;
-
-    WebsiteAdapter(@NonNull Context context, @NonNull InteractionListener listener) {
-        mContext = context.getApplicationContext();
+    WebsiteAdapter(@NonNull Context context, @NonNull WebSiteAdapterListener listener) {
+        this.context = context.getApplicationContext();
         this.listener = listener;
         setHasStableIds(true);
     }
@@ -45,66 +45,57 @@ class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> 
 
     @Override
     public void onBindViewHolder(WebSiteHolder holder, int position) {
-        final WebSite webSite = mWebSites.get(position);
-        holder.url.setText(webSite.url);
-        holder.deleteIcon.setImageDrawable(new IconicsDrawable(mContext)
+        final WebSite webSite = webSites.get(position);
+        holder.deleteIcon.setImageDrawable(new IconicsDrawable(context)
                 .icon(CommunityMaterial.Icon.cmd_close)
-                .color(ContextCompat.getColor(mContext, R.color.accent_icon_nofocus))
+                .color(ContextCompat.getColor(context, R.color.accent_icon_nofocus))
                 .sizeDp(16));
-        holder.shareIcon.setImageDrawable(new IconicsDrawable(mContext)
+        holder.shareIcon.setImageDrawable(new IconicsDrawable(context)
                 .icon(CommunityMaterial.Icon.cmd_share_variant)
-                .color(ContextCompat.getColor(mContext, R.color.accent_icon_nofocus))
+                .color(ContextCompat.getColor(context, R.color.accent_icon_nofocus))
                 .sizeDp(16));
-        if (webSite.title != null && webSite.title.length() > 0) {
-            holder.title.setText(webSite.title);
-        } else {
-            holder.title.setText(webSite.url);
-        }
-
-        if (webSite.icon != null) {
-            holder.icon.setImageBitmap(webSite.icon);
-        } else {
-            Glide.with(mContext)
-                    .load(webSite.faviconUrl)
-                    .crossFade()
-                    .into(holder.icon);
-        }
+        holder.url.setText(webSite.preferredUrl());
+        holder.title.setText(webSite.safeLabel());
+        Glide.with(context)
+                .load(webSite.faviconUrl)
+                .crossFade()
+                .into(holder.icon);
     }
 
     @Override
     public int getItemCount() {
-        return mWebSites.size();
+        return webSites.size();
     }
 
     @Override
     public long getItemId(int position) {
-        return mWebSites.get(position).hashCode();
+        return webSites.get(position).hashCode();
     }
 
     void setWebsites(ArrayList<WebSite> webSites) {
-        mWebSites.clear();
-        mWebSites.addAll(webSites);
+        this.webSites.clear();
+        this.webSites.addAll(webSites);
         notifyDataSetChanged();
     }
 
     List<WebSite> getWebSites() {
-        return mWebSites;
+        return webSites;
     }
 
     void delete(@NonNull WebSite webSite) {
-        final int index = mWebSites.indexOf(webSite);
+        final int index = webSites.indexOf(webSite);
         if (index != -1) {
-            mWebSites.remove(index);
+            webSites.remove(index);
             notifyItemRemoved(index);
             listener.onWebSiteDelete(webSite);
         }
     }
 
     void update(@NonNull WebSite web) {
-        final int index = mWebSites.indexOf(web);
+        final int index = webSites.indexOf(web);
         if (index != -1) {
-            mWebSites.remove(index);
-            mWebSites.add(index, web);
+            webSites.remove(index);
+            webSites.add(index, web);
             notifyItemChanged(index);
         }
     }
@@ -127,27 +118,32 @@ class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        final WebSite webSite = mWebSites.get(position);
-                        if (webSite != null) {
-                            listener.onWebSiteItemClicked(webSite);
-                        }
+                    final WebSite webSite = getWebsite();
+                    if (webSite != null) {
+                        listener.onWebSiteItemClicked(webSite);
                     }
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    final WebSite webSite = getWebsite();
+                    if (webSite != null) {
+                        listener.onWebSiteLongClicked(webSite);
+                    }
+                    return true;
                 }
             });
 
             deleteIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        final WebSite webSite = mWebSites.get(position);
-                        if (webSite != null) {
-                            mWebSites.remove(webSite);
-                            listener.onWebSiteDelete(webSite);
-                            notifyDataSetChanged();
-                        }
+                    final WebSite webSite = getWebsite();
+                    if (webSite != null) {
+                        webSites.remove(webSite);
+                        listener.onWebSiteDelete(webSite);
+                        notifyDataSetChanged();
                     }
                 }
             });
@@ -155,23 +151,30 @@ class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> 
             shareIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        final WebSite webSite = mWebSites.get(position);
-                        if (webSite != null) {
-                            listener.onWebSiteShare(webSite);
-                        }
+                    final WebSite webSite = getWebsite();
+                    if (webSite != null) {
+                        listener.onWebSiteShare(webSite);
                     }
                 }
             });
         }
+
+        @Nullable
+        private WebSite getWebsite() {
+            final int position = getAdapterPosition();
+            if (position != RecyclerView.NO_POSITION) {
+                return webSites.get(position);
+            } else return null;
+        }
     }
 
-    interface InteractionListener {
+    interface WebSiteAdapterListener {
         void onWebSiteItemClicked(@NonNull WebSite webSite);
 
         void onWebSiteDelete(@NonNull WebSite webSite);
 
         void onWebSiteShare(@NonNull WebSite webSite);
+
+        void onWebSiteLongClicked(@NonNull WebSite webSite);
     }
 }

@@ -136,7 +136,7 @@
             android:theme="@style/DialogTheme" />
 
         <activity
-            android:name=".webheads.helper.ProxyActivity"
+            android:name=".webheads.ui.ProxyActivity"
             android:excludeFromRecents="true"
             android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Translucent" />

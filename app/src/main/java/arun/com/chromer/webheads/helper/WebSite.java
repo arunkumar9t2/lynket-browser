@@ -1,47 +1,39 @@
 package arun.com.chromer.webheads.helper;
 
-import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 
-import arun.com.chromer.webheads.ui.BaseWebHead;
+import com.chimbori.crux.Article;
+
+import static arun.com.chromer.shared.Constants.NO_COLOR;
 
 /**
  * Created by Arun on 05/09/2016.
  */
-
 public class WebSite implements Parcelable {
     public String title;
     public String url;
-    public Bitmap icon;
     public String faviconUrl;
-    public String longUrl;
-    @ColorInt
-    public int color;
+    public String canonicalUrl;
+    public String themeColor;
+    public int extractedColor = NO_COLOR;
+    public String ampUrl;
 
     public WebSite() {
 
     }
 
-    public static WebSite fromWebHead(@NonNull BaseWebHead webHead) {
-        final WebSite webSite = new WebSite();
-        webSite.title = webHead.getTitle();
-        webSite.url = webHead.getUrl();
-        webSite.longUrl = webHead.getUnShortenedUrl();
-        webSite.faviconUrl = webHead.getFaviconUrl();
-        webSite.color = webHead.getWebHeadColor(true);
-        return webSite;
-    }
-
-    private WebSite(Parcel in) {
+    protected WebSite(Parcel in) {
         title = in.readString();
         url = in.readString();
-        icon = in.readParcelable(Bitmap.class.getClassLoader());
         faviconUrl = in.readString();
-        longUrl = in.readString();
-        color = in.readInt();
+        canonicalUrl = in.readString();
+        themeColor = in.readString();
+        extractedColor = in.readInt();
+        ampUrl = in.readString();
     }
 
     public static final Creator<WebSite> CREATOR = new Creator<WebSite>() {
@@ -56,20 +48,36 @@ public class WebSite implements Parcelable {
         }
     };
 
-    @Override
-    public int describeContents() {
-        return 0;
+    @NonNull
+    public static WebSite fromArticle(@NonNull Article article) {
+        final WebSite webSite = new WebSite();
+        webSite.title = article.title;
+        webSite.url = article.url;
+        webSite.canonicalUrl = article.canonicalUrl != null && !article.canonicalUrl.isEmpty() ? article.canonicalUrl : article.url;
+        webSite.faviconUrl = article.faviconUrl;
+        webSite.themeColor = article.themeColor;
+        return webSite;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(title);
-        dest.writeString(url);
-        dest.writeParcelable(icon, flags);
-        dest.writeString(faviconUrl);
-        dest.writeString(longUrl);
-        dest.writeInt(color);
+    @NonNull
+    public String preferredUrl() {
+        return canonicalUrl != null && !canonicalUrl.isEmpty() ? canonicalUrl : url;
     }
+
+    @NonNull
+    public String safeLabel() {
+        return title != null && !title.isEmpty() ? title : preferredUrl();
+    }
+
+    @ColorInt
+    public int themeColor() {
+        try {
+            return Color.parseColor(themeColor);
+        } catch (Exception e) {
+            return NO_COLOR;
+        }
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -89,11 +97,24 @@ public class WebSite implements Parcelable {
         return "WebSite{" +
                 "title='" + title + '\'' +
                 ", url='" + url + '\'' +
-                ", icon=" + icon +
-                ", faviconUrl='" + faviconUrl + '\'' +
-                ", longUrl='" + longUrl + '\'' +
-                ", color=" + color +
+                ", canonicalUrl='" + canonicalUrl + '\'' +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(title);
+        dest.writeString(url);
+        dest.writeString(faviconUrl);
+        dest.writeString(canonicalUrl);
+        dest.writeString(themeColor);
+        dest.writeInt(extractedColor);
+        dest.writeString(ampUrl);
     }
 }
 
