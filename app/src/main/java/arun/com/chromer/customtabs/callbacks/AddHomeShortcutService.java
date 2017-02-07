@@ -15,7 +15,6 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.util.Pair;
 import android.support.v7.graphics.Palette;
 import android.widget.Toast;
 
@@ -30,7 +29,6 @@ import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.helper.RxParser;
 import arun.com.chromer.webheads.helper.WebSite;
-import rx.functions.Func1;
 import timber.log.Timber;
 
 import static android.content.Intent.EXTRA_SHORTCUT_ICON;
@@ -59,18 +57,11 @@ public class AddHomeShortcutService extends IntentService {
 
             showToast(getString(R.string.add_home_screen_begun));
 
-            final Article article = RxParser.parseUrl(urlToAdd)
-                    .map(new Func1<Pair<String, Article>, Article>() {
-                        @Override
-                        public Article call(Pair<String, Article> stringArticlePair) {
-                            return stringArticlePair.second;
-                        }
-                    }).toBlocking().first();
+            final Article article = RxParser.parseUrlSync(urlToAdd);
             if (article == null) {
                 legacyAdd(urlToAdd);
                 return;
             }
-
             final WebSite webSite = WebSite.fromArticle(article);
             final String shortCutName = webSite.safeLabel();
             final String faviconUrl = webSite.faviconUrl;
@@ -79,7 +70,7 @@ public class AddHomeShortcutService extends IntentService {
             if (favicon == null) {
                 favicon = createShortcutIcon(ContextCompat.getColor(this, R.color.primary), shortCutName);
             } else if (!isValidFavicon(favicon)) {
-                final Palette palette = Palette.from(favicon).generate();
+                final Palette palette = Palette.from(favicon).clearFilters().generate();
                 int iconColor = ColorUtil.getBestFaviconColor(palette);
                 if (iconColor == NO_COLOR) {
                     iconColor = ContextCompat.getColor(this, R.color.primary);

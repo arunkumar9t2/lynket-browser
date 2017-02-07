@@ -40,7 +40,7 @@ public class RxParser {
     // To get notified about parse completion event..
     private OnParseListener onParseListener = new OnParseListener() {
         @Override
-        public void onUrlParsed(@NonNull String url, @NonNull Article article) {
+        public void onUrlParsed(@NonNull String url, @Nullable Article article) {
             // No-op
         }
     };
@@ -173,6 +173,10 @@ public class RxParser {
 
     public static Observable<Pair<String, Article>> parseUrl(@Nullable String url) {
         return Observable.just(url).map(URL_TO_ARTICLE_PAIR_MAPPER);
+    }
+
+    public static Article parseUrlSync(@Nullable String url) {
+        return Observable.just(url).map(URL_TO_ARTICLE_PAIR_MAPPER).toBlocking().first().second;
     }
 
     public interface OnParseListener {
