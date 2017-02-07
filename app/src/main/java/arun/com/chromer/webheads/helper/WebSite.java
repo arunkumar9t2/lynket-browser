@@ -19,6 +19,7 @@ public class WebSite implements Parcelable {
     public String faviconUrl;
     public String canonicalUrl;
     public String themeColor;
+    public int extractedColor = NO_COLOR;
     public String ampUrl;
 
     public WebSite() {
@@ -31,6 +32,7 @@ public class WebSite implements Parcelable {
         faviconUrl = in.readString();
         canonicalUrl = in.readString();
         themeColor = in.readString();
+        extractedColor = in.readInt();
         ampUrl = in.readString();
     }
 
@@ -71,7 +73,7 @@ public class WebSite implements Parcelable {
     public int themeColor() {
         try {
             return Color.parseColor(themeColor);
-        } catch (IllegalArgumentException | StringIndexOutOfBoundsException e) {
+        } catch (Exception e) {
             return NO_COLOR;
         }
     }
@@ -111,6 +113,7 @@ public class WebSite implements Parcelable {
         dest.writeString(faviconUrl);
         dest.writeString(canonicalUrl);
         dest.writeString(themeColor);
+        dest.writeInt(extractedColor);
         dest.writeString(ampUrl);
     }
 }
