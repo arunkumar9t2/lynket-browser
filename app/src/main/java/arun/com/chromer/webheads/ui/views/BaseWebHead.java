@@ -7,8 +7,6 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.PixelFormat;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
@@ -20,19 +18,16 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.text.SpannableString;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
 import arun.com.chromer.preferences.manager.Preferences;
-import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.helper.WebSite;
@@ -41,7 +36,22 @@ import butterknife.ButterKnife;
 import cn.nekocode.badge.BadgeDrawable;
 import timber.log.Timber;
 
+import static android.graphics.Color.TRANSPARENT;
+import static android.graphics.Color.WHITE;
+import static android.graphics.PixelFormat.TRANSLUCENT;
+import static android.view.Gravity.LEFT;
+import static android.view.Gravity.TOP;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import static android.view.WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
+import static android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+import static android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+import static android.view.WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+import static android.widget.ImageView.ScaleType.CENTER;
+import static arun.com.chromer.shared.Constants.NO_COLOR;
+import static arun.com.chromer.util.ColorUtil.getForegroundWhiteOrBlack;
 import static arun.com.chromer.util.Utils.dpToPx;
+import static cn.nekocode.badge.BadgeDrawable.TYPE_NUMBER;
+import static com.mikepenz.community_material_typeface_library.CommunityMaterial.Icon.cmd_close;
 
 /**
  * ViewGroup that holds the web head UI elements. Allows configuring various parameters in relation
@@ -49,100 +59,83 @@ import static arun.com.chromer.util.Utils.dpToPx;
  */
 public abstract class BaseWebHead extends FrameLayout {
     // Helper instance to know screen boundaries that web head is allowed to travel
-    static ScreenBounds sScreenBounds;
+    static ScreenBounds screenBounds;
     // Counter to keep count of active web heads
     static int WEB_HEAD_COUNT = 0;
     // Class variables to keep track of where the master was last touched down
     static int masterDownX;
     static int masterDownY;
     // Static window manager instance to update, add and remove web heads
-    private static WindowManager sWindowManager;
+    private static WindowManager windowManager;
     // X icon drawable used when closing
-    private static Drawable sXDrawable;
+    private static Drawable xDrawable;
     // Badge indicator
-    private static BadgeDrawable sBadgeDrawable;
+    private static BadgeDrawable badgeDrawable;
     // Class variables to keep track of master movements
     private static int masterX;
     private static int masterY;
     // Window parameters used to track and update web heads post creation;
-    final WindowManager.LayoutParams mWindowParams;
+    final WindowManager.LayoutParams windowParams;
     // Color of web head when removed
-    int sDeleteColor = Constants.NO_COLOR;
-    // The url of the website that this web head represents, not allowed to change
-    private final String mUrl;
+    int deleteColor = NO_COLOR;
+    // The preferredUrl of the website that this web head represents, not allowed to change
+    private final String url;
+    // Website data that this web head represents
+    private WebSite webSite;
 
     @BindView(R.id.favicon)
-    protected ImageView mFavicon;
+    protected ImageView favicon;
     @BindView(R.id.indicator)
-    protected TextView mIndicator;
+    protected TextView indicator;
     @BindView(R.id.circleBackground)
-    protected ElevatedCircleView mCircleBackground;
+    protected ElevatedCircleView circleBg;
     @BindView(R.id.revealView)
-    protected CircleView mRevealView;
+    protected CircleView revealView;
     @BindView(R.id.badge)
-    protected TextView mBadgeView;
+    protected TextView badgeView;
 
     // Display dimensions
-    int sDispWidth, sDispHeight;
+    int dispWidth, dispHeight;
     // The content view group which host all our elements
-    FrameLayout mContentGroup;
+    FrameLayout contentRoot;
     // Flag to know if the user moved manually or if the web heads is still resting
-    boolean mUserManuallyMoved;
+    boolean userManuallyMoved;
     // If web head was issued with destroy before.
-    boolean mDestroyed;
+    boolean destroyed;
     // Master Wayne
-    boolean mMaster;
+    boolean master;
     // If this web head is being queued to be displayed on screen.
-    boolean mInQueue;
-    // The un shortened url resolved from @link mUrl
-    private String mUnShortenedUrl;
-    // Title of the website
-    private String mTitle;
-
-    // Favicon url
-    private String mFaviconUrl;
+    boolean inQueue;
     // Flag to know if this web head was created for opening in new tab
-    private boolean mIsFromNewTab;
-    private boolean mSpawnSet;
+    private boolean fromNewTab;
+    private boolean spawnCoordSet;
     // Color of the web head
     @ColorInt
-    int mWebHeadColor;
+    int webHeadColor;
 
     @SuppressLint("RtlHardcoded")
-    BaseWebHead(@NonNull Context context, @NonNull String url) {
+    BaseWebHead(@NonNull final Context context, @NonNull final String url) {
         super(context);
         WEB_HEAD_COUNT++;
+        this.url = url;
+        webSite = new WebSite();
+        webSite.url = url;
 
-        mUrl = url;
-        sWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-
+        windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         inflateContent(context);
-        initContent();
-
-        mWindowParams = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                        | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-                        | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
-                PixelFormat.TRANSLUCENT);
-        mWindowParams.gravity = Gravity.TOP | Gravity.LEFT;
-
+        windowParams = createWindowParams();
+        windowParams.gravity = TOP | LEFT;
         initDisplayMetrics();
-
-        sWindowManager.addView(this, mWindowParams);
-
-        if (sXDrawable == null) {
-            sXDrawable = new IconicsDrawable(context)
-                    .icon(CommunityMaterial.Icon.cmd_close)
-                    .color(Color.WHITE)
+        windowManager.addView(this, windowParams);
+        if (xDrawable == null) {
+            xDrawable = new IconicsDrawable(context)
+                    .icon(cmd_close)
+                    .color(WHITE)
                     .sizeDp(18);
         }
-
-        if (sDeleteColor == Constants.NO_COLOR)
-            sDeleteColor = ContextCompat.getColor(context, R.color.remove_web_head_color);
-
+        if (deleteColor == NO_COLOR) {
+            deleteColor = ContextCompat.getColor(context, R.color.remove_web_head_color);
+        }
         // Needed to prevent overly dark shadow.
         if (WEB_HEAD_COUNT > 2) {
             setWebHeadElevation(dpToPx(4));
@@ -167,70 +160,65 @@ public abstract class BaseWebHead extends FrameLayout {
     private void inflateContent(@NonNull Context context) {
         // size
         if (Preferences.webHeadsSize(context) == 2) {
-            mContentGroup = (FrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.web_head_layout_small, this, false);
+            contentRoot = (FrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.web_head_layout_small, this, false);
         } else
-            mContentGroup = (FrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.web_head_layout, this, false);
-        addView(mContentGroup);
+            contentRoot = (FrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.web_head_layout, this, false);
+        addView(contentRoot);
         ButterKnife.bind(this);
+
+        webHeadColor = Preferences.webHeadColor(getContext());
+        indicator.setText(Utils.getFirstLetter(url));
+        indicator.setTextColor(getForegroundWhiteOrBlack(webHeadColor));
+        initRevealView(webHeadColor);
+
+        if (badgeDrawable == null) {
+            badgeDrawable = new BadgeDrawable.Builder()
+                    .type(TYPE_NUMBER)
+                    .badgeColor(ContextCompat.getColor(getContext(), R.color.accent))
+                    .textColor(WHITE)
+                    .number(WEB_HEAD_COUNT)
+                    .build();
+        } else {
+            badgeDrawable.setNumber(WEB_HEAD_COUNT);
+        }
+        badgeView.setVisibility(VISIBLE);
+        badgeView.setText(new SpannableString(badgeDrawable.toSpannable()));
+        updateBadgeColors(webHeadColor);
+
+        if (!Utils.isLollipopAbove()) {
+            final int pad = dpToPx(5);
+            badgeView.setPadding(pad, pad, pad, pad);
+        }
     }
 
     private void initDisplayMetrics() {
         final DisplayMetrics metrics = new DisplayMetrics();
-        sWindowManager.getDefaultDisplay().getMetrics(metrics);
-        sDispWidth = metrics.widthPixels;
-        sDispHeight = metrics.heightPixels;
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        dispWidth = metrics.widthPixels;
+        dispHeight = metrics.heightPixels;
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        if (sScreenBounds == null)
-            sScreenBounds = new ScreenBounds(sDispWidth, sDispHeight, w);
+        if (screenBounds == null)
+            screenBounds = new ScreenBounds(dispWidth, dispHeight, w);
 
-        if (!mSpawnSet) {
-            int x, y = sDispHeight / 3;
+        if (!spawnCoordSet) {
+            int x, y = dispHeight / 3;
 
             if (masterX != 0 || masterY != 0) {
                 x = masterX;
                 y = masterY;
             } else {
                 if (Preferences.webHeadsSpawnLocation(getContext()) == 1) {
-                    x = sScreenBounds.right;
+                    x = screenBounds.right;
                 } else {
-                    x = sScreenBounds.left;
+                    x = screenBounds.left;
                 }
             }
-            mSpawnSet = true;
+            spawnCoordSet = true;
             onSpawnLocationSet(x, y);
-        }
-    }
-
-    /**
-     * Initializes web head from user preferences
-     */
-    private void initContent() {
-        mWebHeadColor = Preferences.webHeadColor(getContext());
-        mIndicator.setText(Utils.getFirstLetter(mUrl));
-        mIndicator.setTextColor(ColorUtil.getForegroundWhiteOrBlack(mWebHeadColor));
-        initRevealView(mWebHeadColor);
-
-        if (sBadgeDrawable == null) {
-            sBadgeDrawable = new BadgeDrawable.Builder()
-                    .type(BadgeDrawable.TYPE_NUMBER)
-                    .badgeColor(ContextCompat.getColor(getContext(), R.color.accent))
-                    .textColor(Color.WHITE)
-                    .number(WEB_HEAD_COUNT)
-                    .build();
-        } else {
-            sBadgeDrawable.setNumber(WEB_HEAD_COUNT);
-        }
-        mBadgeView.setVisibility(VISIBLE);
-        mBadgeView.setText(new SpannableString(sBadgeDrawable.toSpannable()));
-        updateBadgeColors(mWebHeadColor);
-
-        if (!Utils.isLollipopAbove()) {
-            final int pad = dpToPx(5);
-            mBadgeView.setPadding(pad, pad, pad, pad);
         }
     }
 
@@ -248,55 +236,52 @@ public abstract class BaseWebHead extends FrameLayout {
      */
     void updateView() {
         try {
-            if (mMaster) {
-                masterX = mWindowParams.x;
-                masterY = mWindowParams.y;
+            if (master) {
+                masterX = windowParams.x;
+                masterY = windowParams.y;
             }
-            sWindowManager.updateViewLayout(this, mWindowParams);
+            windowManager.updateViewLayout(this, windowParams);
         } catch (IllegalArgumentException e) {
             Timber.e("Update called after view was removed");
         }
     }
 
-    /**
-     * @return true if current web head is the last active one
-     */
     boolean isLastWebHead() {
         return WEB_HEAD_COUNT == 0;
     }
 
-    private void setWebHeadElevation(int elevationPx) {
+    private void setWebHeadElevation(final int elevationPx) {
         if (Utils.isLollipopAbove()) {
-            if (mCircleBackground != null && mRevealView != null) {
-                mCircleBackground.setElevation(elevationPx);
-                mRevealView.setElevation(elevationPx + 1);
+            if (circleBg != null && revealView != null) {
+                circleBg.setElevation(elevationPx);
+                revealView.setElevation(elevationPx + 1);
             }
         }
     }
 
     @NonNull
     public Animator getRevealAnimator(@ColorInt final int newWebHeadColor) {
-        mRevealView.clearAnimation();
+        revealView.clearAnimation();
         initRevealView(newWebHeadColor);
 
         final AnimatorSet animator = new AnimatorSet();
         animator.playTogether(
-                ObjectAnimator.ofFloat(mRevealView, "scaleX", 1f),
-                ObjectAnimator.ofFloat(mRevealView, "scaleY", 1f),
-                ObjectAnimator.ofFloat(mRevealView, "alpha", 1f)
+                ObjectAnimator.ofFloat(revealView, "scaleX", 1f),
+                ObjectAnimator.ofFloat(revealView, "scaleY", 1f),
+                ObjectAnimator.ofFloat(revealView, "alpha", 1f)
         );
-        mRevealView.setLayerType(LAYER_TYPE_HARDWARE, null);
+        revealView.setLayerType(LAYER_TYPE_HARDWARE, null);
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                mWebHeadColor = newWebHeadColor;
-                updateBadgeColors(mWebHeadColor);
-                if (mIndicator != null && mCircleBackground != null && mRevealView != null) {
-                    mCircleBackground.setColor(newWebHeadColor);
-                    mIndicator.setTextColor(ColorUtil.getForegroundWhiteOrBlack(newWebHeadColor));
-                    mRevealView.setLayerType(LAYER_TYPE_NONE, null);
-                    mRevealView.setScaleX(0f);
-                    mRevealView.setScaleY(0f);
+                webHeadColor = newWebHeadColor;
+                updateBadgeColors(webHeadColor);
+                if (indicator != null && circleBg != null && revealView != null) {
+                    circleBg.setColor(newWebHeadColor);
+                    indicator.setTextColor(getForegroundWhiteOrBlack(newWebHeadColor));
+                    revealView.setLayerType(LAYER_TYPE_NONE, null);
+                    revealView.setScaleX(0f);
+                    revealView.setScaleY(0f);
                 }
             }
         });
@@ -309,27 +294,27 @@ public abstract class BaseWebHead extends FrameLayout {
      * Opposite of {@link #getRevealAnimator(int)}. Reveal goes from max scale to 0 appearing to be
      * revealing in.
      *
-     * @param newWebHeadColor New color of reveal
+     * @param newWebHeadColor New themeColor of reveal
      * @param start           Runnable to run on start
      * @param end             Runnable to run on end
      */
     void revealInAnimation(@ColorInt final int newWebHeadColor, @NonNull final Runnable start, @NonNull final Runnable end) {
-        if (mRevealView == null || mCircleBackground == null) {
+        if (revealView == null || circleBg == null) {
             start.run();
             end.run();
         }
-        mRevealView.clearAnimation();
-        mRevealView.setColor(mCircleBackground.getColor());
-        mRevealView.setScaleX(1f);
-        mRevealView.setScaleY(1f);
-        mRevealView.setAlpha(1f);
-        mCircleBackground.setColor(newWebHeadColor);
+        revealView.clearAnimation();
+        revealView.setColor(circleBg.getColor());
+        revealView.setScaleX(1f);
+        revealView.setScaleY(1f);
+        revealView.setAlpha(1f);
+        circleBg.setColor(newWebHeadColor);
         final AnimatorSet animator = new AnimatorSet();
         animator.playTogether(
-                ObjectAnimator.ofFloat(mRevealView, "scaleX", 0f),
-                ObjectAnimator.ofFloat(mRevealView, "scaleY", 0f)
+                ObjectAnimator.ofFloat(revealView, "scaleX", 0f),
+                ObjectAnimator.ofFloat(revealView, "scaleY", 0f)
         );
-        mRevealView.setLayerType(LAYER_TYPE_HARDWARE, null);
+        revealView.setLayerType(LAYER_TYPE_HARDWARE, null);
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -338,11 +323,11 @@ public abstract class BaseWebHead extends FrameLayout {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                mWebHeadColor = newWebHeadColor;
-                mIndicator.setTextColor(ColorUtil.getForegroundWhiteOrBlack(newWebHeadColor));
-                mRevealView.setLayerType(LAYER_TYPE_NONE, null);
-                mRevealView.setScaleX(0f);
-                mRevealView.setScaleY(0f);
+                webHeadColor = newWebHeadColor;
+                indicator.setTextColor(getForegroundWhiteOrBlack(newWebHeadColor));
+                revealView.setLayerType(LAYER_TYPE_NONE, null);
+                revealView.setScaleX(0f);
+                revealView.setScaleY(0f);
                 end.run();
             }
 
@@ -359,10 +344,10 @@ public abstract class BaseWebHead extends FrameLayout {
      * @param revealColor The color to appear during animation
      */
     private void initRevealView(@ColorInt int revealColor) {
-        mRevealView.setColor(revealColor);
-        mRevealView.setScaleX(0f);
-        mRevealView.setScaleY(0f);
-        mRevealView.setAlpha(0.8f);
+        revealView.setColor(revealColor);
+        revealView.setScaleX(0f);
+        revealView.setScaleY(0f);
+        revealView.setAlpha(0.8f);
     }
 
     /**
@@ -370,18 +355,18 @@ public abstract class BaseWebHead extends FrameLayout {
      * is visible by hiding indicators.
      */
     void crossFadeFaviconToX() {
-        mFavicon.setVisibility(VISIBLE);
-        mFavicon.clearAnimation();
-        mFavicon.setScaleType(ImageView.ScaleType.CENTER);
+        favicon.setVisibility(VISIBLE);
+        favicon.clearAnimation();
+        favicon.setScaleType(CENTER);
         final TransitionDrawable icon = new TransitionDrawable(
                 new Drawable[]{
-                        new ColorDrawable(Color.TRANSPARENT),
-                        sXDrawable
+                        new ColorDrawable(TRANSPARENT),
+                        xDrawable
                 });
-        mFavicon.setImageDrawable(icon);
+        favicon.setImageDrawable(icon);
         icon.setCrossFadeEnabled(true);
         icon.startTransition(50);
-        mFavicon
+        favicon
                 .animate()
                 .withLayer()
                 .rotation(180)
@@ -394,11 +379,11 @@ public abstract class BaseWebHead extends FrameLayout {
     @ColorInt
     public int getWebHeadColor(boolean ignoreFavicons) {
         if (ignoreFavicons) {
-            return mWebHeadColor;
+            return webHeadColor;
         } else {
             if (getFaviconBitmap() != null) {
-                return mWebHeadColor;
-            } else return Constants.NO_COLOR;
+                return webHeadColor;
+            } else return NO_COLOR;
         }
     }
 
@@ -408,46 +393,24 @@ public abstract class BaseWebHead extends FrameLayout {
 
     void updateBadgeColors(@ColorInt int webHeadColor) {
         final int badgeColor = ColorUtil.getClosestAccentColor(webHeadColor);
-        sBadgeDrawable.setBadgeColor(badgeColor);
-        sBadgeDrawable.setTextColor(ColorUtil.getForegroundWhiteOrBlack(badgeColor));
-        mBadgeView.invalidate();
+        badgeDrawable.setBadgeColor(badgeColor);
+        badgeDrawable.setTextColor(getForegroundWhiteOrBlack(badgeColor));
+        badgeView.invalidate();
     }
 
     @NonNull
     public ImageView getFaviconView() {
-        return mFavicon;
-    }
-
-    @Nullable
-    public String getFaviconUrl() {
-        return mFaviconUrl;
-    }
-
-    public void setFaviconUrl(@Nullable String faviconUrl) {
-        mFaviconUrl = faviconUrl;
+        return favicon;
     }
 
     @NonNull
     public String getUrl() {
-        return mUrl;
+        return url;
     }
 
     @NonNull
     public String getUnShortenedUrl() {
-        return mUnShortenedUrl == null || mUnShortenedUrl.isEmpty() ? getUrl() : mUnShortenedUrl;
-    }
-
-    public void setUnShortenedUrl(String unShortenedUrl) {
-        mUnShortenedUrl = unShortenedUrl;
-    }
-
-    @Nullable
-    public String getTitle() {
-        return mTitle;
-    }
-
-    public void setTitle(String title) {
-        mTitle = title;
+        return webSite.preferredUrl();
     }
 
     @Nullable
@@ -464,7 +427,7 @@ public abstract class BaseWebHead extends FrameLayout {
     @Nullable
     private Drawable getFaviconDrawable() {
         try {
-            TransitionDrawable drawable = (TransitionDrawable) mFavicon.getDrawable();
+            TransitionDrawable drawable = (TransitionDrawable) favicon.getDrawable();
             if (drawable != null) {
                 return drawable.getDrawable(1);
             } else
@@ -476,63 +439,73 @@ public abstract class BaseWebHead extends FrameLayout {
     }
 
     public void setFaviconDrawable(@NonNull final Drawable faviconDrawable) {
-        if (mIndicator != null && mFavicon != null) {
-            mIndicator.animate().alpha(0).withLayer().start();
+        if (indicator != null && favicon != null) {
+            indicator.animate().alpha(0).withLayer().start();
             TransitionDrawable transitionDrawable = new TransitionDrawable(
                     new Drawable[]{
-                            new ColorDrawable(Color.TRANSPARENT),
+                            new ColorDrawable(TRANSPARENT),
                             faviconDrawable
                     });
-            mFavicon.setVisibility(VISIBLE);
-            mFavicon.setImageDrawable(transitionDrawable);
+            favicon.setVisibility(VISIBLE);
+            favicon.setImageDrawable(transitionDrawable);
             transitionDrawable.setCrossFadeEnabled(true);
             transitionDrawable.startTransition(500);
         }
     }
 
     public boolean isFromNewTab() {
-        return mIsFromNewTab;
+        return fromNewTab;
     }
 
     public void setFromNewTab(boolean fromNewTab) {
-        mIsFromNewTab = fromNewTab;
+        this.fromNewTab = fromNewTab;
     }
 
     @SuppressWarnings("UnusedParameters")
     void destroySelf(boolean receiveCallback) {
-        mDestroyed = true;
+        destroyed = true;
         RemoveWebHead.disappear();
-        removeView(mContentGroup);
-        if (sWindowManager != null)
+        removeView(contentRoot);
+        if (windowManager != null)
             try {
-                sWindowManager.removeView(this);
+                windowManager.removeView(this);
             } catch (Exception ignored) {
             }
     }
 
     public boolean isMaster() {
-        return mMaster;
+        return master;
     }
 
     public void setMaster(boolean master) {
-        this.mMaster = master;
+        this.master = master;
         if (!master) {
-            mBadgeView.setVisibility(INVISIBLE);
+            badgeView.setVisibility(INVISIBLE);
         } else {
-            mBadgeView.setVisibility(VISIBLE);
-            sBadgeDrawable.setNumber(WEB_HEAD_COUNT);
+            badgeView.setVisibility(VISIBLE);
+            badgeDrawable.setNumber(WEB_HEAD_COUNT);
             setInQueue(false);
         }
         onMasterChanged(master);
     }
 
     public void setInQueue(boolean inQueue) {
-        this.mInQueue = inQueue;
+        this.inQueue = inQueue;
         if (inQueue) {
             setVisibility(GONE);
         } else {
             setVisibility(VISIBLE);
         }
+    }
+
+    @NonNull
+    private WindowManager.LayoutParams createWindowParams() {
+        return new WindowManager.LayoutParams(
+                WRAP_CONTENT,
+                WRAP_CONTENT,
+                TYPE_SYSTEM_ALERT,
+                FLAG_NOT_FOCUSABLE | FLAG_LAYOUT_NO_LIMITS | FLAG_HARDWARE_ACCELERATED,
+                TRANSLUCENT);
     }
 
     /**
@@ -542,7 +515,12 @@ public abstract class BaseWebHead extends FrameLayout {
      */
     @NonNull
     public WebSite getWebsite() {
-        return WebSite.fromWebHead(this);
+        return webSite;
+    }
+
+    public void setWebSite(WebSite webSite) {
+        Timber.d(webSite.toString());
+        this.webSite = webSite;
     }
 
     /**

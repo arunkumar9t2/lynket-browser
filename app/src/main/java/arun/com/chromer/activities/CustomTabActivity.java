@@ -19,8 +19,6 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -28,14 +26,17 @@ import java.net.URL;
 import arun.com.chromer.R;
 import arun.com.chromer.customtabs.CustomTabs;
 import arun.com.chromer.preferences.manager.Preferences;
-import arun.com.chromer.shared.Constants;
-import arun.com.chromer.util.Benchmark;
 import arun.com.chromer.util.ColorUtil;
-import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.helper.WebSite;
 import de.jetwick.snacktory.HtmlFetcher;
 import de.jetwick.snacktory.JResult;
 import timber.log.Timber;
+
+import static android.content.Intent.EXTRA_TEXT;
+import static arun.com.chromer.shared.Constants.ACTION_MINIMIZE;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_WEBHEAD;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBSITE;
+import static arun.com.chromer.shared.Constants.NO_COLOR;
 
 public class CustomTabActivity extends AppCompatActivity {
     private boolean isLoaded = false;
@@ -55,12 +56,11 @@ public class CustomTabActivity extends AppCompatActivity {
         }
 
         mBaseUrl = getIntent().getDataString();
-        final boolean isWebhead = getIntent().getBooleanExtra(Constants.EXTRA_KEY_FROM_WEBHEAD, false);
+        final boolean isWebhead = getIntent().getBooleanExtra(EXTRA_KEY_FROM_WEBHEAD, false);
 
-        final WebSite webSite = getIntent().getParcelableExtra(Constants.EXTRA_KEY_WEBSITE);
-        final int color = webSite != null && !TextUtils.isEmpty(webSite.faviconUrl) ? webSite.color : Constants.NO_COLOR;
+        final WebSite webSite = getIntent().getParcelableExtra(EXTRA_KEY_WEBSITE);
+        final int color = webSite != null && !TextUtils.isEmpty(webSite.faviconUrl) ? webSite.themeColor() : NO_COLOR;
 
-        Benchmark.start("Custom tab launching in CTA");
         CustomTabs.from(this)
                 .forUrl(mBaseUrl)
                 .forWebHead(isWebhead)
@@ -68,14 +68,12 @@ public class CustomTabActivity extends AppCompatActivity {
                 // .noAnimations(Preferences.aggressiveLoading(this))
                 .prepare()
                 .launch();
-        Benchmark.end();
 
         if (Preferences.aggressiveLoading(this)) {
             delayedGoToBack();
         }
 
         dispatchDescriptionTask(webSite);
-
         registerMinimizeReceiver();
     }
 
@@ -84,15 +82,15 @@ public class CustomTabActivity extends AppCompatActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
                 Timber.d("Minimize called with %s : %s", mBaseUrl, intent.toString());
-                if (intent.getAction().equalsIgnoreCase(Constants.ACTION_MINIMIZE) && intent.hasExtra(Intent.EXTRA_TEXT)) {
-                    if (mBaseUrl.equalsIgnoreCase(intent.getStringExtra(Intent.EXTRA_TEXT))) {
-                        Timber.d("Minimized %s", intent.getStringExtra(Intent.EXTRA_TEXT));
+                if (intent.getAction().equalsIgnoreCase(ACTION_MINIMIZE) && intent.hasExtra(EXTRA_TEXT)) {
+                    if (mBaseUrl.equalsIgnoreCase(intent.getStringExtra(EXTRA_TEXT))) {
+                        Timber.d("Minimized %s", intent.getStringExtra(EXTRA_TEXT));
                         moveTaskToBack(true);
                     }
                 }
             }
         };
-        LocalBroadcastManager.getInstance(this).registerReceiver(mMinimizeReceiver, new IntentFilter(Constants.ACTION_MINIMIZE));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMinimizeReceiver, new IntentFilter(ACTION_MINIMIZE));
     }
 
     private void delayedGoToBack() {
@@ -106,25 +104,25 @@ public class CustomTabActivity extends AppCompatActivity {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void dispatchDescriptionTask(@Nullable final WebSite webSite) {
-        if (Utils.isLollipopAbove()) {
+        /*if (Utils.isLollipopAbove()) {
             if (webSite != null && webSite.title != null) {
                 final String title = webSite.title;
                 final String faviconUrl = webSite.faviconUrl;
-                setTaskDescription(new ActivityManager.TaskDescription(title, null, webSite.color));
+                setTaskDescription(new ActivityManager.TaskDescription(title, null, webSite.themeColor));
                 Glide.with(this)
                         .load(faviconUrl)
                         .asBitmap()
                         .into(new SimpleTarget<Bitmap>() {
                             @Override
                             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                                setTaskDescription(new ActivityManager.TaskDescription(title, resource, webSite.color));
+                                setTaskDescription(new ActivityManager.TaskDescription(title, resource, webSite.themeColor));
                             }
                         });
             } else {
                 mExtractionTask = new ExtractionTask(mBaseUrl);
                 mExtractionTask.execute();
             }
-        }
+        }*/
     }
 
     @Override
@@ -156,7 +154,7 @@ public class CustomTabActivity extends AppCompatActivity {
         final String mUrl;
         String mTitle;
         Bitmap mIcon;
-        int color = Constants.NO_COLOR;
+        int color = NO_COLOR;
 
         ExtractionTask(@Nullable String url) {
             mUrl = url;
@@ -214,7 +212,7 @@ public class CustomTabActivity extends AppCompatActivity {
             if (mIcon != null && mIcon.getWidth() < 0) {
                 mIcon = null;
             }
-            if (color != Constants.NO_COLOR) {
+            if (color != NO_COLOR) {
                 setTaskDescription(new ActivityManager.TaskDescription(label, mIcon, color));
             } else {
                 setTaskDescription(new ActivityManager.TaskDescription(label, mIcon));

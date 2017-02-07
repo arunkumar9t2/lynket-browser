@@ -248,7 +248,7 @@ public class HtmlFetcher {
             if (result.getFaviconUrl().isEmpty())
                 result.setFaviconUrl(SHelper.getDefaultFavicon(url));
 
-            // some links are relative to root and do not include the domain of the url :(
+            // some links are relative to root and do not include the domain of the preferredUrl :(
             result.setFaviconUrl(fixUrl(url, result.getFaviconUrl()));
             result.setImageUrl(fixUrl(url, result.getImageUrl()));
             result.setVideoUrl(fixUrl(url, result.getVideoUrl()));

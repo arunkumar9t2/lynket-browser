@@ -40,7 +40,7 @@ public class RxParser {
     // To get notified about parse completion event..
     private OnParseListener onParseListener = new OnParseListener() {
         @Override
-        public void onParseComplete(@NonNull String url, @NonNull Article article) {
+        public void onUrlParsed(@NonNull String url, @NonNull Article article) {
             // No-op
         }
     };
@@ -95,7 +95,7 @@ public class RxParser {
                     .doOnNext(new Action1<Pair<String, Article>>() {
                         @Override
                         public void call(Pair<String, Article> articlePair) {
-                            onParseListener.onParseComplete(articlePair.first, articlePair.second);
+                            onParseListener.onUrlParsed(articlePair.first, articlePair.second);
                         }
                     }).subscribe();
         }
@@ -109,7 +109,7 @@ public class RxParser {
         if (onParseListener == null) {
             onParseListener = new OnParseListener() {
                 @Override
-                public void onParseComplete(@NonNull String url, @Nullable Article article) {
+                public void onUrlParsed(@NonNull String url, @Nullable Article article) {
 
                 }
             };
@@ -177,6 +177,6 @@ public class RxParser {
 
     public interface OnParseListener {
         @MainThread
-        void onParseComplete(final @NonNull String url, final @Nullable Article article);
+        void onUrlParsed(final @NonNull String url, final @Nullable Article article);
     }
 }

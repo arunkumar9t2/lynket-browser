@@ -28,12 +28,11 @@ import butterknife.ButterKnife;
  */
 
 class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> {
-
     private final Context context;
     private final List<WebSite> webSites = new ArrayList<>();
-    private final InteractionListener listener;
+    private final WebSiteAdapterListener listener;
 
-    WebsiteAdapter(@NonNull Context context, @NonNull InteractionListener listener) {
+    WebsiteAdapter(@NonNull Context context, @NonNull WebSiteAdapterListener listener) {
         this.context = context.getApplicationContext();
         this.listener = listener;
         setHasStableIds(true);
@@ -47,7 +46,6 @@ class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> 
     @Override
     public void onBindViewHolder(WebSiteHolder holder, int position) {
         final WebSite webSite = webSites.get(position);
-        holder.url.setText(webSite.url);
         holder.deleteIcon.setImageDrawable(new IconicsDrawable(context)
                 .icon(CommunityMaterial.Icon.cmd_close)
                 .color(ContextCompat.getColor(context, R.color.accent_icon_nofocus))
@@ -56,20 +54,12 @@ class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> 
                 .icon(CommunityMaterial.Icon.cmd_share_variant)
                 .color(ContextCompat.getColor(context, R.color.accent_icon_nofocus))
                 .sizeDp(16));
-        if (webSite.title != null && webSite.title.length() > 0) {
-            holder.title.setText(webSite.title);
-        } else {
-            holder.title.setText(webSite.url);
-        }
-
-        if (webSite.icon != null) {
-            holder.icon.setImageBitmap(webSite.icon);
-        } else {
-            Glide.with(context)
-                    .load(webSite.faviconUrl)
-                    .crossFade()
-                    .into(holder.icon);
-        }
+        holder.url.setText(webSite.preferredUrl());
+        holder.title.setText(webSite.safeLabel());
+        Glide.with(context)
+                .load(webSite.faviconUrl)
+                .crossFade()
+                .into(holder.icon);
     }
 
     @Override
@@ -178,7 +168,7 @@ class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> 
         }
     }
 
-    interface InteractionListener {
+    interface WebSiteAdapterListener {
         void onWebSiteItemClicked(@NonNull WebSite webSite);
 
         void onWebSiteDelete(@NonNull WebSite webSite);

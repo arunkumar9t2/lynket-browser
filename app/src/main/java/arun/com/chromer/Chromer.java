@@ -45,7 +45,7 @@ public class Chromer extends Application {
 
     private void buildOkHttpClient() {
         Timber.d("Initializing OkHttpClient");
-        final int cacheSize = 20 * 1024 * 1024; // 20 MiB
+        final int cacheSize = 30 * 1024 * 1024; // 20 MiB
         final File cacheDir = new File(getCacheDir(), "http");
         okHttpClient = new OkHttpClient.Builder()
                 .cache(new Cache(cacheDir, cacheSize))
