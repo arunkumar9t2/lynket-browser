@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 
 import com.facebook.rebound.Spring;
 
+import arun.com.chromer.webheads.ui.views.WebHead;
+
 /**
  * Created by Arun on 08/08/2016.
  */

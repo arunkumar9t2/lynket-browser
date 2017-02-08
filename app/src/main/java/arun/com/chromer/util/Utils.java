@@ -343,6 +343,21 @@ public class Utils {
     }
 
     /**
+     * Scales down a source image to {@param targetSizePx} and returns a scaled bitmap
+     *
+     * @param orgImage     Original bitmap
+     * @param targetSizePx Target size in pixels
+     * @param filter       Whether to use filter or not.
+     * @return
+     */
+    public static Bitmap scale(@NonNull Bitmap orgImage, float targetSizePx, boolean filter) {
+        final float ratio = Math.min(targetSizePx / orgImage.getWidth(), targetSizePx / orgImage.getHeight());
+        final int width = Math.round(ratio * orgImage.getWidth());
+        final int height = Math.round(ratio * orgImage.getHeight());
+        return Bitmap.createScaledBitmap(orgImage, width, height, filter);
+    }
+
+    /**
      * A helper class for providing a shadow on sheets
      */
     @TargetApi(21)

@@ -7,92 +7,135 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.graphics.Palette;
 import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-
-import java.net.MalformedURLException;
-import java.net.URL;
+import com.chimbori.crux.Article;
 
 import arun.com.chromer.R;
 import arun.com.chromer.customtabs.CustomTabs;
 import arun.com.chromer.preferences.manager.Preferences;
-import arun.com.chromer.shared.Constants;
-import arun.com.chromer.util.Benchmark;
-import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Utils;
+import arun.com.chromer.webheads.helper.RxParser;
 import arun.com.chromer.webheads.helper.WebSite;
-import de.jetwick.snacktory.HtmlFetcher;
-import de.jetwick.snacktory.JResult;
+import rx.SingleSubscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
+
+import static android.content.Intent.EXTRA_TEXT;
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
+import static android.widget.Toast.LENGTH_SHORT;
+import static arun.com.chromer.shared.Constants.ACTION_MINIMIZE;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_WEBHEAD;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBSITE;
+import static arun.com.chromer.shared.Constants.NO_COLOR;
 
 public class CustomTabActivity extends AppCompatActivity {
     private boolean isLoaded = false;
-    private ExtractionTask mExtractionTask;
-    private String mBaseUrl = "";
-    private BroadcastReceiver mMinimizeReceiver;
+    private String baseUrl = "";
+    private BroadcastReceiver minimizeReceiver;
+    private final CompositeSubscription subscriptions = new CompositeSubscription();
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @TargetApi(LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getIntent() == null || getIntent().getData() == null) {
-            Toast.makeText(this, getString(R.string.unsupported_link), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.unsupported_link), LENGTH_SHORT).show();
             finish();
             return;
         }
+        baseUrl = getIntent().getDataString();
+        final boolean isWebHead = getIntent().getBooleanExtra(EXTRA_KEY_FROM_WEBHEAD, false);
+        final WebSite webSite = getIntent().getParcelableExtra(EXTRA_KEY_WEBSITE);
+        final int fallbackWebColor = webSite != null && !TextUtils.isEmpty(webSite.faviconUrl) ? webSite.themeColor() : NO_COLOR;
 
-        mBaseUrl = getIntent().getDataString();
-        final boolean isWebhead = getIntent().getBooleanExtra(Constants.EXTRA_KEY_FROM_WEBHEAD, false);
-
-        final WebSite webSite = getIntent().getParcelableExtra(Constants.EXTRA_KEY_WEBSITE);
-        final int color = webSite != null && !TextUtils.isEmpty(webSite.faviconUrl) ? webSite.color : Constants.NO_COLOR;
-
-        Benchmark.start("Custom tab launching in CTA");
         CustomTabs.from(this)
-                .forUrl(mBaseUrl)
-                .forWebHead(isWebhead)
-                .fallbackColor(color)
-                // .noAnimations(Preferences.aggressiveLoading(this))
+                .forUrl(baseUrl)
+                .forWebHead(isWebHead)
+                .fallbackColor(fallbackWebColor)
                 .prepare()
                 .launch();
-        Benchmark.end();
-
         if (Preferences.aggressiveLoading(this)) {
             delayedGoToBack();
         }
-
-        dispatchDescriptionTask(webSite);
-
         registerMinimizeReceiver();
+        beginExtraction(webSite);
+    }
+
+    private void beginExtraction(@Nullable WebSite webSite) {
+        if (webSite != null && webSite.title != null && webSite.faviconUrl != null) {
+            Timber.d("Website info exists, setting description");
+            applyDescriptionFromWebsite(webSite);
+        } else {
+            Timber.d("No info found, beginning parsing");
+            final Subscription s = RxParser.parseUrl(baseUrl)
+                    .map(new Func1<Pair<String, Article>, Article>() {
+                        @Override
+                        public Article call(Pair<String, Article> stringArticlePair) {
+                            return stringArticlePair.second;
+                        }
+                    })
+                    .filter(new Func1<Article, Boolean>() {
+                        @Override
+                        public Boolean call(Article article) {
+                            return article != null;
+                        }
+                    })
+                    .map(new Func1<Article, WebSite>() {
+                        @Override
+                        public WebSite call(Article article) {
+                            return WebSite.fromArticle(article);
+                        }
+                    })
+                    .toSingle()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new SingleSubscriber<WebSite>() {
+                        @Override
+                        public void onSuccess(WebSite webSite) {
+                            Timber.d("Parsing success");
+                            applyDescriptionFromWebsite(webSite);
+                        }
+
+                        @Override
+                        public void onError(Throwable error) {
+                            Timber.e(error);
+                        }
+                    });
+            subscriptions.add(s);
+        }
     }
 
     private void registerMinimizeReceiver() {
-        mMinimizeReceiver = new BroadcastReceiver() {
+        minimizeReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Timber.d("Minimize called with %s : %s", mBaseUrl, intent.toString());
-                if (intent.getAction().equalsIgnoreCase(Constants.ACTION_MINIMIZE) && intent.hasExtra(Intent.EXTRA_TEXT)) {
-                    if (mBaseUrl.equalsIgnoreCase(intent.getStringExtra(Intent.EXTRA_TEXT))) {
-                        Timber.d("Minimized %s", intent.getStringExtra(Intent.EXTRA_TEXT));
+                if (intent.getAction().equalsIgnoreCase(ACTION_MINIMIZE)
+                        && intent.hasExtra(EXTRA_TEXT)) {
+                    final String url = intent.getStringExtra(EXTRA_TEXT);
+                    if (baseUrl.equalsIgnoreCase(url)) {
+                        Timber.d("Minimized %s", url);
                         moveTaskToBack(true);
                     }
                 }
             }
         };
-        LocalBroadcastManager.getInstance(this).registerReceiver(mMinimizeReceiver, new IntentFilter(Constants.ACTION_MINIMIZE));
+        LocalBroadcastManager.getInstance(this).registerReceiver(minimizeReceiver, new IntentFilter(ACTION_MINIMIZE));
     }
 
     private void delayedGoToBack() {
@@ -104,27 +147,10 @@ public class CustomTabActivity extends AppCompatActivity {
         }, 650);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void dispatchDescriptionTask(@Nullable final WebSite webSite) {
-        if (Utils.isLollipopAbove()) {
-            if (webSite != null && webSite.title != null) {
-                final String title = webSite.title;
-                final String faviconUrl = webSite.faviconUrl;
-                setTaskDescription(new ActivityManager.TaskDescription(title, null, webSite.color));
-                Glide.with(this)
-                        .load(faviconUrl)
-                        .asBitmap()
-                        .into(new SimpleTarget<Bitmap>() {
-                            @Override
-                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                                setTaskDescription(new ActivityManager.TaskDescription(title, resource, webSite.color));
-                            }
-                        });
-            } else {
-                mExtractionTask = new ExtractionTask(mBaseUrl);
-                mExtractionTask.execute();
-            }
-        }
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        isLoaded = true;
     }
 
     @Override
@@ -138,94 +164,25 @@ public class CustomTabActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mExtractionTask != null && !mExtractionTask.isCancelled()) {
-            mExtractionTask.cancel(true);
-        }
-        mExtractionTask = null;
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMinimizeReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(minimizeReceiver);
+        subscriptions.clear();
     }
 
-    @Override
-    public void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        isLoaded = true;
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private class ExtractionTask extends AsyncTask<Void, String, Void> {
-        final String mUrl;
-        String mTitle;
-        Bitmap mIcon;
-        int color = Constants.NO_COLOR;
-
-        ExtractionTask(@Nullable String url) {
-            mUrl = url;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            if (mUrl != null && mUrl.length() > 0) {
-                setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.loading)));
-            }
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            if (mUrl != null && mUrl.length() > 0) {
-                Timber.d("Beginning extraction");
-                try {
-                    final HtmlFetcher fetcher = new HtmlFetcher();
-                    final String unShortenedUrl = fetcher.unShortenUrl(mUrl);
-                    final JResult res = fetcher.fetchAndExtract(unShortenedUrl, false);
-                    mTitle = res.getTitle();
-
-                    mIcon = Glide.with(CustomTabActivity.this)
-                            .load(res.getFaviconUrl())
-                            .asBitmap()
-                            .into(-1, -1)
-                            .get();
-
-                    final Palette palette = Palette.from(mIcon)
-                            .clearFilters()
-                            .generate();
-                    color = ColorUtil.getBestFaviconColor(palette);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            String label = "";
-            if (mTitle != null && mTitle.length() > 0) {
-                label = mTitle;
-            } else {
-                try {
-                    label = new URL(mUrl).getHost().toUpperCase();
-                } catch (MalformedURLException ignored) {
-                }
-            }
-            if (label.trim().length() == 0 && mUrl != null) {
-                label = mUrl.toUpperCase();
-            }
-            Timber.d("Setting task description %s", label);
-            if (mIcon != null && mIcon.getWidth() < 0) {
-                mIcon = null;
-            }
-            if (color != Constants.NO_COLOR) {
-                setTaskDescription(new ActivityManager.TaskDescription(label, mIcon, color));
-            } else {
-                setTaskDescription(new ActivityManager.TaskDescription(label, mIcon));
-            }
-            mIcon = null;
-        }
-
-        @Override
-        protected void onCancelled() {
-            super.onCancelled();
-            Timber.d("Cancelled");
+    @TargetApi(LOLLIPOP)
+    private void applyDescriptionFromWebsite(@NonNull final WebSite webSite) {
+        if (Utils.isLollipopAbove()) {
+            final String title = webSite.safeLabel();
+            final String faviconUrl = webSite.faviconUrl;
+            setTaskDescription(new ActivityManager.TaskDescription(title, null, webSite.themeColor()));
+            Glide.with(this)
+                    .load(faviconUrl)
+                    .asBitmap()
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap icon, GlideAnimation<? super Bitmap> glideAnimation) {
+                            setTaskDescription(new ActivityManager.TaskDescription(title, icon, webSite.themeColor()));
+                        }
+                    });
         }
     }
 }

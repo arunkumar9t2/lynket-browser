@@ -32,3 +32,8 @@
     public *;
 }
 -keepattributes EnclosingMethod
+
+-dontwarn okio.**
+
+-dontwarn sun.misc.Unsafe
+-dontwarn org.w3c.dom.bootstrap.DOMImplementationRegistry

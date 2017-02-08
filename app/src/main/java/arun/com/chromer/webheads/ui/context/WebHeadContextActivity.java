@@ -39,7 +39,7 @@ import static arun.com.chromer.shared.Constants.ACTION_EVENT_WEBSITE_UPDATED;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBSITE;
 import static arun.com.chromer.shared.Constants.TEXT_SHARE_INTENT;
 
-public class WebHeadContextActivity extends AppCompatActivity implements WebsiteAdapter.InteractionListener {
+public class WebHeadContextActivity extends AppCompatActivity implements WebsiteAdapter.WebSiteAdapterListener {
     @BindView(R.id.web_sites_list)
     RecyclerView websiteListView;
     @BindView(R.id.copy_all)
@@ -118,7 +118,7 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
 
     @Override
     public void onWebSiteLongClicked(@NonNull WebSite webSite) {
-        copyToClipboard(webSite.safeLabel(), webSite.url());
+        copyToClipboard(webSite.safeLabel(), webSite.preferredUrl());
     }
 
     @OnClick(R.id.copy_all)
@@ -145,7 +145,7 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
                             final ArrayList<Uri> webSites = new ArrayList<>();
                             for (WebSite webSite : websitesAdapter.getWebSites()) {
                                 try {
-                                    webSites.add(Uri.parse(webSite.url()));
+                                    webSites.add(Uri.parse(webSite.preferredUrl()));
                                 } catch (Exception ignored) {
                                 }
                             }
@@ -164,7 +164,7 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
     private StringBuilder getCSVUrls() {
         final StringBuilder builder = new StringBuilder();
         for (WebSite webSite : websitesAdapter.getWebSites()) {
-            builder.append(webSite.url()).append(',');
+            builder.append(webSite.preferredUrl()).append(',');
         }
         return builder;
     }

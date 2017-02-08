@@ -12,14 +12,14 @@ import java.util.Stack;
 
 import arun.com.chromer.customtabs.CustomTabManager;
 import arun.com.chromer.preferences.manager.Preferences;
-import arun.com.chromer.webheads.ui.WebHead;
+import arun.com.chromer.webheads.ui.views.WebHead;
 import timber.log.Timber;
 
 import static android.support.customtabs.CustomTabsService.KEY_URL;
 
 /**
  * Created by Arun on 25-01-2017.
- * Organizer class that takes {@link arun.com.chromer.webheads.ui.WebHead} list to process it and
+ * Organizer class that takes {@link WebHead} list to process it and
  * return a ordered URL list that can be directly commanded to {@link arun.com.chromer.customtabs.CustomTabManager}
  * for pre fetching.
  */
@@ -82,5 +82,17 @@ public class UrlOrganizer {
             }
         }
         return urlStack;
+    }
+
+    public List<Bundle> getPossibleUrls(@NonNull Map<String, WebHead> webHeads) {
+        final List<Bundle> possibleUrls = new ArrayList<>();
+        for (WebHead webHead : webHeads.values()) {
+            String url = webHead.getUrl();
+
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(KEY_URL, Uri.parse(url));
+            possibleUrls.add(bundle);
+        }
+        return possibleUrls;
     }
 }
