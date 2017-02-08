@@ -44,7 +44,6 @@ import arun.com.chromer.customtabs.CustomTabs;
 import arun.com.chromer.customtabs.prefetch.ScannerService;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.views.IntentPickerSheetView;
-import timber.log.Timber;
 
 /**
  * Created by Arun on 17/12/2015.
@@ -323,7 +322,6 @@ public class Utils {
                 }
             }
         } catch (Exception ignored) {
-            Timber.e(ignored.toString());
         }
         return null;
     }

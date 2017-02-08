@@ -224,4 +224,5 @@
     <string name="choose_share_method">Choose share method</string>
     <string name="comma_seperated">Comma separated</string>
     <string name="share_all_list">List - Limited app support. Eg: Join, Pushbullet etc.</string>
+    <string name="new_tab">Open new tab</string>
 </resources>

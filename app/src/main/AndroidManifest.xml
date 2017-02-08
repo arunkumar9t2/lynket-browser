@@ -71,6 +71,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
         </activity>
         <activity
             android:name=".activities.CustomTabActivity"
@@ -134,7 +137,11 @@
             android:excludeFromRecents="true"
             android:noHistory="true"
             android:theme="@style/DialogTheme" />
-
+        <activity
+            android:name=".activities.NewTabDialogActivity"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:theme="@style/DialogTheme" />
         <activity
             android:name=".webheads.ui.ProxyActivity"
             android:excludeFromRecents="true"
@@ -157,12 +164,10 @@
         <meta-data
             android:name="VERSION"
             android:value="2" />
-
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="${crashlyticsApiKey}"
             tools:replace="android:value" />
-
         <meta-data
             android:name="arun.com.chromer.glide.ChromerGideModule"
             android:value="GlideModule" />
