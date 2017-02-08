@@ -45,3 +45,5 @@
 
 -keep class com.crashlytics.** { *; }
 -dontwarn com.crashlytics.**
+
+-keep public class * implements com.bumptech.glide.module.GlideModule

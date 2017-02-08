@@ -18,6 +18,17 @@ a {
 <body>
 <strong>You can view this again in the about screen.</strong>
 <br></br>
+<strong>1.6.2 - Beta</strong>
+<ul>
+    <li><b>NEW:</b> <b>7.1+</b> "New tab" launcher shortcut.</li>
+    <li><b>IMPROVED:</b> Rewritten blacklist feature.</li>
+    <li><b>IMPROVED:</b> Better parsing of metadata from websites, thanks to <a href="https://github.com/chimbori/crux">Crux</a>. Dynamic web toolbar color also enhanced.</li>
+    <li><b>IMPROVED:</b> Height of bottom bar is reduced.</li>
+    <li><b>IMPROVED:</b> Overhauled web head context screen.</li>
+    <li><b>IMPROVED:</b> Share all has now has two different modes - multiple and csv. Can share to more apps now.</li>
+    <li><b>FIX:</b> CCT not launching when setting certain apps like Instapaper as favorite share app.</li>
+</ul>
+<br></br>
 <strong>1.6.1</strong>
 <a href="https://goo.gl/photos/BzRV69ABov9zJxVu9">  View album</a>
 <ul>
