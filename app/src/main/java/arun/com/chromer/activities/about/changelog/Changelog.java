@@ -54,7 +54,7 @@ public class Changelog {
                 }
             });
             new MaterialDialog.Builder(activity)
-                    .customView(content, true)
+                    .customView(content, false)
                     .title("Changelog")
                     .positiveText(android.R.string.ok)
                     .neutralText(R.string.rate_play_store)
