@@ -40,7 +40,7 @@ public class BottomBarReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         final int clickedId = intent.getIntExtra(CustomTabsIntent.EXTRA_REMOTEVIEWS_CLICKED_ID, -1);
         final String url = intent.getDataString();
-
+        final String orgUrl = intent.getStringExtra(Intent.EXTRA_TEXT);
         if (url == null || clickedId == -1) {
             Timber.d("Skipped bottom bar callback");
             return;
@@ -54,25 +54,26 @@ public class BottomBarReceiver extends BroadcastReceiver {
                 new ShareUrl(context, url).perform();
                 break;
             case R.id.bottom_bar_minimize_tab:
-                new MinimizeUrl(context, url).perform();
+                if (orgUrl != null)
+                    new MinimizeUrl(context, orgUrl).perform();
                 break;
         }
     }
 
     private static abstract class Command {
-        Context mContext;
-        final String mUrl;
+        Context context;
+        final String url;
         boolean performCalled = false;
 
         Command(@NonNull Context context, @NonNull String url) {
-            mContext = context.getApplicationContext();
-            mUrl = url;
+            this.context = context.getApplicationContext();
+            this.url = url;
         }
 
         void perform() {
             performCalled = true;
             onPerform();
-            mContext = null;
+            context = null;
         }
 
         protected abstract void onPerform();
@@ -90,7 +91,7 @@ public class BottomBarReceiver extends BroadcastReceiver {
                 throw new IllegalStateException("Should call perform() instead of onPerform()");
             }
             try {
-                final ClipboardManager clipboardManager = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                final ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
                 if (clipboardManager.hasPrimaryClip()) {
                     final ClipData.Item item = clipboardManager.getPrimaryClip().getItemAt(0);
                     findAndOpenLink(item.getText().toString());
@@ -122,15 +123,15 @@ public class BottomBarReceiver extends BroadcastReceiver {
             if (url == null) {
                 invalidLink();
             }
-            final Intent websiteIntent = new Intent(mContext, BrowserInterceptActivity.class);
+            final Intent websiteIntent = new Intent(context, BrowserInterceptActivity.class);
             websiteIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             websiteIntent.putExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, true);
             websiteIntent.setData(Uri.parse(url));
-            mContext.startActivity(websiteIntent);
+            context.startActivity(websiteIntent);
         }
 
         private void invalidLink() {
-            Toast.makeText(mContext, mContext.getString(R.string.open_in_new_tab_error), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.open_in_new_tab_error), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -142,7 +143,7 @@ public class BottomBarReceiver extends BroadcastReceiver {
 
         @Override
         protected void onPerform() {
-            Utils.shareText(mContext, mUrl);
+            Utils.shareText(context, url);
         }
     }
 
@@ -154,7 +155,7 @@ public class BottomBarReceiver extends BroadcastReceiver {
 
         @Override
         protected void onPerform() {
-            DocumentUtils.minimizeTaskByUrl(mContext, mUrl);
+            DocumentUtils.minimizeTaskByUrl(context, url);
         }
     }
 }

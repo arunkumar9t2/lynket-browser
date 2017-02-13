@@ -66,8 +66,9 @@ public class BottomBarManager {
      * {@link BottomBarManager#getClickableIDs()}.
      */
     @NonNull
-    public static PendingIntent getOnClickPendingIntent(Context context) {
+    public static PendingIntent getOnClickPendingIntent(Context context, String url) {
         final Intent broadcastIntent = new Intent(context, BottomBarReceiver.class);
+        broadcastIntent.putExtra(Intent.EXTRA_TEXT, url);
         return PendingIntent.getBroadcast(context, 0, broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 

@@ -107,7 +107,7 @@ public class DocumentUtils {
     @TargetApi(LOLLIPOP)
     public static void openNewCustomTab(@NonNull final Context context, @NonNull final WebHead webHead) {
         final Intent customTabActivity = new Intent(context, CustomTabActivity.class);
-        customTabActivity.setData(Uri.parse(webHead.getUnShortenedUrl()));
+        customTabActivity.setData(Uri.parse(webHead.getUrl()));
         customTabActivity.setFlags(FLAG_ACTIVITY_NEW_TASK);
         if (webHead.isFromNewTab() || Preferences.mergeTabs(context)) {
             customTabActivity.addFlags(FLAG_ACTIVITY_NEW_DOCUMENT);

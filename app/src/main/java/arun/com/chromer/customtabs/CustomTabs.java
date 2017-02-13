@@ -379,6 +379,7 @@ public class CustomTabs {
             builder
                     .setStartAnimations(activity, start[0], start[1])
                     .setExitAnimations(activity, exit[0], exit[1]);
+            activity.overridePendingTransition(start[0], start[1]);
         }
     }
 
@@ -609,7 +610,7 @@ public class CustomTabs {
         builder.setSecondaryToolbarViews(
                 createBottomBarRemoteViews(activity, toolbarColor, config),
                 getClickableIDs(),
-                getOnClickPendingIntent(activity)
+                getOnClickPendingIntent(activity, url)
         );
     }
 
