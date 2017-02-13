@@ -20,7 +20,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.chimbori.crux.Article;
+import com.chimbori.crux.articles.Article;
 
 import arun.com.chromer.R;
 import arun.com.chromer.customtabs.CustomTabs;

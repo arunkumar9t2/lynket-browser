@@ -5,9 +5,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.util.Pair;
 
-import com.chimbori.crux.Article;
-import com.chimbori.crux.CandidateURL;
-import com.chimbori.crux.Extractor;
+import com.chimbori.crux.articles.Article;
+import com.chimbori.crux.articles.Extractor;
+import com.chimbori.crux.urls.CandidateURL;
 
 import java.io.IOException;
 
@@ -151,7 +151,7 @@ public class RxParser {
                                     .body()
                                     .string();
 
-                            article = Extractor.with(candidateUrl, stringData)
+                            article = Extractor.with(url, stringData)
                                     .extractMetadata()
                                     .article();
                             Timber.d(article.toString());

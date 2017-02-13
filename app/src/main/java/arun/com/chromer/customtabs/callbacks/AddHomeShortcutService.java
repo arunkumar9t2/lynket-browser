@@ -19,7 +19,7 @@ import android.support.v7.graphics.Palette;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.chimbori.crux.Article;
+import com.chimbori.crux.articles.Article;
 
 import java.util.concurrent.ExecutionException;
 

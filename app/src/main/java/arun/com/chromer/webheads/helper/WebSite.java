@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 
-import com.chimbori.crux.Article;
+import com.chimbori.crux.articles.Article;
 
 import static arun.com.chromer.shared.Constants.NO_COLOR;
 
