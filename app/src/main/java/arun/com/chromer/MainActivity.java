@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private void setupMaterialSearch() {
         mMaterialSearchView.clearFocus();
-        mMaterialSearchView.setInteractionListener(new MaterialSearchView.InteractionListener() {
+        mMaterialSearchView.setInteractionListener(new MaterialSearchView.SearchViewInteractionListener() {
             @Override
             public void onVoiceIconClick() {
                 if (Utils.isVoiceRecognizerPresent(getApplicationContext())) {
@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             }
 
             @Override
-            public void onMenuClick() {
+            public void onHamburgerClick() {
                 if (mDrawer.isDrawerOpen()) {
                     mDrawer.closeDrawer();
                 } else {
