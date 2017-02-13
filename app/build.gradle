@@ -62,7 +62,6 @@ dependencies {
     debugCompile 'com.facebook.stetho:stetho:1.4.2'
     // Support
     compile 'com.android.support:support-compat:25.1.1'
-    compile 'com.android.support:support-core-utils:25.1.1'
     compile 'com.android.support:support-core-ui:25.1.1'
     compile 'com.android.support:support-fragment:25.1.1'
     compile 'com.android.support:design:25.1.1'
@@ -89,13 +88,12 @@ dependencies {
     compile 'com.facebook.rebound:rebound:0.3.8'
     compile 'com.github.nekocode:Badge:1.2'
     // Reactive
-    compile 'io.reactivex:rxjava:1.2.4'
-    compile 'com.jakewharton.rxbinding:rxbinding:1.0.0'
-    compile 'io.reactivex:rxjava:1.1.6'
+    compile 'io.reactivex:rxjava:1.2.6'
+    compile 'io.reactivex:rxandroid:1.2.1'
     compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
         transitive = true;
     }
-    compile 'com.squareup.okhttp3:okhttp:3.5.0'
+    compile 'com.squareup.okhttp3:okhttp:3.6.0'
     compile 'com.github.chimbori:crux:-SNAPSHOT'
 }
 
