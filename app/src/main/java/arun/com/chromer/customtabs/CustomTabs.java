@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Random;
 
 import arun.com.chromer.R;
+import arun.com.chromer.activities.OpenIntentWithActivity;
 import arun.com.chromer.customtabs.bottombar.BottomBarManager;
 import arun.com.chromer.customtabs.callbacks.AddHomeShortcutService;
 import arun.com.chromer.customtabs.callbacks.ClipboardService;
@@ -508,6 +509,7 @@ public class CustomTabs {
         prepareMinimize();
         prepareCopyLink();
         prepareAddToHomeScreen();
+        prepareOpenWith();
         prepareOpenInChrome();
     }
 
@@ -580,7 +582,6 @@ public class CustomTabs {
      */
     private void prepareOpenInChrome() {
         final String customTabPkg = Preferences.customTabApp(activity);
-
         if (Utils.isPackageInstalled(activity, customTabPkg)) {
             if (customTabPkg.equalsIgnoreCase(BETA_PACKAGE)
                     || customTabPkg.equalsIgnoreCase(DEV_PACKAGE)
@@ -594,6 +595,12 @@ public class CustomTabs {
                 builder.addMenuItem(label, openChromePending);
             }
         }
+    }
+
+    private void prepareOpenWith() {
+        final Intent openWithActivity = new Intent(activity, OpenIntentWithActivity.class);
+        final PendingIntent openWithActivityPending = PendingIntent.getActivity(activity, 0, openWithActivity, FLAG_UPDATE_CURRENT);
+        builder.addMenuItem(activity.getString(R.string.open_with), openWithActivityPending);
     }
 
     /**

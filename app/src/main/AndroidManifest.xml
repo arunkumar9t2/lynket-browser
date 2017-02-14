@@ -71,6 +71,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
@@ -147,6 +148,12 @@
             android:excludeFromRecents="true"
             android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Translucent" />
+        <activity
+            android:name=".activities.OpenIntentWithActivity"
+            android:excludeFromRecents="true"
+            android:label="@string/title_activity_open_with"
+            android:noHistory="true"
+            android:theme="@style/Theme.AppCompat.Translucent" />
 
         <service
             android:name=".webheads.qs.WebHeadTile"
@@ -171,6 +178,7 @@
         <meta-data
             android:name="arun.com.chromer.glide.ChromerGideModule"
             android:value="GlideModule" />
+
     </application>
 
 </manifest>
