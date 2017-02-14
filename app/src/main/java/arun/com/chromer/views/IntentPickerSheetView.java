@@ -28,7 +28,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 import flipboard.bottomsheet.commons.R;
 
 @SuppressLint("ViewConstructor")
@@ -64,7 +64,7 @@ public class IntentPickerSheetView extends FrameLayout {
             }
         });
 
-        ViewCompat.setElevation(this, Util.dpToPx(16));
+        ViewCompat.setElevation(this, Utils.dpToPx(16));
     }
 
     @NonNull
@@ -134,7 +134,7 @@ public class IntentPickerSheetView extends FrameLayout {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         // Necessary for showing elevation on 5.0+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setOutlineProvider(new Util.ShadowOutline(w, h));
+            setOutlineProvider(new Utils.ShadowOutline(w, h));
         }
     }
 

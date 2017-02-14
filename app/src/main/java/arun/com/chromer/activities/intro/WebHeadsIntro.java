@@ -8,7 +8,7 @@ import android.support.v4.content.ContextCompat;
 import com.github.paolorotolo.appintro.AppIntro;
 
 import arun.com.chromer.R;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 
 /**
  * Created by Arun on 17/12/2015.
@@ -38,7 +38,7 @@ public class WebHeadsIntro extends AppIntro {
                 R.drawable.webheads_3,
                 bgColor));
 
-        if (Util.isLollipopAbove()) {
+        if (Utils.isLollipopAbove()) {
             addSlide(AppIntroFragment.newInstance(getString(R.string.save_time),
                     getText(R.string.webheads_intro_4_lolli),
                     R.drawable.webheads_3,

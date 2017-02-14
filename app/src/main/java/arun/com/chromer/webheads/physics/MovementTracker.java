@@ -7,28 +7,29 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 /**
- * A helper class for tracking web heads movements. This is needed to correctly apply polarity on calculated velocity
- * by velocity tracker. For example when web head is moved from left to right and top to bottom, the
- * X and Y velocity should be positive. Sometimes that is not the case with raw values given by {@link android.view.VelocityTracker}
+ * A helper class for tracking web heads movements. This is needed to correctly apply polarity on
+ * calculated velocity by velocity tracker. For example when web head is moved from left to right
+ * and top to bottom, the X and Y velocity should be positive. Sometimes that is not the case with
+ * raw values given by{@link android.view.VelocityTracker}
  */
 public class MovementTracker {
-    private static MovementTracker sInstance;
-    private final SizedQueue<Float> mXPoints;
-    private final SizedQueue<Float> mYPoints;
-    private int mTrackingSize = 0;
+    private static MovementTracker INSTANCE;
+    private final SizedQueue<Float> xPoints;
+    private final SizedQueue<Float> yPoints;
+    private int trackingSize = 0;
 
     private MovementTracker() {
-        mTrackingSize = 10;
-        mXPoints = new SizedQueue<>(mTrackingSize);
-        mYPoints = new SizedQueue<>(mTrackingSize);
+        trackingSize = 10;
+        xPoints = new SizedQueue<>(trackingSize);
+        yPoints = new SizedQueue<>(trackingSize);
     }
 
     @NonNull
     public static MovementTracker obtain() {
-        if (sInstance == null) {
-            sInstance = new MovementTracker();
+        if (INSTANCE == null) {
+            INSTANCE = new MovementTracker();
         }
-        return sInstance;
+        return INSTANCE;
     }
 
     public static float[] adjustVelocities(float[] p1, float[] p2, float xVelocity, float yVelocity) {
@@ -76,34 +77,34 @@ public class MovementTracker {
     public void addMovement(@NonNull MotionEvent event) {
         float x = event.getRawX();
         float y = event.getRawY();
-        mXPoints.add(x);
-        mYPoints.add(y);
+        xPoints.add(x);
+        yPoints.add(y);
     }
 
     /**
      * Clear the tracking queue when user begins the gesture.
      */
     public void onDown() {
-        mXPoints.clear();
-        mYPoints.clear();
+        xPoints.clear();
+        yPoints.clear();
     }
 
     /**
      * Clear the tracking queue when user ends the gesture.
      */
     public void onUp() {
-        mXPoints.clear();
-        mYPoints.clear();
+        xPoints.clear();
+        yPoints.clear();
     }
 
     public float[] getAdjustedVelocities(float xVelocity, float yVelocity) {
-        int trackingThreshold = (int) (0.25 * mTrackingSize);
+        int trackingThreshold = (int) (0.25 * trackingSize);
         float[] velocities;
-        if (mXPoints.size() >= trackingThreshold) {
-            int downIndex = mXPoints.size() - trackingThreshold;
+        if (xPoints.size() >= trackingThreshold) {
+            int downIndex = xPoints.size() - trackingThreshold;
 
-            float[] up = new float[]{mXPoints.getLast(), mYPoints.getLast()};
-            float[] down = new float[]{mXPoints.get(downIndex), mYPoints.get(downIndex)};
+            float[] up = new float[]{xPoints.getLast(), yPoints.getLast()};
+            float[] down = new float[]{xPoints.get(downIndex), yPoints.get(downIndex)};
 
             velocities = adjustVelocities(down, up, xVelocity, yVelocity);
         } else {
@@ -114,7 +115,7 @@ public class MovementTracker {
 
     @Override
     public String toString() {
-        return mXPoints.toString() + mYPoints.toString();
+        return xPoints.toString() + yPoints.toString();
     }
 }
 

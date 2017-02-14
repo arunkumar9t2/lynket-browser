@@ -1,4 +1,4 @@
-package arun.com.chromer.webheads.ui;
+package arun.com.chromer.webheads.ui.views;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -24,7 +25,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 import timber.log.Timber;
 
 /**
@@ -33,7 +34,7 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class RemoveWebHead extends FrameLayout {
 
-    static final double MAGNETISM_THRESHOLD = Util.dpToPx(120);
+    static final double MAGNETISM_THRESHOLD = Utils.dpToPx(120);
     private static WindowManager sWindowManager;
     private static RemoveWebHead sOurInstance;
 
@@ -85,7 +86,19 @@ public class RemoveWebHead extends FrameLayout {
         sWindowManager.addView(this, mWindowParams);
     }
 
-    public static RemoveWebHead get(Context context) {
+    public static void init(@NonNull Context context) {
+        get(context);
+    }
+
+    /**
+     * Returns an instance of this view. If the view is not initialized, then a new view is created
+     * and returned.
+     * The returned view might not have been laid out yet.
+     *
+     * @param context
+     * @return
+     */
+    public synchronized static RemoveWebHead get(@NonNull Context context) {
         if (sOurInstance != null)
             return sOurInstance;
         else {

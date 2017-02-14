@@ -32,3 +32,12 @@
     public *;
 }
 -keepattributes EnclosingMethod
+
+-dontwarn okio.**
+
+-dontwarn sun.misc.Unsafe
+-dontwarn org.w3c.dom.bootstrap.DOMImplementationRegistry
+
+-keepattributes *Annotation*
+-keep class com.crashlytics.** { *; }
+-dontwarn com.crashlytics.**

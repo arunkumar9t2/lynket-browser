@@ -20,7 +20,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import arun.com.chromer.BuildConfig;
 import arun.com.chromer.R;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 import butterknife.ButterKnife;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
@@ -54,14 +54,14 @@ public class Changelog {
                 }
             });
             new MaterialDialog.Builder(activity)
-                    .customView(content, true)
+                    .customView(content, false)
                     .title("Changelog")
                     .positiveText(android.R.string.ok)
                     .neutralText(R.string.rate_play_store)
                     .onNeutral(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            Util.openPlayStore(activity, activity.getPackageName());
+                            Utils.openPlayStore(activity, activity.getPackageName());
                         }
                     })
                     .dismissListener(new DialogInterface.OnDismissListener() {

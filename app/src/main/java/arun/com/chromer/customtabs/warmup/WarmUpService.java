@@ -76,6 +76,7 @@ public class WarmUpService extends Service implements CustomTabManager.Connectio
 
     }
 
+    @Nullable
     public CustomTabsSession getTabSession() {
         if (mCustomTabManager != null) {
             return mCustomTabManager.getSession();

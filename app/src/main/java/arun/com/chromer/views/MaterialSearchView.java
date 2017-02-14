@@ -36,42 +36,45 @@ import arun.com.chromer.R;
 import arun.com.chromer.search.SearchSuggestions;
 import arun.com.chromer.search.SuggestionAdapter;
 import arun.com.chromer.search.SuggestionItem;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
 public class MaterialSearchView extends RelativeLayout implements SearchSuggestions.SuggestionsCallback, SuggestionAdapter.SuggestionClickListener {
     @ColorInt
-    private final int mNormalColor = ContextCompat.getColor(getContext(), R.color.accent_icon_nofocus);
+    private final int normalColor = ContextCompat.getColor(getContext(), R.color.accent_icon_nofocus);
     @ColorInt
-    private final int mFocusedColor = ContextCompat.getColor(getContext(), R.color.accent);
+    private final int focusedColor = ContextCompat.getColor(getContext(), R.color.accent);
 
-    private boolean mInFocus = false;
-    private boolean mShouldClearText;
+    private boolean inFocus = false;
+    private boolean clearText;
 
     @BindView(R.id.msv_left_icon)
-    public ImageView mMenuIconView;
+    public ImageView menuIconView;
     @BindView(R.id.msv_right_icon)
-    public ImageView mVoiceIconView;
+    public ImageView voiceIconView;
     @BindView(R.id.msv_label)
     public TextView mLabel;
     @BindView(R.id.msv_edittext)
-    public EditText mEditText;
+    public EditText editText;
     @BindView(R.id.search_suggestions)
-    public RecyclerView mSuggestionList;
+    public RecyclerView suggestionList;
     @BindView(R.id.msv_card)
-    public CardView mCard;
+    public CardView card;
 
-    private IconicsDrawable mXIcon;
-    private IconicsDrawable mVoiceIcon;
-    private IconicsDrawable mMenuIcon;
+    private IconicsDrawable xIcon;
+    private IconicsDrawable voiceIcon;
+    private IconicsDrawable menuIcon;
 
-    private SearchSuggestions mSearchSuggestions;
-    private SuggestionAdapter mSuggestionAdapter;
+    private SearchSuggestions searchSuggestions;
+    private SuggestionAdapter suggestionAdapter;
 
-    private int mNormalCardHeight = -1;
+    private int normalCardHeight = -1;
 
-    private InteractionListener mInteractionListener = new InteractionListener() {
+    private SearchViewInteractionListener listener = new SearchViewInteractionListener() {
         @Override
         public void onVoiceIconClick() {
             // no op
@@ -83,7 +86,7 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
         }
 
         @Override
-        public void onMenuClick() {
+        public void onHamburgerClick() {
             // no op
         }
     };
@@ -104,31 +107,31 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
     }
 
     private void init(Context context) {
-        mSearchSuggestions = new SearchSuggestions(context, this);
-        mXIcon = new IconicsDrawable(context)
+        searchSuggestions = new SearchSuggestions(context, this);
+        xIcon = new IconicsDrawable(context)
                 .icon(CommunityMaterial.Icon.cmd_close)
-                .color(mNormalColor)
+                .color(normalColor)
                 .sizeDp(16);
-        mVoiceIcon = new IconicsDrawable(context)
+        voiceIcon = new IconicsDrawable(context)
                 .icon(CommunityMaterial.Icon.cmd_microphone)
-                .color(mNormalColor)
+                .color(normalColor)
                 .sizeDp(18);
-        mMenuIcon = new IconicsDrawable(context)
+        menuIcon = new IconicsDrawable(context)
                 .icon(CommunityMaterial.Icon.cmd_menu)
-                .color(mNormalColor)
+                .color(normalColor)
                 .sizeDp(18);
-
         addView(LayoutInflater.from(getContext()).inflate(R.layout.material_search_view, this, false));
         ButterKnife.bind(this);
-        mSuggestionAdapter = new SuggestionAdapter(getContext(), this);
-        mSuggestionList.setLayoutManager(new LinearLayoutManager(getContext()));
-        mSuggestionList.setAdapter(mSuggestionAdapter);
-        mSuggestionList.addItemDecoration(new DividerItemDecoration(getContext()));
-        mCard.post(new Runnable() {
+
+        suggestionAdapter = new SuggestionAdapter(getContext(), this);
+        suggestionList.setLayoutManager(new LinearLayoutManager(getContext()));
+        suggestionList.setAdapter(suggestionAdapter);
+        suggestionList.addItemDecoration(new DividerItemDecoration(getContext()));
+        card.post(new Runnable() {
             @Override
             public void run() {
-                if (mNormalCardHeight == -1) {
-                    mNormalCardHeight = mCard.getHeight();
+                if (normalCardHeight == -1) {
+                    normalCardHeight = card.getHeight();
                 }
             }
         });
@@ -137,20 +140,20 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mEditText.setOnClickListener(new OnClickListener() {
+        editText.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 performClick();
             }
         });
-        mEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
+        editText.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) gainFocus();
                 else loseFocus(null);
             }
         });
-        mEditText.addTextChangedListener(new TextWatcher() {
+        editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -163,41 +166,40 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
             @Override
             public void afterTextChanged(Editable s) {
                 handleVoiceIconState();
-
                 if (s.length() != 0) {
                     mLabel.setAlpha(0f);
-                    mSearchSuggestions.fetchForQuery(s.toString());
+                    searchSuggestions.fetchForQuery(s.toString());
                 } else mLabel.setAlpha(0.5f);
             }
         });
-        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    mInteractionListener.onSearchPerformed(getURL());
+                    listener.onSearchPerformed(getURL());
                     return true;
                 }
                 return false;
             }
         });
 
-        mMenuIconView.setImageDrawable(mMenuIcon);
-        mMenuIconView.setOnClickListener(new OnClickListener() {
+        menuIconView.setImageDrawable(menuIcon);
+        menuIconView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                mInteractionListener.onMenuClick();
+                listener.onHamburgerClick();
             }
         });
 
-        mVoiceIconView.setImageDrawable(mVoiceIcon);
-        mVoiceIconView.setOnClickListener(new OnClickListener() {
+        voiceIconView.setImageDrawable(voiceIcon);
+        voiceIconView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mShouldClearText) {
-                    mEditText.setText("");
+                if (clearText) {
+                    editText.setText("");
                     loseFocus(null);
                 } else {
-                    if (mInteractionListener != null) mInteractionListener.onVoiceIconClick();
+                    if (listener != null) listener.onVoiceIconClick();
                 }
             }
         });
@@ -205,17 +207,17 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!mInFocus) gainFocus();
+                if (!inFocus) gainFocus();
             }
         });
     }
 
     private void gainFocus() {
-        float labelAlpha = mEditText.getText().length() == 0 ? 0.5f : 0f;
+        final float labelAlpha = editText.getText().length() == 0 ? 0.5f : 0f;
         final AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(
                 ObjectAnimator.ofFloat(mLabel, "alpha", labelAlpha),
-                ObjectAnimator.ofFloat(mEditText, "alpha", 1).setDuration(300)
+                ObjectAnimator.ofFloat(editText, "alpha", 1).setDuration(300)
         );
         hardwareLayers();
         animatorSet.addListener(new AnimatorListenerAdapter() {
@@ -227,20 +229,20 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
             }
         });
         animatorSet.start();
-        mInFocus = true;
+        inFocus = true;
     }
 
     private void loseFocus(final Runnable endAction) {
         final AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(
                 ObjectAnimator.ofFloat(mLabel, "alpha", 1),
-                ObjectAnimator.ofFloat(mEditText, "alpha", 0).setDuration(300)
+                ObjectAnimator.ofFloat(editText, "alpha", 0).setDuration(300)
         );
         hardwareLayers();
         animatorSet.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
-                mEditText.clearFocus();
+                editText.clearFocus();
                 setNormalColor();
             }
 
@@ -254,17 +256,17 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
             }
         });
         animatorSet.start();
-        mInFocus = false;
+        inFocus = false;
     }
 
     private void clearLayerTypes() {
         mLabel.setLayerType(LAYER_TYPE_NONE, null);
-        mEditText.setLayerType(LAYER_TYPE_NONE, null);
+        editText.setLayerType(LAYER_TYPE_NONE, null);
     }
 
     private void hardwareLayers() {
         mLabel.setLayerType(LAYER_TYPE_HARDWARE, null);
-        mEditText.setLayerType(LAYER_TYPE_HARDWARE, null);
+        editText.setLayerType(LAYER_TYPE_HARDWARE, null);
     }
 
     private void hideKeyboard() {
@@ -274,26 +276,26 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
     }
 
     private void setFocusedColor() {
-        mMenuIconView.setImageDrawable(mMenuIcon.color(mFocusedColor));
-        mVoiceIconView.setImageDrawable(mVoiceIcon.color(mFocusedColor));
+        menuIconView.setImageDrawable(menuIcon.color(focusedColor));
+        voiceIconView.setImageDrawable(voiceIcon.color(focusedColor));
     }
 
     private void setNormalColor() {
-        mMenuIconView.setImageDrawable(mMenuIcon.color(mNormalColor));
-        mVoiceIconView.setImageDrawable(mVoiceIcon.color(mNormalColor));
+        menuIconView.setImageDrawable(menuIcon.color(normalColor));
+        voiceIconView.setImageDrawable(voiceIcon.color(normalColor));
     }
 
     private void handleVoiceIconState() {
-        if (mEditText.getText() != null && mEditText.getText().length() != 0) {
-            if (mInFocus)
-                mVoiceIconView.setImageDrawable(mXIcon.color(mFocusedColor));
-            else mVoiceIconView.setImageDrawable(mXIcon.color(mNormalColor));
-            mShouldClearText = true;
+        if (editText.getText() != null && editText.getText().length() != 0) {
+            if (inFocus)
+                voiceIconView.setImageDrawable(xIcon.color(focusedColor));
+            else voiceIconView.setImageDrawable(xIcon.color(normalColor));
+            clearText = true;
         } else {
-            if (mInFocus)
-                mVoiceIconView.setImageDrawable(mVoiceIcon.color(mFocusedColor));
-            else mVoiceIconView.setImageDrawable(mVoiceIcon.color(mNormalColor));
-            mShouldClearText = false;
+            if (inFocus)
+                voiceIconView.setImageDrawable(voiceIcon.color(focusedColor));
+            else voiceIconView.setImageDrawable(voiceIcon.color(normalColor));
+            clearText = false;
         }
     }
 
@@ -314,21 +316,21 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
 
     @Override
     public boolean hasFocus() {
-        return mInFocus && super.hasFocus();
+        return inFocus && super.hasFocus();
     }
 
     @NonNull
     public String getText() {
-        return mEditText.getText() == null ? "" : mEditText.getText().toString();
+        return editText.getText() == null ? "" : editText.getText().toString();
     }
 
     @NonNull
     public String getURL() {
-        return Util.getSearchUrl(getText());
+        return Utils.getSearchUrl(getText());
     }
 
-    public void setInteractionListener(@NonNull InteractionListener listener) {
-        mInteractionListener = listener;
+    public void setInteractionListener(@NonNull SearchViewInteractionListener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -341,29 +343,29 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
         clearFocus(new Runnable() {
             @Override
             public void run() {
-                mInteractionListener.onSearchPerformed(Util.getSearchUrl(suggestion));
+                listener.onSearchPerformed(Utils.getSearchUrl(suggestion));
             }
         });
     }
 
     private void hideSuggestions() {
-        mSuggestionAdapter.clear();
+        suggestionAdapter.clear();
         animateCardToHeight(getNormalHeightPx() /* guess: minimum search bar height*/);
     }
 
     private int getNormalHeightPx() {
-        if (mNormalCardHeight != -1) {
-            return mNormalCardHeight;
+        if (normalCardHeight != -1) {
+            return normalCardHeight;
         }
-        return Util.dpToPx(50);
+        return Utils.dpToPx(50);
     }
 
     @Override
     public void onFetchSuggestions(@NonNull List<SuggestionItem> suggestions) {
-        final boolean shouldReveal = mSuggestionAdapter.getItemCount() == 0 && suggestions.size() > 0;
-        final boolean shouldShrink = mSuggestionAdapter.getItemCount() != 0 && suggestions.size() == 0;
+        final boolean shouldReveal = suggestionAdapter.getItemCount() == 0 && suggestions.size() > 0;
+        final boolean shouldShrink = suggestionAdapter.getItemCount() != 0 && suggestions.size() == 0;
 
-        mSuggestionAdapter.updateSuggestions(suggestions);
+        suggestionAdapter.updateSuggestions(suggestions);
 
         if (shouldShrink) {
             animateCardToHeight(getNormalHeightPx() /* guess: minimum search bar height*/);
@@ -375,37 +377,36 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
     }
 
     private void animateCardToHeight(final int heightPx) {
-        final ValueAnimator anim = ValueAnimator.ofInt(mCard.getHeight(), heightPx);
+        final ValueAnimator anim = ValueAnimator.ofInt(card.getHeight(), heightPx);
         anim.setDuration(300);
         anim.setInterpolator(new FastOutSlowInInterpolator());
-        mCard.setLayerType(LAYER_TYPE_HARDWARE, null);
+        card.setLayerType(LAYER_TYPE_HARDWARE, null);
         anim.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                mCard.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
-                mCard.requestLayout();
-                mCard.setLayerType(LAYER_TYPE_NONE, null);
+                card.setLayoutParams(new FrameLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+                card.requestLayout();
+                card.setLayerType(LAYER_TYPE_NONE, null);
             }
         });
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             public void onAnimationUpdate(ValueAnimator animation) {
-                mCard.getLayoutParams().height = (int) animation.getAnimatedValue();
-                mCard.requestLayout();
+                card.getLayoutParams().height = (int) animation.getAnimatedValue();
+                card.requestLayout();
             }
         });
         anim.start();
     }
 
     private int getPredictedSuggestionHeight() {
-        return mCard.getHeight() + (mSearchSuggestions.getMaxSuggestions() * Util.dpToPx(48));
+        return card.getHeight() + (searchSuggestions.getMaxSuggestions() * Utils.dpToPx(48));
     }
 
-    public interface InteractionListener {
+    public interface SearchViewInteractionListener {
         void onVoiceIconClick();
 
-        @SuppressWarnings("UnusedParameters")
         void onSearchPerformed(@NonNull String url);
 
-        void onMenuClick();
+        void onHamburgerClick();
     }
 }

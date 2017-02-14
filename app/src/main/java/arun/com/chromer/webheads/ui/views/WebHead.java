@@ -1,4 +1,4 @@
-package arun.com.chromer.webheads.ui;
+package arun.com.chromer.webheads.ui.views;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -7,11 +7,9 @@ import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.view.GestureDetector;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.Toast;
 
 import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
@@ -21,71 +19,70 @@ import com.facebook.rebound.SpringListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import arun.com.chromer.BuildConfig;
-import arun.com.chromer.R;
 import arun.com.chromer.preferences.manager.Preferences;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.physics.MovementTracker;
 import arun.com.chromer.webheads.physics.SpringConfigs;
+import arun.com.chromer.webheads.ui.WebHeadContract;
 import timber.log.Timber;
+
+import static android.view.Gravity.LEFT;
+import static android.view.Gravity.RIGHT;
+import static android.view.Gravity.TOP;
+import static android.view.MotionEvent.ACTION_CANCEL;
+import static android.view.MotionEvent.ACTION_DOWN;
+import static android.view.MotionEvent.ACTION_MOVE;
+import static android.view.MotionEvent.ACTION_UP;
+import static arun.com.chromer.webheads.physics.SpringConfigs.FLING;
+import static arun.com.chromer.webheads.ui.views.RemoveWebHead.MAGNETISM_THRESHOLD;
 
 /**
  * Web head object which adds draggable and gesture functionality.
  */
 @SuppressLint("ViewConstructor")
 public class WebHead extends BaseWebHead implements SpringListener {
-
     private static final float TOUCH_DOWN_SCALE = 1f;
     private static final float TOUCH_UP_SCALE = 1f;
     // Coordinate of remove web head that we can lock on to.
-    private int[] mTrashLockCoordinate;
+    private int[] trashLockingCoordinates;
     // True when being dragged, otherwise false
-    private boolean mDragging;
+    private boolean dragging;
     // True when attached to remove view, otherwise false
-    private boolean mWasRemoveLocked;
+    private boolean wasLockedToRemove;
     // True when fling detected and false on new touch event
-    private boolean mWasFlung;
+    private boolean wasFlung;
     // True when click was detected, and false on new touch event
-    private boolean mWasClicked;
+    private boolean wasClicked;
     // True when touched down and false otherwise
-    private boolean mScaledDown;
-    // If this is true, then on releasing the web head, we close all others and clean up.
-    private boolean mShouldCloseAll;
+    private boolean scaledDown;
     // If web head is resting on the sides
-    private boolean mIsCoasting = false;
+    private boolean isCoasting = false;
     // Minimum horizontal velocity that we need to move the web head from one end of the scree to another
     private static int MINIMUM_HORIZONTAL_FLING_VELOCITY = 0;
     // Touch slop of the device
-    private final int mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
-    // Long press duration of device
-    private static final int mLongPressDuration = ViewConfiguration.getLongPressTimeout();
+    private final int touchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
     // Gesture detector to recognize fling and click on web heads
-    private final GestureDetector mGestureDetector = new GestureDetector(getContext(), new GestureDetectorListener());
+    private final GestureDetector gestureDetector = new GestureDetector(getContext(), new GestureDetectorListener());
     // Individual springs to control X, Y and scale of the web head
-    private Spring mXSpring, mYSpring, mScaleSpring;
+    private Spring xSpring, ySpring, scaleSpring;
 
     private float posX, posY;
     private int initialDownX, initialDownY;
 
-    private static final Timer sTimer = new Timer();
-    private static TimerTask sLongPressToCloseAllTask;
-    private TimerTask mCoastingTask;
-
-    private static Toast sToast;
-
+    private static final Timer timer = new Timer();
+    private TimerTask coastingTask;
     // The interaction listener that clients can provide to listen for events on webhead.
-    private final WebHeadContract mContract;
-
+    private final WebHeadContract webHeadContract;
     /**
-     * Movement tracker instance that is used to adjust X and Y velocity calculated by {@link #mGestureDetector}.
-     * This is needed since sometimes velocities coming from {@link GestureDetectorListener#onFling(MotionEvent, MotionEvent, float, float)}
-     * has wrong polarity.
+     * Movement tracker instance that is used to adjust X and Y velocity calculated by {@link #gestureDetector}.
+     * This is needed since sometimes velocities coming from
+     * {@link GestureDetectorListener#onFling(MotionEvent, MotionEvent, float, float)}has wrong polarity.
      */
-    private static MovementTracker sMovementTracker;
+    private static MovementTracker movementTracker;
 
     /**
-     * Inits the web head and attaches to the system window. It is assumed that draw over other apps permission is
-     * granted for 6.0+.
+     * Inits the web head and attaches to the system window. It is assumed that draw over other apps
+     * permission is granted for 6.0+.
      *
      * @param context  Service
      * @param url      Url the web head will carry
@@ -93,9 +90,9 @@ public class WebHead extends BaseWebHead implements SpringListener {
      */
     public WebHead(@NonNull Context context, @NonNull String url, @NonNull WebHeadContract contract) {
         super(context, url);
-        mContract = contract;
-        mMaster = true;
-        sMovementTracker = MovementTracker.obtain();
+        webHeadContract = contract;
+        master = true;
+        movementTracker = MovementTracker.obtain();
         calcVelocities();
         setupSprings();
         scheduleCoastingTask();
@@ -103,51 +100,52 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
     private void calcVelocities() {
         if (MINIMUM_HORIZONTAL_FLING_VELOCITY == 0) {
-            int scaledScreenWidthDp = (getResources().getConfiguration().screenWidthDp * 10);
-            MINIMUM_HORIZONTAL_FLING_VELOCITY = Util.dpToPx(scaledScreenWidthDp);
+            final int scaledScreenWidthDp = (getResources().getConfiguration().screenWidthDp * 10);
+            MINIMUM_HORIZONTAL_FLING_VELOCITY = Utils.dpToPx(scaledScreenWidthDp);
         }
     }
 
     private void setupSprings() {
-        mYSpring = mContract.newSpring();
-        mYSpring.addListener(this);
-        mXSpring = mContract.newSpring();
-        mXSpring.addListener(this);
-        mScaleSpring = mContract.newSpring();
-        mScaleSpring.addListener(new SimpleSpringListener() {
+        ySpring = webHeadContract.newSpring();
+        ySpring.addListener(this);
+        xSpring = webHeadContract.newSpring();
+        xSpring.addListener(this);
+        scaleSpring = webHeadContract.newSpring();
+        scaleSpring.addListener(new SimpleSpringListener() {
             @Override
             public void onSpringUpdate(Spring spring) {
-                float howMuch = (float) spring.getCurrentValue();
-                mContentGroup.setScaleX(howMuch);
-                mContentGroup.setScaleY(howMuch);
+                final float howMuch = (float) spring.getCurrentValue();
+                contentRoot.setScaleX(howMuch);
+                contentRoot.setScaleY(howMuch);
             }
         });
-        mScaleSpring.setCurrentValue(0.0f, true);
+        scaleSpring.setCurrentValue(0.0f, true);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        // Don't react to any touch event and consume it when we are being destroyed
-        if (mDestroyed || !mMaster || mInQueue) return true;
+        // Don't react to any touch event and consume it when we are being destroyed, if we are a
+        // a slave or if we are in queue.
+        if (destroyed || !master || inQueue) return true;
         try {
             // Reset gesture flag on each event
-            mWasFlung = false;
-            mWasClicked = false;
+            wasFlung = false;
+            wasClicked = false;
 
             // Let gesture detector intercept events, needed for fling and click
-            mGestureDetector.onTouchEvent(event);
+            gestureDetector.onTouchEvent(event);
 
-            if (mWasClicked) return true;
+            if (wasClicked) return true;
 
             switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
+                case ACTION_DOWN:
                     handleTouchDown(event);
                     break;
-                case MotionEvent.ACTION_MOVE:
+                case ACTION_MOVE:
                     handleMove(event);
                     break;
-                case MotionEvent.ACTION_UP:
-                case MotionEvent.ACTION_CANCEL:
+                case ACTION_UP:
+                case ACTION_CANCEL:
                     if (handleTouchUp())
                         return true;
                     break;
@@ -155,27 +153,23 @@ public class WebHead extends BaseWebHead implements SpringListener {
                     break;
             }
         } catch (NullPointerException e) {
-            final String msg = "NPE on web heads " + e.getMessage();
-            if (BuildConfig.DEBUG) {
-                Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
-            }
             destroySelf(true);
         }
         return true;
     }
 
     private void handleTouchDown(@NonNull MotionEvent event) {
-        mDragging = false;
+        dragging = false;
 
-        sMovementTracker.onDown();
+        movementTracker.onDown();
 
-        initialDownX = mWindowParams.x;
-        initialDownY = mWindowParams.y;
+        initialDownX = windowParams.x;
+        initialDownY = windowParams.y;
 
         posX = event.getRawX();
         posY = event.getRawY();
 
-        if (mMaster) {
+        if (master) {
             masterDownX = (int) posX;
             masterDownY = (int) posY;
         }
@@ -192,19 +186,19 @@ public class WebHead extends BaseWebHead implements SpringListener {
      * @param event the touch event
      */
     private void handleMove(@NonNull MotionEvent event) {
-        sMovementTracker.addMovement(event);
+        movementTracker.addMovement(event);
 
         float offsetX = event.getRawX() - posX;
         float offsetY = event.getRawY() - posY;
 
-        if (Math.hypot(offsetX, offsetY) > mTouchSlop) {
-            mDragging = true;
+        if (Math.hypot(offsetX, offsetY) > touchSlop) {
+            dragging = true;
         }
 
-        if (mDragging) {
+        if (dragging) {
             getRemoveWebHead().reveal();
 
-            mUserManuallyMoved = true;
+            userManuallyMoved = true;
 
             int x = (int) (initialDownX + offsetX);
             int y = (int) (initialDownY + offsetY);
@@ -213,20 +207,20 @@ public class WebHead extends BaseWebHead implements SpringListener {
                 getRemoveWebHead().grow();
                 touchUp();
 
-                mXSpring.setSpringConfig(SpringConfigs.SNAP);
-                mYSpring.setSpringConfig(SpringConfigs.SNAP);
+                xSpring.setSpringConfig(SpringConfigs.SNAP);
+                ySpring.setSpringConfig(SpringConfigs.SNAP);
 
-                mXSpring.setEndValue(trashLockCoOrd()[0]);
-                mYSpring.setEndValue(trashLockCoOrd()[1]);
+                xSpring.setEndValue(trashLockCoOrd()[0]);
+                ySpring.setEndValue(trashLockCoOrd()[1]);
 
             } else {
                 getRemoveWebHead().shrink();
 
-                mXSpring.setSpringConfig(SpringConfigs.DRAG);
-                mYSpring.setSpringConfig(SpringConfigs.DRAG);
+                xSpring.setSpringConfig(SpringConfigs.DRAG);
+                ySpring.setSpringConfig(SpringConfigs.DRAG);
 
-                mXSpring.setCurrentValue(x);
-                mYSpring.setCurrentValue(y);
+                xSpring.setCurrentValue(x);
+                ySpring.setCurrentValue(y);
 
                 touchDown();
             }
@@ -234,22 +228,16 @@ public class WebHead extends BaseWebHead implements SpringListener {
     }
 
     private boolean handleTouchUp() {
-        cancelToast();
-        if (mShouldCloseAll) {
-            sTimer.purge();
-            mContract.closeAll();
-            return true;
-        }
-        if (mWasRemoveLocked) {
+        if (wasLockedToRemove) {
             // If head was locked onto a remove bubble before, then kill ourselves
             destroySelf(true);
             return true;
         }
-        mDragging = false;
+        dragging = false;
 
-        sMovementTracker.onUp();
+        movementTracker.onUp();
 
-        if (!mWasFlung && mUserManuallyMoved) {
+        if (!wasFlung && userManuallyMoved) {
             stickToWall();
         }
         touchUp();
@@ -257,28 +245,6 @@ public class WebHead extends BaseWebHead implements SpringListener {
         RemoveWebHead.disappear();
         scheduleCoastingTask();
         return false;
-    }
-
-    private void scheduleLongPressToCloseTask() {
-        if (sLongPressToCloseAllTask != null) {
-            sLongPressToCloseAllTask.cancel();
-        }
-        sLongPressToCloseAllTask = new TimerTask() {
-            @Override
-            public void run() {
-                mShouldCloseAll = true;
-                post(new Runnable() {
-                    @Override
-                    public void run() {
-                        cancelToast();
-                        sToast = Toast.makeText(getContext(), R.string.close_all_explanation, Toast.LENGTH_SHORT);
-                        sToast.setGravity(Gravity.CENTER, 0, 0);
-                        sToast.show();
-                    }
-                });
-            }
-        };
-        sTimer.schedule(sLongPressToCloseAllTask, 3000);
     }
 
     /**
@@ -289,34 +255,28 @@ public class WebHead extends BaseWebHead implements SpringListener {
             return;
         }
         cancelCoastingTask();
-        mCoastingTask = new TimerTask() {
+        coastingTask = new TimerTask() {
             @Override
             public void run() {
                 Timber.v("Coasting active");
-                mIsCoasting = true;
+                isCoasting = true;
                 final int halfWidth = getWidth() / 4;
-                if (sScreenBounds != null)
-                    if (mWindowParams.x < sDispWidth / 2) {
-                        mXSpring.setEndValue(sScreenBounds.left - halfWidth);
+                if (screenBounds != null)
+                    if (windowParams.x < dispWidth / 2) {
+                        xSpring.setEndValue(screenBounds.left - halfWidth);
                     } else {
-                        mXSpring.setEndValue(sScreenBounds.right + halfWidth);
+                        xSpring.setEndValue(screenBounds.right + halfWidth);
                     }
             }
         };
         Timber.v("Scheduled a coasting task");
-        sTimer.schedule(mCoastingTask, 6000);
+        timer.schedule(coastingTask, 6000);
     }
 
     private void cancelCoastingTask() {
-        mIsCoasting = false;
-        if (mCoastingTask != null) {
-            mCoastingTask.cancel();
-        }
-    }
-
-    public static void cancelToast() {
-        if (sToast != null) {
-            sToast.cancel();
+        isCoasting = false;
+        if (coastingTask != null) {
+            coastingTask.cancel();
         }
     }
 
@@ -327,14 +287,14 @@ public class WebHead extends BaseWebHead implements SpringListener {
      * @return array of x and y.
      */
     private int[] trashLockCoOrd() {
-        if (mTrashLockCoordinate == null) {
+        if (trashLockingCoordinates == null) {
             int[] removeCentre = getRemoveWebHead().getCenterCoordinates();
             int offset = getWidth() / 2;
             int x = removeCentre[0] - offset;
             int y = removeCentre[1] - offset;
-            mTrashLockCoordinate = new int[]{x, y};
+            trashLockingCoordinates = new int[]{x, y};
         }
-        return mTrashLockCoordinate;
+        return trashLockingCoordinates;
     }
 
     /**
@@ -345,29 +305,23 @@ public class WebHead extends BaseWebHead implements SpringListener {
      * @return true if near, false other wise
      */
     private boolean isNearRemoveCircle(int x, int y) {
-        int[] p = getRemoveWebHead().getCenterCoordinates();
-        int rX = p[0];
-        int rY = p[1];
+        final int[] p = getRemoveWebHead().getCenterCoordinates();
+        final int rX = p[0];
+        final int rY = p[1];
 
-        int offset = getWidth() / 2;
+        final int offset = getWidth() / 2;
         x += offset;
         y += offset;
 
-        if (dist(rX, rY, x, y) < RemoveWebHead.MAGNETISM_THRESHOLD) {
-            mWasRemoveLocked = true;
-            mBadgeView.setVisibility(INVISIBLE);
-            mContract.onMasterLockedToRemove();
-            scheduleLongPressToCloseTask();
+        if (dist(rX, rY, x, y) < MAGNETISM_THRESHOLD) {
+            wasLockedToRemove = true;
+            badgeView.setVisibility(INVISIBLE);
+            webHeadContract.onMasterLockedToRemove();
             return true;
         } else {
-            mWasRemoveLocked = false;
-            mShouldCloseAll = false;
-            cancelToast();
-            if (sLongPressToCloseAllTask != null) {
-                sLongPressToCloseAllTask.cancel();
-            }
-            mBadgeView.setVisibility(VISIBLE);
-            mContract.onMasterReleasedFromRemove();
+            wasLockedToRemove = false;
+            badgeView.setVisibility(VISIBLE);
+            webHeadContract.onMasterReleasedFromRemove();
             return false;
         }
     }
@@ -377,46 +331,46 @@ public class WebHead extends BaseWebHead implements SpringListener {
     }
 
     public void reveal() {
-        mScaleSpring.setEndValue(TOUCH_UP_SCALE);
-        mScaledDown = false;
+        scaleSpring.setEndValue(TOUCH_UP_SCALE);
+        scaledDown = false;
     }
 
     private void touchDown() {
-        if (!mScaledDown) {
-            mScaleSpring.setEndValue(TOUCH_DOWN_SCALE);
-            mScaledDown = true;
+        if (!scaledDown) {
+            scaleSpring.setEndValue(TOUCH_DOWN_SCALE);
+            scaledDown = true;
         }
     }
 
     private void touchUp() {
-        if (mScaledDown) {
-            mScaleSpring.setEndValue(TOUCH_UP_SCALE);
-            mScaledDown = false;
+        if (scaledDown) {
+            scaleSpring.setEndValue(TOUCH_UP_SCALE);
+            scaledDown = false;
         }
     }
 
     @NonNull
     public Spring getXSpring() {
-        return mXSpring;
+        return xSpring;
     }
 
     @NonNull
     public Spring getYSpring() {
-        return mYSpring;
+        return ySpring;
     }
 
-    public void setSpringConfig(@NonNull SpringConfig config) {
-        mXSpring.setSpringConfig(config);
-        mYSpring.setSpringConfig(config);
+    public void setSpringConfig(@NonNull final SpringConfig config) {
+        xSpring.setSpringConfig(config);
+        ySpring.setSpringConfig(config);
     }
 
     @Override
     public void onSpringUpdate(Spring spring) {
-        mWindowParams.x = (int) mXSpring.getCurrentValue();
-        mWindowParams.y = (int) mYSpring.getCurrentValue();
+        windowParams.x = (int) xSpring.getCurrentValue();
+        windowParams.y = (int) ySpring.getCurrentValue();
         updateView();
-        if (mMaster) {
-            mContract.onMasterWebHeadMoved(mWindowParams.x, mWindowParams.y);
+        if (master) {
+            webHeadContract.onMasterWebHeadMoved(windowParams.x, windowParams.y);
             checkBounds();
             updateBadgeLocation();
         }
@@ -424,13 +378,13 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
     @SuppressLint("RtlHardcoded")
     private void updateBadgeLocation() {
-        final LayoutParams params = (LayoutParams) mBadgeView.getLayoutParams();
-        if (mWindowParams.x > sDispWidth / 2) {
-            params.gravity = Gravity.TOP | Gravity.LEFT;
+        final LayoutParams params = (LayoutParams) badgeView.getLayoutParams();
+        if (windowParams.x > dispWidth / 2) {
+            params.gravity = TOP | LEFT;
         } else {
-            params.gravity = Gravity.TOP | Gravity.RIGHT;
+            params.gravity = TOP | RIGHT;
         }
-        mBadgeView.setLayoutParams(params);
+        badgeView.setLayoutParams(params);
     }
 
     @Override
@@ -448,65 +402,60 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
     private void checkBounds() {
         // Only check when free
-        if (mDragging || sScreenBounds == null || !mMaster || mInQueue || mIsCoasting) {
+        if (dragging || screenBounds == null || !master || inQueue || isCoasting) {
             return;
         }
 
-        int x = mWindowParams.x;
-        int y = mWindowParams.y;
+        final int x = windowParams.x;
+        final int y = windowParams.y;
 
-        int width = getWidth();
+        final int width = getWidth();
 
-        if (x + width >= sDispWidth) {
-            mXSpring.setSpringConfig(SpringConfigs.FLING);
-            mXSpring.setEndValue(sScreenBounds.right);
+        if (x + width >= dispWidth) {
+            xSpring.setSpringConfig(FLING);
+            xSpring.setEndValue(screenBounds.right);
         }
         if (x - width <= 0) {
-            mXSpring.setSpringConfig(SpringConfigs.FLING);
-            mXSpring.setEndValue(sScreenBounds.left);
+            xSpring.setSpringConfig(FLING);
+            xSpring.setEndValue(screenBounds.left);
         }
-        if (y + width >= sDispHeight) {
-            mYSpring.setSpringConfig(SpringConfigs.FLING);
-            mYSpring.setEndValue(sScreenBounds.bottom);
+        if (y + width >= dispHeight) {
+            ySpring.setSpringConfig(FLING);
+            ySpring.setEndValue(screenBounds.bottom);
         }
         if (y - width <= 0) {
-            mYSpring.setSpringConfig(SpringConfigs.FLING);
-            mYSpring.setEndValue(sScreenBounds.top);
+            ySpring.setSpringConfig(FLING);
+            ySpring.setEndValue(screenBounds.top);
         }
 
-        int minimumVelocityToReachSides = Util.dpToPx(100);
+        /*final int minimumVelocityToReachSides = Utils.dpToPx(100);
         //noinspection StatementWithEmptyBody
-        if (!mWasRemoveLocked
-                && Math.abs(mXSpring.getVelocity()) < minimumVelocityToReachSides
-                && Math.abs(mYSpring.getVelocity()) < minimumVelocityToReachSides
-                && !mDragging) {
-            // Commenting temporarily TODO investigate if causing any issue
+        if (!wasLockedToRemove
+                && Math.abs(xSpring.getVelocity()) < minimumVelocityToReachSides
+                && Math.abs(ySpring.getVelocity()) < minimumVelocityToReachSides
+                && !dragging) {
+            // Commenting temporarily
             // stickToWall();
-        }
+        }*/
     }
 
     /**
      * Makes the web head stick to either side of the wall.
      */
     private void stickToWall() {
-        if (mWindowParams.x > sDispWidth / 2) {
-            mXSpring.setSpringConfig(SpringConfigs.FLING);
-            mXSpring.setEndValue(sScreenBounds.right);
-            Timber.e("Restored X");
+        if (windowParams.x > dispWidth / 2) {
+            xSpring.setSpringConfig(FLING);
+            xSpring.setEndValue(screenBounds.right);
         } else {
-            mXSpring.setSpringConfig(SpringConfigs.FLING);
-            mXSpring.setEndValue(sScreenBounds.left);
-            Timber.e("Restored X");
+            xSpring.setSpringConfig(FLING);
+            xSpring.setEndValue(screenBounds.left);
         }
-
-        if (mWindowParams.y < sScreenBounds.top) {
-            mYSpring.setSpringConfig(SpringConfigs.FLING);
-            mYSpring.setEndValue(sScreenBounds.top);
-            Timber.e("Restored Y");
-        } else if (mWindowParams.y > sScreenBounds.bottom) {
-            mYSpring.setSpringConfig(SpringConfigs.FLING);
-            mYSpring.setEndValue(sScreenBounds.bottom);
-            Timber.e("Restored Y");
+        if (windowParams.y < screenBounds.top) {
+            ySpring.setSpringConfig(FLING);
+            ySpring.setEndValue(screenBounds.top);
+        } else if (windowParams.y > screenBounds.bottom) {
+            ySpring.setSpringConfig(FLING);
+            ySpring.setEndValue(screenBounds.bottom);
         }
     }
 
@@ -514,42 +463,39 @@ public class WebHead extends BaseWebHead implements SpringListener {
      * Method to move the current web head to wherever the last master was.
      */
     public void goToMasterTouchDownPoint() {
-        setSpringConfig(SpringConfigs.FLING);
-        mXSpring.setEndValue(masterDownX);
-        mYSpring.setEndValue(masterDownY);
+        setSpringConfig(FLING);
+        xSpring.setEndValue(masterDownX);
+        ySpring.setEndValue(masterDownY);
     }
 
     @Override
-    protected void onMasterChanged(boolean master) {
-        final String result = master ? "master" : "slave";
-        Timber.d("%s became %s", getUrl(), result);
+    protected void onMasterChanged(final boolean master) {
         if (master) {
             updateBadgeLocation();
-            updateBadgeColors(mWebHeadColor);
-            mIsCoasting = false;
+            updateBadgeColors(webHeadColor);
+            isCoasting = false;
         }
     }
 
     @Override
-    protected void onSpawnLocationSet(int x, int y) {
-        mXSpring.setCurrentValue(x);
-        mYSpring.setCurrentValue(y);
+    protected void onSpawnLocationSet(final int x, final int y) {
+        xSpring.setCurrentValue(x);
+        ySpring.setCurrentValue(y);
     }
 
     @Override
     public void destroySelf(final boolean receiveCallback) {
         cancelCoastingTask();
-        cancelToast();
-        mDestroyed = true;
+        destroyed = true;
         WEB_HEAD_COUNT--;
         destroySprings();
         if (isCurrentlyAtRemoveWeb()) {
-            if (Util.isLollipopAbove()) {
+            if (Utils.isLollipopAbove()) {
                 closeWithAnimationL(receiveCallback);
             } else
                 closeWithAnimation(receiveCallback);
         } else {
-            if (receiveCallback) mContract.onWebHeadDestroyed(this, isLastWebHead());
+            if (receiveCallback) webHeadContract.onWebHeadDestroyed(this, isLastWebHead());
             super.destroySelf(receiveCallback);
         }
     }
@@ -560,13 +506,13 @@ public class WebHead extends BaseWebHead implements SpringListener {
      * @param receiveCallback True if clients should be notified
      */
     private void closeWithAnimation(final boolean receiveCallback) {
-        revealInAnimation(sDeleteColor,
+        revealInAnimation(deleteColor,
                 new Runnable() {
                     @Override
                     public void run() {
-                        if (mCircleBackground != null && mIndicator != null) {
-                            mCircleBackground.clearElevation();
-                            mIndicator.setVisibility(GONE);
+                        if (circleBg != null && indicator != null) {
+                            circleBg.clearElevation();
+                            indicator.setVisibility(GONE);
                         }
                         crossFadeFaviconToX();
                     }
@@ -577,7 +523,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
                             @Override
                             public void run() {
                                 if (receiveCallback)
-                                    mContract.onWebHeadDestroyed(WebHead.this, isLastWebHead());
+                                    webHeadContract.onWebHeadDestroyed(WebHead.this, isLastWebHead());
                                 WebHead.super.destroySelf(receiveCallback);
                             }
                         }, 200);
@@ -592,7 +538,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void closeWithAnimationL(final boolean receiveCallback) {
-        mCircleBackground
+        circleBg
                 .animate()
                 .setDuration(50)
                 .withLayer()
@@ -601,13 +547,13 @@ public class WebHead extends BaseWebHead implements SpringListener {
                 .withEndAction(new Runnable() {
                     @Override
                     public void run() {
-                        revealInAnimation(sDeleteColor,
+                        revealInAnimation(deleteColor,
                                 new Runnable() {
                                     @Override
                                     public void run() {
                                         crossFadeFaviconToX();
-                                        if (mIndicator != null)
-                                            mIndicator.setVisibility(GONE);
+                                        if (indicator != null)
+                                            indicator.setVisibility(GONE);
                                     }
                                 },
                                 new Runnable() {
@@ -617,7 +563,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
                                             @Override
                                             public void run() {
                                                 if (receiveCallback)
-                                                    mContract.onWebHeadDestroyed(WebHead.this, isLastWebHead());
+                                                    webHeadContract.onWebHeadDestroyed(WebHead.this, isLastWebHead());
                                                 WebHead.super.destroySelf(receiveCallback);
                                             }
                                         }, 200);
@@ -629,21 +575,21 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
     /**
      * Helper to know if the web head is currently locked in place with remove web head.
+     * NOTE: Will also adjust the web head to remove web head center if it is in close vicinity.
      *
      * @return true if locked, else false.
      */
     private boolean isCurrentlyAtRemoveWeb() {
-        int rx = trashLockCoOrd()[0];
-        int ry = trashLockCoOrd()[1];
-
-        if (mWindowParams.x == rx && mWindowParams.y == ry) {
+        final int rx = trashLockCoOrd()[0];
+        final int ry = trashLockCoOrd()[1];
+        if (windowParams.x == rx && windowParams.y == ry) {
             return true;
         } else {
-            double dist = dist(mWindowParams.x, mWindowParams.y, rx, ry);
-            if (dist < Util.dpToPx(15)) {
+            final double dist = dist(windowParams.x, windowParams.y, rx, ry);
+            if (dist < Utils.dpToPx(15)) {
                 Timber.d("Adjusting positions");
-                mWindowParams.x = rx;
-                mWindowParams.y = ry;
+                windowParams.x = rx;
+                windowParams.y = ry;
                 updateView();
                 return true;
             } else return false;
@@ -651,8 +597,8 @@ public class WebHead extends BaseWebHead implements SpringListener {
     }
 
     private void destroySprings() {
-        mXSpring.destroy();
-        mYSpring.destroy();
+        xSpring.destroy();
+        ySpring.destroy();
     }
 
     /**
@@ -662,25 +608,25 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
         @Override
         public void onLongPress(MotionEvent e) {
-            mContract.onMasterLongClick();
+            webHeadContract.onMasterLongClick();
         }
 
         @Override
         public boolean onSingleTapConfirmed(MotionEvent event) {
-            mWasClicked = true;
-            if (Preferences.webHeadsCloseOnOpen(getContext()) && mContentGroup != null) {
-                if (mWindowParams.x < sDispWidth / 2) {
-                    mContentGroup.setPivotX(0);
+            wasClicked = true;
+            if (Preferences.webHeadsCloseOnOpen(getContext()) && contentRoot != null) {
+                if (windowParams.x < dispWidth / 2) {
+                    contentRoot.setPivotX(0);
                 } else {
-                    mContentGroup.setPivotX(mContentGroup.getWidth());
+                    contentRoot.setPivotX(contentRoot.getWidth());
                 }
-                mContentGroup.setPivotY((float) (mContentGroup.getHeight() * 0.75));
+                contentRoot.setPivotY((float) (contentRoot.getHeight() * 0.75));
                 try {
-                    mScaleSpring.setAtRest();
+                    scaleSpring.setAtRest();
                 } catch (Exception e) {
                     Timber.e("Error : %s", e.getMessage());
                 }
-                mContentGroup.animate()
+                contentRoot.animate()
                         .scaleX(0.0f)
                         .scaleY(0.0f)
                         .alpha(0.5f)
@@ -694,9 +640,9 @@ public class WebHead extends BaseWebHead implements SpringListener {
                             }
                         }).start();
                 // Store the touch down point if its master
-                if (mMaster) {
-                    masterDownX = mWindowParams.x;
-                    masterDownY = mWindowParams.y;
+                if (master) {
+                    masterDownX = windowParams.x;
+                    masterDownY = windowParams.y;
                 }
             } else sendCallback();
             return true;
@@ -704,26 +650,24 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            mDragging = false;
+            dragging = false;
 
-            float[] adjustedVelocities = sMovementTracker.getAdjustedVelocities(velocityX, velocityY);
-
+            float[] adjustedVelocities = movementTracker.getAdjustedVelocities(velocityX, velocityY);
             if (adjustedVelocities == null) {
                 float[] down = new float[]{e1.getRawX(), e1.getRawY()};
                 float[] up = new float[]{e2.getRawX(), e2.getRawY()};
                 adjustedVelocities = MovementTracker.adjustVelocities(down, up, velocityX, velocityY);
             }
-
             if (adjustedVelocities != null) {
-                mWasFlung = true;
+                wasFlung = true;
 
                 velocityX = interpolateXVelocity(e2, adjustedVelocities[0]);
 
-                mXSpring.setSpringConfig(SpringConfigs.DRAG);
-                mYSpring.setSpringConfig(SpringConfigs.DRAG);
+                xSpring.setSpringConfig(SpringConfigs.DRAG);
+                ySpring.setSpringConfig(SpringConfigs.DRAG);
 
-                mXSpring.setVelocity(velocityX);
-                mYSpring.setVelocity(adjustedVelocities[1]);
+                xSpring.setVelocity(velocityX);
+                ySpring.setVelocity(adjustedVelocities[1]);
                 return true;
             }
             return false;
@@ -740,7 +684,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
          * @return Scaled velocity
          */
         private float interpolateXVelocity(MotionEvent upEvent, float velocityX) {
-            float x = upEvent.getRawX() / sDispWidth;
+            float x = upEvent.getRawX() / dispWidth;
             if (velocityX > 0) {
                 velocityX = Math.max(velocityX, MINIMUM_HORIZONTAL_FLING_VELOCITY * (1 - x));
             } else {
@@ -751,7 +695,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
         private void sendCallback() {
             RemoveWebHead.disappear();
-            mContract.onWebHeadClick(WebHead.this);
+            webHeadContract.onWebHeadClick(WebHead.this);
         }
     }
 

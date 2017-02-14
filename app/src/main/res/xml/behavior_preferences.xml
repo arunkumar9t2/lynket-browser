@@ -7,11 +7,11 @@
             android:defaultValue="true"
             android:key="merge_tabs_and_apps_preference"
             android:summary="@string/merge_tabs_explanation"
-            android:title="@string/merge_tabs"/>
+            android:title="@string/merge_tabs" />
         <!--suppress AndroidElementNotAllowed -->
         <arun.com.chromer.preferences.widgets.IconSwitchPreference
             android:key="blacklist_preference_dummy"
             android:summary="@string/blacklisted_explanation"
-            android:title="@string/blacklisted_apps"/>
+            android:title="@string/blacklisted_apps" />
     </PreferenceCategory>
 </PreferenceScreen>

@@ -2,66 +2,69 @@ package arun.com.chromer.activities;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.widget.Toast;
 
-import java.util.List;
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
 
 import arun.com.chromer.R;
-import arun.com.chromer.db.BlacklistedApps;
+import arun.com.chromer.activities.blacklist.BlackListManager;
 import arun.com.chromer.preferences.manager.Preferences;
-import arun.com.chromer.shared.AppDetectService;
-import arun.com.chromer.shared.Constants;
-import arun.com.chromer.util.Util;
-import arun.com.chromer.webheads.helper.ProxyActivity;
+import arun.com.chromer.shared.AppDetectionManager;
+import arun.com.chromer.util.Utils;
+import arun.com.chromer.webheads.ui.ProxyActivity;
+import timber.log.Timber;
+
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+import static android.content.Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_DOCUMENT;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
+import static android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION;
+import static android.widget.Toast.LENGTH_LONG;
+import static android.widget.Toast.LENGTH_SHORT;
+import static arun.com.chromer.shared.Constants.ACTION_CLOSE_MAIN;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_NEW_TAB;
 
 @SuppressLint("GoogleAppIndexingApiWarning")
 public class BrowserInterceptActivity extends AppCompatActivity {
+    private MaterialDialog dialog;
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @TargetApi(LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (getIntent() == null || getIntent().getData() == null) {
-            Toast.makeText(this, getString(R.string.unsupported_link), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.unsupported_link), LENGTH_SHORT).show();
             finish();
             return;
         }
 
         signalMainFinish();
 
-        final boolean isFromNewTab = getIntent().getBooleanExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, false);
+        final boolean isFromNewTab = getIntent().getBooleanExtra(EXTRA_KEY_FROM_NEW_TAB, false);
 
         // Check if we should blacklist the launching app
         if (Preferences.blacklist(this)) {
-            if (AppDetectService.getInstance() != null) {
-                String lastApp = AppDetectService.getInstance().getLastApp();
-                if (lastApp.length() > 0) {
-                    List<BlacklistedApps> blacklisted = BlacklistedApps.find(BlacklistedApps.class, "package_name = ?", lastApp);
-                    if (blacklisted.size() > 0) {
-                        // The calling app was found in blacklisted table in DB, attempt to launch in secondary browser,
-                        // if failed then show a chooser
-                        performBlacklistAction();
-                        // End this
-                        finish();
-                        return;
-                    }
-                }
-            } else {
-                // App detect service was not running. So let's start it.
-                startService(new Intent(this, AppDetectService.class));
+            final String lastApp = AppDetectionManager.getInstance(this).getNonFilteredPackage();
+            if (!TextUtils.isEmpty(lastApp) && BlackListManager.isPackageBlackListed(lastApp)) {
+                // The calling app was blacklisted by user, perform blacklisting.
+                performBlacklistAction();
+                return;
             }
         }
 
@@ -70,9 +73,8 @@ public class BrowserInterceptActivity extends AppCompatActivity {
         if (Preferences.webHeads(this)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (!Settings.canDrawOverlays(this)) {
-                    Toast.makeText(this, getString(R.string.web_head_permission_toast), Toast.LENGTH_LONG).show();
-                    final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                            Uri.parse("package:" + getPackageName()));
+                    Toast.makeText(this, getString(R.string.web_head_permission_toast), LENGTH_LONG).show();
+                    final Intent intent = new Intent(ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
                     startActivity(intent);
                 } else {
                     launchWebHead(isFromNewTab);
@@ -81,13 +83,13 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                 launchWebHead(isFromNewTab);
             }
         } else {
-            Intent customTabActivity = new Intent(this, CustomTabActivity.class);
+            final Intent customTabActivity = new Intent(this, CustomTabActivity.class);
             customTabActivity.setData(getIntent().getData());
             if (isFromNewTab || Preferences.mergeTabs(this)) {
-                customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-                customTabActivity.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                customTabActivity.addFlags(FLAG_ACTIVITY_NEW_DOCUMENT);
+                customTabActivity.addFlags(FLAG_ACTIVITY_MULTIPLE_TASK);
             }
-            customTabActivity.putExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, isFromNewTab);
+            customTabActivity.putExtra(EXTRA_KEY_FROM_NEW_TAB, isFromNewTab);
             startActivity(customTabActivity);
         }
 
@@ -96,71 +98,80 @@ public class BrowserInterceptActivity extends AppCompatActivity {
 
     private void signalMainFinish() {
         LocalBroadcastManager.getInstance(this)
-                .sendBroadcast(new Intent(Constants.ACTION_CLOSE_MAIN));
+                .sendBroadcast(new Intent(ACTION_CLOSE_MAIN));
     }
 
+    /**
+     * Performs the blacklist action, which is opening the link we received in the user's
+     * preferred browser.
+     * We try to formulate a intent with user's secondary browser and launch it. If it fails we show
+     * a dialog and explain what went wrong.
+     */
     private void performBlacklistAction() {
-        String componentFlatten = Preferences.secondaryBrowserComponent(this);
-        if (componentFlatten != null && Util.isPackageInstalled(this, Preferences.secondaryBrowserPackage(this))) {
+        final String secondaryBrowserPackage = Preferences.secondaryBrowserPackage(this);
+
+        if (secondaryBrowserPackage == null) {
+            showSecondaryBrowserHandlingError(R.string.secondary_browser_not_error);
+            return;
+        }
+
+        if (Utils.isPackageInstalled(this, secondaryBrowserPackage)) {
             final Intent webIntentExplicit = getOriginalIntentCopy(getIntent());
-            webIntentExplicit.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            webIntentExplicit.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            ComponentName cN = ComponentName.unflattenFromString(componentFlatten);
-            webIntentExplicit.setComponent(cN);
+            webIntentExplicit.setPackage(secondaryBrowserPackage);
             try {
                 startActivity(webIntentExplicit);
-            } catch (ActivityNotFoundException e) {
-                launchSecondaryBrowserWithIteration();
+                finish();
+            } catch (Exception e) {
+                Timber.e("Secondary browser launch error: %s", e.getMessage());
+                showSecondaryBrowserHandlingError(R.string.secondary_browser_launch_error);
             }
-        } else showIntentChooser();
+        } else {
+            showSecondaryBrowserHandlingError(R.string.secondary_browser_not_installed);
+        }
     }
 
-    private void showIntentChooser() {
-        Toast.makeText(this, getString(R.string.blacklist_message), Toast.LENGTH_LONG).show();
-        Intent defaultIntent = getOriginalIntentCopy(getIntent());
-        Intent chooserIntent = Intent.createChooser(defaultIntent, getString(R.string.open_with));
-        chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        chooserIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(chooserIntent);
+    private void showSecondaryBrowserHandlingError(@StringRes int stringRes) {
+        closeDialogs();
+        dialog = new MaterialDialog.Builder(this)
+                .title(R.string.secondary_browser_launching_error_title)
+                .content(stringRes)
+                .iconRes(R.mipmap.ic_launcher)
+                .positiveText(R.string.launch_setting)
+                .negativeText(android.R.string.cancel)
+                .theme(Theme.LIGHT)
+                .positiveColorRes(R.color.colorAccent)
+                .negativeColorRes(R.color.colorAccent)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        final Intent chromerIntent = getPackageManager().getLaunchIntentForPackage(getPackageName());
+                        chromerIntent.addFlags(FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(chromerIntent);
+                    }
+                })
+                .dismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        finish();
+                    }
+                }).show();
+    }
+
+    private void closeDialogs() {
+        if (dialog != null) {
+            dialog.dismiss();
+        }
     }
 
     private void launchWebHead(boolean isNewTab) {
-        Intent webHeadLauncher = new Intent(this, ProxyActivity.class);
-        webHeadLauncher.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        final Intent webHeadLauncher = new Intent(this, ProxyActivity.class);
+        webHeadLauncher.addFlags(FLAG_ACTIVITY_NEW_TASK);
         if (!isNewTab)
-            webHeadLauncher.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            webHeadLauncher.addFlags(FLAG_ACTIVITY_CLEAR_TASK);
 
-        webHeadLauncher.putExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, isNewTab);
+        webHeadLauncher.putExtra(EXTRA_KEY_FROM_NEW_TAB, isNewTab);
         webHeadLauncher.setData(getIntent().getData());
         startActivity(webHeadLauncher);
-    }
-
-    private void launchSecondaryBrowserWithIteration() {
-        final Intent webIntentImplicit = getOriginalIntentCopy(getIntent());
-        webIntentImplicit.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        webIntentImplicit.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        @SuppressLint("InlinedApi")
-        List<ResolveInfo> resolvedActivityList = getApplicationContext().getPackageManager()
-                .queryIntentActivities(webIntentImplicit, PackageManager.MATCH_ALL);
-
-        String secondaryPackage = Preferences.secondaryBrowserPackage(this);
-
-        if (secondaryPackage != null) {
-            boolean found = false;
-            for (ResolveInfo info : resolvedActivityList) {
-                if (info.activityInfo.packageName.equalsIgnoreCase(secondaryPackage)) {
-                    found = true;
-                    ComponentName componentName = new ComponentName(
-                            info.activityInfo.packageName,
-                            info.activityInfo.name);
-                    webIntentImplicit.setComponent(componentName);
-                    // This will be the new component, so write it to preferences
-                    Preferences.secondaryBrowserComponent(this, componentName.flattenToString());
-                    startActivity(webIntentImplicit);
-                }
-            }
-            if (!found) showIntentChooser();
-        }
     }
 
     @NonNull

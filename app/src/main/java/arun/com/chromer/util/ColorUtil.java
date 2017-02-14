@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import arun.com.chromer.shared.Constants;
+import static arun.com.chromer.shared.Constants.NO_COLOR;
 
 /**
  * Created by Arun on 12/06/2016.
@@ -106,7 +106,7 @@ public class ColorUtil {
     @ColorInt
     public static int getBestFaviconColor(@Nullable Palette palette) {
         if (palette != null) {
-            List<Palette.Swatch> sortedSwatch = getSwatchListFromPalette(palette);
+            final List<Palette.Swatch> sortedSwatch = getSwatchListFromPalette(palette);
             // Descending
             Collections.sort(sortedSwatch,
                     new Comparator<Palette.Swatch>() {
@@ -120,15 +120,15 @@ public class ColorUtil {
 
             // We want the vibrant color but we will avoid it if it is the most prominent one.
             // Instead we will choose the next prominent color
-            int vibrantColor = palette.getVibrantColor(Constants.NO_COLOR);
+            int vibrantColor = palette.getVibrantColor(NO_COLOR);
             int prominentColor = sortedSwatch.get(0).getRgb();
-            if (vibrantColor == Constants.NO_COLOR) {
-                int darkVibrantColor = palette.getDarkVibrantColor(Constants.NO_COLOR);
-                if (darkVibrantColor != Constants.NO_COLOR) {
+            if (vibrantColor == NO_COLOR) {
+                int darkVibrantColor = palette.getDarkVibrantColor(NO_COLOR);
+                if (darkVibrantColor != NO_COLOR) {
                     return darkVibrantColor;
                 } else {
-                    int mutedColor = palette.getMutedColor(Constants.NO_COLOR);
-                    if (mutedColor != Constants.NO_COLOR) {
+                    int mutedColor = palette.getMutedColor(NO_COLOR);
+                    if (mutedColor != NO_COLOR) {
                         return mutedColor;
                     } else {
                         return prominentColor;
@@ -136,7 +136,7 @@ public class ColorUtil {
                 }
             } else return vibrantColor;
         }
-        return Constants.NO_COLOR;
+        return NO_COLOR;
     }
 
     /**
@@ -158,24 +158,24 @@ public class ColorUtil {
     @ColorInt
     public static int getBestColorFromPalette(@Nullable Palette palette) {
         if (palette == null) {
-            return Constants.NO_COLOR;
+            return NO_COLOR;
         }
-        int vibrantColor = palette.getVibrantColor(Constants.NO_COLOR);
-        if (vibrantColor != Constants.NO_COLOR) {
+        int vibrantColor = palette.getVibrantColor(NO_COLOR);
+        if (vibrantColor != NO_COLOR) {
             return vibrantColor;
         } else {
-            int darkVibrantColor = palette.getDarkVibrantColor(Constants.NO_COLOR);
-            if (darkVibrantColor != Constants.NO_COLOR) {
+            int darkVibrantColor = palette.getDarkVibrantColor(NO_COLOR);
+            if (darkVibrantColor != NO_COLOR) {
                 return darkVibrantColor;
             } else {
-                return palette.getDarkMutedColor(Constants.NO_COLOR);
+                return palette.getDarkMutedColor(NO_COLOR);
             }
         }
     }
 
     @NonNull
     public static Drawable getRippleDrawableCompat(final @ColorInt int color) {
-        if (Util.isLollipopAbove()) {
+        if (Utils.isLollipopAbove()) {
             return new RippleDrawable(ColorStateList.valueOf(color),
                     null,
                     null

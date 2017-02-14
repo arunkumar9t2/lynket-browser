@@ -17,12 +17,8 @@ package arun.com.chromer.customtabs.callbacks;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.v4.content.LocalBroadcastManager;
 
-import arun.com.chromer.shared.Constants;
-import arun.com.chromer.webheads.WebHeadService;
+import arun.com.chromer.util.DocumentUtils;
 import timber.log.Timber;
 
 /**
@@ -32,26 +28,11 @@ public class MinimizeBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        String url = intent.getStringExtra(Intent.EXTRA_TEXT);
+        final String url = intent.getStringExtra(Intent.EXTRA_TEXT);
         if (url != null) {
-            sendMinimizeIntent(context, url);
-            signalWebHead(context, url);
+            DocumentUtils.minimizeTaskByUrl(context, url);
         } else {
-            Timber.e("Error");
+            Timber.e("Error minimizing");
         }
-    }
-
-    private void signalWebHead(Context context, @NonNull String url) {
-        final Intent webHeadService = new Intent(context, WebHeadService.class);
-        webHeadService.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        webHeadService.setData(Uri.parse(url));
-        webHeadService.putExtra(Constants.EXTRA_KEY_MINIMIZE, true);
-        context.startService(webHeadService);
-    }
-
-    private void sendMinimizeIntent(Context context, String url) {
-        final Intent minimizeIntent = new Intent(Constants.ACTION_MINIMIZE);
-        minimizeIntent.putExtra(Intent.EXTRA_TEXT, url);
-        LocalBroadcastManager.getInstance(context).sendBroadcastSync(minimizeIntent);
     }
 }

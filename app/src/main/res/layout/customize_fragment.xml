@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -27,7 +26,7 @@
                 <FrameLayout
                     android:id="@+id/preference_container"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
@@ -50,7 +49,7 @@
                 <FrameLayout
                     android:id="@+id/bottom_bar_container"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -61,14 +60,14 @@
                     android:text="@string/available_actions"
                     android:textColor="@color/material_dark_light"
                     android:textSize="14sp"
-                    android:textStyle="bold|italic"/>
+                    android:textStyle="bold|italic" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/bottom_bar_action_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:scrollbars="none"/>
+                    android:scrollbars="none" />
             </LinearLayout>
 
         </android.support.v7.widget.CardView>

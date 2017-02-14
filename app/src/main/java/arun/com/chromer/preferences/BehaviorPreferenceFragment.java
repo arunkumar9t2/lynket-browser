@@ -16,7 +16,7 @@ import arun.com.chromer.R;
 import arun.com.chromer.activities.blacklist.BlacklistManagerActivity;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.preferences.widgets.IconSwitchPreference;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 
 /**
  * Created by Arun on 21/06/2016.
@@ -98,7 +98,7 @@ public class BehaviorPreferenceFragment extends DividerLessPreferenceFragment im
     public void onResume() {
         super.onResume();
         getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-        if (!Util.isLollipopAbove()) {
+        if (!Utils.isLollipopAbove()) {
             mMergeTabsPreference.setVisible(false);
         }
     }

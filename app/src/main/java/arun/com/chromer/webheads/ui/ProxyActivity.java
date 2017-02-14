@@ -1,4 +1,4 @@
-package arun.com.chromer.webheads.helper;
+package arun.com.chromer.webheads.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,7 +23,7 @@ public class ProxyActivity extends AppCompatActivity {
 
         boolean isFromNewTab = getIntent().getBooleanExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, false);
 
-        Intent webHeadService = new Intent(this, WebHeadService.class);
+        final Intent webHeadService = new Intent(this, WebHeadService.class);
         webHeadService.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         webHeadService.setData(getIntent().getData());
         webHeadService.putExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, isFromNewTab);

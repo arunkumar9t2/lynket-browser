@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.TextView;
 
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 
 /**
  * Created by Arun on 19/06/2016.
@@ -37,7 +37,7 @@ public class SubCheckBoxPreference extends CheckBoxPreference {
 
         title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         summary.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-        title.setPadding(Util.dpToPx(30), 0, 0, 0);
-        summary.setPadding(Util.dpToPx(30), 0, 0, 0);
+        title.setPadding(Utils.dpToPx(30), 0, 0, 0);
+        summary.setPadding(Utils.dpToPx(30), 0, 0, 0);
     }
 }

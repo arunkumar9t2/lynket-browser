@@ -10,7 +10,6 @@ import arun.com.chromer.customtabs.warmup.WarmUpService;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.shared.AppDetectService;
 import arun.com.chromer.shared.Constants;
-import timber.log.Timber;
 
 /**
  * Created by Arun on 30/01/2016.
@@ -39,8 +38,7 @@ public class ServiceUtil {
                 context.startService(new Intent(context, ScannerService.class));
             else
                 context.stopService(new Intent(context, ScannerService.class));
-        } catch (Exception e) {
-            Timber.d("Ignoring startup exception of accessibility service");
+        } catch (Exception ignored) {
         }
     }
 

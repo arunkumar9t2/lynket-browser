@@ -1,54 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/context_activity_card_view"
     android:layout_width="320dp"
     android:layout_height="wrap_content"
     android:minWidth="320dp"
     app:cardBackgroundColor="@android:color/white"
+    app:cardCornerRadius="3dp"
+    app:cardElevation="10dp"
+    app:cardPreventCornerOverlap="true"
+    app:cardUseCompatPadding="true"
     tools:context="arun.com.chromer.webheads.ui.context.WebHeadContextActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clipToPadding="false"
         android:orientation="vertical">
 
-
-        <RelativeLayout
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_gravity="center|left"
-                android:gravity="center|left"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:text="@string/web_sites"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textSize="16sp"/>
-
-            <TextView
-                android:id="@+id/share_all"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_gravity="center|right"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:gravity="center|right"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:text="@string/share_all"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/accent"
-                android:textSize="16sp"/>
-        </RelativeLayout>
+            android:layout_height="48dp"
+            android:layout_gravity="center|left"
+            android:background="@color/colorPrimary"
+            android:elevation="2dp"
+            android:gravity="center|left"
+            android:outlineProvider="bounds"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:text="@string/web_sites"
+            android:textAllCaps="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
+            android:textColor="@android:color/white" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/web_sites_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <TextView
+                android:id="@+id/copy_all"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="0.5"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="@string/copy_all"
+                android:textAllCaps="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
+                android:textColor="@color/accent"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/share_all"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="0.5"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="@string/share_all"
+                android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
+                android:textColor="@color/accent"
+                android:textSize="14sp" />
+        </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>

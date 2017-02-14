@@ -57,7 +57,7 @@ import arun.com.chromer.preferences.widgets.AppPreferenceCardView;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Benchmark;
 import arun.com.chromer.util.ServiceUtil;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 import arun.com.chromer.views.IntentPickerSheetView;
 import arun.com.chromer.views.MaterialSearchView;
 import arun.com.chromer.views.TabView;
@@ -173,11 +173,11 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private void setupMaterialSearch() {
         mMaterialSearchView.clearFocus();
-        mMaterialSearchView.setInteractionListener(new MaterialSearchView.InteractionListener() {
+        mMaterialSearchView.setInteractionListener(new MaterialSearchView.SearchViewInteractionListener() {
             @Override
             public void onVoiceIconClick() {
-                if (Util.isVoiceRecognizerPresent(getApplicationContext())) {
-                    startActivityForResult(Util.getRecognizerIntent(MainActivity.this), Constants.REQUEST_CODE_VOICE);
+                if (Utils.isVoiceRecognizerPresent(getApplicationContext())) {
+                    startActivityForResult(Utils.getRecognizerIntent(MainActivity.this), Constants.REQUEST_CODE_VOICE);
                 } else {
                     snack(getString(R.string.no_voice_rec_apps));
                 }
@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             }
 
             @Override
-            public void onMenuClick() {
+            public void onHamburgerClick() {
                 if (mDrawer.isDrawerOpen()) {
                     mDrawer.closeDrawer();
                 } else {
@@ -269,7 +269,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                                 startActivity(Intent.createChooser(emailIntent, getString(R.string.send_email)));
                                 break;
                             case 3:
-                                Util.openPlayStore(MainActivity.this, getPackageName());
+                                Utils.openPlayStore(MainActivity.this, getPackageName());
                                 break;
                             case 4:
                                 startActivity(new Intent(MainActivity.this, ChromerIntro.class));
@@ -415,7 +415,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             dialog.dismiss();
-                            Util.openPlayStore(MainActivity.this, Constants.CHROME_PACKAGE);
+                            Utils.openPlayStore(MainActivity.this, Constants.CHROME_PACKAGE);
                         }
                     }).show();
         }
@@ -442,7 +442,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 case RESULT_OK:
                     final List<String> resultList = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     if (resultList != null && !resultList.isEmpty()) {
-                        launchCustomTab(Util.getSearchUrl(resultList.get(0)));
+                        launchCustomTab(Utils.getSearchUrl(resultList.get(0)));
                     }
                     break;
                 default:
@@ -471,7 +471,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     @Override
     public void onDefaultCustomTabProviderClick(final AppPreferenceCardView customTabPreferenceCard) {
-        final List<IntentPickerSheetView.ActivityInfo> customTabApps = Util.getCustomTabActivityInfos(this);
+        final List<IntentPickerSheetView.ActivityInfo> customTabApps = Utils.getCustomTabActivityInfos(this);
         if (customTabApps.isEmpty()) {
             checkAndEducateUser(true);
             return;

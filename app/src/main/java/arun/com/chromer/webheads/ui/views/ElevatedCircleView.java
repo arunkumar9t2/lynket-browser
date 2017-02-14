@@ -1,4 +1,4 @@
-package arun.com.chromer.webheads.ui;
+package arun.com.chromer.webheads.ui.views;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewOutlineProvider;
 
 import arun.com.chromer.R;
-import arun.com.chromer.util.Util;
+import arun.com.chromer.util.Utils;
 
 /**
  * Circle view that draws bitmap shadow layers on pre L and system drop shadow on post L systems.
@@ -26,7 +26,7 @@ public class ElevatedCircleView extends CircleView {
 
     public ElevatedCircleView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        if (!Util.isLollipopAbove()) {
+        if (!Utils.isLollipopAbove()) {
             float shadowR = context.getResources().getDimension(R.dimen.web_head_shadow_radius);
             float shadowDx = context.getResources().getDimension(R.dimen.web_head_shadow_dx);
             float shadowDy = context.getResources().getDimension(R.dimen.web_head_shadow_dy);
@@ -38,7 +38,7 @@ public class ElevatedCircleView extends CircleView {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        if (Util.isLollipopAbove()) {
+        if (Utils.isLollipopAbove()) {
             setOutlineProvider(new ViewOutlineProvider() {
                 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
                 @Override
@@ -56,7 +56,7 @@ public class ElevatedCircleView extends CircleView {
      * No op when called for post L devices.
      */
     public void clearElevation() {
-        if (!Util.isLollipopAbove()) {
+        if (!Utils.isLollipopAbove()) {
             mBgPaint.clearShadowLayer();
             invalidate();
         }
