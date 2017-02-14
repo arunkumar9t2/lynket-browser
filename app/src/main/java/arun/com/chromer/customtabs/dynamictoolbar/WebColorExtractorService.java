@@ -23,21 +23,23 @@ public class WebColorExtractorService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        final String urlToExtract = intent.getDataString();
-        URL url;
-        int color = NO_COLOR;
-        try {
-            url = new URL(urlToExtract);
-            color = Color.parseColor(RxParser.parseUrlSync(urlToExtract).themeColor);
-            if (color != NO_COLOR) {
-                Timber.d("Extracted color %d for %s", color, url.getHost());
-                final WebColor webColor = new WebColor(url.getHost(), color);
-                webColor.save();
-            } else {
-                Timber.d("Color extraction failed");
+        if (intent != null && intent.getDataString() != null) {
+            final String urlToExtract = intent.getDataString();
+            URL url;
+            int color = NO_COLOR;
+            try {
+                url = new URL(urlToExtract);
+                color = Color.parseColor(RxParser.parseUrlSync(urlToExtract).themeColor);
+                if (color != NO_COLOR) {
+                    Timber.d("Extracted color %d for %s", color, url.getHost());
+                    final WebColor webColor = new WebColor(url.getHost(), color);
+                    webColor.save();
+                } else {
+                    Timber.d("Color extraction failed");
+                }
+            } catch (Exception e) {
+                Timber.e(e);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }
