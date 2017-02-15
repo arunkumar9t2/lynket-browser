@@ -164,7 +164,7 @@ public class RxParser {
                             webSiteString = null;
                             Timber.d("Fetched %s in %s", url, getThreadName());
                         }
-                    } catch (Exception e) {
+                    } catch (Exception | OutOfMemoryError e) {
                         Timber.e(e.getMessage());
                         Observable.error(e);
                     }
