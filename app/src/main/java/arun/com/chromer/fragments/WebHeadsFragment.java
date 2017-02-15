@@ -16,7 +16,7 @@ import butterknife.Unbinder;
  * Created by Arun on 19/06/2016.
  */
 public class WebHeadsFragment extends Fragment {
-    private Unbinder mUnbinder;
+    private Unbinder unbinder;
 
     public static WebHeadsFragment newInstance() {
         WebHeadsFragment fragment = new WebHeadsFragment();
@@ -34,7 +34,7 @@ public class WebHeadsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mUnbinder = ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
         getChildFragmentManager()
                 .beginTransaction()
                 .replace(R.id.webhead_container, WebHeadPreferenceFragment.newInstance())
@@ -44,6 +44,6 @@ public class WebHeadsFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mUnbinder.unbind();
+        unbinder.unbind();
     }
 }

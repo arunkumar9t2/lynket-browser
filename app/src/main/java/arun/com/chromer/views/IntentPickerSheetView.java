@@ -36,6 +36,7 @@ public class IntentPickerSheetView extends FrameLayout {
 
     private final Intent intent;
     private final GridView appGrid;
+    @SuppressWarnings("FieldCanBeLocal")
     private final TextView titleView;
     private final List<ActivityInfo> mixins = new ArrayList<>();
     private Adapter adapter;

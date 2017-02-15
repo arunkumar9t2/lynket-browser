@@ -134,7 +134,7 @@
     <string name="blacklist_explanation">Otvaranje poveznica iz aplikacija na crnoj listi otvorit će ih u sekundarnom pregledniku.</string>
     <string name="revoke_accessibility_permission">Sada možete ukloniti Chromerovo dopuštenje usluge pristupačnosti.</string>
     <string name="last_fetched_urls">Posljednje predučitani URL-ovi</string>
-    <string name="blacklist_on">Stavljanje aplikacija na crnu listu je %s.</string>
+    <string name="blacklist_on">Stavljanje aplikacija na crnu listu je.</string>
     <string name="translations">Prijevodi</string>
     <string name="merge_tabs">Spoji kartice i aplikacije</string>
     <string name="merge_tabs_explanation">Kartice će se prikazivati s drugim nedavnim aplikacijama na zaslonu nedavnih aplikacija.</string>

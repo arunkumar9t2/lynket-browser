@@ -38,10 +38,10 @@ import de.psdev.licensesdialog.LicensesDialog;
 public class AboutFragment extends Fragment {
 
     @BindView(R.id.about_app_version_list)
-    public RecyclerView mChromerList;
+    public RecyclerView chromerList;
     @BindView(R.id.about_author_version_list)
-    public RecyclerView mAuthorList;
-    private Unbinder mUnBinder;
+    public RecyclerView authorList;
+    private Unbinder unBinder;
 
     public AboutFragment() {
         // Required empty public constructor
@@ -58,7 +58,7 @@ public class AboutFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_about, container, false);
-        mUnBinder = ButterKnife.bind(this, rootView);
+        unBinder = ButterKnife.bind(this, rootView);
         populateData();
         return rootView;
     }
@@ -66,7 +66,7 @@ public class AboutFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mUnBinder.unbind();
+        unBinder.unbind();
     }
 
     @OnClick(R.id.patryk)
@@ -82,12 +82,12 @@ public class AboutFragment extends Fragment {
     }
 
     private void populateData() {
-        mChromerList.setNestedScrollingEnabled(false);
-        mChromerList.setLayoutManager(new LinearLayoutManager(getContext()));
-        mChromerList.setAdapter(new AppAdapter());
-        mAuthorList.setNestedScrollingEnabled(false);
-        mAuthorList.setLayoutManager(new LinearLayoutManager(getContext()));
-        mAuthorList.setAdapter(new AuthorAdapter());
+        chromerList.setNestedScrollingEnabled(false);
+        chromerList.setLayoutManager(new LinearLayoutManager(getContext()));
+        chromerList.setAdapter(new AppAdapter());
+        authorList.setNestedScrollingEnabled(false);
+        authorList.setLayoutManager(new LinearLayoutManager(getContext()));
+        authorList.setAdapter(new AuthorAdapter());
     }
 
     class AppAdapter extends RecyclerView.Adapter<AppAdapter.ItemHolder> {

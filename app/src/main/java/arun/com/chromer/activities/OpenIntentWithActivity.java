@@ -56,7 +56,6 @@ public class OpenIntentWithActivity extends AppCompatActivity {
         } else {
             invalidLink();
             finish();
-            return;
         }
     }
 

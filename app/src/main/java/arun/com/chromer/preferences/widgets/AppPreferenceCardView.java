@@ -32,24 +32,26 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import timber.log.Timber;
 
+import static android.widget.ImageView.ScaleType.CENTER;
+
 public class AppPreferenceCardView extends CardView {
     private static final int CUSTOM_TAB_PROVIDER = 0;
     private static final int SECONDARY_BROWSER = 1;
     private static final int FAVORITE_SHARE = 2;
 
     @BindView(R.id.app_preference_icon)
-    public ImageView mIcon;
+    public ImageView icon;
     @BindView(R.id.app_preference_category)
-    public TextView mCategoryTextView;
+    public TextView categoryTextView;
     @BindView(R.id.app_preference_selection)
-    public TextView mAppNameTextView;
+    public TextView appNameTextView;
 
-    private Unbinder mUnBinder;
+    private Unbinder unbinder;
 
-    private String mCategoryText;
-    private String mAppName;
-    private String mAppPackage;
-    private int mPreferenceType;
+    private String category;
+    private String appName;
+    private String appPackage;
+    private int preferenceType;
 
     public AppPreferenceCardView(Context context) {
         super(context);
@@ -74,47 +76,46 @@ public class AppPreferenceCardView extends CardView {
             throw new IllegalArgumentException("Must specify app:preferenceType in xml");
         }
 
-        mPreferenceType = a.getInt(R.styleable.AppPreferenceCardView_preferenceType, 0);
+        preferenceType = a.getInt(R.styleable.AppPreferenceCardView_preferenceType, 0);
         setInitialValues();
         a.recycle();
-
         addView(LayoutInflater.from(getContext()).inflate(R.layout.app_preference_cardview_content, this, false));
-        mUnBinder = ButterKnife.bind(this);
+        unbinder = ButterKnife.bind(this);
     }
 
     private void setInitialValues() {
-        switch (mPreferenceType) {
+        switch (preferenceType) {
             case CUSTOM_TAB_PROVIDER:
-                mCategoryText = getResources().getString(R.string.default_provider);
+                category = getResources().getString(R.string.default_provider);
                 final String customTabProvider = Preferences.customTabApp(getContext());
                 if (customTabProvider != null) {
-                    mAppName = Utils.getAppNameWithPackage(getContext(), customTabProvider);
-                    mAppPackage = customTabProvider;
+                    appName = Utils.getAppNameWithPackage(getContext(), customTabProvider);
+                    appPackage = customTabProvider;
                 } else {
-                    mAppName = getResources().getString(R.string.not_found);
-                    mAppPackage = null;
+                    appName = getResources().getString(R.string.not_found);
+                    appPackage = null;
                 }
                 break;
             case SECONDARY_BROWSER:
-                mCategoryText = getResources().getString(R.string.choose_secondary_browser);
+                category = getResources().getString(R.string.choose_secondary_browser);
                 final String secondaryBrowser = Preferences.secondaryBrowserPackage(getContext());
                 if (secondaryBrowser != null) {
-                    mAppName = Utils.getAppNameWithPackage(getContext(), secondaryBrowser);
-                    mAppPackage = secondaryBrowser;
+                    appName = Utils.getAppNameWithPackage(getContext(), secondaryBrowser);
+                    appPackage = secondaryBrowser;
                 } else {
-                    mAppName = getResources().getString(R.string.not_set);
-                    mAppPackage = null;
+                    appName = getResources().getString(R.string.not_set);
+                    appPackage = null;
                 }
                 break;
             case FAVORITE_SHARE:
-                mCategoryText = getResources().getString(R.string.fav_share_app);
+                category = getResources().getString(R.string.fav_share_app);
                 final String favSharePackage = Preferences.favSharePackage(getContext());
                 if (favSharePackage != null) {
-                    mAppName = Utils.getAppNameWithPackage(getContext(), favSharePackage);
-                    mAppPackage = favSharePackage;
+                    appName = Utils.getAppNameWithPackage(getContext(), favSharePackage);
+                    appPackage = favSharePackage;
                 } else {
-                    mAppName = getResources().getString(R.string.not_set);
-                    mAppPackage = null;
+                    appName = getResources().getString(R.string.not_set);
+                    appPackage = null;
                 }
                 break;
         }
@@ -127,21 +128,21 @@ public class AppPreferenceCardView extends CardView {
     }
 
     private void updateUI() {
-        mAppNameTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.material_dark_color));
-        mCategoryTextView.setText(mCategoryText);
-        mAppNameTextView.setText(mAppName);
+        appNameTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.material_dark_color));
+        categoryTextView.setText(category);
+        appNameTextView.setText(appName);
         applyIcon();
     }
 
     private void applyIcon() {
-        if (Utils.isPackageInstalled(getContext(), mAppPackage)) {
+        if (Utils.isPackageInstalled(getContext(), appPackage)) {
             final PackageManager pm = getContext().getApplicationContext().getPackageManager();
             Drawable appIcon = null;
             try {
-                ApplicationInfo ai = pm.getApplicationInfo(mAppPackage, 0);
+                ApplicationInfo ai = pm.getApplicationInfo(appPackage, 0);
                 appIcon = ai.loadIcon(pm);
             } catch (PackageManager.NameNotFoundException e) {
-                Timber.e("Failed to load icon for %s", mAppName);
+                Timber.e("Failed to load icon for %s", appName);
             }
             if (appIcon != null) {
                 setIconDrawable(appIcon, true);
@@ -159,14 +160,14 @@ public class AppPreferenceCardView extends CardView {
                         });
             }
         } else {
-            mIcon.setScaleType(ImageView.ScaleType.CENTER);
-            switch (mPreferenceType) {
+            icon.setScaleType(CENTER);
+            switch (preferenceType) {
                 case CUSTOM_TAB_PROVIDER:
                     setIconDrawable(new IconicsDrawable(getContext())
                             .icon(CommunityMaterial.Icon.cmd_comment_alert_outline)
                             .colorRes(R.color.error)
                             .sizeDp(30), false);
-                    mAppNameTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.error));
+                    appNameTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.error));
                     break;
                 case SECONDARY_BROWSER:
                     setIconDrawable(new IconicsDrawable(getContext())
@@ -185,15 +186,15 @@ public class AppPreferenceCardView extends CardView {
     }
 
     private void setIconDrawable(final Drawable newIconDrawable, final boolean overrideScaleType) {
-        if (mIcon != null) {
+        if (icon != null) {
             TransitionDrawable transitionDrawable = new TransitionDrawable(
                     new Drawable[]{
                             getCurrentIcon(),
                             newIconDrawable
                     });
-            mIcon.setImageDrawable(transitionDrawable);
-            if (mIcon.getScaleType() != ImageView.ScaleType.FIT_CENTER && overrideScaleType) {
-                mIcon.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            icon.setImageDrawable(transitionDrawable);
+            if (icon.getScaleType() != ImageView.ScaleType.FIT_CENTER && overrideScaleType) {
+                icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
             }
             transitionDrawable.setCrossFadeEnabled(true);
             transitionDrawable.startTransition(300);
@@ -207,12 +208,12 @@ public class AppPreferenceCardView extends CardView {
      */
     @NonNull
     private Drawable getCurrentIcon() {
-        return mIcon.getDrawable() == null ? new ColorDrawable(Color.TRANSPARENT) : mIcon.getDrawable();
+        return icon.getDrawable() == null ? new ColorDrawable(Color.TRANSPARENT) : icon.getDrawable();
     }
 
     public void updatePreference(@Nullable final ComponentName componentName) {
         final String flatComponent = componentName == null ? null : componentName.flattenToString();
-        switch (mPreferenceType) {
+        switch (preferenceType) {
             case CUSTOM_TAB_PROVIDER:
                 if (componentName != null) {
                     Preferences.customTabApp(getContext(), componentName.getPackageName());
@@ -236,7 +237,7 @@ public class AppPreferenceCardView extends CardView {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        mUnBinder.unbind();
+        unbinder.unbind();
     }
 
 

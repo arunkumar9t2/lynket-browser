@@ -39,7 +39,7 @@ public class CustomizeFragment extends Fragment {
     private Unbinder mUnbinder;
 
     @BindView(R.id.bottom_bar_action_list)
-    public RecyclerView mBottomActionsList;
+    public RecyclerView recyclerView;
 
     public static CustomizeFragment newInstance() {
         CustomizeFragment fragment = new CustomizeFragment();
@@ -67,8 +67,8 @@ public class CustomizeFragment extends Fragment {
     }
 
     private void initBottomActions() {
-        mBottomActionsList.setLayoutManager(new LinearLayoutManager(getContext()));
-        mBottomActionsList.setAdapter(new BottomActionsAdapter(getActivity()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(new BottomActionsAdapter(getActivity()));
     }
 
     @Override
@@ -81,43 +81,43 @@ public class CustomizeFragment extends Fragment {
         private static final String NEW_TAB = "NEW_TAB";
         private static final String SHARE = "SHARE";
         private static final String MINIMIZE = "MINIMIZE";
-        private final Context mContext;
-        private final List<String> mItems = new LinkedList<>();
+        private final Context context;
+        private final List<String> items = new LinkedList<>();
 
         BottomActionsAdapter(Context context) {
-            mContext = context;
+            this.context = context;
             if (Utils.isLollipopAbove()) {
-                mItems.add(NEW_TAB);
+                items.add(NEW_TAB);
             }
-            mItems.add(SHARE);
-            mItems.add(MINIMIZE);
+            items.add(SHARE);
+            items.add(MINIMIZE);
         }
 
         @Override
         public BottomActionHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new BottomActionHolder(LayoutInflater.from(mContext).inflate(R.layout.bottom_action_template, parent, false));
+            return new BottomActionHolder(LayoutInflater.from(context).inflate(R.layout.bottom_action_template, parent, false));
         }
 
         @Override
         public void onBindViewHolder(BottomActionHolder holder, int position) {
-            final int iconColor = ContextCompat.getColor(mContext, R.color.colorAccentLighter);
-            switch (mItems.get(position)) {
+            final int iconColor = ContextCompat.getColor(context, R.color.colorAccentLighter);
+            switch (items.get(position)) {
                 case NEW_TAB:
-                    holder.icon.setImageDrawable(new IconicsDrawable(mContext)
+                    holder.icon.setImageDrawable(new IconicsDrawable(context)
                             .icon(CommunityMaterial.Icon.cmd_plus_box)
                             .color(iconColor)
                             .sizeDp(18));
                     holder.action.setText(html(R.string.open_in_new_tab_explanation));
                     break;
                 case SHARE:
-                    holder.icon.setImageDrawable(new IconicsDrawable(mContext)
+                    holder.icon.setImageDrawable(new IconicsDrawable(context)
                             .icon(CommunityMaterial.Icon.cmd_share_variant)
                             .color(iconColor)
                             .sizeDp(18));
                     holder.action.setText(html(R.string.share_action_explanation));
                     break;
                 case MINIMIZE:
-                    holder.icon.setImageDrawable(new IconicsDrawable(mContext)
+                    holder.icon.setImageDrawable(new IconicsDrawable(context)
                             .icon(CommunityMaterial.Icon.cmd_flip_to_back)
                             .color(iconColor)
                             .sizeDp(18));
@@ -128,12 +128,12 @@ public class CustomizeFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return mItems.size();
+            return items.size();
         }
 
         @NonNull
         private Spanned html(@StringRes int res) {
-            final String string = mContext.getString(res);
+            final String string = context.getString(res);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 return Html.fromHtml(string, Html.FROM_HTML_MODE_LEGACY);
             } else {

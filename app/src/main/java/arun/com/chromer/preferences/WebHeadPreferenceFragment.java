@@ -41,14 +41,14 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
             Preferences.WEB_HEAD_SIZE,
     };
 
-    private final IntentFilter mWebHeadColorFilter = new IntentFilter(Constants.ACTION_WEBHEAD_COLOR_SET);
+    private final IntentFilter webHeadColorFilter = new IntentFilter(Constants.ACTION_WEBHEAD_COLOR_SET);
 
-    private ColorPreference mWebHeadsColor;
-    private IconSwitchPreference mWebHeadSwitch;
-    private IconListPreference mSpawnLocation;
-    private IconCheckboxPreference mCloseOnOpen;
-    private IconCheckboxPreference mAggressive;
-    private IconListPreference mSize;
+    private ColorPreference webHeadColor;
+    private IconSwitchPreference webHeadSwitch;
+    private IconListPreference spawnLocation;
+    private IconCheckboxPreference closeOnOpen;
+    private IconCheckboxPreference aggressiveLoading;
+    private IconListPreference webHeadSize;
 
     public WebHeadPreferenceFragment() {
         // Required empty public constructor
@@ -76,12 +76,12 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
     @Override
     public void onResume() {
         super.onResume();
-        registerReceiver(mColorSelectionReceiver, mWebHeadColorFilter);
+        registerReceiver(mColorSelectionReceiver, webHeadColorFilter);
         getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         updatePreferenceStates(Preferences.WEB_HEAD_ENABLED);
         updatePreferenceSummary(WEBHEAD_PREFERENCE_GROUP);
         if (!Utils.isLollipopAbove()) {
-            mAggressive.setVisible(false);
+            aggressiveLoading.setVisible(false);
         }
     }
 
@@ -98,51 +98,51 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
         updatePreferenceSummary(WEBHEAD_PREFERENCE_GROUP);
         if (key.equalsIgnoreCase(Preferences.MERGE_TABS_AND_APPS)) {
             if (!Preferences.mergeTabs(getActivity())) {
-                mAggressive.setChecked(false);
+                aggressiveLoading.setChecked(false);
             }
         }
     }
 
     private void init() {
-        mWebHeadSwitch = (IconSwitchPreference) findPreference(Preferences.WEB_HEAD_ENABLED);
-        mWebHeadsColor = (ColorPreference) findPreference(Preferences.WEB_HEADS_COLOR);
-        mSpawnLocation = (IconListPreference) findPreference(Preferences.WEB_HEAD_SPAWN_LOCATION);
-        mSize = (IconListPreference) findPreference(Preferences.WEB_HEAD_SIZE);
-        mCloseOnOpen = (IconCheckboxPreference) findPreference(Preferences.WEB_HEAD_CLOSE_ON_OPEN);
-        mAggressive = (IconCheckboxPreference) findPreference(AGGRESSIVE_LOADING);
+        webHeadSwitch = (IconSwitchPreference) findPreference(Preferences.WEB_HEAD_ENABLED);
+        webHeadColor = (ColorPreference) findPreference(Preferences.WEB_HEADS_COLOR);
+        spawnLocation = (IconListPreference) findPreference(Preferences.WEB_HEAD_SPAWN_LOCATION);
+        webHeadSize = (IconListPreference) findPreference(Preferences.WEB_HEAD_SIZE);
+        closeOnOpen = (IconCheckboxPreference) findPreference(Preferences.WEB_HEAD_CLOSE_ON_OPEN);
+        aggressiveLoading = (IconCheckboxPreference) findPreference(AGGRESSIVE_LOADING);
     }
 
 
     private void setIcons() {
         int materialLight = ContextCompat.getColor(getActivity(), R.color.material_dark_light);
-        mWebHeadsColor.setIcon(new IconicsDrawable(getActivity())
+        webHeadColor.setIcon(new IconicsDrawable(getActivity())
                 .icon(CommunityMaterial.Icon.cmd_palette)
                 .color(materialLight)
                 .sizeDp(24));
-        mWebHeadSwitch.setIcon(new IconicsDrawable(getActivity())
+        webHeadSwitch.setIcon(new IconicsDrawable(getActivity())
                 .icon(CommunityMaterial.Icon.cmd_chart_bubble)
                 .color(materialLight)
                 .sizeDp(24));
-        mSpawnLocation.setIcon(new IconicsDrawable(getActivity())
+        spawnLocation.setIcon(new IconicsDrawable(getActivity())
                 .icon(CommunityMaterial.Icon.cmd_code_tags)
                 .color(materialLight)
                 .sizeDp(24));
-        mSize.setIcon(new IconicsDrawable(getActivity())
+        webHeadSize.setIcon(new IconicsDrawable(getActivity())
                 .icon(CommunityMaterial.Icon.cmd_crop_free)
                 .color(materialLight)
                 .sizeDp(24));
-        mCloseOnOpen.setIcon(new IconicsDrawable(getActivity())
+        closeOnOpen.setIcon(new IconicsDrawable(getActivity())
                 .icon(CommunityMaterial.Icon.cmd_close_circle_outline)
                 .color(materialLight)
                 .sizeDp(24));
-        mAggressive.setIcon(new IconicsDrawable(getActivity())
+        aggressiveLoading.setIcon(new IconicsDrawable(getActivity())
                 .icon(CommunityMaterial.Icon.cmd_fast_forward)
                 .color(materialLight)
                 .sizeDp(24));
     }
 
     private void setupWebHeadColorPreference() {
-        mWebHeadsColor.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        webHeadColor.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 int chosenColor = ((ColorPreference) preference).getColor();
@@ -158,7 +158,7 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
     }
 
     private void setupAggressivePreference() {
-        mAggressive.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        aggressiveLoading.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (((Boolean) newValue) && !Preferences.mergeTabs(getActivity())) {
@@ -175,7 +175,7 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
     }
 
     private void setUpWebHeadSwitch() {
-        mWebHeadSwitch.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        webHeadSwitch.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 final SwitchPreferenceCompat switchCompat = (SwitchPreferenceCompat) preference;

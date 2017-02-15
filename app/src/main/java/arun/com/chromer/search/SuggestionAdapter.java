@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
  * Created by Arun on 03/08/2016.
  */
 public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.SuggestionItemHolder> {
-    private final Context mContext;
+    private final Context context;
 
     private SuggestionClickListener mCallback = new SuggestionClickListener() {
         @Override
@@ -36,17 +36,17 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
         }
     };
     @NonNull
-    private final List<SuggestionItem> mSuggestions = new ArrayList<>();
+    private final List<SuggestionItem> suggestionItems = new ArrayList<>();
 
-    private static Drawable sSearch;
+    private static Drawable searchIcon;
 
     public SuggestionAdapter(@NonNull final Context context, @Nullable SuggestionClickListener listener) {
-        mContext = context.getApplicationContext();
+        this.context = context.getApplicationContext();
         setHasStableIds(true);
         mCallback = listener;
 
-        if (sSearch == null)
-            sSearch = new IconicsDrawable(context)
+        if (searchIcon == null)
+            searchIcon = new IconicsDrawable(context)
                     .icon(CommunityMaterial.Icon.cmd_magnify)
                     .color(ContextCompat.getColor(context, R.color.material_dark_light))
                     .sizeDp(18);
@@ -59,46 +59,45 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
 
     @Override
     public void onBindViewHolder(SuggestionItemHolder holder, int position) {
-        holder.suggestion.setText(mSuggestions.get(position).suggestion);
-        SuggestionItem item = mSuggestions.get(position);
+        holder.suggestion.setText(suggestionItems.get(position).suggestion);
+        SuggestionItem item = suggestionItems.get(position);
         switch (item.type) {
             case SuggestionItem.COPY:
-                holder.icon.setImageDrawable(new IconicsDrawable(mContext)
+                holder.icon.setImageDrawable(new IconicsDrawable(context)
                         .icon(CommunityMaterial.Icon.cmd_content_copy)
-                        .color(ContextCompat.getColor(mContext, R.color.md_cyan_600))
+                        .color(ContextCompat.getColor(context, R.color.md_cyan_600))
                         .sizeDp(18));
                 break;
             case SuggestionItem.GOOGLE:
-                holder.icon.setImageDrawable(sSearch);
+                holder.icon.setImageDrawable(searchIcon);
                 break;
         }
     }
 
     @Override
     public int getItemCount() {
-        return mSuggestions.size();
+        return suggestionItems.size();
     }
 
     @Override
     public long getItemId(int position) {
-        return mSuggestions.get(position).hashCode();
+        return suggestionItems.get(position).hashCode();
     }
 
     public void updateSuggestions(@NonNull List<SuggestionItem> newSuggestions) {
-        final SuggestionDiff suggestionDiff = new SuggestionDiff(mSuggestions, newSuggestions);
-
+        final SuggestionDiff suggestionDiff = new SuggestionDiff(suggestionItems, newSuggestions);
         //Benchmark.start("Diff Calculation");
         final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(suggestionDiff, true);
         // Benchmark.end();
 
-        mSuggestions.clear();
-        mSuggestions.addAll(newSuggestions);
+        suggestionItems.clear();
+        suggestionItems.addAll(newSuggestions);
 
         diffResult.dispatchUpdatesTo(this);
     }
 
     public void clear() {
-        mSuggestions.clear();
+        suggestionItems.clear();
         notifyDataSetChanged();
     }
 
@@ -116,7 +115,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
                 public void onClick(View view) {
                     final int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
-                        mCallback.onSuggestionClicked(mSuggestions.get(position).suggestion);
+                        mCallback.onSuggestionClicked(suggestionItems.get(position).suggestion);
                     }
                 }
             });
@@ -129,34 +128,34 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
 
     private class SuggestionDiff extends DiffUtil.Callback {
 
-        private final List<SuggestionItem> mNewList;
-        private final List<SuggestionItem> mOldList;
+        private final List<SuggestionItem> newList;
+        private final List<SuggestionItem> oldList;
 
         SuggestionDiff(@NonNull List<SuggestionItem> oldList, @NonNull List<SuggestionItem> newList) {
-            mOldList = oldList;
-            mNewList = newList;
+            this.oldList = oldList;
+            this.newList = newList;
         }
 
         @Override
         public int getOldListSize() {
-            return mOldList.size();
+            return oldList.size();
         }
 
         @Override
         public int getNewListSize() {
-            return mNewList.size();
+            return newList.size();
         }
 
         @Override
         public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-            return mOldList.get(oldItemPosition).suggestion.
-                    equalsIgnoreCase(mNewList.get(newItemPosition).suggestion);
+            return oldList.get(oldItemPosition).suggestion.
+                    equalsIgnoreCase(newList.get(newItemPosition).suggestion);
         }
 
         @Override
         public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-            return mOldList.get(oldItemPosition).suggestion.
-                    equalsIgnoreCase(mNewList.get(newItemPosition).suggestion);
+            return oldList.get(oldItemPosition).suggestion.
+                    equalsIgnoreCase(newList.get(newItemPosition).suggestion);
         }
     }
 }

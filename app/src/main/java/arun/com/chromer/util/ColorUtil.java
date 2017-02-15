@@ -68,7 +68,6 @@ public class ColorUtil {
     @NonNull
     public static List<Palette.Swatch> getSwatchListFromPalette(@NonNull Palette palette) {
         final List<Palette.Swatch> swatchList = new ArrayList<>();
-
         Palette.Swatch vibrantSwatch = palette.getVibrantSwatch();
         Palette.Swatch vibrantDarkSwatch = palette.getDarkVibrantSwatch();
         Palette.Swatch vibrantLightSwatch = palette.getLightVibrantSwatch();
@@ -117,7 +116,6 @@ public class ColorUtil {
                             return b - a;
                         }
                     });
-
             // We want the vibrant color but we will avoid it if it is the most prominent one.
             // Instead we will choose the next prominent color
             int vibrantColor = palette.getVibrantColor(NO_COLOR);
