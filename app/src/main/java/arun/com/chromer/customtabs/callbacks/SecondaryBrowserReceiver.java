@@ -17,24 +17,23 @@ import arun.com.chromer.R;
 import arun.com.chromer.preferences.manager.Preferences;
 import timber.log.Timber;
 
+import static android.content.Intent.ACTION_VIEW;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 public class SecondaryBrowserReceiver extends BroadcastReceiver {
     public SecondaryBrowserReceiver() {
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        String url = intent.getDataString();
-
+        final String url = intent.getDataString();
         if (url != null) {
-            Intent webIntentExplicit = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-            webIntentExplicit.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            String componentFlatten = Preferences.secondaryBrowserComponent(context);
-
+            final Intent webIntentExplicit = new Intent(ACTION_VIEW, Uri.parse(url));
+            webIntentExplicit.setFlags(FLAG_ACTIVITY_NEW_TASK);
+            final String componentFlatten = Preferences.secondaryBrowserComponent(context);
             if (componentFlatten != null) {
                 ComponentName cN = ComponentName.unflattenFromString(componentFlatten);
                 webIntentExplicit.setComponent(cN);
-
                 try {
                     context.startActivity(webIntentExplicit);
                 } catch (ActivityNotFoundException e) {
@@ -48,26 +47,22 @@ public class SecondaryBrowserReceiver extends BroadcastReceiver {
 
     private void launchComponentWithIteration(Context context, String url) {
         Timber.d("Attempting to launch activity with iteration");
-
-        Intent webIntentImplicit = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        webIntentImplicit.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        @SuppressLint("InlinedApi") List<ResolveInfo> resolvedActivityList = context.getPackageManager().queryIntentActivities(webIntentImplicit, PackageManager.MATCH_ALL);
-
-        String secondaryPackage = Preferences.secondaryBrowserPackage(context);
-
+        final Intent webIntentImplicit = new Intent(ACTION_VIEW, Uri.parse(url));
+        webIntentImplicit.setFlags(FLAG_ACTIVITY_NEW_TASK);
+        @SuppressLint("InlinedApi")
+        final List<ResolveInfo> resolvedActivityList = context.getPackageManager().queryIntentActivities(webIntentImplicit, PackageManager.MATCH_ALL);
+        final String secondaryPackage = Preferences.secondaryBrowserPackage(context);
         if (secondaryPackage != null) {
             boolean found = false;
             for (ResolveInfo info : resolvedActivityList) {
                 if (info.activityInfo.packageName.equalsIgnoreCase(secondaryPackage)) {
                     found = true;
-
-                    ComponentName componentName = new ComponentName(info.activityInfo.packageName, info.activityInfo.name);
+                    final ComponentName componentName = new ComponentName(info.activityInfo.packageName, info.activityInfo.name);
                     webIntentImplicit.setComponent(componentName);
-
                     // This will be the new component, so write it to preferences
                     Preferences.secondaryBrowserComponent(context, componentName.flattenToString());
-
                     context.startActivity(webIntentImplicit);
+                    break;
                 }
             }
             if (!found) showChooser(context, url);
@@ -76,12 +71,10 @@ public class SecondaryBrowserReceiver extends BroadcastReceiver {
 
     private void showChooser(Context context, String url) {
         Timber.d("Falling back to intent chooser");
-
         Toast.makeText(context, context.getString(R.string.unxp_err), Toast.LENGTH_SHORT).show();
-        Intent implicitViewIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-
+        final Intent implicitViewIntent = new Intent(ACTION_VIEW, Uri.parse(url));
         Intent chooserIntent = Intent.createChooser(implicitViewIntent, context.getString(R.string.open_with));
-        chooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        chooserIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(chooserIntent);
     }
 }

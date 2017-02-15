@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
@@ -29,6 +30,7 @@ import java.util.List;
 import java.util.Random;
 
 import arun.com.chromer.R;
+import arun.com.chromer.activities.OpenIntentWithActivity;
 import arun.com.chromer.customtabs.bottombar.BottomBarManager;
 import arun.com.chromer.customtabs.callbacks.AddHomeShortcutService;
 import arun.com.chromer.customtabs.callbacks.ClipboardService;
@@ -155,9 +157,6 @@ public class CustomTabs {
             final Intent keepAliveIntent = new Intent();
             keepAliveIntent.setClassName(activity.getPackageName(), KeepAliveService.class.getCanonicalName());
             customTabsIntent.intent.putExtra(EXTRA_CUSTOM_TABS_KEEP_ALIVE, keepAliveIntent);
-            if (noAnimation) {
-                // customTabsIntent.intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            }
             try {
                 customTabsIntent.launchUrl(activity, uri);
                 Timber.d("Launched url: %s", uri.toString());
@@ -510,6 +509,7 @@ public class CustomTabs {
         prepareMinimize();
         prepareCopyLink();
         prepareAddToHomeScreen();
+        prepareOpenWith();
         prepareOpenInChrome();
     }
 
@@ -570,9 +570,11 @@ public class CustomTabs {
      * Adds menu item to enable adding the current url to home screen
      */
     private void prepareAddToHomeScreen() {
-        final Intent addShortcutIntent = new Intent(activity, AddHomeShortcutService.class);
-        final PendingIntent addShortcutPending = PendingIntent.getService(activity, 0, addShortcutIntent, FLAG_UPDATE_CURRENT);
-        builder.addMenuItem(activity.getString(R.string.add_to_homescreen), addShortcutPending);
+        if (!shouldIgnoreAddToHome()) {
+            final Intent addShortcutIntent = new Intent(activity, AddHomeShortcutService.class);
+            final PendingIntent addShortcutPending = PendingIntent.getService(activity, 0, addShortcutIntent, FLAG_UPDATE_CURRENT);
+            builder.addMenuItem(activity.getString(R.string.add_to_homescreen), addShortcutPending);
+        }
     }
 
     /**
@@ -580,7 +582,6 @@ public class CustomTabs {
      */
     private void prepareOpenInChrome() {
         final String customTabPkg = Preferences.customTabApp(activity);
-
         if (Utils.isPackageInstalled(activity, customTabPkg)) {
             if (customTabPkg.equalsIgnoreCase(BETA_PACKAGE)
                     || customTabPkg.equalsIgnoreCase(DEV_PACKAGE)
@@ -594,6 +595,12 @@ public class CustomTabs {
                 builder.addMenuItem(label, openChromePending);
             }
         }
+    }
+
+    private void prepareOpenWith() {
+        final Intent openWithActivity = new Intent(activity, OpenIntentWithActivity.class);
+        final PendingIntent openWithActivityPending = PendingIntent.getActivity(activity, 0, openWithActivity, FLAG_UPDATE_CURRENT);
+        builder.addMenuItem(activity.getString(R.string.open_with), openWithActivityPending);
     }
 
     /**
@@ -645,6 +652,26 @@ public class CustomTabs {
         return this;
     }
 
+    private boolean shouldIgnoreAddToHome() {
+        return chromeVariantVersion() >= 57;
+    }
+
+    private int chromeVariantVersion() {
+        final String customTabPackage = Preferences.customTabApp(activity);
+        if (Utils.isPackageInstalled(activity, customTabPackage)
+                && (customTabPackage.equalsIgnoreCase(STABLE_PACKAGE)
+                | customTabPackage.equalsIgnoreCase(DEV_PACKAGE)
+                | customTabPackage.equalsIgnoreCase(BETA_PACKAGE)
+                | customTabPackage.equalsIgnoreCase(LOCAL_PACKAGE))) {
+            try {
+                final PackageInfo packageInfo = activity.getPackageManager().getPackageInfo(customTabPackage, 0);
+                return Integer.parseInt(packageInfo.versionName.split("\\.")[0]);
+            } catch (Exception e) {
+                return -1;
+            }
+        }
+        return -1;
+    }
 
     /**
      * To be used as a fallback to open the Uri when Custom Tabs is not available.

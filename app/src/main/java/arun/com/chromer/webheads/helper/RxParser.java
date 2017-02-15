@@ -9,8 +9,6 @@ import com.chimbori.crux.articles.Article;
 import com.chimbori.crux.articles.Extractor;
 import com.chimbori.crux.urls.CandidateURL;
 
-import java.io.IOException;
-
 import arun.com.chromer.Chromer;
 import okhttp3.Request;
 import rx.Observable;
@@ -27,13 +25,16 @@ import timber.log.Timber;
  * Created by Arunkumar on 26-01-2017.
  */
 public class RxParser {
+    // Our parser subject
     private final SerializedSubject<String, String> parserSubject = PublishSubject.<String>create().toSerialized();
-
+    // Singleton
     private static volatile RxParser INSTANCE = null;
     // We will spoof as an iPad so that websites properly expose their shortcut icon. Even Google.com
     // does not provide bigger icons when we go as Android.
     private static final String USER_AGENT = "Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25";
     private static final String CHROMER = "Chromer";
+    // No that determines no of pages that can be concurrently parsed.
+    private static final int MAX_CONCURRENT_PARSING = 4;
 
     // Reference to subscription that we create.
     private Subscription parseSubscription;
@@ -82,7 +83,7 @@ public class RxParser {
                         public Boolean call(String url) {
                             return url != null;
                         }
-                    })
+                    }).onBackpressureBuffer()
                     .flatMap(new Func1<String, Observable<Pair<String, Article>>>() {
                         @Override
                         public Observable<Pair<String, Article>> call(String url) {
@@ -90,8 +91,13 @@ public class RxParser {
                                     .subscribeOn(Schedulers.computation())
                                     .map(URL_TO_ARTICLE_PAIR_MAPPER);
                         }
+                    }, MAX_CONCURRENT_PARSING).observeOn(AndroidSchedulers.mainThread())
+                    .doOnError(new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            Timber.e(throwable);
+                        }
                     })
-                    .observeOn(AndroidSchedulers.mainThread())
                     .doOnNext(new Action1<Pair<String, Article>>() {
                         @Override
                         public void call(Pair<String, Article> articlePair) {
@@ -134,7 +140,6 @@ public class RxParser {
             new Func1<String, Pair<String, Article>>() {
                 @Override
                 public Pair<String, Article> call(final String url) {
-                    printThread();
                     Article article = null;
                     try {
                         final CandidateURL candidateUrl = new CandidateURL(url);
@@ -145,18 +150,21 @@ public class RxParser {
                                     .header("Referer", CHROMER)
                                     .build();
 
-                            final String stringData = Chromer.getOkHttpClient()
+                            String webSiteString = Chromer.getOkHttpClient()
                                     .newCall(request)
                                     .execute()
                                     .body()
                                     .string();
 
-                            article = Extractor.with(url, stringData)
+                            article = Extractor.with(url, webSiteString)
                                     .extractMetadata()
                                     .article();
-                            Timber.d(article.toString());
+
+                            // Dispose string
+                            webSiteString = null;
+                            Timber.d("Fetched %s in %s", url, getThreadName());
                         }
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         Timber.e(e.getMessage());
                         Observable.error(e);
                     }
@@ -168,7 +176,11 @@ public class RxParser {
      * Prints the current active thread. Only for debug purposes.
      */
     private static void printThread() {
-        Timber.d("Thread: %s", Thread.currentThread().getName());
+        Timber.d("Thread: %s", getThreadName());
+    }
+
+    private static String getThreadName() {
+        return Thread.currentThread().getName();
     }
 
     public static Observable<Pair<String, Article>> parseUrl(@Nullable String url) {
