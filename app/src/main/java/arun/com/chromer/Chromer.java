@@ -1,6 +1,7 @@
 package arun.com.chromer;
 
 import android.app.Application;
+import android.os.StrictMode;
 
 import com.crashlytics.android.Crashlytics;
 import com.orm.SugarContext;
@@ -16,12 +17,17 @@ public class Chromer extends Application {
     public void onCreate() {
         super.onCreate();
         Fabric.with(this, new Crashlytics());
-
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
-            // Stetho.initializeWithDefaults(this);
+            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build());
+            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build());
         }
-
         SugarContext.init(this);
     }
 
