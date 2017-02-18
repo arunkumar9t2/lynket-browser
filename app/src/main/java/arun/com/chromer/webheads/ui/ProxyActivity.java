@@ -15,14 +15,11 @@ public class ProxyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Timber.d("Cleared");
 
-
         if (getIntent() == null || getIntent().getData() == null) {
             finish();
             return;
         }
-
         boolean isFromNewTab = getIntent().getBooleanExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, false);
-
         final Intent webHeadService = new Intent(this, WebHeadService.class);
         webHeadService.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         webHeadService.setData(getIntent().getData());

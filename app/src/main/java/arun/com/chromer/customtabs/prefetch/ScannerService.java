@@ -9,9 +9,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -290,11 +290,13 @@ public class ScannerService extends AccessibilityService implements CustomTabMan
 
     private boolean isWifiConditionsMet() {
         if (Preferences.wifiOnlyPrefetch(this)) {
-            ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-            // TODO fix this deprecated call
-            //noinspection deprecation
-            NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-            return mWifi.isConnected();
+            final WifiManager wifiMgr = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+            if (wifiMgr.isWifiEnabled()) {
+                final WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
+                return !(wifiInfo != null && wifiInfo.getNetworkId() == -1);
+            } else {
+                return false;
+            }
         } else
             return true;
     }

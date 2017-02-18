@@ -184,6 +184,9 @@ public class WebHeadService extends Service implements WebHeadContract,
     }
 
     private void addWebHead(final String webHeadUrl, final boolean isNewTab, final boolean isMinimized) {
+        if (springChain2D == null) {
+            springChain2D = SpringChain2D.create(this);
+        }
         RxParser.getInstance().parse(webHeadUrl);
         springChain2D.clear();
 

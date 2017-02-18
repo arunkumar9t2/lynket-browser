@@ -125,12 +125,15 @@ public class CustomTabActivity extends AppCompatActivity {
         minimizeReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equalsIgnoreCase(ACTION_MINIMIZE)
-                        && intent.hasExtra(EXTRA_TEXT)) {
+                if (intent.getAction().equalsIgnoreCase(ACTION_MINIMIZE) && intent.hasExtra(EXTRA_TEXT)) {
                     final String url = intent.getStringExtra(EXTRA_TEXT);
                     if (baseUrl.equalsIgnoreCase(url)) {
-                        Timber.d("Minimized %s", url);
-                        moveTaskToBack(true);
+                        try {
+                            Timber.d("Minimized %s", url);
+                            moveTaskToBack(true);
+                        } catch (Exception e) {
+                            Timber.e(e);
+                        }
                     }
                 }
             }
@@ -163,9 +166,9 @@ public class CustomTabActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(minimizeReceiver);
         subscriptions.clear();
+        super.onDestroy();
     }
 
     @TargetApi(LOLLIPOP)
