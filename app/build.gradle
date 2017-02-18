@@ -94,7 +94,6 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
         transitive = true;
     }
-    compile 'com.squareup.okhttp3:okhttp:3.6.0'
     compile 'com.github.chimbori:crux:-SNAPSHOT'
 }
 

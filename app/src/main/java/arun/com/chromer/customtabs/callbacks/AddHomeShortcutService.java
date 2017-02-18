@@ -25,9 +25,9 @@ import java.util.concurrent.ExecutionException;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.BrowserInterceptActivity;
+import arun.com.chromer.parser.RxParser;
 import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Utils;
-import arun.com.chromer.webheads.helper.RxParser;
 import arun.com.chromer.webheads.helper.WebSite;
 import timber.log.Timber;
 
