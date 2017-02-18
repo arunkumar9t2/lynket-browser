@@ -14,6 +14,7 @@ import java.util.List;
 
 import arun.com.chromer.R;
 import arun.com.chromer.shared.Constants;
+import arun.com.chromer.util.SafeIntent;
 import arun.com.chromer.util.Utils;
 import timber.log.Timber;
 
@@ -26,23 +27,21 @@ public class ShareInterceptActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final Intent intent = getIntent();
+        final SafeIntent safeIntent = new SafeIntent(getIntent());
         try {
-            if (intent != null) {
-                final String action = intent.getAction();
-                String text = null;
-                switch (action) {
-                    case Intent.ACTION_SEND:
-                        if (intent.hasExtra(Intent.EXTRA_TEXT)) {
-                            text = intent.getExtras().getCharSequence(Intent.EXTRA_TEXT).toString();
-                        }
-                        break;
-                    case Intent.ACTION_PROCESS_TEXT:
-                        text = intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT);
-                        break;
-                }
-                findAndOpenLink(text);
+            final String action = safeIntent.getAction();
+            String text = null;
+            switch (action) {
+                case Intent.ACTION_SEND:
+                    if (safeIntent.hasExtra(Intent.EXTRA_TEXT)) {
+                        text = getIntent().getExtras().getCharSequence(Intent.EXTRA_TEXT).toString();
+                    }
+                    break;
+                case Intent.ACTION_PROCESS_TEXT:
+                    text = safeIntent.getStringExtra(Intent.EXTRA_PROCESS_TEXT);
+                    break;
             }
+            findAndOpenLink(text);
         } catch (Exception exception) {
             invalidLink();
             Timber.e(exception.getMessage());
@@ -54,7 +53,6 @@ public class ShareInterceptActivity extends AppCompatActivity {
 
     private void findAndOpenLink(@Nullable String text) {
         if (text == null) return;
-
         final List<String> urls = Utils.findURLs(text);
         if (!urls.isEmpty()) {
             // use only the first link

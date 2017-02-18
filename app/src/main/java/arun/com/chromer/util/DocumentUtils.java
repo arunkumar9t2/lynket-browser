@@ -22,6 +22,7 @@ import static android.content.Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_DOCUMENT;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.os.Build.VERSION_CODES.LOLLIPOP;
+import static arun.com.chromer.shared.Constants.ACTION_CLOSE_ROOT;
 import static arun.com.chromer.shared.Constants.ACTION_MINIMIZE;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_WEBHEAD;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_MINIMIZE;
@@ -152,5 +153,9 @@ public class DocumentUtils {
             webHeadService.putExtra(EXTRA_KEY_MINIMIZE, true);
             context.startService(webHeadService);
         }
+    }
+
+    public static void closeRootActivity(@NonNull Context context) {
+        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(ACTION_CLOSE_ROOT));
     }
 }

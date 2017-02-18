@@ -9,6 +9,7 @@ import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.flipboard.bottomsheet.OnSheetDismissedListener;
 
 import arun.com.chromer.R;
+import arun.com.chromer.util.DocumentUtils;
 import arun.com.chromer.views.IntentPickerSheetView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,6 +26,7 @@ public class OpenIntentWithActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        DocumentUtils.closeRootActivity(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_with);
         ButterKnife.bind(this);

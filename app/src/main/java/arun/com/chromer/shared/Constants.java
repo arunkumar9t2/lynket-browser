@@ -33,7 +33,7 @@ public class Constants {
     // Intent Actions
     public static final String ACTION_TOOLBAR_COLOR_SET = "ACTION_TOOLBAR_COLOR_SET";
     public static final String ACTION_WEBHEAD_COLOR_SET = "ACTION_WEBHEAD_COLOR_SET";
-    public static final String ACTION_CLOSE_MAIN = "ACTION_CLOSE_MAIN";
+    public static final String ACTION_CLOSE_ROOT = "ACTION_CLOSE_ROOT";
     public static final String ACTION_INSTALL_SHORTCUT = "com.android.launcher.action.INSTALL_SHORTCUT";
     public static final String ACTION_STOP_WEBHEAD_SERVICE = "close_service";
     public static final String ACTION_REBIND_WEBHEAD_TAB_CONNECTION = "rebind_event";

@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.StackingBehavior;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
@@ -145,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         };
         LocalBroadcastManager.getInstance(this).registerReceiver(
                 closeReceiver,
-                new IntentFilter(Constants.ACTION_CLOSE_MAIN));
+                new IntentFilter(Constants.ACTION_CLOSE_ROOT));
     }
 
     private void setUpAppBarLayout() {
@@ -314,7 +315,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 .title(R.string.join_beta)
                 .content(R.string.join_beta_content)
                 .btnStackedGravity(GravityEnum.END)
-                .forceStacking(true)
+                .stackingBehavior(StackingBehavior.ALWAYS)
                 .positiveText(R.string.join_google_plus)
                 .neutralText(R.string.become_a_tester)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
