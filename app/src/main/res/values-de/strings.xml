@@ -40,7 +40,7 @@
         <item>Normal</item>
         <item>Klein</item>
     </string-array>
-    <string name="share_text">Hey,  teste \‘Chromer\’ für schnelles und sicheres surfen. Hier runterladen: https://goo.gl/992ils</string>
+    <string name="share_text">Hey,  teste \'Chromer\' für schnelles und sicheres surfen. Hier runterladen: https://goo.gl/992ils</string>
     <string name="share_via">Teilen mit…</string>
     <string name="custom_tab_provider_not_found">Kein kompatibler Custom-Tab-Anbieter gefunden</string>
     <string name="custom_tab_provider_not_found_expln">Chrome benötigt einen Custom-Tab-kompatiblen Browser auf deinem Gerät. Momentan sind keine solchen Browser installiert. Würdest du Google Chrome (kostenlos) aus dem Play Store installieren? Wenn du es bereits hast, bitte aktualidiere es auf die neueste Version.</string>
@@ -134,7 +134,7 @@
     <string name="credits">Credits</string>
     <string name="icon_design">Icon Design</string>
     <string name="overlay_permission_content">Um die Web Heads anzuzeigen wird die Berechtigung, etwas über anderen Apps einzublenden benötigt. Möchtest du die Berechtigung gewähren?</string>
-    <string name="webheads_intro_1">Wenn du irgendeinen Link öffnest wird eine \“schwebende Blase\” (Web Head) erstellt und Chromer versucht den Link vorab zu laden.</string>
+    <string name="webheads_intro_1">Wenn du irgendeinen Link öffnest wird eine \"schwebende Blase\" (Web Head) erstellt und Chromer versucht den Link vorab zu laden.</string>
     <string name="webheads_intro_3">Wenn du einen Web Head ziehst, erscheint eine Mülltonne. Lass den Web Head darüber los um ihn zu schließen.</string>
     <string name="webheads_intro_4">"Chromer priorisiert den zuletzt geöffneten Link und lädt ihn vorab. Die beste Methode ist, die Web Heads nacheinander von oben nach unten auszuwählen. Die beste Erfahrung wird gewährleistet, wenn die Web Heads automatisch geschlossen werden beim Antippen. "</string>
     <string name="web_head_permission_toast">Um Links in schwebenden Blasen zu öffnen, benötigt Chromer die Berechtigung, etwas über anderen Apps einzublenden. Bitte aktivieren oder die Web Heads deaktivieren.</string>

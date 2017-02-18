@@ -1,9 +1,5 @@
 package arun.com.chromer.activities.intro;
 
-/**
- * Created by Arun on 06/02/2016.
- */
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;

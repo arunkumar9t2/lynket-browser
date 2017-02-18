@@ -144,7 +144,7 @@
     <string name="blacklist_explanation">Links uit een app op de zwarte lijst openen in de tweede browser</string>
     <string name="revoke_accessibility_permission">Je kan nu de toegankelijkheidsrechten van Chromer terugdraaien.</string>
     <string name="last_fetched_urls">Laatst voorgeladen URLs</string>
-    <string name="blacklist_on">Apps op de zwarte lijst zijn %s</string>
+    <string name="blacklist_off">\‘Apps op de zwarte lijst\‘ is uitgeschakeld</string>
     <string name="translations">Vertalingen</string>
     <string name="merge_tabs">Tabbladen samenvoegen met apps</string>
     <string name="merge_tabs_explanation">Tabbladen samen met andere recente apps weergeven op het recente-apps-scherm</string>
@@ -189,4 +189,6 @@
     <string name="intro_back_fatigue">Het maakt niet uit hoe ver je navigeert met een link, je kan altijd <b>op X drukken</b> om snel terug te keren naar de vorige app.</string>
     <string name="merge_tabs_explanation_intro">Jouw apps en websites leven samen op het \“recent\” scherm.</string>
     <string name="improves_loading_times">Verbetert laadtijden</string>
+    <string name="web_close_on_open_desc">Webheads verdwijnen zodra je een link opent</string>
+    <string name="web_close_on_open_title">Webheads sluiten na aantikken</string>
 </resources>

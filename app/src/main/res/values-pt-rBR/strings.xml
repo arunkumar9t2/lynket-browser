@@ -153,7 +153,6 @@
     <string name="blacklist_explanation">A abertura de links de um app da lista negra irá usar o navegador secundário</string>
     <string name="revoke_accessibility_permission">Agora você pode revogar a permissão de acessibilidade do Chromer.</string>
     <string name="last_fetched_urls">Últimas URLs carregadas</string>
-    <string name="blacklist_on">Lista negra de apps %s</string>
     <string name="translations">Traduções</string>
     <string name="merge_tabs">Mesclar abas e apps</string>
     <string name="merge_tabs_explanation">Ver suas abas junto com outros apps na tela de apps Recentes.</string>

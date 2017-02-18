@@ -22,6 +22,10 @@
         <item>Normalna</item>
         <item>Mala</item>
     </string-array>
+    <string-array name="webHeadsSizeKeys">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
     <string name="share_text">Hej, pogledajte \“Chromer\” za brzo i sigurno iskustvo pregledavanja interneta. Preuzmite ga ovdje: https://goo.gl/992ils</string>
     <string name="share_via">Podijelite putem…</string>
     <string name="custom_tab_provider_not_found">Nije pronađen kompatibilan pružatelj prilagođenih kartica.</string>
@@ -52,9 +56,12 @@
     <string name="add_to_homescreen">Dodaj na početni zaslon</string>
     <string name="intro_1">Pozdrav!\nChromer je lagan, siguran i brz mrežni preglednik.</string>
     <string name="intro_2">Koristi se Chromeovom značajkom prilagođenih kartica što je izuzetno laka Chromeova kartica dizajnirana za brzo učitavanje poveznica.</string>
+    <string name="intro_5_new">Ovo skenira poveznice na vašem zaslonu te ih učitava u pozadini kako bi se poboljšale performanse iscrtavanja.\n\nTakođer može zadržati preglednik u memoriji kako bi se unaprijedilo vrijeme pokretanja.</string>
+    <string name="intro_4_new">Može naslagati više poveznica u plutajuće mjehuriće kada ih otvorite te ih zatim djelomično učitati u pozadini!\n\n<b>NAUČI VIŠE</b></string>
     <string name="how_to_use">Kako upotrebljavati?</string>
     <string name="intro_6">Jednostavno postavite Chromer kao zadani preglednik. Chromer će prikazati poveznicu na nenametljiv način. Ili odaberite Chromer kada vam bude potreban.</string>
     <string name="why_use">Zašto upotrebljavati?</string>
+    <string name="intro_7_new">Nenametljivost i brzo učitavanje,\nsmanjena potrošnja podataka,\npodijeljene informacije za prijavu stoga Chrome automatski završava obrasce te ih osigurava sa najnovijim ažuriranjima.\n\nVaši podatci o pregledavanju su automatski sinkronizirani sa vašim Google računom.</string>
     <string name="version">Verzija</string>
     <string name="changelog">Popis promjena</string>
     <string name="join_google_plus">Pridružite se Google+ zajednici</string>
@@ -116,7 +123,10 @@
     <string name="credits">Zahvale</string>
     <string name="icon_design">Dizajn ikone</string>
     <string name="overlay_permission_content">Da bi se plutajući mjehurići mogli prikazivati na zaslonu potrebno je dopuštenje povlačenja preko drugih aplikacija. Želite li ga odmah odobriti?</string>
+    <string name="webheads_intro_1">Kada otvorite poveznicu u bilo kojoj aplikaciji, stvorit će se plutajući mjehurić na vašem zaslonu te će Chromer pokušati unaprijed dobaviti poveznicu.</string>
+    <string name="webheads_intro_2_new">Prije otvaranju više poveznica, ovi mjehurići će se automatski poslagati jedan na drugog. Dugim pritiskom na mjehurić možete pristupiti njegovom izborniku.</string>
     <string name="webheads_intro_3">Kada počnete povlačiti plutajući mjehurić prikazat će se koš za smeće. Ubacite ga u koš da biste ga izbrisali.</string>
+    <string name="webheads_intro_4_lolli">Agresivno pozadinsko učitavanje će učitati stranicu u pozadini dok vi koristite aplikaciju u kojoj ste trenutno.\n<b>Kartica koju ste otvorili može zatreperiti. To se događa namjerno i nije pogreška.</b></string>
     <string name="webheads_intro_4">Chromer daje prednost posljednje otvorenoj poveznici i predučitava je. Preporučamo vam da dodirnete mjehuriće jedan po jedan od vrha do dna. Ako omogućite zatvaranje plutajućih mjehurića pri otvaranju ovo će biti jednostavnije.</string>
     <string name="web_head_permission_toast">Da bi mogao otvarati poveznice u plutajućim mjehurićima, Chromer treba dopuštenje za povlačenje preko drugih aplikacija. Odobrite to dopuštenje da biste nastavili ili onemogućite plutajuće mjehuriće u postavkama Chromera.</string>
     <string name="tap_close_all">Dodirnite da biste zatvorili sve</string>
@@ -135,6 +145,7 @@
     <string name="revoke_accessibility_permission">Sada možete ukloniti Chromerovo dopuštenje usluge pristupačnosti.</string>
     <string name="last_fetched_urls">Posljednje predučitani URL-ovi</string>
     <string name="blacklist_on">Stavljanje aplikacija na crnu listu je.</string>
+    <string name="blacklist_off">Crna lista je isključena</string>
     <string name="translations">Prijevodi</string>
     <string name="merge_tabs">Spoji kartice i aplikacije</string>
     <string name="merge_tabs_explanation">Kartice će se prikazivati s drugim nedavnim aplikacijama na zaslonu nedavnih aplikacija.</string>
@@ -158,4 +169,27 @@
     <string name="web_heads_description">Otvaraj poveznice u plutajućim mjehurićima</string>
     <string name="webhead_size_title">Veličina</string>
     <string name="webhead_size_dialog">Odaberite veličinu plutajućih mjehurića</string>
+    <string name="changelog_skipped">Popis promjena je preskočen zbog pogreške</string>
+    <string name="see_whats_new">Pogledajte što je novo</string>
+    <string name="help_translations">Pomozite prevesti aplikaciju na svoj jezik</string>
+    <string name="close_all_explanation">Otpustite prst za zatvaranje svih mjehurića</string>
+    <string name="aggressive_background_loading">Agresivno pozadinsko učitavanje</string>
+    <string name="aggressive_background_loading_desc">Web stranice će biti učitane u pozadini umjesto dobavljanja unaprijed</string>
+    <string name="aggresive_dia_title">Zahtijeva spajanje kartica i aplikacija</string>
+    <string name="aggresive_dia_content">Agresivno pozadinsko učitavanje zahtijeva da spajanje kartica i aplikacija bude omogućeno. To je za vas sada omogućeno.</string>
+    <string name="merge_tabs_off_title">Pažnja</string>
+    <string name="merget_tabs_off_content">Onemogućavanje spajanja kartica i aplikacija će također onemogućiti agresivno pozadinsko učitavanje.</string>
+    <string name="web_sites">Web stranice</string>
+    <string name="share_all">Podijeli sve</string>
+    <string name="thank_you">Hvala vam puno!</string>
+    <string name="tile_label">Plutajući mjehurići</string>
+    <string name="save_time">Uštedite vrijeme</string>
+    <string name="multiple_links">Višestruke poveznice</string>
+    <string name="web_heads_intro">Uvod u plut. mjehuriće</string>
+    <string name="avoid_back_fatigue">Izbjegnite umaranje pritiskanjem tipke natrag</string>
+    <string name="intro_back_fatigue">Nije bitno koliko ste duboko ušli u poveznicu, uvijek možete <b>pritisnuti X</b> za brzi povratak u prošlu aplikaciju.</string>
+    <string name="merge_tabs_explanation_intro">Vaše aplikacije i web stranice će zajedno živjeti na zaslonu nedavnih aplikacija.</string>
+    <string name="improves_loading_times">Poboljšava vrijeme učitavanja</string>
+    <string name="web_close_on_open_desc">Plutajući mjehurići će nestati kada otvorite poveznicu</string>
+    <string name="web_close_on_open_title">Zatvorite mjehuriće kada ih dodirnete.</string>
 </resources>
