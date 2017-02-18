@@ -22,6 +22,10 @@
         <item>Normal</item>
         <item>Küçük</item>
     </string-array>
+    <string-array name="webHeadsSizeKeys">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
     <string name="share_text">\‘Chromer\’ uygulamasına ve güvenli tarayıcı deneyimine hızlıca göz at! Buradan indir https://goo.gl/992ils</string>
     <string name="share_via">Aracılığıyla paylaş…</string>
     <string name="custom_tab_provider_not_found">Uyumlu sekme sağlayıcısı bulunamadı</string>
@@ -39,7 +43,7 @@
     <string name="send_email">E-Posta gönder…</string>
     <string name="fallback_msg">Özel sekme açılamadı, normal tarayıcı ile açılıyor</string>
     <string name="open_with">Şununla aç…</string>
-    <string name="open_in_browser">%1$s\'da aç</string>
+    <string name="open_in_browser">%1$s \'da aç</string>
     <string name="unxp_err">Beklenmeyen hata, tekrar deneyin</string>
     <string name="unsupported_link">Desteklenmeyen bağlantı, tekrar deneyin</string>
     <string name="couldnt_load_price">Fiyat yüklenemedi</string>
@@ -98,6 +102,12 @@
     <string name="grant">İzin ver</string>
     <string name="open_source_contributions">Açık kaynak şeyi</string>
     <string name="blacklisted_explanation">Bazı uygulamalardan gelen bağlantıları Chromer\'den dışla</string>
+    <string name="loading">Yükleniyor…</string>
+    <string name="please_wait">Lütfen bekleyin</string>
+    <string name="translations">Çeviriler</string>
+    <string name="bottom_bar">Alt bar</string>
+    <string name="open_in_new_tab">Yeni sekmede aç</string>
+    <string name="open_in_new_tab_error">Geçersiz bağlantı, sayfaya uzun basarak herhangi bir metin veya bağlantıyı kopyaladınız mı?</string>
     <string name="options">Seçenekler</string>
     <string name="customize">Özelleştirme</string>
     <string name="not_set">Ayarlanmamış</string>
@@ -111,4 +121,14 @@
     <string name="web_heads_description">Bağlantıları kayan baloncuklar ile aç</string>
     <string name="webhead_size_title">Boyut</string>
     <string name="webhead_size_dialog">Web başlığının boyutunu seç</string>
+    <string name="changelog_skipped">Değişiklikler bir hata nedeniyle atlanır</string>
+    <string name="see_whats_new">Yenilikleri görün</string>
+    <string name="help_translations">Uygulamayı diline çevirmeye yardım et</string>
+    <string name="merge_tabs_off_title">Dikkat</string>
+    <string name="web_sites">Web Siteler</string>
+    <string name="share_all">Tümünü paylaş</string>
+    <string name="thank_you">Çok teşekkür ederim!</string>
+    <string name="tile_label">Web başlıkları</string>
+    <string name="save_time">Zamandan tasarruf</string>
+    <string name="multiple_links">Çoklu bağlantılar</string>
 </resources>

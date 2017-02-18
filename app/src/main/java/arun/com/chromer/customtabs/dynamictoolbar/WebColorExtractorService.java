@@ -7,7 +7,7 @@ import android.graphics.Color;
 import java.net.URL;
 
 import arun.com.chromer.db.WebColor;
-import arun.com.chromer.webheads.helper.RxParser;
+import arun.com.chromer.parser.RxParser;
 import timber.log.Timber;
 
 import static arun.com.chromer.shared.Constants.NO_COLOR;

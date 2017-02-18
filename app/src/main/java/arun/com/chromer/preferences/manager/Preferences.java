@@ -444,6 +444,7 @@ public class Preferences {
                 .putBoolean(MERGE_TABS_AND_APPS, preference).apply();
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean bottomBar(Context context) {
         return PreferenceManager
                 .getDefaultSharedPreferences(context)

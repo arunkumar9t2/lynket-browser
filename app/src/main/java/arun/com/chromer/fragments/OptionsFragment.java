@@ -31,21 +31,19 @@ import timber.log.Timber;
 
 public class OptionsFragment extends Fragment {
     @BindView(R.id.customtab_preference_view)
-    public AppPreferenceCardView mCustomTabPreferenceView;
+    public AppPreferenceCardView customTabProviderView;
     @BindView(R.id.browser_preference_view)
-    public AppPreferenceCardView mBrowserPreferenceView;
+    public AppPreferenceCardView browserPreferenceView;
     @BindView(R.id.favshare_preference_view)
-    public AppPreferenceCardView mFavSharePreferenceView;
+    public AppPreferenceCardView favSharePreferenceView;
     @BindView(R.id.set_default_card)
-    public CardView mSetDefaultCard;
+    public CardView setDefaultCard;
     @BindView(R.id.set_default_image)
-    public ImageView mSetDefaultIcon;
+    public ImageView setDefaultIcon;
 
-    private Unbinder mUnbinder;
-
-    private Context mAppContext;
-
-    private FragmentInteractionListener mListener;
+    private Unbinder unbinder;
+    private Context context;
+    private FragmentInteractionListener fragmentInteractionListener;
 
     public static OptionsFragment newInstance() {
         OptionsFragment fragment = new OptionsFragment();
@@ -57,18 +55,18 @@ public class OptionsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mAppContext = getActivity().getApplicationContext();
+        context = getActivity().getApplicationContext();
         return inflater.inflate(R.layout.options_fragment, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mUnbinder = ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
 
-        mSetDefaultIcon.setImageDrawable(new IconicsDrawable(mAppContext)
+        setDefaultIcon.setImageDrawable(new IconicsDrawable(context)
                 .icon(CommunityMaterial.Icon.cmd_auto_fix)
-                .color(ContextCompat.getColor(mAppContext, R.color.colorAccent))
+                .color(ContextCompat.getColor(context, R.color.colorAccent))
                 .sizeDp(30));
         getChildFragmentManager()
                 .beginTransaction()
@@ -81,8 +79,8 @@ public class OptionsFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mUnbinder.unbind();
-        mAppContext = null;
+        unbinder.unbind();
+        context = null;
     }
 
     @Override
@@ -95,7 +93,7 @@ public class OptionsFragment extends Fragment {
     public void onAttach(Context context) {
         Timber.d("On Attached");
         try {
-            mListener = (FragmentInteractionListener) context;
+            fragmentInteractionListener = (FragmentInteractionListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException("Must implement FragmentInteractionListener");
         }
@@ -104,24 +102,24 @@ public class OptionsFragment extends Fragment {
 
     private void updateDefaultBrowserCard() {
         if (!Utils.isDefaultBrowser(getActivity())) {
-            mSetDefaultCard.setVisibility(View.VISIBLE);
+            setDefaultCard.setVisibility(View.VISIBLE);
         } else
-            mSetDefaultCard.setVisibility(View.GONE);
+            setDefaultCard.setVisibility(View.GONE);
     }
 
     @OnClick(R.id.customtab_preference_view)
     public void onDefaultProviderClick() {
-        mListener.onDefaultCustomTabProviderClick(mCustomTabPreferenceView);
+        fragmentInteractionListener.onDefaultCustomTabProviderClick(customTabProviderView);
     }
 
     @OnClick(R.id.browser_preference_view)
     public void onSecondaryBrowserPreferenceClicked() {
-        mListener.onSecondaryBrowserClick(mBrowserPreferenceView);
+        fragmentInteractionListener.onSecondaryBrowserClick(browserPreferenceView);
     }
 
     @OnClick(R.id.favshare_preference_view)
     public void onFavSharePreferenceClicked() {
-        mListener.onFavoriteShareAppClick(mFavSharePreferenceView);
+        fragmentInteractionListener.onFavoriteShareAppClick(favSharePreferenceView);
     }
 
     @OnClick(R.id.set_default_card)

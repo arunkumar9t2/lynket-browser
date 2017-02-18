@@ -232,7 +232,6 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
                                 case 2:
                                     mHelper.launchPurchaseFlow(DonateActivity.this, PREMIUM_SKU, RC_REQUEST,
                                             mPurchaseFinishedListener, "premium");
-                                    return;
                             }
                     }
                 });

@@ -16,6 +16,7 @@ public class Benchmark {
         throw new AssertionError();
     }
 
+    @SuppressWarnings("SameParameterValue")
     public static void start(@Nullable String name) {
         startNs = System.nanoTime();
         process = name != null ? name : "";

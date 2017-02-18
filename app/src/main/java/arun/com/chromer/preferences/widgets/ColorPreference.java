@@ -15,10 +15,9 @@ import arun.com.chromer.R;
  * Created by Arun on 16/04/2016.
  */
 public class ColorPreference extends Preference {
-    private View mColorIndicator;
-
+    private View colorIndicator;
     @ColorInt
-    private int mColor = 0;
+    private int color = 0;
 
     private int DEFAULT_COLOR = 0;
 
@@ -46,7 +45,7 @@ public class ColorPreference extends Preference {
             TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.ColorPreference);
             int colorRes = ta.getResourceId(R.styleable.ColorPreference_color, 0);
             if (colorRes != 0) {
-                mColor = ContextCompat.getColor(getContext(), colorRes);
+                color = ContextCompat.getColor(getContext(), colorRes);
             }
             ta.recycle();
         }
@@ -55,10 +54,10 @@ public class ColorPreference extends Preference {
     @Override
     protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
         if (restorePersistedValue) {
-            mColor = this.getPersistedInt(DEFAULT_COLOR);
+            color = this.getPersistedInt(DEFAULT_COLOR);
         } else {
-            mColor = (int) defaultValue;
-            persistInt(mColor);
+            color = (int) defaultValue;
+            persistInt(color);
         }
     }
 
@@ -70,24 +69,24 @@ public class ColorPreference extends Preference {
     @Override
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
-        mColorIndicator = holder.findViewById(R.id.color_preview);
+        colorIndicator = holder.findViewById(R.id.color_preview);
         PreferenceIconLayoutHelper.applyLayoutChanges(holder, isEnabled());
         invalidate();
     }
 
     private void invalidate() {
-        if (mColorIndicator != null) {
-            mColorIndicator.setBackgroundColor(mColor);
+        if (colorIndicator != null) {
+            colorIndicator.setBackgroundColor(color);
         }
     }
 
     @ColorInt
     public int getColor() {
-        return getPersistedInt(mColor);
+        return getPersistedInt(color);
     }
 
     public void setColor(@ColorInt int color) {
-        mColor = color;
+        this.color = color;
         persistInt(color);
         setSummary(colorHexValue());
         invalidate();
@@ -95,7 +94,7 @@ public class ColorPreference extends Preference {
 
     private String colorHexValue() {
         //noinspection PointlessBitwiseExpression
-        return String.format("#%06X", (0xFFFFFF & mColor));
+        return String.format("#%06X", (0xFFFFFF & color));
     }
 
     public void refreshSummary() {

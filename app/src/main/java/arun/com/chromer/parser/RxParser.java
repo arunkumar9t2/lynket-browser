@@ -1,4 +1,4 @@
-package arun.com.chromer.webheads.helper;
+package arun.com.chromer.parser;
 
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
@@ -9,8 +9,6 @@ import com.chimbori.crux.articles.Article;
 import com.chimbori.crux.articles.Extractor;
 import com.chimbori.crux.urls.CandidateURL;
 
-import arun.com.chromer.Chromer;
-import okhttp3.Request;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -29,10 +27,6 @@ public class RxParser {
     private final SerializedSubject<String, String> parserSubject = PublishSubject.<String>create().toSerialized();
     // Singleton
     private static volatile RxParser INSTANCE = null;
-    // We will spoof as an iPad so that websites properly expose their shortcut icon. Even Google.com
-    // does not provide bigger icons when we go as Android.
-    private static final String USER_AGENT = "Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25";
-    private static final String CHROMER = "Chromer";
     // No that determines no of pages that can be concurrently parsed.
     private static final int MAX_CONCURRENT_PARSING = 4;
 
@@ -142,29 +136,18 @@ public class RxParser {
                 public Pair<String, Article> call(final String url) {
                     Article article = null;
                     try {
-                        final CandidateURL candidateUrl = new CandidateURL(url);
-                        if (candidateUrl.isLikelyArticle()) {
-                            final Request request = new Request.Builder()
-                                    .url(url)
-                                    .header("User-Agent", USER_AGENT)
-                                    .header("Referer", CHROMER)
-                                    .build();
-
-                            String webSiteString = Chromer.getOkHttpClient()
-                                    .newCall(request)
-                                    .execute()
-                                    .body()
-                                    .string();
-
+                        final String expanded = WebsiteDownloader.unShortenUrl(url);
+                        final CandidateURL candidateUrl = new CandidateURL(expanded);
+                        if (candidateUrl.resolveRedirects().isLikelyArticle()) {
+                            String webSiteString = WebsiteDownloader.htmlString(candidateUrl.toString());
                             article = Extractor.with(url, webSiteString)
                                     .extractMetadata()
                                     .article();
-
                             // Dispose string
                             webSiteString = null;
                             Timber.d("Fetched %s in %s", url, getThreadName());
                         }
-                    } catch (Exception e) {
+                    } catch (Exception | OutOfMemoryError e) {
                         Timber.e(e.getMessage());
                         Observable.error(e);
                     }
@@ -172,9 +155,6 @@ public class RxParser {
                 }
             };
 
-    /**
-     * Prints the current active thread. Only for debug purposes.
-     */
     private static void printThread() {
         Timber.d("Thread: %s", getThreadName());
     }

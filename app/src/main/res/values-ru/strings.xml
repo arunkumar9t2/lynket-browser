@@ -153,7 +153,6 @@
     <string name="blacklist_explanation">Запуская ссылки через приложение которые вы добавили в чёрный список будет перенаправлено на ваш вторичный браузер</string>
     <string name="revoke_accessibility_permission">Теперь вы можете отозвать разрешение доступности службы Chromer.</string>
     <string name="last_fetched_urls">Последние предзагруженные ссылки</string>
-    <string name="blacklist_on">Фильтрование приложений включено %s</string>
     <string name="translations">Переводы</string>
     <string name="merge_tabs">Вкладки в списке недавних приложений</string>
     <string name="merge_tabs_explanation">Вкладки Chromer будут раздельно отображены в списке недавно запущенных приложений.</string>

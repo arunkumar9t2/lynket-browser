@@ -70,8 +70,7 @@ interface Blacklist {
             }).filter(new Func1<ResolveInfo, Boolean>() {
                 @Override
                 public Boolean call(ResolveInfo resolveInfo) {
-                    if (resolveInfo == null) return false;
-                    return !resolveInfo.activityInfo.packageName.equalsIgnoreCase(context.getPackageName());
+                    return resolveInfo != null && !resolveInfo.activityInfo.packageName.equalsIgnoreCase(context.getPackageName());
                 }
             }).map(new Func1<ResolveInfo, App>() {
                 @Override

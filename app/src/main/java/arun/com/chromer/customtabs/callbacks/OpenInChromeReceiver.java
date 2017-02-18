@@ -16,15 +16,12 @@ public class OpenInChromeReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        String url = intent.getDataString();
-
+        final String url = intent.getDataString();
         if (url != null) {
             final String customTabPkg = Preferences.customTabApp(context);
-
             if (Utils.isPackageInstalled(context, customTabPkg)) {
-                Intent chromeIntentExplicit = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                final Intent chromeIntentExplicit = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 final ComponentName cN = Utils.getBrowserComponentForPackage(context, customTabPkg);
-
                 if (cN != null) {
                     chromeIntentExplicit.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     chromeIntentExplicit.setComponent(cN);

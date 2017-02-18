@@ -11,7 +11,7 @@ import android.view.View;
  * icon frame and icon itself so that it looks better
  */
 public class IconSwitchPreference extends SwitchPreferenceCompat {
-    private boolean mHideSwitch;
+    private boolean hideSwitch;
 
     public IconSwitchPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
@@ -34,16 +34,16 @@ public class IconSwitchPreference extends SwitchPreferenceCompat {
         super.onBindViewHolder(holder);
         PreferenceIconLayoutHelper.applyLayoutChanges(holder, isEnabled());
         View switchView = holder.findViewById(android.support.v7.preference.R.id.switchWidget);
-        if (mHideSwitch && switchView != null) {
+        if (hideSwitch && switchView != null) {
             switchView.setVisibility(View.GONE);
         }
     }
 
     public void hideSwitch() {
-        mHideSwitch = true;
+        hideSwitch = true;
     }
 
     public void showSwitch() {
-        mHideSwitch = false;
+        hideSwitch = false;
     }
 }

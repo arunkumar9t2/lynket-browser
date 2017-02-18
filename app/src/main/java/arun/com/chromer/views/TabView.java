@@ -37,17 +37,21 @@ public class TabView extends FrameLayout {
     public static final int TAB_TYPE_OPTIONS = 0;
     public static final int TAB_TYPE_WEB_HEADS = 1;
     public static final int TAB_TYPE_CUSTOMIZE = 2;
+
     @ColorInt
     private static final int SELECTED_COLOR = Color.WHITE;
     @ColorInt
     private static final int UN_SELECTED_COLOR = ColorUtils.setAlphaComponent(SELECTED_COLOR, 178);
+
     @BindView(R.id.tab_view_icon)
-    public ImageView mTabIcon;
+    public ImageView tabIcon;
     @BindView(R.id.tab_view_text)
-    public TextView mTabText;
+    public TextView text;
+
     private float initialIconX = 0;
     private float initialTextX = 0;
-    private boolean mSelected;
+    private boolean selected;
+
     @TabType
     private int mTabType = TAB_TYPE_OPTIONS;
 
@@ -72,44 +76,44 @@ public class TabView extends FrameLayout {
         ButterKnife.bind(this);
         switch (mTabType) {
             case TAB_TYPE_OPTIONS:
-                mTabIcon.setImageDrawable(new IconicsDrawable(getContext())
+                tabIcon.setImageDrawable(new IconicsDrawable(getContext())
                         .icon(CommunityMaterial.Icon.cmd_settings)
                         .color(SELECTED_COLOR)
                         .sizeDp(23));
-                mTabText.setText(R.string.options);
-                mTabText.setTextColor(SELECTED_COLOR);
+                text.setText(R.string.options);
+                text.setTextColor(SELECTED_COLOR);
                 break;
             case TAB_TYPE_WEB_HEADS:
-                mTabIcon.setImageDrawable(new IconicsDrawable(getContext())
+                tabIcon.setImageDrawable(new IconicsDrawable(getContext())
                         .icon(CommunityMaterial.Icon.cmd_chart_bubble)
                         .color(UN_SELECTED_COLOR)
                         .sizeDp(23));
-                mTabText.setText(R.string.web_heads);
-                mTabText.setTextColor(UN_SELECTED_COLOR);
+                text.setText(R.string.web_heads);
+                text.setTextColor(UN_SELECTED_COLOR);
                 break;
             case TAB_TYPE_CUSTOMIZE:
-                mTabIcon.setImageDrawable(new IconicsDrawable(getContext())
+                tabIcon.setImageDrawable(new IconicsDrawable(getContext())
                         .icon(CommunityMaterial.Icon.cmd_format_paint)
                         .color(UN_SELECTED_COLOR)
                         .sizeDp(23));
-                mTabText.setText(R.string.customize);
-                mTabText.setTextColor(UN_SELECTED_COLOR);
+                text.setText(R.string.customize);
+                text.setTextColor(UN_SELECTED_COLOR);
                 break;
         }
         getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                int totalWidth = mTabIcon.getWidth() + Utils.dpToPx(5) + mTabText.getWidth();
+                int totalWidth = tabIcon.getWidth() + Utils.dpToPx(5) + text.getWidth();
                 int layoutWidth = getWidth();
                 initialIconX = (layoutWidth / 2) - (totalWidth / 2);
-                mTabIcon.setX(initialIconX);
-                initialTextX = initialIconX + mTabIcon.getWidth() + Utils.dpToPx(10);
-                mTabText.setX(initialTextX);
+                tabIcon.setX(initialIconX);
+                initialTextX = initialIconX + tabIcon.getWidth() + Utils.dpToPx(10);
+                text.setX(initialTextX);
 
-                mTabText.setPivotX(0);
-                mTabText.setPivotY(mTabText.getHeight() / 2);
+                text.setPivotX(0);
+                text.setPivotY(text.getHeight() / 2);
                 // Refresh animations
-                setSelected(mSelected);
+                setSelected(selected);
                 getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
@@ -117,40 +121,40 @@ public class TabView extends FrameLayout {
 
     @Override
     public void setSelected(boolean selected) {
-        mSelected = selected;
-        if (mTabIcon == null || mTabText == null) return;
+        this.selected = selected;
+        if (tabIcon == null || text == null) return;
         if (selected) {
-            mTabText.setTextColor(SELECTED_COLOR);
-            IconicsDrawable drawable = (IconicsDrawable) mTabIcon.getDrawable();
-            mTabIcon.setImageDrawable(drawable.color(SELECTED_COLOR));
+            text.setTextColor(SELECTED_COLOR);
+            IconicsDrawable drawable = (IconicsDrawable) tabIcon.getDrawable();
+            tabIcon.setImageDrawable(drawable.color(SELECTED_COLOR));
             selectedAnimation();
         } else {
-            mTabText.setTextColor(UN_SELECTED_COLOR);
-            IconicsDrawable drawable = (IconicsDrawable) mTabIcon.getDrawable();
-            mTabIcon.setImageDrawable(drawable.color(UN_SELECTED_COLOR));
+            text.setTextColor(UN_SELECTED_COLOR);
+            IconicsDrawable drawable = (IconicsDrawable) tabIcon.getDrawable();
+            tabIcon.setImageDrawable(drawable.color(UN_SELECTED_COLOR));
             unSelectedAnimation();
         }
     }
 
     private float getIconCentreInLayout() {
-        return ((getWidth() / 2) - (mTabIcon.getWidth() / 2));
+        return ((getWidth() / 2) - (tabIcon.getWidth() / 2));
     }
 
     private void clearAnimations() {
-        mTabText.clearAnimation();
-        mTabIcon.clearAnimation();
+        text.clearAnimation();
+        tabIcon.clearAnimation();
     }
 
     private void unSelectedAnimation() {
         clearAnimations();
         final AnimatorSet transformAnimator = new AnimatorSet();
         transformAnimator.playTogether(
-                ObjectAnimator.ofFloat(mTabIcon, "translationX", initialIconX),
-                ObjectAnimator.ofFloat(mTabIcon, "scaleX", 0.75f),
-                ObjectAnimator.ofFloat(mTabIcon, "scaleY", 0.75f),
-                ObjectAnimator.ofFloat(mTabText, "scaleX", 1f),
-                ObjectAnimator.ofFloat(mTabText, "scaleY", 1f),
-                ObjectAnimator.ofFloat(mTabText, "alpha", 1f)
+                ObjectAnimator.ofFloat(tabIcon, "translationX", initialIconX),
+                ObjectAnimator.ofFloat(tabIcon, "scaleX", 0.75f),
+                ObjectAnimator.ofFloat(tabIcon, "scaleY", 0.75f),
+                ObjectAnimator.ofFloat(text, "scaleX", 1f),
+                ObjectAnimator.ofFloat(text, "scaleY", 1f),
+                ObjectAnimator.ofFloat(text, "alpha", 1f)
         );
         transformAnimator.setDuration(275);
         transformAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -167,12 +171,12 @@ public class TabView extends FrameLayout {
         clearAnimations();
         final AnimatorSet transformAnimator = new AnimatorSet();
         transformAnimator.playTogether(
-                ObjectAnimator.ofFloat(mTabIcon, "translationX", getIconCentreInLayout()),
-                ObjectAnimator.ofFloat(mTabIcon, "scaleX", 1f),
-                ObjectAnimator.ofFloat(mTabIcon, "scaleY", 1f),
-                ObjectAnimator.ofFloat(mTabText, "scaleX", 0f),
-                ObjectAnimator.ofFloat(mTabText, "scaleY", 0f),
-                ObjectAnimator.ofFloat(mTabText, "alpha", 0f)
+                ObjectAnimator.ofFloat(tabIcon, "translationX", getIconCentreInLayout()),
+                ObjectAnimator.ofFloat(tabIcon, "scaleX", 1f),
+                ObjectAnimator.ofFloat(tabIcon, "scaleY", 1f),
+                ObjectAnimator.ofFloat(text, "scaleX", 0f),
+                ObjectAnimator.ofFloat(text, "scaleY", 0f),
+                ObjectAnimator.ofFloat(text, "alpha", 0f)
         );
         transformAnimator.setDuration(275);
         transformAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -189,13 +193,13 @@ public class TabView extends FrameLayout {
         Animator animator = null;
         switch (mTabType) {
             case TAB_TYPE_OPTIONS:
-                animator = ObjectAnimator.ofFloat(mTabIcon, "rotation", 180);
+                animator = ObjectAnimator.ofFloat(tabIcon, "rotation", 180);
                 break;
             case TAB_TYPE_WEB_HEADS:
-                animator = ObjectAnimator.ofFloat(mTabIcon, "rotation", 125);
+                animator = ObjectAnimator.ofFloat(tabIcon, "rotation", 125);
                 break;
             case TAB_TYPE_CUSTOMIZE:
-                animator = ObjectAnimator.ofFloat(mTabIcon, "scaleY", 1.2f);
+                animator = ObjectAnimator.ofFloat(tabIcon, "scaleY", 1.2f);
                 ((ObjectAnimator) animator).setRepeatMode(ValueAnimator.REVERSE);
                 ((ObjectAnimator) animator).setRepeatCount(3);
                 animator.setInterpolator(new LinearInterpolator());
@@ -210,13 +214,13 @@ public class TabView extends FrameLayout {
         Animator animator = null;
         switch (mTabType) {
             case TAB_TYPE_OPTIONS:
-                animator = ObjectAnimator.ofFloat(mTabIcon, "rotation", -180);
+                animator = ObjectAnimator.ofFloat(tabIcon, "rotation", -180);
                 break;
             case TAB_TYPE_WEB_HEADS:
-                animator = ObjectAnimator.ofFloat(mTabIcon, "rotation", -90);
+                animator = ObjectAnimator.ofFloat(tabIcon, "rotation", -90);
                 break;
             case TAB_TYPE_CUSTOMIZE:
-                animator = ObjectAnimator.ofFloat(mTabIcon, "scaleY", 0.75f);
+                animator = ObjectAnimator.ofFloat(tabIcon, "scaleY", 0.75f);
                 break;
         }
         if (animator != null)
@@ -226,6 +230,6 @@ public class TabView extends FrameLayout {
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({TAB_TYPE_OPTIONS, TAB_TYPE_WEB_HEADS, TAB_TYPE_CUSTOMIZE})
-    public @interface TabType {
+    @interface TabType {
     }
 }

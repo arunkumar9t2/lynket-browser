@@ -66,7 +66,7 @@ public abstract class DividerLessPreferenceFragment extends PreferenceFragmentCo
         }
     }
 
-    private void debug(String string, Object... args) {
+    private void debug(@SuppressWarnings("SameParameterValue") String string, Object... args) {
         //noinspection ConstantConditions
         if (mDebug) {
             Timber.d(string, args);

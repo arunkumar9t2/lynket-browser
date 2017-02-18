@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<resources>
+    <string-array name="animationValues">
+        <item>なし</item>
+        <item>右にスライド</item>
+        <item>上にスライド</item>
+    </string-array>
+    <string-array name="animationSpeedValues">
+        <item>普通</item>
+        <item>短め</item>
+    </string-array>
+    <string-array name="actionValues">
+        <item>サブブラウザ</item>
+        <item>お気に入りの共有アプリ</item>
+        <item>General share</item>
+    </string-array>
+    <string-array name="webHeadsSpawnValues">
+        <item>右</item>
+        <item>左</item>
+    </string-array>
+    <string-array name="webHeadsSizeValues">
+        <item>普通</item>
+        <item>小さい</item>
+    </string-array>
+    <string-array name="webHeadsSizeKeys">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string name="share_text">Chromer で、速くて安全なブラウジングをご体験ください！ ここからダウンロード
+ https://goo.gl/992ils</string>
+    <string name="share_via">共有…</string>
+    <string name="custom_tab_provider_not_found">互換性のあるカスタムタブプロバイダーが見つかりません</string>
+    <string name="custom_tab_provider_not_found_expln">Chromerを使用するには、カスタムタブ対応のブラウザが必要です。 PlayストアからGoogle Chrome（無料）をインストールしますか？
+既にインストールしている場合は最新バージョンに更新してください。</string>
+    <string name="install">インストール</string>
+    <string name="licenses">ライセンス</string>
+    <string name="about">Chromer について</string>
+    <string name="help_chromer_grow">CHromer の成長を手伝ってください！</string>
+    <string name="share">共有</string>
+    <string name="share_with">%1$s と共有します</string>
+    <string name="more_custom_tbs">カスタムタブの詳細</string>
+    <string name="rate_play_store">Play ストアで評価</string>
+    <string name="feedback">フィードバック</string>
+    <string name="intro">紹介</string>
+    <string name="send_email">メールを送信…</string>
+    <string name="fallback_msg">カスタムタブで開くことができませんでした。</string>
+    <string name="open_with">開く…</string>
+    <string name="open_in_browser">%1$s で開く</string>
+    <string name="unxp_err">予期せぬエラーが発生しました。やり直してください。</string>
+    <string name="unsupported_link">サポートされていないリンクです。やり直してください。</string>
+    <string name="couldnt_load_price">値を読み込めません。</string>
+    <string name="coffee">コーヒー</string>
+    <string name="lunch">昼食</string>
+    <string name="premium_donation">プレミアム寄付</string>
+    <string name="invalid_link">無効なリンク</string>
+    <string name="copied">コピーしました</string>
+    <string name="copy_link">リンクをコピー</string>
+    <string name="add_to_homescreen">ホーム画面に追加</string>
+    <string name="intro_1">こんにちは！\nChromer は軽くて安全で速いブラウザです。</string>
+    <string name="intro_2">Google Chrome のカスタムタブ機能を使用していて、リンクを速く読み込むために設計された、究極的に軽い Chrome タブです。</string>
+    <string name="intro_5_new">画面上のリンクをスキャンし、バックグラウンドで読み込むことで、レンダリングのパフォーマンスを向上させることができます。\n\nまた、起動時間を短縮するためにブラウザをメモリに保持することもできます。</string>
+    <string name="intro_4_new">複数のリンクを開いたり、バックグラウンドで読み込んだりするときに、複数のリンクをフローティングバブルにスタックすることができます。\n\n<b>LEARN MORE</b></string>
+    <string name="version">バージョン</string>
+    <string name="changelog">更新履歴</string>
+    <string name="join_google_plus">Google+ コミュニティに参加</string>
+    <string name="share_ideas">アイディアを共有してください！</string>
+    <string name="support_development">開発を支援</string>
+    <string name="consider_donation">寄付のご検討お願いします</string>
+    <string name="add_to_circles">Google+ サークルに追加</string>
+    <string name="follow_twitter">Twitter でフォロー</string>
+    <string name="connect_linkedIn">LinkedIn で接続</string>
+    <string name="more_apps">他のアプリ</string>
+    <string name="author">製作者</string>
+    <string name="added">追加しました</string>
+    <string name="settings">設定</string>
+    <string name="colored_toolbar">ツールバーの色</string>
+    <string name="choose_animation">起動アニメーション</string>
+    <string name="animation_speed">アニメーションの速度</string>
+    <string name="dynamic_toolbar_color">ツールバーの色を動的に</string>
+    <string name="set_default_chromer">既定のブラウザに設定</string>
+    <string name="only_on_wifi">Wi-Fi 時のみスキャン</string>
+    <string name="default_toolbar_color">既定のツールバーの色</string>
+    <string name="web_heads_color">ウェブヘッドの色</string>
+    <string name="fav_share_success">%1$s がお気に入り共有アプリとして設定されました！</string>
+    <string name="based_on_app">アプリに依存</string>
+    <string name="based_on_web">ウェブサイトに依存</string>
+    <string name="fav_share_app">お気に入り共有アプリ</string>
+    <string name="choose_fav_share_app">お気に入り共有アプリを選択</string>
+    <string name="web_heads">ウェブヘッド</string>
+    <string name="credits">クレジット</string>
+    <string name="icon_design">アイコンデザイン</string>
+    <string name="tap_close_all">タップしてすべて閉じる</string>
+    <string name="join_beta">ベータに参加</string>
+    <string name="become_a_tester">テスターになる</string>
+    <string name="loading">読み込み中…</string>
+    <string name="please_wait">お待ちください</string>
+    <string name="translations">翻訳</string>
+    <string name="bottom_bar_pref_title">ボトムバーを表示</string>
+    <string name="bottom_bar">ボトムバー</string>
+    <string name="open_in_new_tab">新しいタブで開く</string>
+    <string name="options">オプション</string>
+    <string name="customize">カスタマイズ</string>
+    <string name="behavior_preferences">動作</string>
+    <string name="notifications">通知</string>
+    <string name="web_heads_description">フローティングバブルでリンクを開く</string>
+    <string name="webhead_size_title">大きさ</string>
+    <string name="webhead_size_dialog">ウェブヘッドの大きさを選択</string>
+    <string name="see_whats_new">更新履歴を見る</string>
+    <string name="help_translations">あなたの言語への翻訳を手伝ってください</string>
+    <string name="merge_tabs_off_title">注意</string>
+    <string name="web_sites">ウェブサイト</string>
+    <string name="share_all">すべてを共有</string>
+    <string name="thank_you">ありがとうございます。</string>
+    <string name="tile_label">ウェブヘッド</string>
+</resources>

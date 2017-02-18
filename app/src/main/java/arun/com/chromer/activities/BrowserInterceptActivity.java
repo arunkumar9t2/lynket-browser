@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -23,6 +22,8 @@ import arun.com.chromer.R;
 import arun.com.chromer.activities.blacklist.BlackListManager;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.shared.AppDetectionManager;
+import arun.com.chromer.util.DocumentUtils;
+import arun.com.chromer.util.SafeIntent;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.ui.ProxyActivity;
 import timber.log.Timber;
@@ -30,34 +31,30 @@ import timber.log.Timber;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
-import static android.content.Intent.FLAG_ACTIVITY_NEW_DOCUMENT;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.os.Build.VERSION_CODES.LOLLIPOP;
-import static android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION;
 import static android.widget.Toast.LENGTH_LONG;
 import static android.widget.Toast.LENGTH_SHORT;
-import static arun.com.chromer.shared.Constants.ACTION_CLOSE_MAIN;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_NEW_TAB;
 
 @SuppressLint("GoogleAppIndexingApiWarning")
 public class BrowserInterceptActivity extends AppCompatActivity {
     private MaterialDialog dialog;
+    private SafeIntent safeIntent;
 
     @TargetApi(LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DocumentUtils.closeRootActivity(this);
 
-        if (getIntent() == null || getIntent().getData() == null) {
-            Toast.makeText(this, getString(R.string.unsupported_link), LENGTH_SHORT).show();
-            finish();
+        safeIntent = new SafeIntent(getIntent());
+        if (safeIntent.getData() == null) {
+            exitWithToast();
             return;
         }
 
-        signalMainFinish();
-
-        final boolean isFromNewTab = getIntent().getBooleanExtra(EXTRA_KEY_FROM_NEW_TAB, false);
-
+        final boolean isFromNewTab = safeIntent.getBooleanExtra(EXTRA_KEY_FROM_NEW_TAB, false);
         // Check if we should blacklist the launching app
         if (Preferences.blacklist(this)) {
             final String lastApp = AppDetectionManager.getInstance(this).getNonFilteredPackage();
@@ -74,7 +71,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (!Settings.canDrawOverlays(this)) {
                     Toast.makeText(this, getString(R.string.web_head_permission_toast), LENGTH_LONG).show();
-                    final Intent intent = new Intent(ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
+                    final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
                     startActivity(intent);
                 } else {
                     launchWebHead(isFromNewTab);
@@ -84,9 +81,9 @@ public class BrowserInterceptActivity extends AppCompatActivity {
             }
         } else {
             final Intent customTabActivity = new Intent(this, CustomTabActivity.class);
-            customTabActivity.setData(getIntent().getData());
+            customTabActivity.setData(safeIntent.getData());
             if (isFromNewTab || Preferences.mergeTabs(this)) {
-                customTabActivity.addFlags(FLAG_ACTIVITY_NEW_DOCUMENT);
+                customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
                 customTabActivity.addFlags(FLAG_ACTIVITY_MULTIPLE_TASK);
             }
             customTabActivity.putExtra(EXTRA_KEY_FROM_NEW_TAB, isFromNewTab);
@@ -96,9 +93,9 @@ public class BrowserInterceptActivity extends AppCompatActivity {
         finish();
     }
 
-    private void signalMainFinish() {
-        LocalBroadcastManager.getInstance(this)
-                .sendBroadcast(new Intent(ACTION_CLOSE_MAIN));
+    private void exitWithToast() {
+        Toast.makeText(this, getString(R.string.unsupported_link), LENGTH_SHORT).show();
+        finish();
     }
 
     /**
@@ -168,15 +165,14 @@ public class BrowserInterceptActivity extends AppCompatActivity {
         webHeadLauncher.addFlags(FLAG_ACTIVITY_NEW_TASK);
         if (!isNewTab)
             webHeadLauncher.addFlags(FLAG_ACTIVITY_CLEAR_TASK);
-
         webHeadLauncher.putExtra(EXTRA_KEY_FROM_NEW_TAB, isNewTab);
-        webHeadLauncher.setData(getIntent().getData());
+        webHeadLauncher.setData(safeIntent.getData());
         startActivity(webHeadLauncher);
     }
 
     @NonNull
     private Intent getOriginalIntentCopy(@NonNull Intent originalIntent) {
-        Intent copy = new Intent(Intent.ACTION_VIEW, originalIntent.getData());
+        final Intent copy = new Intent(Intent.ACTION_VIEW, safeIntent.getData());
         if (originalIntent.getExtras() != null) {
             copy.putExtras(originalIntent.getExtras());
         }

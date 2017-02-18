@@ -32,7 +32,11 @@ public class CustomTabManager implements ServiceConnectionCallback {
      */
     public void unbindCustomTabsService(Context context) {
         if (mConnection == null) return;
-        context.unbindService(mConnection);
+        try {
+            context.unbindService(mConnection);
+        } catch (IllegalArgumentException e) {
+            Timber.e("Ignored exception trying to unbind without binding first");
+        }
         mClient = null;
         mCustomTabsSession = null;
         mConnection = null;

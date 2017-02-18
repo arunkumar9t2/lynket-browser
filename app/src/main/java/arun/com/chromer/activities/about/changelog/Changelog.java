@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
@@ -41,6 +42,11 @@ public class Changelog {
                     super.onPageFinished(view, url);
                     content.removeView(progress);
                     webView.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                    return super.shouldOverrideUrlLoading(view, request);
                 }
 
                 @Override

@@ -18,6 +18,13 @@ a {
 <body>
 <strong>You can view this again in the about screen.</strong>
 <br></br>
+<strong>1.6.3</strong>
+<ul>
+    <li><b>NEW:</b>Pressing new tab in bottom bar will show a dialog instead of automatically opening the link.</li>
+    <li>Handle crashes when opening links from Facebook</li>
+    <li>Crash fixes.</li>
+    <li>Synced translations</li>
+</ul>
 <strong>1.6.2</strong>
 <ul>
     <li><b>NEW:</b>Open with menu item. Provides ability to open link in any browser when viewing.</li>

@@ -24,9 +24,9 @@ import com.chimbori.crux.articles.Article;
 
 import arun.com.chromer.R;
 import arun.com.chromer.customtabs.CustomTabs;
+import arun.com.chromer.parser.RxParser;
 import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.util.Utils;
-import arun.com.chromer.webheads.helper.RxParser;
 import arun.com.chromer.webheads.helper.WebSite;
 import rx.SingleSubscriber;
 import rx.Subscription;
@@ -125,12 +125,15 @@ public class CustomTabActivity extends AppCompatActivity {
         minimizeReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equalsIgnoreCase(ACTION_MINIMIZE)
-                        && intent.hasExtra(EXTRA_TEXT)) {
+                if (intent.getAction().equalsIgnoreCase(ACTION_MINIMIZE) && intent.hasExtra(EXTRA_TEXT)) {
                     final String url = intent.getStringExtra(EXTRA_TEXT);
                     if (baseUrl.equalsIgnoreCase(url)) {
-                        Timber.d("Minimized %s", url);
-                        moveTaskToBack(true);
+                        try {
+                            Timber.d("Minimized %s", url);
+                            moveTaskToBack(true);
+                        } catch (Exception e) {
+                            Timber.e(e);
+                        }
                     }
                 }
             }
@@ -163,9 +166,9 @@ public class CustomTabActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(minimizeReceiver);
         subscriptions.clear();
+        super.onDestroy();
     }
 
     @TargetApi(LOLLIPOP)

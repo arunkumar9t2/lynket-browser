@@ -11,16 +11,12 @@
     </string-array>
     <string-array name="actionValues">
         <item>Navegador secundario</item>
-        <item>"Aplicación favorita para compartir"</item>
+        <item>Aplicación favorita para compartir</item>
         <item>General share</item>
     </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>Derecha</item>
         <item>Izquierda</item>
-    </string-array>
-    <string-array name="webHeadsSizeValues">
-        <item>Normal</item>
-        <item>Pequeño</item>
     </string-array>
     <string name="share_text">¡Oye mira \‘Chromer \’ para una rápida y segura experiencia de navegación! Descarguela aquí https://goo.gl/992ils</string>
     <string name="share_via">"Compartir vía… "</string>
@@ -51,4 +47,113 @@
     <string name="web_heads_description">Abrir enlaces en burbujas flotantes</string>
     <string name="webhead_size_title">Tamaño</string>
     <string name="webhead_size_dialog">Escoja el tamaño de las burbujas</string>
+    <string name="fallback_msg">No se pudo abrir la pestaña personalizada, volviendo a los navegadores normales</string>
+    <string name="open_with">Abrir con…</string>
+    <string name="open_in_browser">Abrir en %1$s</string>
+    <string name="unxp_err">"Error inesperado, vuelve a intentarlo "</string>
+    <string name="unsupported_link">No es un vínculo compatible, Vuelve a intentarlo.</string>
+    <string name="couldnt_load_price">"No se pudo cargar el costo "</string>
+    <string name="coffee">Café</string>
+    <string name="lunch">Almuerzo</string>
+    <string name="premium_donation">Donación premium</string>
+    <string name="invalid_link">"Enlace invalido "</string>
+    <string name="copied">"Copiado "</string>
+    <string name="copy_link">"Copiar enlace "</string>
+    <string name="add_to_homescreen">Añadir a la Pantalla de Inicio</string>
+    <string name="intro_1">Hola!\nChromer es un navegador ligero, seguro y rápido.\n</string>
+    <string name="intro_2">Utiliza la función de pestañas personalizadas de Google Chrome, que es una pestaña de Chrome extremadamente ligera diseñada para cargar rápidamente un enlace.</string>
+    <string name="intro_5_new">Puede escanear enlaces en su pantalla y cargarlos en segundo plano para aumentar el rendimiento de la representación.\n\nTambién puede mantener el navegador en la memoria para mejorar los tiempos de lanzamiento.</string>
+    <string name="intro_4_new">Puede apilar múltiples enlaces en burbujas flotantes al abrirlos y luego cargarlos en segundo plano.\n\n<b>APRENDE MÁS</b></string>
+    <string name="how_to_use">¿Como se usa?</string>
+    <string name="intro_6">Simplemente establezca Chrome como navegador predeterminado, Chrome mostrará el enlace de una manera no intrusiva. O elija Chromer cuando sea necesario</string>
+    <string name="why_use">¿Por que usarlo?</string>
+    <string name="intro_7_new">Carga Rápida y no intrusiva,\nReducido uso de Datos,\nInformación de inicio de sesión compartida de Chrome, por lo tanto auto completa formularios y SEGURO con las últimas actualizaciones.\n\nSus datos de navegación se sincronizan automáticamente con su cuenta de Google.\n\n\n</string>
+    <string name="version">"Versión "</string>
+    <string name="changelog">Registro de cambios</string>
+    <string name="join_google_plus">Únete a la comunidad de Google+</string>
+    <string name="share_ideas">¡Comparte tus ideas!</string>
+    <string name="support_development">Desarrollo de Soporte</string>
+    <string name="consider_donation">Considere una donación</string>
+    <string name="add_to_circles">Añadir a los Círculos de Google+</string>
+    <string name="follow_twitter">Siguenos en Twitter</string>
+    <string name="connect_linkedIn">Conectarse en LinkedIn</string>
+    <string name="more_apps">"Mas aplicaciones "</string>
+    <string name="author">"Author "</string>
+    <string name="added">"Adicional "</string>
+    <string name="settings">"Ajustes "</string>
+    <string name="colored_toolbar">Color de la Barra de Herramientas</string>
+    <string name="choose_animation">Animación de apertura</string>
+    <string name="animation_speed">Velocidad de animación</string>
+    <string name="default_pref_xpln">"Puede Establecer Chromer como predeterminado para abrir todos los enlaces, o puede elegir Chromer cuando se muestra la lista "</string>
+    <string name="personalization">"Personalización "</string>
+    <string name="default_clear_msg">Se establece como el navegador predeterminado, por favor, borrarlo haciendo clic en borrar valores predeterminados.</string>
+    <string name="dynamic_toolbar_color">Color dinámico de la barra de herramientas</string>
+    <string name="keep_chrome_warmedup">Mantenga su navegador en la memoria para un lanzamiento más rápido</string>
+    <string name="warmup_browser">"Calentamiento del navegador"</string>
+    <string name="set_default_chromer">"Establecer como navegador predeterminado "</string>
+    <string name="default_provider">Proveedor de pestañas personalizadas</string>
+    <string name="pre_fetch_content">"Captación previa del contenido "</string>
+    <string name="pre_fetch_desc">Analiza la pantalla de enlaces y carga en segundo plano para su lanzamiento instantáneo</string>
+    <string name="accessibility_description">"Este servicio será utilizado por Chromer para escanear enlaces de texto en la pantalla y cargarlos en segundo plano. Chromer no procesa ninguna otra información. Todavía puede usar Chromer en modo de luz si decide no conceder esto. Para obtener más información, inicie la aplicación Chromer."</string>
+    <string name="accessibility_dialog_title">Se requiere permiso de accesibilidad</string>
+    <string name="accessibility_dialog_desc">Para permitir que Chromer busque enlaces en cualquier aplicación, requiere que conceda permiso de servicio de accesibilidad. Por favor concede permiso de accesibilidad en la siguiente pantalla, después de lo cual puedes habilitar esta opción y disfrutar de lanzamientos rápidos.</string>
+    <string name="open_settings">Abrir ajustes</string>
+    <string name="only_on_wifi">Escanear sólo en Wifi</string>
+    <string name="show_notification">"Mostrar notificación cuando un enlace se busca previamente"</string>
+    <string name="default_toolbar_color">Color predeterminado de la barra de herramientas</string>
+    <string name="web_heads_color">Color de las cabezas web</string>
+    <string name="choose_secondary_browser">Navegador Secundario</string>
+    <string name="dynamic_toolbar_help">Para habilitar coloración dinámica de barra de herramientas, Chromer aprende los colores en silencio. Puede que no vienen inicialmente para un sitio web o una aplicación, pero va a mejorar con el tiempo con el uso. Disfruta!</string>
+    <string name="secondary_browser_success">%1$s Configurado como navegador secundario!</string>
+    <string name="fav_share_success">%1$s es su aplicación preferida para compartir</string>
+    <string name="based_on_app">Basado en la aplicación</string>
+    <string name="based_on_web">Basado en el sitio web</string>
+    <string name="preferred_action">Acción preferida</string>
+    <string name="fav_share_app">Aplicación favorita para compartir</string>
+    <string name="choose_fav_share_app">Elija su aplicación favorita para compartir</string>
+    <string name="dynamic_summary_appweb">El color se escogerá en base al sitio web si este lo permite y si no se escogerá el de la aplicación</string>
+    <string name="dynamic_summary_app">El color se escogerá en base a la aplicación que lance el sitio web</string>
+    <string name="dynamic_summary_web">El color se escogerá en base al sitio web lanzado</string>
+    <string name="no_option_selected">Ninguna opción seleccionada</string>
+    <string name="permission_required">Se necesita permiso</string>
+    <string name="usage_permission_explanation_appcolor">Para activar el coloreado dinámico de la barra de herramientas según la aplicación, Chromer necesita su permiso para saber qué aplicaciones está usando. ¿Quiere conceder este permiso ahora?</string>
+    <string name="usage_permission_explanation_blacklist">Para activar la lista negra de aplicaciones, Chromer necesita su permiso para saber qué aplicaciones está usando. ¿Quiere conceder este permiso ahora?</string>
+    <string name="grant">Conceder</string>
+    <string name="search_or_type_url">Busque o escriba una URL</string>
+    <string name="voice_prompt">Diga su consulta</string>
+    <string name="web_heads">Web Heads</string>
+    <string name="credits">Agradecimientos</string>
+    <string name="icon_design">Diseño de iconos</string>
+    <string name="tap_close_all">Toque para cerrar todas</string>
+    <string name="join_beta">Apúntese a la beta</string>
+    <string name="become_a_tester">Conviértase en tester</string>
+    <string name="no_voice_rec_apps">No se encontraron aplicaciones de reconocimiento de voz compatibles</string>
+    <string name="blacklisted_apps">Aplicaciones en lista negra</string>
+    <string name="loading">Cargando…</string>
+    <string name="please_wait">Espere</string>
+    <string name="last_fetched_urls">Últimas urls buscadas</string>
+    <string name="blacklist_on">Lista negra de aplicaciones activada</string>
+    <string name="blacklist_off">Lista negra de aplicaciones desactivada</string>
+    <string name="translations">Traducciones</string>
+    <string name="merge_tabs">Mezclar pestañas y aplicaciones</string>
+    <string name="already_loaded">Ya fue cargado</string>
+    <string name="add_home_screen_begun">El acceso directo será añadido en breve</string>
+    <string name="bottom_bar_pref_summary">Muestra una barra de herramientas adicional con opciones extra</string>
+    <string name="bottom_bar_pref_title">Mostrar barra inferior</string>
+    <string name="bottom_bar">Barra inferior</string>
+    <string name="open_in_new_tab">Abrir en nueva pestaña</string>
+    <string name="open_in_new_tab_error">Enlace no válido, ¿ha copiado algún texto o enlace con una pulsación larga en la página?</string>
+    <string name="see_whats_new">Vea las novedades</string>
+    <string name="help_translations">Ayude a traducir la aplicación a su idioma</string>
+    <string name="aggressive_background_loading">Carga agresiva en segundo plano</string>
+    <string name="merge_tabs_off_title">Atención</string>
+    <string name="merget_tabs_off_content">Desactivando la mezcla de pestañas y aplicaciones también desactiva la carga agresiva en segundo plano</string>
+    <string name="web_sites">Sitios web</string>
+    <string name="share_all">Compartir todo</string>
+    <string name="thank_you">¡Muchas gracias!</string>
+    <string name="save_time">Ahorre tiempo</string>
+    <string name="multiple_links">Múltiples enlaces</string>
+    <string name="avoid_back_fatigue">Evite el cansancio por pulsar atrás</string>
+    <string name="merge_tabs_explanation_intro">Sus aplicaciones y sitios web conviven en la misma pantalla de recientes</string>
+    <string name="improves_loading_times">Mejora los tiempos de carga</string>
 </resources>

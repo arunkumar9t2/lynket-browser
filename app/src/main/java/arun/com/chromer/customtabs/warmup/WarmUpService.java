@@ -14,11 +14,11 @@ import timber.log.Timber;
  */
 public class WarmUpService extends Service implements CustomTabManager.ConnectionCallback {
 
-    private static WarmUpService sWarmUpService = null;
-    private CustomTabManager mCustomTabManager;
+    private static WarmUpService warmUpService = null;
+    private CustomTabManager customTabManager;
 
     public static WarmUpService getInstance() {
-        return sWarmUpService;
+        return warmUpService;
     }
 
     @Nullable
@@ -30,39 +30,39 @@ public class WarmUpService extends Service implements CustomTabManager.Connectio
     @Override
     public void onCreate() {
         super.onCreate();
-        sWarmUpService = this;
+        warmUpService = this;
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (mCustomTabManager != null) {
+        if (customTabManager != null) {
             // Already an instance exists, so we will un bind the current connection and then bind again.
             Timber.d("Severing existing connection");
-            mCustomTabManager.unbindCustomTabsService(this);
+            customTabManager.unbindCustomTabsService(this);
         }
-        mCustomTabManager = new CustomTabManager();
-        mCustomTabManager.setConnectionCallback(this);
+        customTabManager = new CustomTabManager();
+        customTabManager.setConnectionCallback(this);
 
-        boolean success = mCustomTabManager.bindCustomTabsService(this);
+        boolean success = customTabManager.bindCustomTabsService(this);
         Timber.d("Was bound %b", success);
         return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
-        if (mCustomTabManager != null)
-            mCustomTabManager.unbindCustomTabsService(this);
-        mCustomTabManager = null;
-        sWarmUpService = null;
+        if (customTabManager != null)
+            customTabManager.unbindCustomTabsService(this);
+        customTabManager = null;
+        warmUpService = null;
         Timber.d("Died");
         super.onDestroy();
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
-        sWarmUpService = null;
-        if (mCustomTabManager != null)
-            mCustomTabManager.unbindCustomTabsService(this);
+        warmUpService = null;
+        if (customTabManager != null)
+            customTabManager.unbindCustomTabsService(this);
         return super.onUnbind(intent);
     }
 
@@ -78,8 +78,8 @@ public class WarmUpService extends Service implements CustomTabManager.Connectio
 
     @Nullable
     public CustomTabsSession getTabSession() {
-        if (mCustomTabManager != null) {
-            return mCustomTabManager.getSession();
+        if (customTabManager != null) {
+            return customTabManager.getSession();
         }
         return null;
     }

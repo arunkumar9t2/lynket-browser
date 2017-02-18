@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.StackingBehavior;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
@@ -70,33 +71,33 @@ import timber.log.Timber;
 public class MainActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback, OptionsFragment.FragmentInteractionListener {
 
     @BindView(R.id.bottomsheet)
-    public BottomSheetLayout mBottomSheet;
+    public BottomSheetLayout bottomSheetLayout;
     @BindView(R.id.material_search_view)
-    public MaterialSearchView mMaterialSearchView;
+    public MaterialSearchView materialSearchView;
     @BindView(R.id.toolbar)
-    public Toolbar mToolbar;
+    public Toolbar toolbar;
     @BindView(R.id.tab_layout)
-    public TabLayout mTabLayout;
+    public TabLayout tabLayout;
     @BindView(R.id.view_pager)
-    public ViewPager mViewPager;
+    public ViewPager viewPager;
     @BindView(R.id.coordinator_layout)
-    public CoordinatorLayout mCoordinatorLayout;
+    public CoordinatorLayout coordinatorLayout;
 
-    private CustomTabManager mCustomTabManager;
-    private Drawer mDrawer;
+    private CustomTabManager customTabManager;
+    private Drawer drawer;
     private BroadcastReceiver closeReceiver;
 
     @Override
     protected void onStart() {
         super.onStart();
-        mCustomTabManager.bindCustomTabsService(this);
+        customTabManager.bindCustomTabsService(this);
         // startService(new Intent(this, WebHeadService.class));
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        mCustomTabManager.unbindCustomTabsService(this);
+        customTabManager.unbindCustomTabsService(this);
         // stopService(new Intent(this, WebHeadService.class));
     }
 
@@ -145,35 +146,35 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         };
         LocalBroadcastManager.getInstance(this).registerReceiver(
                 closeReceiver,
-                new IntentFilter(Constants.ACTION_CLOSE_MAIN));
+                new IntentFilter(Constants.ACTION_CLOSE_ROOT));
     }
 
     private void setUpAppBarLayout() {
-        setSupportActionBar(mToolbar);
+        setSupportActionBar(toolbar);
 
-        mViewPager.setAdapter(new PagerAdapter(getSupportFragmentManager()));
-        mTabLayout.setupWithViewPager(mViewPager);
-        final TabLayout.Tab optionsTab = mTabLayout.getTabAt(0);
+        viewPager.setAdapter(new PagerAdapter(getSupportFragmentManager()));
+        tabLayout.setupWithViewPager(viewPager);
+        final TabLayout.Tab optionsTab = tabLayout.getTabAt(0);
         if (optionsTab != null) {
             final TabView tabView = new TabView(this, TabView.TAB_TYPE_OPTIONS);
             optionsTab.setCustomView(tabView);
             tabView.setSelected(true);
         }
 
-        final TabLayout.Tab webHeadsTab = mTabLayout.getTabAt(1);
+        final TabLayout.Tab webHeadsTab = tabLayout.getTabAt(1);
         if (webHeadsTab != null) {
             webHeadsTab.setCustomView(new TabView(this, TabView.TAB_TYPE_WEB_HEADS));
         }
 
-        final TabLayout.Tab customizeTab = mTabLayout.getTabAt(2);
+        final TabLayout.Tab customizeTab = tabLayout.getTabAt(2);
         if (customizeTab != null) {
             customizeTab.setCustomView(new TabView(this, TabView.TAB_TYPE_CUSTOMIZE));
         }
     }
 
     private void setupMaterialSearch() {
-        mMaterialSearchView.clearFocus();
-        mMaterialSearchView.setInteractionListener(new MaterialSearchView.SearchViewInteractionListener() {
+        materialSearchView.clearFocus();
+        materialSearchView.setInteractionListener(new MaterialSearchView.SearchViewInteractionListener() {
             @Override
             public void onVoiceIconClick() {
                 if (Utils.isVoiceRecognizerPresent(getApplicationContext())) {
@@ -190,28 +191,28 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
             @Override
             public void onHamburgerClick() {
-                if (mDrawer.isDrawerOpen()) {
-                    mDrawer.closeDrawer();
+                if (drawer.isDrawerOpen()) {
+                    drawer.closeDrawer();
                 } else {
-                    mDrawer.openDrawer();
+                    drawer.openDrawer();
                 }
             }
         });
     }
 
     public void snack(@NonNull String textToSnack) {
-        Snackbar.make(mCoordinatorLayout, textToSnack, Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_SHORT).show();
     }
 
     public void snackLong(@NonNull String textToSnack) {
-        Snackbar.make(mCoordinatorLayout, textToSnack, Snackbar.LENGTH_LONG).show();
+        Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_LONG).show();
     }
 
 
     private void setupDrawer() {
-        mDrawer = new DrawerBuilder()
+        drawer = new DrawerBuilder()
                 .withActivity(this)
-                .withToolbar(mToolbar)
+                .withToolbar(toolbar)
                 .withAccountHeader(new AccountHeaderBuilder()
                         .withActivity(this)
                         .withHeaderBackground(R.drawable.chromer)
@@ -306,7 +307,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 })
                 .withDelayDrawerClickEvent(200)
                 .build();
-        mDrawer.setSelection(-1);
+        drawer.setSelection(-1);
     }
 
     private void showJoinBetaDialog() {
@@ -314,7 +315,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 .title(R.string.join_beta)
                 .content(R.string.join_beta_content)
                 .btnStackedGravity(GravityEnum.END)
-                .forceStacking(true)
+                .stackingBehavior(StackingBehavior.ALWAYS)
                 .positiveText(R.string.join_google_plus)
                 .neutralText(R.string.become_a_tester)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -344,7 +345,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 Benchmark.start("Custom tab launching");
                 CustomTabs.from(this)
                         .forUrl(url)
-                        .withSession(mCustomTabManager.getSession())
+                        .withSession(customTabManager.getSession())
                         .prepare()
                         .launch();
                 Benchmark.end();
@@ -354,23 +355,23 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private void refreshCustomTabBindings() {
         // Unbind from currently bound service
-        mCustomTabManager.unbindCustomTabsService(this);
+        customTabManager.unbindCustomTabsService(this);
         setupCustomTab();
-        mCustomTabManager.bindCustomTabsService(this);
+        customTabManager.bindCustomTabsService(this);
 
         // Restarting services will make them update their bindings.
         ServiceUtil.refreshCustomTabBindings(getApplicationContext());
     }
 
     private void setupCustomTab() {
-        mCustomTabManager = new CustomTabManager();
-        mCustomTabManager.setConnectionCallback(
+        customTabManager = new CustomTabManager();
+        customTabManager.setConnectionCallback(
                 new CustomTabManager.ConnectionCallback() {
                     @Override
                     public void onCustomTabsConnected() {
                         Timber.d("Connected to custom tabs");
                         try {
-                            mCustomTabManager.mayLaunchUrl(Uri.parse(Constants.GOOGLE_URL), null, null);
+                            customTabManager.mayLaunchUrl(Uri.parse(Constants.GOOGLE_URL), null, null);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -423,13 +424,13 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     @Override
     public void onBackPressed() {
-        if (mMaterialSearchView.hasFocus()) {
-            mMaterialSearchView.clearFocus();
+        if (materialSearchView.hasFocus()) {
+            materialSearchView.clearFocus();
             return;
         }
 
-        if (mBottomSheet.isSheetShowing()) {
-            mBottomSheet.dismissSheet();
+        if (bottomSheetLayout.isSheetShowing()) {
+            bottomSheetLayout.dismissSheet();
             return;
         }
         super.onBackPressed();
@@ -453,8 +454,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     @OnClick(R.id.fab)
     public void onFabClick() {
-        if (mMaterialSearchView.hasFocus() && mMaterialSearchView.getText().length() > 0) {
-            launchCustomTab(mMaterialSearchView.getURL());
+        if (materialSearchView.hasFocus() && materialSearchView.getText().length() > 0) {
+            launchCustomTab(materialSearchView.getURL());
         } else
             launchCustomTab(Constants.GOOGLE_URL);
     }
@@ -463,7 +464,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mBottomSheet.showWithSheetView(browserPicker);
+                bottomSheetLayout.showWithSheetView(browserPicker);
             }
         }, 150);
     }
@@ -483,7 +484,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 new IntentPickerSheetView.OnIntentPickedListener() {
                     @Override
                     public void onIntentPicked(IntentPickerSheetView.ActivityInfo activityInfo) {
-                        mBottomSheet.dismissSheet();
+                        bottomSheetLayout.dismissSheet();
                         customTabPreferenceCard.updatePreference(activityInfo.componentName);
                         refreshCustomTabBindings();
                         snack(String.format(getString(R.string.default_provider_success), activityInfo.label));
@@ -502,7 +503,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 new IntentPickerSheetView.OnIntentPickedListener() {
                     @Override
                     public void onIntentPicked(IntentPickerSheetView.ActivityInfo activityInfo) {
-                        mBottomSheet.dismissSheet();
+                        bottomSheetLayout.dismissSheet();
                         browserPreferenceCard.updatePreference(activityInfo.componentName);
                         snack(String.format(getString(R.string.secondary_browser_success), activityInfo.label));
                     }
@@ -519,7 +520,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 new IntentPickerSheetView.OnIntentPickedListener() {
                     @Override
                     public void onIntentPicked(IntentPickerSheetView.ActivityInfo activityInfo) {
-                        mBottomSheet.dismissSheet();
+                        bottomSheetLayout.dismissSheet();
                         favShareAppPreferenceCard.updatePreference(activityInfo.componentName);
                         snack(String.format(getString(R.string.fav_share_success), activityInfo.label));
                     }

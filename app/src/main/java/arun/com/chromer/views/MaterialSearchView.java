@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -126,7 +127,7 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
         suggestionAdapter = new SuggestionAdapter(getContext(), this);
         suggestionList.setLayoutManager(new LinearLayoutManager(getContext()));
         suggestionList.setAdapter(suggestionAdapter);
-        suggestionList.addItemDecoration(new DividerItemDecoration(getContext()));
+        suggestionList.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.HORIZONTAL));
         card.post(new Runnable() {
             @Override
             public void run() {

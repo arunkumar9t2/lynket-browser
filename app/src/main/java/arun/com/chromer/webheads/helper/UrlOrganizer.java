@@ -24,7 +24,7 @@ import static android.support.customtabs.CustomTabsService.KEY_URL;
  * for pre fetching.
  */
 public class UrlOrganizer {
-    private Context context;
+    private final Context context;
 
     public UrlOrganizer(@NonNull Context context) {
         this.context = context.getApplicationContext();

@@ -28,7 +28,7 @@
         <item>1</item>
         <item>2</item>
     </string-array>
-    <string name="share_text">Hey, dai un occhiata a \‘Chromer\’ per una navigazione sicura e veloce! Scaricala qua http://goo.gl/922ils</string>
+    <string name="share_text">Hey, dai un occhiata a \'Chromer\' per una navigazione sicura e veloce! Scaricala qua http://goo.gl/922ils</string>
     <string name="share_via">Condividi con…</string>
     <string name="custom_tab_provider_not_found">Nessun fornitore di custom tab trovato</string>
     <string name="custom_tab_provider_not_found_expln">Chromer necessita di un browser con custom tab compatibile installato sul tuo telefono. Momentaneamente non ci sono browser installati che le supportano. Vorresti installare Chrome (gratis) dal play store? Se è già installato, allora aggiornalo all\'ultima versione.</string>

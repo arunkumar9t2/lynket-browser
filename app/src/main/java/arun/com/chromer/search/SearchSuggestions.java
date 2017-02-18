@@ -35,9 +35,9 @@ public class SearchSuggestions {
     private static final int MAX_SUGGESTIONS = 6;
 
     @SuppressWarnings("FieldCanBeLocal")
-    private final Context mContext;
-    private SuggestionTask mSuggestionTask;
-    private SuggestionsCallback mSuggestionsCallback = new SuggestionsCallback() {
+    private final Context context;
+    private SuggestionTask suggestionTask;
+    private SuggestionsCallback suggestionsCallback = new SuggestionsCallback() {
         @Override
         public void onFetchSuggestions(@NonNull List<SuggestionItem> suggestions) {
 
@@ -45,10 +45,10 @@ public class SearchSuggestions {
     };
 
     public SearchSuggestions(@NonNull final Context context, @Nullable SuggestionsCallback suggestionsCallback) {
-        mContext = context.getApplicationContext();
+        this.context = context.getApplicationContext();
 
         if (suggestionsCallback != null) {
-            mSuggestionsCallback = suggestionsCallback;
+            this.suggestionsCallback = suggestionsCallback;
         }
     }
 
@@ -59,13 +59,13 @@ public class SearchSuggestions {
      */
     public synchronized void fetchForQuery(@NonNull String query) {
         cancelLastFetch();
-        mSuggestionTask = new SuggestionTask(query);
-        mSuggestionTask.execute();
+        suggestionTask = new SuggestionTask(query);
+        suggestionTask.execute();
     }
 
     private void cancelLastFetch() {
-        if (mSuggestionTask != null) {
-            mSuggestionTask.cancel(true);
+        if (suggestionTask != null) {
+            suggestionTask.cancel(true);
         }
     }
 
@@ -99,7 +99,7 @@ public class SearchSuggestions {
             final String suggestUrl = SEARCH_URL.concat(mQuery).replace(" ", "+");
             HttpURLConnection connection = null;
             try {
-                if (Utils.isNetworkAvailable(mContext)) {
+                if (Utils.isNetworkAvailable(context)) {
                     final URL url = new URL(suggestUrl);
                     connection = (HttpURLConnection) url.openConnection();
                     connection.connect();
@@ -134,7 +134,7 @@ public class SearchSuggestions {
         }
 
         private void addCopySuggestion() {
-            final String copyText = Utils.getClipBoardText(mContext);
+            final String copyText = Utils.getClipBoardText(context);
             if (copyText != null && copyText.length() > 0) {
                 mSuggestions.add(new SuggestionItem(copyText, SuggestionItem.COPY));
             }
@@ -145,7 +145,7 @@ public class SearchSuggestions {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        mSuggestionsCallback.onFetchSuggestions(mSuggestions);
+                        suggestionsCallback.onFetchSuggestions(mSuggestions);
                     }
                 });
             } else {
