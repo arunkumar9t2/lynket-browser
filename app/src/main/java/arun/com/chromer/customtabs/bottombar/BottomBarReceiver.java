@@ -15,21 +15,14 @@
 package arun.com.chromer.customtabs.bottombar;
 
 import android.content.BroadcastReceiver;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
-import android.widget.Toast;
-
-import java.util.List;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.BrowserInterceptActivity;
-import arun.com.chromer.shared.Constants;
+import arun.com.chromer.activities.NewTabDialogActivity;
 import arun.com.chromer.util.DocumentUtils;
 import arun.com.chromer.util.Utils;
 import timber.log.Timber;
@@ -90,49 +83,13 @@ public class BottomBarReceiver extends BroadcastReceiver {
             if (!performCalled) {
                 throw new IllegalStateException("Should call perform() instead of onPerform()");
             }
-            try {
-                final ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                if (clipboardManager.hasPrimaryClip()) {
-                    final ClipData.Item item = clipboardManager.getPrimaryClip().getItemAt(0);
-                    findAndOpenLink(item.getText().toString());
-                    clipboardManager.setPrimaryClip(ClipData.newPlainText("", ""));
-                } else
-                    invalidLink();
-            } catch (Exception e) {
-                invalidLink();
-                Timber.e(e.getMessage());
-            }
+            DocumentUtils.closeRootActivity(context);
+            final Intent newTabIntent = new Intent(context, NewTabDialogActivity.class);
+            newTabIntent.setData(Uri.parse(url));
+            newTabIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(newTabIntent);
         }
 
-        private void findAndOpenLink(@NonNull String text) {
-            final List<String> urls = Utils.findURLs(text);
-            if (urls.size() != 0) {
-                // use only the first link
-                openLink(urls.get(0));
-            } else {
-                // No urls were found, so lets do a google search with the text received.
-                if (!text.isEmpty()) {
-                    text = Constants.G_SEARCH_URL + text.replace(" ", "+");
-                    openLink(text);
-                } else
-                    invalidLink();
-            }
-        }
-
-        private void openLink(@Nullable String url) {
-            if (url == null) {
-                invalidLink();
-            }
-            final Intent websiteIntent = new Intent(context, BrowserInterceptActivity.class);
-            websiteIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            websiteIntent.putExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, true);
-            websiteIntent.setData(Uri.parse(url));
-            context.startActivity(websiteIntent);
-        }
-
-        private void invalidLink() {
-            Toast.makeText(context, context.getString(R.string.open_in_new_tab_error), Toast.LENGTH_LONG).show();
-        }
     }
 
     private static class ShareUrl extends Command {
