@@ -81,13 +81,13 @@ public class BehaviorPreferenceFragment extends DividerLessPreferenceFragment im
         mMergeTabsPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (!((Boolean) newValue) && Preferences.aggressiveLoading(getActivity())) {
+                if (!((Boolean) newValue) && Preferences.get(getContext()).aggressiveLoading()) {
                     new MaterialDialog.Builder(getActivity())
                             .title(R.string.merge_tabs_off_title)
                             .content(R.string.merget_tabs_off_content)
                             .positiveText(android.R.string.ok)
                             .show();
-                    Preferences.aggressiveLoading(getActivity(), false);
+                    Preferences.get(getContext()).aggressiveLoading(false);
                 }
                 return true;
             }
@@ -112,7 +112,7 @@ public class BehaviorPreferenceFragment extends DividerLessPreferenceFragment im
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equalsIgnoreCase(Preferences.AGGRESSIVE_LOADING)) {
-            if (Preferences.aggressiveLoading(getActivity())) {
+            if (Preferences.get(getContext()).aggressiveLoading()) {
                 mMergeTabsPreference.setChecked(true);
             }
         }

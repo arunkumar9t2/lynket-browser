@@ -30,7 +30,7 @@ public class SecondaryBrowserReceiver extends BroadcastReceiver {
         if (url != null) {
             final Intent webIntentExplicit = new Intent(ACTION_VIEW, Uri.parse(url));
             webIntentExplicit.setFlags(FLAG_ACTIVITY_NEW_TASK);
-            final String componentFlatten = Preferences.secondaryBrowserComponent(context);
+            final String componentFlatten = Preferences.get(context).secondaryBrowserComponent();
             if (componentFlatten != null) {
                 ComponentName cN = ComponentName.unflattenFromString(componentFlatten);
                 webIntentExplicit.setComponent(cN);
@@ -51,7 +51,7 @@ public class SecondaryBrowserReceiver extends BroadcastReceiver {
         webIntentImplicit.setFlags(FLAG_ACTIVITY_NEW_TASK);
         @SuppressLint("InlinedApi")
         final List<ResolveInfo> resolvedActivityList = context.getPackageManager().queryIntentActivities(webIntentImplicit, PackageManager.MATCH_ALL);
-        final String secondaryPackage = Preferences.secondaryBrowserPackage(context);
+        final String secondaryPackage = Preferences.get(context).secondaryBrowserPackage();
         if (secondaryPackage != null) {
             boolean found = false;
             for (ResolveInfo info : resolvedActivityList) {
@@ -60,7 +60,7 @@ public class SecondaryBrowserReceiver extends BroadcastReceiver {
                     final ComponentName componentName = new ComponentName(info.activityInfo.packageName, info.activityInfo.name);
                     webIntentImplicit.setComponent(componentName);
                     // This will be the new component, so write it to preferences
-                    Preferences.secondaryBrowserComponent(context, componentName.flattenToString());
+                    Preferences.get(context).secondaryBrowserComponent(componentName.flattenToString());
                     context.startActivity(webIntentImplicit);
                     break;
                 }

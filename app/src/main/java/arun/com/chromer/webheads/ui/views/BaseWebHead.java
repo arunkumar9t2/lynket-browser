@@ -159,14 +159,14 @@ public abstract class BaseWebHead extends FrameLayout {
 
     private void inflateContent(@NonNull Context context) {
         // size
-        if (Preferences.webHeadsSize(context) == 2) {
+        if (Preferences.get(context).webHeadsSize() == 2) {
             contentRoot = (FrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.web_head_layout_small, this, false);
         } else
             contentRoot = (FrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.web_head_layout, this, false);
         addView(contentRoot);
         ButterKnife.bind(this);
 
-        webHeadColor = Preferences.webHeadColor(getContext());
+        webHeadColor = Preferences.get(context).webHeadColor();
         indicator.setText(Utils.getFirstLetter(url));
         indicator.setTextColor(getForegroundWhiteOrBlack(webHeadColor));
         initRevealView(webHeadColor);
@@ -211,7 +211,7 @@ public abstract class BaseWebHead extends FrameLayout {
                 x = masterX;
                 y = masterY;
             } else {
-                if (Preferences.webHeadsSpawnLocation(getContext()) == 1) {
+                if (Preferences.get(getContext()).webHeadsSpawnLocation() == 1) {
                     x = screenBounds.right;
                 } else {
                     x = screenBounds.left;

@@ -87,7 +87,7 @@ public class AppPreferenceCardView extends CardView {
         switch (preferenceType) {
             case CUSTOM_TAB_PROVIDER:
                 category = getResources().getString(R.string.default_provider);
-                final String customTabProvider = Preferences.customTabApp(getContext());
+                final String customTabProvider = Preferences.get(getContext()).customTabApp();
                 if (customTabProvider != null) {
                     appName = Utils.getAppNameWithPackage(getContext(), customTabProvider);
                     appPackage = customTabProvider;
@@ -98,7 +98,7 @@ public class AppPreferenceCardView extends CardView {
                 break;
             case SECONDARY_BROWSER:
                 category = getResources().getString(R.string.choose_secondary_browser);
-                final String secondaryBrowser = Preferences.secondaryBrowserPackage(getContext());
+                final String secondaryBrowser = Preferences.get(getContext()).secondaryBrowserPackage();
                 if (secondaryBrowser != null) {
                     appName = Utils.getAppNameWithPackage(getContext(), secondaryBrowser);
                     appPackage = secondaryBrowser;
@@ -109,7 +109,7 @@ public class AppPreferenceCardView extends CardView {
                 break;
             case FAVORITE_SHARE:
                 category = getResources().getString(R.string.fav_share_app);
-                final String favSharePackage = Preferences.favSharePackage(getContext());
+                final String favSharePackage = Preferences.get(getContext()).favSharePackage();
                 if (favSharePackage != null) {
                     appName = Utils.getAppNameWithPackage(getContext(), favSharePackage);
                     appPackage = favSharePackage;
@@ -216,14 +216,14 @@ public class AppPreferenceCardView extends CardView {
         switch (preferenceType) {
             case CUSTOM_TAB_PROVIDER:
                 if (componentName != null) {
-                    Preferences.customTabApp(getContext(), componentName.getPackageName());
+                    Preferences.get(getContext()).customTabApp(componentName.getPackageName());
                 }
                 break;
             case SECONDARY_BROWSER:
-                Preferences.secondaryBrowserComponent(getContext(), flatComponent);
+                Preferences.get(getContext()).secondaryBrowserComponent(flatComponent);
                 break;
             case FAVORITE_SHARE:
-                Preferences.favShareComponent(getContext(), flatComponent);
+                Preferences.get(getContext()).favShareComponent(flatComponent);
                 break;
         }
         refreshState();

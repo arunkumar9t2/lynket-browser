@@ -12,8 +12,9 @@ import java.util.List;
 
 import arun.com.chromer.R;
 import arun.com.chromer.customtabs.CustomTabs;
-import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Utils;
+
+import static arun.com.chromer.shared.Constants.CHROME_PACKAGE;
 
 /**
  * Created by Arun on 05/01/2016.
@@ -29,7 +30,6 @@ public class Preferences {
     public static final String WEB_HEAD_ENABLED = "webhead_enabled_pref";
     public static final String WEB_HEAD_SPAWN_LOCATION = "webhead_spawn_preference";
     public static final String WEB_HEAD_SIZE = "webhead_size_preference";
-    private static final String WEB_HEAD_FAVICON = "webhead_favicons_pref";
     public static final String BOTTOM_BAR_ENABLED = "bottombar_enabled_pref";
     public static final int PREFERRED_ACTION_BROWSER = 1;
     public static final int PREFERRED_ACTION_FAV_SHARE = 2;
@@ -43,6 +43,8 @@ public class Preferences {
     public static final String PRE_FETCH_NOTIFICATION = "pre_fetch_notification_preference";
     public static final String BLACKLIST_DUMMY = "blacklist_preference_dummy";
     public static final String MERGE_TABS_AND_APPS = "merge_tabs_and_apps_preference";
+    public static final String AGGRESSIVE_LOADING = "aggressive_loading";
+    private static final String WEB_HEAD_FAVICON = "webhead_favicons_pref";
     private static final String BLACKLIST = "blacklist_preference";
     private static final String PREFERRED_PACKAGE = "preferred_package";
     private static final String FIRST_RUN = "firstrun_2";
@@ -52,410 +54,311 @@ public class Preferences {
     private static final String CLEAN_DATABASE = "clean_database";
     private static final String DYNAMIC_COLOR_APP = "dynamic_color_app";
     private static final String DYNAMIC_COLOR_WEB = "dynamic_color_web";
-    public static final String AGGRESSIVE_LOADING = "aggressive_loading";
+    private static Preferences INSTANCE;
 
-    private static SharedPreferences preferences(Context context) {
-        return context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
+    private final Context context;
+
+    public Preferences(@NonNull Context context) {
+        this.context = context.getApplicationContext();
     }
 
-    public static boolean isFirstRun(Context context) {
-        if (preferences(context).getBoolean(FIRST_RUN, true)) {
-            preferences(context).edit().putBoolean(FIRST_RUN, false).apply();
+    @NonNull
+    public static synchronized Preferences get(@NonNull Context context) {
+        if (INSTANCE == null) {
+            INSTANCE = new Preferences(context);
+        }
+        return INSTANCE;
+    }
+
+    /**
+     * Returns default shared preferences.
+     *
+     * @return {@link SharedPreferences} instance
+     */
+    @NonNull
+    private SharedPreferences getDefaultSharedPreferences() {
+        return PreferenceManager.getDefaultSharedPreferences(context);
+    }
+
+    public boolean isFirstRun() {
+        if (getDefaultSharedPreferences().getBoolean(FIRST_RUN, true)) {
+            getDefaultSharedPreferences().edit().putBoolean(FIRST_RUN, false).apply();
             return true;
         }
         return false;
     }
 
-    public static boolean dummyBottomBar(Context context) {
-        // TODO Fix this and make learnt flag persistable
-        return !preferences(context).getBoolean(USER_KNOWS_BOTTOM_BAR, false);
+    public boolean isColoredToolbar() {
+        return getDefaultSharedPreferences().getBoolean(TOOLBAR_COLOR_PREF, true);
     }
 
-    public static boolean isColoredToolbar(Context context) {
-        return PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getBoolean(TOOLBAR_COLOR_PREF, true);
+    public int toolbarColor() {
+        return getDefaultSharedPreferences().getInt(TOOLBAR_COLOR, ContextCompat.getColor(context, R.color.colorPrimary));
     }
 
-    public static int toolbarColor(Context context) {
-        return PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getInt(TOOLBAR_COLOR,
-                        ContextCompat.getColor(context, R.color.colorPrimary));
+    public void toolbarColor(int selectedColor) {
+        getDefaultSharedPreferences().edit().putInt(TOOLBAR_COLOR, selectedColor).apply();
     }
 
-    public static void toolbarColor(Context context, int selectedColor) {
-        PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .edit()
-                .putInt(TOOLBAR_COLOR, selectedColor).apply();
+    public int webHeadColor() {
+        return getDefaultSharedPreferences().getInt(WEB_HEADS_COLOR, ContextCompat.getColor(context, R.color.web_head_bg));
     }
 
-    public static int webHeadColor(Context context) {
-        return PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getInt(WEB_HEADS_COLOR,
-                        ContextCompat.getColor(context, R.color.web_head_bg));
+    public void webHeadColor(int selectedColor) {
+        getDefaultSharedPreferences().edit().putInt(WEB_HEADS_COLOR, selectedColor).apply();
     }
 
-    public static void webHeadColor(Context context, int selectedColor) {
-        PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .edit()
-                .putInt(WEB_HEADS_COLOR, selectedColor).apply();
+    public boolean isAnimationEnabled() {
+        return animationType() != 0;
     }
 
-    public static boolean isAnimationEnabled(Context context) {
-        return animationType(context) != 0;
+    public int animationType() {
+        return Integer.parseInt(getDefaultSharedPreferences().getString(ANIMATION_TYPE, "1"));
     }
 
-    public static int animationType(Context context) {
-        return Integer.parseInt(PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getString(ANIMATION_TYPE, "1"));
+    public int animationSpeed() {
+        return Integer.parseInt(getDefaultSharedPreferences().getString(ANIMATION_SPEED, "1"));
     }
 
-    public static int animationSpeed(Context context) {
-        return Integer.parseInt(PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getString(ANIMATION_SPEED, "1"));
-    }
-
-    public static int preferredAction(Context context) {
-        return Integer.parseInt(PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getString(PREFERRED_ACTION, "1"));
+    public int preferredAction() {
+        return Integer.parseInt(getDefaultSharedPreferences().getString(PREFERRED_ACTION, "1"));
     }
 
     @Nullable
-    public static String customTabApp(Context context) {
-        String packageName = PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getString(PREFERRED_PACKAGE, null);
-
+    public String customTabApp() {
+        String packageName = getDefaultSharedPreferences().getString(PREFERRED_PACKAGE, null);
         if (packageName != null && Utils.isPackageInstalled(context, packageName))
             return packageName;
         else {
-            packageName = getDefaultCustomTabApp(context);
+            packageName = getDefaultCustomTabApp();
             // update the new custom tab package
-            customTabApp(context, packageName);
+            customTabApp(packageName);
         }
         return packageName;
     }
 
     @Nullable
-    private static String getDefaultCustomTabApp(Context context) {
-        if (Utils.isPackageInstalled(context, Constants.CHROME_PACKAGE) &&
-                CustomTabs.isPackageSupportCustomTabs(context, Constants.CHROME_PACKAGE))
-            return Constants.CHROME_PACKAGE;
-
-        List<String> supportingPackages = CustomTabs.getCustomTabSupportingPackages(context);
+    private String getDefaultCustomTabApp() {
+        if (CustomTabs.isPackageSupportCustomTabs(context, CHROME_PACKAGE))
+            return CHROME_PACKAGE;
+        final List<String> supportingPackages = CustomTabs.getCustomTabSupportingPackages(context);
         if (supportingPackages.size() > 0) {
             return supportingPackages.get(0);
         } else
             return null;
     }
 
-    public static void customTabApp(Context context, String string) {
-        PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .edit()
-                .putString(PREFERRED_PACKAGE, string).apply();
+    public void customTabApp(String string) {
+        getDefaultSharedPreferences().edit().putString(PREFERRED_PACKAGE, string).apply();
     }
 
     @Nullable
-    public static String secondaryBrowserComponent(Context context) {
-        return PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getString(SECONDARY_PREF, null);
+    public String secondaryBrowserComponent() {
+        return getDefaultSharedPreferences().getString(SECONDARY_PREF, null);
     }
 
-    public static void secondaryBrowserComponent(Context context, String flattenChomponentString) {
-        PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .edit()
-                .putString(SECONDARY_PREF, flattenChomponentString).apply();
+    public void secondaryBrowserComponent(final String componentString) {
+        getDefaultSharedPreferences().edit().putString(SECONDARY_PREF, componentString).apply();
     }
 
     @Nullable
-    public static String secondaryBrowserPackage(Context context) {
-        String flatString = secondaryBrowserComponent(context);
+    public String secondaryBrowserPackage() {
+        final String flatString = secondaryBrowserComponent();
         if (flatString == null) {
             return null;
         }
-
-        ComponentName cN = ComponentName.unflattenFromString(flatString);
+        final ComponentName cN = ComponentName.unflattenFromString(flatString);
         if (cN == null) return null;
 
         return cN.getPackageName();
     }
 
     @Nullable
-    public static String favShareComponent(Context context) {
-        return PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getString(FAV_SHARE_PREF, null);
+    public String favShareComponent() {
+        return getDefaultSharedPreferences().getString(FAV_SHARE_PREF, null);
     }
 
-    public static void favShareComponent(Context context, String string) {
-        PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .edit()
-                .putString(FAV_SHARE_PREF, string).apply();
+    public void favShareComponent(final String componentString) {
+        getDefaultSharedPreferences().edit().putString(FAV_SHARE_PREF, componentString).apply();
     }
 
     @Nullable
-    public static String favSharePackage(Context context) {
-        String flatString = favShareComponent(context);
+    public String favSharePackage() {
+        final String flatString = favShareComponent();
         if (flatString == null) {
             return null;
         }
-
-        ComponentName cN = ComponentName.unflattenFromString(flatString);
+        final ComponentName cN = ComponentName.unflattenFromString(flatString);
         if (cN == null) return null;
-
         return cN.getPackageName();
     }
 
-    public static boolean warmUp(Context context) {
-        return PreferenceManager
-                .getDefaultSharedPreferences(context).getBoolean(WARM_UP, false);
+    public boolean warmUp() {
+        return getDefaultSharedPreferences().getBoolean(WARM_UP, false);
     }
 
-    public static void warmUp(Context context, boolean preference) {
-        PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .edit()
-                .putBoolean(WARM_UP, preference).apply();
+    public void warmUp(final boolean preference) {
+        getDefaultSharedPreferences().edit().putBoolean(WARM_UP, preference).apply();
     }
 
-    public static boolean preFetch(Context context) {
-        return PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getBoolean(PRE_FETCH, false);
+    public boolean preFetch() {
+        return getDefaultSharedPreferences().getBoolean(PRE_FETCH, false);
     }
 
-    public static void preFetch(Context context, boolean preference) {
-        PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .edit().putBoolean(PRE_FETCH, preference).apply();
+    public void preFetch(final boolean preference) {
+        getDefaultSharedPreferences().edit().putBoolean(PRE_FETCH, preference).apply();
     }
 
-    public static boolean wifiOnlyPrefetch(Context context) {
-        return PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getBoolean(WIFI_PREFETCH, false);
+    public boolean wifiOnlyPrefetch() {
+        return getDefaultSharedPreferences().getBoolean(WIFI_PREFETCH, false);
     }
 
-    public static void wifiOnlyPrefetch(Context context, boolean preference) {
-        PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .edit().putBoolean(WIFI_PREFETCH, preference).apply();
+    public void wifiOnlyPrefetch(final boolean preference) {
+        getDefaultSharedPreferences().edit().putBoolean(WIFI_PREFETCH, preference).apply();
     }
 
-    public static boolean preFetchNotification(Context context) {
-        return PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getBoolean(PRE_FETCH_NOTIFICATION, true);
+    public boolean preFetchNotification() {
+        return getDefaultSharedPreferences().getBoolean(PRE_FETCH_NOTIFICATION, true);
     }
 
-    public static void preFetchNotification(Context context, boolean preference) {
-        PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .edit().putBoolean(PRE_FETCH_NOTIFICATION, preference).apply();
+    public void preFetchNotification(final boolean preference) {
+        getDefaultSharedPreferences().edit().putBoolean(PRE_FETCH_NOTIFICATION, preference).apply();
     }
 
-    public static boolean dynamicToolbar(Context context) {
-        return PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getBoolean(DYNAMIC_COLOR, false);
+    public boolean dynamicToolbar() {
+        return getDefaultSharedPreferences().getBoolean(DYNAMIC_COLOR, false);
     }
 
     @SuppressWarnings("unused")
-    public static void dynamicToolbar(Context context, boolean preference) {
-        PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .edit()
-                .putBoolean(DYNAMIC_COLOR, preference).apply();
+    public void dynamicToolbar(final boolean preference) {
+        getDefaultSharedPreferences().edit().putBoolean(DYNAMIC_COLOR, preference).apply();
     }
 
-    public static boolean shouldCleanDB(Context context) {
-        if (preferences(context).getBoolean(CLEAN_DATABASE, true)) {
-            preferences(context).edit().putBoolean(CLEAN_DATABASE, false).apply();
-            return true;
-        }
-        return false;
+    public boolean dynamicToolbarOnApp() {
+        return getDefaultSharedPreferences().getBoolean(DYNAMIC_COLOR_APP, false);
     }
 
-    public static boolean dynamicToolbarOnApp(Context context) {
-        return preferences(context).getBoolean(DYNAMIC_COLOR_APP, false);
+    private void dynamicToolbarOnApp(final boolean preference) {
+        getDefaultSharedPreferences().edit().putBoolean(DYNAMIC_COLOR_APP, preference).apply();
     }
 
-    private static void dynamicToolbarOnApp(Context context, boolean preference) {
-        preferences(context).edit().putBoolean(DYNAMIC_COLOR_APP, preference).apply();
+    public boolean dynamicToolbarOnWeb() {
+        return getDefaultSharedPreferences().getBoolean(DYNAMIC_COLOR_WEB, false);
     }
 
-    public static boolean dynamicToolbarOnWeb(Context context) {
-        return preferences(context).getBoolean(DYNAMIC_COLOR_WEB, false);
+    private void dynamicToolbarOnWeb(final boolean preference) {
+        getDefaultSharedPreferences().edit().putBoolean(DYNAMIC_COLOR_WEB, preference).apply();
     }
 
-    private static void dynamicToolbarOnWeb(Context context, boolean preference) {
-        preferences(context).edit().putBoolean(DYNAMIC_COLOR_WEB, preference).apply();
+    public boolean aggressiveLoading() {
+        return Utils.isLollipopAbove() && webHeads()
+                && getDefaultSharedPreferences().getBoolean(AGGRESSIVE_LOADING, false);
     }
 
-    public static boolean aggressiveLoading(Context context) {
-        return Utils.isLollipopAbove()
-                && webHeads(context)
-                && PreferenceManager
-                .getDefaultSharedPreferences(context).getBoolean(AGGRESSIVE_LOADING, false);
+    public void aggressiveLoading(final boolean preference) {
+        getDefaultSharedPreferences().edit().putBoolean(AGGRESSIVE_LOADING, preference).apply();
     }
 
-    public static void aggressiveLoading(Context context, boolean preference) {
-        PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .edit()
-                .putBoolean(AGGRESSIVE_LOADING, preference).apply();
-    }
-
-    private static void dynamicToolbarOptions(Context context, boolean app, boolean web) {
-        dynamicToolbarOnApp(context, app);
-        dynamicToolbarOnWeb(context, web);
-        dynamicToolbar(context, app || web);
+    private void dynamicToolbarOptions(final boolean app, final boolean web) {
+        dynamicToolbarOnApp(app);
+        dynamicToolbarOnWeb(web);
+        dynamicToolbar(app || web);
     }
 
     @Nullable
-    public static Integer[] dynamicToolbarSelections(Context context) {
-        if (dynamicToolbarOnApp(context) && dynamicToolbarOnWeb(context))
+    public Integer[] dynamicToolbarSelections() {
+        if (dynamicToolbarOnApp() && dynamicToolbarOnWeb())
             return new Integer[]{0, 1};
-        else if (dynamicToolbarOnApp(context))
+        else if (dynamicToolbarOnApp())
             return new Integer[]{0};
-        else if (dynamicToolbarOnWeb(context))
+        else if (dynamicToolbarOnWeb())
             return new Integer[]{1};
         else return null;
     }
 
-    public static void updateAppAndWeb(Context context, Integer[] which) {
+    public void updateAppAndWeb(final Integer[] which) {
         switch (which.length) {
             case 0:
-                Preferences.dynamicToolbarOptions(context, false, false);
+                dynamicToolbarOptions(false, false);
                 break;
             case 1:
                 if (which[0] == 0) {
-                    Preferences.dynamicToolbarOptions(context, true, false);
+                    dynamicToolbarOptions(true, false);
                 } else if (which[0] == 1) {
-                    Preferences.dynamicToolbarOptions(context, false, true);
+                    dynamicToolbarOptions(false, true);
                 }
                 break;
             case 2:
-                Preferences.dynamicToolbarOptions(context, true, true);
+                dynamicToolbarOptions(true, true);
                 break;
         }
     }
 
     @NonNull
-    public static CharSequence dynamicColorSummary(Context context) {
-        if (dynamicToolbarOnApp(context) && dynamicToolbarOnWeb(context)) {
+    public CharSequence dynamicColorSummary() {
+        if (dynamicToolbarOnApp() && dynamicToolbarOnWeb()) {
             return context.getString(R.string.dynamic_summary_appweb);
-        } else if (dynamicToolbarOnApp(context)) {
+        } else if (dynamicToolbarOnApp()) {
             return context.getString(R.string.dynamic_summary_app);
-        } else if (dynamicToolbarOnWeb(context)) {
+        } else if (dynamicToolbarOnWeb()) {
             return context.getString(R.string.dynamic_summary_web);
         } else
             return context.getString(R.string.no_option_selected);
     }
 
-    public static boolean webHeads(Context context) {
-        return PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getBoolean(WEB_HEAD_ENABLED, false);
+    public boolean webHeads() {
+        return getDefaultSharedPreferences().getBoolean(WEB_HEAD_ENABLED, false);
     }
 
-    @SuppressWarnings("unused")
-    public static void webHeads(Context context, boolean preference) {
-        PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .edit()
-                .putBoolean(WEB_HEAD_ENABLED, preference).apply();
+    public void webHeads(final boolean preference) {
+        getDefaultSharedPreferences().edit().putBoolean(WEB_HEAD_ENABLED, preference).apply();
     }
 
-    public static boolean favicons(Context context) {
-        return PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getBoolean(WEB_HEAD_FAVICON, true);
+    public boolean favicons() {
+        return getDefaultSharedPreferences().getBoolean(WEB_HEAD_FAVICON, true);
     }
 
-    @SuppressWarnings("unused")
-    public static void favicons(Context context, boolean preference) {
-        PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .edit()
-                .putBoolean(WEB_HEAD_FAVICON, preference).apply();
+    public void favicons(final boolean preference) {
+        getDefaultSharedPreferences().edit().putBoolean(WEB_HEAD_FAVICON, preference).apply();
     }
 
-    public static int webHeadsSpawnLocation(Context context) {
-        return Integer.parseInt(PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getString(WEB_HEAD_SPAWN_LOCATION, "1"));
+    public int webHeadsSpawnLocation() {
+        return Integer.parseInt(getDefaultSharedPreferences().getString(WEB_HEAD_SPAWN_LOCATION, "1"));
     }
 
-    public static int webHeadsSize(Context context) {
-        return Integer.parseInt(PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getString(WEB_HEAD_SIZE, "1"));
+    public int webHeadsSize() {
+        return Integer.parseInt(getDefaultSharedPreferences().getString(WEB_HEAD_SIZE, "1"));
     }
 
-    public static boolean webHeadsCloseOnOpen(Context context) {
-        return PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getBoolean(WEB_HEAD_CLOSE_ON_OPEN, false);
+    public boolean webHeadsCloseOnOpen() {
+        return getDefaultSharedPreferences().getBoolean(WEB_HEAD_CLOSE_ON_OPEN, false);
     }
 
-    @SuppressWarnings("unused")
-    public static void webHeadsCloseOnOpen(Context context, boolean preference) {
-        PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .edit()
-                .putBoolean(WEB_HEAD_CLOSE_ON_OPEN, preference).apply();
+    public void webHeadsCloseOnOpen(final boolean preference) {
+        getDefaultSharedPreferences().edit().putBoolean(WEB_HEAD_CLOSE_ON_OPEN, preference).apply();
     }
 
-    public static boolean blacklist(Context context) {
-        return PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getBoolean(BLACKLIST, false);
+    public boolean blacklist() {
+        return getDefaultSharedPreferences().getBoolean(BLACKLIST, false);
     }
 
-    public static void blacklist(Context context, boolean preference) {
-        PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .edit().putBoolean(BLACKLIST, preference).apply();
+    public void blacklist(final boolean preference) {
+        getDefaultSharedPreferences().edit().putBoolean(BLACKLIST, preference).apply();
     }
 
-    public static boolean mergeTabs(Context context) {
-        return Utils.isLollipopAbove() &&
-                PreferenceManager
-                        .getDefaultSharedPreferences(context)
-                        .getBoolean(MERGE_TABS_AND_APPS, false);
+    public boolean mergeTabs() {
+        return Utils.isLollipopAbove() && getDefaultSharedPreferences().getBoolean(MERGE_TABS_AND_APPS, false);
     }
 
-    public static void mergeTabs(Context context, boolean preference) {
-        PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .edit()
-                .putBoolean(MERGE_TABS_AND_APPS, preference).apply();
+    public void mergeTabs(final boolean preference) {
+        getDefaultSharedPreferences().edit().putBoolean(MERGE_TABS_AND_APPS, preference).apply();
     }
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean bottomBar(Context context) {
-        return PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getBoolean(BOTTOM_BAR_ENABLED, false);
+    public boolean bottomBar() {
+        return getDefaultSharedPreferences().getBoolean(BOTTOM_BAR_ENABLED, false);
     }
 
-    @SuppressWarnings("unused")
-    public static void bottomBar(Context context, boolean preference) {
-        PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .edit()
-                .putBoolean(BOTTOM_BAR_ENABLED, preference).apply();
+    public void bottomBar(final boolean preference) {
+        getDefaultSharedPreferences().edit().putBoolean(BOTTOM_BAR_ENABLED, preference).apply();
     }
 }

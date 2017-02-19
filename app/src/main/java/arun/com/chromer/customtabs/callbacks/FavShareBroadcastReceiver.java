@@ -37,7 +37,7 @@ public class FavShareBroadcastReceiver extends BroadcastReceiver {
             final Intent openAppIntent = new Intent(Intent.ACTION_SEND);
             openAppIntent.putExtra(EXTRA_TEXT, url);
             openAppIntent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-            openAppIntent.setComponent(ComponentName.unflattenFromString(Preferences.favShareComponent(context)));
+            openAppIntent.setComponent(ComponentName.unflattenFromString(Preferences.get(context).favShareComponent()));
             try {
                 context.startActivity(openAppIntent);
             } catch (Exception e) {

@@ -57,13 +57,14 @@ import static arun.com.chromer.activities.settings.preferences.manager.Preferenc
 import static arun.com.chromer.activities.settings.preferences.manager.Preferences.ANIMATION_SHORT;
 import static arun.com.chromer.activities.settings.preferences.manager.Preferences.PREFERRED_ACTION_BROWSER;
 import static arun.com.chromer.activities.settings.preferences.manager.Preferences.PREFERRED_ACTION_FAV_SHARE;
+import static arun.com.chromer.activities.settings.preferences.manager.Preferences.PREFERRED_ACTION_GEN_SHARE;
 import static arun.com.chromer.customtabs.bottombar.BottomBarManager.createBottomBarRemoteViews;
 import static arun.com.chromer.customtabs.bottombar.BottomBarManager.getClickableIDs;
 import static arun.com.chromer.customtabs.bottombar.BottomBarManager.getOnClickPendingIntent;
 import static arun.com.chromer.shared.Constants.NO_COLOR;
 
 /**
- * A helper class that builds up the view intent according to user preferences and
+ * A helper class that builds up the view intent according to user Preferences.get(activity) and
  * launches custom tab.
  */
 public class CustomTabs {
@@ -177,7 +178,7 @@ public class CustomTabs {
      */
     @Nullable
     private static String getCustomTabPackage(Context context) {
-        final String userPackage = Preferences.customTabApp(context);
+        final String userPackage = Preferences.get(context).customTabApp();
         if (userPackage != null && userPackage.length() > 0) {
             return userPackage;
         }
@@ -277,7 +278,7 @@ public class CustomTabs {
     }
 
     /**
-     * Facade method that does all the heavy work of building up the builder based on user preferences
+     * Facade method that does all the heavy work of building up the builder based on user Preferences.get(activity)
      *
      * @return Instance of this class
      */
@@ -325,7 +326,7 @@ public class CustomTabs {
         }
 
         final ScannerService sService = ScannerService.getInstance();
-        if (sService != null && sService.getTabSession() != null && Preferences.preFetch(activity)) {
+        if (sService != null && sService.getTabSession() != null && Preferences.get(activity).get(activity).preFetch()) {
             Timber.d("Using scanner session");
             return sService.getTabSession();
         }
@@ -343,9 +344,9 @@ public class CustomTabs {
      */
     private void prepareAnimations() {
         assertBuilderInitialized();
-        if (Preferences.isAnimationEnabled(activity) && !noAnimation) {
-            final int type = Preferences.animationType(activity);
-            final int speed = Preferences.animationSpeed(activity);
+        if (Preferences.get(activity).isAnimationEnabled() && !noAnimation) {
+            final int type = Preferences.get(activity).animationType();
+            final int speed = Preferences.get(activity).animationSpeed();
             int start[] = new int[]{};
             int exit[] = new int[]{};
             switch (speed) {
@@ -387,16 +388,16 @@ public class CustomTabs {
      */
     private void prepareToolbar() {
         assertBuilderInitialized();
-        if (Preferences.isColoredToolbar(activity)) {
-            toolbarColor = Preferences.toolbarColor(activity);
+        if (Preferences.get(activity).isColoredToolbar()) {
+            toolbarColor = Preferences.get(activity).toolbarColor();
 
-            if (Preferences.dynamicToolbar(activity)) {
+            if (Preferences.get(activity).dynamicToolbar()) {
                 final boolean overrideRequested = webToolbarFallback != NO_COLOR;
-                if (Preferences.dynamicToolbarOnApp(activity)) {
+                if (Preferences.get(activity).dynamicToolbarOnApp()) {
                     setAppToolbarColor();
                 }
 
-                if (Preferences.dynamicToolbarOnWeb(activity)) {
+                if (Preferences.get(activity).dynamicToolbarOnWeb()) {
                     if (overrideRequested) {
                         toolbarColor = webToolbarFallback;
                         Timber.d("Using fallback color");
@@ -462,13 +463,13 @@ public class CustomTabs {
     }
 
     /**
-     * Used to set the action button based on user preferences. Usually secondary browser or favorite share app.
+     * Used to set the action button based on user Preferences.get(activity). Usually secondary browser or favorite share app.
      */
     private void prepareActionButton() {
         assertBuilderInitialized();
-        switch (Preferences.preferredAction(activity)) {
+        switch (Preferences.get(activity).preferredAction()) {
             case PREFERRED_ACTION_BROWSER:
-                String pakage = Preferences.secondaryBrowserPackage(activity);
+                String pakage = Preferences.get(activity).secondaryBrowserPackage();
                 if (Utils.isPackageInstalled(activity, pakage)) {
                     final Bitmap icon = getAppIconBitmap(pakage);
                     final Intent intent = new Intent(activity, SecondaryBrowserReceiver.class);
@@ -478,7 +479,7 @@ public class CustomTabs {
                 }
                 break;
             case PREFERRED_ACTION_FAV_SHARE:
-                pakage = Preferences.favSharePackage(activity);
+                pakage = Preferences.get(activity).favSharePackage();
                 if (Utils.isPackageInstalled(activity, pakage)) {
                     final Bitmap icon = getAppIconBitmap(pakage);
                     final Intent intent = new Intent(activity, FavShareBroadcastReceiver.class);
@@ -487,7 +488,7 @@ public class CustomTabs {
                     builder.setActionButton(icon, activity.getString(R.string.fav_share_app), favSharePending);
                 }
                 break;
-            case Preferences.PREFERRED_ACTION_GEN_SHARE:
+            case PREFERRED_ACTION_GEN_SHARE:
                 final Bitmap shareIcon = new IconicsDrawable(activity)
                         .icon(CommunityMaterial.Icon.cmd_share_variant)
                         .color(WHITE)
@@ -518,7 +519,7 @@ public class CustomTabs {
      * merge tabs and apps and
      */
     private void prepareMinimize() {
-        if (!Preferences.bottomBar(activity) && forWebHead && Preferences.mergeTabs(activity)) {
+        if (!Preferences.get(activity).bottomBar() && forWebHead && Preferences.get(activity).mergeTabs()) {
             final Intent minimizeIntent = new Intent(activity, MinimizeBroadcastReceiver.class);
             minimizeIntent.putExtra(Intent.EXTRA_TEXT, url);
             final PendingIntent pendingMin = PendingIntent.getBroadcast(activity, new Random().nextInt(), minimizeIntent, FLAG_UPDATE_CURRENT);
@@ -532,9 +533,9 @@ public class CustomTabs {
      */
     private void preparePreferredAction() {
         assertBuilderInitialized();
-        switch (Preferences.preferredAction(activity)) {
+        switch (Preferences.get(activity).preferredAction()) {
             case PREFERRED_ACTION_BROWSER:
-                String pkg = Preferences.favSharePackage(activity);
+                String pkg = Preferences.get(activity).favSharePackage();
                 if (Utils.isPackageInstalled(activity, pkg)) {
                     final String app = Utils.getAppNameWithPackage(activity, pkg);
                     final String label = String.format(activity.getString(R.string.share_with), app);
@@ -544,7 +545,7 @@ public class CustomTabs {
                 }
                 break;
             case PREFERRED_ACTION_FAV_SHARE:
-                pkg = Preferences.secondaryBrowserPackage(activity);
+                pkg = Preferences.get(activity).secondaryBrowserPackage();
                 if (Utils.isPackageInstalled(activity, pkg)) {
                     if (!pkg.equalsIgnoreCase(STABLE_PACKAGE)) {
                         final String app = Utils.getAppNameWithPackage(activity, pkg);
@@ -581,7 +582,7 @@ public class CustomTabs {
      * Adds an open in chrome option
      */
     private void prepareOpenInChrome() {
-        final String customTabPkg = Preferences.customTabApp(activity);
+        final String customTabPkg = Preferences.get(activity).customTabApp();
         if (Utils.isPackageInstalled(activity, customTabPkg)) {
             if (customTabPkg.equalsIgnoreCase(BETA_PACKAGE)
                     || customTabPkg.equalsIgnoreCase(DEV_PACKAGE)
@@ -607,11 +608,11 @@ public class CustomTabs {
      * Add all bottom bar actions
      */
     private void prepareBottomBar() {
-        if (!Preferences.bottomBar(activity)) {
+        if (!Preferences.get(activity).bottomBar()) {
             return;
         }
         final BottomBarManager.Config config = new BottomBarManager.Config();
-        config.minimize = forWebHead && Preferences.mergeTabs(activity);
+        config.minimize = forWebHead && Preferences.get(activity).mergeTabs();
         config.openInNewTab = Utils.isLollipopAbove();
 
         builder.setSecondaryToolbarViews(
@@ -657,7 +658,7 @@ public class CustomTabs {
     }
 
     private int chromeVariantVersion() {
-        final String customTabPackage = Preferences.customTabApp(activity);
+        final String customTabPackage = Preferences.get(activity).customTabApp();
         if (Utils.isPackageInstalled(activity, customTabPackage)
                 && (customTabPackage.equalsIgnoreCase(STABLE_PACKAGE)
                 | customTabPackage.equalsIgnoreCase(DEV_PACKAGE)

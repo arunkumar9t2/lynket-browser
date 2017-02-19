@@ -89,7 +89,7 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
     public void onWebSiteItemClicked(@NonNull WebSite webSite) {
         finish();
         DocumentUtils.smartOpenNewTab(this, webSite);
-        if (Preferences.webHeadsCloseOnOpen(this)) {
+        if (Preferences.get(this).webHeadsCloseOnOpen()) {
             broadcastDeleteWebHead(webSite);
         }
     }

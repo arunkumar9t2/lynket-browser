@@ -102,7 +102,7 @@ public class ScannerService extends AccessibilityService implements CustomTabMan
     }
 
     private void updateNotification() {
-        if (mLastFetchedUrl != null && mLastFetchedUrl.length() > 0 && Preferences.preFetchNotification(this)) {
+        if (mLastFetchedUrl != null && mLastFetchedUrl.length() > 0 && Preferences.get(this).preFetchNotification()) {
             Timber.d("Posting notification");
             PendingIntent contentIntent = PendingIntent.getBroadcast(this,
                     0,
@@ -206,14 +206,14 @@ public class ScannerService extends AccessibilityService implements CustomTabMan
     }
 
     private boolean shouldIgnoreEvent(AccessibilityEvent event) {
-        if (!Preferences.preFetch(this)) return true;
+        if (!Preferences.get(this).preFetch()) return true;
 
         if (!isWifiConditionsMet()) return true;
 
         String packageName;
         if (event.getPackageName() != null) {
             packageName = event.getPackageName().toString();
-            return packageName.equalsIgnoreCase(Preferences.customTabApp(this))
+            return packageName.equalsIgnoreCase(Preferences.get(this).customTabApp())
                     || getBrowserPackageList().contains(packageName);
         }
         return false;
@@ -289,7 +289,7 @@ public class ScannerService extends AccessibilityService implements CustomTabMan
     }
 
     private boolean isWifiConditionsMet() {
-        if (Preferences.wifiOnlyPrefetch(this)) {
+        if (Preferences.get(this).wifiOnlyPrefetch()) {
             final WifiManager wifiMgr = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             if (wifiMgr.isWifiEnabled()) {
                 final WifiInfo wifiInfo = wifiMgr.getConnectionInfo();

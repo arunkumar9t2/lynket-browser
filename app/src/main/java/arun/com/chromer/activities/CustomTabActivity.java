@@ -70,7 +70,7 @@ public class CustomTabActivity extends AppCompatActivity {
                 .fallbackColor(fallbackWebColor)
                 .prepare()
                 .launch();
-        if (Preferences.aggressiveLoading(this)) {
+        if (Preferences.get(this).aggressiveLoading()) {
             delayedGoToBack();
         }
         registerMinimizeReceiver();

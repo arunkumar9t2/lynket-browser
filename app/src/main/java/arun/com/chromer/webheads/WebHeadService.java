@@ -211,7 +211,7 @@ public class WebHeadService extends Service implements WebHeadContract,
         newWebHead.reveal();
         webHeads.put(webHeadUrl, newWebHead);
 
-        if (Preferences.aggressiveLoading(this) && !isMinimized) {
+        if (Preferences.get(this).aggressiveLoading() && !isMinimized) {
             DocumentUtils.openNewCustomTab(this, newWebHead);
         }
     }
@@ -257,7 +257,7 @@ public class WebHeadService extends Service implements WebHeadContract,
     }
 
     private void warmUp(WebHead webHead) {
-        if (!Preferences.aggressiveLoading(this)) {
+        if (!Preferences.get(this).aggressiveLoading()) {
             if (customTabConnected) {
                 customTabManager.mayLaunchUrl(Uri.parse(webHead.getUnShortenedUrl()), null, urlOrganizer.getPossibleUrls(webHeads));
             } else deferMayLaunchUntilConnected(webHead.getUnShortenedUrl());
@@ -384,7 +384,7 @@ public class WebHeadService extends Service implements WebHeadContract,
             lastOpenedUrl = webHead.getUrl();
             // If user prefers to the close the head on opening the link, then call destroySelf()
             // which will take care of closing and detaching the web head
-            if (Preferences.webHeadsCloseOnOpen(WebHeadService.this)) {
+            if (Preferences.get(this).webHeadsCloseOnOpen()) {
                 webHead.destroySelf(true);
                 // Since the current url is opened, lets prepare the next set of urls
                 urlOrganizer.prepareNextSetOfUrls(webHeads, lastOpenedUrl, customTabManager);

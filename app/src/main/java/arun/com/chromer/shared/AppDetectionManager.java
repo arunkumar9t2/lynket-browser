@@ -77,7 +77,7 @@ public final class AppDetectionManager {
 
         // Chances are that we picked the opening custom tab, so let's ignore our default provider
         // to be safe
-        if (packageName.equalsIgnoreCase(Preferences.customTabApp(context))) return false;
+        if (packageName.equalsIgnoreCase(Preferences.get(context).customTabApp())) return false;
 
         // Ignore google quick search box
         if (packageName.equalsIgnoreCase("com.google.android.googlequicksearchbox")) return false;

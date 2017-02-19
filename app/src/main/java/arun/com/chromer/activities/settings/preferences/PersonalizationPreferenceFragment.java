@@ -135,13 +135,13 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
 
     private void updatePreferenceStates(String key) {
         if (key.equalsIgnoreCase(Preferences.TOOLBAR_COLOR_PREF)) {
-            final boolean webHeadsEnabled = Preferences.isColoredToolbar(getActivity());
+            final boolean webHeadsEnabled = Preferences.get(getContext()).isColoredToolbar();
             enableDisablePreference(webHeadsEnabled,
                     Preferences.TOOLBAR_COLOR,
                     Preferences.DYNAMIC_COLOR
             );
         } else if (key.equalsIgnoreCase(Preferences.ANIMATION_TYPE)) {
-            final boolean animationEnabled = Preferences.isAnimationEnabled(getActivity());
+            final boolean animationEnabled = Preferences.get(getContext()).isAnimationEnabled();
             enableDisablePreference(animationEnabled, Preferences.ANIMATION_SPEED);
         }
 
@@ -149,8 +149,8 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
     }
 
     private void updateDynamicSummary() {
-        mDynamicColor.setSummary(Preferences.dynamicColorSummary(getActivity()));
-        boolean isColoredToolbar = Preferences.isColoredToolbar(getActivity());
+        mDynamicColor.setSummary(Preferences.get(getContext()).dynamicColorSummary());
+        boolean isColoredToolbar = Preferences.get(getContext()).isColoredToolbar();
         if (!isColoredToolbar) {
             mDynamicColor.setChecked(false);
         }
@@ -170,7 +170,7 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
                                     getString(R.string.based_on_web))
                             .positiveText(android.R.string.ok)
                             .alwaysCallMultiChoiceCallback()
-                            .itemsCallbackMultiChoice(Preferences.dynamicToolbarSelections(getActivity()),
+                            .itemsCallbackMultiChoice(Preferences.get(getContext()).dynamicToolbarSelections(),
                                     new MaterialDialog.ListCallbackMultiChoice() {
                                         @Override
                                         public boolean onSelection(MaterialDialog dialog,
@@ -178,10 +178,10 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
                                                                    CharSequence[] text) {
                                             if (which.length == 0) {
                                                 switchCompat.setChecked(false);
-                                                Preferences.dynamicToolbar(getActivity(), false);
+                                                Preferences.get(getContext()).dynamicToolbar(false);
                                             } else switchCompat.setChecked(true);
 
-                                            Preferences.updateAppAndWeb(getActivity(), which);
+                                            Preferences.get(getContext()).updateAppAndWeb(which);
                                             requestUsagePermissionIfNeeded();
                                             handleAppDetectionService();
                                             updateDynamicSummary();
@@ -191,7 +191,7 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
                             .dismissListener(new DialogInterface.OnDismissListener() {
                                 @Override
                                 public void onDismiss(DialogInterface dialog) {
-                                    switchCompat.setChecked(Preferences.dynamicToolbar(getActivity()));
+                                    switchCompat.setChecked(Preferences.get(getContext()).dynamicToolbar());
                                 }
                             })
                             .show();
@@ -222,7 +222,7 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
     }
 
     private void requestUsagePermissionIfNeeded() {
-        if (Preferences.dynamicToolbarOnApp(getActivity()) && !Utils.canReadUsageStats(getActivity())) {
+        if (Preferences.get(getContext()).dynamicToolbarOnApp() && !Utils.canReadUsageStats(getActivity())) {
             new MaterialDialog.Builder(getActivity())
                     .title(R.string.permission_required)
                     .content(R.string.usage_permission_explanation_appcolor)
@@ -240,7 +240,7 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
     }
 
     private void handleAppDetectionService() {
-        if (ServiceUtil.isAppBasedToolbarColor(getActivity()) || Preferences.blacklist(getActivity()))
+        if (ServiceUtil.isAppBasedToolbarColor(getActivity()) || Preferences.get(getContext()).blacklist())
             getActivity().startService(new Intent(getActivity().getApplicationContext(), AppDetectService.class));
         else
             getActivity().stopService(new Intent(getActivity().getApplicationContext(), AppDetectService.class));

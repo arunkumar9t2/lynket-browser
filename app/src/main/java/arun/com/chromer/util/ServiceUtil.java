@@ -21,12 +21,12 @@ public class ServiceUtil {
     }
 
     public static void takeCareOfServices(@NonNull Context context) {
-        if (Preferences.warmUp(context) && !Preferences.preFetch(context))
+        if (Preferences.get(context).warmUp() && !Preferences.get(context).preFetch())
             context.startService(new Intent(context, WarmUpService.class));
         else
             context.stopService(new Intent(context, WarmUpService.class));
 
-        if (isAppBasedToolbarColor(context) || Preferences.blacklist(context)) {
+        if (isAppBasedToolbarColor(context) || Preferences.get(context).blacklist()) {
             Intent appDetectService = new Intent(context, AppDetectService.class);
             appDetectService.putExtra(Constants.EXTRA_KEY_CLEAR_LAST_TOP_APP, true);
             context.startService(appDetectService);
@@ -34,7 +34,7 @@ public class ServiceUtil {
             context.stopService(new Intent(context, AppDetectService.class));
 
         try {
-            if (Preferences.preFetch(context))
+            if (Preferences.get(context).preFetch())
                 context.startService(new Intent(context, ScannerService.class));
             else
                 context.stopService(new Intent(context, ScannerService.class));
@@ -43,7 +43,7 @@ public class ServiceUtil {
     }
 
     public static boolean isAppBasedToolbarColor(@NonNull Context ctx) {
-        return Preferences.dynamicToolbarOnApp(ctx) && Preferences.dynamicToolbar(ctx);
+        return Preferences.get(ctx).dynamicToolbarOnApp() && Preferences.get(ctx).dynamicToolbar();
     }
 
     public static void refreshCustomTabBindings(@NonNull Context context) {

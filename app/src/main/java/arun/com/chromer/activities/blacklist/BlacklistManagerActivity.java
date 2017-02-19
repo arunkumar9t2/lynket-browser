@@ -103,9 +103,9 @@ public class BlacklistManagerActivity extends AppCompatActivity implements
         if (menuItem != null) {
             final SwitchCompat blackListSwitch = (SwitchCompat) menuItem.getActionView().findViewById(R.id.blacklist_switch);
             if (blackListSwitch != null) {
-                final boolean blackListActive = Preferences.blacklist(this) && Utils.canReadUsageStats(this);
-                Preferences.blacklist(this, blackListActive);
-                blackListSwitch.setChecked(Preferences.blacklist(this));
+                final boolean blackListActive = Preferences.get(this).blacklist() && Utils.canReadUsageStats(this);
+                Preferences.get(this).blacklist(blackListActive);
+                blackListSwitch.setChecked(Preferences.get(this).blacklist());
                 blackListSwitch.setOnCheckedChangeListener(this);
             }
         }
@@ -154,7 +154,7 @@ public class BlacklistManagerActivity extends AppCompatActivity implements
             requestUsagePermission();
         } else {
             showSnack(isChecked ? getString(R.string.blacklist_on) : getString(R.string.blacklist_off));
-            Preferences.blacklist(getApplicationContext(), isChecked);
+            Preferences.get(this).blacklist(isChecked);
             ServiceUtil.takeCareOfServices(getApplicationContext());
         }
     }

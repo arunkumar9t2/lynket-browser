@@ -614,7 +614,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent event) {
             wasClicked = true;
-            if (Preferences.webHeadsCloseOnOpen(getContext()) && contentRoot != null) {
+            if (Preferences.get(getContext()).webHeadsCloseOnOpen() && contentRoot != null) {
                 if (windowParams.x < dispWidth / 2) {
                     contentRoot.setPivotX(0);
                 } else {

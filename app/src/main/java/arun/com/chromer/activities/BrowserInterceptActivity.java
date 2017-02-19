@@ -56,7 +56,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
 
         final boolean isFromNewTab = safeIntent.getBooleanExtra(EXTRA_KEY_FROM_NEW_TAB, false);
         // Check if we should blacklist the launching app
-        if (Preferences.blacklist(this)) {
+        if (Preferences.get(this).blacklist()) {
             final String lastApp = AppDetectionManager.getInstance(this).getNonFilteredPackage();
             if (!TextUtils.isEmpty(lastApp) && BlackListManager.isPackageBlackListed(lastApp)) {
                 // The calling app was blacklisted by user, perform blacklisting.
@@ -67,7 +67,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
 
         // If user prefers to open in bubbles, then start the web head service which will take care
         // of pre fetching and loading the bubble.
-        if (Preferences.webHeads(this)) {
+        if (Preferences.get(this).webHeads()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (!Settings.canDrawOverlays(this)) {
                     Toast.makeText(this, getString(R.string.web_head_permission_toast), LENGTH_LONG).show();
@@ -82,7 +82,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
         } else {
             final Intent customTabActivity = new Intent(this, CustomTabActivity.class);
             customTabActivity.setData(safeIntent.getData());
-            if (isFromNewTab || Preferences.mergeTabs(this)) {
+            if (isFromNewTab || Preferences.get(this).mergeTabs()) {
                 customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
                 customTabActivity.addFlags(FLAG_ACTIVITY_MULTIPLE_TASK);
             }
@@ -105,7 +105,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
      * a dialog and explain what went wrong.
      */
     private void performBlacklistAction() {
-        final String secondaryBrowserPackage = Preferences.secondaryBrowserPackage(this);
+        final String secondaryBrowserPackage = Preferences.get(this).secondaryBrowserPackage();
 
         if (secondaryBrowserPackage == null) {
             showSecondaryBrowserHandlingError(R.string.secondary_browser_not_error);

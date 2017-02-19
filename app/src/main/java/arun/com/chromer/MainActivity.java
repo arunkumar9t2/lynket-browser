@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         setContentView(R.layout.main_activity);
         ButterKnife.bind(this);
 
-        if (Preferences.isFirstRun(this)) {
+        if (Preferences.get(this).isFirstRun()) {
             startActivity(new Intent(this, ChromerIntro.class));
         }
 
@@ -337,7 +337,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
 
     private void launchCustomTab(@Nullable String url) {
         if (url != null) {
-            if (Preferences.webHeads(this)) {
+            if (Preferences.get(this).webHeads()) {
                 final Intent webHeadService = new Intent(this, WebHeadService.class);
                 webHeadService.setData(Uri.parse(url));
                 startService(webHeadService);

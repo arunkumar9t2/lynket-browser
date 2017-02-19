@@ -6,13 +6,13 @@ import android.os.Build;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.settings.preferences.manager.Preferences;
+import timber.log.Timber;
 
 /**
  * Created by Arun on 09/09/2016.
@@ -22,13 +22,10 @@ import arun.com.chromer.activities.settings.preferences.manager.Preferences;
 public class WebHeadTile extends TileService {
     /**
      * Called when the tile is added to the Quick Settings.
-     *
-     * @return TileService constant indicating tile state
      */
-
     @Override
     public void onTileAdded() {
-        Log.d("QS", "Tile added");
+        Timber.d("Tile added");
         updateTile();
     }
 
@@ -37,7 +34,7 @@ public class WebHeadTile extends TileService {
      */
     @Override
     public void onStartListening() {
-        Log.d("QS", "Start listening");
+        Timber.d("Start listening");
         updateTile();
     }
 
@@ -46,7 +43,7 @@ public class WebHeadTile extends TileService {
      */
     @Override
     public void onClick() {
-        Preferences.webHeads(this, !Preferences.webHeads(this));
+        Preferences.get(this).webHeads(!Preferences.get(this).webHeads());
         updateTile();
     }
 
@@ -55,7 +52,7 @@ public class WebHeadTile extends TileService {
      */
     @Override
     public void onStopListening() {
-        Log.d("QS", "Stop Listening");
+        Timber.d("Stop Listening");
     }
 
     /**
@@ -63,14 +60,14 @@ public class WebHeadTile extends TileService {
      */
     @Override
     public void onTileRemoved() {
-        Log.d("QS", "Tile removed");
+        Timber.d("Tile removed");
     }
 
     // Changes the appearance of the tile.
     private void updateTile() {
         final Tile tile = getQsTile();
         if (tile != null) {
-            boolean isWebHeadActive = Preferences.webHeads(this);
+            boolean isWebHeadActive = Preferences.get(this).webHeads();
             Icon newIcon;
             String newLabel;
             int newState;
@@ -81,7 +78,6 @@ public class WebHeadTile extends TileService {
                         .icon(CommunityMaterial.Icon.cmd_chart_bubble)
                         .color(Color.WHITE)
                         .sizeDp(24).toBitmap());
-
                 newState = Tile.STATE_ACTIVE;
             } else {
                 newLabel = getString(R.string.web_heads);

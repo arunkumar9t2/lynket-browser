@@ -35,7 +35,7 @@ public class CircleView extends View {
         super(context, attrs, defStyleAttr);
         mBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mBgPaint.setStyle(Paint.Style.FILL);
-        mColor = Preferences.webHeadColor(getContext());
+        mColor = Preferences.get(getContext()).webHeadColor();
         mBgPaint.setColor(mColor);
     }
 

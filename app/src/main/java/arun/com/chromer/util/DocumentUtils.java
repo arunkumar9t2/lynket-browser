@@ -70,7 +70,7 @@ public class DocumentUtils {
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     @TargetApi(LOLLIPOP)
     private static boolean reOrderCustomTabByUrls(@NonNull final Context context, @NonNull final String shortUrl, @Nullable final String longUrl) {
-        if (!Preferences.mergeTabs(context)) {
+        if (!Preferences.get(context).mergeTabs()) {
             return false;
         }
         final ActivityManager am = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
@@ -96,7 +96,7 @@ public class DocumentUtils {
         final Intent customTabActivity = new Intent(context, CustomTabActivity.class);
         customTabActivity.setData(Uri.parse(webSite.url));
         customTabActivity.setFlags(FLAG_ACTIVITY_NEW_TASK);
-        if (Preferences.mergeTabs(context)) {
+        if (Preferences.get(context).mergeTabs()) {
             customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
             customTabActivity.addFlags(FLAG_ACTIVITY_MULTIPLE_TASK);
         }
@@ -110,7 +110,7 @@ public class DocumentUtils {
         final Intent customTabActivity = new Intent(context, CustomTabActivity.class);
         customTabActivity.setData(Uri.parse(webHead.getUrl()));
         customTabActivity.setFlags(FLAG_ACTIVITY_NEW_TASK);
-        if (webHead.isFromNewTab() || Preferences.mergeTabs(context)) {
+        if (webHead.isFromNewTab() || Preferences.get(context).mergeTabs()) {
             customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
             customTabActivity.addFlags(FLAG_ACTIVITY_MULTIPLE_TASK);
         }
@@ -146,7 +146,7 @@ public class DocumentUtils {
         minimizeIntent.putExtra(EXTRA_TEXT, url);
         LocalBroadcastManager.getInstance(context).sendBroadcastSync(minimizeIntent);
         // Open a new web head if the old was destroyed
-        if (Preferences.webHeads(context)) {
+        if (Preferences.get(context).webHeads()) {
             final Intent webHeadService = new Intent(context, WebHeadService.class);
             webHeadService.addFlags(FLAG_ACTIVITY_NEW_TASK);
             webHeadService.setData(Uri.parse(url));

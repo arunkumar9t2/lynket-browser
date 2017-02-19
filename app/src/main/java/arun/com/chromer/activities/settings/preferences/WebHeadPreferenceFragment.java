@@ -97,7 +97,7 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
         updatePreferenceStates(key);
         updatePreferenceSummary(WEBHEAD_PREFERENCE_GROUP);
         if (key.equalsIgnoreCase(Preferences.MERGE_TABS_AND_APPS)) {
-            if (!Preferences.mergeTabs(getActivity())) {
+            if (!Preferences.get(getContext()).mergeTabs()) {
                 aggressiveLoading.setChecked(false);
             }
         }
@@ -161,13 +161,13 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
         aggressiveLoading.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (((Boolean) newValue) && !Preferences.mergeTabs(getActivity())) {
+                if (((Boolean) newValue) && !Preferences.get(getContext()).mergeTabs()) {
                     new MaterialDialog.Builder(getActivity())
                             .title(R.string.aggresive_dia_title)
                             .content(R.string.aggresive_dia_content)
                             .positiveText(android.R.string.ok)
                             .show();
-                    Preferences.mergeTabs(getActivity(), true);
+                    Preferences.get(getContext()).mergeTabs(true);
                 }
                 return true;
             }
@@ -211,7 +211,7 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
 
     private void updatePreferenceStates(String key) {
         if (key.equalsIgnoreCase(Preferences.WEB_HEAD_ENABLED)) {
-            final boolean webHeadsEnabled = Preferences.webHeads(getActivity());
+            final boolean webHeadsEnabled = Preferences.get(getContext()).webHeads();
             enableDisablePreference(webHeadsEnabled,
                     Preferences.WEB_HEAD_SPAWN_LOCATION,
                     Preferences.WEB_HEADS_COLOR,

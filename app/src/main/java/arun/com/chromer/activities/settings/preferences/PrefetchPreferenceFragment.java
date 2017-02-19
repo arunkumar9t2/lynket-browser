@@ -66,13 +66,13 @@ public class PrefetchPreferenceFragment extends DividerLessPreferenceFragment im
                         mPrefetchPreference.setChecked(false);
                         guideUserToAccessibilitySettings(true);
                         mWarmupPreference.setEnabled(true);
-                        mWarmupPreference.setChecked(Preferences.warmUp(getActivity()));
+                        mWarmupPreference.setChecked(Preferences.get(getContext()).warmUp());
                     } else {
                         mWarmupPreference.setEnabled(false);
                         mWarmupPreference.setChecked(true);
                     }
                 } else {
-                    mWarmupPreference.setChecked(Preferences.warmUp(getActivity()));
+                    mWarmupPreference.setChecked(Preferences.get(getContext()).warmUp());
                     guideUserToAccessibilitySettings(false);
                     mWarmupPreference.setEnabled(true);
                 }
@@ -104,7 +104,7 @@ public class PrefetchPreferenceFragment extends DividerLessPreferenceFragment im
 
         // Start stop warm up service
         if (key.equalsIgnoreCase(Preferences.WARM_UP)) {
-            if (Preferences.warmUp(getActivity())) {
+            if (Preferences.get(getContext()).warmUp()) {
                 getActivity().startService(new Intent(getActivity(), WarmUpService.class));
             } else {
                 getActivity().stopService(new Intent(getActivity(), WarmUpService.class));
@@ -113,7 +113,7 @@ public class PrefetchPreferenceFragment extends DividerLessPreferenceFragment im
     }
 
     private boolean isPrefetchEnabled() {
-        return Utils.isAccessibilityServiceEnabled(getActivity()) && Preferences.preFetch(getActivity());
+        return Utils.isAccessibilityServiceEnabled(getActivity()) && Preferences.get(getContext()).preFetch();
     }
 
     private void guideUserToAccessibilitySettings(boolean prefetchEnabled) {

@@ -39,7 +39,7 @@ public class UrlOrganizer {
      * @param customTabManager The manager instance which will help with pre fetching.
      */
     public void prepareNextSetOfUrls(@NonNull Map<String, WebHead> webHeads, @NonNull String lastOpenedUrl, @NonNull CustomTabManager customTabManager) {
-        if (Preferences.aggressiveLoading(context)) return;
+        if (Preferences.get(context).aggressiveLoading()) return;
 
         final Stack<String> urlStack = getUrlStack(webHeads, lastOpenedUrl);
         if (urlStack.size() > 0) {

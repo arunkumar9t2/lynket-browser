@@ -79,7 +79,7 @@ public class CustomTabManager implements ServiceConnectionCallback {
     public boolean bindCustomTabsService(Context context) {
         if (mClient != null) return false;
 
-        String packageName = Preferences.customTabApp(context);
+        String packageName = Preferences.get(context).customTabApp();
         if (packageName == null) return false;
 
         mConnection = new ServiceConnection(this);
