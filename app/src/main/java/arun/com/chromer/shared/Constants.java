@@ -10,11 +10,11 @@ public class Constants {
     public static final int NO_COLOR = -1;
 
     // URL
-    public static final String GOOGLE_URL = "http://www.google.com/";
+    public static final String GOOGLE_URL = "https://www.google.com/";
     public static final String CUSTOM_TAB_URL = "https://developer.chrome.com/multidevice/android/customtabs#whentouse";
     public static final String APP_TESTING_URL = "https://play.google.com/apps/testing/arun.com.chromer";
     public static final String G_COMMUNITY_URL = "https://plus.google.com/communities/109754631011301174504";
-    public static final String G_SEARCH_URL = "http://www.google.com/search?q=";
+    public static final String G_SEARCH_URL = "https://www.google.com/search?q=";
 
     //Objects
     public static final Intent WEB_INTENT = new Intent(Intent.ACTION_VIEW, Uri.parse(GOOGLE_URL));
