@@ -48,6 +48,7 @@ import arun.com.chromer.activities.about.changelog.Changelog;
 import arun.com.chromer.activities.intro.ChromerIntro;
 import arun.com.chromer.activities.intro.WebHeadsIntro;
 import arun.com.chromer.activities.payments.DonateActivity;
+import arun.com.chromer.activities.settings.SettingsActivity;
 import arun.com.chromer.activities.settings.fragments.CustomizeFragment;
 import arun.com.chromer.activities.settings.fragments.OptionsFragment;
 import arun.com.chromer.activities.settings.fragments.WebHeadsFragment;
@@ -112,6 +113,8 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         if (Preferences.get(this).isFirstRun()) {
             startActivity(new Intent(this, ChromerIntro.class));
         }
+
+        startActivity(new Intent(this, SettingsActivity.class));
 
         Changelog.conditionalShow(this);
 
