@@ -12,7 +12,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
-import arun.com.chromer.preferences.manager.Preferences;
+import arun.com.chromer.activities.settings.preferences.manager.Preferences;
 
 /**
  * Created by Arun on 09/09/2016.

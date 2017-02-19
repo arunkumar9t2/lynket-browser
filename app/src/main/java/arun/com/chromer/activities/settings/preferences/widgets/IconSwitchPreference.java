@@ -1,4 +1,4 @@
-package arun.com.chromer.preferences.widgets;
+package arun.com.chromer.activities.settings.preferences.widgets;
 
 import android.content.Context;
 import android.support.v7.preference.PreferenceViewHolder;

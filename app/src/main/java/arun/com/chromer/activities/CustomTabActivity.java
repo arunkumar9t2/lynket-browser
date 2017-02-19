@@ -23,9 +23,9 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.chimbori.crux.articles.Article;
 
 import arun.com.chromer.R;
+import arun.com.chromer.activities.settings.preferences.manager.Preferences;
 import arun.com.chromer.customtabs.CustomTabs;
 import arun.com.chromer.parser.RxParser;
-import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.helper.WebSite;
 import rx.SingleSubscriber;

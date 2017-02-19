@@ -1,4 +1,4 @@
-package arun.com.chromer.preferences;
+package arun.com.chromer.activities.settings.preferences;
 
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
@@ -16,7 +16,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import arun.com.chromer.MainActivity;
-import arun.com.chromer.preferences.widgets.ColorPreference;
+import arun.com.chromer.activities.settings.preferences.widgets.ColorPreference;
 import timber.log.Timber;
 
 /**

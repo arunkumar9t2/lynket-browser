@@ -3,25 +3,25 @@
 
     <PreferenceCategory android:title="@string/additional_preferences">
         <!--suppress AndroidElementNotAllowed -->
-        <arun.com.chromer.preferences.widgets.IconSwitchPreference
+        <arun.com.chromer.activities.settings.preferences.widgets.IconSwitchPreference
             android:defaultValue="true"
             android:key="warm_up_preference"
             android:summary="@string/keep_chrome_warmedup"
             android:title="@string/warmup_browser" />
         <!--suppress AndroidElementNotAllowed -->
-        <arun.com.chromer.preferences.widgets.IconSwitchPreference
+        <arun.com.chromer.activities.settings.preferences.widgets.IconSwitchPreference
             android:defaultValue="false"
             android:key="pre_fetch_preference"
             android:summary="@string/pre_fetch_desc"
             android:title="@string/pre_fetch_content" />
         <!--suppress AndroidElementNotAllowed -->
-        <arun.com.chromer.preferences.widgets.SubCheckBoxPreference
+        <arun.com.chromer.activities.settings.preferences.widgets.SubCheckBoxPreference
             android:defaultValue="true"
             android:key="wifi_preference"
             android:title="@string/only_on_wifi" />
 
         <!--suppress AndroidElementNotAllowed -->
-        <arun.com.chromer.preferences.widgets.SubCheckBoxPreference
+        <arun.com.chromer.activities.settings.preferences.widgets.SubCheckBoxPreference
             android:defaultValue="false"
             android:key="pre_fetch_notification_preference"
             android:summary="@string/show_notification"

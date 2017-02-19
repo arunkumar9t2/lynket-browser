@@ -1,4 +1,4 @@
-package arun.com.chromer.fragments;
+package arun.com.chromer.activities.settings.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import arun.com.chromer.R;
-import arun.com.chromer.preferences.WebHeadPreferenceFragment;
+import arun.com.chromer.activities.settings.preferences.WebHeadPreferenceFragment;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 

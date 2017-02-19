@@ -7,7 +7,7 @@ import android.support.annotation.ColorInt;
 import android.util.AttributeSet;
 import android.view.View;
 
-import arun.com.chromer.preferences.manager.Preferences;
+import arun.com.chromer.activities.settings.preferences.manager.Preferences;
 import arun.com.chromer.util.Utils;
 
 /**

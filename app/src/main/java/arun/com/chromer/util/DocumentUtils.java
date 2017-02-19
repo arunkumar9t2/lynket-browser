@@ -10,7 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 
 import arun.com.chromer.activities.CustomTabActivity;
-import arun.com.chromer.preferences.manager.Preferences;
+import arun.com.chromer.activities.settings.preferences.manager.Preferences;
 import arun.com.chromer.webheads.WebHeadService;
 import arun.com.chromer.webheads.helper.WebSite;
 import arun.com.chromer.webheads.ui.views.WebHead;

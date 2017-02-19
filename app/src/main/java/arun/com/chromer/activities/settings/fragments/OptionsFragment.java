@@ -1,4 +1,4 @@
-package arun.com.chromer.fragments;
+package arun.com.chromer.activities.settings.fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,9 +18,9 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
-import arun.com.chromer.preferences.BehaviorPreferenceFragment;
-import arun.com.chromer.preferences.PrefetchPreferenceFragment;
-import arun.com.chromer.preferences.widgets.AppPreferenceCardView;
+import arun.com.chromer.activities.settings.preferences.BehaviorPreferenceFragment;
+import arun.com.chromer.activities.settings.preferences.PrefetchPreferenceFragment;
+import arun.com.chromer.activities.settings.preferences.widgets.AppPreferenceCardView;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;

@@ -1,4 +1,4 @@
-package arun.com.chromer.preferences;
+package arun.com.chromer.activities.settings.preferences;
 
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
@@ -23,15 +23,15 @@ import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.MainActivity;
 import arun.com.chromer.R;
-import arun.com.chromer.preferences.manager.Preferences;
-import arun.com.chromer.preferences.widgets.ColorPreference;
-import arun.com.chromer.preferences.widgets.IconCheckboxPreference;
-import arun.com.chromer.preferences.widgets.IconListPreference;
-import arun.com.chromer.preferences.widgets.IconSwitchPreference;
+import arun.com.chromer.activities.settings.preferences.manager.Preferences;
+import arun.com.chromer.activities.settings.preferences.widgets.ColorPreference;
+import arun.com.chromer.activities.settings.preferences.widgets.IconCheckboxPreference;
+import arun.com.chromer.activities.settings.preferences.widgets.IconListPreference;
+import arun.com.chromer.activities.settings.preferences.widgets.IconSwitchPreference;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Utils;
 
-import static arun.com.chromer.preferences.manager.Preferences.AGGRESSIVE_LOADING;
+import static arun.com.chromer.activities.settings.preferences.manager.Preferences.AGGRESSIVE_LOADING;
 
 public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 

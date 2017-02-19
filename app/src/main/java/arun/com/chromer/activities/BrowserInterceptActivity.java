@@ -20,7 +20,7 @@ import com.afollestad.materialdialogs.Theme;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.blacklist.BlackListManager;
-import arun.com.chromer.preferences.manager.Preferences;
+import arun.com.chromer.activities.settings.preferences.manager.Preferences;
 import arun.com.chromer.shared.AppDetectionManager;
 import arun.com.chromer.util.DocumentUtils;
 import arun.com.chromer.util.SafeIntent;

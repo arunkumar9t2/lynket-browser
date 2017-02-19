@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
-import arun.com.chromer.preferences.manager.Preferences;
+import arun.com.chromer.activities.settings.preferences.manager.Preferences;
 import timber.log.Timber;
 
 /**

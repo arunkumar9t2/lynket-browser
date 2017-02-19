@@ -1,4 +1,4 @@
-package arun.com.chromer.preferences.manager;
+package arun.com.chromer.activities.settings.preferences.manager;
 
 import android.content.ComponentName;
 import android.content.Context;

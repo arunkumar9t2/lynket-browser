@@ -1,4 +1,4 @@
-package arun.com.chromer.fragments;
+package arun.com.chromer.activities.settings.fragments;
 
 import android.content.Context;
 import android.os.Build;
@@ -25,8 +25,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import arun.com.chromer.R;
-import arun.com.chromer.preferences.BottomBarPreferenceFragment;
-import arun.com.chromer.preferences.PersonalizationPreferenceFragment;
+import arun.com.chromer.activities.settings.preferences.BottomBarPreferenceFragment;
+import arun.com.chromer.activities.settings.preferences.PersonalizationPreferenceFragment;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;

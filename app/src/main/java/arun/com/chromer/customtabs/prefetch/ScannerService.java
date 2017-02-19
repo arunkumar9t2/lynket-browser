@@ -31,9 +31,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import arun.com.chromer.R;
+import arun.com.chromer.activities.settings.preferences.manager.Preferences;
 import arun.com.chromer.customtabs.CustomTabManager;
 import arun.com.chromer.customtabs.warmup.WarmUpService;
-import arun.com.chromer.preferences.manager.Preferences;
 import timber.log.Timber;
 
 /**

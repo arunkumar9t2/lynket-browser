@@ -1,4 +1,4 @@
-package arun.com.chromer.preferences.widgets;
+package arun.com.chromer.activities.settings.preferences.widgets;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;

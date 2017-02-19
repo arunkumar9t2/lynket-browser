@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import arun.com.chromer.activities.settings.preferences.manager.Preferences;
 import arun.com.chromer.customtabs.CustomTabManager;
-import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.webheads.ui.views.WebHead;
 import timber.log.Timber;
 

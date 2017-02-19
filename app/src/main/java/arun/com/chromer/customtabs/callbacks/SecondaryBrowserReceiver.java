@@ -14,7 +14,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import arun.com.chromer.R;
-import arun.com.chromer.preferences.manager.Preferences;
+import arun.com.chromer.activities.settings.preferences.manager.Preferences;
 import timber.log.Timber;
 
 import static android.content.Intent.ACTION_VIEW;

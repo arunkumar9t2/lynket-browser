@@ -31,6 +31,7 @@ import java.util.Random;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.OpenIntentWithActivity;
+import arun.com.chromer.activities.settings.preferences.manager.Preferences;
 import arun.com.chromer.customtabs.bottombar.BottomBarManager;
 import arun.com.chromer.customtabs.callbacks.AddHomeShortcutService;
 import arun.com.chromer.customtabs.callbacks.ClipboardService;
@@ -45,7 +46,6 @@ import arun.com.chromer.customtabs.prefetch.ScannerService;
 import arun.com.chromer.customtabs.warmup.WarmUpService;
 import arun.com.chromer.db.AppColor;
 import arun.com.chromer.db.WebColor;
-import arun.com.chromer.preferences.manager.Preferences;
 import arun.com.chromer.shared.AppDetectionManager;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.WebHeadService;
@@ -53,13 +53,13 @@ import timber.log.Timber;
 
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static android.graphics.Color.WHITE;
+import static arun.com.chromer.activities.settings.preferences.manager.Preferences.ANIMATION_MEDIUM;
+import static arun.com.chromer.activities.settings.preferences.manager.Preferences.ANIMATION_SHORT;
+import static arun.com.chromer.activities.settings.preferences.manager.Preferences.PREFERRED_ACTION_BROWSER;
+import static arun.com.chromer.activities.settings.preferences.manager.Preferences.PREFERRED_ACTION_FAV_SHARE;
 import static arun.com.chromer.customtabs.bottombar.BottomBarManager.createBottomBarRemoteViews;
 import static arun.com.chromer.customtabs.bottombar.BottomBarManager.getClickableIDs;
 import static arun.com.chromer.customtabs.bottombar.BottomBarManager.getOnClickPendingIntent;
-import static arun.com.chromer.preferences.manager.Preferences.ANIMATION_MEDIUM;
-import static arun.com.chromer.preferences.manager.Preferences.ANIMATION_SHORT;
-import static arun.com.chromer.preferences.manager.Preferences.PREFERRED_ACTION_BROWSER;
-import static arun.com.chromer.preferences.manager.Preferences.PREFERRED_ACTION_FAV_SHARE;
 import static arun.com.chromer.shared.Constants.NO_COLOR;
 
 /**

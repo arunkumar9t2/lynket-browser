@@ -23,7 +23,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import java.util.ArrayList;
 
 import arun.com.chromer.R;
-import arun.com.chromer.preferences.manager.Preferences;
+import arun.com.chromer.activities.settings.preferences.manager.Preferences;
 import arun.com.chromer.util.DocumentUtils;
 import arun.com.chromer.webheads.helper.WebSite;
 import butterknife.BindView;

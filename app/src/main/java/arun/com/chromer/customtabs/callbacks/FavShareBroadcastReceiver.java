@@ -21,7 +21,7 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import arun.com.chromer.R;
-import arun.com.chromer.preferences.manager.Preferences;
+import arun.com.chromer.activities.settings.preferences.manager.Preferences;
 
 import static android.content.Intent.EXTRA_TEXT;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
