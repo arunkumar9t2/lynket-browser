@@ -78,7 +78,7 @@
                 android:resource="@xml/shortcuts" />
         </activity>
         <activity
-            android:name=".activities.settings.SettingsActivity"
+            android:name=".activities.settings.SettingsGroupActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -189,6 +189,15 @@
             android:name="arun.com.chromer.glide.ChromerGideModule"
             android:value="GlideModule" />
 
+        <activity
+            android:name=".activities.settings.browsingmode.BrowsingModeActivity"
+            android:label="@string/title_activity_browsing_mode"
+            android:parentActivityName=".activities.settings.SettingsGroupActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="arun.com.chromer.activities.settings.SettingsGroupActivity" />
+        </activity>
     </application>
 
 </manifest>

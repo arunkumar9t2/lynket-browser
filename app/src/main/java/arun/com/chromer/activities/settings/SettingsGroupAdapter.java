@@ -22,12 +22,17 @@ import butterknife.ButterKnife;
 /**
  * Created by Arunkumar on 19-02-2017.
  */
-class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.SettingsItemViewHolder> {
+class SettingsGroupAdapter extends RecyclerView.Adapter<SettingsGroupAdapter.SettingsItemViewHolder> {
     private final Context context;
-
     private final List<String> settingsItems = new ArrayList<>();
+    private GroupItemClickListener groupItemClickListener = new GroupItemClickListener() {
+        @Override
+        public void onGroupItemClicked(int position, View view) {
+            // no-op
+        }
+    };
 
-    SettingsAdapter(@NonNull final Context context) {
+    SettingsGroupAdapter(@NonNull final Context context) {
         setHasStableIds(true);
         this.context = context.getApplicationContext();
         settingsItems.add(context.getString(R.string.settings_browsing_mode));
@@ -41,8 +46,15 @@ class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.SettingsItemV
     }
 
     @Override
-    public void onBindViewHolder(SettingsItemViewHolder holder, int position) {
+    public void onBindViewHolder(final SettingsItemViewHolder holder, int position) {
         holder.bind(settingsItems.get(position));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (holder.getAdapterPosition() != RecyclerView.NO_POSITION)
+                    groupItemClickListener.onGroupItemClicked(holder.getAdapterPosition(), holder.itemView);
+            }
+        });
     }
 
     @Override
@@ -53,6 +65,20 @@ class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.SettingsItemV
     @Override
     public int getItemCount() {
         return settingsItems.size();
+    }
+
+    void setGroupItemClickListener(@NonNull GroupItemClickListener groupItemClickListener) {
+        this.groupItemClickListener = groupItemClickListener;
+    }
+
+    void cleanUp() {
+        groupItemClickListener = new GroupItemClickListener() {
+            @Override
+            public void onGroupItemClicked(int position, View view) {
+
+            }
+        };
+        settingsItems.clear();
     }
 
     public class SettingsItemViewHolder extends RecyclerView.ViewHolder {
@@ -77,8 +103,7 @@ class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.SettingsItemV
                             .icon(CommunityMaterial.Icon.cmd_earth)
                             .colorRes(R.color.colorAccent)
                             .sizeDp(24));
-                    subtitle.setVisibility(View.VISIBLE);
-                    subtitle.setText("Custom tabs");
+                    subtitle.setVisibility(View.GONE);
                     break;
                 case 1:
                     icon.setImageDrawable(new IconicsDrawable(icon.getContext())
@@ -96,5 +121,9 @@ class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.SettingsItemV
                     break;
             }
         }
+    }
+
+    public interface GroupItemClickListener {
+        void onGroupItemClicked(int position, final View view);
     }
 }

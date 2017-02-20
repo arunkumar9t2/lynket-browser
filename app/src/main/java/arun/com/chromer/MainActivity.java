@@ -48,7 +48,7 @@ import arun.com.chromer.activities.about.changelog.Changelog;
 import arun.com.chromer.activities.intro.ChromerIntro;
 import arun.com.chromer.activities.intro.WebHeadsIntro;
 import arun.com.chromer.activities.payments.DonateActivity;
-import arun.com.chromer.activities.settings.SettingsActivity;
+import arun.com.chromer.activities.settings.SettingsGroupActivity;
 import arun.com.chromer.activities.settings.fragments.CustomizeFragment;
 import arun.com.chromer.activities.settings.fragments.OptionsFragment;
 import arun.com.chromer.activities.settings.fragments.WebHeadsFragment;
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             startActivity(new Intent(this, ChromerIntro.class));
         }
 
-        startActivity(new Intent(this, SettingsActivity.class));
+        startActivity(new Intent(this, SettingsGroupActivity.class));
 
         Changelog.conditionalShow(this);
 
@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         });
     }
 
-    public void snack(@NonNull String textToSnack) {
+    private void snack(@NonNull String textToSnack) {
         Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_SHORT).show();
     }
 

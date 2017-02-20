@@ -230,4 +230,10 @@
     <string name="settings_browsing_mode">Browsing mode</string>
     <string name="settings_look_and_feel">Look &amp; feel</string>
     <string name="settings_browsing_options">Browsing options</string>
+    <string name="title_activity_browsing_mode">Browsing mode</string>
+    <string name="browsing_mode_slide_over">Slide over</string>
+    <string name="browsing_mode_web_heads">Web heads</string>
+    <string name="browsing_mode_slide_over_explanation">Websites slide over the app you are using.</string>
+    <string name="browsing_mode_web_heads_explanation">Websites load in the background allowing you to stack multiple links and then get back to them later with floating bubbles on screen.</string>
+    <string name="load_faster_heading">Load pages faster with below options</string>
 </resources>
