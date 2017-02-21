@@ -100,7 +100,7 @@ public class WebHeadPreferenceFragment extends BasePreferenceFragment implements
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         updatePreferenceStates(key);
-        updatePreferenceSummary(SUMMARY_GROUP);
+        updatePreferenceSummary(key);
         if (key.equalsIgnoreCase(MERGE_TABS_AND_APPS)) {
             if (!Preferences.get(getContext()).mergeTabs()) {
                 aggressiveLoading.setChecked(false);

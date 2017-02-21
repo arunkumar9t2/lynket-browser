@@ -50,8 +50,8 @@ public class Preferences {
     private static final String FIRST_RUN = "firstrun_2";
     private static final String SECONDARY_PREF = "secondary_preference";
     private static final String FAV_SHARE_PREF = "fav_share_preference";
-    private static final String DYNAMIC_COLOR_APP = "dynamic_color_app";
-    private static final String DYNAMIC_COLOR_WEB = "dynamic_color_web";
+    public static final String DYNAMIC_COLOR_APP = "dynamic_color_app";
+    public static final String DYNAMIC_COLOR_WEB = "dynamic_color_web";
     public static final String AMP_MODE = "amp_mode_pref";
     public static final String ARTICLE_MODE = "article_mode_pref";
     // Singleton instance
@@ -239,7 +239,6 @@ public class Preferences {
         return getDefaultSharedPreferences().getBoolean(DYNAMIC_COLOR, false);
     }
 
-    @SuppressWarnings("unused")
     public void dynamicToolbar(final boolean preference) {
         getDefaultSharedPreferences().edit().putBoolean(DYNAMIC_COLOR, preference).apply();
     }

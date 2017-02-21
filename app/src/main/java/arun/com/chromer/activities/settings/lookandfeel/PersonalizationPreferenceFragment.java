@@ -28,6 +28,7 @@ import arun.com.chromer.activities.settings.preferences.BasePreferenceFragment;
 import arun.com.chromer.activities.settings.widgets.ColorPreference;
 import arun.com.chromer.activities.settings.widgets.IconListPreference;
 import arun.com.chromer.activities.settings.widgets.IconSwitchPreference;
+import arun.com.chromer.activities.settings.widgets.SubCheckBoxPreference;
 import arun.com.chromer.shared.AppDetectService;
 import arun.com.chromer.util.ServiceUtil;
 import arun.com.chromer.util.Utils;
@@ -35,6 +36,8 @@ import arun.com.chromer.util.Utils;
 import static arun.com.chromer.activities.settings.Preferences.ANIMATION_SPEED;
 import static arun.com.chromer.activities.settings.Preferences.ANIMATION_TYPE;
 import static arun.com.chromer.activities.settings.Preferences.DYNAMIC_COLOR;
+import static arun.com.chromer.activities.settings.Preferences.DYNAMIC_COLOR_APP;
+import static arun.com.chromer.activities.settings.Preferences.DYNAMIC_COLOR_WEB;
 import static arun.com.chromer.activities.settings.Preferences.PREFERRED_ACTION;
 import static arun.com.chromer.activities.settings.Preferences.TOOLBAR_COLOR;
 import static arun.com.chromer.activities.settings.Preferences.TOOLBAR_COLOR_PREF;
@@ -59,6 +62,8 @@ public class PersonalizationPreferenceFragment extends BasePreferenceFragment im
     private IconListPreference animationSpeedPreference;
     private IconListPreference openingAnimationPreference;
     private IconListPreference preferredActionPreference;
+    private SubCheckBoxPreference dynamicAppPreference;
+    private SubCheckBoxPreference dynamicWebPreference;
 
     public PersonalizationPreferenceFragment() {
         // Required empty public constructor
@@ -89,6 +94,7 @@ public class PersonalizationPreferenceFragment extends BasePreferenceFragment im
         registerReceiver(colorSelectionReceiver, toolbarColorSetFilter);
         updatePreferenceStates(TOOLBAR_COLOR_PREF);
         updatePreferenceStates(ANIMATION_TYPE);
+        updatePreferenceStates(DYNAMIC_COLOR);
         updatePreferenceSummary(SUMMARY_GROUP);
     }
 
@@ -101,7 +107,7 @@ public class PersonalizationPreferenceFragment extends BasePreferenceFragment im
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         updatePreferenceStates(key);
-        updatePreferenceSummary(SUMMARY_GROUP);
+        updatePreferenceSummary(key);
     }
 
     private void init() {
@@ -111,6 +117,8 @@ public class PersonalizationPreferenceFragment extends BasePreferenceFragment im
         preferredActionPreference = (IconListPreference) findPreference(PREFERRED_ACTION);
         openingAnimationPreference = (IconListPreference) findPreference(ANIMATION_TYPE);
         animationSpeedPreference = (IconListPreference) findPreference(ANIMATION_SPEED);
+        dynamicAppPreference = (SubCheckBoxPreference) findPreference(DYNAMIC_COLOR_APP);
+        dynamicWebPreference = (SubCheckBoxPreference) findPreference(DYNAMIC_COLOR_WEB);
     }
 
     private void setupIcons() {
@@ -143,11 +151,33 @@ public class PersonalizationPreferenceFragment extends BasePreferenceFragment im
         if (key.equalsIgnoreCase(TOOLBAR_COLOR_PREF)) {
             final boolean coloredToolbar = Preferences.get(getContext()).isColoredToolbar();
             enableDisablePreference(coloredToolbar, TOOLBAR_COLOR, DYNAMIC_COLOR);
+            if (!coloredToolbar) {
+                dynamicColorPreference.setChecked(false);
+            }
         } else if (key.equalsIgnoreCase(ANIMATION_TYPE)) {
             final boolean animationEnabled = Preferences.get(getContext()).isAnimationEnabled();
             enableDisablePreference(animationEnabled, ANIMATION_SPEED);
+        } else if (key.equalsIgnoreCase(DYNAMIC_COLOR)
+                || key.equalsIgnoreCase(DYNAMIC_COLOR_APP)
+                || key.equalsIgnoreCase(DYNAMIC_COLOR_WEB)) {
+            final boolean dynamicColor = Preferences.get(getContext()).dynamicToolbar();
+            if (!dynamicColor) {
+                dynamicAppPreference.setVisible(false);
+                dynamicWebPreference.setVisible(false);
+                dynamicAppPreference.setChecked(false);
+                dynamicWebPreference.setChecked(false);
+            } else {
+                dynamicAppPreference.setVisible(true);
+                dynamicWebPreference.setVisible(true);
+            }
+            if (key.equalsIgnoreCase(DYNAMIC_COLOR_APP)) {
+                if (Preferences.get(getContext()).dynamicToolbarOnApp() && !Utils.canReadUsageStats(getActivity())) {
+                    requestUsagePermission();
+                    handleAppDetectionService();
+                }
+            }
+            updateDynamicSummary();
         }
-        updateDynamicSummary();
     }
 
     private void updateDynamicSummary() {
@@ -168,38 +198,9 @@ public class PersonalizationPreferenceFragment extends BasePreferenceFragment im
                     new MaterialDialog.Builder(getActivity())
                             .title(R.string.dynamic_toolbar_color)
                             .content(R.string.dynamic_toolbar_help)
-                            .items(getString(R.string.based_on_app),
-                                    getString(R.string.based_on_web))
                             .positiveText(android.R.string.ok)
-                            .alwaysCallMultiChoiceCallback()
-                            .itemsCallbackMultiChoice(Preferences.get(getContext()).dynamicToolbarSelections(),
-                                    new MaterialDialog.ListCallbackMultiChoice() {
-                                        @Override
-                                        public boolean onSelection(MaterialDialog dialog,
-                                                                   Integer[] which,
-                                                                   CharSequence[] text) {
-                                            if (which.length == 0) {
-                                                switchCompat.setChecked(false);
-                                                Preferences.get(getContext()).dynamicToolbar(false);
-                                            } else switchCompat.setChecked(true);
-
-                                            Preferences.get(getContext()).updateAppAndWeb(which);
-                                            requestUsagePermissionIfNeeded();
-                                            handleAppDetectionService();
-                                            updateDynamicSummary();
-                                            return true;
-                                        }
-                                    })
-                            .dismissListener(new DialogInterface.OnDismissListener() {
-                                @Override
-                                public void onDismiss(DialogInterface dialog) {
-                                    switchCompat.setChecked(Preferences.get(getContext()).dynamicToolbar());
-                                }
-                            })
                             .show();
-                    requestUsagePermissionIfNeeded();
                 }
-                handleAppDetectionService();
                 updateDynamicSummary();
                 return false;
             }
@@ -223,21 +224,25 @@ public class PersonalizationPreferenceFragment extends BasePreferenceFragment im
         });
     }
 
-    private void requestUsagePermissionIfNeeded() {
-        if (Preferences.get(getContext()).dynamicToolbarOnApp() && !Utils.canReadUsageStats(getActivity())) {
-            new MaterialDialog.Builder(getActivity())
-                    .title(R.string.permission_required)
-                    .content(R.string.usage_permission_explanation_appcolor)
-                    .positiveText(R.string.grant)
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            getActivity().startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
-                        }
-                    }).show();
-        }
-
+    private void requestUsagePermission() {
+        new MaterialDialog.Builder(getActivity())
+                .title(R.string.permission_required)
+                .content(R.string.usage_permission_explanation_appcolor)
+                .positiveText(R.string.grant)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        getActivity().startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+                    }
+                })
+                .dismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        dynamicAppPreference.setChecked(Utils.canReadUsageStats(getContext()));
+                    }
+                })
+                .show();
     }
 
     private void handleAppDetectionService() {
