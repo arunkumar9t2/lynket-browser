@@ -27,7 +27,7 @@ import android.widget.TextView;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.settings.preferences.manager.Preferences;
+import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.helper.WebSite;

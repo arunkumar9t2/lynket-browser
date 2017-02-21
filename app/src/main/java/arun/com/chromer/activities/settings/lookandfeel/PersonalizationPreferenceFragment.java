@@ -1,4 +1,4 @@
-package arun.com.chromer.activities.settings.preferences;
+package arun.com.chromer.activities.settings.lookandfeel;
 
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
@@ -23,25 +23,32 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.settings.lookandfeel.LookAndFeelActivity;
-import arun.com.chromer.activities.settings.preferences.manager.Preferences;
+import arun.com.chromer.activities.settings.Preferences;
+import arun.com.chromer.activities.settings.preferences.BasePreferenceFragment;
 import arun.com.chromer.activities.settings.widgets.ColorPreference;
 import arun.com.chromer.activities.settings.widgets.IconListPreference;
 import arun.com.chromer.activities.settings.widgets.IconSwitchPreference;
 import arun.com.chromer.shared.AppDetectService;
-import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.ServiceUtil;
 import arun.com.chromer.util.Utils;
 
+import static arun.com.chromer.activities.settings.Preferences.ANIMATION_SPEED;
+import static arun.com.chromer.activities.settings.Preferences.ANIMATION_TYPE;
+import static arun.com.chromer.activities.settings.Preferences.DYNAMIC_COLOR;
+import static arun.com.chromer.activities.settings.Preferences.PREFERRED_ACTION;
+import static arun.com.chromer.activities.settings.Preferences.TOOLBAR_COLOR;
+import static arun.com.chromer.activities.settings.Preferences.TOOLBAR_COLOR_PREF;
 import static arun.com.chromer.shared.Constants.ACTION_TOOLBAR_COLOR_SET;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_TOOLBAR_COLOR;
+import static arun.com.chromer.shared.Constants.NO_COLOR;
 
-public class PersonalizationPreferenceFragment extends DividerLessPreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class PersonalizationPreferenceFragment extends BasePreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private final String[] PREFERENCE_GROUP = new String[]{
-            Preferences.ANIMATION_SPEED,
-            Preferences.ANIMATION_TYPE,
-            Preferences.PREFERRED_ACTION,
-            Preferences.TOOLBAR_COLOR
+    private final String[] SUMMARY_GROUP = new String[]{
+            ANIMATION_SPEED,
+            ANIMATION_TYPE,
+            PREFERRED_ACTION,
+            TOOLBAR_COLOR
     };
 
     private final IntentFilter toolbarColorSetFilter = new IntentFilter(ACTION_TOOLBAR_COLOR_SET);
@@ -71,7 +78,6 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
         // init and set icon
         init();
         setupIcons();
-
         // setup preferences after creation
         setupToolbarColorPreference();
         setupDynamicToolbar();
@@ -80,33 +86,31 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
     @Override
     public void onResume() {
         super.onResume();
-        registerReceiver(mColorSelectionReceiver, toolbarColorSetFilter);
-        getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-        updatePreferenceStates(Preferences.TOOLBAR_COLOR_PREF);
-        updatePreferenceStates(Preferences.ANIMATION_TYPE);
-        updatePreferenceSummary(PREFERENCE_GROUP);
+        registerReceiver(colorSelectionReceiver, toolbarColorSetFilter);
+        updatePreferenceStates(TOOLBAR_COLOR_PREF);
+        updatePreferenceStates(ANIMATION_TYPE);
+        updatePreferenceSummary(SUMMARY_GROUP);
     }
 
     @Override
     public void onPause() {
-        unregisterReceiver(mColorSelectionReceiver);
-        getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+        unregisterReceiver(colorSelectionReceiver);
         super.onPause();
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         updatePreferenceStates(key);
-        updatePreferenceSummary(PREFERENCE_GROUP);
+        updatePreferenceSummary(SUMMARY_GROUP);
     }
 
     private void init() {
-        dynamicColorPreference = (IconSwitchPreference) findPreference(Preferences.DYNAMIC_COLOR);
-        coloredToolbarPreference = (IconSwitchPreference) findPreference(Preferences.TOOLBAR_COLOR_PREF);
-        toolbarColorPreference = (ColorPreference) findPreference(Preferences.TOOLBAR_COLOR);
-        preferredActionPreference = (IconListPreference) findPreference(Preferences.PREFERRED_ACTION);
-        openingAnimationPreference = (IconListPreference) findPreference(Preferences.ANIMATION_TYPE);
-        animationSpeedPreference = (IconListPreference) findPreference(Preferences.ANIMATION_SPEED);
+        dynamicColorPreference = (IconSwitchPreference) findPreference(DYNAMIC_COLOR);
+        coloredToolbarPreference = (IconSwitchPreference) findPreference(TOOLBAR_COLOR_PREF);
+        toolbarColorPreference = (ColorPreference) findPreference(TOOLBAR_COLOR);
+        preferredActionPreference = (IconListPreference) findPreference(PREFERRED_ACTION);
+        openingAnimationPreference = (IconListPreference) findPreference(ANIMATION_TYPE);
+        animationSpeedPreference = (IconListPreference) findPreference(ANIMATION_SPEED);
     }
 
     private void setupIcons() {
@@ -136,12 +140,12 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
 
 
     private void updatePreferenceStates(String key) {
-        if (key.equalsIgnoreCase(Preferences.TOOLBAR_COLOR_PREF)) {
+        if (key.equalsIgnoreCase(TOOLBAR_COLOR_PREF)) {
             final boolean coloredToolbar = Preferences.get(getContext()).isColoredToolbar();
-            enableDisablePreference(coloredToolbar, Preferences.TOOLBAR_COLOR, Preferences.DYNAMIC_COLOR);
-        } else if (key.equalsIgnoreCase(Preferences.ANIMATION_TYPE)) {
+            enableDisablePreference(coloredToolbar, TOOLBAR_COLOR, DYNAMIC_COLOR);
+        } else if (key.equalsIgnoreCase(ANIMATION_TYPE)) {
             final boolean animationEnabled = Preferences.get(getContext()).isAnimationEnabled();
-            enableDisablePreference(animationEnabled, Preferences.ANIMATION_SPEED);
+            enableDisablePreference(animationEnabled, ANIMATION_SPEED);
         }
         updateDynamicSummary();
     }
@@ -243,12 +247,12 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
             getActivity().stopService(new Intent(getActivity().getApplicationContext(), AppDetectService.class));
     }
 
-    private final BroadcastReceiver mColorSelectionReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver colorSelectionReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            int selectedColor = intent.getIntExtra(Constants.EXTRA_KEY_TOOLBAR_COLOR, Constants.NO_COLOR);
-            if (selectedColor != Constants.NO_COLOR) {
-                ColorPreference preference = (ColorPreference) findPreference(Preferences.TOOLBAR_COLOR);
+            final int selectedColor = intent.getIntExtra(EXTRA_KEY_TOOLBAR_COLOR, NO_COLOR);
+            if (selectedColor != NO_COLOR) {
+                final ColorPreference preference = (ColorPreference) findPreference(TOOLBAR_COLOR);
                 if (preference != null) {
                     preference.setColor(selectedColor);
                 }

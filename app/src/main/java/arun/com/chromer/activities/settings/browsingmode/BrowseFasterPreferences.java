@@ -11,11 +11,11 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.settings.preferences.DividerLessPreferenceFragment;
-import arun.com.chromer.activities.settings.preferences.manager.Preferences;
+import arun.com.chromer.activities.settings.Preferences;
+import arun.com.chromer.activities.settings.preferences.BasePreferenceFragment;
 import arun.com.chromer.activities.settings.widgets.IconSwitchPreference;
 
-public class BrowseFasterPreferences extends DividerLessPreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class BrowseFasterPreferences extends BasePreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public BrowseFasterPreferences() {
         // Required empty public constructor

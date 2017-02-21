@@ -9,9 +9,9 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.settings.preferences.manager.Preferences;
+import arun.com.chromer.activities.settings.Preferences;
 
-public class BottomBarPreferenceFragment extends DividerLessPreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class BottomBarPreferenceFragment extends BasePreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public BottomBarPreferenceFragment() {
         // Required empty public constructor
@@ -33,24 +33,11 @@ public class BottomBarPreferenceFragment extends DividerLessPreferenceFragment i
     }
 
     private void setupBottomBarPreference() {
-        SwitchPreferenceCompat bottomBarPreference = (SwitchPreferenceCompat) findPreference(Preferences.BOTTOM_BAR_ENABLED);
+        final SwitchPreferenceCompat bottomBarPreference = (SwitchPreferenceCompat) findPreference(Preferences.BOTTOM_BAR_ENABLED);
         bottomBarPreference.setIcon(new IconicsDrawable(getActivity())
                 .icon(CommunityMaterial.Icon.cmd_more)
                 .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
                 .sizeDp(24));
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    public void onPause() {
-        getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
-        super.onPause();
     }
 
     @Override

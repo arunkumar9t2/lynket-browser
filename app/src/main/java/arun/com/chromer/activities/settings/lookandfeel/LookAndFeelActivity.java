@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,8 +13,7 @@ import android.support.v7.widget.Toolbar;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.settings.preferences.PersonalizationPreferenceFragment;
-import arun.com.chromer.activities.settings.preferences.WebHeadPreferenceFragment;
+import arun.com.chromer.activities.SnackHelper;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -22,7 +22,7 @@ import static arun.com.chromer.shared.Constants.ACTION_WEBHEAD_COLOR_SET;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_TOOLBAR_COLOR;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBHEAD_COLOR;
 
-public class LookAndFeelActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback {
+public class LookAndFeelActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback, SnackHelper {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.coordinator_layout)
@@ -60,5 +60,15 @@ public class LookAndFeelActivity extends AppCompatActivity implements ColorChoos
                 LocalBroadcastManager.getInstance(this).sendBroadcast(webHeadColorIntent);
                 break;
         }
+    }
+
+    @Override
+    public void snack(@NonNull String message) {
+        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void snackLong(@NonNull String message) {
+        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show();
     }
 }

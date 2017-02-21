@@ -3,7 +3,6 @@ package arun.com.chromer.activities.settings.preferences;
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,16 +14,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import arun.com.chromer.MainActivity;
+import arun.com.chromer.activities.SnackHelper;
 import arun.com.chromer.activities.settings.widgets.ColorPreference;
-import timber.log.Timber;
 
 /**
  * Created by Arun on 02/03/2016.
  */
-public abstract class DividerLessPreferenceFragment extends PreferenceFragmentCompat {
-    @SuppressWarnings("FieldCanBeLocal")
-    private final boolean mDebug = false;
+public abstract class BasePreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
@@ -32,19 +28,15 @@ public abstract class DividerLessPreferenceFragment extends PreferenceFragmentCo
     }
 
     @Override
-    public void setDivider(Drawable divider) {
-        super.setDivider(divider);
-    }
-
-    @Override
     public RecyclerView onCreateRecyclerView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        RecyclerView recyclerView = super.onCreateRecyclerView(inflater, parent, savedInstanceState);
+        final RecyclerView recyclerView = super.onCreateRecyclerView(inflater, parent, savedInstanceState);
+        // Needed for not eating touch event when flinged.
         recyclerView.setNestedScrollingEnabled(false);
         return recyclerView;
     }
 
-    void enableDisablePreference(boolean enabled, String... preferenceKeys) {
-        for (String preferenceKey : preferenceKeys) {
+    protected void enableDisablePreference(boolean enabled, String... preferenceKeys) {
+        for (final String preferenceKey : preferenceKeys) {
             final Preference preference = findPreference(preferenceKey);
             if (preference != null) {
                 preference.setEnabled(enabled);
@@ -52,13 +44,12 @@ public abstract class DividerLessPreferenceFragment extends PreferenceFragmentCo
         }
     }
 
-    void updatePreferenceSummary(String... preferenceKeys) {
-        for (String key : preferenceKeys) {
+    protected void updatePreferenceSummary(String... preferenceKeys) {
+        for (final String key : preferenceKeys) {
             final Preference preference = getPreferenceScreen().findPreference(key);
             if (preference instanceof ListPreference) {
                 final ListPreference listPreference = (ListPreference) preference;
                 listPreference.setSummary(listPreference.getEntry());
-                debug("Set %s preference to %s", listPreference.getTitle(), listPreference.getEntry());
             } else if (preference instanceof ColorPreference) {
                 final ColorPreference colorPreference = (ColorPreference) preference;
                 colorPreference.refreshSummary();
@@ -66,10 +57,30 @@ public abstract class DividerLessPreferenceFragment extends PreferenceFragmentCo
         }
     }
 
-    private void debug(@SuppressWarnings("SameParameterValue") String string, Object... args) {
-        //noinspection ConstantConditions
-        if (mDebug) {
-            Timber.d(string, args);
+    @Override
+    public void onResume() {
+        super.onResume();
+        getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onPause() {
+        getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+        super.onPause();
+    }
+
+    @Override
+    public abstract void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key);
+
+    protected void registerReceiver(@Nullable BroadcastReceiver receiver, @Nullable IntentFilter filter) {
+        if (receiver != null && filter != null) {
+            getLocalBroadcastManager().registerReceiver(receiver, filter);
+        }
+    }
+
+    protected void unregisterReceiver(@Nullable BroadcastReceiver receiver) {
+        if (receiver != null) {
+            getLocalBroadcastManager().unregisterReceiver(receiver);
         }
     }
 
@@ -78,25 +89,10 @@ public abstract class DividerLessPreferenceFragment extends PreferenceFragmentCo
         return LocalBroadcastManager.getInstance(getActivity());
     }
 
-    void registerReceiver(@Nullable BroadcastReceiver receiver, @Nullable IntentFilter filter) {
-        if (receiver != null && filter != null) {
-            getLocalBroadcastManager().registerReceiver(receiver, filter);
-        }
-    }
-
-    void unregisterReceiver(@Nullable BroadcastReceiver receiver) {
-        if (receiver != null) {
-            getLocalBroadcastManager().unregisterReceiver(receiver);
-        }
-    }
-
-    /**
-     * Shows a {@link android.support.design.widget.Snackbar} by calling activity methods.
-     */
-    void snackLong(@NonNull final String textToSnack) {
-        if (getActivity() instanceof MainActivity) {
-            final MainActivity activity = (MainActivity) getActivity();
-            activity.snackLong(textToSnack);
+    protected void snackLong(@NonNull final String textToSnack) {
+        if (getActivity() instanceof SnackHelper) {
+            final SnackHelper snackHelper = (SnackHelper) getActivity();
+            snackHelper.snackLong(textToSnack);
         }
     }
 

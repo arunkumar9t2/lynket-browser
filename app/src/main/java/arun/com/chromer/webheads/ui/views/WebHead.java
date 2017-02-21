@@ -19,7 +19,7 @@ import com.facebook.rebound.SpringListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import arun.com.chromer.activities.settings.preferences.manager.Preferences;
+import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.physics.MovementTracker;
 import arun.com.chromer.webheads.physics.SpringConfigs;

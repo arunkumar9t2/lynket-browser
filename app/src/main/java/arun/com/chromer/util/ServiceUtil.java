@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 
-import arun.com.chromer.activities.settings.preferences.manager.Preferences;
+import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.prefetch.ScannerService;
 import arun.com.chromer.customtabs.warmup.WarmUpService;
 import arun.com.chromer.shared.AppDetectService;

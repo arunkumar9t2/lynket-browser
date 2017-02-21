@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.settings.preferences.WebHeadPreferenceFragment;
+import arun.com.chromer.activities.settings.lookandfeel.WebHeadPreferenceFragment;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 

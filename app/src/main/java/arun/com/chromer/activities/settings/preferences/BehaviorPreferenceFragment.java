@@ -14,14 +14,14 @@ import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.blacklist.BlacklistManagerActivity;
-import arun.com.chromer.activities.settings.preferences.manager.Preferences;
+import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.activities.settings.widgets.IconSwitchPreference;
 import arun.com.chromer.util.Utils;
 
 /**
  * Created by Arun on 21/06/2016.
  */
-public class BehaviorPreferenceFragment extends DividerLessPreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class BehaviorPreferenceFragment extends BasePreferenceFragment {
 
     private IconSwitchPreference mMergeTabsPreference;
 
@@ -97,16 +97,9 @@ public class BehaviorPreferenceFragment extends DividerLessPreferenceFragment im
     @Override
     public void onResume() {
         super.onResume();
-        getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         if (!Utils.isLollipopAbove()) {
             mMergeTabsPreference.setVisible(false);
         }
-    }
-
-    @Override
-    public void onPause() {
-        getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
-        super.onPause();
     }
 
     @Override
