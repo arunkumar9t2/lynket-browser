@@ -21,8 +21,8 @@ import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
-import arun.com.chromer.MainActivity;
 import arun.com.chromer.R;
+import arun.com.chromer.activities.settings.lookandfeel.LookAndFeelActivity;
 import arun.com.chromer.activities.settings.preferences.manager.Preferences;
 import arun.com.chromer.activities.settings.widgets.ColorPreference;
 import arun.com.chromer.activities.settings.widgets.IconCheckboxPreference;
@@ -35,7 +35,7 @@ import static arun.com.chromer.activities.settings.preferences.manager.Preferenc
 
 public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private final String[] WEBHEAD_PREFERENCE_GROUP = new String[]{
+    private final String[] WEB_HEAD_PREFERENCE_GROUP = new String[]{
             Preferences.WEB_HEAD_SPAWN_LOCATION,
             Preferences.WEB_HEADS_COLOR,
             Preferences.WEB_HEAD_SIZE,
@@ -55,8 +55,8 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
     }
 
     public static WebHeadPreferenceFragment newInstance() {
-        WebHeadPreferenceFragment fragment = new WebHeadPreferenceFragment();
-        Bundle args = new Bundle();
+        final WebHeadPreferenceFragment fragment = new WebHeadPreferenceFragment();
+        final Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
@@ -79,7 +79,7 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
         registerReceiver(mColorSelectionReceiver, webHeadColorFilter);
         getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         updatePreferenceStates(Preferences.WEB_HEAD_ENABLED);
-        updatePreferenceSummary(WEBHEAD_PREFERENCE_GROUP);
+        updatePreferenceSummary(WEB_HEAD_PREFERENCE_GROUP);
         if (!Utils.isLollipopAbove()) {
             aggressiveLoading.setVisible(false);
         }
@@ -95,7 +95,7 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         updatePreferenceStates(key);
-        updatePreferenceSummary(WEBHEAD_PREFERENCE_GROUP);
+        updatePreferenceSummary(WEB_HEAD_PREFERENCE_GROUP);
         if (key.equalsIgnoreCase(Preferences.MERGE_TABS_AND_APPS)) {
             if (!Preferences.get(getContext()).mergeTabs()) {
                 aggressiveLoading.setChecked(false);
@@ -146,7 +146,7 @@ public class WebHeadPreferenceFragment extends DividerLessPreferenceFragment imp
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 int chosenColor = ((ColorPreference) preference).getColor();
-                new ColorChooserDialog.Builder((MainActivity) getActivity(), R.string.web_heads_color)
+                new ColorChooserDialog.Builder((LookAndFeelActivity) getActivity(), R.string.web_heads_color)
                         .titleSub(R.string.web_heads_color)
                         .allowUserColorInputAlpha(false)
                         .preselect(chosenColor)

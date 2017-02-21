@@ -53,7 +53,7 @@ public class BlacklistManagerActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         presenter = new Blacklist.Presenter(this);
-        setContentView(R.layout.activty_blacklist);
+        setContentView(R.layout.activity_blacklist);
         ButterKnife.bind(this);
         setupToolbar();
 

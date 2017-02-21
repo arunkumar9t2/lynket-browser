@@ -22,8 +22,8 @@ import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
-import arun.com.chromer.MainActivity;
 import arun.com.chromer.R;
+import arun.com.chromer.activities.settings.lookandfeel.LookAndFeelActivity;
 import arun.com.chromer.activities.settings.preferences.manager.Preferences;
 import arun.com.chromer.activities.settings.widgets.ColorPreference;
 import arun.com.chromer.activities.settings.widgets.IconListPreference;
@@ -32,6 +32,8 @@ import arun.com.chromer.shared.AppDetectService;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.ServiceUtil;
 import arun.com.chromer.util.Utils;
+
+import static arun.com.chromer.shared.Constants.ACTION_TOOLBAR_COLOR_SET;
 
 public class PersonalizationPreferenceFragment extends DividerLessPreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -42,22 +44,22 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
             Preferences.TOOLBAR_COLOR
     };
 
-    private final IntentFilter mToolBarColorFilter = new IntentFilter(Constants.ACTION_TOOLBAR_COLOR_SET);
+    private final IntentFilter toolbarColorSetFilter = new IntentFilter(ACTION_TOOLBAR_COLOR_SET);
 
-    private IconSwitchPreference mDynamicColor;
-    private IconSwitchPreference mIsColoredToolbar;
-    private ColorPreference mToolbarColorPref;
-    private IconListPreference mAnimationSpeed;
-    private IconListPreference mOpeningAnimation;
-    private IconListPreference mPreferredAction;
+    private IconSwitchPreference dynamicColorPreference;
+    private IconSwitchPreference coloredToolbarPreference;
+    private ColorPreference toolbarColorPreference;
+    private IconListPreference animationSpeedPreference;
+    private IconListPreference openingAnimationPreference;
+    private IconListPreference preferredActionPreference;
 
     public PersonalizationPreferenceFragment() {
         // Required empty public constructor
     }
 
     public static PersonalizationPreferenceFragment newInstance() {
-        PersonalizationPreferenceFragment fragment = new PersonalizationPreferenceFragment();
-        Bundle args = new Bundle();
+        final PersonalizationPreferenceFragment fragment = new PersonalizationPreferenceFragment();
+        final Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
@@ -78,7 +80,7 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
     @Override
     public void onResume() {
         super.onResume();
-        registerReceiver(mColorSelectionReceiver, mToolBarColorFilter);
+        registerReceiver(mColorSelectionReceiver, toolbarColorSetFilter);
         getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         updatePreferenceStates(Preferences.TOOLBAR_COLOR_PREF);
         updatePreferenceStates(Preferences.ANIMATION_TYPE);
@@ -99,34 +101,34 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
     }
 
     private void init() {
-        mDynamicColor = (IconSwitchPreference) findPreference(Preferences.DYNAMIC_COLOR);
-        mIsColoredToolbar = (IconSwitchPreference) findPreference(Preferences.TOOLBAR_COLOR_PREF);
-        mToolbarColorPref = (ColorPreference) findPreference(Preferences.TOOLBAR_COLOR);
-        mPreferredAction = (IconListPreference) findPreference(Preferences.PREFERRED_ACTION);
-        mOpeningAnimation = (IconListPreference) findPreference(Preferences.ANIMATION_TYPE);
-        mAnimationSpeed = (IconListPreference) findPreference(Preferences.ANIMATION_SPEED);
+        dynamicColorPreference = (IconSwitchPreference) findPreference(Preferences.DYNAMIC_COLOR);
+        coloredToolbarPreference = (IconSwitchPreference) findPreference(Preferences.TOOLBAR_COLOR_PREF);
+        toolbarColorPreference = (ColorPreference) findPreference(Preferences.TOOLBAR_COLOR);
+        preferredActionPreference = (IconListPreference) findPreference(Preferences.PREFERRED_ACTION);
+        openingAnimationPreference = (IconListPreference) findPreference(Preferences.ANIMATION_TYPE);
+        animationSpeedPreference = (IconListPreference) findPreference(Preferences.ANIMATION_SPEED);
     }
 
     private void setupIcons() {
-        Drawable palette = new IconicsDrawable(getActivity())
+        final Drawable palette = new IconicsDrawable(getActivity())
                 .icon(CommunityMaterial.Icon.cmd_palette)
                 .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
                 .sizeDp(24);
-        mToolbarColorPref.setIcon(palette);
-        mIsColoredToolbar.setIcon(palette);
-        mDynamicColor.setIcon(new IconicsDrawable(getActivity())
+        toolbarColorPreference.setIcon(palette);
+        coloredToolbarPreference.setIcon(palette);
+        dynamicColorPreference.setIcon(new IconicsDrawable(getActivity())
                 .icon(CommunityMaterial.Icon.cmd_format_color_fill)
                 .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
                 .sizeDp(24));
-        mPreferredAction.setIcon(new IconicsDrawable(getActivity())
+        preferredActionPreference.setIcon(new IconicsDrawable(getActivity())
                 .icon(CommunityMaterial.Icon.cmd_heart)
                 .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
                 .sizeDp(24));
-        mOpeningAnimation.setIcon(new IconicsDrawable(getActivity())
+        openingAnimationPreference.setIcon(new IconicsDrawable(getActivity())
                 .icon(CommunityMaterial.Icon.cmd_image_filter_none)
                 .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
                 .sizeDp(24));
-        mAnimationSpeed.setIcon(new IconicsDrawable(getActivity())
+        animationSpeedPreference.setIcon(new IconicsDrawable(getActivity())
                 .icon(CommunityMaterial.Icon.cmd_speedometer)
                 .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
                 .sizeDp(24));
@@ -135,29 +137,25 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
 
     private void updatePreferenceStates(String key) {
         if (key.equalsIgnoreCase(Preferences.TOOLBAR_COLOR_PREF)) {
-            final boolean webHeadsEnabled = Preferences.get(getContext()).isColoredToolbar();
-            enableDisablePreference(webHeadsEnabled,
-                    Preferences.TOOLBAR_COLOR,
-                    Preferences.DYNAMIC_COLOR
-            );
+            final boolean coloredToolbar = Preferences.get(getContext()).isColoredToolbar();
+            enableDisablePreference(coloredToolbar, Preferences.TOOLBAR_COLOR, Preferences.DYNAMIC_COLOR);
         } else if (key.equalsIgnoreCase(Preferences.ANIMATION_TYPE)) {
             final boolean animationEnabled = Preferences.get(getContext()).isAnimationEnabled();
             enableDisablePreference(animationEnabled, Preferences.ANIMATION_SPEED);
         }
-
         updateDynamicSummary();
     }
 
     private void updateDynamicSummary() {
-        mDynamicColor.setSummary(Preferences.get(getContext()).dynamicColorSummary());
+        dynamicColorPreference.setSummary(Preferences.get(getContext()).dynamicColorSummary());
         boolean isColoredToolbar = Preferences.get(getContext()).isColoredToolbar();
         if (!isColoredToolbar) {
-            mDynamicColor.setChecked(false);
+            dynamicColorPreference.setChecked(false);
         }
     }
 
     private void setupDynamicToolbar() {
-        mDynamicColor.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        dynamicColorPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 final SwitchPreferenceCompat switchCompat = (SwitchPreferenceCompat) preference;
@@ -206,11 +204,11 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
 
 
     private void setupToolbarColorPreference() {
-        mToolbarColorPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        toolbarColorPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 int chosenColor = ((ColorPreference) preference).getColor();
-                new ColorChooserDialog.Builder((MainActivity) getActivity(), R.string.default_toolbar_color)
+                new ColorChooserDialog.Builder((LookAndFeelActivity) getActivity(), R.string.default_toolbar_color)
                         .titleSub(R.string.default_toolbar_color)
                         .allowUserColorInputAlpha(false)
                         .preselect(chosenColor)
@@ -231,7 +229,6 @@ public class PersonalizationPreferenceFragment extends DividerLessPreferenceFrag
                         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            // TODO Some devices don't have this activity. Should // FIXME: 28/02/2016
                             getActivity().startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
                         }
                     }).show();

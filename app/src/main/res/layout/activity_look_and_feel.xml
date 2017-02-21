@@ -22,6 +22,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/activity_browsing_mode_content" />
+    <include layout="@layout/activity_look_and_feel_content" />
 
 </android.support.design.widget.CoordinatorLayout>
