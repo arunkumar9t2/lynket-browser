@@ -15,7 +15,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 import arun.com.chromer.R;
 import arun.com.chromer.activities.blacklist.BlacklistManagerActivity;
 import arun.com.chromer.activities.settings.preferences.manager.Preferences;
-import arun.com.chromer.activities.settings.preferences.widgets.IconSwitchPreference;
+import arun.com.chromer.activities.settings.widgets.IconSwitchPreference;
 import arun.com.chromer.util.Utils;
 
 /**

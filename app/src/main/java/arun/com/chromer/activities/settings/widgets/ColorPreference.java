@@ -1,4 +1,4 @@
-package arun.com.chromer.activities.settings.preferences.widgets;
+package arun.com.chromer.activities.settings.widgets;
 
 import android.content.Context;
 import android.content.res.TypedArray;

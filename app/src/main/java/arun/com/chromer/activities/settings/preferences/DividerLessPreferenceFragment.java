@@ -16,7 +16,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import arun.com.chromer.MainActivity;
-import arun.com.chromer.activities.settings.preferences.widgets.ColorPreference;
+import arun.com.chromer.activities.settings.widgets.ColorPreference;
 import timber.log.Timber;
 
 /**

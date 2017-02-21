@@ -53,7 +53,7 @@ import arun.com.chromer.activities.settings.fragments.CustomizeFragment;
 import arun.com.chromer.activities.settings.fragments.OptionsFragment;
 import arun.com.chromer.activities.settings.fragments.WebHeadsFragment;
 import arun.com.chromer.activities.settings.preferences.manager.Preferences;
-import arun.com.chromer.activities.settings.preferences.widgets.AppPreferenceCardView;
+import arun.com.chromer.activities.settings.widgets.AppPreferenceCardView;
 import arun.com.chromer.customtabs.CustomTabManager;
 import arun.com.chromer.customtabs.CustomTabs;
 import arun.com.chromer.shared.Constants;

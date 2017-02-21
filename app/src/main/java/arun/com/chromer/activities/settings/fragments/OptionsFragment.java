@@ -20,7 +20,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 import arun.com.chromer.R;
 import arun.com.chromer.activities.settings.preferences.BehaviorPreferenceFragment;
 import arun.com.chromer.activities.settings.preferences.PrefetchPreferenceFragment;
-import arun.com.chromer.activities.settings.preferences.widgets.AppPreferenceCardView;
+import arun.com.chromer.activities.settings.widgets.AppPreferenceCardView;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;

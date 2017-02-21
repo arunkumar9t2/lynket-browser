@@ -13,7 +13,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 import arun.com.chromer.R;
 import arun.com.chromer.activities.settings.preferences.DividerLessPreferenceFragment;
 import arun.com.chromer.activities.settings.preferences.manager.Preferences;
-import arun.com.chromer.activities.settings.preferences.widgets.IconSwitchPreference;
+import arun.com.chromer.activities.settings.widgets.IconSwitchPreference;
 
 public class BrowseFasterPreferences extends DividerLessPreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
