@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="48dp"
     android:layout_gravity="center"
+    android:baselineAligned="false"
     android:gravity="center"
     android:orientation="horizontal"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
-    android:weightSum="9"
-    android:baselineAligned="false">
+    android:weightSum="9">
 
     <FrameLayout
         android:id="@+id/bottom_bar_open_in_new_tab"
@@ -44,8 +44,8 @@
             android:id="@+id/bottom_bar_share_img"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:contentDescription="@string/share"
             android:layout_gravity="center"
+            android:contentDescription="@string/share"
             android:gravity="center"
             android:padding="5dp"
             android:scaleType="fitCenter" />

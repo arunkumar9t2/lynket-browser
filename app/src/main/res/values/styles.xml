@@ -86,4 +86,12 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
+
+    <style name="FullWidthCard">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">-6dp</item>
+        <item name="android:layout_marginRight">-6dp</item>
+        <item name="android:layout_marginTop">-6dp</item>
+    </style>
 </resources>
