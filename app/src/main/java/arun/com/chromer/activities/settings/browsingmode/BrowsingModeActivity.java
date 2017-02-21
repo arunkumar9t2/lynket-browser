@@ -42,6 +42,11 @@ public class BrowsingModeActivity extends SubActivity implements BrowsingModeAda
         browsingModeListView.setLayoutManager(new LinearLayoutManager(this));
         browsingModeListView.setAdapter(adapter);
         adapter.setBrowsingModeClickListener(this);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.browse_faster_preferences_container, BrowseFasterPreferences.newInstance())
+                .commit();
     }
 
     @Override

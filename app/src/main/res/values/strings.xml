@@ -236,4 +236,10 @@
     <string name="browsing_mode_slide_over_explanation">Websites slide over the app you are using.</string>
     <string name="browsing_mode_web_heads_explanation">Websites load in the background allowing you to stack multiple links and then get back to them later with floating bubbles on screen.</string>
     <string name="load_faster_heading">Load pages faster with below options</string>
+    <string name="amp">Accelerated Mobile Pages (AMP)</string>
+    <string name="amp_summary">Load mobile optimized version of the website for much quicker and smoother reading experience.</string>
+    <string name="article_mode">Article mode</string>
+    <string name="article_mode_summary">Load sleek looking reader mode with no extra stuff focusing just on the content.</string>
+    <string name="amp_warning_title">AMP Warning</string>
+    <string name="amp_warning_content"><![CDATA[In <b>Slide-over</b> mode, it might take a short while to grab the website\'s AMP url. You might see a dialog when this happens.]]></string>
 </resources>

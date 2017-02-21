@@ -34,10 +34,10 @@ class PreferenceIconLayoutHelper {
      * @param holder  the preference view holder
      * @param checked if the preference is enabled
      */
-    public static void applyLayoutChanges(@NonNull PreferenceViewHolder holder, boolean checked) {
+    static void applyLayoutChanges(@NonNull PreferenceViewHolder holder, boolean checked) {
         try {
-            LinearLayout iconFrame = (LinearLayout) holder.findViewById(android.support.v7.preference.R.id.icon_frame);
-            ImageView imageView = (ImageView) holder.findViewById(android.R.id.icon);
+            final LinearLayout iconFrame = (LinearLayout) holder.findViewById(android.support.v7.preference.R.id.icon_frame);
+            final ImageView imageView = (ImageView) holder.findViewById(android.R.id.icon);
 
             if (iconFrame.getMinimumWidth() != 0) {
                 iconFrame.setMinimumWidth(0);
@@ -58,13 +58,13 @@ class PreferenceIconLayoutHelper {
      * @param checked   Whether the preference is enabled
      */
     private static void applyIconTint(@NonNull ImageView imageView, boolean checked) {
-        Drawable drawable = imageView.getDrawable();
+        final Drawable drawable = imageView.getDrawable();
         if (drawable != null) {
             if (drawable instanceof IconicsDrawable) {
                 // Just redraw with the correct color
                 imageView.setImageDrawable(((IconicsDrawable) drawable).color(checked ? CHECKED_COLOR : UNCHECKED_COLOR));
             } else {
-                Drawable wrap = DrawableCompat.wrap(drawable);
+                final Drawable wrap = DrawableCompat.wrap(drawable);
                 DrawableCompat.setTint(wrap, checked ? CHECKED_COLOR : UNCHECKED_COLOR);
                 imageView.setImageDrawable(drawable);
             }

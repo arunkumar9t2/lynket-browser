@@ -11,7 +11,7 @@
     android:orientation="horizontal"
     android:padding="5dp"
     android:weightSum="1"
-    app:cardCornerRadius="3dp"
+    app:cardCornerRadius="1dp"
     app:cardElevation="0dp"
     app:cardPreventCornerOverlap="true"
     app:cardUseCompatPadding="true">

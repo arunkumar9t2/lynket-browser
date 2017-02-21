@@ -23,19 +23,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
-                android:padding="5dp" />
+                android:nestedScrollingEnabled="false"
+                android:padding="5dp"
+                tools:targetApi="lollipop" />
         </android.support.v7.widget.CardView>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <android.support.v7.widget.CardView
+            android:id="@+id/browsing_mode_more_options_card"
+            style="@style/FullWidthCard"
             android:layout_below="@+id/browsing_mode_card"
-            android:layout_margin="10dp"
-            android:gravity="center|start"
-            android:text="@string/load_faster_heading"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:textColor="@color/accent"
-            android:textSize="14sp" />
+            app:cardElevation="4dp"
+            app:cardUseCompatPadding="true">
+
+            <FrameLayout
+                android:id="@+id/browse_faster_preferences_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </android.support.v7.widget.CardView>
     </RelativeLayout>
 
 </android.support.v4.widget.NestedScrollView>

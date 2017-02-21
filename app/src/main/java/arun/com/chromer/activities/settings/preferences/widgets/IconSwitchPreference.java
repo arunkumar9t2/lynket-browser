@@ -33,7 +33,7 @@ public class IconSwitchPreference extends SwitchPreferenceCompat {
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
         PreferenceIconLayoutHelper.applyLayoutChanges(holder, isEnabled());
-        View switchView = holder.findViewById(android.support.v7.preference.R.id.switchWidget);
+        final View switchView = holder.findViewById(android.support.v7.preference.R.id.switchWidget);
         if (hideSwitch && switchView != null) {
             switchView.setVisibility(View.GONE);
         }

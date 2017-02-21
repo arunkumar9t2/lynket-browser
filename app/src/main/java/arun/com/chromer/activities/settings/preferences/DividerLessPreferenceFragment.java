@@ -33,7 +33,7 @@ public abstract class DividerLessPreferenceFragment extends PreferenceFragmentCo
 
     @Override
     public void setDivider(Drawable divider) {
-        // Don't do anything here
+        super.setDivider(divider);
     }
 
     @Override
@@ -101,7 +101,7 @@ public abstract class DividerLessPreferenceFragment extends PreferenceFragmentCo
     }
 
     @NonNull
-    SharedPreferences getSharedPreferences() {
+    protected SharedPreferences getSharedPreferences() {
         return getPreferenceManager().getSharedPreferences();
     }
 }

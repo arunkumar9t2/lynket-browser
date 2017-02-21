@@ -48,12 +48,13 @@ public class Preferences {
     private static final String BLACKLIST = "blacklist_preference";
     private static final String PREFERRED_PACKAGE = "preferred_package";
     private static final String FIRST_RUN = "firstrun_2";
-    private static final String USER_KNOWS_BOTTOM_BAR = "user_learnt_bottom_bar";
     private static final String SECONDARY_PREF = "secondary_preference";
     private static final String FAV_SHARE_PREF = "fav_share_preference";
-    private static final String CLEAN_DATABASE = "clean_database";
     private static final String DYNAMIC_COLOR_APP = "dynamic_color_app";
     private static final String DYNAMIC_COLOR_WEB = "dynamic_color_web";
+    public static final String AMP_MODE = "amp_mode_pref";
+    public static final String ARTICLE_MODE = "article_mode_pref";
+    // Singleton instance
     private static Preferences INSTANCE;
 
     private final Context context;
@@ -204,6 +205,15 @@ public class Preferences {
     public boolean preFetch() {
         return getDefaultSharedPreferences().getBoolean(PRE_FETCH, false);
     }
+
+    public boolean ampMode() {
+        return getDefaultSharedPreferences().getBoolean(AMP_MODE, false);
+    }
+
+    public boolean articleMode() {
+        return getDefaultSharedPreferences().getBoolean(ARTICLE_MODE, false);
+    }
+
 
     public void preFetch(final boolean preference) {
         getDefaultSharedPreferences().edit().putBoolean(PRE_FETCH, preference).apply();
