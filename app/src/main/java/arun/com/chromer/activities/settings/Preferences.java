@@ -268,41 +268,6 @@ public class Preferences {
         getDefaultSharedPreferences().edit().putBoolean(AGGRESSIVE_LOADING, preference).apply();
     }
 
-    private void dynamicToolbarOptions(final boolean app, final boolean web) {
-        dynamicToolbarOnApp(app);
-        dynamicToolbarOnWeb(web);
-        dynamicToolbar(app || web);
-    }
-
-    @Nullable
-    public Integer[] dynamicToolbarSelections() {
-        if (dynamicToolbarOnApp() && dynamicToolbarOnWeb())
-            return new Integer[]{0, 1};
-        else if (dynamicToolbarOnApp())
-            return new Integer[]{0};
-        else if (dynamicToolbarOnWeb())
-            return new Integer[]{1};
-        else return null;
-    }
-
-    public void updateAppAndWeb(final Integer[] which) {
-        switch (which.length) {
-            case 0:
-                dynamicToolbarOptions(false, false);
-                break;
-            case 1:
-                if (which[0] == 0) {
-                    dynamicToolbarOptions(true, false);
-                } else if (which[0] == 1) {
-                    dynamicToolbarOptions(false, true);
-                }
-                break;
-            case 2:
-                dynamicToolbarOptions(true, true);
-                break;
-        }
-    }
-
     @NonNull
     public CharSequence dynamicColorSummary() {
         if (dynamicToolbarOnApp() && dynamicToolbarOnWeb()) {
