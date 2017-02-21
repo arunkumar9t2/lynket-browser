@@ -22,7 +22,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/blacklist_activity_content" />
+    <include layout="@layout/activity_blacklist_content" />
 
     <!--<android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

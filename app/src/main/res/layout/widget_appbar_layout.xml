@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:theme="@style/AppTheme.AppBarOverlay"
-    tools:showIn="@layout/main_activity">
+    tools:showIn="@layout/activity_main">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"

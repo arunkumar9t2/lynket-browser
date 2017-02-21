@@ -79,7 +79,7 @@ public class AppPreferenceCardView extends CardView {
         preferenceType = a.getInt(R.styleable.AppPreferenceCardView_preferenceType, 0);
         setInitialValues();
         a.recycle();
-        addView(LayoutInflater.from(getContext()).inflate(R.layout.app_preference_cardview_content, this, false));
+        addView(LayoutInflater.from(getContext()).inflate(R.layout.widget_app_preference_cardview_content, this, false));
         unbinder = ButterKnife.bind(this);
     }
 

@@ -45,7 +45,7 @@ class BrowsingModeAdapter extends RecyclerView.Adapter<BrowsingModeAdapter.Brows
 
     @Override
     public BrowsingModeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new BrowsingModeViewHolder(LayoutInflater.from(context).inflate(R.layout.browsing_mode_item_template, parent, false));
+        return new BrowsingModeViewHolder(LayoutInflater.from(context).inflate(R.layout.activity_browsing_mode_item_template, parent, false));
     }
 
     @Override

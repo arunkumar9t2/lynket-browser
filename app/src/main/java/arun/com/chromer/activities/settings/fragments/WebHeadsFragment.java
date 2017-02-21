@@ -28,7 +28,7 @@ public class WebHeadsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.web_head_fragment, container, false);
+        return inflater.inflate(R.layout.fragment_web_head, container, false);
     }
 
     @Override

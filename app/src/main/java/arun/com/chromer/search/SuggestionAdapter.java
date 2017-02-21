@@ -54,7 +54,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
 
     @Override
     public SuggestionItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new SuggestionItemHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.suggestion_item_template, parent, false));
+        return new SuggestionItemHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.widget_suggestions_item_template, parent, false));
     }
 
     @Override

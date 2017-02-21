@@ -100,7 +100,7 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.donate_activity);
+        setContentView(R.layout.activity_donate);
 
         // compute your public key and store it in base64EncodedPublicKey
         mHelper = new IabHelper(this, BuildConfig.BASE_64);
@@ -153,7 +153,7 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new ViewHolder(LayoutInflater.from(getApplicationContext()).inflate(R.layout.about_fragment_listview_template, parent, false));
+            return new ViewHolder(LayoutInflater.from(getApplicationContext()).inflate(R.layout.fragment_about_list_item_template, parent, false));
         }
 
         @Override

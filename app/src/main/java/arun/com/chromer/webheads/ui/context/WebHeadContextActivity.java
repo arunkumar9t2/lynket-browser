@@ -54,7 +54,7 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.web_head_context_activity);
+        setContentView(R.layout.activity_web_head_context);
         ButterKnife.bind(this);
 
         if (getIntent() == null || getIntent().getParcelableArrayListExtra(EXTRA_KEY_WEBSITE) == null) {

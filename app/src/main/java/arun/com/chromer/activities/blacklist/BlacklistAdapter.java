@@ -47,7 +47,7 @@ class BlacklistAdapter extends RecyclerView.Adapter<BlacklistAdapter.BlackListIt
 
     @Override
     public BlackListItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new BlackListItemViewHolder(LayoutInflater.from(activityRef.get()).inflate(R.layout.blacklist_app_list_item_template, parent, false));
+        return new BlackListItemViewHolder(LayoutInflater.from(activityRef.get()).inflate(R.layout.activity_blacklist_list_item_template, parent, false));
     }
 
     @Override

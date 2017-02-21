@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.main_activity);
+        setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
         if (Preferences.get(this).isFirstRun()) {

@@ -93,7 +93,7 @@ public class AboutFragment extends Fragment {
     class AppAdapter extends RecyclerView.Adapter<AppAdapter.ItemHolder> {
         @Override
         public ItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            final View view = LayoutInflater.from(getActivity()).inflate(R.layout.about_fragment_listview_template, parent, false);
+            final View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_about_list_item_template, parent, false);
             return new ItemHolder(view);
         }
 
@@ -196,7 +196,7 @@ public class AboutFragment extends Fragment {
     class AuthorAdapter extends RecyclerView.Adapter<AuthorAdapter.ItemHolder> {
         @Override
         public ItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            final View view = LayoutInflater.from(getActivity()).inflate(R.layout.about_fragment_listview_template, parent, false);
+            final View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_about_list_item_template, parent, false);
             return new ItemHolder(view);
         }
 

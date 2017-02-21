@@ -160,9 +160,9 @@ public abstract class BaseWebHead extends FrameLayout {
     private void inflateContent(@NonNull Context context) {
         // size
         if (Preferences.get(context).webHeadsSize() == 2) {
-            contentRoot = (FrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.web_head_layout_small, this, false);
+            contentRoot = (FrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.widget_web_head_layout_small, this, false);
         } else
-            contentRoot = (FrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.web_head_layout, this, false);
+            contentRoot = (FrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.widget_web_head_layout, this, false);
         addView(contentRoot);
         ButterKnife.bind(this);
 

@@ -40,7 +40,7 @@ class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> 
 
     @Override
     public WebSiteHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new WebSiteHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.web_head_context_item_template, parent, false));
+        return new WebSiteHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_web_head_context_item_template, parent, false));
     }
 
     @Override

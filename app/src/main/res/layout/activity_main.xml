@@ -15,7 +15,7 @@
         android:background="@color/card_background_light"
         tools:context="arun.com.chromer.MainActivity">
 
-        <include layout="@layout/appbar_layout" />
+        <include layout="@layout/widget_appbar_layout" />
 
         <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -34,7 +34,7 @@
 
     </android.support.design.widget.CoordinatorLayout>
 
-    <include layout="@layout/bottom_sheet_layout" />
+    <include layout="@layout/widget_bottom_sheet_layout" />
 
     <arun.com.chromer.views.MaterialSearchView
         android:id="@+id/material_search_view"

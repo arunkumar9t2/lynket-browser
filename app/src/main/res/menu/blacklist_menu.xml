@@ -5,7 +5,7 @@
     <item
         android:id="@+id/blacklist_switch_item"
         android:title="Switch"
-        app:actionLayout="@layout/blacklist_toolbar_switch"
+        app:actionLayout="@layout/widget_blacklist_toolbar_switch"
         app:showAsAction="always"
         tools:ignore="HardcodedText" />
 </menu>

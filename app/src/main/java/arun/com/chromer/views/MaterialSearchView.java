@@ -121,7 +121,7 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
                 .icon(CommunityMaterial.Icon.cmd_menu)
                 .color(normalColor)
                 .sizeDp(18);
-        addView(LayoutInflater.from(getContext()).inflate(R.layout.material_search_view, this, false));
+        addView(LayoutInflater.from(getContext()).inflate(R.layout.widget_material_search_view, this, false));
         ButterKnife.bind(this);
 
         suggestionAdapter = new SuggestionAdapter(getContext(), this);
