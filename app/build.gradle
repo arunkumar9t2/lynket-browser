@@ -102,7 +102,6 @@ dependencies {
         transitive = true;
     }
     compile 'com.github.chimbori:crux:-SNAPSHOT'
-    compile project(':article-view:article')
 }
 
 static def getBase64() {
