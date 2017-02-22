@@ -13,7 +13,6 @@ import arun.com.chromer.activities.CustomTabActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.webheads.WebHeadService;
 import arun.com.chromer.webheads.helper.WebSite;
-import arun.com.chromer.webheads.ui.views.WebHead;
 import timber.log.Timber;
 
 import static android.content.Context.ACTIVITY_SERVICE;
@@ -43,27 +42,19 @@ public class DocumentUtils {
         return info;
     }
 
-    /**
-     * Reorders a old task if it exists else opens a new tab
-     *
-     * @param context
-     * @param webHead
-     */
-    public static void smartOpenNewTab(@NonNull final Context context, @NonNull final WebHead webHead) {
-        if (!reOrderCustomTabByUrls(context, webHead.getUrl(), webHead.getUnShortenedUrl())) {
-            openNewCustomTab(context, webHead);
-        }
+    public static void smartOpenNewTab(@NonNull final Context context, @NonNull final WebSite webSite) {
+        smartOpenNewTab(context, webSite, false);
     }
 
     /**
      * Reorders a old task if it exists else opens a new tab
      *
-     * @param context
-     * @param webSite
+     * @param context Context to work with
+     * @param webSite Website data
      */
-    public static void smartOpenNewTab(@NonNull final Context context, @NonNull final WebSite webSite) {
+    public static void smartOpenNewTab(@NonNull final Context context, @NonNull final WebSite webSite, final boolean isNewTab) {
         if (!reOrderCustomTabByUrls(context, webSite.url, webSite.preferredUrl())) {
-            openNewCustomTab(context, webSite);
+            openNewCustomTab(context, webSite, isNewTab);
         }
     }
 
@@ -92,30 +83,16 @@ public class DocumentUtils {
     }
 
     @TargetApi(LOLLIPOP)
-    public static void openNewCustomTab(@NonNull final Context context, @NonNull final WebSite webSite) {
+    public static void openNewCustomTab(@NonNull final Context context, @NonNull final WebSite webSite, boolean isFromNewTab) {
         final Intent customTabActivity = new Intent(context, CustomTabActivity.class);
         customTabActivity.setData(Uri.parse(webSite.url));
         customTabActivity.setFlags(FLAG_ACTIVITY_NEW_TASK);
-        if (Preferences.get(context).mergeTabs()) {
+        if (isFromNewTab || Preferences.get(context).mergeTabs()) {
             customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
             customTabActivity.addFlags(FLAG_ACTIVITY_MULTIPLE_TASK);
         }
         customTabActivity.putExtra(EXTRA_KEY_FROM_WEBHEAD, true);
         customTabActivity.putExtra(EXTRA_KEY_WEBSITE, webSite);
-        context.startActivity(customTabActivity);
-    }
-
-    @TargetApi(LOLLIPOP)
-    public static void openNewCustomTab(@NonNull final Context context, @NonNull final WebHead webHead) {
-        final Intent customTabActivity = new Intent(context, CustomTabActivity.class);
-        customTabActivity.setData(Uri.parse(webHead.getUrl()));
-        customTabActivity.setFlags(FLAG_ACTIVITY_NEW_TASK);
-        if (webHead.isFromNewTab() || Preferences.get(context).mergeTabs()) {
-            customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-            customTabActivity.addFlags(FLAG_ACTIVITY_MULTIPLE_TASK);
-        }
-        customTabActivity.putExtra(EXTRA_KEY_FROM_WEBHEAD, true);
-        customTabActivity.putExtra(EXTRA_KEY_WEBSITE, webHead.getWebsite());
         context.startActivity(customTabActivity);
     }
 
