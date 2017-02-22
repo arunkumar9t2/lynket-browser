@@ -1,12 +1,15 @@
 package arun.com.chromer.parser;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -22,14 +25,14 @@ import timber.log.Timber;
  * An utility class to fetch a website as {@link String}.
  * Adapted from https://github.com/karussell/snacktory by Peter Karich
  */
-class WebsiteDownloader {
+class WebsiteUtilities {
     private static final String ACCEPT = "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
     // We will spoof as an iPad so that websites properly expose their shortcut icon. Even Google.com
     // does not provide bigger icons when we go as Android.
     private static final String USER_AGENT = "Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25";
 
     @WorkerThread
-    public static String htmlString(@NonNull final String url) throws IOException {
+    static String htmlString(@NonNull final String url) throws IOException {
         final HttpURLConnection urlConnection = createUrlConnection(url, 10000);
         urlConnection.setInstanceFollowRedirects(true);
         final String encoding = urlConnection.getContentEncoding();
@@ -42,7 +45,26 @@ class WebsiteDownloader {
             inputStream = urlConnection.getInputStream();
         }
         final String enc = Converter.extractEncoding(urlConnection.getContentType());
-        final String result = new Converter(url).streamToString(inputStream, enc);
+        final String result = new Converter(url).grabStringFromInputStream(inputStream, enc);
+        urlConnection.disconnect();
+        return result;
+    }
+
+    @WorkerThread
+    static String headString(@NonNull final String url) throws IOException {
+        final HttpURLConnection urlConnection = createUrlConnection(url, 10000);
+        urlConnection.setInstanceFollowRedirects(true);
+        final String encoding = urlConnection.getContentEncoding();
+        final InputStream inputStream;
+        if (encoding != null && encoding.equalsIgnoreCase("gzip")) {
+            inputStream = new GZIPInputStream(urlConnection.getInputStream());
+        } else if (encoding != null && encoding.equalsIgnoreCase("deflate")) {
+            inputStream = new InflaterInputStream(urlConnection.getInputStream(), new Inflater(true));
+        } else {
+            inputStream = urlConnection.getInputStream();
+        }
+        final String enc = Converter.extractEncoding(urlConnection.getContentType());
+        final String result = new Converter(url).grabHeadTag(inputStream, enc);
         urlConnection.disconnect();
         return result;
     }
@@ -62,6 +84,7 @@ class WebsiteDownloader {
         return unShortenedUrl;
     }
 
+    @NonNull
     private static String getRedirectUrl(@NonNull final String url) {
         HttpURLConnection conn = null;
         try {
@@ -85,6 +108,7 @@ class WebsiteDownloader {
         return url;
     }
 
+    @NonNull
     private static String useDomainOfFirstArg4Second(String urlForDomain, String path) {
         if (path.startsWith("http"))
             return path;
@@ -109,10 +133,12 @@ class WebsiteDownloader {
         return path;
     }
 
+    @NonNull
     private static String extractHost(String url) {
         return extractDomain(url, false);
     }
 
+    @NonNull
     private static String extractDomain(String url, boolean aggressive) {
         if (url.startsWith("http://"))
             url = url.substring("http://".length());
@@ -135,6 +161,15 @@ class WebsiteDownloader {
         return url;
     }
 
+    /**
+     * Provides a {@link HttpURLConnection} instance for the given url and timeout
+     *
+     * @param urlAsStr Url to create a connection for.
+     * @param timeout  Timeout
+     * @return {@link HttpURLConnection} instance.
+     * @throws IOException
+     */
+    @NonNull
     private static HttpURLConnection createUrlConnection(String urlAsStr, int timeout) throws IOException {
         final URL url = new URL(urlAsStr);
         //using proxy may increase latency
@@ -169,7 +204,14 @@ class WebsiteDownloader {
             return this;
         }
 
-        static String extractEncoding(String contentType) {
+        /**
+         * Tries to extract type of encoding for the given content type.
+         *
+         * @param contentType Content type gotten from {@link HttpURLConnection#getContentType()}
+         * @return
+         */
+        @NonNull
+        static String extractEncoding(@Nullable String contentType) {
             final String[] values;
             if (contentType != null)
                 values = contentType.split(";");
@@ -179,7 +221,6 @@ class WebsiteDownloader {
 
             for (String value : values) {
                 value = value.trim().toLowerCase();
-
                 if (value.startsWith("charset="))
                     charset = value.substring("charset=".length());
             }
@@ -189,18 +230,21 @@ class WebsiteDownloader {
             return charset;
         }
 
+        @NonNull
         public String getEncoding() {
             if (encoding == null)
                 return "";
             return encoding.toLowerCase();
         }
 
-        public String streamToString(InputStream is) {
-            return streamToString(is, maxBytes, encoding);
+        @NonNull
+        public String grabStringFromInputStream(InputStream is) {
+            return grabStringFromInputStream(is, maxBytes, encoding);
         }
 
-        String streamToString(InputStream is, String enc) {
-            return streamToString(is, maxBytes, enc);
+        @NonNull
+        String grabStringFromInputStream(InputStream is, String encoding) {
+            return grabStringFromInputStream(is, maxBytes, encoding);
         }
 
         /**
@@ -210,7 +254,8 @@ class WebsiteDownloader {
          * @param maxBytes The max bytes that we want to read from the input stream
          * @return String
          */
-        String streamToString(InputStream is, int maxBytes, String encoding) {
+        @NonNull
+        String grabStringFromInputStream(InputStream is, int maxBytes, String encoding) {
             this.encoding = encoding;
             // Http 1.1. standard is iso-8859-1 not utf8 :(
             // but we force utf-8 as youtube assumes it ;)
@@ -225,15 +270,15 @@ class WebsiteDownloader {
                 // detect encoding with the help of meta tag
                 try {
                     in.mark(K2 * 2);
-                    String tmpEnc = detectCharset("charset=", output, in, this.encoding);
-                    if (tmpEnc != null)
-                        this.encoding = tmpEnc;
+                    String tmpEncoding = detectCharset("charset=", output, in, this.encoding);
+                    if (tmpEncoding != null)
+                        this.encoding = tmpEncoding;
                     else {
                         Timber.d("no charset found in first stage");
                         // detect with the help of xml beginning ala encoding="charset"
-                        tmpEnc = detectCharset("encoding=", output, in, this.encoding);
-                        if (tmpEnc != null)
-                            this.encoding = tmpEnc;
+                        tmpEncoding = detectCharset("encoding=", output, in, this.encoding);
+                        if (tmpEncoding != null)
+                            this.encoding = tmpEncoding;
                         else
                             Timber.d("no charset found in second stage");
                     }
@@ -276,6 +321,56 @@ class WebsiteDownloader {
             return "";
         }
 
+        @NonNull
+        String grabHeadTag(@NonNull InputStream is, @Nullable String encoding) {
+            this.encoding = encoding;
+            // Http 1.1. standard is iso-8859-1 not utf8 :(
+            // but we force utf-8 as youtube assumes it ;)
+            if (this.encoding == null || this.encoding.isEmpty())
+                this.encoding = UTF8;
+
+            final StringBuilder headTagContents = new StringBuilder();
+
+            BufferedReader bufferedReader = null;
+            InputStreamReader inputStreamReader = null;
+            try {
+                inputStreamReader = new InputStreamReader(is, encoding);
+                bufferedReader = new BufferedReader(inputStreamReader);
+                String temp;
+                boolean insideHeadTag = false;
+                while ((temp = bufferedReader.readLine()) != null) {
+                    if (temp.contains("<head>")) {
+                        insideHeadTag = true;
+                    }
+                    if (insideHeadTag) {
+                        headTagContents.append(temp);
+                    }
+                    if (temp.contains("</head>")) {
+                        // Exit
+                        break;
+                    }
+                }
+            } catch (IOException e) {
+                Timber.e(e);
+            } finally {
+                if (inputStreamReader != null) {
+                    try {
+                        inputStreamReader.close();
+                    } catch (Exception ignored) {
+
+                    }
+                }
+                if (bufferedReader != null) {
+                    try {
+                        bufferedReader.close();
+                    } catch (Exception ignored) {
+
+                    }
+                }
+            }
+            return headTagContents.toString();
+        }
+
         /**
          * This method detects the charset even if the first call only returns some
          * bytes. It will read until 4K bytes are reached and then try to determine
@@ -283,6 +378,7 @@ class WebsiteDownloader {
          *
          * @throws IOException
          */
+        @Nullable
         String detectCharset(String key, ByteArrayOutputStream bos, BufferedInputStream in,
                              String enc) throws IOException {
             // Grab better encoding from stream
@@ -343,6 +439,7 @@ class WebsiteDownloader {
             return null;
         }
 
+        @NonNull
         static String encodingCleanup(final String str) {
             final StringBuilder sb = new StringBuilder();
             boolean startedWithCorrectString = false;

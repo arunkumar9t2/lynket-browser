@@ -23,13 +23,14 @@ import timber.log.Timber;
  * Created by Arunkumar on 26-01-2017.
  */
 public class RxParser {
-    // Our parser subject
-    private final SerializedSubject<String, String> parserSubject = PublishSubject.<String>create().toSerialized();
     // Singleton
     private static volatile RxParser INSTANCE = null;
+
+    // Our parser subject
+    private final SerializedSubject<String, String> parserSubject = PublishSubject.<String>create().toSerialized();
+
     // No that determines no of pages that can be concurrently parsed.
     private static final int MAX_CONCURRENT_PARSING = 4;
-
     // Reference to subscription that we create.
     private Subscription parseSubscription;
     // To get notified about parse completion event..
@@ -136,10 +137,10 @@ public class RxParser {
                 public Pair<String, Article> call(final String url) {
                     Article article = null;
                     try {
-                        final String expanded = WebsiteDownloader.unShortenUrl(url);
+                        final String expanded = WebsiteUtilities.unShortenUrl(url);
                         final CandidateURL candidateUrl = new CandidateURL(expanded);
                         if (candidateUrl.resolveRedirects().isLikelyArticle()) {
-                            String webSiteString = WebsiteDownloader.htmlString(candidateUrl.toString());
+                            String webSiteString = WebsiteUtilities.headString(candidateUrl.toString());
                             article = Extractor.with(url, webSiteString)
                                     .extractMetadata()
                                     .article();
