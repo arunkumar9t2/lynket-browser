@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -17,15 +18,19 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
+import com.chimbori.crux.articles.Article;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.blacklist.BlackListManager;
 import arun.com.chromer.activities.settings.Preferences;
+import arun.com.chromer.parser.RxParser;
 import arun.com.chromer.shared.AppDetectionManager;
 import arun.com.chromer.util.DocumentUtils;
+import arun.com.chromer.util.RxUtils;
 import arun.com.chromer.util.SafeIntent;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.ui.ProxyActivity;
+import rx.SingleSubscriber;
 import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
@@ -41,6 +46,7 @@ import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_NEW_TAB;
 public class BrowserInterceptActivity extends AppCompatActivity {
     private MaterialDialog dialog;
     private SafeIntent safeIntent;
+    private boolean isFromNewTab;
 
     @TargetApi(LOLLIPOP)
     @Override
@@ -54,7 +60,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
             return;
         }
 
-        final boolean isFromNewTab = safeIntent.getBooleanExtra(EXTRA_KEY_FROM_NEW_TAB, false);
+        isFromNewTab = safeIntent.getBooleanExtra(EXTRA_KEY_FROM_NEW_TAB, false);
         // Check if we should blacklist the launching app
         if (Preferences.get(this).blacklist()) {
             final String lastApp = AppDetectionManager.getInstance(this).getNonFilteredPackage();
@@ -80,16 +86,47 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                 launchWebHead(isFromNewTab);
             }
         } else {
-            final Intent customTabActivity = new Intent(this, CustomTabActivity.class);
-            customTabActivity.setData(safeIntent.getData());
-            if (isFromNewTab || Preferences.get(this).mergeTabs()) {
-                customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-                customTabActivity.addFlags(FLAG_ACTIVITY_MULTIPLE_TASK);
-            }
-            customTabActivity.putExtra(EXTRA_KEY_FROM_NEW_TAB, isFromNewTab);
-            startActivity(customTabActivity);
-        }
+            if (Preferences.get(this).ampMode()) {
+                final MaterialDialog dialog = new MaterialDialog.Builder(this)
+                        .theme(Theme.LIGHT)
+                        .content("Grabbing AMP link")
+                        .show();
+                RxParser.parseUrl(safeIntent.getData().toString())
+                        .compose(RxUtils.<Pair<String, Article>>applySchedulers())
+                        .toSingle()
+                        .subscribe(new SingleSubscriber<Pair<String, Article>>() {
+                            @Override
+                            public void onSuccess(Pair<String, Article> stringArticlePair) {
+                                dialog.dismiss();
+                                if (stringArticlePair.second != null && !TextUtils.isEmpty(stringArticlePair.second.ampUrl)) {
+                                    launchCCT(Uri.parse(stringArticlePair.second.ampUrl), isFromNewTab);
+                                } else {
+                                    launchCCT(safeIntent.getData(), isFromNewTab);
+                                }
+                            }
 
+                            @Override
+                            public void onError(Throwable error) {
+                                dialog.dismiss();
+                                launchCCT(safeIntent.getData(), isFromNewTab);
+                            }
+                        });
+            } else {
+                launchCCT(safeIntent.getData(), isFromNewTab);
+            }
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void launchCCT(Uri uri, boolean isFromNewTab) {
+        final Intent customTabActivity = new Intent(this, CustomTabActivity.class);
+        customTabActivity.setData(uri);
+        if (isFromNewTab || Preferences.get(this).mergeTabs()) {
+            customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+            customTabActivity.addFlags(FLAG_ACTIVITY_MULTIPLE_TASK);
+        }
+        customTabActivity.putExtra(EXTRA_KEY_FROM_NEW_TAB, isFromNewTab);
+        startActivity(customTabActivity);
         finish();
     }
 
@@ -125,6 +162,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
         } else {
             showSecondaryBrowserHandlingError(R.string.secondary_browser_not_installed);
         }
+        finish();
     }
 
     private void showSecondaryBrowserHandlingError(@StringRes int stringRes) {
@@ -168,6 +206,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
         webHeadLauncher.putExtra(EXTRA_KEY_FROM_NEW_TAB, isNewTab);
         webHeadLauncher.setData(safeIntent.getData());
         startActivity(webHeadLauncher);
+        finish();
     }
 
     @NonNull
