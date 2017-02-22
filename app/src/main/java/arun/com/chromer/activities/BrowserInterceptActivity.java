@@ -34,6 +34,7 @@ import arun.com.chromer.webheads.ui.ProxyActivity;
 import rx.SingleSubscriber;
 import timber.log.Timber;
 
+import static android.content.Intent.ACTION_VIEW;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
@@ -57,11 +58,11 @@ public class BrowserInterceptActivity extends AppCompatActivity {
 
         safeIntent = new SafeIntent(getIntent());
         if (safeIntent.getData() == null) {
-            exitWithToast();
+            invalidLink();
             return;
         }
-
         isFromNewTab = safeIntent.getBooleanExtra(EXTRA_KEY_FROM_NEW_TAB, false);
+
         // Check if we should blacklist the launching app
         if (Preferences.get(this).blacklist()) {
             final String lastApp = AppDetectionManager.getInstance(this).getNonFilteredPackage();
@@ -72,8 +73,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
             }
         }
 
-        // If user prefers to open in bubbles, then start the web head service which will take care
-        // of pre fetching and loading the bubble.
+        // If user prefers to open in bubbles, then start the web head service.
         if (Preferences.get(this).webHeads()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (!Settings.canDrawOverlays(this)) {
@@ -81,53 +81,53 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                     final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
                     startActivity(intent);
                 } else {
-                    launchWebHead(isFromNewTab);
+                    launchWebHead();
                 }
             } else {
-                launchWebHead(isFromNewTab);
+                launchWebHead();
             }
-        } else {
-            if (Preferences.get(this).ampMode()) {
-                final MaterialDialog dialog = new MaterialDialog.Builder(this)
-                        .theme(Theme.LIGHT)
-                        .content("Grabbing AMP link")
-                        .show();
-                RxParser.parseUrl(safeIntent.getData().toString())
-                        .compose(RxUtils.<Pair<String, Article>>applySchedulers())
-                        .toSingle()
-                        .subscribe(new SingleSubscriber<Pair<String, Article>>() {
-                            @Override
-                            public void onSuccess(final Pair<String, Article> stringArticlePair) {
-                                Timber.d(stringArticlePair.toString());
-                                if (stringArticlePair.second != null && !TextUtils.isEmpty(stringArticlePair.second.ampUrl)) {
-                                    dialog.setContent("Link found!");
-                                    new Handler().postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            dialog.dismiss();
-                                            launchCCT(Uri.parse(stringArticlePair.second.ampUrl), isFromNewTab);
-                                        }
-                                    }, 150);
-                                } else {
-                                    launchCCT(safeIntent.getData(), isFromNewTab);
-                                }
+        } else if (Preferences.get(this).ampMode()) {
+            closeDialogs();
+            dialog = new MaterialDialog.Builder(this)
+                    .theme(Theme.LIGHT)
+                    .content("Grabbing AMP link")
+                    .progress(true, 0)
+                    .show();
+            RxParser.parseUrl(safeIntent.getData().toString())
+                    .compose(RxUtils.<Pair<String, Article>>applySchedulers())
+                    .toSingle()
+                    .subscribe(new SingleSubscriber<Pair<String, Article>>() {
+                        @Override
+                        public void onSuccess(final Pair<String, Article> articlePair) {
+                            if (articlePair.second != null
+                                    && !TextUtils.isEmpty(articlePair.second.ampUrl)) {
+                                dialog.setContent("Link found!");
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        dialog.dismiss();
+                                        launchCCT(Uri.parse(articlePair.second.ampUrl));
+                                    }
+                                }, 150);
+                            } else {
+                                launchCCT(safeIntent.getData());
                             }
+                        }
 
-                            @Override
-                            public void onError(Throwable error) {
-                                Timber.e(error);
-                                dialog.dismiss();
-                                launchCCT(safeIntent.getData(), isFromNewTab);
-                            }
-                        });
-            } else {
-                launchCCT(safeIntent.getData(), isFromNewTab);
-            }
+                        @Override
+                        public void onError(Throwable error) {
+                            Timber.e(error);
+                            dialog.dismiss();
+                            launchCCT(safeIntent.getData());
+                        }
+                    });
+        } else {
+            launchCCT(safeIntent.getData());
         }
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void launchCCT(Uri uri, boolean isFromNewTab) {
+    private void launchCCT(Uri uri) {
         final Intent customTabActivity = new Intent(this, CustomTabActivity.class);
         customTabActivity.setData(uri);
         if (isFromNewTab || Preferences.get(this).mergeTabs()) {
@@ -139,7 +139,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
         finish();
     }
 
-    private void exitWithToast() {
+    private void invalidLink() {
         Toast.makeText(this, getString(R.string.unsupported_link), LENGTH_SHORT).show();
         finish();
     }
@@ -152,12 +152,10 @@ public class BrowserInterceptActivity extends AppCompatActivity {
      */
     private void performBlacklistAction() {
         final String secondaryBrowserPackage = Preferences.get(this).secondaryBrowserPackage();
-
         if (secondaryBrowserPackage == null) {
             showSecondaryBrowserHandlingError(R.string.secondary_browser_not_error);
             return;
         }
-
         if (Utils.isPackageInstalled(this, secondaryBrowserPackage)) {
             final Intent webIntentExplicit = getOriginalIntentCopy(getIntent());
             webIntentExplicit.setPackage(secondaryBrowserPackage);
@@ -207,12 +205,13 @@ public class BrowserInterceptActivity extends AppCompatActivity {
         }
     }
 
-    private void launchWebHead(boolean isNewTab) {
+    private void launchWebHead() {
         final Intent webHeadLauncher = new Intent(this, ProxyActivity.class);
         webHeadLauncher.addFlags(FLAG_ACTIVITY_NEW_TASK);
-        if (!isNewTab)
+        if (!isFromNewTab) {
             webHeadLauncher.addFlags(FLAG_ACTIVITY_CLEAR_TASK);
-        webHeadLauncher.putExtra(EXTRA_KEY_FROM_NEW_TAB, isNewTab);
+        }
+        webHeadLauncher.putExtra(EXTRA_KEY_FROM_NEW_TAB, isFromNewTab);
         webHeadLauncher.setData(safeIntent.getData());
         startActivity(webHeadLauncher);
         finish();
@@ -220,7 +219,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
 
     @NonNull
     private Intent getOriginalIntentCopy(@NonNull Intent originalIntent) {
-        final Intent copy = new Intent(Intent.ACTION_VIEW, safeIntent.getData());
+        final Intent copy = new Intent(ACTION_VIEW, safeIntent.getData());
         if (originalIntent.getExtras() != null) {
             copy.putExtras(originalIntent.getExtras());
         }
