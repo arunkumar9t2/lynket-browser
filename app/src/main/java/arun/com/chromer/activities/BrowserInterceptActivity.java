@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
@@ -96,10 +97,17 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                         .toSingle()
                         .subscribe(new SingleSubscriber<Pair<String, Article>>() {
                             @Override
-                            public void onSuccess(Pair<String, Article> stringArticlePair) {
-                                dialog.dismiss();
+                            public void onSuccess(final Pair<String, Article> stringArticlePair) {
+                                Timber.d(stringArticlePair.toString());
                                 if (stringArticlePair.second != null && !TextUtils.isEmpty(stringArticlePair.second.ampUrl)) {
-                                    launchCCT(Uri.parse(stringArticlePair.second.ampUrl), isFromNewTab);
+                                    dialog.setContent("Link found!");
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            dialog.dismiss();
+                                            launchCCT(Uri.parse(stringArticlePair.second.ampUrl), isFromNewTab);
+                                        }
+                                    }, 150);
                                 } else {
                                     launchCCT(safeIntent.getData(), isFromNewTab);
                                 }
@@ -107,6 +115,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
 
                             @Override
                             public void onError(Throwable error) {
+                                Timber.e(error);
                                 dialog.dismiss();
                                 launchCCT(safeIntent.getData(), isFromNewTab);
                             }
