@@ -1,4 +1,4 @@
-package arun.com.chromer.activities.settings.preferences;
+package arun.com.chromer.activities.settings.browsingoptions;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.settings.Preferences;
+import arun.com.chromer.activities.settings.preferences.BasePreferenceFragment;
 
 public class BottomBarPreferenceFragment extends BasePreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 

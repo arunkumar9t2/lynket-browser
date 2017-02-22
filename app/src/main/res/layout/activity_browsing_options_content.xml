@@ -119,5 +119,18 @@
                     android:layout_below="@id/error" />
             </RelativeLayout>
         </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/browsing_options_bottom_bar"
+            style="@style/FullWidthCard"
+            android:layout_below="@+id/browsing_options_web_heads"
+            app:cardElevation="4dp"
+            app:cardUseCompatPadding="true">
+
+            <FrameLayout
+                android:id="@+id/bottom_bar_preference_fragment_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </android.support.v7.widget.CardView>
     </RelativeLayout>
 </android.support.v4.widget.NestedScrollView>

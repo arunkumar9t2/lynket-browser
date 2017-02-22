@@ -65,6 +65,7 @@ public class BrowsingOptionsActivity extends SubActivity implements SnackHelper,
                 .beginTransaction()
                 .replace(R.id.behaviour_fragment_container, BehaviorPreferenceFragment.newInstance())
                 .replace(R.id.web_head_fragment_container, WebHeadOptionsFragment.newInstance())
+                .replace(R.id.bottom_bar_preference_fragment_container, BottomBarPreferenceFragment.newInstance())
                 .commit();
     }
 

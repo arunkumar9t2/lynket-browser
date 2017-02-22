@@ -41,6 +41,7 @@ import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
@@ -127,7 +128,7 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
         suggestionAdapter = new SuggestionAdapter(getContext(), this);
         suggestionList.setLayoutManager(new LinearLayoutManager(getContext()));
         suggestionList.setAdapter(suggestionAdapter);
-        suggestionList.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.HORIZONTAL));
+        suggestionList.addItemDecoration(new DividerItemDecoration(getContext(), VERTICAL));
         card.post(new Runnable() {
             @Override
             public void run() {

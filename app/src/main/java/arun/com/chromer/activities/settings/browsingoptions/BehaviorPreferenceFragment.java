@@ -35,7 +35,7 @@ public class BehaviorPreferenceFragment extends BasePreferenceFragment {
     }
 
     public static BehaviorPreferenceFragment newInstance() {
-        BehaviorPreferenceFragment fragment = new BehaviorPreferenceFragment();
+        final BehaviorPreferenceFragment fragment = new BehaviorPreferenceFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;

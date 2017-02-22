@@ -97,7 +97,10 @@ public class WebSite implements Parcelable {
         return "WebSite{" +
                 "title='" + title + '\'' +
                 ", url='" + url + '\'' +
+                ", faviconUrl='" + faviconUrl + '\'' +
                 ", canonicalUrl='" + canonicalUrl + '\'' +
+                ", themeColor='" + themeColor + '\'' +
+                ", ampUrl='" + ampUrl + '\'' +
                 '}';
     }
 

@@ -25,8 +25,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import arun.com.chromer.R;
+import arun.com.chromer.activities.settings.browsingoptions.BottomBarPreferenceFragment;
 import arun.com.chromer.activities.settings.lookandfeel.PersonalizationPreferenceFragment;
-import arun.com.chromer.activities.settings.preferences.BottomBarPreferenceFragment;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
