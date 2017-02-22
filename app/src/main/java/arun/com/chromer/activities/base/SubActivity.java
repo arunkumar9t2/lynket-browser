@@ -8,7 +8,7 @@ import arun.com.chromer.R;
 /**
  * Created by Arunkumar on 19-02-2017.
  */
-public class SubActivity extends AppCompatActivity {
+public abstract class SubActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
