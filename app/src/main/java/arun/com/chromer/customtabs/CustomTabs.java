@@ -31,7 +31,7 @@ import java.util.Random;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.OpenIntentWithActivity;
-import arun.com.chromer.activities.settings.preferences.manager.Preferences;
+import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.bottombar.BottomBarManager;
 import arun.com.chromer.customtabs.callbacks.AddHomeShortcutService;
 import arun.com.chromer.customtabs.callbacks.ClipboardService;
@@ -53,11 +53,11 @@ import timber.log.Timber;
 
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static android.graphics.Color.WHITE;
-import static arun.com.chromer.activities.settings.preferences.manager.Preferences.ANIMATION_MEDIUM;
-import static arun.com.chromer.activities.settings.preferences.manager.Preferences.ANIMATION_SHORT;
-import static arun.com.chromer.activities.settings.preferences.manager.Preferences.PREFERRED_ACTION_BROWSER;
-import static arun.com.chromer.activities.settings.preferences.manager.Preferences.PREFERRED_ACTION_FAV_SHARE;
-import static arun.com.chromer.activities.settings.preferences.manager.Preferences.PREFERRED_ACTION_GEN_SHARE;
+import static arun.com.chromer.activities.settings.Preferences.ANIMATION_MEDIUM;
+import static arun.com.chromer.activities.settings.Preferences.ANIMATION_SHORT;
+import static arun.com.chromer.activities.settings.Preferences.PREFERRED_ACTION_BROWSER;
+import static arun.com.chromer.activities.settings.Preferences.PREFERRED_ACTION_FAV_SHARE;
+import static arun.com.chromer.activities.settings.Preferences.PREFERRED_ACTION_GEN_SHARE;
 import static arun.com.chromer.customtabs.bottombar.BottomBarManager.createBottomBarRemoteViews;
 import static arun.com.chromer.customtabs.bottombar.BottomBarManager.getClickableIDs;
 import static arun.com.chromer.customtabs.bottombar.BottomBarManager.getOnClickPendingIntent;
@@ -326,7 +326,7 @@ public class CustomTabs {
         }
 
         final ScannerService sService = ScannerService.getInstance();
-        if (sService != null && sService.getTabSession() != null && Preferences.get(activity).get(activity).preFetch()) {
+        if (sService != null && sService.getTabSession() != null && Preferences.get(activity).preFetch()) {
             Timber.d("Using scanner session");
             return sService.getTabSession();
         }

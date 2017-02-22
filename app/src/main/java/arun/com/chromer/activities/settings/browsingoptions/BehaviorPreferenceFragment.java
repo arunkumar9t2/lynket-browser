@@ -1,4 +1,4 @@
-package arun.com.chromer.activities.settings.preferences;
+package arun.com.chromer.activities.settings.browsingoptions;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
@@ -14,16 +14,21 @@ import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.blacklist.BlacklistManagerActivity;
-import arun.com.chromer.activities.settings.preferences.manager.Preferences;
-import arun.com.chromer.activities.settings.preferences.widgets.IconSwitchPreference;
+import arun.com.chromer.activities.settings.Preferences;
+import arun.com.chromer.activities.settings.preferences.BasePreferenceFragment;
+import arun.com.chromer.activities.settings.widgets.IconSwitchPreference;
 import arun.com.chromer.util.Utils;
+
+import static arun.com.chromer.activities.settings.Preferences.AGGRESSIVE_LOADING;
+import static arun.com.chromer.activities.settings.Preferences.BLACKLIST_DUMMY;
+import static arun.com.chromer.activities.settings.Preferences.MERGE_TABS_AND_APPS;
 
 /**
  * Created by Arun on 21/06/2016.
  */
-public class BehaviorPreferenceFragment extends DividerLessPreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class BehaviorPreferenceFragment extends BasePreferenceFragment {
 
-    private IconSwitchPreference mMergeTabsPreference;
+    private IconSwitchPreference mergeTabsPreference;
 
     public BehaviorPreferenceFragment() {
         // Required empty public constructor
@@ -46,9 +51,9 @@ public class BehaviorPreferenceFragment extends DividerLessPreferenceFragment im
     }
 
     private void setupBlacklistPreference() {
-        IconSwitchPreference blackListPreference = (IconSwitchPreference) findPreference(Preferences.BLACKLIST_DUMMY);
+        final IconSwitchPreference blackListPreference = (IconSwitchPreference) findPreference(BLACKLIST_DUMMY);
         if (blackListPreference != null) {
-            Drawable recentImg = new IconicsDrawable(getActivity())
+            final Drawable recentImg = new IconicsDrawable(getActivity())
                     .icon(CommunityMaterial.Icon.cmd_filter_variant)
                     .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
                     .sizeDp(24);
@@ -57,7 +62,7 @@ public class BehaviorPreferenceFragment extends DividerLessPreferenceFragment im
             blackListPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    Intent blacklistedApps = new Intent(getActivity(), BlacklistManagerActivity.class);
+                    final Intent blacklistedApps = new Intent(getActivity(), BlacklistManagerActivity.class);
                     startActivity(blacklistedApps,
                             ActivityOptions.makeCustomAnimation(getActivity(),
                                     R.anim.slide_in_right_medium,
@@ -70,15 +75,15 @@ public class BehaviorPreferenceFragment extends DividerLessPreferenceFragment im
     }
 
     private void setupMergeTabsPreference() {
-        mMergeTabsPreference = (IconSwitchPreference) findPreference(Preferences.MERGE_TABS_AND_APPS);
-        if (mMergeTabsPreference != null) {
-            Drawable recentImg = new IconicsDrawable(getActivity())
+        mergeTabsPreference = (IconSwitchPreference) findPreference(MERGE_TABS_AND_APPS);
+        if (mergeTabsPreference != null) {
+            final Drawable recentImg = new IconicsDrawable(getActivity())
                     .icon(CommunityMaterial.Icon.cmd_animation)
                     .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
                     .sizeDp(24);
-            mMergeTabsPreference.setIcon(recentImg);
+            mergeTabsPreference.setIcon(recentImg);
         }
-        mMergeTabsPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        mergeTabsPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (!((Boolean) newValue) && Preferences.get(getContext()).aggressiveLoading()) {
@@ -97,23 +102,16 @@ public class BehaviorPreferenceFragment extends DividerLessPreferenceFragment im
     @Override
     public void onResume() {
         super.onResume();
-        getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         if (!Utils.isLollipopAbove()) {
-            mMergeTabsPreference.setVisible(false);
+            mergeTabsPreference.setVisible(false);
         }
     }
 
     @Override
-    public void onPause() {
-        getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
-        super.onPause();
-    }
-
-    @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equalsIgnoreCase(Preferences.AGGRESSIVE_LOADING)) {
+        if (key.equalsIgnoreCase(AGGRESSIVE_LOADING)) {
             if (Preferences.get(getContext()).aggressiveLoading()) {
-                mMergeTabsPreference.setChecked(true);
+                mergeTabsPreference.setChecked(true);
             }
         }
     }

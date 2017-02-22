@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:context="arun.com.chromer.MainActivity"
-        tools:showIn="@layout/main_activity">
+        tools:showIn="@layout/activity_main">
 
         <android.support.v7.widget.CardView
             android:id="@+id/set_default_card"
@@ -80,7 +80,7 @@
             android:orientation="horizontal"
             android:weightSum="1.5">
 
-            <arun.com.chromer.activities.settings.preferences.widgets.AppPreferenceCardView
+            <arun.com.chromer.activities.settings.widgets.AppPreferenceCardView
                 android:id="@+id/customtab_preference_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
                 app:cardElevation="2dp"
                 app:preferenceType="customTabProvider" />
 
-            <arun.com.chromer.activities.settings.preferences.widgets.AppPreferenceCardView
+            <arun.com.chromer.activities.settings.widgets.AppPreferenceCardView
                 android:id="@+id/browser_preference_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -104,7 +104,7 @@
                 app:cardElevation="2dp"
                 app:preferenceType="secondaryBrowser" />
 
-            <arun.com.chromer.activities.settings.preferences.widgets.AppPreferenceCardView
+            <arun.com.chromer.activities.settings.widgets.AppPreferenceCardView
                 android:id="@+id/favshare_preference_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

@@ -25,8 +25,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import arun.com.chromer.R;
+import arun.com.chromer.activities.settings.lookandfeel.PersonalizationPreferenceFragment;
 import arun.com.chromer.activities.settings.preferences.BottomBarPreferenceFragment;
-import arun.com.chromer.activities.settings.preferences.PersonalizationPreferenceFragment;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,7 +51,7 @@ public class CustomizeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.customize_fragment, container, false);
+        return inflater.inflate(R.layout.fragment_customize, container, false);
     }
 
     @Override
@@ -95,7 +95,7 @@ public class CustomizeFragment extends Fragment {
 
         @Override
         public BottomActionHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new BottomActionHolder(LayoutInflater.from(context).inflate(R.layout.bottom_action_template, parent, false));
+            return new BottomActionHolder(LayoutInflater.from(context).inflate(R.layout.widget_bottom_bar_actions, parent, false));
         }
 
         @Override

@@ -44,7 +44,7 @@ import java.util.ListIterator;
 import java.util.Map;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.settings.preferences.manager.Preferences;
+import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.CustomTabManager;
 import arun.com.chromer.parser.RxParser;
 import arun.com.chromer.util.DocumentUtils;

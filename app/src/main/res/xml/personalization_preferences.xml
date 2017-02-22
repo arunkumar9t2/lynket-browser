@@ -5,38 +5,46 @@
     android:title="@string/settings">
     <PreferenceCategory android:title="@string/personalization">
         <!--suppress AndroidElementNotAllowed -->
-        <arun.com.chromer.activities.settings.preferences.widgets.IconSwitchPreference
+        <arun.com.chromer.activities.settings.widgets.IconSwitchPreference
             android:defaultValue="true"
             android:key="toolbar_color_pref"
             android:title="@string/colored_toolbar" />
 
-        <!--suppress AndroidElementNotAllowed -->
-        <arun.com.chromer.activities.settings.preferences.widgets.ColorPreference
+        <arun.com.chromer.activities.settings.widgets.ColorPreference
             android:key="toolbar_color"
             android:title="@string/default_toolbar_color"
             app:color="@color/colorPrimary" />
 
-        <!--suppress AndroidElementNotAllowed -->
-        <arun.com.chromer.activities.settings.preferences.widgets.IconSwitchPreference
+        <arun.com.chromer.activities.settings.widgets.IconSwitchPreference
             android:defaultValue="false"
             android:key="dynamic_color"
             android:title="@string/dynamic_toolbar_color" />
 
-        <arun.com.chromer.activities.settings.preferences.widgets.IconListPreference
+        <arun.com.chromer.activities.settings.widgets.SubCheckBoxPreference
+            android:defaultValue="false"
+            android:key="dynamic_color_app"
+            android:title="@string/based_on_app" />
+
+        <arun.com.chromer.activities.settings.widgets.SubCheckBoxPreference
+            android:defaultValue="false"
+            android:key="dynamic_color_web"
+            android:title="@string/based_on_web" />
+
+        <arun.com.chromer.activities.settings.widgets.IconListPreference
             android:defaultValue="1"
             android:entries="@array/actionValues"
             android:entryValues="@array/actionKeys"
             android:key="preferred_action_preference"
             android:title="@string/preferred_action" />
 
-        <arun.com.chromer.activities.settings.preferences.widgets.IconListPreference
+        <arun.com.chromer.activities.settings.widgets.IconListPreference
             android:defaultValue="1"
             android:entries="@array/animationValues"
             android:entryValues="@array/animationKeys"
             android:key="animation_preference"
             android:title="@string/choose_animation" />
 
-        <arun.com.chromer.activities.settings.preferences.widgets.IconListPreference
+        <arun.com.chromer.activities.settings.widgets.IconListPreference
             android:defaultValue="1"
             android:entries="@array/animationSpeedValues"
             android:entryValues="@array/animationSpeedKeys"

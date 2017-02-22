@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:theme="@style/AppTheme.AppBarOverlay"
-    tools:showIn="@layout/main_activity">
+    tools:showIn="@layout/activity_main">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -15,9 +15,4 @@
         android:background="?attr/colorPrimary"
         android:visibility="invisible"
         app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tab_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 </android.support.design.widget.AppBarLayout>

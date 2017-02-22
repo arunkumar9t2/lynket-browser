@@ -1,4 +1,4 @@
-package arun.com.chromer.activities.settings.preferences.widgets;
+package arun.com.chromer.activities.settings.widgets;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -24,7 +24,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.settings.preferences.manager.Preferences;
+import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;
@@ -79,7 +79,7 @@ public class AppPreferenceCardView extends CardView {
         preferenceType = a.getInt(R.styleable.AppPreferenceCardView_preferenceType, 0);
         setInitialValues();
         a.recycle();
-        addView(LayoutInflater.from(getContext()).inflate(R.layout.app_preference_cardview_content, this, false));
+        addView(LayoutInflater.from(getContext()).inflate(R.layout.widget_app_preference_cardview_content, this, false));
         unbinder = ButterKnife.bind(this);
     }
 

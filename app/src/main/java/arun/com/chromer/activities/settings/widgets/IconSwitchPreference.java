@@ -1,4 +1,4 @@
-package arun.com.chromer.activities.settings.preferences.widgets;
+package arun.com.chromer.activities.settings.widgets;
 
 import android.content.Context;
 import android.support.v7.preference.PreferenceViewHolder;
@@ -33,7 +33,7 @@ public class IconSwitchPreference extends SwitchPreferenceCompat {
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
         PreferenceIconLayoutHelper.applyLayoutChanges(holder, isEnabled());
-        View switchView = holder.findViewById(android.support.v7.preference.R.id.switchWidget);
+        final View switchView = holder.findViewById(android.support.v7.preference.R.id.switchWidget);
         if (hideSwitch && switchView != null) {
             switchView.setVisibility(View.GONE);
         }

@@ -14,8 +14,8 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.settings.preferences.manager.Preferences;
-import arun.com.chromer.activities.settings.preferences.widgets.IconSwitchPreference;
+import arun.com.chromer.activities.settings.Preferences;
+import arun.com.chromer.activities.settings.widgets.IconSwitchPreference;
 import arun.com.chromer.customtabs.warmup.WarmUpService;
 import arun.com.chromer.util.ServiceUtil;
 import arun.com.chromer.util.Utils;
@@ -23,7 +23,7 @@ import arun.com.chromer.util.Utils;
 /**
  * Created by Arun on 19/06/2016.
  */
-public class PrefetchPreferenceFragment extends DividerLessPreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class PrefetchPreferenceFragment extends BasePreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     private final String[] PREFERENCE_GROUP = new String[]{
             Preferences.WIFI_PREFETCH,
             Preferences.PRE_FETCH_NOTIFICATION,
@@ -85,7 +85,6 @@ public class PrefetchPreferenceFragment extends DividerLessPreferenceFragment im
     @Override
     public void onResume() {
         super.onResume();
-        getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         final boolean isPrefetchEnabled = isPrefetchEnabled();
         mPrefetchPreference.setChecked(isPrefetchEnabled);
         mWarmupPreference.setEnabled(!isPrefetchEnabled);
@@ -93,15 +92,8 @@ public class PrefetchPreferenceFragment extends DividerLessPreferenceFragment im
     }
 
     @Override
-    public void onPause() {
-        getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
-        super.onPause();
-    }
-
-    @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         enableDisablePreference(isPrefetchEnabled(), PREFERENCE_GROUP);
-
         // Start stop warm up service
         if (key.equalsIgnoreCase(Preferences.WARM_UP)) {
             if (Preferences.get(getContext()).warmUp()) {

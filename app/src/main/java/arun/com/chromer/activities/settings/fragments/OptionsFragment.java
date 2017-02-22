@@ -18,9 +18,9 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.settings.preferences.BehaviorPreferenceFragment;
+import arun.com.chromer.activities.settings.browsingoptions.BehaviorPreferenceFragment;
 import arun.com.chromer.activities.settings.preferences.PrefetchPreferenceFragment;
-import arun.com.chromer.activities.settings.preferences.widgets.AppPreferenceCardView;
+import arun.com.chromer.activities.settings.widgets.AppPreferenceCardView;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;
@@ -56,7 +56,7 @@ public class OptionsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         context = getActivity().getApplicationContext();
-        return inflater.inflate(R.layout.options_fragment, container, false);
+        return inflater.inflate(R.layout.fragment_options, container, false);
     }
 
     @Override

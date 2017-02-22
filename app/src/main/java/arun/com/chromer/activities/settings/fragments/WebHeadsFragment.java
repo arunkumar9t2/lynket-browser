@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.settings.preferences.WebHeadPreferenceFragment;
+import arun.com.chromer.activities.settings.lookandfeel.WebHeadPreferenceFragment;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -28,7 +28,7 @@ public class WebHeadsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.web_head_fragment, container, false);
+        return inflater.inflate(R.layout.fragment_web_head, container, false);
     }
 
     @Override

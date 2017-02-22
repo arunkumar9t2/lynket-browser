@@ -226,4 +226,23 @@
     <string name="share_all_list">List - Limited app support. Eg: Join, Pushbullet etc.</string>
     <string name="new_tab">Open new tab</string>
     <string name="title_activity_open_with">Open with</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="settings_browsing_mode">Browsing mode</string>
+    <string name="settings_look_and_feel">Look &amp; feel</string>
+    <string name="settings_browsing_options">Browsing options</string>
+    <string name="title_activity_browsing_mode">Browsing mode</string>
+    <string name="browsing_mode_slide_over">Slide over</string>
+    <string name="browsing_mode_web_heads">Web heads</string>
+    <string name="browsing_mode_slide_over_explanation">Websites slide over the app you are using.</string>
+    <string name="browsing_mode_web_heads_explanation">Websites load in the background allowing you to stack multiple links and then get back to them later with floating bubbles on screen.</string>
+    <string name="load_faster_heading">Load pages faster with below options</string>
+    <string name="amp">Accelerated Mobile Pages (AMP)</string>
+    <string name="amp_summary">Load mobile optimized version of the website for much quicker and smoother reading experience.</string>
+    <string name="article_mode">Article mode</string>
+    <string name="article_mode_summary">Load sleek looking reader mode with no extra stuff focusing just on the content.</string>
+    <string name="amp_warning_title">AMP Warning</string>
+    <string name="amp_warning_content"><![CDATA[In <b>Slide-over</b> mode, it might take a short while to grab the website\'s AMP url. You might see a dialog when this happens.]]></string>
+    <string name="title_activity_look_and_feel">Look and feel</string>
+    <string name="not_available_in_slide_mode">Not available during slide-over mode</string>
+    <string name="title_activity_browsing_options">Browsing options</string>
 </resources>

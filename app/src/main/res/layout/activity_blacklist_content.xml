@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".activities.blacklist.BlacklistManagerActivity"
-    tools:showIn="@layout/blacklist_activity">
+    tools:showIn="@layout/activity_blacklist">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/app_recyclerview"

@@ -1,4 +1,4 @@
-package arun.com.chromer.activities.settings.preferences.widgets;
+package arun.com.chromer.activities.settings.widgets;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -37,7 +37,7 @@ public class ColorPreference extends Preference {
     }
 
     private void init(Context context, AttributeSet attrs) {
-        setWidgetLayoutResource(R.layout.preference_color_widget);
+        setWidgetLayoutResource(R.layout.widget_color_preference);
 
         DEFAULT_COLOR = ContextCompat.getColor(getContext(), R.color.colorPrimary);
 

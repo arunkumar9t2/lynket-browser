@@ -32,7 +32,7 @@ public class Changelog {
     public static void show(final Activity activity) {
         try {
             @SuppressLint("InflateParams")
-            final FrameLayout content = (FrameLayout) LayoutInflater.from(activity).inflate(R.layout.changelog_layout, null);
+            final FrameLayout content = (FrameLayout) LayoutInflater.from(activity).inflate(R.layout.widget_changelog_layout, null);
             final MaterialProgressBar progress = ButterKnife.findById(content, R.id.changelog_progress);
             final WebView webView = ButterKnife.findById(content, R.id.changelog_web_view);
             webView.loadData(activity.getString(R.string.changelog_text), "text/html", "utf-8");

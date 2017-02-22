@@ -24,8 +24,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import java.util.List;
 
 import arun.com.chromer.R;
+import arun.com.chromer.activities.SnackHelper;
 import arun.com.chromer.activities.blacklist.model.App;
-import arun.com.chromer.activities.settings.preferences.manager.Preferences;
+import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.util.ServiceUtil;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;
@@ -34,7 +35,7 @@ import butterknife.ButterKnife;
 public class BlacklistManagerActivity extends AppCompatActivity implements
         Blacklist.View,
         BlacklistAdapter.BlackListItemClickedListener,
-        CompoundButton.OnCheckedChangeListener, SwipeRefreshLayout.OnRefreshListener {
+        CompoundButton.OnCheckedChangeListener, SwipeRefreshLayout.OnRefreshListener, SnackHelper {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -47,19 +48,19 @@ public class BlacklistManagerActivity extends AppCompatActivity implements
 
     private Blacklist.Presenter presenter;
 
-    private final BlacklistAdapter blacklistAdapter = new BlacklistAdapter(this, this);
+    private BlacklistAdapter blacklistAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         presenter = new Blacklist.Presenter(this);
-        setContentView(R.layout.blacklist_activity);
+        setContentView(R.layout.activity_blacklist);
         ButterKnife.bind(this);
         setupToolbar();
 
+        blacklistAdapter = new BlacklistAdapter(this, this);
         blackListedAppsList.setLayoutManager(new LinearLayoutManager(this));
         blackListedAppsList.setAdapter(blacklistAdapter);
-
         loadApps();
     }
 
@@ -83,12 +84,6 @@ public class BlacklistManagerActivity extends AppCompatActivity implements
         presenter.cleanUp();
         blacklistAdapter.cleanUp();
         super.onDestroy();
-    }
-
-
-    private void showSnack(@NonNull String textToSnack) {
-        // Have to provide a view for view traversal, so providing the recycler view.
-        Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -153,7 +148,7 @@ public class BlacklistManagerActivity extends AppCompatActivity implements
             buttonView.setChecked(false);
             requestUsagePermission();
         } else {
-            showSnack(isChecked ? getString(R.string.blacklist_on) : getString(R.string.blacklist_off));
+            snack(isChecked ? getString(R.string.blacklist_on) : getString(R.string.blacklist_off));
             Preferences.get(this).blacklist(isChecked);
             ServiceUtil.takeCareOfServices(getApplicationContext());
         }
@@ -172,5 +167,15 @@ public class BlacklistManagerActivity extends AppCompatActivity implements
     @Override
     public void onRefresh() {
         loadApps();
+    }
+
+    @Override
+    public void snack(@NonNull String message) {
+        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void snackLong(@NonNull String message) {
+        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show();
     }
 }
