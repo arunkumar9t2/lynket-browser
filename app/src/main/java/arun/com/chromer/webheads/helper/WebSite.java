@@ -5,6 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.chimbori.crux.articles.Article;
 
@@ -19,7 +20,6 @@ public class WebSite implements Parcelable {
     public String faviconUrl;
     public String canonicalUrl;
     public String themeColor;
-    public int extractedColor = NO_COLOR;
     public String ampUrl;
 
     public WebSite() {
@@ -32,7 +32,6 @@ public class WebSite implements Parcelable {
         faviconUrl = in.readString();
         canonicalUrl = in.readString();
         themeColor = in.readString();
-        extractedColor = in.readInt();
         ampUrl = in.readString();
     }
 
@@ -53,9 +52,10 @@ public class WebSite implements Parcelable {
         final WebSite webSite = new WebSite();
         webSite.title = article.title;
         webSite.url = article.url;
-        webSite.canonicalUrl = article.canonicalUrl != null && !article.canonicalUrl.isEmpty() ? article.canonicalUrl : article.url;
+        webSite.canonicalUrl = !TextUtils.isEmpty(article.canonicalUrl) ? article.canonicalUrl : article.url;
         webSite.faviconUrl = article.faviconUrl;
         webSite.themeColor = article.themeColor;
+        webSite.ampUrl = !TextUtils.isEmpty(article.ampUrl) ? article.ampUrl : webSite.canonicalUrl;
         return webSite;
     }
 
@@ -113,7 +113,6 @@ public class WebSite implements Parcelable {
         dest.writeString(faviconUrl);
         dest.writeString(canonicalUrl);
         dest.writeString(themeColor);
-        dest.writeInt(extractedColor);
         dest.writeString(ampUrl);
     }
 }

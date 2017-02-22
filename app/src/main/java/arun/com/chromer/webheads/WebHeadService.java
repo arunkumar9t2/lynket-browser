@@ -26,6 +26,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.NotificationCompat;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -63,6 +64,7 @@ import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.os.AsyncTask.THREAD_POOL_EXECUTOR;
 import static android.support.v4.app.NotificationCompat.PRIORITY_MIN;
+import static android.widget.Toast.LENGTH_SHORT;
 import static arun.com.chromer.shared.Constants.ACTION_CLOSE_WEBHEAD_BY_URL;
 import static arun.com.chromer.shared.Constants.ACTION_EVENT_WEBHEAD_DELETED;
 import static arun.com.chromer.shared.Constants.ACTION_EVENT_WEBSITE_UPDATED;
@@ -176,10 +178,15 @@ public class WebHeadService extends Service implements WebHeadContract,
         final boolean isMinimized = intent.getBooleanExtra(EXTRA_KEY_MINIMIZE, false);
 
         final String urlToLoad = intent.getDataString();
+        if (TextUtils.isEmpty(urlToLoad)) {
+            Toast.makeText(this, R.string.invalid_link, LENGTH_SHORT).show();
+            return;
+        }
+
         if (!isLinkAlreadyLoaded(urlToLoad)) {
             addWebHead(urlToLoad, isFromNewTab, isMinimized);
         } else if (!isMinimized) {
-            Toast.makeText(this, R.string.already_loaded, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.already_loaded, LENGTH_SHORT).show();
         }
     }
 
@@ -377,20 +384,18 @@ public class WebHeadService extends Service implements WebHeadContract,
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onWebHeadClick(@NonNull WebHead webHead) {
-        if (!webHead.getUnShortenedUrl().isEmpty()) {
-            DocumentUtils.smartOpenNewTab(this, webHead.getWebsite());
+        DocumentUtils.smartOpenNewTab(this, webHead.getWebsite());
 
-            // Store the last opened url
-            lastOpenedUrl = webHead.getUrl();
-            // If user prefers to the close the head on opening the link, then call destroySelf()
-            // which will take care of closing and detaching the web head
-            if (Preferences.get(this).webHeadsCloseOnOpen()) {
-                webHead.destroySelf(true);
-                // Since the current url is opened, lets prepare the next set of urls
-                urlOrganizer.prepareNextSetOfUrls(webHeads, lastOpenedUrl, customTabManager);
-            }
-            hideRemoveView();
+        // Store the last opened url
+        lastOpenedUrl = webHead.getUrl();
+        // If user prefers to the close the head on opening the link, then call destroySelf()
+        // which will take care of closing and detaching the web head
+        if (Preferences.get(this).webHeadsCloseOnOpen()) {
+            webHead.destroySelf(true);
+            // Since the current url is opened, lets prepare the next set of urls
+            urlOrganizer.prepareNextSetOfUrls(webHeads, lastOpenedUrl, customTabManager);
         }
+        hideRemoveView();
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 
 import arun.com.chromer.activities.CustomTabActivity;
 import arun.com.chromer.activities.settings.Preferences;
@@ -53,14 +54,14 @@ public class DocumentUtils {
      * @param webSite Website data
      */
     public static void smartOpenNewTab(@NonNull final Context context, @NonNull final WebSite webSite, final boolean isNewTab) {
-        if (!reOrderCustomTabByUrls(context, webSite.url, webSite.preferredUrl())) {
+        if (!reOrderTab(context, webSite)) {
             openNewCustomTab(context, webSite, isNewTab);
         }
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     @TargetApi(LOLLIPOP)
-    private static boolean reOrderCustomTabByUrls(@NonNull final Context context, @NonNull final String shortUrl, @Nullable final String longUrl) {
+    private static boolean reOrderTab(@NonNull final Context context, @NonNull WebSite webSite) {
         if (!Preferences.get(context).mergeTabs()) {
             return false;
         }
@@ -70,7 +71,9 @@ public class DocumentUtils {
             try {
                 final Intent intent = info.baseIntent;
                 final String url = intent.getDataString();
-                if (url.equalsIgnoreCase(shortUrl) || url.equalsIgnoreCase(longUrl)) {
+                if (url.equalsIgnoreCase(webSite.url)
+                        || url.equalsIgnoreCase(webSite.preferredUrl())
+                        || url.equalsIgnoreCase(webSite.ampUrl)) {
                     Timber.d("Moved tab to front %s", url);
                     task.moveToFront();
                     return true;
@@ -85,15 +88,34 @@ public class DocumentUtils {
     @TargetApi(LOLLIPOP)
     public static void openNewCustomTab(@NonNull final Context context, @NonNull final WebSite webSite, boolean isFromNewTab) {
         final Intent customTabActivity = new Intent(context, CustomTabActivity.class);
-        customTabActivity.setData(Uri.parse(webSite.url));
+        final Uri usableUri = getUsableUri(context, webSite);
+
+        customTabActivity.setData(usableUri);
         customTabActivity.setFlags(FLAG_ACTIVITY_NEW_TASK);
         if (isFromNewTab || Preferences.get(context).mergeTabs()) {
             customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
             customTabActivity.addFlags(FLAG_ACTIVITY_MULTIPLE_TASK);
         }
+
         customTabActivity.putExtra(EXTRA_KEY_FROM_WEBHEAD, true);
         customTabActivity.putExtra(EXTRA_KEY_WEBSITE, webSite);
         context.startActivity(customTabActivity);
+    }
+
+    /**
+     * Given the myraid of preferences we have, this method gives the correct Uri we should be using
+     * for opening a new tab.
+     *
+     * @param context Context to work with.
+     * @param webSite Website data.
+     * @return
+     */
+    private static Uri getUsableUri(@NonNull Context context, @NonNull WebSite webSite) {
+        if (Preferences.get(context).ampMode()) {
+            return TextUtils.isEmpty(webSite.ampUrl) ? Uri.parse(webSite.preferredUrl()) : Uri.parse(webSite.ampUrl);
+        } else {
+            return Uri.parse(webSite.preferredUrl());
+        }
     }
 
     @TargetApi(LOLLIPOP)
