@@ -212,7 +212,7 @@ public class WebHeadService extends Service implements WebHeadContract,
         webHeads.put(webHeadUrl, newWebHead);
 
         if (Preferences.get(this).aggressiveLoading() && !isMinimized) {
-            DocumentUtils.openNewCustomTab(this, newWebHead);
+            DocumentUtils.openNewCustomTab(this, newWebHead.getWebsite(), isNewTab);
         }
     }
 
@@ -378,7 +378,7 @@ public class WebHeadService extends Service implements WebHeadContract,
     @Override
     public void onWebHeadClick(@NonNull WebHead webHead) {
         if (!webHead.getUnShortenedUrl().isEmpty()) {
-            DocumentUtils.smartOpenNewTab(this, webHead);
+            DocumentUtils.smartOpenNewTab(this, webHead.getWebsite());
 
             // Store the last opened url
             lastOpenedUrl = webHead.getUrl();
