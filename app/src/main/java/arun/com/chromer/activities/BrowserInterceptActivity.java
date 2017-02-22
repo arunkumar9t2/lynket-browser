@@ -90,8 +90,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
             closeDialogs();
             dialog = new MaterialDialog.Builder(this)
                     .theme(Theme.LIGHT)
-                    .content("Grabbing AMP link")
-                    .progress(true, 0)
+                    .content(R.string.grabbing_amp_link)
                     .show();
             RxParser.parseUrl(safeIntent.getData().toString())
                     .compose(RxUtils.<Pair<String, Article>>applySchedulers())
@@ -128,6 +127,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void launchCCT(Uri uri) {
+        closeDialogs();
         final Intent customTabActivity = new Intent(this, CustomTabActivity.class);
         customTabActivity.setData(uri);
         if (isFromNewTab || Preferences.get(this).mergeTabs()) {

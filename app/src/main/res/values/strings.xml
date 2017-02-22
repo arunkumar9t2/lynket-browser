@@ -245,4 +245,5 @@
     <string name="title_activity_look_and_feel">Look and feel</string>
     <string name="not_available_in_slide_mode">Not available during slide-over mode</string>
     <string name="title_activity_browsing_options">Browsing options</string>
+    <string name="grabbing_amp_link">Grabbing AMP link</string>
 </resources>

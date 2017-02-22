@@ -71,7 +71,7 @@ class WebsiteUtilities {
 
     @NonNull
     static String unShortenUrl(@NonNull String url) {
-        final int maxRedirects = 5;
+        final int maxRedirects = 3;
         String unShortenedUrl = url;
         for (int i = 0; i < maxRedirects; i++) {
             url = getRedirectUrl(url);
