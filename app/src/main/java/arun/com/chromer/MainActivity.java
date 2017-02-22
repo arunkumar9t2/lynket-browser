@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
@@ -60,7 +59,6 @@ import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Benchmark;
 import arun.com.chromer.util.ServiceUtil;
 import arun.com.chromer.util.Utils;
-import arun.com.chromer.views.IntentPickerSheetView;
 import arun.com.chromer.views.MaterialSearchView;
 import arun.com.chromer.views.TabView;
 import arun.com.chromer.webheads.WebHeadService;
@@ -463,73 +461,20 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             launchCustomTab(Constants.GOOGLE_URL);
     }
 
-    private void showPicker(final IntentPickerSheetView browserPicker) {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                bottomSheetLayout.showWithSheetView(browserPicker);
-            }
-        }, 150);
-    }
-
 
     @Override
     public void onDefaultCustomTabProviderClick(final AppPreferenceCardView customTabPreferenceCard) {
-        final List<IntentPickerSheetView.ActivityInfo> customTabApps = Utils.getCustomTabActivityInfos(this);
-        if (customTabApps.isEmpty()) {
-            checkAndEducateUser(true);
-            return;
-        }
 
-        final IntentPickerSheetView customTabPicker = new IntentPickerSheetView(this,
-                Constants.DUMMY_INTENT,
-                R.string.default_provider,
-                new IntentPickerSheetView.OnIntentPickedListener() {
-                    @Override
-                    public void onIntentPicked(IntentPickerSheetView.ActivityInfo activityInfo) {
-                        bottomSheetLayout.dismissSheet();
-                        customTabPreferenceCard.updatePreference(activityInfo.componentName);
-                        refreshCustomTabBindings();
-                        snack(String.format(getString(R.string.default_provider_success), activityInfo.label));
-                    }
-                });
-        customTabPicker.setFilter(IntentPickerSheetView.selfPackageExcludeFilter(this));
-        customTabPicker.setMixins(customTabApps);
-        showPicker(customTabPicker);
     }
 
     @Override
     public void onSecondaryBrowserClick(final AppPreferenceCardView browserPreferenceCard) {
-        final IntentPickerSheetView browserPicker = new IntentPickerSheetView(this,
-                Constants.WEB_INTENT,
-                R.string.choose_secondary_browser,
-                new IntentPickerSheetView.OnIntentPickedListener() {
-                    @Override
-                    public void onIntentPicked(IntentPickerSheetView.ActivityInfo activityInfo) {
-                        bottomSheetLayout.dismissSheet();
-                        browserPreferenceCard.updatePreference(activityInfo.componentName);
-                        snack(String.format(getString(R.string.secondary_browser_success), activityInfo.label));
-                    }
-                });
-        browserPicker.setFilter(IntentPickerSheetView.selfPackageExcludeFilter(this));
-        showPicker(browserPicker);
+
     }
 
     @Override
     public void onFavoriteShareAppClick(final AppPreferenceCardView favShareAppPreferenceCard) {
-        final IntentPickerSheetView favSharePicker = new IntentPickerSheetView(this,
-                Constants.TEXT_SHARE_INTENT,
-                R.string.choose_fav_share_app,
-                new IntentPickerSheetView.OnIntentPickedListener() {
-                    @Override
-                    public void onIntentPicked(IntentPickerSheetView.ActivityInfo activityInfo) {
-                        bottomSheetLayout.dismissSheet();
-                        favShareAppPreferenceCard.updatePreference(activityInfo.componentName);
-                        snack(String.format(getString(R.string.fav_share_success), activityInfo.label));
-                    }
-                });
-        favSharePicker.setFilter(IntentPickerSheetView.selfPackageExcludeFilter(this));
-        showPicker(favSharePicker);
+
     }
 
     public class PagerAdapter extends FragmentPagerAdapter {

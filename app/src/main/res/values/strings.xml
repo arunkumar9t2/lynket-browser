@@ -244,4 +244,5 @@
     <string name="amp_warning_content"><![CDATA[In <b>Slide-over</b> mode, it might take a short while to grab the website\'s AMP url. You might see a dialog when this happens.]]></string>
     <string name="title_activity_look_and_feel">Look and feel</string>
     <string name="not_available_in_slide_mode">Not available during slide-over mode</string>
+    <string name="title_activity_browsing_options">Browsing options</string>
 </resources>

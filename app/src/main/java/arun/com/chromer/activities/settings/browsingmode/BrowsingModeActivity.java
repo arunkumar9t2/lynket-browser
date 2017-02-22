@@ -45,7 +45,7 @@ public class BrowsingModeActivity extends SubActivity implements BrowsingModeAda
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.browse_faster_preferences_container, BrowseFasterPreferences.newInstance())
+                .replace(R.id.browse_faster_preferences_container, BrowseFasterPreferenceFragment.newInstance())
                 .commit();
     }
 

@@ -11,6 +11,7 @@ import android.view.View;
 import arun.com.chromer.R;
 import arun.com.chromer.activities.base.SubActivity;
 import arun.com.chromer.activities.settings.browsingmode.BrowsingModeActivity;
+import arun.com.chromer.activities.settings.browsingoptions.BrowsingOptionsActivity;
 import arun.com.chromer.activities.settings.lookandfeel.LookAndFeelActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,6 +56,7 @@ public class SettingsGroupActivity extends SubActivity implements SettingsGroupA
                 startActivity(new Intent(this, LookAndFeelActivity.class));
                 break;
             case 2:
+                startActivity(new Intent(this, BrowsingOptionsActivity.class));
                 break;
         }
     }

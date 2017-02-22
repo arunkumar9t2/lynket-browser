@@ -141,7 +141,7 @@
         <activity
             android:name=".activities.blacklist.BlacklistManagerActivity"
             android:label="@string/blacklisted_apps"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activities.settings.browsingoptions.BrowsingOptionsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".webheads.ui.context.WebHeadContextActivity"
@@ -176,6 +176,15 @@
         <activity
             android:name=".activities.settings.lookandfeel.LookAndFeelActivity"
             android:label="@string/title_activity_look_and_feel"
+            android:parentActivityName=".activities.settings.SettingsGroupActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="arun.com.chromer.activities.settings.SettingsGroupActivity" />
+        </activity>
+        <activity
+            android:name=".activities.settings.browsingoptions.BrowsingOptionsActivity"
+            android:label="@string/title_activity_browsing_options"
             android:parentActivityName=".activities.settings.SettingsGroupActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

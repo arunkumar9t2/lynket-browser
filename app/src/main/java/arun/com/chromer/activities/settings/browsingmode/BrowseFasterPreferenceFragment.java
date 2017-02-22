@@ -15,14 +15,14 @@ import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.activities.settings.preferences.BasePreferenceFragment;
 import arun.com.chromer.activities.settings.widgets.IconSwitchPreference;
 
-public class BrowseFasterPreferences extends BasePreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class BrowseFasterPreferenceFragment extends BasePreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    public BrowseFasterPreferences() {
+    public BrowseFasterPreferenceFragment() {
         // Required empty public constructor
     }
 
-    public static BrowseFasterPreferences newInstance() {
-        final BrowseFasterPreferences fragment = new BrowseFasterPreferences();
+    public static BrowseFasterPreferenceFragment newInstance() {
+        final BrowseFasterPreferenceFragment fragment = new BrowseFasterPreferenceFragment();
         final Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
