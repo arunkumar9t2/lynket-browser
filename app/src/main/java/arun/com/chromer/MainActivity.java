@@ -8,17 +8,11 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -28,7 +22,6 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.StackingBehavior;
-import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -42,6 +35,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import java.util.Collections;
 import java.util.List;
 
+import arun.com.chromer.activities.SnackHelper;
 import arun.com.chromer.activities.about.AboutAppActivity;
 import arun.com.chromer.activities.about.changelog.Changelog;
 import arun.com.chromer.activities.intro.ChromerIntro;
@@ -49,25 +43,21 @@ import arun.com.chromer.activities.intro.WebHeadsIntro;
 import arun.com.chromer.activities.payments.DonateActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.activities.settings.SettingsGroupActivity;
-import arun.com.chromer.activities.settings.fragments.CustomizeFragment;
-import arun.com.chromer.activities.settings.fragments.OptionsFragment;
-import arun.com.chromer.activities.settings.fragments.WebHeadsFragment;
-import arun.com.chromer.activities.settings.widgets.AppPreferenceCardView;
 import arun.com.chromer.customtabs.CustomTabManager;
 import arun.com.chromer.customtabs.CustomTabs;
 import arun.com.chromer.shared.Constants;
-import arun.com.chromer.util.Benchmark;
 import arun.com.chromer.util.ServiceUtil;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.views.MaterialSearchView;
-import arun.com.chromer.views.TabView;
 import arun.com.chromer.webheads.WebHeadService;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback, OptionsFragment.FragmentInteractionListener {
+import static arun.com.chromer.shared.Constants.ACTION_CLOSE_ROOT;
+
+public class MainActivity extends AppCompatActivity implements SnackHelper {
 
     @BindView(R.id.bottomsheet)
     public BottomSheetLayout bottomSheetLayout;
@@ -75,10 +65,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     public MaterialSearchView materialSearchView;
     @BindView(R.id.toolbar)
     public Toolbar toolbar;
-    @BindView(R.id.tab_layout)
-    public TabLayout tabLayout;
-    @BindView(R.id.view_pager)
-    public ViewPager viewPager;
     @BindView(R.id.coordinator_layout)
     public CoordinatorLayout coordinatorLayout;
 
@@ -90,21 +76,18 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
     protected void onStart() {
         super.onStart();
         customTabManager.bindCustomTabsService(this);
-        // startService(new Intent(this, WebHeadService.class));
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         customTabManager.unbindCustomTabsService(this);
-        // stopService(new Intent(this, WebHeadService.class));
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
@@ -112,22 +95,12 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             startActivity(new Intent(this, ChromerIntro.class));
         }
 
-        startActivity(new Intent(this, SettingsGroupActivity.class));
-
         Changelog.conditionalShow(this);
-
-        setUpAppBarLayout();
-
         setupMaterialSearch();
-
         setupDrawer();
-
         setupCustomTab();
-
         checkAndEducateUser(false);
-
         ServiceUtil.takeCareOfServices(getApplicationContext());
-
         registerCloseReceiver();
     }
 
@@ -145,14 +118,11 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 MainActivity.this.finish();
             }
         };
-        LocalBroadcastManager.getInstance(this).registerReceiver(
-                closeReceiver,
-                new IntentFilter(Constants.ACTION_CLOSE_ROOT));
+        LocalBroadcastManager.getInstance(this).registerReceiver(closeReceiver, new IntentFilter(ACTION_CLOSE_ROOT));
     }
 
-    private void setUpAppBarLayout() {
+    /*private void setUpAppBarLayout() {
         setSupportActionBar(toolbar);
-
         viewPager.setAdapter(new PagerAdapter(getSupportFragmentManager()));
         tabLayout.setupWithViewPager(viewPager);
         final TabLayout.Tab optionsTab = tabLayout.getTabAt(0);
@@ -171,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         if (customizeTab != null) {
             customizeTab.setCustomView(new TabView(this, TabView.TAB_TYPE_CUSTOMIZE));
         }
-    }
+    }*/
 
     private void setupMaterialSearch() {
         materialSearchView.clearFocus();
@@ -201,10 +171,12 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
         });
     }
 
-    private void snack(@NonNull String textToSnack) {
+    @Override
+    public void snack(@NonNull String textToSnack) {
         Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_SHORT).show();
     }
 
+    @Override
     public void snackLong(@NonNull String textToSnack) {
         Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_LONG).show();
     }
@@ -220,6 +192,9 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         .withHeaderBackgroundScaleType(ImageView.ScaleType.CENTER_CROP)
                         .withDividerBelowHeader(true)
                         .build())
+                .addStickyDrawerItems(new PrimaryDrawerItem().withName(getString(R.string.settings)).withIdentifier(11)
+                        .withIcon(CommunityMaterial.Icon.cmd_settings)
+                        .withSelectable(false))
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName(getString(R.string.intro)).withIdentifier(4)
                                 .withIcon(CommunityMaterial.Icon.cmd_clipboard_text)
@@ -238,10 +213,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                                 .withIcon(CommunityMaterial.Icon.cmd_beta)
                                 .withSelectable(false),
                         new DividerDrawerItem(),
-                        new SecondaryDrawerItem().withName(getString(R.string.more_custom_tbs))
-                                .withIcon(CommunityMaterial.Icon.cmd_open_in_new)
-                                .withIdentifier(5)
-                                .withSelectable(false),
                         new SecondaryDrawerItem().withName(getString(R.string.share))
                                 .withIcon(CommunityMaterial.Icon.cmd_share_variant)
                                 .withDescription(getString(R.string.help_chromer_grow))
@@ -265,8 +236,7 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                         int i = (int) drawerItem.getIdentifier();
                         switch (i) {
                             case 2:
-                                Intent emailIntent = new Intent(Intent.ACTION_SENDTO,
-                                        Uri.fromParts("mailto", Constants.MAILID, null));
+                                final Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", Constants.MAILID, null));
                                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
                                 startActivity(Intent.createChooser(emailIntent, getString(R.string.send_email)));
                                 break;
@@ -276,20 +246,17 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                             case 4:
                                 startActivity(new Intent(MainActivity.this, ChromerIntro.class));
                                 break;
-                            case 5:
-                                launchCustomTab(Constants.CUSTOM_TAB_URL);
-                                break;
                             case 6:
                                 startActivity(new Intent(MainActivity.this, DonateActivity.class));
                                 break;
                             case 7:
-                                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                                final Intent shareIntent = new Intent(Intent.ACTION_SEND);
                                 shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text));
                                 shareIntent.setType("text/plain");
                                 startActivity(Intent.createChooser(shareIntent, getString(R.string.share_via)));
                                 break;
                             case 8:
-                                Intent aboutActivityIntent = new Intent(MainActivity.this, AboutAppActivity.class);
+                                final Intent aboutActivityIntent = new Intent(MainActivity.this, AboutAppActivity.class);
                                 startActivity(aboutActivityIntent,
                                         ActivityOptions.makeCustomAnimation(MainActivity.this,
                                                 R.anim.slide_in_right_medium,
@@ -301,6 +268,9 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                                 break;
                             case 10:
                                 startActivity(new Intent(MainActivity.this, WebHeadsIntro.class));
+                                break;
+                            case 11:
+                                startActivity(new Intent(MainActivity.this, SettingsGroupActivity.class));
                                 break;
                         }
                         return false;
@@ -343,25 +313,13 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                 webHeadService.setData(Uri.parse(url));
                 startService(webHeadService);
             } else {
-                Benchmark.start("Custom tab launching");
                 CustomTabs.from(this)
                         .forUrl(url)
                         .withSession(customTabManager.getSession())
                         .prepare()
                         .launch();
-                Benchmark.end();
             }
         }
-    }
-
-    private void refreshCustomTabBindings() {
-        // Unbind from currently bound service
-        customTabManager.unbindCustomTabsService(this);
-        setupCustomTab();
-        customTabManager.bindCustomTabsService(this);
-
-        // Restarting services will make them update their bindings.
-        ServiceUtil.refreshCustomTabBindings(getApplicationContext());
     }
 
     private void setupCustomTab() {
@@ -382,22 +340,6 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
                     public void onCustomTabsDisconnected() {
                     }
                 });
-    }
-
-    @Override
-    public void onColorSelection(@NonNull ColorChooserDialog dialog, @ColorInt int selectedColor) {
-        switch (dialog.getTitle()) {
-            case R.string.default_toolbar_color:
-                Intent toolbarColorIntent = new Intent(Constants.ACTION_TOOLBAR_COLOR_SET);
-                toolbarColorIntent.putExtra(Constants.EXTRA_KEY_TOOLBAR_COLOR, selectedColor);
-                LocalBroadcastManager.getInstance(this).sendBroadcast(toolbarColorIntent);
-                break;
-            case R.string.web_heads_color:
-                Intent webHeadColorIntent = new Intent(Constants.ACTION_WEBHEAD_COLOR_SET);
-                webHeadColorIntent.putExtra(Constants.EXTRA_KEY_WEBHEAD_COLOR, selectedColor);
-                LocalBroadcastManager.getInstance(this).sendBroadcast(webHeadColorIntent);
-                break;
-        }
     }
 
     private void checkAndEducateUser(boolean forceShow) {
@@ -459,58 +401,5 @@ public class MainActivity extends AppCompatActivity implements ColorChooserDialo
             launchCustomTab(materialSearchView.getURL());
         } else
             launchCustomTab(Constants.GOOGLE_URL);
-    }
-
-
-    @Override
-    public void onDefaultCustomTabProviderClick(final AppPreferenceCardView customTabPreferenceCard) {
-
-    }
-
-    @Override
-    public void onSecondaryBrowserClick(final AppPreferenceCardView browserPreferenceCard) {
-
-    }
-
-    @Override
-    public void onFavoriteShareAppClick(final AppPreferenceCardView favShareAppPreferenceCard) {
-
-    }
-
-    public class PagerAdapter extends FragmentPagerAdapter {
-
-        private final String[] mSections = new String[]{
-                getString(R.string.options),
-                getString(R.string.web_heads),
-                getString(R.string.customize)
-        };
-
-        PagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return OptionsFragment.newInstance();
-                case 1:
-                    return WebHeadsFragment.newInstance();
-                case 2:
-                    return CustomizeFragment.newInstance();
-            }
-            return null;
-        }
-
-        @Override
-        public int getCount() {
-            return mSections.length;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mSections[position];
-        }
-
     }
 }
