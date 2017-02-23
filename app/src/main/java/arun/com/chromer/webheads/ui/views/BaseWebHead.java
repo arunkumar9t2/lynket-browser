@@ -225,10 +225,10 @@ public abstract class BaseWebHead extends FrameLayout {
     /**
      * Used to get an instance of remove web head
      *
-     * @return an instance of {@link RemoveWebHead}
+     * @return an instance of {@link Trashy}
      */
-    RemoveWebHead getRemoveWebHead() {
-        return RemoveWebHead.get(getContext());
+    Trashy getRemoveWebHead() {
+        return Trashy.get(getContext());
     }
 
     /**
@@ -464,7 +464,7 @@ public abstract class BaseWebHead extends FrameLayout {
     @SuppressWarnings("UnusedParameters")
     void destroySelf(boolean receiveCallback) {
         destroyed = true;
-        RemoveWebHead.disappear();
+        Trashy.disappear();
         removeView(contentRoot);
         if (windowManager != null)
             try {
