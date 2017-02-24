@@ -45,19 +45,22 @@ import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.activities.settings.SettingsGroupActivity;
 import arun.com.chromer.customtabs.CustomTabManager;
 import arun.com.chromer.customtabs.CustomTabs;
+import arun.com.chromer.search.SuggestionItem;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.ServiceUtil;
 import arun.com.chromer.util.Utils;
-import arun.com.chromer.views.MaterialSearchView;
+import arun.com.chromer.views.searchview.MaterialSearchView;
 import arun.com.chromer.webheads.WebHeadService;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 import static arun.com.chromer.shared.Constants.ACTION_CLOSE_ROOT;
+import static arun.com.chromer.shared.Constants.REQUEST_CODE_VOICE;
 
-public class MainActivity extends AppCompatActivity implements SnackHelper {
+public class MainActivity extends AppCompatActivity implements SnackHelper, Home.View {
 
     @BindView(R.id.bottomsheet)
     public BottomSheetLayout bottomSheetLayout;
@@ -72,22 +75,16 @@ public class MainActivity extends AppCompatActivity implements SnackHelper {
     private Drawer drawer;
     private BroadcastReceiver closeReceiver;
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        customTabManager.bindCustomTabsService(this);
-    }
+    private Home.Presenter presenter;
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        customTabManager.unbindCustomTabsService(this);
-    }
+    private final CompositeSubscription subscriptions = new CompositeSubscription();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
+        presenter = new Home.Presenter(this);
+
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
@@ -105,9 +102,30 @@ public class MainActivity extends AppCompatActivity implements SnackHelper {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        customTabManager.bindCustomTabsService(this);
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        customTabManager.unbindCustomTabsService(this);
+    }
+
+    @Override
     protected void onDestroy() {
-        super.onDestroy();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(closeReceiver);
+        subscriptions.clear();
+        presenter.cleanUp();
+        presenter = null;
+        super.onDestroy();
     }
 
     private void registerCloseReceiver() {
@@ -121,35 +139,14 @@ public class MainActivity extends AppCompatActivity implements SnackHelper {
         LocalBroadcastManager.getInstance(this).registerReceiver(closeReceiver, new IntentFilter(ACTION_CLOSE_ROOT));
     }
 
-    /*private void setUpAppBarLayout() {
-        setSupportActionBar(toolbar);
-        viewPager.setAdapter(new PagerAdapter(getSupportFragmentManager()));
-        tabLayout.setupWithViewPager(viewPager);
-        final TabLayout.Tab optionsTab = tabLayout.getTabAt(0);
-        if (optionsTab != null) {
-            final TabView tabView = new TabView(this, TabView.TAB_TYPE_OPTIONS);
-            optionsTab.setCustomView(tabView);
-            tabView.setSelected(true);
-        }
-
-        final TabLayout.Tab webHeadsTab = tabLayout.getTabAt(1);
-        if (webHeadsTab != null) {
-            webHeadsTab.setCustomView(new TabView(this, TabView.TAB_TYPE_WEB_HEADS));
-        }
-
-        final TabLayout.Tab customizeTab = tabLayout.getTabAt(2);
-        if (customizeTab != null) {
-            customizeTab.setCustomView(new TabView(this, TabView.TAB_TYPE_CUSTOMIZE));
-        }
-    }*/
-
     private void setupMaterialSearch() {
         materialSearchView.clearFocus();
+        presenter.registerSearch(materialSearchView.getEditText());
         materialSearchView.setInteractionListener(new MaterialSearchView.SearchViewInteractionListener() {
             @Override
             public void onVoiceIconClick() {
                 if (Utils.isVoiceRecognizerPresent(getApplicationContext())) {
-                    startActivityForResult(Utils.getRecognizerIntent(MainActivity.this), Constants.REQUEST_CODE_VOICE);
+                    startActivityForResult(Utils.getRecognizerIntent(MainActivity.this), REQUEST_CODE_VOICE);
                 } else {
                     snack(getString(R.string.no_voice_rec_apps));
                 }
@@ -169,6 +166,12 @@ public class MainActivity extends AppCompatActivity implements SnackHelper {
                 }
             }
         });
+
+    }
+
+    @Override
+    public void setSuggestions(@NonNull List<SuggestionItem> suggestions) {
+        materialSearchView.setSuggestions(suggestions);
     }
 
     @Override
@@ -381,7 +384,7 @@ public class MainActivity extends AppCompatActivity implements SnackHelper {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Constants.REQUEST_CODE_VOICE) {
+        if (requestCode == REQUEST_CODE_VOICE) {
             switch (resultCode) {
                 case RESULT_OK:
                     final List<String> resultList = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);

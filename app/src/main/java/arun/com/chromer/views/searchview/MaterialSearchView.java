@@ -1,4 +1,4 @@
-package arun.com.chromer.views;
+package arun.com.chromer.views.searchview;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -8,6 +8,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.widget.CardView;
@@ -34,7 +35,6 @@ import com.mikepenz.iconics.IconicsDrawable;
 import java.util.List;
 
 import arun.com.chromer.R;
-import arun.com.chromer.search.SearchSuggestions;
 import arun.com.chromer.search.SuggestionAdapter;
 import arun.com.chromer.search.SuggestionItem;
 import arun.com.chromer.util.Utils;
@@ -45,7 +45,8 @@ import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
-public class MaterialSearchView extends RelativeLayout implements SearchSuggestions.SuggestionsCallback, SuggestionAdapter.SuggestionClickListener {
+public class MaterialSearchView extends RelativeLayout implements
+        SuggestionAdapter.SuggestionClickListener {
     @ColorInt
     private final int normalColor = ContextCompat.getColor(getContext(), R.color.accent_icon_nofocus);
     @ColorInt
@@ -71,7 +72,6 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
     private IconicsDrawable voiceIcon;
     private IconicsDrawable menuIcon;
 
-    private SearchSuggestions searchSuggestions;
     private SuggestionAdapter suggestionAdapter;
 
     private int normalCardHeight = -1;
@@ -93,6 +93,8 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
         }
     };
 
+    private int maxSuggestions = 5;
+
     public MaterialSearchView(Context context) {
         super(context);
         init(context);
@@ -109,7 +111,6 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
     }
 
     private void init(Context context) {
-        searchSuggestions = new SearchSuggestions(context, this);
         xIcon = new IconicsDrawable(context)
                 .icon(CommunityMaterial.Icon.cmd_close)
                 .color(normalColor)
@@ -170,7 +171,6 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
                 handleVoiceIconState();
                 if (s.length() != 0) {
                     label.setAlpha(0f);
-                    searchSuggestions.fetchForQuery(s.toString());
                 } else label.setAlpha(0.5f);
             }
         });
@@ -234,7 +234,7 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
         inFocus = true;
     }
 
-    private void loseFocus(final Runnable endAction) {
+    private void loseFocus(@Nullable final Runnable endAction) {
         final AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(
                 ObjectAnimator.ofFloat(label, "alpha", 1),
@@ -301,15 +301,17 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
         }
     }
 
-    @Override
-    public void clearFocus() {
-        loseFocus(null);
-        final View view = findFocus();
-        if (view != null) view.clearFocus();
-        super.clearFocus();
+    @NonNull
+    public EditText getEditText() {
+        return editText;
     }
 
-    private void clearFocus(@NonNull Runnable endAction) {
+    @Override
+    public void clearFocus() {
+        clearFocus(null);
+    }
+
+    private void clearFocus(@Nullable Runnable endAction) {
         loseFocus(endAction);
         final View view = findFocus();
         if (view != null) view.clearFocus();
@@ -355,20 +357,10 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
         animateCardToHeight(getNormalHeightPx() /* guess: minimum search bar height*/);
     }
 
-    private int getNormalHeightPx() {
-        if (normalCardHeight != -1) {
-            return normalCardHeight;
-        }
-        return Utils.dpToPx(50);
-    }
-
-    @Override
-    public void onFetchSuggestions(@NonNull List<SuggestionItem> suggestions) {
+    public void setSuggestions(@NonNull List<SuggestionItem> suggestions) {
         final boolean shouldReveal = suggestionAdapter.getItemCount() == 0 && suggestions.size() > 0;
         final boolean shouldShrink = suggestionAdapter.getItemCount() != 0 && suggestions.size() == 0;
-
         suggestionAdapter.updateSuggestions(suggestions);
-
         if (shouldShrink) {
             animateCardToHeight(getNormalHeightPx() /* guess: minimum search bar height*/);
             return;
@@ -376,6 +368,21 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
         if (shouldReveal) {
             animateCardToHeight(getPredictedSuggestionHeight());
         }
+    }
+
+    public int getMaxSuggestions() {
+        return maxSuggestions;
+    }
+
+    public void setMaxSuggestions(int maxSuggestions) {
+        this.maxSuggestions = maxSuggestions;
+    }
+
+    private int getNormalHeightPx() {
+        if (normalCardHeight != -1) {
+            return normalCardHeight;
+        }
+        return Utils.dpToPx(50);
     }
 
     private void animateCardToHeight(final int heightPx) {
@@ -400,8 +407,9 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
         anim.start();
     }
 
+
     private int getPredictedSuggestionHeight() {
-        return card.getHeight() + (searchSuggestions.getMaxSuggestions() * Utils.dpToPx(48));
+        return card.getHeight() + (maxSuggestions * Utils.dpToPx(48));
     }
 
     public interface SearchViewInteractionListener {

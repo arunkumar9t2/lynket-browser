@@ -92,9 +92,11 @@ dependencies {
     compile 'com.facebook.rebound:rebound:0.3.8'
 
     compile 'com.github.nekocode:Badge:1.2'
+
     // Reactive
     compile 'io.reactivex:rxjava:1.2.6'
     compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'com.jakewharton.rxbinding:rxbinding:1.0.0'
 
     compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
         transitive = true;

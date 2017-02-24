@@ -29,7 +29,7 @@
 
     <include layout="@layout/widget_bottom_sheet_layout" />
 
-    <arun.com.chromer.views.MaterialSearchView
+    <arun.com.chromer.views.searchview.MaterialSearchView
         android:id="@+id/material_search_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

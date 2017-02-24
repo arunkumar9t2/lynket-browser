@@ -27,18 +27,16 @@ import butterknife.ButterKnife;
  * Created by Arun on 03/08/2016.
  */
 public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.SuggestionItemHolder> {
+    private static Drawable searchIcon;
     private final Context context;
-
+    @NonNull
+    private final List<SuggestionItem> suggestionItems = new ArrayList<>();
     private SuggestionClickListener mCallback = new SuggestionClickListener() {
         @Override
         public void onSuggestionClicked(@NonNull String suggestion) {
             // no op
         }
     };
-    @NonNull
-    private final List<SuggestionItem> suggestionItems = new ArrayList<>();
-
-    private static Drawable searchIcon;
 
     public SuggestionAdapter(@NonNull final Context context, @Nullable SuggestionClickListener listener) {
         this.context = context.getApplicationContext();
@@ -97,6 +95,10 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
         notifyDataSetChanged();
     }
 
+    public interface SuggestionClickListener {
+        void onSuggestionClicked(@NonNull final String suggestion);
+    }
+
     class SuggestionItemHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.suggestions_text)
         TextView suggestion;
@@ -116,10 +118,6 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
                 }
             });
         }
-    }
-
-    public interface SuggestionClickListener {
-        void onSuggestionClicked(@NonNull final String suggestion);
     }
 
     private class SuggestionDiff extends DiffUtil.Callback {
