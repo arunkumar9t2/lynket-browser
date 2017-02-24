@@ -47,11 +47,10 @@ import java.util.Map;
 import arun.com.chromer.R;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.CustomTabManager;
-import arun.com.chromer.parser.RxParser;
+import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.util.DocumentUtils;
 import arun.com.chromer.webheads.helper.ColorExtractionTask;
 import arun.com.chromer.webheads.helper.UrlOrganizer;
-import arun.com.chromer.webheads.helper.WebSite;
 import arun.com.chromer.webheads.physics.SpringChain2D;
 import arun.com.chromer.webheads.ui.WebHeadContract;
 import arun.com.chromer.webheads.ui.context.WebHeadContextActivity;
@@ -79,7 +78,7 @@ import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBSITE;
 import static arun.com.chromer.shared.Constants.NO_COLOR;
 
 public class WebHeadService extends Service implements WebHeadContract,
-        CustomTabManager.ConnectionCallback, RxParser.OnParseListener {
+        CustomTabManager.ConnectionCallback {
     /**
      * Reference to all the web heads created on screen. Ordered in the order of creation by using
      * {@link LinkedHashMap}. The key must be unique and is usually the url the web head represents.
@@ -121,7 +120,6 @@ public class WebHeadService extends Service implements WebHeadContract,
         bindToCustomTabSession();
         registerReceivers();
         showNotification();
-        RxParser.getInstance().setOnParseListener(this);
     }
 
     @Override
@@ -135,7 +133,6 @@ public class WebHeadService extends Service implements WebHeadContract,
         }
         RemoveWebHead.destroy();
         unregisterReceivers();
-        RxParser.getInstance().unsubscribe();
         super.onDestroy();
     }
 
@@ -194,7 +191,7 @@ public class WebHeadService extends Service implements WebHeadContract,
         if (springChain2D == null) {
             springChain2D = SpringChain2D.create(this);
         }
-        RxParser.getInstance().parse(webHeadUrl);
+        // RxParser.getInstance().parse(webHeadUrl);
         springChain2D.clear();
 
         final WebHead newWebHead = new WebHead(/*Service*/ this, webHeadUrl, /*listener*/ this);
@@ -227,7 +224,6 @@ public class WebHeadService extends Service implements WebHeadContract,
         return index > MAX_VISIBLE_WEB_HEADS;
     }
 
-    @Override
     public void onUrlParsed(@NonNull final String url, final @Nullable Article article) {
         final WebHead webHead = webHeads.get(url);
         if (webHead != null && article != null) {

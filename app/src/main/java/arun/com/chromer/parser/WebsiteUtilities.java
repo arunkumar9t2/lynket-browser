@@ -339,7 +339,7 @@ class WebsiteUtilities {
                 String temp;
                 boolean insideHeadTag = false;
                 while ((temp = bufferedReader.readLine()) != null) {
-                    if (temp.contains("<head>")) {
+                    if (temp.contains("<head")) {
                         insideHeadTag = true;
                     }
                     if (insideHeadTag) {

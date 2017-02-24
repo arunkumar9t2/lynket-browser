@@ -102,6 +102,7 @@ dependencies {
         transitive = true;
     }
     compile 'com.github.chimbori:crux:-SNAPSHOT'
+    compile 'com.jakewharton:disklrucache:2.0.2'
 }
 
 static def getBase64() {

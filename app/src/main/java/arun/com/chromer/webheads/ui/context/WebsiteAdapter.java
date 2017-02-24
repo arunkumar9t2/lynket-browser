@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import arun.com.chromer.R;
-import arun.com.chromer.webheads.helper.WebSite;
+import arun.com.chromer.data.website.model.WebSite;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

@@ -12,7 +12,6 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -20,19 +19,15 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.chimbori.crux.articles.Article;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.CustomTabs;
-import arun.com.chromer.parser.RxParser;
+import arun.com.chromer.data.website.WebSiteRepository;
+import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.util.Utils;
-import arun.com.chromer.webheads.helper.WebSite;
-import rx.SingleSubscriber;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -83,40 +78,15 @@ public class CustomTabActivity extends AppCompatActivity {
             applyDescriptionFromWebsite(webSite);
         } else {
             Timber.d("No info found, beginning parsing");
-            final Subscription s = RxParser.parseUrl(baseUrl)
-                    .map(new Func1<Pair<String, Article>, Article>() {
+            final Subscription s = WebSiteRepository.getInstance(this)
+                    .getWebsite(baseUrl)
+                    .doOnNext(new Action1<WebSite>() {
                         @Override
-                        public Article call(Pair<String, Article> stringArticlePair) {
-                            return stringArticlePair.second;
-                        }
-                    })
-                    .filter(new Func1<Article, Boolean>() {
-                        @Override
-                        public Boolean call(Article article) {
-                            return article != null;
-                        }
-                    })
-                    .map(new Func1<Article, WebSite>() {
-                        @Override
-                        public WebSite call(Article article) {
-                            return WebSite.fromArticle(article);
-                        }
-                    })
-                    .toSingle()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new SingleSubscriber<WebSite>() {
-                        @Override
-                        public void onSuccess(WebSite webSite) {
-                            Timber.d("Parsing success");
+                        public void call(WebSite webSite) {
                             applyDescriptionFromWebsite(webSite);
                         }
-
-                        @Override
-                        public void onError(Throwable error) {
-                            Timber.e(error);
-                        }
-                    });
+                    })
+                    .subscribe();
             subscriptions.add(s);
         }
     }

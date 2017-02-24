@@ -12,8 +12,8 @@ import android.text.TextUtils;
 
 import arun.com.chromer.activities.CustomTabActivity;
 import arun.com.chromer.activities.settings.Preferences;
+import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.webheads.WebHeadService;
-import arun.com.chromer.webheads.helper.WebSite;
 import timber.log.Timber;
 
 import static android.content.Context.ACTIVITY_SERVICE;

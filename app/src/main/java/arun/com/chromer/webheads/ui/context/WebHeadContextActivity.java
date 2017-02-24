@@ -24,8 +24,8 @@ import java.util.ArrayList;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.settings.Preferences;
+import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.util.DocumentUtils;
-import arun.com.chromer.webheads.helper.WebSite;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;

@@ -25,10 +25,10 @@ import java.util.concurrent.ExecutionException;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.BrowserInterceptActivity;
+import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.parser.RxParser;
 import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Utils;
-import arun.com.chromer.webheads.helper.WebSite;
 import timber.log.Timber;
 
 import static android.content.Intent.EXTRA_SHORTCUT_ICON;

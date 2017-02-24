@@ -1,4 +1,4 @@
-package arun.com.chromer.webheads.helper;
+package arun.com.chromer.data.website.model;
 
 import android.graphics.Color;
 import android.os.Parcel;
@@ -24,6 +24,10 @@ public class WebSite implements Parcelable {
 
     public WebSite() {
 
+    }
+
+    public WebSite(@NonNull String url) {
+        this.url = url;
     }
 
     protected WebSite(Parcel in) {

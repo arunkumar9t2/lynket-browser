@@ -28,9 +28,9 @@ import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.settings.Preferences;
+import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Utils;
-import arun.com.chromer.webheads.helper.WebSite;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.nekocode.badge.BadgeDrawable;
