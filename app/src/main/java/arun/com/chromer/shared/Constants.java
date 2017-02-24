@@ -51,6 +51,7 @@ public class Constants {
     public static final String EXTRA_KEY_FROM_NEW_TAB = "EXTRA_KEY_FROM_NEW_TAB";
     public static final String EXTRA_KEY_WEBSITE = "EXTRA_KEY_WEBSITE";
     public static final String EXTRA_KEY_MINIMIZE = "EXTRA_KEY_MINIMIZE";
+    public static final String EXTRA_KEY_ORIGINAL_URL = "EXTRA_KEY_ORIGINAL_URL";
     // Request codes
     public static final int REQUEST_CODE_VOICE = 10001;
 

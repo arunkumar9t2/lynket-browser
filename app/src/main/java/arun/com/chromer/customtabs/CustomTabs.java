@@ -61,6 +61,7 @@ import static arun.com.chromer.activities.settings.Preferences.PREFERRED_ACTION_
 import static arun.com.chromer.customtabs.bottombar.BottomBarManager.createBottomBarRemoteViews;
 import static arun.com.chromer.customtabs.bottombar.BottomBarManager.getClickableIDs;
 import static arun.com.chromer.customtabs.bottombar.BottomBarManager.getOnClickPendingIntent;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_ORIGINAL_URL;
 import static arun.com.chromer.shared.Constants.NO_COLOR;
 
 /**
@@ -521,7 +522,7 @@ public class CustomTabs {
     private void prepareMinimize() {
         if (!Preferences.get(activity).bottomBar() && forWebHead && Preferences.get(activity).mergeTabs()) {
             final Intent minimizeIntent = new Intent(activity, MinimizeBroadcastReceiver.class);
-            minimizeIntent.putExtra(Intent.EXTRA_TEXT, url);
+            minimizeIntent.putExtra(EXTRA_KEY_ORIGINAL_URL, url);
             final PendingIntent pendingMin = PendingIntent.getBroadcast(activity, new Random().nextInt(), minimizeIntent, FLAG_UPDATE_CURRENT);
             builder.addMenuItem(activity.getString(R.string.minimize), pendingMin);
         }
@@ -563,6 +564,7 @@ public class CustomTabs {
 
     private void prepareCopyLink() {
         final Intent clipboardIntent = new Intent(activity, ClipboardService.class);
+        clipboardIntent.putExtra(EXTRA_KEY_ORIGINAL_URL, url);
         final PendingIntent serviceIntentPending = PendingIntent.getService(activity, 0, clipboardIntent, FLAG_UPDATE_CURRENT);
         builder.addMenuItem(activity.getString(R.string.copy_link), serviceIntentPending);
     }
@@ -573,6 +575,7 @@ public class CustomTabs {
     private void prepareAddToHomeScreen() {
         if (!shouldIgnoreAddToHome()) {
             final Intent addShortcutIntent = new Intent(activity, AddHomeShortcutService.class);
+            addShortcutIntent.putExtra(EXTRA_KEY_ORIGINAL_URL, url);
             final PendingIntent addShortcutPending = PendingIntent.getService(activity, 0, addShortcutIntent, FLAG_UPDATE_CURRENT);
             builder.addMenuItem(activity.getString(R.string.add_to_homescreen), addShortcutPending);
         }
@@ -600,6 +603,7 @@ public class CustomTabs {
 
     private void prepareOpenWith() {
         final Intent openWithActivity = new Intent(activity, OpenIntentWithActivity.class);
+        openWithActivity.putExtra(EXTRA_KEY_ORIGINAL_URL, url);
         final PendingIntent openWithActivityPending = PendingIntent.getActivity(activity, 0, openWithActivity, FLAG_UPDATE_CURRENT);
         builder.addMenuItem(activity.getString(R.string.open_with), openWithActivityPending);
     }
