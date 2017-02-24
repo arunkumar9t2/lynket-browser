@@ -59,8 +59,8 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
     @BindView(R.id.msv_right_icon)
     public ImageView voiceIconView;
     @BindView(R.id.msv_label)
-    public TextView mLabel;
-    @BindView(R.id.msv_edittext)
+    public TextView label;
+    @BindView(R.id.msv_edit_text)
     public EditText editText;
     @BindView(R.id.search_suggestions)
     public RecyclerView suggestionList;
@@ -169,9 +169,9 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
             public void afterTextChanged(Editable s) {
                 handleVoiceIconState();
                 if (s.length() != 0) {
-                    mLabel.setAlpha(0f);
+                    label.setAlpha(0f);
                     searchSuggestions.fetchForQuery(s.toString());
-                } else mLabel.setAlpha(0.5f);
+                } else label.setAlpha(0.5f);
             }
         });
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -218,7 +218,7 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
         final float labelAlpha = editText.getText().length() == 0 ? 0.5f : 0f;
         final AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(
-                ObjectAnimator.ofFloat(mLabel, "alpha", labelAlpha),
+                ObjectAnimator.ofFloat(label, "alpha", labelAlpha),
                 ObjectAnimator.ofFloat(editText, "alpha", 1).setDuration(300)
         );
         hardwareLayers();
@@ -237,7 +237,7 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
     private void loseFocus(final Runnable endAction) {
         final AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(
-                ObjectAnimator.ofFloat(mLabel, "alpha", 1),
+                ObjectAnimator.ofFloat(label, "alpha", 1),
                 ObjectAnimator.ofFloat(editText, "alpha", 0).setDuration(300)
         );
         hardwareLayers();
@@ -262,12 +262,12 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
     }
 
     private void clearLayerTypes() {
-        mLabel.setLayerType(LAYER_TYPE_NONE, null);
+        label.setLayerType(LAYER_TYPE_NONE, null);
         editText.setLayerType(LAYER_TYPE_NONE, null);
     }
 
     private void hardwareLayers() {
-        mLabel.setLayerType(LAYER_TYPE_HARDWARE, null);
+        label.setLayerType(LAYER_TYPE_HARDWARE, null);
         editText.setLayerType(LAYER_TYPE_HARDWARE, null);
     }
 
@@ -304,14 +304,14 @@ public class MaterialSearchView extends RelativeLayout implements SearchSuggesti
     @Override
     public void clearFocus() {
         loseFocus(null);
-        View view = findFocus();
+        final View view = findFocus();
         if (view != null) view.clearFocus();
         super.clearFocus();
     }
 
     private void clearFocus(@NonNull Runnable endAction) {
         loseFocus(endAction);
-        View view = findFocus();
+        final View view = findFocus();
         if (view != null) view.clearFocus();
         super.clearFocus();
     }

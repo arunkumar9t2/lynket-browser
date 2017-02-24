@@ -86,13 +86,9 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
 
     public void updateSuggestions(@NonNull List<SuggestionItem> newSuggestions) {
         final SuggestionDiff suggestionDiff = new SuggestionDiff(suggestionItems, newSuggestions);
-        //Benchmark.start("Diff Calculation");
         final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(suggestionDiff, true);
-        // Benchmark.end();
-
         suggestionItems.clear();
         suggestionItems.addAll(newSuggestions);
-
         diffResult.dispatchUpdatesTo(this);
     }
 
