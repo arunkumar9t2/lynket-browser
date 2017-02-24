@@ -17,6 +17,7 @@
             style="@style/FullWidthCard"
             android:animateLayoutChanges="true"
             app:cardElevation="4dp"
+            app:cardPreventCornerOverlap="true"
             app:cardUseCompatPadding="true">
 
             <FrameLayout
@@ -30,6 +31,7 @@
             style="@style/FullWidthCard"
             android:layout_below="@id/toolbar_options_card"
             app:cardElevation="4dp"
+            app:cardPreventCornerOverlap="true"
             app:cardUseCompatPadding="true">
 
             <RelativeLayout

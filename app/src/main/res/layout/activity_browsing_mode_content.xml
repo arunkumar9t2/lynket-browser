@@ -16,6 +16,7 @@
             android:id="@+id/browsing_mode_card"
             style="@style/FullWidthCard"
             app:cardElevation="4dp"
+            app:cardPreventCornerOverlap="true"
             app:cardUseCompatPadding="true">
 
             <android.support.v7.widget.RecyclerView
@@ -33,6 +34,7 @@
             style="@style/FullWidthCard"
             android:layout_below="@+id/browsing_mode_card"
             app:cardElevation="4dp"
+            app:cardPreventCornerOverlap="true"
             app:cardUseCompatPadding="true">
 
             <FrameLayout

@@ -15,6 +15,7 @@
         <android.support.v7.widget.CardView
             android:id="@+id/browsing_options_app_preferences_card"
             style="@style/FullWidthCard"
+            app:cardPreventCornerOverlap="true"
             app:cardElevation="4dp"
             app:cardUseCompatPadding="true">
 
@@ -82,6 +83,7 @@
             style="@style/FullWidthCard"
             android:layout_below="@+id/browsing_options_app_preferences_card"
             app:cardElevation="4dp"
+            app:cardPreventCornerOverlap="true"
             app:cardUseCompatPadding="true">
 
             <FrameLayout
@@ -95,6 +97,7 @@
             style="@style/FullWidthCard"
             android:layout_below="@+id/browsing_options_behavior"
             app:cardElevation="4dp"
+            app:cardPreventCornerOverlap="true"
             app:cardUseCompatPadding="true">
 
             <RelativeLayout
@@ -125,6 +128,7 @@
             style="@style/FullWidthCard"
             android:layout_below="@+id/browsing_options_web_heads"
             app:cardElevation="4dp"
+            app:cardPreventCornerOverlap="true"
             app:cardUseCompatPadding="true">
 
             <FrameLayout
