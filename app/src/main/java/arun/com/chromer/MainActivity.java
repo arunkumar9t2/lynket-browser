@@ -15,7 +15,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -30,7 +29,6 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.util.Collections;
 import java.util.List;
@@ -231,53 +229,50 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
                                 .withIcon(CommunityMaterial.Icon.cmd_information)
                                 .withIdentifier(8)
                                 .withSelectable(false)
-                ).withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-                    @Override
-                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        if (drawerItem == null)
-                            return false;
-                        int i = (int) drawerItem.getIdentifier();
-                        switch (i) {
-                            case 2:
-                                final Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", Constants.MAILID, null));
-                                emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
-                                startActivity(Intent.createChooser(emailIntent, getString(R.string.send_email)));
-                                break;
-                            case 3:
-                                Utils.openPlayStore(MainActivity.this, getPackageName());
-                                break;
-                            case 4:
-                                startActivity(new Intent(MainActivity.this, ChromerIntro.class));
-                                break;
-                            case 6:
-                                startActivity(new Intent(MainActivity.this, DonateActivity.class));
-                                break;
-                            case 7:
-                                final Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                                shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text));
-                                shareIntent.setType("text/plain");
-                                startActivity(Intent.createChooser(shareIntent, getString(R.string.share_via)));
-                                break;
-                            case 8:
-                                final Intent aboutActivityIntent = new Intent(MainActivity.this, AboutAppActivity.class);
-                                startActivity(aboutActivityIntent,
-                                        ActivityOptions.makeCustomAnimation(MainActivity.this,
-                                                R.anim.slide_in_right_medium,
-                                                R.anim.slide_out_left_medium).toBundle()
-                                );
-                                break;
-                            case 9:
-                                showJoinBetaDialog();
-                                break;
-                            case 10:
-                                startActivity(new Intent(MainActivity.this, WebHeadsIntro.class));
-                                break;
-                            case 11:
-                                startActivity(new Intent(MainActivity.this, SettingsGroupActivity.class));
-                                break;
-                        }
+                ).withOnDrawerItemClickListener((view, position, drawerItem) -> {
+                    if (drawerItem == null)
                         return false;
+                    int i = (int) drawerItem.getIdentifier();
+                    switch (i) {
+                        case 2:
+                            final Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", Constants.MAILID, null));
+                            emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+                            startActivity(Intent.createChooser(emailIntent, getString(R.string.send_email)));
+                            break;
+                        case 3:
+                            Utils.openPlayStore(MainActivity.this, getPackageName());
+                            break;
+                        case 4:
+                            startActivity(new Intent(MainActivity.this, ChromerIntro.class));
+                            break;
+                        case 6:
+                            startActivity(new Intent(MainActivity.this, DonateActivity.class));
+                            break;
+                        case 7:
+                            final Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                            shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text));
+                            shareIntent.setType("text/plain");
+                            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_via)));
+                            break;
+                        case 8:
+                            final Intent aboutActivityIntent = new Intent(MainActivity.this, AboutAppActivity.class);
+                            startActivity(aboutActivityIntent,
+                                    ActivityOptions.makeCustomAnimation(MainActivity.this,
+                                            R.anim.slide_in_right_medium,
+                                            R.anim.slide_out_left_medium).toBundle()
+                            );
+                            break;
+                        case 9:
+                            showJoinBetaDialog();
+                            break;
+                        case 10:
+                            startActivity(new Intent(MainActivity.this, WebHeadsIntro.class));
+                            break;
+                        case 11:
+                            startActivity(new Intent(MainActivity.this, SettingsGroupActivity.class));
+                            break;
                     }
+                    return false;
                 })
                 .withDelayDrawerClickEvent(200)
                 .build();
@@ -292,19 +287,11 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
                 .stackingBehavior(StackingBehavior.ALWAYS)
                 .positiveText(R.string.join_google_plus)
                 .neutralText(R.string.become_a_tester)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        final Intent googleIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.G_COMMUNITY_URL));
-                        startActivity(googleIntent);
-                    }
+                .onPositive((dialog, which) -> {
+                    final Intent googleIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.G_COMMUNITY_URL));
+                    startActivity(googleIntent);
                 })
-                .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        launchCustomTab(Constants.APP_TESTING_URL);
-                    }
-                })
+                .onNeutral((dialog, which) -> launchCustomTab(Constants.APP_TESTING_URL))
                 .build()
                 .show();
     }

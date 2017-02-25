@@ -47,12 +47,8 @@ public class WebsiteRepository implements BaseWebsiteRepository {
                         if (webSite == null) {
                             Timber.d("Cache miss for: %s", url);
                             return webNetworkStore.getWebsite(url)
-                                    .filter(new Func1<WebSite, Boolean>() {
-                                        @Override
-                                        public Boolean call(WebSite webSite) {
-                                            return webSite != null;
-                                        }
-                                    }).flatMap(new Func1<WebSite, Observable<WebSite>>() {
+                                    .filter(webSite1 -> webSite1 != null)
+                                    .flatMap(new Func1<WebSite, Observable<WebSite>>() {
                                         @Override
                                         public Observable<WebSite> call(WebSite webSite) {
                                             return cacheStore.saveWebsite(webSite);
@@ -63,6 +59,6 @@ public class WebsiteRepository implements BaseWebsiteRepository {
                             return Observable.just(webSite);
                         }
                     }
-                }).compose(RxUtils.<WebSite>applySchedulers());
+                }).compose(RxUtils.applySchedulers());
     }
 }

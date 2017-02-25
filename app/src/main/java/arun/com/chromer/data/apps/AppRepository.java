@@ -9,14 +9,12 @@ import arun.com.chromer.customtabs.dynamictoolbar.AppColorExtractorService;
 import arun.com.chromer.data.common.App;
 import arun.com.chromer.shared.Constants;
 import rx.Observable;
-import rx.functions.Action1;
 import timber.log.Timber;
 
 public class AppRepository implements BaseAppRepository {
     private final Context context;
-
+    // Disk app store
     private final AppDiskStore diskStore;
-
     @SuppressLint("StaticFieldLeak")
     private static AppRepository INSTANCE;
 
@@ -28,7 +26,7 @@ public class AppRepository implements BaseAppRepository {
      */
     public static AppRepository getInstance(@NonNull Context context) {
         if (INSTANCE == null) {
-            return new AppRepository(context);
+            INSTANCE = new AppRepository(context);
         }
         return INSTANCE;
     }
@@ -53,15 +51,12 @@ public class AppRepository implements BaseAppRepository {
     @Override
     public Observable<Integer> getPackageColor(@NonNull final String packageName) {
         return diskStore.getPackageColor(packageName)
-                .doOnNext(new Action1<Integer>() {
-                    @Override
-                    public void call(Integer integer) {
-                        if (integer == -1) {
-                            Timber.d("Color not found, starting extraction.");
-                            final Intent intent = new Intent(context, AppColorExtractorService.class);
-                            intent.putExtra(Constants.EXTRA_PACKAGE_NAME, packageName);
-                            context.startService(intent);
-                        }
+                .doOnNext(integer -> {
+                    if (integer == -1) {
+                        Timber.d("Color not found, starting extraction.");
+                        final Intent intent = new Intent(context, AppColorExtractorService.class);
+                        intent.putExtra(Constants.EXTRA_PACKAGE_NAME, packageName);
+                        context.startService(intent);
                     }
                 });
     }

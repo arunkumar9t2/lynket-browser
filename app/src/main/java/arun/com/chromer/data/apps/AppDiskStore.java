@@ -92,15 +92,12 @@ class AppDiskStore implements AppStore {
     @Override
     public Observable<Integer> getPackageColor(@NonNull String packageName) {
         return getApp(packageName)
-                .map(new Func1<App, Integer>() {
-                    @Override
-                    public Integer call(final App app) {
-                        if (app != null) {
-                            Timber.d("Got %d color for %s from storage", app.color, app.packageName);
-                            return app.color;
-                        } else {
-                            return Constants.NO_COLOR;
-                        }
+                .map(app -> {
+                    if (app != null) {
+                        Timber.d("Got %d color for %s from storage", app.color, app.packageName);
+                        return app.color;
+                    } else {
+                        return Constants.NO_COLOR;
                     }
                 });
     }
@@ -143,6 +140,4 @@ class AppDiskStore implements AppStore {
             return Observable.just(null);
         }
     }
-
-
 }
