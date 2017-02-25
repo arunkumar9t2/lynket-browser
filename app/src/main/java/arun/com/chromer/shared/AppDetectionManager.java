@@ -18,6 +18,7 @@ public final class AppDetectionManager {
     private String nonFilteredPackage = "";
 
     private final Context context;
+
     @SuppressLint("StaticFieldLeak")
     // But this is the recommended way as per developer training :/ :/
     private static AppDetectionManager INSTANCE;

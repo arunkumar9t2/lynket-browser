@@ -57,7 +57,7 @@ public class CustomTabActivity extends AppCompatActivity {
         baseUrl = getIntent().getDataString();
         final boolean isWebHead = getIntent().getBooleanExtra(EXTRA_KEY_FROM_WEBHEAD, false);
         final WebSite webSite = getIntent().getParcelableExtra(EXTRA_KEY_WEBSITE);
-        final int fallbackWebColor = webSite != null && !TextUtils.isEmpty(webSite.faviconUrl) ? webSite.themeColor() : NO_COLOR;
+        final int fallbackWebColor = webSite != null && !TextUtils.isEmpty(webSite.themeColor) ? webSite.themeColor() : NO_COLOR;
 
         CustomTabs.from(this)
                 .forUrl(baseUrl)
@@ -84,6 +84,11 @@ public class CustomTabActivity extends AppCompatActivity {
                         @Override
                         public void call(WebSite webSite) {
                             applyDescriptionFromWebsite(webSite);
+                        }
+                    }).doOnError(new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            Timber.e(throwable.toString());
                         }
                     })
                     .subscribe();

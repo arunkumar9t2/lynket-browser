@@ -2,9 +2,6 @@ package arun.com.chromer.activities.blacklist;
 
 import android.support.annotation.NonNull;
 
-import arun.com.chromer.db.BlacklistedApps;
-import timber.log.Timber;
-
 /**
  * Utility class to manage interaction with DB for blacklist functionality.
  */
@@ -14,21 +11,22 @@ public class BlackListManager {
     }
 
     public static boolean isPackageBlackListed(@NonNull String packageName) {
-        return !BlacklistedApps.find(BlacklistedApps.class, "package_name = ?", packageName).isEmpty();
+        return false;
+        // return !BlacklistedApps.find(BlacklistedApps.class, "package_name = ?", packageName).isEmpty();
     }
 
     public static void setBlackListed(@NonNull String packageName) {
-        final BlacklistedApps blacklistedApp = new BlacklistedApps(packageName);
+        /*final BlacklistedApps blacklistedApp = new BlacklistedApps(packageName);
         if (blacklistedApp.save() != -1) {
             Timber.d("Saved blacklist: %s", packageName);
-        }
+        }*/
     }
 
     public static void deleteBlackListed(@NonNull String packageName) {
-        for (BlacklistedApps app : BlacklistedApps.find(BlacklistedApps.class, "package_name = ?", packageName)) {
+        /*for (BlacklistedApps app : BlacklistedApps.find(BlacklistedApps.class, "package_name = ?", packageName)) {
             if (app.delete()) {
                 Timber.d("Deleted blacklist: %s", packageName);
             }
-        }
+        }*/
     }
 }

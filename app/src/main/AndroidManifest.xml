@@ -203,12 +203,6 @@
         </service>
 
         <meta-data
-            android:name="DOMAIN_PACKAGE_NAME"
-            android:value="arun.com.chromer.db" />
-        <meta-data
-            android:name="VERSION"
-            android:value="2" />
-        <meta-data
             android:name="io.fabric.ApiKey"
             android:value="${crashlyticsApiKey}"
             tools:replace="android:value" />

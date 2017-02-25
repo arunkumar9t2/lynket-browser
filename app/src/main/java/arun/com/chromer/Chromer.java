@@ -4,9 +4,9 @@ import android.app.Application;
 import android.os.StrictMode;
 
 import com.crashlytics.android.Crashlytics;
-import com.orm.SugarContext;
 
 import io.fabric.sdk.android.Fabric;
+import io.paperdb.Paper;
 import timber.log.Timber;
 
 /**
@@ -28,12 +28,6 @@ public class Chromer extends Application {
                     .penaltyLog()
                     .build());
         }
-        SugarContext.init(this);
-    }
-
-    @Override
-    public void onTerminate() {
-        super.onTerminate();
-        SugarContext.terminate();
+        Paper.init(this);
     }
 }

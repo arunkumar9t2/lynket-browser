@@ -6,7 +6,6 @@ import android.graphics.Color;
 
 import java.net.URL;
 
-import arun.com.chromer.db.WebColor;
 import arun.com.chromer.parser.RxParser;
 import timber.log.Timber;
 
@@ -32,8 +31,8 @@ public class WebColorExtractorService extends IntentService {
                 color = Color.parseColor(RxParser.parseUrlSync(urlToExtract).themeColor);
                 if (color != NO_COLOR) {
                     Timber.d("Extracted color %d for %s", color, url.getHost());
-                    final WebColor webColor = new WebColor(url.getHost(), color);
-                    webColor.save();
+                    /*final WebColor webColor = new WebColor(url.getHost(), color);
+                    webColor.save();*/
                 } else {
                     Timber.d("Color extraction failed");
                 }

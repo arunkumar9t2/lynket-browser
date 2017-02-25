@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.Comparator;
 
@@ -13,11 +14,11 @@ import arun.com.chromer.util.Utils;
  * Created by Arun on 24/01/2016.
  */
 public class App implements Comparable {
-    private String appName;
-    private String packageName;
-    private Drawable appIcon;
-    private CharSequence label;
-    private boolean blackListed;
+    public String appName;
+    public String packageName;
+    public Drawable appIcon;
+    public CharSequence label;
+    public boolean blackListed;
 
     public App(Context context, String packageName) {
         this.packageName = packageName;
@@ -31,23 +32,6 @@ public class App implements Comparable {
 
     public App() {
 
-    }
-
-    private static int compareApps(App lhs, App rhs) {
-        final String lhsName = lhs != null ? lhs.appName : null;
-        final String rhsName = rhs != null ? rhs.appName : null;
-
-        boolean lhsBlacklist = lhs != null && lhs.blackListed;
-        boolean rhsBlacklist = rhs != null && rhs.blackListed;
-
-        if (lhsBlacklist ^ rhsBlacklist) return (lhsBlacklist) ? -1 : 1;
-
-        if (lhsName == null ^ rhsName == null) return lhs == null ? -1 : 1;
-
-        //noinspection ConstantConditions
-        if (lhsName == null && rhsName == null) return 0;
-
-        return lhsName.compareToIgnoreCase(rhsName);
     }
 
     public String getAppName() {
@@ -94,9 +78,7 @@ public class App implements Comparable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         App app = (App) o;
-
         return packageName != null ? packageName.equals(app.packageName) : app.packageName == null;
 
     }
@@ -108,7 +90,22 @@ public class App implements Comparable {
 
     @Override
     public int compareTo(@NonNull Object another) {
-        return compareApps(this, (App) another);
+        return blackListAwareComparison(this, (App) another);
+    }
+
+    private static int blackListAwareComparison(@Nullable App lhs, @Nullable App rhs) {
+        final String lhsName = lhs != null ? lhs.appName : null;
+        final String rhsName = rhs != null ? rhs.appName : null;
+
+        boolean lhsBlacklist = lhs != null && lhs.blackListed;
+        boolean rhsBlacklist = rhs != null && rhs.blackListed;
+
+        if (lhsBlacklist ^ rhsBlacklist) return (lhsBlacklist) ? -1 : 1;
+        if (lhsName == null ^ rhsName == null) return lhs == null ? -1 : 1;
+        //noinspection ConstantConditions
+        if (lhsName == null && rhsName == null) return 0;
+
+        return lhsName.compareToIgnoreCase(rhsName);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -116,7 +113,7 @@ public class App implements Comparable {
 
         @Override
         public int compare(App lhs, App rhs) {
-            return compareApps(lhs, rhs);
+            return blackListAwareComparison(lhs, rhs);
         }
     }
 }
