@@ -19,7 +19,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import arun.com.chromer.activities.blacklist.model.App;
+import arun.com.chromer.data.common.App;
 import arun.com.chromer.util.Utils;
 import timber.log.Timber;
 
@@ -40,7 +40,7 @@ class AppIconModelLoader implements StreamModelLoader<App> {
                 if (app == null) {
                     return null;
                 }
-                inputStream = convertPackageNameToIconInputStream(app.getPackageName());
+                inputStream = convertPackageNameToIconInputStream(app.packageName);
                 return inputStream;
             }
 
@@ -61,7 +61,7 @@ class AppIconModelLoader implements StreamModelLoader<App> {
 
             @Override
             public String getId() {
-                return app.getPackageName();
+                return app.packageName;
             }
 
             @Override

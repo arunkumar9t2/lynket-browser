@@ -23,4 +23,6 @@ interface BaseAppRepository {
     Observable<Integer> getPackageColor(@NonNull String packageName);
 
     Observable<App> setPackageColor(@NonNull String packageName, int color);
+
+    Observable<App> removeBlacklist(String packageName);
 }

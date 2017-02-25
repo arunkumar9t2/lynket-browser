@@ -4,6 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+import java.util.Comparator;
 
 /**
  * Created by Arun on 24/01/2016.
@@ -71,5 +74,28 @@ public class App implements Parcelable {
         dest.writeString(packageName);
         dest.writeByte((byte) (blackListed ? 1 : 0));
         dest.writeInt(color);
+    }
+
+    private static int blackListAwareComparison(@Nullable App lhs, @Nullable App rhs) {
+        final String lhsName = lhs != null ? lhs.appName : null;
+        final String rhsName = rhs != null ? rhs.appName : null;
+
+        boolean lhsBlacklist = lhs != null && lhs.blackListed;
+        boolean rhsBlacklist = rhs != null && rhs.blackListed;
+
+        if (lhsBlacklist ^ rhsBlacklist) return (lhsBlacklist) ? -1 : 1;
+        if (lhsName == null ^ rhsName == null) return lhs == null ? -1 : 1;
+        //noinspection ConstantConditions
+        if (lhsName == null && rhsName == null) return 0;
+
+        return lhsName.compareToIgnoreCase(rhsName);
+    }
+
+    public static class BlackListComparator implements Comparator<App> {
+
+        @Override
+        public int compare(App lhs, App rhs) {
+            return blackListAwareComparison(lhs, rhs);
+        }
     }
 }

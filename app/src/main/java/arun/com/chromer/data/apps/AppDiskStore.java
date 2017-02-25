@@ -14,13 +14,19 @@ import rx.Observable;
 import rx.functions.Func1;
 import timber.log.Timber;
 
-public class AppDiskStore implements AppStore {
+class AppDiskStore implements AppStore {
     private final Context context;
 
     private static final String APP_BOOK_NAME = "APPS";
 
-    public AppDiskStore(Context context) {
+    AppDiskStore(Context context) {
         this.context = context.getApplicationContext();
+    }
+
+    @NonNull
+    @Override
+    public Book getBook() {
+        return Paper.book(APP_BOOK_NAME);
     }
 
     @NonNull
@@ -63,14 +69,16 @@ public class AppDiskStore implements AppStore {
         return getApp(packageName)
                 .flatMap(new Func1<App, Observable<App>>() {
                     @Override
-                    public Observable<App> call(final App app) {
+                    public Observable<App> call(App app) {
                         if (app != null) {
                             app.blackListed = true;
                             Timber.d("Set %s as blacklisted", app.packageName);
                             return savApp(app);
                         } else {
                             Timber.d("Added %s and blacklisted", packageName);
-                            return savApp(Utils.createApp(context, packageName));
+                            app = Utils.createApp(context, packageName);
+                            app.blackListed = true;
+                            return savApp(app);
                         }
                     }
                 });
@@ -115,9 +123,26 @@ public class AppDiskStore implements AppStore {
                 });
     }
 
-    @NonNull
     @Override
-    public Book getBook() {
-        return Paper.book(APP_BOOK_NAME);
+    public Observable<App> removeBlacklist(final String packageName) {
+        if (getBook().exist(packageName)) {
+            return getApp(packageName)
+                    .flatMap(new Func1<App, Observable<App>>() {
+                        @Override
+                        public Observable<App> call(App app) {
+                            if (app != null) {
+                                app.blackListed = false;
+                                Timber.d("Blacklist removed %s", app.packageName);
+                                return savApp(app);
+                            } else {
+                                return Observable.just(null);
+                            }
+                        }
+                    });
+        } else {
+            return Observable.just(null);
+        }
     }
+
+
 }

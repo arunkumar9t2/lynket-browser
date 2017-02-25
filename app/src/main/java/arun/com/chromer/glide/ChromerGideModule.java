@@ -8,7 +8,8 @@ import com.bumptech.glide.module.GlideModule;
 
 import java.io.InputStream;
 
-import arun.com.chromer.activities.blacklist.model.App;
+import arun.com.chromer.data.common.App;
+
 
 public class ChromerGideModule implements GlideModule {
     @Override

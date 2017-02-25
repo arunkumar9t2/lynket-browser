@@ -25,8 +25,8 @@ import java.util.List;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.SnackHelper;
-import arun.com.chromer.activities.blacklist.model.App;
 import arun.com.chromer.activities.settings.Preferences;
+import arun.com.chromer.data.common.App;
 import arun.com.chromer.util.ServiceUtil;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;
@@ -88,7 +88,7 @@ public class BlacklistManagerActivity extends AppCompatActivity implements
 
     @Override
     public void onBlackListItemClick(App app) {
-        presenter.updateBlacklist(app);
+        presenter.updateBlacklist(this, app);
     }
 
     @Override

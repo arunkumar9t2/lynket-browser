@@ -22,8 +22,8 @@ import com.afollestad.materialdialogs.Theme;
 import com.chimbori.crux.articles.Article;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.blacklist.BlackListManager;
 import arun.com.chromer.activities.settings.Preferences;
+import arun.com.chromer.data.apps.AppRepository;
 import arun.com.chromer.parser.RxParser;
 import arun.com.chromer.shared.AppDetectionManager;
 import arun.com.chromer.util.DocumentUtils;
@@ -65,8 +65,9 @@ public class BrowserInterceptActivity extends AppCompatActivity {
 
         // Check if we should blacklist the launching app
         if (Preferences.get(this).blacklist()) {
-            final String lastApp = AppDetectionManager.getInstance(this).getNonFilteredPackage();
-            if (!TextUtils.isEmpty(lastApp) && BlackListManager.isPackageBlackListed(lastApp)) {
+            final String lastAppPackage = AppDetectionManager.getInstance(this).getNonFilteredPackage();
+            if (!TextUtils.isEmpty(lastAppPackage)
+                    && AppRepository.getInstance(this).isPackageBlacklisted(lastAppPackage)) {
                 // The calling app was blacklisted by user, perform blacklisting.
                 performBlacklistAction();
                 return;
@@ -91,7 +92,12 @@ public class BrowserInterceptActivity extends AppCompatActivity {
             dialog = new MaterialDialog.Builder(this)
                     .theme(Theme.LIGHT)
                     .content(R.string.grabbing_amp_link)
-                    .show();
+                    .dismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            finish();
+                        }
+                    }).show();
             RxParser.parseUrl(safeIntent.getData().toString())
                     .compose(RxUtils.<Pair<String, Article>>applySchedulers())
                     .toSingle()
@@ -107,7 +113,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                                         dialog.dismiss();
                                         launchCCT(Uri.parse(articlePair.second.ampUrl));
                                     }
-                                }, 150);
+                                }, 100);
                             } else {
                                 launchCCT(safeIntent.getData());
                             }

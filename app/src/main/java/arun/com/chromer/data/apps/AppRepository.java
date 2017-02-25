@@ -72,6 +72,11 @@ public class AppRepository implements BaseAppRepository {
     }
 
     @Override
+    public Observable<App> removeBlacklist(String packageName) {
+        return diskStore.removeBlacklist(packageName);
+    }
+
+    @Override
     public boolean isPackageBlacklisted(@NonNull String packageName) {
         return diskStore.isPackageBlacklisted(packageName);
     }
