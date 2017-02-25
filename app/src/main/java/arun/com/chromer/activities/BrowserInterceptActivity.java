@@ -2,7 +2,6 @@ package arun.com.chromer.activities;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -11,27 +10,23 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
-import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
-import com.chimbori.crux.articles.Article;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.data.apps.AppRepository;
-import arun.com.chromer.parser.RxParser;
+import arun.com.chromer.data.website.WebsiteRepository;
 import arun.com.chromer.shared.AppDetectionManager;
 import arun.com.chromer.util.DocumentUtils;
 import arun.com.chromer.util.RxUtils;
 import arun.com.chromer.util.SafeIntent;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.ui.ProxyActivity;
-import rx.SingleSubscriber;
 import timber.log.Timber;
 
 import static android.content.Intent.ACTION_VIEW;
@@ -92,40 +87,27 @@ public class BrowserInterceptActivity extends AppCompatActivity {
             dialog = new MaterialDialog.Builder(this)
                     .theme(Theme.LIGHT)
                     .content(R.string.grabbing_amp_link)
-                    .dismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                            finish();
-                        }
-                    }).show();
-            RxParser.parseUrl(safeIntent.getData().toString())
-                    .compose(RxUtils.<Pair<String, Article>>applySchedulers())
-                    .toSingle()
-                    .subscribe(new SingleSubscriber<Pair<String, Article>>() {
-                        @Override
-                        public void onSuccess(final Pair<String, Article> articlePair) {
-                            if (articlePair.second != null
-                                    && !TextUtils.isEmpty(articlePair.second.ampUrl)) {
-                                dialog.setContent("Link found!");
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        dialog.dismiss();
-                                        launchCCT(Uri.parse(articlePair.second.ampUrl));
-                                    }
-                                }, 100);
-                            } else {
-                                launchCCT(safeIntent.getData());
-                            }
-                        }
-
-                        @Override
-                        public void onError(Throwable error) {
-                            Timber.e(error);
-                            dialog.dismiss();
+                    .dismissListener(d -> finish())
+                    .show();
+            WebsiteRepository.getInstance(this)
+                    .getWebsite(safeIntent.getData().toString())
+                    .compose(RxUtils.applySchedulers())
+                    .doOnNext(webSite -> {
+                        if (webSite != null && !TextUtils.isEmpty(webSite.ampUrl)) {
+                            dialog.setContent(R.string.link_found);
+                            new Handler().postDelayed(() -> {
+                                dialog.dismiss();
+                                launchCCT(Uri.parse(webSite.ampUrl));
+                            }, 100);
+                        } else {
                             launchCCT(safeIntent.getData());
                         }
-                    });
+                    })
+                    .doOnError(throwable -> {
+                        Timber.e(throwable);
+                        launchCCT(safeIntent.getData());
+                        dialog.dismiss();
+                    }).subscribe();
         } else {
             launchCCT(safeIntent.getData());
         }
@@ -189,20 +171,12 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                 .theme(Theme.LIGHT)
                 .positiveColorRes(R.color.colorAccent)
                 .negativeColorRes(R.color.colorAccent)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        final Intent chromerIntent = getPackageManager().getLaunchIntentForPackage(getPackageName());
-                        chromerIntent.addFlags(FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(chromerIntent);
-                    }
+                .onPositive((dialog1, which) -> {
+                    final Intent chromerIntent = getPackageManager().getLaunchIntentForPackage(getPackageName());
+                    chromerIntent.addFlags(FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(chromerIntent);
                 })
-                .dismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        finish();
-                    }
-                }).show();
+                .dismissListener(dialog12 -> finish()).show();
     }
 
     private void closeDialogs() {

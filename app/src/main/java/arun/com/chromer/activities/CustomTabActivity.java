@@ -27,7 +27,6 @@ import arun.com.chromer.data.website.WebsiteRepository;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.util.Utils;
 import rx.Subscription;
-import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -80,17 +79,8 @@ public class CustomTabActivity extends AppCompatActivity {
             Timber.d("No info found, beginning parsing");
             final Subscription s = WebsiteRepository.getInstance(this)
                     .getWebsite(baseUrl)
-                    .doOnNext(new Action1<WebSite>() {
-                        @Override
-                        public void call(WebSite webSite) {
-                            applyDescriptionFromWebsite(webSite);
-                        }
-                    }).doOnError(new Action1<Throwable>() {
-                        @Override
-                        public void call(Throwable throwable) {
-                            Timber.e(throwable.toString());
-                        }
-                    })
+                    .doOnNext(this::applyDescriptionFromWebsite)
+                    .doOnError(Timber::e)
                     .subscribe();
             subscriptions.add(s);
         }
@@ -117,12 +107,7 @@ public class CustomTabActivity extends AppCompatActivity {
     }
 
     private void delayedGoToBack() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                moveTaskToBack(true);
-            }
-        }, 650);
+        new Handler().postDelayed(() -> moveTaskToBack(true), 650);
     }
 
     @Override
