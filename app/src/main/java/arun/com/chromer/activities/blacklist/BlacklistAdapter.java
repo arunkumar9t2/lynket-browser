@@ -114,12 +114,7 @@ class BlacklistAdapter extends RecyclerView.Adapter<BlacklistAdapter.BlackListIt
             ButterKnife.bind(this, view);
             appPackage.setVisibility(View.GONE);
             appCheckbox.setOnClickListener(this);
-            blacklistTemplateRoot.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    appCheckbox.performClick();
-                }
-            });
+            blacklistTemplateRoot.setOnClickListener(v -> appCheckbox.performClick());
         }
 
         @Override

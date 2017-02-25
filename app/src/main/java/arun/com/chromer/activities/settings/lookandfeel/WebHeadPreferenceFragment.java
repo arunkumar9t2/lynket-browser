@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.preference.Preference;
 
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
@@ -105,18 +104,15 @@ public class WebHeadPreferenceFragment extends BasePreferenceFragment implements
     }
 
     private void setupWebHeadColorPreference() {
-        webHeadColor.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                final int chosenColor = ((ColorPreference) preference).getColor();
-                new ColorChooserDialog.Builder((LookAndFeelActivity) getActivity(), R.string.web_heads_color)
-                        .titleSub(R.string.web_heads_color)
-                        .allowUserColorInputAlpha(false)
-                        .preselect(chosenColor)
-                        .dynamicButtonColor(false)
-                        .show();
-                return true;
-            }
+        webHeadColor.setOnPreferenceClickListener(preference -> {
+            final int chosenColor = ((ColorPreference) preference).getColor();
+            new ColorChooserDialog.Builder((LookAndFeelActivity) getActivity(), R.string.web_heads_color)
+                    .titleSub(R.string.web_heads_color)
+                    .allowUserColorInputAlpha(false)
+                    .preselect(chosenColor)
+                    .dynamicButtonColor(false)
+                    .show();
+            return true;
         });
     }
 

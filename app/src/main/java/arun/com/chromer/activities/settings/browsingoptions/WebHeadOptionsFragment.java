@@ -3,7 +3,6 @@ package arun.com.chromer.activities.settings.browsingoptions;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.preference.Preference;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
@@ -95,19 +94,16 @@ public class WebHeadOptionsFragment extends BasePreferenceFragment {
     }
 
     private void setupAggressivePreference() {
-        aggressiveLoading.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (((Boolean) newValue) && !Preferences.get(getContext()).mergeTabs()) {
-                    new MaterialDialog.Builder(getActivity())
-                            .title(R.string.aggresive_dia_title)
-                            .content(R.string.aggresive_dia_content)
-                            .positiveText(android.R.string.ok)
-                            .show();
-                    Preferences.get(getContext()).mergeTabs(true);
-                }
-                return true;
+        aggressiveLoading.setOnPreferenceChangeListener((preference, newValue) -> {
+            if (((Boolean) newValue) && !Preferences.get(getContext()).mergeTabs()) {
+                new MaterialDialog.Builder(getActivity())
+                        .title(R.string.aggresive_dia_title)
+                        .content(R.string.aggresive_dia_content)
+                        .positiveText(android.R.string.ok)
+                        .show();
+                Preferences.get(getContext()).mergeTabs(true);
             }
+            return true;
         });
     }
 

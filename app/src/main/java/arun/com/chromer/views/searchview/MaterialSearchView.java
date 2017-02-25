@@ -18,7 +18,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -130,12 +129,9 @@ public class MaterialSearchView extends RelativeLayout implements
         suggestionList.setLayoutManager(new LinearLayoutManager(getContext()));
         suggestionList.setAdapter(suggestionAdapter);
         suggestionList.addItemDecoration(new DividerItemDecoration(getContext(), VERTICAL));
-        card.post(new Runnable() {
-            @Override
-            public void run() {
-                if (normalCardHeight == -1) {
-                    normalCardHeight = card.getHeight();
-                }
+        card.post(() -> {
+            if (normalCardHeight == -1) {
+                normalCardHeight = card.getHeight();
             }
         });
     }
@@ -143,18 +139,10 @@ public class MaterialSearchView extends RelativeLayout implements
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        editText.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                performClick();
-            }
-        });
-        editText.setOnFocusChangeListener(new OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) gainFocus();
-                else loseFocus(null);
-            }
+        editText.setOnClickListener(v -> performClick());
+        editText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) gainFocus();
+            else loseFocus(null);
         });
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -174,43 +162,29 @@ public class MaterialSearchView extends RelativeLayout implements
                 } else label.setAlpha(0.5f);
             }
         });
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    listener.onSearchPerformed(getURL());
-                    return true;
-                }
-                return false;
+        editText.setOnEditorActionListener((textView, actionId, keyEvent) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                listener.onSearchPerformed(getURL());
+                return true;
             }
+            return false;
         });
 
         menuIconView.setImageDrawable(menuIcon);
-        menuIconView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listener.onHamburgerClick();
-            }
-        });
+        menuIconView.setOnClickListener(view -> listener.onHamburgerClick());
 
         voiceIconView.setImageDrawable(voiceIcon);
-        voiceIconView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (clearText) {
-                    editText.setText("");
-                    loseFocus(null);
-                } else {
-                    if (listener != null) listener.onVoiceIconClick();
-                }
+        voiceIconView.setOnClickListener(v -> {
+            if (clearText) {
+                editText.setText("");
+                loseFocus(null);
+            } else {
+                if (listener != null) listener.onVoiceIconClick();
             }
         });
 
-        setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!inFocus) gainFocus();
-            }
+        setOnClickListener(v -> {
+            if (!inFocus) gainFocus();
         });
     }
 
@@ -344,12 +318,7 @@ public class MaterialSearchView extends RelativeLayout implements
 
     @Override
     public void onSuggestionClicked(@NonNull final String suggestion) {
-        clearFocus(new Runnable() {
-            @Override
-            public void run() {
-                listener.onSearchPerformed(Utils.getSearchUrl(suggestion));
-            }
-        });
+        clearFocus(() -> listener.onSearchPerformed(Utils.getSearchUrl(suggestion)));
     }
 
     private void hideSuggestions() {
@@ -398,11 +367,9 @@ public class MaterialSearchView extends RelativeLayout implements
                 card.setLayerType(LAYER_TYPE_NONE, null);
             }
         });
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            public void onAnimationUpdate(ValueAnimator animation) {
-                card.getLayoutParams().height = (int) animation.getAnimatedValue();
-                card.requestLayout();
-            }
+        anim.addUpdateListener(animation -> {
+            card.getLayoutParams().height = (int) animation.getAnimatedValue();
+            card.requestLayout();
         });
         anim.start();
     }
