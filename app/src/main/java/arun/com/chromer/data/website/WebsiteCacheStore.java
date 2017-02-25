@@ -13,7 +13,7 @@ import rx.Observable;
 /**
  * Cache store to get/put {@link WebSite} objects to disk cache.
  */
-class WebSiteCacheStore implements WebSiteStore {
+class WebsiteCacheStore implements WebsiteStore {
     @SuppressWarnings("FieldCanBeLocal")
     private final Context context;
     // Cache to store our data.
@@ -21,7 +21,7 @@ class WebSiteCacheStore implements WebSiteStore {
     // Cache size, currently set at 30 Mb.
     private static final int DISK_CACHE_SIZE = 1024 * 1024 * 30;
 
-    WebSiteCacheStore(Context context) {
+    WebsiteCacheStore(Context context) {
         this.context = context.getApplicationContext();
         try {
             webSiteDiskCache = ParcelDiskCache.open(context, WebSite.class.getClassLoader(), "WebSiteCache", DISK_CACHE_SIZE);

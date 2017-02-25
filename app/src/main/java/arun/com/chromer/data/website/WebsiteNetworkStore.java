@@ -15,7 +15,7 @@ import rx.functions.Func1;
 /**
  * Network store which freshly parses website data for a given URL.
  */
-class WebsiteNetworkStore implements WebSiteStore {
+class WebsiteNetworkStore implements WebsiteStore {
     @SuppressWarnings("FieldCanBeLocal")
     private final Context context;
 

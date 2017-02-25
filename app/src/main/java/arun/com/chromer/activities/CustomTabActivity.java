@@ -23,7 +23,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import arun.com.chromer.R;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.CustomTabs;
-import arun.com.chromer.data.website.WebSiteRepository;
+import arun.com.chromer.data.website.WebsiteRepository;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.util.Utils;
 import rx.Subscription;
@@ -78,7 +78,7 @@ public class CustomTabActivity extends AppCompatActivity {
             applyDescriptionFromWebsite(webSite);
         } else {
             Timber.d("No info found, beginning parsing");
-            final Subscription s = WebSiteRepository.getInstance(this)
+            final Subscription s = WebsiteRepository.getInstance(this)
                     .getWebsite(baseUrl)
                     .doOnNext(new Action1<WebSite>() {
                         @Override

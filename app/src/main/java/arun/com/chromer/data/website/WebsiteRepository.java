@@ -13,26 +13,26 @@ import timber.log.Timber;
 /**
  * Website repository implementation for managing and providing website data.
  */
-public class WebSiteRepository implements BaseWebsiteRepository {
+public class WebsiteRepository implements BaseWebsiteRepository {
     @SuppressWarnings("FieldCanBeLocal")
     private final Context context;
     // Singleton instance
     @SuppressLint("StaticFieldLeak")
-    private static WebSiteRepository INSTANCE;
+    private static WebsiteRepository INSTANCE;
     // Network store
-    private final WebSiteStore webNetworkStore;
+    private final WebsiteStore webNetworkStore;
     // Cache store
-    private final WebSiteStore cacheStore;
+    private final WebsiteStore cacheStore;
 
-    private WebSiteRepository(@NonNull Context context) {
+    private WebsiteRepository(@NonNull Context context) {
         this.context = context.getApplicationContext();
         webNetworkStore = new WebsiteNetworkStore(context);
-        cacheStore = new WebSiteCacheStore(context);
+        cacheStore = new WebsiteCacheStore(context);
     }
 
-    public static synchronized WebSiteRepository getInstance(@NonNull Context context) {
+    public static synchronized WebsiteRepository getInstance(@NonNull Context context) {
         if (INSTANCE == null) {
-            INSTANCE = new WebSiteRepository(context);
+            INSTANCE = new WebsiteRepository(context);
         }
         return INSTANCE;
     }

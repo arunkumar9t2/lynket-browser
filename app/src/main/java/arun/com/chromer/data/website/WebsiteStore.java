@@ -9,7 +9,7 @@ import rx.Observable;
  * Created by arunk on 24-02-2017.
  */
 
-interface WebSiteStore {
+interface WebsiteStore {
     @NonNull
     Observable<WebSite> getWebsite(@NonNull String url);
 
