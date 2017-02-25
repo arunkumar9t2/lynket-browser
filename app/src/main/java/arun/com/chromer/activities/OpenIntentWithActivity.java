@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.flipboard.bottomsheet.BottomSheetLayout;
-import com.flipboard.bottomsheet.OnSheetDismissedListener;
 
 import arun.com.chromer.R;
 import arun.com.chromer.util.DocumentUtils;
@@ -31,27 +30,19 @@ public class OpenIntentWithActivity extends AppCompatActivity {
         setContentView(R.layout.activity_open_with);
         ButterKnife.bind(this);
 
-        bottomSheet.addOnSheetDismissedListener(new OnSheetDismissedListener() {
-            @Override
-            public void onDismissed(BottomSheetLayout bottomSheetLayout) {
-                finish();
-            }
-        });
+        bottomSheet.addOnSheetDismissedListener(bottomSheetLayout -> finish());
 
         if (getIntent() != null && getIntent().getDataString() != null) {
             final Intent webSiteIntent = new Intent(ACTION_VIEW, getIntent().getData());
             final IntentPickerSheetView browserPicker = new IntentPickerSheetView(this,
                     webSiteIntent,
                     R.string.open_with,
-                    new IntentPickerSheetView.OnIntentPickedListener() {
-                        @Override
-                        public void onIntentPicked(IntentPickerSheetView.ActivityInfo activityInfo) {
-                            bottomSheet.dismissSheet();
-                            webSiteIntent.setComponent(activityInfo.componentName);
-                            webSiteIntent.setFlags(FLAG_ACTIVITY_CLEAR_TASK | FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(webSiteIntent);
-                            finish();
-                        }
+                    activityInfo -> {
+                        bottomSheet.dismissSheet();
+                        webSiteIntent.setComponent(activityInfo.componentName);
+                        webSiteIntent.setFlags(FLAG_ACTIVITY_CLEAR_TASK | FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(webSiteIntent);
+                        finish();
                     });
             browserPicker.setFilter(IntentPickerSheetView.selfPackageExcludeFilter(this));
             bottomSheet.showWithSheetView(browserPicker);
