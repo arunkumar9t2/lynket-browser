@@ -41,7 +41,7 @@ public class RxParser {
                 String webSiteString = WebsiteUtilities.headString(candidateUrl.toString());
 
                 article = Extractor
-                        .with(url, webSiteString)
+                        .with(expanded, webSiteString)
                         .extractMetadata()
                         .article();
 
