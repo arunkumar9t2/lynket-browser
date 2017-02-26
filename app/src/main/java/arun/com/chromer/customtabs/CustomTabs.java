@@ -79,18 +79,15 @@ public class CustomTabs {
      * Fallback in case there was en error launching custom tabs
      */
     private final static CustomTabsFallback CUSTOM_TABS_FALLBACK =
-            new CustomTabsFallback() {
-                @Override
-                public void openUri(Activity activity, Uri uri) {
-                    if (activity != null) {
-                        final String string = activity.getString(R.string.fallback_msg);
-                        Toast.makeText(activity, string, Toast.LENGTH_SHORT).show();
-                        try {
-                            final Intent target = new Intent(Intent.ACTION_VIEW, uri);
-                            activity.startActivity(Intent.createChooser(target, activity.getString(R.string.open_with)));
-                        } catch (ActivityNotFoundException e) {
-                            Toast.makeText(activity, activity.getString(R.string.unxp_err), Toast.LENGTH_SHORT).show();
-                        }
+            (activity1, uri) -> {
+                if (activity1 != null) {
+                    final String string = activity1.getString(R.string.fallback_msg);
+                    Toast.makeText(activity1, string, Toast.LENGTH_SHORT).show();
+                    try {
+                        final Intent target = new Intent(Intent.ACTION_VIEW, uri);
+                        activity1.startActivity(Intent.createChooser(target, activity1.getString(R.string.open_with)));
+                    } catch (ActivityNotFoundException e) {
+                        Toast.makeText(activity1, activity1.getString(R.string.unxp_err), Toast.LENGTH_SHORT).show();
                     }
                 }
             };
