@@ -120,6 +120,7 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
         transitive = true;
     }
+    compile project(path: ':article-view')
 }
 
 static def getBase64() {

@@ -3,6 +3,7 @@ package arun.com.chromer.activities;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import arun.com.chromer.util.SafeIntent;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.ui.ProxyActivity;
 import timber.log.Timber;
+import xyz.klinker.android.article.ArticleIntent;
 
 import static android.content.Intent.ACTION_VIEW;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
@@ -108,6 +110,15 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                         launchCCT(safeIntent.getData());
                         dialog.dismiss();
                     }).subscribe();
+        } else if (Preferences.get(this).articleMode()) {
+            final ArticleIntent intent = new ArticleIntent.Builder(this)
+                    .setToolbarColor(Color.parseColor("#00BCD4"))
+                    .setAccentColor(Color.parseColor("#EEFF41"))
+                    .setTheme(ArticleIntent.THEME_DARK)
+                    .setTextSize(15)     // 15 SP (default)
+                    .build();
+            intent.launchUrl(this, safeIntent.getData());
+            finish();
         } else {
             launchCCT(safeIntent.getData());
         }
