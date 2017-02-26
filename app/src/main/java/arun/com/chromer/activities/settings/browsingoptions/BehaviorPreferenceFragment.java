@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.preference.Preference;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
@@ -59,17 +58,14 @@ public class BehaviorPreferenceFragment extends BasePreferenceFragment {
                     .sizeDp(24);
             blackListPreference.setIcon(recentImg);
             blackListPreference.hideSwitch();
-            blackListPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    final Intent blacklistedApps = new Intent(getActivity(), BlacklistManagerActivity.class);
-                    startActivity(blacklistedApps,
-                            ActivityOptions.makeCustomAnimation(getActivity(),
-                                    R.anim.slide_in_right_medium,
-                                    R.anim.slide_out_left_medium).toBundle()
-                    );
-                    return false;
-                }
+            blackListPreference.setOnPreferenceClickListener(preference -> {
+                final Intent blacklistedApps = new Intent(getActivity(), BlacklistManagerActivity.class);
+                startActivity(blacklistedApps,
+                        ActivityOptions.makeCustomAnimation(getActivity(),
+                                R.anim.slide_in_right_medium,
+                                R.anim.slide_out_left_medium).toBundle()
+                );
+                return false;
             });
         }
     }
@@ -82,10 +78,7 @@ public class BehaviorPreferenceFragment extends BasePreferenceFragment {
                     .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
                     .sizeDp(24);
             mergeTabsPreference.setIcon(recentImg);
-        }
-        mergeTabsPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
+            mergeTabsPreference.setOnPreferenceChangeListener((preference, newValue) -> {
                 if (!((Boolean) newValue) && Preferences.get(getContext()).aggressiveLoading()) {
                     new MaterialDialog.Builder(getActivity())
                             .title(R.string.merge_tabs_off_title)
@@ -95,8 +88,8 @@ public class BehaviorPreferenceFragment extends BasePreferenceFragment {
                     Preferences.get(getContext()).aggressiveLoading(false);
                 }
                 return true;
-            }
-        });
+            });
+        }
     }
 
     @Override

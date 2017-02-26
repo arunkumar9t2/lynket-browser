@@ -40,13 +40,12 @@ import arun.com.chromer.customtabs.callbacks.MinimizeBroadcastReceiver;
 import arun.com.chromer.customtabs.callbacks.OpenInChromeReceiver;
 import arun.com.chromer.customtabs.callbacks.SecondaryBrowserReceiver;
 import arun.com.chromer.customtabs.callbacks.ShareBroadcastReceiver;
-import arun.com.chromer.customtabs.dynamictoolbar.AppColorExtractorService;
-import arun.com.chromer.customtabs.dynamictoolbar.WebColorExtractorService;
 import arun.com.chromer.customtabs.prefetch.ScannerService;
 import arun.com.chromer.customtabs.warmup.WarmUpService;
-import arun.com.chromer.db.AppColor;
-import arun.com.chromer.db.WebColor;
+import arun.com.chromer.data.apps.AppRepository;
+import arun.com.chromer.shared.AppDetectService;
 import arun.com.chromer.shared.AppDetectionManager;
+import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.WebHeadService;
 import timber.log.Timber;
@@ -409,8 +408,7 @@ public class CustomTabs {
             }
 
             if (toolbarColor != NO_COLOR) {
-                builder
-                        .setToolbarColor(toolbarColor)
+                builder.setToolbarColor(toolbarColor)
                         .setSecondaryToolbarColor(toolbarColor);
             }
         }
@@ -424,7 +422,7 @@ public class CustomTabs {
     private boolean setWebToolbarColor() {
         // Check if we have the color extracted for this source
         final String host = Uri.parse(url).getHost();
-        if (host != null) {
+        /*if (host != null) {
             final List<WebColor> webColors = WebColor.find(WebColor.class, "url = ?", host);
 
             if (!webColors.isEmpty()) {
@@ -435,7 +433,7 @@ public class CustomTabs {
                 extractorService.setData(Uri.parse(url));
                 activity.startService(extractorService);
             }
-        }
+        }*/
         return false;
     }
 
@@ -446,16 +444,14 @@ public class CustomTabs {
      */
     private boolean setAppToolbarColor() {
         try {
-            final String lastApp = AppDetectionManager.getInstance(activity).getFilteredPackage();
-            if (TextUtils.isEmpty(lastApp)) return false;
-            final List<AppColor> appColors = AppColor.find(AppColor.class, "app = ?", lastApp);
-            if (!appColors.isEmpty()) {
-                toolbarColor = appColors.get(0).getColor();
-                return true;
-            } else {
-                final Intent extractorService = new Intent(activity, AppColorExtractorService.class);
-                extractorService.putExtra("app", lastApp);
-                activity.startService(extractorService);
+            final String lastPackage = AppDetectionManager.getInstance(activity).getFilteredPackage();
+            if (TextUtils.isEmpty(lastPackage)) {
+                activity.startService(new Intent(activity, AppDetectService.class));
+                return false;
+            }
+            final int savedColor = AppRepository.getInstance(activity).getPackageColorSync(lastPackage);
+            if (savedColor != Constants.NO_COLOR) {
+                toolbarColor = savedColor;
             }
         } catch (Exception e) {
             Timber.e(e.toString());

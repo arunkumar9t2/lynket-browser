@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.blacklist.model.App;
+import arun.com.chromer.data.common.App;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -53,9 +53,9 @@ class BlacklistAdapter extends RecyclerView.Adapter<BlacklistAdapter.BlackListIt
     @Override
     public void onBindViewHolder(final BlackListItemViewHolder holder, int position) {
         final App currApp = apps.get(position);
-        holder.appName.setText(currApp.getAppName());
-        holder.appPackage.setText(currApp.getPackageName());
-        holder.appCheckbox.setChecked(currApp.isBlackListed());
+        holder.appName.setText(currApp.appName);
+        holder.appPackage.setText(currApp.packageName);
+        holder.appCheckbox.setChecked(currApp.blackListed);
 
         if (activityRef.get() != null)
             Glide.with(activityRef.get())
@@ -65,13 +65,19 @@ class BlacklistAdapter extends RecyclerView.Adapter<BlacklistAdapter.BlackListIt
     }
 
     @Override
+    public void onViewRecycled(BlackListItemViewHolder holder) {
+        super.onViewRecycled(holder);
+        Glide.clear(holder.appIcon);
+    }
+
+    @Override
     public int getItemCount() {
         return apps.size();
     }
 
     @Override
     public long getItemId(int position) {
-        return apps.get(position).getPackageName().hashCode();
+        return apps.get(position).hashCode();
     }
 
     public void setApps(@NonNull List<App> apps) {
@@ -108,12 +114,7 @@ class BlacklistAdapter extends RecyclerView.Adapter<BlacklistAdapter.BlackListIt
             ButterKnife.bind(this, view);
             appPackage.setVisibility(View.GONE);
             appCheckbox.setOnClickListener(this);
-            blacklistTemplateRoot.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    appCheckbox.performClick();
-                }
-            });
+            blacklistTemplateRoot.setOnClickListener(v -> appCheckbox.performClick());
         }
 
         @Override
@@ -121,7 +122,7 @@ class BlacklistAdapter extends RecyclerView.Adapter<BlacklistAdapter.BlackListIt
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
                 final App app = apps.get(position);
-                app.setBlackListed(appCheckbox.isChecked());
+                app.blackListed = appCheckbox.isChecked();
                 listener.onBlackListItemClick(app);
             }
         }

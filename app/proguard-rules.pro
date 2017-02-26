@@ -25,13 +25,12 @@
 -keep class android.net.http.** { *; }
 -dontwarn android.net.http.**
 
--keepclasseswithmembernames public class * extends com.orm.SugarRecord { *; }
--keepclasseswithmembernames class com.orm.* { *; }
--dontwarn com.google.common.**
 -keep public class org.jsoup.** {
     public *;
 }
 -keepattributes EnclosingMethod
+
+-dontwarn java.lang.invoke.*
 
 -dontwarn sun.misc.Unsafe
 -dontwarn org.w3c.dom.bootstrap.DOMImplementationRegistry

@@ -6,7 +6,6 @@ import android.widget.EditText;
 
 import com.arun.rxgoogleinstant.RxSuggestions;
 import com.jakewharton.rxbinding.widget.RxTextView;
-import com.jakewharton.rxbinding.widget.TextViewAfterTextChangeEvent;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -15,8 +14,6 @@ import java.util.concurrent.TimeUnit;
 
 import arun.com.chromer.search.SuggestionItem;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -43,42 +40,22 @@ public interface Home {
 
         void registerSearch(@NonNull EditText editText) {
             compositeSubscription.add(RxTextView.afterTextChangeEvents(editText)
-                    .map(new Func1<TextViewAfterTextChangeEvent, String>() {
-                        @Override
-                        public String call(TextViewAfterTextChangeEvent textViewAfterTextChangeEvent) {
-                            return textViewAfterTextChangeEvent.editable().toString();
-                        }
-                    }).filter(new Func1<String, Boolean>() {
-                        @Override
-                        public Boolean call(String s) {
-                            return !TextUtils.isEmpty(s);
-                        }
-                    }).subscribeOn(AndroidSchedulers.mainThread())
+                    .map(changeEvent -> changeEvent.editable().toString())
+                    .filter(s -> !TextUtils.isEmpty(s)).subscribeOn(AndroidSchedulers.mainThread())
                     .debounce(300, TimeUnit.MILLISECONDS)
                     .compose(RxSuggestions.suggestionsTransformer())
-                    .map(new Func1<List<String>, List<SuggestionItem>>() {
-                        @Override
-                        public List<SuggestionItem> call(List<String> strings) {
-                            final List<SuggestionItem> suggestionItems = new ArrayList<>();
-                            for (String string : strings) {
-                                suggestionItems.add(new SuggestionItem(string, SuggestionItem.GOOGLE));
-                            }
-                            return suggestionItems;
+                    .map(strings -> {
+                        final List<SuggestionItem> suggestionItems = new ArrayList<>();
+                        for (String string : strings) {
+                            suggestionItems.add(new SuggestionItem(string, SuggestionItem.GOOGLE));
                         }
-                    }).doOnNext(new Action1<List<SuggestionItem>>() {
-                        @Override
-                        public void call(List<SuggestionItem> suggestionItems) {
-                            if (isViewAttached()) {
-                                getView().setSuggestions(suggestionItems);
-                            }
+                        return suggestionItems;
+                    }).doOnNext(suggestionItems -> {
+                        if (isViewAttached()) {
+                            getView().setSuggestions(suggestionItems);
                         }
-                    })
-                    .doOnError(new Action1<Throwable>() {
-                        @Override
-                        public void call(Throwable throwable) {
-                            Timber.e(throwable.toString());
-                        }
-                    }).subscribe());
+                    }).doOnError(Timber::e)
+                    .subscribe());
         }
 
         void cleanUp() {

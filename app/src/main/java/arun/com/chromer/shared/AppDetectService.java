@@ -33,13 +33,7 @@ public class AppDetectService extends Service {
     // Flag to control polling.
     private boolean stopPolling = false;
     // Detector to get current foreground app.
-    AppDetector appDetector = new AppDetector() {
-        @NonNull
-        @Override
-        public String getForegroundPackage() {
-            return "";
-        }
-    };
+    AppDetector appDetector = () -> "";
     // Handler to run our polling.
     private final Handler detectorHandler = new Handler();
     // The runnable which runs out detector.
@@ -127,12 +121,8 @@ public class AppDetectService extends Service {
 
     @SuppressWarnings("unused")
     void toast(final String toast) {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(AppDetectService.this, toast, Toast.LENGTH_SHORT).show();
-            }
-        });
+        new Handler(Looper.getMainLooper())
+                .post(() -> Toast.makeText(AppDetectService.this, toast, Toast.LENGTH_SHORT).show());
     }
 
     private interface AppDetector {

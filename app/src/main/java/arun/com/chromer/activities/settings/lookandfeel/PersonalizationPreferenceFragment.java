@@ -3,7 +3,6 @@ package arun.com.chromer.activities.settings.lookandfeel;
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -11,12 +10,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.preference.Preference;
 import android.support.v7.preference.SwitchPreferenceCompat;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
@@ -189,59 +185,43 @@ public class PersonalizationPreferenceFragment extends BasePreferenceFragment im
     }
 
     private void setupDynamicToolbar() {
-        dynamicColorPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                final SwitchPreferenceCompat switchCompat = (SwitchPreferenceCompat) preference;
-                final boolean isChecked = switchCompat.isChecked();
-                if (isChecked) {
-                    new MaterialDialog.Builder(getActivity())
-                            .title(R.string.dynamic_toolbar_color)
-                            .content(R.string.dynamic_toolbar_help)
-                            .positiveText(android.R.string.ok)
-                            .show();
-                }
-                updateDynamicSummary();
-                return false;
+        dynamicColorPreference.setOnPreferenceClickListener(preference -> {
+            final SwitchPreferenceCompat switchCompat = (SwitchPreferenceCompat) preference;
+            final boolean isChecked = switchCompat.isChecked();
+            if (isChecked) {
+                new MaterialDialog.Builder(getActivity())
+                        .title(R.string.dynamic_toolbar_color)
+                        .content(R.string.dynamic_toolbar_help)
+                        .positiveText(android.R.string.ok)
+                        .show();
             }
+            updateDynamicSummary();
+            return false;
         });
     }
 
 
     private void setupToolbarColorPreference() {
-        toolbarColorPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                int chosenColor = ((ColorPreference) preference).getColor();
-                new ColorChooserDialog.Builder((LookAndFeelActivity) getActivity(), R.string.default_toolbar_color)
-                        .titleSub(R.string.default_toolbar_color)
-                        .allowUserColorInputAlpha(false)
-                        .preselect(chosenColor)
-                        .dynamicButtonColor(false)
-                        .show();
-                return true;
-            }
+        toolbarColorPreference.setOnPreferenceClickListener(preference -> {
+            int chosenColor = ((ColorPreference) preference).getColor();
+            new ColorChooserDialog.Builder((LookAndFeelActivity) getActivity(), R.string.default_toolbar_color)
+                    .titleSub(R.string.default_toolbar_color)
+                    .allowUserColorInputAlpha(false)
+                    .preselect(chosenColor)
+                    .dynamicButtonColor(false)
+                    .show();
+            return true;
         });
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void requestUsagePermission() {
         new MaterialDialog.Builder(getActivity())
                 .title(R.string.permission_required)
                 .content(R.string.usage_permission_explanation_appcolor)
                 .positiveText(R.string.grant)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        getActivity().startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
-                    }
-                })
-                .dismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        dynamicAppPreference.setChecked(Utils.canReadUsageStats(getContext()));
-                    }
-                })
+                .onPositive((dialog, which) -> getActivity().startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)))
+                .dismissListener(dialog -> dynamicAppPreference.setChecked(Utils.canReadUsageStats(getContext())))
                 .show();
     }
 

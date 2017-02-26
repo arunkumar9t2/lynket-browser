@@ -16,9 +16,6 @@ import timber.log.Timber;
  * Created by Arunkumar on 26-01-2017.
  */
 public class RxParser {
-    // No that determines no of pages that can be concurrently parsed.
-    private static final int MAX_CONCURRENT_PARSING = 4;
-
     private RxParser() {
 
     }
@@ -35,32 +32,27 @@ public class RxParser {
      * Converts the given URL to its extracted article metadata form. The extraction is not performed
      * if the given url is not a proper web url.
      */
-    private static final Func1<String, Pair<String, Article>> URL_TO_ARTICLE_PAIR_MAPPER =
-            new Func1<String, Pair<String, Article>>() {
-                @Override
-                public Pair<String, Article> call(final String url) {
-                    Article article = null;
-                    try {
-                        final String expanded = WebsiteUtilities.unShortenUrl(url);
-                        final CandidateURL candidateUrl = new CandidateURL(expanded);
-                        if (candidateUrl.resolveRedirects().isLikelyArticle()) {
-                            String webSiteString = WebsiteUtilities.headString(candidateUrl.toString());
+    private static final Func1<String, Pair<String, Article>> URL_TO_ARTICLE_PAIR_MAPPER = url -> {
+        Article article = null;
+        try {
+            final String expanded = WebsiteUtilities.unShortenUrl(url);
+            final CandidateURL candidateUrl = new CandidateURL(expanded);
+            if (candidateUrl.resolveRedirects().isLikelyArticle()) {
+                String webSiteString = WebsiteUtilities.headString(candidateUrl.toString());
 
-                            article = Extractor
-                                    .with(url, webSiteString)
-                                    .extractMetadata()
-                                    .article();
+                article = Extractor
+                        .with(expanded, webSiteString)
+                        .extractMetadata()
+                        .article();
 
-                            //noinspection UnusedAssignment
-                            webSiteString = null;
-                            Timber.d("Fetched %s");
-                            Utils.printThread();
-                        }
-                    } catch (Exception | OutOfMemoryError e) {
-                        Timber.e(e.getMessage());
-                        Observable.error(e);
-                    }
-                    return new Pair<>(url, article);
-                }
-            };
+                //noinspection UnusedAssignment
+                webSiteString = null;
+                Utils.printThread();
+            }
+        } catch (Exception | OutOfMemoryError e) {
+            Timber.e(e.getMessage());
+            Observable.error(e);
+        }
+        return new Pair<>(url, article);
+    };
 }

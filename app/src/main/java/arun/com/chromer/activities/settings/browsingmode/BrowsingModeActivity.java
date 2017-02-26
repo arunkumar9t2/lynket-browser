@@ -1,6 +1,5 @@
 package arun.com.chromer.activities.settings.browsingmode;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -63,15 +62,11 @@ public class BrowsingModeActivity extends SubActivity implements BrowsingModeAda
                 if (!Settings.canDrawOverlays(this)) {
                     Preferences.get(this).webHeads(false);
                     final Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.overlay_permission_content, Snackbar.LENGTH_INDEFINITE);
-                    snackbar.setAction(R.string.grant, new View.OnClickListener() {
-                        @TargetApi(Build.VERSION_CODES.M)
-                        @Override
-                        public void onClick(View v) {
-                            snackbar.dismiss();
-                            final Uri pkgUri = Uri.parse("package:" + BrowsingModeActivity.this.getPackageName());
-                            final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, pkgUri);
-                            startActivityForResult(intent, 0);
-                        }
+                    snackbar.setAction(R.string.grant, v -> {
+                        snackbar.dismiss();
+                        final Uri pkgUri = Uri.parse("package:" + BrowsingModeActivity.this.getPackageName());
+                        final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, pkgUri);
+                        startActivityForResult(intent, 0);
                     });
                     snackbar.show();
                 } else Preferences.get(this).webHeads(true);

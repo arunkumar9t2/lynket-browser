@@ -29,11 +29,8 @@ import butterknife.ButterKnife;
 class BrowsingModeAdapter extends RecyclerView.Adapter<BrowsingModeAdapter.BrowsingModeViewHolder> {
     private final Context context;
     private final List<String> settingsItems = new ArrayList<>();
-    private BrowsingModeClickListener browsingModeClickListener = new BrowsingModeClickListener() {
-        @Override
-        public void onModeClicked(int position, View view) {
-            // no-op
-        }
+    private BrowsingModeClickListener browsingModeClickListener = (position, view) -> {
+        // no-op
     };
 
     BrowsingModeAdapter(@NonNull final Context context) {
@@ -51,12 +48,9 @@ class BrowsingModeAdapter extends RecyclerView.Adapter<BrowsingModeAdapter.Brows
     @Override
     public void onBindViewHolder(final BrowsingModeViewHolder holder, int position) {
         holder.bind(settingsItems.get(position));
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (holder.getAdapterPosition() != RecyclerView.NO_POSITION)
-                    browsingModeClickListener.onModeClicked(holder.getAdapterPosition(), holder.itemView);
-            }
+        holder.itemView.setOnClickListener(v -> {
+            if (holder.getAdapterPosition() != RecyclerView.NO_POSITION)
+                browsingModeClickListener.onModeClicked(holder.getAdapterPosition(), holder.itemView);
         });
     }
 
@@ -75,11 +69,7 @@ class BrowsingModeAdapter extends RecyclerView.Adapter<BrowsingModeAdapter.Brows
     }
 
     void cleanUp() {
-        browsingModeClickListener = new BrowsingModeClickListener() {
-            @Override
-            public void onModeClicked(int position, View view) {
-
-            }
+        browsingModeClickListener = (position, view) -> {
         };
         settingsItems.clear();
     }

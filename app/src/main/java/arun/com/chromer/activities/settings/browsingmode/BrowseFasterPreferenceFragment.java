@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.preference.Preference;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
@@ -44,12 +43,7 @@ public class BrowseFasterPreferenceFragment extends BasePreferenceFragment imple
                     .color(ContextCompat.getColor(getActivity(), R.color.android_green))
                     .sizeDp(24);
             articleModePreference.setIcon(articleImg);
-            articleModePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    return false;
-                }
-            });
+            articleModePreference.setOnPreferenceClickListener(preference -> false);
         }
     }
 
@@ -57,20 +51,17 @@ public class BrowseFasterPreferenceFragment extends BasePreferenceFragment imple
         final IconSwitchPreference ampModePreference = (IconSwitchPreference) findPreference(Preferences.AMP_MODE);
         if (ampModePreference != null) {
             ampModePreference.setIcon(R.drawable.ic_action_amp_icon);
-            ampModePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    final boolean isSlideOver = !Preferences.get(getContext()).webHeads();
-                    if (isSlideOver && (Boolean) newValue) {
-                        new MaterialDialog.Builder(getActivity())
-                                .title(R.string.amp_warning_title)
-                                .content(R.string.amp_warning_content)
-                                .positiveText(android.R.string.ok)
-                                .iconRes(R.drawable.ic_action_amp_icon)
-                                .show();
-                    }
-                    return true;
+            ampModePreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                final boolean isSlideOver = !Preferences.get(getContext()).webHeads();
+                if (isSlideOver && (Boolean) newValue) {
+                    new MaterialDialog.Builder(getActivity())
+                            .title(R.string.amp_warning_title)
+                            .content(R.string.amp_warning_content)
+                            .positiveText(android.R.string.ok)
+                            .iconRes(R.drawable.ic_action_amp_icon)
+                            .show();
                 }
+                return true;
             });
         }
     }

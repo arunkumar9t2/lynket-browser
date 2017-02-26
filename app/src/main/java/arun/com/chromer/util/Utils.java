@@ -42,6 +42,7 @@ import arun.com.chromer.BuildConfig;
 import arun.com.chromer.R;
 import arun.com.chromer.customtabs.CustomTabs;
 import arun.com.chromer.customtabs.prefetch.ScannerService;
+import arun.com.chromer.data.common.App;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.views.IntentPickerSheetView;
 import timber.log.Timber;
@@ -358,6 +359,13 @@ public class Utils {
 
     public static void printThread() {
         Timber.d("Thread: %s", Thread.currentThread().getName());
+    }
+
+    public static App createApp(@NonNull Context context, @NonNull String packageName) {
+        final App app = new App();
+        app.packageName = packageName;
+        app.appName = getAppNameWithPackage(context, packageName);
+        return app;
     }
 
     /**

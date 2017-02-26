@@ -2,8 +2,8 @@ package arun.com.chromer.activities;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,28 +11,25 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
-import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
-import com.chimbori.crux.articles.Article;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.blacklist.BlackListManager;
 import arun.com.chromer.activities.settings.Preferences;
-import arun.com.chromer.parser.RxParser;
+import arun.com.chromer.data.apps.AppRepository;
+import arun.com.chromer.data.website.WebsiteRepository;
 import arun.com.chromer.shared.AppDetectionManager;
 import arun.com.chromer.util.DocumentUtils;
 import arun.com.chromer.util.RxUtils;
 import arun.com.chromer.util.SafeIntent;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.ui.ProxyActivity;
-import rx.SingleSubscriber;
 import timber.log.Timber;
+import xyz.klinker.android.article.ArticleIntent;
 
 import static android.content.Intent.ACTION_VIEW;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
@@ -65,8 +62,9 @@ public class BrowserInterceptActivity extends AppCompatActivity {
 
         // Check if we should blacklist the launching app
         if (Preferences.get(this).blacklist()) {
-            final String lastApp = AppDetectionManager.getInstance(this).getNonFilteredPackage();
-            if (!TextUtils.isEmpty(lastApp) && BlackListManager.isPackageBlackListed(lastApp)) {
+            final String lastAppPackage = AppDetectionManager.getInstance(this).getNonFilteredPackage();
+            if (!TextUtils.isEmpty(lastAppPackage)
+                    && AppRepository.getInstance(this).isPackageBlacklisted(lastAppPackage)) {
                 // The calling app was blacklisted by user, perform blacklisting.
                 performBlacklistAction();
                 return;
@@ -91,35 +89,36 @@ public class BrowserInterceptActivity extends AppCompatActivity {
             dialog = new MaterialDialog.Builder(this)
                     .theme(Theme.LIGHT)
                     .content(R.string.grabbing_amp_link)
+                    .dismissListener(d -> finish())
                     .show();
-            RxParser.parseUrl(safeIntent.getData().toString())
-                    .compose(RxUtils.<Pair<String, Article>>applySchedulers())
-                    .toSingle()
-                    .subscribe(new SingleSubscriber<Pair<String, Article>>() {
-                        @Override
-                        public void onSuccess(final Pair<String, Article> articlePair) {
-                            if (articlePair.second != null
-                                    && !TextUtils.isEmpty(articlePair.second.ampUrl)) {
-                                dialog.setContent("Link found!");
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        dialog.dismiss();
-                                        launchCCT(Uri.parse(articlePair.second.ampUrl));
-                                    }
-                                }, 150);
-                            } else {
-                                launchCCT(safeIntent.getData());
-                            }
-                        }
-
-                        @Override
-                        public void onError(Throwable error) {
-                            Timber.e(error);
-                            dialog.dismiss();
+            WebsiteRepository.getInstance(this)
+                    .getWebsite(safeIntent.getData().toString())
+                    .compose(RxUtils.applySchedulers())
+                    .doOnNext(webSite -> {
+                        if (webSite != null && !TextUtils.isEmpty(webSite.ampUrl)) {
+                            dialog.setContent(R.string.link_found);
+                            new Handler().postDelayed(() -> {
+                                dialog.dismiss();
+                                launchCCT(Uri.parse(webSite.ampUrl));
+                            }, 100);
+                        } else {
                             launchCCT(safeIntent.getData());
                         }
-                    });
+                    })
+                    .doOnError(throwable -> {
+                        Timber.e(throwable);
+                        launchCCT(safeIntent.getData());
+                        dialog.dismiss();
+                    }).subscribe();
+        } else if (Preferences.get(this).articleMode()) {
+            final ArticleIntent intent = new ArticleIntent.Builder(this)
+                    .setToolbarColor(Color.parseColor("#00BCD4"))
+                    .setAccentColor(Color.parseColor("#EEFF41"))
+                    .setTheme(ArticleIntent.THEME_DARK)
+                    .setTextSize(15)     // 15 SP (default)
+                    .build();
+            intent.launchUrl(this, safeIntent.getData());
+            finish();
         } else {
             launchCCT(safeIntent.getData());
         }
@@ -183,20 +182,12 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                 .theme(Theme.LIGHT)
                 .positiveColorRes(R.color.colorAccent)
                 .negativeColorRes(R.color.colorAccent)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        final Intent chromerIntent = getPackageManager().getLaunchIntentForPackage(getPackageName());
-                        chromerIntent.addFlags(FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(chromerIntent);
-                    }
+                .onPositive((dialog1, which) -> {
+                    final Intent chromerIntent = getPackageManager().getLaunchIntentForPackage(getPackageName());
+                    chromerIntent.addFlags(FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(chromerIntent);
                 })
-                .dismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        finish();
-                    }
-                }).show();
+                .dismissListener(dialog12 -> finish()).show();
     }
 
     private void closeDialogs() {

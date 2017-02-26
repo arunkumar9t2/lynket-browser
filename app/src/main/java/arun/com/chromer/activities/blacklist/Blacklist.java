@@ -8,10 +8,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.lang.ref.WeakReference;
+import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.Callable;
 
-import arun.com.chromer.activities.blacklist.model.App;
+import arun.com.chromer.data.apps.AppRepository;
+import arun.com.chromer.data.common.App;
 import arun.com.chromer.util.RxUtils;
 import arun.com.chromer.util.Utils;
 import rx.Observable;
@@ -35,7 +36,7 @@ interface Blacklist {
      * Presenter containing all business logic for this screen.
      */
     class Presenter {
-        WeakReference<View> viewRef;
+        final WeakReference<View> viewRef;
         private final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
         Presenter(@NonNull View view) {
@@ -43,9 +44,10 @@ interface Blacklist {
         }
 
         boolean isViewAttached() {
-            return viewRef != null && viewRef.get() != null;
+            return viewRef.get() != null;
         }
 
+        @NonNull
         View getView() {
             return viewRef.get();
         }
@@ -54,37 +56,26 @@ interface Blacklist {
             if (isViewAttached()) {
                 getView().setRefreshing(true);
             }
+            final Comparator<App> appComparator = new App.BlackListComparator();
             final PackageManager pm = context.getApplicationContext().getPackageManager();
-            final Subscription subscription = Observable.fromCallable(new Callable<List<ResolveInfo>>() {
-                @Override
-                public List<ResolveInfo> call() throws Exception {
-                    final Intent intent = new Intent(Intent.ACTION_MAIN);
-                    intent.addCategory(Intent.CATEGORY_LAUNCHER);
-                    return pm.queryIntentActivities(intent, 0);
-                }
-            }).flatMap(new Func1<List<ResolveInfo>, Observable<ResolveInfo>>() {
-                @Override
-                public Observable<ResolveInfo> call(List<ResolveInfo> resolveInfos) {
-                    return Observable.from(resolveInfos);
-                }
-            }).filter(new Func1<ResolveInfo, Boolean>() {
-                @Override
-                public Boolean call(ResolveInfo resolveInfo) {
-                    return resolveInfo != null && !resolveInfo.activityInfo.packageName.equalsIgnoreCase(context.getPackageName());
-                }
-            }).map(new Func1<ResolveInfo, App>() {
-                @Override
-                public App call(ResolveInfo resolveInfo) {
-                    final App app = new App();
-                    final String pkg = resolveInfo.activityInfo.packageName;
-                    app.setAppName(Utils.getAppNameWithPackage(context, pkg));
-                    app.setPackageName(pkg);
-                    app.setBlackListed(BlackListManager.isPackageBlackListed(pkg));
-                    return app;
-                }
-            }).distinct()
-                    .toSortedList()
-                    .compose(RxUtils.<List<App>>applySchedulers())
+            final Intent intent = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER);
+
+            final Subscription subscription = Observable
+                    .fromCallable(() -> pm.queryIntentActivities(intent, 0))
+                    .flatMap(new Func1<List<ResolveInfo>, Observable<ResolveInfo>>() {
+                        @Override
+                        public Observable<ResolveInfo> call(List<ResolveInfo> resolveInfos) {
+                            return Observable.from(resolveInfos);
+                        }
+                    }).filter(resolveInfo -> resolveInfo != null
+                            && !resolveInfo.activityInfo.packageName.equalsIgnoreCase(context.getPackageName()))
+                    .map(resolveInfo -> {
+                        final App app = Utils.createApp(context, resolveInfo.activityInfo.packageName);
+                        app.blackListed = AppRepository.getInstance(context).isPackageBlacklisted(app.packageName);
+                        return app;
+                    }).distinct()
+                    .toSortedList(appComparator::compare)
+                    .compose(RxUtils.applySchedulers())
                     .toSingle()
                     .subscribe(new SingleSubscriber<List<App>>() {
                         @Override
@@ -104,19 +95,22 @@ interface Blacklist {
         }
 
         void cleanUp() {
-            if (viewRef != null) {
-                viewRef.clear();
-                viewRef = null;
-            }
+            viewRef.clear();
             compositeSubscription.clear();
         }
 
-        void updateBlacklist(@Nullable App app) {
-            if (app != null && app.getPackageName() != null) {
-                if (app.isBlackListed()) {
-                    BlackListManager.setBlackListed(app.getPackageName());
+        void updateBlacklist(@NonNull Context context, @Nullable App app) {
+            if (app != null) {
+                if (app.blackListed) {
+                    AppRepository.getInstance(context)
+                            .setPackageBlacklisted(app.packageName)
+                            .compose(RxUtils.applySchedulers())
+                            .subscribe();
                 } else {
-                    BlackListManager.deleteBlackListed(app.getPackageName());
+                    AppRepository.getInstance(context)
+                            .removeBlacklist(app.packageName)
+                            .compose(RxUtils.applySchedulers())
+                            .subscribe();
                 }
             }
         }

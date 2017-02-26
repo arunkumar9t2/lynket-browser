@@ -31,18 +31,14 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
     private final Context context;
     @NonNull
     private final List<SuggestionItem> suggestionItems = new ArrayList<>();
-    private SuggestionClickListener mCallback = new SuggestionClickListener() {
-        @Override
-        public void onSuggestionClicked(@NonNull String suggestion) {
-            // no op
-        }
+    private SuggestionClickListener callBack = suggestion -> {
+        // no op
     };
 
     public SuggestionAdapter(@NonNull final Context context, @Nullable SuggestionClickListener listener) {
         this.context = context.getApplicationContext();
         setHasStableIds(true);
-        mCallback = listener;
-
+        callBack = listener;
         if (searchIcon == null)
             searchIcon = new IconicsDrawable(context)
                     .icon(CommunityMaterial.Icon.cmd_magnify)
@@ -108,13 +104,10 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
         SuggestionItemHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    final int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        mCallback.onSuggestionClicked(suggestionItems.get(position).suggestion);
-                    }
+            view.setOnClickListener(view1 -> {
+                final int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    callBack.onSuggestionClicked(suggestionItems.get(position).suggestion);
                 }
             });
         }

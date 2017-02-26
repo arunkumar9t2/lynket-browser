@@ -36,7 +36,7 @@ class WebsiteNetworkStore implements WebsiteStore {
                             return Observable.just(new WebSite(urlArticlePair.first));
                         }
                     }
-                }).compose(RxUtils.<WebSite>applySchedulers());
+                }).compose(RxUtils.applySchedulers());
     }
 
     @NonNull
