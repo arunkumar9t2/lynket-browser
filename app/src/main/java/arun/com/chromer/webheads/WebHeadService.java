@@ -5,7 +5,6 @@ import android.animation.AnimatorSet;
 import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -77,7 +76,7 @@ import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBHEAD_COLOR;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBSITE;
 import static arun.com.chromer.shared.Constants.NO_COLOR;
 
-public class WebHeadService extends Service implements WebHeadContract,
+public class WebHeadService extends OverlayService implements WebHeadContract,
         CustomTabManager.ConnectionCallback {
     /**
      * Reference to all the web heads created on screen. Ordered in the order of creation by using
@@ -104,11 +103,34 @@ public class WebHeadService extends Service implements WebHeadContract,
     }
 
     @Override
+    int getNotificationId() {
+        // Constant
+        return 1;
+    }
+
+    @Override
+    Notification getNotification() {
+        final PendingIntent contentIntent = PendingIntent.getBroadcast(this,
+                0,
+                new Intent(ACTION_STOP_WEBHEAD_SERVICE),
+                FLAG_UPDATE_CURRENT);
+        return new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_chromer_notification)
+                .setPriority(PRIORITY_MIN)
+                .setContentText(getString(R.string.tap_close_all))
+                .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                .setContentTitle(getString(R.string.web_heads_service))
+                .setContentIntent(contentIntent)
+                .setAutoCancel(false)
+                .setLocalOnly(true)
+                .build();
+    }
+
+    @Override
     public void onCreate() {
         super.onCreate();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(this)) {
-                Timber.d("Exited web head service since overlay permission was revoked");
                 stopSelf();
                 return;
             }
@@ -119,13 +141,11 @@ public class WebHeadService extends Service implements WebHeadContract,
 
         bindToCustomTabSession();
         registerReceivers();
-        showNotification();
     }
 
     @Override
     public void onDestroy() {
         Timber.d("Exiting webhead service");
-        stopForeground(true);
         WebHead.clearMasterPosition();
         removeWebHeads();
         if (customTabManager != null) {
@@ -147,26 +167,6 @@ public class WebHeadService extends Service implements WebHeadContract,
     public int onStartCommand(Intent intent, int flags, int startId) {
         processIntent(intent);
         return START_STICKY;
-    }
-
-    private void showNotification() {
-        final PendingIntent contentIntent = PendingIntent.getBroadcast(this,
-                0,
-                new Intent(ACTION_STOP_WEBHEAD_SERVICE),
-                FLAG_UPDATE_CURRENT);
-
-        final Notification notification = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_chromer_notification)
-                .setPriority(PRIORITY_MIN)
-                .setContentText(getString(R.string.tap_close_all))
-                .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
-                .setContentTitle(getString(R.string.web_heads_service))
-                .setContentIntent(contentIntent)
-                .setAutoCancel(false)
-                .setLocalOnly(true)
-                .build();
-
-        startForeground(1, notification);
     }
 
     private void processIntent(@Nullable Intent intent) {
