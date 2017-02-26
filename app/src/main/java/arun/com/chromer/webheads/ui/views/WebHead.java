@@ -34,7 +34,7 @@ import static android.view.MotionEvent.ACTION_DOWN;
 import static android.view.MotionEvent.ACTION_MOVE;
 import static android.view.MotionEvent.ACTION_UP;
 import static arun.com.chromer.webheads.physics.SpringConfigs.FLING;
-import static arun.com.chromer.webheads.ui.views.RemoveWebHead.MAGNETISM_THRESHOLD;
+import static arun.com.chromer.webheads.ui.views.Trashy.MAGNETISM_THRESHOLD;
 
 /**
  * Web head object which adds draggable and gesture functionality.
@@ -242,7 +242,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
         }
         touchUp();
         // hide remove view
-        RemoveWebHead.disappear();
+        Trashy.disappear();
         scheduleCoastingTask();
         return false;
     }
@@ -694,7 +694,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
         }
 
         private void sendCallback() {
-            RemoveWebHead.disappear();
+            Trashy.disappear();
             webHeadContract.onWebHeadClick(WebHead.this);
         }
     }

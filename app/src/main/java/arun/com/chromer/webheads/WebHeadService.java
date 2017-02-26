@@ -54,7 +54,7 @@ import arun.com.chromer.webheads.helper.UrlOrganizer;
 import arun.com.chromer.webheads.physics.SpringChain2D;
 import arun.com.chromer.webheads.ui.WebHeadContract;
 import arun.com.chromer.webheads.ui.context.WebHeadContextActivity;
-import arun.com.chromer.webheads.ui.views.RemoveWebHead;
+import arun.com.chromer.webheads.ui.views.Trashy;
 import arun.com.chromer.webheads.ui.views.WebHead;
 import timber.log.Timber;
 
@@ -115,7 +115,7 @@ public class WebHeadService extends Service implements WebHeadContract,
         }
         springChain2D = SpringChain2D.create(this);
         urlOrganizer = new UrlOrganizer(this);
-        RemoveWebHead.init(this);
+        Trashy.init(this);
 
         bindToCustomTabSession();
         registerReceivers();
@@ -131,7 +131,7 @@ public class WebHeadService extends Service implements WebHeadContract,
         if (customTabManager != null) {
             customTabManager.unbindCustomTabsService(this);
         }
-        RemoveWebHead.destroy();
+        Trashy.destroy();
         unregisterReceivers();
         super.onDestroy();
     }
@@ -399,7 +399,7 @@ public class WebHeadService extends Service implements WebHeadContract,
         webHead.setMaster(false);
         webHeads.remove(webHead.getUrl());
         if (isLastWebHead) {
-            RemoveWebHead.get(this).destroyAnimator(new Runnable() {
+            Trashy.get(this).destroyAnimator(new Runnable() {
                 @Override
                 public void run() {
                     stopSelf();
@@ -481,7 +481,7 @@ public class WebHeadService extends Service implements WebHeadContract,
     }
 
     private void hideRemoveView() {
-        RemoveWebHead.disappear();
+        Trashy.disappear();
     }
 
     private class WebHeadNavigationCallback extends CustomTabManager.NavigationCallback {
