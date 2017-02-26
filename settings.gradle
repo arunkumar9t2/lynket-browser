@@ -1,3 +1,4 @@
 include ':app'
 include ':RxSuggestions:library'
-include ':article-android:article-view'
+include ':article-view'
+project(':article-view').projectDir = new File('article-android/article-view');
