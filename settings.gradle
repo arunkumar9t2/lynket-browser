@@ -1,2 +1,3 @@
 include ':app'
 include ':RxSuggestions:library'
+include ':article-android:article-view'
