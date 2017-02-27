@@ -3,12 +3,9 @@ package arun.com.chromer.activities.settings.preferences;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.preference.Preference;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -57,28 +54,25 @@ public class PrefetchPreferenceFragment extends BasePreferenceFragment implement
                 .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
                 .sizeDp(24));
 
-        mPrefetchPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                final boolean isChecked = mPrefetchPreference.isChecked();
-                if (isChecked) {
-                    if (!Utils.isAccessibilityServiceEnabled(getActivity())) {
-                        mPrefetchPreference.setChecked(false);
-                        guideUserToAccessibilitySettings(true);
-                        mWarmupPreference.setEnabled(true);
-                        mWarmupPreference.setChecked(Preferences.get(getContext()).warmUp());
-                    } else {
-                        mWarmupPreference.setEnabled(false);
-                        mWarmupPreference.setChecked(true);
-                    }
-                } else {
-                    mWarmupPreference.setChecked(Preferences.get(getContext()).warmUp());
-                    guideUserToAccessibilitySettings(false);
+        mPrefetchPreference.setOnPreferenceClickListener(preference -> {
+            final boolean isChecked = mPrefetchPreference.isChecked();
+            if (isChecked) {
+                if (!Utils.isAccessibilityServiceEnabled(getActivity())) {
+                    mPrefetchPreference.setChecked(false);
+                    guideUserToAccessibilitySettings(true);
                     mWarmupPreference.setEnabled(true);
+                    mWarmupPreference.setChecked(Preferences.get(getContext()).warmUp());
+                } else {
+                    mWarmupPreference.setEnabled(false);
+                    mWarmupPreference.setChecked(true);
                 }
-                ServiceUtil.takeCareOfServices(getActivity());
-                return false;
+            } else {
+                mWarmupPreference.setChecked(Preferences.get(getContext()).warmUp());
+                guideUserToAccessibilitySettings(false);
+                mWarmupPreference.setEnabled(true);
             }
+            ServiceUtil.takeCareOfServices(getActivity());
+            return false;
         });
     }
 
@@ -114,12 +108,9 @@ public class PrefetchPreferenceFragment extends BasePreferenceFragment implement
                     .title(R.string.accessibility_dialog_title)
                     .content(R.string.accessibility_dialog_desc)
                     .positiveText(R.string.open_settings)
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            dialog.dismiss();
-                            startActivityForResult(new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS), 0);
-                        }
+                    .onPositive((dialog, which) -> {
+                        dialog.dismiss();
+                        startActivityForResult(new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS), 0);
                     })
                     .show();
         } else {

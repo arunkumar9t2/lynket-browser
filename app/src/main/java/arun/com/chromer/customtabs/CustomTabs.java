@@ -40,7 +40,6 @@ import arun.com.chromer.customtabs.callbacks.MinimizeBroadcastReceiver;
 import arun.com.chromer.customtabs.callbacks.OpenInChromeReceiver;
 import arun.com.chromer.customtabs.callbacks.SecondaryBrowserReceiver;
 import arun.com.chromer.customtabs.callbacks.ShareBroadcastReceiver;
-import arun.com.chromer.customtabs.prefetch.ScannerService;
 import arun.com.chromer.customtabs.warmup.WarmUpService;
 import arun.com.chromer.data.apps.AppRepository;
 import arun.com.chromer.shared.AppDetectService;
@@ -322,11 +321,6 @@ public class CustomTabs {
             return WebHeadService.getTabSession();
         }
 
-        final ScannerService sService = ScannerService.getInstance();
-        if (sService != null && sService.getTabSession() != null && Preferences.get(activity).preFetch()) {
-            Timber.d("Using scanner session");
-            return sService.getTabSession();
-        }
         final WarmUpService service = WarmUpService.getInstance();
         if (service != null) {
             Timber.d("Using warm up session");
@@ -387,7 +381,6 @@ public class CustomTabs {
         assertBuilderInitialized();
         if (Preferences.get(activity).isColoredToolbar()) {
             toolbarColor = Preferences.get(activity).toolbarColor();
-
             if (Preferences.get(activity).dynamicToolbar()) {
                 final boolean overrideRequested = webToolbarFallback != NO_COLOR;
                 if (Preferences.get(activity).dynamicToolbarOnApp()) {

@@ -29,6 +29,7 @@
         <service android:name=".customtabs.warmup.WarmUpService" />
         <service
             android:name=".customtabs.prefetch.ScannerService"
+            android:enabled="false"
             android:exported="true"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
