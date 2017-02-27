@@ -4,8 +4,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.util.Pair;
 
 import com.chimbori.crux.articles.Article;
-import com.chimbori.crux.articles.Extractor;
-import com.chimbori.crux.urls.CandidateURL;
+import com.chimbori.crux.articles.ArticleExtractor;
+import com.chimbori.crux.urls.CruxURL;
 
 import arun.com.chromer.util.Utils;
 import rx.Observable;
@@ -36,11 +36,11 @@ public class RxParser {
         Article article = null;
         try {
             final String expanded = WebsiteUtilities.unShortenUrl(url);
-            final CandidateURL candidateUrl = new CandidateURL(expanded);
+            final CruxURL candidateUrl = CruxURL.parse(expanded);
             if (candidateUrl.resolveRedirects().isLikelyArticle()) {
                 String webSiteString = WebsiteUtilities.headString(candidateUrl.toString());
 
-                article = Extractor
+                article = ArticleExtractor
                         .with(expanded, webSiteString)
                         .extractMetadata()
                         .article();
