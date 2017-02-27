@@ -6,10 +6,10 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
-import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
@@ -507,28 +507,18 @@ public class WebHead extends BaseWebHead implements SpringListener {
      */
     private void closeWithAnimation(final boolean receiveCallback) {
         revealInAnimation(deleteColor,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        if (circleBg != null && indicator != null) {
-                            circleBg.clearElevation();
-                            indicator.setVisibility(GONE);
-                        }
-                        crossFadeFaviconToX();
+                () -> {
+                    if (circleBg != null && indicator != null) {
+                        circleBg.clearElevation();
+                        indicator.setVisibility(GONE);
                     }
-                }, new Runnable() {
-                    @Override
-                    public void run() {
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (receiveCallback)
-                                    webHeadContract.onWebHeadDestroyed(WebHead.this, isLastWebHead());
-                                WebHead.super.destroySelf(receiveCallback);
-                            }
-                        }, 200);
-                    }
-                });
+                    crossFadeFaviconToX();
+                }, () -> new Handler()
+                        .postDelayed(() -> {
+                            if (receiveCallback)
+                                webHeadContract.onWebHeadDestroyed(WebHead.this, isLastWebHead());
+                            WebHead.super.destroySelf(receiveCallback);
+                        }, 200));
     }
 
     /**
@@ -538,39 +528,23 @@ public class WebHead extends BaseWebHead implements SpringListener {
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void closeWithAnimationL(final boolean receiveCallback) {
-        circleBg
-                .animate()
+        circleBg.animate()
                 .setDuration(50)
                 .withLayer()
                 .translationZ(0)
                 .z(0)
-                .withEndAction(new Runnable() {
-                    @Override
-                    public void run() {
+                .withEndAction(() ->
                         revealInAnimation(deleteColor,
-                                new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        crossFadeFaviconToX();
-                                        if (indicator != null)
-                                            indicator.setVisibility(GONE);
-                                    }
+                                () -> {
+                                    crossFadeFaviconToX();
+                                    if (indicator != null)
+                                        indicator.setVisibility(GONE);
                                 },
-                                new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        new Handler().postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                if (receiveCallback)
-                                                    webHeadContract.onWebHeadDestroyed(WebHead.this, isLastWebHead());
-                                                WebHead.super.destroySelf(receiveCallback);
-                                            }
-                                        }, 200);
-                                    }
-                                });
-                    }
-                });
+                                () -> new Handler().postDelayed(() -> {
+                                    if (receiveCallback)
+                                        webHeadContract.onWebHeadDestroyed(WebHead.this, isLastWebHead());
+                                    WebHead.super.destroySelf(receiveCallback);
+                                }, 200)));
     }
 
     /**
@@ -631,14 +605,10 @@ public class WebHead extends BaseWebHead implements SpringListener {
                         .scaleY(0.0f)
                         .alpha(0.5f)
                         .withLayer()
-                        .setDuration(250)
-                        .setInterpolator(new AccelerateDecelerateInterpolator())
-                        .withEndAction(new Runnable() {
-                            @Override
-                            public void run() {
-                                sendCallback();
-                            }
-                        }).start();
+                        .setDuration(125)
+                        .setInterpolator(new FastOutSlowInInterpolator())
+                        .withEndAction(this::sendCallback)
+                        .start();
                 // Store the touch down point if its master
                 if (master) {
                     masterDownX = windowParams.x;
