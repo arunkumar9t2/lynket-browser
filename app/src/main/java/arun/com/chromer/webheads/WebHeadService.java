@@ -56,6 +56,7 @@ import arun.com.chromer.webheads.ui.context.WebHeadContextActivity;
 import arun.com.chromer.webheads.ui.views.Trashy;
 import arun.com.chromer.webheads.ui.views.WebHead;
 import timber.log.Timber;
+import xyz.klinker.android.article.ArticleUtils;
 
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
@@ -209,6 +210,10 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
                 DocumentUtils.openNewCustomTab(getApplication(), newWebHead.getWebsite(), isNewTab);
             }
         });
+
+        if (Preferences.get(this).articleMode()) {
+            preloadUrl(webHeadUrl, true);
+        }
     }
 
     private void onUrlParsed(@NonNull final String url, final @Nullable Article article) {
@@ -282,6 +287,9 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     private void preloadUrl(final String url, final boolean forArticleMode) {
         if (Preferences.get(this).articleMode() || forArticleMode) {
             // Do article mode.
+            // Preload this article.
+            ArticleUtils.preloadArticle(this, Uri.parse(url),
+                    success -> Timber.d("Url %s preloaded, result: %b", url, success));
         } else {
             customTabManager.mayLaunchUrl(Uri.parse(url));
         }

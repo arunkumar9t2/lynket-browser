@@ -11,6 +11,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import arun.com.chromer.activities.CustomTabActivity;
+import arun.com.chromer.activities.browsing.article.ArticleLauncher;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.webheads.WebHeadService;
@@ -55,7 +56,11 @@ public class DocumentUtils {
      */
     public static void smartOpenNewTab(@NonNull final Context context, @NonNull final WebSite webSite, final boolean isNewTab) {
         if (!reOrderTab(context, webSite)) {
-            openNewCustomTab(context, webSite, isNewTab);
+            if (Preferences.get(context).articleMode()) {
+                openNewArticleTab(context, webSite, isNewTab);
+            } else {
+                openNewCustomTab(context, webSite, isNewTab);
+            }
         }
     }
 
@@ -102,6 +107,14 @@ public class DocumentUtils {
         context.startActivity(customTabActivity);
     }
 
+
+    public static void openNewArticleTab(Context context, WebSite webSite, boolean newTab) {
+        ArticleLauncher.from(context, getUsableUri(context, webSite))
+                .applyCustomizations()
+                .forNewTab(newTab)
+                .launch();
+    }
+
     /**
      * Given the myraid of preferences we have, this method gives the correct Uri we should be using
      * for opening a new tab.
@@ -111,7 +124,9 @@ public class DocumentUtils {
      * @return
      */
     private static Uri getUsableUri(@NonNull Context context, @NonNull WebSite webSite) {
-        if (Preferences.get(context).ampMode()) {
+        if (Preferences.get(context).articleMode()) {
+            return Uri.parse(webSite.url);
+        } else if (Preferences.get(context).ampMode()) {
             return TextUtils.isEmpty(webSite.ampUrl) ? Uri.parse(webSite.preferredUrl()) : Uri.parse(webSite.ampUrl);
         } else {
             return Uri.parse(webSite.preferredUrl());
