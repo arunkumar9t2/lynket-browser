@@ -138,7 +138,7 @@ public abstract class BaseWebHead extends FrameLayout {
         }
         // Needed to prevent overly dark shadow.
         if (WEB_HEAD_COUNT > 2) {
-            setWebHeadElevation(dpToPx(4));
+            setWebHeadElevation(dpToPx(5));
         }
     }
 

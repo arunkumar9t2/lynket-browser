@@ -1,17 +1,20 @@
 package arun.com.chromer.webheads.ui.views;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
+import android.view.animation.Interpolator;
 
-import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringConfig;
 import com.facebook.rebound.SpringListener;
@@ -63,8 +66,10 @@ public class WebHead extends BaseWebHead implements SpringListener {
     private final int touchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
     // Gesture detector to recognize fling and click on web heads
     private final GestureDetector gestureDetector = new GestureDetector(getContext(), new GestureDetectorListener());
-    // Individual springs to control X, Y and scale of the web head
-    private Spring xSpring, ySpring, scaleSpring;
+    // Individual springs to control X, Y
+    private Spring xSpring, ySpring;
+    // As per material guidelines, fast out slow in recommended for shrink/expand animations
+    private static final Interpolator FAST_OUT_SLOW_IN_INTERPOLATOR = new FastOutSlowInInterpolator();
 
     private float posX, posY;
     private int initialDownX, initialDownY;
@@ -110,16 +115,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
         ySpring.addListener(this);
         xSpring = webHeadContract.newSpring();
         xSpring.addListener(this);
-        scaleSpring = webHeadContract.newSpring();
-        scaleSpring.addListener(new SimpleSpringListener() {
-            @Override
-            public void onSpringUpdate(Spring spring) {
-                final float howMuch = (float) spring.getCurrentValue();
-                contentRoot.setScaleX(howMuch);
-                contentRoot.setScaleY(howMuch);
-            }
-        });
-        scaleSpring.setCurrentValue(0.0f, true);
+        setContentScale(0.0f);
     }
 
     @Override
@@ -330,21 +326,66 @@ public class WebHead extends BaseWebHead implements SpringListener {
         return (float) Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
 
-    public void reveal() {
-        scaleSpring.setEndValue(TOUCH_UP_SCALE);
+    /**
+     * Used to set the scale of {@link #contentRoot} for use in reveal and shrink animations. This
+     * one directly sets the vales, for animations refer {@link #setContentScale(float)}
+     *
+     * @param scale Scale to set
+     */
+    private void setContentScale(final float scale) {
+        contentRoot.setScaleX(scale);
+        contentRoot.setScaleY(scale);
+    }
+
+    /**
+     * Same as {@link #setContentScale(float)} but with animations.
+     *
+     * @param scale
+     */
+    private void animateContentScale(final float scale) {
+        animateContentScale(scale, null);
+    }
+
+    /**
+     * Same as {@link #setContentScale(float)} but with animations and ability to listen when animation
+     * finishes by giving a Runnable. {@param end}
+     *
+     * @param scale     Scale to set
+     * @param endAction End runnable to execute after animations
+     */
+    private void animateContentScale(final float scale, @Nullable final Runnable endAction) {
+        contentRoot.animate()
+                .scaleX(scale)
+                .scaleY(scale)
+                .withLayer()
+                .setInterpolator(new SpringInterpolator(0.2, 5))
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        if (endAction != null) {
+                            endAction.run();
+                        }
+                    }
+                }).start();
+    }
+
+    public void reveal(@Nullable final Runnable endAction) {
+        animateContentScale(TOUCH_UP_SCALE, endAction);
         scaledDown = false;
     }
 
     private void touchDown() {
         if (!scaledDown) {
-            scaleSpring.setEndValue(TOUCH_DOWN_SCALE);
+            // scaleSpring.setEndValue(TOUCH_DOWN_SCALE);
+            // animateContentScale(TOUCH_DOWN_SCALE);
             scaledDown = true;
         }
     }
 
     private void touchUp() {
         if (scaledDown) {
-            scaleSpring.setEndValue(TOUCH_UP_SCALE);
+            // scaleSpring.setEndValue(TOUCH_UP_SCALE);
+            // animateContentScale(TOUCH_UP_SCALE);
             scaledDown = false;
         }
     }
@@ -595,18 +636,13 @@ public class WebHead extends BaseWebHead implements SpringListener {
                     contentRoot.setPivotX(contentRoot.getWidth());
                 }
                 contentRoot.setPivotY((float) (contentRoot.getHeight() * 0.75));
-                try {
-                    scaleSpring.setAtRest();
-                } catch (Exception e) {
-                    Timber.e("Error : %s", e.getMessage());
-                }
                 contentRoot.animate()
                         .scaleX(0.0f)
                         .scaleY(0.0f)
                         .alpha(0.5f)
                         .withLayer()
                         .setDuration(125)
-                        .setInterpolator(new FastOutSlowInInterpolator())
+                        .setInterpolator(FAST_OUT_SLOW_IN_INTERPOLATOR)
                         .withEndAction(this::sendCallback)
                         .start();
                 // Store the touch down point if its master
@@ -672,5 +708,20 @@ public class WebHead extends BaseWebHead implements SpringListener {
     @Override
     public String toString() {
         return "Webhead " + getUrl() + "master: " + String.valueOf(isMaster());
+    }
+
+    static class SpringInterpolator implements android.view.animation.Interpolator {
+        double amp = 1;
+        double frequency = 10;
+
+        SpringInterpolator(double amplitude, double frequency) {
+            amp = amplitude;
+            this.frequency = frequency;
+        }
+
+        public float getInterpolation(float time) {
+            return (float) (-1 * Math.pow(Math.E, -time / amp) *
+                    Math.cos(frequency * time) + 1);
+        }
     }
 }

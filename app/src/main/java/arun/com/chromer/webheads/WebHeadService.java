@@ -212,12 +212,12 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         }
         springChain2D.rest();
 
-        newWebHead.reveal();
+        newWebHead.reveal(() -> {
+            if (Preferences.get(getApplication()).aggressiveLoading() && !isMinimized) {
+                DocumentUtils.openNewCustomTab(getApplication(), newWebHead.getWebsite(), isNewTab);
+            }
+        });
         webHeads.put(webHeadUrl, newWebHead);
-
-        if (Preferences.get(this).aggressiveLoading() && !isMinimized) {
-            DocumentUtils.openNewCustomTab(this, newWebHead.getWebsite(), isNewTab);
-        }
     }
 
     private boolean shouldQueue(final int index) {
