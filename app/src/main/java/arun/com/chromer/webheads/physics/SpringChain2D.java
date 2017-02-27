@@ -20,18 +20,18 @@ import arun.com.chromer.webheads.WebHeadService;
  * Custom spring chain helper that simplifies maintaining 2 separate chains for X and Y axis.
  */
 public class SpringChain2D implements SpringListener {
-    private final LinkedList<Spring> mXSprings = new LinkedList<>();
-    private final LinkedList<Spring> mYSprings = new LinkedList<>();
+    private final LinkedList<Spring> xSprings = new LinkedList<>();
+    private final LinkedList<Spring> ySpring = new LinkedList<>();
 
-    private Spring mXMasterSpring;
-    private Spring mYMasterSpring;
+    private Spring xMasterSpring;
+    private Spring yMasterSpring;
 
     private final int sDispWidth;
 
     private static final int xDiff = Utils.dpToPx(4);
     private static final int yDiff = Utils.dpToPx(1.7);
 
-    private boolean mDisplacementEnabled = true;
+    private boolean displacementEnabled = true;
 
     private SpringChain2D(int dispWidth) {
         this.sDispWidth = dispWidth;
@@ -44,39 +44,51 @@ public class SpringChain2D implements SpringListener {
         return new SpringChain2D(metrics.widthPixels);
     }
 
-    public void setMasterSprings(@NonNull Spring xMaster, @NonNull Spring yMaster) {
-        mXMasterSpring = xMaster;
-        mYMasterSpring = yMaster;
-        mXMasterSpring.addListener(this);
-        mYMasterSpring.addListener(this);
+    public void clear() {
+        if (xMasterSpring != null) {
+            xMasterSpring.removeListener(this);
+        }
+        if (yMasterSpring != null) {
+            yMasterSpring.removeListener(this);
+        }
+        for (final Spring spring : xSprings) {
+            spring.removeListener(this);
+        }
+        for (final Spring spring : ySpring) {
+            spring.removeListener(this);
+        }
+        xSprings.clear();
+        ySpring.clear();
     }
 
-    public void clear() {
-        mXSprings.clear();
-        mYSprings.clear();
+    public void setMasterSprings(@NonNull Spring xMaster, @NonNull Spring yMaster) {
+        xMasterSpring = xMaster;
+        yMasterSpring = yMaster;
+        xMasterSpring.addListener(this);
+        yMasterSpring.addListener(this);
     }
 
     public void addSlaveSprings(@NonNull Spring xSpring, @NonNull Spring ySpring) {
-        if (mXSprings.size() <= WebHeadService.MAX_VISIBLE_WEB_HEADS) {
-            mXSprings.add(xSpring);
-            mYSprings.add(ySpring);
+        if (xSprings.size() <= WebHeadService.MAX_VISIBLE_WEB_HEADS) {
+            xSprings.add(xSpring);
+            this.ySpring.add(ySpring);
         }
     }
 
     @Override
     public void onSpringUpdate(Spring spring) {
-        final int masterX = (int) mXMasterSpring.getCurrentValue();
-        final int masterY = (int) mYMasterSpring.getCurrentValue();
+        final int masterX = (int) xMasterSpring.getCurrentValue();
+        final int masterY = (int) yMasterSpring.getCurrentValue();
         performGroupMove(masterX, masterY);
     }
 
     public void rest() {
-        Iterator lit = mXSprings.descendingIterator();
+        Iterator lit = xSprings.descendingIterator();
         while (lit.hasNext()) {
             final Spring s = (Spring) lit.next();
             s.setAtRest();
         }
-        lit = mYSprings.descendingIterator();
+        lit = ySpring.descendingIterator();
         while (lit.hasNext()) {
             final Spring s = (Spring) lit.next();
             s.setAtRest();
@@ -85,10 +97,10 @@ public class SpringChain2D implements SpringListener {
 
     public void performGroupMove(int masterX, int masterY) {
         int displacement = 0;
-        Iterator lit = mXSprings.descendingIterator();
+        Iterator lit = xSprings.descendingIterator();
         while (lit.hasNext()) {
             final Spring s = (Spring) lit.next();
-            if (mDisplacementEnabled) {
+            if (displacementEnabled) {
                 if (isRight(masterX)) {
                     displacement += xDiff;
                 } else {
@@ -99,10 +111,10 @@ public class SpringChain2D implements SpringListener {
         }
 
         displacement = 0;
-        lit = mYSprings.descendingIterator();
+        lit = ySpring.descendingIterator();
         while (lit.hasNext()) {
             final Spring s = (Spring) lit.next();
-            if (mDisplacementEnabled) {
+            if (displacementEnabled) {
                 displacement += yDiff;
             }
             s.setEndValue(masterY + displacement);
@@ -134,10 +146,10 @@ public class SpringChain2D implements SpringListener {
     }
 
     public void disableDisplacement() {
-        mDisplacementEnabled = false;
+        displacementEnabled = false;
     }
 
     public void enableDisplacement() {
-        mDisplacementEnabled = true;
+        displacementEnabled = true;
     }
 }

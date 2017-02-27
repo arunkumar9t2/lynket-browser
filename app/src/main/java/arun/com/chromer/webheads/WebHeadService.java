@@ -192,33 +192,23 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         if (springChain2D == null) {
             springChain2D = SpringChain2D.create(this);
         }
-        // RxParser.getInstance().parse(webHeadUrl);
-        springChain2D.clear();
-
         final WebHead newWebHead = new WebHead(/*Service*/ this, webHeadUrl, /*listener*/ this);
         newWebHead.setFromNewTab(isNewTab);
-
-        springChain2D.setMasterSprings(newWebHead.getXSpring(), newWebHead.getYSpring());
-
-        int index = webHeads.values().size();
         for (WebHead oldWebHead : webHeads.values()) {
+            // Set all old web heads to slave
             oldWebHead.setMaster(false);
-            if (shouldQueue(index + 1)) {
-                oldWebHead.setInQueue(true);
-            } else {
-                oldWebHead.setSpringConfig(SpringConfig.fromOrigamiTensionAndFriction(90, 9 + (index * 5)));
-                springChain2D.addSlaveSprings(oldWebHead.getXSpring(), oldWebHead.getYSpring());
-            }
-            index--;
         }
-        springChain2D.rest();
+        newWebHead.setMaster(true);
+        // Add to our map
+        webHeads.put(webHeadUrl, newWebHead);
+
+        updateSpringChain();
 
         newWebHead.reveal(() -> {
             if (Preferences.get(getApplication()).aggressiveLoading() && !isMinimized) {
                 DocumentUtils.openNewCustomTab(getApplication(), newWebHead.getWebsite(), isNewTab);
             }
         });
-        webHeads.put(webHeadUrl, newWebHead);
     }
 
     private void onUrlParsed(@NonNull final String url, final @Nullable Article article) {
@@ -344,7 +334,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     private void updateSpringChain() {
         springChain2D.rest();
         springChain2D.clear();
-        springChain2D.enableDisplacement();
+        springChain2D.disableDisplacement();
         // Index that is used to differentiate spring config
         int springChainIndex = webHeads.values().size();
         // Index that is used to determine if the web hed should be in queue.
@@ -368,6 +358,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
                 index--;
             }
         }
+        springChain2D.enableDisplacement();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
