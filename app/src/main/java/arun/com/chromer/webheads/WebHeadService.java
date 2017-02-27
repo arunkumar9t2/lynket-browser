@@ -14,6 +14,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.ColorInt;
@@ -49,7 +50,6 @@ import arun.com.chromer.customtabs.CustomTabManager;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.util.DocumentUtils;
 import arun.com.chromer.webheads.helper.ColorExtractionTask;
-import arun.com.chromer.webheads.helper.UrlOrganizer;
 import arun.com.chromer.webheads.physics.SpringChain2D;
 import arun.com.chromer.webheads.ui.WebHeadContract;
 import arun.com.chromer.webheads.ui.context.WebHeadContextActivity;
@@ -94,8 +94,6 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     private boolean customTabConnected;
     // Max visible web heads is set 6 for performance reasons.
     public static final int MAX_VISIBLE_WEB_HEADS = 5;
-    // Url organizer to take care of pre-fetching.
-    private UrlOrganizer urlOrganizer;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -136,7 +134,6 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
             }
         }
         springChain2D = SpringChain2D.create(this);
-        urlOrganizer = new UrlOrganizer(this);
         Trashy.init(this);
 
         bindToCustomTabSession();
@@ -172,7 +169,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     private void processIntent(@Nullable Intent intent) {
         if (intent == null || intent.getDataString() == null) return; // don't do anything
         final boolean isFromNewTab = intent.getBooleanExtra(EXTRA_KEY_FROM_NEW_TAB, false);
-        final boolean isMinimized = intent.getBooleanExtra(EXTRA_KEY_MINIMIZE, false);
+        final boolean isForMinimized = intent.getBooleanExtra(EXTRA_KEY_MINIMIZE, false);
 
         final String urlToLoad = intent.getDataString();
         if (TextUtils.isEmpty(urlToLoad)) {
@@ -181,10 +178,14 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         }
 
         if (!isLinkAlreadyLoaded(urlToLoad)) {
-            addWebHead(urlToLoad, isFromNewTab, isMinimized);
-        } else if (!isMinimized) {
+            addWebHead(urlToLoad, isFromNewTab, isForMinimized);
+        } else if (!isForMinimized) {
             Toast.makeText(this, R.string.already_loaded, LENGTH_SHORT).show();
         }
+    }
+
+    private boolean isLinkAlreadyLoaded(@Nullable String urlToLoad) {
+        return urlToLoad == null || webHeads.containsKey(urlToLoad);
     }
 
     private void addWebHead(final String webHeadUrl, final boolean isNewTab, final boolean isMinimized) {
@@ -220,11 +221,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         webHeads.put(webHeadUrl, newWebHead);
     }
 
-    private boolean shouldQueue(final int index) {
-        return index > MAX_VISIBLE_WEB_HEADS;
-    }
-
-    public void onUrlParsed(@NonNull final String url, final @Nullable Article article) {
+    private void onUrlParsed(@NonNull final String url, final @Nullable Article article) {
         final WebHead webHead = webHeads.get(url);
         if (webHead != null && article != null) {
             warmUp(webHead);
@@ -259,45 +256,6 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         }
     }
 
-    private void warmUp(WebHead webHead) {
-        if (!Preferences.get(this).aggressiveLoading()) {
-            if (customTabConnected) {
-                customTabManager.mayLaunchUrl(Uri.parse(webHead.getUnShortenedUrl()), null, urlOrganizer.getPossibleUrls(webHeads));
-            } else deferMayLaunchUntilConnected(webHead.getUnShortenedUrl());
-        }
-    }
-
-    private boolean isLinkAlreadyLoaded(@Nullable String urlToLoad) {
-        return urlToLoad == null || webHeads.containsKey(urlToLoad);
-    }
-
-    // TODO Rework this crappy logic.
-    private void deferMayLaunchUntilConnected(final String urlToLoad) {
-        final Thread deferThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                int i = 0;
-                while (i < 10) {
-                    try {
-                        if (customTabConnected) {
-                            Thread.sleep(300);
-                            boolean ok = customTabManager.mayLaunchUrl(Uri.parse(urlToLoad),
-                                    null,
-                                    urlOrganizer.getPossibleUrls(webHeads));
-                            Timber.d("Deferred may launch was %b", ok);
-                            if (ok) break;
-                        }
-                        Thread.sleep(300);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    i++;
-                }
-            }
-        });
-        deferThread.start();
-    }
-
     private void bindToCustomTabSession() {
         if (customTabManager != null) {
             // Already an instance exists, so we will un bind the current connection and then
@@ -313,6 +271,37 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         if (customTabManager.bindCustomTabsService(this)) Timber.d("Binding successful");
     }
 
+
+    private void warmUp(WebHead webHead) {
+        if (!Preferences.get(this).aggressiveLoading()) {
+            if (customTabConnected) {
+                preloadUrl(webHead.getUnShortenedUrl(), false);
+            } else {
+                deferPreload(webHead.getUnShortenedUrl());
+            }
+        }
+    }
+
+    /**
+     * Based on the current active browsing mode, will perform correct preload strategy.
+     * If its normal, then do custom tab may launch url else if its article mode, then call
+     * article mode's prefetch.
+     *
+     * @param forArticleMode Whether we are trying to load for article mode.
+     */
+    private void preloadUrl(final String url, final boolean forArticleMode) {
+        if (Preferences.get(this).articleMode() || forArticleMode) {
+            // Do article mode.
+        } else {
+            customTabManager.mayLaunchUrl(Uri.parse(url));
+        }
+    }
+
+    private void deferPreload(@NonNull final String urlToLoad) {
+        new Handler().postDelayed(() -> preloadUrl(urlToLoad, false), 300);
+    }
+
+
     private void removeWebHeads() {
         for (WebHead webhead : webHeads.values()) {
             if (webhead != null) webhead.destroySelf(false);
@@ -323,14 +312,33 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         Timber.d("WebHeads: %d", webHeads.size());
     }
 
+    private boolean shouldQueue(final int index) {
+        return index > MAX_VISIBLE_WEB_HEADS;
+    }
+
     private void updateWebHeadColors(@ColorInt int webHeadColor) {
         final AnimatorSet animatorSet = new AnimatorSet();
-        List<Animator> animators = new LinkedList<>();
+        final List<Animator> animators = new LinkedList<>();
         for (WebHead webhead : webHeads.values()) {
             animators.add(webhead.getRevealAnimator(webHeadColor));
         }
         animatorSet.playTogether(animators);
         animatorSet.start();
+    }
+
+    private void selectNextMaster() {
+        final ListIterator<String> it = new ArrayList<>(webHeads.keySet()).listIterator(webHeads.size());
+        //noinspection LoopStatementThatDoesntLoop
+        while (it.hasPrevious()) {
+            final String key = it.previous();
+            final WebHead toBeMaster = webHeads.get(key);
+            if (toBeMaster != null) {
+                toBeMaster.setMaster(true);
+                updateSpringChain();
+                toBeMaster.goToMasterTouchDownPoint();
+            }
+            break;
+        }
     }
 
     private void updateSpringChain() {
@@ -341,7 +349,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         int springChainIndex = webHeads.values().size();
         // Index that is used to determine if the web hed should be in queue.
         int index = webHeads.values().size();
-        for (WebHead webHead : webHeads.values()) {
+        for (final WebHead webHead : webHeads.values()) {
             if (webHead != null) {
                 if (webHead.isMaster()) {
                     // Master will never be in queue, so no check is made.
@@ -362,21 +370,6 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         }
     }
 
-    private void selectNextMaster() {
-        final ListIterator<String> it = new ArrayList<>(webHeads.keySet()).listIterator(webHeads.size());
-        //noinspection LoopStatementThatDoesntLoop
-        while (it.hasPrevious()) {
-            final String key = it.previous();
-            final WebHead toBeMaster = webHeads.get(key);
-            if (toBeMaster != null) {
-                toBeMaster.setMaster(true);
-                updateSpringChain();
-                toBeMaster.goToMasterTouchDownPoint();
-            }
-            break;
-        }
-    }
-
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onWebHeadClick(@NonNull WebHead webHead) {
@@ -388,8 +381,6 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         // which will take care of closing and detaching the web head
         if (Preferences.get(this).webHeadsCloseOnOpen()) {
             webHead.destroySelf(true);
-            // Since the current url is opened, lets prepare the next set of urls
-            urlOrganizer.prepareNextSetOfUrls(webHeads, lastOpenedUrl, customTabManager);
         }
         hideRemoveView();
     }
@@ -399,17 +390,10 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         webHead.setMaster(false);
         webHeads.remove(webHead.getUrl());
         if (isLastWebHead) {
-            Trashy.get(this).destroyAnimator(new Runnable() {
-                @Override
-                public void run() {
-                    stopSelf();
-                }
-            });
+            Trashy.get(this).destroyAnimator(this::stopSelf);
         } else {
             selectNextMaster();
-            // Now that this web head is destroyed, with this web head as the reference prepare the
-            // other urls
-            urlOrganizer.prepareNextSetOfUrls(webHeads, webHead.getUrl(), customTabManager);
+            preloadUrl("", false);
         }
         ContextActivityHelper.signalDeleted(this, webHead.getWebsite());
     }
@@ -443,7 +427,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     @Override
     public void onMasterLongClick() {
         final ListIterator<String> it = new ArrayList<>(webHeads.keySet()).listIterator(webHeads.size());
-        ArrayList<WebSite> webSites = new ArrayList<>();
+        final ArrayList<WebSite> webSites = new ArrayList<>();
         while (it.hasPrevious()) {
             final String key = it.previous();
             final WebHead webHead = webHeads.get(key);
@@ -454,13 +438,6 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         ContextActivityHelper.open(this, webSites);
     }
 
-
-    private void closeWebHeadByUrl(@NonNull String url) {
-        final WebHead webHead = webHeads.get(url);
-        if (webHead != null) {
-            webHead.destroySelf(true);
-        }
-    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -480,6 +457,13 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         customTabConnected = false;
     }
 
+    private void closeWebHeadByUrl(@NonNull String url) {
+        final WebHead webHead = webHeads.get(url);
+        if (webHead != null) {
+            webHead.destroySelf(true);
+        }
+    }
+
     private void hideRemoveView() {
         Trashy.disappear();
     }
@@ -493,10 +477,6 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
 
                     break;
                 case TAB_HIDDEN:
-                    // When a tab is exited, prepare the other urls.
-                    urlOrganizer.prepareNextSetOfUrls(webHeads, lastOpenedUrl, customTabManager);
-                    // Clear the last opened preferredUrl flag
-                    lastOpenedUrl = "";
                     break;
             }
         }

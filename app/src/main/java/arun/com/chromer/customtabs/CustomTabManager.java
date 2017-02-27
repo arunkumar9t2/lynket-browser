@@ -108,6 +108,11 @@ public class CustomTabManager implements ServiceConnectionCallback {
         return ok;
     }
 
+    @SuppressWarnings("SameParameterValue")
+    public boolean mayLaunchUrl(Uri uri) {
+        return mayLaunchUrl(uri, null, null);
+    }
+
     @Override
     public void onServiceConnected(CustomTabsClient client) {
         mClient = client;
