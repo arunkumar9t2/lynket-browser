@@ -18,7 +18,6 @@ import arun.com.chromer.webheads.WebHeadService;
 import timber.log.Timber;
 
 import static android.content.Context.ACTIVITY_SERVICE;
-import static android.content.Intent.EXTRA_TEXT;
 import static android.content.Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.os.Build.VERSION_CODES.LOLLIPOP;
@@ -26,6 +25,7 @@ import static arun.com.chromer.shared.Constants.ACTION_CLOSE_ROOT;
 import static arun.com.chromer.shared.Constants.ACTION_MINIMIZE;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_WEBHEAD;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_MINIMIZE;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_ORIGINAL_URL;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBSITE;
 
 /**
@@ -157,7 +157,7 @@ public class DocumentUtils {
         Timber.d("Attempting to minimize %s", url);
         // Ask tabs to minimize
         final Intent minimizeIntent = new Intent(ACTION_MINIMIZE);
-        minimizeIntent.putExtra(EXTRA_TEXT, url);
+        minimizeIntent.putExtra(EXTRA_KEY_ORIGINAL_URL, url);
         LocalBroadcastManager.getInstance(context).sendBroadcastSync(minimizeIntent);
         // Open a new web head if the old was destroyed
         if (Preferences.get(context).webHeads()) {

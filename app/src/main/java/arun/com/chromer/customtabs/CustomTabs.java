@@ -506,7 +506,7 @@ public class CustomTabs {
      * merge tabs and apps and
      */
     private void prepareMinimize() {
-        if (!Preferences.get(activity).bottomBar() && forWebHead && Preferences.get(activity).mergeTabs()) {
+        if (!Preferences.get(activity).bottomBar() && Preferences.get(activity).mergeTabs()) {
             final Intent minimizeIntent = new Intent(activity, MinimizeBroadcastReceiver.class);
             minimizeIntent.putExtra(EXTRA_KEY_ORIGINAL_URL, url);
             final PendingIntent pendingMin = PendingIntent.getBroadcast(activity, new Random().nextInt(), minimizeIntent, FLAG_UPDATE_CURRENT);
@@ -602,7 +602,7 @@ public class CustomTabs {
             return;
         }
         final BottomBarManager.Config config = new BottomBarManager.Config();
-        config.minimize = forWebHead && Preferences.get(activity).mergeTabs();
+        config.minimize = Preferences.get(activity).mergeTabs();
         config.openInNewTab = Utils.isLollipopAbove();
 
         builder.setSecondaryToolbarViews(

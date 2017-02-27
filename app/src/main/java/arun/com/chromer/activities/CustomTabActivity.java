@@ -30,11 +30,11 @@ import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-import static android.content.Intent.EXTRA_TEXT;
 import static android.os.Build.VERSION_CODES.LOLLIPOP;
 import static android.widget.Toast.LENGTH_SHORT;
 import static arun.com.chromer.shared.Constants.ACTION_MINIMIZE;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_WEBHEAD;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_ORIGINAL_URL;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBSITE;
 import static arun.com.chromer.shared.Constants.NO_COLOR;
 
@@ -90,8 +90,8 @@ public class CustomTabActivity extends AppCompatActivity {
         minimizeReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equalsIgnoreCase(ACTION_MINIMIZE) && intent.hasExtra(EXTRA_TEXT)) {
-                    final String url = intent.getStringExtra(EXTRA_TEXT);
+                if (intent.getAction().equalsIgnoreCase(ACTION_MINIMIZE) && intent.hasExtra(EXTRA_KEY_ORIGINAL_URL)) {
+                    final String url = intent.getStringExtra(EXTRA_KEY_ORIGINAL_URL);
                     if (baseUrl.equalsIgnoreCase(url)) {
                         try {
                             Timber.d("Minimized %s", url);

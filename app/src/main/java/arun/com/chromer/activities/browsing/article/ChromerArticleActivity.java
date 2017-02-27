@@ -11,8 +11,8 @@ import arun.com.chromer.activities.CustomTabActivity;
 import timber.log.Timber;
 import xyz.klinker.android.article.ArticleActivity;
 
-import static android.content.Intent.EXTRA_TEXT;
 import static arun.com.chromer.shared.Constants.ACTION_MINIMIZE;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_ORIGINAL_URL;
 
 public class ChromerArticleActivity extends ArticleActivity {
     private String baseUrl = "";
@@ -38,8 +38,8 @@ public class ChromerArticleActivity extends ArticleActivity {
         minimizeReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equalsIgnoreCase(ACTION_MINIMIZE) && intent.hasExtra(EXTRA_TEXT)) {
-                    final String url = intent.getStringExtra(EXTRA_TEXT);
+                if (intent.getAction().equalsIgnoreCase(ACTION_MINIMIZE) && intent.hasExtra(EXTRA_KEY_ORIGINAL_URL)) {
+                    final String url = intent.getStringExtra(EXTRA_KEY_ORIGINAL_URL);
                     if (baseUrl.equalsIgnoreCase(url)) {
                         try {
                             Timber.d("Minimized %s", url);
