@@ -17,7 +17,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.StackingBehavior;
@@ -345,12 +344,9 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
                     .content(getString(R.string.custom_tab_provider_not_found_expln))
                     .positiveText(getString(R.string.install))
                     .negativeText(getString(android.R.string.no))
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            dialog.dismiss();
-                            Utils.openPlayStore(MainActivity.this, Constants.CHROME_PACKAGE);
-                        }
+                    .onPositive((dialog, which) -> {
+                        dialog.dismiss();
+                        Utils.openPlayStore(MainActivity.this, Constants.CHROME_PACKAGE);
                     }).show();
         }
     }
@@ -389,7 +385,8 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
     public void onFabClick() {
         if (materialSearchView.hasFocus() && materialSearchView.getText().length() > 0) {
             launchCustomTab(materialSearchView.getURL());
-        } else
+        } else {
             launchCustomTab(Constants.GOOGLE_URL);
+        }
     }
 }
