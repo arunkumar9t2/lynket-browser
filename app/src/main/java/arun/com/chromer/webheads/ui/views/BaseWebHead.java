@@ -522,8 +522,8 @@ public abstract class BaseWebHead extends FrameLayout {
         return webSite;
     }
 
-    public void setWebSite(WebSite webSite) {
-        Timber.d(webSite.toString());
+    public void setWebSite(@NonNull WebSite webSite) {
+        // Timber.d(webSite.toString());
         this.webSite = webSite;
     }
 

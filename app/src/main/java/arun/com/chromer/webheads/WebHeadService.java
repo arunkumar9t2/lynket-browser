@@ -47,6 +47,7 @@ import java.util.Map;
 import arun.com.chromer.R;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.CustomTabManager;
+import arun.com.chromer.data.website.WebsiteRepository;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.util.DocumentUtils;
 import arun.com.chromer.webheads.helper.ColorExtractionTask;
@@ -55,6 +56,7 @@ import arun.com.chromer.webheads.ui.WebHeadContract;
 import arun.com.chromer.webheads.ui.context.WebHeadContextActivity;
 import arun.com.chromer.webheads.ui.views.Trashy;
 import arun.com.chromer.webheads.ui.views.WebHead;
+import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 import xyz.klinker.android.article.ArticleUtils;
 
@@ -95,6 +97,8 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     private boolean customTabConnected;
     // Max visible web heads is set 6 for performance reasons.
     public static final int MAX_VISIBLE_WEB_HEADS = 5;
+
+    private final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -146,6 +150,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         Timber.d("Exiting webhead service");
         WebHead.clearMasterPosition();
         removeWebHeads();
+        compositeSubscription.clear();
         if (customTabManager != null) {
             customTabManager.unbindCustomTabsService(this);
         }
@@ -220,6 +225,44 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         if (Preferences.get(this).articleMode()) {
             preloadUrl(webHeadUrl, true);
         }
+
+        // Begin metadata extractions
+        beginExtraction(webHeadUrl);
+    }
+
+    private void beginExtraction(final String webHeadUrl) {
+        compositeSubscription.add(WebsiteRepository.getInstance(this)
+                .getWebsite(webHeadUrl)
+                .doOnError(Timber::e)
+                .doOnNext(webSite -> {
+                    final WebHead webHead = webHeads.get(webHeadUrl);
+                    if (webHead != null && webSite != null) {
+                        webHead.setWebSite(webSite);
+                        ContextActivityHelper.signalUpdated(getApplication(), webHead.getWebsite());
+                        final String faviconUrl = webSite.faviconUrl;
+                        Glide.with(getApplication())
+                                .load(faviconUrl)
+                                .asBitmap()
+                                .into(new BitmapImageViewTarget(webHead.getFaviconView()) {
+                                    @Override
+                                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                        if (resource != null) {
+                                            // dispatch themeColor extraction task
+                                            new ColorExtractionTask(webHead, resource).executeOnExecutor(THREAD_POOL_EXECUTOR);
+                                            webHead.setFaviconDrawable(getRoundedBitmapDrawable(resource));
+                                        }
+                                    }
+                                });
+                    }
+                }).subscribe());
+    }
+
+    @NonNull
+    private RoundedBitmapDrawable getRoundedBitmapDrawable(Bitmap resource) {
+        final RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), resource);
+        roundedBitmapDrawable.setAntiAlias(true);
+        roundedBitmapDrawable.setCircular(true);
+        return roundedBitmapDrawable;
     }
 
     private void onUrlParsed(@NonNull final String url, final @Nullable Article article) {
@@ -229,24 +272,6 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
             try {
                 final String faviconUrl = article.faviconUrl;
                 webHead.setWebSite(WebSite.fromArticle(article));
-                Glide.with(this)
-                        .load(faviconUrl)
-                        .asBitmap()
-                        .into(new BitmapImageViewTarget(webHead.getFaviconView()) {
-                            @Override
-                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                                if (resource == null) {
-                                    return;
-                                }
-                                // dispatch themeColor extraction task
-                                new ColorExtractionTask(webHead, resource).executeOnExecutor(THREAD_POOL_EXECUTOR);
-
-                                final RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), resource);
-                                roundedBitmapDrawable.setAntiAlias(true);
-                                roundedBitmapDrawable.setCircular(true);
-                                webHead.setFaviconDrawable(roundedBitmapDrawable);
-                            }
-                        });
                 // Also signal the context activity so that it can update its data
                 ContextActivityHelper.signalUpdated(this, webHead.getWebsite());
             } catch (Exception e) {
@@ -291,7 +316,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
      * @param forArticleMode Whether we are trying to load for article mode.
      */
     private void preloadUrl(final String url, final boolean forArticleMode) {
-        if (Preferences.get(this).articleMode() || forArticleMode) {
+        if (forArticleMode) {
             // Do article mode.
             // Preload this article.
             ArticleUtils.preloadArticle(this, Uri.parse(url),
