@@ -48,16 +48,27 @@ class WebsiteDiskStore implements WebsiteStore, BookStore {
     @NonNull
     @Override
     public Observable<WebSite> getWebsite(@NonNull final String url) {
-        return Observable.fromCallable(() -> webSiteDiskCache.get(url.trim()));
+        return Observable.fromCallable(() -> {
+            try {
+                return webSiteDiskCache.get(url.trim());
+            } catch (Exception e) {
+                Timber.e(e);
+                return null;
+            }
+        });
     }
 
     @NonNull
     @Override
     public Observable<WebSite> saveWebsite(@NonNull final WebSite webSite) {
-        return Observable.fromCallable(() -> webSiteDiskCache.set(webSite.url, webSite))
-                .doOnNext(cachedWebsite -> {
-
-                });
+        return Observable.fromCallable(() -> {
+            try {
+                return webSiteDiskCache.set(webSite.url, webSite);
+            } catch (Exception e) {
+                Timber.e(e);
+                return null;
+            }
+        });
     }
 
     @NonNull

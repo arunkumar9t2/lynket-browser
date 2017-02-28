@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_open_full_page"
+        android:icon="@drawable/ic_open_in_browser_36dp"
+        android:title="@string/open_full_page"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_action_button"
+        android:icon="@mipmap/ic_launcher"
+        android:title="@string/choose_secondary_browser"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_copy_link"
+        android:title="@string/copy_link"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_open_with"
+        android:title="@string/open_with"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_share"
+        android:title="@string/share"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_more"
+        android:checkable="false"
+        android:title="@string/more"
+        app:showAsAction="never" />
+</menu>

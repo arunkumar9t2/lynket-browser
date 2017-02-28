@@ -11,8 +11,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import arun.com.chromer.R;
 import arun.com.chromer.util.Utils;
 
-import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.text.InputType.TYPE_CLASS_TEXT;
 import static android.widget.Toast.LENGTH_SHORT;
 
@@ -35,7 +33,6 @@ public class NewTabDialogActivity extends AppCompatActivity {
                     Toast.makeText(NewTabDialogActivity.this, url, LENGTH_SHORT).show();
                     final Intent websiteIntent = new Intent(NewTabDialogActivity.this, BrowserInterceptActivity.class);
                     websiteIntent.setData(Uri.parse(url));
-                    websiteIntent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(websiteIntent);
                     finish();
                 })

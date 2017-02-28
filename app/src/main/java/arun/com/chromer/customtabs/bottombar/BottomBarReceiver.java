@@ -83,7 +83,6 @@ public class BottomBarReceiver extends BroadcastReceiver {
             if (!performCalled) {
                 throw new IllegalStateException("Should call perform() instead of onPerform()");
             }
-            DocumentUtils.closeRootActivity(context);
             final Intent newTabIntent = new Intent(context, NewTabDialogActivity.class);
             newTabIntent.setData(Uri.parse(url));
             newTabIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

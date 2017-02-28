@@ -248,4 +248,6 @@
     <string name="grabbing_amp_link">Grabbing AMP link</string>
     <string name="link_found">Link found!</string>
     <string name="open">Open</string>
+    <string name="open_full_page">Open full page</string>
+    <string name="more">More</string>
 </resources>

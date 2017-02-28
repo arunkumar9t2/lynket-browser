@@ -9,7 +9,6 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -132,8 +131,8 @@ public class CustomTabActivity extends AppCompatActivity {
     }
 
     @TargetApi(LOLLIPOP)
-    private void applyDescriptionFromWebsite(@NonNull final WebSite webSite) {
-        if (Utils.isLollipopAbove()) {
+    private void applyDescriptionFromWebsite(@Nullable final WebSite webSite) {
+        if (Utils.isLollipopAbove() && webSite != null) {
             final String title = webSite.safeLabel();
             final String faviconUrl = webSite.faviconUrl;
             setTaskDescription(new ActivityManager.TaskDescription(title, null, webSite.themeColor()));
