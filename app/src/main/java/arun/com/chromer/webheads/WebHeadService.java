@@ -193,6 +193,8 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         if (springChain2D == null) {
             springChain2D = SpringChain2D.create(this);
         }
+        springChain2D.clear();
+
         final WebHead newWebHead = new WebHead(/*Service*/ this, webHeadUrl, /*listener*/ this);
         newWebHead.setFromNewTab(isNewTab);
         for (WebHead oldWebHead : webHeads.values()) {
@@ -203,13 +205,17 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         // Add to our map
         webHeads.put(webHeadUrl, newWebHead);
 
-        updateSpringChain();
-
-        newWebHead.reveal(() -> {
+        newWebHead.post(() -> newWebHead.reveal(() -> {
             if (Preferences.get(getApplication()).aggressiveLoading() && !isMinimized) {
                 DocumentUtils.openNewCustomTab(getApplication(), newWebHead.getWebsite(), isNewTab);
             }
-        });
+            new Handler().postDelayed(() -> {
+                // Update the spring chain
+                updateSpringChain();
+                // Trigger an update
+                onMasterWebHeadMoved(newWebHead.getWindowParams().x, newWebHead.getWindowParams().y);
+            }, 100);
+        }));
 
         if (Preferences.get(this).articleMode()) {
             preloadUrl(webHeadUrl, true);

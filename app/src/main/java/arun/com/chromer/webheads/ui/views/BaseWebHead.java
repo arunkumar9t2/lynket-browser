@@ -246,6 +246,10 @@ public abstract class BaseWebHead extends FrameLayout {
         }
     }
 
+    public WindowManager.LayoutParams getWindowParams() {
+        return windowParams;
+    }
+
     boolean isLastWebHead() {
         return WEB_HEAD_COUNT == 0;
     }
