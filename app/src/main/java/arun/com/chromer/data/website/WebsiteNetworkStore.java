@@ -1,11 +1,13 @@
 package arun.com.chromer.data.website;
 
 import android.content.Context;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
 
 import com.chimbori.crux.articles.Article;
 
+import arun.com.chromer.data.website.model.WebColor;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.parser.RxParser;
 import arun.com.chromer.util.RxUtils;
@@ -42,6 +44,17 @@ class WebsiteNetworkStore implements WebsiteStore {
     @NonNull
     @Override
     public Observable<WebSite> saveWebsite(@NonNull WebSite webSite) {
+        return Observable.empty();
+    }
+
+    @NonNull
+    @Override
+    public Observable<WebColor> getWebsiteColor(@NonNull String url) {
+        return Observable.empty();
+    }
+
+    @Override
+    public Observable<WebColor> saveWebsiteColor(@NonNull String host, @ColorInt int color) {
         return Observable.empty();
     }
 }

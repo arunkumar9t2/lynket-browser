@@ -2,6 +2,7 @@ package arun.com.chromer.data.website;
 
 import android.support.annotation.NonNull;
 
+import arun.com.chromer.data.website.model.WebColor;
 import arun.com.chromer.data.website.model.WebSite;
 import rx.Observable;
 
@@ -13,4 +14,9 @@ import rx.Observable;
 interface BaseWebsiteRepository {
     @NonNull
     Observable<WebSite> getWebsite(@NonNull String url);
+
+    int getWebsiteColorSync(@NonNull final String url);
+
+    @NonNull
+    Observable<WebColor> saveWebColor(final String url);
 }

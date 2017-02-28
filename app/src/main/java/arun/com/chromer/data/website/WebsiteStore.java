@@ -1,7 +1,9 @@
 package arun.com.chromer.data.website;
 
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 
+import arun.com.chromer.data.website.model.WebColor;
 import arun.com.chromer.data.website.model.WebSite;
 import rx.Observable;
 
@@ -15,4 +17,9 @@ interface WebsiteStore {
 
     @NonNull
     Observable<WebSite> saveWebsite(@NonNull WebSite webSite);
+
+    @NonNull
+    Observable<WebColor> getWebsiteColor(@NonNull final String url);
+
+    Observable<WebColor> saveWebsiteColor(@NonNull final String host, @ColorInt int color);
 }

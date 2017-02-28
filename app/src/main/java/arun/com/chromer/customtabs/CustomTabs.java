@@ -42,6 +42,7 @@ import arun.com.chromer.customtabs.callbacks.SecondaryBrowserReceiver;
 import arun.com.chromer.customtabs.callbacks.ShareBroadcastReceiver;
 import arun.com.chromer.customtabs.warmup.WarmUpService;
 import arun.com.chromer.data.apps.AppRepository;
+import arun.com.chromer.data.website.WebsiteRepository;
 import arun.com.chromer.shared.AppDetectService;
 import arun.com.chromer.shared.AppDetectionManager;
 import arun.com.chromer.shared.Constants;
@@ -396,7 +397,6 @@ public class CustomTabs {
                     }
                 }
             }
-
             if (toolbarColor != NO_COLOR) {
                 builder.setToolbarColor(toolbarColor)
                         .setSecondaryToolbarColor(toolbarColor);
@@ -411,20 +411,14 @@ public class CustomTabs {
      */
     private boolean setWebToolbarColor() {
         // Check if we have the color extracted for this source
-        final String host = Uri.parse(url).getHost();
-        /*if (host != null) {
-            final List<WebColor> webColors = WebColor.find(WebColor.class, "url = ?", host);
-
-            if (!webColors.isEmpty()) {
-                toolbarColor = webColors.get(0).getColor();
-                return true;
-            } else {
-                final Intent extractorService = new Intent(activity, WebColorExtractorService.class);
-                extractorService.setData(Uri.parse(url));
-                activity.startService(extractorService);
-            }
-        }*/
-        return false;
+        final int color = WebsiteRepository.getInstance(activity).getWebsiteColorSync(url);
+        if (color != Constants.NO_COLOR) {
+            toolbarColor = color;
+            return true;
+        } else {
+            WebsiteRepository.getInstance(activity).saveWebColor(url).subscribe();
+            return false;
+        }
     }
 
     /**
@@ -442,6 +436,7 @@ public class CustomTabs {
             final int savedColor = AppRepository.getInstance(activity).getPackageColorSync(lastPackage);
             if (savedColor != Constants.NO_COLOR) {
                 toolbarColor = savedColor;
+                return true;
             }
         } catch (Exception e) {
             Timber.e(e.toString());
