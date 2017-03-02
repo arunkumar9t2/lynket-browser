@@ -1,6 +1,5 @@
 package arun.com.chromer;
 
-import android.app.ActivityOptions;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -192,9 +191,7 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
                         .withHeaderBackgroundScaleType(ImageView.ScaleType.CENTER_CROP)
                         .withDividerBelowHeader(true)
                         .build())
-                .addStickyDrawerItems(new PrimaryDrawerItem().withName(getString(R.string.settings)).withIdentifier(11)
-                        .withIcon(CommunityMaterial.Icon.cmd_settings)
-                        .withSelectable(false))
+                .addStickyDrawerItems()
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName(getString(R.string.intro)).withIdentifier(4)
                                 .withIcon(CommunityMaterial.Icon.cmd_clipboard_text)
@@ -211,6 +208,9 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
                         new PrimaryDrawerItem().withName(R.string.join_beta)
                                 .withIdentifier(9)
                                 .withIcon(CommunityMaterial.Icon.cmd_beta)
+                                .withSelectable(false),
+                        new PrimaryDrawerItem().withName(getString(R.string.settings)).withIdentifier(11)
+                                .withIcon(CommunityMaterial.Icon.cmd_settings)
                                 .withSelectable(false),
                         new DividerDrawerItem(),
                         new SecondaryDrawerItem().withName(getString(R.string.share))
@@ -254,12 +254,7 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
                             startActivity(Intent.createChooser(shareIntent, getString(R.string.share_via)));
                             break;
                         case 8:
-                            final Intent aboutActivityIntent = new Intent(MainActivity.this, AboutAppActivity.class);
-                            startActivity(aboutActivityIntent,
-                                    ActivityOptions.makeCustomAnimation(MainActivity.this,
-                                            R.anim.slide_in_right_medium,
-                                            R.anim.slide_out_left_medium).toBundle()
-                            );
+                            startActivity(new Intent(MainActivity.this, AboutAppActivity.class));
                             break;
                         case 9:
                             showJoinBetaDialog();
