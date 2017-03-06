@@ -14,6 +14,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -136,6 +138,22 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
         super.onDestroy();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.home_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_settings:
+                startActivity(new Intent(MainActivity.this, SettingsGroupActivity.class));
+                break;
+        }
+        return true;
+    }
+
     private void registerCloseReceiver() {
         closeReceiver = new BroadcastReceiver() {
             @Override
@@ -220,9 +238,6 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
                                 .withIdentifier(9)
                                 .withIcon(CommunityMaterial.Icon.cmd_beta)
                                 .withSelectable(false),
-                        new PrimaryDrawerItem().withName(getString(R.string.settings)).withIdentifier(11)
-                                .withIcon(CommunityMaterial.Icon.cmd_settings)
-                                .withSelectable(false),
                         new DividerDrawerItem(),
                         new SecondaryDrawerItem().withName(getString(R.string.share))
                                 .withIcon(CommunityMaterial.Icon.cmd_share_variant)
@@ -272,9 +287,6 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
                             break;
                         case 10:
                             startActivity(new Intent(MainActivity.this, WebHeadsIntro.class));
-                            break;
-                        case 11:
-                            startActivity(new Intent(MainActivity.this, SettingsGroupActivity.class));
                             break;
                     }
                     return false;
