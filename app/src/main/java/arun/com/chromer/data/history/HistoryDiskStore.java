@@ -195,6 +195,8 @@ public class HistoryDiskStore extends SQLiteOpenHelper implements HistoryStore {
             boolean exists = false;
             if (cursor != null && cursor.getCount() > 0) {
                 exists = true;
+            }
+            if (cursor != null) {
                 cursor.close();
             }
             return exists;

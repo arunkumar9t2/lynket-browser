@@ -37,6 +37,7 @@ import java.util.List;
 import arun.com.chromer.activities.SnackHelper;
 import arun.com.chromer.activities.about.AboutAppActivity;
 import arun.com.chromer.activities.about.changelog.Changelog;
+import arun.com.chromer.activities.history.HistoryActivity;
 import arun.com.chromer.activities.intro.ChromerIntro;
 import arun.com.chromer.activities.intro.WebHeadsIntro;
 import arun.com.chromer.activities.payments.DonateActivity;
@@ -102,7 +103,10 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
             startActivity(new Intent(this, ChromerIntro.class));
         }
 
+        startActivity(new Intent(this, HistoryActivity.class));
+
         Changelog.conditionalShow(this);
+
         setupMaterialSearch();
         setupDrawer();
         setupCustomTab();

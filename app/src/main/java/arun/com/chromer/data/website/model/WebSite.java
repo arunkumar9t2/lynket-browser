@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import com.chimbori.crux.articles.Article;
 
 import arun.com.chromer.data.history.model.HistoryTable;
+import xyz.klinker.android.article.data.webarticle.model.WebArticle;
 
 import static arun.com.chromer.shared.Constants.NO_COLOR;
 
@@ -62,6 +63,18 @@ public class WebSite implements Parcelable {
 
     @NonNull
     public static WebSite fromArticle(@NonNull Article article) {
+        final WebSite webSite = new WebSite();
+        webSite.title = article.title;
+        webSite.url = article.url;
+        webSite.canonicalUrl = !TextUtils.isEmpty(article.canonicalUrl) ? article.canonicalUrl : article.url;
+        webSite.faviconUrl = article.faviconUrl;
+        webSite.themeColor = article.themeColor;
+        webSite.ampUrl = !TextUtils.isEmpty(article.ampUrl) ? article.ampUrl : webSite.canonicalUrl;
+        return webSite;
+    }
+
+    @NonNull
+    public static WebSite fromArticle(@NonNull WebArticle article) {
         final WebSite webSite = new WebSite();
         webSite.title = article.title;
         webSite.url = article.url;
