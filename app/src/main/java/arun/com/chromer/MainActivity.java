@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,7 +38,6 @@ import java.util.List;
 import arun.com.chromer.activities.SnackHelper;
 import arun.com.chromer.activities.about.AboutAppActivity;
 import arun.com.chromer.activities.about.changelog.Changelog;
-import arun.com.chromer.activities.history.HistoryActivity;
 import arun.com.chromer.activities.intro.ChromerIntro;
 import arun.com.chromer.activities.intro.WebHeadsIntro;
 import arun.com.chromer.activities.payments.DonateActivity;
@@ -73,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
     public CoordinatorLayout coordinatorLayout;
     @BindView(R.id.chromer)
     TextView chromer;
+    @BindView(R.id.incognito_mode)
+    CheckBox incognitoMode;
 
     private CustomTabManager customTabManager;
     private Drawer drawer;
@@ -103,8 +105,6 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
             startActivity(new Intent(this, ChromerIntro.class));
         }
 
-        startActivity(new Intent(this, HistoryActivity.class));
-
         Changelog.conditionalShow(this);
 
         setupMaterialSearch();
@@ -125,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
     @Override
     protected void onResume() {
         super.onResume();
+        invalidateState();
     }
 
     @Override
@@ -157,6 +158,13 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
         }
         return true;
     }
+
+    private void invalidateState() {
+        incognitoMode.setChecked(Preferences.get(this).incognitoMode());
+        incognitoMode.setOnCheckedChangeListener((buttonView, isChecked) ->
+                Preferences.get(getApplicationContext()).incognitoMode(isChecked));
+    }
+
 
     private void registerCloseReceiver() {
         closeReceiver = new BroadcastReceiver() {

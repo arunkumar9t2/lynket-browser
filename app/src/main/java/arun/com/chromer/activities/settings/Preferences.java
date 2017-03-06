@@ -54,6 +54,7 @@ public class Preferences {
     public static final String DYNAMIC_COLOR_WEB = "dynamic_color_web";
     public static final String AMP_MODE = "amp_mode_pref";
     public static final String ARTICLE_MODE = "article_mode_pref";
+    public static final String INCOGNITO_MODE = "incognito_mode_pref";
     // Singleton instance
     private static Preferences INSTANCE;
 
@@ -212,6 +213,14 @@ public class Preferences {
 
     public boolean articleMode() {
         return getDefaultSharedPreferences().getBoolean(ARTICLE_MODE, false);
+    }
+
+    public boolean incognitoMode() {
+        return getDefaultSharedPreferences().getBoolean(INCOGNITO_MODE, false);
+    }
+
+    public void incognitoMode(final boolean preference) {
+        getDefaultSharedPreferences().edit().putBoolean(INCOGNITO_MODE, preference).apply();
     }
 
 
