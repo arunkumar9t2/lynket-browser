@@ -646,9 +646,9 @@ public class CustomTabs {
         final String customTabPackage = Preferences.get(activity).customTabApp();
         if (Utils.isPackageInstalled(activity, customTabPackage)
                 && (customTabPackage.equalsIgnoreCase(STABLE_PACKAGE)
-                | customTabPackage.equalsIgnoreCase(DEV_PACKAGE)
-                | customTabPackage.equalsIgnoreCase(BETA_PACKAGE)
-                | customTabPackage.equalsIgnoreCase(LOCAL_PACKAGE))) {
+                || customTabPackage.equalsIgnoreCase(DEV_PACKAGE)
+                || customTabPackage.equalsIgnoreCase(BETA_PACKAGE)
+                || customTabPackage.equalsIgnoreCase(LOCAL_PACKAGE))) {
             try {
                 final PackageInfo packageInfo = activity.getPackageManager().getPackageInfo(customTabPackage, 0);
                 return Integer.parseInt(packageInfo.versionName.split("\\.")[0]);

@@ -25,6 +25,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.StackingBehavior;
 import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
@@ -161,6 +162,11 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
 
     private void invalidateState() {
         incognitoMode.setChecked(Preferences.get(this).incognitoMode());
+        incognitoMode.setCompoundDrawablePadding(Utils.dpToPx(5));
+        incognitoMode.setCompoundDrawables(new IconicsDrawable(this)
+                .icon(CommunityMaterial.Icon.cmd_incognito)
+                .colorRes(R.color.material_dark_color)
+                .sizeDp(24), null, null, null);
         incognitoMode.setOnCheckedChangeListener((buttonView, isChecked) ->
                 Preferences.get(getApplicationContext()).incognitoMode(isChecked));
     }
