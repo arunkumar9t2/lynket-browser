@@ -36,9 +36,9 @@
             android:layout_height="wrap_content"
             android:ellipsize="marquee"
             android:maxLines="1"
-            android:paddingBottom="1dp"
+            android:paddingBottom="2dp"
             android:textAppearance="@style/Preference_TextAppearanceMaterialSubhead"
-            android:textSize="13sp"
+            android:textSize="14sp"
             tools:ignore="SelectableText" />
 
         <TextView

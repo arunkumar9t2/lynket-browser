@@ -130,6 +130,12 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
     }
 
     void setCursor(@Nullable Cursor cursor) {
+        if (this.cursor != null) {
+            try {
+                this.cursor.close();
+            } catch (Exception ignored) {
+            }
+        }
         this.cursor = cursor;
         refresh();
     }
