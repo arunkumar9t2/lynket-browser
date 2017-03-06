@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import arun.com.chromer.data.history.model.HistoryTable;
 import arun.com.chromer.data.website.model.WebSite;
 import rx.Observable;
@@ -28,7 +31,7 @@ import static arun.com.chromer.data.history.model.HistoryTable.TABLE_NAME;
 /**
  * Created by Arunkumar on 03-03-2017.
  */
-public class HistoryDiskStore extends SQLiteOpenHelper implements HistoryStore {
+class HistoryDiskStore extends SQLiteOpenHelper implements HistoryStore {
     private static final int DATABASE_VERSION = 1;
 
     private SQLiteDatabase database;
@@ -219,6 +222,33 @@ public class HistoryDiskStore extends SQLiteOpenHelper implements HistoryStore {
         return Observable.fromCallable(() -> {
             open();
             return database.delete(TABLE_NAME, "1", null);
+        });
+    }
+
+    @NonNull
+    @Override
+    public Observable<List<WebSite>> recents() {
+        return Observable.fromCallable(() -> {
+            open();
+            final List<WebSite> webSites = new ArrayList<>();
+            final Cursor cursor = database.query(TABLE_NAME,
+                    ALL_COLUMN_PROJECTION,
+                    null,
+                    null,
+                    null,
+                    null,
+                    HistoryTable.ORDER_BY_TIME_DESC,
+                    "8");
+            if (cursor != null) {
+                try {
+                    while (cursor.moveToNext()) {
+                        webSites.add(WebSite.fromCursor(cursor));
+                    }
+                } finally {
+                    cursor.close();
+                }
+            }
+            return webSites;
         });
     }
 }

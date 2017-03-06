@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 
+import java.util.List;
+
 import arun.com.chromer.data.website.model.WebSite;
 import rx.Observable;
 import timber.log.Timber;
@@ -15,7 +17,7 @@ public class HistoryRepository implements HistoryStore {
     private static HistoryRepository INSTANCE = null;
     private final Context context;
 
-    public HistoryRepository(Context applicationContext) {
+    private HistoryRepository(Context applicationContext) {
         this.context = applicationContext;
     }
 
@@ -85,5 +87,11 @@ public class HistoryRepository implements HistoryStore {
     @Override
     public Observable<Integer> deleteAll() {
         return HistoryDiskStore.getInstance(context).deleteAll();
+    }
+
+    @NonNull
+    @Override
+    public Observable<List<WebSite>> recents() {
+        return HistoryDiskStore.getInstance(context).recents();
     }
 }

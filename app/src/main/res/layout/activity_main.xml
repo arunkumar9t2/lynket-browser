@@ -52,28 +52,60 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="85dp"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/incognito_mode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:text="@string/incognito_mode"
+                    android:textColor="@color/material_dark_color"
+                    android:textSize="16sp" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recents_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:clipToPadding="false"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp" />
+
+                <TextView
+                    android:id="@+id/history"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center|start"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:gravity="center|end"
+                    android:paddingLeft="24dp"
+                    android:paddingRight="24dp"
+                    android:text="@string/history_link"
+                    android:textAllCaps="true"
+                    android:textColor="@color/material_dark_color"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
             <arun.com.chromer.views.searchview.MaterialSearchView
                 android:id="@+id/material_search_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top" />
+        </FrameLayout>
 
-            <CheckBox
-                android:id="@+id/incognito_mode"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:layout_gravity="center"
-                android:checked="true"
-                android:gravity="center"
-                android:text="@string/incognito_mode"
-                android:textColor="@color/material_dark_color"
-                android:textSize="16sp" />
-        </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.FloatingActionButton

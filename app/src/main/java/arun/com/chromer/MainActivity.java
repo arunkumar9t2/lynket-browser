@@ -10,14 +10,18 @@ import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.GravityEnum;
@@ -36,9 +40,9 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import java.util.Collections;
 import java.util.List;
 
-import arun.com.chromer.activities.SnackHelper;
 import arun.com.chromer.activities.about.AboutAppActivity;
 import arun.com.chromer.activities.about.changelog.Changelog;
+import arun.com.chromer.activities.history.HistoryActivity;
 import arun.com.chromer.activities.intro.ChromerIntro;
 import arun.com.chromer.activities.intro.WebHeadsIntro;
 import arun.com.chromer.activities.payments.DonateActivity;
@@ -46,6 +50,7 @@ import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.activities.settings.SettingsGroupActivity;
 import arun.com.chromer.customtabs.CustomTabManager;
 import arun.com.chromer.customtabs.CustomTabs;
+import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.search.SuggestionItem;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.ServiceUtil;
@@ -62,7 +67,7 @@ import timber.log.Timber;
 import static arun.com.chromer.shared.Constants.ACTION_CLOSE_ROOT;
 import static arun.com.chromer.shared.Constants.REQUEST_CODE_VOICE;
 
-public class MainActivity extends AppCompatActivity implements SnackHelper, Home.View {
+public class MainActivity extends AppCompatActivity implements Home.View {
 
     @BindView(R.id.bottomsheet)
     public BottomSheetLayout bottomSheetLayout;
@@ -76,10 +81,18 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
     TextView chromer;
     @BindView(R.id.incognito_mode)
     CheckBox incognitoMode;
+    @BindView(R.id.recents_list)
+    RecyclerView recentsList;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+    @BindView(R.id.root)
+    LinearLayout root;
 
     private CustomTabManager customTabManager;
     private Drawer drawer;
     private BroadcastReceiver closeReceiver;
+
+    private RecentsAdapter recentsAdapter;
 
     private Home.Presenter presenter;
 
@@ -111,9 +124,18 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
         setupMaterialSearch();
         setupDrawer();
         setupCustomTab();
+        setupRecents();
+
         checkAndEducateUser(false);
+
         ServiceUtil.takeCareOfServices(getApplicationContext());
         registerCloseReceiver();
+    }
+
+    private void setupRecents() {
+        recentsList.setLayoutManager(new GridLayoutManager(this, 4));
+        recentsAdapter = new RecentsAdapter();
+        recentsList.setAdapter(recentsAdapter);
     }
 
     @Override
@@ -169,6 +191,8 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
                 .sizeDp(24), null, null, null);
         incognitoMode.setOnCheckedChangeListener((buttonView, isChecked) ->
                 Preferences.get(getApplicationContext()).incognitoMode(isChecked));
+
+        presenter.loadRecents(this);
     }
 
 
@@ -216,6 +240,11 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
     @Override
     public void setSuggestions(@NonNull List<SuggestionItem> suggestions) {
         materialSearchView.setSuggestions(suggestions);
+    }
+
+    @Override
+    public void setRecents(@NonNull List<WebSite> webSites) {
+        recentsAdapter.setWebSites(webSites);
     }
 
     @Override
@@ -424,5 +453,10 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
         } else {
             launchCustomTab(Constants.GOOGLE_URL);
         }
+    }
+
+    @OnClick(R.id.history)
+    public void onClick() {
+        startActivity(new Intent(this, HistoryActivity.class));
     }
 }

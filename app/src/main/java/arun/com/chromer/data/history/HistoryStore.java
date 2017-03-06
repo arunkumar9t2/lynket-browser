@@ -3,13 +3,15 @@ package arun.com.chromer.data.history;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 
+import java.util.List;
+
 import arun.com.chromer.data.website.model.WebSite;
 import rx.Observable;
 
 /**
  * Created by Arunkumar on 03-03-2017.
  */
-public interface HistoryStore {
+interface HistoryStore {
     @NonNull
     Observable<Cursor> getAllItemsCursor();
 
@@ -30,4 +32,7 @@ public interface HistoryStore {
 
     @NonNull
     Observable<Integer> deleteAll();
+
+    @NonNull
+    Observable<List<WebSite>> recents();
 }

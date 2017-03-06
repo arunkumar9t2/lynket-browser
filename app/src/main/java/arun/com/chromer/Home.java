@@ -1,5 +1,6 @@
 package arun.com.chromer;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.widget.EditText;
@@ -12,14 +13,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import arun.com.chromer.activities.SnackHelper;
+import arun.com.chromer.data.history.HistoryRepository;
+import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.search.SuggestionItem;
+import arun.com.chromer.util.RxUtils;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-public interface Home {
-    interface View {
+interface Home {
+    interface View extends SnackHelper {
         void setSuggestions(@NonNull List<SuggestionItem> suggestions);
+
+        void setRecents(@NonNull List<WebSite> webSites);
     }
 
     class Presenter {
@@ -55,6 +62,19 @@ public interface Home {
                             getView().setSuggestions(suggestionItems);
                         }
                     }).doOnError(Timber::e)
+                    .subscribe());
+        }
+
+        void loadRecents(@NonNull Context context) {
+            compositeSubscription.add(HistoryRepository.getInstance(context)
+                    .recents()
+                    .compose(RxUtils.applySchedulers())
+                    .doOnError(Timber::e)
+                    .doOnNext(webSites -> {
+                        if (isViewAttached()) {
+                            getView().setRecents(webSites);
+                        }
+                    })
                     .subscribe());
         }
 
