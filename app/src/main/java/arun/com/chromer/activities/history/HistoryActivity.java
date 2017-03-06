@@ -14,6 +14,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import arun.com.chromer.R;
 import arun.com.chromer.activities.base.SubActivity;
 import butterknife.BindView;
@@ -59,8 +61,6 @@ public class HistoryActivity extends SubActivity implements History.View {
             }
         });
 
-        presenter.loadHistory(this);
-
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorPrimary),
                 ContextCompat.getColor(this, R.color.accent));
         swipeRefreshLayout.setOnRefreshListener(() -> presenter.loadHistory(this));
@@ -78,6 +78,12 @@ public class HistoryActivity extends SubActivity implements History.View {
         };
         final ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeTouch);
         itemTouchHelper.attachToRecyclerView(historyList);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.loadHistory(this);
     }
 
     @Override
@@ -109,6 +115,14 @@ public class HistoryActivity extends SubActivity implements History.View {
 
     @OnClick(R.id.fab)
     public void onFabDeleteClick() {
-        presenter.deleteAll(this);
+        if (historyAdapter.getItemCount() != 0) {
+            new MaterialDialog.Builder(this)
+                    .title(R.string.are_you_sure)
+                    .content(R.string.history_deletion_confirmation_content)
+                    .positiveText(android.R.string.yes)
+                    .negativeText(android.R.string.no)
+                    .onPositive((dialog, which) -> presenter.deleteAll(getApplicationContext()))
+                    .show();
+        }
     }
 }

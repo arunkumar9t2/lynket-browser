@@ -252,4 +252,6 @@
     <string name="more">More</string>
     <string name="title_history">History</string>
     <string name="deleted_items">%1$d items deleted.</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="history_deletion_confirmation_content">This action will delete all history and it is not reversible.</string>
 </resources>
