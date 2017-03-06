@@ -15,6 +15,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -45,6 +46,7 @@ import arun.com.chromer.search.SuggestionItem;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.ServiceUtil;
 import arun.com.chromer.util.Utils;
+import arun.com.chromer.util.cache.FontCache;
 import arun.com.chromer.views.searchview.MaterialSearchView;
 import arun.com.chromer.webheads.WebHeadService;
 import butterknife.BindView;
@@ -66,6 +68,8 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
     public Toolbar toolbar;
     @BindView(R.id.coordinator_layout)
     public CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.chromer)
+    TextView chromer;
 
     private CustomTabManager customTabManager;
     private Drawer drawer;
@@ -80,9 +84,17 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
         setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
         presenter = new Home.Presenter(this);
-
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setHomeButtonEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            getSupportActionBar().setDisplayShowHomeEnabled(false);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+        chromer.setTypeface(FontCache.get(FontCache.MONO, this));
 
         if (Preferences.get(this).isFirstRun()) {
             startActivity(new Intent(this, ChromerIntro.class));
@@ -184,7 +196,6 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
     private void setupDrawer() {
         drawer = new DrawerBuilder()
                 .withActivity(this)
-                .withToolbar(toolbar)
                 .withAccountHeader(new AccountHeaderBuilder()
                         .withActivity(this)
                         .withHeaderBackground(R.drawable.chromer)
