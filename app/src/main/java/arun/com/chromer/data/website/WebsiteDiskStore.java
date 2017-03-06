@@ -55,6 +55,12 @@ class WebsiteDiskStore implements WebsiteStore, BookStore {
                 Timber.e(e);
                 return null;
             }
+        }).doOnNext(webSite -> {
+            if (webSite == null) {
+                Timber.d("Cache miss for: %s", url);
+            } else {
+                Timber.d("Cache hit for : %s", url);
+            }
         });
     }
 
@@ -67,6 +73,10 @@ class WebsiteDiskStore implements WebsiteStore, BookStore {
             } catch (Exception e) {
                 Timber.e(e);
                 return null;
+            }
+        }).doOnNext(webSite1 -> {
+            if (webSite1 != null) {
+                Timber.d("Put %s to cache", webSite1.url);
             }
         });
     }

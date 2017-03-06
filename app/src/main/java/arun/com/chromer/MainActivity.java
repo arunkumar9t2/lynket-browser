@@ -14,7 +14,10 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -34,6 +37,7 @@ import java.util.List;
 import arun.com.chromer.activities.SnackHelper;
 import arun.com.chromer.activities.about.AboutAppActivity;
 import arun.com.chromer.activities.about.changelog.Changelog;
+import arun.com.chromer.activities.history.HistoryActivity;
 import arun.com.chromer.activities.intro.ChromerIntro;
 import arun.com.chromer.activities.intro.WebHeadsIntro;
 import arun.com.chromer.activities.payments.DonateActivity;
@@ -45,6 +49,7 @@ import arun.com.chromer.search.SuggestionItem;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.ServiceUtil;
 import arun.com.chromer.util.Utils;
+import arun.com.chromer.util.cache.FontCache;
 import arun.com.chromer.views.searchview.MaterialSearchView;
 import arun.com.chromer.webheads.WebHeadService;
 import butterknife.BindView;
@@ -66,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
     public Toolbar toolbar;
     @BindView(R.id.coordinator_layout)
     public CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.chromer)
+    TextView chromer;
 
     private CustomTabManager customTabManager;
     private Drawer drawer;
@@ -80,15 +87,26 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
         setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
         presenter = new Home.Presenter(this);
-
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setHomeButtonEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            getSupportActionBar().setDisplayShowHomeEnabled(false);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+        chromer.setTypeface(FontCache.get(FontCache.MONO, this));
 
         if (Preferences.get(this).isFirstRun()) {
             startActivity(new Intent(this, ChromerIntro.class));
         }
 
+        startActivity(new Intent(this, HistoryActivity.class));
+
         Changelog.conditionalShow(this);
+
         setupMaterialSearch();
         setupDrawer();
         setupCustomTab();
@@ -122,6 +140,22 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
         presenter.cleanUp();
         presenter = null;
         super.onDestroy();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.home_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_settings:
+                startActivity(new Intent(MainActivity.this, SettingsGroupActivity.class));
+                break;
+        }
+        return true;
     }
 
     private void registerCloseReceiver() {
@@ -184,7 +218,6 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
     private void setupDrawer() {
         drawer = new DrawerBuilder()
                 .withActivity(this)
-                .withToolbar(toolbar)
                 .withAccountHeader(new AccountHeaderBuilder()
                         .withActivity(this)
                         .withHeaderBackground(R.drawable.chromer)
@@ -208,9 +241,6 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
                         new PrimaryDrawerItem().withName(R.string.join_beta)
                                 .withIdentifier(9)
                                 .withIcon(CommunityMaterial.Icon.cmd_beta)
-                                .withSelectable(false),
-                        new PrimaryDrawerItem().withName(getString(R.string.settings)).withIdentifier(11)
-                                .withIcon(CommunityMaterial.Icon.cmd_settings)
                                 .withSelectable(false),
                         new DividerDrawerItem(),
                         new SecondaryDrawerItem().withName(getString(R.string.share))
@@ -261,9 +291,6 @@ public class MainActivity extends AppCompatActivity implements SnackHelper, Home
                             break;
                         case 10:
                             startActivity(new Intent(MainActivity.this, WebHeadsIntro.class));
-                            break;
-                        case 11:
-                            startActivity(new Intent(MainActivity.this, SettingsGroupActivity.class));
                             break;
                     }
                     return false;

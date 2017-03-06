@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,9 +24,13 @@ import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.callbacks.ClipboardService;
 import arun.com.chromer.customtabs.callbacks.FavShareBroadcastReceiver;
 import arun.com.chromer.customtabs.callbacks.SecondaryBrowserReceiver;
+import arun.com.chromer.data.history.HistoryRepository;
+import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.util.RxUtils;
 import arun.com.chromer.util.Utils;
 import timber.log.Timber;
 import xyz.klinker.android.article.ArticleActivity;
+import xyz.klinker.android.article.data.webarticle.model.WebArticle;
 
 import static android.content.Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
 import static android.graphics.Color.WHITE;
@@ -54,6 +59,15 @@ public class ChromerArticleActivity extends ArticleActivity {
         customTabActivity.setData(getIntent().getData());
         startActivity(customTabActivity);
         finish();
+    }
+
+    @Override
+    protected void onArticleLoaded(@NonNull WebArticle webArticle) {
+        super.onArticleLoaded(webArticle);
+        HistoryRepository.getInstance(this)
+                .insert(WebSite.fromArticle(webArticle))
+                .compose(RxUtils.applySchedulers())
+                .subscribe();
     }
 
     @Override

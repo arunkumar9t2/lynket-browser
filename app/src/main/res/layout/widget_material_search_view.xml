@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardBackgroundColor="@color/cardview_light_background"
-        app:cardElevation="4dp"
+        app:cardElevation="3dp"
         app:cardPreventCornerOverlap="true"
         app:cardUseCompatPadding="true">
 

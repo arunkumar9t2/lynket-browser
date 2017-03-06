@@ -196,6 +196,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="arun.com.chromer.activities.settings.SettingsGroupActivity" />
         </activity>
+        <activity
+            android:name=".activities.history.HistoryActivity"
+            android:label="@string/title_history"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service
             android:name=".webheads.qs.WebHeadTile"
