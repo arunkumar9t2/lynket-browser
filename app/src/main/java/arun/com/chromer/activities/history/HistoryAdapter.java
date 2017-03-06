@@ -1,8 +1,10 @@
 package arun.com.chromer.activities.history;
 
 import android.database.Cursor;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.util.AsyncListUtil;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,8 +19,11 @@ import com.bumptech.glide.Glide;
 
 import arun.com.chromer.R;
 import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.util.ColorUtil;
+import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.nekocode.badge.BadgeDrawable;
 import timber.log.Timber;
 
 /**
@@ -97,6 +102,18 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
                         .load(webSite.faviconUrl)
                         .crossFade()
                         .into(holder.historyFavicon);
+            } else {
+                final String letter = Utils.getFirstLetter(webSite.safeLabel()).toUpperCase();
+                final boolean themeExists = webSite.themeColor() != -1;
+                final int bgColor = themeExists ? webSite.themeColor() : ContextCompat.getColor(holder.itemView.getContext(), R.color.colorPrimary);
+                final BadgeDrawable drawable = new BadgeDrawable.Builder()
+                        .type(BadgeDrawable.TYPE_ONLY_ONE_TEXT)
+                        .badgeColor(bgColor)
+                        .textColor(themeExists ? ColorUtil.getClosestAccentColor(bgColor) : Color.WHITE)
+                        .text1(" " + letter + " ")
+                        .textSize(Utils.dpToPx(24))
+                        .build();
+                holder.historyFavicon.setImageDrawable(drawable);
             }
         }
     }
