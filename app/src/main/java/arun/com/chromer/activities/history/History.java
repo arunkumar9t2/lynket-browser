@@ -65,5 +65,9 @@ public interface History {
                     }).subscribe());
         }
 
+        void deleteAll(@NonNull Context context) {
+
+        }
+
     }
 }
