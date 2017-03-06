@@ -33,7 +33,10 @@ class WebsiteNetworkStore implements WebsiteStore {
                     @Override
                     public Observable<WebSite> call(Pair<String, Article> urlArticlePair) {
                         if (urlArticlePair.second != null) {
-                            return Observable.just(WebSite.fromArticle(urlArticlePair.second));
+                            final WebSite extractedWebsite = WebSite.fromArticle(urlArticlePair.second);
+                            // We preserve the original url, otherwise breaks cache.
+                            extractedWebsite.url = urlArticlePair.first;
+                            return Observable.just(extractedWebsite);
                         } else {
                             return Observable.just(new WebSite(urlArticlePair.first));
                         }

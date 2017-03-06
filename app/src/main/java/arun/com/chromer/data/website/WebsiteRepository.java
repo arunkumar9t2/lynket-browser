@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
+import arun.com.chromer.data.history.HistoryRepository;
 import arun.com.chromer.data.website.model.WebColor;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.util.RxUtils;
@@ -45,26 +46,30 @@ public class WebsiteRepository implements BaseWebsiteRepository {
     @NonNull
     @Override
     public Observable<WebSite> getWebsite(@NonNull final String url) {
-        return cacheStore.getWebsite(url)
-                .flatMap(new Func1<WebSite, Observable<WebSite>>() {
-                    @Override
-                    public Observable<WebSite> call(WebSite webSite) {
-                        if (webSite == null) {
-                            Timber.d("Cache miss for: %s", url);
-                            return webNetworkStore.getWebsite(url)
-                                    .filter(webSite1 -> webSite1 != null)
-                                    .flatMap(new Func1<WebSite, Observable<WebSite>>() {
-                                        @Override
-                                        public Observable<WebSite> call(WebSite webSite) {
-                                            return cacheStore.saveWebsite(webSite);
-                                        }
-                                    });
-                        } else {
-                            Timber.d("Cache hit for : %s", url);
-                            return Observable.just(webSite);
-                        }
+        final Observable<WebSite> cache = cacheStore.getWebsite(url)
+                .doOnNext(webSite -> {
+                    if (webSite != null) {
+                        HistoryRepository.getInstance(context).update(webSite).subscribe();
                     }
-                }).doOnError(Timber::e)
+                });
+
+        final Observable<WebSite> history = HistoryRepository.getInstance(context).get(new WebSite(url))
+                .doOnNext(webSite -> {
+                    if (webSite != null) {
+                        HistoryRepository.getInstance(context).update(webSite).subscribe();
+                    }
+                });
+
+        final Observable<WebSite> remote = webNetworkStore.getWebsite(url)
+                .filter(webSite -> webSite != null)
+                .doOnNext(webSite -> {
+                    cacheStore.saveWebsite(webSite).subscribe();
+                    HistoryRepository.getInstance(context).insert(webSite).subscribe();
+                });
+
+        return Observable.concat(cache, history, remote)
+                .first(webSite -> webSite != null)
+                .doOnError(Timber::e)
                 .compose(RxUtils.applySchedulers());
     }
 
