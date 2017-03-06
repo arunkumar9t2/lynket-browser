@@ -27,7 +27,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:paddingLeft="15dp"
+        android:paddingLeft="20dp"
         tools:ignore="RtlSymmetry">
 
         <TextView
@@ -36,6 +36,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="marquee"
             android:maxLines="1"
+            android:paddingBottom="1dp"
             android:textAppearance="@style/Preference_TextAppearanceMaterialSubhead"
             android:textSize="13sp"
             tools:ignore="SelectableText" />
