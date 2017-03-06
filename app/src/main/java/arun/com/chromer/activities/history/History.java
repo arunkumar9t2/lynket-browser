@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 
 import java.lang.ref.WeakReference;
 
+import arun.com.chromer.R;
+import arun.com.chromer.activities.SnackHelper;
 import arun.com.chromer.data.history.HistoryRepository;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.util.RxUtils;
@@ -16,9 +18,8 @@ import timber.log.Timber;
 /**
  * Created by arunk on 06-03-2017.
  */
-
-public interface History {
-    interface View {
+interface History {
+    interface View extends SnackHelper {
         void loading(boolean loading);
 
         void setCursor(@Nullable Cursor cursor);
@@ -68,7 +69,16 @@ public interface History {
         }
 
         void deleteAll(@NonNull Context context) {
-
+            compositeSubscription.add(HistoryRepository.getInstance(context)
+                    .deleteAll()
+                    .compose(RxUtils.applySchedulers())
+                    .doOnError(Timber::e)
+                    .doOnNext(rows -> loadHistory(context))
+                    .doOnNext(rows -> {
+                        if (isViewAttached()) {
+                            getView().snack(String.format(context.getString(R.string.deleted_items), rows));
+                        }
+                    }).subscribe());
         }
 
         void deleteHistory(@NonNull Context context, @Nullable WebSite webSite) {

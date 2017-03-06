@@ -215,7 +215,10 @@ public class HistoryDiskStore extends SQLiteOpenHelper implements HistoryStore {
 
     @NonNull
     @Override
-    public Observable<Boolean> deleteAll() {
-        return null;
+    public Observable<Integer> deleteAll() {
+        return Observable.fromCallable(() -> {
+            open();
+            return database.delete(TABLE_NAME, "1", null);
+        });
     }
 }

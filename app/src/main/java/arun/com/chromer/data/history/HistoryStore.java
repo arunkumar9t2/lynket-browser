@@ -29,5 +29,5 @@ public interface HistoryStore {
     Observable<Boolean> exists(@NonNull final WebSite webSite);
 
     @NonNull
-    Observable<Boolean> deleteAll();
+    Observable<Integer> deleteAll();
 }

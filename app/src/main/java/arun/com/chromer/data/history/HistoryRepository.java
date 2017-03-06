@@ -83,7 +83,7 @@ public class HistoryRepository implements HistoryStore {
 
     @NonNull
     @Override
-    public Observable<Boolean> deleteAll() {
+    public Observable<Integer> deleteAll() {
         return HistoryDiskStore.getInstance(context).deleteAll();
     }
 }
