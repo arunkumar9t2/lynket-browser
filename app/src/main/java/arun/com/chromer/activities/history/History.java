@@ -8,8 +8,10 @@ import android.support.annotation.Nullable;
 import java.lang.ref.WeakReference;
 
 import arun.com.chromer.data.history.HistoryRepository;
+import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.util.RxUtils;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  * Created by arunk on 06-03-2017.
@@ -48,12 +50,12 @@ public interface History {
 
         void loadHistory(@NonNull Context context) {
             compositeSubscription.add(HistoryRepository.getInstance(context).getAllItemsCursor()
+                    .compose(RxUtils.applySchedulers())
                     .doOnSubscribe(() -> {
                         if (isViewAttached()) {
                             getView().loading(true);
                         }
                     })
-                    .compose(RxUtils.applySchedulers())
                     .doOnNext(cursor -> {
                         if (isViewAttached()) {
                             getView().loading(false);
@@ -69,5 +71,15 @@ public interface History {
 
         }
 
+        void deleteHistory(@NonNull Context context, @Nullable WebSite webSite) {
+            if (webSite != null && webSite.url != null) {
+                compositeSubscription.add(HistoryRepository.getInstance(context)
+                        .delete(webSite)
+                        .compose(RxUtils.applySchedulers())
+                        .doOnError(Timber::e)
+                        .doOnNext(result -> loadHistory(context))
+                        .subscribe());
+            }
+        }
     }
 }

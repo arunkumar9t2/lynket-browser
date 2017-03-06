@@ -129,6 +129,15 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         return asyncWebsiteList.getItemCount();
     }
 
+    @Nullable
+    public WebSite getItemAt(final int position) {
+        if (cursor != null) {
+            cursor.moveToPosition(position);
+            return WebSite.fromCursor(cursor);
+        }
+        return null;
+    }
+
     void setCursor(@Nullable Cursor cursor) {
         if (this.cursor != null) {
             try {

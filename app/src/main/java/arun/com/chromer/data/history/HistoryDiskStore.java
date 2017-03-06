@@ -174,7 +174,17 @@ public class HistoryDiskStore extends SQLiteOpenHelper implements HistoryStore {
     @NonNull
     @Override
     public Observable<WebSite> delete(@NonNull WebSite webSite) {
-        return null;
+        return Observable.fromCallable(() -> {
+            open();
+            final String whereClause = COLUMN_URL + "=?";
+            final String[] whereArgs = {webSite.url};
+            if (database.delete(TABLE_NAME, whereClause, whereArgs) > 0) {
+                Timber.d("Deletion successful for %s", webSite.url);
+            } else {
+                Timber.e("Deletion failed for %s", webSite.url);
+            }
+            return webSite;
+        });
     }
 
     @NonNull

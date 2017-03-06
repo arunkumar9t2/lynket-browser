@@ -11,6 +11,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.SnackHelper;
@@ -60,6 +61,20 @@ public class HistoryActivity extends SubActivity implements History.View, SnackH
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorPrimary),
                 ContextCompat.getColor(this, R.color.accent));
         swipeRefreshLayout.setOnRefreshListener(() -> presenter.loadHistory(this));
+
+        final ItemTouchHelper.SimpleCallback swipeTouch = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                presenter.deleteHistory(getApplicationContext(), historyAdapter.getItemAt(viewHolder.getAdapterPosition()));
+            }
+        };
+        final ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeTouch);
+        itemTouchHelper.attachToRecyclerView(historyList);
     }
 
     @Override
