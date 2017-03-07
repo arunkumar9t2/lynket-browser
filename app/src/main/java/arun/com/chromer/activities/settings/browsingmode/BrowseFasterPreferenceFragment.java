@@ -16,6 +16,9 @@ import arun.com.chromer.activities.settings.widgets.IconSwitchPreference;
 
 public class BrowseFasterPreferenceFragment extends BasePreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private IconSwitchPreference articleModePreference;
+    private IconSwitchPreference ampModePreference;
+
     public BrowseFasterPreferenceFragment() {
         // Required empty public constructor
     }
@@ -36,7 +39,7 @@ public class BrowseFasterPreferenceFragment extends BasePreferenceFragment imple
     }
 
     private void setupArticlePreference() {
-        final IconSwitchPreference articleModePreference = (IconSwitchPreference) findPreference(Preferences.ARTICLE_MODE);
+        articleModePreference = (IconSwitchPreference) findPreference(Preferences.ARTICLE_MODE);
         if (articleModePreference != null) {
             final Drawable articleImg = new IconicsDrawable(getActivity())
                     .icon(CommunityMaterial.Icon.cmd_file_image)
@@ -44,11 +47,17 @@ public class BrowseFasterPreferenceFragment extends BasePreferenceFragment imple
                     .sizeDp(24);
             articleModePreference.setIcon(articleImg);
             articleModePreference.setOnPreferenceClickListener(preference -> false);
+            articleModePreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                if ((Boolean) newValue) {
+                    ampModePreference.setChecked(false);
+                }
+                return true;
+            });
         }
     }
 
     private void setupAmpPreference() {
-        final IconSwitchPreference ampModePreference = (IconSwitchPreference) findPreference(Preferences.AMP_MODE);
+        ampModePreference = (IconSwitchPreference) findPreference(Preferences.AMP_MODE);
         if (ampModePreference != null) {
             ampModePreference.setIcon(R.drawable.ic_action_amp_icon);
             ampModePreference.setOnPreferenceChangeListener((preference, newValue) -> {
@@ -60,6 +69,9 @@ public class BrowseFasterPreferenceFragment extends BasePreferenceFragment imple
                             .positiveText(android.R.string.ok)
                             .iconRes(R.drawable.ic_action_amp_icon)
                             .show();
+                }
+                if ((Boolean) newValue) {
+                    articleModePreference.setChecked(false);
                 }
                 return true;
             });

@@ -28,5 +28,6 @@
         android:id="@+id/menu_more"
         android:checkable="false"
         android:title="@string/more"
+        android:visible="false"
         app:showAsAction="never" />
 </menu>
