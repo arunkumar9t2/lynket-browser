@@ -18,6 +18,28 @@ a {
 <body>
 <strong>You can view this again in the about screen.</strong>
 <br></br>
+<strong>1.7</strong>
+<h4 class="list-heading">New browsing modes!</h3>
+<ul>
+    <li><b>Article view!</b> A reader mode which filters all images and ads on a page and displays only the content of the page - Full support with web heads.</li>
+    <li><b>AMP Support!</b> Chromer can now launch the AMP version of the page if it exists for faster loading and better reading experience on mobile.</li>
+    <li>To <b>enable</b>, <i>Settings > Browsing mode > AMP or Article mode.</i> </li>
+</ul>
+<h4 class="list-heading">Design</h3>
+<ul>
+    <li><b>NEW:</b> Major UI over haul and moved settings to its own page with better categorization.</li>
+    <li><b>NEW:</b> Simpler home screen with recently launched links shortcuts.</li>
+</ul>
+<h4 class="list-heading">History</h3>
+<ul>
+    <li><b>NEW:</b>In addition to syncing history with Google account, Chromer now provides its own history option.</li>
+</ul>
+<h4 class="list-heading">Others</h3>
+<ul>
+    <li><b>IMPROVED:</b>Web head animations and performance.</li>
+    <li><b>IMPROVED:</b>Performance improvements in many areas, related to storage.</li>
+    <li><b>MISC:</b>Removed screen scan and pre-fetch option.</li>
+</ul>
 <strong>1.6.3</strong>
 <ul>
     <li><b>NEW:</b>Pressing new tab in bottom bar will show a dialog instead of automatically opening the link.</li>
