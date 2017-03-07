@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
+import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.data.website.model.WebSite;
 import rx.Observable;
 import timber.log.Timber;
@@ -50,25 +51,33 @@ public class HistoryRepository implements HistoryStore {
     @NonNull
     @Override
     public Observable<WebSite> insert(@NonNull final WebSite webSite) {
-        return HistoryDiskStore.getInstance(context).insert(webSite)
-                .doOnNext(webSite1 -> {
-                    if (webSite1 != null) {
-                        Timber.d("Added %s to history", webSite1.url);
-                    } else {
-                        Timber.e("%s Did not add to history", webSite.url);
-                    }
-                });
+        if (Preferences.get(context).incognitoMode()) {
+            return Observable.just(webSite);
+        } else {
+            return HistoryDiskStore.getInstance(context).insert(webSite)
+                    .doOnNext(webSite1 -> {
+                        if (webSite1 != null) {
+                            Timber.d("Added %s to history", webSite1.url);
+                        } else {
+                            Timber.e("%s Did not add to history", webSite.url);
+                        }
+                    });
+        }
     }
 
     @NonNull
     @Override
     public Observable<WebSite> update(@NonNull final WebSite webSite) {
-        return HistoryDiskStore.getInstance(context).update(webSite)
-                .doOnNext(saved -> {
-                    if (saved != null) {
-                        Timber.d("Updated %s in history table", saved.url);
-                    }
-                });
+        if (Preferences.get(context).incognitoMode()) {
+            return Observable.just(webSite);
+        } else {
+            return HistoryDiskStore.getInstance(context).update(webSite)
+                    .doOnNext(saved -> {
+                        if (saved != null) {
+                            Timber.d("Updated %s in history table", saved.url);
+                        }
+                    });
+        }
     }
 
     @NonNull

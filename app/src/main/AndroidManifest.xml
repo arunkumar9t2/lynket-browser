@@ -200,6 +200,9 @@
             android:name=".activities.history.HistoryActivity"
             android:label="@string/title_history"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.browsing.incognito.WebViewActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <service
             android:name=".webheads.qs.WebHeadTile"
@@ -218,6 +221,7 @@
         <meta-data
             android:name="arun.com.chromer.glide.ChromerGideModule"
             android:value="GlideModule" />
+
     </application>
 
 </manifest>
