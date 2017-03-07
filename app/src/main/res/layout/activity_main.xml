@@ -71,7 +71,8 @@
                     android:gravity="center"
                     android:text="@string/incognito_mode"
                     android:textColor="@color/material_dark_color"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:visibility="gone" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recents_list"
