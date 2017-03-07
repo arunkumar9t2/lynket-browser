@@ -102,7 +102,7 @@ class BrowsingModeAdapter extends RecyclerView.Adapter<BrowsingModeAdapter.Brows
                             .color(Color.WHITE)
                             .sizeDp(24));
                     selector.setImageDrawable(new IconicsDrawable(selector.getContext())
-                            .icon(webHeads ? CommunityMaterial.Icon.cmd_checkbox_blank_circle_outline : CommunityMaterial.Icon.cmd_checkbox_marked_circle_outline)
+                            .icon(webHeads ? CommunityMaterial.Icon.cmd_checkbox_blank_circle_outline : CommunityMaterial.Icon.cmd_checkbox_marked_circle)
                             .color(Color.WHITE)
                             .sizeDp(24));
                     title.setTextColor(Color.WHITE);
@@ -116,13 +116,13 @@ class BrowsingModeAdapter extends RecyclerView.Adapter<BrowsingModeAdapter.Brows
                             .color(Color.WHITE)
                             .sizeDp(24));
                     selector.setImageDrawable(new IconicsDrawable(selector.getContext())
-                            .icon(!webHeads ? CommunityMaterial.Icon.cmd_checkbox_blank_circle_outline : CommunityMaterial.Icon.cmd_checkbox_marked_circle_outline)
+                            .icon(!webHeads ? CommunityMaterial.Icon.cmd_checkbox_blank_circle_outline : CommunityMaterial.Icon.cmd_checkbox_marked_circle)
                             .color(Color.WHITE)
                             .sizeDp(24));
                     title.setTextColor(Color.WHITE);
                     subtitle.setTextColor(Color.WHITE);
                     subtitle.setText(R.string.browsing_mode_web_heads_explanation);
-                    browsingModeRoot.setCardBackgroundColor(ContextCompat.getColor(browsingModeRoot.getContext(), R.color.md_deep_orange_500));
+                    browsingModeRoot.setCardBackgroundColor(ContextCompat.getColor(browsingModeRoot.getContext(), R.color.md_yellow_800));
                     break;
             }
         }
