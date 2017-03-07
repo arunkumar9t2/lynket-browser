@@ -24,7 +24,7 @@
 -dontwarn org.apache.http.**
 -keep class android.net.http.** { *; }
 -dontwarn android.net.http.**
-
+-dontwarn com.google.common.**
 -keep public class org.jsoup.** {
     public *;
 }
@@ -38,3 +38,4 @@
 -keepattributes *Annotation*
 -keep class com.crashlytics.** { *; }
 -dontwarn com.crashlytics.**
+-keepattributes SourceFile,LineNumberTable

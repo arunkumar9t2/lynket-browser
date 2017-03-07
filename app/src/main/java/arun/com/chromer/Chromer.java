@@ -4,7 +4,6 @@ import android.app.Application;
 import android.os.StrictMode;
 
 import com.crashlytics.android.Crashlytics;
-import com.facebook.stetho.Stetho;
 
 import io.fabric.sdk.android.Fabric;
 import io.paperdb.Paper;
@@ -20,7 +19,7 @@ public class Chromer extends Application {
         Fabric.with(this, new Crashlytics());
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
-            Stetho.initializeWithDefaults(this);
+            // Stetho.initializeWithDefaults(this);
             StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                     .detectAll()
                     .penaltyLog()

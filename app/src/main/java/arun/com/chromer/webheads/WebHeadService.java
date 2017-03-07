@@ -56,6 +56,7 @@ import arun.com.chromer.webheads.ui.WebHeadContract;
 import arun.com.chromer.webheads.ui.context.WebHeadContextActivity;
 import arun.com.chromer.webheads.ui.views.Trashy;
 import arun.com.chromer.webheads.ui.views.WebHead;
+import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 import xyz.klinker.android.article.ArticleUtils;
@@ -227,13 +228,13 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         }
 
         // Begin metadata extractions
-        beginExtraction(webHeadUrl);
+        doExtraction(webHeadUrl);
     }
 
-    private void beginExtraction(final String webHeadUrl) {
-        compositeSubscription.add(WebsiteRepository.getInstance(this)
+    private void doExtraction(final String webHeadUrl) {
+        final Subscription s = WebsiteRepository.getInstance(this)
                 .getWebsite(webHeadUrl)
-                .doOnError(Timber::e)
+                .doOnError(throwable -> Timber.e(throwable))
                 .doOnNext(webSite -> {
                     final WebHead webHead = webHeads.get(webHeadUrl);
                     if (webHead != null && webSite != null) {
@@ -254,7 +255,8 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
                                     }
                                 });
                     }
-                }).subscribe());
+                }).subscribe();
+        compositeSubscription.add(s);
     }
 
     @NonNull
