@@ -1,6 +1,8 @@
 package arun.com.chromer.activities.history;
 
+import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.util.AsyncListUtil;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import arun.com.chromer.R;
+import arun.com.chromer.activities.BrowserInterceptActivity;
 import arun.com.chromer.data.website.model.WebSite;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -92,6 +95,11 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHold
             holder.historyTitle.setText(webSite.safeLabel());
             holder.historySubtitle.setVisibility(View.VISIBLE);
             holder.historySubtitle.setText(webSite.preferredUrl());
+            holder.itemView.setOnClickListener(v -> {
+                final Intent intent = new Intent(holder.itemView.getContext(), BrowserInterceptActivity.class);
+                intent.setData(Uri.parse(webSite.preferredUrl()));
+                holder.itemView.getContext().startActivity(intent);
+            });
             if (!TextUtils.isEmpty(webSite.faviconUrl)) {
                 Glide.with(holder.itemView.getContext())
                         .load(webSite.faviconUrl)

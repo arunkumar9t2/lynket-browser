@@ -1,5 +1,7 @@
 package arun.com.chromer;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -14,6 +16,7 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 
+import arun.com.chromer.activities.BrowserInterceptActivity;
 import arun.com.chromer.data.website.model.WebSite;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +40,11 @@ class RecentsAdapter extends RecyclerView.Adapter<RecentsAdapter.RecentsViewHold
         final WebSite website = position < webSites.size() ? webSites.get(position) : null;
         if (website != null) {
             holder.label.setText(website.safeLabel());
+            holder.itemView.setOnClickListener(v -> {
+                final Intent intent = new Intent(holder.itemView.getContext(), BrowserInterceptActivity.class);
+                intent.setData(Uri.parse(website.preferredUrl()));
+                holder.itemView.getContext().startActivity(intent);
+            });
             if (!TextUtils.isEmpty(website.faviconUrl)) {
                 Glide.with(holder.itemView.getContext())
                         .load(website.faviconUrl)
