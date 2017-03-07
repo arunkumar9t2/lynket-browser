@@ -16,6 +16,7 @@ import arun.com.chromer.activities.blacklist.BlacklistManagerActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.activities.settings.preferences.BasePreferenceFragment;
 import arun.com.chromer.activities.settings.widgets.IconSwitchPreference;
+import arun.com.chromer.customtabs.warmup.WarmUpService;
 import arun.com.chromer.util.Utils;
 
 import static arun.com.chromer.activities.settings.Preferences.AGGRESSIVE_LOADING;
@@ -47,6 +48,12 @@ public class BehaviorPreferenceFragment extends BasePreferenceFragment {
         // setup bottom bar preference
         setupMergeTabsPreference();
         setupBlacklistPreference();
+
+        final IconSwitchPreference warmUpPreference = (IconSwitchPreference) findPreference(Preferences.WARM_UP);
+        warmUpPreference.setIcon(new IconicsDrawable(getActivity())
+                .icon(CommunityMaterial.Icon.cmd_lightbulb)
+                .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
+                .sizeDp(24));
     }
 
     private void setupBlacklistPreference() {
@@ -105,6 +112,14 @@ public class BehaviorPreferenceFragment extends BasePreferenceFragment {
         if (key.equalsIgnoreCase(AGGRESSIVE_LOADING)) {
             if (Preferences.get(getContext()).aggressiveLoading()) {
                 mergeTabsPreference.setChecked(true);
+            }
+        }
+        // Start stop warm up service
+        if (key.equalsIgnoreCase(Preferences.WARM_UP)) {
+            if (Preferences.get(getContext()).warmUp()) {
+                getActivity().startService(new Intent(getActivity(), WarmUpService.class));
+            } else {
+                getActivity().stopService(new Intent(getActivity(), WarmUpService.class));
             }
         }
     }
