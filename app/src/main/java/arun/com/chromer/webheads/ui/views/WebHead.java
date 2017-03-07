@@ -312,12 +312,12 @@ public class WebHead extends BaseWebHead implements SpringListener {
         if (dist(rX, rY, x, y) < MAGNETISM_THRESHOLD) {
             wasLockedToRemove = true;
             badgeView.setVisibility(INVISIBLE);
-            webHeadContract.onMasterLockedToRemove();
+            webHeadContract.onMasterLockedToTrashy();
             return true;
         } else {
             wasLockedToRemove = false;
             badgeView.setVisibility(VISIBLE);
-            webHeadContract.onMasterReleasedFromRemove();
+            webHeadContract.onMasterReleasedFromTrashy();
             return false;
         }
     }

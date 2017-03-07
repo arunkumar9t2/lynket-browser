@@ -19,9 +19,9 @@ public interface WebHeadContract {
     @NonNull
     Spring newSpring();
 
-    void onMasterLockedToRemove();
+    void onMasterLockedToTrashy();
 
-    void onMasterReleasedFromRemove();
+    void onMasterReleasedFromTrashy();
 
     void closeAll();
 

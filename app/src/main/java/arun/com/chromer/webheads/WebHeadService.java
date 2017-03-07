@@ -32,7 +32,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.chimbori.crux.articles.Article;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringConfig;
 import com.facebook.rebound.SpringSystem;
@@ -87,7 +86,6 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
      * {@link LinkedHashMap}. The key must be unique and is usually the url the web head represents.
      */
     private final Map<String, WebHead> webHeads = new LinkedHashMap<>();
-    private static String lastOpenedUrl = "";
     // Connection manager instance to connect and warm up custom tab providers
     private static CustomTabManager customTabManager;
     // The base spring system to create our springs.
@@ -212,7 +210,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         webHeads.put(webHeadUrl, newWebHead);
 
         newWebHead.post(() -> newWebHead.reveal(() -> {
-            if (Preferences.get(getApplication()).aggressiveLoading() && !isMinimized) {
+            if (Preferences.get(getApplication()).aggressiveLoading() && !isMinimized && !Preferences.get(this).articleMode()) {
                 DocumentUtils.openNewCustomTab(getApplication(), newWebHead.getWebsite(), isNewTab);
             }
             new Handler().postDelayed(() -> {
@@ -224,7 +222,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         }));
 
         if (Preferences.get(this).articleMode()) {
-            preloadUrl(webHeadUrl, true);
+            preloadUrl(webHeadUrl);
         }
 
         // Begin metadata extractions
@@ -234,10 +232,11 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     private void doExtraction(final String webHeadUrl) {
         final Subscription s = WebsiteRepository.getInstance(this)
                 .getWebsite(webHeadUrl)
-                .doOnError(throwable -> Timber.e(throwable))
+                .doOnError(Timber::e)
                 .doOnNext(webSite -> {
                     final WebHead webHead = webHeads.get(webHeadUrl);
                     if (webHead != null && webSite != null) {
+                        warmUp(webHead);
                         webHead.setWebSite(webSite);
                         ContextActivityHelper.signalUpdated(getApplication(), webHead.getWebsite());
                         final String faviconUrl = webSite.faviconUrl;
@@ -254,6 +253,8 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
                                         }
                                     }
                                 });
+                    } else if (webHead != null) {
+                        warmUp(webHead);
                     }
                 }).subscribe();
         compositeSubscription.add(s);
@@ -265,23 +266,6 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         roundedBitmapDrawable.setAntiAlias(true);
         roundedBitmapDrawable.setCircular(true);
         return roundedBitmapDrawable;
-    }
-
-    private void onUrlParsed(@NonNull final String url, final @Nullable Article article) {
-        final WebHead webHead = webHeads.get(url);
-        if (webHead != null && article != null) {
-            warmUp(webHead);
-            try {
-                final String faviconUrl = article.faviconUrl;
-                webHead.setWebSite(WebSite.fromArticle(article));
-                // Also signal the context activity so that it can update its data
-                ContextActivityHelper.signalUpdated(this, webHead.getWebsite());
-            } catch (Exception e) {
-                Timber.e(e.getMessage());
-            }
-        } else if (webHead != null) {
-            warmUp(webHead);
-        }
     }
 
     private void bindToCustomTabSession() {
@@ -303,7 +287,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     private void warmUp(WebHead webHead) {
         if (!Preferences.get(this).aggressiveLoading()) {
             if (customTabConnected) {
-                preloadUrl(webHead.getUnShortenedUrl(), false);
+                preloadUrl(webHead.getUnShortenedUrl());
             } else {
                 deferPreload(webHead.getUnShortenedUrl());
             }
@@ -314,11 +298,9 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
      * Based on the current active browsing mode, will perform correct preload strategy.
      * If its normal, then do custom tab may launch url else if its article mode, then call
      * article mode's prefetch.
-     *
-     * @param forArticleMode Whether we are trying to load for article mode.
      */
-    private void preloadUrl(final String url, final boolean forArticleMode) {
-        if (forArticleMode) {
+    private void preloadUrl(final String url) {
+        if (Preferences.get(this).articleMode()) {
             // Do article mode.
             // Preload this article.
             ArticleUtils.preloadArticle(this, Uri.parse(url),
@@ -329,7 +311,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     }
 
     private void deferPreload(@NonNull final String urlToLoad) {
-        new Handler().postDelayed(() -> preloadUrl(urlToLoad, false), 300);
+        new Handler().postDelayed(() -> preloadUrl(urlToLoad), 300);
     }
 
 
@@ -407,14 +389,12 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     public void onWebHeadClick(@NonNull WebHead webHead) {
         DocumentUtils.smartOpenNewTab(this, webHead.getWebsite());
 
-        // Store the last opened url
-        lastOpenedUrl = webHead.getUrl();
         // If user prefers to the close the head on opening the link, then call destroySelf()
         // which will take care of closing and detaching the web head
         if (Preferences.get(this).webHeadsCloseOnOpen()) {
             webHead.destroySelf(true);
         }
-        hideRemoveView();
+        hideTrashy();
     }
 
     @Override
@@ -425,7 +405,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
             Trashy.get(this).destroyAnimator(this::stopSelf);
         } else {
             selectNextMaster();
-            preloadUrl("", false);
+            preloadUrl("");
         }
         ContextActivityHelper.signalDeleted(this, webHead.getWebsite());
     }
@@ -442,12 +422,12 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     }
 
     @Override
-    public void onMasterLockedToRemove() {
+    public void onMasterLockedToTrashy() {
         springChain2D.disableDisplacement();
     }
 
     @Override
-    public void onMasterReleasedFromRemove() {
+    public void onMasterReleasedFromTrashy() {
         springChain2D.enableDisplacement();
     }
 
@@ -496,7 +476,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         }
     }
 
-    private void hideRemoveView() {
+    private void hideTrashy() {
         Trashy.disappear();
     }
 
@@ -506,7 +486,6 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
             // TODO Implement something useful with this callbacks
             switch (navigationEvent) {
                 case TAB_SHOWN:
-
                     break;
                 case TAB_HIDDEN:
                     break;
