@@ -122,7 +122,6 @@ public class OptionsFragment extends Fragment {
         fragmentInteractionListener.onFavoriteShareAppClick(favSharePreferenceView);
     }
 
-    @OnClick(R.id.set_default_card)
     public void onSetDefaultClick() {
         final String defaultBrowser = Utils.getDefaultBrowserPackage(getActivity());
         if (defaultBrowser.equalsIgnoreCase("android")

@@ -5,6 +5,7 @@
     <color name="colorPrimaryDarker">#283593</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorAccentLighter">#EC407A</color>
+    <color name="colorAccentDarker">#AD1457</color>
     <!-- this is needed as preference_category_material layout is using this color as the text color -->
     <color name="preference_fallback_accent_color">@color/accent</color>
 
