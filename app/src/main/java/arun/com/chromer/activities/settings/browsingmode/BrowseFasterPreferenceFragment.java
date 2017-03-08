@@ -19,6 +19,8 @@ public class BrowseFasterPreferenceFragment extends BasePreferenceFragment imple
     private IconSwitchPreference articleModePreference;
     private IconSwitchPreference ampModePreference;
 
+    private MaterialDialog dialog;
+
     public BrowseFasterPreferenceFragment() {
         // Required empty public constructor
     }
@@ -48,9 +50,7 @@ public class BrowseFasterPreferenceFragment extends BasePreferenceFragment imple
             articleModePreference.setIcon(articleImg);
             articleModePreference.setOnPreferenceClickListener(preference -> false);
             articleModePreference.setOnPreferenceChangeListener((preference, newValue) -> {
-                if ((Boolean) newValue) {
-                    ampModePreference.setChecked(false);
-                }
+                showInformationDialog(Preferences.get(getActivity()).ampMode(), (Boolean) newValue);
                 return true;
             });
         }
@@ -70,11 +70,27 @@ public class BrowseFasterPreferenceFragment extends BasePreferenceFragment imple
                             .iconRes(R.drawable.ic_action_amp_icon)
                             .show();
                 }
-                if ((Boolean) newValue) {
-                    articleModePreference.setChecked(false);
-                }
+                showInformationDialog((Boolean) newValue, Preferences.get(getActivity()).articleMode());
                 return true;
             });
+        }
+    }
+
+    private void showInformationDialog(final boolean ampMode, final boolean article) {
+        dismissDialog();
+        if (ampMode && article) {
+            dialog = new MaterialDialog.Builder(getActivity())
+                    .iconRes(R.drawable.ic_action_amp_icon)
+                    .title(R.string.attention)
+                    .content(R.string.amp_article_combined_explanation)
+                    .positiveText(android.R.string.ok)
+                    .show();
+        }
+    }
+
+    private void dismissDialog() {
+        if (dialog != null) {
+            dialog.dismiss();
         }
     }
 

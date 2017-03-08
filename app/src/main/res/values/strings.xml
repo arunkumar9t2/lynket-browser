@@ -257,4 +257,6 @@
     <string name="incognito_mode">Incognito mode</string>
     <string name="history_link">History</string>
     <string name="recents_intro">Recently opened links will appear here</string>
+    <string name="amp_article_combined_explanation"><![CDATA[When both <b>AMP and Article mode is on</b>, Chromer will try to load AMP version of the page if it exists. If not article mode will be loaded.]]></string>
+    <string name="attention">Attention!</string>
 </resources>

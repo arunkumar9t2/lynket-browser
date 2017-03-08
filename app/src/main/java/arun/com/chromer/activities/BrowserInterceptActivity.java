@@ -98,26 +98,41 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                             dialog.setContent(R.string.link_found);
                             new Handler().postDelayed(() -> {
                                 dialog.dismiss();
+                                // Got the AMP version, lets load that in CCT.
                                 launchCCT(Uri.parse(webSite.ampUrl));
                             }, 100);
                         } else {
-                            launchCCT(safeIntent.getData());
+                            // AMP failed, try article if user prefers it and launch it.
+                            articleAwareLaunch();
                         }
                     })
                     .doOnError(throwable -> {
                         Timber.e(throwable);
-                        launchCCT(safeIntent.getData());
+                        articleAwareLaunch();
                         dialog.dismiss();
                     }).subscribe();
         } else if (Preferences.get(this).articleMode()) {
-            ArticleLauncher.from(this, safeIntent.getData())
-                    .applyCustomizations()
-                    .forNewTab(isFromNewTab)
-                    .launch();
-            finish();
+            // User just wants article, load it.
+            launchArticle();
         } else {
             launchCCT(safeIntent.getData());
         }
+    }
+
+    private void articleAwareLaunch() {
+        if (Preferences.get(this).articleMode()) {
+            launchArticle();
+        } else {
+            launchCCT(safeIntent.getData());
+        }
+    }
+
+    private void launchArticle() {
+        ArticleLauncher.from(this, safeIntent.getData())
+                .applyCustomizations()
+                .forNewTab(isFromNewTab)
+                .launch();
+        finish();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

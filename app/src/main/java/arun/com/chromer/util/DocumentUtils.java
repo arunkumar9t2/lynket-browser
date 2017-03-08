@@ -56,7 +56,9 @@ public class DocumentUtils {
      */
     public static void smartOpenNewTab(@NonNull final Context context, @NonNull final WebSite webSite, final boolean isNewTab) {
         if (!reOrderTab(context, webSite)) {
-            if (Preferences.get(context).articleMode()) {
+            if (Preferences.get(context).ampMode()) {
+                openNewCustomTab(context, webSite, isNewTab);
+            } else if (Preferences.get(context).articleMode()) {
                 openNewArticleTab(context, webSite, isNewTab);
             } else {
                 openNewCustomTab(context, webSite, isNewTab);
@@ -124,10 +126,10 @@ public class DocumentUtils {
      * @return Uri of the website to open
      */
     private static Uri getUsableUri(@NonNull Context context, @NonNull WebSite webSite) {
-        if (Preferences.get(context).articleMode()) {
-            return Uri.parse(webSite.url);
-        } else if (Preferences.get(context).ampMode()) {
+        if (Preferences.get(context).ampMode()) {
             return TextUtils.isEmpty(webSite.ampUrl) ? Uri.parse(webSite.preferredUrl()) : Uri.parse(webSite.ampUrl);
+        } else if (Preferences.get(context).articleMode()) {
+            return Uri.parse(webSite.url);
         } else {
             return Uri.parse(webSite.preferredUrl());
         }
