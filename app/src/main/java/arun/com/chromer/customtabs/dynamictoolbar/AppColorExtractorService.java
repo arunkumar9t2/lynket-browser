@@ -13,7 +13,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import arun.com.chromer.R;
@@ -112,12 +111,11 @@ public class AppColorExtractorService extends IntentService {
                 Timber.d("Extracted %d for %s", extractColor, packageName);
                 try {
                     saveColorToDb(packageName, extractColor);
-                    iconBitmap.recycle();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-        } catch (PackageManager.NameNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -135,13 +133,10 @@ public class AppColorExtractorService extends IntentService {
     private int getPreferredColorFromSwatches(Palette palette) {
         final List<Palette.Swatch> swatchList = ColorUtil.getSwatchListFromPalette(palette);
         final Palette.Swatch prominentSwatch = Collections.max(swatchList,
-                new Comparator<Palette.Swatch>() {
-                    @Override
-                    public int compare(Palette.Swatch swatch1, Palette.Swatch swatch2) {
-                        int a = swatch1 == null ? 0 : swatch1.getPopulation();
-                        int b = swatch2 == null ? 0 : swatch2.getPopulation();
-                        return a - b;
-                    }
+                (swatch1, swatch2) -> {
+                    int a = swatch1 == null ? 0 : swatch1.getPopulation();
+                    int b = swatch2 == null ? 0 : swatch2.getPopulation();
+                    return a - b;
                 });
         if (prominentSwatch != null)
             return prominentSwatch.getRgb();
