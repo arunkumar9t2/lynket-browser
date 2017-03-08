@@ -6,6 +6,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -108,7 +109,7 @@ public abstract class BaseWebHead extends FrameLayout {
     boolean inQueue;
     // Flag to know if this web head was created for opening in new tab
     private boolean fromNewTab;
-    private boolean spawnCoordSet;
+    protected boolean spawnCoordSet;
     // Color of the web head
     @ColorInt
     int webHeadColor;
@@ -189,6 +190,8 @@ public abstract class BaseWebHead extends FrameLayout {
             final int pad = dpToPx(5);
             badgeView.setPadding(pad, pad, pad, pad);
         }
+
+        post(this::setInitialSpawnLocation);
     }
 
     private void initDisplayMetrics() {
@@ -201,12 +204,23 @@ public abstract class BaseWebHead extends FrameLayout {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        if (screenBounds == null)
-            screenBounds = new ScreenBounds(dispWidth, dispHeight, w);
+    }
 
+
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        masterX = 0;
+        masterY = 0;
+        initDisplayMetrics();
+    }
+
+    protected void setInitialSpawnLocation() {
+        if (screenBounds == null) {
+            screenBounds = new ScreenBounds(dispWidth, dispHeight, getWidth());
+        }
         if (!spawnCoordSet) {
             int x, y = dispHeight / 3;
-
             if (masterX != 0 || masterY != 0) {
                 x = masterX;
                 y = masterY;
@@ -218,6 +232,7 @@ public abstract class BaseWebHead extends FrameLayout {
                 }
             }
             spawnCoordSet = true;
+            Timber.d("Spawn %d, %d", x, y);
             onSpawnLocationSet(x, y);
         }
     }
@@ -227,7 +242,7 @@ public abstract class BaseWebHead extends FrameLayout {
      *
      * @return an instance of {@link Trashy}
      */
-    Trashy getRemoveWebHead() {
+    Trashy getTrashy() {
         return Trashy.get(getContext());
     }
 

@@ -2,6 +2,7 @@ package arun.com.chromer.webheads.ui.views;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -33,36 +34,35 @@ import timber.log.Timber;
  */
 @SuppressLint("ViewConstructor")
 public class Trashy extends FrameLayout {
-
     static final double MAGNETISM_THRESHOLD = Utils.dpToPx(120);
-    private static WindowManager sWindowManager;
-    private static Trashy sOurInstance;
+    private static WindowManager windowManager;
+    private static Trashy INSTANCE;
 
-    private WindowManager.LayoutParams mWindowParams;
+    private WindowManager.LayoutParams windowParams;
 
-    private int mDispWidth;
-    private int mDispHeight;
+    private int dispWidth;
+    private int dispHeight;
 
-    private Spring mScaleSpring;
-    private SpringSystem mSpringSystem;
+    private Spring scaleSpring;
+    private SpringSystem springSystem;
 
-    private boolean mHidden;
+    private boolean hidden;
 
-    private RemoveHeadCircle mRemoveHeadCircle;
+    private RemoveHeadCircle removeHeadCircle;
 
-    private boolean mGrew;
+    private boolean grew;
 
-    private int[] mCentrePoint = null;
+    private int[] centrePoint = null;
 
     @SuppressLint("RtlHardcoded")
     private Trashy(Context context, WindowManager windowManager) {
         super(context);
-        sWindowManager = windowManager;
+        Trashy.windowManager = windowManager;
 
-        mRemoveHeadCircle = new RemoveHeadCircle(context);
-        addView(mRemoveHeadCircle);
+        removeHeadCircle = new RemoveHeadCircle(context);
+        addView(removeHeadCircle);
 
-        mWindowParams = new WindowManager.LayoutParams(
+        windowParams = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
@@ -73,17 +73,25 @@ public class Trashy extends FrameLayout {
         setDisplayMetrics();
 
         setVisibility(INVISIBLE);
-        mHidden = true;
+        hidden = true;
 
-        mWindowParams.gravity = Gravity.LEFT | Gravity.TOP;
-        int offset = getAdaptWidth() / 2;
-        mWindowParams.x = (mDispWidth / 2) - offset;
-        mWindowParams.y = mDispHeight - (mDispHeight / 6) - offset;
+        setInitialLocation();
 
         setUpSprings();
         initCentreCoords();
 
-        sWindowManager.addView(this, mWindowParams);
+        Trashy.windowManager.addView(this, windowParams);
+    }
+
+    private void setInitialLocation() {
+        windowParams.gravity = Gravity.LEFT | Gravity.TOP;
+        int offset = getAdaptWidth() / 2;
+        windowParams.x = (dispWidth / 2) - offset;
+        windowParams.y = dispHeight - (dispHeight / 6) - offset;
+    }
+
+    private void updateView() {
+        windowManager.updateViewLayout(this, windowParams);
     }
 
     public static void init(@NonNull Context context) {
@@ -99,32 +107,32 @@ public class Trashy extends FrameLayout {
      * @return
      */
     public synchronized static Trashy get(@NonNull Context context) {
-        if (sOurInstance != null)
-            return sOurInstance;
+        if (INSTANCE != null)
+            return INSTANCE;
         else {
             Timber.d("Creating new instance of remove web head");
             WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-            sOurInstance = new Trashy(context, windowManager);
-            return sOurInstance;
+            INSTANCE = new Trashy(context, windowManager);
+            return INSTANCE;
         }
     }
 
     public static void destroy() {
-        if (sOurInstance != null) {
-            sOurInstance.destroySelf();
+        if (INSTANCE != null) {
+            INSTANCE.destroySelf();
         }
     }
 
     public static void disappear() {
-        if (sOurInstance != null) {
-            sOurInstance.hide();
+        if (INSTANCE != null) {
+            INSTANCE.hide();
         }
     }
 
     public void destroyAnimator(final Runnable endAction) {
-        if (sOurInstance == null || mRemoveHeadCircle == null) endAction.run();
+        if (INSTANCE == null || removeHeadCircle == null) endAction.run();
 
-        sOurInstance.mRemoveHeadCircle.animate()
+        INSTANCE.removeHeadCircle.animate()
                 .scaleX(0.0f)
                 .scaleY(0.0f)
                 .alpha(0.5f)
@@ -136,22 +144,22 @@ public class Trashy extends FrameLayout {
     }
 
     private void destroySelf() {
-        mScaleSpring.setAtRest();
-        mScaleSpring.destroy();
-        mScaleSpring = null;
+        scaleSpring.setAtRest();
+        scaleSpring.destroy();
+        scaleSpring = null;
 
-        removeView(mRemoveHeadCircle);
-        mRemoveHeadCircle = null;
+        removeView(removeHeadCircle);
+        removeHeadCircle = null;
 
-        mWindowParams = null;
+        windowParams = null;
 
-        mSpringSystem = null;
+        springSystem = null;
 
-        sWindowManager.removeView(this);
+        windowManager.removeView(this);
 
-        mCentrePoint = null;
+        centrePoint = null;
 
-        sOurInstance = null;
+        INSTANCE = null;
         Timber.d("Remove view detached and killed");
     }
 
@@ -160,73 +168,82 @@ public class Trashy extends FrameLayout {
     }
 
     int[] getCenterCoordinates() {
-        if (mCentrePoint == null) {
+        if (centrePoint == null) {
             initCentreCoords();
         }
-        return mCentrePoint;
+        return centrePoint;
     }
 
     private void initCentreCoords() {
         int offset = getAdaptWidth() / 2;
         int rX = getWindowParams().x + offset;
         int rY = getWindowParams().y + offset;
-        mCentrePoint = new int[]{rX, rY};
+        centrePoint = new int[]{rX, rY};
     }
 
     private void setUpSprings() {
-        mSpringSystem = SpringSystem.create();
-        mScaleSpring = mSpringSystem.createSpring();
+        springSystem = SpringSystem.create();
+        scaleSpring = springSystem.createSpring();
 
         SpringConfig scaleSpringConfig = SpringConfig.fromOrigamiTensionAndFriction(100, 9);
-        mScaleSpring.setSpringConfig(scaleSpringConfig);
-        mScaleSpring.addListener(new SimpleSpringListener() {
+        scaleSpring.setSpringConfig(scaleSpringConfig);
+        scaleSpring.addListener(new SimpleSpringListener() {
             @Override
             public void onSpringUpdate(Spring spring) {
                 float value = (float) spring.getCurrentValue();
-                mRemoveHeadCircle.setScaleX(value);
-                mRemoveHeadCircle.setScaleY(value);
+                removeHeadCircle.setScaleX(value);
+                removeHeadCircle.setScaleY(value);
             }
         });
     }
 
     private void setDisplayMetrics() {
         final DisplayMetrics metrics = new DisplayMetrics();
-        sWindowManager.getDefaultDisplay().getMetrics(metrics);
-        mDispWidth = metrics.widthPixels;
-        mDispHeight = metrics.heightPixels;
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        dispWidth = metrics.widthPixels;
+        dispHeight = metrics.heightPixels;
+    }
+
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        centrePoint = null;
+        setDisplayMetrics();
+        setInitialLocation();
+        post(this::updateView);
     }
 
     private WindowManager.LayoutParams getWindowParams() {
-        return mWindowParams;
+        return windowParams;
     }
 
     private void hide() {
-        if (!mHidden) {
-            mScaleSpring.setEndValue(0.0f);
-            mHidden = true;
+        if (!hidden) {
+            scaleSpring.setEndValue(0.0f);
+            hidden = true;
         }
     }
 
     void reveal() {
         setVisibility(VISIBLE);
-        if (mHidden) {
-            mScaleSpring.setEndValue(0.9f);
-            mHidden = false;
+        if (hidden) {
+            scaleSpring.setEndValue(0.9f);
+            hidden = false;
         }
     }
 
     void grow() {
-        if (!mGrew) {
-            mScaleSpring.setCurrentValue(0.9f, true);
-            mScaleSpring.setEndValue(1f);
-            mGrew = true;
+        if (!grew) {
+            scaleSpring.setCurrentValue(0.9f, true);
+            scaleSpring.setEndValue(1f);
+            grew = true;
         }
     }
 
     void shrink() {
-        if (mGrew) {
-            mScaleSpring.setEndValue(0.9f);
-            mGrew = false;
+        if (grew) {
+            scaleSpring.setEndValue(0.9f);
+            grew = false;
         }
     }
 

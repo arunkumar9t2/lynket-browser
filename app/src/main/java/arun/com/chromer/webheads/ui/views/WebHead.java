@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -154,6 +155,17 @@ public class WebHead extends BaseWebHead implements SpringListener {
         return true;
     }
 
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        trashLockingCoordinates = null;
+        MINIMUM_HORIZONTAL_FLING_VELOCITY = 0;
+        spawnCoordSet = false;
+        screenBounds = null;
+        calcVelocities();
+        setInitialSpawnLocation();
+    }
+
     private void handleTouchDown(@NonNull MotionEvent event) {
         dragging = false;
 
@@ -192,7 +204,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
         }
 
         if (dragging) {
-            getRemoveWebHead().reveal();
+            getTrashy().reveal();
 
             userManuallyMoved = true;
 
@@ -200,7 +212,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
             int y = (int) (initialDownY + offsetY);
 
             if (isNearRemoveCircle(x, y)) {
-                getRemoveWebHead().grow();
+                getTrashy().grow();
                 touchUp();
 
                 xSpring.setSpringConfig(SpringConfigs.SNAP);
@@ -210,7 +222,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
                 ySpring.setEndValue(trashLockCoOrd()[1]);
 
             } else {
-                getRemoveWebHead().shrink();
+                getTrashy().shrink();
 
                 xSpring.setSpringConfig(SpringConfigs.DRAG);
                 ySpring.setSpringConfig(SpringConfigs.DRAG);
@@ -284,7 +296,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
      */
     private int[] trashLockCoOrd() {
         if (trashLockingCoordinates == null) {
-            int[] removeCentre = getRemoveWebHead().getCenterCoordinates();
+            int[] removeCentre = getTrashy().getCenterCoordinates();
             int offset = getWidth() / 2;
             int x = removeCentre[0] - offset;
             int y = removeCentre[1] - offset;
@@ -301,7 +313,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
      * @return true if near, false other wise
      */
     private boolean isNearRemoveCircle(int x, int y) {
-        final int[] p = getRemoveWebHead().getCenterCoordinates();
+        final int[] p = getTrashy().getCenterCoordinates();
         final int rX = p[0];
         final int rY = p[1];
 
@@ -554,7 +566,8 @@ public class WebHead extends BaseWebHead implements SpringListener {
                         indicator.setVisibility(GONE);
                     }
                     crossFadeFaviconToX();
-                }, () -> new Handler()
+                },
+                () -> new Handler()
                         .postDelayed(() -> {
                             if (receiveCallback)
                                 webHeadContract.onWebHeadDestroyed(WebHead.this, isLastWebHead());
