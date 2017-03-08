@@ -73,7 +73,7 @@ public class HistoryActivity extends SubActivity implements History.View {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                presenter.deleteHistory(getApplicationContext(), historyAdapter.getItemAt(viewHolder.getAdapterPosition()));
+                presenter.deleteHistory(getApplicationContext(), historyAdapter.getWebsiteAt(viewHolder.getAdapterPosition()));
             }
         };
         final ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeTouch);

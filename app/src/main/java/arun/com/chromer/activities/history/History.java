@@ -12,6 +12,8 @@ import arun.com.chromer.activities.SnackHelper;
 import arun.com.chromer.data.history.HistoryRepository;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.util.RxUtils;
+import rx.Observable;
+import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -81,15 +83,18 @@ interface History {
                     }).subscribe());
         }
 
-        void deleteHistory(@NonNull Context context, @Nullable WebSite webSite) {
-            if (webSite != null && webSite.url != null) {
-                compositeSubscription.add(HistoryRepository.getInstance(context)
-                        .delete(webSite)
-                        .compose(RxUtils.applySchedulers())
-                        .doOnError(Timber::e)
-                        .doOnNext(result -> loadHistory(context))
-                        .subscribe());
-            }
+        void deleteHistory(@NonNull Context context, @NonNull Observable<WebSite> webSiteObservable) {
+            compositeSubscription.add(webSiteObservable
+                    .filter(webSite -> webSite != null && webSite.url != null)
+                    .flatMap(new Func1<WebSite, Observable<WebSite>>() {
+                        @Override
+                        public Observable<WebSite> call(WebSite webSite) {
+                            return HistoryRepository.getInstance(context).delete(webSite);
+                        }
+                    }).compose(RxUtils.applySchedulers())
+                    .doOnError(Timber::e)
+                    .doOnNext(result -> loadHistory(context))
+                    .subscribe());
         }
     }
 }

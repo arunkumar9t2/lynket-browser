@@ -22,6 +22,7 @@ import arun.com.chromer.activities.BrowserInterceptActivity;
 import arun.com.chromer.data.website.model.WebSite;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
 import timber.log.Timber;
 
 /**
@@ -128,6 +129,11 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHold
             return WebSite.fromCursor(cursor);
         }
         return null;
+    }
+
+    @NonNull
+    Observable<WebSite> getWebsiteAt(final int position) {
+        return Observable.fromCallable(() -> getItemAt(position));
     }
 
     void setCursor(@Nullable Cursor cursor) {
