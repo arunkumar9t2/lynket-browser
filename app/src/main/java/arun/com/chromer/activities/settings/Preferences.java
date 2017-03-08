@@ -211,8 +211,16 @@ public class Preferences {
         return getDefaultSharedPreferences().getBoolean(AMP_MODE, false);
     }
 
+    public void ampMode(final boolean preference) {
+        getDefaultSharedPreferences().edit().putBoolean(AMP_MODE, preference).apply();
+    }
+
     public boolean articleMode() {
         return getDefaultSharedPreferences().getBoolean(ARTICLE_MODE, false);
+    }
+
+    public void articleMode(final boolean preference) {
+        getDefaultSharedPreferences().edit().putBoolean(ARTICLE_MODE, preference).apply();
     }
 
     public boolean incognitoMode() {

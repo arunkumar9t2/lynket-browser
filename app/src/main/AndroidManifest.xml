@@ -56,6 +56,34 @@
             android:enabled="true"
             android:exported="true"
             tools:ignore="ExportedService" />
+        <service
+            android:name=".qs.WebHeadTile"
+            android:icon="@drawable/ic_bubble_chart_white_24dp"
+            android:label="@string/web_heads"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".qs.AmpTile"
+            android:icon="@drawable/ic_action_amp_icon"
+            android:label="@string/amp_mode"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".qs.ArticleTile"
+            android:icon="@drawable/ic_description_black_24dp"
+            android:label="@string/article_mode"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
 
         <receiver android:name=".customtabs.callbacks.ShareBroadcastReceiver" />
         <receiver android:name=".customtabs.callbacks.FavShareBroadcastReceiver" />
@@ -202,17 +230,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.browsing.incognito.WebViewActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-
-        <service
-            android:name=".webheads.qs.WebHeadTile"
-            android:icon="@drawable/ic_bubble_chart_white_24dp"
-            android:label="@string/tile_label"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
-            </intent-filter>
-        </service>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
             android:name="io.fabric.ApiKey"

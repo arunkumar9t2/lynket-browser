@@ -1,4 +1,4 @@
-package arun.com.chromer.webheads.qs;
+package arun.com.chromer.qs;
 
 import android.graphics.Color;
 import android.graphics.drawable.Icon;
