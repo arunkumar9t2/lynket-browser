@@ -148,7 +148,7 @@
     <string name="webheads_intro_4">Chromer prioritizes the last opened link and pre-fetches it. The recommended method is to click the web heads one by one from top to bottom. Enabling close web heads on launch wil make this seamless.</string>
     <string name="web_head_permission_toast">To open links in floating bubbles, Chromer needs drawing over other apps permission, please grant to continue or disable Web Heads in Chromer settings.</string>
     <string name="tap_close_all">Tap to close all</string>
-    <string name="web_heads_service">Web Heads Service</string>
+    <string name="web_heads_service">Web Heads Active</string>
     <string name="join_beta">Join Beta</string>
     <string name="become_a_tester">Become a tester</string>
     <string name="join_beta_content">Beta releases are experimental builds that has the latest features but has few bugs. You can contribute to the development by joining as tester and then reporting bugs you face in the Google+ Community. \n\nPlease make sure you have joined the Google+ community, and then click the become a tester button to go to Google Play testing link. \n\nNOTE: You have to join the community to become a tester.</string>
@@ -259,4 +259,5 @@
     <string name="recents_intro">Recently opened links will appear here</string>
     <string name="amp_article_combined_explanation"><![CDATA[When both <b>AMP and Article mode is on</b>, Chromer will try to load AMP version of the page if it exists. If not article mode will be loaded.]]></string>
     <string name="attention">Attention!</string>
+    <string name="manage">Manage</string>
 </resources>

@@ -9,7 +9,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -44,6 +43,7 @@ import java.util.ListIterator;
 import java.util.Map;
 
 import arun.com.chromer.R;
+import arun.com.chromer.activities.NewTabDialogActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.CustomTabManager;
 import arun.com.chromer.data.website.WebsiteRepository;
@@ -69,6 +69,8 @@ import static android.widget.Toast.LENGTH_SHORT;
 import static arun.com.chromer.shared.Constants.ACTION_CLOSE_WEBHEAD_BY_URL;
 import static arun.com.chromer.shared.Constants.ACTION_EVENT_WEBHEAD_DELETED;
 import static arun.com.chromer.shared.Constants.ACTION_EVENT_WEBSITE_UPDATED;
+import static arun.com.chromer.shared.Constants.ACTION_OPEN_CONTEXT_ACTIVITY;
+import static arun.com.chromer.shared.Constants.ACTION_OPEN_NEW_TAB;
 import static arun.com.chromer.shared.Constants.ACTION_REBIND_WEBHEAD_TAB_CONNECTION;
 import static arun.com.chromer.shared.Constants.ACTION_STOP_WEBHEAD_SERVICE;
 import static arun.com.chromer.shared.Constants.ACTION_WEBHEAD_COLOR_SET;
@@ -112,15 +114,16 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
 
     @Override
     Notification getNotification() {
-        final PendingIntent contentIntent = PendingIntent.getBroadcast(this,
-                0,
-                new Intent(ACTION_STOP_WEBHEAD_SERVICE),
-                FLAG_UPDATE_CURRENT);
+        final PendingIntent contentIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_STOP_WEBHEAD_SERVICE), FLAG_UPDATE_CURRENT);
+        final PendingIntent contextActivity = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_OPEN_CONTEXT_ACTIVITY), FLAG_UPDATE_CURRENT);
+        final PendingIntent newTab = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_OPEN_NEW_TAB), FLAG_UPDATE_CURRENT);
         return new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_chromer_notification)
                 .setPriority(PRIORITY_MIN)
                 .setContentText(getString(R.string.tap_close_all))
                 .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                .addAction(R.drawable.ic_view_list_black_24dp, getText(R.string.manage), contextActivity)
+                .addAction(R.drawable.ic_add_black_24dp, getText(R.string.new_tab), newTab)
                 .setContentTitle(getString(R.string.web_heads_service))
                 .setContentIntent(contentIntent)
                 .setAutoCancel(false)
@@ -139,7 +142,6 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         }
         springChain2D = SpringChain2D.create(this);
         Trashy.init(this);
-
         bindToCustomTabSession();
         registerReceivers();
     }
@@ -438,6 +440,10 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
 
     @Override
     public void onMasterLongClick() {
+        openContextActivity();
+    }
+
+    private void openContextActivity() {
         final ListIterator<String> it = new ArrayList<>(webHeads.keySet()).listIterator(webHeads.size());
         final ArrayList<WebSite> webSites = new ArrayList<>();
         while (it.hasPrevious()) {
@@ -448,14 +454,6 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
             }
         }
         ContextActivityHelper.open(this, webSites);
-    }
-
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        Timber.d(newConfig.toString());
-        // TODO handle webhead positions after orientations change.
     }
 
     @Override
@@ -483,7 +481,6 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     private class WebHeadNavigationCallback extends CustomTabManager.NavigationCallback {
         @Override
         public void onNavigationEvent(int navigationEvent, Bundle extras) {
-            // TODO Implement something useful with this callbacks
             switch (navigationEvent) {
                 case TAB_SHOWN:
                     break;
@@ -494,17 +491,23 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     }
 
     private void registerReceivers() {
-        final IntentFilter filter = new IntentFilter();
-        filter.addAction(ACTION_WEBHEAD_COLOR_SET);
-        filter.addAction(ACTION_REBIND_WEBHEAD_TAB_CONNECTION);
-        filter.addAction(ACTION_CLOSE_WEBHEAD_BY_URL);
-        LocalBroadcastManager.getInstance(this).registerReceiver(localReceiver, filter);
-        registerReceiver(broadcastReceiver, new IntentFilter(ACTION_STOP_WEBHEAD_SERVICE));
+        final IntentFilter localEvents = new IntentFilter();
+        localEvents.addAction(ACTION_WEBHEAD_COLOR_SET);
+        localEvents.addAction(ACTION_REBIND_WEBHEAD_TAB_CONNECTION);
+        localEvents.addAction(ACTION_CLOSE_WEBHEAD_BY_URL);
+        localEvents.addAction(ACTION_OPEN_CONTEXT_ACTIVITY);
+        LocalBroadcastManager.getInstance(this).registerReceiver(localReceiver, localEvents);
+
+        final IntentFilter notificationFilter = new IntentFilter();
+        notificationFilter.addAction(ACTION_STOP_WEBHEAD_SERVICE);
+        notificationFilter.addAction(ACTION_OPEN_CONTEXT_ACTIVITY);
+        notificationFilter.addAction(ACTION_OPEN_NEW_TAB);
+        registerReceiver(notificationActionReceiver, notificationFilter);
     }
 
     private void unregisterReceivers() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(localReceiver);
-        unregisterReceiver(broadcastReceiver);
+        unregisterReceiver(notificationActionReceiver);
     }
 
     private final BroadcastReceiver localReceiver = new BroadcastReceiver() {
@@ -533,10 +536,22 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         }
     };
 
-    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver notificationActionReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            stopSelf();
+            switch (intent.getAction()) {
+                case ACTION_STOP_WEBHEAD_SERVICE:
+                    stopSelf();
+                    break;
+                case ACTION_OPEN_CONTEXT_ACTIVITY:
+                    openContextActivity();
+                    break;
+                case ACTION_OPEN_NEW_TAB:
+                    final Intent newTabIntent = new Intent(context, NewTabDialogActivity.class);
+                    newTabIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(newTabIntent);
+                    break;
+            }
         }
     };
 

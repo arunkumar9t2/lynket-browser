@@ -41,6 +41,8 @@ public class Constants {
     public static final String ACTION_MINIMIZE = "ACTION_MINIMIZE";
     public static final String ACTION_EVENT_WEBSITE_UPDATED = "ACTION_EVENT_WEBSITE_UPDATED";
     public static final String ACTION_EVENT_WEBHEAD_DELETED = "ACTION_EVENT_WEBHEAD_DELETED";
+    public static final String ACTION_OPEN_CONTEXT_ACTIVITY = "ACTION_OPEN_CONTEXT_ACTIVITY";
+    public static final String ACTION_OPEN_NEW_TAB = "ACTION_OPEN_NEW_TAB";
     // Extra keys
     public static final String EXTRA_KEY_SHOULD_REFRESH_BINDING = "EXTRA_KEY_SHOULD_REFRESH_BINDING";
     public static final String EXTRA_KEY_FROM_WEBHEAD = "EXTRA_KEY_FROM_WEBHEAD";
