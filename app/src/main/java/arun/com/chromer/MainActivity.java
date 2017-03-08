@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -87,6 +89,10 @@ public class MainActivity extends AppCompatActivity implements Home.View {
     FloatingActionButton fab;
     @BindView(R.id.root)
     LinearLayout root;
+    @BindView(R.id.collapsing_toolbar)
+    CollapsingToolbarLayout collapsingToolbar;
+    @BindView(R.id.appbar)
+    AppBarLayout appbar;
 
     private CustomTabManager customTabManager;
     private Drawer drawer;
@@ -113,6 +119,26 @@ public class MainActivity extends AppCompatActivity implements Home.View {
             getSupportActionBar().setDisplayShowHomeEnabled(false);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
+        appbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean shown = false;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    collapsingToolbar.setTitle(getString(R.string.app_name));
+                    chromer.setText(" ");
+                    shown = true;
+                } else if (shown) {
+                    collapsingToolbar.setTitle(" ");
+                    chromer.setText(getString(R.string.app_name));
+                    shown = false;
+                }
+            }
+        });
         chromer.setTypeface(FontCache.get(FontCache.MONO, this));
 
         if (Preferences.get(this).isFirstRun()) {
