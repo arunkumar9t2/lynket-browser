@@ -121,7 +121,7 @@ public class DocumentUtils {
      *
      * @param context Context to work with.
      * @param webSite Website data.
-     * @return
+     * @return Uri of the website to open
      */
     private static Uri getUsableUri(@NonNull Context context, @NonNull WebSite webSite) {
         if (Preferences.get(context).articleMode()) {
