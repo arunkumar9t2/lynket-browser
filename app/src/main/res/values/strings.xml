@@ -255,5 +255,6 @@
     <string name="are_you_sure">Are you sure?</string>
     <string name="history_deletion_confirmation_content">This action will delete all history and it is not reversible.</string>
     <string name="incognito_mode">Incognito mode</string>
-    <string name="history_link">History ></string>
+    <string name="history_link">History</string>
+    <string name="recents_intro">Recently opened links will appear here</string>
 </resources>

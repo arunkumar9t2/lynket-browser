@@ -15,6 +15,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -66,6 +67,8 @@ import butterknife.OnClick;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static arun.com.chromer.shared.Constants.ACTION_CLOSE_ROOT;
 import static arun.com.chromer.shared.Constants.REQUEST_CODE_VOICE;
 
@@ -93,6 +96,13 @@ public class MainActivity extends AppCompatActivity implements Home.View {
     CollapsingToolbarLayout collapsingToolbar;
     @BindView(R.id.appbar)
     AppBarLayout appbar;
+    @BindView(R.id.nested_scroll_view)
+    NestedScrollView nestedScrollView;
+    @BindView(R.id.recent_missing_text)
+    TextView recentMissingText;
+    @BindView(R.id.history)
+    TextView history;
+
 
     private CustomTabManager customTabManager;
     private Drawer drawer;
@@ -139,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements Home.View {
                 }
             }
         });
+        collapsingToolbar.setCollapsedTitleTypeface(FontCache.get(FontCache.MONO, this));
         chromer.setTypeface(FontCache.get(FontCache.MONO, this));
 
         if (Preferences.get(this).isFirstRun()) {
@@ -159,6 +170,11 @@ public class MainActivity extends AppCompatActivity implements Home.View {
     }
 
     private void setupRecents() {
+        recentMissingText.setCompoundDrawablePadding(Utils.dpToPx(8));
+        recentMissingText.setCompoundDrawables(new IconicsDrawable(this)
+                .icon(CommunityMaterial.Icon.cmd_history)
+                .colorRes(R.color.accent)
+                .sizeDp(24), null, null, null);
         recentsList.setLayoutManager(new GridLayoutManager(this, 4));
         recentsAdapter = new RecentsAdapter();
         recentsList.setAdapter(recentsAdapter);
@@ -271,6 +287,13 @@ public class MainActivity extends AppCompatActivity implements Home.View {
     @Override
     public void setRecents(@NonNull List<WebSite> webSites) {
         recentsAdapter.setWebSites(webSites);
+        if (webSites.isEmpty()) {
+            recentMissingText.setVisibility(VISIBLE);
+            history.setVisibility(GONE);
+        } else {
+            recentMissingText.setVisibility(GONE);
+            history.setVisibility(VISIBLE);
+        }
     }
 
     @Override
