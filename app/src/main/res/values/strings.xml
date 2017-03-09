@@ -36,6 +36,16 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+    <string-array name="articleThemeValues">
+        <item>Dark</item>
+        <item>Light</item>
+        <item>Auto</item>
+    </string-array>
+    <string-array name="articleThemeKeys">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
     <string-array name="webHeadsSizeValues">
         <item>Normal</item>
         <item>Small</item>
@@ -240,6 +250,7 @@
     <string name="amp_mode">AMP Mode</string>
     <string name="amp_summary">Load mobile optimized version of the website for much quicker and smoother reading experience.</string>
     <string name="article_mode">Article mode</string>
+    <string name="article_theme">Article theme</string>
     <string name="article_mode_summary">Load sleek looking reader mode with no extra stuff focusing just on the content.</string>
     <string name="amp_warning_title">AMP Warning</string>
     <string name="amp_warning_content"><![CDATA[In <b>Slide-over</b> mode, it might take a short while to grab the website\'s AMP url. You might see a dialog when this happens.]]></string>

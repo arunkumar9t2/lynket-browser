@@ -48,6 +48,7 @@ public class LookAndFeelActivity extends AppCompatActivity implements ColorChoos
                 .beginTransaction()
                 .replace(R.id.toolbar_options_preferences_container, PersonalizationPreferenceFragment.newInstance())
                 .replace(R.id.web_head_options_preferences_container, WebHeadPreferenceFragment.newInstance())
+                .replace(R.id.article_options_preferences_container, ArticlePreferenceFragment.newInstance())
                 .commit();
     }
 

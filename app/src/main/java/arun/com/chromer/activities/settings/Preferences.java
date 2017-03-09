@@ -54,6 +54,10 @@ public class Preferences {
     public static final String DYNAMIC_COLOR_WEB = "dynamic_color_web";
     public static final String AMP_MODE = "amp_mode_pref";
     public static final String ARTICLE_MODE = "article_mode_pref";
+    public static final String ARTICLE_THEME = "article_theme_preference";
+    public static final int THEME_DARK = 1;
+    public static final int THEME_LIGHT = 2;
+    public static final int THEME_AUTO = 3;
     public static final String INCOGNITO_MODE = "incognito_mode_pref";
     // Singleton instance
     private static Preferences INSTANCE;
@@ -120,6 +124,10 @@ public class Preferences {
 
     public int animationSpeed() {
         return Integer.parseInt(getDefaultSharedPreferences().getString(ANIMATION_SPEED, "1"));
+    }
+
+    public int articleTheme() {
+        return Integer.parseInt(getDefaultSharedPreferences().getString(ARTICLE_THEME, "1"));
     }
 
     public int preferredAction() {

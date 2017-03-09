@@ -46,9 +46,12 @@ public class ArticleLauncher {
         final int color = Preferences.get(context).isColoredToolbar()
                 ? Preferences.get(context).toolbarColor()
                 : ContextCompat.getColor(context, R.color.colorPrimary);
+        final int theme = Preferences.get(context).articleTheme();
         builder.setToolbarColor(color)
                 .setAccentColor(ContextCompat.getColor(context, R.color.colorPrimary))
-                .setTheme(ArticleIntent.THEME_DARK)
+                .setTheme(theme == Preferences.THEME_DARK ? ArticleIntent.THEME_DARK
+                        : theme == Preferences.THEME_LIGHT ? ArticleIntent.THEME_LIGHT
+                        : ArticleIntent.THEME_AUTO)
                 .setTextSize(15);
         return this;
     }
