@@ -5,8 +5,8 @@
     android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:background="@color/card_background_light"
+    android:fitsSystemWindows="true"
     tools:context="arun.com.chromer.activities.settings.browsingoptions.BrowsingOptionsActivity">
 
     <android.support.design.widget.AppBarLayout

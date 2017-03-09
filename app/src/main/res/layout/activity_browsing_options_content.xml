@@ -15,8 +15,8 @@
         <android.support.v7.widget.CardView
             android:id="@+id/browsing_options_app_preferences_card"
             style="@style/FullWidthCard"
-            app:cardPreventCornerOverlap="true"
             app:cardElevation="4dp"
+            app:cardPreventCornerOverlap="true"
             app:cardUseCompatPadding="true">
 
             <RelativeLayout
@@ -131,10 +131,35 @@
             app:cardPreventCornerOverlap="true"
             app:cardUseCompatPadding="true">
 
-            <FrameLayout
-                android:id="@+id/bottom_bar_preference_fragment_container"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:id="@+id/bottom_bar_preference_fragment_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center|start"
+                    android:gravity="center|start"
+                    android:paddingLeft="45dp"
+                    android:paddingStart="45dp"
+                    android:text="@string/available_actions"
+                    android:textColor="@color/material_dark_light"
+                    android:textSize="14sp"
+                    android:textStyle="bold|italic" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/bottom_bar_action_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:scrollbars="none" />
+            </LinearLayout>
         </android.support.v7.widget.CardView>
     </RelativeLayout>
 </android.support.v4.widget.NestedScrollView>
