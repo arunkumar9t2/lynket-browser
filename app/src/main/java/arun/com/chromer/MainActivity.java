@@ -53,9 +53,11 @@ import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.activities.settings.SettingsGroupActivity;
 import arun.com.chromer.customtabs.CustomTabManager;
 import arun.com.chromer.customtabs.CustomTabs;
+import arun.com.chromer.data.website.WebsiteRepository;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.search.SuggestionItem;
 import arun.com.chromer.shared.Constants;
+import arun.com.chromer.util.RxUtils;
 import arun.com.chromer.util.ServiceUtil;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.util.cache.FontCache;
@@ -422,6 +424,10 @@ public class MainActivity extends AppCompatActivity implements Home.View {
                         .prepare()
                         .launch();
             }
+            WebsiteRepository.getInstance(this).getWebsite(url)
+                    .compose(RxUtils.applySchedulers())
+                    .doOnError(Timber::e)
+                    .subscribe();
         }
     }
 
