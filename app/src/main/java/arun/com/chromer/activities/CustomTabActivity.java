@@ -20,7 +20,6 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.browsing.incognito.WebViewActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.CustomTabs;
 import arun.com.chromer.data.website.WebsiteRepository;
@@ -54,7 +53,7 @@ public class CustomTabActivity extends AppCompatActivity {
             return;
         }
 
-        if (Preferences.get(this).incognitoMode()) {
+        /*if (Preferences.get(this).incognitoMode()) {
             // Do an intent copy and let web view handle it.
             final Intent webViewActivity = new Intent(this, WebViewActivity.class);
             webViewActivity.setData(getIntent().getData());
@@ -63,7 +62,7 @@ public class CustomTabActivity extends AppCompatActivity {
             startActivity(webViewActivity);
             finish();
             return;
-        }
+        }*/
 
         baseUrl = getIntent().getDataString();
         final boolean isWebHead = getIntent().getBooleanExtra(EXTRA_KEY_FROM_WEBHEAD, false);
