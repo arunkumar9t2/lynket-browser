@@ -18,7 +18,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -65,18 +67,34 @@ public class WebViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        baseUrl = getIntent().getDataString();
+
         setContentView(R.layout.activity_web_view);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        baseUrl = getIntent().getDataString();
 
         final WebSite webSite = getIntent().getParcelableExtra(EXTRA_KEY_WEBSITE);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(xyz.klinker.android.article.R.drawable.article_ic_close);
+            getSupportActionBar().setTitle(webSite != null ? webSite.safeLabel() : baseUrl);
+        }
+
 
         if (Preferences.get(this).aggressiveLoading()) {
             delayedGoToBack();
         }
         registerMinimizeReceiver();
         beginExtraction(webSite);
+
+        webView.setWebViewClient(new WebViewClient() {
+
+        });
+        final WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+
+        webView.loadUrl(getIntent().getDataString());
     }
 
     private void beginExtraction(@Nullable WebSite webSite) {
@@ -100,19 +118,24 @@ public class WebViewActivity extends AppCompatActivity {
 
     @TargetApi(LOLLIPOP)
     private void applyDescriptionFromWebsite(@Nullable final WebSite webSite) {
-        if (Utils.isLollipopAbove() && webSite != null) {
+        if (webSite != null) {
             final String title = webSite.safeLabel();
             final String faviconUrl = webSite.faviconUrl;
-            setTaskDescription(new ActivityManager.TaskDescription(title, null, webSite.themeColor()));
-            Glide.with(this)
-                    .load(faviconUrl)
-                    .asBitmap()
-                    .into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(Bitmap icon, GlideAnimation<? super Bitmap> glideAnimation) {
-                            setTaskDescription(new ActivityManager.TaskDescription(title, icon, webSite.themeColor()));
-                        }
-                    });
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle(title);
+            }
+            if (Utils.isLollipopAbove()) {
+                setTaskDescription(new ActivityManager.TaskDescription(title, null, webSite.themeColor()));
+                Glide.with(this)
+                        .load(faviconUrl)
+                        .asBitmap()
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap icon, GlideAnimation<? super Bitmap> glideAnimation) {
+                                setTaskDescription(new ActivityManager.TaskDescription(title, icon, webSite.themeColor()));
+                            }
+                        });
+            }
         }
     }
 
@@ -162,6 +185,9 @@ public class WebViewActivity extends AppCompatActivity {
                 actionButton.setTitle(R.string.share);
                 break;
         }
+
+        final MenuItem fullPage = menu.findItem(R.id.menu_open_full_page);
+        fullPage.setVisible(false);
         return true;
     }
 
