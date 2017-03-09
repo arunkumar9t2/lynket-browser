@@ -211,17 +211,12 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         // Add to our map
         webHeads.put(webHeadUrl, newWebHead);
 
-        newWebHead.post(() -> newWebHead.reveal(() -> {
-            if (Preferences.get(getApplication()).aggressiveLoading() && !isMinimized && !Preferences.get(this).articleMode()) {
-                DocumentUtils.openNewCustomTab(getApplication(), newWebHead.getWebsite(), isNewTab);
-            }
-            new Handler().postDelayed(() -> {
-                // Update the spring chain
-                updateSpringChain();
-                // Trigger an update
-                onMasterWebHeadMoved(newWebHead.getWindowParams().x, newWebHead.getWindowParams().y);
-            }, 100);
-        }));
+        if (Preferences.get(getApplication()).aggressiveLoading() && !isMinimized && !Preferences.get(this).articleMode()) {
+            DocumentUtils.openNewCustomTab(getApplication(), newWebHead.getWebsite(), isNewTab);
+            new Handler().postDelayed(() -> reveal(newWebHead), 650);
+        } else {
+            reveal(newWebHead);
+        }
 
         if (Preferences.get(this).articleMode()) {
             preloadUrl(webHeadUrl);
@@ -229,6 +224,15 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
 
         // Begin metadata extractions
         doExtraction(webHeadUrl);
+    }
+
+    private boolean reveal(WebHead newWebHead) {
+        return newWebHead.post(() -> newWebHead.reveal(() -> {
+            // Update the spring chain
+            updateSpringChain();
+            // Trigger an update
+            onMasterWebHeadMoved(newWebHead.getWindowParams().x, newWebHead.getWindowParams().y);
+        }));
     }
 
     private void doExtraction(final String webHeadUrl) {
