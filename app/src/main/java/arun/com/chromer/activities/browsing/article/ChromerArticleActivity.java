@@ -121,6 +121,7 @@ public class ChromerArticleActivity extends ArticleActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
             case R.id.menu_action_button:
                 switch (Preferences.get(this).preferredAction()) {
