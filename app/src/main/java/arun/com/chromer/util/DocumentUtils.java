@@ -56,7 +56,7 @@ public class DocumentUtils {
      */
     public static void smartOpenNewTab(@NonNull final Context context, @NonNull final WebSite webSite, final boolean isNewTab) {
         if (!reOrderTab(context, webSite)) {
-            if (Preferences.get(context).ampMode()) {
+            if (Preferences.get(context).ampMode() && !TextUtils.isEmpty(webSite.ampUrl)) {
                 openNewCustomTab(context, webSite, isNewTab);
             } else if (Preferences.get(context).articleMode()) {
                 openNewArticleTab(context, webSite, isNewTab);

@@ -69,7 +69,7 @@ public class WebSite implements Parcelable {
         webSite.canonicalUrl = !TextUtils.isEmpty(article.canonicalUrl) ? article.canonicalUrl : article.url;
         webSite.faviconUrl = article.faviconUrl;
         webSite.themeColor = article.themeColor;
-        webSite.ampUrl = !TextUtils.isEmpty(article.ampUrl) ? article.ampUrl : webSite.canonicalUrl;
+        webSite.ampUrl = !TextUtils.isEmpty(article.ampUrl) ? article.ampUrl : "";
         return webSite;
     }
 
@@ -81,7 +81,21 @@ public class WebSite implements Parcelable {
         webSite.canonicalUrl = !TextUtils.isEmpty(article.canonicalUrl) ? article.canonicalUrl : article.url;
         webSite.faviconUrl = article.faviconUrl;
         webSite.themeColor = article.themeColor;
-        webSite.ampUrl = !TextUtils.isEmpty(article.ampUrl) ? article.ampUrl : webSite.canonicalUrl;
+        webSite.ampUrl = !TextUtils.isEmpty(article.ampUrl) ? article.ampUrl : "";
+        return webSite;
+    }
+
+    public static WebSite fromCursor(@NonNull Cursor cursor) {
+        final WebSite webSite = new WebSite();
+        webSite.title = cursor.getString(cursor.getColumnIndex(HistoryTable.COLUMN_TITLE));
+        webSite.url = cursor.getString(cursor.getColumnIndex(HistoryTable.COLUMN_URL));
+        webSite.faviconUrl = cursor.getString(cursor.getColumnIndex(HistoryTable.COLUMN_FAVICON));
+        webSite.canonicalUrl = cursor.getString(cursor.getColumnIndex(HistoryTable.COLUMN_CANONICAL));
+        webSite.themeColor = cursor.getString(cursor.getColumnIndex(HistoryTable.COLUMN_COLOR));
+        webSite.ampUrl = cursor.getString(cursor.getColumnIndex(HistoryTable.COLUMN_AMP));
+        webSite.bookmarked = cursor.getInt(cursor.getColumnIndex(HistoryTable.COLUMN_BOOKMARKED)) == 1;
+        webSite.createdAt = cursor.getLong(cursor.getColumnIndex(HistoryTable.COLUMN_CREATED_AT));
+        webSite.count = cursor.getInt(cursor.getColumnIndex(HistoryTable.COLUMN_VISITED));
         return webSite;
     }
 
@@ -149,20 +163,6 @@ public class WebSite implements Parcelable {
                 ", createdAt=" + createdAt +
                 ", count=" + count +
                 '}';
-    }
-
-    public static WebSite fromCursor(@NonNull Cursor cursor) {
-        final WebSite webSite = new WebSite();
-        webSite.title = cursor.getString(cursor.getColumnIndex(HistoryTable.COLUMN_TITLE));
-        webSite.url = cursor.getString(cursor.getColumnIndex(HistoryTable.COLUMN_URL));
-        webSite.faviconUrl = cursor.getString(cursor.getColumnIndex(HistoryTable.COLUMN_FAVICON));
-        webSite.canonicalUrl = cursor.getString(cursor.getColumnIndex(HistoryTable.COLUMN_CANONICAL));
-        webSite.themeColor = cursor.getString(cursor.getColumnIndex(HistoryTable.COLUMN_COLOR));
-        webSite.ampUrl = cursor.getString(cursor.getColumnIndex(HistoryTable.COLUMN_AMP));
-        webSite.bookmarked = cursor.getInt(cursor.getColumnIndex(HistoryTable.COLUMN_BOOKMARKED)) == 1;
-        webSite.createdAt = cursor.getLong(cursor.getColumnIndex(HistoryTable.COLUMN_CREATED_AT));
-        webSite.count = cursor.getInt(cursor.getColumnIndex(HistoryTable.COLUMN_VISITED));
-        return webSite;
     }
 }
 

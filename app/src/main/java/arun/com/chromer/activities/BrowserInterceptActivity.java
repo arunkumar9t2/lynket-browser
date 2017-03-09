@@ -103,6 +103,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                             }, 100);
                         } else {
                             // AMP failed, try article if user prefers it and launch it.
+                            dialog.setContent(R.string.link_not_found);
                             articleAwareLaunch();
                         }
                     })
