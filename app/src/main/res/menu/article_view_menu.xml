@@ -23,7 +23,14 @@
         android:id="@+id/menu_share"
         android:title="@string/share"
         app:showAsAction="never" />
-
+    <item
+        android:id="@+id/menu_share_with"
+        android:title="@string/share"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_add_to_homescreen"
+        android:title="@string/add_to_homescreen"
+        app:showAsAction="never" />
     <item
         android:id="@+id/menu_more"
         android:checkable="false"

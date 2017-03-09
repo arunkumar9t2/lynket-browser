@@ -21,6 +21,7 @@ import arun.com.chromer.R;
 import arun.com.chromer.activities.CustomTabActivity;
 import arun.com.chromer.activities.OpenIntentWithActivity;
 import arun.com.chromer.activities.settings.Preferences;
+import arun.com.chromer.customtabs.callbacks.AddHomeShortcutService;
 import arun.com.chromer.customtabs.callbacks.ClipboardService;
 import arun.com.chromer.customtabs.callbacks.FavShareBroadcastReceiver;
 import arun.com.chromer.customtabs.callbacks.SecondaryBrowserReceiver;
@@ -116,6 +117,15 @@ public class ChromerArticleActivity extends ArticleActivity {
                 actionButton.setTitle(R.string.share);
                 break;
         }
+        final MenuItem favoriteShare = menu.findItem(R.id.menu_share_with);
+        final String pkg = Preferences.get(this).favSharePackage();
+        if (pkg != null) {
+            final String app = Utils.getAppNameWithPackage(this, pkg);
+            final String label = String.format(getString(R.string.share_with), app);
+            favoriteShare.setTitle(label);
+        } else {
+            favoriteShare.setVisible(false);
+        }
         return true;
     }
 
@@ -126,12 +136,10 @@ public class ChromerArticleActivity extends ArticleActivity {
             case R.id.menu_action_button:
                 switch (Preferences.get(this).preferredAction()) {
                     case PREFERRED_ACTION_BROWSER:
-                        sendBroadcast(new Intent(this, SecondaryBrowserReceiver.class)
-                                .setData(Uri.parse(baseUrl)));
+                        sendBroadcast(new Intent(this, SecondaryBrowserReceiver.class).setData(Uri.parse(baseUrl)));
                         break;
                     case PREFERRED_ACTION_FAV_SHARE:
-                        sendBroadcast(new Intent(this, FavShareBroadcastReceiver.class)
-                                .setData(Uri.parse(baseUrl)));
+                        sendBroadcast(new Intent(this, FavShareBroadcastReceiver.class).setData(Uri.parse(baseUrl)));
                         break;
                     case PREFERRED_ACTION_GEN_SHARE:
                         shareUrl();
@@ -139,12 +147,10 @@ public class ChromerArticleActivity extends ArticleActivity {
                 }
                 break;
             case R.id.menu_copy_link:
-                startService(new Intent(this, ClipboardService.class)
-                        .setData(Uri.parse(baseUrl)));
+                startService(new Intent(this, ClipboardService.class).setData(Uri.parse(baseUrl)));
                 break;
             case R.id.menu_open_with:
-                startActivity(new Intent(this, OpenIntentWithActivity.class)
-                        .setData(Uri.parse(baseUrl)));
+                startActivity(new Intent(this, OpenIntentWithActivity.class).setData(Uri.parse(baseUrl)));
                 break;
             case R.id.menu_share:
                 shareUrl();
@@ -161,6 +167,12 @@ public class ChromerArticleActivity extends ArticleActivity {
                 break;
             case R.id.menu_more:
                 Toast.makeText(this, "Todo", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.menu_share_with:
+                sendBroadcast(new Intent(this, FavShareBroadcastReceiver.class).setData(Uri.parse(baseUrl)));
+                break;
+            case R.id.menu_add_to_homescreen:
+                startService(new Intent(this, AddHomeShortcutService.class).setData(Uri.parse(baseUrl)));
                 break;
         }
         return true;
