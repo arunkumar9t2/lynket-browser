@@ -100,7 +100,7 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.donate_activity);
+        setContentView(R.layout.activity_donate);
 
         // compute your public key and store it in base64EncodedPublicKey
         mHelper = new IabHelper(this, BuildConfig.BASE_64);
@@ -109,30 +109,26 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
         mHelper.enableDebugLogging(false);
 
         Timber.d("Starting setup.");
-        mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
-            @SuppressWarnings("unchecked")
-            @Override
-            public void onIabSetupFinished(IabResult result) {
-                Timber.d("Setup finished.");
-                if (!result.isSuccess()) {
-                    Timber.d("Problem setting up In-app Billing: %s", result);
-                    return;
-                }
-                // Have we been disposed of in the meantime? If so, quit.
-                if (mHelper == null) return;
-
-                mBroadcastReceiver = new IabBroadcastReceiver(DonateActivity.this);
-                IntentFilter broadcastFilter = new IntentFilter(IabBroadcastReceiver.ACTION);
-                registerReceiver(mBroadcastReceiver, broadcastFilter);
-
-                // IAB is fully set up. Now, let's get an inventory of stuff we own.
-                Timber.d("Setup successful. Querying inventory.");
-                List additionalSku = new ArrayList();
-                additionalSku.add(COFEE_SKU);
-                additionalSku.add(LUNCH_SKU);
-                additionalSku.add(PREMIUM_SKU);
-                mHelper.queryInventoryAsync(true, additionalSku, mGotInventoryListener);
+        mHelper.startSetup(result -> {
+            Timber.d("Setup finished.");
+            if (!result.isSuccess()) {
+                Timber.d("Problem setting up In-app Billing: %s", result);
+                return;
             }
+            // Have we been disposed of in the meantime? If so, quit.
+            if (mHelper == null) return;
+
+            mBroadcastReceiver = new IabBroadcastReceiver(DonateActivity.this);
+            IntentFilter broadcastFilter = new IntentFilter(IabBroadcastReceiver.ACTION);
+            registerReceiver(mBroadcastReceiver, broadcastFilter);
+
+            // IAB is fully set up. Now, let's get an inventory of stuff we own.
+            Timber.d("Setup successful. Querying inventory.");
+            List<String> additionalSku = new ArrayList<>();
+            additionalSku.add(COFEE_SKU);
+            additionalSku.add(LUNCH_SKU);
+            additionalSku.add(PREMIUM_SKU);
+            mHelper.queryInventoryAsync(true, additionalSku, mGotInventoryListener);
         });
     }
 
@@ -153,7 +149,7 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new ViewHolder(LayoutInflater.from(getApplicationContext()).inflate(R.layout.about_fragment_listview_template, parent, false));
+            return new ViewHolder(LayoutInflater.from(getApplicationContext()).inflate(R.layout.fragment_about_list_item_template, parent, false));
         }
 
         @Override
@@ -215,25 +211,22 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
             public ViewHolder(View itemView) {
                 super(itemView);
                 ButterKnife.bind(this, itemView);
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION)
-                            switch (position) {
-                                case 0:
-                                    mHelper.launchPurchaseFlow(DonateActivity.this, COFEE_SKU, RC_REQUEST,
-                                            mPurchaseFinishedListener, "coffee");
-                                    return;
-                                case 1:
-                                    mHelper.launchPurchaseFlow(DonateActivity.this, LUNCH_SKU, RC_REQUEST,
-                                            mPurchaseFinishedListener, "lunch");
-                                    return;
-                                case 2:
-                                    mHelper.launchPurchaseFlow(DonateActivity.this, PREMIUM_SKU, RC_REQUEST,
-                                            mPurchaseFinishedListener, "premium");
-                            }
-                    }
+                itemView.setOnClickListener(v -> {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION)
+                        switch (position) {
+                            case 0:
+                                mHelper.launchPurchaseFlow(DonateActivity.this, COFEE_SKU, RC_REQUEST,
+                                        mPurchaseFinishedListener, "coffee");
+                                return;
+                            case 1:
+                                mHelper.launchPurchaseFlow(DonateActivity.this, LUNCH_SKU, RC_REQUEST,
+                                        mPurchaseFinishedListener, "lunch");
+                                return;
+                            case 2:
+                                mHelper.launchPurchaseFlow(DonateActivity.this, PREMIUM_SKU, RC_REQUEST,
+                                        mPurchaseFinishedListener, "premium");
+                        }
                 });
             }
         }

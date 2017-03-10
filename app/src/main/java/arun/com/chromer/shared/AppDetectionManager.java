@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
-import arun.com.chromer.preferences.manager.Preferences;
+import arun.com.chromer.activities.settings.Preferences;
 import timber.log.Timber;
 
 /**
@@ -18,6 +18,7 @@ public final class AppDetectionManager {
     private String nonFilteredPackage = "";
 
     private final Context context;
+
     @SuppressLint("StaticFieldLeak")
     // But this is the recommended way as per developer training :/ :/
     private static AppDetectionManager INSTANCE;
@@ -77,7 +78,7 @@ public final class AppDetectionManager {
 
         // Chances are that we picked the opening custom tab, so let's ignore our default provider
         // to be safe
-        if (packageName.equalsIgnoreCase(Preferences.customTabApp(context))) return false;
+        if (packageName.equalsIgnoreCase(Preferences.get(context).customTabApp())) return false;
 
         // Ignore google quick search box
         if (packageName.equalsIgnoreCase("com.google.android.googlequicksearchbox")) return false;

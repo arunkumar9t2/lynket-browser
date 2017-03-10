@@ -3,18 +3,17 @@ package arun.com.chromer.activities.about;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 
 import arun.com.chromer.R;
+import arun.com.chromer.activities.base.SubActivity;
 
-public class AboutAppActivity extends AppCompatActivity {
+public class AboutAppActivity extends SubActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.about_activity);
+        setContentView(R.layout.activity_about);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -33,26 +32,4 @@ public class AboutAppActivity extends AppCompatActivity {
             getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.primary_dark));
         }
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            // For finishing activity on clicking up caret
-            finishWithTransition();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        finishWithTransition();
-        super.onBackPressed();
-    }
-
-    private void finishWithTransition() {
-        finish();
-        overridePendingTransition(R.anim.slide_in_left_medium, R.anim.slide_out_right_medium);
-    }
-
 }

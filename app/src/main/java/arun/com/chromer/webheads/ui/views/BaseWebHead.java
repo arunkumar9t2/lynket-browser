@@ -6,6 +6,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -27,10 +28,10 @@ import android.widget.TextView;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
-import arun.com.chromer.preferences.manager.Preferences;
+import arun.com.chromer.activities.settings.Preferences;
+import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Utils;
-import arun.com.chromer.webheads.helper.WebSite;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.nekocode.badge.BadgeDrawable;
@@ -108,7 +109,7 @@ public abstract class BaseWebHead extends FrameLayout {
     boolean inQueue;
     // Flag to know if this web head was created for opening in new tab
     private boolean fromNewTab;
-    private boolean spawnCoordSet;
+    protected boolean spawnCoordSet;
     // Color of the web head
     @ColorInt
     int webHeadColor;
@@ -138,7 +139,7 @@ public abstract class BaseWebHead extends FrameLayout {
         }
         // Needed to prevent overly dark shadow.
         if (WEB_HEAD_COUNT > 2) {
-            setWebHeadElevation(dpToPx(4));
+            setWebHeadElevation(dpToPx(5));
         }
     }
 
@@ -159,14 +160,14 @@ public abstract class BaseWebHead extends FrameLayout {
 
     private void inflateContent(@NonNull Context context) {
         // size
-        if (Preferences.webHeadsSize(context) == 2) {
-            contentRoot = (FrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.web_head_layout_small, this, false);
+        if (Preferences.get(context).webHeadsSize() == 2) {
+            contentRoot = (FrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.widget_web_head_layout_small, this, false);
         } else
-            contentRoot = (FrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.web_head_layout, this, false);
+            contentRoot = (FrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.widget_web_head_layout, this, false);
         addView(contentRoot);
         ButterKnife.bind(this);
 
-        webHeadColor = Preferences.webHeadColor(getContext());
+        webHeadColor = Preferences.get(context).webHeadColor();
         indicator.setText(Utils.getFirstLetter(url));
         indicator.setTextColor(getForegroundWhiteOrBlack(webHeadColor));
         initRevealView(webHeadColor);
@@ -189,6 +190,8 @@ public abstract class BaseWebHead extends FrameLayout {
             final int pad = dpToPx(5);
             badgeView.setPadding(pad, pad, pad, pad);
         }
+
+        post(this::setInitialSpawnLocation);
     }
 
     private void initDisplayMetrics() {
@@ -201,23 +204,35 @@ public abstract class BaseWebHead extends FrameLayout {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        if (screenBounds == null)
-            screenBounds = new ScreenBounds(dispWidth, dispHeight, w);
+    }
 
+
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        masterX = 0;
+        masterY = 0;
+        initDisplayMetrics();
+    }
+
+    protected void setInitialSpawnLocation() {
+        if (screenBounds == null) {
+            screenBounds = new ScreenBounds(dispWidth, dispHeight, getWidth());
+        }
         if (!spawnCoordSet) {
             int x, y = dispHeight / 3;
-
             if (masterX != 0 || masterY != 0) {
                 x = masterX;
                 y = masterY;
             } else {
-                if (Preferences.webHeadsSpawnLocation(getContext()) == 1) {
+                if (Preferences.get(getContext()).webHeadsSpawnLocation() == 1) {
                     x = screenBounds.right;
                 } else {
                     x = screenBounds.left;
                 }
             }
             spawnCoordSet = true;
+            Timber.d("Spawn %d, %d", x, y);
             onSpawnLocationSet(x, y);
         }
     }
@@ -225,10 +240,10 @@ public abstract class BaseWebHead extends FrameLayout {
     /**
      * Used to get an instance of remove web head
      *
-     * @return an instance of {@link RemoveWebHead}
+     * @return an instance of {@link Trashy}
      */
-    RemoveWebHead getRemoveWebHead() {
-        return RemoveWebHead.get(getContext());
+    Trashy getTrashy() {
+        return Trashy.get(getContext());
     }
 
     /**
@@ -244,6 +259,10 @@ public abstract class BaseWebHead extends FrameLayout {
         } catch (IllegalArgumentException e) {
             Timber.e("Update called after view was removed");
         }
+    }
+
+    public WindowManager.LayoutParams getWindowParams() {
+        return windowParams;
     }
 
     boolean isLastWebHead() {
@@ -464,7 +483,7 @@ public abstract class BaseWebHead extends FrameLayout {
     @SuppressWarnings("UnusedParameters")
     void destroySelf(boolean receiveCallback) {
         destroyed = true;
-        RemoveWebHead.disappear();
+        Trashy.disappear();
         removeView(contentRoot);
         if (windowManager != null)
             try {
@@ -518,8 +537,8 @@ public abstract class BaseWebHead extends FrameLayout {
         return webSite;
     }
 
-    public void setWebSite(WebSite webSite) {
-        Timber.d(webSite.toString());
+    public void setWebSite(@NonNull WebSite webSite) {
+        // Timber.d(webSite.toString());
         this.webSite = webSite;
     }
 

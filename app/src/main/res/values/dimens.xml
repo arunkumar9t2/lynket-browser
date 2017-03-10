@@ -22,5 +22,7 @@
     <dimen name="remove_head_shadow_radius">3dp</dimen>
     <dimen name="remove_head_shadow_dx">0dp</dimen>
     <dimen name="remove_head_shadow_dy">1dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 
 </resources>

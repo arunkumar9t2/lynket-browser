@@ -42,12 +42,7 @@ public class WebHeadIntroExplainFragment extends AppIntroFragment {
         if (v != null) {
             final TextView d = (TextView) v.findViewById(com.github.paolorotolo.appintro.R.id.description);
             d.setBackground(ColorUtil.getRippleDrawableCompat(ContextCompat.getColor(getActivity(), R.color.accent)));
-            d.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(getActivity(), WebHeadsIntro.class));
-                }
-            });
+            d.setOnClickListener(v1 -> startActivity(new Intent(getActivity(), WebHeadsIntro.class)));
         }
         return v;
     }

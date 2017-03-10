@@ -1,0 +1,3 @@
+[submodule "RxSuggestions"]
+	path = RxSuggestions
+	url = https://github.com/arunkumar9t2/RxSuggestions.git

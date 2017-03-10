@@ -3,7 +3,6 @@ package arun.com.chromer.activities.about.changelog;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -16,7 +15,6 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import arun.com.chromer.BuildConfig;
@@ -32,7 +30,7 @@ public class Changelog {
     public static void show(final Activity activity) {
         try {
             @SuppressLint("InflateParams")
-            final FrameLayout content = (FrameLayout) LayoutInflater.from(activity).inflate(R.layout.changelog_layout, null);
+            final FrameLayout content = (FrameLayout) LayoutInflater.from(activity).inflate(R.layout.widget_changelog_layout, null);
             final MaterialProgressBar progress = ButterKnife.findById(content, R.id.changelog_progress);
             final WebView webView = ButterKnife.findById(content, R.id.changelog_web_view);
             webView.loadData(activity.getString(R.string.changelog_text), "text/html", "utf-8");
@@ -64,18 +62,8 @@ public class Changelog {
                     .title("Changelog")
                     .positiveText(android.R.string.ok)
                     .neutralText(R.string.rate_play_store)
-                    .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            Utils.openPlayStore(activity, activity.getPackageName());
-                        }
-                    })
-                    .dismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialogInterface) {
-                            content.removeAllViews();
-                        }
-                    })
+                    .onNeutral((dialog, which) -> Utils.openPlayStore(activity, activity.getPackageName()))
+                    .dismissListener(dialogInterface -> content.removeAllViews())
                     .show();
         } catch (Exception e) {
             e.printStackTrace();

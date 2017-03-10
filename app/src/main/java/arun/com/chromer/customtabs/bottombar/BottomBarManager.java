@@ -23,7 +23,7 @@ public class BottomBarManager {
     public static RemoteViews createBottomBarRemoteViews(@NonNull final Context context, final int toolbarColor, final @NonNull Config config) {
         final int iconColor = ColorUtil.getForegroundWhiteOrBlack(toolbarColor);
 
-        final RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.bottom_bar_layout);
+        final RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_bottom_bar_layout);
         remoteViews.setInt(R.id.bottom_bar_root, "setBackgroundColor", toolbarColor);
 
         if (!config.minimize) {

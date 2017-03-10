@@ -36,6 +36,16 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+    <string-array name="articleThemeValues">
+        <item>Dark</item>
+        <item>Light</item>
+        <item>Auto</item>
+    </string-array>
+    <string-array name="articleThemeKeys">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
     <string-array name="webHeadsSizeValues">
         <item>Normal</item>
         <item>Small</item>
@@ -48,6 +58,7 @@
     <string name="share_via">Share via…</string>
     <string name="custom_tab_provider_not_found">Compatible custom tab provider not found</string>
     <string name="custom_tab_provider_not_found_expln">Chromer requires you to have any Custom tab compatible browser on your phone. Currently there are no browsers on your phone that supports it. Would you like to install Google Chrome (Free) from play store? If you already have it, then please update it to latest version.</string>
+    <string name="custom_tab_provider_not_found_dialog_content"><![CDATA[Could not find compatible custom tab browser on your phone. Google Chrome (Free) is recommended. You can still view webpages within Chromer and use Article mode, but for the best experience, a custom tab provider is highly recommended. Would you like to install now?]]></string>
     <string name="install">Install</string>
     <string name="licenses">Licenses</string>
     <string name="about">About</string>
@@ -59,7 +70,7 @@
     <string name="feedback">Feedback</string>
     <string name="intro">Intro</string>
     <string name="send_email">Send email…</string>
-    <string name="fallback_msg">Could not open custom tab, falling back to normal browsers</string>
+    <string name="fallback_msg">Could not open custom tab, falling back to webview.</string>
     <string name="open_with">Open with…</string>
     <string name="open_in_browser">Open in %1$s</string>
     <string name="unxp_err">Unexpected error, try again</string>
@@ -79,7 +90,7 @@
     <string name="how_to_use">How to use this?</string>
     <string name="intro_6">Just set Chromer as your default browser, Chromer will display the link in a non-intrusive way. Or choose Chromer when needed.</string>
     <string name="why_use">Why use?</string>
-    <string name="intro_7_new">Non-intrusive and quicker loading, \n reduced data usage, \n shared login info from Chrome hence auto completes forms and SECURE with latest updates. \n\n Your browsing data is automatically synced with your Google account.</string>
+    <string name="chromer_advantages"><![CDATA[<b>Chrome Custom Tabs -</b> Chrome custom tab is the recommended way for displaying web content and is light weight and faster. Your browsing activity like bookmarks, passwords and history are synced with your account. \n<b>AMP -</b> AMP mode saves data and loads the web page very quickly.\n<b>Article -</b> Article mode further enhances the browsing experience by removing unnecessary content.\n<b>Web heads -</b> Web heads save time by conveniently loading multiple links in the background.]]></string>
     <string name="version">Version</string>
     <string name="changelog">Changelog</string>
     <string name="join_google_plus">Join Google+ Community</string>
@@ -148,7 +159,7 @@
     <string name="webheads_intro_4">Chromer prioritizes the last opened link and pre-fetches it. The recommended method is to click the web heads one by one from top to bottom. Enabling close web heads on launch wil make this seamless.</string>
     <string name="web_head_permission_toast">To open links in floating bubbles, Chromer needs drawing over other apps permission, please grant to continue or disable Web Heads in Chromer settings.</string>
     <string name="tap_close_all">Tap to close all</string>
-    <string name="web_heads_service">Web Heads Service</string>
+    <string name="web_heads_service">Web Heads Active</string>
     <string name="join_beta">Join Beta</string>
     <string name="become_a_tester">Become a tester</string>
     <string name="join_beta_content">Beta releases are experimental builds that has the latest features but has few bugs. You can contribute to the development by joining as tester and then reporting bugs you face in the Google+ Community. \n\nPlease make sure you have joined the Google+ community, and then click the become a tester button to go to Google Play testing link. \n\nNOTE: You have to join the community to become a tester.</string>
@@ -226,4 +237,45 @@
     <string name="share_all_list">List - Limited app support. Eg: Join, Pushbullet etc.</string>
     <string name="new_tab">Open new tab</string>
     <string name="title_activity_open_with">Open with</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="settings_browsing_mode">Browsing mode</string>
+    <string name="settings_look_and_feel">Look &amp; feel</string>
+    <string name="settings_browsing_options">Browsing options</string>
+    <string name="title_activity_browsing_mode">Browsing mode</string>
+    <string name="browsing_mode_slide_over">Slide over</string>
+    <string name="browsing_mode_web_heads">Web heads</string>
+    <string name="browsing_mode_slide_over_explanation">Websites slide over the app you are using.</string>
+    <string name="browsing_mode_web_heads_explanation">Websites load in the background allowing you to stack multiple links and then get back to them later with floating bubbles on screen.</string>
+    <string name="load_faster_heading">Load pages faster with below options</string>
+    <string name="amp">Accelerated Mobile Pages (AMP)</string>
+    <string name="amp_mode">AMP Mode</string>
+    <string name="amp_summary">Load mobile optimized version of the website for much quicker and smoother reading experience.</string>
+    <string name="article_mode">Article mode</string>
+    <string name="article_theme">Article theme</string>
+    <string name="article_mode_summary">Load sleek looking reader mode with no extra stuff focusing just on the content.</string>
+    <string name="amp_warning_title">AMP Warning</string>
+    <string name="amp_warning_content"><![CDATA[In <b>Slide-over</b> mode, it might take a short while to grab the website\'s AMP url. You might see a dialog when this happens.]]></string>
+    <string name="title_activity_look_and_feel">Look and feel</string>
+    <string name="not_available_in_slide_mode">Not available during slide-over mode</string>
+    <string name="title_activity_browsing_options">Browsing options</string>
+    <string name="grabbing_amp_link">Grabbing AMP link</string>
+    <string name="link_found">Link found!</string>
+    <string name="link_not_found">AMP link not found</string>
+    <string name="open">Open</string>
+    <string name="open_full_page">Open full page</string>
+    <string name="more">More</string>
+    <string name="title_history">History</string>
+    <string name="deleted_items">%1$d items deleted.</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="history_deletion_confirmation_content">This action will delete all history and it is not reversible.</string>
+    <string name="incognito_mode">Incognito mode</string>
+    <string name="history_link">History</string>
+    <string name="recents_intro">Recently opened links will appear here</string>
+    <string name="amp_article_combined_explanation"><![CDATA[When both <b>AMP and Article mode is on</b>, Chromer will try to load AMP version of the page if it exists. If not article mode will be loaded.]]></string>
+    <string name="attention">Attention!</string>
+    <string name="manage">Manage</string>
+    <string name="more_menu">More</string>
+    <string name="open_article_view">Open article view</string>
+    <string name="browse_seamlessly">Browse seamlessly</string>
+    <string name="slide_over_explanation">Web pages slide over the app you are using and you can press X to quickly return to the app</string>
 </resources>

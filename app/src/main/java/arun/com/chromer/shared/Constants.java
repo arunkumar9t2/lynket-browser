@@ -10,11 +10,11 @@ public class Constants {
     public static final int NO_COLOR = -1;
 
     // URL
-    public static final String GOOGLE_URL = "http://www.google.com/";
+    public static final String GOOGLE_URL = "https://www.google.com/";
     public static final String CUSTOM_TAB_URL = "https://developer.chrome.com/multidevice/android/customtabs#whentouse";
     public static final String APP_TESTING_URL = "https://play.google.com/apps/testing/arun.com.chromer";
     public static final String G_COMMUNITY_URL = "https://plus.google.com/communities/109754631011301174504";
-    public static final String G_SEARCH_URL = "http://www.google.com/search?q=";
+    public static final String G_SEARCH_URL = "https://www.google.com/search?q=";
 
     //Objects
     public static final Intent WEB_INTENT = new Intent(Intent.ACTION_VIEW, Uri.parse(GOOGLE_URL));
@@ -41,6 +41,8 @@ public class Constants {
     public static final String ACTION_MINIMIZE = "ACTION_MINIMIZE";
     public static final String ACTION_EVENT_WEBSITE_UPDATED = "ACTION_EVENT_WEBSITE_UPDATED";
     public static final String ACTION_EVENT_WEBHEAD_DELETED = "ACTION_EVENT_WEBHEAD_DELETED";
+    public static final String ACTION_OPEN_CONTEXT_ACTIVITY = "ACTION_OPEN_CONTEXT_ACTIVITY";
+    public static final String ACTION_OPEN_NEW_TAB = "ACTION_OPEN_NEW_TAB";
     // Extra keys
     public static final String EXTRA_KEY_SHOULD_REFRESH_BINDING = "EXTRA_KEY_SHOULD_REFRESH_BINDING";
     public static final String EXTRA_KEY_FROM_WEBHEAD = "EXTRA_KEY_FROM_WEBHEAD";
@@ -51,6 +53,9 @@ public class Constants {
     public static final String EXTRA_KEY_FROM_NEW_TAB = "EXTRA_KEY_FROM_NEW_TAB";
     public static final String EXTRA_KEY_WEBSITE = "EXTRA_KEY_WEBSITE";
     public static final String EXTRA_KEY_MINIMIZE = "EXTRA_KEY_MINIMIZE";
+    public static final String EXTRA_PACKAGE_NAME = "EXTRA_PACKAGE_NAME";
+    public static final String EXTRA_KEY_ORIGINAL_URL = "EXTRA_KEY_ORIGINAL_URL";
+    public static final String EXTRA_KEY_FROM_ARTICLE = "EXTRA_KEY_FROM_ARTICLE";
     // Request codes
     public static final int REQUEST_CODE_VOICE = 10001;
 

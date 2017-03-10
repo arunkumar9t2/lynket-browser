@@ -24,13 +24,11 @@ import com.mikepenz.iconics.IconicsDrawable;
 import arun.com.chromer.BuildConfig;
 import arun.com.chromer.R;
 import arun.com.chromer.activities.about.changelog.Changelog;
-import arun.com.chromer.activities.about.licenses.Licenses;
 import arun.com.chromer.shared.Constants;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import de.psdev.licensesdialog.LicensesDialog;
 
 /**
  * Created by Arun on 11/11/2015.
@@ -93,7 +91,7 @@ public class AboutFragment extends Fragment {
     class AppAdapter extends RecyclerView.Adapter<AppAdapter.ItemHolder> {
         @Override
         public ItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            final View view = LayoutInflater.from(getActivity()).inflate(R.layout.about_fragment_listview_template, parent, false);
+            final View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_about_list_item_template, parent, false);
             return new ItemHolder(view);
         }
 
@@ -178,11 +176,8 @@ public class AboutFragment extends Fragment {
                         getActivity().startActivity(communityIntent);
                         break;
                     case 3:
-                        new LicensesDialog.Builder(getActivity())
-                                .setNotices(Licenses.getNotices())
-                                .setTitle(R.string.licenses)
-                                .build()
-                                .showAppCompat();
+                        Intent licenses = new Intent(Intent.ACTION_VIEW, Uri.parse("http://htmlpreview.github.com/?https://github.com/arunkumar9t2/chromer/blob/master/notices.html"));
+                        getActivity().startActivity(licenses);
                         break;
                     case 4:
                         Intent oneSkyIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://os0l2aw.oneskyapp.com/collaboration/project/62112"));
@@ -196,7 +191,7 @@ public class AboutFragment extends Fragment {
     class AuthorAdapter extends RecyclerView.Adapter<AuthorAdapter.ItemHolder> {
         @Override
         public ItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            final View view = LayoutInflater.from(getActivity()).inflate(R.layout.about_fragment_listview_template, parent, false);
+            final View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_about_list_item_template, parent, false);
             return new ItemHolder(view);
         }
 

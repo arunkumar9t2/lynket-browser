@@ -21,7 +21,7 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import arun.com.chromer.R;
-import arun.com.chromer.preferences.manager.Preferences;
+import arun.com.chromer.activities.settings.Preferences;
 
 import static android.content.Intent.EXTRA_TEXT;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -37,7 +37,7 @@ public class FavShareBroadcastReceiver extends BroadcastReceiver {
             final Intent openAppIntent = new Intent(Intent.ACTION_SEND);
             openAppIntent.putExtra(EXTRA_TEXT, url);
             openAppIntent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-            openAppIntent.setComponent(ComponentName.unflattenFromString(Preferences.favShareComponent(context)));
+            openAppIntent.setComponent(ComponentName.unflattenFromString(Preferences.get(context).favShareComponent()));
             try {
                 context.startActivity(openAppIntent);
             } catch (Exception e) {

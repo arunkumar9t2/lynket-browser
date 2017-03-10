@@ -29,6 +29,7 @@
         <service android:name=".customtabs.warmup.WarmUpService" />
         <service
             android:name=".customtabs.prefetch.ScannerService"
+            android:enabled="false"
             android:exported="true"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
@@ -55,6 +56,33 @@
             android:enabled="true"
             android:exported="true"
             tools:ignore="ExportedService" />
+        <service
+            android:name=".qs.WebHeadTile"
+            android:icon="@drawable/ic_bubble_chart_white_24dp"
+            android:label="@string/web_heads"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".qs.AmpTile"
+            android:icon="@drawable/ic_action_amp_icon"
+            android:label="@string/amp_mode"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".qs.ArticleTile"
+            android:icon="@drawable/ic_description_black_24dp"
+            android:label="@string/article_mode"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
 
         <receiver android:name=".customtabs.callbacks.ShareBroadcastReceiver" />
         <receiver android:name=".customtabs.callbacks.FavShareBroadcastReceiver" />
@@ -78,9 +106,22 @@
                 android:resource="@xml/shortcuts" />
         </activity>
         <activity
+            android:name=".activities.settings.SettingsGroupActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="arun.com.chromer.MainActivity" />
+        </activity>
+        <activity
             android:name=".activities.CustomTabActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat.Translucent" />
+        <activity
+            android:name=".activities.browsing.article.ChromerArticleActivity"
+            android:label="@string/app_name"
+            android:theme="@style/ArticleTheme" />
         <activity
             android:name=".activities.intro.ChromerIntro"
             android:label="Intro"
@@ -132,7 +173,7 @@
         <activity
             android:name=".activities.blacklist.BlacklistManagerActivity"
             android:label="@string/blacklisted_apps"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activities.settings.browsingoptions.BrowsingOptionsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".webheads.ui.context.WebHeadContextActivity"
@@ -155,23 +196,47 @@
             android:label="@string/title_activity_open_with"
             android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Translucent" />
+        <activity
+            android:name=".activities.MoreMenuActivity"
+            android:excludeFromRecents="true"
+            android:label="@string/more_menu"
+            android:noHistory="true"
+            android:theme="@style/DialogTheme" />
+        <activity
+            android:name=".activities.settings.browsingmode.BrowsingModeActivity"
+            android:label="@string/title_activity_browsing_mode"
+            android:parentActivityName=".activities.settings.SettingsGroupActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="arun.com.chromer.activities.settings.SettingsGroupActivity" />
+        </activity>
+        <activity
+            android:name=".activities.settings.lookandfeel.LookAndFeelActivity"
+            android:label="@string/title_activity_look_and_feel"
+            android:parentActivityName=".activities.settings.SettingsGroupActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="arun.com.chromer.activities.settings.SettingsGroupActivity" />
+        </activity>
+        <activity
+            android:name=".activities.settings.browsingoptions.BrowsingOptionsActivity"
+            android:label="@string/title_activity_browsing_options"
+            android:parentActivityName=".activities.settings.SettingsGroupActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="arun.com.chromer.activities.settings.SettingsGroupActivity" />
+        </activity>
+        <activity
+            android:name=".activities.history.HistoryActivity"
+            android:label="@string/title_history"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.browsing.incognito.WebViewActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
-        <service
-            android:name=".webheads.qs.WebHeadTile"
-            android:icon="@drawable/ic_bubble_chart_white_24dp"
-            android:label="@string/tile_label"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
-            </intent-filter>
-        </service>
-
-        <meta-data
-            android:name="DOMAIN_PACKAGE_NAME"
-            android:value="arun.com.chromer.db" />
-        <meta-data
-            android:name="VERSION"
-            android:value="2" />
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="${crashlyticsApiKey}"

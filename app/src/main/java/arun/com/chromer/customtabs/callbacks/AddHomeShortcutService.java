@@ -25,10 +25,10 @@ import java.util.concurrent.ExecutionException;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.BrowserInterceptActivity;
+import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.parser.RxParser;
 import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Utils;
-import arun.com.chromer.webheads.helper.WebSite;
 import timber.log.Timber;
 
 import static android.content.Intent.EXTRA_SHORTCUT_ICON;
@@ -176,11 +176,6 @@ public class AddHomeShortcutService extends IntentService {
     }
 
     private void showToast(@NonNull final String msgToShow) {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(AddHomeShortcutService.this, msgToShow, LENGTH_SHORT).show();
-            }
-        });
+        new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(AddHomeShortcutService.this, msgToShow, LENGTH_SHORT).show());
     }
 }

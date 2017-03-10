@@ -25,6 +25,9 @@ import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
+import android.text.Html;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Patterns;
@@ -42,8 +45,10 @@ import arun.com.chromer.BuildConfig;
 import arun.com.chromer.R;
 import arun.com.chromer.customtabs.CustomTabs;
 import arun.com.chromer.customtabs.prefetch.ScannerService;
+import arun.com.chromer.data.common.App;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.views.IntentPickerSheetView;
+import timber.log.Timber;
 
 /**
  * Created by Arun on 17/12/2015.
@@ -353,6 +358,28 @@ public class Utils {
         final int width = Math.round(ratio * orgImage.getWidth());
         final int height = Math.round(ratio * orgImage.getHeight());
         return Bitmap.createScaledBitmap(orgImage, width, height, filter);
+    }
+
+    public static void printThread() {
+        Timber.d("Thread: %s", Thread.currentThread().getName());
+    }
+
+    public static App createApp(@NonNull Context context, @NonNull String packageName) {
+        final App app = new App();
+        app.packageName = packageName;
+        app.appName = getAppNameWithPackage(context, packageName);
+        return app;
+    }
+
+    @NonNull
+    public static Spanned html(@NonNull Context context, @StringRes int res) {
+        final String string = context.getString(res);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return Html.fromHtml(string, Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            //noinspection deprecation
+            return Html.fromHtml(string);
+        }
     }
 
     /**

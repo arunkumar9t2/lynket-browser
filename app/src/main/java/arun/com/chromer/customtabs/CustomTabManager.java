@@ -10,7 +10,7 @@ import android.support.customtabs.CustomTabsSession;
 
 import java.util.List;
 
-import arun.com.chromer.preferences.manager.Preferences;
+import arun.com.chromer.activities.settings.Preferences;
 import timber.log.Timber;
 
 /**
@@ -79,7 +79,7 @@ public class CustomTabManager implements ServiceConnectionCallback {
     public boolean bindCustomTabsService(Context context) {
         if (mClient != null) return false;
 
-        String packageName = Preferences.customTabApp(context);
+        String packageName = Preferences.get(context).customTabApp();
         if (packageName == null) return false;
 
         mConnection = new ServiceConnection(this);
@@ -106,6 +106,11 @@ public class CustomTabManager implements ServiceConnectionCallback {
             Timber.d("May launch url was a failure for %s", uri.toString());
         }
         return ok;
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    public boolean mayLaunchUrl(Uri uri) {
+        return mayLaunchUrl(uri, null, null);
     }
 
     @Override

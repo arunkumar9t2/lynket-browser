@@ -72,7 +72,7 @@ public class TabView extends FrameLayout {
 
     private void init(@NonNull Context context, @TabType int tabType) {
         mTabType = tabType;
-        addView(LayoutInflater.from(context).inflate(R.layout.tab_view_layout, this, false));
+        addView(LayoutInflater.from(context).inflate(R.layout.widget_tab_view_layout, this, false));
         ButterKnife.bind(this);
         switch (mTabType) {
             case TAB_TYPE_OPTIONS:

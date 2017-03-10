@@ -30,7 +30,10 @@ import java.util.List;
 import java.util.Random;
 
 import arun.com.chromer.R;
+import arun.com.chromer.activities.MoreMenuActivity;
 import arun.com.chromer.activities.OpenIntentWithActivity;
+import arun.com.chromer.activities.browsing.incognito.WebViewActivity;
+import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.bottombar.BottomBarManager;
 import arun.com.chromer.customtabs.callbacks.AddHomeShortcutService;
 import arun.com.chromer.customtabs.callbacks.ClipboardService;
@@ -39,31 +42,32 @@ import arun.com.chromer.customtabs.callbacks.MinimizeBroadcastReceiver;
 import arun.com.chromer.customtabs.callbacks.OpenInChromeReceiver;
 import arun.com.chromer.customtabs.callbacks.SecondaryBrowserReceiver;
 import arun.com.chromer.customtabs.callbacks.ShareBroadcastReceiver;
-import arun.com.chromer.customtabs.dynamictoolbar.AppColorExtractorService;
-import arun.com.chromer.customtabs.dynamictoolbar.WebColorExtractorService;
-import arun.com.chromer.customtabs.prefetch.ScannerService;
 import arun.com.chromer.customtabs.warmup.WarmUpService;
-import arun.com.chromer.db.AppColor;
-import arun.com.chromer.db.WebColor;
-import arun.com.chromer.preferences.manager.Preferences;
+import arun.com.chromer.data.apps.AppRepository;
+import arun.com.chromer.data.website.WebsiteRepository;
+import arun.com.chromer.shared.AppDetectService;
 import arun.com.chromer.shared.AppDetectionManager;
+import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.WebHeadService;
 import timber.log.Timber;
 
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.graphics.Color.WHITE;
+import static arun.com.chromer.activities.settings.Preferences.ANIMATION_MEDIUM;
+import static arun.com.chromer.activities.settings.Preferences.ANIMATION_SHORT;
+import static arun.com.chromer.activities.settings.Preferences.PREFERRED_ACTION_BROWSER;
+import static arun.com.chromer.activities.settings.Preferences.PREFERRED_ACTION_FAV_SHARE;
+import static arun.com.chromer.activities.settings.Preferences.PREFERRED_ACTION_GEN_SHARE;
 import static arun.com.chromer.customtabs.bottombar.BottomBarManager.createBottomBarRemoteViews;
 import static arun.com.chromer.customtabs.bottombar.BottomBarManager.getClickableIDs;
 import static arun.com.chromer.customtabs.bottombar.BottomBarManager.getOnClickPendingIntent;
-import static arun.com.chromer.preferences.manager.Preferences.ANIMATION_MEDIUM;
-import static arun.com.chromer.preferences.manager.Preferences.ANIMATION_SHORT;
-import static arun.com.chromer.preferences.manager.Preferences.PREFERRED_ACTION_BROWSER;
-import static arun.com.chromer.preferences.manager.Preferences.PREFERRED_ACTION_FAV_SHARE;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_ORIGINAL_URL;
 import static arun.com.chromer.shared.Constants.NO_COLOR;
 
 /**
- * A helper class that builds up the view intent according to user preferences and
+ * A helper class that builds up the view intent according to user Preferences.get(activity) and
  * launches custom tab.
  */
 public class CustomTabs {
@@ -78,18 +82,16 @@ public class CustomTabs {
      * Fallback in case there was en error launching custom tabs
      */
     private final static CustomTabsFallback CUSTOM_TABS_FALLBACK =
-            new CustomTabsFallback() {
-                @Override
-                public void openUri(Activity activity, Uri uri) {
-                    if (activity != null) {
-                        final String string = activity.getString(R.string.fallback_msg);
-                        Toast.makeText(activity, string, Toast.LENGTH_SHORT).show();
-                        try {
-                            final Intent target = new Intent(Intent.ACTION_VIEW, uri);
-                            activity.startActivity(Intent.createChooser(target, activity.getString(R.string.open_with)));
-                        } catch (ActivityNotFoundException e) {
-                            Toast.makeText(activity, activity.getString(R.string.unxp_err), Toast.LENGTH_SHORT).show();
-                        }
+            (activity, uri) -> {
+                if (activity != null) {
+                    final String string = activity.getString(R.string.fallback_msg);
+                    Toast.makeText(activity, string, Toast.LENGTH_SHORT).show();
+                    try {
+                        final Intent intent = new Intent(activity, WebViewActivity.class);
+                        intent.setData(uri);
+                        activity.startActivity(intent);
+                    } catch (ActivityNotFoundException e) {
+                        Toast.makeText(activity, activity.getString(R.string.unxp_err), Toast.LENGTH_SHORT).show();
                     }
                 }
             };
@@ -177,7 +179,7 @@ public class CustomTabs {
      */
     @Nullable
     private static String getCustomTabPackage(Context context) {
-        final String userPackage = Preferences.customTabApp(context);
+        final String userPackage = Preferences.get(context).customTabApp();
         if (userPackage != null && userPackage.length() > 0) {
             return userPackage;
         }
@@ -277,7 +279,7 @@ public class CustomTabs {
     }
 
     /**
-     * Facade method that does all the heavy work of building up the builder based on user preferences
+     * Facade method that does all the heavy work of building up the builder based on user Preferences.get(activity)
      *
      * @return Instance of this class
      */
@@ -324,11 +326,6 @@ public class CustomTabs {
             return WebHeadService.getTabSession();
         }
 
-        final ScannerService sService = ScannerService.getInstance();
-        if (sService != null && sService.getTabSession() != null && Preferences.preFetch(activity)) {
-            Timber.d("Using scanner session");
-            return sService.getTabSession();
-        }
         final WarmUpService service = WarmUpService.getInstance();
         if (service != null) {
             Timber.d("Using warm up session");
@@ -343,9 +340,9 @@ public class CustomTabs {
      */
     private void prepareAnimations() {
         assertBuilderInitialized();
-        if (Preferences.isAnimationEnabled(activity) && !noAnimation) {
-            final int type = Preferences.animationType(activity);
-            final int speed = Preferences.animationSpeed(activity);
+        if (Preferences.get(activity).isAnimationEnabled() && !noAnimation) {
+            final int type = Preferences.get(activity).animationType();
+            final int speed = Preferences.get(activity).animationSpeed();
             int start[] = new int[]{};
             int exit[] = new int[]{};
             switch (speed) {
@@ -387,16 +384,15 @@ public class CustomTabs {
      */
     private void prepareToolbar() {
         assertBuilderInitialized();
-        if (Preferences.isColoredToolbar(activity)) {
-            toolbarColor = Preferences.toolbarColor(activity);
-
-            if (Preferences.dynamicToolbar(activity)) {
+        if (Preferences.get(activity).isColoredToolbar()) {
+            toolbarColor = Preferences.get(activity).toolbarColor();
+            if (Preferences.get(activity).dynamicToolbar()) {
                 final boolean overrideRequested = webToolbarFallback != NO_COLOR;
-                if (Preferences.dynamicToolbarOnApp(activity)) {
+                if (Preferences.get(activity).dynamicToolbarOnApp()) {
                     setAppToolbarColor();
                 }
 
-                if (Preferences.dynamicToolbarOnWeb(activity)) {
+                if (Preferences.get(activity).dynamicToolbarOnWeb()) {
                     if (overrideRequested) {
                         toolbarColor = webToolbarFallback;
                         Timber.d("Using fallback color");
@@ -405,10 +401,8 @@ public class CustomTabs {
                     }
                 }
             }
-
             if (toolbarColor != NO_COLOR) {
-                builder
-                        .setToolbarColor(toolbarColor)
+                builder.setToolbarColor(toolbarColor)
                         .setSecondaryToolbarColor(toolbarColor);
             }
         }
@@ -421,20 +415,14 @@ public class CustomTabs {
      */
     private boolean setWebToolbarColor() {
         // Check if we have the color extracted for this source
-        final String host = Uri.parse(url).getHost();
-        if (host != null) {
-            final List<WebColor> webColors = WebColor.find(WebColor.class, "url = ?", host);
-
-            if (!webColors.isEmpty()) {
-                toolbarColor = webColors.get(0).getColor();
-                return true;
-            } else {
-                final Intent extractorService = new Intent(activity, WebColorExtractorService.class);
-                extractorService.setData(Uri.parse(url));
-                activity.startService(extractorService);
-            }
+        final int color = WebsiteRepository.getInstance(activity).getWebsiteColorSync(url);
+        if (color != Constants.NO_COLOR) {
+            toolbarColor = color;
+            return true;
+        } else {
+            WebsiteRepository.getInstance(activity).saveWebColor(url).subscribe();
+            return false;
         }
-        return false;
     }
 
     /**
@@ -444,16 +432,15 @@ public class CustomTabs {
      */
     private boolean setAppToolbarColor() {
         try {
-            final String lastApp = AppDetectionManager.getInstance(activity).getFilteredPackage();
-            if (TextUtils.isEmpty(lastApp)) return false;
-            final List<AppColor> appColors = AppColor.find(AppColor.class, "app = ?", lastApp);
-            if (!appColors.isEmpty()) {
-                toolbarColor = appColors.get(0).getColor();
+            final String lastPackage = AppDetectionManager.getInstance(activity).getFilteredPackage();
+            if (TextUtils.isEmpty(lastPackage)) {
+                activity.startService(new Intent(activity, AppDetectService.class));
+                return false;
+            }
+            final int savedColor = AppRepository.getInstance(activity).getPackageColorSync(lastPackage);
+            if (savedColor != Constants.NO_COLOR) {
+                toolbarColor = savedColor;
                 return true;
-            } else {
-                final Intent extractorService = new Intent(activity, AppColorExtractorService.class);
-                extractorService.putExtra("app", lastApp);
-                activity.startService(extractorService);
             }
         } catch (Exception e) {
             Timber.e(e.toString());
@@ -462,13 +449,13 @@ public class CustomTabs {
     }
 
     /**
-     * Used to set the action button based on user preferences. Usually secondary browser or favorite share app.
+     * Used to set the action button based on user Preferences.get(activity). Usually secondary browser or favorite share app.
      */
     private void prepareActionButton() {
         assertBuilderInitialized();
-        switch (Preferences.preferredAction(activity)) {
+        switch (Preferences.get(activity).preferredAction()) {
             case PREFERRED_ACTION_BROWSER:
-                String pakage = Preferences.secondaryBrowserPackage(activity);
+                String pakage = Preferences.get(activity).secondaryBrowserPackage();
                 if (Utils.isPackageInstalled(activity, pakage)) {
                     final Bitmap icon = getAppIconBitmap(pakage);
                     final Intent intent = new Intent(activity, SecondaryBrowserReceiver.class);
@@ -478,7 +465,7 @@ public class CustomTabs {
                 }
                 break;
             case PREFERRED_ACTION_FAV_SHARE:
-                pakage = Preferences.favSharePackage(activity);
+                pakage = Preferences.get(activity).favSharePackage();
                 if (Utils.isPackageInstalled(activity, pakage)) {
                     final Bitmap icon = getAppIconBitmap(pakage);
                     final Intent intent = new Intent(activity, FavShareBroadcastReceiver.class);
@@ -487,7 +474,7 @@ public class CustomTabs {
                     builder.setActionButton(icon, activity.getString(R.string.fav_share_app), favSharePending);
                 }
                 break;
-            case Preferences.PREFERRED_ACTION_GEN_SHARE:
+            case PREFERRED_ACTION_GEN_SHARE:
                 final Bitmap shareIcon = new IconicsDrawable(activity)
                         .icon(CommunityMaterial.Icon.cmd_share_variant)
                         .color(WHITE)
@@ -508,9 +495,21 @@ public class CustomTabs {
         preparePreferredAction();
         prepareMinimize();
         prepareCopyLink();
-        prepareAddToHomeScreen();
+        // prepareAddToHomeScreen();
         prepareOpenWith();
         prepareOpenInChrome();
+        prepareMoreMenu();
+    }
+
+    /**
+     * Prepares more menu
+     */
+    private void prepareMoreMenu() {
+        final Intent moreMenuActivity = new Intent(activity, MoreMenuActivity.class);
+        moreMenuActivity.setFlags(FLAG_ACTIVITY_NEW_TASK);
+        moreMenuActivity.putExtra(EXTRA_KEY_ORIGINAL_URL, url);
+        final PendingIntent moreMenuPending = PendingIntent.getActivity(activity, 0, moreMenuActivity, FLAG_UPDATE_CURRENT);
+        builder.addMenuItem(activity.getString(R.string.more_menu), moreMenuPending);
     }
 
     /**
@@ -518,9 +517,9 @@ public class CustomTabs {
      * merge tabs and apps and
      */
     private void prepareMinimize() {
-        if (!Preferences.bottomBar(activity) && forWebHead && Preferences.mergeTabs(activity)) {
+        if (!Preferences.get(activity).bottomBar() && Preferences.get(activity).mergeTabs()) {
             final Intent minimizeIntent = new Intent(activity, MinimizeBroadcastReceiver.class);
-            minimizeIntent.putExtra(Intent.EXTRA_TEXT, url);
+            minimizeIntent.putExtra(EXTRA_KEY_ORIGINAL_URL, url);
             final PendingIntent pendingMin = PendingIntent.getBroadcast(activity, new Random().nextInt(), minimizeIntent, FLAG_UPDATE_CURRENT);
             builder.addMenuItem(activity.getString(R.string.minimize), pendingMin);
         }
@@ -532,9 +531,9 @@ public class CustomTabs {
      */
     private void preparePreferredAction() {
         assertBuilderInitialized();
-        switch (Preferences.preferredAction(activity)) {
+        switch (Preferences.get(activity).preferredAction()) {
             case PREFERRED_ACTION_BROWSER:
-                String pkg = Preferences.favSharePackage(activity);
+                String pkg = Preferences.get(activity).favSharePackage();
                 if (Utils.isPackageInstalled(activity, pkg)) {
                     final String app = Utils.getAppNameWithPackage(activity, pkg);
                     final String label = String.format(activity.getString(R.string.share_with), app);
@@ -544,7 +543,7 @@ public class CustomTabs {
                 }
                 break;
             case PREFERRED_ACTION_FAV_SHARE:
-                pkg = Preferences.secondaryBrowserPackage(activity);
+                pkg = Preferences.get(activity).secondaryBrowserPackage();
                 if (Utils.isPackageInstalled(activity, pkg)) {
                     if (!pkg.equalsIgnoreCase(STABLE_PACKAGE)) {
                         final String app = Utils.getAppNameWithPackage(activity, pkg);
@@ -562,6 +561,7 @@ public class CustomTabs {
 
     private void prepareCopyLink() {
         final Intent clipboardIntent = new Intent(activity, ClipboardService.class);
+        clipboardIntent.putExtra(EXTRA_KEY_ORIGINAL_URL, url);
         final PendingIntent serviceIntentPending = PendingIntent.getService(activity, 0, clipboardIntent, FLAG_UPDATE_CURRENT);
         builder.addMenuItem(activity.getString(R.string.copy_link), serviceIntentPending);
     }
@@ -572,6 +572,7 @@ public class CustomTabs {
     private void prepareAddToHomeScreen() {
         if (!shouldIgnoreAddToHome()) {
             final Intent addShortcutIntent = new Intent(activity, AddHomeShortcutService.class);
+            addShortcutIntent.putExtra(EXTRA_KEY_ORIGINAL_URL, url);
             final PendingIntent addShortcutPending = PendingIntent.getService(activity, 0, addShortcutIntent, FLAG_UPDATE_CURRENT);
             builder.addMenuItem(activity.getString(R.string.add_to_homescreen), addShortcutPending);
         }
@@ -581,7 +582,7 @@ public class CustomTabs {
      * Adds an open in chrome option
      */
     private void prepareOpenInChrome() {
-        final String customTabPkg = Preferences.customTabApp(activity);
+        final String customTabPkg = Preferences.get(activity).customTabApp();
         if (Utils.isPackageInstalled(activity, customTabPkg)) {
             if (customTabPkg.equalsIgnoreCase(BETA_PACKAGE)
                     || customTabPkg.equalsIgnoreCase(DEV_PACKAGE)
@@ -599,6 +600,7 @@ public class CustomTabs {
 
     private void prepareOpenWith() {
         final Intent openWithActivity = new Intent(activity, OpenIntentWithActivity.class);
+        openWithActivity.putExtra(EXTRA_KEY_ORIGINAL_URL, url);
         final PendingIntent openWithActivityPending = PendingIntent.getActivity(activity, 0, openWithActivity, FLAG_UPDATE_CURRENT);
         builder.addMenuItem(activity.getString(R.string.open_with), openWithActivityPending);
     }
@@ -607,11 +609,11 @@ public class CustomTabs {
      * Add all bottom bar actions
      */
     private void prepareBottomBar() {
-        if (!Preferences.bottomBar(activity)) {
+        if (!Preferences.get(activity).bottomBar()) {
             return;
         }
         final BottomBarManager.Config config = new BottomBarManager.Config();
-        config.minimize = forWebHead && Preferences.mergeTabs(activity);
+        config.minimize = Preferences.get(activity).mergeTabs();
         config.openInNewTab = Utils.isLollipopAbove();
 
         builder.setSecondaryToolbarViews(
@@ -657,12 +659,12 @@ public class CustomTabs {
     }
 
     private int chromeVariantVersion() {
-        final String customTabPackage = Preferences.customTabApp(activity);
+        final String customTabPackage = Preferences.get(activity).customTabApp();
         if (Utils.isPackageInstalled(activity, customTabPackage)
                 && (customTabPackage.equalsIgnoreCase(STABLE_PACKAGE)
-                | customTabPackage.equalsIgnoreCase(DEV_PACKAGE)
-                | customTabPackage.equalsIgnoreCase(BETA_PACKAGE)
-                | customTabPackage.equalsIgnoreCase(LOCAL_PACKAGE))) {
+                || customTabPackage.equalsIgnoreCase(DEV_PACKAGE)
+                || customTabPackage.equalsIgnoreCase(BETA_PACKAGE)
+                || customTabPackage.equalsIgnoreCase(LOCAL_PACKAGE))) {
             try {
                 final PackageInfo packageInfo = activity.getPackageManager().getPackageInfo(customTabPackage, 0);
                 return Integer.parseInt(packageInfo.versionName.split("\\.")[0]);

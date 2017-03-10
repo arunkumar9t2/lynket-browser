@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="arun.com.chromer.activities.settings.browsingoptions.BrowsingOptionsActivity"
+    tools:showIn="@layout/activity_browsing_options">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/browsing_options_app_preferences_card"
+            style="@style/FullWidthCard"
+            app:cardElevation="4dp"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/app_preference_category"
+                    style="@style/Preference.Headers"
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/app_preferences"
+                    tools:ignore="RtlHardcoded" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/app_preference_category"
+                    android:orientation="horizontal"
+                    android:weightSum="1.5">
+
+                    <arun.com.chromer.activities.settings.widgets.AppPreferenceCardView
+                        android:id="@+id/customtab_preference_view"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="0.5"
+                        android:clickable="true"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        app:cardCornerRadius="2dp"
+                        app:cardElevation="0dp"
+                        app:preferenceType="customTabProvider" />
+
+                    <arun.com.chromer.activities.settings.widgets.AppPreferenceCardView
+                        android:id="@+id/browser_preference_view"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="0.5"
+                        android:clickable="true"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        app:cardCornerRadius="2dp"
+                        app:cardElevation="0dp"
+                        app:preferenceType="secondaryBrowser" />
+
+                    <arun.com.chromer.activities.settings.widgets.AppPreferenceCardView
+                        android:id="@+id/favshare_preference_view"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="0.5"
+                        android:clickable="true"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        app:cardCornerRadius="2dp"
+                        app:cardElevation="0dp"
+                        app:preferenceType="favoriteShare" />
+                </LinearLayout>
+            </RelativeLayout>
+
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/browsing_options_behavior"
+            style="@style/FullWidthCard"
+            android:layout_below="@+id/browsing_options_app_preferences_card"
+            app:cardElevation="4dp"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true">
+
+            <FrameLayout
+                android:id="@+id/behaviour_fragment_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/browsing_options_web_heads"
+            style="@style/FullWidthCard"
+            android:layout_below="@+id/browsing_options_behavior"
+            app:cardElevation="4dp"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true">
+
+                <TextView
+                    android:id="@+id/error"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center"
+                    android:text="@string/not_available_in_slide_mode"
+                    android:textColor="@color/error"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
+
+                <FrameLayout
+                    android:id="@+id/web_head_fragment_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/error" />
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/browsing_options_bottom_bar"
+            style="@style/FullWidthCard"
+            android:layout_below="@+id/browsing_options_web_heads"
+            app:cardElevation="4dp"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:id="@+id/bottom_bar_preference_fragment_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center|start"
+                    android:gravity="center|start"
+                    android:paddingLeft="45dp"
+                    android:paddingStart="45dp"
+                    android:text="@string/available_actions"
+                    android:textColor="@color/material_dark_light"
+                    android:textSize="14sp"
+                    android:textStyle="bold|italic" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/bottom_bar_action_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:scrollbars="none" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </RelativeLayout>
+</android.support.v4.widget.NestedScrollView>

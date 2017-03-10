@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,9 +22,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import java.util.ArrayList;
 
 import arun.com.chromer.R;
-import arun.com.chromer.preferences.manager.Preferences;
+import arun.com.chromer.activities.settings.Preferences;
+import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.util.DocumentUtils;
-import arun.com.chromer.webheads.helper.WebSite;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -54,7 +53,7 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.web_head_context_activity);
+        setContentView(R.layout.activity_web_head_context);
         ButterKnife.bind(this);
 
         if (getIntent() == null || getIntent().getParcelableArrayListExtra(EXTRA_KEY_WEBSITE) == null) {
@@ -89,7 +88,7 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
     public void onWebSiteItemClicked(@NonNull WebSite webSite) {
         finish();
         DocumentUtils.smartOpenNewTab(this, webSite);
-        if (Preferences.webHeadsCloseOnOpen(this)) {
+        if (Preferences.get(this).webHeadsCloseOnOpen()) {
             broadcastDeleteWebHead(webSite);
         }
     }
@@ -135,28 +134,24 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
         new MaterialDialog.Builder(this)
                 .title(R.string.choose_share_method)
                 .items(items)
-                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
-                    @Override
-                    public boolean onSelection(MaterialDialog dialog, View itemView,
-                                               int which, CharSequence text) {
-                        if (which == 0) {
-                            startActivity(Intent.createChooser(TEXT_SHARE_INTENT.putExtra(EXTRA_TEXT, getCSVUrls().toString()), getString(R.string.share_all)));
-                        } else {
-                            final ArrayList<Uri> webSites = new ArrayList<>();
-                            for (WebSite webSite : websitesAdapter.getWebSites()) {
-                                try {
-                                    webSites.add(Uri.parse(webSite.preferredUrl()));
-                                } catch (Exception ignored) {
-                                }
+                .itemsCallbackSingleChoice(0, (dialog, itemView, which, text) -> {
+                    if (which == 0) {
+                        startActivity(Intent.createChooser(TEXT_SHARE_INTENT.putExtra(EXTRA_TEXT, getCSVUrls().toString()), getString(R.string.share_all)));
+                    } else {
+                        final ArrayList<Uri> webSites = new ArrayList<>();
+                        for (WebSite webSite : websitesAdapter.getWebSites()) {
+                            try {
+                                webSites.add(Uri.parse(webSite.preferredUrl()));
+                            } catch (Exception ignored) {
                             }
-                            final Intent shareIntent = new Intent();
-                            shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
-                            shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, webSites);
-                            shareIntent.setType("text/plain");
-                            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_all)));
                         }
-                        return false;
+                        final Intent shareIntent = new Intent();
+                        shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
+                        shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, webSites);
+                        shareIntent.setType("text/plain");
+                        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_all)));
                     }
+                    return false;
                 }).show();
     }
 

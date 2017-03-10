@@ -1,6 +1,8 @@
 package arun.com.chromer.activities.intro;
 
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,10 +13,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.github.paolorotolo.appintro.R.id;
-import com.github.paolorotolo.appintro.R.layout;
+
+import arun.com.chromer.R;
+import arun.com.chromer.util.cache.FontCache;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class AppIntroFragment extends Fragment {
+    @BindView(R.id.title)
+    TextView titleTv;
+    @BindView(R.id.image)
+    ImageView image;
+    @BindView(R.id.description)
+    TextView descriptionTv;
+    @BindView(R.id.root)
+    LinearLayout root;
+
     private int drawable;
     private int bgColor;
     private int titleColor;
@@ -25,13 +39,13 @@ public class AppIntroFragment extends Fragment {
     public AppIntroFragment() {
     }
 
-    public static AppIntroFragment newInstance(CharSequence title, CharSequence description, int imageDrawable, int bgColor) {
+    public static AppIntroFragment newInstance(CharSequence title, CharSequence description, @DrawableRes int imageDrawable, @ColorInt int bgColor) {
         return newInstance(title, description, imageDrawable, bgColor, 0, 0);
     }
 
     @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
-    public static AppIntroFragment newInstance(CharSequence title, CharSequence description, int imageDrawable, int bgColor, int titleColor, int descColor) {
-        AppIntroFragment sampleSlide = new AppIntroFragment();
+    public static AppIntroFragment newInstance(CharSequence title, CharSequence description, @DrawableRes int imageDrawable, @ColorInt int bgColor, @ColorInt int titleColor, @ColorInt int descColor) {
+        final AppIntroFragment sampleSlide = new AppIntroFragment();
         Bundle args = new Bundle();
         args.putCharSequence("title", title);
         args.putCharSequence("desc", description);
@@ -58,25 +72,25 @@ public class AppIntroFragment extends Fragment {
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(layout.fragment_intro, container, false);
-        TextView t = (TextView) v.findViewById(id.title);
-        TextView d = (TextView) v.findViewById(id.description);
-        ImageView i = (ImageView) v.findViewById(id.image);
-        LinearLayout m = (LinearLayout) v.findViewById(id.main);
-        t.setText(this.title);
+        final View view = inflater.inflate(R.layout.fragment_text_intro, container, false);
+        ButterKnife.bind(this, view);
+
+        titleTv.setTypeface(FontCache.get(FontCache.MONO, getContext()));
+        titleTv.setText(this.title);
         if (this.titleColor != 0) {
-            t.setTextColor(this.titleColor);
+            titleTv.setTextColor(this.titleColor);
         }
 
-        d.setText(this.description);
+        descriptionTv.setText(this.description);
         if (this.descColor != 0) {
-            d.setTextColor(this.descColor);
+            descriptionTv.setTextColor(this.descColor);
         }
 
         // Use glide to load the drawable
-        Glide.with(this).load(drawable).crossFade().into(i);
+        Glide.with(this).load(drawable).crossFade().into(image);
 
-        m.setBackgroundColor(this.bgColor);
-        return v;
+        root.setBackgroundColor(this.bgColor);
+        ButterKnife.bind(this, view);
+        return view;
     }
 }

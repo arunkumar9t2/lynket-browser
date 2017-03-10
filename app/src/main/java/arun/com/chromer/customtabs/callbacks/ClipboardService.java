@@ -31,16 +31,7 @@ public class ClipboardService extends IntentService {
     }
 
     private void showToast(final String msgToShow) {
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(new Runnable() {
-
-            @Override
-            public void run() {
-                Toast.makeText(
-                        ClipboardService.this,
-                        msgToShow,
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+        final Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(() -> Toast.makeText(ClipboardService.this, msgToShow, Toast.LENGTH_SHORT).show());
     }
 }
