@@ -30,6 +30,10 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.StackingBehavior;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
+import com.crashlytics.android.answers.SearchEvent;
+import com.crashlytics.android.answers.ShareEvent;
 import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -257,6 +261,7 @@ public class MainActivity extends AppCompatActivity implements Home.View {
         materialSearchView.setInteractionListener(new MaterialSearchView.SearchViewInteractionListener() {
             @Override
             public void onVoiceIconClick() {
+                Answers.getInstance().logSearch(new SearchEvent().putCustomAttribute("Mode", "Voice"));
                 if (Utils.isVoiceRecognizerPresent(getApplicationContext())) {
                     startActivityForResult(Utils.getRecognizerIntent(MainActivity.this), REQUEST_CODE_VOICE);
                 } else {
@@ -267,6 +272,7 @@ public class MainActivity extends AppCompatActivity implements Home.View {
             @Override
             public void onSearchPerformed(@NonNull String url) {
                 launchCustomTab(url);
+                Answers.getInstance().logSearch(new SearchEvent());
             }
 
             @Override
@@ -358,27 +364,32 @@ public class MainActivity extends AppCompatActivity implements Home.View {
                             final Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", Constants.MAILID, null));
                             emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
                             startActivity(Intent.createChooser(emailIntent, getString(R.string.send_email)));
+                            Answers.getInstance().logCustom(new CustomEvent("Send feedback"));
                             break;
                         case 3:
                             Utils.openPlayStore(MainActivity.this, getPackageName());
+                            Answers.getInstance().logCustom(new CustomEvent("Send feedback"));
                             break;
                         case 4:
                             startActivity(new Intent(MainActivity.this, ChromerIntro.class));
                             break;
                         case 6:
                             startActivity(new Intent(MainActivity.this, DonateActivity.class));
+                            Answers.getInstance().logCustom(new CustomEvent("Donate clicked"));
                             break;
                         case 7:
                             final Intent shareIntent = new Intent(Intent.ACTION_SEND);
                             shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text));
                             shareIntent.setType("text/plain");
                             startActivity(Intent.createChooser(shareIntent, getString(R.string.share_via)));
+                            Answers.getInstance().logShare(new ShareEvent());
                             break;
                         case 8:
                             startActivity(new Intent(MainActivity.this, AboutAppActivity.class));
                             break;
                         case 9:
                             showJoinBetaDialog();
+                            Answers.getInstance().logCustom(new CustomEvent("Join Beta"));
                             break;
                         case 10:
                             startActivity(new Intent(MainActivity.this, WebHeadsIntro.class));
@@ -456,6 +467,7 @@ public class MainActivity extends AppCompatActivity implements Home.View {
             packages = Collections.EMPTY_LIST;
         }
         if (packages.size() == 0 || forceShow) {
+            Answers.getInstance().logCustom(new CustomEvent("Missing provider"));
             new MaterialDialog.Builder(this)
                     .title(R.string.custom_tab_provider_not_found)
                     .content(Utils.html(this, R.string.custom_tab_provider_not_found_dialog_content))
@@ -464,6 +476,7 @@ public class MainActivity extends AppCompatActivity implements Home.View {
                     .onPositive((dialog, which) -> {
                         dialog.dismiss();
                         Utils.openPlayStore(MainActivity.this, Constants.CHROME_PACKAGE);
+                        Answers.getInstance().logCustom(new CustomEvent("Install Chrome Clicked"));
                     }).show();
         }
     }
