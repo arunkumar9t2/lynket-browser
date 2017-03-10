@@ -496,7 +496,7 @@ public class CustomTabs {
         prepareMinimize();
         prepareCopyLink();
         // prepareAddToHomeScreen();
-        prepareOpenWith();
+        // prepareOpenWith();
         prepareOpenInChrome();
         prepareMoreMenu();
     }
