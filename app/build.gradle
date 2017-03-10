@@ -23,8 +23,8 @@ android {
         applicationId "arun.com.chromer"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 30
-        versionName "1.7 Beta"
+        versionCode 31
+        versionName "1.7"
 
         buildConfigField "String", "BASE_64", getBase64()
         manifestPlaceholders = [crashlyticsApiKey: getFabricKey()]
