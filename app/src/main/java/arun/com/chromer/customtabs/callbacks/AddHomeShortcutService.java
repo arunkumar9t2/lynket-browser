@@ -176,11 +176,6 @@ public class AddHomeShortcutService extends IntentService {
     }
 
     private void showToast(@NonNull final String msgToShow) {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(AddHomeShortcutService.this, msgToShow, LENGTH_SHORT).show();
-            }
-        });
+        new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(AddHomeShortcutService.this, msgToShow, LENGTH_SHORT).show());
     }
 }

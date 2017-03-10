@@ -25,11 +25,8 @@ import butterknife.ButterKnife;
 class SettingsGroupAdapter extends RecyclerView.Adapter<SettingsGroupAdapter.SettingsItemViewHolder> {
     private final Context context;
     private final List<String> settingsItems = new ArrayList<>();
-    private GroupItemClickListener groupItemClickListener = new GroupItemClickListener() {
-        @Override
-        public void onGroupItemClicked(int position, View view) {
-            // no-op
-        }
+    private GroupItemClickListener groupItemClickListener = (position, view) -> {
+        // no-op
     };
 
     SettingsGroupAdapter(@NonNull final Context context) {
@@ -48,12 +45,9 @@ class SettingsGroupAdapter extends RecyclerView.Adapter<SettingsGroupAdapter.Set
     @Override
     public void onBindViewHolder(final SettingsItemViewHolder holder, int position) {
         holder.bind(settingsItems.get(position));
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (holder.getAdapterPosition() != RecyclerView.NO_POSITION)
-                    groupItemClickListener.onGroupItemClicked(holder.getAdapterPosition(), holder.itemView);
-            }
+        holder.itemView.setOnClickListener(v -> {
+            if (holder.getAdapterPosition() != RecyclerView.NO_POSITION)
+                groupItemClickListener.onGroupItemClicked(holder.getAdapterPosition(), holder.itemView);
         });
     }
 
@@ -72,11 +66,8 @@ class SettingsGroupAdapter extends RecyclerView.Adapter<SettingsGroupAdapter.Set
     }
 
     void cleanUp() {
-        groupItemClickListener = new GroupItemClickListener() {
-            @Override
-            public void onGroupItemClicked(int position, View view) {
+        groupItemClickListener = (position, view) -> {
 
-            }
         };
         settingsItems.clear();
     }

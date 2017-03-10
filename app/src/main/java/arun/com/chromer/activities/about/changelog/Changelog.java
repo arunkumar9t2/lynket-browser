@@ -3,7 +3,6 @@ package arun.com.chromer.activities.about.changelog;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -16,7 +15,6 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import arun.com.chromer.BuildConfig;
@@ -64,18 +62,8 @@ public class Changelog {
                     .title("Changelog")
                     .positiveText(android.R.string.ok)
                     .neutralText(R.string.rate_play_store)
-                    .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            Utils.openPlayStore(activity, activity.getPackageName());
-                        }
-                    })
-                    .dismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialogInterface) {
-                            content.removeAllViews();
-                        }
-                    })
+                    .onNeutral((dialog, which) -> Utils.openPlayStore(activity, activity.getPackageName()))
+                    .dismissListener(dialogInterface -> content.removeAllViews())
                     .show();
         } catch (Exception e) {
             e.printStackTrace();

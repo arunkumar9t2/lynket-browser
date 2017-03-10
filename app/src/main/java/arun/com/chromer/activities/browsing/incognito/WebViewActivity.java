@@ -18,9 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -88,13 +86,13 @@ public class WebViewActivity extends AppCompatActivity {
         registerMinimizeReceiver();
         beginExtraction(webSite);
 
-        webView.setWebViewClient(new WebViewClient() {
+      /*  webView.setWebViewClient(new WebViewClient() {
 
         });
         final WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
 
-        webView.loadUrl(getIntent().getDataString());
+        webView.loadUrl(getIntent().getDataString());*/
     }
 
     private void beginExtraction(@Nullable WebSite webSite) {

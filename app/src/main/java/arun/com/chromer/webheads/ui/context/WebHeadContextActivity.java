@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -135,28 +134,24 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
         new MaterialDialog.Builder(this)
                 .title(R.string.choose_share_method)
                 .items(items)
-                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
-                    @Override
-                    public boolean onSelection(MaterialDialog dialog, View itemView,
-                                               int which, CharSequence text) {
-                        if (which == 0) {
-                            startActivity(Intent.createChooser(TEXT_SHARE_INTENT.putExtra(EXTRA_TEXT, getCSVUrls().toString()), getString(R.string.share_all)));
-                        } else {
-                            final ArrayList<Uri> webSites = new ArrayList<>();
-                            for (WebSite webSite : websitesAdapter.getWebSites()) {
-                                try {
-                                    webSites.add(Uri.parse(webSite.preferredUrl()));
-                                } catch (Exception ignored) {
-                                }
+                .itemsCallbackSingleChoice(0, (dialog, itemView, which, text) -> {
+                    if (which == 0) {
+                        startActivity(Intent.createChooser(TEXT_SHARE_INTENT.putExtra(EXTRA_TEXT, getCSVUrls().toString()), getString(R.string.share_all)));
+                    } else {
+                        final ArrayList<Uri> webSites = new ArrayList<>();
+                        for (WebSite webSite : websitesAdapter.getWebSites()) {
+                            try {
+                                webSites.add(Uri.parse(webSite.preferredUrl()));
+                            } catch (Exception ignored) {
                             }
-                            final Intent shareIntent = new Intent();
-                            shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
-                            shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, webSites);
-                            shareIntent.setType("text/plain");
-                            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_all)));
                         }
-                        return false;
+                        final Intent shareIntent = new Intent();
+                        shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
+                        shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, webSites);
+                        shareIntent.setType("text/plain");
+                        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_all)));
                     }
+                    return false;
                 }).show();
     }
 

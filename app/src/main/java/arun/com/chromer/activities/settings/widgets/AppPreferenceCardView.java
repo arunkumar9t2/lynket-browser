@@ -148,15 +148,12 @@ public class AppPreferenceCardView extends CardView {
                 setIconDrawable(appIcon, true);
                 Palette.from(Utils.drawableToBitmap(appIcon))
                         .clearFilters()
-                        .generate(new Palette.PaletteAsyncListener() {
-                            @Override
-                            public void onGenerated(Palette palette) {
-                                int bestColor = ColorUtil.getBestColorFromPalette(palette);
-                                Drawable foreground = ColorUtil.getRippleDrawableCompat(bestColor);
-                                // Bug in SDK requires redundant cast
-                                //noinspection RedundantCast
-                                ((FrameLayout) AppPreferenceCardView.this).setForeground(foreground);
-                            }
+                        .generate(palette -> {
+                            int bestColor = ColorUtil.getBestColorFromPalette(palette);
+                            Drawable foreground = ColorUtil.getRippleDrawableCompat(bestColor);
+                            // Bug in SDK requires redundant cast
+                            //noinspection RedundantCast
+                            ((FrameLayout) AppPreferenceCardView.this).setForeground(foreground);
                         });
             }
         } else {

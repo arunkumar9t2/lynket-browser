@@ -30,11 +30,8 @@ class BlacklistAdapter extends RecyclerView.Adapter<BlacklistAdapter.BlackListIt
     private WeakReference<Activity> activityRef = new WeakReference<>(null);
     private final List<App> apps = new ArrayList<>();
 
-    private BlackListItemClickedListener listener = new BlackListItemClickedListener() {
-        @Override
-        public void onBlackListItemClick(App app) {
-            // no-op
-        }
+    private BlackListItemClickedListener listener = app -> {
+        // no-op
     };
 
     BlacklistAdapter(@NonNull Activity activity, @Nullable BlackListItemClickedListener listener) {

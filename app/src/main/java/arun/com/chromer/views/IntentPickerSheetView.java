@@ -16,7 +16,6 @@ import android.support.v4.view.ViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.GridView;
@@ -58,24 +57,14 @@ public class IntentPickerSheetView extends FrameLayout {
         titleView = (TextView) findViewById(R.id.title);
 
         titleView.setText(title);
-        appGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                listener.onIntentPicked(adapter.getItem(position));
-            }
-        });
+        appGrid.setOnItemClickListener((parent, view, position, id) -> listener.onIntentPicked(adapter.getItem(position)));
 
         ViewCompat.setElevation(this, Utils.dpToPx(16));
     }
 
     @NonNull
     public static Filter selfPackageExcludeFilter(@NonNull final Context context) {
-        return new Filter() {
-            @Override
-            public boolean include(ActivityInfo info) {
-                return !info.componentName.getPackageName().equalsIgnoreCase(context.getPackageName());
-            }
-        };
+        return info -> !info.componentName.getPackageName().equalsIgnoreCase(context.getPackageName());
     }
 
     @Override

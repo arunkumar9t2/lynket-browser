@@ -115,46 +115,34 @@ class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> 
         WebSiteHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final WebSite webSite = getWebsite();
-                    if (webSite != null) {
-                        listener.onWebSiteItemClicked(webSite);
-                    }
+            itemView.setOnClickListener(v -> {
+                final WebSite webSite = getWebsite();
+                if (webSite != null) {
+                    listener.onWebSiteItemClicked(webSite);
                 }
             });
 
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    final WebSite webSite = getWebsite();
-                    if (webSite != null) {
-                        listener.onWebSiteLongClicked(webSite);
-                    }
-                    return true;
+            itemView.setOnLongClickListener(v -> {
+                final WebSite webSite = getWebsite();
+                if (webSite != null) {
+                    listener.onWebSiteLongClicked(webSite);
+                }
+                return true;
+            });
+
+            deleteIcon.setOnClickListener(v -> {
+                final WebSite webSite = getWebsite();
+                if (webSite != null) {
+                    webSites.remove(webSite);
+                    listener.onWebSiteDelete(webSite);
+                    notifyDataSetChanged();
                 }
             });
 
-            deleteIcon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final WebSite webSite = getWebsite();
-                    if (webSite != null) {
-                        webSites.remove(webSite);
-                        listener.onWebSiteDelete(webSite);
-                        notifyDataSetChanged();
-                    }
-                }
-            });
-
-            shareIcon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final WebSite webSite = getWebsite();
-                    if (webSite != null) {
-                        listener.onWebSiteShare(webSite);
-                    }
+            shareIcon.setOnClickListener(v -> {
+                final WebSite webSite = getWebsite();
+                if (webSite != null) {
+                    listener.onWebSiteShare(webSite);
                 }
             });
         }

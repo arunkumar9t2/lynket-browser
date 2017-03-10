@@ -14,7 +14,6 @@ import android.support.v7.graphics.Palette;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -108,13 +107,10 @@ public class ColorUtil {
             final List<Palette.Swatch> sortedSwatch = getSwatchListFromPalette(palette);
             // Descending
             Collections.sort(sortedSwatch,
-                    new Comparator<Palette.Swatch>() {
-                        @Override
-                        public int compare(Palette.Swatch swatch1, Palette.Swatch swatch2) {
-                            int a = swatch1 == null ? 0 : swatch1.getPopulation();
-                            int b = swatch2 == null ? 0 : swatch2.getPopulation();
-                            return b - a;
-                        }
+                    (swatch1, swatch2) -> {
+                        int a = swatch1 == null ? 0 : swatch1.getPopulation();
+                        int b = swatch2 == null ? 0 : swatch2.getPopulation();
+                        return b - a;
                     });
             // We want the vibrant color but we will avoid it if it is the most prominent one.
             // Instead we will choose the next prominent color
