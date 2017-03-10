@@ -117,7 +117,7 @@ public class ScannerService extends AccessibilityService implements CustomTabMan
             }
 
             Notification notification = new NotificationCompat.Builder(this)
-                    .setSmallIcon(R.drawable.ic_chromer_notification)
+                    //  .setSmallIcon(R.drawable.ic_chromer_notification)
                     .setPriority(NotificationCompat.PRIORITY_MIN)
                     .setCategory(NotificationCompat.CATEGORY_STATUS)
                     .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
