@@ -38,7 +38,6 @@ a {
 <ul>
     <li><b>NEW: </b>Chromer opens the page in web view in case custom tab provider is not found.</li>
     <li><b>NEW: </b>Menu option under "More" to easily open the current page in article mode.</li>
-    <li><b>NEW: </b>Chromer opens the page in web view in case custom tab provider is not found.</li>
     <li><b>NEW: </b>Web head service notification now has actions for creating new tab and managing web heads</li>
     <li><b>IMPROVED: </b>Web head animations and performance.</li>
     <li><b>IMPROVED: </b>Aggressive background loading performance.</li>
