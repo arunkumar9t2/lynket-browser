@@ -84,7 +84,6 @@
             </intent-filter>
         </service>
 
-
         <receiver android:name=".customtabs.callbacks.ShareBroadcastReceiver" />
         <receiver android:name=".customtabs.callbacks.FavShareBroadcastReceiver" />
         <receiver android:name=".customtabs.callbacks.SecondaryBrowserReceiver" />
@@ -197,6 +196,12 @@
             android:label="@string/title_activity_open_with"
             android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Translucent" />
+        <activity
+            android:name=".activities.MoreMenuActivity"
+            android:excludeFromRecents="true"
+            android:label="@string/more_menu"
+            android:noHistory="true"
+            android:theme="@style/DialogTheme" />
         <activity
             android:name=".activities.settings.browsingmode.BrowsingModeActivity"
             android:label="@string/title_activity_browsing_mode"

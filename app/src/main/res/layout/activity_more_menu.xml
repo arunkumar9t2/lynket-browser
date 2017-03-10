@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/more_menu_card"
+    android:layout_width="320dp"
+    android:layout_height="wrap_content"
+    android:minWidth="320dp"
+    app:cardBackgroundColor="@android:color/white"
+    app:cardCornerRadius="3dp"
+    app:cardElevation="10dp"
+    app:cardPreventCornerOverlap="true"
+    app:cardUseCompatPadding="true"
+    tools:context="arun.com.chromer.activities.MoreMenuActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/menu_header"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="center|left"
+            android:background="@color/colorPrimary"
+            android:elevation="2dp"
+            android:gravity="center|left"
+            android:outlineProvider="bounds"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:text="@string/more_menu"
+            android:textAllCaps="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
+            android:textColor="@android:color/white" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/menu_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical" />
+    </LinearLayout>
+</android.support.v7.widget.CardView>

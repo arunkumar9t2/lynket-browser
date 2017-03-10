@@ -12,16 +12,15 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.CustomTabActivity;
+import arun.com.chromer.activities.MoreMenuActivity;
 import arun.com.chromer.activities.OpenIntentWithActivity;
 import arun.com.chromer.activities.settings.Preferences;
-import arun.com.chromer.customtabs.callbacks.AddHomeShortcutService;
 import arun.com.chromer.customtabs.callbacks.ClipboardService;
 import arun.com.chromer.customtabs.callbacks.FavShareBroadcastReceiver;
 import arun.com.chromer.customtabs.callbacks.SecondaryBrowserReceiver;
@@ -39,6 +38,7 @@ import static arun.com.chromer.activities.settings.Preferences.PREFERRED_ACTION_
 import static arun.com.chromer.activities.settings.Preferences.PREFERRED_ACTION_FAV_SHARE;
 import static arun.com.chromer.activities.settings.Preferences.PREFERRED_ACTION_GEN_SHARE;
 import static arun.com.chromer.shared.Constants.ACTION_MINIMIZE;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_ARTICLE;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_ORIGINAL_URL;
 
 public class ChromerArticleActivity extends ArticleActivity {
@@ -166,13 +166,14 @@ public class ChromerArticleActivity extends ArticleActivity {
                 finish();
                 break;
             case R.id.menu_more:
-                Toast.makeText(this, "Todo", Toast.LENGTH_SHORT).show();
+                final Intent moreMenuActivity = new Intent(this, MoreMenuActivity.class);
+                moreMenuActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                moreMenuActivity.putExtra(EXTRA_KEY_ORIGINAL_URL, baseUrl);
+                moreMenuActivity.putExtra(EXTRA_KEY_FROM_ARTICLE, true);
+                startActivity(moreMenuActivity);
                 break;
             case R.id.menu_share_with:
                 sendBroadcast(new Intent(this, FavShareBroadcastReceiver.class).setData(Uri.parse(baseUrl)));
-                break;
-            case R.id.menu_add_to_homescreen:
-                startService(new Intent(this, AddHomeShortcutService.class).setData(Uri.parse(baseUrl)));
                 break;
         }
         return true;

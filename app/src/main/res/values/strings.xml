@@ -273,4 +273,6 @@
     <string name="amp_article_combined_explanation"><![CDATA[When both <b>AMP and Article mode is on</b>, Chromer will try to load AMP version of the page if it exists. If not article mode will be loaded.]]></string>
     <string name="attention">Attention!</string>
     <string name="manage">Manage</string>
+    <string name="more_menu">More</string>
+    <string name="open_article_view">Open article view</string>
 </resources>

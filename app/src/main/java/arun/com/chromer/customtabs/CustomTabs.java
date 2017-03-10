@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Random;
 
 import arun.com.chromer.R;
+import arun.com.chromer.activities.MoreMenuActivity;
 import arun.com.chromer.activities.OpenIntentWithActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.bottombar.BottomBarManager;
@@ -51,6 +52,7 @@ import arun.com.chromer.webheads.WebHeadService;
 import timber.log.Timber;
 
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.graphics.Color.WHITE;
 import static arun.com.chromer.activities.settings.Preferences.ANIMATION_MEDIUM;
 import static arun.com.chromer.activities.settings.Preferences.ANIMATION_SHORT;
@@ -491,9 +493,21 @@ public class CustomTabs {
         preparePreferredAction();
         prepareMinimize();
         prepareCopyLink();
-        prepareAddToHomeScreen();
+        // prepareAddToHomeScreen();
         prepareOpenWith();
         prepareOpenInChrome();
+        prepareMoreMenu();
+    }
+
+    /**
+     * Prepares more menu
+     */
+    private void prepareMoreMenu() {
+        final Intent moreMenuActivity = new Intent(activity, MoreMenuActivity.class);
+        moreMenuActivity.setFlags(FLAG_ACTIVITY_NEW_TASK);
+        moreMenuActivity.putExtra(EXTRA_KEY_ORIGINAL_URL, url);
+        final PendingIntent moreMenuPending = PendingIntent.getActivity(activity, 0, moreMenuActivity, FLAG_UPDATE_CURRENT);
+        builder.addMenuItem(activity.getString(R.string.more_menu), moreMenuPending);
     }
 
     /**

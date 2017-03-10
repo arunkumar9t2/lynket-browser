@@ -119,6 +119,7 @@
                             android:padding="8dp"
                             android:text="@string/history_link"
                             android:textAllCaps="true"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
                             android:textColor="@color/accent"
                             android:textSize="14sp"
                             android:textStyle="bold" />

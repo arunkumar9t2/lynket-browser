@@ -49,8 +49,8 @@ public class BrowserInterceptActivity extends AppCompatActivity {
     @TargetApi(LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         DocumentUtils.closeRootActivity(this);
+        super.onCreate(savedInstanceState);
 
         safeIntent = new SafeIntent(getIntent());
         if (safeIntent.getData() == null) {
