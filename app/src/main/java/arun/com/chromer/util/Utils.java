@@ -25,6 +25,9 @@ import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
+import android.text.Html;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Patterns;
@@ -366,6 +369,17 @@ public class Utils {
         app.packageName = packageName;
         app.appName = getAppNameWithPackage(context, packageName);
         return app;
+    }
+
+    @NonNull
+    public static Spanned html(@NonNull Context context, @StringRes int res) {
+        final String string = context.getString(res);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return Html.fromHtml(string, Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            //noinspection deprecation
+            return Html.fromHtml(string);
+        }
     }
 
     /**

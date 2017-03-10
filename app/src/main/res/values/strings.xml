@@ -58,6 +58,7 @@
     <string name="share_via">Share via…</string>
     <string name="custom_tab_provider_not_found">Compatible custom tab provider not found</string>
     <string name="custom_tab_provider_not_found_expln">Chromer requires you to have any Custom tab compatible browser on your phone. Currently there are no browsers on your phone that supports it. Would you like to install Google Chrome (Free) from play store? If you already have it, then please update it to latest version.</string>
+    <string name="custom_tab_provider_not_found_dialog_content"><![CDATA[Could not find compatible custom tab browser on your phone. Google Chrome (Free) is recommended. You can still view webpages within Chromer and use Article mode, but for the best experience, a custom tab provider is highly recommended. Would you like to install now?]]></string>
     <string name="install">Install</string>
     <string name="licenses">Licenses</string>
     <string name="about">About</string>

@@ -18,8 +18,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.Toast;
+import android.webkit.WebViewClient;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -28,7 +29,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.CustomTabActivity;
+import arun.com.chromer.activities.MoreMenuActivity;
 import arun.com.chromer.activities.OpenIntentWithActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.callbacks.ClipboardService;
@@ -43,13 +44,13 @@ import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-import static android.content.Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
 import static android.graphics.Color.WHITE;
 import static android.os.Build.VERSION_CODES.LOLLIPOP;
 import static arun.com.chromer.activities.settings.Preferences.PREFERRED_ACTION_BROWSER;
 import static arun.com.chromer.activities.settings.Preferences.PREFERRED_ACTION_FAV_SHARE;
 import static arun.com.chromer.activities.settings.Preferences.PREFERRED_ACTION_GEN_SHARE;
 import static arun.com.chromer.shared.Constants.ACTION_MINIMIZE;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_ARTICLE;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_ORIGINAL_URL;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBSITE;
 
@@ -80,19 +81,19 @@ public class WebViewActivity extends AppCompatActivity {
         }
 
 
-        if (Preferences.get(this).aggressiveLoading()) {
+       /* if (Preferences.get(this).aggressiveLoading()) {
             delayedGoToBack();
-        }
+        }*/
         registerMinimizeReceiver();
         beginExtraction(webSite);
 
-      /*  webView.setWebViewClient(new WebViewClient() {
+        webView.setWebViewClient(new WebViewClient() {
 
         });
         final WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
 
-        webView.loadUrl(getIntent().getDataString());*/
+        webView.loadUrl(getIntent().getDataString());
     }
 
     private void beginExtraction(@Nullable WebSite webSite) {
@@ -183,15 +184,26 @@ public class WebViewActivity extends AppCompatActivity {
                 actionButton.setTitle(R.string.share);
                 break;
         }
-
         final MenuItem fullPage = menu.findItem(R.id.menu_open_full_page);
         fullPage.setVisible(false);
+        final MenuItem favoriteShare = menu.findItem(R.id.menu_share_with);
+        final String pkg = Preferences.get(this).favSharePackage();
+        if (pkg != null) {
+            final String app = Utils.getAppNameWithPackage(this, pkg);
+            final String label = String.format(getString(R.string.share_with), app);
+            favoriteShare.setTitle(label);
+        } else {
+            favoriteShare.setVisible(false);
+        }
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
             case R.id.menu_action_button:
                 switch (Preferences.get(this).preferredAction()) {
                     case PREFERRED_ACTION_BROWSER:
@@ -218,18 +230,15 @@ public class WebViewActivity extends AppCompatActivity {
             case R.id.menu_share:
                 shareUrl();
                 break;
-            case R.id.menu_open_full_page:
-                final Intent customTabActivity = new Intent(this, CustomTabActivity.class);
-                customTabActivity.setData(Uri.parse(baseUrl));
-                if (Preferences.get(this).mergeTabs()) {
-                    customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-                    customTabActivity.addFlags(FLAG_ACTIVITY_MULTIPLE_TASK);
-                }
-                startActivity(customTabActivity);
-                finish();
-                break;
             case R.id.menu_more:
-                Toast.makeText(this, "Todo", Toast.LENGTH_SHORT).show();
+                final Intent moreMenuActivity = new Intent(this, MoreMenuActivity.class);
+                moreMenuActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                moreMenuActivity.putExtra(EXTRA_KEY_ORIGINAL_URL, baseUrl);
+                moreMenuActivity.putExtra(EXTRA_KEY_FROM_ARTICLE, true);
+                startActivity(moreMenuActivity);
+                break;
+            case R.id.menu_share_with:
+                sendBroadcast(new Intent(this, FavShareBroadcastReceiver.class).setData(Uri.parse(baseUrl)));
                 break;
         }
         return true;

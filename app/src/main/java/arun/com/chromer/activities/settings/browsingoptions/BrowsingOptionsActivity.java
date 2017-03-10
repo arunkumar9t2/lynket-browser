@@ -2,11 +2,9 @@ package arun.com.chromer.activities.settings.browsingoptions;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -14,8 +12,6 @@ import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -233,21 +229,21 @@ public class BrowsingOptionsActivity extends SubActivity implements SnackHelper,
                             .icon(CommunityMaterial.Icon.cmd_plus_box)
                             .color(iconColor)
                             .sizeDp(18));
-                    holder.action.setText(html(R.string.open_in_new_tab_explanation));
+                    holder.action.setText(Utils.html(context, R.string.open_in_new_tab_explanation));
                     break;
                 case SHARE:
                     holder.icon.setImageDrawable(new IconicsDrawable(context)
                             .icon(CommunityMaterial.Icon.cmd_share_variant)
                             .color(iconColor)
                             .sizeDp(18));
-                    holder.action.setText(html(R.string.share_action_explanation));
+                    holder.action.setText(Utils.html(context, R.string.share_action_explanation));
                     break;
                 case MINIMIZE:
                     holder.icon.setImageDrawable(new IconicsDrawable(context)
                             .icon(CommunityMaterial.Icon.cmd_flip_to_back)
                             .color(iconColor)
                             .sizeDp(18));
-                    holder.action.setText(html(R.string.minimize_action_explanation));
+                    holder.action.setText(Utils.html(context, R.string.minimize_action_explanation));
                     break;
             }
         }
@@ -255,17 +251,6 @@ public class BrowsingOptionsActivity extends SubActivity implements SnackHelper,
         @Override
         public int getItemCount() {
             return items.size();
-        }
-
-        @NonNull
-        private Spanned html(@StringRes int res) {
-            final String string = context.getString(res);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                return Html.fromHtml(string, Html.FROM_HTML_MODE_LEGACY);
-            } else {
-                //noinspection deprecation
-                return Html.fromHtml(string);
-            }
         }
 
         class BottomActionHolder extends RecyclerView.ViewHolder {

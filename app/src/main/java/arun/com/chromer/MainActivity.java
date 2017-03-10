@@ -457,10 +457,10 @@ public class MainActivity extends AppCompatActivity implements Home.View {
         }
         if (packages.size() == 0 || forceShow) {
             new MaterialDialog.Builder(this)
-                    .title(getString(R.string.custom_tab_provider_not_found))
-                    .content(getString(R.string.custom_tab_provider_not_found_expln))
-                    .positiveText(getString(R.string.install))
-                    .negativeText(getString(android.R.string.no))
+                    .title(R.string.custom_tab_provider_not_found)
+                    .content(Utils.html(this, R.string.custom_tab_provider_not_found_dialog_content))
+                    .positiveText(R.string.install)
+                    .negativeText(android.R.string.no)
                     .onPositive((dialog, which) -> {
                         dialog.dismiss();
                         Utils.openPlayStore(MainActivity.this, Constants.CHROME_PACKAGE);

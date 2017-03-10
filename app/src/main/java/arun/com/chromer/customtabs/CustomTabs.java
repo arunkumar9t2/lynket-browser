@@ -32,6 +32,7 @@ import java.util.Random;
 import arun.com.chromer.R;
 import arun.com.chromer.activities.MoreMenuActivity;
 import arun.com.chromer.activities.OpenIntentWithActivity;
+import arun.com.chromer.activities.browsing.incognito.WebViewActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.bottombar.BottomBarManager;
 import arun.com.chromer.customtabs.callbacks.AddHomeShortcutService;
@@ -81,15 +82,16 @@ public class CustomTabs {
      * Fallback in case there was en error launching custom tabs
      */
     private final static CustomTabsFallback CUSTOM_TABS_FALLBACK =
-            (activity1, uri) -> {
-                if (activity1 != null) {
-                    final String string = activity1.getString(R.string.fallback_msg);
-                    Toast.makeText(activity1, string, Toast.LENGTH_SHORT).show();
+            (activity, uri) -> {
+                if (activity != null) {
+                    final String string = activity.getString(R.string.fallback_msg);
+                    Toast.makeText(activity, string, Toast.LENGTH_SHORT).show();
                     try {
-                        final Intent target = new Intent(Intent.ACTION_VIEW, uri);
-                        activity1.startActivity(Intent.createChooser(target, activity1.getString(R.string.open_with)));
+                        final Intent intent = new Intent(activity, WebViewActivity.class);
+                        intent.setData(uri);
+                        activity.startActivity(intent);
                     } catch (ActivityNotFoundException e) {
-                        Toast.makeText(activity1, activity1.getString(R.string.unxp_err), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, activity.getString(R.string.unxp_err), Toast.LENGTH_SHORT).show();
                     }
                 }
             };
