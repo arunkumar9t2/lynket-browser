@@ -70,7 +70,7 @@
     <string name="feedback">Feedback</string>
     <string name="intro">Intro</string>
     <string name="send_email">Send email…</string>
-    <string name="fallback_msg">Could not open custom tab, falling back to normal browsers</string>
+    <string name="fallback_msg">Could not open custom tab, falling back to webview.</string>
     <string name="open_with">Open with…</string>
     <string name="open_in_browser">Open in %1$s</string>
     <string name="unxp_err">Unexpected error, try again</string>
