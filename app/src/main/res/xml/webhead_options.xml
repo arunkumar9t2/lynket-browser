@@ -5,7 +5,7 @@
 
     <PreferenceCategory android:title="@string/web_heads">
         <arun.com.chromer.activities.settings.widgets.IconCheckboxPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="aggressive_loading"
             android:summary="@string/aggressive_background_loading_desc"
             android:title="@string/aggressive_background_loading" />
