@@ -12,14 +12,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import arun.com.chromer.R;
 import arun.com.chromer.util.cache.FontCache;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class AppIntroFragment extends Fragment {
+public class TextIntroFragment extends Fragment {
     @BindView(R.id.title)
     TextView titleTv;
     @BindView(R.id.image)
@@ -36,16 +34,16 @@ public class AppIntroFragment extends Fragment {
     private CharSequence title;
     private CharSequence description;
 
-    public AppIntroFragment() {
+    public TextIntroFragment() {
     }
 
-    public static AppIntroFragment newInstance(CharSequence title, CharSequence description, @DrawableRes int imageDrawable, @ColorInt int bgColor) {
-        return newInstance(title, description, imageDrawable, bgColor, 0, 0);
+    public static TextIntroFragment newInstance(CharSequence title, CharSequence description, @ColorInt int bgColor) {
+        return newInstance(title, description, 0, bgColor, 0, 0);
     }
 
     @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
-    public static AppIntroFragment newInstance(CharSequence title, CharSequence description, @DrawableRes int imageDrawable, @ColorInt int bgColor, @ColorInt int titleColor, @ColorInt int descColor) {
-        final AppIntroFragment sampleSlide = new AppIntroFragment();
+    public static TextIntroFragment newInstance(CharSequence title, CharSequence description, @DrawableRes int imageDrawable, @ColorInt int bgColor, @ColorInt int titleColor, @ColorInt int descColor) {
+        final TextIntroFragment sampleSlide = new TextIntroFragment();
         Bundle args = new Bundle();
         args.putCharSequence("title", title);
         args.putCharSequence("desc", description);
@@ -72,7 +70,7 @@ public class AppIntroFragment extends Fragment {
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_text_intro, container, false);
+        final View view = inflater.inflate(R.layout.fragment_chromer_intro, container, false);
         ButterKnife.bind(this, view);
 
         titleTv.setTypeface(FontCache.get(FontCache.MONO, getContext()));
@@ -85,10 +83,7 @@ public class AppIntroFragment extends Fragment {
         if (this.descColor != 0) {
             descriptionTv.setTextColor(this.descColor);
         }
-
-        // Use glide to load the drawable
-        Glide.with(this).load(drawable).crossFade().into(image);
-
+        image.setVisibility(View.GONE);
         root.setBackgroundColor(this.bgColor);
         ButterKnife.bind(this, view);
         return view;

@@ -323,9 +323,6 @@ public class MainActivity extends AppCompatActivity implements Home.View {
                         new PrimaryDrawerItem().withName(getString(R.string.intro)).withIdentifier(4)
                                 .withIcon(CommunityMaterial.Icon.cmd_clipboard_text)
                                 .withSelectable(false),
-                        new PrimaryDrawerItem().withName(getString(R.string.web_heads_intro)).withIdentifier(10)
-                                .withIcon(CommunityMaterial.Icon.cmd_chart_bubble)
-                                .withSelectable(false),
                         new PrimaryDrawerItem().withName(getString(R.string.feedback)).withIdentifier(2)
                                 .withIcon(CommunityMaterial.Icon.cmd_message_text)
                                 .withSelectable(false),

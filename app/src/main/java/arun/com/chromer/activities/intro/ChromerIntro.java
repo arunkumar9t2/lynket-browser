@@ -21,16 +21,24 @@ public class ChromerIntro extends AppIntro {
 
         int bgColor = ContextCompat.getColor(this, R.color.colorPrimaryDarker);
 
-        // OPTIONAL METHODS
-        // Override bar/separator color
         addSlide(AppIntroFragment.newInstance(getString(R.string.app_name),
                 getString(R.string.intro_1),
                 R.drawable.chromer_hd_icon,
                 bgColor));
 
-        addSlide(AppIntroFragment.newInstance(getString(R.string.app_name),
-                getText(R.string.intro_2),
-                R.drawable.chromer_hd_icon,
+        addSlide(AppIntroFragment.newInstance(getString(R.string.browse_seamlessly),
+                getString(R.string.slide_over_explanation),
+                R.drawable.slide_over,
+                bgColor));
+
+        addSlide(AppIntroFragment.newInstance(getString(R.string.amp),
+                getString(R.string.amp_summary),
+                R.drawable.amp_page,
+                bgColor));
+
+        addSlide(AppIntroFragment.newInstance(getString(R.string.article_mode),
+                getText(R.string.article_mode_summary),
+                R.drawable.article_sample,
                 bgColor));
 
         addSlide(WebHeadIntroExplainFragment.newInstance(getString(R.string.web_heads),
@@ -38,30 +46,15 @@ public class ChromerIntro extends AppIntro {
                 R.drawable.intro_webheads,
                 bgColor));
 
-        addSlide(AppIntroFragment.newInstance(getString(R.string.avoid_back_fatigue),
-                getText(R.string.intro_back_fatigue),
-                R.drawable.back_fatigue,
-                bgColor));
-
         if (Utils.isLollipopAbove())
             addSlide(AppIntroFragment.newInstance(getString(R.string.merge_tabs),
                     getText(R.string.merge_tabs_explanation_intro),
-                    R.drawable.merge_tabs,
+                    R.drawable.merge_tabs_apps,
                     bgColor));
-
-        addSlide(AppIntroFragment.newInstance(getString(R.string.improves_loading_times),
-                getText(R.string.intro_5_new),
-                R.drawable.intro_scan_links,
-                bgColor));
 
         addSlide(AppIntroFragment.newInstance(getString(R.string.how_to_use),
                 getText(R.string.intro_6),
                 R.drawable.intro_set_default,
-                bgColor));
-
-        addSlide(AppIntroFragment.newInstance(getString(R.string.why_use),
-                getText(R.string.intro_7_new),
-                R.drawable.intro_why_use,
                 bgColor));
 
         // Hide Skip/Done button

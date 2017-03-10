@@ -89,7 +89,7 @@
     <string name="how_to_use">How to use this?</string>
     <string name="intro_6">Just set Chromer as your default browser, Chromer will display the link in a non-intrusive way. Or choose Chromer when needed.</string>
     <string name="why_use">Why use?</string>
-    <string name="intro_7_new">Non-intrusive and quicker loading, \n reduced data usage, \n shared login info from Chrome hence auto completes forms and SECURE with latest updates. \n\n Your browsing data is automatically synced with your Google account.</string>
+    <string name="chromer_advantages"><![CDATA[<b>Chrome Custom Tabs -</b> Chrome custom tab is the recommended way for displaying web content and is light weight and faster. Your browsing activity like bookmarks, passwords and history are synced with your account. \n<b>AMP -</b> AMP mode saves data and loads the web page very quickly.\n<b>Article -</b> Article mode further enhances the browsing experience by removing unnecessary content.\n<b>Web heads -</b> Web heads save time by conveniently loading multiple links in the background.]]></string>
     <string name="version">Version</string>
     <string name="changelog">Changelog</string>
     <string name="join_google_plus">Join Google+ Community</string>
@@ -275,4 +275,6 @@
     <string name="manage">Manage</string>
     <string name="more_menu">More</string>
     <string name="open_article_view">Open article view</string>
+    <string name="browse_seamlessly">Browse seamlessly</string>
+    <string name="slide_over_explanation">Web pages slide over the app you are using and you can press X to quickly return to the app</string>
 </resources>

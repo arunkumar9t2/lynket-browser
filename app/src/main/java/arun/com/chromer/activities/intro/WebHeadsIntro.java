@@ -19,7 +19,7 @@ public class WebHeadsIntro extends AppIntro {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        int bgColor = ContextCompat.getColor(this, R.color.md_cyan_800);
+        int bgColor = ContextCompat.getColor(this, R.color.md_teal_800);
 
         // OPTIONAL METHODS
         // Override bar/separator color
