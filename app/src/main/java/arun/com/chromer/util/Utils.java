@@ -405,9 +405,14 @@ public class Utils {
 
     @TargetApi(Build.VERSION_CODES.M)
     public static void openDrawOverlaySettings(@NonNull Activity activity) {
-        Toast.makeText(activity, activity.getString(R.string.web_head_permission_toast), LENGTH_LONG).show();
-        final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + activity.getPackageName()));
-        activity.startActivityForResult(intent, 0);
+        try {
+            Toast.makeText(activity, activity.getString(R.string.web_head_permission_toast), LENGTH_LONG).show();
+            final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + activity.getPackageName()));
+            activity.startActivityForResult(intent, 0);
+        } catch (Exception e) {
+            Timber.e(e);
+            Toast.makeText(activity, R.string.overlay_missing, Toast.LENGTH_LONG).show();
+        }
     }
 
     /**

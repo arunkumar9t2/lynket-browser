@@ -278,4 +278,5 @@
     <string name="open_article_view">Open article view</string>
     <string name="browse_seamlessly">Browse seamlessly</string>
     <string name="slide_over_explanation">Web pages slide over the app you are using and you can press X to quickly return to the app</string>
+    <string name="overlay_missing">Your device does not seem to have standard Grant draw overlay permission screen. Please contact your manufacturer to resolve this.</string>
 </resources>
