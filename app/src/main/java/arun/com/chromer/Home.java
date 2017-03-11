@@ -49,8 +49,9 @@ interface Home {
             compositeSubscription.add(RxTextView.afterTextChangeEvents(editText)
                     .map(changeEvent -> changeEvent.editable().toString())
                     .filter(s -> !TextUtils.isEmpty(s)).subscribeOn(AndroidSchedulers.mainThread())
+                    .debounce(150, TimeUnit.MILLISECONDS)
                     .onBackpressureLatest()
-                    .debounce(300, TimeUnit.MILLISECONDS)
+                    .doOnNext(s -> Timber.d("Query: %s", s))
                     .compose(RxSuggestions.suggestionsTransformer())
                     .map(strings -> {
                         final List<SuggestionItem> suggestionItems = new ArrayList<>();
