@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -50,7 +49,6 @@ import static arun.com.chromer.activities.settings.Preferences.PREFERRED_ACTION_
 import static arun.com.chromer.activities.settings.Preferences.PREFERRED_ACTION_FAV_SHARE;
 import static arun.com.chromer.activities.settings.Preferences.PREFERRED_ACTION_GEN_SHARE;
 import static arun.com.chromer.shared.Constants.ACTION_MINIMIZE;
-import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_ARTICLE;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_ORIGINAL_URL;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBSITE;
 
@@ -208,11 +206,11 @@ public class WebViewActivity extends AppCompatActivity {
                 switch (Preferences.get(this).preferredAction()) {
                     case PREFERRED_ACTION_BROWSER:
                         sendBroadcast(new Intent(this, SecondaryBrowserReceiver.class)
-                                .setData(Uri.parse(baseUrl)));
+                                .setData(getIntent().getData()));
                         break;
                     case PREFERRED_ACTION_FAV_SHARE:
                         sendBroadcast(new Intent(this, FavShareBroadcastReceiver.class)
-                                .setData(Uri.parse(baseUrl)));
+                                .setData(getIntent().getData()));
                         break;
                     case PREFERRED_ACTION_GEN_SHARE:
                         shareUrl();
@@ -221,11 +219,11 @@ public class WebViewActivity extends AppCompatActivity {
                 break;
             case R.id.menu_copy_link:
                 startService(new Intent(this, ClipboardService.class)
-                        .setData(Uri.parse(baseUrl)));
+                        .setData(getIntent().getData()));
                 break;
             case R.id.menu_open_with:
                 startActivity(new Intent(this, OpenIntentWithActivity.class)
-                        .setData(Uri.parse(baseUrl)));
+                        .setData(getIntent().getData()));
                 break;
             case R.id.menu_share:
                 shareUrl();
@@ -234,11 +232,11 @@ public class WebViewActivity extends AppCompatActivity {
                 final Intent moreMenuActivity = new Intent(this, MoreMenuActivity.class);
                 moreMenuActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 moreMenuActivity.putExtra(EXTRA_KEY_ORIGINAL_URL, baseUrl);
-                moreMenuActivity.putExtra(EXTRA_KEY_FROM_ARTICLE, true);
+                moreMenuActivity.setData(getIntent().getData());
                 startActivity(moreMenuActivity);
                 break;
             case R.id.menu_share_with:
-                sendBroadcast(new Intent(this, FavShareBroadcastReceiver.class).setData(Uri.parse(baseUrl)));
+                sendBroadcast(new Intent(this, FavShareBroadcastReceiver.class).setData(getIntent().getData()));
                 break;
         }
         return true;
