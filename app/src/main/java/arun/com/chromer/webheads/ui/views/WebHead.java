@@ -369,7 +369,6 @@ public class WebHead extends BaseWebHead implements SpringListener {
         contentRoot.animate()
                 .scaleX(scale)
                 .scaleY(scale)
-                .withLayer()
                 .setInterpolator(new SpringInterpolator(0.2, 5))
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
@@ -382,6 +381,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
     }
 
     public void reveal(@Nullable final Runnable endAction) {
+        Timber.d("Reveal %s", webSite.url);
         animateContentScale(TOUCH_UP_SCALE, endAction);
         scaledDown = false;
     }

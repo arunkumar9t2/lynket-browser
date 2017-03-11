@@ -33,6 +33,7 @@ import android.util.DisplayMetrics;
 import android.util.Patterns;
 import android.view.View;
 import android.view.ViewOutlineProvider;
+import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
 import java.net.URL;
@@ -379,6 +380,19 @@ public class Utils {
         } else {
             //noinspection deprecation
             return Html.fromHtml(string);
+        }
+    }
+
+    public static void doAfterLayout(@NonNull final View view, @NonNull final Runnable end) {
+        final ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
+        if (viewTreeObserver.isAlive()) {
+            viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    end.run();
+                }
+            });
         }
     }
 

@@ -82,7 +82,7 @@ public abstract class BaseWebHead extends FrameLayout {
     // The preferredUrl of the website that this web head represents, not allowed to change
     private final String url;
     // Website data that this web head represents
-    private WebSite webSite;
+    protected WebSite webSite;
 
     @BindView(R.id.favicon)
     protected ImageView favicon;
@@ -190,8 +190,8 @@ public abstract class BaseWebHead extends FrameLayout {
             final int pad = dpToPx(5);
             badgeView.setPadding(pad, pad, pad, pad);
         }
-
-        post(this::setInitialSpawnLocation);
+        requestLayout();
+        Utils.doAfterLayout(this, this::setInitialSpawnLocation);
     }
 
     private void initDisplayMetrics() {
@@ -202,12 +202,6 @@ public abstract class BaseWebHead extends FrameLayout {
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-    }
-
-
-    @Override
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         masterX = 0;
@@ -216,6 +210,7 @@ public abstract class BaseWebHead extends FrameLayout {
     }
 
     protected void setInitialSpawnLocation() {
+        Timber.d("Initial spawn location set.");
         if (screenBounds == null) {
             screenBounds = new ScreenBounds(dispWidth, dispHeight, getWidth());
         }
@@ -232,7 +227,6 @@ public abstract class BaseWebHead extends FrameLayout {
                 }
             }
             spawnCoordSet = true;
-            Timber.d("Spawn %d, %d", x, y);
             onSpawnLocationSet(x, y);
         }
     }
