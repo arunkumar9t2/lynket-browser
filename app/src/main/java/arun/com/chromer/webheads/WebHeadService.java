@@ -218,9 +218,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
             reveal(newWebHead);
         }
 
-        if (Preferences.get(this).articleMode()) {
-            preloadUrl(webHeadUrl);
-        }
+        preLoadForArticle(webHeadUrl);
 
         // Begin metadata extractions
         doExtraction(webHeadUrl);
@@ -293,7 +291,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     private void warmUp(WebHead webHead) {
         if (!Preferences.get(this).aggressiveLoading()) {
             if (customTabConnected) {
-                preloadUrl(webHead.getUnShortenedUrl());
+                preLoadUrl(webHead.getUnShortenedUrl());
             } else {
                 deferPreload(webHead.getUnShortenedUrl());
             }
@@ -305,19 +303,21 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
      * If its normal, then do custom tab may launch url else if its article mode, then call
      * article mode's prefetch.
      */
-    private void preloadUrl(final String url) {
-        if (Preferences.get(this).articleMode()) {
-            // Do article mode.
-            // Preload this article.
-            ArticleUtils.preloadArticle(this, Uri.parse(url),
-                    success -> Timber.d("Url %s preloaded, result: %b", url, success));
-        } else {
+    private void preLoadUrl(final String url) {
+        if (!Preferences.get(this).articleMode()) {
             customTabManager.mayLaunchUrl(Uri.parse(url));
         }
     }
 
+    private void preLoadForArticle(String url) {
+        if (Preferences.get(this).articleMode()) {
+            ArticleUtils.preloadArticle(this, Uri.parse(url),
+                    success -> Timber.d("Url %s preloaded, result: %b", url, success));
+        }
+    }
+
     private void deferPreload(@NonNull final String urlToLoad) {
-        new Handler().postDelayed(() -> preloadUrl(urlToLoad), 300);
+        new Handler().postDelayed(() -> preLoadUrl(urlToLoad), 300);
     }
 
 
@@ -411,7 +411,9 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
             Trashy.get(this).destroyAnimator(this::stopSelf);
         } else {
             selectNextMaster();
-            preloadUrl("");
+            if (!Preferences.get(this).articleMode()) {
+                preLoadUrl("");
+            }
         }
         ContextActivityHelper.signalDeleted(this, webHead.getWebsite());
     }
