@@ -422,9 +422,13 @@ public class MainActivity extends AppCompatActivity implements Home.View {
     private void launchCustomTab(@Nullable String url) {
         if (url != null) {
             if (Preferences.get(this).webHeads()) {
-                final Intent webHeadService = new Intent(this, WebHeadService.class);
-                webHeadService.setData(Uri.parse(url));
-                startService(webHeadService);
+                if (Utils.isOverlayGranted(this)) {
+                    final Intent webHeadService = new Intent(this, WebHeadService.class);
+                    webHeadService.setData(Uri.parse(url));
+                    startService(webHeadService);
+                } else {
+                    Utils.openDrawOverlaySettings(this);
+                }
             } else {
                 CustomTabs.from(this)
                         .forUrl(url)

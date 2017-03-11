@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
@@ -36,7 +35,6 @@ import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.os.Build.VERSION_CODES.LOLLIPOP;
-import static android.widget.Toast.LENGTH_LONG;
 import static android.widget.Toast.LENGTH_SHORT;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_NEW_TAB;
 
@@ -62,8 +60,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
         // Check if we should blacklist the launching app
         if (Preferences.get(this).blacklist()) {
             final String lastAppPackage = AppDetectionManager.getInstance(this).getNonFilteredPackage();
-            if (!TextUtils.isEmpty(lastAppPackage)
-                    && AppRepository.getInstance(this).isPackageBlacklisted(lastAppPackage)) {
+            if (!TextUtils.isEmpty(lastAppPackage) && AppRepository.getInstance(this).isPackageBlacklisted(lastAppPackage)) {
                 // The calling app was blacklisted by user, perform blacklisting.
                 performBlacklistAction();
                 return;
@@ -72,16 +69,11 @@ public class BrowserInterceptActivity extends AppCompatActivity {
 
         // If user prefers to open in bubbles, then start the web head service.
         if (Preferences.get(this).webHeads()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (!Settings.canDrawOverlays(this)) {
-                    Toast.makeText(this, getString(R.string.web_head_permission_toast), LENGTH_LONG).show();
-                    final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
-                    startActivity(intent);
-                } else {
-                    launchWebHead();
-                }
-            } else {
+            if (Utils.isOverlayGranted(this)) {
                 launchWebHead();
+            } else {
+                Utils.openDrawOverlaySettings(this);
+                finish();
             }
         } else if (Preferences.get(this).ampMode()) {
             closeDialogs();

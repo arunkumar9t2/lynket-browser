@@ -2,6 +2,7 @@ package arun.com.chromer.util;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AppOpsManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -50,6 +51,8 @@ import arun.com.chromer.data.common.App;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.views.IntentPickerSheetView;
 import timber.log.Timber;
+
+import static android.widget.Toast.LENGTH_LONG;
 
 /**
  * Created by Arun on 17/12/2015.
@@ -394,6 +397,17 @@ public class Utils {
                 }
             });
         }
+    }
+
+    public static boolean isOverlayGranted(@NonNull Context context) {
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(context);
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    public static void openDrawOverlaySettings(@NonNull Activity activity) {
+        Toast.makeText(activity, activity.getString(R.string.web_head_permission_toast), LENGTH_LONG).show();
+        final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + activity.getPackageName()));
+        activity.startActivityForResult(intent, 0);
     }
 
     /**

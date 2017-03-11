@@ -1,10 +1,6 @@
 package arun.com.chromer.activities.settings.browsingmode;
 
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +11,7 @@ import android.view.View;
 import arun.com.chromer.R;
 import arun.com.chromer.activities.base.SubActivity;
 import arun.com.chromer.activities.settings.Preferences;
+import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -55,22 +52,27 @@ public class BrowsingModeActivity extends SubActivity implements BrowsingModeAda
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
     public void onModeClicked(int position, View view) {
         Preferences.get(this).webHeads(position == 1);
         if (position == 1) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (!Settings.canDrawOverlays(this)) {
-                    Preferences.get(this).webHeads(false);
-                    final Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.overlay_permission_content, Snackbar.LENGTH_INDEFINITE);
-                    snackbar.setAction(R.string.grant, v -> {
-                        snackbar.dismiss();
-                        final Uri pkgUri = Uri.parse("package:" + BrowsingModeActivity.this.getPackageName());
-                        final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, pkgUri);
-                        startActivityForResult(intent, 0);
-                    });
-                    snackbar.show();
-                } else Preferences.get(this).webHeads(true);
-            } else Preferences.get(this).webHeads(true);
+            if (Utils.isOverlayGranted(this)) {
+                Preferences.get(this).webHeads(true);
+            } else {
+                Preferences.get(this).webHeads(false);
+                // Utils.openDrawOverlaySettings(this);
+                final Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.overlay_permission_content, Snackbar.LENGTH_INDEFINITE);
+                snackbar.setAction(R.string.grant, v -> {
+                    snackbar.dismiss();
+                    Utils.openDrawOverlaySettings(BrowsingModeActivity.this);
+                });
+                snackbar.show();
+            }
         } else Preferences.get(this).webHeads(false);
         adapter.notifyDataSetChanged();
     }
