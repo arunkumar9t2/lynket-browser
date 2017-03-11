@@ -513,8 +513,12 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     }
 
     private void unregisterReceivers() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(localReceiver);
-        unregisterReceiver(notificationActionReceiver);
+        try {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(localReceiver);
+            unregisterReceiver(notificationActionReceiver);
+        } catch (IllegalArgumentException ignored) {
+            Timber.e(ignored);
+        }
     }
 
     private final BroadcastReceiver localReceiver = new BroadcastReceiver() {
