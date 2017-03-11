@@ -532,8 +532,13 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
     @Override
     protected void onSpawnLocationSet(final int x, final int y) {
-        xSpring.setCurrentValue(x);
-        ySpring.setCurrentValue(y);
+        try {
+            ySpring.setCurrentValue(y);
+            xSpring.setCurrentValue(x);
+        } catch (IllegalArgumentException e) {
+            // Should never happen
+            Timber.e(e);
+        }
     }
 
     @Override
