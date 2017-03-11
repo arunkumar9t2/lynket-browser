@@ -18,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 
 import java.util.ArrayList;
 
@@ -69,6 +71,7 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
         websiteListView.setAdapter(websitesAdapter);
 
         registerEventsReceiver();
+        Answers.getInstance().logContentView(new ContentViewEvent().putContentName("Web head context activity"));
     }
 
     private void registerEventsReceiver() {

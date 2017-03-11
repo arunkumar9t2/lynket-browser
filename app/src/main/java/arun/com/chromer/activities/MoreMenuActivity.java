@@ -26,6 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_ARTICLE;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_ORIGINAL_URL;
 
 
 public class MoreMenuActivity extends AppCompatActivity {
@@ -96,6 +97,19 @@ public class MoreMenuActivity extends AppCompatActivity {
                     break;
                 case 3:
                     holder.menuImage.setImageDrawable(new IconicsDrawable(holder.itemView.getContext())
+                            .icon(CommunityMaterial.Icon.cmd_open_in_new)
+                            .colorRes(R.color.accent)
+                            .sizeDp(24));
+                    holder.menuText.setText(R.string.open_with);
+                    holder.itemView.setOnClickListener(v -> {
+                        final Intent openWithActivity = new Intent(MoreMenuActivity.this, OpenIntentWithActivity.class);
+                        openWithActivity.setData(getIntent().getData());
+                        openWithActivity.putExtra(EXTRA_KEY_ORIGINAL_URL, getIntent().getDataString());
+                        startActivity(openWithActivity);
+                    });
+                    break;
+                case 4:
+                    holder.menuImage.setImageDrawable(new IconicsDrawable(holder.itemView.getContext())
                             .icon(CommunityMaterial.Icon.cmd_file_image)
                             .colorRes(R.color.accent)
                             .sizeDp(24));
@@ -111,9 +125,9 @@ public class MoreMenuActivity extends AppCompatActivity {
         @Override
         public int getItemCount() {
             if (fromArticle) {
-                return 3;
-            } else {
                 return 4;
+            } else {
+                return 5;
             }
         }
 

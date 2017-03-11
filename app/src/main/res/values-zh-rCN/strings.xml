@@ -79,7 +79,6 @@
     <string name="how_to_use">要如何使用？</string>
     <string name="intro_6">将 Chromer 设置成你的默认浏览器，Chromer 将会以非入侵的方式显示您所打开的链接。此外您还可以选择仅在需要时调用它。</string>
     <string name="why_use">为什么使用它？</string>
-    <string name="intro_7_new">非侵入式，更快的加载速度，节省数据流量。\n与 Chrome 共享登录信息因此可自动填充表单并具备 Chrome 最新版本中的安全性能。\n\n您的浏览数据将自动同步至您的谷歌帐号内。</string>
     <string name="version">版本</string>
     <string name="changelog">更新日志</string>
     <string name="join_google_plus">加入 Google+ 社群</string>
