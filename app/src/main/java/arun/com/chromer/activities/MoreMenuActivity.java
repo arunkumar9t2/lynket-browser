@@ -1,7 +1,6 @@
 package arun.com.chromer.activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -93,7 +92,7 @@ public class MoreMenuActivity extends AppCompatActivity {
                             .colorRes(R.color.accent)
                             .sizeDp(24));
                     holder.menuText.setText(R.string.add_to_homescreen);
-                    holder.itemView.setOnClickListener(v -> startService(new Intent(MoreMenuActivity.this, AddHomeShortcutService.class).setData(Uri.parse(getIntent().getDataString()))));
+                    holder.itemView.setOnClickListener(v -> startService(new Intent(MoreMenuActivity.this, AddHomeShortcutService.class).setData(getIntent().getData())));
                     break;
                 case 3:
                     holder.menuImage.setImageDrawable(new IconicsDrawable(holder.itemView.getContext())

@@ -22,6 +22,7 @@ import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.ContentViewEvent;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.settings.Preferences;
@@ -161,8 +162,14 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
     @NonNull
     private StringBuilder getCSVUrls() {
         final StringBuilder builder = new StringBuilder();
-        for (WebSite webSite : websitesAdapter.getWebSites()) {
-            builder.append(webSite.preferredUrl()).append(',');
+        final List<WebSite> webSites = websitesAdapter.getWebSites();
+        final int size = webSites.size();
+        for (int i = 0; i < size; i++) {
+            builder.append(webSites.get(i).preferredUrl());
+            if (i != size - 1) {
+                builder.append(',')
+                        .append(' ');
+            }
         }
         return builder;
     }
