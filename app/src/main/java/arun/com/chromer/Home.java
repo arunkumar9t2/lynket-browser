@@ -49,6 +49,7 @@ interface Home {
             compositeSubscription.add(RxTextView.afterTextChangeEvents(editText)
                     .map(changeEvent -> changeEvent.editable().toString())
                     .filter(s -> !TextUtils.isEmpty(s)).subscribeOn(AndroidSchedulers.mainThread())
+                    .onBackpressureLatest()
                     .debounce(300, TimeUnit.MILLISECONDS)
                     .compose(RxSuggestions.suggestionsTransformer())
                     .map(strings -> {
