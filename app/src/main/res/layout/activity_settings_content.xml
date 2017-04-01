@@ -34,7 +34,9 @@
         android:foreground="?android:attr/selectableItemBackground"
         app:cardBackgroundColor="@color/colorAccentDarker"
         app:cardElevation="4dp"
-        app:cardUseCompatPadding="true">
+        app:cardUseCompatPadding="true"
+        app:contentPaddingBottom="8dp"
+        app:contentPaddingTop="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -68,11 +70,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ellipsize="marquee"
+                    android:fontFamily="sans-serif-condensed"
                     android:paddingBottom="2dp"
                     android:text="@string/set_default_chromer"
                     android:textAppearance="@style/Preference_TextAppearanceMaterialSubhead"
                     android:textColor="@android:color/white"
                     android:textSize="14sp"
+                    android:textStyle="bold"
                     tools:ignore="SelectableText" />
 
                 <TextView
