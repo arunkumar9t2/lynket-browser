@@ -33,5 +33,5 @@ Your contributions are most welcome.
 
 ## License
 
-Chromer is licensed under the [GNU v3 Public License.](LICENSE.txt)
+Chromer is licensed under the [GNU v3 Public License.](LICENSE)
 
