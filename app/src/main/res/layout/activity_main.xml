@@ -76,8 +76,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="72dp"
                 android:orientation="vertical">
+
+                <arun.com.chromer.views.searchview.MaterialSearchView
+                    android:id="@+id/material_search_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top" />
 
                 <CheckBox
                     android:id="@+id/incognito_mode"
@@ -95,9 +100,8 @@
                     android:id="@+id/recents_card"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginRight="12dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     app:cardPreventCornerOverlap="true"
                     app:cardUseCompatPadding="true">
 
@@ -138,17 +142,10 @@
                             android:textAllCaps="true"
                             android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
                             android:textColor="@color/accent"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
+                            android:textSize="14sp" />
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
             </LinearLayout>
-
-            <arun.com.chromer.views.searchview.MaterialSearchView
-                android:id="@+id/material_search_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top" />
         </FrameLayout>
 
     </android.support.v4.widget.NestedScrollView>
