@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.widget.EditText;
 
-import com.arun.rxgoogleinstant.RxSuggestions;
+import com.arun.rxsuggestions.RxSuggestions;
 import com.jakewharton.rxbinding.widget.RxTextView;
 
 import java.lang.ref.WeakReference;

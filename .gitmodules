@@ -1,0 +1,6 @@
+[submodule "rxSuggestions"]
+	path = rxSuggestions
+	url = https://github.com/arunkumar9t2/rxSuggestions.git
+[submodule "article-android"]
+	path = article-android
+	url = https://github.com/arunkumar9t2/article-android.git
