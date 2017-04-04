@@ -26,7 +26,6 @@ import android.widget.EditText;
 import com.arun.rxsuggestions.RxSuggestions;
 import com.jakewharton.rxbinding.widget.RxTextView;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -37,31 +36,16 @@ import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.search.SuggestionItem;
 import arun.com.chromer.util.RxUtils;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 interface Home {
-    interface View extends SnackHelper {
+    interface View extends SnackHelper, Base.View {
         void setSuggestions(@NonNull List<SuggestionItem> suggestions);
 
         void setRecents(@NonNull List<WebSite> webSites);
     }
 
-    class Presenter {
-        WeakReference<Home.View> viewRef;
-        private final CompositeSubscription compositeSubscription = new CompositeSubscription();
-
-        Presenter(@NonNull Home.View view) {
-            viewRef = new WeakReference<>(view);
-        }
-
-        boolean isViewAttached() {
-            return viewRef != null && viewRef.get() != null;
-        }
-
-        Home.View getView() {
-            return viewRef.get();
-        }
+    class Presenter extends Base.Presenter<View> {
 
         void registerSearch(@NonNull EditText editText) {
             compositeSubscription.add(RxTextView.afterTextChangeEvents(editText)
@@ -96,14 +80,6 @@ interface Home {
                         }
                     })
                     .subscribe());
-        }
-
-        void cleanUp() {
-            if (viewRef != null) {
-                viewRef.clear();
-                viewRef = null;
-            }
-            compositeSubscription.clear();
         }
     }
 }

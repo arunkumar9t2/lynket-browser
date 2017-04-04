@@ -34,7 +34,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -86,9 +85,7 @@ import arun.com.chromer.util.cache.FontCache;
 import arun.com.chromer.views.searchview.MaterialSearchView;
 import arun.com.chromer.webheads.WebHeadService;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 import static android.view.View.GONE;
@@ -96,7 +93,7 @@ import static android.view.View.VISIBLE;
 import static arun.com.chromer.shared.Constants.ACTION_CLOSE_ROOT;
 import static arun.com.chromer.shared.Constants.REQUEST_CODE_VOICE;
 
-public class MainActivity extends AppCompatActivity implements Home.View {
+public class MainActivity extends BaseActivity<Home.View, Home.Presenter> implements Home.View {
 
     @BindView(R.id.bottomsheet)
     public BottomSheetLayout bottomSheetLayout;
@@ -134,17 +131,10 @@ public class MainActivity extends AppCompatActivity implements Home.View {
 
     private RecentsAdapter recentsAdapter;
 
-    private Home.Presenter presenter;
-
-    private final CompositeSubscription subscriptions = new CompositeSubscription();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
-        presenter = new Home.Presenter(this);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
@@ -223,13 +213,21 @@ public class MainActivity extends AppCompatActivity implements Home.View {
         customTabManager.unbindCustomTabsService(this);
     }
 
+    @NonNull
+    @Override
+    public Home.Presenter createPresenter() {
+        return new Home.Presenter();
+    }
+
     @Override
     protected void onDestroy() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(closeReceiver);
-        subscriptions.clear();
-        presenter.cleanUp();
-        presenter = null;
         super.onDestroy();
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.activity_main;
     }
 
     @Override

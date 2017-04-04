@@ -25,7 +25,6 @@ import com.chimbori.crux.articles.Article;
 import com.chimbori.crux.articles.ArticleExtractor;
 import com.chimbori.crux.urls.CruxURL;
 
-import arun.com.chromer.util.Utils;
 import rx.Observable;
 import rx.functions.Func1;
 import timber.log.Timber;
@@ -65,10 +64,9 @@ public class RxParser {
 
                 //noinspection UnusedAssignment
                 webSiteString = null;
-                Utils.printThread();
             }
         } catch (Exception | OutOfMemoryError e) {
-            Timber.e(e.getMessage());
+            Timber.e(e);
             Observable.error(e);
         }
         return new Pair<>(url, article);
