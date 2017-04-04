@@ -69,6 +69,7 @@ import arun.com.chromer.activities.about.changelog.Changelog;
 import arun.com.chromer.activities.history.HistoryActivity;
 import arun.com.chromer.activities.intro.ChromerIntro;
 import arun.com.chromer.activities.intro.WebHeadsIntro;
+import arun.com.chromer.activities.mvp.BaseActivity;
 import arun.com.chromer.activities.payments.DonateActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.activities.settings.SettingsGroupActivity;

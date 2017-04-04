@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer;
+package arun.com.chromer.activities.mvp;
 
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 import com.hannesdorfmann.mosby3.mvp.MvpView;
@@ -28,7 +28,7 @@ import rx.subscriptions.CompositeSubscription;
  */
 public interface Base {
     abstract class Presenter<V extends MvpView> extends MvpBasePresenter<V> {
-        final CompositeSubscription compositeSubscription = new CompositeSubscription();
+        protected final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
         void onDestroy() {
             compositeSubscription.clear();

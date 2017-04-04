@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import arun.com.chromer.activities.SnackHelper;
+import arun.com.chromer.activities.mvp.Base;
 import arun.com.chromer.data.history.HistoryRepository;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.search.SuggestionItem;
