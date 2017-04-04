@@ -25,10 +25,10 @@ import android.content.pm.ResolveInfo;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import java.lang.ref.WeakReference;
 import java.util.Comparator;
 import java.util.List;
 
+import arun.com.chromer.activities.mvp.Base;
 import arun.com.chromer.data.apps.AppRepository;
 import arun.com.chromer.data.common.App;
 import arun.com.chromer.util.RxUtils;
@@ -37,14 +37,13 @@ import rx.Observable;
 import rx.SingleSubscriber;
 import rx.Subscription;
 import rx.functions.Func1;
-import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 /**
  * Blacklist screen interface holding View and Presenter classes.
  */
 interface Blacklist {
-    interface View {
+    interface View extends Base.View {
         void setApps(@NonNull List<App> apps);
 
         void setRefreshing(boolean refreshing);
@@ -53,23 +52,7 @@ interface Blacklist {
     /**
      * Presenter containing all business logic for this screen.
      */
-    class Presenter {
-        final WeakReference<View> viewRef;
-        private final CompositeSubscription compositeSubscription = new CompositeSubscription();
-
-        Presenter(@NonNull View view) {
-            viewRef = new WeakReference<>(view);
-        }
-
-        boolean isViewAttached() {
-            return viewRef.get() != null;
-        }
-
-        @NonNull
-        View getView() {
-            return viewRef.get();
-        }
-
+    class Presenter extends Base.Presenter<View> {
         void loadAppList(@NonNull final Context context) {
             if (isViewAttached()) {
                 getView().setRefreshing(true);
@@ -110,11 +93,6 @@ interface Blacklist {
                         }
                     });
             compositeSubscription.add(subscription);
-        }
-
-        void cleanUp() {
-            viewRef.clear();
-            compositeSubscription.clear();
         }
 
         void updateBlacklist(@NonNull Context context, @Nullable App app) {

@@ -27,7 +27,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
@@ -42,14 +41,14 @@ import java.util.List;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.SnackHelper;
+import arun.com.chromer.activities.mvp.BaseActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.data.common.App;
 import arun.com.chromer.util.ServiceUtil;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
-public class BlacklistManagerActivity extends AppCompatActivity implements
+public class BlacklistManagerActivity extends BaseActivity<Blacklist.View, Blacklist.Presenter> implements
         Blacklist.View,
         BlacklistAdapter.BlackListItemClickedListener,
         CompoundButton.OnCheckedChangeListener, SwipeRefreshLayout.OnRefreshListener, SnackHelper {
@@ -63,16 +62,11 @@ public class BlacklistManagerActivity extends AppCompatActivity implements
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
 
-    private Blacklist.Presenter presenter;
-
     private BlacklistAdapter blacklistAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter = new Blacklist.Presenter(this);
-        setContentView(R.layout.activity_blacklist);
-        ButterKnife.bind(this);
         setupToolbar();
 
         blacklistAdapter = new BlacklistAdapter(this, this);
@@ -98,9 +92,19 @@ public class BlacklistManagerActivity extends AppCompatActivity implements
 
     @Override
     protected void onDestroy() {
-        presenter.cleanUp();
         blacklistAdapter.cleanUp();
         super.onDestroy();
+    }
+
+    @NonNull
+    @Override
+    public Blacklist.Presenter createPresenter() {
+        return new Blacklist.Presenter();
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.activity_blacklist;
     }
 
     @Override
