@@ -103,11 +103,6 @@ public class MaterialSearchView extends RelativeLayout implements
         public void onSearchPerformed(@NonNull String url) {
             // no op
         }
-
-        @Override
-        public void onHamburgerClick() {
-            // no op
-        }
     };
 
     private int maxSuggestions = 5;
@@ -189,7 +184,6 @@ public class MaterialSearchView extends RelativeLayout implements
         });
 
         menuIconView.setImageDrawable(menuIcon);
-        menuIconView.setOnClickListener(view -> listener.onHamburgerClick());
 
         voiceIconView.setImageDrawable(voiceIcon);
         voiceIconView.setOnClickListener(v -> {
@@ -401,7 +395,5 @@ public class MaterialSearchView extends RelativeLayout implements
         void onVoiceIconClick();
 
         void onSearchPerformed(@NonNull String url);
-
-        void onHamburgerClick();
     }
 }
