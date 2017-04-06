@@ -20,7 +20,6 @@ package arun.com.chromer.activities.blacklist;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -40,6 +39,8 @@ import arun.com.chromer.R;
 import arun.com.chromer.data.common.App;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.subjects.PublishSubject;
 
 /**
  * Created by Arun on 24/01/2016.
@@ -48,15 +49,10 @@ class BlacklistAdapter extends RecyclerView.Adapter<BlacklistAdapter.BlackListIt
     private WeakReference<Activity> activityRef = new WeakReference<>(null);
     private final List<App> apps = new ArrayList<>();
 
-    private BlackListItemClickedListener listener = app -> {
-        // no-op
-    };
+    private PublishSubject<App> clickSubject = PublishSubject.create();
 
-    BlacklistAdapter(@NonNull Activity activity, @Nullable BlackListItemClickedListener listener) {
+    BlacklistAdapter(@NonNull Activity activity) {
         this.activityRef = new WeakReference<>(activity);
-        if (listener != null) {
-            this.listener = listener;
-        }
         setHasStableIds(true);
     }
 
@@ -85,6 +81,10 @@ class BlacklistAdapter extends RecyclerView.Adapter<BlacklistAdapter.BlackListIt
         Glide.clear(holder.appIcon);
     }
 
+    public Observable<App> clicks() {
+        return clickSubject.asObservable();
+    }
+
     @Override
     public int getItemCount() {
         return apps.size();
@@ -106,10 +106,6 @@ class BlacklistAdapter extends RecyclerView.Adapter<BlacklistAdapter.BlackListIt
             activityRef.clear();
             activityRef = null;
         }
-    }
-
-    interface BlackListItemClickedListener {
-        void onBlackListItemClick(App app);
     }
 
     class BlackListItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -138,7 +134,7 @@ class BlacklistAdapter extends RecyclerView.Adapter<BlacklistAdapter.BlackListIt
             if (position != RecyclerView.NO_POSITION) {
                 final App app = apps.get(position);
                 app.blackListed = appCheckbox.isChecked();
-                listener.onBlackListItemClick(app);
+                clickSubject.onNext(app);
             }
         }
     }

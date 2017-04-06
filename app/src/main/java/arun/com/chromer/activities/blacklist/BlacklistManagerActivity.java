@@ -50,7 +50,6 @@ import butterknife.BindView;
 
 public class BlacklistManagerActivity extends BaseActivity<Blacklist.View, Blacklist.Presenter> implements
         Blacklist.View,
-        BlacklistAdapter.BlackListItemClickedListener,
         CompoundButton.OnCheckedChangeListener, SwipeRefreshLayout.OnRefreshListener, SnackHelper {
 
     @BindView(R.id.toolbar)
@@ -69,9 +68,10 @@ public class BlacklistManagerActivity extends BaseActivity<Blacklist.View, Black
         super.onCreate(savedInstanceState);
         setupToolbar();
 
-        blacklistAdapter = new BlacklistAdapter(this, this);
+        blacklistAdapter = new BlacklistAdapter(this);
         blackListedAppsList.setLayoutManager(new LinearLayoutManager(this));
         blackListedAppsList.setAdapter(blacklistAdapter);
+        presenter.handleSelections(this, blacklistAdapter.clicks());
         loadApps();
     }
 
@@ -105,11 +105,6 @@ public class BlacklistManagerActivity extends BaseActivity<Blacklist.View, Black
     @Override
     protected int getLayoutRes() {
         return R.layout.activity_blacklist;
-    }
-
-    @Override
-    public void onBlackListItemClick(App app) {
-        presenter.updateBlacklist(this, app);
     }
 
     @Override

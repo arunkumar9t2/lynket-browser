@@ -21,7 +21,6 @@ package arun.com.chromer.activities.blacklist;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -36,7 +35,6 @@ import arun.com.chromer.util.Utils;
 import rx.Observable;
 import rx.SingleSubscriber;
 import rx.Subscription;
-import rx.functions.Func1;
 import timber.log.Timber;
 
 /**
@@ -63,12 +61,8 @@ interface Blacklist {
 
             final Subscription subscription = Observable
                     .fromCallable(() -> pm.queryIntentActivities(intent, 0))
-                    .flatMap(new Func1<List<ResolveInfo>, Observable<ResolveInfo>>() {
-                        @Override
-                        public Observable<ResolveInfo> call(List<ResolveInfo> resolveInfos) {
-                            return Observable.from(resolveInfos);
-                        }
-                    }).filter(resolveInfo -> resolveInfo != null
+                    .flatMapIterable(resolveInfos -> resolveInfos)
+                    .filter(resolveInfo -> resolveInfo != null
                             && !resolveInfo.activityInfo.packageName.equalsIgnoreCase(context.getPackageName()))
                     .map(resolveInfo -> {
                         final App app = Utils.createApp(context, resolveInfo.activityInfo.packageName);
@@ -109,6 +103,11 @@ interface Blacklist {
                             .subscribe();
                 }
             }
+        }
+
+        void handleSelections(final Context context, Observable<App> clicks) {
+            final Subscription subscription = clicks.subscribe(app -> updateBlacklist(context, app));
+            compositeSubscription.add(subscription);
         }
     }
 }
