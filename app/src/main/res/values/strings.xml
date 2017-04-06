@@ -298,4 +298,5 @@
     <string name="overlay_missing">Your device does not seem to have standard Grant draw overlay permission screen. Please contact your manufacturer to resolve this.</string>
     <string name="home">Home</string>
     <string name="no_items_present">No items present.</string>
+    <string name="recents">Recents</string>
 </resources>

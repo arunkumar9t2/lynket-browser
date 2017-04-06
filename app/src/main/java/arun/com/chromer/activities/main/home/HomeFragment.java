@@ -73,6 +73,8 @@ public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implem
     TextView recentMissingText;
     @BindView(R.id.recents_list)
     RecyclerView recentsList;
+    @BindView(R.id.recents_header)
+    TextView recentsHeader;
 
 
     private CustomTabManager customTabManager;
@@ -177,11 +179,11 @@ public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implem
     }
 
     private void setupRecents() {
-        recentMissingText.setCompoundDrawablePadding(Utils.dpToPx(8));
-        recentMissingText.setCompoundDrawables(new IconicsDrawable(getContext())
+        recentsHeader.setCompoundDrawablePadding(Utils.dpToPx(8));
+        recentsHeader.setCompoundDrawables(new IconicsDrawable(getContext())
                 .icon(CommunityMaterial.Icon.cmd_history)
                 .colorRes(R.color.accent)
-                .sizeDp(24), null, null, null);
+                .sizeDp(20), null, null, null);
         recentsList.setLayoutManager(new GridLayoutManager(getActivity(), 4));
         recentsAdapter = new RecentsAdapter();
         recentsList.setAdapter(recentsAdapter);
