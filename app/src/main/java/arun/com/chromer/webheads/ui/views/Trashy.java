@@ -109,7 +109,9 @@ public class Trashy extends FrameLayout {
     }
 
     private void updateView() {
-        windowManager.updateViewLayout(this, windowParams);
+        if (windowParams != null) {
+            windowManager.updateViewLayout(this, windowParams);
+        }
     }
 
     public static void init(@NonNull Context context) {
