@@ -28,7 +28,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -36,6 +39,7 @@ import arun.com.chromer.R;
 import arun.com.chromer.activities.SnackHelper;
 import arun.com.chromer.activities.mvp.BaseFragment;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -49,6 +53,8 @@ public class HistoryFragment extends BaseFragment<History.View, History.Presente
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.fab)
     FloatingActionButton fab;
+    @BindView(R.id.error)
+    TextView error;
     private HistoryAdapter historyAdapter;
 
     @Override
@@ -70,6 +76,7 @@ public class HistoryFragment extends BaseFragment<History.View, History.Presente
     @Override
     public void setCursor(@Nullable Cursor cursor) {
         historyAdapter.setCursor(cursor);
+        error.setVisibility(cursor == null || cursor.isClosed() || cursor.getCount() == 0 ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -142,5 +149,13 @@ public class HistoryFragment extends BaseFragment<History.View, History.Presente
                     .onPositive((dialog, which) -> presenter.deleteAll(getContext()))
                     .show();
         }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        ButterKnife.bind(this, rootView);
+        return rootView;
     }
 }
