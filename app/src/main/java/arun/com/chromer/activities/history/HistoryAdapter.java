@@ -55,7 +55,7 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHold
         @Override
         public int refreshData() {
             Timber.d("Refresh data");
-            if (cursor == null) {
+            if (cursor == null || cursor.isClosed()) {
                 return 0;
             }
             return cursor.getCount();
@@ -125,6 +125,7 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHold
                         .crossFade()
                         .into(holder.historyFavicon);
             } else {
+                Glide.clear(holder.itemView);
             }
         }
     }
