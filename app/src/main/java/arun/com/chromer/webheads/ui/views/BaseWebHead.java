@@ -208,8 +208,6 @@ public abstract class BaseWebHead extends FrameLayout {
             final int pad = dpToPx(5);
             badgeView.setPadding(pad, pad, pad, pad);
         }
-        requestLayout();
-        Utils.doAfterLayout(this, this::setInitialSpawnLocation);
     }
 
     private void initDisplayMetrics() {

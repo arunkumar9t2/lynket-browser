@@ -405,6 +405,7 @@ public class Utils {
     }
 
     public static void doAfterLayout(@NonNull final View view, @NonNull final Runnable end) {
+        view.requestLayout();
         final ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
         if (viewTreeObserver.isAlive()) {
             viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

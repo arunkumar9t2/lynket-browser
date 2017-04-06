@@ -399,23 +399,22 @@ public class WebHead extends BaseWebHead implements SpringListener {
     }
 
     public void reveal(@Nullable final Runnable endAction) {
-        Timber.d("Reveal %s", webSite.url);
-        animateContentScale(TOUCH_UP_SCALE, endAction);
-        scaledDown = false;
+        Utils.doAfterLayout(this, () -> {
+            setInitialSpawnLocation();
+            Timber.d("Reveal %s", webSite.url);
+            animateContentScale(TOUCH_UP_SCALE, endAction);
+            scaledDown = false;
+        });
     }
 
     private void touchDown() {
         if (!scaledDown) {
-            // scaleSpring.setEndValue(TOUCH_DOWN_SCALE);
-            // animateContentScale(TOUCH_DOWN_SCALE);
             scaledDown = true;
         }
     }
 
     private void touchUp() {
         if (scaledDown) {
-            // scaleSpring.setEndValue(TOUCH_UP_SCALE);
-            // animateContentScale(TOUCH_UP_SCALE);
             scaledDown = false;
         }
     }
