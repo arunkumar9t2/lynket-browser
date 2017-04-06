@@ -64,6 +64,12 @@ class WebsiteNetworkStore implements WebsiteStore {
 
     @NonNull
     @Override
+    public Observable<Void> clearCache() {
+        return Observable.empty();
+    }
+
+    @NonNull
+    @Override
     public Observable<WebSite> saveWebsite(@NonNull WebSite webSite) {
         return Observable.empty();
     }

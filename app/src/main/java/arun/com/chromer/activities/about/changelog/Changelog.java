@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v7.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebResourceRequest;
@@ -37,14 +38,20 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import arun.com.chromer.BuildConfig;
 import arun.com.chromer.R;
+import arun.com.chromer.data.website.WebsiteRepository;
+import arun.com.chromer.util.RxUtils;
 import arun.com.chromer.util.Utils;
 import butterknife.ButterKnife;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
+import timber.log.Timber;
 
 /**
  * Created by Arun on 25/12/2015.
  */
 public class Changelog {
+    private static final String PREF_VERSION_CODE_KEY = "version_code";
+    private static final int DOES_NT_EXIST = -1;
+
     public static void show(final Activity activity) {
         try {
             @SuppressLint("InflateParams")
@@ -97,17 +104,21 @@ public class Changelog {
     public static void conditionalShow(@NonNull final Activity activity) {
         if (shouldShow(activity)) {
             show(activity);
+            handleMigration(activity);
         }
     }
 
+    private static void handleMigration(@NonNull final Activity activity) {
+        WebsiteRepository.getInstance(activity)
+                .clearCache()
+                .compose(RxUtils.applySchedulers())
+                .doOnError(Timber::e)
+                .subscribe();
+    }
+
     private static boolean shouldShow(@NonNull final Context context) {
-        final String PREF_VERSION_CODE_KEY = "version_code";
-        final int DOES_NT_EXIST = -1;
-        // Get current version code
         int currentVersionCode = BuildConfig.VERSION_CODE;
-        final SharedPreferences prefs = context.getSharedPreferences(
-                context.getPackageName(),
-                Context.MODE_PRIVATE);
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         int savedVersionCode = prefs.getInt(PREF_VERSION_CODE_KEY, DOES_NT_EXIST);
         prefs.edit().putInt(PREF_VERSION_CODE_KEY, currentVersionCode).apply();

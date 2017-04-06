@@ -46,12 +46,12 @@ public class WebsiteRepository implements BaseWebsiteRepository {
     // Network store
     private final WebsiteStore webNetworkStore;
     // Cache store
-    private final WebsiteStore cacheStore;
+    private final WebsiteStore diskStore;
 
     private WebsiteRepository(@NonNull Context context) {
         this.context = context.getApplicationContext();
         webNetworkStore = new WebsiteNetworkStore(context);
-        cacheStore = new WebsiteDiskStore(context);
+        diskStore = new WebsiteDiskStore(context);
     }
 
     public static synchronized WebsiteRepository getInstance(@NonNull Context context) {
@@ -64,7 +64,7 @@ public class WebsiteRepository implements BaseWebsiteRepository {
     @NonNull
     @Override
     public Observable<WebSite> getWebsite(@NonNull final String url) {
-        final Observable<WebSite> cache = cacheStore.getWebsite(url)
+        final Observable<WebSite> cache = diskStore.getWebsite(url)
                 .doOnNext(webSite -> {
                     if (webSite != null) {
                         HistoryRepository.getInstance(context).update(webSite).subscribe();
@@ -81,7 +81,7 @@ public class WebsiteRepository implements BaseWebsiteRepository {
         final Observable<WebSite> remote = webNetworkStore.getWebsite(url)
                 .filter(webSite -> webSite != null)
                 .doOnNext(webSite -> {
-                    cacheStore.saveWebsite(webSite).subscribe();
+                    diskStore.saveWebsite(webSite).subscribe();
                     HistoryRepository.getInstance(context).insert(webSite).subscribe();
                 });
 
@@ -93,7 +93,7 @@ public class WebsiteRepository implements BaseWebsiteRepository {
 
     @Override
     public int getWebsiteColorSync(@NonNull String url) {
-        return cacheStore.getWebsiteColor(url).toBlocking().first().color;
+        return diskStore.getWebsiteColor(url).toBlocking().first().color;
     }
 
     @NonNull
@@ -105,12 +105,18 @@ public class WebsiteRepository implements BaseWebsiteRepository {
                     @Override
                     public Observable<WebColor> call(WebSite webSite) {
                         if (webSite != null && webSite.themeColor() != NO_COLOR) {
-                            return cacheStore.saveWebsiteColor(Uri.parse(webSite.url).getHost(), webSite.themeColor());
+                            return diskStore.saveWebsiteColor(Uri.parse(webSite.url).getHost(), webSite.themeColor());
                         } else {
                             return Observable.empty();
                         }
                     }
                 });
+    }
+
+    @NonNull
+    @Override
+    public Observable<Void> clearCache() {
+        return diskStore.clearCache();
     }
 
 }

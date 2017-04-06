@@ -37,4 +37,7 @@ interface BaseWebsiteRepository {
 
     @NonNull
     Observable<WebColor> saveWebColor(final String url);
+
+    @NonNull
+    Observable<Void> clearCache();
 }

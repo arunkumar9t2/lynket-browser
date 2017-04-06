@@ -34,6 +34,9 @@ interface WebsiteStore {
     Observable<WebSite> getWebsite(@NonNull String url);
 
     @NonNull
+    Observable<Void> clearCache();
+
+    @NonNull
     Observable<WebSite> saveWebsite(@NonNull WebSite webSite);
 
     @NonNull
