@@ -132,7 +132,7 @@ public class MaterialSearchView extends RelativeLayout implements
                 .color(normalColor)
                 .sizeDp(18);
         menuIcon = new IconicsDrawable(context)
-                .icon(CommunityMaterial.Icon.cmd_menu)
+                .icon(CommunityMaterial.Icon.cmd_magnify)
                 .color(normalColor)
                 .sizeDp(18);
         addView(LayoutInflater.from(getContext()).inflate(R.layout.widget_material_search_view, this, false));
