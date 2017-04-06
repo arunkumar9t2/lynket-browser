@@ -71,6 +71,7 @@ public abstract class OverlayService extends Service {
         if (!Utils.isOverlayGranted(this)) {
             Toast.makeText(this, getString(R.string.web_head_permission_toast), LENGTH_LONG).show();
             final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             Timber.d("Exited overlay service since overlay permission was revoked");
             stopSelf();
