@@ -45,6 +45,8 @@ import arun.com.chromer.util.RxUtils;
 import arun.com.chromer.util.SafeIntent;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.ui.ProxyActivity;
+import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 import static android.content.Intent.ACTION_VIEW;
@@ -61,6 +63,8 @@ public class BrowserInterceptActivity extends AppCompatActivity {
     private MaterialDialog dialog;
     private SafeIntent safeIntent;
     private boolean isFromNewTab;
+
+    private final CompositeSubscription subs = new CompositeSubscription();
 
     @TargetApi(LOLLIPOP)
     @Override
@@ -100,7 +104,8 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                     .content(R.string.grabbing_amp_link)
                     .dismissListener(d -> finish())
                     .show();
-            WebsiteRepository.getInstance(this)
+
+            final Subscription subscription = WebsiteRepository.getInstance(this)
                     .getWebsite(safeIntent.getData().toString())
                     .compose(RxUtils.applySchedulers())
                     .doOnNext(webSite -> {
@@ -122,12 +127,19 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                         articleAwareLaunch();
                         dialog.dismiss();
                     }).subscribe();
+            subs.add(subscription);
         } else if (Preferences.get(this).articleMode()) {
             // User just wants article, load it.
             launchArticle();
         } else {
             launchCCT(safeIntent.getData());
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        subs.clear();
     }
 
     private void articleAwareLaunch() {
@@ -204,12 +216,12 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                 .theme(Theme.LIGHT)
                 .positiveColorRes(R.color.colorAccent)
                 .negativeColorRes(R.color.colorAccent)
-                .onPositive((dialog1, which) -> {
+                .onPositive((dialog, which) -> {
                     final Intent chromerIntent = getPackageManager().getLaunchIntentForPackage(getPackageName());
                     chromerIntent.addFlags(FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(chromerIntent);
                 })
-                .dismissListener(dialog12 -> finish()).show();
+                .dismissListener(dialog -> finish()).show();
     }
 
     private void closeDialogs() {
