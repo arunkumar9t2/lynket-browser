@@ -26,7 +26,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
@@ -34,8 +33,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -86,8 +87,6 @@ public class MainActivity extends AppCompatActivity implements SnackHelper {
     public CoordinatorLayout coordinatorLayout;
     @BindView(R.id.root)
     LinearLayout root;
-    @BindView(R.id.collapsing_toolbar)
-    CollapsingToolbarLayout collapsingToolbar;
     @BindView(R.id.appbar)
     AppBarLayout appbar;
 
@@ -162,10 +161,8 @@ public class MainActivity extends AppCompatActivity implements SnackHelper {
 
     private void setupDrawer() {
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
-        collapsingToolbar.setTitle(getString(R.string.app_name));
-        collapsingToolbar.setCollapsedTitleTypeface(FontCache.get(MONO, this));
-        Drawer drawer = new DrawerBuilder()
+        setToolbarTypeFace();
+        final Drawer drawer = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .withAccountHeader(new AccountHeaderBuilder()
@@ -298,5 +295,18 @@ public class MainActivity extends AppCompatActivity implements SnackHelper {
             return;
         }
         super.onBackPressed();
+    }
+
+    public void setToolbarTypeFace() {
+        for (int i = 0; i < toolbar.getChildCount(); i++) {
+            final View view = toolbar.getChildAt(i);
+            if (view instanceof TextView) {
+                TextView tv = (TextView) view;
+                if (tv.getText().equals(toolbar.getTitle())) {
+                    tv.setTypeface(FontCache.get(MONO, this));
+                    break;
+                }
+            }
+        }
     }
 }
