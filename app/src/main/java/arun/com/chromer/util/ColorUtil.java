@@ -30,8 +30,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v7.graphics.Palette;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -84,7 +83,8 @@ public class ColorUtil {
 
     @NonNull
     public static List<Palette.Swatch> getSwatchListFromPalette(@NonNull Palette palette) {
-        final List<Palette.Swatch> swatchList = new ArrayList<>();
+        final List<Palette.Swatch> swatchList = new LinkedList<>();
+        Palette.Swatch prominentSwatch = palette.getDominantSwatch();
         Palette.Swatch vibrantSwatch = palette.getVibrantSwatch();
         Palette.Swatch vibrantDarkSwatch = palette.getDarkVibrantSwatch();
         Palette.Swatch vibrantLightSwatch = palette.getLightVibrantSwatch();
@@ -92,6 +92,7 @@ public class ColorUtil {
         Palette.Swatch mutedDarkSwatch = palette.getDarkMutedSwatch();
         Palette.Swatch mutedLightSwatch = palette.getLightMutedSwatch();
 
+        swatchList.add(prominentSwatch);
         swatchList.add(vibrantSwatch);
         swatchList.add(vibrantDarkSwatch);
         swatchList.add(vibrantLightSwatch);
@@ -123,17 +124,10 @@ public class ColorUtil {
     public static int getBestFaviconColor(@Nullable Palette palette) {
         if (palette != null) {
             final List<Palette.Swatch> sortedSwatch = getSwatchListFromPalette(palette);
-            // Descending
-            Collections.sort(sortedSwatch,
-                    (swatch1, swatch2) -> {
-                        int a = swatch1 == null ? 0 : swatch1.getPopulation();
-                        int b = swatch2 == null ? 0 : swatch2.getPopulation();
-                        return b - a;
-                    });
             // We want the vibrant color but we will avoid it if it is the most prominent one.
             // Instead we will choose the next prominent color
             int vibrantColor = palette.getVibrantColor(NO_COLOR);
-            int prominentColor = sortedSwatch.get(0).getRgb();
+            int prominentColor = sortedSwatch.get(0) != null ? sortedSwatch.get(0).getRgb() : NO_COLOR;
             if (vibrantColor == NO_COLOR) {
                 int darkVibrantColor = palette.getDarkVibrantColor(NO_COLOR);
                 if (darkVibrantColor != NO_COLOR) {
