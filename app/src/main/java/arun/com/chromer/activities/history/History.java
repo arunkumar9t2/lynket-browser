@@ -23,52 +23,27 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import java.lang.ref.WeakReference;
-
 import arun.com.chromer.R;
 import arun.com.chromer.activities.SnackHelper;
+import arun.com.chromer.activities.mvp.Base;
 import arun.com.chromer.data.history.HistoryRepository;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.util.RxUtils;
 import rx.Observable;
 import rx.functions.Func1;
-import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 /**
  * Created by arunk on 06-03-2017.
  */
 interface History {
-    interface View extends SnackHelper {
+    interface View extends SnackHelper, Base.View {
         void loading(boolean loading);
 
         void setCursor(@Nullable Cursor cursor);
     }
 
-    class Presenter {
-        WeakReference<History.View> viewRef;
-        private final CompositeSubscription compositeSubscription = new CompositeSubscription();
-
-        Presenter(@NonNull History.View view) {
-            viewRef = new WeakReference<>(view);
-        }
-
-        boolean isViewAttached() {
-            return viewRef != null && viewRef.get() != null;
-        }
-
-        History.View getView() {
-            return viewRef.get();
-        }
-
-        void cleanUp() {
-            if (viewRef != null) {
-                viewRef.clear();
-                viewRef = null;
-            }
-            compositeSubscription.clear();
-        }
-
+    class Presenter extends Base.Presenter<History.View> {
         void loadHistory(@NonNull Context context) {
             compositeSubscription.add(HistoryRepository.getInstance(context).getAllItemsCursor()
                     .compose(RxUtils.applySchedulers())
