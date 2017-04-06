@@ -128,6 +128,7 @@ public class HistoryFragment extends BaseFragment<History.View, History.Presente
     public void onResume() {
         super.onResume();
         presenter.loadHistory(getContext());
+        getActivity().setTitle(R.string.title_history);
     }
 
     @OnClick(R.id.fab)

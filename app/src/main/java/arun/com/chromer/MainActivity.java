@@ -26,6 +26,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
@@ -59,6 +60,7 @@ import java.util.List;
 import arun.com.chromer.activities.SnackHelper;
 import arun.com.chromer.activities.about.AboutAppActivity;
 import arun.com.chromer.activities.about.changelog.Changelog;
+import arun.com.chromer.activities.history.HistoryFragment;
 import arun.com.chromer.activities.intro.ChromerIntro;
 import arun.com.chromer.activities.intro.WebHeadsIntro;
 import arun.com.chromer.activities.main.home.HomeFragment;
@@ -89,6 +91,8 @@ public class MainActivity extends AppCompatActivity implements SnackHelper {
     LinearLayout root;
     @BindView(R.id.appbar)
     AppBarLayout appbar;
+    @BindView(R.id.bottom_navigation)
+    BottomNavigationView bottomNavigation;
 
     private BroadcastReceiver closeReceiver;
 
@@ -110,6 +114,23 @@ public class MainActivity extends AppCompatActivity implements SnackHelper {
         ServiceUtil.takeCareOfServices(getApplicationContext());
         registerCloseReceiver();
 
+        bottomNavigation.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.home:
+                    selectHome();
+                    break;
+                case R.id.history:
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, new HistoryFragment())
+                            .commit();
+                    break;
+            }
+            return false;
+        });
+        bottomNavigation.setSelectedItemId(R.id.home);
+    }
+
+    private void selectHome() {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new HomeFragment())
                 .commit();

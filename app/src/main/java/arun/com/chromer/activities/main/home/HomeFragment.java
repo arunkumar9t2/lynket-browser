@@ -101,6 +101,7 @@ public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implem
     public void onResume() {
         super.onResume();
         invalidateState();
+        getActivity().setTitle(R.string.app_name);
     }
 
 
