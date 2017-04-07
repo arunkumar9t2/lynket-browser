@@ -74,6 +74,7 @@ public class Constants {
     public static final String EXTRA_PACKAGE_NAME = "EXTRA_PACKAGE_NAME";
     public static final String EXTRA_KEY_ORIGINAL_URL = "EXTRA_KEY_ORIGINAL_URL";
     public static final String EXTRA_KEY_FROM_ARTICLE = "EXTRA_KEY_FROM_ARTICLE";
+    public static final String EXTRA_KEY_FROM_OUR_APP = "EXTRA_KEY_FROM_OUR_APP";
     // Request codes
     public static final int REQUEST_CODE_VOICE = 10001;
 

@@ -25,7 +25,7 @@
     android:clickable="true"
     android:focusable="true"
     android:gravity="center_vertical"
-    android:minHeight="48dp"
+    android:minHeight="52dp"
     android:orientation="horizontal"
     android:paddingBottom="5dp"
     android:paddingLeft="10dp"
@@ -38,6 +38,7 @@
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_gravity="center"
+        android:scaleType="fitCenter"
         tools:ignore="ContentDescription" />
 
     <RelativeLayout

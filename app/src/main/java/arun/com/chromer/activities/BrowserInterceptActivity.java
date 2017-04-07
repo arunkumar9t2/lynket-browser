@@ -57,27 +57,32 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.os.Build.VERSION_CODES.LOLLIPOP;
 import static android.widget.Toast.LENGTH_SHORT;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_NEW_TAB;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_OUR_APP;
 
 @SuppressLint("GoogleAppIndexingApiWarning")
 public class BrowserInterceptActivity extends AppCompatActivity {
     private MaterialDialog dialog;
     private SafeIntent safeIntent;
     private boolean isFromNewTab;
+    private boolean isFromOurApp;
 
     private final CompositeSubscription subs = new CompositeSubscription();
 
     @TargetApi(LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        DocumentUtils.closeRootActivity(this);
         super.onCreate(savedInstanceState);
-
         safeIntent = new SafeIntent(getIntent());
         if (safeIntent.getData() == null) {
             invalidLink();
             return;
         }
         isFromNewTab = safeIntent.getBooleanExtra(EXTRA_KEY_FROM_NEW_TAB, false);
+        isFromOurApp = safeIntent.getBooleanExtra(EXTRA_KEY_FROM_OUR_APP, false);
+
+        if (!isFromOurApp) {
+            DocumentUtils.closeRootActivity(this);
+        }
 
         // Check if we should blacklist the launching app
         if (Preferences.get(this).blacklist()) {
@@ -233,7 +238,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
     private void launchWebHead() {
         final Intent webHeadLauncher = new Intent(this, ProxyActivity.class);
         webHeadLauncher.addFlags(FLAG_ACTIVITY_NEW_TASK);
-        if (!isFromNewTab) {
+        if (!isFromNewTab && !isFromOurApp) {
             webHeadLauncher.addFlags(FLAG_ACTIVITY_CLEAR_TASK);
         }
         webHeadLauncher.putExtra(EXTRA_KEY_FROM_NEW_TAB, isFromNewTab);

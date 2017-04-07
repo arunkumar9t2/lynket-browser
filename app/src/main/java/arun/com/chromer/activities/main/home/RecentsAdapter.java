@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer;
+package arun.com.chromer.activities.main.home;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -34,18 +34,20 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 
+import arun.com.chromer.R;
 import arun.com.chromer.activities.BrowserInterceptActivity;
 import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.shared.Constants;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
  * Created by arunk on 07-03-2017.
  */
-class RecentsAdapter extends RecyclerView.Adapter<RecentsAdapter.RecentsViewHolder> {
+public class RecentsAdapter extends RecyclerView.Adapter<RecentsAdapter.RecentsViewHolder> {
     private final List<WebSite> webSites = new ArrayList<>();
 
-    RecentsAdapter() {
+    public RecentsAdapter() {
     }
 
     @Override
@@ -60,6 +62,7 @@ class RecentsAdapter extends RecyclerView.Adapter<RecentsAdapter.RecentsViewHold
             holder.label.setText(website.safeLabel());
             holder.itemView.setOnClickListener(v -> {
                 final Intent intent = new Intent(holder.itemView.getContext(), BrowserInterceptActivity.class);
+                intent.putExtra(Constants.EXTRA_KEY_FROM_OUR_APP, true);
                 intent.setData(Uri.parse(website.preferredUrl()));
                 holder.itemView.getContext().startActivity(intent);
             });
@@ -81,7 +84,7 @@ class RecentsAdapter extends RecyclerView.Adapter<RecentsAdapter.RecentsViewHold
         return webSites.size();
     }
 
-    void setWebSites(@NonNull List<WebSite> webSites) {
+    public void setWebSites(@NonNull List<WebSite> webSites) {
         this.webSites.clear();
         this.webSites.addAll(webSites);
         notifyDataSetChanged();
