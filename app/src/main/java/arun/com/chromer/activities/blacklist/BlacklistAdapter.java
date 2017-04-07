@@ -1,8 +1,25 @@
+/*
+ * Chromer
+ * Copyright (C) 2017 Arunkumar
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package arun.com.chromer.activities.blacklist;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,6 +39,8 @@ import arun.com.chromer.R;
 import arun.com.chromer.data.common.App;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.subjects.PublishSubject;
 
 /**
  * Created by Arun on 24/01/2016.
@@ -30,15 +49,10 @@ class BlacklistAdapter extends RecyclerView.Adapter<BlacklistAdapter.BlackListIt
     private WeakReference<Activity> activityRef = new WeakReference<>(null);
     private final List<App> apps = new ArrayList<>();
 
-    private BlackListItemClickedListener listener = app -> {
-        // no-op
-    };
+    private PublishSubject<App> clickSubject = PublishSubject.create();
 
-    BlacklistAdapter(@NonNull Activity activity, @Nullable BlackListItemClickedListener listener) {
+    BlacklistAdapter(@NonNull Activity activity) {
         this.activityRef = new WeakReference<>(activity);
-        if (listener != null) {
-            this.listener = listener;
-        }
         setHasStableIds(true);
     }
 
@@ -67,6 +81,10 @@ class BlacklistAdapter extends RecyclerView.Adapter<BlacklistAdapter.BlackListIt
         Glide.clear(holder.appIcon);
     }
 
+    public Observable<App> clicks() {
+        return clickSubject.asObservable();
+    }
+
     @Override
     public int getItemCount() {
         return apps.size();
@@ -88,10 +106,6 @@ class BlacklistAdapter extends RecyclerView.Adapter<BlacklistAdapter.BlackListIt
             activityRef.clear();
             activityRef = null;
         }
-    }
-
-    interface BlackListItemClickedListener {
-        void onBlackListItemClick(App app);
     }
 
     class BlackListItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -120,7 +134,7 @@ class BlacklistAdapter extends RecyclerView.Adapter<BlacklistAdapter.BlackListIt
             if (position != RecyclerView.NO_POSITION) {
                 final App app = apps.get(position);
                 app.blackListed = appCheckbox.isChecked();
-                listener.onBlackListItemClick(app);
+                clickSubject.onNext(app);
             }
         }
     }

@@ -1,3 +1,21 @@
+/*
+ * Chromer
+ * Copyright (C) 2017 Arunkumar
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package arun.com.chromer.activities.blacklist;
 
 import android.annotation.TargetApi;
@@ -9,7 +27,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
@@ -24,16 +41,15 @@ import java.util.List;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.SnackHelper;
+import arun.com.chromer.activities.mvp.BaseActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.data.common.App;
 import arun.com.chromer.util.ServiceUtil;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
-public class BlacklistManagerActivity extends AppCompatActivity implements
+public class BlacklistManagerActivity extends BaseActivity<Blacklist.View, Blacklist.Presenter> implements
         Blacklist.View,
-        BlacklistAdapter.BlackListItemClickedListener,
         CompoundButton.OnCheckedChangeListener, SwipeRefreshLayout.OnRefreshListener, SnackHelper {
 
     @BindView(R.id.toolbar)
@@ -45,21 +61,17 @@ public class BlacklistManagerActivity extends AppCompatActivity implements
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
 
-    private Blacklist.Presenter presenter;
-
     private BlacklistAdapter blacklistAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter = new Blacklist.Presenter(this);
-        setContentView(R.layout.activity_blacklist);
-        ButterKnife.bind(this);
         setupToolbar();
 
-        blacklistAdapter = new BlacklistAdapter(this, this);
+        blacklistAdapter = new BlacklistAdapter(this);
         blackListedAppsList.setLayoutManager(new LinearLayoutManager(this));
         blackListedAppsList.setAdapter(blacklistAdapter);
+        presenter.handleSelections(this, blacklistAdapter.clicks());
         loadApps();
     }
 
@@ -80,14 +92,19 @@ public class BlacklistManagerActivity extends AppCompatActivity implements
 
     @Override
     protected void onDestroy() {
-        presenter.cleanUp();
         blacklistAdapter.cleanUp();
         super.onDestroy();
     }
 
+    @NonNull
     @Override
-    public void onBlackListItemClick(App app) {
-        presenter.updateBlacklist(this, app);
+    public Blacklist.Presenter createPresenter() {
+        return new Blacklist.Presenter();
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.activity_blacklist;
     }
 
     @Override

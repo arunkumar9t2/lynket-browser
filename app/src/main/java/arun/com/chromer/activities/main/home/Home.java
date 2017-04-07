@@ -1,4 +1,22 @@
-package arun.com.chromer;
+/*
+ * Chromer
+ * Copyright (C) 2017 Arunkumar
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package arun.com.chromer.activities.main.home;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,42 +26,27 @@ import android.widget.EditText;
 import com.arun.rxsuggestions.RxSuggestions;
 import com.jakewharton.rxbinding.widget.RxTextView;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import arun.com.chromer.activities.SnackHelper;
+import arun.com.chromer.activities.mvp.Base;
 import arun.com.chromer.data.history.HistoryRepository;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.search.SuggestionItem;
 import arun.com.chromer.util.RxUtils;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 interface Home {
-    interface View extends SnackHelper {
+    interface View extends SnackHelper, Base.View {
         void setSuggestions(@NonNull List<SuggestionItem> suggestions);
 
         void setRecents(@NonNull List<WebSite> webSites);
     }
 
-    class Presenter {
-        WeakReference<Home.View> viewRef;
-        private final CompositeSubscription compositeSubscription = new CompositeSubscription();
-
-        Presenter(@NonNull Home.View view) {
-            viewRef = new WeakReference<>(view);
-        }
-
-        boolean isViewAttached() {
-            return viewRef != null && viewRef.get() != null;
-        }
-
-        Home.View getView() {
-            return viewRef.get();
-        }
+    class Presenter extends Base.Presenter<View> {
 
         void registerSearch(@NonNull EditText editText) {
             compositeSubscription.add(RxTextView.afterTextChangeEvents(editText)
@@ -78,14 +81,6 @@ interface Home {
                         }
                     })
                     .subscribe());
-        }
-
-        void cleanUp() {
-            if (viewRef != null) {
-                viewRef.clear();
-                viewRef = null;
-            }
-            compositeSubscription.clear();
         }
     }
 }

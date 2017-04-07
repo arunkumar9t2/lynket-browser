@@ -1,3 +1,21 @@
+/*
+ * Chromer
+ * Copyright (C) 2017 Arunkumar
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package arun.com.chromer.activities;
 
 import android.annotation.SuppressLint;
@@ -27,6 +45,8 @@ import arun.com.chromer.util.RxUtils;
 import arun.com.chromer.util.SafeIntent;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.ui.ProxyActivity;
+import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 import static android.content.Intent.ACTION_VIEW;
@@ -37,25 +57,32 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.os.Build.VERSION_CODES.LOLLIPOP;
 import static android.widget.Toast.LENGTH_SHORT;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_NEW_TAB;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_OUR_APP;
 
 @SuppressLint("GoogleAppIndexingApiWarning")
 public class BrowserInterceptActivity extends AppCompatActivity {
     private MaterialDialog dialog;
     private SafeIntent safeIntent;
     private boolean isFromNewTab;
+    private boolean isFromOurApp;
+
+    private final CompositeSubscription subs = new CompositeSubscription();
 
     @TargetApi(LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        DocumentUtils.closeRootActivity(this);
         super.onCreate(savedInstanceState);
-
         safeIntent = new SafeIntent(getIntent());
         if (safeIntent.getData() == null) {
             invalidLink();
             return;
         }
         isFromNewTab = safeIntent.getBooleanExtra(EXTRA_KEY_FROM_NEW_TAB, false);
+        isFromOurApp = safeIntent.getBooleanExtra(EXTRA_KEY_FROM_OUR_APP, false);
+
+        if (!isFromOurApp) {
+            DocumentUtils.closeRootActivity(this);
+        }
 
         // Check if we should blacklist the launching app
         if (Preferences.get(this).blacklist()) {
@@ -82,7 +109,8 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                     .content(R.string.grabbing_amp_link)
                     .dismissListener(d -> finish())
                     .show();
-            WebsiteRepository.getInstance(this)
+
+            final Subscription subscription = WebsiteRepository.getInstance(this)
                     .getWebsite(safeIntent.getData().toString())
                     .compose(RxUtils.applySchedulers())
                     .doOnNext(webSite -> {
@@ -104,12 +132,19 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                         articleAwareLaunch();
                         dialog.dismiss();
                     }).subscribe();
+            subs.add(subscription);
         } else if (Preferences.get(this).articleMode()) {
             // User just wants article, load it.
             launchArticle();
         } else {
             launchCCT(safeIntent.getData());
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        subs.clear();
     }
 
     private void articleAwareLaunch() {
@@ -186,12 +221,12 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                 .theme(Theme.LIGHT)
                 .positiveColorRes(R.color.colorAccent)
                 .negativeColorRes(R.color.colorAccent)
-                .onPositive((dialog1, which) -> {
+                .onPositive((dialog, which) -> {
                     final Intent chromerIntent = getPackageManager().getLaunchIntentForPackage(getPackageName());
                     chromerIntent.addFlags(FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(chromerIntent);
                 })
-                .dismissListener(dialog12 -> finish()).show();
+                .dismissListener(dialog -> finish()).show();
     }
 
     private void closeDialogs() {
@@ -203,7 +238,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
     private void launchWebHead() {
         final Intent webHeadLauncher = new Intent(this, ProxyActivity.class);
         webHeadLauncher.addFlags(FLAG_ACTIVITY_NEW_TASK);
-        if (!isFromNewTab) {
+        if (!isFromNewTab && !isFromOurApp) {
             webHeadLauncher.addFlags(FLAG_ACTIVITY_CLEAR_TASK);
         }
         webHeadLauncher.putExtra(EXTRA_KEY_FROM_NEW_TAB, isFromNewTab);

@@ -1,3 +1,21 @@
+/*
+ * Chromer
+ * Copyright (C) 2017 Arunkumar
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package arun.com.chromer.views.searchview;
 
 import android.animation.Animator;
@@ -85,11 +103,6 @@ public class MaterialSearchView extends RelativeLayout implements
         public void onSearchPerformed(@NonNull String url) {
             // no op
         }
-
-        @Override
-        public void onHamburgerClick() {
-            // no op
-        }
     };
 
     private int maxSuggestions = 5;
@@ -119,7 +132,7 @@ public class MaterialSearchView extends RelativeLayout implements
                 .color(normalColor)
                 .sizeDp(18);
         menuIcon = new IconicsDrawable(context)
-                .icon(CommunityMaterial.Icon.cmd_menu)
+                .icon(CommunityMaterial.Icon.cmd_magnify)
                 .color(normalColor)
                 .sizeDp(18);
         addView(LayoutInflater.from(getContext()).inflate(R.layout.widget_material_search_view, this, false));
@@ -171,7 +184,6 @@ public class MaterialSearchView extends RelativeLayout implements
         });
 
         menuIconView.setImageDrawable(menuIcon);
-        menuIconView.setOnClickListener(view -> listener.onHamburgerClick());
 
         voiceIconView.setImageDrawable(voiceIcon);
         voiceIconView.setOnClickListener(v -> {
@@ -383,7 +395,5 @@ public class MaterialSearchView extends RelativeLayout implements
         void onVoiceIconClick();
 
         void onSearchPerformed(@NonNull String url);
-
-        void onHamburgerClick();
     }
 }

@@ -1,3 +1,21 @@
+/*
+ * Chromer
+ * Copyright (C) 2017 Arunkumar
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package arun.com.chromer.webheads.ui.views;
 
 import android.animation.Animator;
@@ -381,23 +399,22 @@ public class WebHead extends BaseWebHead implements SpringListener {
     }
 
     public void reveal(@Nullable final Runnable endAction) {
-        Timber.d("Reveal %s", webSite.url);
-        animateContentScale(TOUCH_UP_SCALE, endAction);
-        scaledDown = false;
+        Utils.doAfterLayout(this, () -> {
+            setInitialSpawnLocation();
+            Timber.d("Reveal %s", webSite.url);
+            animateContentScale(TOUCH_UP_SCALE, endAction);
+            scaledDown = false;
+        });
     }
 
     private void touchDown() {
         if (!scaledDown) {
-            // scaleSpring.setEndValue(TOUCH_DOWN_SCALE);
-            // animateContentScale(TOUCH_DOWN_SCALE);
             scaledDown = true;
         }
     }
 
     private void touchUp() {
         if (scaledDown) {
-            // scaleSpring.setEndValue(TOUCH_UP_SCALE);
-            // animateContentScale(TOUCH_UP_SCALE);
             scaledDown = false;
         }
     }

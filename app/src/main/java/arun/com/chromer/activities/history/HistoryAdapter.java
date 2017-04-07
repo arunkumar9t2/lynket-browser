@@ -1,3 +1,21 @@
+/*
+ * Chromer
+ * Copyright (C) 2017 Arunkumar
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package arun.com.chromer.activities.history;
 
 import android.content.Intent;
@@ -20,6 +38,7 @@ import com.bumptech.glide.Glide;
 import arun.com.chromer.R;
 import arun.com.chromer.activities.BrowserInterceptActivity;
 import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.shared.Constants;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observable;
@@ -37,7 +56,7 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHold
         @Override
         public int refreshData() {
             Timber.d("Refresh data");
-            if (cursor == null) {
+            if (cursor == null || cursor.isClosed()) {
                 return 0;
             }
             return cursor.getCount();
@@ -99,6 +118,7 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHold
             holder.itemView.setOnClickListener(v -> {
                 final Intent intent = new Intent(holder.itemView.getContext(), BrowserInterceptActivity.class);
                 intent.setData(Uri.parse(webSite.preferredUrl()));
+                intent.putExtra(Constants.EXTRA_KEY_FROM_OUR_APP, true);
                 holder.itemView.getContext().startActivity(intent);
             });
             if (!TextUtils.isEmpty(webSite.faviconUrl)) {
@@ -107,6 +127,7 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHold
                         .crossFade()
                         .into(holder.historyFavicon);
             } else {
+                Glide.clear(holder.itemView);
             }
         }
     }

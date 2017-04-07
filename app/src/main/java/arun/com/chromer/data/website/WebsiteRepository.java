@@ -1,3 +1,21 @@
+/*
+ * Chromer
+ * Copyright (C) 2017 Arunkumar
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package arun.com.chromer.data.website;
 
 import android.annotation.SuppressLint;
@@ -28,12 +46,12 @@ public class WebsiteRepository implements BaseWebsiteRepository {
     // Network store
     private final WebsiteStore webNetworkStore;
     // Cache store
-    private final WebsiteStore cacheStore;
+    private final WebsiteStore diskStore;
 
     private WebsiteRepository(@NonNull Context context) {
         this.context = context.getApplicationContext();
         webNetworkStore = new WebsiteNetworkStore(context);
-        cacheStore = new WebsiteDiskStore(context);
+        diskStore = new WebsiteDiskStore(context);
     }
 
     public static synchronized WebsiteRepository getInstance(@NonNull Context context) {
@@ -46,7 +64,7 @@ public class WebsiteRepository implements BaseWebsiteRepository {
     @NonNull
     @Override
     public Observable<WebSite> getWebsite(@NonNull final String url) {
-        final Observable<WebSite> cache = cacheStore.getWebsite(url)
+        final Observable<WebSite> cache = diskStore.getWebsite(url)
                 .doOnNext(webSite -> {
                     if (webSite != null) {
                         HistoryRepository.getInstance(context).update(webSite).subscribe();
@@ -63,7 +81,7 @@ public class WebsiteRepository implements BaseWebsiteRepository {
         final Observable<WebSite> remote = webNetworkStore.getWebsite(url)
                 .filter(webSite -> webSite != null)
                 .doOnNext(webSite -> {
-                    cacheStore.saveWebsite(webSite).subscribe();
+                    diskStore.saveWebsite(webSite).subscribe();
                     HistoryRepository.getInstance(context).insert(webSite).subscribe();
                 });
 
@@ -75,7 +93,7 @@ public class WebsiteRepository implements BaseWebsiteRepository {
 
     @Override
     public int getWebsiteColorSync(@NonNull String url) {
-        return cacheStore.getWebsiteColor(url).toBlocking().first().color;
+        return diskStore.getWebsiteColor(url).toBlocking().first().color;
     }
 
     @NonNull
@@ -87,12 +105,18 @@ public class WebsiteRepository implements BaseWebsiteRepository {
                     @Override
                     public Observable<WebColor> call(WebSite webSite) {
                         if (webSite != null && webSite.themeColor() != NO_COLOR) {
-                            return cacheStore.saveWebsiteColor(Uri.parse(webSite.url).getHost(), webSite.themeColor());
+                            return diskStore.saveWebsiteColor(Uri.parse(webSite.url).getHost(), webSite.themeColor());
                         } else {
                             return Observable.empty();
                         }
                     }
                 });
+    }
+
+    @NonNull
+    @Override
+    public Observable<Void> clearCache() {
+        return diskStore.clearCache();
     }
 
 }
