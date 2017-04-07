@@ -17,21 +17,25 @@ Chromer is available for free on the Google Play Store.
 </a>
 
 ## Feature highlights
-* *Web heads* - Ability to open links in floating bubbles.
-* For < 5.0+ devices, this is a better replacement to view pages than system web view as it might not be latest.
-* Opens all URL links in a Chrome Custom Tab irresprecitve of support from launching app.
-* 5.0+ Ability to open links in multiple recent entires. A.K.A Merge tabs and apps.
-* Runs a light weight service to warm up chrome instance. 
-* Dynamic toolbar color which can be based on either the website or the launching app.
-* Syncs all opened tabs with your Google account.
-* Since this uses CCT, you can press X to quickly return to your launching app.
-* Customize almost every aspect of Chrome Custom Tabs.
+**🌟 STANDOUT FEATURES: 🌟**  
+1. **Chrome Custom Tabs** to render web pages means faster and secure browsing experience. Instead of using *Web View*, Chromer uses Google recommended way of using CCT to view pages. 
+    * This results in *syncing your browsing activity* with the Custom Tab Provider browser, eg. Google Chrome.
+    * On top Chrome Custom Tab, Chromer provides many customizations like setting a **secondary browser, blacklisting certain apps, dynamic toolbar color etc.**
+2. ⚡ **Accelerated Mobile Pages** support. Before loading a page, Chromer can find and load the AMP version instead which loads much faster. 
+    * AMP is widely getting adopted but you have to hit the AMP url manually to view the page. *Google search* does this, but not much anywhere else. Chromer solves this problem doing the AMP conversion automatically before loading the page.
+3. 📰 **Article mode**, a special reader mode which removes unnecessary content from webpages like **Ads** and shows just the content you are looking for. 
+4. 🔵 **Web heads** it helps you save time by loading a page in background (5.0+ only, for other versions pre-fetch is used which only aims to reduce loading time) while enabling you to continue using the app of your choice. Floating bubbles are provided that enables you to manage multiple links. 
+    * Web heads works well with **AMP and Article modes,** saving you time.
+5. **Browsing activity syncs with Google account, if you use Google Chrome as the provider.** 
+6. 🎨 Many customization options from colors to animations.
 
 ## Contributions
 
-Your contributions are most welcome.
+1. If you are a developer and would like to contribute to Chromer, please consider making a **pull request** against the `develop` branch.
+2. Code format style is *Android Studio default.*
+3. I strongly welcome any criticisms on the code base.
 
 ## License
 
-Chromer is licensed under the [GNU v3 Public License.](LICENSE)
+Chromer is licensed under the [GNU v3 Public License.](LICENSE). RxSuggestions and Article-View are licensed under Apache License.
 
