@@ -30,7 +30,6 @@ Chromer is available for free on the Google Play Store.
 6. 🎨 Many customization options from colors to animations.
 
 
-----------
 
 
 ## Examples
@@ -43,8 +42,6 @@ Chromer is available for free on the Google Play Store.
 ![Multiple links web heads](https://github.com/arunkumar9t2/chromer/raw/master/art/Article%20+%20Web%20heads.gif)
 
 
-----------
-
 
 ## Contributions
 
@@ -53,7 +50,6 @@ Chromer is available for free on the Google Play Store.
 3. I strongly welcome any criticisms on the code base.
 
 
-----------
 
 
 ## License
