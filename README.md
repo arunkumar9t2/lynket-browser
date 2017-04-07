@@ -22,18 +22,39 @@ Chromer is available for free on the Google Play Store.
     * This results in *syncing your browsing activity* with the Custom Tab Provider browser, eg. Google Chrome.
     * On top Chrome Custom Tab, Chromer provides many customizations like setting a **secondary browser, blacklisting certain apps, dynamic toolbar color etc.**
 2. ⚡ **Accelerated Mobile Pages** support. Before loading a page, Chromer can find and load the AMP version instead which loads much faster. 
-    * AMP is widely getting adopted but you have to hit the AMP url manually to view the page. *Google search* does this, but not much anywhere else. Chromer solves this problem doing the AMP conversion automatically before loading the page.
-3. 📰 **Article mode**, a special reader mode which removes unnecessary content from webpages like **Ads** and shows just the content you are looking for. 
+    * AMP is widely getting adopted but you have to hit the AMP url manually to view the page. *Google search* does this, but not much anywhere else. Chromer solves this problem doing the **AMP conversion automatically** before loading the page.
+3. 📰 **Article mode**, a special reader mode which removes unnecessary content from webpage and shows just the content you are looking for. 
 4. 🔵 **Web heads** it helps you save time by loading a page in background (5.0+ only, for other versions pre-fetch is used which only aims to reduce loading time) while enabling you to continue using the app of your choice. Floating bubbles are provided that enables you to manage multiple links. 
     * Web heads works well with **AMP and Article modes,** saving you time.
 5. **Browsing activity syncs with Google account, if you use Google Chrome as the provider.** 
 6. 🎨 Many customization options from colors to animations.
+
+
+----------
+
+
+## Examples
+
+#### AMP mode
+![Droid Life - AMP Version](https://github.com/arunkumar9t2/chromer/raw/master/art/AMP%20Example.gif)
+#### Article mode
+![Article Mode](https://github.com/arunkumar9t2/chromer/raw/master/art/Article%20Example.gif)
+#### Web heads + Article mode
+![Multiple links web heads](https://github.com/arunkumar9t2/chromer/raw/master/art/Article%20+%20Web%20heads.gif)
+
+
+----------
+
 
 ## Contributions
 
 1. If you are a developer and would like to contribute to Chromer, please consider making a **pull request** against the `develop` branch.
 2. Code format style is *Android Studio default.*
 3. I strongly welcome any criticisms on the code base.
+
+
+----------
+
 
 ## License
 
