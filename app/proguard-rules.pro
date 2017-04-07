@@ -39,3 +39,5 @@
 -keep class com.crashlytics.** { *; }
 -dontwarn com.crashlytics.**
 -keepattributes SourceFile,LineNumberTable
+
+-dontwarn edu.umd.cs.findbugs.annotations.SuppressFBWarnings
