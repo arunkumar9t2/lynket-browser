@@ -57,6 +57,7 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import java.util.Collections;
 import java.util.List;
 
+import arun.com.chromer.activities.BrowserInterceptActivity;
 import arun.com.chromer.activities.SnackHelper;
 import arun.com.chromer.activities.about.AboutAppActivity;
 import arun.com.chromer.activities.about.changelog.Changelog;
@@ -282,7 +283,12 @@ public class MainActivity extends AppCompatActivity implements SnackHelper {
                     final Intent googleIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.G_COMMUNITY_URL));
                     startActivity(googleIntent);
                 })
-                // .onNeutral((dialog, which) -> launchCustomTab(Constants.APP_TESTING_URL))
+                .onNeutral((dialog, which) -> {
+                    final Intent intent = new Intent(this, BrowserInterceptActivity.class);
+                    intent.putExtra(Constants.EXTRA_KEY_FROM_OUR_APP, true);
+                    intent.setData(Uri.parse(Constants.APP_TESTING_URL));
+                    startActivity(intent);
+                })
                 .build()
                 .show();
     }

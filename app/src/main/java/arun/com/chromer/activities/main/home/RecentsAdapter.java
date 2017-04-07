@@ -37,6 +37,7 @@ import java.util.List;
 import arun.com.chromer.R;
 import arun.com.chromer.activities.BrowserInterceptActivity;
 import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.shared.Constants;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -61,6 +62,7 @@ public class RecentsAdapter extends RecyclerView.Adapter<RecentsAdapter.RecentsV
             holder.label.setText(website.safeLabel());
             holder.itemView.setOnClickListener(v -> {
                 final Intent intent = new Intent(holder.itemView.getContext(), BrowserInterceptActivity.class);
+                intent.putExtra(Constants.EXTRA_KEY_FROM_OUR_APP, true);
                 intent.setData(Uri.parse(website.preferredUrl()));
                 holder.itemView.getContext().startActivity(intent);
             });
