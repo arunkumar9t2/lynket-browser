@@ -44,11 +44,9 @@ import arun.com.chromer.activities.mvp.BaseFragment;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.CustomTabManager;
 import arun.com.chromer.customtabs.CustomTabs;
-import arun.com.chromer.data.website.WebsiteRepository;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.search.SuggestionItem;
 import arun.com.chromer.shared.Constants;
-import arun.com.chromer.util.RxUtils;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.views.searchview.MaterialSearchView;
 import arun.com.chromer.webheads.WebHeadService;
@@ -206,11 +204,6 @@ public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implem
                         .prepare()
                         .launch();
             }
-            WebsiteRepository.getInstance(getActivity())
-                    .getWebsite(url)
-                    .compose(RxUtils.applySchedulers())
-                    .doOnError(Timber::e)
-                    .subscribe();
         }
     }
 
