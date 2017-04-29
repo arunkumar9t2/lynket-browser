@@ -29,11 +29,11 @@ import java.util.concurrent.Callable;
 import arun.com.chromer.data.common.BookStore;
 import arun.com.chromer.data.website.model.WebColor;
 import arun.com.chromer.data.website.model.WebSite;
-import arun.com.chromer.util.cache.ParcelDiskCache;
 import io.paperdb.Book;
 import io.paperdb.Paper;
 import rx.Observable;
 import timber.log.Timber;
+import xyz.klinker.android.article.data.cache.ParcelDiskCache;
 
 import static arun.com.chromer.shared.Constants.NO_COLOR;
 
