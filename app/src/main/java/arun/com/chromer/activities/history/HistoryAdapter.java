@@ -108,12 +108,11 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHold
         final WebSite webSite = asyncWebsiteList.getItem(position);
         if (webSite == null) {
             holder.historyTitle.setText(R.string.loading);
-            holder.historySubtitle.setVisibility(View.GONE);
+            holder.historySubtitle.setText(R.string.loading);
             holder.historyFavicon.setImageDrawable(null);
             Glide.clear(holder.historyFavicon);
         } else {
             holder.historyTitle.setText(webSite.safeLabel());
-            holder.historySubtitle.setVisibility(View.VISIBLE);
             holder.historySubtitle.setText(webSite.preferredUrl());
             holder.itemView.setOnClickListener(v -> {
                 final Intent intent = new Intent(holder.itemView.getContext(), BrowserInterceptActivity.class);
