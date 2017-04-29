@@ -84,6 +84,11 @@ class WebsiteUtilities {
         final String enc = Converter.extractEncoding(urlConnection.getContentType());
         final String result = new Converter(url).grabHeadTag(inputStream, enc);
         urlConnection.disconnect();
+        try {
+            inputStream.close();
+        } catch (Exception ignored) {
+
+        }
         return result;
     }
 
