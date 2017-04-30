@@ -25,8 +25,10 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,9 +40,14 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import arun.com.chromer.R;
 import arun.com.chromer.activities.SnackHelper;
 import arun.com.chromer.activities.mvp.BaseFragment;
+import arun.com.chromer.activities.settings.Preferences;
+import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 /**
  * Created by arunk on 07-04-2017.
@@ -55,6 +62,12 @@ public class HistoryFragment extends BaseFragment<History.View, History.Presente
     FloatingActionButton fab;
     @BindView(R.id.error)
     TextView error;
+    @BindView(R.id.enable_history_subtitle)
+    TextView enableHistorySubtitle;
+    @BindView(R.id.incognito_switch)
+    SwitchCompat incognitoSwitch;
+    @BindView(R.id.enable_history_card)
+    CardView enableHistoryCard;
     private HistoryAdapter historyAdapter;
 
     @Override
@@ -75,8 +88,10 @@ public class HistoryFragment extends BaseFragment<History.View, History.Presente
 
     @Override
     public void setCursor(@Nullable Cursor cursor) {
-        historyAdapter.setCursor(cursor);
-        error.setVisibility(cursor == null || cursor.isClosed() || cursor.getCount() == 0 ? View.VISIBLE : View.GONE);
+        historyList.postDelayed(() -> {
+            historyAdapter.setCursor(cursor);
+            error.setVisibility(cursor == null || cursor.isClosed() || cursor.getCount() == 0 ? VISIBLE : GONE);
+        }, 100);
     }
 
     @Override
@@ -116,6 +131,10 @@ public class HistoryFragment extends BaseFragment<History.View, History.Presente
                 ContextCompat.getColor(getContext(), R.color.accent));
         swipeRefreshLayout.setOnRefreshListener(() -> presenter.loadHistory(getContext()));
 
+        enableHistoryCard.setOnClickListener(v -> incognitoSwitch.performClick());
+        incognitoSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> Preferences.get(getActivity()).incognitoMode(!isChecked));
+        enableHistorySubtitle.setText(getFormattedMessage());
+
         final ItemTouchHelper.SimpleCallback swipeTouch = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -131,10 +150,20 @@ public class HistoryFragment extends BaseFragment<History.View, History.Presente
         itemTouchHelper.attachToRecyclerView(historyList);
     }
 
+    private CharSequence getFormattedMessage() {
+        final String provider = Preferences.get(getContext()).customTabApp();
+        if (provider == null) {
+            return getString(R.string.enable_history_subtitle);
+        } else {
+            return Utils.html(getActivity(), String.format(getString(R.string.enable_history_subtitle_custom_tab), Utils.getAppNameWithPackage(getActivity(), provider)));
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         presenter.loadHistory(getContext());
+        incognitoSwitch.setChecked(!Preferences.get(getActivity()).incognitoMode());
         getActivity().setTitle(R.string.title_history);
     }
 

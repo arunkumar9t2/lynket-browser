@@ -141,7 +141,6 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            android:id="@+id/browsing_options_bottom_bar"
             style="@style/FullWidthCard"
             android:layout_below="@+id/browsing_options_web_heads"
             app:cardElevation="4dp"
@@ -168,7 +167,8 @@
                     android:text="@string/available_actions"
                     android:textColor="@color/material_dark_light"
                     android:textSize="14sp"
-                    android:textStyle="bold|italic" />
+                    android:textStyle="bold|italic"
+                    tools:ignore="RtlSymmetry" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/bottom_bar_action_list"

@@ -26,7 +26,6 @@
     android:gravity="center_vertical"
     android:minHeight="56dp"
     android:orientation="horizontal"
-    android:padding="5dp"
     tools:ignore="Overdraw,RtlHardcoded">
 
     <ImageView
@@ -34,13 +33,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         tools:ignore="ContentDescription" />
 
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:paddingLeft="30dp"
         tools:ignore="RtlSymmetry">
 
         <TextView

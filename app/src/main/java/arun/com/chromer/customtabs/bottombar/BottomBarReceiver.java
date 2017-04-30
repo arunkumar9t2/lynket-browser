@@ -27,6 +27,7 @@ import android.support.customtabs.CustomTabsIntent;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.NewTabDialogActivity;
+import arun.com.chromer.activities.browsing.article.ArticleLauncher;
 import arun.com.chromer.util.DocumentUtils;
 import arun.com.chromer.util.Utils;
 import timber.log.Timber;
@@ -54,6 +55,9 @@ public class BottomBarReceiver extends BroadcastReceiver {
                 if (orgUrl != null)
                     new MinimizeUrl(context, orgUrl).perform();
                 break;
+            case R.id.bottom_bar_article_view:
+                new ArticleView(context, orgUrl).perform();
+                break;
         }
     }
 
@@ -74,6 +78,24 @@ public class BottomBarReceiver extends BroadcastReceiver {
         }
 
         protected abstract void onPerform();
+    }
+
+    private static class ArticleView extends Command {
+
+        ArticleView(@NonNull Context context, @NonNull String url) {
+            super(context, url);
+        }
+
+        @Override
+        protected void onPerform() {
+            if (!performCalled) {
+                throw new IllegalStateException("Should call perform() instead of onPerform()");
+            }
+            ArticleLauncher.from(context, Uri.parse(url))
+                    .applyCustomizations()
+                    .forNewTab(true)
+                    .launch();
+        }
     }
 
     private static class OpenInNewTab extends Command {

@@ -61,7 +61,16 @@ public class ColorUtil {
             Color.parseColor("#FF3D00")
     };
 
-    private final static int[] ACCENT_COLORS_700 = new int[]{
+    public final static int[] PLACEHOLDER_COLORS = new int[]{
+            Color.parseColor("#D32F2F"),
+            Color.parseColor("#C2185B"),
+            Color.parseColor("#303F9F"),
+            Color.parseColor("#6A1B9A"),
+            Color.parseColor("#37474F"),
+            Color.parseColor("#2E7D32")
+    };
+
+    public final static int[] ACCENT_COLORS_700 = new int[]{
             Color.parseColor("#D32F2F"),
             Color.parseColor("#C2185B"),
             Color.parseColor("#7B1FA2"),

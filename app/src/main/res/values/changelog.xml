@@ -35,6 +35,15 @@ a {
 <body>
 <strong>You can view this again in the about screen.</strong>
 <br></br>
+<strong>1.7.2</strong>
+<ul>
+    <li><b>NEW: </b> Home screen UI with bottom bar.</li>
+    <li><b>NEW: </b> Circle icon for 7.1+ and supported launchers</li>
+    <li><b>NEW: </b> Overhauled history screen. Option to disable history.</li>
+    <li><b>NEW: </b> Article mode shortcut in bottom bar.</li>
+    <li><b>NEW: </b> AMP indicator in history to show if there is an AMP version available, tapping this would launch the AMP version.</li>
+    <li><b>FIXES: </b> Old website reuse bug, crash fixes, duplicate history entries.</li>
+</ul>
 <strong>1.7</strong>
 <h4 class="list-heading">New browsing modes!</h3>
 <ul>

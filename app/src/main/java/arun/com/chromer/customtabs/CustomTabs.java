@@ -71,7 +71,6 @@ import arun.com.chromer.webheads.WebHeadService;
 import timber.log.Timber;
 
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.graphics.Color.WHITE;
 import static arun.com.chromer.activities.settings.Preferences.ANIMATION_MEDIUM;
 import static arun.com.chromer.activities.settings.Preferences.ANIMATION_SHORT;
@@ -524,7 +523,6 @@ public class CustomTabs {
      */
     private void prepareMoreMenu() {
         final Intent moreMenuActivity = new Intent(activity, MoreMenuActivity.class);
-        moreMenuActivity.setFlags(FLAG_ACTIVITY_NEW_TASK);
         moreMenuActivity.putExtra(EXTRA_KEY_ORIGINAL_URL, url);
         final PendingIntent moreMenuPending = PendingIntent.getActivity(activity, 0, moreMenuActivity, FLAG_UPDATE_CURRENT);
         builder.addMenuItem(activity.getString(R.string.more_menu), moreMenuPending);

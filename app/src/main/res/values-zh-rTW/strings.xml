@@ -15,12 +15,11 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-
 <resources>
     <string-array name="animationValues">
         <item>無動畫</item>
-        <item>向左滑出</item>
-        <item>向上滑出</item>
+        <item>向左滑入</item>
+        <item>向上滑入</item>
     </string-array>
     <string-array name="animationSpeedValues">
         <item>普通</item>
@@ -31,34 +30,42 @@
         <item>2</item>
     </string-array>
     <string-array name="actionValues">
-        <item>第二順位瀏覽器</item>
+        <item>次選瀏覽器</item>
         <item>喜好的分享應用程式</item>
-        <item>General share</item>
+        <item>分享</item>
     </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>右側</item>
         <item>左側</item>
     </string-array>
+    <string-array name="articleThemeValues">
+        <item>夜間</item>
+        <item>日光</item>
+        <item>自動</item>
+    </string-array>
     <string-array name="webHeadsSizeValues">
         <item>一般</item>
         <item>小</item>
     </string-array>
+    <string-array name="webHeadsSizeKeys">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
     <string name="share_text">嘿，快來體驗 \‘Chromer\’ 提供的快速和安全瀏覽功能！ 可以在這裡下載 https://goo.gl/992ils</string>
     <string name="share_via">分享至…</string>
-    <string name="custom_tab_provider_not_found">找不到相容自訂標籤頁功能的提供程式</string>
+    <string name="custom_tab_provider_not_found">找不到提供相容自訂標籤頁功能的瀏覽器程式</string>
     <string name="custom_tab_provider_not_found_expln">Chromer需要您在手機上安裝可相容自訂標籤頁功能的瀏覽器，目前在您的手機上沒有發現可支援該功能的瀏覽器。您要在Play Store上安裝Google Chrome（免費）嗎？如果您已安裝了，請更新它至最新版本。</string>
     <string name="install">安裝</string>
     <string name="licenses">開放原始碼授權</string>
     <string name="about">關於</string>
-    <string name="help_chromer_grow">幫助 Chromer 成長！</string>
+    <string name="help_chromer_grow">協助改善 Chromer ！</string>
     <string name="share">分享</string>
     <string name="share_with">以 %1$s 分享</string>
-    <string name="more_custom_tbs">詳細了解自訂分頁</string>
     <string name="rate_play_store">在Play Store中評分</string>
     <string name="feedback">意見回饋</string>
     <string name="intro">簡介</string>
     <string name="send_email">發送電子郵件…</string>
-    <string name="fallback_msg">無法打開自訂分頁，將以瀏覽器開啟</string>
+    <string name="fallback_msg">無法打開自訂標籤頁，將以瀏覽器開啟</string>
     <string name="open_with">選擇應用程式打開…</string>
     <string name="open_in_browser">在 %1$s 中打開</string>
     <string name="unxp_err">異常錯誤，請重試</string>
@@ -72,12 +79,9 @@
     <string name="copy_link">複製連結</string>
     <string name="add_to_homescreen">添加到主屏幕</string>
     <string name="intro_1">您好！\nChromer是一個輕量、安全以及快速的網頁瀏覽器。</string>
-    <string name="intro_2">它使用Google Chrome的自訂標籤頁功能，提供極輕量的Chrome標籤頁以快速載入連結。</string>
-    <string name="intro_5_new">它可以掃描屏幕上的連結，並在背景加載它們以提高閱讀性能。\n\n它也可將瀏覽器保持運行在內存中，加快開啟時間。</string>
     <string name="intro_4_new">它可以在開啟連結時新增多個疊加式的浮動氣泡，並且於背景載入部份內容！<b>查閱更多</b></string>
     <string name="how_to_use">如何使用？</string>
     <string name="intro_6">只需設定Chromer作為您的預設瀏覽器，Chromer將以非入侵的方式顯示連結內容。或者您也可以在需要時選擇使用Chromer。</string>
-    <string name="why_use">為何要使用？</string>
     <string name="version">版本</string>
     <string name="changelog">更新日誌</string>
     <string name="join_google_plus">加入 Google+ 社群</string>
@@ -87,7 +91,7 @@
     <string name="add_to_circles">加入到 Google+ 圈子</string>
     <string name="follow_twitter">在 Twitter 上關注</string>
     <string name="connect_linkedIn">在 LinkedIn 上聯繫</string>
-    <string name="more_apps">更多應用</string>
+    <string name="more_apps">更多應用程式</string>
     <string name="author">作者</string>
     <string name="added">已添加</string>
     <string name="settings">設定</string>
@@ -112,9 +116,9 @@
     <string name="show_notification">當預載連結時顯示通知</string>
     <string name="default_toolbar_color">預設工具欄顏色</string>
     <string name="web_heads_color">浮動氣泡顏色</string>
-    <string name="choose_secondary_browser">第二順位瀏覽器</string>
+    <string name="choose_secondary_browser">次選瀏覽器</string>
     <string name="dynamic_toolbar_help">啟動了動態工具欄變色，Chromer會靜靜地學習顏色適配。起初它可能無法正確符合網頁或應用程式的顏色，但它會隨使用時間不斷改善，試試看吧！</string>
-    <string name="secondary_browser_success">%1$s 被設定為第二順位瀏覽器</string>
+    <string name="secondary_browser_success">%1$s 被設定為次選瀏覽器</string>
     <string name="fav_share_success">%1$s 被設定為您的喜好分享應用程式！</string>
     <string name="default_provider_success">%1$s 將被用於提供自訂標籤頁！</string>
     <string name="based_on_app">根據應用程式</string>
@@ -146,7 +150,7 @@
     <string name="webheads_intro_4">Chromer會優先讀取最後打開的連結並預載它。建議的使用方法是由上至下依次點開浮動氣泡。啟用\“關閉已點開的浮動氣泡\”功能可使這操作更流暢。</string>
     <string name="web_head_permission_toast">要使用浮動氣泡打開連結，Chromer需要在其他應用程式上顯示的權限，請授予權限以繼續，或在Chromer設定中停用浮動氣泡功能。</string>
     <string name="tap_close_all">點擊以關閉全部</string>
-    <string name="web_heads_service">浮動氣泡服務</string>
+    <string name="web_heads_service">浮動氣泡正在運行</string>
     <string name="join_beta">加入測試版計劃</string>
     <string name="become_a_tester">成為測試人員</string>
     <string name="join_beta_content">測試版是具有最新功能但可能有少量錯誤的實驗性版本，您可以透過加入成為測試人員及在 Google+ 社群上回報您遇到的問題來為開發做出貢獻。\n\n請確定您已加入 Google+ 社群，然後點擊成為測試人員按鈕以獲得 Google Play 的測試連結。\n\n注意：您必需加入社群才能成為測試人員。</string>
@@ -154,12 +158,10 @@
     <string name="blacklisted_apps">黑名單應用程式</string>
     <string name="blacklisted_explanation">在某些App排除以 Chromer 開啟連結</string>
     <string name="loading">載入中…</string>
-    <string name="please_wait">請稍等</string>
-    <string name="blacklist_message">您已將這個應用程式加入黑名單中，Chromer將不會被用來打開它裡面的連結，但您還未設定第二瀏覽器，請選擇第二瀏覽器以繼續。</string>
     <string name="share_failed_msg">無法分享至應用程式，預設返回標準分享</string>
-    <string name="blacklist_explanation">在黑名單應用程式中打開連結將會使用第二瀏覽器開啟它們</string>
     <string name="revoke_accessibility_permission">您現在可以撤銷 Chromer 的無障礙權限。</string>
     <string name="last_fetched_urls">最近獲取的網址</string>
+    <string name="blacklist_on">黑名單應用程式 %s</string>
     <string name="blacklist_off">黑名單應用程式已關閉</string>
     <string name="translations">翻譯</string>
     <string name="merge_tabs">合併顯示分頁和應用程式</string>
@@ -170,18 +172,14 @@
     <string name="bottom_bar_pref_title">顯示底層工具列</string>
     <string name="bottom_bar">底層工具列</string>
     <string name="open_in_new_tab">在新分頁中開啟</string>
-    <string name="open_in_new_tab_error">無效的連結。請問您有透過長按頁面來複製任何連結或文字嗎？</string>
     <string name="options">選項</string>
     <string name="customize">定制</string>
     <string name="not_set">尚未設定</string>
     <string name="not_found">無法找到</string>
-    <string name="app_preferences">App偏好設定</string>
+    <string name="app_preferences">應用程式的偏好設定</string>
     <string name="behavior_preferences">行為</string>
     <string name="additional_preferences">額外的</string>
     <string name="notifications">通知</string>
-    <string name="web_heads_enabled">懸浮氣泡已開啟！您可以排列它們並在稍後瀏覽</string>
-    <string name="web_heads_title">您可以儲存多個連結以便稍後瀏覽它們</string>
-    <string name="web_heads_description">使用懸浮氣泡開啟連結</string>
     <string name="webhead_size_title">大小</string>
     <string name="webhead_size_dialog">選擇懸浮氣泡的大小</string>
     <string name="changelog_skipped">因發生錯誤，更新日誌將被忽略。</string>
@@ -189,11 +187,72 @@
     <string name="help_translations">幫助翻譯此應用程式</string>
     <string name="aggressive_background_loading">背景預載模式</string>
     <string name="aggressive_background_loading_desc">網頁將會在背景預載而不只是記錄連結。</string>
+    <string name="aggresive_dia_title">需要合併顯示分頁和應用程式</string>
+    <string name="aggresive_dia_content">使用背景預載模式需同時開啟合併顯示分頁和應用程式。</string>
     <string name="merge_tabs_off_title">注意</string>
+    <string name="merget_tabs_off_content">關閉合併顯示分頁和應用程式亦會同時關閉背景預載模式。</string>
+    <string name="web_sites">網址</string>
     <string name="share_all">分享全部</string>
     <string name="thank_you">謝謝！</string>
-    <string name="tile_label">浮動氣泡</string>
     <string name="save_time">節省時間</string>
     <string name="multiple_links">多個連結</string>
-    <string name="web_heads_intro">浮動氣泡簡介</string>
+    <string name="merge_tabs_explanation_intro">你的標籤頁將出現在最近使用的應用程式頁面</string>
+    <string name="web_close_on_open_desc">當打開含連結的浮動氣泡，該浮動氣泡將會隨之消失。</string>
+    <string name="web_close_on_open_title">當按下時浮動氣泡將隨之關閉。</string>
+    <string name="minimize">縮小</string>
+    <string name="open_in_new_tab_explanation"><![CDATA[<b>開啟新分頁(5.0+) -</b> 在畫面上複製連結或文字然後按此按鈕以開啟連結或開啟分頁或浮動氣泡搜尋該文字。]]></string>
+    <string name="share_action_explanation"><![CDATA[<b>分享 -</b> 快速使用Android內置的分享功能]]></string>
+    <string name="minimize_action_explanation"><![CDATA[<b>縮小 -</b> 將現行網頁縮小至浮動氣泡。只有<i>合併顯示分頁和應用程式</i>被啟用時才適用 ]]></string>
+    <string name="available_actions">可行操作</string>
+    <string name="secondary_browser_launching_error_title">開啟次要瀏覽器程式時發生錯誤</string>
+    <string name="launch_setting">開啟設定</string>
+    <string name="secondary_browser_not_installed">你的次要瀏覽器程式已在你的系統上移除了。需要前往設定版面更改嗎？</string>
+    <string name="secondary_browser_launch_error">無法使用瀏覽器程式開啟連結，需要更改設定嗎？</string>
+    <string name="secondary_browser_not_error">你已使用黑名單禁止Chromer打開連結但沒有設定次要瀏覽器程式，需要現在設定嗎？</string>
+    <string name="copy_all">全部複製</string>
+    <string name="choose_share_method">選取分享方式</string>
+    <string name="comma_seperated">以逗號分隔</string>
+    <string name="share_all_list">清單 - 有限度的程式支援 Eg: Join by joaoapps, Pushbullet 等等.</string>
+    <string name="new_tab">開啟新分頁</string>
+    <string name="title_activity_open_with">打開方法</string>
+    <string name="title_activity_settings">設定</string>
+    <string name="settings_browsing_mode">瀏覽模式</string>
+    <string name="settings_look_and_feel">樣式及外觀</string>
+    <string name="settings_browsing_options">瀏覽選項</string>
+    <string name="title_activity_browsing_mode">瀏覽模式</string>
+    <string name="browsing_mode_slide_over">滑入</string>
+    <string name="browsing_mode_web_heads">浮動氣泡</string>
+    <string name="browsing_mode_slide_over_explanation">網頁會滑入至畫面屏幕</string>
+    <string name="browsing_mode_web_heads_explanation">允許你同時開啟多個網頁連結並在在背景加載，網頁會以浮動氣泡形式顯示，你可以隨時按下浮動氣泡打開連結。</string>
+    <string name="load_faster_heading">開啟以下選項以加快網頁載入速度</string>
+    <string name="amp">"加速行動版網頁(AMP) "</string>
+    <string name="amp_mode">加速行動版網頁模式</string>
+    <string name="amp_summary">載入專為行動裝置而優化的網頁能夠提升網頁加載速度及提供更流暢的瀏覽體驗</string>
+    <string name="article_mode">閱讀模式</string>
+    <string name="article_theme">閱讀模式的顏色主題</string>
+    <string name="article_mode_summary">載入文章閱讀模式的版面能夠移除像是網頁裡的按鈕、廣告等干擾物，讓您更容易閱讀顯示在螢幕上的文字。</string>
+    <string name="amp_warning_title">AMP警告</string>
+    <string name="amp_warning_content"><![CDATA[當使用<b>滑入</b> 模式時，Chromer需要時間抓取加速行動版網頁的連結，當下會有提示方塊供用戶知悉。]]></string>
+    <string name="title_activity_look_and_feel">樣式及外觀</string>
+    <string name="not_available_in_slide_mode">在滑入模式下不可用</string>
+    <string name="title_activity_browsing_options">瀏覽選項</string>
+    <string name="grabbing_amp_link">正在抓取加速行動版網頁的連結</string>
+    <string name="link_found">已找到連結</string>
+    <string name="link_not_found">沒有找到加速行動版網頁的連結</string>
+    <string name="open">開啟</string>
+    <string name="open_full_page">開啟全頁</string>
+    <string name="more">更多</string>
+    <string name="title_history">記錄</string>
+    <string name="deleted_items">%1$d 項目已刪除。</string>
+    <string name="are_you_sure">你肯定嗎？</string>
+    <string name="history_deletion_confirmation_content">此操作將會清除所有記錄而且不能還原。</string>
+    <string name="incognito_mode">無痕式模式</string>
+    <string name="recents_intro">最近開啟的連結會在這顥示</string>
+    <string name="amp_article_combined_explanation"><![CDATA[當 <b>加速行動版網頁(AMP) 及閱讀模式被開啟時</b>，Chromer 會先加載網站提供的「加速行動版網頁」版本，不然會轉用「閱讀模式」加載網頁。]]></string>
+    <string name="attention">注意！</string>
+    <string name="manage">管理</string>
+    <string name="more_menu">更多</string>
+    <string name="open_article_view">開啟閱讀模式</string>
+    <string name="browse_seamlessly">流暢無縫的瀏覽</string>
+    <string name="slide_over_explanation">網頁會滑入至畫面屏幕，你可以按 X 隨時關閉標籤分頁返回你正在使用的應用程式。</string>
 </resources>

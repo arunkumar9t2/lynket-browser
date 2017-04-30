@@ -59,6 +59,7 @@ public class Changelog {
             final MaterialProgressBar progress = ButterKnife.findById(content, R.id.changelog_progress);
             final WebView webView = ButterKnife.findById(content, R.id.changelog_web_view);
             webView.loadData(activity.getString(R.string.changelog_text), "text/html", "utf-8");
+            //noinspection deprecation
             webView.setWebViewClient(new WebViewClient() {
                 @Override
                 public void onPageFinished(WebView view, String url) {

@@ -39,14 +39,19 @@
             app:cardElevation="2dp">
 
             <LinearLayout
-                style="@style/Widget.CardContent"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="4dp"
+                android:paddingTop="4dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="8dp"
                     android:text="@string/app_name"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
@@ -67,14 +72,19 @@
             app:cardElevation="2dp">
 
             <LinearLayout
-                style="@style/Widget.CardContent"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="4dp"
+                android:paddingTop="4dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="8dp"
                     android:text="@string/author"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="@color/material_dark_color" />
@@ -97,13 +107,19 @@
             app:cardElevation="2dp">
 
             <LinearLayout
-                style="@style/Widget.CardContent"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="4dp"
+                android:paddingTop="4dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="8dp"
                     android:text="@string/credits"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="@color/material_dark_color" />
@@ -115,10 +131,12 @@
                 <LinearLayout
                     android:id="@+id/patryk"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="56dp"
+                    android:layout_marginLeft="56dp"
                     android:background="?android:attr/selectableItemBackground"
+                    android:gravity="center_vertical"
                     android:orientation="vertical"
-                    android:padding="5dp">
+                    android:padding="4dp">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -139,10 +157,12 @@
                 <LinearLayout
                     android:id="@+id/daniel"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="56dp"
+                    android:layout_marginLeft="56dp"
                     android:background="?android:attr/selectableItemBackground"
+                    android:gravity="center_vertical"
                     android:orientation="vertical"
-                    android:padding="5dp">
+                    android:padding="4dp">
 
                     <TextView
                         android:layout_width="match_parent"

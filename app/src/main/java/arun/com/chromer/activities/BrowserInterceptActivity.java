@@ -58,6 +58,7 @@ import static android.os.Build.VERSION_CODES.LOLLIPOP;
 import static android.widget.Toast.LENGTH_SHORT;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_NEW_TAB;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_OUR_APP;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_SKIP_EXTRACTION;
 
 @SuppressLint("GoogleAppIndexingApiWarning")
 public class BrowserInterceptActivity extends AppCompatActivity {
@@ -65,6 +66,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
     private SafeIntent safeIntent;
     private boolean isFromNewTab;
     private boolean isFromOurApp;
+    private boolean skipExtraction;
 
     private final CompositeSubscription subs = new CompositeSubscription();
 
@@ -79,6 +81,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
         }
         isFromNewTab = safeIntent.getBooleanExtra(EXTRA_KEY_FROM_NEW_TAB, false);
         isFromOurApp = safeIntent.getBooleanExtra(EXTRA_KEY_FROM_OUR_APP, false);
+        skipExtraction = safeIntent.getBooleanExtra(EXTRA_KEY_SKIP_EXTRACTION, false);
 
         if (!isFromOurApp) {
             DocumentUtils.closeRootActivity(this);
@@ -173,6 +176,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
             customTabActivity.addFlags(FLAG_ACTIVITY_MULTIPLE_TASK);
         }
         customTabActivity.putExtra(EXTRA_KEY_FROM_NEW_TAB, isFromNewTab);
+        customTabActivity.putExtra(EXTRA_KEY_SKIP_EXTRACTION, skipExtraction);
         startActivity(customTabActivity);
         finish();
     }
@@ -242,6 +246,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
             webHeadLauncher.addFlags(FLAG_ACTIVITY_CLEAR_TASK);
         }
         webHeadLauncher.putExtra(EXTRA_KEY_FROM_NEW_TAB, isFromNewTab);
+        webHeadLauncher.putExtra(EXTRA_KEY_SKIP_EXTRACTION, skipExtraction);
         webHeadLauncher.setData(safeIntent.getData());
         startActivity(webHeadLauncher);
         finish();

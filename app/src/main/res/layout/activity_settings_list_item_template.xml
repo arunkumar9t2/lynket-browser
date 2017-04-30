@@ -18,7 +18,6 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/settings_item_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
@@ -26,16 +25,16 @@
     android:gravity="center|left"
     android:minHeight="70dp"
     android:orientation="horizontal"
-    android:padding="5dp"
     android:weightSum="1"
     tools:ignore="RtlHardcoded">
 
     <ImageView
         android:id="@+id/settins_list_icon"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginLeft="12dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        android:padding="8dp"
         android:scaleType="fitCenter"
         tools:ignore="ContentDescription" />
 
@@ -44,9 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:orientation="vertical"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/settings_list_title"

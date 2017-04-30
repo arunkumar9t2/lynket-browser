@@ -27,9 +27,9 @@ import java.util.Hashtable;
  * Created by Arunkumar on 06-03-2017.
  */
 public class FontCache {
-    private static Hashtable<String, Typeface> fontCache = new Hashtable<>();
+    private static final Hashtable<String, Typeface> fontCache = new Hashtable<>();
 
-    public static String MONO = "RobotoMono-Regular.ttf";
+    public static final String MONO = "RobotoMono-Regular.ttf";
 
     public static Typeface get(String name, Context context) {
         Typeface tf = fontCache.get(name);

@@ -221,6 +221,7 @@ public class BrowsingOptionsActivity extends SubActivity implements SnackHelper,
         private static final String NEW_TAB = "NEW_TAB";
         private static final String SHARE = "SHARE";
         private static final String MINIMIZE = "MINIMIZE";
+        private static final String ARTICLE = "ARTICLE";
         private final Context context;
         private final List<String> items = new LinkedList<>();
 
@@ -231,6 +232,7 @@ public class BrowsingOptionsActivity extends SubActivity implements SnackHelper,
             }
             items.add(SHARE);
             items.add(MINIMIZE);
+            items.add(ARTICLE);
         }
 
         @Override
@@ -262,6 +264,13 @@ public class BrowsingOptionsActivity extends SubActivity implements SnackHelper,
                             .color(iconColor)
                             .sizeDp(18));
                     holder.action.setText(Utils.html(context, R.string.minimize_action_explanation));
+                    break;
+                case ARTICLE:
+                    holder.icon.setImageDrawable(new IconicsDrawable(context)
+                            .icon(CommunityMaterial.Icon.cmd_file_image)
+                            .color(iconColor)
+                            .sizeDp(18));
+                    holder.action.setText(Utils.html(context, R.string.bottom_bar_article_mode_explanation));
                     break;
             }
         }

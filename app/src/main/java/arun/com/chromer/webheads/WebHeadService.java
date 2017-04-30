@@ -95,6 +95,7 @@ import static arun.com.chromer.shared.Constants.ACTION_WEBHEAD_COLOR_SET;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_NEW_TAB;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_MINIMIZE;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_REBIND_WEBHEAD_CXN;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_SKIP_EXTRACTION;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBHEAD_COLOR;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBSITE;
 import static arun.com.chromer.shared.Constants.NO_COLOR;
@@ -130,6 +131,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         return 1;
     }
 
+    @NonNull
     @Override
     Notification getNotification() {
         final PendingIntent contentIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_STOP_WEBHEAD_SERVICE), FLAG_UPDATE_CURRENT);
@@ -194,8 +196,10 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
 
     private void processIntent(@Nullable Intent intent) {
         if (intent == null || intent.getDataString() == null) return; // don't do anything
+
         final boolean isFromNewTab = intent.getBooleanExtra(EXTRA_KEY_FROM_NEW_TAB, false);
         final boolean isForMinimized = intent.getBooleanExtra(EXTRA_KEY_MINIMIZE, false);
+        final boolean skipExtraction = intent.getBooleanExtra(EXTRA_KEY_SKIP_EXTRACTION, false);
 
         final String urlToLoad = intent.getDataString();
         if (TextUtils.isEmpty(urlToLoad)) {
@@ -204,7 +208,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         }
 
         if (!isLinkAlreadyLoaded(urlToLoad)) {
-            addWebHead(urlToLoad, isFromNewTab, isForMinimized);
+            addWebHead(urlToLoad, isFromNewTab, isForMinimized, skipExtraction);
         } else if (!isForMinimized) {
             Toast.makeText(this, R.string.already_loaded, LENGTH_SHORT).show();
         }
@@ -214,7 +218,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         return urlToLoad == null || webHeads.containsKey(urlToLoad);
     }
 
-    private void addWebHead(final String webHeadUrl, final boolean isNewTab, final boolean isMinimized) {
+    private void addWebHead(final String webHeadUrl, final boolean isNewTab, final boolean isMinimized, boolean skipExtraction) {
         if (springChain2D == null) {
             springChain2D = SpringChain2D.create(this);
         }
@@ -240,7 +244,9 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         preLoadForArticle(webHeadUrl);
 
         // Begin metadata extractions
-        doExtraction(webHeadUrl);
+        if (!skipExtraction) {
+            doExtraction(webHeadUrl);
+        }
     }
 
     private boolean reveal(WebHead newWebHead) {

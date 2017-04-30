@@ -22,7 +22,6 @@
 
     <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:animateLayoutChanges="true">
@@ -51,11 +50,11 @@
                 android:visibility="gone" />
 
             <android.support.v7.widget.CardView
-                android:id="@+id/recents_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+                android:animateLayoutChanges="true"
                 app:cardPreventCornerOverlap="true"
                 app:cardUseCompatPadding="true">
 

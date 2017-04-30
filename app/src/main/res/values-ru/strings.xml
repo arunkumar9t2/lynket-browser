@@ -15,7 +15,6 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-
 <resources>
     <string-array name="animationValues">
         <item>Ничего</item>
@@ -38,7 +37,7 @@
     <string-array name="actionValues">
         <item>Вторичный браузер</item>
         <item>Избранное приложение для передачи</item>
-        <item>General share</item>
+        <item>Поделиться</item>
     </string-array>
     <string-array name="actionKeys">
         <item>1</item>
@@ -53,9 +52,18 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+    <string-array name="articleThemeValues">
+        <item>Темный</item>
+        <item>Светлый</item>
+        <item>Автоматически</item>
+    </string-array>
     <string-array name="webHeadsSizeValues">
         <item>Нормальный</item>
         <item>Мелкий</item>
+    </string-array>
+    <string-array name="webHeadsSizeKeys">
+        <item>1</item>
+        <item>2</item>
     </string-array>
     <string name="share_text">Зацените \‘Chromer\’ для быстрого и безопасного сёрфинга в интернете! Скачать здесь https://goo.gl/992ils</string>
     <string name="share_via">Поделиться через…</string>
@@ -67,7 +75,6 @@
     <string name="help_chromer_grow">Помогите развитию Chromer!</string>
     <string name="share">Поделиться</string>
     <string name="share_with">Поделится через %1$s</string>
-    <string name="more_custom_tbs">Подробнее о пользовательских вкладках</string>
     <string name="rate_play_store">Оценить в Play Маркет</string>
     <string name="feedback">Обратная связь</string>
     <string name="intro">Вступление</string>
@@ -86,10 +93,9 @@
     <string name="copy_link">Скопировать ссылку</string>
     <string name="add_to_homescreen">Добавить на главный экран</string>
     <string name="intro_1">Привет!\nChromer это легкий, безопасный и быстрый веб-браузер.</string>
-    <string name="intro_2">Он использует пользовательские вкладки Google Chrome для мгновенной загрузки страниц.</string>
+    <string name="intro_4_new">Он может накапливать множество ссылок в плавающих кнопках когда вы открываете их, и потом мгновенно загружает их в фоновом режиме!\n \n<b>LEARN MORE</b></string>
     <string name="how_to_use">Как им пользоваться?</string>
     <string name="intro_6">Просто установите Chromer в качестве браузера по умолчанию, чтобы он ненавязчиво отображал ссылки. Или выберите Chromer, когда это необходимо.</string>
-    <string name="why_use">Зачем он нужен?</string>
     <string name="version">Версия</string>
     <string name="changelog">Изменения</string>
     <string name="join_google_plus">"Присоединиться к сообществу Google+ "</string>
@@ -152,7 +158,9 @@
     <string name="icon_design">Дизайн иконки</string>
     <string name="overlay_permission_content">Чтобы перемещать плавающие кнопки по экрану, необходимо разрешение на экранные наложения. Хотите предоставить разрешение сейчас?</string>
     <string name="webheads_intro_1">Когда вы открываете ссылку в любом приложении, плавающая кнопка будет создана на экране, и Chromer предварительно загрузит ссылку.</string>
+    <string name="webheads_intro_2_new">При открытии нескольких ссылок, эти кнопки автоматически группируются друг на друге. Длительное нажатие на шар позволяет получить доступ к контекстному меню.</string>
     <string name="webheads_intro_3">Вы можете убрать плавающую кнопку, переместив её в \“Корзину\”.</string>
+    <string name="webheads_intro_4_lolli">Принудительная загрузка в фоне будет загружать страницу в фоновом режиме, пока вы продолжаете использовать приложение, в котором вы находитесь.\n <b>Можно заметить мерцание открытия вкладки. Это сделано специально и не является ошибкой.</b></string>
     <string name="webheads_intro_4">Chromer отдаёт приоритет последней открытой ссылке и загружает её заранее. Рекомендуется открывать плавающие кнопки одну за одной от начала до конца. Плавающие кнопки расположенные рядом открываются без проблем.</string>
     <string name="web_head_permission_toast">Чтобы открывать ссылки в плавающих кнопках Chromer необходим доступ к другим приложениям, пожалуйста, предоставьте доступ, или отключите плавающие кнопки в настройках Chromer.</string>
     <string name="tap_close_all">Нажмите, чтобы закрыть всё</string>
@@ -164,12 +172,11 @@
     <string name="blacklisted_apps">Приложения в чёрном списке</string>
     <string name="blacklisted_explanation">Запретить Chromer обрабатывать ссылки для определенных приложений</string>
     <string name="loading">Загрузка…</string>
-    <string name="please_wait">Пожалуйста, подождите</string>
-    <string name="blacklist_message">Вы добавили это приложение в чёрный список Chromer и не указали вторичный браузер. Пожалуйста, выберите браузер чтобы продолжить.</string>
     <string name="share_failed_msg">Не удалось поделиться через стандартное приложение</string>
-    <string name="blacklist_explanation">Запуская ссылки через приложение которые вы добавили в чёрный список будет перенаправлено на ваш вторичный браузер</string>
     <string name="revoke_accessibility_permission">Теперь вы можете отозвать разрешение доступности службы Chromer.</string>
     <string name="last_fetched_urls">Последние предзагруженные ссылки</string>
+    <string name="blacklist_on">Фильтрование приложений включено %s</string>
+    <string name="blacklist_off">Блокирование приложений выключено</string>
     <string name="translations">Переводы</string>
     <string name="merge_tabs">Вкладки в списке недавних приложений</string>
     <string name="merge_tabs_explanation">Вкладки Chromer будут раздельно отображены в списке недавно запущенных приложений.</string>
@@ -179,7 +186,6 @@
     <string name="bottom_bar_pref_title">Показать нижнюю панель</string>
     <string name="bottom_bar">Нижняя панель</string>
     <string name="open_in_new_tab">Открыть в новой вкладке</string>
-    <string name="open_in_new_tab_error">Неверная ссылка, вы точно скопировали текст или ссылку долгим нажатием на странице?</string>
     <string name="options">Опции</string>
     <string name="customize">Настроить</string>
     <string name="not_set">Не задано</string>
@@ -188,9 +194,79 @@
     <string name="behavior_preferences">Поведение</string>
     <string name="additional_preferences">Дополнительно</string>
     <string name="notifications">Уведомления</string>
-    <string name="web_heads_enabled">Webheads включен! Теперь вы можете открыть в фоне несколько ссылок и просматривать их позже.</string>
-    <string name="web_heads_title">Вы можете открывать несколько ссылок и просматривать их позже</string>
-    <string name="web_heads_description">Открывать ссылки в плавающих пузырьках</string>
     <string name="webhead_size_title">Размер</string>
     <string name="webhead_size_dialog">Выберите размер плавающей иконки</string>
+    <string name="changelog_skipped">Список изменений пропущен из-за ошибки</string>
+    <string name="see_whats_new">Что нового</string>
+    <string name="help_translations">Помогите перевести приложение на свой язык</string>
+    <string name="aggressive_background_loading">Принудительная загрузка в фоне</string>
+    <string name="aggressive_background_loading_desc">Веб-страницы будут полноценно загружаться в фоновом режиме, а не только предварительно</string>
+    <string name="aggresive_dia_title">Объединить вкладки и приложения</string>
+    <string name="aggresive_dia_content">Для работы Принудительной фоновой загрузки, опция Объединить вкладки и приложения должна быть включена. Сейчас она активирована.</string>
+    <string name="merge_tabs_off_title">Внимание</string>
+    <string name="merget_tabs_off_content">Отключение опции Объединить вкладки и приложения также отключает Принудительную фоновую загрузку.</string>
+    <string name="web_sites">Вебсайты</string>
+    <string name="share_all">Поделиться</string>
+    <string name="thank_you">Большое спасибо!</string>
+    <string name="save_time">Сэкономить время</string>
+    <string name="multiple_links">Несколько ссылок</string>
+    <string name="merge_tabs_explanation_intro">Ваши приложения и вкладки сайтов находятся в списке недавних приложений.</string>
+    <string name="web_close_on_open_desc">Плавающий шар исчезнет, как только вы откроете ссылку</string>
+    <string name="web_close_on_open_title">Закрытие плавающей кнопки одним нажатием.</string>
+    <string name="minimize">Свернуть</string>
+    <string name="open_in_new_tab_explanation"><![CDATA[<b>Открыть в новой вкладке (5.0+) -</b> Скопировав ссылку или текст на экране, нажмите этот значок, чтобы открыть ссылку или найти скопированный текст в новой вкладке или плавающем шаре.]]></string>
+    <string name="share_action_explanation"><![CDATA[<b>Поделиться -</b> Позволяет быстро выполнить стандартное Android действие.]]></string>
+    <string name="minimize_action_explanation"><![CDATA[<b>Свернуть -</b> Сворачивает текущую страницу в плавающий шар. Доступно только если <i>Плавающие кнопки и объединение вкладок</i> включено.]]></string>
+    <string name="available_actions">Доступные действия</string>
+    <string name="secondary_browser_launching_error_title">Ошибка запуска вторичного браузера</string>
+    <string name="launch_setting">Настройки запуска</string>
+    <string name="secondary_browser_not_installed">Похоже вторичный браузер, который вы выбрали не установлен в системе. Открыть страницу настроек для переназначения вторичного браузера?</string>
+    <string name="secondary_browser_launch_error">Невозможно открыть ссылку в браузере, который вы выбрали. Хотите изменить этот параметр?</string>
+    <string name="secondary_browser_not_error">Вы добавили это приложение в чёрный список Chromer и не указали вторичный браузер. Вы бы хотели сейчас назначить вторичный браузер?</string>
+    <string name="copy_all">Скопировать все</string>
+    <string name="choose_share_method">Выбор способа Поделиться</string>
+    <string name="comma_seperated">Разделенные запятой</string>
+    <string name="share_all_list">Список - Ограниченная поддержка приложений. Например: Join, Pushbullet и т.д.</string>
+    <string name="new_tab">Открыть новую вкладку</string>
+    <string name="title_activity_open_with">Открыть через</string>
+    <string name="title_activity_settings">Настройки</string>
+    <string name="settings_browsing_mode">Режим просмотра</string>
+    <string name="settings_look_and_feel">Смотри и чувствуй</string>
+    <string name="settings_browsing_options">Параметры просмотра</string>
+    <string name="title_activity_browsing_mode">Режим брузинга</string>
+    <string name="browsing_mode_slide_over">Слайд вверх</string>
+    <string name="browsing_mode_web_heads">Плавающие кнопки</string>
+    <string name="browsing_mode_slide_over_explanation">Веб-страница откроется поверх используемого приложения.</string>
+    <string name="browsing_mode_web_heads_explanation">Веб-сайты загружаются в фоновом режиме, что позволит вам объединить несколько ссылок, а затем возвращаться к ним с плавающей кнопки на экране.</string>
+    <string name="load_faster_heading">Загружайте страницы быстрее с помощью параметров ниже</string>
+    <string name="amp">Ускоренные Мобильные Страницы (аббревиатура AMP)</string>
+    <string name="amp_mode">Технология AMP</string>
+    <string name="amp_summary">Загружает оптимизированную мобильную версию сайта для более быстрого и плавного чтения.</string>
+    <string name="article_mode">Режим чтения</string>
+    <string name="article_theme">Тема статьи</string>
+    <string name="article_mode_summary">Загружает лаконичный и удобный Режим чтения без лишнего мусора, сфокусировавшись исключительно на содержании.</string>
+    <string name="amp_warning_title">Предупреждение AMP</string>
+    <string name="amp_warning_content"><![CDATA[В режиме <b>Слайд вверх</b> может пройти некоторое время, для захвата URL-адреса используя AMP. Вы можете увидеть диалоговое окно, когда это произойдет.]]></string>
+    <string name="title_activity_look_and_feel">Смотри и чувствуй</string>
+    <string name="not_available_in_slide_mode">Недоступно в режиме Слайд вверх</string>
+    <string name="title_activity_browsing_options">Параметры просмотра</string>
+    <string name="grabbing_amp_link">Захват AMP ссылки</string>
+    <string name="link_found">Ссылка найдена!</string>
+    <string name="link_not_found">AMP ссылка найдена</string>
+    <string name="open">Открыть</string>
+    <string name="open_full_page">Открыть страницу полностью</string>
+    <string name="more">Больше</string>
+    <string name="title_history">История</string>
+    <string name="deleted_items">%1$d элементы удалены.</string>
+    <string name="are_you_sure">Вы уверены?</string>
+    <string name="history_deletion_confirmation_content">Это удалит всю историю, действие не обратимо.</string>
+    <string name="incognito_mode">Режим инкогнито</string>
+    <string name="recents_intro">Здесь будут показаны недавно открытые ссылки</string>
+    <string name="amp_article_combined_explanation"><![CDATA[Когда оба режима <b>AMP и Режим чтения включены</b>, Chromer попытается загрузить AMP версию страницы, если она существует. Если не существует - будет загружен Режим статьи.]]></string>
+    <string name="attention">Внимание!</string>
+    <string name="manage">Управление</string>
+    <string name="more_menu">Больше</string>
+    <string name="open_article_view">Открыть в режиме чтения</string>
+    <string name="browse_seamlessly">Плавный браузинг</string>
+    <string name="slide_over_explanation">Веб-страница откроется поверх текущего приложения, нажмите x, чтобы быстро вернуться назад</string>
 </resources>

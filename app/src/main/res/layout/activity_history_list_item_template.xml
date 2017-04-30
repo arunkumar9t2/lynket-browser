@@ -25,27 +25,43 @@
     android:clickable="true"
     android:focusable="true"
     android:gravity="center_vertical"
-    android:minHeight="52dp"
+    android:minHeight="60dp"
     android:orientation="horizontal"
-    android:paddingBottom="5dp"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:paddingTop="5dp"
+    android:paddingBottom="4dp"
+    android:paddingTop="4dp"
     tools:ignore="RtlHardcoded">
 
-    <ImageView
-        android:id="@+id/history_favicon"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+    <FrameLayout
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_gravity="center"
-        android:scaleType="fitCenter"
-        tools:ignore="ContentDescription" />
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:padding="4dp">
+
+        <ImageView
+            android:id="@+id/history_favicon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            tools:ignore="ContentDescription"
+            tools:src="@mipmap/ic_launcher" />
+
+        <arun.com.chromer.views.PlaceholderLetterView
+            android:id="@+id/history_placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+    </FrameLayout>
 
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:paddingLeft="20dp"
+        android:paddingEnd="16dp"
+        android:paddingRight="16dp"
         tools:ignore="RtlSymmetry">
 
         <TextView
@@ -57,7 +73,8 @@
             android:paddingBottom="2dp"
             android:textAppearance="@style/Preference_TextAppearanceMaterialSubhead"
             android:textSize="14sp"
-            tools:ignore="SelectableText" />
+            tools:ignore="SelectableText"
+            tools:text="Test" />
 
         <TextView
             android:id="@+id/history_subtitle"
@@ -69,6 +86,22 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="?android:attr/textColorSecondary"
             android:textSize="12sp"
-            tools:ignore="SelectableText" />
+            tools:ignore="SelectableText"
+            tools:text="Test" />
     </RelativeLayout>
+
+
+    <ImageView
+        android:id="@+id/history_amp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center"
+        android:layout_marginRight="16dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_action_amp_icon"
+        android:tint="@color/md_blue_500"
+        android:visibility="gone"
+        tools:ignore="ContentDescription"
+        tools:src="@mipmap/ic_launcher_round" />
 </LinearLayout>

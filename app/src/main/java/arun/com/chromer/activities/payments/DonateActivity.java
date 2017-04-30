@@ -58,9 +58,11 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
     // (arbitrary) request code for the purchase flow
     private static final int RC_REQUEST = 10001;
     private static final int ICON_SIZE_DP = 24;
-    private static boolean mCoffeeDone = false;
-    private static boolean mLunchDone = false;
-    private static boolean mPremiumDone = false;
+
+    private boolean mCoffeeDone = false;
+    private boolean mLunchDone = false;
+    private boolean mPremiumDone = false;
+
     private IabHelper mHelper;
     // Callback for when a purchase is finished
     private final IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
@@ -105,10 +107,9 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
             mLunchDone = inventory.getPurchase(LUNCH_SKU) != null;
             mPremiumDone = inventory.getPurchase(PREMIUM_SKU) != null;
 
-            if (mCoffeeDone | mLunchDone | mPremiumDone) {
+            if (mCoffeeDone || mLunchDone || mPremiumDone) {
                 findViewById(R.id.thank_you).setVisibility(View.VISIBLE);
             }
-
             loadData(list);
         }
     };

@@ -108,7 +108,6 @@ public class WebViewActivity extends AppCompatActivity {
         });
         final WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
-
         webView.loadUrl(getIntent().getDataString());
     }
 
@@ -248,7 +247,6 @@ public class WebViewActivity extends AppCompatActivity {
                 break;
             case R.id.menu_more:
                 final Intent moreMenuActivity = new Intent(this, MoreMenuActivity.class);
-                moreMenuActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 moreMenuActivity.putExtra(EXTRA_KEY_ORIGINAL_URL, baseUrl);
                 moreMenuActivity.setData(getIntent().getData());
                 startActivity(moreMenuActivity);

@@ -24,16 +24,16 @@
     android:baselineAligned="false"
     android:gravity="center"
     android:orientation="horizontal"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:weightSum="9">
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:weightSum="4">
 
     <FrameLayout
         android:id="@+id/bottom_bar_open_in_new_tab"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:layout_weight="3"
+        android:layout_weight="1"
         android:contentDescription="@string/open_in_new_tab"
         android:foreground="?android:attr/selectableItemBackground">
 
@@ -53,7 +53,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:layout_weight="3"
+        android:layout_weight="1"
         android:contentDescription="@string/share"
         android:foreground="?android:attr/selectableItemBackground">
 
@@ -73,12 +73,32 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:layout_weight="3"
+        android:layout_weight="1"
         android:contentDescription="@string/minimize"
         android:foreground="?android:attr/selectableItemBackground">
 
         <ImageView
             android:id="@+id/bottom_bar_minimize_img"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:contentDescription="@string/minimize"
+            android:gravity="center"
+            android:padding="5dp"
+            android:scaleType="fitCenter" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/bottom_bar_article_view"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:contentDescription="@string/minimize"
+        android:foreground="?android:attr/selectableItemBackground">
+
+        <ImageView
+            android:id="@+id/bottom_bar_article_view_img"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_gravity="center"

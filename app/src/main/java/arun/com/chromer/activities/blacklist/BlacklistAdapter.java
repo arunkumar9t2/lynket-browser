@@ -49,7 +49,7 @@ class BlacklistAdapter extends RecyclerView.Adapter<BlacklistAdapter.BlackListIt
     private WeakReference<Activity> activityRef = new WeakReference<>(null);
     private final List<App> apps = new ArrayList<>();
 
-    private PublishSubject<App> clickSubject = PublishSubject.create();
+    private final PublishSubject<App> clickSubject = PublishSubject.create();
 
     BlacklistAdapter(@NonNull Activity activity) {
         this.activityRef = new WeakReference<>(activity);

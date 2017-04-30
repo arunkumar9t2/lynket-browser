@@ -23,7 +23,7 @@ android {
         applicationId "arun.com.chromer"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 33
+        versionCode 34
         versionName "1.7.2"
 
         buildConfigField "String", "BASE_64", getBase64()
@@ -72,7 +72,7 @@ dependencies {
     compile 'com.github.paolorotolo:appintro:4.1.0'
 
     // Icons
-    compile 'com.mikepenz:community-material-typeface:1.5.54.2@aar'
+    compile 'com.mikepenz:community-material-typeface:1.9.32.1@aar'
 
     // Drawer
     compile('com.mikepenz:materialdrawer:5.3.6@aar') {

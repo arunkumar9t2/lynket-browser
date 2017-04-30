@@ -80,6 +80,7 @@ public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implem
     private CustomTabManager customTabManager;
     private RecentsAdapter recentsAdapter;
 
+    @NonNull
     @Override
     public Home.Presenter createPresenter() {
         return new Home.Presenter();
@@ -179,7 +180,7 @@ public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implem
     }
 
     private void setupRecents() {
-        recentsHeader.setCompoundDrawablePadding(Utils.dpToPx(8));
+        recentsHeader.setCompoundDrawablePadding(Utils.dpToPx(22));
         recentsHeader.setCompoundDrawables(new IconicsDrawable(getContext())
                 .icon(CommunityMaterial.Icon.cmd_history)
                 .colorRes(R.color.accent)
@@ -205,12 +206,12 @@ public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implem
                         .withSession(customTabManager.getSession())
                         .prepare()
                         .launch();
+                WebsiteRepository.getInstance(getActivity())
+                        .getWebsite(url)
+                        .compose(RxUtils.applySchedulers())
+                        .doOnError(Timber::e)
+                        .subscribe();
             }
-            WebsiteRepository.getInstance(getActivity())
-                    .getWebsite(url)
-                    .compose(RxUtils.applySchedulers())
-                    .doOnError(Timber::e)
-                    .subscribe();
         }
     }
 
