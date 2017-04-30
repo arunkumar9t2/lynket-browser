@@ -100,6 +100,7 @@
         android:background="?android:attr/selectableItemBackground"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_action_amp_icon"
+        android:tint="@color/md_blue_500"
         android:visibility="gone"
         tools:ignore="ContentDescription"
         tools:src="@mipmap/ic_launcher_round" />
