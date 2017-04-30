@@ -38,11 +38,13 @@ import com.bumptech.glide.Glide;
 import arun.com.chromer.R;
 import arun.com.chromer.activities.BrowserInterceptActivity;
 import arun.com.chromer.data.website.model.WebSite;
-import arun.com.chromer.shared.Constants;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observable;
 import timber.log.Timber;
+
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_OUR_APP;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_SKIP_EXTRACTION;
 
 /**
  * Created by Arunkumar on 06-03-2017.
@@ -106,29 +108,7 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHold
     @Override
     public void onBindViewHolder(final HistoryViewHolder holder, int position) {
         final WebSite webSite = asyncWebsiteList.getItem(position);
-        if (webSite == null) {
-            holder.historyTitle.setText(R.string.loading);
-            holder.historySubtitle.setText(R.string.loading);
-            holder.historyFavicon.setImageDrawable(null);
-            Glide.clear(holder.historyFavicon);
-        } else {
-            holder.historyTitle.setText(webSite.safeLabel());
-            holder.historySubtitle.setText(webSite.preferredUrl());
-            holder.itemView.setOnClickListener(v -> {
-                final Intent intent = new Intent(holder.itemView.getContext(), BrowserInterceptActivity.class);
-                intent.setData(Uri.parse(webSite.preferredUrl()));
-                intent.putExtra(Constants.EXTRA_KEY_FROM_OUR_APP, true);
-                holder.itemView.getContext().startActivity(intent);
-            });
-            if (!TextUtils.isEmpty(webSite.faviconUrl)) {
-                Glide.with(holder.itemView.getContext())
-                        .load(webSite.faviconUrl)
-                        .crossFade()
-                        .into(holder.historyFavicon);
-            } else {
-                Glide.clear(holder.itemView);
-            }
-        }
+        holder.bind(webSite);
     }
 
     @Override
@@ -181,17 +161,71 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHold
         }
     }
 
-    static class HistoryViewHolder extends RecyclerView.ViewHolder {
+    class HistoryViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.history_title)
         TextView historyTitle;
         @BindView(R.id.history_favicon)
         ImageView historyFavicon;
         @BindView(R.id.history_subtitle)
         TextView historySubtitle;
+        @BindView(R.id.history_amp)
+        ImageView historyAmp;
+
 
         HistoryViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            itemView.setOnClickListener(v -> {
+                final int position = getAdapterPosition();
+                final WebSite webSite = asyncWebsiteList.getItem(position);
+                if (webSite != null && position != RecyclerView.NO_POSITION) {
+                    final Intent intent = new Intent(itemView.getContext(), BrowserInterceptActivity.class);
+                    intent.setData(Uri.parse(webSite.preferredUrl()));
+                    intent.putExtra(EXTRA_KEY_FROM_OUR_APP, true);
+                    itemView.getContext().startActivity(intent);
+                }
+            });
+
+            historyAmp.setOnClickListener(v -> {
+                final int position = getAdapterPosition();
+                final WebSite webSite = asyncWebsiteList.getItem(position);
+                if (webSite != null && position != RecyclerView.NO_POSITION) {
+                    final Intent intent = new Intent(itemView.getContext(), BrowserInterceptActivity.class);
+                    intent.setData(Uri.parse(webSite.ampUrl));
+                    intent.putExtra(EXTRA_KEY_FROM_OUR_APP, true);
+                    intent.putExtra(EXTRA_KEY_SKIP_EXTRACTION, true);
+                    itemView.getContext().startActivity(intent);
+                }
+            });
+        }
+
+        public void bind(@Nullable WebSite webSite) {
+            if (webSite == null) {
+                historyTitle.setText(R.string.loading);
+                historySubtitle.setText(R.string.loading);
+                historyFavicon.setImageDrawable(null);
+                historyAmp.setVisibility(View.GONE);
+                Glide.clear(historyFavicon);
+            } else {
+                historyTitle.setText(webSite.safeLabel());
+                historySubtitle.setText(webSite.preferredUrl());
+                if (!TextUtils.isEmpty(webSite.faviconUrl)) {
+                    Glide.with(itemView.getContext())
+                            .load(webSite.faviconUrl)
+                            .crossFade()
+                            .into(historyFavicon);
+                } else {
+                    Glide.clear(historyFavicon);
+                }
+                if (!TextUtils.isEmpty(webSite.ampUrl)) {
+                    historyAmp.setVisibility(View.VISIBLE);
+                } else {
+                    historyAmp.setVisibility(View.GONE);
+                }
+            }
         }
     }
+
+
 }

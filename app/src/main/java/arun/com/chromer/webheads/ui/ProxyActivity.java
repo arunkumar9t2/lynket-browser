@@ -22,9 +22,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import arun.com.chromer.shared.Constants;
 import arun.com.chromer.webheads.WebHeadService;
 import timber.log.Timber;
+
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_NEW_TAB;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_SKIP_EXTRACTION;
 
 public class ProxyActivity extends AppCompatActivity {
 
@@ -37,11 +39,13 @@ public class ProxyActivity extends AppCompatActivity {
             finish();
             return;
         }
-        boolean isFromNewTab = getIntent().getBooleanExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, false);
+        boolean isFromNewTab = getIntent().getBooleanExtra(EXTRA_KEY_FROM_NEW_TAB, false);
+        boolean launchDirectly = getIntent().getBooleanExtra(EXTRA_KEY_SKIP_EXTRACTION, false);
         final Intent webHeadService = new Intent(this, WebHeadService.class);
         webHeadService.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         webHeadService.setData(getIntent().getData());
-        webHeadService.putExtra(Constants.EXTRA_KEY_FROM_NEW_TAB, isFromNewTab);
+        webHeadService.putExtra(EXTRA_KEY_FROM_NEW_TAB, isFromNewTab);
+        webHeadService.putExtra(EXTRA_KEY_SKIP_EXTRACTION, launchDirectly);
         startService(webHeadService);
         finish();
     }
