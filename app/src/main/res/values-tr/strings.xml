@@ -15,7 +15,6 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-
 <resources>
     <string-array name="animationValues">
         <item>Hiçbiri</item>
@@ -53,7 +52,6 @@
     <string name="help_chromer_grow">Chromer\'in büyümesine yardımcı ol!</string>
     <string name="share">Paylaş</string>
     <string name="share_with">" %1$s ile paylaş"</string>
-    <string name="more_custom_tbs">Daha fazla özel sekme</string>
     <string name="rate_play_store">Play Store\'da oyla</string>
     <string name="feedback">Geri Bildirim</string>
     <string name="intro">Giriş</string>
@@ -72,10 +70,8 @@
     <string name="copy_link">Bağlantıyı kopyala</string>
     <string name="add_to_homescreen">Ana Ekrana ekle</string>
     <string name="intro_1">Merhaba!\nChromer hafif, güvenli ve güvenli bir tarayıcıdır.</string>
-    <string name="intro_2">Hızla bir bağlantı yüklenmesi için tasarlanmış son derece hafif Chrome sekmesi, Google Chrome\'un Özel Sekmeler özelliğini kullanır.</string>
     <string name="how_to_use">Bu nasıl kullanılır?</string>
     <string name="intro_6">Sadece Chromer varsayılan tarayıcı olarak ayarlanmış, Chromer, dahil olmadan,  bir şekilde bağlantıyı gösterecektir. Veya gerektiğinde Chromer\'i seçin.</string>
-    <string name="why_use">Neden kullanılır?</string>
     <string name="version">Versiyon</string>
     <string name="changelog">Değişiklikler</string>
     <string name="join_google_plus">Google+ Topluluğuna Katıl</string>
@@ -120,11 +116,9 @@
     <string name="open_source_contributions">Açık kaynak şeyi</string>
     <string name="blacklisted_explanation">Bazı uygulamalardan gelen bağlantıları Chromer\'den dışla</string>
     <string name="loading">Yükleniyor…</string>
-    <string name="please_wait">Lütfen bekleyin</string>
     <string name="translations">Çeviriler</string>
     <string name="bottom_bar">Alt bar</string>
     <string name="open_in_new_tab">Yeni sekmede aç</string>
-    <string name="open_in_new_tab_error">Geçersiz bağlantı, sayfaya uzun basarak herhangi bir metin veya bağlantıyı kopyaladınız mı?</string>
     <string name="options">Seçenekler</string>
     <string name="customize">Özelleştirme</string>
     <string name="not_set">Ayarlanmamış</string>
@@ -133,9 +127,6 @@
     <string name="behavior_preferences">Hareket</string>
     <string name="additional_preferences">Ekstra</string>
     <string name="notifications">Bildirimler</string>
-    <string name="web_heads_enabled">Web balonları aktif! Birden fazla bağlantıyı kuyruğa ekleyebilir ve sonra görüntüleyebilirsiniz.</string>
-    <string name="web_heads_title">Birçok bağlantıyı yığabilir ve bunları daha sonra görüntüleyebilirsin</string>
-    <string name="web_heads_description">Bağlantıları kayan baloncuklar ile aç</string>
     <string name="webhead_size_title">Boyut</string>
     <string name="webhead_size_dialog">Web başlığının boyutunu seç</string>
     <string name="changelog_skipped">Değişiklikler bir hata nedeniyle atlanır</string>
@@ -145,7 +136,14 @@
     <string name="web_sites">Web Siteler</string>
     <string name="share_all">Tümünü paylaş</string>
     <string name="thank_you">Çok teşekkür ederim!</string>
-    <string name="tile_label">Web başlıkları</string>
     <string name="save_time">Zamandan tasarruf</string>
     <string name="multiple_links">Çoklu bağlantılar</string>
+    <string name="open">Aç</string>
+    <string name="open_full_page">Tam sayfayı aç</string>
+    <string name="more">Daha fazla</string>
+    <string name="title_history">Geçmiş</string>
+    <string name="deleted_items">%1$d öğe silindi.</string>
+    <string name="are_you_sure">Emin misiniz?</string>
+    <string name="history_deletion_confirmation_content">Bu işlem tüm geçmişi silecektir ve geri döndürülemez.</string>
+    <string name="incognito_mode">Gizli mod</string>
 </resources>

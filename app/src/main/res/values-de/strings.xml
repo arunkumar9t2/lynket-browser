@@ -15,7 +15,6 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-
 <resources>
     <string-array name="animationValues">
         <item>Keine</item>
@@ -67,7 +66,6 @@
     <string name="help_chromer_grow">Hilf Chromer zu wachsen!</string>
     <string name="share">Teilen</string>
     <string name="share_with">Teilen mit %1$s</string>
-    <string name="more_custom_tbs">Mehr über Custom Tabs</string>
     <string name="rate_play_store">Im Play Store bewerten</string>
     <string name="feedback">Feedback</string>
     <string name="intro">Einführung</string>
@@ -86,10 +84,8 @@
     <string name="copy_link">Link kopieren</string>
     <string name="add_to_homescreen">Zum Startbildschirm hinzufügen</string>
     <string name="intro_1">"Hallo! \nChromer ist ein schlanker, sicherer und schneller Browser. "</string>
-    <string name="intro_2">Es nutzt Chromes Custom-Tab-Funktion, die einen extrem schlanken Chrome-Tab bereitsstellt, um einen Link schnell zu laden.</string>
     <string name="how_to_use">Wie funktioniert das?</string>
     <string name="intro_6">Du musst nur Chromer als deinen Standardbrowser festlegen. Chromer wird dir den Link dann unaufdringlich anzeigen. Oder du wählst Chromer nur bei Bedarf.</string>
-    <string name="why_use">Warum Chromer?</string>
     <string name="version">Version</string>
     <string name="changelog">Neuigkeiten</string>
     <string name="join_google_plus">Google+ Community beitreten</string>
@@ -164,10 +160,7 @@
     <string name="blacklisted_apps">Ausgeschlossene Apps (Blacklist)</string>
     <string name="blacklisted_explanation">Verhindere, dass Chromer Links von bestimmten Apps verarbeitet</string>
     <string name="loading">Laden…</string>
-    <string name="please_wait">Bitte warten</string>
-    <string name="blacklist_message">Du hast diese App in Chromer ausgeschlossen und keinen sekundären Browser festgelegt. Bitte wähle zum Fortfahren einen Browser.</string>
     <string name="share_failed_msg">Konnte nicht geteilt werden. Benutze stattdessen die Standard App</string>
-    <string name="blacklist_explanation">Öffnest du einen Link aus einer ausgeschlossenen App, dann wird dieser im sekundären Browser geöffnet</string>
     <string name="revoke_accessibility_permission">Du kannst die Berechtigung für die Bedienungshilfe jetzt deaktivieren.</string>
     <string name="last_fetched_urls">Letzte geladene URLs</string>
     <string name="translations">Übersetzungen</string>
@@ -179,7 +172,6 @@
     <string name="bottom_bar_pref_title">Zeige die Bottom-Bar</string>
     <string name="bottom_bar">Bottom-Bar</string>
     <string name="open_in_new_tab">In neuem Tab öffnen</string>
-    <string name="open_in_new_tab_error">Ungültiger Link. Hast du Text oder einen Link durch langes Drücken auf die Seite kopiert?</string>
     <string name="options">Einstellungen</string>
     <string name="customize">Anpassen</string>
     <string name="not_set">nicht gesetzt</string>
@@ -188,9 +180,6 @@
     <string name="behavior_preferences">Verhalten</string>
     <string name="additional_preferences">Weiteres</string>
     <string name="notifications">Benachrichtigungen</string>
-    <string name="web_heads_enabled">Web Heads aktiviert! Du kannst jetzt mehrere Links im Hintergrund laden und nachher ansehen.</string>
-    <string name="web_heads_title">Du kannst mehrere Links laden und später ansehen</string>
-    <string name="web_heads_description">Öffne Links in schwebenden Blasen.</string>
     <string name="webhead_size_title">Größe</string>
     <string name="webhead_size_dialog">Wähle die Größe der Web Heads</string>
 </resources>

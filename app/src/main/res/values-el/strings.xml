@@ -15,7 +15,6 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-
 <resources>
     <string-array name="animationValues">
         <item>Κανένα</item>
@@ -53,7 +52,6 @@
     <string name="help_chromer_grow">Βοηθήστε το Chromer να μεγαλώσει!</string>
     <string name="share">Κοινοποίηση</string>
     <string name="share_with">Κοινοποίηση με %1$s</string>
-    <string name="more_custom_tbs">Περισσότερα στις προσαρμοσμένες σελίδες</string>
     <string name="rate_play_store">Αξιολογήστε στο Play Store</string>
     <string name="feedback">Σχόλια</string>
     <string name="intro">Intro</string>
@@ -72,6 +70,4 @@
     <string name="copy_link">Αντιγραφή συνδέσμου</string>
     <string name="add_to_homescreen">Προσθήκη στην Αρχική Οθόνη</string>
     <string name="intro_1">Γεια σας!\nΤο Chromer είναι ένας ελαφρύς, ασφαλής και γρήγορος περιηγητής.</string>
-    <string name="intro_2">Χρησιμοποιεί την λειτουργία των Προσαρμοσμένων Σελίδων του Chrome το οποίο είναι μία πολύ ελαφρύ σελίδα του Chrome σχεδιασμένη για να ανοίγει γρήγορα κάποιον σύνδεσμο.</string>
-    <string name="intro_5_new">Μπορεί να σαρώσει συνδέσμους από την οθόνη σου και να τις φορτώσει κρυφά για να αυξήσει την απόδοση.\n\nΜπορεί ακόμα να κρατήσει τον περιηγητή στην μνήμη για να βελτιώσει τον χρόνο ανοίγματος.</string>
 </resources>

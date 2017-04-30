@@ -47,7 +47,6 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            android:id="@+id/browsing_mode_more_options_card"
             style="@style/FullWidthCard"
             android:layout_below="@+id/browsing_mode_card"
             app:cardElevation="4dp"

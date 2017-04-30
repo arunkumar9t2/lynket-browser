@@ -80,6 +80,7 @@ public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implem
     private CustomTabManager customTabManager;
     private RecentsAdapter recentsAdapter;
 
+    @NonNull
     @Override
     public Home.Presenter createPresenter() {
         return new Home.Presenter();

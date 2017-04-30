@@ -15,7 +15,6 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-
 <resources>
     <string-array name="animationValues">
         <item>Nenhum</item>
@@ -40,11 +39,6 @@
         <item>App para compartilhar favorito</item>
         <item>General share</item>
     </string-array>
-    <string-array name="actionKeys">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>Direita</item>
         <item>Esquerda</item>
@@ -67,7 +61,6 @@
     <string name="help_chromer_grow">Ajude o Chromer a crescer!</string>
     <string name="share">Compartilhar</string>
     <string name="share_with">Compartilhar com %1$s</string>
-    <string name="more_custom_tbs">Mais em Abas customizadas</string>
     <string name="rate_play_store">"Avaliar na Play Store "</string>
     <string name="feedback">Comentários</string>
     <string name="intro">Introdução</string>
@@ -86,10 +79,8 @@
     <string name="copy_link">Copiar link</string>
     <string name="add_to_homescreen">Adicionar à Tela Inicial</string>
     <string name="intro_1">Olá!\nChromer é um navegador leve, seguro e rápido.</string>
-    <string name="intro_2">Ele usa a função Abas customizadas do Google Chrome que é uma aba do Chrome extremante leve projetada para carregar um link rapidamente</string>
     <string name="how_to_use">Como usar isso?</string>
     <string name="intro_6">Apenas defina o Chromer como o seu navegador padrão, Chromer irá mostrar o link de uma forma não intrusiva.</string>
-    <string name="why_use">Por quê usar?</string>
     <string name="version">Versão</string>
     <string name="changelog">Registro de Alterações</string>
     <string name="join_google_plus">Entrar na Comunidade G+</string>
@@ -164,12 +155,10 @@
     <string name="blacklisted_apps">Apps na lista negra</string>
     <string name="blacklisted_explanation">Excluir a intervenção do Chromer em certos apps</string>
     <string name="loading">Carregando…</string>
-    <string name="please_wait">Aguarde</string>
-    <string name="blacklist_message">Você colocou este app na lista negra do Chromer e não tem um navegador secundário. Escolha um navegador para continuar.</string>
     <string name="share_failed_msg">Não foi possível compartilhar, tentando o compartilhamento normal</string>
-    <string name="blacklist_explanation">A abertura de links de um app da lista negra irá usar o navegador secundário</string>
     <string name="revoke_accessibility_permission">Agora você pode revogar a permissão de acessibilidade do Chromer.</string>
     <string name="last_fetched_urls">Últimas URLs carregadas</string>
+    <string name="blacklist_on">Lista negra de apps %s</string>
     <string name="translations">Traduções</string>
     <string name="merge_tabs">Mesclar abas e apps</string>
     <string name="merge_tabs_explanation">Ver suas abas junto com outros apps na tela de apps Recentes.</string>
@@ -179,7 +168,6 @@
     <string name="bottom_bar_pref_title">Exibir barra inferior</string>
     <string name="bottom_bar">Barra Inferior</string>
     <string name="open_in_new_tab">Abrir em nova aba</string>
-    <string name="open_in_new_tab_error">Link inválido, você copiou algum texto ou link dando um toque longo na página?</string>
     <string name="options">Opções</string>
     <string name="customize">Personalizar</string>
     <string name="not_set">Não Definido</string>
@@ -188,9 +176,6 @@
     <string name="behavior_preferences">Comportamento</string>
     <string name="additional_preferences">Adicionais</string>
     <string name="notifications">Notificações</string>
-    <string name="web_heads_enabled">Web heads ativadas! Agora pode enfileirar múltiplos links e visualizá-los depois.</string>
-    <string name="web_heads_title">Você pode empilhar múltiplos links e visualizá-los depois.</string>
-    <string name="web_heads_description">Abrir links em bolhas flutuantes</string>
     <string name="webhead_size_title">Tamanho</string>
     <string name="webhead_size_dialog">Escolha o tamanho das web heads</string>
 </resources>

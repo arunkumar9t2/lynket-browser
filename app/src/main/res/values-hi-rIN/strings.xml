@@ -15,7 +15,6 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-
 <resources>
     <string-array name="animationValues">
         <item>कुछ नहीं</item>
@@ -53,7 +52,6 @@
     <string name="help_chromer_grow">क्रोमर को बढने में मदद करें!</string>
     <string name="share">शेयर करें</string>
     <string name="share_with">%1$s के साथ शेयर करें</string>
-    <string name="more_custom_tbs">अधिक कस्टम् टैब</string>
     <string name="rate_play_store">प्ले स्टोर में रेट करें।</string>
     <string name="feedback">प्रतिक्रिया</string>
     <string name="intro">परिचय</string>

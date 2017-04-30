@@ -18,6 +18,7 @@
 
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -77,7 +78,8 @@
                     android:text="@string/available_actions"
                     android:textColor="@color/material_dark_light"
                     android:textSize="14sp"
-                    android:textStyle="bold|italic" />
+                    android:textStyle="bold|italic"
+                    tools:ignore="RtlSymmetry" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/bottom_bar_action_list"

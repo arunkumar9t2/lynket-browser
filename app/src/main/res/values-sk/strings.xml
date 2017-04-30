@@ -15,7 +15,6 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-
 <resources>
     <string-array name="animationValues">
         <item>Žiadna</item>
@@ -33,11 +32,16 @@
     <string-array name="actionValues">
         <item>Sekundárny prehliadač</item>
         <item>Aplikácia pre zdieľanie</item>
-        <item>General share</item>
+        <item>Všeobecné zdieľanie</item>
     </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>Vpravo</item>
         <item>Vľavo</item>
+    </string-array>
+    <string-array name="articleThemeValues">
+        <item>Tmavá</item>
+        <item>Svetlá</item>
+        <item>Autom.</item>
     </string-array>
     <string-array name="webHeadsSizeValues">
         <item>Normálne</item>
@@ -57,7 +61,6 @@
     <string name="help_chromer_grow">Pomôžte Chromer rásť!</string>
     <string name="share">Zdieľať</string>
     <string name="share_with">Zdieľať s %1$s</string>
-    <string name="more_custom_tbs">Viac o Custom Tabs</string>
     <string name="rate_play_store">Hodnotiť v Obchode Play</string>
     <string name="feedback">Spätná väzba</string>
     <string name="intro">Úvod</string>
@@ -76,12 +79,9 @@
     <string name="copy_link">Skopírovať odkaz</string>
     <string name="add_to_homescreen">Pridať na domovskú stránku</string>
     <string name="intro_1">Ahoj! \nChromer je ľahký, bezpečný a rýchly webový prehliadač.</string>
-    <string name="intro_2">Používa funkciu Custom Tabs z Google Chrome, ktorá je extrémne odľahčená karta z Chrome, určená pre rýchle otvorenie odkazu.</string>
-    <string name="intro_5_new">Môže skenovať odkazy na vašej obrazovke a načítať ich na pozadí pre zvýšenie výkonu vykresľovania.\n \nMôže tiež ponechať prehliadač v pamäti pre skrátenie času spúšťania.</string>
     <string name="intro_4_new">Môže zoskupiť viacero odkazov do plávajúcich bublín pri ich otvorení a potom ich načítať na pozadí!\n \n<b>ZISTIŤ VIAC</b></string>
     <string name="how_to_use">Ako používať Chromer?</string>
     <string name="intro_6">Stačí nastaviť Chromer ako predvolený prehliadač, Chromer zobrazí odkaz nerušivým spôsobom. Alebo si vyberte Chromer v prípade potreby.</string>
-    <string name="why_use">Prečo používať Chromer?</string>
     <string name="version">Verzia</string>
     <string name="changelog">Zoznam zmien</string>
     <string name="join_google_plus">Pripojiť sa do Google+ komunity</string>
@@ -158,12 +158,10 @@
     <string name="blacklisted_apps">Blokované aplikácie</string>
     <string name="blacklisted_explanation">Vylúči Chromer zo spracovávania odkazov určitých aplikácií</string>
     <string name="loading">Načítavanie…</string>
-    <string name="please_wait">Prosím, počkajte</string>
-    <string name="blacklist_message">Zablokovali ste túto aplikáciu pre spúšťanie v Chromer a nenastavili ste sekundárny prehliadač. Prosím, zvoľte prehliadač.</string>
     <string name="share_failed_msg">Do aplikácie nie je možné zdieľať, presmerované do normálneho zdieľania</string>
-    <string name="blacklist_explanation">Odkazy z blokovaniej aplikácie budú otvorené v sekundárnom prehliadači.</string>
     <string name="revoke_accessibility_permission">Teraz môžete zakázať službu Dostupnosť pre Chromer.</string>
     <string name="last_fetched_urls">Naposledy načínané adresy</string>
+    <string name="blacklist_on">Blokované aplikácie sú %s</string>
     <string name="blacklist_off">Blokované aplikácie sú vypnuté</string>
     <string name="translations">Preklad aplikácie</string>
     <string name="merge_tabs">Zlúčenie kariet a aplikácií</string>
@@ -174,7 +172,6 @@
     <string name="bottom_bar_pref_title">Zobraziť dolnú lištu</string>
     <string name="bottom_bar">Dolná lišta</string>
     <string name="open_in_new_tab">Otvoriť na novej karte</string>
-    <string name="open_in_new_tab_error">Neplatný odkaz, skopírovali ste text alebo odkaz dlhým podržaním?</string>
     <string name="options">Možnosti</string>
     <string name="customize">Prispôsobiť</string>
     <string name="not_set">Nenastavené</string>
@@ -183,15 +180,11 @@
     <string name="behavior_preferences">Správanie</string>
     <string name="additional_preferences">Ďalšie</string>
     <string name="notifications">Upozornenia</string>
-    <string name="web_heads_enabled">Webové hlavičky sú povolené! Môžete zaradiť odkazy do fronty a zobraziť ich neskôr.</string>
-    <string name="web_heads_title">Môže zoskupiť viacero odkazov a zobraziť ich neskôr.</string>
-    <string name="web_heads_description">Otvoriť odkazy v plávajúcich bublinách</string>
     <string name="webhead_size_title">Veľkosť</string>
     <string name="webhead_size_dialog">Zvoľte veľkosť webových hlavičiek</string>
     <string name="changelog_skipped">Zoznam zmien bol preskočený z dôvodu chyby</string>
     <string name="see_whats_new">Pozrite sa, čo je nové</string>
     <string name="help_translations">Pomôžte preložiť aplikáciu do vášho jazyka</string>
-    <string name="close_all_explanation">Pustite pre zatvorenie všetkých webových hlavičiek</string>
     <string name="aggressive_background_loading">Agresívne načítanie na pozadí</string>
     <string name="aggressive_background_loading_desc">Webové stránky budú načítané na pozadí namiesto iba prednačítania</string>
     <string name="aggresive_dia_title">Vyžaduje sa zlúčenie kariet a aplikácií</string>
@@ -201,14 +194,65 @@
     <string name="web_sites">Webové stránky</string>
     <string name="share_all">Zdieľať všetko</string>
     <string name="thank_you">Ďakujem veľmi pekne!</string>
-    <string name="tile_label">Webové hlavičky</string>
     <string name="save_time">Šetrí čas</string>
     <string name="multiple_links">Viacero odkazov</string>
-    <string name="web_heads_intro">Úvod k webovým hlavičkám</string>
-    <string name="avoid_back_fatigue">Zabraňuje únave z klikania späť</string>
-    <string name="intro_back_fatigue">Nezáleží, ako ďaleko ste prešli z pôvodného odkazu, vždy môžete <b>kliknúť na X</b> pre rýchle vrátenie sa do predchádzajúcej aplikácie.</string>
     <string name="merge_tabs_explanation_intro">Vaše aplikácie a karty webových stránok žijú spolu na obrazovke nedávnych aplikácií.</string>
-    <string name="improves_loading_times">Zlepšuje čas načítavania</string>
     <string name="web_close_on_open_desc">Webové hlavičky zmiznú po otvorení odkazu</string>
     <string name="web_close_on_open_title">Zavrieť webové hlavičky po kliknutí.</string>
+    <string name="minimize">Minimalizovať</string>
+    <string name="open_in_new_tab_explanation"><![CDATA[<b>Otvoriť na novej karte (5.0+) -</b> Skopírujte odkaz alebo text na obrazovke a kliknite na túto ikonu pre spustenie odkazu alebo vyhľadanie skopírovaného textu na novej karte alebo v bubline.]]></string>
+    <string name="share_action_explanation"><![CDATA[<b>Zdieľať -</b> Rýchle spustenie akcie zdieľania Androidu.]]></string>
+    <string name="minimize_action_explanation"><![CDATA[<b>Minimalizovať -</b> Minimalizuje aktuálnu stránku späť do bubliny. Dostupné iba ak je povolené <i>Webové hlavičky</i> a <i>Zlúčenie kariet a aplikácií</i>.]]></string>
+    <string name="available_actions">Dostupné akcie</string>
+    <string name="secondary_browser_launching_error_title">Vyskytla sa chyba pri spúšťaní sekundárneho prehliadača</string>
+    <string name="launch_setting">Nastavenia spustenia</string>
+    <string name="secondary_browser_not_installed">Vyzerá to, že sekundárny prehliadač, ktorý ste zvolili, už nie je nainštalovaný. Chcete zobraziť nastavenia aby ste mohli toto nastavenie zmeniť?</string>
+    <string name="secondary_browser_launch_error">Odkaz nie je možné spustiť v prehliadači, ktorý ste zvolili. Chcete toto nastavenie zmeniť?</string>
+    <string name="secondary_browser_not_error">Zablokovali ste túto aplikáciu pre spúšťanie odkazov v Chromer a nenastavili ste sekundárny prehliadač. Chcete teraz nastaviť sekundárny prehliadač?</string>
+    <string name="copy_all">Kopírovať všetko</string>
+    <string name="choose_share_method">Zvoľte metódu zdieľania</string>
+    <string name="comma_seperated">Oddelené čiarkou</string>
+    <string name="share_all_list">Zoznam - Obmedzená podpora aplikácie. Napr. Join, Pushbullet, atď.</string>
+    <string name="new_tab">Otvoriť novú kartu</string>
+    <string name="title_activity_open_with">Otvoriť s</string>
+    <string name="title_activity_settings">Nastavenia</string>
+    <string name="settings_browsing_mode">Režim prehiadania</string>
+    <string name="settings_look_and_feel">Vzhľad a dojem</string>
+    <string name="settings_browsing_options">Možnosti prehiadania</string>
+    <string name="title_activity_browsing_mode">Režim prehiadania</string>
+    <string name="browsing_mode_slide_over">Vysunúť cez aplikáciu</string>
+    <string name="browsing_mode_web_heads">Webové hlavičky</string>
+    <string name="browsing_mode_slide_over_explanation">Webové stránky sa vysunú cez aplikáciu, ktorú používate.</string>
+    <string name="browsing_mode_web_heads_explanation">Webové stránky načítavané na pozadí, vám umožňujú zoskupiť viacero odkazov a potom sa k nim vrátiť pomocou bublín na obrazovke.</string>
+    <string name="load_faster_heading">Načítať stránky rýchlejšie pomocou možností nižšie</string>
+    <string name="amp">Accelerated Mobile Pages (AMP)</string>
+    <string name="amp_mode">AMP režim</string>
+    <string name="amp_summary">Načíta optimalizované verzie stránok pre rýchlejšie a pohodlnejšie čítanie.</string>
+    <string name="article_mode">Režim článok</string>
+    <string name="article_theme">Téma článku</string>
+    <string name="article_mode_summary">Načíta elegatne vyzerajúci článok zameraný na obsah bez zbytočností okolo.</string>
+    <string name="amp_warning_title">AMP upozornenie</string>
+    <string name="amp_warning_content"><![CDATA[V režime <b>Vysunúť cez aplikáciu</b> môže získanie AMP adresy chvíľu trvať. Uvidíte dialógové okno s informáciou.]]></string>
+    <string name="title_activity_look_and_feel">Vzhľad a dojem</string>
+    <string name="not_available_in_slide_mode">Nie je dostupné v režime vysunutia cez aplikáciu</string>
+    <string name="title_activity_browsing_options">Možnosti prehiadania</string>
+    <string name="grabbing_amp_link">Získavanie AMP odkazu</string>
+    <string name="link_found">Odkaz nájdený!</string>
+    <string name="link_not_found">AMP odkaz nenájdený</string>
+    <string name="open">Otvoriť</string>
+    <string name="open_full_page">Otvoriť úplnú stránku</string>
+    <string name="more">Viac</string>
+    <string name="title_history">História</string>
+    <string name="deleted_items">Vymazaných položiek: %1$d</string>
+    <string name="are_you_sure">Ste si istý?</string>
+    <string name="history_deletion_confirmation_content">Táto akcie vymaže celú históriu a nie je to možné vrátiť späť.</string>
+    <string name="incognito_mode">Režim inkognito</string>
+    <string name="recents_intro">Tu sa zobrazia nedávno otvorené odkazy</string>
+    <string name="amp_article_combined_explanation"><![CDATA[Ak sú povolené režimy <b>AMP aj článok</b>, Chromer sa pokúsi načítať AMP verziu stránky, ak je dostupná. Ak nie, bude načítaná v režime článok.]]></string>
+    <string name="attention">Upozornenie!</string>
+    <string name="manage">Spravovať</string>
+    <string name="more_menu">Viac</string>
+    <string name="open_article_view">Otvoriť v zobrazení článku</string>
+    <string name="browse_seamlessly">Prehliadajte hladko</string>
+    <string name="slide_over_explanation">Webové stránky sa vysunú cez aplikáciu, ktorú používate a môžete použiť tlačidlo X pre rýchle vrátenie sa do aplikácie</string>
 </resources>

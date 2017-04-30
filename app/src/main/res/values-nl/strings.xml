@@ -15,7 +15,6 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-
 <resources>
     <string-array name="animationValues">
         <item>Geen</item>
@@ -29,11 +28,16 @@
     <string-array name="actionValues">
         <item>Tweede browser</item>
         <item>Favoriete deel-app</item>
-        <item>General share</item>
+        <item>Gewoon delen</item>
     </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>Rechts</item>
         <item>Links</item>
+    </string-array>
+    <string-array name="articleThemeValues">
+        <item>Donker</item>
+        <item>Licht</item>
+        <item>Automatisch</item>
     </string-array>
     <string-array name="webHeadsSizeValues">
         <item>Normaal</item>
@@ -53,7 +57,6 @@
     <string name="help_chromer_grow">Help Chromer groter te worden!</string>
     <string name="share">Delen</string>
     <string name="share_with">Delen met %1$s</string>
-    <string name="more_custom_tbs">Meer over aangepaste tabbladen.</string>
     <string name="rate_play_store">Beoordelen in de Play Store.</string>
     <string name="feedback">Feedback</string>
     <string name="intro">Intro</string>
@@ -72,12 +75,9 @@
     <string name="copy_link">Link kopiëren</string>
     <string name="add_to_homescreen">Toevoegen aan thuisscherm</string>
     <string name="intro_1">Hallo!\nChromer is een lichtgewicht, veilige en snelle webbrowser.</string>
-    <string name="intro_2">Chromer gebruikt de aangepaste tabbladen-functie van Chrome, een lichtgewicht tabblad ontworpen voor het snel laden van links.</string>
-    <string name="intro_5_new">Chromer kan naar links op je scherm scannen en ze in de achtergrond laden om laadprestaties te verbeteren.\n\nChromer kan de browser ook in het geheugen houden om starttijden te verminderen.</string>
-    <string name="intro_4_new">Chromer kan meerder links in zwevende bellen opstapelen en ze dan op de achtergrond laden!\n\n<b>KOM MEER TE WETEN</b></string>
+    <string name="intro_4_new">Chromer kan meerdere links in zwevende rondjes opstapelen en ze dan op de achtergrond laden!\n\n<b>MEER INFORMATIE</b></string>
     <string name="how_to_use">Hoe gebruik je dit?</string>
     <string name="intro_6">Stel Chromer in als standaardbrowser en Chromer zal de link op een niet-opdringerige manier laten zien. Of kies Chromer wanneer dit nodig is.</string>
-    <string name="why_use">Waarom gebruiken?</string>
     <string name="version">Versie</string>
     <string name="changelog">Changelog</string>
     <string name="join_google_plus">Google+ community</string>
@@ -101,9 +101,9 @@
     <string name="keep_chrome_warmedup">Browser in het geheugen houden om sneller te starten</string>
     <string name="warmup_browser">Browser opwarmen</string>
     <string name="set_default_chromer">Als standaardbrowser instellen</string>
-    <string name="default_provider">Aangepaste tabbladen-leverancier</string>
+    <string name="default_provider">Tabbladen-leverancier</string>
     <string name="pre_fetch_content">Inhoud van tevoren laden</string>
-    <string name="pre_fetch_desc">Scherm scannen voor links en ze in de achtergrond laden om ze meteen te openen</string>
+    <string name="pre_fetch_desc">Scherm scannen voor links en ze in de achtergrond laden om ze snel te kunnen openen</string>
     <string name="accessibility_description">Deze service zal door Chromer worden gebruikt om links op het scherm te zoeken en deze op de achtergrond te laden. Geen andere informatie wordt door Chromer verwerkt. Je kan Chromer nog steeds in de lichte modus gebruiken als je ervoor kiest dit niet toe te staan. Start de Chromer app voor meer informatie.</string>
     <string name="accessibility_dialog_title">Togang tot toegankelijkheid vereist</string>
     <string name="accessibility_dialog_desc">Om Chromer toe te staan om links in alle apps te zoeken heeft het toegang nodig tot toegankelijkheid. Geef toegang op het volgende scherm, hierna kan je deze optie inschakelen en van snelle starts genieten.</string>
@@ -139,14 +139,14 @@
     <string name="credits">Credits</string>
     <string name="icon_design">Ontwerp van icoon</string>
     <string name="overlay_permission_content">Om webheads op het scherm te zetten heeft Chromer toestemming nodig om over andere apps te tekenen. Wil je daar nu toestemming voor geven?</string>
-    <string name="webheads_intro_1">Wanneer je een link in welke app dan ook opent, verschijnt er een rondje genaamd webhead op het scherm en zal Chromer proberen de link van tevoren te laden.</string>
-    <string name="webheads_intro_2_new">Als er meerdere links geopend zijn stapelen webheads zich automatisch op. Houdt een webhead lang ingedrukt om het contextmenu te openen.</string>
+    <string name="webheads_intro_1">Wanneer je een link in welke app dan ook opent, verschijnt er een rondje genaamd <i>webhead</i> op het scherm en zal Chromer proberen de link van tevoren te laden.</string>
+    <string name="webheads_intro_2_new">Als er meerdere links geopend zijn stapelen webheads zich automatisch op. Hou een webhead lang ingedrukt om het optie-menu te openen.</string>
     <string name="webheads_intro_3">Wanneer je een webhead sleept verschijnt er een prullenbak. Laat de webhead boven de prullenbak los om de webhead te verwijderen.</string>
-    <string name="webheads_intro_4_lolli">Agressief laden op de achtergrond laadt de pagina op de achtergrond terwijl je de app die je op dat moment gebruikt niet hoeft te verlaten.\n<b>Het kan gebeuren dat het beeld knippert  als je het tabblad opent. Dit is de bedoeling en geen fout.</b></string>
+    <string name="webheads_intro_4_lolli">Agressief laden op de achtergrond laadt de pagina op de achtergrond terwijl je je huidige app niet hoeft te verlaten.\n<b>Het beeld kan knipperen als je een tabblad opent. Dit is de bedoeling en geen fout.</b></string>
     <string name="webheads_intro_4">Chromer geeft de laatst geopende link prioriteit en laadt deze alvast. De beste manier is om van boven naar beneden op de webheads te tikken. \“Webheads sluiten\” inschakelen is het beste.</string>
     <string name="web_head_permission_toast">Om links in zwevende rondjes te openen heeft Chromer toestemming nodig om over andere apps te tekenen. Geef toestemming om webheads te blijven gebruiken of schakel webheads uit in de instellingen van Chromer.</string>
     <string name="tap_close_all">Tik om alles te sluiten</string>
-    <string name="web_heads_service">Webheadservice</string>
+    <string name="web_heads_service">Webhead-service</string>
     <string name="join_beta">Bètaversie</string>
     <string name="become_a_tester">Tester worden</string>
     <string name="join_beta_content">Bèta-versies zijn experimenteel en hebben de nieuwste functies, maar wel een aantal bugs. Je kan bijdragen aan de ontwikkeling van Chromer door tester te worden en dan alle bugs die je vindt in de Google+ community te delen.\n\nWord eerst lid van de Google+ community en klik dan op de \‘Tester worden\’\-knop om naar de Google Play test-link te gaan.\n\nLET OP: Je moet lid worden van de Google+ community om een tester te worden.</string>
@@ -154,23 +154,20 @@
     <string name="blacklisted_apps">Apps op de zwarte lijst</string>
     <string name="blacklisted_explanation">Chromer niet gebruiken voor links van bepaalde apps</string>
     <string name="loading">Laden…</string>
-    <string name="please_wait">Even geduld</string>
-    <string name="blacklist_message">Je hebt deze app in de zwarte lijst gezet waardoor deze niet via Chromer opent, maar je hebt geen tweede browser ingesteld. Kies een browser om verder te gaan.</string>
     <string name="share_failed_msg">Kan niet via de app delen, terugvallen naar normaal delen</string>
-    <string name="blacklist_explanation">Links uit een app op de zwarte lijst openen in de tweede browser</string>
     <string name="revoke_accessibility_permission">Je kan nu de toegankelijkheidsrechten van Chromer terugdraaien.</string>
     <string name="last_fetched_urls">Laatst voorgeladen URLs</string>
+    <string name="blacklist_on">\‘Apps op de zwarte lijst\‘ is ingeschakeld</string>
     <string name="blacklist_off">\‘Apps op de zwarte lijst\‘ is uitgeschakeld</string>
     <string name="translations">Vertalingen</string>
     <string name="merge_tabs">Tabbladen samenvoegen met apps</string>
     <string name="merge_tabs_explanation">Tabbladen samen met andere recente apps weergeven op het recente-apps-scherm</string>
     <string name="already_loaded">Al geladen</string>
-    <string name="add_home_screen_begun">Snelkoppeling wordt binnenkort toegevoegd.</string>
+    <string name="add_home_screen_begun">Snelkoppeling wordt toegevoegd</string>
     <string name="bottom_bar_pref_summary">Toolbar met extra opties</string>
-    <string name="bottom_bar_pref_title">Bar onderaan weergeven</string>
-    <string name="bottom_bar">Bar onderaan</string>
+    <string name="bottom_bar_pref_title">Balk onderaan weergeven</string>
+    <string name="bottom_bar">Balk onderaan</string>
     <string name="open_in_new_tab">Openen op nieuw tabblad</string>
-    <string name="open_in_new_tab_error">Ongeldige link, heb je wel tekst of een link gekopieerd door lang op de pagina te drukken?</string>
     <string name="options">Opties</string>
     <string name="customize">Aanpassen</string>
     <string name="not_set">"Niet ingesteld "</string>
@@ -179,32 +176,76 @@
     <string name="behavior_preferences">Gedrag</string>
     <string name="additional_preferences">Overig</string>
     <string name="notifications">Meldingen</string>
-    <string name="web_heads_enabled">Webheads ingeschakeld! Je kan nu meerdere links stapelen en ze later bekijken.</string>
-    <string name="web_heads_title">Je kan meerdere links stapelen en ze later bekijken</string>
-    <string name="web_heads_description">Links in zwevende rondjes openen</string>
     <string name="webhead_size_title">Formaat</string>
     <string name="webhead_size_dialog">Formaat van webheads</string>
     <string name="changelog_skipped">Changelog overgeslagen vanwege een fout</string>
     <string name="see_whats_new">Wat is er nieuw?</string>
     <string name="help_translations">Help met vertalen van de app naar jouw taal</string>
-    <string name="close_all_explanation">Vinger optillen om alle webheads te sluiten</string>
     <string name="aggressive_background_loading">Agressief laden op de achtergrond</string>
-    <string name="aggressive_background_loading_desc">Webpagina\'s worden op de achtergrond geladen in plaats van dat ze alvast ontvangen worden.</string>
-    <string name="aggresive_dia_title">Tabbladen en apps samen weergeven is vereist.</string>
-    <string name="aggresive_dia_content">Agressief laden op de achtergrond vereist dat de voorkeur \“Tabbladen en apps samen weergeven\” is ingeschakeld. Het is momenteel ingeschakeld.</string>
-    <string name="merge_tabs_off_title">Attentie</string>
-    <string name="merget_tabs_off_content">Het uitschakelen van tabbladen en apps samen weergeven schakeld ook agressief laden op de achtergrond uit.</string>
+    <string name="aggressive_background_loading_desc">Webpagina\'s worden op de achtergrond geladen in plaats van dat ze vooraf geladen worden.</string>
+    <string name="aggresive_dia_title">\'Tabbladen samenvoegen met apps\' vereist</string>
+    <string name="aggresive_dia_content">Agressief laden op de achtergrond vereist dat \'Tabbladen samenvoegen met apps\' is ingeschakeld. Die optie is nu ingeschakeld.</string>
+    <string name="merge_tabs_off_title">Let op</string>
+    <string name="merget_tabs_off_content">\‘Tabbladen samenvoegen met apps\‘ uitschakelen schakelt ook \‘Agressief laden op de achtergrond\‘ uit.</string>
     <string name="web_sites">Websites</string>
-    <string name="share_all">Deel alle</string>
+    <string name="share_all">Alles delen</string>
     <string name="thank_you">Heel erg bedankt!</string>
-    <string name="tile_label">Webheads</string>
-    <string name="save_time">Bespaar tijd</string>
+    <string name="save_time">Tijd besparen</string>
     <string name="multiple_links">Meerdere links</string>
-    <string name="web_heads_intro">Intro over webheads</string>
-    <string name="avoid_back_fatigue">Vermijdt te veel op terug drukken.</string>
-    <string name="intro_back_fatigue">Het maakt niet uit hoe ver je navigeert met een link, je kan altijd <b>op X drukken</b> om snel terug te keren naar de vorige app.</string>
-    <string name="merge_tabs_explanation_intro">Jouw apps en websites leven samen op het \“recent\” scherm.</string>
-    <string name="improves_loading_times">Verbetert laadtijden</string>
+    <string name="merge_tabs_explanation_intro">Jouw apps en websites leven samen op het recente-apps-scherm.</string>
     <string name="web_close_on_open_desc">Webheads verdwijnen zodra je een link opent</string>
     <string name="web_close_on_open_title">Webheads sluiten na aantikken</string>
+    <string name="minimize">Minimaliseren</string>
+    <string name="open_in_new_tab_explanation"><![CDATA[<b>In nieuw tabblad openen (5.0+) -</b> Kopieer een link of tekst op het scherm en tik dit pictogram om de link te openen of de gekopieerde tekst te zoeken in een nieuw aangepast tabblad of zwevend rondje.]]></string>
+    <string name="share_action_explanation"><![CDATA[<b>Delen -</b> Snel de Android-actie <i>Delen<i> uitvoeren.]]></string>
+    <string name="minimize_action_explanation"><![CDATA[<b>Minimaliseren -</b> Zal de huidige pagina minimaliseren naar een zwevend rondje. Alleen beschikbaar als de opties <i>Webheads</i> en <i>Tabbladen samenvoegen</i> ingeschakeld zijn.]]></string>
+    <string name="available_actions">Beschikbare acties</string>
+    <string name="secondary_browser_launching_error_title">Fout bij laden van tweede browser</string>
+    <string name="launch_setting">Instellingen van openen</string>
+    <string name="secondary_browser_not_installed">Het lijkt er op dat de tweede browser die je hebt gekozen niet geïnstalleerd is op het systeem. Wil je het instellingenscherm openen om je keuze van tweede browser aan te passen?</string>
+    <string name="secondary_browser_launch_error">Kan de link niet openen met de browser die je hebt gekozen. Wil je deze instelling aanpassen?</string>
+    <string name="secondary_browser_not_error">Je hebt deze app op de zwarte lijst gezet zodat deze geen links van Chromer kan openen, maar geen tweede browser gekozen. Wil je nu een tweede browser instellen?</string>
+    <string name="copy_all">Alles kopiëren</string>
+    <string name="choose_share_method">Deel-methode kiezen</string>
+    <string name="comma_seperated">Kommagescheiden</string>
+    <string name="share_all_list">Lijst - Beperkte app-ondersteuning, bijv. Join, Pushbullet, enz.</string>
+    <string name="new_tab">Nieuw tabblad openen</string>
+    <string name="title_activity_open_with">Openen met</string>
+    <string name="title_activity_settings">Instellingen</string>
+    <string name="settings_browsing_mode">Browsing</string>
+    <string name="settings_look_and_feel">Uiterlijk</string>
+    <string name="settings_browsing_options">Instellingen</string>
+    <string name="title_activity_browsing_mode">Browsing</string>
+    <string name="browsing_mode_slide_over">Schuiven</string>
+    <string name="browsing_mode_web_heads">Webheads</string>
+    <string name="browsing_mode_slide_over_explanation">Websites schuiven over de huidige app.</string>
+    <string name="browsing_mode_web_heads_explanation">Websites worden op de achtergrond geladen, zodat u meerdere links kan opstapelen in zwevende bellen en deze later kan openen.</string>
+    <string name="amp">Accelerated Mobile Pages (AMP)</string>
+    <string name="amp_mode">AMP-modus</string>
+    <string name="article_mode">Artikelweergave</string>
+    <string name="article_theme">Thema van artikelen</string>
+    <string name="amp_warning_title">Waarschuwing bij AMP</string>
+    <string name="amp_warning_content"><![CDATA[Indien <b>Schuiven</b> is gekozen, kan het even duren tot de AMP-link gevonden is. Er wordt dan een pop-up weergegeven.]]></string>
+    <string name="title_activity_look_and_feel">Uiterlijk</string>
+    <string name="not_available_in_slide_mode">Niet beschikbaar bij de optie Schuiven</string>
+    <string name="title_activity_browsing_options">Browsing</string>
+    <string name="grabbing_amp_link">AMP-link openen</string>
+    <string name="link_found">Link gevonden!</string>
+    <string name="link_not_found">AMP-link niet gevonden</string>
+    <string name="open">Openen</string>
+    <string name="open_full_page">Volledige pagina openen</string>
+    <string name="more">Meer</string>
+    <string name="title_history">Geschiedenis</string>
+    <string name="deleted_items">%1$d items verwijderd.</string>
+    <string name="are_you_sure">Weet u het zeker?</string>
+    <string name="history_deletion_confirmation_content">Dit zal de complete geschiedenis verwijderen en kan niet ongedaan worden gemaakt.</string>
+    <string name="incognito_mode">Incognitomodus</string>
+    <string name="recents_intro">Recent geopende links zullen hier staan</string>
+    <string name="amp_article_combined_explanation"><![CDATA[Als <b>AMP en Artikelmodus beide ingeschakeld zijn</b>, zal Chromer proberen de AMP-versie van de pagina te laden als deze bestaat. Zo niet, zal de pagina in Artikelweergave worden geladen.]]></string>
+    <string name="attention">Let op</string>
+    <string name="manage">Beheren</string>
+    <string name="more_menu">Meer</string>
+    <string name="open_article_view">Artikelweergave openen</string>
+    <string name="browse_seamlessly">Naadloos bladeren</string>
+    <string name="slide_over_explanation">Webpagina\'s schuiven over de de app die u op dat moment gebruikt en snel gesloten worden met een tik op de X.</string>
 </resources>

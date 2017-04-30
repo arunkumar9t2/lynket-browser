@@ -15,7 +15,6 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-
 <resources>
     <string-array name="animationValues">
         <item>无动画</item>
@@ -38,7 +37,7 @@
     <string-array name="actionValues">
         <item>第二浏览器</item>
         <item>最喜欢的分享应用</item>
-        <item>General share</item>
+        <item>常规分享</item>
     </string-array>
     <string-array name="actionKeys">
         <item>1</item>
@@ -52,6 +51,11 @@
     <string-array name="webHeadsSpawnKeys">
         <item>1</item>
         <item>2</item>
+    </string-array>
+    <string-array name="articleThemeValues">
+        <item>暗色</item>
+        <item>亮色</item>
+        <item>自动</item>
     </string-array>
     <string-array name="webHeadsSizeValues">
         <item>正常</item>
@@ -71,7 +75,6 @@
     <string name="help_chromer_grow">帮助 Chromer 成长！</string>
     <string name="share">分享</string>
     <string name="share_with">分享至 %1$s</string>
-    <string name="more_custom_tbs">详细了解自定义标签页</string>
     <string name="rate_play_store">在 Play 商店内评价</string>
     <string name="feedback">反馈</string>
     <string name="intro">简介</string>
@@ -90,12 +93,9 @@
     <string name="copy_link">复制链接</string>
     <string name="add_to_homescreen">添加至主屏幕</string>
     <string name="intro_1">您好！\nChromer 是一款轻量化，安全且高速的网页浏览器。</string>
-    <string name="intro_2">它使用谷歌 Chrome 浏览器中的自定义标签页功能。这是一种极为轻量化的 Chrome 标签页，可以用来快速的加载一个链接。</string>
-    <string name="intro_5_new">它可以检索你屏幕上的链接并在后台加载它们以改善渲染性能。\n它还可以将浏览器保留在内存中以加快启动时间。</string>
     <string name="intro_4_new">它可以在您点击多个链接时创建叠加式的浮动气泡并选择在后台加载它们！\n\n<b>了解更多</b></string>
     <string name="how_to_use">要如何使用？</string>
     <string name="intro_6">将 Chromer 设置成你的默认浏览器，Chromer 将会以非入侵的方式显示您所打开的链接。此外您还可以选择仅在需要时调用它。</string>
-    <string name="why_use">为什么使用它？</string>
     <string name="version">版本</string>
     <string name="changelog">更新日志</string>
     <string name="join_google_plus">加入 Google+ 社群</string>
@@ -172,12 +172,10 @@
     <string name="blacklisted_apps">黑名单应用</string>
     <string name="blacklisted_explanation">阻止 Chromer 打开来自特定应用的链接</string>
     <string name="loading">正在加载…</string>
-    <string name="please_wait">请等待</string>
-    <string name="blacklist_message">您已将这个程序加入到了黑名单中，Chromer 将不会被用来打开其中的链接。当前您还没有设置过第二浏览器，请选择一个浏览器以继续。</string>
     <string name="share_failed_msg">无法分享到应用，默认返回标准分享</string>
-    <string name="blacklist_explanation">在黑名单应用中打开的链接将于第二浏览器中加载</string>
     <string name="revoke_accessibility_permission">您现在可以撤销掉 Chromer 的无障碍服务了</string>
     <string name="last_fetched_urls">最近获取过的网址</string>
+    <string name="blacklist_on">黑名单应用 %s</string>
     <string name="blacklist_off">已禁用的黑名单应用</string>
     <string name="translations">翻译</string>
     <string name="merge_tabs">合并标签页和应用</string>
@@ -188,7 +186,6 @@
     <string name="bottom_bar_pref_title">显示底栏</string>
     <string name="bottom_bar">底栏</string>
     <string name="open_in_new_tab">在新标签页中打开</string>
-    <string name="open_in_new_tab_error">无效的链接，您是否已通过长按页面操作复制了文本或者链接？</string>
     <string name="options">选项</string>
     <string name="customize">自定义</string>
     <string name="not_set">未设置</string>
@@ -197,15 +194,11 @@
     <string name="behavior_preferences">行为</string>
     <string name="additional_preferences">其他</string>
     <string name="notifications">通知</string>
-    <string name="web_heads_enabled">链接气泡已启用！您现在可以队列多条链接并在稍后查看它们</string>
-    <string name="web_heads_title">堆叠多条链接以便稍后查看</string>
-    <string name="web_heads_description">在浮动气泡中打开链接</string>
     <string name="webhead_size_title">尺寸</string>
     <string name="webhead_size_dialog">选择链接气泡尺寸</string>
     <string name="changelog_skipped">由于一个错误，已跳过更新日志</string>
     <string name="see_whats_new">看看有什么更新</string>
     <string name="help_translations">帮助翻译软件至您所使用的语言</string>
-    <string name="close_all_explanation">松开手指来关闭所有的链接气泡</string>
     <string name="aggressive_background_loading">完整的后台加载</string>
     <string name="aggressive_background_loading_desc">网页将在后台被完全加载而不仅只为预读取</string>
     <string name="aggresive_dia_title">需要启用合并标签页和应用</string>
@@ -215,14 +208,54 @@
     <string name="web_sites">网站</string>
     <string name="share_all">分享所有</string>
     <string name="thank_you">非常感谢！</string>
-    <string name="tile_label">链接气泡</string>
     <string name="save_time">节省时间</string>
     <string name="multiple_links">多条链接</string>
-    <string name="web_heads_intro">链接气泡介绍</string>
-    <string name="avoid_back_fatigue">避免频繁使用回退键</string>
-    <string name="intro_back_fatigue">无论您浏览至链接的何处，都可以通过<b>点击 X</b> 来快速返回至您的前一个应用。</string>
     <string name="merge_tabs_explanation_intro">您的应用和链接气泡都将显示在最近任务列表里</string>
-    <string name="improves_loading_times">改善加载时间</string>
     <string name="web_close_on_open_desc">链接气泡将在您打开链接后消失</string>
     <string name="web_close_on_open_title">在点击后关闭链接气泡</string>
+    <string name="minimize">最小化</string>
+    <string name="open_in_new_tab_explanation"><![CDATA[<b>在新标签页打开 (5.0+) -</b> 复制屏幕上的一个链接或一段文本，点击这个图标以在一个新标签或气泡中打开该链接或搜索复制的文本。]]></string>
+    <string name="share_action_explanation"><![CDATA[<b>分享 -</b> 快速地执行 Android 分享动作。]]></string>
+    <string name="minimize_action_explanation"><![CDATA[<b>最小化 -</b> 将最小化当前页面到一个气泡。只在<i>链接气泡与合并标签页</i>功能开启时可用。]]></string>
+    <string name="available_actions">可用动作</string>
+    <string name="secondary_browser_launching_error_title">启动第二浏览器时出错</string>
+    <string name="launch_setting">启动设置</string>
+    <string name="secondary_browser_not_installed">看起来您选定的第二浏览器已经不存在于当前系统了。您是否希望前往设置页面编辑您的第二浏览器偏好？</string>
+    <string name="secondary_browser_launch_error">无法使用您选定的浏览器启动此链接。您是否希望编辑设置？</string>
+    <string name="secondary_browser_not_error">您已经将此应用列入阻止 Chromer 处理链接的黑名单，但并没有设置第二浏览器。您是否希望立刻设置您的第二浏览器？</string>
+    <string name="copy_all">全部复制</string>
+    <string name="title_activity_settings">设置</string>
+    <string name="settings_browsing_mode">浏览模式</string>
+    <string name="settings_look_and_feel">外观</string>
+    <string name="settings_browsing_options">浏览选项</string>
+    <string name="title_activity_browsing_mode">浏览模式</string>
+    <string name="browsing_mode_slide_over">滑出页面</string>
+    <string name="browsing_mode_web_heads">链接气泡</string>
+    <string name="browsing_mode_slide_over_explanation">网站滑出到您正在使用的应用上层。</string>
+    <string name="browsing_mode_web_heads_explanation">网站在后台载入，使您可以保留多个链接，随后可以利用屏幕上的链接气泡重新返回浏览。</string>
+    <string name="load_faster_heading">使用下列选项加快页面载入</string>
+    <string name="amp">加速移动页面 (AMP)</string>
+    <string name="amp_mode">AMP 模式</string>
+    <string name="amp_summary">加载优化的网站移动版本，提供更快更流畅的阅读体验。</string>
+    <string name="article_mode">阅读模式</string>
+    <string name="article_theme">阅读模式主题</string>
+    <string name="article_mode_summary">加载雅致的阅读器模式，聚焦于内容，不含多余元素。</string>
+    <string name="amp_warning_title">AMP 模式警告</string>
+    <string name="title_activity_look_and_feel">界面外观</string>
+    <string name="open">打开</string>
+    <string name="open_full_page">打开完整页面</string>
+    <string name="more">更多</string>
+    <string name="title_history">历史</string>
+    <string name="deleted_items">已删除 %1$d 个项目。</string>
+    <string name="are_you_sure">您确定吗？</string>
+    <string name="history_deletion_confirmation_content">此动作将删除所有历史，且无法撤销。</string>
+    <string name="incognito_mode">隐身模式</string>
+    <string name="recents_intro">最近打开过的链接将显示在此处</string>
+    <string name="amp_article_combined_explanation"><![CDATA[当 <b>AMP 与文章模式同时开启</b>时，Chromer 将尝试加载该页面的 AMP 版本。如果 AMP 版本不可用，将载入文章模式。]]></string>
+    <string name="attention">注意！</string>
+    <string name="manage">管理</string>
+    <string name="more_menu">更多</string>
+    <string name="open_article_view">打开文章视图</string>
+    <string name="browse_seamlessly">无缝浏览</string>
+    <string name="slide_over_explanation">网页会滑出到当前使用的应用上方，您可以点击 X 来快速返回到先前应用</string>
 </resources>

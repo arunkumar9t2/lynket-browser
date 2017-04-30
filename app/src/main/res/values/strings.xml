@@ -15,7 +15,6 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-
 <resources>
     <string-array name="animationValues">
         <item>None</item>
@@ -82,7 +81,6 @@
     <string name="help_chromer_grow">Help Chromer grow!</string>
     <string name="share">Share</string>
     <string name="share_with">Share with %1$s</string>
-    <string name="more_custom_tbs">More on custom tabs</string>
     <string name="rate_play_store">Rate on Play Store</string>
     <string name="feedback">Feedback</string>
     <string name="intro">Intro</string>
@@ -101,13 +99,9 @@
     <string name="copy_link">Copy link</string>
     <string name="add_to_homescreen">Add to Home Screen</string>
     <string name="intro_1">Hello! \nChromer is a light-weight, secure and a fast web browser.</string>
-    <string name="intro_2">It uses Google Chrome\'s Custom Tabs feature which is an extremely light weight Chrome tab designed for quickly loading a link.</string>
-    <string name="intro_5_new">It can scan links on your screen and load them in background to increase rendering performance. \n \n It can also keep browser in memory to improve launch times.</string>
     <string name="intro_4_new">It can stack multiple links in floating bubbles when you open them and then load them in background! \n \n<b>LEARN MORE</b></string>
     <string name="how_to_use">How to use this?</string>
     <string name="intro_6">Just set Chromer as your default browser, Chromer will display the link in a non-intrusive way. Or choose Chromer when needed.</string>
-    <string name="why_use">Why use?</string>
-    <string name="chromer_advantages"><![CDATA[<b>Chrome Custom Tabs -</b> Chrome custom tab is the recommended way for displaying web content and is light weight and faster. Your browsing activity like bookmarks, passwords and history are synced with your account. \n<b>AMP -</b> AMP mode saves data and loads the web page very quickly.\n<b>Article -</b> Article mode further enhances the browsing experience by removing unnecessary content.\n<b>Web heads -</b> Web heads save time by conveniently loading multiple links in the background.]]></string>
     <string name="version">Version</string>
     <string name="changelog">Changelog</string>
     <string name="join_google_plus">Join Google+ Community</string>
@@ -184,10 +178,7 @@
     <string name="blacklisted_apps">Blacklisted apps</string>
     <string name="blacklisted_explanation">Exclude Chromer from handling links from certain apps</string>
     <string name="loading">Loading…</string>
-    <string name="please_wait">Please wait</string>
-    <string name="blacklist_message">You have blacklisted this app from launching in Chromer and have not set a secondary browser. Please choose a browser to continue.</string>
     <string name="share_failed_msg">Could not share to the app, defaulting to normal share</string>
-    <string name="blacklist_explanation">Launching links from a blacklisted app will open them in your secondary browser</string>
     <string name="revoke_accessibility_permission">You can now revoke Chromer\'s accessibility service permission.</string>
     <string name="last_fetched_urls">Last fetched urls</string>
     <string name="blacklist_on">Blacklisting apps turned on</string>
@@ -201,7 +192,6 @@
     <string name="bottom_bar_pref_title">Show bottom bar</string>
     <string name="bottom_bar">Bottom Bar</string>
     <string name="open_in_new_tab">Open in new tab</string>
-    <string name="open_in_new_tab_error">Invalid link, have you copied any text or link by long pressing the page?</string>
     <string name="options">Options</string>
     <string name="customize">Customize</string>
     <string name="not_set">Not Set</string>
@@ -210,15 +200,11 @@
     <string name="behavior_preferences">Behavior</string>
     <string name="additional_preferences">Additional</string>
     <string name="notifications">Notifications</string>
-    <string name="web_heads_enabled">Web heads enabled! You can now queue multiple links and view them later.</string>
-    <string name="web_heads_title">You can stack multiple links and view them later</string>
-    <string name="web_heads_description">Open links in floating bubbles</string>
     <string name="webhead_size_title">Size</string>
     <string name="webhead_size_dialog">Choose the size of web heads</string>
     <string name="changelog_skipped">Changelog skipped due to an error</string>
     <string name="see_whats_new">See what\'s new</string>
     <string name="help_translations">Help translate app to your language</string>
-    <string name="close_all_explanation">Release finger to close all web heads</string>
     <string name="aggressive_background_loading">Aggressive background loading</string>
     <string name="aggressive_background_loading_desc">Web pages will be loaded in background instead of just pre-fetching</string>
     <string name="aggresive_dia_title">Merge tabs and apps required</string>
@@ -228,14 +214,9 @@
     <string name="web_sites">Websites</string>
     <string name="share_all">Share all</string>
     <string name="thank_you">Thank you very much!</string>
-    <string name="tile_label">Web heads</string>
     <string name="save_time">Save time</string>
     <string name="multiple_links">Multiple links</string>
-    <string name="web_heads_intro">Web Heads Intro</string>
-    <string name="avoid_back_fatigue">Avoid back press fatigue</string>
-    <string name="intro_back_fatigue">No matter how deep you navigated from a link, you can always <b>press X</b> to quickly return to your previous app.</string>
     <string name="merge_tabs_explanation_intro">Your apps and web site tabs live together in your recents screen.</string>
-    <string name="improves_loading_times">Improves loading times</string>
     <string name="web_close_on_open_desc">Web heads will disappear once you open the link</string>
     <string name="web_close_on_open_title">Close web heads once clicked.</string>
     <string name="minimize">Minimize</string>
@@ -286,7 +267,6 @@
     <string name="are_you_sure">Are you sure?</string>
     <string name="history_deletion_confirmation_content">This action will delete all history and it is not reversible.</string>
     <string name="incognito_mode">Incognito mode</string>
-    <string name="history_link">History</string>
     <string name="recents_intro">Recently opened links will appear here</string>
     <string name="amp_article_combined_explanation"><![CDATA[When both <b>AMP and Article mode is on</b>, Chromer will try to load AMP version of the page if it exists. If not article mode will be loaded.]]></string>
     <string name="attention">Attention!</string>

@@ -15,7 +15,6 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-
 <resources>
     <string-array name="animationValues">
         <item>Nessuno</item>
@@ -55,7 +54,6 @@
     <string name="help_chromer_grow">Aiuta Chromer a crescere!</string>
     <string name="share">Condividi</string>
     <string name="share_with">Condividi con %1$s</string>
-    <string name="more_custom_tbs">Più informazioni su custom tabs</string>
     <string name="rate_play_store">Vota sul Play store</string>
     <string name="feedback">Feedback</string>
     <string name="intro">Intro</string>
@@ -74,10 +72,8 @@
     <string name="copy_link">Copia link</string>
     <string name="add_to_homescreen">Aggiungi alla home screen</string>
     <string name="intro_1">Ciao!\nChromer è un web browser leggero, sicuro e veloce.</string>
-    <string name="intro_2">Usa le custom tab di Chrome che sono delle pagine leggere sviluppate apposta per caricare velocemente un link.</string>
     <string name="how_to_use">Come usare questo?</string>
     <string name="intro_6">Imposta Chromer come broswer definitivo, e visualizzerà i link in maniera non intrusiva. O seleziona Chromer quando necessario.</string>
-    <string name="why_use">Perché usare?</string>
     <string name="version">Versione</string>
     <string name="changelog">Changelog</string>
     <string name="join_google_plus">Unisciti alla Community Google+</string>

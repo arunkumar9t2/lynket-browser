@@ -40,8 +40,8 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
  */
 public class ArticleLauncher {
     private Context context;
-    Uri uri;
-    private ArticleIntent.Builder builder;
+    final Uri uri;
+    private final ArticleIntent.Builder builder;
 
     private boolean newTab;
 

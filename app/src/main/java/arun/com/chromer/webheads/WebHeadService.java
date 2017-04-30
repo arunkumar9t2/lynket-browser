@@ -131,6 +131,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         return 1;
     }
 
+    @NonNull
     @Override
     Notification getNotification() {
         final PendingIntent contentIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_STOP_WEBHEAD_SERVICE), FLAG_UPDATE_CURRENT);

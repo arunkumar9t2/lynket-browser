@@ -15,7 +15,6 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-
 <resources>
     <string-array name="animationValues">
         <item>なし</item>
@@ -29,11 +28,16 @@
     <string-array name="actionValues">
         <item>サブブラウザ</item>
         <item>お気に入りの共有アプリ</item>
-        <item>General share</item>
+        <item>一般的な共有</item>
     </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>右</item>
         <item>左</item>
+    </string-array>
+    <string-array name="articleThemeValues">
+        <item>ダーク</item>
+        <item>ライト</item>
+        <item>自動</item>
     </string-array>
     <string-array name="webHeadsSizeValues">
         <item>普通</item>
@@ -55,13 +59,12 @@
     <string name="help_chromer_grow">CHromer の成長を手伝ってください！</string>
     <string name="share">共有</string>
     <string name="share_with">%1$s と共有します</string>
-    <string name="more_custom_tbs">カスタムタブの詳細</string>
     <string name="rate_play_store">Play ストアで評価</string>
     <string name="feedback">フィードバック</string>
     <string name="intro">紹介</string>
     <string name="send_email">メールを送信…</string>
-    <string name="fallback_msg">カスタムタブで開くことができませんでした。</string>
-    <string name="open_with">開く…</string>
+    <string name="fallback_msg">カスタムタブで開くことができないので、普通のブラウザで開きます</string>
+    <string name="open_with">別のアプリで開く</string>
     <string name="open_in_browser">%1$s で開く</string>
     <string name="unxp_err">予期せぬエラーが発生しました。やり直してください。</string>
     <string name="unsupported_link">サポートされていないリンクです。やり直してください。</string>
@@ -74,9 +77,9 @@
     <string name="copy_link">リンクをコピー</string>
     <string name="add_to_homescreen">ホーム画面に追加</string>
     <string name="intro_1">こんにちは！\nChromer は軽くて安全で速いブラウザです。</string>
-    <string name="intro_2">Google Chrome のカスタムタブ機能を使用していて、リンクを速く読み込むために設計された、究極的に軽い Chrome タブです。</string>
-    <string name="intro_5_new">画面上のリンクをスキャンし、バックグラウンドで読み込むことで、レンダリングのパフォーマンスを向上させることができます。\n\nまた、起動時間を短縮するためにブラウザをメモリに保持することもできます。</string>
-    <string name="intro_4_new">複数のリンクを開いたり、バックグラウンドで読み込んだりするときに、複数のリンクをフローティングバブルにスタックすることができます。\n\n<b>LEARN MORE</b></string>
+    <string name="intro_4_new">複数のリンクを開いたり、バックグラウンドで読み込んだりするときに、複数のリンクをフローティングバブルにスタックすることができます。\n\n<b>詳細</b></string>
+    <string name="how_to_use">どうやって使うの？</string>
+    <string name="intro_6">Chromerを既定のブラウザに設定するだけで、リンクをChromerで開くようになります。また、ブラウザを選択して開く際には、Chromerを選択してください。</string>
     <string name="version">バージョン</string>
     <string name="changelog">更新履歴</string>
     <string name="join_google_plus">Google+ コミュニティに参加</string>
@@ -93,40 +96,161 @@
     <string name="colored_toolbar">ツールバーの色</string>
     <string name="choose_animation">起動アニメーション</string>
     <string name="animation_speed">アニメーションの速度</string>
+    <string name="default_pref_xpln">Chromerですべてのリンクを開くように設定するか、リンクを開くブラウザのリストからChromerを選択してください。</string>
+    <string name="personalization">カスタマイズ</string>
+    <string name="default_clear_msg">が既定のブラウザに設定されています。タップして設定をクリアしてください。</string>
     <string name="dynamic_toolbar_color">ツールバーの色を動的に</string>
+    <string name="keep_chrome_warmedup">高速起動のためにメモリに常駐させる</string>
+    <string name="warmup_browser">ウォームアップ</string>
     <string name="set_default_chromer">既定のブラウザに設定</string>
+    <string name="default_provider">Custom tabのプロバイダ</string>
+    <string name="pre_fetch_content">コンテンツを先読み</string>
+    <string name="pre_fetch_desc">瞬時に開けるよう、画面内のリンクをスキャンしてバックグラウンドで読み込みます</string>
+    <string name="accessibility_description">この機能は画面内のテキストリンクをスキャンしてバックグラウンドで読み込むために使用します。Chromerはその他の情報を取得しません。この機能を許可することなく、引き続きChromerを利用することも可能です。詳しい情報は、Chromerを直接起動してご確認ください。</string>
+    <string name="accessibility_dialog_title">アクセス権限の許可が要求されました</string>
+    <string name="accessibility_dialog_desc">Chromerにあらゆるアプリのリンクのスキャンを許可するには、アクセス権限の承認が必要です。次の画面で権限を承認すると、このオプションの変更が可能になり、より高速な動作を体感できます。</string>
+    <string name="open_settings">設定を開く</string>
     <string name="only_on_wifi">Wi-Fi 時のみスキャン</string>
+    <string name="show_notification">リンクの先読みを通知</string>
     <string name="default_toolbar_color">既定のツールバーの色</string>
     <string name="web_heads_color">ウェブヘッドの色</string>
+    <string name="choose_secondary_browser">サブブラウザ</string>
+    <string name="dynamic_toolbar_help">ツールバーの動的な色変更を可能にすると、Chromerはこっそりと色の学習を行います。始めのうちはページやアプリに合わないかもしれませんが、使い続けるうちに改善されていきます。お楽しみに！</string>
+    <string name="secondary_browser_success">%1$s をサブブラウザに設定しました！</string>
     <string name="fav_share_success">%1$s がお気に入り共有アプリとして設定されました！</string>
+    <string name="default_provider_success">%1$sをCustom Tabsのプロバイダとして利用します！</string>
     <string name="based_on_app">アプリに依存</string>
     <string name="based_on_web">ウェブサイトに依存</string>
+    <string name="preferred_action">お気に入りのアクション</string>
     <string name="fav_share_app">お気に入り共有アプリ</string>
     <string name="choose_fav_share_app">お気に入り共有アプリを選択</string>
+    <string name="dynamic_summary_appweb">サイトの色設定に従います(サイトが対応していなければアプリに従います)</string>
+    <string name="dynamic_summary_app">ページを開くアプリの色に従います</string>
+    <string name="dynamic_summary_web">開いたページの色に従います</string>
+    <string name="no_option_selected">オプションが選択されていません</string>
+    <string name="permission_required">権限が必要です</string>
+    <string name="usage_permission_explanation_appcolor">ツールバーの色をアプリに合わせるには、使用中のアプリをChromerが取得するための権限を許可する必要があります。今すぐ権限を承認しますか？</string>
+    <string name="usage_permission_explanation_blacklist">ブラックリストを有効化するには、利用中のアプリをChromerが取得する権限を許可する必要があります。今すぐ権限を承認しますか？</string>
+    <string name="grant">承認</string>
+    <string name="open_source_contributions">オープンソース</string>
+    <string name="search_or_type_url">検索かURLを入力</string>
+    <string name="voice_prompt">お話しください</string>
     <string name="web_heads">ウェブヘッド</string>
+    <string name="webhead_spawn_summary">自動取得した位置</string>
+    <string name="webhead_spawn_title">Web headsの表示位置を選択</string>
     <string name="credits">クレジット</string>
     <string name="icon_design">アイコンデザイン</string>
+    <string name="overlay_permission_content">Web headsの表示には、オーバーレイ権限の承認が必要です。今すぐ権限を承認しますか？</string>
+    <string name="webheads_intro_1">アプリからリンクを開くと、Web headsというフローティングバブルを画面上に生成し、リンクの先読みを試みます。</string>
+    <string name="webheads_intro_2_new">複数のリンクを開いたときに、web headsを自動でまとめます。web headsを長押しするとメニューが開きます。</string>
+    <string name="webheads_intro_3">Web headsをドラッグするとゴミ箱が表示されます。ゴミ箱にドロップするとweb headsを削除できます。</string>
+    <string name="webheads_intro_4_lolli">強力なバックグラウンドロード読み込みでは、あなたが元のアプリを使っている間にもページを読み込みます。\n<b>タブがちらっと見えることがありますがバグではありません。</b></string>
+    <string name="webheads_intro_4">Chromerは最後に開いたページを優先的に先読みします。よって、Web headsを上から順にタップしていく使い方がおすすめです。ページを開くと同時にWeb headsを削除するように設定することで、さらにシームレスに使えるようになります。</string>
+    <string name="web_head_permission_toast">リンクをバブルで開くには、Chromerに他のアプリの上に描画する権限が必要です。このまま続けることを承認するか、Chromerの設定よりWeb headsを無効にしてください。</string>
     <string name="tap_close_all">タップしてすべて閉じる</string>
+    <string name="web_heads_service">Web headsは有効</string>
     <string name="join_beta">ベータに参加</string>
     <string name="become_a_tester">テスターになる</string>
+    <string name="join_beta_content">ベータリリースは試験的なビルドであり、最新の機能を搭載していますがバグがある可能性があります。バグに遭遇した場合はテスターとして、Google+のコミュニティから報告することで開発に貢献することができます。\n\nGoogle+コミュニティに参加していることを確かめた上で、「テスターになる」ボタンをタップしてGoogle Playのテスター用リンクに移動してください。\n\n注意:テスターになるにはコミュニティに参加する必要があります。</string>
+    <string name="no_voice_rec_apps">利用できる音声認識アプリが見つかりません</string>
+    <string name="blacklisted_apps">ブラックリストに登録されたアプリ</string>
+    <string name="blacklisted_explanation">Chromerがこれらのアプリのリンクを扱わないようにする</string>
     <string name="loading">読み込み中…</string>
-    <string name="please_wait">お待ちください</string>
+    <string name="share_failed_msg">このアプリには共有できないため、デフォルトの共有を使用します</string>
+    <string name="revoke_accessibility_permission">Chromerのアクセス権限を無効にできます。</string>
+    <string name="last_fetched_urls">最近読み込んだURL</string>
+    <string name="blacklist_on">ブラックリストを有効化</string>
+    <string name="blacklist_off">ブラックリストを無効化</string>
     <string name="translations">翻訳</string>
+    <string name="merge_tabs">タブをアプリと同様に扱う</string>
+    <string name="merge_tabs_explanation">タブが最近使ったアプリ(端末の機能)の一覧に表示されます。</string>
+    <string name="already_loaded">読み込み済</string>
+    <string name="add_home_screen_begun">すぐにショートカットが追加されます</string>
+    <string name="bottom_bar_pref_summary">追加機能のあるツールバーを表示</string>
     <string name="bottom_bar_pref_title">ボトムバーを表示</string>
     <string name="bottom_bar">ボトムバー</string>
     <string name="open_in_new_tab">新しいタブで開く</string>
     <string name="options">オプション</string>
     <string name="customize">カスタマイズ</string>
+    <string name="not_set">未設定</string>
+    <string name="not_found">見つかりません</string>
+    <string name="app_preferences">アプリの設定</string>
     <string name="behavior_preferences">動作</string>
+    <string name="additional_preferences">追加</string>
     <string name="notifications">通知</string>
-    <string name="web_heads_description">フローティングバブルでリンクを開く</string>
     <string name="webhead_size_title">大きさ</string>
     <string name="webhead_size_dialog">ウェブヘッドの大きさを選択</string>
+    <string name="changelog_skipped">エラーのため更新履歴はスキップされました</string>
     <string name="see_whats_new">更新履歴を見る</string>
     <string name="help_translations">あなたの言語への翻訳を手伝ってください</string>
+    <string name="aggressive_background_loading">強力なバックグラウンドロード</string>
+    <string name="aggressive_background_loading_desc">ページはバックグラウンドで読み込まれます(単なる先読みの代わりに)</string>
+    <string name="aggresive_dia_title">タブをアプリと同様に扱う設定を有効にしてください</string>
+    <string name="aggresive_dia_content">強力なバックグラウンドロードを使うにはタブとアプリを同様に扱う設定を有効にする必要があります(有効になりました)。</string>
     <string name="merge_tabs_off_title">注意</string>
+    <string name="merget_tabs_off_content">タブとアプリの同列化を無効にすると、強力なバックグラウンドロードも無効化されます。</string>
     <string name="web_sites">ウェブサイト</string>
     <string name="share_all">すべてを共有</string>
     <string name="thank_you">ありがとうございます。</string>
-    <string name="tile_label">ウェブヘッド</string>
+    <string name="save_time">時間を節約</string>
+    <string name="multiple_links">複数のリンク</string>
+    <string name="merge_tabs_explanation_intro">アプリとタブは履歴画面に共存します。</string>
+    <string name="web_close_on_open_desc">Web headsはリンクを開くと隠れます</string>
+    <string name="web_close_on_open_title">Web headsはタップ時に閉じられます。</string>
+    <string name="minimize">最小化</string>
+    <string name="open_in_new_tab_explanation"><![CDATA[<b>新しいタブで開く(5.0以上)-</b>画面上のリンクやテキストをコピーしてこのアイコンをタップすると、コピーしたものを新しいタブかバブルで表示するか検索します。]]></string>
+    <string name="share_action_explanation"><![CDATA[<b>共有 -</b>Androidの共有機能を素早く使用できます。]]></string>
+    <string name="minimize_action_explanation"><![CDATA[<b>最小化 -</b>現在のページをバブル化します。<i>Web headsとタブのマージ</i>が有効な場合のみ利用できます。]]></string>
+    <string name="available_actions">利用可能なアクション</string>
+    <string name="secondary_browser_launching_error_title">サブブラウザの起動エラー</string>
+    <string name="launch_setting">設定を開く</string>
+    <string name="secondary_browser_not_installed">選択したサブブラウザはインストールされていないようです。設定画面に移動してサブブラウザの設定を変更しますか？</string>
+    <string name="secondary_browser_launch_error">このリンクは選択したブラウザでは開けませんでした。設定を変更しますか？</string>
+    <string name="secondary_browser_not_error">このアプリはChromerのブラックリストに登録されていますが、サブブラウザが設定されていません。今すぐサブブラウザを設定しますか？</string>
+    <string name="copy_all">すべてコピー</string>
+    <string name="choose_share_method">共有の機能を選択</string>
+    <string name="comma_seperated">カンマ区切り</string>
+    <string name="share_all_list">リスト - 一部のアプリのみサポートしています。例: Join, Pushbullet など</string>
+    <string name="new_tab">新しいタブを開く</string>
+    <string name="title_activity_open_with">別のアプリで開く</string>
+    <string name="title_activity_settings">設定</string>
+    <string name="settings_browsing_mode">ブラウジングモード</string>
+    <string name="settings_look_and_feel">外観とアニメーション</string>
+    <string name="settings_browsing_options">ブラウジングオプション</string>
+    <string name="title_activity_browsing_mode">ブラウジングモード</string>
+    <string name="browsing_mode_slide_over">スライド式</string>
+    <string name="browsing_mode_web_heads">Web heads</string>
+    <string name="browsing_mode_slide_over_explanation">ページが使用中のアプリの上にスライドしてきます。</string>
+    <string name="browsing_mode_web_heads_explanation">Webサイトをバックグラウンドで読み込むことで、複数のリンクをフローティングバブルに貯めておいて後から表示することができます。</string>
+    <string name="load_faster_heading">以下のオプションは読み込みを高速化します</string>
+    <string name="amp">Accelerated Mobile Pages (AMP)</string>
+    <string name="amp_mode">AMPモード</string>
+    <string name="amp_summary">より高速にスムーズに読めるよう最適化されたページを読み込む</string>
+    <string name="article_mode">記事モード</string>
+    <string name="article_theme">記事モードのテーマ</string>
+    <string name="article_mode_summary">コンテンツを読むことのみに特化したシンプルな記事モードを読み込む</string>
+    <string name="amp_warning_title">AMPモードの注意</string>
+    <string name="amp_warning_content"><![CDATA[スライドモードでは、AMPのURLを取得するため少し時間が掛かります。読み込み状況はダイアログで表示します。]]></string>
+    <string name="title_activity_look_and_feel">外観とアニメーション</string>
+    <string name="not_available_in_slide_mode">スライドモードでは使用できません</string>
+    <string name="title_activity_browsing_options">ブラウジングオプション</string>
+    <string name="grabbing_amp_link">AMPリンクを取得中</string>
+    <string name="link_found">リンクが見つかりました！</string>
+    <string name="link_not_found">AMPが見つかりませんでした</string>
+    <string name="open">開く</string>
+    <string name="open_full_page">完全なページを開く</string>
+    <string name="more">もっと</string>
+    <string name="title_history">履歴</string>
+    <string name="deleted_items">%1$d個削除しました。</string>
+    <string name="are_you_sure">よろしいですか？</string>
+    <string name="history_deletion_confirmation_content">すべての履歴を削除します。復元はできません。</string>
+    <string name="incognito_mode">匿名モード</string>
+    <string name="recents_intro">最近開いたページがここに表示されます</string>
+    <string name="amp_article_combined_explanation"><![CDATA[<b>AMPと記事モードを両方オンにした場合</b>、AMPが存在すればAMPを読み込み、存在しなければ記事モードを読み込みます。]]></string>
+    <string name="attention">注意！</string>
+    <string name="manage">管理</string>
+    <string name="more_menu">もっと見る</string>
+    <string name="open_article_view">記事ビューで開く</string>
+    <string name="browse_seamlessly">シームレスなブラウジング</string>
+    <string name="slide_over_explanation">ページは使用中のアプリの上にスライド表示します。「X」をタップすることで素早くもとのアプリに戻れます。</string>
 </resources>

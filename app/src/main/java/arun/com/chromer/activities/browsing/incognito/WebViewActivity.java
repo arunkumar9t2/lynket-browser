@@ -108,7 +108,6 @@ public class WebViewActivity extends AppCompatActivity {
         });
         final WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
-
         webView.loadUrl(getIntent().getDataString());
     }
 
