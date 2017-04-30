@@ -179,7 +179,7 @@ public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implem
     }
 
     private void setupRecents() {
-        recentsHeader.setCompoundDrawablePadding(Utils.dpToPx(8));
+        recentsHeader.setCompoundDrawablePadding(Utils.dpToPx(22));
         recentsHeader.setCompoundDrawables(new IconicsDrawable(getContext())
                 .icon(CommunityMaterial.Icon.cmd_history)
                 .colorRes(R.color.accent)

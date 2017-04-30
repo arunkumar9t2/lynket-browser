@@ -30,7 +30,6 @@ import arun.com.chromer.data.history.HistoryRepository;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.util.RxUtils;
 import rx.Observable;
-import rx.functions.Func1;
 import timber.log.Timber;
 
 /**
@@ -45,14 +44,13 @@ interface History {
 
     class Presenter extends Base.Presenter<History.View> {
         void loadHistory(@NonNull Context context) {
+            if (isViewAttached()) {
+                getView().loading(true);
+            }
             compositeSubscription.add(HistoryRepository.getInstance(context).getAllItemsCursor()
                     .compose(RxUtils.applySchedulers())
-                    .doOnSubscribe(() -> {
-                        if (isViewAttached()) {
-                            getView().loading(true);
-                        }
-                    })
-                    .doOnNext(cursor -> {
+                    .toSingle()
+                    .doOnSuccess(cursor -> {
                         if (isViewAttached()) {
                             getView().loading(false);
                             getView().setCursor(cursor);
@@ -79,12 +77,8 @@ interface History {
         void deleteHistory(@NonNull Context context, @NonNull Observable<WebSite> webSiteObservable) {
             compositeSubscription.add(webSiteObservable
                     .filter(webSite -> webSite != null && webSite.url != null)
-                    .flatMap(new Func1<WebSite, Observable<WebSite>>() {
-                        @Override
-                        public Observable<WebSite> call(WebSite webSite) {
-                            return HistoryRepository.getInstance(context).delete(webSite);
-                        }
-                    }).compose(RxUtils.applySchedulers())
+                    .flatMap(webSite -> HistoryRepository.getInstance(context).delete(webSite))
+                    .compose(RxUtils.applySchedulers())
                     .doOnError(Timber::e)
                     .doOnNext(result -> loadHistory(context))
                     .subscribe());
