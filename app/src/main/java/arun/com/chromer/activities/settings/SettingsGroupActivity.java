@@ -54,7 +54,6 @@ import timber.log.Timber;
 import static arun.com.chromer.shared.Constants.ACTION_CLOSE_ROOT;
 
 public class SettingsGroupActivity extends SubActivity implements SettingsGroupAdapter.GroupItemClickListener {
-
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.settings_list_view)
