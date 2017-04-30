@@ -25,12 +25,10 @@
     android:clickable="true"
     android:focusable="true"
     android:gravity="center_vertical"
-    android:minHeight="52dp"
+    android:minHeight="60dp"
     android:orientation="horizontal"
-    android:paddingBottom="5dp"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:paddingTop="5dp"
+    android:paddingBottom="4dp"
+    android:paddingTop="4dp"
     tools:ignore="RtlHardcoded">
 
     <ImageView
@@ -38,6 +36,8 @@
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_gravity="center"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:scaleType="fitCenter"
         tools:ignore="ContentDescription" />
 
@@ -45,7 +45,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:paddingLeft="20dp"
+        android:paddingLeft="4dp"
         tools:ignore="RtlSymmetry">
 
         <TextView
@@ -56,8 +56,9 @@
             android:maxLines="1"
             android:paddingBottom="2dp"
             android:textAppearance="@style/Preference_TextAppearanceMaterialSubhead"
-            android:textSize="14sp"
-            tools:ignore="SelectableText" />
+            android:textSize="13sp"
+            tools:ignore="SelectableText"
+            tools:text="Test" />
 
         <TextView
             android:id="@+id/history_subtitle"
@@ -69,6 +70,7 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="?android:attr/textColorSecondary"
             android:textSize="12sp"
-            tools:ignore="SelectableText" />
+            tools:ignore="SelectableText"
+            tools:text="Test" />
     </RelativeLayout>
 </LinearLayout>
