@@ -404,6 +404,16 @@ public class Utils {
         }
     }
 
+    @NonNull
+    public static Spanned html(@NonNull Context context, @NonNull String string) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return Html.fromHtml(string, Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            //noinspection deprecation
+            return Html.fromHtml(string);
+        }
+    }
+
     public static void doAfterLayout(@NonNull final View view, @NonNull final Runnable end) {
         view.requestLayout();
         final ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();

@@ -279,4 +279,7 @@
     <string name="home">Home</string>
     <string name="no_items_present">No items present.</string>
     <string name="recents">Recents</string>
+    <string name="enable_history">History enabled</string>
+    <string name="enable_history_subtitle">Disabling history will stop recording items here.</string>
+    <string name="enable_history_subtitle_custom_tab"><![CDATA[Disabling history will stop recording items here. The custom tab provider, <b>%1$s</b> might still record entries.]]></string>
 </resources>
