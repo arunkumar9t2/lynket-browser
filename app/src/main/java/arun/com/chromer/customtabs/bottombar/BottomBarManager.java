@@ -36,6 +36,10 @@ import arun.com.chromer.util.ColorUtil;
  * Created by Arun on 06/11/2016.
  */
 public class BottomBarManager {
+    private static IconicsDrawable shareImageDrawable;
+    private static IconicsDrawable newTabDrawable;
+    private static IconicsDrawable minimizeDrawable;
+    private static IconicsDrawable articleDrawable;
 
     @NonNull
     public static RemoteViews createBottomBarRemoteViews(@NonNull final Context context, final int toolbarColor, final @NonNull Config config) {
@@ -51,23 +55,37 @@ public class BottomBarManager {
             remoteViews.setViewVisibility(R.id.bottom_bar_open_in_new_tab, View.GONE);
         }
 
-        // TODO Cache this
-        final Bitmap shareImage = new IconicsDrawable(context)
-                .icon(CommunityMaterial.Icon.cmd_share_variant)
-                .color(iconColor)
-                .sizeDp(24).toBitmap();
-        final Bitmap openInNewTabImage = new IconicsDrawable(context)
-                .icon(CommunityMaterial.Icon.cmd_plus_box)
-                .color(iconColor)
-                .sizeDp(24).toBitmap();
-        final Bitmap minimize = new IconicsDrawable(context)
-                .icon(CommunityMaterial.Icon.cmd_flip_to_back)
-                .color(iconColor)
-                .sizeDp(24).toBitmap();
+        if (shareImageDrawable == null) {
+            shareImageDrawable = new IconicsDrawable(context)
+                    .icon(CommunityMaterial.Icon.cmd_share_variant)
+                    .sizeDp(24);
+        }
+        if (newTabDrawable == null) {
+            newTabDrawable = new IconicsDrawable(context)
+                    .icon(CommunityMaterial.Icon.cmd_plus_box)
+                    .sizeDp(24);
+        }
+        if (minimizeDrawable == null) {
+            minimizeDrawable = new IconicsDrawable(context)
+                    .icon(CommunityMaterial.Icon.cmd_flip_to_back)
+                    .sizeDp(24);
+        }
+
+        if (articleDrawable == null) {
+            articleDrawable = new IconicsDrawable(context)
+                    .icon(CommunityMaterial.Icon.cmd_file_image)
+                    .sizeDp(24);
+        }
+
+        final Bitmap shareImage = shareImageDrawable.color(iconColor).toBitmap();
+        final Bitmap openInNewTabImage = newTabDrawable.color(iconColor).toBitmap();
+        final Bitmap minimize = minimizeDrawable.color(iconColor).toBitmap();
+        final Bitmap article = articleDrawable.color(iconColor).toBitmap();
 
         remoteViews.setBitmap(R.id.bottom_bar_open_in_new_tab_img, "setImageBitmap", openInNewTabImage);
         remoteViews.setBitmap(R.id.bottom_bar_share_img, "setImageBitmap", shareImage);
         remoteViews.setBitmap(R.id.bottom_bar_minimize_img, "setImageBitmap", minimize);
+        remoteViews.setBitmap(R.id.bottom_bar_article_view_img, "setImageBitmap", article);
         return remoteViews;
     }
 
@@ -76,7 +94,8 @@ public class BottomBarManager {
         return new int[]{
                 R.id.bottom_bar_open_in_new_tab,
                 R.id.bottom_bar_share,
-                R.id.bottom_bar_minimize_tab};
+                R.id.bottom_bar_minimize_tab,
+                R.id.bottom_bar_article_view};
     }
 
     /**
