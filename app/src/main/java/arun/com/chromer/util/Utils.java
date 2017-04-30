@@ -434,6 +434,11 @@ public class Utils {
         }
     }
 
+    public static boolean isValidFavicon(@Nullable Bitmap favicon) {
+        return favicon != null && !(favicon.getWidth() == 16 || favicon.getHeight() == 16
+                || favicon.getWidth() == 32 || favicon.getHeight() == 32);
+    }
+
     /**
      * A helper class for providing a shadow on sheets
      */

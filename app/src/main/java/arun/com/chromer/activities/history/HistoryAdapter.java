@@ -20,6 +20,7 @@ package arun.com.chromer.activities.history;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -34,15 +35,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.BrowserInterceptActivity;
 import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.util.Utils;
+import arun.com.chromer.views.PlaceholderLetterView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observable;
 import timber.log.Timber;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_OUR_APP;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_SKIP_EXTRACTION;
 
@@ -170,12 +176,13 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHold
         TextView historySubtitle;
         @BindView(R.id.history_amp)
         ImageView historyAmp;
+        @BindView(R.id.history_placeholder)
+        PlaceholderLetterView historyPlaceholder;
 
 
         HistoryViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-
             itemView.setOnClickListener(v -> {
                 final int position = getAdapterPosition();
                 final WebSite webSite = asyncWebsiteList.getItem(position);
@@ -205,7 +212,7 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHold
                 historyTitle.setText(R.string.loading);
                 historySubtitle.setText(R.string.loading);
                 historyFavicon.setImageDrawable(null);
-                historyAmp.setVisibility(View.GONE);
+                historyAmp.setVisibility(GONE);
                 Glide.clear(historyFavicon);
             } else {
                 historyTitle.setText(webSite.safeLabel());
@@ -213,17 +220,40 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHold
                 if (!TextUtils.isEmpty(webSite.faviconUrl)) {
                     Glide.with(itemView.getContext())
                             .load(webSite.faviconUrl)
-                            .crossFade()
-                            .into(historyFavicon);
+                            .asBitmap()
+                            .into(new BitmapImageViewTarget(historyFavicon) {
+                                @Override
+                                protected void setResource(Bitmap resource) {
+                                    if (Utils.isValidFavicon(resource)) {
+                                        showFavicon(resource);
+                                    } else {
+                                        showPlaceholder(webSite.url);
+                                    }
+                                }
+                            });
                 } else {
                     Glide.clear(historyFavicon);
+                    showPlaceholder(webSite.url);
                 }
                 if (!TextUtils.isEmpty(webSite.ampUrl)) {
-                    historyAmp.setVisibility(View.VISIBLE);
+                    historyAmp.setVisibility(VISIBLE);
                 } else {
-                    historyAmp.setVisibility(View.GONE);
+                    historyAmp.setVisibility(GONE);
                 }
             }
+        }
+
+        private void showPlaceholder(@NonNull String url) {
+            historyFavicon.setImageDrawable(null);
+            historyFavicon.setVisibility(GONE);
+            historyPlaceholder.setPlaceHolder(url);
+            historyPlaceholder.setVisibility(VISIBLE);
+        }
+
+        private void showFavicon(Bitmap resource) {
+            historyPlaceholder.setVisibility(GONE);
+            historyFavicon.setVisibility(VISIBLE);
+            historyFavicon.setImageBitmap(resource);
         }
     }
 

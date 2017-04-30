@@ -31,17 +31,30 @@
     android:paddingTop="4dp"
     tools:ignore="RtlHardcoded">
 
-    <ImageView
-        android:id="@+id/history_favicon"
+    <FrameLayout
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:padding="4dp"
-        android:scaleType="fitCenter"
-        tools:ignore="ContentDescription"
-        tools:src="@mipmap/ic_launcher" />
+        android:padding="4dp">
+
+        <ImageView
+            android:id="@+id/history_favicon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            tools:ignore="ContentDescription"
+            tools:src="@mipmap/ic_launcher" />
+
+        <arun.com.chromer.views.PlaceholderLetterView
+            android:id="@+id/history_placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+    </FrameLayout>
 
     <RelativeLayout
         android:layout_width="0dp"

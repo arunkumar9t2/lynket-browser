@@ -87,7 +87,7 @@ public class AddHomeShortcutService extends IntentService {
             Bitmap favicon = getFaviconBitmap(faviconUrl);
             if (favicon == null) {
                 favicon = createShortcutIcon(ContextCompat.getColor(this, R.color.primary), shortCutName);
-            } else if (!isValidFavicon(favicon)) {
+            } else if (!Utils.isValidFavicon(favicon)) {
                 final Palette palette = Palette.from(favicon).clearFilters().generate();
                 int iconColor = ColorUtil.getBestFaviconColor(palette);
                 if (iconColor == NO_COLOR) {
@@ -174,11 +174,6 @@ public class AddHomeShortcutService extends IntentService {
         final float x = cW / 2f - rect.width() / 2f - rect.left;
         final float y = cH / 2f + rect.height() / 2f - rect.bottom;
         canvas.drawText(text, x, y, paint);
-    }
-
-    private boolean isValidFavicon(@NonNull Bitmap favicon) {
-        return !(favicon.getWidth() == 16 || favicon.getHeight() == 16
-                || favicon.getWidth() == 32 || favicon.getHeight() == 32);
     }
 
     private void legacyAdd(@NonNull String unShortenedUrl) {
