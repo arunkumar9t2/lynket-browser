@@ -19,8 +19,10 @@
 package arun.com.chromer.activities.main.home;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -30,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +41,13 @@ import arun.com.chromer.R;
 import arun.com.chromer.activities.BrowserInterceptActivity;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.shared.Constants;
+import arun.com.chromer.util.Utils;
+import arun.com.chromer.views.PlaceholderLetterView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 /**
  * Created by arunk on 07-03-2017.
@@ -51,32 +59,14 @@ public class RecentsAdapter extends RecyclerView.Adapter<RecentsAdapter.RecentsV
     }
 
     @Override
-    public RecentsAdapter.RecentsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecentsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new RecentsViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_main_recents_item_template, parent, false));
     }
 
     @Override
     public void onBindViewHolder(RecentsViewHolder holder, int position) {
-        final WebSite website = position < webSites.size() ? webSites.get(position) : null;
-        if (website != null) {
-            holder.label.setText(website.safeLabel());
-            holder.itemView.setOnClickListener(v -> {
-                final Intent intent = new Intent(holder.itemView.getContext(), BrowserInterceptActivity.class);
-                intent.putExtra(Constants.EXTRA_KEY_FROM_OUR_APP, true);
-                intent.setData(Uri.parse(website.preferredUrl()));
-                holder.itemView.getContext().startActivity(intent);
-            });
-            if (!TextUtils.isEmpty(website.faviconUrl)) {
-                Glide.with(holder.itemView.getContext())
-                        .load(website.faviconUrl)
-                        .crossFade()
-                        .into(holder.icon);
-            } else {
-
-            }
-        } else {
-            // holder.label.setText(R.string.loading);
-        }
+        final WebSite website = webSites.get(position);
+        holder.bind(website);
     }
 
     @Override
@@ -84,7 +74,7 @@ public class RecentsAdapter extends RecyclerView.Adapter<RecentsAdapter.RecentsV
         return webSites.size();
     }
 
-    public void setWebSites(@NonNull List<WebSite> webSites) {
+    void setWebSites(@NonNull List<WebSite> webSites) {
         this.webSites.clear();
         this.webSites.addAll(webSites);
         notifyDataSetChanged();
@@ -95,10 +85,54 @@ public class RecentsAdapter extends RecyclerView.Adapter<RecentsAdapter.RecentsV
         ImageView icon;
         @BindView(R.id.label)
         TextView label;
+        @BindView(R.id.icon_placeholder)
+        PlaceholderLetterView iconPlaceholder;
 
         RecentsViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+        }
+
+        void bind(@Nullable WebSite website) {
+            if (website != null) {
+                label.setText(website.safeLabel());
+                itemView.setOnClickListener(v -> {
+                    final Intent intent = new Intent(itemView.getContext(), BrowserInterceptActivity.class);
+                    intent.putExtra(Constants.EXTRA_KEY_FROM_OUR_APP, true);
+                    intent.setData(Uri.parse(website.preferredUrl()));
+                    itemView.getContext().startActivity(intent);
+                });
+                if (!TextUtils.isEmpty(website.faviconUrl)) {
+                    Glide.with(itemView.getContext())
+                            .load(website.faviconUrl)
+                            .asBitmap()
+                            .into(new BitmapImageViewTarget(icon) {
+                                @Override
+                                protected void setResource(Bitmap resource) {
+                                    if (Utils.isValidFavicon(resource)) {
+                                        showFavicon(resource);
+                                    } else {
+                                        showPlaceholder(website.safeLabel());
+                                    }
+                                }
+                            });
+                } else {
+                    showPlaceholder(website.safeLabel());
+                }
+            }
+        }
+
+        private void showPlaceholder(@NonNull String label) {
+            icon.setImageDrawable(null);
+            icon.setVisibility(GONE);
+            iconPlaceholder.setVisibility(VISIBLE);
+            iconPlaceholder.setPlaceHolder(label);
+        }
+
+        private void showFavicon(Bitmap resource) {
+            iconPlaceholder.setVisibility(GONE);
+            icon.setVisibility(VISIBLE);
+            icon.setImageBitmap(resource);
         }
     }
 }

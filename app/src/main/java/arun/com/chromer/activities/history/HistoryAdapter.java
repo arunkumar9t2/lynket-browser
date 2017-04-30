@@ -227,13 +227,13 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHold
                                     if (Utils.isValidFavicon(resource)) {
                                         showFavicon(resource);
                                     } else {
-                                        showPlaceholder(webSite.url);
+                                        showPlaceholder(webSite.safeLabel());
                                     }
                                 }
                             });
                 } else {
                     Glide.clear(historyFavicon);
-                    showPlaceholder(webSite.url);
+                    showPlaceholder(webSite.safeLabel());
                 }
                 if (!TextUtils.isEmpty(webSite.ampUrl)) {
                     historyAmp.setVisibility(VISIBLE);
@@ -246,8 +246,8 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHold
         private void showPlaceholder(@NonNull String url) {
             historyFavicon.setImageDrawable(null);
             historyFavicon.setVisibility(GONE);
-            historyPlaceholder.setPlaceHolder(url);
             historyPlaceholder.setVisibility(VISIBLE);
+            historyPlaceholder.setPlaceHolder(url);
         }
 
         private void showFavicon(Bitmap resource) {

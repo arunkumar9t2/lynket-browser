@@ -22,15 +22,28 @@
     android:layout_gravity="center"
     android:background="?attr/selectableItemBackground"
     android:clickable="true"
-    android:gravity="center"
+    android:gravity="top|center"
     android:orientation="vertical"
     android:padding="8dp">
 
-    <ImageView
-        android:id="@+id/icon"
+    <FrameLayout
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="8dp">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter" />
+
+        <arun.com.chromer.views.PlaceholderLetterView
+            android:id="@+id/icon_placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/label"
@@ -43,6 +56,6 @@
         android:paddingLeft="2dp"
         android:paddingRight="2dp"
         android:textColor="@color/material_dark_color"
-        android:textSize="14sp" />
+        android:textSize="13sp" />
 
 </LinearLayout>
