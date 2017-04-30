@@ -204,7 +204,7 @@
     <string name="webhead_size_dialog">Choose the size of web heads</string>
     <string name="changelog_skipped">Changelog skipped due to an error</string>
     <string name="see_whats_new">See what\'s new</string>
-    <string name="help_translations">Help translate app to your language</string>
+    <string name="help_translations">Help translate app to your language.</string>
     <string name="aggressive_background_loading">Aggressive background loading</string>
     <string name="aggressive_background_loading_desc">Web pages will be loaded in background instead of just pre-fetching</string>
     <string name="aggresive_dia_title">Merge tabs and apps required</string>
@@ -283,4 +283,7 @@
     <string name="enable_history">History enabled</string>
     <string name="enable_history_subtitle">Disabling history will stop recording items here.</string>
     <string name="enable_history_subtitle_custom_tab"><![CDATA[Disabling history will stop recording items here. The custom tab provider, <b>%1$s</b> might still record entries.]]></string>
+    <string name="source">Source</string>
+    <string name="contribute_to_chromer">Love to code? Fork Chromer and contribute.</string>
+    <string name="fork_on_github">Fork on GitHub</string>
 </resources>

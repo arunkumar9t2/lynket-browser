@@ -21,6 +21,7 @@ package arun.com.chromer.activities.about;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -160,12 +161,20 @@ public class AboutFragment extends Fragment {
                             .color(materialDark)
                             .sizeDp(24));
                     break;
+                case 5:
+                    holder.title.setText(R.string.source);
+                    holder.subtitle.setText(R.string.contribute_to_chromer);
+                    holder.imageView.setBackground(new IconicsDrawable(getActivity())
+                            .icon(CommunityMaterial.Icon.cmd_source_branch)
+                            .color(materialDark)
+                            .sizeDp(24));
+                    break;
             }
         }
 
         @Override
         public int getItemCount() {
-            return 5;
+            return 6;
         }
 
         class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -205,6 +214,11 @@ public class AboutFragment extends Fragment {
                         Intent oneSkyIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://os0l2aw.oneskyapp.com/collaboration/project/62112"));
                         getActivity().startActivity(oneSkyIntent);
                         Answers.getInstance().logCustom(new CustomEvent("Translations"));
+                        break;
+                    case 5:
+                        Intent sourceIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/arunkumar9t2/chromer"));
+                        getActivity().startActivity(sourceIntent);
+                        Answers.getInstance().logCustom(new CustomEvent("Source clicked"));
                         break;
                 }
             }
@@ -257,6 +271,14 @@ public class AboutFragment extends Fragment {
                             .sizeDp(24));
                     break;
                 case 4:
+                    holder.title.setText(R.string.fork_on_github);
+                    holder.subtitle.setVisibility(View.GONE);
+                    holder.imageView.setBackground(new IconicsDrawable(getActivity())
+                            .icon(CommunityMaterial.Icon.cmd_github_circle)
+                            .color(Color.BLACK)
+                            .sizeDp(24));
+                    break;
+                case 5:
                     holder.title.setText(R.string.more_apps);
                     holder.subtitle.setVisibility(View.GONE);
                     holder.imageView.setBackground(new IconicsDrawable(getActivity())
@@ -269,7 +291,7 @@ public class AboutFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return 5;
+            return 6;
         }
 
         class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -308,6 +330,11 @@ public class AboutFragment extends Fragment {
                         Answers.getInstance().logCustom(new CustomEvent("LinkedIn"));
                         break;
                     case 4:
+                        Intent github = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/arunkumar9t2/"));
+                        getActivity().startActivity(github);
+                        Answers.getInstance().logCustom(new CustomEvent("GitHub"));
+                        break;
+                    case 5:
                         try {
                             getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://search?q=pub:Arunkumar")));
                         } catch (android.content.ActivityNotFoundException anfe) {
