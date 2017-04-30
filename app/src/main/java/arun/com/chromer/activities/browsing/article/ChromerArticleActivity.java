@@ -186,7 +186,6 @@ public class ChromerArticleActivity extends ArticleActivity {
             case R.id.menu_more:
                 final Intent moreMenuActivity = new Intent(this, MoreMenuActivity.class);
                 moreMenuActivity.setData(getIntent().getData());
-                moreMenuActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 moreMenuActivity.putExtra(EXTRA_KEY_ORIGINAL_URL, baseUrl);
                 moreMenuActivity.putExtra(EXTRA_KEY_FROM_ARTICLE, true);
                 startActivity(moreMenuActivity);
