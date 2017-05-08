@@ -284,8 +284,18 @@ public class WebViewActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        webView.destroy();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(minimizeReceiver);
         subscriptions.clear();
         super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (webView.canGoBack()) {
+            webView.goBack();
+        } else {
+            super.onBackPressed();
+        }
     }
 }
