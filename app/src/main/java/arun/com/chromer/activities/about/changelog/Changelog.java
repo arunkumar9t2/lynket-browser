@@ -38,12 +38,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import arun.com.chromer.BuildConfig;
 import arun.com.chromer.R;
-import arun.com.chromer.data.website.WebsiteRepository;
-import arun.com.chromer.util.RxUtils;
 import arun.com.chromer.util.Utils;
 import butterknife.ButterKnife;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
-import timber.log.Timber;
 
 /**
  * Created by Arun on 25/12/2015.
@@ -110,20 +107,14 @@ public class Changelog {
     }
 
     private static void handleMigration(@NonNull final Activity activity) {
-        WebsiteRepository.getInstance(activity)
-                .clearCache()
-                .compose(RxUtils.applySchedulers())
-                .doOnError(Timber::e)
-                .subscribe();
+        Utils.deleteCache(activity).subscribe();
     }
 
     private static boolean shouldShow(@NonNull final Context context) {
         int currentVersionCode = BuildConfig.VERSION_CODE;
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
         int savedVersionCode = prefs.getInt(PREF_VERSION_CODE_KEY, DOES_NT_EXIST);
         prefs.edit().putInt(PREF_VERSION_CODE_KEY, currentVersionCode).apply();
-
         if (currentVersionCode == savedVersionCode) {
             // This is just a normal run
             return false;

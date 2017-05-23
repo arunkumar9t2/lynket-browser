@@ -55,9 +55,11 @@ import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -68,6 +70,9 @@ import arun.com.chromer.customtabs.prefetch.ScannerService;
 import arun.com.chromer.data.common.App;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.views.IntentPickerSheetView;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 import static android.widget.Toast.LENGTH_LONG;
@@ -469,4 +474,46 @@ public class Utils {
         }
     }
 
+
+    public static Observable<Boolean> deleteCache(@NonNull Context context) {
+        return Observable.fromCallable(new Callable<Boolean>() {
+            boolean delete(Context context) {
+                boolean deleted = true;
+                try {
+                    final File internalCache = context.getCacheDir();
+                    if (internalCache != null && internalCache.isDirectory()) {
+                        deleted = deleteDir(internalCache);
+                    }
+                    final File externalCache = context.getExternalCacheDir();
+                    if (externalCache != null && externalCache.isDirectory()) {
+                        deleted = deleteDir(externalCache);
+                    }
+                } catch (Exception e) {
+                    Timber.e(e);
+                    return false;
+                }
+                return deleted;
+            }
+
+            boolean deleteDir(final File dir) {
+                if (dir != null && dir.isDirectory()) {
+                    String[] children = dir.list();
+                    for (String path : children) {
+                        boolean success = deleteDir(new File(dir, path));
+                        if (!success) {
+                            return false;
+                        }
+                    }
+                }
+                return dir != null && dir.delete();
+            }
+
+            @Override
+            public Boolean call() throws Exception {
+                return delete(context.getApplicationContext());
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(result -> Timber.d("Cache deletion %b", result));
+    }
 }
