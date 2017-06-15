@@ -24,6 +24,7 @@ import android.support.annotation.NonNull;
 import java.util.concurrent.Callable;
 
 import arun.com.chromer.data.common.App;
+import arun.com.chromer.data.common.BookStore;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Utils;
 import io.paperdb.Book;
@@ -32,12 +33,12 @@ import rx.Observable;
 import rx.functions.Func1;
 import timber.log.Timber;
 
-class AppDiskStore implements AppStore {
+public class AppDiskStore implements AppStore, BookStore {
     private final Context context;
 
     private static final String APP_BOOK_NAME = "APPS";
 
-    AppDiskStore(Context context) {
+    public AppDiskStore(Context context) {
         this.context = context.getApplicationContext();
     }
 

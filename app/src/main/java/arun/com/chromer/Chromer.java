@@ -25,6 +25,10 @@ import android.util.Log;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 
+import arun.com.chromer.di.components.AppComponent;
+import arun.com.chromer.di.components.DaggerAppComponent;
+import arun.com.chromer.di.modules.AppModule;
+import arun.com.chromer.di.modules.DataModule;
 import io.fabric.sdk.android.Fabric;
 import io.paperdb.Paper;
 import timber.log.Timber;
@@ -33,6 +37,8 @@ import timber.log.Timber;
  * Created by Arun on 06/01/2016.
  */
 public class Chromer extends Application {
+    private AppComponent appComponent;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -57,6 +63,15 @@ public class Chromer extends Application {
         } else {
             Timber.plant(new CrashlyticsTree());
         }
+
+        appComponent = DaggerAppComponent.builder()
+                .appModule(new AppModule(this))
+                .dataModule(new DataModule(this))
+                .build();
+    }
+
+    public AppComponent getAppComponent() {
+        return appComponent;
     }
 
     private static class CrashlyticsTree extends Timber.Tree {

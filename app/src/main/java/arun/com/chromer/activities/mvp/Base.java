@@ -23,22 +23,18 @@ import com.hannesdorfmann.mosby3.mvp.MvpView;
 
 import rx.subscriptions.CompositeSubscription;
 
-/**
- * Created by Arunkumar on 05-04-2017.
- */
 public interface Base {
     abstract class Presenter<V extends MvpView> extends MvpBasePresenter<V> {
-        protected final CompositeSubscription compositeSubscription = new CompositeSubscription();
+        protected final CompositeSubscription subs = new CompositeSubscription();
 
-        void onDestroy() {
-            compositeSubscription.clear();
+        public void onDestroy() {
+            subs.clear();
+            detachView(false);
         }
 
-        void onResume() {
-        }
+        public abstract void onResume();
 
-        void onPause() {
-        }
+        public abstract void onPause();
     }
 
     interface View extends MvpView {

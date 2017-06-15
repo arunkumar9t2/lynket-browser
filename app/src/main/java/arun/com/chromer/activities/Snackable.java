@@ -16,7 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.data.apps;
+package arun.com.chromer.activities;
 
-public interface AppStore extends BaseAppRepository {
+import android.support.annotation.NonNull;
+
+public interface Snackable {
+    void snack(@NonNull final String message);
+
+    void snackLong(@NonNull final String message);
 }

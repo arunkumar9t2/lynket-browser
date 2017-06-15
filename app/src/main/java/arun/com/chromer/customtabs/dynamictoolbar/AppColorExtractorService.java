@@ -33,6 +33,9 @@ import android.support.v7.graphics.Palette;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import arun.com.chromer.Chromer;
 import arun.com.chromer.R;
 import arun.com.chromer.data.apps.AppRepository;
 import arun.com.chromer.util.ColorUtil;
@@ -46,12 +49,16 @@ import static arun.com.chromer.shared.Constants.NO_COLOR;
 
 public class AppColorExtractorService extends IntentService {
 
+    @Inject
+    AppRepository appRepository;
+
     public AppColorExtractorService() {
         super(AppColorExtractorService.class.getSimpleName());
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        ((Chromer) getApplication()).getAppComponent().inject(this);
         if (intent != null) {
             final String packageName = intent.getStringExtra(EXTRA_PACKAGE_NAME);
             if (packageName != null) {
@@ -138,11 +145,6 @@ public class AppColorExtractorService extends IntentService {
         }
     }
 
-    private void saveColorToDb(final String packageName, @ColorInt int extractedColor) {
-        AppRepository.getInstance(this)
-                .setPackageColor(packageName, extractedColor)
-                .subscribe();
-    }
 
     private boolean isValidPackage(String app) {
         return app.equalsIgnoreCase(getPackageName()) || app.equalsIgnoreCase("android") || app.isEmpty();
@@ -159,6 +161,10 @@ public class AppColorExtractorService extends IntentService {
         if (prominentSwatch != null)
             return prominentSwatch.getRgb();
         else return -1;
+    }
+
+    private void saveColorToDb(final String packageName, @ColorInt int extractedColor) {
+        appRepository.setPackageColor(packageName, extractedColor).subscribe();
     }
 
 }

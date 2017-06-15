@@ -27,9 +27,12 @@ import android.support.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import arun.com.chromer.activities.mvp.Base;
 import arun.com.chromer.data.apps.AppRepository;
 import arun.com.chromer.data.common.App;
+import arun.com.chromer.di.PerActivity;
 import arun.com.chromer.util.RxUtils;
 import arun.com.chromer.util.Utils;
 import rx.Observable;
@@ -50,7 +53,16 @@ interface Blacklist {
     /**
      * Presenter containing all business logic for this screen.
      */
+    @PerActivity
     class Presenter extends Base.Presenter<View> {
+
+        private final AppRepository appRepository;
+
+        @Inject
+        public Presenter(@NonNull AppRepository appRepository) {
+            this.appRepository = appRepository;
+        }
+
         void loadAppList(@NonNull final Context context) {
             if (isViewAttached()) {
                 getView().setRefreshing(true);
@@ -66,7 +78,7 @@ interface Blacklist {
                             && !resolveInfo.activityInfo.packageName.equalsIgnoreCase(context.getPackageName()))
                     .map(resolveInfo -> {
                         final App app = Utils.createApp(context, resolveInfo.activityInfo.packageName);
-                        app.blackListed = AppRepository.getInstance(context).isPackageBlacklisted(app.packageName);
+                        app.blackListed = appRepository.isPackageBlacklisted(app.packageName);
                         return app;
                     }).distinct()
                     .toSortedList(appComparator::compare)
@@ -86,19 +98,17 @@ interface Blacklist {
                             Timber.e(error.toString());
                         }
                     });
-            compositeSubscription.add(subscription);
+            subs.add(subscription);
         }
 
         void updateBlacklist(@NonNull Context context, @Nullable App app) {
             if (app != null) {
                 if (app.blackListed) {
-                    AppRepository.getInstance(context)
-                            .setPackageBlacklisted(app.packageName)
+                    appRepository.setPackageBlacklisted(app.packageName)
                             .compose(RxUtils.applySchedulers())
                             .subscribe();
                 } else {
-                    AppRepository.getInstance(context)
-                            .removeBlacklist(app.packageName)
+                    appRepository.removeBlacklist(app.packageName)
                             .compose(RxUtils.applySchedulers())
                             .subscribe();
                 }
@@ -107,7 +117,17 @@ interface Blacklist {
 
         void handleSelections(final Context context, Observable<App> clicks) {
             final Subscription subscription = clicks.subscribe(app -> updateBlacklist(context, app));
-            compositeSubscription.add(subscription);
+            subs.add(subscription);
+        }
+
+        @Override
+        public void onResume() {
+
+        }
+
+        @Override
+        public void onPause() {
+
         }
     }
 }

@@ -16,7 +16,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.data.apps;
+package arun.com.chromer.di.modules;
 
-public interface AppStore extends BaseAppRepository {
+import android.app.Application;
+
+import javax.inject.Singleton;
+
+import dagger.Module;
+import dagger.Provides;
+
+@Module
+public class AppModule {
+
+    Application application;
+
+    public AppModule(Application application) {
+        this.application = application;
+    }
+
+    @Provides
+    @Singleton
+    Application providesApplication() {
+        return application;
+    }
 }

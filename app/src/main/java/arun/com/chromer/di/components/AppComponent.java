@@ -16,7 +16,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.data.apps;
+package arun.com.chromer.di.components;
 
-public interface AppStore extends BaseAppRepository {
+import android.support.annotation.NonNull;
+
+import javax.inject.Singleton;
+
+import arun.com.chromer.customtabs.dynamictoolbar.AppColorExtractorService;
+import arun.com.chromer.di.modules.ActivityModule;
+import arun.com.chromer.di.modules.AppModule;
+import arun.com.chromer.di.modules.DataModule;
+import dagger.Component;
+
+@Singleton
+@Component(modules = {
+        AppModule.class,
+        DataModule.class,
+})
+public interface AppComponent {
+    @NonNull
+    ActivityComponent newActivityComponent(@NonNull ActivityModule activityModule);
+
+    @NonNull
+    void inject(AppColorExtractorService appColorExtractorService);
 }

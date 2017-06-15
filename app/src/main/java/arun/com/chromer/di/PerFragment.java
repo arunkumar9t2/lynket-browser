@@ -16,7 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.data.apps;
+package arun.com.chromer.di;
 
-public interface AppStore extends BaseAppRepository {
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+import javax.inject.Scope;
+
+/**
+ * Scoping annotation to confine object lifetime to lifecycle of a
+ * {@link android.support.v4.app.Fragment}
+ */
+@Scope
+@Retention(RetentionPolicy.RUNTIME)
+public @interface PerFragment {
 }

@@ -18,7 +18,6 @@
 
 package arun.com.chromer.data.apps;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -32,26 +31,11 @@ import timber.log.Timber;
 public class AppRepository implements BaseAppRepository {
     private final Context context;
     // Disk app store
-    private final AppDiskStore diskStore;
-    @SuppressLint("StaticFieldLeak")
-    private static AppRepository INSTANCE;
+    private final AppStore diskStore;
 
-    /**
-     * Used to get a singleton instance of the repository
-     *
-     * @param context Context to work with.
-     * @return Instance of this class.
-     */
-    public static AppRepository getInstance(@NonNull Context context) {
-        if (INSTANCE == null) {
-            INSTANCE = new AppRepository(context);
-        }
-        return INSTANCE;
-    }
-
-    private AppRepository(@NonNull Context context) {
+    public AppRepository(@NonNull Context context, @NonNull AppStore appStore) {
         this.context = context.getApplicationContext();
-        this.diskStore = new AppDiskStore(context);
+        this.diskStore = appStore;
     }
 
     @NonNull

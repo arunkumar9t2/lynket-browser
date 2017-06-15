@@ -35,7 +35,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.SnackHelper;
+import arun.com.chromer.activities.Snackable;
 import arun.com.chromer.activities.settings.Preferences;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,7 +45,7 @@ import static arun.com.chromer.shared.Constants.ACTION_WEBHEAD_COLOR_SET;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_TOOLBAR_COLOR;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBHEAD_COLOR;
 
-public class LookAndFeelActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback, SnackHelper, SharedPreferences.OnSharedPreferenceChangeListener {
+public class LookAndFeelActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback, Snackable, SharedPreferences.OnSharedPreferenceChangeListener {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.coordinator_layout)

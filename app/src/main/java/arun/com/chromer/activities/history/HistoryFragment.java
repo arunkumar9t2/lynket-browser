@@ -36,7 +36,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.SnackHelper;
+import arun.com.chromer.activities.Snackable;
 import arun.com.chromer.activities.mvp.BaseFragment;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.util.Utils;
@@ -69,12 +69,12 @@ public class HistoryFragment extends BaseFragment<History.View, History.Presente
 
     @Override
     public void snack(@NonNull String message) {
-        ((SnackHelper) getActivity()).snack(message);
+        ((Snackable) getActivity()).snack(message);
     }
 
     @Override
     public void snackLong(@NonNull String message) {
-        ((SnackHelper) getActivity()).snackLong(message);
+        ((Snackable) getActivity()).snackLong(message);
     }
 
 

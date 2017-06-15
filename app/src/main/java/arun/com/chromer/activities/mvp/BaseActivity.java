@@ -23,23 +23,41 @@ import android.support.annotation.LayoutRes;
 
 import com.hannesdorfmann.mosby3.mvp.MvpActivity;
 
+import arun.com.chromer.Chromer;
+import arun.com.chromer.di.components.ActivityComponent;
+import arun.com.chromer.di.modules.ActivityModule;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import rx.subscriptions.CompositeSubscription;
 
 /**
- * Created by Arunkumar on 05-04-2017.
+ * Created by arunk on 11-01-2017.
  */
+
 public abstract class BaseActivity<V extends Base.View, P extends Base.Presenter<V>>
         extends MvpActivity<V, P> {
 
     protected Unbinder unbinder;
 
+    ActivityComponent activityComponent;
+
+    protected final CompositeSubscription subs = new CompositeSubscription();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        activityComponent = ((Chromer) getApplication())
+                .getAppComponent()
+                .newActivityComponent(new ActivityModule(this));
+        inject(activityComponent);
         super.onCreate(savedInstanceState);
         setContentView(getLayoutRes());
         unbinder = ButterKnife.bind(this);
     }
+
+    protected abstract void inject(ActivityComponent activityComponent);
+
+    @LayoutRes
+    protected abstract int getLayoutRes();
 
     @Override
     protected void onResume() {
@@ -53,13 +71,18 @@ public abstract class BaseActivity<V extends Base.View, P extends Base.Presenter
         presenter.onPause();
     }
 
+
+    public ActivityComponent getActivityComponent() {
+        return activityComponent;
+    }
+
     @Override
     protected void onDestroy() {
-        presenter.onDestroy();
+        subs.clear();
         unbinder.unbind();
+        presenter.onDestroy();
+        activityComponent = null;
         super.onDestroy();
     }
 
-    @LayoutRes
-    protected abstract int getLayoutRes();
 }

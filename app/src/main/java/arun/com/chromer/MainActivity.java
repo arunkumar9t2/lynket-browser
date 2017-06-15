@@ -58,7 +58,7 @@ import java.util.Collections;
 import java.util.List;
 
 import arun.com.chromer.activities.BrowserInterceptActivity;
-import arun.com.chromer.activities.SnackHelper;
+import arun.com.chromer.activities.Snackable;
 import arun.com.chromer.activities.about.AboutAppActivity;
 import arun.com.chromer.activities.about.changelog.Changelog;
 import arun.com.chromer.activities.history.HistoryFragment;
@@ -80,7 +80,7 @@ import timber.log.Timber;
 import static arun.com.chromer.shared.Constants.ACTION_CLOSE_ROOT;
 import static arun.com.chromer.util.cache.FontCache.MONO;
 
-public class MainActivity extends AppCompatActivity implements SnackHelper {
+public class MainActivity extends AppCompatActivity implements Snackable {
 
     @BindView(R.id.bottomsheet)
     public BottomSheetLayout bottomSheetLayout;

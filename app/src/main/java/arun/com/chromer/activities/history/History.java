@@ -24,7 +24,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.SnackHelper;
+import arun.com.chromer.activities.Snackable;
 import arun.com.chromer.activities.mvp.Base;
 import arun.com.chromer.data.history.HistoryRepository;
 import arun.com.chromer.data.website.model.WebSite;
@@ -36,7 +36,7 @@ import timber.log.Timber;
  * Created by arunk on 06-03-2017.
  */
 interface History {
-    interface View extends SnackHelper, Base.View {
+    interface View extends Snackable, Base.View {
         void loading(boolean loading);
 
         void setCursor(@Nullable Cursor cursor);
@@ -47,7 +47,7 @@ interface History {
             if (isViewAttached()) {
                 getView().loading(true);
             }
-            compositeSubscription.add(HistoryRepository.getInstance(context).getAllItemsCursor()
+            subs.add(HistoryRepository.getInstance(context).getAllItemsCursor()
                     .compose(RxUtils.applySchedulers())
                     .toSingle()
                     .doOnSuccess(cursor -> {
@@ -62,7 +62,7 @@ interface History {
         }
 
         void deleteAll(@NonNull Context context) {
-            compositeSubscription.add(HistoryRepository.getInstance(context)
+            subs.add(HistoryRepository.getInstance(context)
                     .deleteAll()
                     .compose(RxUtils.applySchedulers())
                     .doOnError(Timber::e)
@@ -75,13 +75,23 @@ interface History {
         }
 
         void deleteHistory(@NonNull Context context, @NonNull Observable<WebSite> webSiteObservable) {
-            compositeSubscription.add(webSiteObservable
+            subs.add(webSiteObservable
                     .filter(webSite -> webSite != null && webSite.url != null)
                     .flatMap(webSite -> HistoryRepository.getInstance(context).delete(webSite))
                     .compose(RxUtils.applySchedulers())
                     .doOnError(Timber::e)
                     .doOnNext(result -> loadHistory(context))
                     .subscribe());
+        }
+
+        @Override
+        public void onResume() {
+
+        }
+
+        @Override
+        public void onPause() {
+
         }
     }
 }

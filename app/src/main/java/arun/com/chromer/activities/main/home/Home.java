@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import arun.com.chromer.activities.SnackHelper;
+import arun.com.chromer.activities.Snackable;
 import arun.com.chromer.activities.mvp.Base;
 import arun.com.chromer.data.history.HistoryRepository;
 import arun.com.chromer.data.website.model.WebSite;
@@ -40,7 +40,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 interface Home {
-    interface View extends SnackHelper, Base.View {
+    interface View extends Snackable, Base.View {
         void setSuggestions(@NonNull List<SuggestionItem> suggestions);
 
         void setRecents(@NonNull List<WebSite> webSites);
@@ -49,7 +49,7 @@ interface Home {
     class Presenter extends Base.Presenter<View> {
 
         void registerSearch(@NonNull EditText editText) {
-            compositeSubscription.add(RxTextView.afterTextChangeEvents(editText)
+            subs.add(RxTextView.afterTextChangeEvents(editText)
                     .map(changeEvent -> changeEvent.editable().toString())
                     .filter(s -> !TextUtils.isEmpty(s)).subscribeOn(AndroidSchedulers.mainThread())
                     .debounce(150, TimeUnit.MILLISECONDS)
@@ -71,7 +71,7 @@ interface Home {
         }
 
         void loadRecents(@NonNull Context context) {
-            compositeSubscription.add(HistoryRepository.getInstance(context)
+            subs.add(HistoryRepository.getInstance(context)
                     .recents()
                     .compose(RxUtils.applySchedulers())
                     .doOnError(Timber::e)
@@ -81,6 +81,16 @@ interface Home {
                         }
                     })
                     .subscribe());
+        }
+
+        @Override
+        public void onResume() {
+
+        }
+
+        @Override
+        public void onPause() {
+
         }
     }
 }

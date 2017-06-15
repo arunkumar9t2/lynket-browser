@@ -16,7 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.data.apps;
+package arun.com.chromer.di.modules;
 
-public interface AppStore extends BaseAppRepository {
+import android.support.v4.app.Fragment;
+
+import dagger.Module;
+
+@Module
+public class FragmentModule {
+
+    private final Fragment fragment;
+
+    public FragmentModule(Fragment fragment) {
+        this.fragment = fragment;
+    }
+
 }

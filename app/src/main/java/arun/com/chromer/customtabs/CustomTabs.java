@@ -47,6 +47,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.inject.Inject;
+
 import arun.com.chromer.R;
 import arun.com.chromer.activities.MoreMenuActivity;
 import arun.com.chromer.activities.OpenIntentWithActivity;
@@ -153,6 +155,9 @@ public class CustomTabs {
         forWebHead = false;
         noAnimation = false;
     }
+
+    @Inject
+    AppRepository appRepository;
 
     /**
      * Used to get an instance of this helper
@@ -454,7 +459,7 @@ public class CustomTabs {
                 activity.startService(new Intent(activity, AppDetectService.class));
                 return false;
             }
-            final int savedColor = AppRepository.getInstance(activity).getPackageColorSync(lastPackage);
+            final int savedColor = appRepository.getPackageColorSync(lastPackage);
             if (savedColor != Constants.NO_COLOR) {
                 toolbarColor = savedColor;
                 return true;

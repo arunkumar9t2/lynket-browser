@@ -39,18 +39,21 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import arun.com.chromer.R;
-import arun.com.chromer.activities.SnackHelper;
+import arun.com.chromer.activities.Snackable;
 import arun.com.chromer.activities.mvp.BaseActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.data.common.App;
+import arun.com.chromer.di.components.ActivityComponent;
 import arun.com.chromer.util.ServiceUtil;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 
 public class BlacklistManagerActivity extends BaseActivity<Blacklist.View, Blacklist.Presenter> implements
         Blacklist.View,
-        CompoundButton.OnCheckedChangeListener, SwipeRefreshLayout.OnRefreshListener, SnackHelper {
+        CompoundButton.OnCheckedChangeListener, SwipeRefreshLayout.OnRefreshListener, Snackable {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -63,6 +66,9 @@ public class BlacklistManagerActivity extends BaseActivity<Blacklist.View, Black
 
     private BlacklistAdapter blacklistAdapter;
 
+    @Inject
+    Blacklist.Presenter presenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +79,11 @@ public class BlacklistManagerActivity extends BaseActivity<Blacklist.View, Black
         blackListedAppsList.setAdapter(blacklistAdapter);
         presenter.handleSelections(this, blacklistAdapter.clicks());
         loadApps();
+    }
+
+    @Override
+    protected void inject(ActivityComponent activityComponent) {
+        activityComponent.inject(this);
     }
 
     private void loadApps() {
@@ -99,7 +110,7 @@ public class BlacklistManagerActivity extends BaseActivity<Blacklist.View, Black
     @NonNull
     @Override
     public Blacklist.Presenter createPresenter() {
-        return new Blacklist.Presenter();
+        return presenter;
     }
 
     @Override

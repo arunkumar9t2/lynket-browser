@@ -37,9 +37,7 @@ import com.afollestad.materialdialogs.Theme;
 import arun.com.chromer.R;
 import arun.com.chromer.activities.browsing.article.ArticleLauncher;
 import arun.com.chromer.activities.settings.Preferences;
-import arun.com.chromer.data.apps.AppRepository;
 import arun.com.chromer.data.website.WebsiteRepository;
-import arun.com.chromer.shared.AppDetectionManager;
 import arun.com.chromer.util.DocumentUtils;
 import arun.com.chromer.util.RxUtils;
 import arun.com.chromer.util.SafeIntent;
@@ -89,12 +87,12 @@ public class BrowserInterceptActivity extends AppCompatActivity {
 
         // Check if we should blacklist the launching app
         if (Preferences.get(this).blacklist()) {
-            final String lastAppPackage = AppDetectionManager.getInstance(this).getNonFilteredPackage();
+            /*final String lastAppPackage = AppDetectionManager.getInstance(this).getNonFilteredPackage();
             if (!TextUtils.isEmpty(lastAppPackage) && AppRepository.getInstance(this).isPackageBlacklisted(lastAppPackage)) {
                 // The calling app was blacklisted by user, perform blacklisting.
                 performBlacklistAction();
                 return;
-            }
+            }*/
         }
 
         // If user prefers to open in bubbles, then start the web head service.

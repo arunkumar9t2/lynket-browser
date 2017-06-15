@@ -16,7 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.data.apps;
+package arun.com.chromer.di.modules;
 
-public interface AppStore extends BaseAppRepository {
+import android.app.Activity;
+
+import dagger.Module;
+
+@Module
+public class ActivityModule {
+
+    private final Activity activity;
+
+    public ActivityModule(Activity activity) {
+        this.activity = activity;
+    }
+
 }
