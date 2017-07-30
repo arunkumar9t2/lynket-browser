@@ -108,6 +108,11 @@ public class LookAndFeelActivity extends AppCompatActivity implements ColorChoos
     }
 
     @Override
+    public void onColorChooserDismissed(@NonNull ColorChooserDialog dialog) {
+
+    }
+
+    @Override
     public void snack(@NonNull String message) {
         Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_SHORT).show();
     }

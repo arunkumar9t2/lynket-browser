@@ -20,15 +20,12 @@ package arun.com.chromer.activities.main.home;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 import android.widget.EditText;
 
-import com.arun.rxsuggestions.RxSuggestions;
 import com.jakewharton.rxbinding.widget.RxTextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import arun.com.chromer.activities.Snackable;
 import arun.com.chromer.activities.mvp.Base;
@@ -36,7 +33,7 @@ import arun.com.chromer.data.history.HistoryRepository;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.search.SuggestionItem;
 import arun.com.chromer.util.RxUtils;
-import rx.android.schedulers.AndroidSchedulers;
+import in.arunkumarsampath.suggestions.RxSuggestions;
 import timber.log.Timber;
 
 interface Home {
@@ -51,10 +48,6 @@ interface Home {
         void registerSearch(@NonNull EditText editText) {
             subs.add(RxTextView.afterTextChangeEvents(editText)
                     .map(changeEvent -> changeEvent.editable().toString())
-                    .filter(s -> !TextUtils.isEmpty(s)).subscribeOn(AndroidSchedulers.mainThread())
-                    .debounce(150, TimeUnit.MILLISECONDS)
-                    .onBackpressureLatest()
-                    .doOnNext(s -> Timber.d("Query: %s", s))
                     .compose(RxSuggestions.suggestionsTransformer())
                     .map(strings -> {
                         final List<SuggestionItem> suggestionItems = new ArrayList<>();
