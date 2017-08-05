@@ -18,11 +18,7 @@
 
 package arun.com.chromer.activities.main.home;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
-import android.widget.EditText;
-
-import com.jakewharton.rxbinding.widget.RxTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +33,7 @@ import arun.com.chromer.di.PerFragment;
 import arun.com.chromer.search.SuggestionItem;
 import arun.com.chromer.util.RxUtils;
 import in.arunkumarsampath.suggestions.RxSuggestions;
+import rx.Observable;
 import timber.log.Timber;
 
 interface Home {
@@ -56,9 +53,8 @@ interface Home {
             this.historyRepository = historyRepository;
         }
 
-        void registerSearch(@NonNull EditText editText) {
-            subs.add(RxTextView.afterTextChangeEvents(editText)
-                    .map(changeEvent -> changeEvent.editable().toString())
+        void registerSearch(@NonNull Observable<String> stringObservable) {
+            subs.add(stringObservable
                     .compose(RxSuggestions.suggestionsTransformer())
                     .map(strings -> {
                         final List<SuggestionItem> suggestionItems = new ArrayList<>();
@@ -74,7 +70,7 @@ interface Home {
                     .subscribe());
         }
 
-        void loadRecents(@NonNull Context context) {
+        void loadRecents() {
             subs.add(historyRepository.recents()
                     .compose(RxUtils.applySchedulers())
                     .doOnError(Timber::e)

@@ -41,6 +41,8 @@ import arun.com.chromer.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.support.v13.view.ViewCompat.setTransitionName;
+
 /**
  * Created by Arun on 03/08/2016.
  */
@@ -71,9 +73,10 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
 
     @Override
     public void onBindViewHolder(SuggestionItemHolder holder, int position) {
-        holder.suggestion.setText(suggestionItems.get(position).suggestion);
-        SuggestionItem item = suggestionItems.get(position);
-        switch (item.type) {
+        final SuggestionItem suggestionItem = suggestionItems.get(position);
+        holder.suggestion.setText(suggestionItem.suggestion);
+        setTransitionName(holder.suggestion, suggestionItem.type + suggestionItem.suggestion);
+        switch (suggestionItem.type) {
             case SuggestionItem.COPY:
                 holder.icon.setImageDrawable(new IconicsDrawable(context)
                         .icon(CommunityMaterial.Icon.cmd_content_copy)

@@ -31,6 +31,7 @@ import arun.com.chromer.di.components.FragmentComponent;
 import arun.com.chromer.di.modules.FragmentModule;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by Arunkumar on 05-04-2017.
@@ -39,6 +40,8 @@ public abstract class BaseFragment<V extends Base.View, P extends Base.Presenter
         extends MvpFragment<V, P> {
     private FragmentComponent fragmentComponent;
     private Unbinder unbinder;
+
+    protected final CompositeSubscription subs = new CompositeSubscription();
 
     @Nullable
     @Override
@@ -77,6 +80,7 @@ public abstract class BaseFragment<V extends Base.View, P extends Base.Presenter
         presenter.onDestroy();
         super.onDestroy();
         unbinder.unbind();
+        fragmentComponent = null;
     }
 
     @LayoutRes

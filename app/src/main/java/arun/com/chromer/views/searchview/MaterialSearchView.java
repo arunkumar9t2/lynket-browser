@@ -25,7 +25,6 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.transition.TransitionManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,7 +34,6 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -54,11 +52,13 @@ import arun.com.chromer.util.Utils;
 import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.subjects.PublishSubject;
 
 import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
+import static android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH;
 
-public class MaterialSearchView extends RelativeLayout implements
-        SuggestionAdapter.SuggestionClickListener {
+public class MaterialSearchView extends RelativeLayout implements SuggestionAdapter.SuggestionClickListener {
     @BindColor(R.color.accent_icon_nofocus)
     int normalColor;
     @BindColor(R.color.accent)
@@ -86,17 +86,9 @@ public class MaterialSearchView extends RelativeLayout implements
 
     private SuggestionAdapter suggestionAdapter;
 
-    private SearchViewInteractionListener listener = new SearchViewInteractionListener() {
-        @Override
-        public void onVoiceIconClick() {
-            // no op
-        }
-
-        @Override
-        public void onSearchPerformed(@NonNull String url) {
-            // no op
-        }
-    };
+    private PublishSubject<Void> voiceIconClicks = PublishSubject.create();
+    private PublishSubject<String> searchPerforms = PublishSubject.create();
+    private PublishSubject<Void> clearClicks = PublishSubject.create();
 
     public MaterialSearchView(Context context) {
         super(context);
@@ -131,6 +123,7 @@ public class MaterialSearchView extends RelativeLayout implements
 
         suggestionAdapter = new SuggestionAdapter(getContext(), this);
         suggestionList.setLayoutManager(new LinearLayoutManager(getContext()));
+        suggestionList.setItemAnimator(null);
         suggestionList.setAdapter(suggestionAdapter);
         suggestionList.addItemDecoration(new DividerItemDecoration(getContext(), VERTICAL));
     }
@@ -162,8 +155,8 @@ public class MaterialSearchView extends RelativeLayout implements
             }
         });
         editText.setOnEditorActionListener((textView, actionId, keyEvent) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                listener.onSearchPerformed(getURL());
+            if (actionId == IME_ACTION_SEARCH) {
+                searchPerforms.onNext(getURL());
                 return true;
             }
             return false;
@@ -177,13 +170,25 @@ public class MaterialSearchView extends RelativeLayout implements
                 editText.setText("");
                 loseFocus(null);
             } else {
-                if (listener != null) listener.onVoiceIconClick();
+                voiceIconClicks.onNext(null);
             }
         });
 
         setOnClickListener(v -> {
             if (!inFocus) gainFocus();
         });
+    }
+
+    public Observable<Void> voiceIconClicks() {
+        return voiceIconClicks.asObservable();
+    }
+
+    public Observable<String> searchPerfomed() {
+        return searchPerforms.asObservable();
+    }
+
+    public Observable<Void> clearClicks() {
+        return clearClicks.asObservable();
     }
 
     private void gainFocus() {
@@ -305,10 +310,6 @@ public class MaterialSearchView extends RelativeLayout implements
         return Utils.getSearchUrl(getText());
     }
 
-    public void setInteractionListener(@NonNull SearchViewInteractionListener listener) {
-        this.listener = listener;
-    }
-
     @Override
     public void setOnClickListener(OnClickListener l) {
         // no op
@@ -316,22 +317,15 @@ public class MaterialSearchView extends RelativeLayout implements
 
     @Override
     public void onSuggestionClicked(@NonNull final String suggestion) {
-        clearFocus(() -> listener.onSearchPerformed(Utils.getSearchUrl(suggestion)));
+        clearFocus(() -> searchPerforms.onNext(Utils.getSearchUrl(suggestion)));
     }
 
     private void hideSuggestions() {
+        clearClicks.onNext(null);
         suggestionAdapter.clear();
-        TransitionManager.beginDelayedTransition(this);
     }
 
     public void setSuggestions(@NonNull List<SuggestionItem> suggestions) {
         suggestionAdapter.updateSuggestions(suggestions);
-        TransitionManager.beginDelayedTransition(this);
-    }
-
-    public interface SearchViewInteractionListener {
-        void onVoiceIconClick();
-
-        void onSearchPerformed(@NonNull String url);
     }
 }
