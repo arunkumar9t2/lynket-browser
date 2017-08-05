@@ -43,7 +43,7 @@ import javax.inject.Inject;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.Snackable;
-import arun.com.chromer.activities.mvp.BaseActivity;
+import arun.com.chromer.activities.base.BaseActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.data.common.App;
 import arun.com.chromer.di.components.ActivityComponent;
@@ -123,7 +123,7 @@ public class BlacklistManagerActivity extends BaseActivity<Blacklist.View, Black
         getMenuInflater().inflate(R.menu.blacklist_menu, menu);
         final MenuItem menuItem = menu.findItem(R.id.blacklist_switch_item);
         if (menuItem != null) {
-            final SwitchCompat blackListSwitch = (SwitchCompat) menuItem.getActionView().findViewById(R.id.blacklist_switch);
+            final SwitchCompat blackListSwitch = menuItem.getActionView().findViewById(R.id.blacklist_switch);
             if (blackListSwitch != null) {
                 final boolean blackListActive = Preferences.get(this).blacklist() && Utils.canReadUsageStats(this);
                 Preferences.get(this).blacklist(blackListActive);

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.activities.mvp;
+package arun.com.chromer.activities.base;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -35,7 +35,6 @@ import butterknife.Unbinder;
  */
 public abstract class BaseFragment<V extends Base.View, P extends Base.Presenter<V>>
         extends MvpFragment<V, P> {
-
 
     private Unbinder unbinder;
 

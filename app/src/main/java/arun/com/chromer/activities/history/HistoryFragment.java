@@ -37,7 +37,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.Snackable;
-import arun.com.chromer.activities.mvp.BaseFragment;
+import arun.com.chromer.activities.base.BaseFragment;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;

@@ -40,7 +40,7 @@ import java.util.List;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.Snackable;
-import arun.com.chromer.activities.mvp.BaseFragment;
+import arun.com.chromer.activities.base.BaseFragment;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.CustomTabManager;
 import arun.com.chromer.customtabs.CustomTabs;

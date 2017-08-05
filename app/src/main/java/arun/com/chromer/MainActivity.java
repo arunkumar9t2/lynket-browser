@@ -81,7 +81,6 @@ import static arun.com.chromer.shared.Constants.ACTION_CLOSE_ROOT;
 import static arun.com.chromer.util.cache.FontCache.MONO;
 
 public class MainActivity extends AppCompatActivity implements Snackable {
-
     @BindView(R.id.bottomsheet)
     public BottomSheetLayout bottomSheetLayout;
     @BindView(R.id.toolbar)

@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import arun.com.chromer.activities.Snackable;
-import arun.com.chromer.activities.mvp.Base;
+import arun.com.chromer.activities.base.Base;
 import arun.com.chromer.data.history.HistoryRepository;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.search.SuggestionItem;

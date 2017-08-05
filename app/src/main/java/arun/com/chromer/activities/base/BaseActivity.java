@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.activities.mvp;
+package arun.com.chromer.activities.base;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
