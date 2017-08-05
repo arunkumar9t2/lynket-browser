@@ -39,6 +39,7 @@ import arun.com.chromer.R;
 import arun.com.chromer.activities.Snackable;
 import arun.com.chromer.activities.base.BaseFragment;
 import arun.com.chromer.activities.settings.Preferences;
+import arun.com.chromer.di.components.FragmentComponent;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -156,6 +157,11 @@ public class HistoryFragment extends BaseFragment<History.View, History.Presente
         } else {
             return Utils.html(getActivity(), String.format(getString(R.string.enable_history_subtitle_custom_tab), Utils.getAppNameWithPackage(getActivity(), provider)));
         }
+    }
+
+    @Override
+    protected void inject(FragmentComponent fragmentComponent) {
+
     }
 
     @Override

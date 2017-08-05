@@ -38,6 +38,8 @@ import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import arun.com.chromer.R;
 import arun.com.chromer.activities.Snackable;
 import arun.com.chromer.activities.base.BaseFragment;
@@ -46,6 +48,7 @@ import arun.com.chromer.customtabs.CustomTabManager;
 import arun.com.chromer.customtabs.CustomTabs;
 import arun.com.chromer.data.website.WebsiteRepository;
 import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.di.components.FragmentComponent;
 import arun.com.chromer.search.SuggestionItem;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.RxUtils;
@@ -78,7 +81,9 @@ public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implem
 
 
     private CustomTabManager customTabManager;
-    private RecentsAdapter recentsAdapter;
+
+    @Inject
+    RecentsAdapter recentsAdapter;
 
     @NonNull
     @Override
@@ -98,6 +103,11 @@ public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implem
     public void onStart() {
         super.onStart();
         customTabManager.bindCustomTabsService(getActivity());
+    }
+
+    @Override
+    protected void inject(FragmentComponent fragmentComponent) {
+        fragmentComponent.inject(this);
     }
 
     @Override
@@ -186,7 +196,6 @@ public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implem
                 .colorRes(R.color.accent)
                 .sizeDp(20), null, null, null);
         recentsList.setLayoutManager(new GridLayoutManager(getActivity(), 4));
-        recentsAdapter = new RecentsAdapter();
         recentsList.setAdapter(recentsAdapter);
     }
 

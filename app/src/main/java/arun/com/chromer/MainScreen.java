@@ -16,18 +16,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.di.components;
+package arun.com.chromer;
 
-import arun.com.chromer.activities.main.home.HomeFragment;
-import arun.com.chromer.di.PerFragment;
-import arun.com.chromer.di.modules.FragmentModule;
-import dagger.Subcomponent;
+import javax.inject.Inject;
 
-@PerFragment
-@Subcomponent(modules = {
-        FragmentModule.class
-})
-public interface FragmentComponent {
+import arun.com.chromer.activities.Snackable;
+import arun.com.chromer.activities.base.Base;
+import arun.com.chromer.di.PerActivity;
 
-    void inject(HomeFragment homeFragment);
+/**
+ * Created by arunk on 05-08-2017.
+ */
+
+public interface MainScreen {
+    interface View extends Base.View, Snackable {
+    }
+
+    @PerActivity
+    class Presenter extends Base.Presenter<MainScreen.View> {
+
+        @Inject
+        public Presenter() {
+        }
+
+        @Override
+        public void onResume() {
+
+        }
+
+        @Override
+        public void onPause() {
+
+        }
+    }
 }

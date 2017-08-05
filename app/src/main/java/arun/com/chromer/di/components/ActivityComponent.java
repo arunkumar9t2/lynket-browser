@@ -20,6 +20,7 @@ package arun.com.chromer.di.components;
 
 import android.support.annotation.NonNull;
 
+import arun.com.chromer.MainActivity;
 import arun.com.chromer.activities.blacklist.BlacklistManagerActivity;
 import arun.com.chromer.di.PerActivity;
 import arun.com.chromer.di.modules.ActivityModule;
@@ -35,4 +36,6 @@ public interface ActivityComponent {
     FragmentComponent newFragmentComponent(@NonNull FragmentModule fragmentModule);
 
     void inject(BlacklistManagerActivity blacklistManagerActivity);
+
+    void inject(MainActivity mainActivity);
 }

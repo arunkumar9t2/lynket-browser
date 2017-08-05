@@ -27,6 +27,8 @@ import android.view.ViewGroup;
 
 import com.hannesdorfmann.mosby3.mvp.MvpFragment;
 
+import arun.com.chromer.di.components.FragmentComponent;
+import arun.com.chromer.di.modules.FragmentModule;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -35,7 +37,7 @@ import butterknife.Unbinder;
  */
 public abstract class BaseFragment<V extends Base.View, P extends Base.Presenter<V>>
         extends MvpFragment<V, P> {
-
+    private FragmentComponent fragmentComponent;
     private Unbinder unbinder;
 
     @Nullable
@@ -45,6 +47,18 @@ public abstract class BaseFragment<V extends Base.View, P extends Base.Presenter
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        fragmentComponent = ((BaseActivity) getActivity())
+                .getActivityComponent()
+                .newFragmentComponent(new FragmentModule(this));
+        inject(fragmentComponent);
+    }
+
+    protected abstract void inject(FragmentComponent fragmentComponent);
 
     @Override
     public void onResume() {

@@ -30,7 +30,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -57,10 +56,12 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import arun.com.chromer.activities.BrowserInterceptActivity;
-import arun.com.chromer.activities.Snackable;
 import arun.com.chromer.activities.about.AboutAppActivity;
 import arun.com.chromer.activities.about.changelog.Changelog;
+import arun.com.chromer.activities.base.BaseActivity;
 import arun.com.chromer.activities.history.HistoryFragment;
 import arun.com.chromer.activities.intro.ChromerIntro;
 import arun.com.chromer.activities.intro.WebHeadsIntro;
@@ -69,24 +70,24 @@ import arun.com.chromer.activities.payments.DonateActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.activities.settings.SettingsGroupActivity;
 import arun.com.chromer.customtabs.CustomTabs;
+import arun.com.chromer.di.components.ActivityComponent;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.ServiceUtil;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.util.cache.FontCache;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import timber.log.Timber;
 
 import static arun.com.chromer.shared.Constants.ACTION_CLOSE_ROOT;
 import static arun.com.chromer.util.cache.FontCache.MONO;
 
-public class MainActivity extends AppCompatActivity implements Snackable {
+public class MainActivity extends BaseActivity<MainScreen.View, MainScreen.Presenter> implements MainScreen.View {
     @BindView(R.id.bottomsheet)
-    public BottomSheetLayout bottomSheetLayout;
+    BottomSheetLayout bottomSheetLayout;
     @BindView(R.id.toolbar)
-    public Toolbar toolbar;
+    Toolbar toolbar;
     @BindView(R.id.coordinator_layout)
-    public CoordinatorLayout coordinatorLayout;
+    CoordinatorLayout coordinatorLayout;
     @BindView(R.id.root)
     LinearLayout root;
     @BindView(R.id.appbar)
@@ -94,14 +95,15 @@ public class MainActivity extends AppCompatActivity implements Snackable {
     @BindView(R.id.bottom_navigation)
     BottomNavigationView bottomNavigation;
 
+    @Inject
+    MainScreen.Presenter presenter;
+
     private BroadcastReceiver closeReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
 
         if (Preferences.get(this).isFirstRun()) {
             startActivity(new Intent(this, ChromerIntro.class));
@@ -130,6 +132,16 @@ public class MainActivity extends AppCompatActivity implements Snackable {
         bottomNavigation.setSelectedItemId(R.id.home);
     }
 
+    @Override
+    protected void inject(ActivityComponent activityComponent) {
+        activityComponent.inject(this);
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.activity_main;
+    }
+
     private void selectHome() {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new HomeFragment())
@@ -140,6 +152,12 @@ public class MainActivity extends AppCompatActivity implements Snackable {
     protected void onDestroy() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(closeReceiver);
         super.onDestroy();
+    }
+
+    @NonNull
+    @Override
+    public MainScreen.Presenter createPresenter() {
+        return presenter;
     }
 
     @Override
