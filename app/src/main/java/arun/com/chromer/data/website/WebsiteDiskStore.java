@@ -24,7 +24,6 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 
 import java.io.IOException;
-import java.util.concurrent.Callable;
 
 import arun.com.chromer.data.common.BookStore;
 import arun.com.chromer.data.website.model.WebColor;
@@ -86,12 +85,9 @@ class WebsiteDiskStore implements WebsiteStore, BookStore {
     @NonNull
     @Override
     public Observable<Void> clearCache() {
-        return Observable.fromCallable(new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                webSiteDiskCache.clear();
-                return null;
-            }
+        return Observable.fromCallable(() -> {
+            webSiteDiskCache.clear();
+            return null;
         });
     }
 

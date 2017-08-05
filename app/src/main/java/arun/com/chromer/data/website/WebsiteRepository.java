@@ -28,7 +28,6 @@ import arun.com.chromer.data.website.model.WebColor;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.util.RxUtils;
 import rx.Observable;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -101,14 +100,11 @@ public class WebsiteRepository implements BaseWebsiteRepository {
     public Observable<WebColor> saveWebColor(String url) {
         return getWebsite(url)
                 .observeOn(Schedulers.io())
-                .flatMap(new Func1<WebSite, Observable<WebColor>>() {
-                    @Override
-                    public Observable<WebColor> call(WebSite webSite) {
-                        if (webSite != null && webSite.themeColor() != NO_COLOR) {
-                            return diskStore.saveWebsiteColor(Uri.parse(webSite.url).getHost(), webSite.themeColor());
-                        } else {
-                            return Observable.empty();
-                        }
+                .flatMap(webSite -> {
+                    if (webSite != null && webSite.themeColor() != NO_COLOR) {
+                        return diskStore.saveWebsiteColor(Uri.parse(webSite.url).getHost(), webSite.themeColor());
+                    } else {
+                        return Observable.empty();
                     }
                 });
     }

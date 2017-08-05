@@ -21,8 +21,6 @@ package arun.com.chromer.data.apps;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import java.util.concurrent.Callable;
-
 import arun.com.chromer.data.common.App;
 import arun.com.chromer.data.common.BookStore;
 import arun.com.chromer.shared.Constants;
@@ -30,7 +28,6 @@ import arun.com.chromer.util.Utils;
 import io.paperdb.Book;
 import io.paperdb.Paper;
 import rx.Observable;
-import rx.functions.Func1;
 import timber.log.Timber;
 
 public class AppDiskStore implements AppStore, BookStore {
@@ -51,28 +48,20 @@ public class AppDiskStore implements AppStore, BookStore {
     @NonNull
     @Override
     public Observable<App> getApp(@NonNull final String packageName) {
-        return Observable.fromCallable(new Callable<App>() {
-            @Override
-            public App call() throws Exception {
-                return getBook().read(packageName, null);
-            }
-        });
+        return Observable.fromCallable(() -> getBook().read(packageName, null));
     }
 
     @NonNull
     @Override
     public Observable<App> savApp(App app) {
         return Observable.just(app)
-                .flatMap(new Func1<App, Observable<App>>() {
-                    @Override
-                    public Observable<App> call(final App app) {
-                        if (app == null) {
-                            return null;
-                        } else {
-                            getBook().write(app.packageName, app);
-                            Timber.d("Wrote %s to storage", app.packageName);
-                            return Observable.just(app);
-                        }
+                .flatMap(app1 -> {
+                    if (app1 == null) {
+                        return null;
+                    } else {
+                        getBook().write(app1.packageName, app1);
+                        Timber.d("Wrote %s to storage", app1.packageName);
+                        return Observable.just(app1);
                     }
                 });
     }
@@ -86,19 +75,16 @@ public class AppDiskStore implements AppStore, BookStore {
     @Override
     public Observable<App> setPackageBlacklisted(@NonNull final String packageName) {
         return getApp(packageName)
-                .flatMap(new Func1<App, Observable<App>>() {
-                    @Override
-                    public Observable<App> call(App app) {
-                        if (app != null) {
-                            app.blackListed = true;
-                            Timber.d("Set %s as blacklisted", app.packageName);
-                            return savApp(app);
-                        } else {
-                            Timber.d("Added %s and blacklisted", packageName);
-                            app = Utils.createApp(context, packageName);
-                            app.blackListed = true;
-                            return savApp(app);
-                        }
+                .flatMap(app -> {
+                    if (app != null) {
+                        app.blackListed = true;
+                        Timber.d("Set %s as blacklisted", app.packageName);
+                        return savApp(app);
+                    } else {
+                        Timber.d("Added %s and blacklisted", packageName);
+                        app = Utils.createApp(context, packageName);
+                        app.blackListed = true;
+                        return savApp(app);
                     }
                 });
     }
@@ -124,17 +110,14 @@ public class AppDiskStore implements AppStore, BookStore {
     @Override
     public Observable<App> setPackageColor(@NonNull final String packageName, final int color) {
         return getApp(packageName)
-                .flatMap(new Func1<App, Observable<App>>() {
-                    @Override
-                    public Observable<App> call(final App app) {
-                        if (app != null) {
-                            app.color = color;
-                            Timber.d("Saved %d color for %s", color, app.packageName);
-                            return savApp(app);
-                        } else {
-                            Timber.d("Created and saved %d color for %s", color, packageName);
-                            return savApp(Utils.createApp(context, packageName));
-                        }
+                .flatMap(app -> {
+                    if (app != null) {
+                        app.color = color;
+                        Timber.d("Saved %d color for %s", color, app.packageName);
+                        return savApp(app);
+                    } else {
+                        Timber.d("Created and saved %d color for %s", color, packageName);
+                        return savApp(Utils.createApp(context, packageName));
                     }
                 });
     }
@@ -143,16 +126,13 @@ public class AppDiskStore implements AppStore, BookStore {
     public Observable<App> removeBlacklist(final String packageName) {
         if (getBook().exist(packageName)) {
             return getApp(packageName)
-                    .flatMap(new Func1<App, Observable<App>>() {
-                        @Override
-                        public Observable<App> call(App app) {
-                            if (app != null) {
-                                app.blackListed = false;
-                                Timber.d("Blacklist removed %s", app.packageName);
-                                return savApp(app);
-                            } else {
-                                return Observable.just(null);
-                            }
+                    .flatMap(app -> {
+                        if (app != null) {
+                            app.blackListed = false;
+                            Timber.d("Blacklist removed %s", app.packageName);
+                            return savApp(app);
+                        } else {
+                            return Observable.just(null);
                         }
                     });
         } else {
