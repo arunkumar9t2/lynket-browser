@@ -22,13 +22,10 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.Context;
-import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
+import android.support.transition.TransitionManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -41,7 +38,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -55,19 +51,18 @@ import arun.com.chromer.R;
 import arun.com.chromer.search.SuggestionAdapter;
 import arun.com.chromer.search.SuggestionItem;
 import arun.com.chromer.util.Utils;
+import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 public class MaterialSearchView extends RelativeLayout implements
         SuggestionAdapter.SuggestionClickListener {
-    @ColorInt
-    private final int normalColor = ContextCompat.getColor(getContext(), R.color.accent_icon_nofocus);
-    @ColorInt
-    private final int focusedColor = ContextCompat.getColor(getContext(), R.color.accent);
+    @BindColor(R.color.accent_icon_nofocus)
+    int normalColor;
+    @BindColor(R.color.accent)
+    int focusedColor;
 
     private boolean inFocus = false;
     private boolean clearText;
@@ -91,8 +86,6 @@ public class MaterialSearchView extends RelativeLayout implements
 
     private SuggestionAdapter suggestionAdapter;
 
-    private int normalCardHeight = -1;
-
     private SearchViewInteractionListener listener = new SearchViewInteractionListener() {
         @Override
         public void onVoiceIconClick() {
@@ -104,8 +97,6 @@ public class MaterialSearchView extends RelativeLayout implements
             // no op
         }
     };
-
-    private int maxSuggestions = 5;
 
     public MaterialSearchView(Context context) {
         super(context);
@@ -142,11 +133,6 @@ public class MaterialSearchView extends RelativeLayout implements
         suggestionList.setLayoutManager(new LinearLayoutManager(getContext()));
         suggestionList.setAdapter(suggestionAdapter);
         suggestionList.addItemDecoration(new DividerItemDecoration(getContext(), VERTICAL));
-        card.post(() -> {
-            if (normalCardHeight == -1) {
-                normalCardHeight = card.getHeight();
-            }
-        });
     }
 
     @Override
@@ -335,60 +321,12 @@ public class MaterialSearchView extends RelativeLayout implements
 
     private void hideSuggestions() {
         suggestionAdapter.clear();
-        animateCardToHeight(getNormalHeightPx() /* guess: minimum search bar height*/);
+        TransitionManager.beginDelayedTransition(this);
     }
 
     public void setSuggestions(@NonNull List<SuggestionItem> suggestions) {
-        final boolean shouldReveal = suggestionAdapter.getItemCount() == 0 && suggestions.size() > 0;
-        final boolean shouldShrink = suggestionAdapter.getItemCount() != 0 && suggestions.size() == 0;
         suggestionAdapter.updateSuggestions(suggestions);
-        if (shouldShrink) {
-            animateCardToHeight(getNormalHeightPx() /* guess: minimum search bar height*/);
-            return;
-        }
-        if (shouldReveal) {
-            animateCardToHeight(getPredictedSuggestionHeight());
-        }
-    }
-
-    public int getMaxSuggestions() {
-        return maxSuggestions;
-    }
-
-    public void setMaxSuggestions(int maxSuggestions) {
-        this.maxSuggestions = maxSuggestions;
-    }
-
-    private int getNormalHeightPx() {
-        if (normalCardHeight != -1) {
-            return normalCardHeight;
-        }
-        return Utils.dpToPx(50);
-    }
-
-    private void animateCardToHeight(final int heightPx) {
-        final ValueAnimator anim = ValueAnimator.ofInt(card.getHeight(), heightPx);
-        anim.setDuration(300);
-        anim.setInterpolator(new FastOutSlowInInterpolator());
-        card.setLayerType(LAYER_TYPE_HARDWARE, null);
-        anim.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                card.setLayoutParams(new FrameLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
-                card.requestLayout();
-                card.setLayerType(LAYER_TYPE_NONE, null);
-            }
-        });
-        anim.addUpdateListener(animation -> {
-            card.getLayoutParams().height = (int) animation.getAnimatedValue();
-            card.requestLayout();
-        });
-        anim.start();
-    }
-
-
-    private int getPredictedSuggestionHeight() {
-        return card.getHeight() + (maxSuggestions * Utils.dpToPx(48));
+        TransitionManager.beginDelayedTransition(this);
     }
 
     public interface SearchViewInteractionListener {

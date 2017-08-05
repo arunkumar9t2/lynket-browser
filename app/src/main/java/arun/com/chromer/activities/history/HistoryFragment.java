@@ -52,7 +52,6 @@ import static android.view.View.VISIBLE;
 /**
  * Created by arunk on 07-04-2017.
  */
-
 public class HistoryFragment extends BaseFragment<History.View, History.Presenter> implements History.View {
     @BindView(R.id.history_list)
     RecyclerView historyList;
