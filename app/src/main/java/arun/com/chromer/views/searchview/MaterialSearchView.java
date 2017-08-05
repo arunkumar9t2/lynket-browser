@@ -48,7 +48,6 @@ import java.util.List;
 import arun.com.chromer.R;
 import arun.com.chromer.search.SuggestionAdapter;
 import arun.com.chromer.search.SuggestionItem;
-import arun.com.chromer.util.Utils;
 import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,6 +56,7 @@ import rx.subjects.PublishSubject;
 
 import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
 import static android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH;
+import static arun.com.chromer.util.Utils.getSearchUrl;
 
 public class MaterialSearchView extends RelativeLayout implements SuggestionAdapter.SuggestionClickListener {
     @BindColor(R.color.accent_icon_nofocus)
@@ -307,7 +307,7 @@ public class MaterialSearchView extends RelativeLayout implements SuggestionAdap
 
     @NonNull
     public String getURL() {
-        return Utils.getSearchUrl(getText());
+        return getSearchUrl(getText());
     }
 
     @Override
@@ -317,7 +317,7 @@ public class MaterialSearchView extends RelativeLayout implements SuggestionAdap
 
     @Override
     public void onSuggestionClicked(@NonNull final String suggestion) {
-        clearFocus(() -> searchPerforms.onNext(Utils.getSearchUrl(suggestion)));
+        clearFocus(() -> searchPerforms.onNext(getSearchUrl(suggestion)));
     }
 
     private void hideSuggestions() {

@@ -183,7 +183,7 @@ public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implem
         }));
 
         subs.add(materialSearchView.searchPerfomed().subscribe(url -> {
-            launchCustomTab(url);
+            materialSearchView.postDelayed(() -> launchCustomTab(url), 150);
             Answers.getInstance().logSearch(new SearchEvent());
         }));
 
