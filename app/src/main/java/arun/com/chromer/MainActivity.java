@@ -99,6 +99,8 @@ public class MainActivity extends BaseActivity<MainScreen.View, MainScreen.Prese
     MainScreen.Presenter presenter;
 
     private BroadcastReceiver closeReceiver;
+    private HistoryFragment historyFragment;
+    private HomeFragment homeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,20 +118,34 @@ public class MainActivity extends BaseActivity<MainScreen.View, MainScreen.Prese
         ServiceUtil.takeCareOfServices(getApplicationContext());
         registerCloseReceiver();
 
+        historyFragment = new HistoryFragment();
+        homeFragment = new HomeFragment();
+
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, homeFragment)
+                .add(R.id.fragment_container, historyFragment)
+                .hide(historyFragment)
+                .show(homeFragment)
+                .commit();
+
+        bottomNavigation.setSelectedItemId(R.id.home);
         bottomNavigation.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.home:
-                    selectHome();
+                    getSupportFragmentManager().beginTransaction()
+                            .show(homeFragment)
+                            .hide(historyFragment)
+                            .commit();
                     break;
                 case R.id.history:
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, new HistoryFragment())
+                            .show(historyFragment)
+                            .hide(homeFragment)
                             .commit();
                     break;
             }
             return false;
         });
-        bottomNavigation.setSelectedItemId(R.id.home);
     }
 
     @Override
@@ -140,12 +156,6 @@ public class MainActivity extends BaseActivity<MainScreen.View, MainScreen.Prese
     @Override
     protected int getLayoutRes() {
         return R.layout.activity_main;
-    }
-
-    private void selectHome() {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new HomeFragment())
-                .commit();
     }
 
     @Override
