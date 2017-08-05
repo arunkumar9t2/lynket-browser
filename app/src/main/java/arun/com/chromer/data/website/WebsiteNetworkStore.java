@@ -18,9 +18,13 @@
 
 package arun.com.chromer.data.website;
 
+import android.app.Application;
 import android.content.Context;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import arun.com.chromer.data.website.model.WebColor;
 import arun.com.chromer.data.website.model.WebSite;
@@ -31,12 +35,13 @@ import rx.Observable;
 /**
  * Network store which freshly parses website data for a given URL.
  */
-class WebsiteNetworkStore implements WebsiteStore {
-    @SuppressWarnings("FieldCanBeLocal")
+@Singleton
+public class WebsiteNetworkStore implements WebsiteStore {
     private final Context context;
 
-    WebsiteNetworkStore(@NonNull Context context) {
-        this.context = context.getApplicationContext();
+    @Inject
+    WebsiteNetworkStore(@NonNull Application application) {
+        this.context = application.getApplicationContext();
     }
 
     @NonNull

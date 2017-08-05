@@ -18,12 +18,16 @@
 
 package arun.com.chromer.data.website;
 
+import android.app.Application;
 import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 
 import java.io.IOException;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import arun.com.chromer.data.common.BookStore;
 import arun.com.chromer.data.website.model.WebColor;
@@ -39,8 +43,8 @@ import static arun.com.chromer.shared.Constants.NO_COLOR;
 /**
  * Cache store to get/put {@link WebSite} objects to disk cache.
  */
-class WebsiteDiskStore implements WebsiteStore, BookStore {
-    @SuppressWarnings("FieldCanBeLocal")
+@Singleton
+public class WebsiteDiskStore implements WebsiteStore, BookStore {
     private final Context context;
     // Cache to store our data.
     private ParcelDiskCache<WebSite> webSiteDiskCache;
@@ -54,7 +58,8 @@ class WebsiteDiskStore implements WebsiteStore, BookStore {
         return Paper.book(THEME_COLOR_BOOK);
     }
 
-    WebsiteDiskStore(Context context) {
+    @Inject
+    WebsiteDiskStore(Application context) {
         this.context = context.getApplicationContext();
         try {
             webSiteDiskCache = ParcelDiskCache.open(context, WebSite.class.getClassLoader(), "WebSiteCache", DISK_CACHE_SIZE);

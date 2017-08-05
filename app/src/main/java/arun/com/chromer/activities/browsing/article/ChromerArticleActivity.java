@@ -42,9 +42,6 @@ import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.callbacks.ClipboardService;
 import arun.com.chromer.customtabs.callbacks.FavShareBroadcastReceiver;
 import arun.com.chromer.customtabs.callbacks.SecondaryBrowserReceiver;
-import arun.com.chromer.data.history.HistoryRepository;
-import arun.com.chromer.data.website.model.WebSite;
-import arun.com.chromer.util.RxUtils;
 import arun.com.chromer.util.Utils;
 import timber.log.Timber;
 import xyz.klinker.android.article.ArticleActivity;
@@ -83,10 +80,10 @@ public class ChromerArticleActivity extends ArticleActivity {
     @Override
     protected void onArticleLoaded(@NonNull WebArticle webArticle) {
         super.onArticleLoaded(webArticle);
-        HistoryRepository.getInstance(this)
+        /*HistoryRepository.getInstance(this)
                 .insert(WebSite.fromArticle(webArticle))
                 .compose(RxUtils.applySchedulers())
-                .subscribe();
+                .subscribe();*/
     }
 
     @Override

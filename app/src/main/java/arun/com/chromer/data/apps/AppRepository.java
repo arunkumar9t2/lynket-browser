@@ -18,23 +18,30 @@
 
 package arun.com.chromer.data.apps;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import arun.com.chromer.customtabs.dynamictoolbar.AppColorExtractorService;
+import arun.com.chromer.data.apps.store.AppStore;
 import arun.com.chromer.data.common.App;
 import arun.com.chromer.shared.Constants;
 import rx.Observable;
 import timber.log.Timber;
 
+@Singleton
 public class AppRepository implements BaseAppRepository {
-    private final Context context;
+    private final Context application;
     // Disk app store
     private final AppStore diskStore;
 
-    public AppRepository(@NonNull Context context, @NonNull AppStore appStore) {
-        this.context = context.getApplicationContext();
+    @Inject
+    AppRepository(@NonNull Application application, @NonNull AppStore appStore) {
+        this.application = application;
         this.diskStore = appStore;
     }
 
@@ -56,9 +63,9 @@ public class AppRepository implements BaseAppRepository {
                 .doOnNext(integer -> {
                     if (integer == -1) {
                         Timber.d("Color not found, starting extraction.");
-                        final Intent intent = new Intent(context, AppColorExtractorService.class);
+                        final Intent intent = new Intent(application, AppColorExtractorService.class);
                         intent.putExtra(Constants.EXTRA_PACKAGE_NAME, packageName);
-                        context.startService(intent);
+                        application.startService(intent);
                     }
                 });
     }

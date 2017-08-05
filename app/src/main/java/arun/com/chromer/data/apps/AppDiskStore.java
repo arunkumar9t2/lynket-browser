@@ -18,9 +18,13 @@
 
 package arun.com.chromer.data.apps;
 
-import android.content.Context;
+import android.app.Application;
 import android.support.annotation.NonNull;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import arun.com.chromer.data.apps.store.AppStore;
 import arun.com.chromer.data.common.App;
 import arun.com.chromer.data.common.BookStore;
 import arun.com.chromer.shared.Constants;
@@ -30,13 +34,15 @@ import io.paperdb.Paper;
 import rx.Observable;
 import timber.log.Timber;
 
+@Singleton
 public class AppDiskStore implements AppStore, BookStore {
-    private final Context context;
+    private final Application application;
 
     private static final String APP_BOOK_NAME = "APPS";
 
-    public AppDiskStore(Context context) {
-        this.context = context.getApplicationContext();
+    @Inject
+    AppDiskStore(Application application) {
+        this.application = application;
     }
 
     @NonNull
@@ -82,7 +88,7 @@ public class AppDiskStore implements AppStore, BookStore {
                         return savApp(app);
                     } else {
                         Timber.d("Added %s and blacklisted", packageName);
-                        app = Utils.createApp(context, packageName);
+                        app = Utils.createApp(application, packageName);
                         app.blackListed = true;
                         return savApp(app);
                     }
@@ -117,7 +123,7 @@ public class AppDiskStore implements AppStore, BookStore {
                         return savApp(app);
                     } else {
                         Timber.d("Created and saved %d color for %s", color, packageName);
-                        return savApp(Utils.createApp(context, packageName));
+                        return savApp(Utils.createApp(application, packageName));
                     }
                 });
     }

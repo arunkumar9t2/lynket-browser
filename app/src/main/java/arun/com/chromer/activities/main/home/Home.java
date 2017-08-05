@@ -27,10 +27,13 @@ import com.jakewharton.rxbinding.widget.RxTextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import arun.com.chromer.activities.Snackable;
 import arun.com.chromer.activities.base.Base;
-import arun.com.chromer.data.history.HistoryRepository;
+import arun.com.chromer.data.history.BaseHistoryRepository;
 import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.di.PerFragment;
 import arun.com.chromer.search.SuggestionItem;
 import arun.com.chromer.util.RxUtils;
 import in.arunkumarsampath.suggestions.RxSuggestions;
@@ -43,7 +46,15 @@ interface Home {
         void setRecents(@NonNull List<WebSite> webSites);
     }
 
+    @PerFragment
     class Presenter extends Base.Presenter<View> {
+
+        private final BaseHistoryRepository historyRepository;
+
+        @Inject
+        public Presenter(BaseHistoryRepository historyRepository) {
+            this.historyRepository = historyRepository;
+        }
 
         void registerSearch(@NonNull EditText editText) {
             subs.add(RxTextView.afterTextChangeEvents(editText)
@@ -64,8 +75,7 @@ interface Home {
         }
 
         void loadRecents(@NonNull Context context) {
-            subs.add(HistoryRepository.getInstance(context)
-                    .recents()
+            subs.add(historyRepository.recents()
                     .compose(RxUtils.applySchedulers())
                     .doOnError(Timber::e)
                     .doOnNext(webSites -> {

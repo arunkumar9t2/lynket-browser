@@ -37,7 +37,7 @@ import javax.inject.Inject;
 
 import arun.com.chromer.Chromer;
 import arun.com.chromer.R;
-import arun.com.chromer.data.apps.AppRepository;
+import arun.com.chromer.data.apps.BaseAppRepository;
 import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Utils;
 import timber.log.Timber;
@@ -50,7 +50,7 @@ import static arun.com.chromer.shared.Constants.NO_COLOR;
 public class AppColorExtractorService extends IntentService {
 
     @Inject
-    AppRepository appRepository;
+    BaseAppRepository appRepository;
 
     public AppColorExtractorService() {
         super(AppColorExtractorService.class.getSimpleName());

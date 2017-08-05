@@ -30,7 +30,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import arun.com.chromer.activities.base.Base;
-import arun.com.chromer.data.apps.AppRepository;
+import arun.com.chromer.data.apps.BaseAppRepository;
 import arun.com.chromer.data.common.App;
 import arun.com.chromer.di.PerActivity;
 import arun.com.chromer.util.RxUtils;
@@ -56,10 +56,10 @@ interface Blacklist {
     @PerActivity
     class Presenter extends Base.Presenter<View> {
 
-        private final AppRepository appRepository;
+        private final BaseAppRepository appRepository;
 
         @Inject
-        public Presenter(@NonNull AppRepository appRepository) {
+        public Presenter(@NonNull BaseAppRepository appRepository) {
             this.appRepository = appRepository;
         }
 

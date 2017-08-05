@@ -18,8 +18,8 @@
 
 package arun.com.chromer.data.history;
 
+import android.app.Application;
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -27,6 +27,9 @@ import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import arun.com.chromer.data.history.model.HistoryTable;
 import arun.com.chromer.data.website.model.WebSite;
@@ -43,32 +46,27 @@ import static arun.com.chromer.data.history.model.HistoryTable.COLUMN_FAVICON;
 import static arun.com.chromer.data.history.model.HistoryTable.COLUMN_TITLE;
 import static arun.com.chromer.data.history.model.HistoryTable.COLUMN_URL;
 import static arun.com.chromer.data.history.model.HistoryTable.COLUMN_VISITED;
+import static arun.com.chromer.data.history.model.HistoryTable.DATABASE_CREATE;
+import static arun.com.chromer.data.history.model.HistoryTable.ORDER_BY_TIME_DESC;
 import static arun.com.chromer.data.history.model.HistoryTable.TABLE_NAME;
 
 /**
  * Created by Arunkumar on 03-03-2017.
  */
-class HistoryDiskStore extends SQLiteOpenHelper implements HistoryStore {
+@Singleton
+public class HistoryDiskStore extends SQLiteOpenHelper implements HistoryStore {
     private static final int DATABASE_VERSION = 1;
 
     private SQLiteDatabase database;
 
-    private HistoryDiskStore(Context context) {
-        super(context, TABLE_NAME, null, DATABASE_VERSION);
-    }
-
-    private static HistoryStore INSTANCE = null;
-
-    public static HistoryStore getInstance(@NonNull Context context) {
-        if (INSTANCE == null) {
-            INSTANCE = new HistoryDiskStore(context.getApplicationContext());
-        }
-        return INSTANCE;
+    @Inject
+    HistoryDiskStore(Application application) {
+        super(application, TABLE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(HistoryTable.DATABASE_CREATE);
+        db.execSQL(DATABASE_CREATE);
         Timber.d("onCreate called");
     }
 
@@ -104,7 +102,7 @@ class HistoryDiskStore extends SQLiteOpenHelper implements HistoryStore {
                     null,
                     null,
                     null,
-                    HistoryTable.ORDER_BY_TIME_DESC);
+                    ORDER_BY_TIME_DESC);
         });
     }
 
@@ -248,7 +246,7 @@ class HistoryDiskStore extends SQLiteOpenHelper implements HistoryStore {
                     null,
                     null,
                     null,
-                    HistoryTable.ORDER_BY_TIME_DESC,
+                    ORDER_BY_TIME_DESC,
                     "8");
             if (cursor != null) {
                 try {

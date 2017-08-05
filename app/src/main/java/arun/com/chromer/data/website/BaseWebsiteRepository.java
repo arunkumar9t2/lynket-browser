@@ -29,7 +29,7 @@ import rx.Observable;
  * {@link WebSite} instances containing useful website information.
  * Will use a combination of disk cache and network parsing to provide requested website's data.
  */
-interface BaseWebsiteRepository {
+public interface BaseWebsiteRepository {
     @NonNull
     Observable<WebSite> getWebsite(@NonNull String url);
 

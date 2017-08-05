@@ -16,21 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.di.components;
+package arun.com.chromer.data.annotation;
 
-import arun.com.chromer.activities.history.HistoryFragment;
-import arun.com.chromer.activities.main.home.HomeFragment;
-import arun.com.chromer.di.PerFragment;
-import arun.com.chromer.di.modules.FragmentModule;
-import dagger.Subcomponent;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-@PerFragment
-@Subcomponent(modules = {
-        FragmentModule.class
-})
-public interface FragmentComponent {
+import javax.inject.Qualifier;
 
-    void inject(HistoryFragment homeFragment);
-
-    void inject(HomeFragment homeFragment);
+@Qualifier
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Disk {
 }

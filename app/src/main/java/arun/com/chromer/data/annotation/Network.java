@@ -16,7 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.data.apps;
+package arun.com.chromer.data.annotation;
 
-public interface AppStore extends BaseAppRepository {
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+import javax.inject.Qualifier;
+
+@Qualifier
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Network {
 }

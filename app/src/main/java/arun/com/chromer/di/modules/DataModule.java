@@ -19,21 +19,31 @@
 package arun.com.chromer.di.modules;
 
 import android.app.Application;
-import android.support.annotation.NonNull;
 
 import javax.inject.Singleton;
 
 import arun.com.chromer.activities.settings.Preferences;
+import arun.com.chromer.data.annotation.Disk;
+import arun.com.chromer.data.annotation.Network;
 import arun.com.chromer.data.apps.AppDiskStore;
 import arun.com.chromer.data.apps.AppRepository;
-import arun.com.chromer.data.apps.AppStore;
+import arun.com.chromer.data.apps.BaseAppRepository;
+import arun.com.chromer.data.apps.store.AppStore;
+import arun.com.chromer.data.history.BaseHistoryRepository;
+import arun.com.chromer.data.history.HistoryDiskStore;
+import arun.com.chromer.data.history.HistoryRepository;
+import arun.com.chromer.data.history.HistoryStore;
+import arun.com.chromer.data.website.BaseWebsiteRepository;
+import arun.com.chromer.data.website.WebsiteDiskStore;
+import arun.com.chromer.data.website.WebsiteNetworkStore;
+import arun.com.chromer.data.website.WebsiteRepository;
+import arun.com.chromer.data.website.WebsiteStore;
 import dagger.Module;
 import dagger.Provides;
 
 @Module
 public class DataModule {
-
-    Application application;
+    private Application application;
 
     public DataModule(Application application) {
         this.application = application;
@@ -47,13 +57,46 @@ public class DataModule {
 
     @Provides
     @Singleton
-    AppStore appStore() {
-        return new AppDiskStore(application);
+    AppStore appStore(AppDiskStore appDiskStore) {
+        return appDiskStore;
     }
 
     @Provides
     @Singleton
-    AppRepository appRepository(@NonNull AppStore appStore) {
-        return new AppRepository(application, appStore);
+    BaseAppRepository appRepository(AppRepository appRepository) {
+        return appRepository;
     }
+
+    @Provides
+    @Singleton
+    HistoryStore historyStore(HistoryDiskStore historyDiskStore) {
+        return historyDiskStore;
+    }
+
+    @Provides
+    @Singleton
+    BaseHistoryRepository historyRepository(HistoryRepository historyRepository) {
+        return historyRepository;
+    }
+
+    @Provides
+    @Singleton
+    @Disk
+    WebsiteStore websiteDiskStore(WebsiteDiskStore websiteDiskStore) {
+        return websiteDiskStore;
+    }
+
+    @Provides
+    @Singleton
+    @Network
+    WebsiteStore websiteNetworkStore(WebsiteNetworkStore websiteNetworkStore) {
+        return websiteNetworkStore;
+    }
+
+    @Provides
+    @Singleton
+    BaseWebsiteRepository websiteRepository(WebsiteRepository websiteRepository) {
+        return websiteRepository;
+    }
+
 }

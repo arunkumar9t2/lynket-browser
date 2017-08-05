@@ -64,7 +64,6 @@ import arun.com.chromer.customtabs.callbacks.SecondaryBrowserReceiver;
 import arun.com.chromer.customtabs.callbacks.ShareBroadcastReceiver;
 import arun.com.chromer.customtabs.warmup.WarmUpService;
 import arun.com.chromer.data.apps.AppRepository;
-import arun.com.chromer.data.website.WebsiteRepository;
 import arun.com.chromer.shared.AppDetectService;
 import arun.com.chromer.shared.AppDetectionManager;
 import arun.com.chromer.shared.Constants;
@@ -437,14 +436,15 @@ public class CustomTabs {
      */
     private boolean setWebToolbarColor() {
         // Check if we have the color extracted for this source
-        final int color = WebsiteRepository.getInstance(activity).getWebsiteColorSync(url);
+        /*final int color = WebsiteRepository.getInstance(activity).getWebsiteColorSync(url);
         if (color != Constants.NO_COLOR) {
             toolbarColor = color;
             return true;
         } else {
             WebsiteRepository.getInstance(activity).saveWebColor(url).subscribe();
             return false;
-        }
+        }*/
+        return false;
     }
 
     /**
