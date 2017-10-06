@@ -26,8 +26,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.Snackable;
-import arun.com.chromer.activities.base.SubActivity;
+import arun.com.chromer.activities.common.Snackable;
+import arun.com.chromer.activities.common.SubActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

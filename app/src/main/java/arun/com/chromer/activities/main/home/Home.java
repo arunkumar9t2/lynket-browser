@@ -25,8 +25,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import arun.com.chromer.activities.Snackable;
-import arun.com.chromer.activities.base.Base;
+import arun.com.chromer.activities.common.Base;
+import arun.com.chromer.activities.common.Snackable;
 import arun.com.chromer.data.history.BaseHistoryRepository;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.di.PerFragment;

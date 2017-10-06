@@ -41,7 +41,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.base.SubActivity;
+import arun.com.chromer.activities.common.SubActivity;
 import arun.com.chromer.activities.settings.browsingmode.BrowsingModeActivity;
 import arun.com.chromer.activities.settings.browsingoptions.BrowsingOptionsActivity;
 import arun.com.chromer.activities.settings.lookandfeel.LookAndFeelActivity;

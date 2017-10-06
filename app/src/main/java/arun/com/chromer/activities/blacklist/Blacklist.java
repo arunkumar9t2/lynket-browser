@@ -29,7 +29,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import arun.com.chromer.activities.base.Base;
+import arun.com.chromer.activities.common.Base;
 import arun.com.chromer.data.apps.BaseAppRepository;
 import arun.com.chromer.data.common.App;
 import arun.com.chromer.di.PerActivity;

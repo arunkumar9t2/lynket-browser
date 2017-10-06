@@ -93,27 +93,32 @@
         <receiver android:name=".customtabs.bottombar.BottomBarReceiver" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.main.MainActivity"
             android:label="@string/app_name"
+            android:theme="@style/AppTheme.Launcher" />
+
+        <activity-alias
+            android:name=".CustomTabActivity"
+            android:label="@string/app_name"
+            android:targetActivity=".activities.main.MainActivity"
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
-        </activity>
+        </activity-alias>
+
         <activity
             android:name=".activities.settings.SettingsGroupActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activities.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="arun.com.chromer.MainActivity" />
+                android:value="arun.com.chromer.activities.main.MainActivity" />
         </activity>
         <activity
             android:name=".activities.CustomTabActivity"

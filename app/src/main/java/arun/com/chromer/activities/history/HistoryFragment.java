@@ -38,8 +38,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import javax.inject.Inject;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.Snackable;
-import arun.com.chromer.activities.base.BaseFragment;
+import arun.com.chromer.activities.common.BaseFragment;
+import arun.com.chromer.activities.common.Snackable;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.di.components.FragmentComponent;
 import arun.com.chromer.util.Utils;

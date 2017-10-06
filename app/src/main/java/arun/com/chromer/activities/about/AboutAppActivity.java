@@ -24,7 +24,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.base.SubActivity;
+import arun.com.chromer.activities.common.SubActivity;
 
 public class AboutAppActivity extends SubActivity {
 
@@ -33,7 +33,7 @@ public class AboutAppActivity extends SubActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

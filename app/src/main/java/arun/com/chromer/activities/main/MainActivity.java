@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer;
+package arun.com.chromer.activities.main;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -58,10 +58,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import arun.com.chromer.R;
 import arun.com.chromer.activities.BrowserInterceptActivity;
 import arun.com.chromer.activities.about.AboutAppActivity;
 import arun.com.chromer.activities.about.changelog.Changelog;
-import arun.com.chromer.activities.base.BaseActivity;
+import arun.com.chromer.activities.common.BaseActivity;
 import arun.com.chromer.activities.history.HistoryFragment;
 import arun.com.chromer.activities.intro.ChromerIntro;
 import arun.com.chromer.activities.intro.WebHeadsIntro;

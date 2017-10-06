@@ -42,8 +42,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.Snackable;
-import arun.com.chromer.activities.base.BaseActivity;
+import arun.com.chromer.activities.common.BaseActivity;
+import arun.com.chromer.activities.common.Snackable;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.data.common.App;
 import arun.com.chromer.di.components.ActivityComponent;

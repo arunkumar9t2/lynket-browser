@@ -32,7 +32,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import arun.com.chromer.activities.Snackable;
+import arun.com.chromer.activities.common.Snackable;
 import arun.com.chromer.activities.settings.widgets.ColorPreference;
 
 /**

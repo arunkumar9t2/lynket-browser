@@ -46,8 +46,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.Snackable;
-import arun.com.chromer.activities.base.SubActivity;
+import arun.com.chromer.activities.common.Snackable;
+import arun.com.chromer.activities.common.SubActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.activities.settings.widgets.AppPreferenceCardView;
 import arun.com.chromer.customtabs.CustomTabs;
