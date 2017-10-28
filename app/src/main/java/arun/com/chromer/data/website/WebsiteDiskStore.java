@@ -91,7 +91,9 @@ public class WebsiteDiskStore implements WebsiteStore, BookStore {
     @Override
     public Observable<Void> clearCache() {
         return Observable.fromCallable(() -> {
-            webSiteDiskCache.clear();
+            if (webSiteDiskCache != null) {
+                webSiteDiskCache.clear();
+            }
             return null;
         });
     }
