@@ -119,15 +119,19 @@ public class MainActivity extends BaseMVPActivity<MainScreen.View, MainScreen.Pr
         ServiceUtil.takeCareOfServices(getApplicationContext());
         registerCloseReceiver();
 
-        historyFragment = new HistoryFragment();
-        homeFragment = new HomeFragment();
-
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, homeFragment)
-                .add(R.id.fragment_container, historyFragment)
-                .hide(historyFragment)
-                .show(homeFragment)
-                .commit();
+        if (savedInstanceState == null) {
+            historyFragment = new HistoryFragment();
+            homeFragment = new HomeFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container, homeFragment, HomeFragment.class.getName())
+                    .add(R.id.fragment_container, historyFragment, HistoryFragment.class.getName())
+                    .hide(historyFragment)
+                    .show(homeFragment)
+                    .commit();
+        } else {
+            historyFragment = (HistoryFragment) getSupportFragmentManager().findFragmentByTag(HistoryFragment.class.getName());
+            homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+        }
 
         bottomNavigation.setSelectedItemId(R.id.home);
         bottomNavigation.setOnNavigationItemSelectedListener(item -> {

@@ -112,6 +112,12 @@ public class HistoryFragment extends BaseMVPFragment<History.View, History.Prese
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         historyAdapter.cleanUp();

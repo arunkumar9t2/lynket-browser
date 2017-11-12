@@ -106,6 +106,12 @@ public class HomeFragment extends BaseMVPFragment<Home.View, Home.Presenter> imp
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupMaterialSearch();
