@@ -16,34 +16,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.di.modules;
+package arun.com.chromer.activities.browserintercept;
 
-import android.app.Application;
+import javax.inject.Inject;
 
-import javax.inject.Singleton;
+import arun.com.chromer.activities.common.Base;
+import arun.com.chromer.di.PerActivity;
 
-import arun.com.chromer.shared.AppDetectionManager;
-import dagger.Module;
-import dagger.Provides;
+/**
+ * Created by arunk on 12-11-2017.
+ */
+public interface BrowserIntercept {
 
-@Module
-public class AppModule {
+    interface View extends Base.View {
 
-    Application application;
-
-    public AppModule(Application application) {
-        this.application = application;
     }
 
-    @Provides
-    @Singleton
-    Application providesApplication() {
-        return application;
-    }
+    @PerActivity
+    class Presenter extends Base.Presenter<BrowserIntercept.View> {
 
-    @Provides
-    @Singleton
-    AppDetectionManager providesAppDetectionManager() {
-        return new AppDetectionManager(application);
+        @Inject
+        public Presenter() {
+        }
+
+        @Override
+        public void onResume() {
+
+        }
+
+        @Override
+        public void onPause() {
+
+        }
     }
 }

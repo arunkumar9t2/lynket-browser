@@ -42,7 +42,7 @@ import com.chimbori.crux.articles.Article;
 import java.util.concurrent.ExecutionException;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.BrowserInterceptActivity;
+import arun.com.chromer.activities.browserintercept.BrowserInterceptActivity;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.parser.RxParser;
 import arun.com.chromer.util.ColorUtil;

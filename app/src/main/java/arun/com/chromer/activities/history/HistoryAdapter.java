@@ -38,7 +38,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.BrowserInterceptActivity;
+import arun.com.chromer.activities.browserintercept.BrowserInterceptActivity;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.views.PlaceholderLetterView;

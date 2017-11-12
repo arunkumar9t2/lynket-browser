@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import arun.com.chromer.R;
+import arun.com.chromer.activities.browserintercept.BrowserInterceptActivity;
 import arun.com.chromer.util.Utils;
 
 import static android.text.InputType.TYPE_CLASS_TEXT;

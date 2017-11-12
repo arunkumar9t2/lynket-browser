@@ -92,11 +92,11 @@
         <receiver android:name=".customtabs.callbacks.MinimizeBroadcastReceiver" />
         <receiver android:name=".customtabs.bottombar.BottomBarReceiver" />
 
+        <!--Chromer launcher activity-->
         <activity
             android:name=".activities.main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.Launcher" />
-
         <activity-alias
             android:name=".CustomTabActivity"
             android:label="@string/app_name"
@@ -109,6 +109,27 @@
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
+        </activity-alias>
+
+        <!--Entry point for browser activity-->
+        <activity
+            android:name=".activities.browserintercept.BrowserInterceptActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat.Translucent" />
+        <activity-alias
+            android:name=".activities.BrowserInterceptActivity"
+            android:label="@string/app_name"
+            android:targetActivity=".activities.browserintercept.BrowserInterceptActivity"
+            android:theme="@style/Theme.AppCompat.Translucent">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+            </intent-filter>
         </activity-alias>
 
         <activity
@@ -153,20 +174,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:mimeType="text/plain" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".activities.BrowserInterceptActivity"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.AppCompat.Translucent">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="http" />
-                <data android:scheme="https" />
             </intent-filter>
         </activity>
         <activity

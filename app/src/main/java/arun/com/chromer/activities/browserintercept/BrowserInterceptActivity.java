@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.activities;
+package arun.com.chromer.activities.browserintercept;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -24,21 +24,31 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
-import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 
+import javax.inject.Inject;
+
 import arun.com.chromer.R;
+import arun.com.chromer.activities.CustomTabActivity;
 import arun.com.chromer.activities.browsing.article.ArticleLauncher;
+import arun.com.chromer.activities.common.BaseActivity;
 import arun.com.chromer.activities.settings.Preferences;
+import arun.com.chromer.data.apps.AppRepository;
+import arun.com.chromer.data.website.WebsiteRepository;
+import arun.com.chromer.di.components.ActivityComponent;
+import arun.com.chromer.shared.AppDetectionManager;
 import arun.com.chromer.util.DocumentUtils;
 import arun.com.chromer.util.SafeIntent;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.ui.ProxyActivity;
+import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -48,13 +58,15 @@ import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.os.Build.VERSION_CODES.LOLLIPOP;
+import static android.text.TextUtils.isEmpty;
 import static android.widget.Toast.LENGTH_SHORT;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_NEW_TAB;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_OUR_APP;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_SKIP_EXTRACTION;
+import static arun.com.chromer.util.RxUtils.applySchedulers;
 
 @SuppressLint("GoogleAppIndexingApiWarning")
-public class BrowserInterceptActivity extends AppCompatActivity {
+public class BrowserInterceptActivity extends BaseActivity<BrowserIntercept.View, BrowserIntercept.Presenter> implements BrowserIntercept.View {
     private MaterialDialog dialog;
     private SafeIntent safeIntent;
     private boolean isFromNewTab;
@@ -62,6 +74,18 @@ public class BrowserInterceptActivity extends AppCompatActivity {
     private boolean skipExtraction;
 
     private final CompositeSubscription subs = new CompositeSubscription();
+
+    @Inject
+    AppDetectionManager appDetectionManager;
+    @Inject
+    BrowserIntercept.Presenter presenter;
+
+
+    // TODO Belongs in presenter.
+    @Inject
+    AppRepository appRepository;
+    @Inject
+    WebsiteRepository websiteRepository;
 
     @TargetApi(LOLLIPOP)
     @Override
@@ -72,6 +96,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
             invalidLink();
             return;
         }
+
         isFromNewTab = safeIntent.getBooleanExtra(EXTRA_KEY_FROM_NEW_TAB, false);
         isFromOurApp = safeIntent.getBooleanExtra(EXTRA_KEY_FROM_OUR_APP, false);
         skipExtraction = safeIntent.getBooleanExtra(EXTRA_KEY_SKIP_EXTRACTION, false);
@@ -80,14 +105,16 @@ public class BrowserInterceptActivity extends AppCompatActivity {
             DocumentUtils.closeRootActivity(this);
         }
 
+        // TODO All the code below belong in a presenter with a unit test :(
+
         // Check if we should blacklist the launching app
         if (Preferences.get(this).blacklist()) {
-            /*final String lastAppPackage = AppDetectionManager.getInstance(this).getNonFilteredPackage();
-            if (!TextUtils.isEmpty(lastAppPackage) && AppRepository.getInstance(this).isPackageBlacklisted(lastAppPackage)) {
+            final String lastAppPackage = appDetectionManager.getNonFilteredPackage();
+            if (!isEmpty(lastAppPackage) && appRepository.isPackageBlacklisted(lastAppPackage)) {
                 // The calling app was blacklisted by user, perform blacklisting.
                 performBlacklistAction();
                 return;
-            }*/
+            }
         }
 
         // If user prefers to open in bubbles, then start the web head service.
@@ -106,9 +133,9 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                     .dismissListener(d -> finish())
                     .show();
 
-           /* final Subscription subscription = WebsiteRepository.getInstance(this)
+            final Subscription subscription = websiteRepository
                     .getWebsite(safeIntent.getData().toString())
-                    .compose(RxUtils.applySchedulers())
+                    .compose(applySchedulers())
                     .doOnNext(webSite -> {
                         if (webSite != null && !TextUtils.isEmpty(webSite.ampUrl)) {
                             dialog.setContent(R.string.link_found);
@@ -128,7 +155,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                         articleAwareLaunch();
                         dialog.dismiss();
                     }).subscribe();
-            subs.add(subscription);*/
+            subs.add(subscription);
         } else if (Preferences.get(this).articleMode()) {
             // User just wants article, load it.
             launchArticle();
@@ -138,9 +165,25 @@ public class BrowserInterceptActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void inject(ActivityComponent activityComponent) {
+        activityComponent.inject(this);
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return 0;
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         subs.clear();
+    }
+
+    @NonNull
+    @Override
+    public BrowserIntercept.Presenter createPresenter() {
+        return presenter;
     }
 
     private void articleAwareLaunch() {

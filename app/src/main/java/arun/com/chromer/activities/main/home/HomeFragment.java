@@ -134,7 +134,9 @@ public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implem
     }
 
     private void doTransition() {
-        beginDelayedTransition(nestedScrollView, autoTransition);
+        if (getActivity() != null && !getActivity().isFinishing() && nestedScrollView != null) {
+            beginDelayedTransition(nestedScrollView, autoTransition);
+        }
     }
 
     @Override

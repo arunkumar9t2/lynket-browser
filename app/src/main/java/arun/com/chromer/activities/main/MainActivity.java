@@ -59,9 +59,9 @@ import java.util.List;
 import javax.inject.Inject;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.BrowserInterceptActivity;
 import arun.com.chromer.activities.about.AboutAppActivity;
 import arun.com.chromer.activities.about.changelog.Changelog;
+import arun.com.chromer.activities.browserintercept.BrowserInterceptActivity;
 import arun.com.chromer.activities.common.BaseActivity;
 import arun.com.chromer.activities.history.HistoryFragment;
 import arun.com.chromer.activities.intro.ChromerIntro;

@@ -49,9 +49,14 @@ public abstract class BaseActivity<V extends Base.View, P extends Base.Presenter
                 .getAppComponent()
                 .newActivityComponent(new ActivityModule(this));
         inject(activityComponent);
+
         super.onCreate(savedInstanceState);
-        setContentView(getLayoutRes());
-        unbinder = ButterKnife.bind(this);
+
+        @LayoutRes int layoutRes = getLayoutRes();
+        if (layoutRes != 0) {
+            setContentView(getLayoutRes());
+            unbinder = ButterKnife.bind(this);
+        }
     }
 
     protected abstract void inject(ActivityComponent activityComponent);
@@ -79,7 +84,9 @@ public abstract class BaseActivity<V extends Base.View, P extends Base.Presenter
     @Override
     protected void onDestroy() {
         subs.clear();
-        unbinder.unbind();
+        if (unbinder != null) {
+            unbinder.unbind();
+        }
         presenter.onDestroy();
         activityComponent = null;
         super.onDestroy();

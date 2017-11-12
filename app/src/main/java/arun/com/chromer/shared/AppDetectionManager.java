@@ -41,7 +41,7 @@ public final class AppDetectionManager {
     // But this is the recommended way as per developer training :/ :/
     private static AppDetectionManager INSTANCE;
 
-    private AppDetectionManager(@NonNull Context context) {
+    public AppDetectionManager(@NonNull Context context) {
         this.context = context.getApplicationContext();
     }
 
