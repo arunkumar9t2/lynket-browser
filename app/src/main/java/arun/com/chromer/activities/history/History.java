@@ -23,11 +23,14 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import javax.inject.Inject;
+
 import arun.com.chromer.R;
-import arun.com.chromer.activities.SnackHelper;
-import arun.com.chromer.activities.mvp.Base;
-import arun.com.chromer.data.history.HistoryRepository;
+import arun.com.chromer.activities.common.Base;
+import arun.com.chromer.activities.common.Snackable;
+import arun.com.chromer.data.history.BaseHistoryRepository;
 import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.di.PerFragment;
 import arun.com.chromer.util.RxUtils;
 import rx.Observable;
 import timber.log.Timber;
@@ -36,18 +39,27 @@ import timber.log.Timber;
  * Created by arunk on 06-03-2017.
  */
 interface History {
-    interface View extends SnackHelper, Base.View {
+    interface View extends Snackable, Base.View {
         void loading(boolean loading);
 
         void setCursor(@Nullable Cursor cursor);
     }
 
+    @PerFragment
     class Presenter extends Base.Presenter<History.View> {
-        void loadHistory(@NonNull Context context) {
+
+        private final BaseHistoryRepository historyRepository;
+
+        @Inject
+        public Presenter(BaseHistoryRepository historyRepository) {
+            this.historyRepository = historyRepository;
+        }
+
+        void loadHistory() {
             if (isViewAttached()) {
                 getView().loading(true);
             }
-            compositeSubscription.add(HistoryRepository.getInstance(context).getAllItemsCursor()
+            subs.add(historyRepository.getAllItemsCursor()
                     .compose(RxUtils.applySchedulers())
                     .toSingle()
                     .doOnSuccess(cursor -> {
@@ -62,11 +74,11 @@ interface History {
         }
 
         void deleteAll(@NonNull Context context) {
-            compositeSubscription.add(HistoryRepository.getInstance(context)
+            subs.add(historyRepository
                     .deleteAll()
                     .compose(RxUtils.applySchedulers())
                     .doOnError(Timber::e)
-                    .doOnNext(rows -> loadHistory(context))
+                    .doOnNext(rows -> loadHistory())
                     .doOnNext(rows -> {
                         if (isViewAttached()) {
                             getView().snack(String.format(context.getString(R.string.deleted_items), rows));
@@ -74,14 +86,24 @@ interface History {
                     }).subscribe());
         }
 
-        void deleteHistory(@NonNull Context context, @NonNull Observable<WebSite> webSiteObservable) {
-            compositeSubscription.add(webSiteObservable
+        void deleteHistory(@NonNull Observable<WebSite> webSiteObservable) {
+            subs.add(webSiteObservable
                     .filter(webSite -> webSite != null && webSite.url != null)
-                    .flatMap(webSite -> HistoryRepository.getInstance(context).delete(webSite))
+                    .flatMap(historyRepository::delete)
                     .compose(RxUtils.applySchedulers())
                     .doOnError(Timber::e)
-                    .doOnNext(result -> loadHistory(context))
+                    .doOnNext(result -> loadHistory())
                     .subscribe());
+        }
+
+        @Override
+        public void onResume() {
+
+        }
+
+        @Override
+        public void onPause() {
+
         }
     }
 }

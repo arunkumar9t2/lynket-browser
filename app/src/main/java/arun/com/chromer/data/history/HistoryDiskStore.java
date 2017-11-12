@@ -18,8 +18,8 @@
 
 package arun.com.chromer.data.history;
 
+import android.app.Application;
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -28,10 +28,12 @@ import android.support.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import arun.com.chromer.data.history.model.HistoryTable;
 import arun.com.chromer.data.website.model.WebSite;
 import rx.Observable;
-import rx.functions.Func1;
 import timber.log.Timber;
 
 import static arun.com.chromer.data.history.model.HistoryTable.ALL_COLUMN_PROJECTION;
@@ -44,32 +46,27 @@ import static arun.com.chromer.data.history.model.HistoryTable.COLUMN_FAVICON;
 import static arun.com.chromer.data.history.model.HistoryTable.COLUMN_TITLE;
 import static arun.com.chromer.data.history.model.HistoryTable.COLUMN_URL;
 import static arun.com.chromer.data.history.model.HistoryTable.COLUMN_VISITED;
+import static arun.com.chromer.data.history.model.HistoryTable.DATABASE_CREATE;
+import static arun.com.chromer.data.history.model.HistoryTable.ORDER_BY_TIME_DESC;
 import static arun.com.chromer.data.history.model.HistoryTable.TABLE_NAME;
 
 /**
  * Created by Arunkumar on 03-03-2017.
  */
-class HistoryDiskStore extends SQLiteOpenHelper implements HistoryStore {
+@Singleton
+public class HistoryDiskStore extends SQLiteOpenHelper implements HistoryStore {
     private static final int DATABASE_VERSION = 1;
 
     private SQLiteDatabase database;
 
-    private HistoryDiskStore(Context context) {
-        super(context, TABLE_NAME, null, DATABASE_VERSION);
-    }
-
-    private static HistoryStore INSTANCE = null;
-
-    public static HistoryStore getInstance(@NonNull Context context) {
-        if (INSTANCE == null) {
-            INSTANCE = new HistoryDiskStore(context.getApplicationContext());
-        }
-        return INSTANCE;
+    @Inject
+    HistoryDiskStore(Application application) {
+        super(application, TABLE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(HistoryTable.DATABASE_CREATE);
+        db.execSQL(DATABASE_CREATE);
         Timber.d("onCreate called");
     }
 
@@ -105,7 +102,7 @@ class HistoryDiskStore extends SQLiteOpenHelper implements HistoryStore {
                     null,
                     null,
                     null,
-                    HistoryTable.ORDER_BY_TIME_DESC);
+                    ORDER_BY_TIME_DESC);
         });
     }
 
@@ -133,27 +130,24 @@ class HistoryDiskStore extends SQLiteOpenHelper implements HistoryStore {
     @Override
     public Observable<WebSite> insert(@NonNull WebSite webSite) {
         return exists(webSite)
-                .flatMap(new Func1<Boolean, Observable<WebSite>>() {
-                    @Override
-                    public Observable<WebSite> call(Boolean exists) {
-                        if (exists) {
-                            return update(webSite);
+                .flatMap(exists -> {
+                    if (exists) {
+                        return update(webSite);
+                    } else {
+                        final ContentValues values = new ContentValues();
+                        values.put(COLUMN_URL, webSite.url);
+                        values.put(COLUMN_TITLE, webSite.title);
+                        values.put(COLUMN_FAVICON, webSite.faviconUrl);
+                        values.put(COLUMN_CANONICAL, webSite.canonicalUrl);
+                        values.put(COLUMN_COLOR, webSite.themeColor);
+                        values.put(COLUMN_AMP, webSite.ampUrl);
+                        values.put(COLUMN_BOOKMARKED, webSite.bookmarked);
+                        values.put(COLUMN_CREATED_AT, System.currentTimeMillis());
+                        values.put(COLUMN_VISITED, 1);
+                        if (database.insert(TABLE_NAME, null, values) != -1) {
+                            return Observable.just(webSite);
                         } else {
-                            final ContentValues values = new ContentValues();
-                            values.put(COLUMN_URL, webSite.url);
-                            values.put(COLUMN_TITLE, webSite.title);
-                            values.put(COLUMN_FAVICON, webSite.faviconUrl);
-                            values.put(COLUMN_CANONICAL, webSite.canonicalUrl);
-                            values.put(COLUMN_COLOR, webSite.themeColor);
-                            values.put(COLUMN_AMP, webSite.ampUrl);
-                            values.put(COLUMN_BOOKMARKED, webSite.bookmarked);
-                            values.put(COLUMN_CREATED_AT, System.currentTimeMillis());
-                            values.put(COLUMN_VISITED, 1);
-                            if (database.insert(TABLE_NAME, null, values) != -1) {
-                                return Observable.just(webSite);
-                            } else {
-                                return Observable.just(null);
-                            }
+                            return Observable.just(null);
                         }
                     }
                 });
@@ -162,32 +156,29 @@ class HistoryDiskStore extends SQLiteOpenHelper implements HistoryStore {
     @NonNull
     @Override
     public Observable<WebSite> update(@NonNull WebSite webSite) {
-        return get(webSite).flatMap(new Func1<WebSite, Observable<WebSite>>() {
-            @Override
-            public Observable<WebSite> call(WebSite saved) {
-                if (saved != null) {
-                    final ContentValues values = new ContentValues();
-                    values.put(COLUMN_URL, saved.url);
-                    values.put(COLUMN_TITLE, saved.title);
-                    values.put(COLUMN_FAVICON, saved.faviconUrl);
-                    values.put(COLUMN_CANONICAL, saved.canonicalUrl);
-                    values.put(COLUMN_COLOR, saved.themeColor);
-                    values.put(COLUMN_AMP, saved.ampUrl);
-                    values.put(COLUMN_BOOKMARKED, saved.bookmarked);
-                    values.put(COLUMN_CREATED_AT, System.currentTimeMillis());
-                    values.put(COLUMN_VISITED, ++saved.count);
+        return get(webSite).flatMap(saved -> {
+            if (saved != null) {
+                final ContentValues values = new ContentValues();
+                values.put(COLUMN_URL, saved.url);
+                values.put(COLUMN_TITLE, saved.title);
+                values.put(COLUMN_FAVICON, saved.faviconUrl);
+                values.put(COLUMN_CANONICAL, saved.canonicalUrl);
+                values.put(COLUMN_COLOR, saved.themeColor);
+                values.put(COLUMN_AMP, saved.ampUrl);
+                values.put(COLUMN_BOOKMARKED, saved.bookmarked);
+                values.put(COLUMN_CREATED_AT, System.currentTimeMillis());
+                values.put(COLUMN_VISITED, ++saved.count);
 
-                    final String whereClause = COLUMN_URL + "=?";
-                    final String[] whereArgs = {saved.url};
+                final String whereClause = COLUMN_URL + "=?";
+                final String[] whereArgs = {saved.url};
 
-                    if (database.update(TABLE_NAME, values, whereClause, whereArgs) > 0) {
-                        return Observable.just(saved);
-                    } else {
-                        return Observable.just(webSite);
-                    }
+                if (database.update(TABLE_NAME, values, whereClause, whereArgs) > 0) {
+                    return Observable.just(saved);
                 } else {
                     return Observable.just(webSite);
                 }
+            } else {
+                return Observable.just(webSite);
             }
         });
     }
@@ -255,7 +246,7 @@ class HistoryDiskStore extends SQLiteOpenHelper implements HistoryStore {
                     null,
                     null,
                     null,
-                    HistoryTable.ORDER_BY_TIME_DESC,
+                    ORDER_BY_TIME_DESC,
                     "8");
             if (cursor != null) {
                 try {

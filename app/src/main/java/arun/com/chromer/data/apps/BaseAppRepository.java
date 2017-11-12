@@ -24,7 +24,7 @@ import android.support.annotation.NonNull;
 import arun.com.chromer.data.common.App;
 import rx.Observable;
 
-interface BaseAppRepository {
+public interface BaseAppRepository {
     @NonNull
     Observable<App> getApp(@NonNull String packageName);
 

@@ -16,12 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.data.apps;
+package arun.com.chromer.di;
 
-import arun.com.chromer.data.common.BookStore;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+import javax.inject.Scope;
 
 /**
- * App store definition
+ * A scoping annotation to permit objects whose lifetime should
+ * conform to the life of the Activity to be memorised in the
+ * correct component.
  */
-interface AppStore extends BookStore, BaseAppRepository {
+@Scope
+@Retention(RetentionPolicy.RUNTIME)
+public @interface PerActivity {
 }

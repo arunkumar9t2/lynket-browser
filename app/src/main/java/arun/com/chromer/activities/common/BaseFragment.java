@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.activities.mvp;
+package arun.com.chromer.activities.common;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -27,17 +27,21 @@ import android.view.ViewGroup;
 
 import com.hannesdorfmann.mosby3.mvp.MvpFragment;
 
+import arun.com.chromer.di.components.FragmentComponent;
+import arun.com.chromer.di.modules.FragmentModule;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by Arunkumar on 05-04-2017.
  */
 public abstract class BaseFragment<V extends Base.View, P extends Base.Presenter<V>>
         extends MvpFragment<V, P> {
-
-
+    private FragmentComponent fragmentComponent;
     private Unbinder unbinder;
+
+    protected final CompositeSubscription subs = new CompositeSubscription();
 
     @Nullable
     @Override
@@ -46,6 +50,18 @@ public abstract class BaseFragment<V extends Base.View, P extends Base.Presenter
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        fragmentComponent = ((BaseActivity) getActivity())
+                .getActivityComponent()
+                .newFragmentComponent(new FragmentModule(this));
+        inject(fragmentComponent);
+    }
+
+    protected abstract void inject(FragmentComponent fragmentComponent);
 
     @Override
     public void onResume() {
@@ -64,6 +80,7 @@ public abstract class BaseFragment<V extends Base.View, P extends Base.Presenter
         presenter.onDestroy();
         super.onDestroy();
         unbinder.unbind();
+        fragmentComponent = null;
     }
 
     @LayoutRes

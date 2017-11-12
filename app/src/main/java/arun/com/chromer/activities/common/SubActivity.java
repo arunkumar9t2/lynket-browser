@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.activities.base;
+package arun.com.chromer.activities.common;
 
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;

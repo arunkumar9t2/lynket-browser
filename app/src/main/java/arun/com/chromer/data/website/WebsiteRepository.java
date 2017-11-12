@@ -18,17 +18,21 @@
 
 package arun.com.chromer.data.website;
 
-import android.annotation.SuppressLint;
+import android.app.Application;
 import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
-import arun.com.chromer.data.history.HistoryRepository;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import arun.com.chromer.data.annotation.Disk;
+import arun.com.chromer.data.annotation.Network;
+import arun.com.chromer.data.history.BaseHistoryRepository;
 import arun.com.chromer.data.website.model.WebColor;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.util.RxUtils;
 import rx.Observable;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -37,28 +41,19 @@ import static arun.com.chromer.shared.Constants.NO_COLOR;
 /**
  * Website repository implementation for managing and providing website data.
  */
+@Singleton
 public class WebsiteRepository implements BaseWebsiteRepository {
-    @SuppressWarnings("FieldCanBeLocal")
     private final Context context;
-    // Singleton instance
-    @SuppressLint("StaticFieldLeak")
-    private static WebsiteRepository INSTANCE;
-    // Network store
     private final WebsiteStore webNetworkStore;
-    // Cache store
     private final WebsiteStore diskStore;
+    private final BaseHistoryRepository historyRepository;
 
-    private WebsiteRepository(@NonNull Context context) {
+    @Inject
+    WebsiteRepository(@NonNull Application context, @Disk WebsiteStore diskStore, @Network WebsiteStore webNetworkStore, BaseHistoryRepository historyRepository) {
         this.context = context.getApplicationContext();
-        webNetworkStore = new WebsiteNetworkStore(context);
-        diskStore = new WebsiteDiskStore(context);
-    }
-
-    public static synchronized WebsiteRepository getInstance(@NonNull Context context) {
-        if (INSTANCE == null) {
-            INSTANCE = new WebsiteRepository(context);
-        }
-        return INSTANCE;
+        this.webNetworkStore = webNetworkStore;
+        this.diskStore = diskStore;
+        this.historyRepository = historyRepository;
     }
 
     @NonNull
@@ -67,14 +62,14 @@ public class WebsiteRepository implements BaseWebsiteRepository {
         final Observable<WebSite> cache = diskStore.getWebsite(url)
                 .doOnNext(webSite -> {
                     if (webSite != null) {
-                        HistoryRepository.getInstance(context).update(webSite).subscribe();
+                        historyRepository.update(webSite).subscribe();
                     }
                 });
 
-        final Observable<WebSite> history = HistoryRepository.getInstance(context).get(new WebSite(url))
+        final Observable<WebSite> history = historyRepository.get(new WebSite(url))
                 .doOnNext(webSite -> {
                     if (webSite != null) {
-                        HistoryRepository.getInstance(context).update(webSite).subscribe();
+                        historyRepository.update(webSite).subscribe();
                     }
                 });
 
@@ -82,7 +77,7 @@ public class WebsiteRepository implements BaseWebsiteRepository {
                 .filter(webSite -> webSite != null)
                 .doOnNext(webSite -> {
                     diskStore.saveWebsite(webSite).subscribe();
-                    HistoryRepository.getInstance(context).insert(webSite).subscribe();
+                    historyRepository.insert(webSite).subscribe();
                 });
 
         return Observable.concat(cache, history, remote)
@@ -101,14 +96,11 @@ public class WebsiteRepository implements BaseWebsiteRepository {
     public Observable<WebColor> saveWebColor(String url) {
         return getWebsite(url)
                 .observeOn(Schedulers.io())
-                .flatMap(new Func1<WebSite, Observable<WebColor>>() {
-                    @Override
-                    public Observable<WebColor> call(WebSite webSite) {
-                        if (webSite != null && webSite.themeColor() != NO_COLOR) {
-                            return diskStore.saveWebsiteColor(Uri.parse(webSite.url).getHost(), webSite.themeColor());
-                        } else {
-                            return Observable.empty();
-                        }
+                .flatMap(webSite -> {
+                    if (webSite != null && webSite.themeColor() != NO_COLOR) {
+                        return diskStore.saveWebsiteColor(Uri.parse(webSite.url).getHost(), webSite.themeColor());
+                    } else {
+                        return Observable.empty();
                     }
                 });
     }

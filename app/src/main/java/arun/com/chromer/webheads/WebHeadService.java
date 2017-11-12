@@ -46,9 +46,6 @@ import android.support.v7.app.NotificationCompat;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringConfig;
 import com.facebook.rebound.SpringSystem;
@@ -64,16 +61,13 @@ import arun.com.chromer.R;
 import arun.com.chromer.activities.NewTabDialogActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.CustomTabManager;
-import arun.com.chromer.data.website.WebsiteRepository;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.util.DocumentUtils;
-import arun.com.chromer.webheads.helper.ColorExtractionTask;
 import arun.com.chromer.webheads.physics.SpringChain2D;
 import arun.com.chromer.webheads.ui.WebHeadContract;
 import arun.com.chromer.webheads.ui.context.WebHeadContextActivity;
 import arun.com.chromer.webheads.ui.views.Trashy;
 import arun.com.chromer.webheads.ui.views.WebHead;
-import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 import xyz.klinker.android.article.ArticleUtils;
@@ -81,7 +75,6 @@ import xyz.klinker.android.article.ArticleUtils;
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static android.os.AsyncTask.THREAD_POOL_EXECUTOR;
 import static android.support.v4.app.NotificationCompat.PRIORITY_MIN;
 import static android.widget.Toast.LENGTH_SHORT;
 import static arun.com.chromer.shared.Constants.ACTION_CLOSE_WEBHEAD_BY_URL;
@@ -259,7 +252,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     }
 
     private void doExtraction(final String webHeadUrl) {
-        final Subscription s = WebsiteRepository.getInstance(this)
+       /* final Subscription s = WebsiteRepository.getInstance(this)
                 .getWebsite(webHeadUrl)
                 .doOnError(Timber::e)
                 .doOnNext(webSite -> {
@@ -286,7 +279,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
                         warmUp(webHead);
                     }
                 }).subscribe();
-        compositeSubscription.add(s);
+        compositeSubscription.add(s);*/
     }
 
     @NonNull

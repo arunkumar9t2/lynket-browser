@@ -16,30 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.data.website;
+package arun.com.chromer.di.modules;
 
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 
-import arun.com.chromer.data.website.model.WebColor;
-import arun.com.chromer.data.website.model.WebSite;
-import rx.Observable;
+import dagger.Module;
 
-/**
- * Created by arunk on 24-02-2017.
- */
-public interface WebsiteStore {
-    @NonNull
-    Observable<WebSite> getWebsite(@NonNull String url);
+@Module
+public class FragmentModule {
 
-    @NonNull
-    Observable<Void> clearCache();
+    private final Fragment fragment;
 
-    @NonNull
-    Observable<WebSite> saveWebsite(@NonNull WebSite webSite);
+    public FragmentModule(Fragment fragment) {
+        this.fragment = fragment;
+    }
 
-    @NonNull
-    Observable<WebColor> getWebsiteColor(@NonNull final String url);
-
-    Observable<WebColor> saveWebsiteColor(@NonNull final String host, @ColorInt int color);
 }

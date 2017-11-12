@@ -32,7 +32,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import arun.com.chromer.activities.SnackHelper;
+import arun.com.chromer.activities.common.Snackable;
 import arun.com.chromer.activities.settings.widgets.ColorPreference;
 
 /**
@@ -108,9 +108,9 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat im
     }
 
     protected void snackLong(@NonNull final String textToSnack) {
-        if (getActivity() instanceof SnackHelper) {
-            final SnackHelper snackHelper = (SnackHelper) getActivity();
-            snackHelper.snackLong(textToSnack);
+        if (getActivity() instanceof Snackable) {
+            final Snackable snackable = (Snackable) getActivity();
+            snackable.snackLong(textToSnack);
         }
     }
 

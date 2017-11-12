@@ -18,13 +18,15 @@
 
 package arun.com.chromer.activities.main.home;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.transition.AutoTransition;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -38,17 +40,18 @@ import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import arun.com.chromer.R;
-import arun.com.chromer.activities.SnackHelper;
-import arun.com.chromer.activities.mvp.BaseFragment;
+import arun.com.chromer.activities.common.BaseFragment;
+import arun.com.chromer.activities.common.Snackable;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.CustomTabManager;
 import arun.com.chromer.customtabs.CustomTabs;
-import arun.com.chromer.data.website.WebsiteRepository;
 import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.di.components.FragmentComponent;
 import arun.com.chromer.search.SuggestionItem;
 import arun.com.chromer.shared.Constants;
-import arun.com.chromer.util.RxUtils;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.views.searchview.MaterialSearchView;
 import arun.com.chromer.webheads.WebHeadService;
@@ -56,15 +59,18 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import timber.log.Timber;
 
+import static android.app.Activity.RESULT_OK;
+import static android.support.transition.TransitionManager.beginDelayedTransition;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static arun.com.chromer.shared.Constants.REQUEST_CODE_VOICE;
+import static arun.com.chromer.util.Utils.getRecognizerIntent;
+import static com.jakewharton.rxbinding.widget.RxTextView.afterTextChangeEvents;
 
 /**
  * Created by Arunkumar on 07-04-2017.
  */
 public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implements Home.View {
-
     @BindView(R.id.material_search_view)
     MaterialSearchView materialSearchView;
     @BindView(R.id.incognito_mode)
@@ -75,15 +81,23 @@ public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implem
     RecyclerView recentsList;
     @BindView(R.id.recents_header)
     TextView recentsHeader;
+    @BindView(R.id.nested_scroll_view)
+    NestedScrollView nestedScrollView;
 
 
     private CustomTabManager customTabManager;
-    private RecentsAdapter recentsAdapter;
+
+    @Inject
+    RecentsAdapter recentsAdapter;
+    @Inject
+    Home.Presenter presenter;
+
+    private AutoTransition autoTransition;
 
     @NonNull
     @Override
     public Home.Presenter createPresenter() {
-        return new Home.Presenter();
+        return presenter;
     }
 
     @Override
@@ -101,6 +115,11 @@ public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implem
     }
 
     @Override
+    protected void inject(FragmentComponent fragmentComponent) {
+        fragmentComponent.inject(this);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         invalidateState();
@@ -114,20 +133,24 @@ public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implem
         customTabManager.unbindCustomTabsService(getActivity());
     }
 
+    private void doTransition() {
+        beginDelayedTransition(nestedScrollView, autoTransition);
+    }
 
     @Override
     public void snack(@NonNull String message) {
-        ((SnackHelper) getActivity()).snack(message);
+        ((Snackable) getActivity()).snack(message);
     }
 
     @Override
     public void snackLong(@NonNull String message) {
-        ((SnackHelper) getActivity()).snackLong(message);
+        ((Snackable) getActivity()).snackLong(message);
     }
 
     @Override
     public void setSuggestions(@NonNull List<SuggestionItem> suggestions) {
         materialSearchView.setSuggestions(suggestions);
+        doTransition();
     }
 
     @Override
@@ -146,25 +169,29 @@ public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implem
     }
 
     private void setupMaterialSearch() {
-        materialSearchView.clearFocus();
-        presenter.registerSearch(materialSearchView.getEditText());
-        materialSearchView.setInteractionListener(new MaterialSearchView.SearchViewInteractionListener() {
-            @Override
-            public void onVoiceIconClick() {
-                Answers.getInstance().logSearch(new SearchEvent().putCustomAttribute("Mode", "Voice"));
-                if (Utils.isVoiceRecognizerPresent(getActivity())) {
-                    startActivityForResult(Utils.getRecognizerIntent(getActivity()), REQUEST_CODE_VOICE);
-                } else {
-                    snack(getString(R.string.no_voice_rec_apps));
-                }
-            }
+        autoTransition = new AutoTransition();
+        autoTransition.setDuration(150);
+        autoTransition.setInterpolator(new FastOutSlowInInterpolator());
 
-            @Override
-            public void onSearchPerformed(@NonNull String url) {
-                launchCustomTab(url);
-                Answers.getInstance().logSearch(new SearchEvent());
+        subs.add(materialSearchView.voiceIconClicks().subscribe(aVoid -> {
+            Answers.getInstance().logSearch(new SearchEvent().putCustomAttribute("Mode", "Voice"));
+            if (Utils.isVoiceRecognizerPresent(getActivity())) {
+                startActivityForResult(getRecognizerIntent(getActivity()), REQUEST_CODE_VOICE);
+            } else {
+                snack(getString(R.string.no_voice_rec_apps));
             }
-        });
+        }));
+
+        subs.add(materialSearchView.searchPerfomed().subscribe(url -> {
+            materialSearchView.postDelayed(() -> launchCustomTab(url), 150);
+            Answers.getInstance().logSearch(new SearchEvent());
+        }));
+
+        subs.add(materialSearchView.clearClicks().subscribe(aVoid -> doTransition()));
+
+        materialSearchView.clearFocus();
+        presenter.registerSearch(afterTextChangeEvents(materialSearchView.getEditText())
+                .map(changeEvent -> changeEvent.editable().toString()));
     }
 
     private void invalidateState() {
@@ -176,7 +203,7 @@ public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implem
                 .sizeDp(24), null, null, null);
         incognitoMode.setOnCheckedChangeListener((buttonView, isChecked) ->
                 Preferences.get(getContext()).incognitoMode(isChecked));
-        presenter.loadRecents(getContext());
+        presenter.loadRecents();
     }
 
     private void setupRecents() {
@@ -186,7 +213,6 @@ public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implem
                 .colorRes(R.color.accent)
                 .sizeDp(20), null, null, null);
         recentsList.setLayoutManager(new GridLayoutManager(getActivity(), 4));
-        recentsAdapter = new RecentsAdapter();
         recentsList.setAdapter(recentsAdapter);
     }
 
@@ -206,11 +232,11 @@ public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implem
                         .withSession(customTabManager.getSession())
                         .prepare()
                         .launch();
-                WebsiteRepository.getInstance(getActivity())
+                /*WebsiteRepository.getInstance(getActivity())
                         .getWebsite(url)
                         .compose(RxUtils.applySchedulers())
                         .doOnError(Timber::e)
-                        .subscribe();
+                        .subscribe();*/
             }
         }
     }
@@ -239,7 +265,7 @@ public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implem
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_VOICE) {
             switch (resultCode) {
-                case Activity.RESULT_OK:
+                case RESULT_OK:
                     final List<String> resultList = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     if (resultList != null && !resultList.isEmpty()) {
                         launchCustomTab(Utils.getSearchUrl(resultList.get(0)));

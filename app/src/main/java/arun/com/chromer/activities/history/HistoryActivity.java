@@ -26,12 +26,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.SnackHelper;
-import arun.com.chromer.activities.base.SubActivity;
+import arun.com.chromer.activities.common.Snackable;
+import arun.com.chromer.activities.common.SubActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class HistoryActivity extends SubActivity implements SnackHelper {
+public class HistoryActivity extends SubActivity implements Snackable {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.coordinator_layout)

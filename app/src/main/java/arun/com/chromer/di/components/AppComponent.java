@@ -16,30 +16,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.data.website;
+package arun.com.chromer.di.components;
 
-import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 
-import arun.com.chromer.data.website.model.WebColor;
-import arun.com.chromer.data.website.model.WebSite;
-import rx.Observable;
+import javax.inject.Singleton;
 
-/**
- * Created by arunk on 24-02-2017.
- */
-public interface WebsiteStore {
+import arun.com.chromer.customtabs.dynamictoolbar.AppColorExtractorService;
+import arun.com.chromer.di.modules.ActivityModule;
+import arun.com.chromer.di.modules.AppModule;
+import arun.com.chromer.di.modules.DataModule;
+import dagger.Component;
+
+@Singleton
+@Component(modules = {
+        AppModule.class,
+        DataModule.class,
+})
+public interface AppComponent {
     @NonNull
-    Observable<WebSite> getWebsite(@NonNull String url);
+    ActivityComponent newActivityComponent(@NonNull ActivityModule activityModule);
 
     @NonNull
-    Observable<Void> clearCache();
-
-    @NonNull
-    Observable<WebSite> saveWebsite(@NonNull WebSite webSite);
-
-    @NonNull
-    Observable<WebColor> getWebsiteColor(@NonNull final String url);
-
-    Observable<WebColor> saveWebsiteColor(@NonNull final String host, @ColorInt int color);
+    void inject(AppColorExtractorService appColorExtractorService);
 }

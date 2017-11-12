@@ -35,10 +35,13 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import javax.inject.Inject;
+
 import arun.com.chromer.R;
-import arun.com.chromer.activities.SnackHelper;
-import arun.com.chromer.activities.mvp.BaseFragment;
+import arun.com.chromer.activities.common.BaseFragment;
+import arun.com.chromer.activities.common.Snackable;
 import arun.com.chromer.activities.settings.Preferences;
+import arun.com.chromer.di.components.FragmentComponent;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -49,7 +52,6 @@ import static android.view.View.VISIBLE;
 /**
  * Created by arunk on 07-04-2017.
  */
-
 public class HistoryFragment extends BaseFragment<History.View, History.Presenter> implements History.View {
     @BindView(R.id.history_list)
     RecyclerView historyList;
@@ -65,16 +67,21 @@ public class HistoryFragment extends BaseFragment<History.View, History.Presente
     SwitchCompat incognitoSwitch;
     @BindView(R.id.enable_history_card)
     CardView enableHistoryCard;
+
+
     private HistoryAdapter historyAdapter;
+
+    @Inject
+    History.Presenter presenter;
 
     @Override
     public void snack(@NonNull String message) {
-        ((SnackHelper) getActivity()).snack(message);
+        ((Snackable) getActivity()).snack(message);
     }
 
     @Override
     public void snackLong(@NonNull String message) {
-        ((SnackHelper) getActivity()).snackLong(message);
+        ((Snackable) getActivity()).snackLong(message);
     }
 
 
@@ -101,7 +108,7 @@ public class HistoryFragment extends BaseFragment<History.View, History.Presente
     @NonNull
     @Override
     public History.Presenter createPresenter() {
-        return new History.Presenter();
+        return presenter;
     }
 
     @Override
@@ -128,7 +135,7 @@ public class HistoryFragment extends BaseFragment<History.View, History.Presente
         swipeRefreshLayout.setColorSchemeColors(
                 ContextCompat.getColor(getContext(), R.color.colorPrimary),
                 ContextCompat.getColor(getContext(), R.color.accent));
-        swipeRefreshLayout.setOnRefreshListener(() -> presenter.loadHistory(getContext()));
+        swipeRefreshLayout.setOnRefreshListener(() -> presenter.loadHistory());
 
         enableHistoryCard.setOnClickListener(v -> incognitoSwitch.performClick());
         incognitoSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> Preferences.get(getActivity()).incognitoMode(!isChecked));
@@ -142,7 +149,7 @@ public class HistoryFragment extends BaseFragment<History.View, History.Presente
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                presenter.deleteHistory(getContext(), historyAdapter.getWebsiteAt(viewHolder.getAdapterPosition()));
+                presenter.deleteHistory(historyAdapter.getWebsiteAt(viewHolder.getAdapterPosition()));
             }
         };
         final ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeTouch);
@@ -159,9 +166,14 @@ public class HistoryFragment extends BaseFragment<History.View, History.Presente
     }
 
     @Override
+    protected void inject(FragmentComponent fragmentComponent) {
+        fragmentComponent.inject(this);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        presenter.loadHistory(getContext());
+        presenter.loadHistory();
         incognitoSwitch.setChecked(!Preferences.get(getActivity()).incognitoMode());
         getActivity().setTitle(R.string.title_history);
     }

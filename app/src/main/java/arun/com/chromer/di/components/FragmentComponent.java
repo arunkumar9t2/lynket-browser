@@ -16,15 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.activities;
+package arun.com.chromer.di.components;
 
-import android.support.annotation.NonNull;
+import arun.com.chromer.activities.history.HistoryFragment;
+import arun.com.chromer.activities.main.home.HomeFragment;
+import arun.com.chromer.di.PerFragment;
+import arun.com.chromer.di.modules.FragmentModule;
+import dagger.Subcomponent;
 
-/**
- * Interface to allow fragments to easily show snack bars in their attached activity.
- */
-public interface SnackHelper {
-    void snack(@NonNull final String message);
+@PerFragment
+@Subcomponent(modules = {
+        FragmentModule.class
+})
+public interface FragmentComponent {
 
-    void snackLong(@NonNull final String message);
+    void inject(HistoryFragment homeFragment);
+
+    void inject(HomeFragment homeFragment);
 }

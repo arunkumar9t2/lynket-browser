@@ -18,11 +18,14 @@
 
 package arun.com.chromer.data.history;
 
-import android.content.Context;
+import android.app.Application;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 
 import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.data.website.model.WebSite;
@@ -32,31 +35,29 @@ import timber.log.Timber;
 /**
  * Created by arunk on 03-03-2017.
  */
-public class HistoryRepository implements HistoryStore {
-    private static HistoryRepository INSTANCE = null;
-    private final Context context;
+@Singleton
+public class HistoryRepository implements BaseHistoryRepository {
+    private final Application application;
+    private final HistoryStore historyStore;
+    private final Preferences preferences;
 
-    private HistoryRepository(Context applicationContext) {
-        this.context = applicationContext;
-    }
-
-    public static HistoryRepository getInstance(@NonNull Context context) {
-        if (INSTANCE == null) {
-            INSTANCE = new HistoryRepository(context.getApplicationContext());
-        }
-        return INSTANCE;
+    @Inject
+    HistoryRepository(Application application, HistoryStore historyStore, Preferences preferences) {
+        this.application = application;
+        this.historyStore = historyStore;
+        this.preferences = preferences;
     }
 
     @NonNull
     @Override
     public Observable<Cursor> getAllItemsCursor() {
-        return HistoryDiskStore.getInstance(context).getAllItemsCursor();
+        return historyStore.getAllItemsCursor();
     }
 
     @NonNull
     @Override
     public Observable<WebSite> get(@NonNull WebSite webSite) {
-        return HistoryDiskStore.getInstance(context).get(webSite)
+        return historyStore.get(webSite)
                 .doOnNext(saved -> {
                     if (saved == null) {
                         Timber.d("History miss for: %s", webSite.url);
@@ -69,10 +70,10 @@ public class HistoryRepository implements HistoryStore {
     @NonNull
     @Override
     public Observable<WebSite> insert(@NonNull final WebSite webSite) {
-        if (Preferences.get(context).incognitoMode()) {
+        if (preferences.incognitoMode()) {
             return Observable.just(webSite);
         } else {
-            return HistoryDiskStore.getInstance(context).insert(webSite)
+            return historyStore.insert(webSite)
                     .doOnNext(webSite1 -> {
                         if (webSite1 != null) {
                             Timber.d("Added %s to history", webSite1.url);
@@ -86,10 +87,10 @@ public class HistoryRepository implements HistoryStore {
     @NonNull
     @Override
     public Observable<WebSite> update(@NonNull final WebSite webSite) {
-        if (Preferences.get(context).incognitoMode()) {
+        if (preferences.incognitoMode()) {
             return Observable.just(webSite);
         } else {
-            return HistoryDiskStore.getInstance(context).update(webSite)
+            return historyStore.update(webSite)
                     .doOnNext(saved -> {
                         if (saved != null) {
                             Timber.d("Updated %s in history table", saved.url);
@@ -101,24 +102,24 @@ public class HistoryRepository implements HistoryStore {
     @NonNull
     @Override
     public Observable<WebSite> delete(@NonNull WebSite webSite) {
-        return HistoryDiskStore.getInstance(context).delete(webSite);
+        return historyStore.delete(webSite);
     }
 
     @NonNull
     @Override
     public Observable<Boolean> exists(@NonNull WebSite webSite) {
-        return HistoryDiskStore.getInstance(context).exists(webSite);
+        return historyStore.exists(webSite);
     }
 
     @NonNull
     @Override
     public Observable<Integer> deleteAll() {
-        return HistoryDiskStore.getInstance(context).deleteAll();
+        return historyStore.deleteAll();
     }
 
     @NonNull
     @Override
     public Observable<List<WebSite>> recents() {
-        return HistoryDiskStore.getInstance(context).recents();
+        return historyStore.recents();
     }
 }

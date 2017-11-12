@@ -52,12 +52,10 @@ import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.callbacks.ClipboardService;
 import arun.com.chromer.customtabs.callbacks.FavShareBroadcastReceiver;
 import arun.com.chromer.customtabs.callbacks.SecondaryBrowserReceiver;
-import arun.com.chromer.data.website.WebsiteRepository;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -117,12 +115,12 @@ public class WebViewActivity extends AppCompatActivity {
             applyDescriptionFromWebsite(webSite);
         } else {
             Timber.d("No info found, beginning parsing");
-            final Subscription s = WebsiteRepository.getInstance(this)
+           /* final Subscription s = WebsiteRepository.getInstance(this)
                     .getWebsite(baseUrl)
                     .doOnNext(this::applyDescriptionFromWebsite)
                     .doOnError(Timber::e)
                     .subscribe();
-            subscriptions.add(s);
+            subscriptions.add(s);*/
         }
     }
 

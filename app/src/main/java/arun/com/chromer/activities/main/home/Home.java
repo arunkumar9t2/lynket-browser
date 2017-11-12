@@ -18,43 +18,43 @@
 
 package arun.com.chromer.activities.main.home;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
-import android.widget.EditText;
-
-import com.arun.rxsuggestions.RxSuggestions;
-import com.jakewharton.rxbinding.widget.RxTextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import arun.com.chromer.activities.SnackHelper;
-import arun.com.chromer.activities.mvp.Base;
-import arun.com.chromer.data.history.HistoryRepository;
+import javax.inject.Inject;
+
+import arun.com.chromer.activities.common.Base;
+import arun.com.chromer.activities.common.Snackable;
+import arun.com.chromer.data.history.BaseHistoryRepository;
 import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.di.PerFragment;
 import arun.com.chromer.search.SuggestionItem;
 import arun.com.chromer.util.RxUtils;
-import rx.android.schedulers.AndroidSchedulers;
+import in.arunkumarsampath.suggestions.RxSuggestions;
+import rx.Observable;
 import timber.log.Timber;
 
 interface Home {
-    interface View extends SnackHelper, Base.View {
+    interface View extends Snackable, Base.View {
         void setSuggestions(@NonNull List<SuggestionItem> suggestions);
 
         void setRecents(@NonNull List<WebSite> webSites);
     }
 
+    @PerFragment
     class Presenter extends Base.Presenter<View> {
 
-        void registerSearch(@NonNull EditText editText) {
-            compositeSubscription.add(RxTextView.afterTextChangeEvents(editText)
-                    .map(changeEvent -> changeEvent.editable().toString())
-                    .filter(s -> !TextUtils.isEmpty(s)).subscribeOn(AndroidSchedulers.mainThread())
-                    .debounce(150, TimeUnit.MILLISECONDS)
-                    .onBackpressureLatest()
-                    .doOnNext(s -> Timber.d("Query: %s", s))
+        private final BaseHistoryRepository historyRepository;
+
+        @Inject
+        public Presenter(BaseHistoryRepository historyRepository) {
+            this.historyRepository = historyRepository;
+        }
+
+        void registerSearch(@NonNull Observable<String> stringObservable) {
+            subs.add(stringObservable
                     .compose(RxSuggestions.suggestionsTransformer())
                     .map(strings -> {
                         final List<SuggestionItem> suggestionItems = new ArrayList<>();
@@ -70,9 +70,8 @@ interface Home {
                     .subscribe());
         }
 
-        void loadRecents(@NonNull Context context) {
-            compositeSubscription.add(HistoryRepository.getInstance(context)
-                    .recents()
+        void loadRecents() {
+            subs.add(historyRepository.recents()
                     .compose(RxUtils.applySchedulers())
                     .doOnError(Timber::e)
                     .doOnNext(webSites -> {
@@ -81,6 +80,16 @@ interface Home {
                         }
                     })
                     .subscribe());
+        }
+
+        @Override
+        public void onResume() {
+
+        }
+
+        @Override
+        public void onPause() {
+
         }
     }
 }

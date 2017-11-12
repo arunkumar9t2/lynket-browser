@@ -26,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        tools:context="arun.com.chromer.MainActivity"
+        tools:context="arun.com.chromer.activities.main.MainActivity"
         tools:showIn="@layout/activity_main">
 
         <android.support.v7.widget.CardView

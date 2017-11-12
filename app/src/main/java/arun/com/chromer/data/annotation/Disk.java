@@ -16,10 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.data.history;
+package arun.com.chromer.data.annotation;
 
-/**
- * Created by Arunkumar on 03-03-2017.
- */
-public interface HistoryStore extends BaseHistoryRepository {
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+import javax.inject.Qualifier;
+
+@Qualifier
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Disk {
 }

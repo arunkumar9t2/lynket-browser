@@ -16,30 +16,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.data.website;
+package arun.com.chromer.activities.main;
 
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
+import javax.inject.Inject;
 
-import arun.com.chromer.data.website.model.WebColor;
-import arun.com.chromer.data.website.model.WebSite;
-import rx.Observable;
+import arun.com.chromer.activities.common.Base;
+import arun.com.chromer.activities.common.Snackable;
+import arun.com.chromer.di.PerActivity;
 
-/**
- * Created by arunk on 24-02-2017.
- */
-public interface WebsiteStore {
-    @NonNull
-    Observable<WebSite> getWebsite(@NonNull String url);
+public interface MainScreen {
+    interface View extends Base.View, Snackable {
+    }
 
-    @NonNull
-    Observable<Void> clearCache();
+    @PerActivity
+    class Presenter extends Base.Presenter<MainScreen.View> {
 
-    @NonNull
-    Observable<WebSite> saveWebsite(@NonNull WebSite webSite);
+        @Inject
+        public Presenter() {
+        }
 
-    @NonNull
-    Observable<WebColor> getWebsiteColor(@NonNull final String url);
+        @Override
+        public void onResume() {
 
-    Observable<WebColor> saveWebsiteColor(@NonNull final String host, @ColorInt int color);
+        }
+
+        @Override
+        public void onPause() {
+
+        }
+    }
 }

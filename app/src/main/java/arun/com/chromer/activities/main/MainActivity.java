@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer;
+package arun.com.chromer.activities.main;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -30,7 +30,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -57,10 +56,13 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import arun.com.chromer.R;
 import arun.com.chromer.activities.BrowserInterceptActivity;
-import arun.com.chromer.activities.SnackHelper;
 import arun.com.chromer.activities.about.AboutAppActivity;
 import arun.com.chromer.activities.about.changelog.Changelog;
+import arun.com.chromer.activities.common.BaseActivity;
 import arun.com.chromer.activities.history.HistoryFragment;
 import arun.com.chromer.activities.intro.ChromerIntro;
 import arun.com.chromer.activities.intro.WebHeadsIntro;
@@ -69,25 +71,24 @@ import arun.com.chromer.activities.payments.DonateActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.activities.settings.SettingsGroupActivity;
 import arun.com.chromer.customtabs.CustomTabs;
+import arun.com.chromer.di.components.ActivityComponent;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.ServiceUtil;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.util.cache.FontCache;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import timber.log.Timber;
 
 import static arun.com.chromer.shared.Constants.ACTION_CLOSE_ROOT;
 import static arun.com.chromer.util.cache.FontCache.MONO;
 
-public class MainActivity extends AppCompatActivity implements SnackHelper {
-
+public class MainActivity extends BaseActivity<MainScreen.View, MainScreen.Presenter> implements MainScreen.View {
     @BindView(R.id.bottomsheet)
-    public BottomSheetLayout bottomSheetLayout;
+    BottomSheetLayout bottomSheetLayout;
     @BindView(R.id.toolbar)
-    public Toolbar toolbar;
+    Toolbar toolbar;
     @BindView(R.id.coordinator_layout)
-    public CoordinatorLayout coordinatorLayout;
+    CoordinatorLayout coordinatorLayout;
     @BindView(R.id.root)
     LinearLayout root;
     @BindView(R.id.appbar)
@@ -95,14 +96,17 @@ public class MainActivity extends AppCompatActivity implements SnackHelper {
     @BindView(R.id.bottom_navigation)
     BottomNavigationView bottomNavigation;
 
+    @Inject
+    MainScreen.Presenter presenter;
+
     private BroadcastReceiver closeReceiver;
+    private HistoryFragment historyFragment;
+    private HomeFragment homeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
 
         if (Preferences.get(this).isFirstRun()) {
             startActivity(new Intent(this, ChromerIntro.class));
@@ -115,32 +119,56 @@ public class MainActivity extends AppCompatActivity implements SnackHelper {
         ServiceUtil.takeCareOfServices(getApplicationContext());
         registerCloseReceiver();
 
+        historyFragment = new HistoryFragment();
+        homeFragment = new HomeFragment();
+
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, homeFragment)
+                .add(R.id.fragment_container, historyFragment)
+                .hide(historyFragment)
+                .show(homeFragment)
+                .commit();
+
+        bottomNavigation.setSelectedItemId(R.id.home);
         bottomNavigation.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.home:
-                    selectHome();
+                    getSupportFragmentManager().beginTransaction()
+                            .show(homeFragment)
+                            .hide(historyFragment)
+                            .commit();
                     break;
                 case R.id.history:
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, new HistoryFragment())
+                            .show(historyFragment)
+                            .hide(homeFragment)
                             .commit();
                     break;
             }
             return false;
         });
-        bottomNavigation.setSelectedItemId(R.id.home);
     }
 
-    private void selectHome() {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new HomeFragment())
-                .commit();
+    @Override
+    protected void inject(ActivityComponent activityComponent) {
+        activityComponent.inject(this);
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.activity_main;
     }
 
     @Override
     protected void onDestroy() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(closeReceiver);
         super.onDestroy();
+    }
+
+    @NonNull
+    @Override
+    public MainScreen.Presenter createPresenter() {
+        return presenter;
     }
 
     @Override

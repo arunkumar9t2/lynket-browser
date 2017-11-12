@@ -37,9 +37,12 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import arun.com.chromer.R;
 import arun.com.chromer.activities.BrowserInterceptActivity;
 import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.di.PerFragment;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.views.PlaceholderLetterView;
@@ -52,9 +55,11 @@ import static android.view.View.VISIBLE;
 /**
  * Created by arunk on 07-03-2017.
  */
+@PerFragment
 public class RecentsAdapter extends RecyclerView.Adapter<RecentsAdapter.RecentsViewHolder> {
     private final List<WebSite> webSites = new ArrayList<>();
 
+    @Inject
     public RecentsAdapter() {
     }
 

@@ -46,8 +46,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.SnackHelper;
-import arun.com.chromer.activities.base.SubActivity;
+import arun.com.chromer.activities.common.Snackable;
+import arun.com.chromer.activities.common.SubActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.activities.settings.widgets.AppPreferenceCardView;
 import arun.com.chromer.customtabs.CustomTabs;
@@ -63,7 +63,7 @@ import static arun.com.chromer.shared.Constants.DUMMY_INTENT;
 import static arun.com.chromer.shared.Constants.TEXT_SHARE_INTENT;
 import static arun.com.chromer.shared.Constants.WEB_INTENT;
 
-public class BrowsingOptionsActivity extends SubActivity implements SnackHelper, SharedPreferences.OnSharedPreferenceChangeListener {
+public class BrowsingOptionsActivity extends SubActivity implements Snackable, SharedPreferences.OnSharedPreferenceChangeListener {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.coordinator_layout)

@@ -18,40 +18,31 @@
 
 package arun.com.chromer.data.apps;
 
-import android.annotation.SuppressLint;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import arun.com.chromer.customtabs.dynamictoolbar.AppColorExtractorService;
+import arun.com.chromer.data.apps.store.AppStore;
 import arun.com.chromer.data.common.App;
 import arun.com.chromer.shared.Constants;
 import rx.Observable;
 import timber.log.Timber;
 
+@Singleton
 public class AppRepository implements BaseAppRepository {
-    private final Context context;
+    private final Context application;
     // Disk app store
-    private final AppDiskStore diskStore;
-    @SuppressLint("StaticFieldLeak")
-    private static AppRepository INSTANCE;
+    private final AppStore diskStore;
 
-    /**
-     * Used to get a singleton instance of the repository
-     *
-     * @param context Context to work with.
-     * @return Instance of this class.
-     */
-    public static AppRepository getInstance(@NonNull Context context) {
-        if (INSTANCE == null) {
-            INSTANCE = new AppRepository(context);
-        }
-        return INSTANCE;
-    }
-
-    private AppRepository(@NonNull Context context) {
-        this.context = context.getApplicationContext();
-        this.diskStore = new AppDiskStore(context);
+    @Inject
+    AppRepository(@NonNull Application application, @NonNull AppStore appStore) {
+        this.application = application;
+        this.diskStore = appStore;
     }
 
     @NonNull
@@ -72,9 +63,9 @@ public class AppRepository implements BaseAppRepository {
                 .doOnNext(integer -> {
                     if (integer == -1) {
                         Timber.d("Color not found, starting extraction.");
-                        final Intent intent = new Intent(context, AppColorExtractorService.class);
+                        final Intent intent = new Intent(application, AppColorExtractorService.class);
                         intent.putExtra(Constants.EXTRA_PACKAGE_NAME, packageName);
-                        context.startService(intent);
+                        application.startService(intent);
                     }
                 });
     }

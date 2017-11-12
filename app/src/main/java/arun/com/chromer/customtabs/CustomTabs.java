@@ -47,6 +47,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.inject.Inject;
+
 import arun.com.chromer.R;
 import arun.com.chromer.activities.MoreMenuActivity;
 import arun.com.chromer.activities.OpenIntentWithActivity;
@@ -62,7 +64,6 @@ import arun.com.chromer.customtabs.callbacks.SecondaryBrowserReceiver;
 import arun.com.chromer.customtabs.callbacks.ShareBroadcastReceiver;
 import arun.com.chromer.customtabs.warmup.WarmUpService;
 import arun.com.chromer.data.apps.AppRepository;
-import arun.com.chromer.data.website.WebsiteRepository;
 import arun.com.chromer.shared.AppDetectService;
 import arun.com.chromer.shared.AppDetectionManager;
 import arun.com.chromer.shared.Constants;
@@ -153,6 +154,9 @@ public class CustomTabs {
         forWebHead = false;
         noAnimation = false;
     }
+
+    @Inject
+    AppRepository appRepository;
 
     /**
      * Used to get an instance of this helper
@@ -432,14 +436,15 @@ public class CustomTabs {
      */
     private boolean setWebToolbarColor() {
         // Check if we have the color extracted for this source
-        final int color = WebsiteRepository.getInstance(activity).getWebsiteColorSync(url);
+        /*final int color = WebsiteRepository.getInstance(activity).getWebsiteColorSync(url);
         if (color != Constants.NO_COLOR) {
             toolbarColor = color;
             return true;
         } else {
             WebsiteRepository.getInstance(activity).saveWebColor(url).subscribe();
             return false;
-        }
+        }*/
+        return false;
     }
 
     /**
@@ -454,7 +459,7 @@ public class CustomTabs {
                 activity.startService(new Intent(activity, AppDetectService.class));
                 return false;
             }
-            final int savedColor = AppRepository.getInstance(activity).getPackageColorSync(lastPackage);
+            final int savedColor = appRepository.getPackageColorSync(lastPackage);
             if (savedColor != Constants.NO_COLOR) {
                 toolbarColor = savedColor;
                 return true;

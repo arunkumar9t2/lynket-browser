@@ -24,11 +24,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -37,15 +35,10 @@ import com.afollestad.materialdialogs.Theme;
 import arun.com.chromer.R;
 import arun.com.chromer.activities.browsing.article.ArticleLauncher;
 import arun.com.chromer.activities.settings.Preferences;
-import arun.com.chromer.data.apps.AppRepository;
-import arun.com.chromer.data.website.WebsiteRepository;
-import arun.com.chromer.shared.AppDetectionManager;
 import arun.com.chromer.util.DocumentUtils;
-import arun.com.chromer.util.RxUtils;
 import arun.com.chromer.util.SafeIntent;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.ui.ProxyActivity;
-import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -89,12 +82,12 @@ public class BrowserInterceptActivity extends AppCompatActivity {
 
         // Check if we should blacklist the launching app
         if (Preferences.get(this).blacklist()) {
-            final String lastAppPackage = AppDetectionManager.getInstance(this).getNonFilteredPackage();
+            /*final String lastAppPackage = AppDetectionManager.getInstance(this).getNonFilteredPackage();
             if (!TextUtils.isEmpty(lastAppPackage) && AppRepository.getInstance(this).isPackageBlacklisted(lastAppPackage)) {
                 // The calling app was blacklisted by user, perform blacklisting.
                 performBlacklistAction();
                 return;
-            }
+            }*/
         }
 
         // If user prefers to open in bubbles, then start the web head service.
@@ -113,7 +106,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                     .dismissListener(d -> finish())
                     .show();
 
-            final Subscription subscription = WebsiteRepository.getInstance(this)
+           /* final Subscription subscription = WebsiteRepository.getInstance(this)
                     .getWebsite(safeIntent.getData().toString())
                     .compose(RxUtils.applySchedulers())
                     .doOnNext(webSite -> {
@@ -135,7 +128,7 @@ public class BrowserInterceptActivity extends AppCompatActivity {
                         articleAwareLaunch();
                         dialog.dismiss();
                     }).subscribe();
-            subs.add(subscription);
+            subs.add(subscription);*/
         } else if (Preferences.get(this).articleMode()) {
             // User just wants article, load it.
             launchArticle();

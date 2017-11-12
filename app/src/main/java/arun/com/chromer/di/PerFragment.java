@@ -16,32 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.activities.mvp;
+package arun.com.chromer.di;
 
-import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
-import com.hannesdorfmann.mosby3.mvp.MvpView;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-import rx.subscriptions.CompositeSubscription;
+import javax.inject.Scope;
 
 /**
- * Created by Arunkumar on 05-04-2017.
+ * Scoping annotation to confine object lifetime to lifecycle of a
+ * {@link android.support.v4.app.Fragment}
  */
-public interface Base {
-    abstract class Presenter<V extends MvpView> extends MvpBasePresenter<V> {
-        protected final CompositeSubscription compositeSubscription = new CompositeSubscription();
-
-        void onDestroy() {
-            compositeSubscription.clear();
-        }
-
-        void onResume() {
-        }
-
-        void onPause() {
-        }
-    }
-
-    interface View extends MvpView {
-
-    }
+@Scope
+@Retention(RetentionPolicy.RUNTIME)
+public @interface PerFragment {
 }

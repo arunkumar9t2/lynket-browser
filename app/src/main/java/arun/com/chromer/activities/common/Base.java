@@ -16,30 +16,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.data.website;
+package arun.com.chromer.activities.common;
 
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
+import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
+import com.hannesdorfmann.mosby3.mvp.MvpView;
 
-import arun.com.chromer.data.website.model.WebColor;
-import arun.com.chromer.data.website.model.WebSite;
-import rx.Observable;
+import rx.subscriptions.CompositeSubscription;
 
-/**
- * Created by arunk on 24-02-2017.
- */
-public interface WebsiteStore {
-    @NonNull
-    Observable<WebSite> getWebsite(@NonNull String url);
+public interface Base {
+    abstract class Presenter<V extends MvpView> extends MvpBasePresenter<V> {
+        protected final CompositeSubscription subs = new CompositeSubscription();
 
-    @NonNull
-    Observable<Void> clearCache();
+        public void onDestroy() {
+            subs.clear();
+            detachView(false);
+        }
 
-    @NonNull
-    Observable<WebSite> saveWebsite(@NonNull WebSite webSite);
+        public abstract void onResume();
 
-    @NonNull
-    Observable<WebColor> getWebsiteColor(@NonNull final String url);
+        public abstract void onPause();
+    }
 
-    Observable<WebColor> saveWebsiteColor(@NonNull final String host, @ColorInt int color);
+    interface View extends MvpView {
+
+    }
 }

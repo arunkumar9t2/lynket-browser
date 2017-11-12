@@ -16,30 +16,41 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.data.website;
+package arun.com.chromer.data.history;
 
-import android.support.annotation.ColorInt;
+import android.database.Cursor;
 import android.support.annotation.NonNull;
 
-import arun.com.chromer.data.website.model.WebColor;
+import java.util.List;
+
 import arun.com.chromer.data.website.model.WebSite;
 import rx.Observable;
 
 /**
- * Created by arunk on 24-02-2017.
+ * Created by Arunkumar on 03-03-2017.
  */
-public interface WebsiteStore {
+public interface BaseHistoryRepository {
     @NonNull
-    Observable<WebSite> getWebsite(@NonNull String url);
+    Observable<Cursor> getAllItemsCursor();
 
     @NonNull
-    Observable<Void> clearCache();
+    Observable<WebSite> get(@NonNull final WebSite webSite);
 
     @NonNull
-    Observable<WebSite> saveWebsite(@NonNull WebSite webSite);
+    Observable<WebSite> insert(@NonNull final WebSite webSite);
 
     @NonNull
-    Observable<WebColor> getWebsiteColor(@NonNull final String url);
+    Observable<WebSite> update(@NonNull final WebSite webSite);
 
-    Observable<WebColor> saveWebsiteColor(@NonNull final String host, @ColorInt int color);
+    @NonNull
+    Observable<WebSite> delete(@NonNull final WebSite webSite);
+
+    @NonNull
+    Observable<Boolean> exists(@NonNull final WebSite webSite);
+
+    @NonNull
+    Observable<Integer> deleteAll();
+
+    @NonNull
+    Observable<List<WebSite>> recents();
 }

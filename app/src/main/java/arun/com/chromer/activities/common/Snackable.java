@@ -16,30 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.data.website;
+package arun.com.chromer.activities.common;
 
-import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 
-import arun.com.chromer.data.website.model.WebColor;
-import arun.com.chromer.data.website.model.WebSite;
-import rx.Observable;
+public interface Snackable {
+    void snack(@NonNull final String message);
 
-/**
- * Created by arunk on 24-02-2017.
- */
-public interface WebsiteStore {
-    @NonNull
-    Observable<WebSite> getWebsite(@NonNull String url);
-
-    @NonNull
-    Observable<Void> clearCache();
-
-    @NonNull
-    Observable<WebSite> saveWebsite(@NonNull WebSite webSite);
-
-    @NonNull
-    Observable<WebColor> getWebsiteColor(@NonNull final String url);
-
-    Observable<WebColor> saveWebsiteColor(@NonNull final String host, @ColorInt int color);
+    void snackLong(@NonNull final String message);
 }

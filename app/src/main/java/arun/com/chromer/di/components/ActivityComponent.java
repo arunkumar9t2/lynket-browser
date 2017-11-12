@@ -16,30 +16,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.data.website;
+package arun.com.chromer.di.components;
 
-import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 
-import arun.com.chromer.data.website.model.WebColor;
-import arun.com.chromer.data.website.model.WebSite;
-import rx.Observable;
+import arun.com.chromer.activities.blacklist.BlacklistManagerActivity;
+import arun.com.chromer.activities.main.MainActivity;
+import arun.com.chromer.di.PerActivity;
+import arun.com.chromer.di.modules.ActivityModule;
+import arun.com.chromer.di.modules.FragmentModule;
+import dagger.Subcomponent;
 
-/**
- * Created by arunk on 24-02-2017.
- */
-public interface WebsiteStore {
+@PerActivity
+@Subcomponent(modules = {
+        ActivityModule.class
+})
+public interface ActivityComponent {
     @NonNull
-    Observable<WebSite> getWebsite(@NonNull String url);
+    FragmentComponent newFragmentComponent(@NonNull FragmentModule fragmentModule);
 
-    @NonNull
-    Observable<Void> clearCache();
+    void inject(BlacklistManagerActivity blacklistManagerActivity);
 
-    @NonNull
-    Observable<WebSite> saveWebsite(@NonNull WebSite webSite);
-
-    @NonNull
-    Observable<WebColor> getWebsiteColor(@NonNull final String url);
-
-    Observable<WebColor> saveWebsiteColor(@NonNull final String host, @ColorInt int color);
+    void inject(MainActivity mainActivity);
 }
