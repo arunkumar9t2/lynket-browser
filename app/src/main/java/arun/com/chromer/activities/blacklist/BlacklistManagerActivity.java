@@ -42,7 +42,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.common.BaseActivity;
+import arun.com.chromer.activities.common.BaseMVPActivity;
 import arun.com.chromer.activities.common.Snackable;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.data.common.App;
@@ -51,7 +51,7 @@ import arun.com.chromer.util.ServiceUtil;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 
-public class BlacklistManagerActivity extends BaseActivity<Blacklist.View, Blacklist.Presenter> implements
+public class BlacklistManagerActivity extends BaseMVPActivity<Blacklist.View, Blacklist.Presenter> implements
         Blacklist.View,
         CompoundButton.OnCheckedChangeListener, SwipeRefreshLayout.OnRefreshListener, Snackable {
 

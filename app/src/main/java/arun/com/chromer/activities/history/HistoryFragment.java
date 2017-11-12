@@ -38,7 +38,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import javax.inject.Inject;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.common.BaseFragment;
+import arun.com.chromer.activities.common.BaseMVPFragment;
 import arun.com.chromer.activities.common.Snackable;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.di.components.FragmentComponent;
@@ -52,7 +52,7 @@ import static android.view.View.VISIBLE;
 /**
  * Created by arunk on 07-04-2017.
  */
-public class HistoryFragment extends BaseFragment<History.View, History.Presenter> implements History.View {
+public class HistoryFragment extends BaseMVPFragment<History.View, History.Presenter> implements History.View {
     @BindView(R.id.history_list)
     RecyclerView historyList;
     @BindView(R.id.swipe_refresh_layout)

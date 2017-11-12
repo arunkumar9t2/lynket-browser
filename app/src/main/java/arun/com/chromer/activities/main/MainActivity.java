@@ -62,7 +62,7 @@ import arun.com.chromer.R;
 import arun.com.chromer.activities.about.AboutAppActivity;
 import arun.com.chromer.activities.about.changelog.Changelog;
 import arun.com.chromer.activities.browserintercept.BrowserInterceptActivity;
-import arun.com.chromer.activities.common.BaseActivity;
+import arun.com.chromer.activities.common.BaseMVPActivity;
 import arun.com.chromer.activities.history.HistoryFragment;
 import arun.com.chromer.activities.intro.ChromerIntro;
 import arun.com.chromer.activities.intro.WebHeadsIntro;
@@ -82,7 +82,7 @@ import timber.log.Timber;
 import static arun.com.chromer.shared.Constants.ACTION_CLOSE_ROOT;
 import static arun.com.chromer.util.cache.FontCache.MONO;
 
-public class MainActivity extends BaseActivity<MainScreen.View, MainScreen.Presenter> implements MainScreen.View {
+public class MainActivity extends BaseMVPActivity<MainScreen.View, MainScreen.Presenter> implements MainScreen.View {
     @BindView(R.id.bottomsheet)
     BottomSheetLayout bottomSheetLayout;
     @BindView(R.id.toolbar)

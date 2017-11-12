@@ -43,7 +43,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.common.BaseFragment;
+import arun.com.chromer.activities.common.BaseMVPFragment;
 import arun.com.chromer.activities.common.Snackable;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.CustomTabManager;
@@ -70,7 +70,7 @@ import static com.jakewharton.rxbinding.widget.RxTextView.afterTextChangeEvents;
 /**
  * Created by Arunkumar on 07-04-2017.
  */
-public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implements Home.View {
+public class HomeFragment extends BaseMVPFragment<Home.View, Home.Presenter> implements Home.View {
     @BindView(R.id.material_search_view)
     MaterialSearchView materialSearchView;
     @BindView(R.id.incognito_mode)

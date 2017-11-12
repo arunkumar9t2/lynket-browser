@@ -21,10 +21,11 @@ package arun.com.chromer.activities.common;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.hannesdorfmann.mosby3.mvp.MvpFragment;
 
 import arun.com.chromer.di.components.FragmentComponent;
 import arun.com.chromer.di.modules.FragmentModule;
@@ -35,7 +36,8 @@ import rx.subscriptions.CompositeSubscription;
 /**
  * Created by Arunkumar on 05-04-2017.
  */
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseMVPFragment<V extends Base.View, P extends Base.Presenter<V>>
+        extends MvpFragment<V, P> {
     private FragmentComponent fragmentComponent;
     private Unbinder unbinder;
 
@@ -49,6 +51,7 @@ public abstract class BaseFragment extends Fragment {
         return view;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +64,20 @@ public abstract class BaseFragment extends Fragment {
     protected abstract void inject(FragmentComponent fragmentComponent);
 
     @Override
+    public void onResume() {
+        super.onResume();
+        presenter.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        presenter.onPause();
+    }
+
+    @Override
     public void onDestroy() {
+        presenter.onDestroy();
         super.onDestroy();
         unbinder.unbind();
         fragmentComponent = null;

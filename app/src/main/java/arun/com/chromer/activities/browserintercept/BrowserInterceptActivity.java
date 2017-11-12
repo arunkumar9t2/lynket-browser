@@ -38,7 +38,7 @@ import javax.inject.Inject;
 import arun.com.chromer.R;
 import arun.com.chromer.activities.CustomTabActivity;
 import arun.com.chromer.activities.browsing.article.ArticleLauncher;
-import arun.com.chromer.activities.common.BaseActivity;
+import arun.com.chromer.activities.common.BaseMVPActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.data.apps.AppRepository;
 import arun.com.chromer.data.website.WebsiteRepository;
@@ -66,7 +66,7 @@ import static arun.com.chromer.shared.Constants.EXTRA_KEY_SKIP_EXTRACTION;
 import static arun.com.chromer.util.RxUtils.applySchedulers;
 
 @SuppressLint("GoogleAppIndexingApiWarning")
-public class BrowserInterceptActivity extends BaseActivity<BrowserIntercept.View, BrowserIntercept.Presenter> implements BrowserIntercept.View {
+public class BrowserInterceptActivity extends BaseMVPActivity<BrowserIntercept.View, BrowserIntercept.Presenter> implements BrowserIntercept.View {
     private MaterialDialog dialog;
     private SafeIntent safeIntent;
     private boolean isFromNewTab;
