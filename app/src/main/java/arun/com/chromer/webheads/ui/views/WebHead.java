@@ -181,7 +181,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
         spawnCoordSet = false;
         screenBounds = null;
         calcVelocities();
-        setInitialSpawnLocation();
+        Utils.doAfterLayout(this, this::setInitialSpawnLocation);
     }
 
     private void handleTouchDown(@NonNull MotionEvent event) {
