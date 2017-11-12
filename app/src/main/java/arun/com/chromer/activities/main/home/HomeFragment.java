@@ -48,10 +48,12 @@ import arun.com.chromer.activities.common.Snackable;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.CustomTabManager;
 import arun.com.chromer.customtabs.CustomTabs;
+import arun.com.chromer.data.website.WebsiteRepository;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.di.components.FragmentComponent;
 import arun.com.chromer.search.SuggestionItem;
 import arun.com.chromer.shared.Constants;
+import arun.com.chromer.util.RxUtils;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.views.searchview.MaterialSearchView;
 import arun.com.chromer.webheads.WebHeadService;
@@ -91,6 +93,9 @@ public class HomeFragment extends BaseMVPFragment<Home.View, Home.Presenter> imp
     RecentsAdapter recentsAdapter;
     @Inject
     Home.Presenter presenter;
+
+    @Inject
+    WebsiteRepository websiteRepository;
 
     private AutoTransition autoTransition;
 
@@ -234,11 +239,11 @@ public class HomeFragment extends BaseMVPFragment<Home.View, Home.Presenter> imp
                         .withSession(customTabManager.getSession())
                         .prepare()
                         .launch();
-                /*WebsiteRepository.getInstance(getActivity())
+                websiteRepository
                         .getWebsite(url)
                         .compose(RxUtils.applySchedulers())
                         .doOnError(Timber::e)
-                        .subscribe();*/
+                        .subscribe();
             }
         }
     }

@@ -52,7 +52,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fragmentComponent = ((BaseMVPActivity) getActivity())
+        fragmentComponent = ((ProvidesActivityComponent) getActivity())
                 .getActivityComponent()
                 .newFragmentComponent(new FragmentModule(this));
         inject(fragmentComponent);

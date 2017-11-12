@@ -26,12 +26,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import arun.com.chromer.R;
+import arun.com.chromer.activities.common.BaseActivity;
 import arun.com.chromer.activities.common.Snackable;
-import arun.com.chromer.activities.common.SubActivity;
+import arun.com.chromer.di.components.ActivityComponent;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
-public class HistoryActivity extends SubActivity implements Snackable {
+public class HistoryActivity extends BaseActivity implements Snackable {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.coordinator_layout)
@@ -40,9 +40,6 @@ public class HistoryActivity extends SubActivity implements Snackable {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_history);
-        ButterKnife.bind(this);
-
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -52,6 +49,11 @@ public class HistoryActivity extends SubActivity implements Snackable {
                 .beginTransaction()
                 .replace(R.id.fragment_container, new HistoryFragment())
                 .commit();
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.activity_history;
     }
 
     @Override
@@ -81,6 +83,10 @@ public class HistoryActivity extends SubActivity implements Snackable {
 
     private void finishWithTransition() {
         finish();
-        // overridePendingTransition(R.anim.slide_in_left_medium, R.anim.slide_out_right_medium);
+    }
+
+    @Override
+    public void inject(ActivityComponent activityComponent) {
+        activityComponent.inject(activityComponent);
     }
 }

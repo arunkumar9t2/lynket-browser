@@ -23,6 +23,8 @@ import android.support.annotation.LayoutRes;
 
 import com.hannesdorfmann.mosby3.mvp.MvpActivity;
 
+import javax.inject.Inject;
+
 import arun.com.chromer.Chromer;
 import arun.com.chromer.di.components.ActivityComponent;
 import arun.com.chromer.di.modules.ActivityModule;
@@ -35,7 +37,7 @@ import rx.subscriptions.CompositeSubscription;
  */
 
 public abstract class BaseMVPActivity<V extends Base.View, P extends Base.Presenter<V>>
-        extends MvpActivity<V, P> {
+        extends MvpActivity<V, P> implements ProvidesActivityComponent {
 
     protected Unbinder unbinder;
 
@@ -59,7 +61,10 @@ public abstract class BaseMVPActivity<V extends Base.View, P extends Base.Presen
         }
     }
 
-    protected abstract void inject(ActivityComponent activityComponent);
+    @Inject
+    public ActivityComponent getActivityComponent() {
+        return activityComponent;
+    }
 
     @LayoutRes
     protected abstract int getLayoutRes();
@@ -74,11 +79,6 @@ public abstract class BaseMVPActivity<V extends Base.View, P extends Base.Presen
     protected void onPause() {
         super.onPause();
         presenter.onPause();
-    }
-
-
-    public ActivityComponent getActivityComponent() {
-        return activityComponent;
     }
 
     @Override

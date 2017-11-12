@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import rx.subscriptions.CompositeSubscription;
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements ProvidesActivityComponent {
     protected Unbinder unbinder;
 
     ActivityComponent activityComponent;
@@ -51,14 +51,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    protected abstract void inject(ActivityComponent activityComponent);
-
-    @LayoutRes
-    protected abstract int getLayoutRes();
-
+    @Override
     public ActivityComponent getActivityComponent() {
         return activityComponent;
     }
+
+    @LayoutRes
+    protected abstract int getLayoutRes();
 
     @Override
     protected void onDestroy() {

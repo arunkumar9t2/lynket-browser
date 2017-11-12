@@ -20,6 +20,7 @@ package arun.com.chromer.di.components;
 
 import android.support.annotation.NonNull;
 
+import arun.com.chromer.activities.CustomTabActivity;
 import arun.com.chromer.activities.blacklist.BlacklistManagerActivity;
 import arun.com.chromer.activities.browserintercept.BrowserInterceptActivity;
 import arun.com.chromer.activities.main.MainActivity;
@@ -41,4 +42,8 @@ public interface ActivityComponent {
     void inject(MainActivity mainActivity);
 
     void inject(BrowserInterceptActivity browserInterceptActivity);
+
+    void inject(CustomTabActivity customTabActivity);
+
+    void inject(ActivityComponent activityComponent);
 }

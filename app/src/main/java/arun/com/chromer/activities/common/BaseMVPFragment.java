@@ -55,7 +55,7 @@ public abstract class BaseMVPFragment<V extends Base.View, P extends Base.Presen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fragmentComponent = ((BaseMVPActivity) getActivity())
+        fragmentComponent = ((ProvidesActivityComponent) getActivity())
                 .getActivityComponent()
                 .newFragmentComponent(new FragmentModule(this));
         inject(fragmentComponent);

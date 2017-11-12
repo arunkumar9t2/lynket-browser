@@ -165,7 +165,7 @@ public class BrowserInterceptActivity extends BaseMVPActivity<BrowserIntercept.V
     }
 
     @Override
-    protected void inject(ActivityComponent activityComponent) {
+    public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
     }
 

@@ -82,7 +82,7 @@ public class BlacklistManagerActivity extends BaseMVPActivity<Blacklist.View, Bl
     }
 
     @Override
-    protected void inject(ActivityComponent activityComponent) {
+    public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
     }
 

@@ -150,7 +150,7 @@ public class MainActivity extends BaseMVPActivity<MainScreen.View, MainScreen.Pr
     }
 
     @Override
-    protected void inject(ActivityComponent activityComponent) {
+    public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
     }
 
