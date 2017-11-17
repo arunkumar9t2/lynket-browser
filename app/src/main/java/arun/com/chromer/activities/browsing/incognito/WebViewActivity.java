@@ -33,11 +33,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.InflateException;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -81,32 +83,39 @@ public class WebViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         baseUrl = getIntent().getDataString();
-
-        setContentView(R.layout.activity_web_view);
         ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
 
-        final WebSite webSite = getIntent().getParcelableExtra(EXTRA_KEY_WEBSITE);
+        try {
+            setContentView(R.layout.activity_web_view);
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(xyz.klinker.android.article.R.drawable.article_ic_close);
-            getSupportActionBar().setTitle(webSite != null ? webSite.safeLabel() : baseUrl);
+            setSupportActionBar(toolbar);
+
+            final WebSite webSite = getIntent().getParcelableExtra(EXTRA_KEY_WEBSITE);
+
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setHomeAsUpIndicator(xyz.klinker.android.article.R.drawable.article_ic_close);
+                getSupportActionBar().setTitle(webSite != null ? webSite.safeLabel() : baseUrl);
+            }
+
+
+            /* if (Preferences.get(this).aggressiveLoading()) {
+                   delayedGoToBack();
+            }*/
+            registerMinimizeReceiver();
+            beginExtraction(webSite);
+
+            webView.setWebViewClient(new WebViewClient() {
+
+            });
+            final WebSettings webSettings = webView.getSettings();
+            webSettings.setJavaScriptEnabled(true);
+            webView.loadUrl(getIntent().getDataString());
+        } catch (InflateException e) {
+            Timber.e(e);
+            Toast.makeText(this, R.string.web_view_not_found, Toast.LENGTH_LONG).show();
+            finish();
         }
-
-
-       /* if (Preferences.get(this).aggressiveLoading()) {
-            delayedGoToBack();
-        }*/
-        registerMinimizeReceiver();
-        beginExtraction(webSite);
-
-        webView.setWebViewClient(new WebViewClient() {
-
-        });
-        final WebSettings webSettings = webView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        webView.loadUrl(getIntent().getDataString());
     }
 
     private void beginExtraction(@Nullable WebSite webSite) {
