@@ -286,4 +286,5 @@
     <string name="source">Source</string>
     <string name="contribute_to_chromer">Love to code? Fork Chromer and contribute.</string>
     <string name="fork_on_github">Fork on GitHub</string>
+    <string name="web_view_not_found">Web View disabled on device. Could not open link.</string>
 </resources>
