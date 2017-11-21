@@ -118,6 +118,14 @@ public class HistoryFragment extends BaseMVPFragment<History.View, History.Prese
     }
 
     @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            getActivity().setTitle(R.string.title_history);
+        }
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         historyAdapter.cleanUp();
@@ -181,7 +189,6 @@ public class HistoryFragment extends BaseMVPFragment<History.View, History.Prese
         super.onResume();
         presenter.loadHistory();
         incognitoSwitch.setChecked(!Preferences.get(getActivity()).incognitoMode());
-        getActivity().setTitle(R.string.title_history);
     }
 
     @OnClick(R.id.fab)

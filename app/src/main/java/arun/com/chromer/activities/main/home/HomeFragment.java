@@ -134,9 +134,15 @@ public class HomeFragment extends BaseMVPFragment<Home.View, Home.Presenter> imp
     public void onResume() {
         super.onResume();
         invalidateState();
-        getActivity().setTitle(R.string.app_name);
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            getActivity().setTitle(R.string.app_name);
+        }
+    }
 
     @Override
     public void onStop() {

@@ -29,19 +29,6 @@
         <service android:name=".customtabs.callbacks.AddHomeShortcutService" />
         <service android:name=".customtabs.warmup.WarmUpService" />
         <service
-            android:name=".customtabs.prefetch.ScannerService"
-            android:enabled="false"
-            android:exported="true"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
-            <intent-filter>
-                <action android:name="android.accessibilityservice.AccessibilityService" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.accessibilityservice"
-                android:resource="@xml/service" />
-        </service>
-        <service
             android:name=".shared.AppDetectService"
             android:enabled="true"
             android:exported="false" />
