@@ -38,10 +38,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import javax.inject.Inject;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.common.BaseMVPFragment;
-import arun.com.chromer.activities.common.Snackable;
 import arun.com.chromer.activities.settings.Preferences;
-import arun.com.chromer.di.components.FragmentComponent;
+import arun.com.chromer.di.fragment.FragmentComponent;
+import arun.com.chromer.shared.common.BaseMVPFragment;
+import arun.com.chromer.shared.common.Snackable;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 import butterknife.OnClick;

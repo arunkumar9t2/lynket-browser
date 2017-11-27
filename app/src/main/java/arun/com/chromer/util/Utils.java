@@ -79,6 +79,8 @@ import static android.widget.Toast.LENGTH_LONG;
  */
 public class Utils {
 
+    public static final boolean ANDROID_OREO = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
+
     private Utils() {
         throw new RuntimeException("No instances");
     }

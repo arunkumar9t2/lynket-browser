@@ -35,8 +35,8 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.common.Snackable;
 import arun.com.chromer.activities.settings.Preferences;
+import arun.com.chromer.shared.common.Snackable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

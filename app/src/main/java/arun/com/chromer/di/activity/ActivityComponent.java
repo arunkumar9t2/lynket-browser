@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.di.components;
+package arun.com.chromer.di.activity;
 
 import android.support.annotation.NonNull;
 
@@ -24,9 +24,10 @@ import arun.com.chromer.activities.CustomTabActivity;
 import arun.com.chromer.activities.blacklist.BlacklistManagerActivity;
 import arun.com.chromer.activities.browserintercept.BrowserInterceptActivity;
 import arun.com.chromer.activities.main.MainActivity;
+import arun.com.chromer.customtabs.CustomTabs;
 import arun.com.chromer.di.PerActivity;
-import arun.com.chromer.di.modules.ActivityModule;
-import arun.com.chromer.di.modules.FragmentModule;
+import arun.com.chromer.di.fragment.FragmentComponent;
+import arun.com.chromer.di.fragment.FragmentModule;
 import dagger.Subcomponent;
 
 @PerActivity
@@ -36,6 +37,9 @@ import dagger.Subcomponent;
 public interface ActivityComponent {
     @NonNull
     FragmentComponent newFragmentComponent(@NonNull FragmentModule fragmentModule);
+
+    @NonNull
+    CustomTabs customTabs();
 
     void inject(BlacklistManagerActivity blacklistManagerActivity);
 

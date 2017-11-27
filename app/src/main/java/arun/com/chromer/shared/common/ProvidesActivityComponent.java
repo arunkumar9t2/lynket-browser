@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.activities.common;
+package arun.com.chromer.shared.common;
 
-import arun.com.chromer.di.components.ActivityComponent;
+import arun.com.chromer.di.activity.ActivityComponent;
 
 /**
  * Created by arunk on 12-11-2017.

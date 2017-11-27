@@ -46,12 +46,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.common.Snackable;
-import arun.com.chromer.activities.common.SubActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.activities.settings.widgets.AppPreferenceCardView;
 import arun.com.chromer.customtabs.CustomTabs;
-import arun.com.chromer.util.ServiceUtil;
+import arun.com.chromer.shared.common.Snackable;
+import arun.com.chromer.shared.common.SubActivity;
+import arun.com.chromer.util.ServiceManager;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.views.IntentPickerSheetView;
 import butterknife.BindView;
@@ -176,7 +176,7 @@ public class BrowsingOptionsActivity extends SubActivity implements Snackable, S
     }
 
     private void refreshCustomTabBindings() {
-        ServiceUtil.refreshCustomTabBindings(getApplicationContext());
+        ServiceManager.refreshCustomTabBindings(getApplicationContext());
     }
 
     private void checkAndEducateUser(boolean forceShow) {

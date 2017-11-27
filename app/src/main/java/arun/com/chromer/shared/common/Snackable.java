@@ -16,33 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.activities.main;
+package arun.com.chromer.shared.common;
 
-import javax.inject.Inject;
+import android.support.annotation.NonNull;
 
-import arun.com.chromer.di.PerActivity;
-import arun.com.chromer.shared.common.Base;
-import arun.com.chromer.shared.common.Snackable;
+public interface Snackable {
+    void snack(@NonNull final String message);
 
-public interface MainScreen {
-    interface View extends Base.View, Snackable {
-    }
-
-    @PerActivity
-    class Presenter extends Base.Presenter<MainScreen.View> {
-
-        @Inject
-        public Presenter() {
-        }
-
-        @Override
-        public void onResume() {
-
-        }
-
-        @Override
-        public void onPause() {
-
-        }
-    }
+    void snackLong(@NonNull final String message);
 }

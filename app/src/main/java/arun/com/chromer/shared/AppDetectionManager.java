@@ -18,11 +18,13 @@
 
 package arun.com.chromer.shared;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import arun.com.chromer.activities.settings.Preferences;
 import timber.log.Timber;
@@ -30,28 +32,18 @@ import timber.log.Timber;
 /**
  * Created by Arunkumar on 21-01-2017.
  */
+@Singleton
 public final class AppDetectionManager {
+    private final Context context;
+
     // Last detected package name of app;
     private String filteredPackage = "";
     private String nonFilteredPackage = "";
 
-    private final Context context;
-
-    @SuppressLint("StaticFieldLeak")
-    // But this is the recommended way as per developer training :/ :/
-    private static AppDetectionManager INSTANCE;
-
+    @Inject
     public AppDetectionManager(@NonNull Context context) {
         this.context = context.getApplicationContext();
     }
-
-    public synchronized static AppDetectionManager getInstance(@NonNull Context context) {
-        if (INSTANCE == null) {
-            INSTANCE = new AppDetectionManager(context);
-        }
-        return INSTANCE;
-    }
-
 
     synchronized void logPackage(@Nullable String appPackage) {
         if (TextUtils.isEmpty(appPackage)) {

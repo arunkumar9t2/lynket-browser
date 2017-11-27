@@ -39,12 +39,11 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import javax.inject.Inject;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.common.BaseActivity;
 import arun.com.chromer.activities.settings.Preferences;
-import arun.com.chromer.customtabs.CustomTabs;
 import arun.com.chromer.data.website.WebsiteRepository;
 import arun.com.chromer.data.website.model.WebSite;
-import arun.com.chromer.di.components.ActivityComponent;
+import arun.com.chromer.di.activity.ActivityComponent;
+import arun.com.chromer.shared.common.BaseActivity;
 import arun.com.chromer.util.Utils;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
@@ -94,11 +93,9 @@ public class CustomTabActivity extends BaseActivity {
         final WebSite webSite = getIntent().getParcelableExtra(EXTRA_KEY_WEBSITE);
         final int fallbackWebColor = webSite != null && !TextUtils.isEmpty(webSite.themeColor) ? webSite.themeColor() : NO_COLOR;
 
-        CustomTabs.from(this)
+        getActivityComponent().customTabs()
                 .forUrl(baseUrl)
-                .forWebHead(isWebHead)
                 .fallbackColor(fallbackWebColor)
-                .prepare()
                 .launch();
 
         if (Preferences.get(this).aggressiveLoading() && !Preferences.get(this).articleMode()) {

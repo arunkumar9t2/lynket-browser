@@ -16,19 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.di.modules;
+package arun.com.chromer.di.fragment;
 
-import android.app.Activity;
+import android.support.v4.app.Fragment;
 
 import dagger.Module;
 
 @Module
-public class ActivityModule {
+public class FragmentModule {
 
-    private final Activity activity;
+    private final Fragment fragment;
 
-    public ActivityModule(Activity activity) {
-        this.activity = activity;
+    public FragmentModule(Fragment fragment) {
+        this.fragment = fragment;
     }
 
 }

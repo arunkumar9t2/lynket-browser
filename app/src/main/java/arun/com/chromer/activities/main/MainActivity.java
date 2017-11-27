@@ -62,7 +62,6 @@ import arun.com.chromer.R;
 import arun.com.chromer.activities.about.AboutAppActivity;
 import arun.com.chromer.activities.about.changelog.Changelog;
 import arun.com.chromer.activities.browserintercept.BrowserInterceptActivity;
-import arun.com.chromer.activities.common.BaseMVPActivity;
 import arun.com.chromer.activities.history.HistoryFragment;
 import arun.com.chromer.activities.intro.ChromerIntro;
 import arun.com.chromer.activities.intro.WebHeadsIntro;
@@ -71,9 +70,10 @@ import arun.com.chromer.activities.payments.DonateActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.activities.settings.SettingsGroupActivity;
 import arun.com.chromer.customtabs.CustomTabs;
-import arun.com.chromer.di.components.ActivityComponent;
+import arun.com.chromer.di.activity.ActivityComponent;
 import arun.com.chromer.shared.Constants;
-import arun.com.chromer.util.ServiceUtil;
+import arun.com.chromer.shared.common.BaseMVPActivity;
+import arun.com.chromer.util.ServiceManager;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.util.cache.FontCache;
 import butterknife.BindView;
@@ -116,7 +116,7 @@ public class MainActivity extends BaseMVPActivity<MainScreen.View, MainScreen.Pr
 
         setupDrawer();
         checkAndEducateUser(false);
-        ServiceUtil.takeCareOfServices(getApplicationContext());
+        ServiceManager.takeCareOfServices(getApplicationContext());
         registerCloseReceiver();
 
         if (savedInstanceState == null) {

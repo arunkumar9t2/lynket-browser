@@ -43,8 +43,7 @@ import arun.com.chromer.activities.settings.widgets.ColorPreference;
 import arun.com.chromer.activities.settings.widgets.IconListPreference;
 import arun.com.chromer.activities.settings.widgets.IconSwitchPreference;
 import arun.com.chromer.activities.settings.widgets.SubCheckBoxPreference;
-import arun.com.chromer.shared.AppDetectService;
-import arun.com.chromer.util.ServiceUtil;
+import arun.com.chromer.util.ServiceManager;
 import arun.com.chromer.util.Utils;
 
 import static arun.com.chromer.activities.settings.Preferences.ANIMATION_SPEED;
@@ -185,10 +184,10 @@ public class PersonalizationPreferenceFragment extends BasePreferenceFragment im
                 dynamicWebPreference.setVisible(true);
             }
             if (key.equalsIgnoreCase(DYNAMIC_COLOR_APP)) {
-                if (Preferences.get(getContext()).dynamicToolbarOnApp() && !Utils.canReadUsageStats(getActivity())) {
+                if (!Utils.canReadUsageStats(getActivity())) {
                     requestUsagePermission();
-                    handleAppDetectionService();
                 }
+                handleAppDetectionService();
             }
             updateDynamicSummary();
         }
@@ -244,10 +243,11 @@ public class PersonalizationPreferenceFragment extends BasePreferenceFragment im
     }
 
     private void handleAppDetectionService() {
-        if (ServiceUtil.isAppBasedToolbarColor(getActivity()) || Preferences.get(getContext()).blacklist())
-            getActivity().startService(new Intent(getActivity().getApplicationContext(), AppDetectService.class));
-        else
-            getActivity().stopService(new Intent(getActivity().getApplicationContext(), AppDetectService.class));
+        if (Preferences.get(getContext()).isAppBasedToolbar() || Preferences.get(getContext()).blacklist()) {
+            ServiceManager.startAppDetectionService(getContext());
+        } else {
+            ServiceManager.stopAppDetectionService(getContext());
+        }
     }
 
     private final BroadcastReceiver colorSelectionReceiver = new BroadcastReceiver() {

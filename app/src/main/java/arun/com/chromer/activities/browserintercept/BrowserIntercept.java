@@ -20,8 +20,8 @@ package arun.com.chromer.activities.browserintercept;
 
 import javax.inject.Inject;
 
-import arun.com.chromer.activities.common.Base;
 import arun.com.chromer.di.PerActivity;
+import arun.com.chromer.shared.common.Base;
 
 /**
  * Created by arunk on 12-11-2017.

@@ -16,16 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.di.components;
+package arun.com.chromer.di.app;
 
 import android.support.annotation.NonNull;
 
 import javax.inject.Singleton;
 
 import arun.com.chromer.customtabs.dynamictoolbar.AppColorExtractorService;
-import arun.com.chromer.di.modules.ActivityModule;
-import arun.com.chromer.di.modules.AppModule;
-import arun.com.chromer.di.modules.DataModule;
+import arun.com.chromer.di.activity.ActivityComponent;
+import arun.com.chromer.di.activity.ActivityModule;
+import arun.com.chromer.di.data.DataModule;
+import arun.com.chromer.di.service.ServiceComponent;
+import arun.com.chromer.di.service.ServiceModule;
+import arun.com.chromer.shared.AppDetectionManager;
 import dagger.Component;
 
 @Singleton
@@ -37,6 +40,11 @@ public interface AppComponent {
     @NonNull
     ActivityComponent newActivityComponent(@NonNull ActivityModule activityModule);
 
+    ServiceComponent newServiceComponent(ServiceModule serviceModule);
+
     @NonNull
     void inject(AppColorExtractorService appColorExtractorService);
+
+    @NonNull
+    AppDetectionManager appDetectionManager();
 }

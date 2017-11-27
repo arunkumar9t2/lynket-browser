@@ -26,9 +26,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.common.BaseActivity;
-import arun.com.chromer.activities.common.Snackable;
-import arun.com.chromer.di.components.ActivityComponent;
+import arun.com.chromer.di.activity.ActivityComponent;
+import arun.com.chromer.shared.common.BaseActivity;
+import arun.com.chromer.shared.common.Snackable;
 import butterknife.BindView;
 
 public class HistoryActivity extends BaseActivity implements Snackable {

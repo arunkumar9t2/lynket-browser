@@ -378,4 +378,9 @@ public class Preferences {
     public void bottomBar(final boolean preference) {
         getDefaultSharedPreferences().edit().putBoolean(BOTTOM_BAR_ENABLED, preference).apply();
     }
+
+    public boolean isAppBasedToolbar() {
+        return Preferences.get(context).dynamicToolbarOnApp()
+                && Preferences.get(context).dynamicToolbar();
+    }
 }

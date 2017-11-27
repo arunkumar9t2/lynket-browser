@@ -21,6 +21,7 @@ package arun.com.chromer.util;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 
 import arun.com.chromer.activities.settings.Preferences;
@@ -31,9 +32,8 @@ import arun.com.chromer.shared.Constants;
 /**
  * Created by Arun on 30/01/2016.
  */
-public class ServiceUtil {
-
-    private ServiceUtil() {
+public class ServiceManager {
+    private ServiceManager() {
         throw new AssertionError("Cannot instantiate");
     }
 
@@ -43,17 +43,20 @@ public class ServiceUtil {
         } else {
             context.stopService(new Intent(context, WarmUpService.class));
         }
-        if (isAppBasedToolbarColor(context) || Preferences.get(context).blacklist()) {
-            final Intent appDetectService = new Intent(context, AppDetectService.class);
-            appDetectService.putExtra(Constants.EXTRA_KEY_CLEAR_LAST_TOP_APP, true);
-            context.startService(appDetectService);
+        if (Preferences.get(context).isAppBasedToolbar() || Preferences.get(context).blacklist()) {
+            startAppDetectionService(context);
         } else {
-            context.stopService(new Intent(context, AppDetectService.class));
+            stopAppDetectionService(context);
         }
     }
 
-    public static boolean isAppBasedToolbarColor(@NonNull Context context) {
-        return Preferences.get(context).dynamicToolbarOnApp() && Preferences.get(context).dynamicToolbar();
+    public static void startAppDetectionService(@NonNull Context context) {
+        ContextCompat.startForegroundService(context, new Intent(context, AppDetectService.class)
+                .putExtra(Constants.EXTRA_KEY_CLEAR_LAST_TOP_APP, true));
+    }
+
+    public static void stopAppDetectionService(@NonNull Context context) {
+        context.stopService(new Intent(context, AppDetectService.class));
     }
 
     public static void refreshCustomTabBindings(@NonNull Context context) {

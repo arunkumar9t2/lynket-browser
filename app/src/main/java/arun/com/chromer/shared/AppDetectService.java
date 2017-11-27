@@ -20,7 +20,8 @@ package arun.com.chromer.shared;
 
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
-import android.app.Service;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.BroadcastReceiver;
@@ -32,26 +33,38 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import javax.inject.Inject;
+
+import arun.com.chromer.R;
+import arun.com.chromer.di.service.ServiceComponent;
+import arun.com.chromer.shared.common.BaseService;
 import arun.com.chromer.util.Utils;
 import timber.log.Timber;
 
+import static android.support.v4.app.NotificationCompat.PRIORITY_MIN;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_CLEAR_LAST_TOP_APP;
 
-public class AppDetectService extends Service {
+public class AppDetectService extends BaseService {
     // Gap at which we polling the system for current foreground app.
     private static final int POLLING_INTERVAL = 400;
+
+    private static final String CHANNEL_ID = "App detection service";
+
     // Needed to turn off polling when screen is turned off.
-    private static BroadcastReceiver screenStateReceiver;
+    private BroadcastReceiver screenStateReceiver;
+
     // Flag to control polling.
     private boolean stopPolling = false;
     // Detector to get current foreground app.
-    AppDetector appDetector = () -> "";
+    private AppDetector appDetector = () -> "";
     // Handler to run our polling.
     private final Handler detectorHandler = new Handler();
     // The runnable which runs out detector.
@@ -61,7 +74,7 @@ public class AppDetectService extends Service {
         public void run() {
             try {
                 final String packageName = appDetector.getForegroundPackage();
-                AppDetectionManager.getInstance(AppDetectService.this).logPackage(packageName);
+                appDetectionManager.logPackage(packageName);
             } catch (Exception e) {
                 Timber.e(e.toString());
             }
@@ -71,26 +84,61 @@ public class AppDetectService extends Service {
         }
     };
 
+    @Inject
+    AppDetectionManager appDetectionManager;
+
     private void clearLastAppIfNeeded(Intent intent) {
         if (intent != null && intent.getBooleanExtra(EXTRA_KEY_CLEAR_LAST_TOP_APP, false)) {
-            AppDetectionManager.getInstance(this).clear();
+            appDetectionManager.clear();
             Timber.d("Last app cleared");
         }
     }
 
     @Override
     public void onCreate() {
+        initChannels();
         super.onCreate();
+
         if (!Utils.canReadUsageStats(this)) {
             Timber.e("Attempted to poll without usage permission");
             stopSelf();
         }
+
         registerScreenReceiver();
         if (Utils.isLollipopAbove()) {
             appDetector = new LollipopDetector();
         } else {
             appDetector = new PreLollipopDetector();
         }
+
+        if (Utils.ANDROID_OREO) {
+            startForeground(1, new NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setSmallIcon(R.drawable.ic_chromer_notification)
+                    .setPriority(PRIORITY_MIN)
+                    .setContentText(getString(R.string.app_detection_service_text))
+                    .setStyle(new NotificationCompat.BigTextStyle()
+                            .bigText(getString(R.string.app_detection_service_text))
+                            .setBigContentTitle(getString(R.string.app_detection_service)))
+                    .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                    .setContentTitle(getString(R.string.app_detection_service))
+                    .setAutoCancel(false)
+                    .setLocalOnly(true)
+                    .build());
+        }
+    }
+
+    private void initChannels() {
+        if (Utils.ANDROID_OREO) {
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "App Detection Service", NotificationManager.IMPORTANCE_MIN);
+            channel.setDescription(getString(R.string.app_detection_notification_channel_description));
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    @Override
+    protected void inject(ServiceComponent serviceComponent) {
+        serviceComponent.inject(this);
     }
 
     @Override
@@ -110,8 +158,12 @@ public class AppDetectService extends Service {
     @Override
     public void onDestroy() {
         stopDetection();
-        unregisterReceiver(screenStateReceiver);
-        AppDetectionManager.getInstance(this).clear();
+        try {
+            unregisterReceiver(screenStateReceiver);
+        } catch (IllegalStateException e) {
+            Timber.e(e);
+        }
+        appDetectionManager.clear();
         Timber.d("Destroying");
         super.onDestroy();
     }
@@ -152,10 +204,10 @@ public class AppDetectService extends Service {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+            if (Intent.ACTION_SCREEN_OFF.equals(intent.getAction())) {
                 stopDetection();
                 Timber.d("Turned off polling");
-            } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+            } else if (Intent.ACTION_SCREEN_ON.equals(intent.getAction())) {
                 startDetection();
                 Timber.d("Turned on polling");
             }
@@ -185,7 +237,7 @@ public class AppDetectService extends Service {
         public String getForegroundPackage() {
             final long time = System.currentTimeMillis();
             final UsageStatsManager usageMan = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
-            final List<UsageStats> stats = usageMan.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 1000, time);
+            final List<UsageStats> stats = usageMan.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 1000 * 3, time);
 
             final SortedMap<Long, UsageStats> sortedMap = new TreeMap<>();
             for (UsageStats usageStats : stats) {

@@ -16,15 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.di.modules;
+package arun.com.chromer.di.data;
 
 import android.app.Application;
 
 import javax.inject.Singleton;
 
 import arun.com.chromer.activities.settings.Preferences;
-import arun.com.chromer.data.annotation.Disk;
-import arun.com.chromer.data.annotation.Network;
 import arun.com.chromer.data.apps.AppDiskStore;
 import arun.com.chromer.data.apps.AppRepository;
 import arun.com.chromer.data.apps.BaseAppRepository;
@@ -33,6 +31,8 @@ import arun.com.chromer.data.history.BaseHistoryRepository;
 import arun.com.chromer.data.history.HistoryDiskStore;
 import arun.com.chromer.data.history.HistoryRepository;
 import arun.com.chromer.data.history.HistoryStore;
+import arun.com.chromer.data.qualifiers.Disk;
+import arun.com.chromer.data.qualifiers.Network;
 import arun.com.chromer.data.website.BaseWebsiteRepository;
 import arun.com.chromer.data.website.WebsiteDiskStore;
 import arun.com.chromer.data.website.WebsiteNetworkStore;

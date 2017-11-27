@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.activities.common;
+package arun.com.chromer.shared.common;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -26,8 +26,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import arun.com.chromer.di.components.FragmentComponent;
-import arun.com.chromer.di.modules.FragmentModule;
+import arun.com.chromer.di.fragment.FragmentComponent;
+import arun.com.chromer.di.fragment.FragmentModule;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import rx.subscriptions.CompositeSubscription;

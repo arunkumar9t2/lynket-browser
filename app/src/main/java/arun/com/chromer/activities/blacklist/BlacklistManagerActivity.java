@@ -42,12 +42,12 @@ import java.util.List;
 import javax.inject.Inject;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.common.BaseMVPActivity;
-import arun.com.chromer.activities.common.Snackable;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.data.common.App;
-import arun.com.chromer.di.components.ActivityComponent;
-import arun.com.chromer.util.ServiceUtil;
+import arun.com.chromer.di.activity.ActivityComponent;
+import arun.com.chromer.shared.common.BaseMVPActivity;
+import arun.com.chromer.shared.common.Snackable;
+import arun.com.chromer.util.ServiceManager;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 
@@ -77,7 +77,7 @@ public class BlacklistManagerActivity extends BaseMVPActivity<Blacklist.View, Bl
         blacklistAdapter = new BlacklistAdapter(this);
         blackListedAppsList.setLayoutManager(new LinearLayoutManager(this));
         blackListedAppsList.setAdapter(blacklistAdapter);
-        presenter.handleSelections(this, blacklistAdapter.clicks());
+        presenter.handleSelections(blacklistAdapter.clicks());
         loadApps();
     }
 
@@ -172,7 +172,7 @@ public class BlacklistManagerActivity extends BaseMVPActivity<Blacklist.View, Bl
         } else {
             snack(isChecked ? getString(R.string.blacklist_on) : getString(R.string.blacklist_off));
             Preferences.get(this).blacklist(isChecked);
-            ServiceUtil.takeCareOfServices(getApplicationContext());
+            ServiceManager.takeCareOfServices(getApplicationContext());
         }
     }
 

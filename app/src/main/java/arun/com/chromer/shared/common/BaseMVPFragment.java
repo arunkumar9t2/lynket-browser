@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.activities.common;
+package arun.com.chromer.shared.common;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -27,8 +27,9 @@ import android.view.ViewGroup;
 
 import com.hannesdorfmann.mosby3.mvp.MvpFragment;
 
-import arun.com.chromer.di.components.FragmentComponent;
-import arun.com.chromer.di.modules.FragmentModule;
+import arun.com.chromer.di.activity.ActivityComponent;
+import arun.com.chromer.di.fragment.FragmentComponent;
+import arun.com.chromer.di.fragment.FragmentModule;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import rx.subscriptions.CompositeSubscription;
@@ -55,10 +56,15 @@ public abstract class BaseMVPFragment<V extends Base.View, P extends Base.Presen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fragmentComponent = ((ProvidesActivityComponent) getActivity())
-                .getActivityComponent()
-                .newFragmentComponent(new FragmentModule(this));
+        fragmentComponent = getActivityComponent().newFragmentComponent(new FragmentModule(this));
         inject(fragmentComponent);
+    }
+
+    /**
+     * Returns the Activity component the fragment is subcomponent of.
+     */
+    protected ActivityComponent getActivityComponent() {
+        return ((ProvidesActivityComponent) getActivity()).getActivityComponent();
     }
 
     protected abstract void inject(FragmentComponent fragmentComponent);

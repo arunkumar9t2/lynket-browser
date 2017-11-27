@@ -16,34 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.di.modules;
+package arun.com.chromer.di.service;
 
-import android.app.Application;
+import arun.com.chromer.di.PerActivity;
+import arun.com.chromer.shared.AppDetectService;
+import dagger.Subcomponent;
 
-import javax.inject.Singleton;
+@PerActivity
+@Subcomponent(modules = {
+        ServiceModule.class
+})
+public interface ServiceComponent {
 
-import arun.com.chromer.shared.AppDetectionManager;
-import dagger.Module;
-import dagger.Provides;
-
-@Module
-public class AppModule {
-
-    Application application;
-
-    public AppModule(Application application) {
-        this.application = application;
-    }
-
-    @Provides
-    @Singleton
-    Application providesApplication() {
-        return application;
-    }
-
-    @Provides
-    @Singleton
-    AppDetectionManager providesAppDetectionManager() {
-        return new AppDetectionManager(application);
-    }
+    void inject(AppDetectService appDetectService);
 }

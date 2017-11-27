@@ -41,11 +41,11 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.common.SubActivity;
 import arun.com.chromer.activities.settings.browsingmode.BrowsingModeActivity;
 import arun.com.chromer.activities.settings.browsingoptions.BrowsingOptionsActivity;
 import arun.com.chromer.activities.settings.lookandfeel.LookAndFeelActivity;
 import arun.com.chromer.shared.Constants;
+import arun.com.chromer.shared.common.SubActivity;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;

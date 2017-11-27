@@ -16,12 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.activities.common;
+package arun.com.chromer.data.qualifiers;
 
-import android.support.annotation.NonNull;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-public interface Snackable {
-    void snack(@NonNull final String message);
+import javax.inject.Qualifier;
 
-    void snackLong(@NonNull final String message);
+@Qualifier
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Disk {
 }

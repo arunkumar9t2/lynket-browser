@@ -16,19 +16,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.di.modules;
+package arun.com.chromer.di.app;
 
-import android.support.v4.app.Fragment;
+import android.app.Application;
 
+import javax.inject.Singleton;
+
+import arun.com.chromer.shared.AppDetectionManager;
 import dagger.Module;
+import dagger.Provides;
 
 @Module
-public class FragmentModule {
+public class AppModule {
 
-    private final Fragment fragment;
+    Application application;
 
-    public FragmentModule(Fragment fragment) {
-        this.fragment = fragment;
+    public AppModule(Application application) {
+        this.application = application;
     }
 
+    @Provides
+    @Singleton
+    Application providesApplication() {
+        return application;
+    }
+
+    @Provides
+    @Singleton
+    AppDetectionManager providesAppDetectionManager() {
+        return new AppDetectionManager(application);
+    }
 }

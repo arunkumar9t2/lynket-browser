@@ -16,16 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.data.annotation;
+package arun.com.chromer.di.activity;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import android.app.Activity;
 
-import javax.inject.Qualifier;
+import dagger.Module;
+import dagger.Provides;
 
-@Qualifier
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Network {
+@Module
+public class ActivityModule {
+
+    private final Activity activity;
+
+    public ActivityModule(Activity activity) {
+        this.activity = activity;
+    }
+
+    @Provides
+    Activity activity() {
+        return activity;
+    }
 }

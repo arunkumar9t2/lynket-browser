@@ -29,10 +29,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import arun.com.chromer.activities.common.Base;
 import arun.com.chromer.data.apps.BaseAppRepository;
 import arun.com.chromer.data.common.App;
 import arun.com.chromer.di.PerActivity;
+import arun.com.chromer.shared.common.Base;
 import arun.com.chromer.util.RxUtils;
 import arun.com.chromer.util.Utils;
 import rx.Observable;
@@ -50,9 +50,6 @@ interface Blacklist {
         void setRefreshing(boolean refreshing);
     }
 
-    /**
-     * Presenter containing all business logic for this screen.
-     */
     @PerActivity
     class Presenter extends Base.Presenter<View> {
 
@@ -101,7 +98,7 @@ interface Blacklist {
             subs.add(subscription);
         }
 
-        void updateBlacklist(@NonNull Context context, @Nullable App app) {
+        void updateBlacklist(@Nullable App app) {
             if (app != null) {
                 if (app.blackListed) {
                     appRepository.setPackageBlacklisted(app.packageName)
@@ -115,9 +112,8 @@ interface Blacklist {
             }
         }
 
-        void handleSelections(final Context context, Observable<App> clicks) {
-            final Subscription subscription = clicks.subscribe(app -> updateBlacklist(context, app));
-            subs.add(subscription);
+        void handleSelections(Observable<App> clicks) {
+            subs.add(clicks.subscribe(this::updateBlacklist));
         }
 
         @Override

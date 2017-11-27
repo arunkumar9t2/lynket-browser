@@ -16,33 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.activities.main;
+package arun.com.chromer.di.service;
 
-import javax.inject.Inject;
+import android.app.Service;
 
-import arun.com.chromer.di.PerActivity;
-import arun.com.chromer.shared.common.Base;
-import arun.com.chromer.shared.common.Snackable;
+import dagger.Module;
 
-public interface MainScreen {
-    interface View extends Base.View, Snackable {
+@Module
+public class ServiceModule {
+
+    private final Service service;
+
+    public ServiceModule(Service service) {
+        this.service = service;
     }
 
-    @PerActivity
-    class Presenter extends Base.Presenter<MainScreen.View> {
-
-        @Inject
-        public Presenter() {
-        }
-
-        @Override
-        public void onResume() {
-
-        }
-
-        @Override
-        public void onPause() {
-
-        }
-    }
 }

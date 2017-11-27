@@ -25,10 +25,10 @@ import android.util.Log;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 
-import arun.com.chromer.di.components.AppComponent;
-import arun.com.chromer.di.components.DaggerAppComponent;
-import arun.com.chromer.di.modules.AppModule;
-import arun.com.chromer.di.modules.DataModule;
+import arun.com.chromer.di.app.AppComponent;
+import arun.com.chromer.di.app.AppModule;
+import arun.com.chromer.di.app.DaggerAppComponent;
+import arun.com.chromer.di.data.DataModule;
 import io.fabric.sdk.android.Fabric;
 import io.paperdb.Paper;
 import timber.log.Timber;

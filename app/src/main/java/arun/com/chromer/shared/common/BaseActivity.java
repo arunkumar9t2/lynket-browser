@@ -16,33 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.activities.common;
+package arun.com.chromer.shared.common;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
-
-import com.hannesdorfmann.mosby3.mvp.MvpActivity;
-
-import javax.inject.Inject;
+import android.support.v7.app.AppCompatActivity;
 
 import arun.com.chromer.Chromer;
-import arun.com.chromer.di.components.ActivityComponent;
-import arun.com.chromer.di.modules.ActivityModule;
+import arun.com.chromer.di.activity.ActivityComponent;
+import arun.com.chromer.di.activity.ActivityModule;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import rx.subscriptions.CompositeSubscription;
 
-/**
- * Created by arunk on 11-01-2017.
- */
-
-public abstract class BaseMVPActivity<V extends Base.View, P extends Base.Presenter<V>>
-        extends MvpActivity<V, P> implements ProvidesActivityComponent {
-
+public abstract class BaseActivity extends AppCompatActivity implements ProvidesActivityComponent {
     protected Unbinder unbinder;
 
     ActivityComponent activityComponent;
-
     protected final CompositeSubscription subs = new CompositeSubscription();
 
     @Override
@@ -61,7 +51,7 @@ public abstract class BaseMVPActivity<V extends Base.View, P extends Base.Presen
         }
     }
 
-    @Inject
+    @Override
     public ActivityComponent getActivityComponent() {
         return activityComponent;
     }
@@ -70,26 +60,12 @@ public abstract class BaseMVPActivity<V extends Base.View, P extends Base.Presen
     protected abstract int getLayoutRes();
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        presenter.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        presenter.onPause();
-    }
-
-    @Override
     protected void onDestroy() {
         subs.clear();
         if (unbinder != null) {
             unbinder.unbind();
         }
-        presenter.onDestroy();
         activityComponent = null;
         super.onDestroy();
     }
-
 }
