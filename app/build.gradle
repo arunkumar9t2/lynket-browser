@@ -73,7 +73,7 @@ dependencies {
     implementation 'com.android.support:palette-v7:26.1.0'
 
     // Suggestions
-    implementation 'in.arunkumarsampath:suggestions:1.0.0'
+    implementation 'in.arunkumarsampath:suggestions:1.0.1'
 
     // Intro
     implementation 'com.github.paolorotolo:appintro:4.1.0'
