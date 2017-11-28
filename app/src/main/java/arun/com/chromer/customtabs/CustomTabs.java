@@ -56,7 +56,6 @@ import arun.com.chromer.activities.OpenIntentWithActivity;
 import arun.com.chromer.activities.browsing.incognito.WebViewActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.bottombar.BottomBarManager;
-import arun.com.chromer.customtabs.callbacks.AddHomeShortcutService;
 import arun.com.chromer.customtabs.callbacks.ClipboardService;
 import arun.com.chromer.customtabs.callbacks.FavShareBroadcastReceiver;
 import arun.com.chromer.customtabs.callbacks.MinimizeBroadcastReceiver;
@@ -567,18 +566,6 @@ public class CustomTabs {
         clipboardIntent.putExtra(EXTRA_KEY_ORIGINAL_URL, url);
         final PendingIntent serviceIntentPending = PendingIntent.getService(activity, 0, clipboardIntent, FLAG_UPDATE_CURRENT);
         builder.addMenuItem(activity.getString(R.string.copy_link), serviceIntentPending);
-    }
-
-    /**
-     * Adds menu item to enable adding the current url to home screen
-     */
-    private void prepareAddToHomeScreen() {
-        if (!shouldIgnoreAddToHome()) {
-            final Intent addShortcutIntent = new Intent(activity, AddHomeShortcutService.class);
-            addShortcutIntent.putExtra(EXTRA_KEY_ORIGINAL_URL, url);
-            final PendingIntent addShortcutPending = PendingIntent.getService(activity, 0, addShortcutIntent, FLAG_UPDATE_CURRENT);
-            builder.addMenuItem(activity.getString(R.string.add_to_homescreen), addShortcutPending);
-        }
     }
 
     /**

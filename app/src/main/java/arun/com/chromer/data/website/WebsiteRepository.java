@@ -27,10 +27,10 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import arun.com.chromer.data.history.BaseHistoryRepository;
-import arun.com.chromer.data.qualifiers.Disk;
-import arun.com.chromer.data.qualifiers.Network;
 import arun.com.chromer.data.website.model.WebColor;
 import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.data.website.qualifiers.Disk;
+import arun.com.chromer.data.website.qualifiers.Network;
 import arun.com.chromer.util.RxUtils;
 import rx.Observable;
 import rx.schedulers.Schedulers;

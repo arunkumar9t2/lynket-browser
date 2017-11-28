@@ -37,7 +37,7 @@ import arun.com.chromer.R;
 import arun.com.chromer.activities.browsing.article.ArticleLauncher;
 import arun.com.chromer.activities.history.HistoryActivity;
 import arun.com.chromer.activities.settings.SettingsGroupActivity;
-import arun.com.chromer.customtabs.callbacks.AddHomeShortcutService;
+import arun.com.chromer.shortcuts.HomeScreenShortcutCreatorActivity;
 import arun.com.chromer.util.DocumentUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -110,7 +110,7 @@ public class MoreMenuActivity extends AppCompatActivity {
                             .colorRes(R.color.accent)
                             .sizeDp(24));
                     holder.menuText.setText(R.string.add_to_homescreen);
-                    holder.itemView.setOnClickListener(v -> startService(new Intent(MoreMenuActivity.this, AddHomeShortcutService.class).setData(getIntent().getData())));
+                    holder.itemView.setOnClickListener(v -> startActivity(new Intent(MoreMenuActivity.this, HomeScreenShortcutCreatorActivity.class).setData(getIntent().getData())));
                     break;
                 case 3:
                     holder.menuImage.setImageDrawable(new IconicsDrawable(holder.itemView.getContext())

@@ -18,14 +18,16 @@
 
 package arun.com.chromer.shared.common;
 
+import android.support.annotation.NonNull;
+
 import arun.com.chromer.di.activity.ActivityComponent;
 
 /**
  * Created by arunk on 12-11-2017.
  */
 public interface ProvidesActivityComponent {
-
+    @NonNull
     ActivityComponent getActivityComponent();
 
-    void inject(ActivityComponent activityComponent);
+    void inject(@NonNull ActivityComponent activityComponent);
 }

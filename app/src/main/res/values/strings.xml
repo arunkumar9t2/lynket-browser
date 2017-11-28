@@ -290,4 +290,8 @@
     <string name="app_detection_notification_channel_description">Notification will be posted when Chromer\'s app detection service is running.</string>
     <string name="app_detection_service_text">Monitoring foreground apps for dynamic toolbar color and blacklisting.</string>
     <string name="app_detection_service">App detection service</string>
+    <string name="shortcut_name">Shorcut name</string>
+    <string name="create_shorcut">Create shortcut</string>
+    <string name="create">Create</string>
+    <string name="name_cannot_be_empty">Name cannot be empty</string>
 </resources>

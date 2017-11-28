@@ -16,35 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.di.app;
+package arun.com.chromer.data
 
-import android.app.Application;
-
-import javax.inject.Singleton;
-
-import arun.com.chromer.di.viewmodel.ViewModelModule;
-import arun.com.chromer.shared.AppDetectionManager;
-import dagger.Module;
-import dagger.Provides;
-
-@Module(includes = ViewModelModule.class)
-public class AppModule {
-
-    Application application;
-
-    public AppModule(Application application) {
-        this.application = application;
-    }
-
-    @Provides
-    @Singleton
-    Application providesApplication() {
-        return application;
-    }
-
-    @Provides
-    @Singleton
-    AppDetectionManager providesAppDetectionManager() {
-        return new AppDetectionManager(application);
-    }
+sealed class Result<T> {
+    data class Success<T>(val data: T) : Result<T>()
+    class Loading<T> : Result<T>()
+    class Idle<T> : Result<T>()
+    data class Failure<T>(val throwable: Throwable) : Result<T>()
 }

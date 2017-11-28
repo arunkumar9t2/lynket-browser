@@ -28,6 +28,7 @@ import arun.com.chromer.customtabs.CustomTabs;
 import arun.com.chromer.di.PerActivity;
 import arun.com.chromer.di.fragment.FragmentComponent;
 import arun.com.chromer.di.fragment.FragmentModule;
+import arun.com.chromer.shortcuts.HomeScreenShortcutCreatorActivity;
 import dagger.Subcomponent;
 
 @PerActivity
@@ -50,4 +51,6 @@ public interface ActivityComponent {
     void inject(CustomTabActivity customTabActivity);
 
     void inject(ActivityComponent activityComponent);
+
+    void inject(@NonNull HomeScreenShortcutCreatorActivity homeScreenShortcutCreatorActivity);
 }

@@ -31,13 +31,13 @@ import arun.com.chromer.data.history.BaseHistoryRepository;
 import arun.com.chromer.data.history.HistoryDiskStore;
 import arun.com.chromer.data.history.HistoryRepository;
 import arun.com.chromer.data.history.HistoryStore;
-import arun.com.chromer.data.qualifiers.Disk;
-import arun.com.chromer.data.qualifiers.Network;
 import arun.com.chromer.data.website.BaseWebsiteRepository;
 import arun.com.chromer.data.website.WebsiteDiskStore;
 import arun.com.chromer.data.website.WebsiteNetworkStore;
 import arun.com.chromer.data.website.WebsiteRepository;
 import arun.com.chromer.data.website.WebsiteStore;
+import arun.com.chromer.data.website.qualifiers.Disk;
+import arun.com.chromer.data.website.qualifiers.Network;
 import dagger.Module;
 import dagger.Provides;
 

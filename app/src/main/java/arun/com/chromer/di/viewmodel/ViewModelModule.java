@@ -16,35 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.di.app;
+package arun.com.chromer.di.viewmodel;
 
-import android.app.Application;
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
 
-import javax.inject.Singleton;
-
-import arun.com.chromer.di.viewmodel.ViewModelModule;
-import arun.com.chromer.shared.AppDetectionManager;
+import arun.com.chromer.shortcuts.HomeScreenShortcutViewModel;
+import arun.com.chromer.viemodel.ViewModelFactory;
+import dagger.Binds;
 import dagger.Module;
-import dagger.Provides;
+import dagger.multibindings.IntoMap;
 
-@Module(includes = ViewModelModule.class)
-public class AppModule {
+@Module
+public abstract class ViewModelModule {
+    @Binds
+    @IntoMap
+    @ViewModelKey(HomeScreenShortcutViewModel.class)
+    abstract ViewModel bindHomeScreenViewModule(HomeScreenShortcutViewModel homeScreenShortcutViewModel);
 
-    Application application;
-
-    public AppModule(Application application) {
-        this.application = application;
-    }
-
-    @Provides
-    @Singleton
-    Application providesApplication() {
-        return application;
-    }
-
-    @Provides
-    @Singleton
-    AppDetectionManager providesAppDetectionManager() {
-        return new AppDetectionManager(application);
-    }
+    @Binds
+    abstract ViewModelProvider.Factory bindViewModelFactory(ViewModelFactory factory);
 }

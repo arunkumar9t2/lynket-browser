@@ -16,35 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.di.app;
+package arun.com.chromer.di.viewmodel;
 
-import android.app.Application;
+import android.arch.lifecycle.ViewModel;
 
-import javax.inject.Singleton;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import arun.com.chromer.di.viewmodel.ViewModelModule;
-import arun.com.chromer.shared.AppDetectionManager;
-import dagger.Module;
-import dagger.Provides;
+import dagger.MapKey;
 
-@Module(includes = ViewModelModule.class)
-public class AppModule {
-
-    Application application;
-
-    public AppModule(Application application) {
-        this.application = application;
-    }
-
-    @Provides
-    @Singleton
-    Application providesApplication() {
-        return application;
-    }
-
-    @Provides
-    @Singleton
-    AppDetectionManager providesAppDetectionManager() {
-        return new AppDetectionManager(application);
-    }
+@Documented
+@Target({ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+@MapKey
+@interface ViewModelKey {
+    Class<? extends ViewModel> value();
 }

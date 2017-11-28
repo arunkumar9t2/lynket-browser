@@ -16,35 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.di.app;
+package arun.com.chromer.extenstions
 
-import android.app.Application;
+import android.view.View
 
-import javax.inject.Singleton;
+fun View.visible() {
+    this.visibility = View.VISIBLE
+}
 
-import arun.com.chromer.di.viewmodel.ViewModelModule;
-import arun.com.chromer.shared.AppDetectionManager;
-import dagger.Module;
-import dagger.Provides;
-
-@Module(includes = ViewModelModule.class)
-public class AppModule {
-
-    Application application;
-
-    public AppModule(Application application) {
-        this.application = application;
-    }
-
-    @Provides
-    @Singleton
-    Application providesApplication() {
-        return application;
-    }
-
-    @Provides
-    @Singleton
-    AppDetectionManager providesAppDetectionManager() {
-        return new AppDetectionManager(application);
-    }
+fun View.gone() {
+    this.visibility = View.GONE
 }
