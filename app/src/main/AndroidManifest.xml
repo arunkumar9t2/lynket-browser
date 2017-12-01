@@ -12,6 +12,7 @@
     <!-- suppress DeprecatedClassUsageInspection -->
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.REORDER_TASKS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
@@ -24,16 +25,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service android:name=".customtabs.dynamictoolbar.WebColorExtractorService" />
         <service android:name=".customtabs.callbacks.ClipboardService" />
-        <service android:name=".customtabs.callbacks.AddHomeShortcutService" />
         <service android:name=".customtabs.warmup.WarmUpService" />
         <service
             android:name=".shared.AppDetectService"
             android:enabled="true"
             android:exported="false" />
         <service
-            android:name=".customtabs.dynamictoolbar.AppColorExtractorService"
+            android:name=".customtabs.dynamictoolbar.AppColorExtractorJob"
             android:exported="false" />
         <service
             android:name=".webheads.WebHeadService"

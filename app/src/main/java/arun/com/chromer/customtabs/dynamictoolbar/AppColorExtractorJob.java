@@ -18,7 +18,6 @@
 
 package arun.com.chromer.customtabs.dynamictoolbar;
 
-import android.app.IntentService;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -27,6 +26,7 @@ import android.graphics.Bitmap;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.JobIntentService;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 
@@ -47,27 +47,25 @@ import static arun.com.chromer.shared.Constants.EXTRA_PACKAGE_NAME;
 import static arun.com.chromer.shared.Constants.NO_COLOR;
 
 
-public class AppColorExtractorService extends IntentService {
+public class AppColorExtractorJob extends JobIntentService {
+
+    public static final int JOB_ID = 112;
 
     @Inject
     BaseAppRepository appRepository;
 
-    public AppColorExtractorService() {
-        super(AppColorExtractorService.class.getSimpleName());
+    public AppColorExtractorJob() {
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
+    protected void onHandleWork(@NonNull Intent intent) {
         ((Chromer) getApplication()).getAppComponent().inject(this);
-        if (intent != null) {
-            final String packageName = intent.getStringExtra(EXTRA_PACKAGE_NAME);
-            if (packageName != null) {
-                if (isValidPackage(packageName))
-                    return;
-
-                if (!extractColorFromResources(packageName)) {
-                    extractColorFromAppIcon(packageName);
-                }
+        final String packageName = intent.getStringExtra(EXTRA_PACKAGE_NAME);
+        if (packageName != null) {
+            if (isValidPackage(packageName))
+                return;
+            if (!extractColorFromResources(packageName)) {
+                extractColorFromAppIcon(packageName);
             }
         }
     }

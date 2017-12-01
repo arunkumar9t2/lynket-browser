@@ -22,7 +22,7 @@ import android.support.annotation.NonNull;
 
 import javax.inject.Singleton;
 
-import arun.com.chromer.customtabs.dynamictoolbar.AppColorExtractorService;
+import arun.com.chromer.customtabs.dynamictoolbar.AppColorExtractorJob;
 import arun.com.chromer.di.activity.ActivityComponent;
 import arun.com.chromer.di.activity.ActivityModule;
 import arun.com.chromer.di.data.DataModule;
@@ -43,7 +43,7 @@ public interface AppComponent {
     ServiceComponent newServiceComponent(ServiceModule serviceModule);
 
     @NonNull
-    void inject(AppColorExtractorService appColorExtractorService);
+    void inject(AppColorExtractorJob appColorExtractorJob);
 
     @NonNull
     AppDetectionManager appDetectionManager();
