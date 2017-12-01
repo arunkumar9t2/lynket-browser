@@ -295,4 +295,6 @@
     <string name="create">Create</string>
     <string name="name_cannot_be_empty">Name cannot be empty</string>
     <string name="chromer_options">Chromer Options</string>
+    <string name="warning">Warning</string>
+    <string name="bottom_bar_crash_warning">Certain recent versions of Chrome might force close when Bottom Bar is enabled. If such an issue exists, please disable Bottom Bar until Chrome is patched.</string>
 </resources>

@@ -48,7 +48,7 @@ public class Preferences {
     public static final String WEB_HEAD_ENABLED = "webhead_enabled_pref";
     public static final String WEB_HEAD_SPAWN_LOCATION = "webhead_spawn_preference";
     public static final String WEB_HEAD_SIZE = "webhead_size_preference";
-    public static final String BOTTOM_BAR_ENABLED = "bottombar_enabled_pref";
+    public static final String BOTTOM_BAR_ENABLED = "bottombar_enabled_preference";
     public static final int PREFERRED_ACTION_BROWSER = 1;
     public static final int PREFERRED_ACTION_FAV_SHARE = 2;
     public static final int PREFERRED_ACTION_GEN_SHARE = 3;
