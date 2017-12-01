@@ -35,6 +35,16 @@ a {
 <body>
 <strong>You can view this again in the about screen.</strong>
 <br></br>
+<strong>1.7.3</strong>
+<ul>
+    <li><b>NEW: </b> Round and Adaptive Icon for Android Oreo</li>
+    <li><b>FIX: </b> Bottom Bar disabled by default to resolve crashes in Chrome.</li>
+    <li><b>NEW: </b> History app shortcuts for 7.1</li>
+    <li><b>NEW: </b> Use custom names while creating home screen shortcuts + Oreo support</li>
+    <li><b>IMPROVED: </b> Article mode UI and stability. Tried to reduce extra gap between text. Improved Blockquote legibility.</li>
+    <li><b>FIX: </b> Chromer not opening links sometimes.</li>
+    <li><b>IMPROVED: </b> Stability of web heads has been improved. Minor UI fixes. Change More menu name to "Chromer Options" for better clarity</li>
+</ul>
 <strong>1.7.2</strong>
 <ul>
     <li><b>NEW: </b> Home screen UI with bottom bar.</li>
