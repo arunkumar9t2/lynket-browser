@@ -22,6 +22,7 @@ import android.app.Activity
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.content.DialogInterface
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.TextInputLayout
@@ -35,6 +36,8 @@ import arun.com.chromer.data.website.model.WebSite
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.visible
+import arun.com.chromer.glide.GlideApp
+import arun.com.chromer.glide.appicon.ApplicationIcon
 import arun.com.chromer.shared.common.BaseActivity
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -42,6 +45,11 @@ import butterknife.Unbinder
 import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.internal.MDButton
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.ImageViewTarget
+import com.bumptech.glide.request.target.Target
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar
 import rx.Observable
 import rx.subscriptions.CompositeSubscription
@@ -84,13 +92,17 @@ class HomeScreenShortcutCreatorActivity : BaseActivity() {
         private var dialog: MaterialDialog? = null
 
         @BindView(R.id.icon_view)
-        internal lateinit var iconView: ImageView
+        @JvmField
+        var iconView: ImageView? = null
         @BindView(R.id.shortcut_name)
-        internal lateinit var shortcutName: EditText
+        @JvmField
+        var shortcutName: EditText? = null
         @BindView(R.id.shortcut_name_wrapper)
-        internal lateinit var shortcutNameWrapper: TextInputLayout
+        @JvmField
+        var shortcutNameWrapper: TextInputLayout? = null
         @BindView(R.id.extract_progress)
-        internal lateinit var progressBar: MaterialProgressBar
+        @JvmField
+        var progressBar: MaterialProgressBar? = null
 
         val subs = CompositeSubscription()
 
@@ -115,38 +127,44 @@ class HomeScreenShortcutCreatorActivity : BaseActivity() {
                     .show()
             val dialogView = dialog!!.customView
             unbinder = ButterKnife.bind(this, dialogView!!)
-            shortcutName.addTextChangedListener(this)
-
-
+            shortcutName?.addTextChangedListener(this)
             positiveButton?.isEnabled = false
 
             subs.add(webSiteObservable.subscribe {
                 when (it) {
                     is Result.Loading<WebSite> -> {
-                        progressBar.visible()
-                        iconView.gone()
-                        shortcutName.setText(R.string.loading)
+                        progressBar?.visible()
+                        iconView?.gone()
+                        shortcutName?.setText(R.string.loading)
                         positiveButton?.isEnabled = false
                     }
                     is Result.Success<WebSite> -> {
-                        shortcutName.setText(it.data.safeLabel())
-                        /*Glide.with(activity)
-                                .load(it.data.faviconUrl)
-                                .listener(object : RequestListener<String, GlideDrawable> {
-                                    override fun onException(e: java.lang.Exception?, model: String?, target: Target<GlideDrawable>?, isFirstResource: Boolean): Boolean {
-                                        loadAttemptFinished()
+                        shortcutName?.setText(it.data.safeLabel())
+                        GlideApp.with(activity)
+                                .load(it.data)
+                                .listener(object : RequestListener<Drawable> {
+                                    override fun onLoadFailed(e: GlideException?, model: Any, target: Target<Drawable>, isFirstResource: Boolean): Boolean {
+                                        GlideApp.with(activity)
+                                                .load(ApplicationIcon.createUri(activity!!.packageName))
+                                                .into(object : ImageViewTarget<Drawable>(iconView) {
+                                                    override fun setResource(resource: Drawable?) {
+                                                        iconView?.setImageDrawable(resource)
+                                                        loadAttemptFinished()
+                                                    }
+                                                })
                                         return false
                                     }
 
-                                    override fun onResourceReady(resource: GlideDrawable?, model: String?, target: Target<GlideDrawable>?, isFromMemoryCache: Boolean, isFirstResource: Boolean): Boolean {
-                                        loadAttemptFinished()
+                                    override fun onResourceReady(resource: Drawable, model: Any, target: Target<Drawable>, dataSource: DataSource, isFirstResource: Boolean): Boolean {
                                         return false
                                     }
                                 })
-                                .into(iconView)*/
-                    }
-                    else -> {
-                        loadAttemptFinished()
+                                .into(object : ImageViewTarget<Drawable>(iconView) {
+                                    override fun setResource(resource: Drawable?) {
+                                        iconView?.setImageDrawable(resource)
+                                        loadAttemptFinished()
+                                    }
+                                })
                     }
                 }
             })
@@ -155,33 +173,37 @@ class HomeScreenShortcutCreatorActivity : BaseActivity() {
         }
 
         private fun loadAttemptFinished() {
-            progressBar.gone()
-            iconView.visible()
-            positiveButton?.isEnabled = true
+            progressBar?.gone()
+            iconView?.visible()
+            enablePositiveButtonIfImageLoaded()
         }
 
         override fun onDismiss(dialogInterface: DialogInterface) {
+            subs.clear()
             activity?.finish()
             activity = null
-            subs.clear()
             unbinder.unbind()
             dialog = null
         }
 
         private val positiveButton: MDButton?
             get() {
-                return dialog!!.getActionButton(DialogAction.POSITIVE)
+                return dialog?.getActionButton(DialogAction.POSITIVE)
             }
 
         override fun afterTextChanged(editable: Editable?) {
             if (editable.toString().trim { it <= ' ' }.isEmpty()) {
-                shortcutNameWrapper.isErrorEnabled = true
-                shortcutNameWrapper.error = activity!!.getString(R.string.name_cannot_be_empty)
+                shortcutNameWrapper?.isErrorEnabled = true
+                shortcutNameWrapper?.error = activity!!.getString(R.string.name_cannot_be_empty)
                 positiveButton?.isEnabled = false
             } else {
-                shortcutNameWrapper.isErrorEnabled = false
-                positiveButton?.isEnabled = true
+                shortcutNameWrapper?.isErrorEnabled = false
+                enablePositiveButtonIfImageLoaded()
             }
+        }
+
+        private fun enablePositiveButtonIfImageLoaded() {
+            positiveButton?.isEnabled = iconView?.drawable != null
         }
 
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
