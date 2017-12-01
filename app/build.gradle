@@ -114,7 +114,8 @@ dependencies {
     implementation 'com.hannesdorfmann.mosby3:mvp:3.0.4'
 
     // Image loading
-    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.github.bumptech.glide:glide:4.1.1'
+    kapt 'com.github.bumptech.glide:compiler:4.1.1'
 
     // Bottom sheet
     implementation 'com.flipboard:bottomsheet-core:1.5.1'

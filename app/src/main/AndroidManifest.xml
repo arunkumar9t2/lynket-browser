@@ -252,10 +252,8 @@
             android:value="${crashlyticsApiKey}"
             tools:replace="android:value" />
         <meta-data
-            android:name="arun.com.chromer.glide.ChromerGideModule"
+            android:name="arun.com.chromer.glide.ChromerGlideModule"
             android:value="GlideModule" />
-
-
     </application>
 
 </manifest>

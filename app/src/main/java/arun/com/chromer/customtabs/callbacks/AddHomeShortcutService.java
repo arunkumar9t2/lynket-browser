@@ -36,7 +36,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.chimbori.crux.articles.Article;
 
 import java.util.concurrent.ExecutionException;
@@ -44,6 +43,7 @@ import java.util.concurrent.ExecutionException;
 import arun.com.chromer.R;
 import arun.com.chromer.activities.browserintercept.BrowserInterceptActivity;
 import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.glide.GlideApp;
 import arun.com.chromer.parser.RxParser;
 import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Utils;
@@ -116,10 +116,10 @@ public class AddHomeShortcutService extends IntentService {
     private Bitmap getFaviconBitmap(@NonNull final String faviconUrl) {
         Bitmap favicon = null;
         try {
-            favicon = Glide.with(this)
-                    .load(faviconUrl)
+            favicon = GlideApp.with(this)
                     .asBitmap()
-                    .into(192, 192)
+                    .load(faviconUrl)
+                    .submit(192, 192)
                     .get();
         } catch (InterruptedException | ExecutionException ignored) {
             Timber.e(ignored.getMessage());

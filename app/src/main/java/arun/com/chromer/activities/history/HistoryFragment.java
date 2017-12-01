@@ -137,7 +137,7 @@ public class HistoryFragment extends BaseMVPFragment<History.View, History.Prese
         super.onViewCreated(view, savedInstanceState);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         historyList.setLayoutManager(linearLayoutManager);
-        historyAdapter = new HistoryAdapter(linearLayoutManager);
+        historyAdapter = new HistoryAdapter(getActivity(), linearLayoutManager);
         historyList.setAdapter(historyAdapter);
         historyList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

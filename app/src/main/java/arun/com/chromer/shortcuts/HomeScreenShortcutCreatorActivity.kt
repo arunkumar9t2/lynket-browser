@@ -42,10 +42,6 @@ import butterknife.Unbinder
 import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.internal.MDButton
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.GlideDrawable
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar
 import rx.Observable
 import rx.subscriptions.CompositeSubscription
@@ -108,6 +104,7 @@ class HomeScreenShortcutCreatorActivity : BaseActivity() {
                     .onPositive { _, _ ->
                         when {
                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> {
+
                             }
                             else -> {
                                 // AddToHomeScreenIntentService.createShortcut(activity!!, iconUri.toString(), icon.packageName, shortcutName.text.toString())
@@ -133,7 +130,7 @@ class HomeScreenShortcutCreatorActivity : BaseActivity() {
                     }
                     is Result.Success<WebSite> -> {
                         shortcutName.setText(it.data.safeLabel())
-                        Glide.with(activity)
+                        /*Glide.with(activity)
                                 .load(it.data.faviconUrl)
                                 .listener(object : RequestListener<String, GlideDrawable> {
                                     override fun onException(e: java.lang.Exception?, model: String?, target: Target<GlideDrawable>?, isFirstResource: Boolean): Boolean {
@@ -146,7 +143,7 @@ class HomeScreenShortcutCreatorActivity : BaseActivity() {
                                         return false
                                     }
                                 })
-                                .into(iconView)
+                                .into(iconView)*/
                     }
                     else -> {
                         loadAttemptFinished()

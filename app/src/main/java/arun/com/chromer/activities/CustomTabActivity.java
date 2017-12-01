@@ -32,9 +32,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 
 import javax.inject.Inject;
 
@@ -43,6 +42,7 @@ import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.data.website.WebsiteRepository;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.di.activity.ActivityComponent;
+import arun.com.chromer.glide.GlideApp;
 import arun.com.chromer.shared.common.BaseActivity;
 import arun.com.chromer.util.Utils;
 import rx.Subscription;
@@ -181,12 +181,12 @@ public class CustomTabActivity extends BaseActivity {
             final String title = webSite.safeLabel();
             final String faviconUrl = webSite.faviconUrl;
             setTaskDescription(new ActivityManager.TaskDescription(title, null, webSite.themeColor()));
-            Glide.with(this)
-                    .load(faviconUrl)
+            GlideApp.with(this)
                     .asBitmap()
+                    .load(faviconUrl)
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
-                        public void onResourceReady(Bitmap icon, GlideAnimation<? super Bitmap> glideAnimation) {
+                        public void onResourceReady(Bitmap icon, Transition<? super Bitmap> transition) {
                             setTaskDescription(new ActivityManager.TaskDescription(title, icon, webSite.themeColor()));
                         }
                     });

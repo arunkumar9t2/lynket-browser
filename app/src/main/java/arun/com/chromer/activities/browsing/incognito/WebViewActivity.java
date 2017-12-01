@@ -41,9 +41,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
@@ -55,6 +54,7 @@ import arun.com.chromer.customtabs.callbacks.ClipboardService;
 import arun.com.chromer.customtabs.callbacks.FavShareBroadcastReceiver;
 import arun.com.chromer.customtabs.callbacks.SecondaryBrowserReceiver;
 import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.glide.GlideApp;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -147,12 +147,12 @@ public class WebViewActivity extends AppCompatActivity {
             }
             if (Utils.isLollipopAbove()) {
                 setTaskDescription(new ActivityManager.TaskDescription(title, null, webSite.themeColor()));
-                Glide.with(this)
-                        .load(faviconUrl)
+                GlideApp.with(this)
                         .asBitmap()
+                        .load(faviconUrl)
                         .into(new SimpleTarget<Bitmap>() {
                             @Override
-                            public void onResourceReady(Bitmap icon, GlideAnimation<? super Bitmap> glideAnimation) {
+                            public void onResourceReady(Bitmap icon, Transition<? super Bitmap> transition) {
                                 setTaskDescription(new ActivityManager.TaskDescription(title, icon, webSite.themeColor()));
                             }
                         });

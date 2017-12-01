@@ -31,8 +31,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +43,7 @@ import arun.com.chromer.R;
 import arun.com.chromer.activities.browserintercept.BrowserInterceptActivity;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.di.PerFragment;
+import arun.com.chromer.glide.GlideApp;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.views.PlaceholderLetterView;
@@ -108,12 +109,12 @@ public class RecentsAdapter extends RecyclerView.Adapter<RecentsAdapter.RecentsV
                     itemView.getContext().startActivity(intent);
                 });
                 if (!TextUtils.isEmpty(website.faviconUrl)) {
-                    Glide.with(itemView.getContext())
-                            .load(website.faviconUrl)
+                    GlideApp.with(itemView.getContext())
                             .asBitmap()
-                            .into(new BitmapImageViewTarget(icon) {
+                            .load(website.faviconUrl)
+                            .into(new SimpleTarget<Bitmap>() {
                                 @Override
-                                protected void setResource(Bitmap resource) {
+                                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
                                     if (Utils.isValidFavicon(resource)) {
                                         showFavicon(resource);
                                     } else {

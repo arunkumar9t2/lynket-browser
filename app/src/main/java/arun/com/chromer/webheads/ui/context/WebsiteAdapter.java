@@ -29,7 +29,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
@@ -38,6 +37,7 @@ import java.util.List;
 
 import arun.com.chromer.R;
 import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.glide.GlideApp;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -74,9 +74,8 @@ class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> 
                 .sizeDp(16));
         holder.url.setText(webSite.preferredUrl());
         holder.title.setText(webSite.safeLabel());
-        Glide.with(context)
+        GlideApp.with(context)
                 .load(webSite.faviconUrl)
-                .crossFade()
                 .into(holder.icon);
     }
 

@@ -18,6 +18,7 @@
 
 package arun.com.chromer.activities.history;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -35,13 +36,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.browserintercept.BrowserInterceptActivity;
 import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.glide.GlideApp;
+import arun.com.chromer.glide.GlideRequests;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.views.PlaceholderLetterView;
 import butterknife.BindView;
@@ -61,6 +63,7 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHold
     private final AsyncListUtil<WebSite> asyncWebsiteList;
     private Cursor cursor = null;
     private final LinearLayoutManager linearLayoutManager;
+    private final GlideRequests glideRequests;
 
     private final AsyncListUtil.DataCallback<WebSite> dataCallback = new AsyncListUtil.DataCallback<WebSite>() {
         @Override
@@ -103,9 +106,10 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHold
         }
     };
 
-    HistoryAdapter(@NonNull LinearLayoutManager linearLayoutManager) {
+    HistoryAdapter(@NonNull Activity activity, @NonNull LinearLayoutManager linearLayoutManager) {
         this.linearLayoutManager = linearLayoutManager;
         asyncWebsiteList = new AsyncListUtil<>(WebSite.class, 50, dataCallback, viewCallback);
+        glideRequests = GlideApp.with(activity);
     }
 
     @Override
@@ -122,7 +126,7 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHold
     @Override
     public void onViewRecycled(HistoryViewHolder holder) {
         super.onViewRecycled(holder);
-        Glide.clear(holder.historyFavicon);
+        glideRequests.clear(holder.historyFavicon);
     }
 
     @Override
@@ -215,28 +219,17 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHold
                 historySubtitle.setText(R.string.loading);
                 historyFavicon.setImageDrawable(null);
                 historyAmp.setVisibility(GONE);
-                Glide.clear(historyFavicon);
+                glideRequests.clear(historyFavicon);
             } else {
                 historyTitle.setText(webSite.safeLabel());
                 historySubtitle.setText(webSite.preferredUrl());
                 if (!TextUtils.isEmpty(webSite.faviconUrl)) {
                     Glide.with(itemView.getContext())
-                            .load(webSite.faviconUrl)
                             .asBitmap()
-                            .listener(new RequestListener<String, Bitmap>() {
+                            .load(webSite.faviconUrl)
+                            .into(new SimpleTarget<Bitmap>() {
                                 @Override
-                                public boolean onException(Exception e, String model, Target<Bitmap> target, boolean isFirstResource) {
-                                    return false;
-                                }
-
-                                @Override
-                                public boolean onResourceReady(Bitmap resource, String model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                    return false;
-                                }
-                            })
-                            .into(new BitmapImageViewTarget(historyFavicon) {
-                                @Override
-                                protected void setResource(Bitmap resource) {
+                                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
                                     if (Utils.isValidFavicon(resource)) {
                                         showFavicon(resource);
                                     } else {
@@ -245,7 +238,7 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHold
                                 }
                             });
                 } else {
-                    Glide.clear(historyFavicon);
+                    glideRequests.clear(historyFavicon);
                     showPlaceholder(webSite.safeLabel());
                 }
                 if (!TextUtils.isEmpty(webSite.ampUrl)) {

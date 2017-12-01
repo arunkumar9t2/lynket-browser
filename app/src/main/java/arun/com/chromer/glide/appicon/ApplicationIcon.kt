@@ -16,27 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.glide;
+package arun.com.chromer.glide.appicon
 
-import android.content.Context;
+import android.net.Uri
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.GlideBuilder;
-import com.bumptech.glide.module.GlideModule;
+class ApplicationIcon(val packageName: String) {
 
-import java.io.InputStream;
-
-import arun.com.chromer.data.common.App;
-
-
-public class ChromerGideModule implements GlideModule {
-    @Override
-    public void applyOptions(Context context, GlideBuilder builder) {
-
-    }
-
-    @Override
-    public void registerComponents(Context context, Glide glide) {
-        glide.register(App.class, InputStream.class, new AppIconModelLoader.Factory());
+    companion object {
+        const val URI_SCHEME_APPLICATION_ICON = "application-icon"
+        fun createUri(packageName: String): Uri = Uri.fromParts(URI_SCHEME_APPLICATION_ICON, packageName, null)
     }
 }
