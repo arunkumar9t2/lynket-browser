@@ -53,7 +53,6 @@ import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -115,7 +114,7 @@ public class MainActivity extends BaseMVPActivity<MainScreen.View, MainScreen.Pr
         Changelog.conditionalShow(this);
 
         setupDrawer();
-        checkAndEducateUser(false);
+        checkAndEducateUser();
         ServiceManager.takeCareOfServices(getApplicationContext());
         registerCloseReceiver();
 
@@ -154,7 +153,7 @@ public class MainActivity extends BaseMVPActivity<MainScreen.View, MainScreen.Pr
     }
 
     @Override
-    public void inject(ActivityComponent activityComponent) {
+    public void inject(@NonNull ActivityComponent activityComponent) {
         activityComponent.inject(this);
     }
 
@@ -325,14 +324,9 @@ public class MainActivity extends BaseMVPActivity<MainScreen.View, MainScreen.Pr
                 .show();
     }
 
-    private void checkAndEducateUser(boolean forceShow) {
-        final List packages;
-        if (!forceShow) {
-            packages = CustomTabs.getCustomTabSupportingPackages(this);
-        } else {
-            packages = Collections.EMPTY_LIST;
-        }
-        if (packages.size() == 0 || forceShow) {
+    private void checkAndEducateUser() {
+        final List packages = CustomTabs.getCustomTabSupportingPackages(this);
+        if (packages.size() == 0) {
             Answers.getInstance().logCustom(new CustomEvent("Missing provider"));
             new MaterialDialog.Builder(this)
                     .title(R.string.custom_tab_provider_not_found)
