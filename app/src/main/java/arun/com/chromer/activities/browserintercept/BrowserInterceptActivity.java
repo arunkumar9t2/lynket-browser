@@ -41,6 +41,7 @@ import arun.com.chromer.activities.browsing.article.ArticleLauncher;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.data.apps.AppRepository;
 import arun.com.chromer.data.website.WebsiteRepository;
+import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.di.activity.ActivityComponent;
 import arun.com.chromer.shared.AppDetectionManager;
 import arun.com.chromer.shared.common.BaseMVPActivity;
@@ -205,15 +206,19 @@ public class BrowserInterceptActivity extends BaseMVPActivity<BrowserIntercept.V
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void launchCCT(Uri uri) {
         closeDialogs();
-        final Intent customTabActivity = new Intent(this, CustomTabActivity.class);
-        customTabActivity.setData(uri);
-        if (isFromNewTab || Preferences.get(this).mergeTabs()) {
-            customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-            customTabActivity.addFlags(FLAG_ACTIVITY_MULTIPLE_TASK);
+
+        if (!DocumentUtils.reOrderTab(this, new WebSite(uri.toString()))) {
+            final Intent customTabActivity = new Intent(this, CustomTabActivity.class);
+            customTabActivity.setData(uri);
+            if (isFromNewTab || Preferences.get(this).mergeTabs()) {
+                customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+                customTabActivity.addFlags(FLAG_ACTIVITY_MULTIPLE_TASK);
+            }
+            customTabActivity.putExtra(EXTRA_KEY_FROM_NEW_TAB, isFromNewTab);
+            customTabActivity.putExtra(EXTRA_KEY_SKIP_EXTRACTION, skipExtraction);
+            startActivity(customTabActivity);
         }
-        customTabActivity.putExtra(EXTRA_KEY_FROM_NEW_TAB, isFromNewTab);
-        customTabActivity.putExtra(EXTRA_KEY_SKIP_EXTRACTION, skipExtraction);
-        startActivity(customTabActivity);
+
         finish();
     }
 
