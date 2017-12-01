@@ -327,7 +327,6 @@ public class CustomTabs {
             Timber.d("Using webhead session");
             return WebHeadService.getTabSession();
         }
-
         return null;
     }
 

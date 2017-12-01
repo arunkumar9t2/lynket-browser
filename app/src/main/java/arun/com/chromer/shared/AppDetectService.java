@@ -99,18 +99,6 @@ public class AppDetectService extends BaseService {
         initChannels();
         super.onCreate();
 
-        if (!Utils.canReadUsageStats(this)) {
-            Timber.e("Attempted to poll without usage permission");
-            stopSelf();
-        }
-
-        registerScreenReceiver();
-        if (Utils.isLollipopAbove()) {
-            appDetector = new LollipopDetector();
-        } else {
-            appDetector = new PreLollipopDetector();
-        }
-
         if (Utils.ANDROID_OREO) {
             startForeground(1, new NotificationCompat.Builder(this, CHANNEL_ID)
                     .setSmallIcon(R.drawable.ic_chromer_notification)
@@ -124,6 +112,18 @@ public class AppDetectService extends BaseService {
                     .setAutoCancel(false)
                     .setLocalOnly(true)
                     .build());
+        }
+
+        if (!Utils.canReadUsageStats(this)) {
+            Timber.e("Attempted to poll without usage permission");
+            stopSelf();
+        }
+
+        registerScreenReceiver();
+        if (Utils.isLollipopAbove()) {
+            appDetector = new LollipopDetector();
+        } else {
+            appDetector = new PreLollipopDetector();
         }
     }
 

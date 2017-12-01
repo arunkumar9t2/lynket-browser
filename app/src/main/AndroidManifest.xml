@@ -32,7 +32,8 @@
             android:exported="false" />
         <service
             android:name=".customtabs.dynamictoolbar.AppColorExtractorJob"
-            android:exported="false" />
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
             android:name=".webheads.WebHeadService"
             android:enabled="true"
