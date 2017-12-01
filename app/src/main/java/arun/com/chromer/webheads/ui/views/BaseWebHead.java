@@ -64,6 +64,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static android.view.WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
 import static android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
 import static android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+import static android.view.WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
 import static android.view.WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
 import static android.widget.ImageView.ScaleType.CENTER;
 import static arun.com.chromer.shared.Constants.NO_COLOR;
@@ -529,12 +530,20 @@ public abstract class BaseWebHead extends FrameLayout {
 
     @NonNull
     private WindowManager.LayoutParams createWindowParams() {
-        return new WindowManager.LayoutParams(
-                WRAP_CONTENT,
-                WRAP_CONTENT,
-                TYPE_SYSTEM_ALERT,
-                FLAG_NOT_FOCUSABLE | FLAG_LAYOUT_NO_LIMITS | FLAG_HARDWARE_ACCELERATED,
-                TRANSLUCENT);
+        if (Utils.ANDROID_OREO) {
+            return new WindowManager.LayoutParams(
+                    WRAP_CONTENT,
+                    WRAP_CONTENT,
+                    TYPE_APPLICATION_OVERLAY,
+                    FLAG_NOT_FOCUSABLE | FLAG_LAYOUT_NO_LIMITS | FLAG_HARDWARE_ACCELERATED,
+                    TRANSLUCENT);
+        } else
+            return new WindowManager.LayoutParams(
+                    WRAP_CONTENT,
+                    WRAP_CONTENT,
+                    TYPE_SYSTEM_ALERT,
+                    FLAG_NOT_FOCUSABLE | FLAG_LAYOUT_NO_LIMITS | FLAG_HARDWARE_ACCELERATED,
+                    TRANSLUCENT);
     }
 
     /**

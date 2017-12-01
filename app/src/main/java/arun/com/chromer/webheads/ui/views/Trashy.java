@@ -25,7 +25,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -46,6 +45,13 @@ import com.mikepenz.iconics.IconicsDrawable;
 import arun.com.chromer.R;
 import arun.com.chromer.util.Utils;
 import timber.log.Timber;
+
+import static android.graphics.PixelFormat.TRANSLUCENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import static android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+import static android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
+import static android.view.WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+import static android.view.WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
 
 /**
  * Created by Arun on 03/02/2016.
@@ -98,18 +104,30 @@ public class Trashy extends FrameLayout {
         dispWidth = metrics.widthPixels;
         dispHeight = metrics.heightPixels;
 
-        windowParams = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                        | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                PixelFormat.TRANSLUCENT);
+        createWindowParams();
 
         windowParams.gravity = Gravity.LEFT | Gravity.TOP;
         int offset = getAdaptWidth() / 2;
         windowParams.x = (dispWidth / 2) - offset;
         windowParams.y = dispHeight - (dispHeight / 6) - offset;
+    }
+
+    private void createWindowParams() {
+        if (Utils.ANDROID_OREO) {
+            windowParams = new WindowManager.LayoutParams(
+                    WRAP_CONTENT,
+                    WRAP_CONTENT,
+                    TYPE_APPLICATION_OVERLAY,
+                    FLAG_NOT_FOCUSABLE | FLAG_NOT_TOUCHABLE,
+                    TRANSLUCENT);
+        } else {
+            windowParams = new WindowManager.LayoutParams(
+                    WRAP_CONTENT,
+                    WRAP_CONTENT,
+                    TYPE_SYSTEM_ALERT,
+                    FLAG_NOT_FOCUSABLE | FLAG_NOT_TOUCHABLE,
+                    TRANSLUCENT);
+        }
     }
 
     private void updateView() {

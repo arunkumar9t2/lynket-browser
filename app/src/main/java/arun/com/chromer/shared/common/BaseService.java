@@ -41,7 +41,7 @@ public abstract class BaseService extends Service {
         inject(serviceComponent);
     }
 
-    protected abstract void inject(ServiceComponent serviceModule);
+    protected abstract void inject(ServiceComponent serviceComponent);
 
     @Override
     public void onDestroy() {

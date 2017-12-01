@@ -22,6 +22,8 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.annotation.TargetApi;
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -38,14 +40,15 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsSession;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v7.app.NotificationCompat;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringConfig;
 import com.facebook.rebound.SpringSystem;
@@ -57,17 +60,25 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import arun.com.chromer.R;
 import arun.com.chromer.activities.NewTabDialogActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.CustomTabManager;
+import arun.com.chromer.data.website.BaseWebsiteRepository;
 import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.di.service.ServiceComponent;
+import arun.com.chromer.glide.GlideApp;
 import arun.com.chromer.util.DocumentUtils;
+import arun.com.chromer.util.Utils;
+import arun.com.chromer.webheads.helper.ColorExtractionTask;
 import arun.com.chromer.webheads.physics.SpringChain2D;
 import arun.com.chromer.webheads.ui.WebHeadContract;
 import arun.com.chromer.webheads.ui.context.WebHeadContextActivity;
 import arun.com.chromer.webheads.ui.views.Trashy;
 import arun.com.chromer.webheads.ui.views.WebHead;
+import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 import xyz.klinker.android.article.ArticleUtils;
@@ -75,6 +86,7 @@ import xyz.klinker.android.article.ArticleUtils;
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static android.os.AsyncTask.THREAD_POOL_EXECUTOR;
 import static android.support.v4.app.NotificationCompat.PRIORITY_MIN;
 import static android.widget.Toast.LENGTH_SHORT;
 import static arun.com.chromer.shared.Constants.ACTION_CLOSE_WEBHEAD_BY_URL;
@@ -113,6 +125,9 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
 
     private final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
+    @Inject
+    BaseWebsiteRepository websiteRepository;
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -127,10 +142,18 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     @NonNull
     @Override
     Notification getNotification() {
+        if (Utils.ANDROID_OREO) {
+            final NotificationChannel channel = new NotificationChannel(WebHeadService.class.getName(), getString(R.string.web_heads_service), NotificationManager.IMPORTANCE_HIGH);
+            channel.setDescription(getString(R.string.app_detection_notification_channel_description));
+            final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
         final PendingIntent contentIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_STOP_WEBHEAD_SERVICE), FLAG_UPDATE_CURRENT);
         final PendingIntent contextActivity = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_OPEN_CONTEXT_ACTIVITY), FLAG_UPDATE_CURRENT);
         final PendingIntent newTab = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_OPEN_NEW_TAB), FLAG_UPDATE_CURRENT);
-        return new NotificationCompat.Builder(this)
+        return new NotificationCompat.Builder(this, WebHeadService.class.getName())
                 .setSmallIcon(R.drawable.ic_chromer_notification)
                 .setPriority(PRIORITY_MIN)
                 .setContentText(getString(R.string.tap_close_all))
@@ -157,6 +180,11 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         Trashy.init(this);
         bindToCustomTabSession();
         registerReceivers();
+    }
+
+    @Override
+    protected void inject(ServiceComponent serviceComponent) {
+        serviceComponent.inject(this);
     }
 
     @Override
@@ -252,7 +280,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     }
 
     private void doExtraction(final String webHeadUrl) {
-       /* final Subscription s = WebsiteRepository.getInstance(this)
+        final Subscription s = websiteRepository
                 .getWebsite(webHeadUrl)
                 .doOnError(Timber::e)
                 .doOnNext(webSite -> {
@@ -262,12 +290,12 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
                         webHead.setWebSite(webSite);
                         ContextActivityHelper.signalUpdated(getApplication(), webHead.getWebsite());
                         final String faviconUrl = webSite.faviconUrl;
-                        Glide.with(getApplication())
-                                .load(faviconUrl)
+                        GlideApp.with(getApplication())
                                 .asBitmap()
+                                .load(faviconUrl)
                                 .into(new BitmapImageViewTarget(webHead.getFaviconView()) {
                                     @Override
-                                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                    protected void setResource(Bitmap resource) {
                                         if (resource != null) {
                                             // dispatch themeColor extraction task
                                             new ColorExtractionTask(webHead, resource).executeOnExecutor(THREAD_POOL_EXECUTOR);
@@ -279,7 +307,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
                         warmUp(webHead);
                     }
                 }).subscribe();
-        compositeSubscription.add(s);*/
+        compositeSubscription.add(s);
     }
 
     @NonNull

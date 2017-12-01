@@ -20,7 +20,6 @@ package arun.com.chromer.webheads;
 
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.Service;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.IBinder;
@@ -31,6 +30,7 @@ import android.support.annotation.Nullable;
 import android.widget.Toast;
 
 import arun.com.chromer.R;
+import arun.com.chromer.shared.common.BaseService;
 import arun.com.chromer.util.Utils;
 import timber.log.Timber;
 
@@ -39,7 +39,7 @@ import static android.widget.Toast.LENGTH_LONG;
 /**
  * Created by Arunkumar on 24-02-2017.
  */
-public abstract class OverlayService extends Service {
+public abstract class OverlayService extends BaseService {
     @Nullable
     @Override
     public abstract IBinder onBind(Intent intent);

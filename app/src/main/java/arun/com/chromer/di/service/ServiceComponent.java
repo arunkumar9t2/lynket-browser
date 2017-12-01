@@ -20,6 +20,7 @@ package arun.com.chromer.di.service;
 
 import arun.com.chromer.di.PerActivity;
 import arun.com.chromer.shared.AppDetectService;
+import arun.com.chromer.webheads.WebHeadService;
 import dagger.Subcomponent;
 
 @PerActivity
@@ -29,4 +30,6 @@ import dagger.Subcomponent;
 public interface ServiceComponent {
 
     void inject(AppDetectService appDetectService);
+
+    void inject(WebHeadService webHeadService);
 }
