@@ -35,8 +35,8 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
+import arun.com.chromer.activities.ChromerOptionsActivity;
 import arun.com.chromer.activities.CustomTabActivity;
-import arun.com.chromer.activities.MoreMenuActivity;
 import arun.com.chromer.activities.OpenIntentWithActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.callbacks.ClipboardService;
@@ -181,7 +181,7 @@ public class ChromerArticleActivity extends ArticleActivity {
                 finish();
                 break;
             case R.id.menu_more:
-                final Intent moreMenuActivity = new Intent(this, MoreMenuActivity.class);
+                final Intent moreMenuActivity = new Intent(this, ChromerOptionsActivity.class);
                 moreMenuActivity.setData(getIntent().getData());
                 moreMenuActivity.putExtra(EXTRA_KEY_ORIGINAL_URL, baseUrl);
                 moreMenuActivity.putExtra(EXTRA_KEY_FROM_ARTICLE, true);

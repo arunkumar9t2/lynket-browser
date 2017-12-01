@@ -201,9 +201,9 @@
             android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Translucent" />
         <activity
-            android:name=".activities.MoreMenuActivity"
+            android:name=".activities.ChromerOptionsActivity"
             android:excludeFromRecents="true"
-            android:label="@string/more_menu"
+            android:label="@string/chromer_options"
             android:noHistory="true"
             android:theme="@style/DialogTheme" />
         <activity

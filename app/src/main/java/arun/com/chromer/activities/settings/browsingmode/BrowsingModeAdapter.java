@@ -116,7 +116,7 @@ class BrowsingModeAdapter extends RecyclerView.Adapter<BrowsingModeAdapter.Brows
             switch (position) {
                 case 0:
                     icon.setImageDrawable(new IconicsDrawable(icon.getContext())
-                            .icon(CommunityMaterial.Icon.cmd_copyright)
+                            .icon(CommunityMaterial.Icon.cmd_open_in_app)
                             .color(Color.WHITE)
                             .sizeDp(24));
                     selector.setImageDrawable(new IconicsDrawable(selector.getContext())
@@ -140,7 +140,7 @@ class BrowsingModeAdapter extends RecyclerView.Adapter<BrowsingModeAdapter.Brows
                     title.setTextColor(Color.WHITE);
                     subtitle.setTextColor(Color.WHITE);
                     subtitle.setText(R.string.browsing_mode_web_heads_explanation);
-                    browsingModeRoot.setCardBackgroundColor(ContextCompat.getColor(browsingModeRoot.getContext(), R.color.md_yellow_800));
+                    browsingModeRoot.setCardBackgroundColor(Color.parseColor("#8CC152"));
                     break;
             }
         }

@@ -28,7 +28,7 @@
     app:cardElevation="10dp"
     app:cardPreventCornerOverlap="true"
     app:cardUseCompatPadding="true"
-    tools:context="arun.com.chromer.activities.MoreMenuActivity">
+    tools:context="arun.com.chromer.activities.ChromerOptionsActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

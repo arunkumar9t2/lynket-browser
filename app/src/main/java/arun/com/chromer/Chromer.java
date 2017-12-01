@@ -53,7 +53,7 @@ public class Chromer extends Application {
             Timber.plant(new Timber.DebugTree());
             // Stetho.initializeWithDefaults(this);
             StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-                    .detectAll()
+                    //.detectAll()
                     .penaltyLog()
                     .build());
             StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()

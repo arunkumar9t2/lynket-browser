@@ -294,4 +294,5 @@
     <string name="create_shorcut">Create shortcut</string>
     <string name="create">Create</string>
     <string name="name_cannot_be_empty">Name cannot be empty</string>
+    <string name="chromer_options">Chromer Options</string>
 </resources>

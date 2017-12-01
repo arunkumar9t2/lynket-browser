@@ -47,7 +47,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.MoreMenuActivity;
+import arun.com.chromer.activities.ChromerOptionsActivity;
 import arun.com.chromer.activities.OpenIntentWithActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.callbacks.ClipboardService;
@@ -253,7 +253,7 @@ public class WebViewActivity extends AppCompatActivity {
                 shareUrl();
                 break;
             case R.id.menu_more:
-                final Intent moreMenuActivity = new Intent(this, MoreMenuActivity.class);
+                final Intent moreMenuActivity = new Intent(this, ChromerOptionsActivity.class);
                 moreMenuActivity.putExtra(EXTRA_KEY_ORIGINAL_URL, baseUrl);
                 moreMenuActivity.setData(getIntent().getData());
                 startActivity(moreMenuActivity);

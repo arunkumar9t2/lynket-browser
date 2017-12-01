@@ -51,7 +51,7 @@ import javax.inject.Inject;
 
 import arun.com.chromer.Chromer;
 import arun.com.chromer.R;
-import arun.com.chromer.activities.MoreMenuActivity;
+import arun.com.chromer.activities.ChromerOptionsActivity;
 import arun.com.chromer.activities.OpenIntentWithActivity;
 import arun.com.chromer.activities.browsing.incognito.WebViewActivity;
 import arun.com.chromer.activities.settings.Preferences;
@@ -494,17 +494,14 @@ public class CustomTabs {
         // prepareAddToHomeScreen();
         // prepareOpenWith();
         prepareOpenInChrome();
-        prepareMoreMenu();
+        prepareChromerOptions();
     }
 
-    /**
-     * Prepares more menu
-     */
-    private void prepareMoreMenu() {
-        final Intent moreMenuActivity = new Intent(activity, MoreMenuActivity.class);
+    private void prepareChromerOptions() {
+        final Intent moreMenuActivity = new Intent(activity, ChromerOptionsActivity.class);
         moreMenuActivity.putExtra(EXTRA_KEY_ORIGINAL_URL, url);
         final PendingIntent moreMenuPending = PendingIntent.getActivity(activity, 0, moreMenuActivity, FLAG_UPDATE_CURRENT);
-        builder.addMenuItem(activity.getString(R.string.more_menu), moreMenuPending);
+        builder.addMenuItem(activity.getString(R.string.chromer_options), moreMenuPending);
     }
 
     /**

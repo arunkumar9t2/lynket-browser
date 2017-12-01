@@ -46,7 +46,7 @@ import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_ARTICLE;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_ORIGINAL_URL;
 
 
-public class MoreMenuActivity extends AppCompatActivity {
+public class ChromerOptionsActivity extends AppCompatActivity {
 
     @BindView(R.id.menu_header)
     TextView menuHeader;
@@ -94,7 +94,7 @@ public class MoreMenuActivity extends AppCompatActivity {
                             .colorRes(R.color.accent)
                             .sizeDp(24));
                     holder.menuText.setText(R.string.settings);
-                    holder.itemView.setOnClickListener(v -> startActivity(new Intent(MoreMenuActivity.this, SettingsGroupActivity.class)));
+                    holder.itemView.setOnClickListener(v -> startActivity(new Intent(ChromerOptionsActivity.this, SettingsGroupActivity.class)));
                     break;
                 case 1:
                     holder.menuImage.setImageDrawable(new IconicsDrawable(holder.itemView.getContext())
@@ -102,7 +102,7 @@ public class MoreMenuActivity extends AppCompatActivity {
                             .colorRes(R.color.accent)
                             .sizeDp(24));
                     holder.menuText.setText(R.string.title_history);
-                    holder.itemView.setOnClickListener(v -> startActivity(new Intent(MoreMenuActivity.this, HistoryActivity.class)));
+                    holder.itemView.setOnClickListener(v -> startActivity(new Intent(ChromerOptionsActivity.this, HistoryActivity.class)));
                     break;
                 case 2:
                     holder.menuImage.setImageDrawable(new IconicsDrawable(holder.itemView.getContext())
@@ -110,7 +110,7 @@ public class MoreMenuActivity extends AppCompatActivity {
                             .colorRes(R.color.accent)
                             .sizeDp(24));
                     holder.menuText.setText(R.string.add_to_homescreen);
-                    holder.itemView.setOnClickListener(v -> startActivity(new Intent(MoreMenuActivity.this, HomeScreenShortcutCreatorActivity.class).setData(getIntent().getData())));
+                    holder.itemView.setOnClickListener(v -> startActivity(new Intent(ChromerOptionsActivity.this, HomeScreenShortcutCreatorActivity.class).setData(getIntent().getData())));
                     break;
                 case 3:
                     holder.menuImage.setImageDrawable(new IconicsDrawable(holder.itemView.getContext())
@@ -119,7 +119,7 @@ public class MoreMenuActivity extends AppCompatActivity {
                             .sizeDp(24));
                     holder.menuText.setText(R.string.open_with);
                     holder.itemView.setOnClickListener(v -> {
-                        final Intent openWithActivity = new Intent(MoreMenuActivity.this, OpenIntentWithActivity.class);
+                        final Intent openWithActivity = new Intent(ChromerOptionsActivity.this, OpenIntentWithActivity.class);
                         openWithActivity.setData(getIntent().getData());
                         openWithActivity.putExtra(EXTRA_KEY_ORIGINAL_URL, getIntent().getDataString());
                         startActivity(openWithActivity);
@@ -131,7 +131,7 @@ public class MoreMenuActivity extends AppCompatActivity {
                             .colorRes(R.color.accent)
                             .sizeDp(24));
                     holder.menuText.setText(R.string.open_article_view);
-                    holder.itemView.setOnClickListener(v -> ArticleLauncher.from(MoreMenuActivity.this, getIntent().getData())
+                    holder.itemView.setOnClickListener(v -> ArticleLauncher.from(ChromerOptionsActivity.this, getIntent().getData())
                             .applyCustomizations()
                             .forNewTab(false)
                             .launch());
