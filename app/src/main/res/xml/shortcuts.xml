@@ -29,5 +29,18 @@
             android:targetPackage="arun.com.chromer" />
         <categories android:name="android.shortcut.conversation" />
     </shortcut>
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_history"
+        android:shortcutId="history"
+        android:shortcutLongLabel="@string/title_history"
+        android:shortcutShortLabel="@string/title_history">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="arun.com.chromer.activities.history.HistoryActivity"
+            android:targetPackage="arun.com.chromer" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
     <!-- Specify more shortcuts here. -->
 </shortcuts>
