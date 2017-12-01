@@ -26,7 +26,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service android:name=".customtabs.callbacks.ClipboardService" />
-        <service android:name=".customtabs.warmup.WarmUpService" />
         <service
             android:name=".shared.AppDetectService"
             android:enabled="true"

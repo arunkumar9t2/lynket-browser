@@ -62,7 +62,6 @@ import arun.com.chromer.customtabs.callbacks.MinimizeBroadcastReceiver;
 import arun.com.chromer.customtabs.callbacks.OpenInChromeReceiver;
 import arun.com.chromer.customtabs.callbacks.SecondaryBrowserReceiver;
 import arun.com.chromer.customtabs.callbacks.ShareBroadcastReceiver;
-import arun.com.chromer.customtabs.warmup.WarmUpService;
 import arun.com.chromer.data.apps.BaseAppRepository;
 import arun.com.chromer.data.website.BaseWebsiteRepository;
 import arun.com.chromer.shared.AppDetectionManager;
@@ -329,11 +328,6 @@ public class CustomTabs {
             return WebHeadService.getTabSession();
         }
 
-        final WarmUpService service = WarmUpService.getInstance();
-        if (service != null) {
-            Timber.d("Using warm up session");
-            return service.getTabSession();
-        }
         return null;
     }
 

@@ -25,7 +25,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 
 import arun.com.chromer.activities.settings.Preferences;
-import arun.com.chromer.customtabs.warmup.WarmUpService;
 import arun.com.chromer.shared.AppDetectService;
 import arun.com.chromer.shared.Constants;
 
@@ -38,11 +37,6 @@ public class ServiceManager {
     }
 
     public static void takeCareOfServices(@NonNull Context context) {
-        if (Preferences.get(context).warmUp()) {
-            context.startService(new Intent(context, WarmUpService.class));
-        } else {
-            context.stopService(new Intent(context, WarmUpService.class));
-        }
         if (Preferences.get(context).isAppBasedToolbar() || Preferences.get(context).blacklist()) {
             startAppDetectionService(context);
         } else {
@@ -60,11 +54,6 @@ public class ServiceManager {
     }
 
     public static void refreshCustomTabBindings(@NonNull Context context) {
-        if (WarmUpService.getInstance() != null) {
-            final Intent warmUpService = new Intent(context, WarmUpService.class);
-            warmUpService.putExtra(Constants.EXTRA_KEY_SHOULD_REFRESH_BINDING, true);
-            context.startService(warmUpService);
-        }
         final Intent intent = new Intent(Constants.ACTION_REBIND_WEBHEAD_TAB_CONNECTION);
         intent.putExtra(Constants.EXTRA_KEY_REBIND_WEBHEAD_CXN, true);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
