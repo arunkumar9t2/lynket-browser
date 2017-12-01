@@ -104,6 +104,7 @@
         <!-- Entry point for browser activity -->
         <activity
             android:name=".activities.browserintercept.BrowserInterceptActivity"
+            android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat.Translucent" />
 
