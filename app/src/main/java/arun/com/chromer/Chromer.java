@@ -19,7 +19,6 @@
 package arun.com.chromer;
 
 import android.app.Application;
-import android.os.StrictMode;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
@@ -52,14 +51,14 @@ public class Chromer extends Application {
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
             // Stetho.initializeWithDefaults(this);
-            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+            /*StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                     //.detectAll()
                     .penaltyLog()
                     .build());
             StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
                     .detectAll()
                     .penaltyLog()
-                    .build());
+                    .build());*/
         } else {
             Timber.plant(new CrashlyticsTree());
         }
