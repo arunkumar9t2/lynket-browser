@@ -23,6 +23,7 @@ import android.support.annotation.NonNull;
 import arun.com.chromer.activities.CustomTabActivity;
 import arun.com.chromer.activities.blacklist.BlacklistManagerActivity;
 import arun.com.chromer.activities.browserintercept.BrowserInterceptActivity;
+import arun.com.chromer.activities.browsing.article.ChromerArticleActivity;
 import arun.com.chromer.activities.main.MainActivity;
 import arun.com.chromer.customtabs.CustomTabs;
 import arun.com.chromer.di.PerActivity;
@@ -53,4 +54,6 @@ public interface ActivityComponent {
     void inject(ActivityComponent activityComponent);
 
     void inject(@NonNull HomeScreenShortcutCreatorActivity homeScreenShortcutCreatorActivity);
+
+    void inject(ChromerArticleActivity chromerArticleActivity);
 }

@@ -66,7 +66,7 @@ public class ArticleLauncher {
                 : ContextCompat.getColor(context, R.color.colorPrimary);
         final int theme = Preferences.get(context).articleTheme();
         builder.setToolbarColor(color)
-                .setAccentColor(ContextCompat.getColor(context, R.color.colorPrimary))
+                .setAccentColor(ContextCompat.getColor(context, R.color.colorAccent))
                 .setTheme(theme == Preferences.THEME_DARK ? ArticleIntent.THEME_DARK
                         : theme == Preferences.THEME_LIGHT ? ArticleIntent.THEME_LIGHT
                         : ArticleIntent.THEME_AUTO)

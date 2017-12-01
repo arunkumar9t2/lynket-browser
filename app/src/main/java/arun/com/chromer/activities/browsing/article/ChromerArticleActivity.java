@@ -34,6 +34,9 @@ import android.view.MenuItem;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
+import javax.inject.Inject;
+
+import arun.com.chromer.Chromer;
 import arun.com.chromer.R;
 import arun.com.chromer.activities.ChromerOptionsActivity;
 import arun.com.chromer.activities.CustomTabActivity;
@@ -42,6 +45,11 @@ import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.callbacks.ClipboardService;
 import arun.com.chromer.customtabs.callbacks.FavShareBroadcastReceiver;
 import arun.com.chromer.customtabs.callbacks.SecondaryBrowserReceiver;
+import arun.com.chromer.data.history.HistoryRepository;
+import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.di.activity.ActivityComponent;
+import arun.com.chromer.di.activity.ActivityModule;
+import arun.com.chromer.util.RxUtils;
 import arun.com.chromer.util.Utils;
 import timber.log.Timber;
 import xyz.klinker.android.article.ArticleActivity;
@@ -60,9 +68,18 @@ public class ChromerArticleActivity extends ArticleActivity {
     private String baseUrl = "";
     private BroadcastReceiver minimizeReceiver;
 
+    ActivityComponent activityComponent;
+    @Inject
+    HistoryRepository historyRepository;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activityComponent = ((Chromer) getApplication())
+                .getAppComponent()
+                .newActivityComponent(new ActivityModule(this));
+        activityComponent.inject(this);
+
         baseUrl = getIntent().getDataString();
         registerMinimizeReceiver();
     }
@@ -80,10 +97,9 @@ public class ChromerArticleActivity extends ArticleActivity {
     @Override
     protected void onArticleLoaded(@NonNull WebArticle webArticle) {
         super.onArticleLoaded(webArticle);
-        /*HistoryRepository.getInstance(this)
-                .insert(WebSite.fromArticle(webArticle))
+        historyRepository.insert(WebSite.fromArticle(webArticle))
                 .compose(RxUtils.applySchedulers())
-                .subscribe();*/
+                .subscribe();
     }
 
     @Override
@@ -221,6 +237,7 @@ public class ChromerArticleActivity extends ArticleActivity {
     @Override
     protected void onDestroy() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(minimizeReceiver);
+        activityComponent = null;
         super.onDestroy();
     }
 }
