@@ -83,7 +83,7 @@ public class BrowseFasterPreferenceFragment extends BasePreferenceFragment imple
                 if (isSlideOver && (Boolean) newValue) {
                     new MaterialDialog.Builder(getActivity())
                             .title(R.string.amp_warning_title)
-                            .content(R.string.amp_warning_content)
+                            .content(R.string.amp_warning_content, true)
                             .positiveText(android.R.string.ok)
                             .iconRes(R.drawable.ic_action_amp_icon)
                             .show();
@@ -100,7 +100,7 @@ public class BrowseFasterPreferenceFragment extends BasePreferenceFragment imple
             dialog = new MaterialDialog.Builder(getActivity())
                     .iconRes(R.drawable.ic_action_amp_icon)
                     .title(R.string.attention)
-                    .content(R.string.amp_article_combined_explanation)
+                    .content(R.string.amp_article_combined_explanation, true)
                     .positiveText(android.R.string.ok)
                     .show();
         }
