@@ -47,7 +47,7 @@
             android:outlineProvider="bounds"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:text="@string/more_menu"
+            android:text="@string/chromer_options"
             android:textAllCaps="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
             android:textColor="@android:color/white" />

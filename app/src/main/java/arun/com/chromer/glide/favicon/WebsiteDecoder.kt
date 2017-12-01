@@ -76,13 +76,13 @@ class WebsiteDecoder(private val context: Context, glide: Glide) : ResourceDecod
         val canvas = Canvas(icon)
         val shadowRadius = Utils.dpToPx(1.8).toFloat()
         val shadowDx = Utils.dpToPx(0.1).toFloat()
-        val shadowDy = Utils.dpToPx(1.2).toFloat()
+        val shadowDy = Utils.dpToPx(1.0).toFloat()
         val textSize = Utils.dpToPx(24.0).toFloat()
 
         val bgPaint = Paint(ANTI_ALIAS_FLAG).apply {
             style = Paint.Style.FILL
             setColor(color)
-            setShadowLayer(shadowRadius, shadowDx, shadowDy, 0x75000000)
+            setShadowLayer(shadowRadius, shadowDx, shadowDy, Color.parseColor("#44000000"))
         }
 
         val padding = Utils.dpToPx(1.0)
