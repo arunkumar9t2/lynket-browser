@@ -22,19 +22,25 @@ import android.app.Activity
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.drawable.Drawable
-import android.os.Build
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.TextInputLayout
+import android.support.v4.content.pm.ShortcutInfoCompat
+import android.support.v4.content.pm.ShortcutManagerCompat
+import android.support.v4.graphics.drawable.IconCompat
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.ImageView
 import arun.com.chromer.R
+import arun.com.chromer.activities.browserintercept.BrowserInterceptActivity
 import arun.com.chromer.data.Result
 import arun.com.chromer.data.website.model.WebSite
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.extenstions.gone
+import arun.com.chromer.extenstions.toBitmap
 import arun.com.chromer.extenstions.visible
 import arun.com.chromer.glide.GlideApp
 import arun.com.chromer.glide.appicon.ApplicationIcon
@@ -106,6 +112,8 @@ class HomeScreenShortcutCreatorActivity : BaseActivity() {
 
         val subs = CompositeSubscription()
 
+        private lateinit var website: WebSite
+
         fun show(): MaterialDialog? {
             dialog = MaterialDialog.Builder(activity!!)
                     .title(R.string.create_shorcut)
@@ -114,14 +122,22 @@ class HomeScreenShortcutCreatorActivity : BaseActivity() {
                     .positiveText(R.string.create)
                     .autoDismiss(false)
                     .onPositive { _, _ ->
-                        when {
-                            Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> {
-
-                            }
-                            else -> {
-                                // AddToHomeScreenIntentService.createShortcut(activity!!, iconUri.toString(), icon.packageName, shortcutName.text.toString())
-                                dialog?.dismiss()
-                            }
+                        if (ShortcutManagerCompat.isRequestPinShortcutSupported(activity!!)) {
+                            ShortcutManagerCompat.requestPinShortcut(
+                                    activity!!,
+                                    ShortcutInfoCompat.Builder(activity!!, website.url)
+                                            .setIcon(IconCompat.createWithBitmap(iconView?.drawable?.toBitmap()))
+                                            .setIntent(Intent(activity, BrowserInterceptActivity::class.java).apply {
+                                                action = Intent.ACTION_VIEW
+                                                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                                data = Uri.parse(website.preferredUrl())
+                                            })
+                                            .setLongLabel(shortcutName?.text.toString())
+                                            .setShortLabel(shortcutName?.text.toString())
+                                            .build(),
+                                    null
+                            )
                         }
                     }
                     .show()
@@ -139,7 +155,8 @@ class HomeScreenShortcutCreatorActivity : BaseActivity() {
                         positiveButton?.isEnabled = false
                     }
                     is Result.Success<WebSite> -> {
-                        shortcutName?.setText(it.data.safeLabel())
+                        website = it.data
+                        shortcutName?.setText(website.safeLabel())
                         GlideApp.with(activity)
                                 .load(it.data)
                                 .listener(object : RequestListener<Drawable> {
