@@ -29,14 +29,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
 import arun.com.chromer.R;
 import arun.com.chromer.data.common.App;
+import arun.com.chromer.glide.GlideApp;
+import arun.com.chromer.glide.GlideRequests;
+import arun.com.chromer.glide.appicon.ApplicationIcon;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observable;
@@ -46,19 +46,19 @@ import rx.subjects.PublishSubject;
  * Created by Arun on 24/01/2016.
  */
 class BlacklistAdapter extends RecyclerView.Adapter<BlacklistAdapter.BlackListItemViewHolder> {
-    private WeakReference<Activity> activityRef = new WeakReference<>(null);
     private final List<App> apps = new ArrayList<>();
 
     private final PublishSubject<App> clickSubject = PublishSubject.create();
+    private final GlideRequests glideRequests;
 
     BlacklistAdapter(@NonNull Activity activity) {
-        this.activityRef = new WeakReference<>(activity);
         setHasStableIds(true);
+        glideRequests = GlideApp.with(activity);
     }
 
     @Override
     public BlackListItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new BlackListItemViewHolder(LayoutInflater.from(activityRef.get()).inflate(R.layout.activity_blacklist_list_item_template, parent, false));
+        return new BlackListItemViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_blacklist_list_item_template, parent, false));
     }
 
     @Override
@@ -68,17 +68,13 @@ class BlacklistAdapter extends RecyclerView.Adapter<BlacklistAdapter.BlackListIt
         holder.appPackage.setText(currApp.packageName);
         holder.appCheckbox.setChecked(currApp.blackListed);
 
-        if (activityRef.get() != null)
-            Glide.with(activityRef.get())
-                    .load(currApp)
-                    .crossFade()
-                    .into(holder.appIcon);
+        glideRequests.load(ApplicationIcon.Companion.createUri(currApp.packageName)).into(holder.appIcon);
     }
 
     @Override
     public void onViewRecycled(BlackListItemViewHolder holder) {
         super.onViewRecycled(holder);
-        Glide.clear(holder.appIcon);
+        glideRequests.clear(holder.appIcon);
     }
 
     public Observable<App> clicks() {
@@ -102,10 +98,6 @@ class BlacklistAdapter extends RecyclerView.Adapter<BlacklistAdapter.BlackListIt
     }
 
     void cleanUp() {
-        if (activityRef != null) {
-            activityRef.clear();
-            activityRef = null;
-        }
     }
 
     class BlackListItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

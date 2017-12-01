@@ -86,7 +86,7 @@ public class DocumentUtils {
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     @TargetApi(LOLLIPOP)
-    private static boolean reOrderTab(@NonNull final Context context, @NonNull WebSite webSite) {
+    public static boolean reOrderTab(@NonNull final Context context, @NonNull WebSite webSite) {
         if (!Preferences.get(context).mergeTabs()) {
             return false;
         }
@@ -96,9 +96,15 @@ public class DocumentUtils {
             try {
                 final Intent intent = info.baseIntent;
                 final String url = intent.getDataString();
-                if (url.equalsIgnoreCase(webSite.url)
+
+                String componentClassName = intent.getComponent().getClassName();
+                boolean taskComponentMatches = componentClassName.equals(CustomTabActivity.class.getName());
+
+                final boolean urlMatches = url.equalsIgnoreCase(webSite.url)
                         || url.equalsIgnoreCase(webSite.preferredUrl())
-                        || url.equalsIgnoreCase(webSite.ampUrl)) {
+                        || url.equalsIgnoreCase(webSite.ampUrl);
+
+                if (taskComponentMatches && urlMatches) {
                     Timber.d("Moved tab to front %s", url);
                     task.moveToFront();
                     return true;

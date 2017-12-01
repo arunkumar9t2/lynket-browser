@@ -12,6 +12,7 @@
     <!-- suppress DeprecatedClassUsageInspection -->
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.REORDER_TASKS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
@@ -19,35 +20,20 @@
     <application
         android:name=".Chromer"
         android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service android:name=".customtabs.dynamictoolbar.WebColorExtractorService" />
         <service android:name=".customtabs.callbacks.ClipboardService" />
-        <service android:name=".customtabs.callbacks.AddHomeShortcutService" />
-        <service android:name=".customtabs.warmup.WarmUpService" />
-        <service
-            android:name=".customtabs.prefetch.ScannerService"
-            android:enabled="false"
-            android:exported="true"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
-            <intent-filter>
-                <action android:name="android.accessibilityservice.AccessibilityService" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.accessibilityservice"
-                android:resource="@xml/service" />
-        </service>
         <service
             android:name=".shared.AppDetectService"
             android:enabled="true"
             android:exported="false" />
         <service
-            android:name=".customtabs.dynamictoolbar.AppColorExtractorService"
-            android:exported="false" />
+            android:name=".customtabs.dynamictoolbar.AppColorExtractorJob"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
             android:name=".webheads.WebHeadService"
             android:enabled="true"
@@ -92,6 +78,7 @@
         <receiver android:name=".customtabs.callbacks.MinimizeBroadcastReceiver" />
         <receiver android:name=".customtabs.bottombar.BottomBarReceiver" />
 
+        <!-- Chromer launcher activity -->
         <activity
             android:name=".activities.main.MainActivity"
             android:label="@string/app_name"
@@ -104,11 +91,36 @@
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
+        </activity-alias>
+
+        <!-- Entry point for browser activity -->
+        <activity
+            android:name=".activities.browserintercept.BrowserInterceptActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat.Translucent" />
+
+        <activity-alias
+            android:name=".activities.BrowserInterceptActivity"
+            android:label="@string/app_name"
+            android:targetActivity=".activities.browserintercept.BrowserInterceptActivity"
+            android:theme="@style/Theme.AppCompat.Translucent">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+            </intent-filter>
         </activity-alias>
 
         <activity
@@ -156,20 +168,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.BrowserInterceptActivity"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.AppCompat.Translucent">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="http" />
-                <data android:scheme="https" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".activities.about.AboutAppActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -206,6 +204,12 @@
             android:name=".activities.MoreMenuActivity"
             android:excludeFromRecents="true"
             android:label="@string/more_menu"
+            android:noHistory="true"
+            android:theme="@style/DialogTheme" />
+        <activity
+            android:name=".shortcuts.HomeScreenShortcutCreatorActivity"
+            android:excludeFromRecents="true"
+            android:label="@string/add_to_homescreen"
             android:noHistory="true"
             android:theme="@style/DialogTheme" />
         <activity
@@ -248,9 +252,8 @@
             android:value="${crashlyticsApiKey}"
             tools:replace="android:value" />
         <meta-data
-            android:name="arun.com.chromer.glide.ChromerGideModule"
+            android:name="arun.com.chromer.glide.ChromerGlideModule"
             android:value="GlideModule" />
-
     </application>
 
 </manifest>

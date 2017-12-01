@@ -24,7 +24,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.common.SubActivity;
+import arun.com.chromer.shared.common.SubActivity;
 
 public class AboutAppActivity extends SubActivity {
 

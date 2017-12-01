@@ -30,9 +30,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import arun.com.chromer.R;
+import arun.com.chromer.glide.GlideApp;
 import arun.com.chromer.util.cache.FontCache;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -105,7 +104,7 @@ public class AppIntroFragment extends Fragment {
         }
 
         // Use glide to load the drawable
-        Glide.with(this).load(drawable).crossFade().into(image);
+        GlideApp.with(this).load(drawable).into(image);
 
         root.setBackgroundColor(this.bgColor);
         ButterKnife.bind(this, view);

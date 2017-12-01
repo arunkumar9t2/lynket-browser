@@ -29,19 +29,23 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
+
+import javax.inject.Inject;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.settings.Preferences;
-import arun.com.chromer.customtabs.CustomTabs;
+import arun.com.chromer.data.website.WebsiteRepository;
 import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.di.activity.ActivityComponent;
+import arun.com.chromer.glide.GlideApp;
+import arun.com.chromer.shared.common.BaseActivity;
 import arun.com.chromer.util.Utils;
+import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -53,11 +57,15 @@ import static arun.com.chromer.shared.Constants.EXTRA_KEY_ORIGINAL_URL;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBSITE;
 import static arun.com.chromer.shared.Constants.NO_COLOR;
 
-public class CustomTabActivity extends AppCompatActivity {
+public class CustomTabActivity extends BaseActivity {
     private boolean isLoaded = false;
     private String baseUrl = "";
     private BroadcastReceiver minimizeReceiver;
     private final CompositeSubscription subscriptions = new CompositeSubscription();
+
+
+    @Inject
+    WebsiteRepository websiteRepository;
 
     @TargetApi(LOLLIPOP)
     @Override
@@ -85,11 +93,9 @@ public class CustomTabActivity extends AppCompatActivity {
         final WebSite webSite = getIntent().getParcelableExtra(EXTRA_KEY_WEBSITE);
         final int fallbackWebColor = webSite != null && !TextUtils.isEmpty(webSite.themeColor) ? webSite.themeColor() : NO_COLOR;
 
-        CustomTabs.from(this)
+        getActivityComponent().customTabs()
                 .forUrl(baseUrl)
-                .forWebHead(isWebHead)
                 .fallbackColor(fallbackWebColor)
-                .prepare()
                 .launch();
 
         if (Preferences.get(this).aggressiveLoading() && !Preferences.get(this).articleMode()) {
@@ -99,18 +105,28 @@ public class CustomTabActivity extends AppCompatActivity {
         beginExtraction(webSite);
     }
 
+    @Override
+    public void inject(ActivityComponent activityComponent) {
+        activityComponent.inject(this);
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return 0;
+    }
+
     private void beginExtraction(@Nullable WebSite webSite) {
         if (webSite != null && webSite.title != null && webSite.faviconUrl != null) {
             Timber.d("Website info exists, setting description");
             applyDescriptionFromWebsite(webSite);
         } else {
             Timber.d("No info found, beginning parsing");
-           /* final Subscription s = WebsiteRepository.getInstance(this)
+            final Subscription s = websiteRepository
                     .getWebsite(baseUrl)
                     .doOnNext(this::applyDescriptionFromWebsite)
                     .doOnError(Timber::e)
                     .subscribe();
-            subscriptions.add(s);*/
+            subscriptions.add(s);
         }
     }
 
@@ -165,12 +181,12 @@ public class CustomTabActivity extends AppCompatActivity {
             final String title = webSite.safeLabel();
             final String faviconUrl = webSite.faviconUrl;
             setTaskDescription(new ActivityManager.TaskDescription(title, null, webSite.themeColor()));
-            Glide.with(this)
-                    .load(faviconUrl)
+            GlideApp.with(this)
                     .asBitmap()
+                    .load(faviconUrl)
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
-                        public void onResourceReady(Bitmap icon, GlideAnimation<? super Bitmap> glideAnimation) {
+                        public void onResourceReady(Bitmap icon, Transition<? super Bitmap> transition) {
                             setTaskDescription(new ActivityManager.TaskDescription(title, icon, webSite.themeColor()));
                         }
                     });

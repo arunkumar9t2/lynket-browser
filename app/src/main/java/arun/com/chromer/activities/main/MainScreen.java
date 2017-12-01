@@ -20,9 +20,9 @@ package arun.com.chromer.activities.main;
 
 import javax.inject.Inject;
 
-import arun.com.chromer.activities.common.Base;
-import arun.com.chromer.activities.common.Snackable;
 import arun.com.chromer.di.PerActivity;
+import arun.com.chromer.shared.common.Base;
+import arun.com.chromer.shared.common.Snackable;
 
 public interface MainScreen {
     interface View extends Base.View, Snackable {

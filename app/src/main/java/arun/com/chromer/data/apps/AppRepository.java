@@ -26,7 +26,7 @@ import android.support.annotation.NonNull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import arun.com.chromer.customtabs.dynamictoolbar.AppColorExtractorService;
+import arun.com.chromer.customtabs.dynamictoolbar.AppColorExtractorJob;
 import arun.com.chromer.data.apps.store.AppStore;
 import arun.com.chromer.data.common.App;
 import arun.com.chromer.shared.Constants;
@@ -63,9 +63,7 @@ public class AppRepository implements BaseAppRepository {
                 .doOnNext(integer -> {
                     if (integer == -1) {
                         Timber.d("Color not found, starting extraction.");
-                        final Intent intent = new Intent(application, AppColorExtractorService.class);
-                        intent.putExtra(Constants.EXTRA_PACKAGE_NAME, packageName);
-                        application.startService(intent);
+                        AppColorExtractorJob.enqueueWork(application, AppColorExtractorJob.class, AppColorExtractorJob.JOB_ID, new Intent().putExtra(Constants.EXTRA_PACKAGE_NAME, packageName));
                     }
                 });
     }

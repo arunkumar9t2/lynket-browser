@@ -38,10 +38,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import javax.inject.Inject;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.common.BaseFragment;
-import arun.com.chromer.activities.common.Snackable;
 import arun.com.chromer.activities.settings.Preferences;
-import arun.com.chromer.di.components.FragmentComponent;
+import arun.com.chromer.di.fragment.FragmentComponent;
+import arun.com.chromer.shared.common.BaseMVPFragment;
+import arun.com.chromer.shared.common.Snackable;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -52,7 +52,7 @@ import static android.view.View.VISIBLE;
 /**
  * Created by arunk on 07-04-2017.
  */
-public class HistoryFragment extends BaseFragment<History.View, History.Presenter> implements History.View {
+public class HistoryFragment extends BaseMVPFragment<History.View, History.Presenter> implements History.View {
     @BindView(R.id.history_list)
     RecyclerView historyList;
     @BindView(R.id.swipe_refresh_layout)
@@ -112,6 +112,20 @@ public class HistoryFragment extends BaseFragment<History.View, History.Presente
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            getActivity().setTitle(R.string.title_history);
+        }
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         historyAdapter.cleanUp();
@@ -123,7 +137,7 @@ public class HistoryFragment extends BaseFragment<History.View, History.Presente
         super.onViewCreated(view, savedInstanceState);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         historyList.setLayoutManager(linearLayoutManager);
-        historyAdapter = new HistoryAdapter(linearLayoutManager);
+        historyAdapter = new HistoryAdapter(getActivity(), linearLayoutManager);
         historyList.setAdapter(historyAdapter);
         historyList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -175,7 +189,6 @@ public class HistoryFragment extends BaseFragment<History.View, History.Presente
         super.onResume();
         presenter.loadHistory();
         incognitoSwitch.setChecked(!Preferences.get(getActivity()).incognitoMode());
-        getActivity().setTitle(R.string.title_history);
     }
 
     @OnClick(R.id.fab)

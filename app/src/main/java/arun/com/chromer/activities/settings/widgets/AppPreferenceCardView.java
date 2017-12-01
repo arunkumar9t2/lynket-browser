@@ -20,14 +20,8 @@ package arun.com.chromer.activities.settings.widgets;
 
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.TransitionDrawable;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
@@ -38,17 +32,22 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.settings.Preferences;
+import arun.com.chromer.glide.GlideApp;
+import arun.com.chromer.glide.appicon.ApplicationIcon;
 import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import timber.log.Timber;
 
 import static android.widget.ImageView.ScaleType.CENTER;
 
@@ -154,76 +153,54 @@ public class AppPreferenceCardView extends CardView {
 
     private void applyIcon() {
         if (Utils.isPackageInstalled(getContext(), appPackage)) {
-            final PackageManager pm = getContext().getApplicationContext().getPackageManager();
-            Drawable appIcon = null;
-            try {
-                ApplicationInfo ai = pm.getApplicationInfo(appPackage, 0);
-                appIcon = ai.loadIcon(pm);
-            } catch (PackageManager.NameNotFoundException e) {
-                Timber.e("Failed to load icon for %s", appName);
-            }
-            if (appIcon != null) {
-                setIconDrawable(appIcon, true);
-                Palette.from(Utils.drawableToBitmap(appIcon))
-                        .clearFilters()
-                        .generate(palette -> {
-                            int bestColor = ColorUtil.getBestColorFromPalette(palette);
-                            Drawable foreground = ColorUtil.getRippleDrawableCompat(bestColor);
-                            // Bug in SDK requires redundant cast
-                            //noinspection RedundantCast
-                            ((FrameLayout) AppPreferenceCardView.this).setForeground(foreground);
-                        });
-            }
+            icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            GlideApp.with(getContext())
+                    .load(ApplicationIcon.Companion.createUri(appPackage))
+                    .fitCenter()
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            Palette.from(Utils.drawableToBitmap(resource))
+                                    .clearFilters()
+                                    .generate(palette -> {
+                                        int bestColor = ColorUtil.getBestColorFromPalette(palette);
+                                        final Drawable foreground = ColorUtil.getRippleDrawableCompat(bestColor);
+                                        //noinspection RedundantCast
+                                        ((FrameLayout) AppPreferenceCardView.this).setForeground(foreground);
+                                    });
+                            return false;
+                        }
+                    })
+                    .into(icon);
         } else {
             icon.setScaleType(CENTER);
             switch (preferenceType) {
                 case CUSTOM_TAB_PROVIDER:
-                    setIconDrawable(new IconicsDrawable(getContext())
+                    icon.setImageDrawable(new IconicsDrawable(getContext())
                             .icon(CommunityMaterial.Icon.cmd_comment_alert_outline)
                             .colorRes(R.color.error)
-                            .sizeDp(30), false);
+                            .sizeDp(30));
                     appNameTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.error));
                     break;
                 case SECONDARY_BROWSER:
-                    setIconDrawable(new IconicsDrawable(getContext())
+                    icon.setImageDrawable(new IconicsDrawable(getContext())
                             .icon(CommunityMaterial.Icon.cmd_open_in_app)
                             .colorRes(R.color.material_dark_light)
-                            .sizeDp(30), false);
+                            .sizeDp(30));
                     break;
                 case FAVORITE_SHARE:
-                    setIconDrawable(new IconicsDrawable(getContext())
+                    icon.setImageDrawable(new IconicsDrawable(getContext())
                             .icon(CommunityMaterial.Icon.cmd_share_variant)
                             .colorRes(R.color.material_dark_light)
-                            .sizeDp(30), false);
+                            .sizeDp(30));
                     break;
             }
         }
-    }
-
-    private void setIconDrawable(final Drawable newIconDrawable, final boolean overrideScaleType) {
-        if (icon != null) {
-            TransitionDrawable transitionDrawable = new TransitionDrawable(
-                    new Drawable[]{
-                            getCurrentIcon(),
-                            newIconDrawable
-                    });
-            icon.setImageDrawable(transitionDrawable);
-            if (icon.getScaleType() != ImageView.ScaleType.FIT_CENTER && overrideScaleType) {
-                icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            }
-            transitionDrawable.setCrossFadeEnabled(true);
-            transitionDrawable.startTransition(300);
-        }
-    }
-
-    /**
-     * Returns the current icon present in the view or returns an empty icon
-     *
-     * @return Icon drawable
-     */
-    @NonNull
-    private Drawable getCurrentIcon() {
-        return icon.getDrawable() == null ? new ColorDrawable(Color.TRANSPARENT) : icon.getDrawable();
     }
 
     public void updatePreference(@Nullable final ComponentName componentName) {

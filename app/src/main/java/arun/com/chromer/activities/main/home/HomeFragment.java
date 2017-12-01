@@ -43,15 +43,16 @@ import java.util.List;
 import javax.inject.Inject;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.common.BaseFragment;
-import arun.com.chromer.activities.common.Snackable;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.CustomTabManager;
-import arun.com.chromer.customtabs.CustomTabs;
+import arun.com.chromer.data.website.WebsiteRepository;
 import arun.com.chromer.data.website.model.WebSite;
-import arun.com.chromer.di.components.FragmentComponent;
+import arun.com.chromer.di.fragment.FragmentComponent;
 import arun.com.chromer.search.SuggestionItem;
 import arun.com.chromer.shared.Constants;
+import arun.com.chromer.shared.common.BaseMVPFragment;
+import arun.com.chromer.shared.common.Snackable;
+import arun.com.chromer.util.RxUtils;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.views.searchview.MaterialSearchView;
 import arun.com.chromer.webheads.WebHeadService;
@@ -70,7 +71,7 @@ import static com.jakewharton.rxbinding.widget.RxTextView.afterTextChangeEvents;
 /**
  * Created by Arunkumar on 07-04-2017.
  */
-public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implements Home.View {
+public class HomeFragment extends BaseMVPFragment<Home.View, Home.Presenter> implements Home.View {
     @BindView(R.id.material_search_view)
     MaterialSearchView materialSearchView;
     @BindView(R.id.incognito_mode)
@@ -92,12 +93,21 @@ public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implem
     @Inject
     Home.Presenter presenter;
 
+    @Inject
+    WebsiteRepository websiteRepository;
+
     private AutoTransition autoTransition;
 
     @NonNull
     @Override
     public Home.Presenter createPresenter() {
         return presenter;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
     }
 
     @Override
@@ -123,9 +133,15 @@ public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implem
     public void onResume() {
         super.onResume();
         invalidateState();
-        getActivity().setTitle(R.string.app_name);
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            getActivity().setTitle(R.string.app_name);
+        }
+    }
 
     @Override
     public void onStop() {
@@ -134,7 +150,9 @@ public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implem
     }
 
     private void doTransition() {
-        beginDelayedTransition(nestedScrollView, autoTransition);
+        if (getActivity() != null && !getActivity().isFinishing() && nestedScrollView != null) {
+            beginDelayedTransition(nestedScrollView, autoTransition);
+        }
     }
 
     @Override
@@ -227,16 +245,15 @@ public class HomeFragment extends BaseFragment<Home.View, Home.Presenter> implem
                     Utils.openDrawOverlaySettings(getActivity());
                 }
             } else {
-                CustomTabs.from(getActivity())
+                getActivityComponent().customTabs()
                         .forUrl(url)
                         .withSession(customTabManager.getSession())
-                        .prepare()
                         .launch();
-                /*WebsiteRepository.getInstance(getActivity())
+                websiteRepository
                         .getWebsite(url)
                         .compose(RxUtils.applySchedulers())
                         .doOnError(Timber::e)
-                        .subscribe();*/
+                        .subscribe();
             }
         }
     }

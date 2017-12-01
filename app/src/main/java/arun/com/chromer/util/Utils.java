@@ -47,7 +47,6 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.text.Html;
 import android.text.Spanned;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Patterns;
 import android.view.View;
@@ -63,10 +62,8 @@ import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import arun.com.chromer.BuildConfig;
 import arun.com.chromer.R;
 import arun.com.chromer.customtabs.CustomTabs;
-import arun.com.chromer.customtabs.prefetch.ScannerService;
 import arun.com.chromer.data.common.App;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.views.IntentPickerSheetView;
@@ -81,6 +78,8 @@ import static android.widget.Toast.LENGTH_LONG;
  * Created by Arun on 17/12/2015.
  */
 public class Utils {
+
+    public static final boolean ANDROID_OREO = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
 
     private Utils() {
         throw new RuntimeException("No instances");
@@ -163,33 +162,6 @@ public class Utils {
             }
         }
         return componentName;
-    }
-
-    public static boolean isAccessibilityServiceEnabled(@NonNull Context context) {
-        int accesEnbld = 0;
-        final String service = BuildConfig.APPLICATION_ID + "/" + ScannerService.class.getName();
-        try {
-            accesEnbld = Settings.Secure.getInt(context.getContentResolver(), android.provider.Settings.Secure.ACCESSIBILITY_ENABLED);
-        } catch (Settings.SettingNotFoundException ignored) {
-        }
-
-        TextUtils.SimpleStringSplitter splitter = new TextUtils.SimpleStringSplitter(':');
-
-        if (accesEnbld == 1) {
-            String settingValue = Settings.Secure.getString(
-                    context.getContentResolver(),
-                    Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
-            if (settingValue != null) {
-                splitter.setString(settingValue);
-                while (splitter.hasNext()) {
-                    String aService = splitter.next();
-                    if (aService.equalsIgnoreCase(service)) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
     }
 
     @NonNull

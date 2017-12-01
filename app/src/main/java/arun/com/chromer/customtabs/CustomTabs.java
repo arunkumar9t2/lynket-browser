@@ -49,24 +49,24 @@ import java.util.Random;
 
 import javax.inject.Inject;
 
+import arun.com.chromer.Chromer;
 import arun.com.chromer.R;
 import arun.com.chromer.activities.MoreMenuActivity;
 import arun.com.chromer.activities.OpenIntentWithActivity;
 import arun.com.chromer.activities.browsing.incognito.WebViewActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.bottombar.BottomBarManager;
-import arun.com.chromer.customtabs.callbacks.AddHomeShortcutService;
 import arun.com.chromer.customtabs.callbacks.ClipboardService;
 import arun.com.chromer.customtabs.callbacks.FavShareBroadcastReceiver;
 import arun.com.chromer.customtabs.callbacks.MinimizeBroadcastReceiver;
 import arun.com.chromer.customtabs.callbacks.OpenInChromeReceiver;
 import arun.com.chromer.customtabs.callbacks.SecondaryBrowserReceiver;
 import arun.com.chromer.customtabs.callbacks.ShareBroadcastReceiver;
-import arun.com.chromer.customtabs.warmup.WarmUpService;
-import arun.com.chromer.data.apps.AppRepository;
-import arun.com.chromer.shared.AppDetectService;
+import arun.com.chromer.data.apps.BaseAppRepository;
+import arun.com.chromer.data.website.BaseWebsiteRepository;
 import arun.com.chromer.shared.AppDetectionManager;
 import arun.com.chromer.shared.Constants;
+import arun.com.chromer.util.ServiceManager;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.WebHeadService;
 import timber.log.Timber;
@@ -136,36 +136,27 @@ public class CustomTabs {
      */
     @ColorInt
     private int webToolbarFallback = NO_COLOR;
-    /**
-     * True if this tab intent is used for web heads. False otherwise.
-     */
-    private boolean forWebHead = false;
-    // Whether to use animations
     private boolean noAnimation = false;
 
+    private final BaseAppRepository appRepository;
+    private final AppDetectionManager appDetectionManager;
+    private final BaseWebsiteRepository websiteRepository;
+
     /**
-     * Private constructor to init our helper
+     * Create an one time usable instance
      *
-     * @param context the context to work with
+     * @param activity the context to work with
      */
-
-    private CustomTabs(Activity context) {
-        activity = context;
-        forWebHead = false;
-        noAnimation = false;
-    }
-
     @Inject
-    AppRepository appRepository;
-
-    /**
-     * Used to get an instance of this helper
-     *
-     * @param activity The context from which custom tab should be launched
-     * @return A helper instance
-     */
-    public static CustomTabs from(@NonNull Activity activity) {
-        return new CustomTabs(activity);
+    public CustomTabs(@NonNull Activity activity,
+                      @NonNull BaseAppRepository appRepository,
+                      @NonNull AppDetectionManager appDetectionManager,
+                      @NonNull BaseWebsiteRepository websiteRepository) {
+        this.activity = activity;
+        noAnimation = false;
+        this.appDetectionManager = appDetectionManager;
+        this.appRepository = appRepository;
+        this.websiteRepository = websiteRepository;
     }
 
     /**
@@ -275,17 +266,6 @@ public class CustomTabs {
     }
 
     /**
-     * To set if the custom tab is going to be launched from web heads. Default is false.
-     *
-     * @param isWebHead true if for web heads
-     * @return Instance of this class
-     */
-    public CustomTabs forWebHead(boolean isWebHead) {
-        forWebHead = isWebHead;
-        return this;
-    }
-
-    /**
      * Clients can specify a toolbar color that will override whatever {@link #prepareToolbar()} sets.
      * Alpha value of the provided color will be ignored.
      * <p>
@@ -305,7 +285,7 @@ public class CustomTabs {
      * @return Instance of this class
      */
     @NonNull
-    public CustomTabs prepare() {
+    private CustomTabs prepare() {
         builder = new CustomTabsIntent.Builder(getSession());
         // set defaults
         builder.setShowTitle(true);
@@ -324,6 +304,7 @@ public class CustomTabs {
      * Builds custom tab intent from the builder we created so far and launches the custom tab.
      */
     public void launch() {
+        prepare();
         assertBuilderInitialized();
         openCustomTab();
 
@@ -345,12 +326,6 @@ public class CustomTabs {
         if (WebHeadService.getTabSession() != null) {
             Timber.d("Using webhead session");
             return WebHeadService.getTabSession();
-        }
-
-        final WarmUpService service = WarmUpService.getInstance();
-        if (service != null) {
-            Timber.d("Using warm up session");
-            return service.getTabSession();
         }
         return null;
     }
@@ -436,15 +411,14 @@ public class CustomTabs {
      */
     private boolean setWebToolbarColor() {
         // Check if we have the color extracted for this source
-        /*final int color = WebsiteRepository.getInstance(activity).getWebsiteColorSync(url);
+        final int color = websiteRepository.getWebsiteColorSync(url);
         if (color != Constants.NO_COLOR) {
             toolbarColor = color;
             return true;
         } else {
-            WebsiteRepository.getInstance(activity).saveWebColor(url).subscribe();
+            websiteRepository.saveWebColor(url).subscribe();
             return false;
-        }*/
-        return false;
+        }
     }
 
     /**
@@ -454,9 +428,9 @@ public class CustomTabs {
      */
     private boolean setAppToolbarColor() {
         try {
-            final String lastPackage = AppDetectionManager.getInstance(activity).getFilteredPackage();
+            final String lastPackage = ((Chromer) activity.getApplication()).getAppComponent().appDetectionManager().getFilteredPackage();
             if (TextUtils.isEmpty(lastPackage)) {
-                activity.startService(new Intent(activity, AppDetectService.class));
+                ServiceManager.startAppDetectionService(activity);
                 return false;
             }
             final int savedColor = appRepository.getPackageColorSync(lastPackage);
@@ -585,18 +559,6 @@ public class CustomTabs {
         clipboardIntent.putExtra(EXTRA_KEY_ORIGINAL_URL, url);
         final PendingIntent serviceIntentPending = PendingIntent.getService(activity, 0, clipboardIntent, FLAG_UPDATE_CURRENT);
         builder.addMenuItem(activity.getString(R.string.copy_link), serviceIntentPending);
-    }
-
-    /**
-     * Adds menu item to enable adding the current url to home screen
-     */
-    private void prepareAddToHomeScreen() {
-        if (!shouldIgnoreAddToHome()) {
-            final Intent addShortcutIntent = new Intent(activity, AddHomeShortcutService.class);
-            addShortcutIntent.putExtra(EXTRA_KEY_ORIGINAL_URL, url);
-            final PendingIntent addShortcutPending = PendingIntent.getService(activity, 0, addShortcutIntent, FLAG_UPDATE_CURRENT);
-            builder.addMenuItem(activity.getString(R.string.add_to_homescreen), addShortcutPending);
-        }
     }
 
     /**

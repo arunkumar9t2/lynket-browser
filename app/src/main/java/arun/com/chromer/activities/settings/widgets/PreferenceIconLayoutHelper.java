@@ -30,6 +30,7 @@ import android.widget.LinearLayout;
 
 import com.mikepenz.iconics.IconicsDrawable;
 
+import arun.com.chromer.util.Utils;
 import timber.log.Timber;
 
 /**
@@ -60,7 +61,10 @@ class PreferenceIconLayoutHelper {
             if (iconFrame.getMinimumWidth() != 0) {
                 iconFrame.setMinimumWidth(0);
                 imageView.setScaleType(ImageView.ScaleType.CENTER);
-                imageView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                int dp12 = Utils.dpToPx(12);
+                params.setMargins(dp12, 0, dp12, 0);
+                imageView.setLayoutParams(params);
             }
 
             applyIconTint(imageView, checked);

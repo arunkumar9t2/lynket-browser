@@ -42,16 +42,16 @@ import java.util.List;
 import javax.inject.Inject;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.common.BaseActivity;
-import arun.com.chromer.activities.common.Snackable;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.data.common.App;
-import arun.com.chromer.di.components.ActivityComponent;
-import arun.com.chromer.util.ServiceUtil;
+import arun.com.chromer.di.activity.ActivityComponent;
+import arun.com.chromer.shared.common.BaseMVPActivity;
+import arun.com.chromer.shared.common.Snackable;
+import arun.com.chromer.util.ServiceManager;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 
-public class BlacklistManagerActivity extends BaseActivity<Blacklist.View, Blacklist.Presenter> implements
+public class BlacklistManagerActivity extends BaseMVPActivity<Blacklist.View, Blacklist.Presenter> implements
         Blacklist.View,
         CompoundButton.OnCheckedChangeListener, SwipeRefreshLayout.OnRefreshListener, Snackable {
 
@@ -77,12 +77,12 @@ public class BlacklistManagerActivity extends BaseActivity<Blacklist.View, Black
         blacklistAdapter = new BlacklistAdapter(this);
         blackListedAppsList.setLayoutManager(new LinearLayoutManager(this));
         blackListedAppsList.setAdapter(blacklistAdapter);
-        presenter.handleSelections(this, blacklistAdapter.clicks());
+        presenter.handleSelections(blacklistAdapter.clicks());
         loadApps();
     }
 
     @Override
-    protected void inject(ActivityComponent activityComponent) {
+    public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
     }
 
@@ -172,7 +172,7 @@ public class BlacklistManagerActivity extends BaseActivity<Blacklist.View, Black
         } else {
             snack(isChecked ? getString(R.string.blacklist_on) : getString(R.string.blacklist_off));
             Preferences.get(this).blacklist(isChecked);
-            ServiceUtil.takeCareOfServices(getApplicationContext());
+            ServiceManager.takeCareOfServices(getApplicationContext());
         }
     }
 

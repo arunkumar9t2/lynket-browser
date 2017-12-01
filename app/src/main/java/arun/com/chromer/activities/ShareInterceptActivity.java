@@ -31,6 +31,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import arun.com.chromer.R;
+import arun.com.chromer.activities.browserintercept.BrowserInterceptActivity;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.SafeIntent;
 import arun.com.chromer.util.Utils;

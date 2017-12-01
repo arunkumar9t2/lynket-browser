@@ -72,7 +72,6 @@ public class Trashy extends FrameLayout {
 
     private int[] centrePoint = null;
 
-    @SuppressLint("RtlHardcoded")
     private Trashy(Context context, WindowManager windowManager) {
         super(context);
         Trashy.windowManager = windowManager;
@@ -80,15 +79,6 @@ public class Trashy extends FrameLayout {
         removeHeadCircle = new RemoveHeadCircle(context);
         addView(removeHeadCircle);
 
-        windowParams = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                        | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                PixelFormat.TRANSLUCENT);
-
-        setDisplayMetrics();
 
         setVisibility(INVISIBLE);
         hidden = true;
@@ -101,7 +91,21 @@ public class Trashy extends FrameLayout {
         Trashy.windowManager.addView(this, windowParams);
     }
 
+    @SuppressLint("RtlHardcoded")
     private void setInitialLocation() {
+        final DisplayMetrics metrics = new DisplayMetrics();
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        dispWidth = metrics.widthPixels;
+        dispHeight = metrics.heightPixels;
+
+        windowParams = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                        | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                PixelFormat.TRANSLUCENT);
+
         windowParams.gravity = Gravity.LEFT | Gravity.TOP;
         int offset = getAdaptWidth() / 2;
         windowParams.x = (dispWidth / 2) - offset;
@@ -217,18 +221,11 @@ public class Trashy extends FrameLayout {
         });
     }
 
-    private void setDisplayMetrics() {
-        final DisplayMetrics metrics = new DisplayMetrics();
-        windowManager.getDefaultDisplay().getMetrics(metrics);
-        dispWidth = metrics.widthPixels;
-        dispHeight = metrics.heightPixels;
-    }
-
     @Override
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        Timber.d(newConfig.toString());
         centrePoint = null;
-        setDisplayMetrics();
         setInitialLocation();
         post(this::updateView);
     }

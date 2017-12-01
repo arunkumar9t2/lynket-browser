@@ -26,7 +26,8 @@
     android:gravity="center|left"
     android:minHeight="56dp"
     android:orientation="horizontal"
-    android:padding="5dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
     android:weightSum="1"
     tools:ignore="RtlHardcoded">
 
@@ -35,6 +36,10 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:padding="4dp"
+        android:scaleType="fitCenter"
         tools:ignore="ContentDescription" />
 
     <LinearLayout
@@ -43,8 +48,8 @@
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp">
+        android:paddingLeft="8dp"
+        android:paddingRight="16dp">
 
         <TextView
             android:id="@+id/app_list_name"
