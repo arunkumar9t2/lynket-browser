@@ -21,7 +21,6 @@ package arun.com.chromer.activities.history;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -36,16 +35,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.browserintercept.BrowserInterceptActivity;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.glide.GlideApp;
 import arun.com.chromer.glide.GlideRequests;
-import arun.com.chromer.util.Utils;
-import arun.com.chromer.views.PlaceholderLetterView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observable;
@@ -182,9 +177,6 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHold
         TextView historySubtitle;
         @BindView(R.id.history_amp)
         ImageView historyAmp;
-        @BindView(R.id.history_placeholder)
-        PlaceholderLetterView historyPlaceholder;
-
 
         HistoryViewHolder(View itemView) {
             super(itemView);
@@ -223,24 +215,10 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHold
             } else {
                 historyTitle.setText(webSite.safeLabel());
                 historySubtitle.setText(webSite.preferredUrl());
-                if (!TextUtils.isEmpty(webSite.faviconUrl)) {
-                    Glide.with(itemView.getContext())
-                            .asBitmap()
-                            .load(webSite.faviconUrl)
-                            .into(new SimpleTarget<Bitmap>() {
-                                @Override
-                                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                                    if (Utils.isValidFavicon(resource)) {
-                                        showFavicon(resource);
-                                    } else {
-                                        showPlaceholder(webSite.safeLabel());
-                                    }
-                                }
-                            });
-                } else {
-                    glideRequests.clear(historyFavicon);
-                    showPlaceholder(webSite.safeLabel());
-                }
+                Glide.with(itemView.getContext())
+                        .load(webSite)
+                        .into(historyFavicon);
+
                 if (!TextUtils.isEmpty(webSite.ampUrl)) {
                     historyAmp.setVisibility(VISIBLE);
                 } else {
@@ -248,20 +226,5 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHold
                 }
             }
         }
-
-        private void showPlaceholder(@NonNull String url) {
-            historyFavicon.setImageDrawable(null);
-            historyFavicon.setVisibility(GONE);
-            historyPlaceholder.setVisibility(VISIBLE);
-            historyPlaceholder.setPlaceHolder(url);
-        }
-
-        private void showFavicon(Bitmap resource) {
-            historyPlaceholder.setVisibility(GONE);
-            historyFavicon.setVisibility(VISIBLE);
-            historyFavicon.setImageBitmap(resource);
-        }
     }
-
-
 }
