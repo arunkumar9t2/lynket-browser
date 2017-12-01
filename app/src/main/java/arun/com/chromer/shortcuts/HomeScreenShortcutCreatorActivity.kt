@@ -120,7 +120,7 @@ class HomeScreenShortcutCreatorActivity : BaseActivity() {
                     .customView(R.layout.dialog_create_shorcut_layout, false)
                     .dismissListener(this)
                     .positiveText(R.string.create)
-                    .autoDismiss(false)
+                    .autoDismiss(true)
                     .onPositive { _, _ ->
                         if (ShortcutManagerCompat.isRequestPinShortcutSupported(activity!!)) {
                             ShortcutManagerCompat.requestPinShortcut(
