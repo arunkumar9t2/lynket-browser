@@ -491,6 +491,7 @@ public class Utils {
             return aBoolean;
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnError(Timber::e)
                 .doOnNext(result -> Timber.d("Cache deletion %b", result));
     }
 }
