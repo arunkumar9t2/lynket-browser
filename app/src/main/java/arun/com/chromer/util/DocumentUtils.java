@@ -30,6 +30,8 @@ import android.text.TextUtils;
 
 import arun.com.chromer.activities.CustomTabActivity;
 import arun.com.chromer.activities.browsing.article.ArticleLauncher;
+import arun.com.chromer.activities.browsing.article.ChromerArticleActivity;
+import arun.com.chromer.activities.browsing.incognito.WebViewActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.webheads.WebHeadService;
@@ -98,7 +100,9 @@ public class DocumentUtils {
                 final String url = intent.getDataString();
 
                 String componentClassName = intent.getComponent().getClassName();
-                boolean taskComponentMatches = componentClassName.equals(CustomTabActivity.class.getName());
+                boolean taskComponentMatches = componentClassName.equals(CustomTabActivity.class.getName())
+                        || componentClassName.equals(ChromerArticleActivity.class.getName())
+                        || componentClassName.equals(WebViewActivity.class.getName());
 
                 final boolean urlMatches = url.equalsIgnoreCase(webSite.url)
                         || url.equalsIgnoreCase(webSite.preferredUrl())
