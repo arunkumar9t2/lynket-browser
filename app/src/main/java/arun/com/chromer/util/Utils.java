@@ -54,6 +54,8 @@ import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
@@ -484,6 +486,9 @@ public class Utils {
             public Boolean call() throws Exception {
                 return delete(context.getApplicationContext());
             }
+        }).map(aBoolean -> {
+            Glide.get(context).clearDiskCache();
+            return aBoolean;
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(result -> Timber.d("Cache deletion %b", result));
