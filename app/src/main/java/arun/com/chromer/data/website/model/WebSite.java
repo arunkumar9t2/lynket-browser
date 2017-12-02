@@ -136,18 +136,39 @@ public class WebSite implements Parcelable {
         }
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         WebSite webSite = (WebSite) o;
-        return url.equals(webSite.url);
+
+        if (bookmarked != webSite.bookmarked) return false;
+        if (createdAt != webSite.createdAt) return false;
+        if (count != webSite.count) return false;
+        if (title != null ? !title.equals(webSite.title) : webSite.title != null) return false;
+        if (!url.equals(webSite.url)) return false;
+        if (faviconUrl != null ? !faviconUrl.equals(webSite.faviconUrl) : webSite.faviconUrl != null)
+            return false;
+        if (canonicalUrl != null ? !canonicalUrl.equals(webSite.canonicalUrl) : webSite.canonicalUrl != null)
+            return false;
+        if (themeColor != null ? !themeColor.equals(webSite.themeColor) : webSite.themeColor != null)
+            return false;
+        return ampUrl != null ? ampUrl.equals(webSite.ampUrl) : webSite.ampUrl == null;
     }
 
     @Override
     public int hashCode() {
-        return url.hashCode();
+        int result = title != null ? title.hashCode() : 0;
+        result = 31 * result + url.hashCode();
+        result = 31 * result + (faviconUrl != null ? faviconUrl.hashCode() : 0);
+        result = 31 * result + (canonicalUrl != null ? canonicalUrl.hashCode() : 0);
+        result = 31 * result + (themeColor != null ? themeColor.hashCode() : 0);
+        result = 31 * result + (ampUrl != null ? ampUrl.hashCode() : 0);
+        result = 31 * result + (bookmarked ? 1 : 0);
+        result = 31 * result + (int) (createdAt ^ (createdAt >>> 32));
+        result = 31 * result + count;
+        return result;
     }
 
     @Override

@@ -51,11 +51,7 @@ import butterknife.Unbinder
 import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.internal.MDButton
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.ImageViewTarget
-import com.bumptech.glide.request.target.Target
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar
 import rx.Observable
 import rx.subscriptions.CompositeSubscription
@@ -159,23 +155,7 @@ class HomeScreenShortcutCreatorActivity : BaseActivity() {
                         shortcutName?.setText(website.safeLabel())
                         GlideApp.with(activity)
                                 .load(it.data)
-                                .listener(object : RequestListener<Drawable> {
-                                    override fun onLoadFailed(e: GlideException?, model: Any, target: Target<Drawable>, isFirstResource: Boolean): Boolean {
-                                        GlideApp.with(activity)
-                                                .load(ApplicationIcon.createUri(activity!!.packageName))
-                                                .into(object : ImageViewTarget<Drawable>(iconView) {
-                                                    override fun setResource(resource: Drawable?) {
-                                                        iconView?.setImageDrawable(resource)
-                                                        loadAttemptFinished()
-                                                    }
-                                                })
-                                        return false
-                                    }
-
-                                    override fun onResourceReady(resource: Drawable, model: Any, target: Target<Drawable>, dataSource: DataSource, isFirstResource: Boolean): Boolean {
-                                        return false
-                                    }
-                                })
+                                .error(GlideApp.with(activity).load(ApplicationIcon.createUri(activity!!.packageName)))
                                 .into(object : ImageViewTarget<Drawable>(iconView) {
                                     override fun setResource(resource: Drawable?) {
                                         iconView?.setImageDrawable(resource)

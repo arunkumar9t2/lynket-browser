@@ -30,13 +30,13 @@ import arun.com.chromer.util.glide.appicon.ApplicationIcon
 import arun.com.chromer.util.glide.appicon.ApplicationIconDecoder
 import arun.com.chromer.util.glide.appicon.ApplicationIconModelLoader
 import arun.com.chromer.util.glide.favicon.WebsiteDecoder
-import arun.com.chromer.util.glide.favicon.WebsiteModelLoader
 import com.bumptech.glide.Glide
 import com.bumptech.glide.GlideBuilder
 import com.bumptech.glide.Registry
 import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.load.DecodeFormat.PREFER_ARGB_8888
 import com.bumptech.glide.load.DecodeFormat.PREFER_RGB_565
+import com.bumptech.glide.load.model.UnitModelLoader
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.module.AppGlideModule
 import com.bumptech.glide.request.RequestOptions
@@ -65,7 +65,7 @@ class ChromerGlideModule : AppGlideModule() {
         registry.prepend(Uri::class.java, ApplicationIcon::class.java, ApplicationIconModelLoader.Factory())
         registry.append(ApplicationIcon::class.java, Bitmap::class.java, ApplicationIconDecoder(context, glide))
 
-        registry.append(Any::class.java, WebSite::class.java, WebsiteModelLoader.Factory())
+        registry.append(WebSite::class.java, WebSite::class.java, UnitModelLoader.Factory.getInstance<WebSite>())
         registry.append(WebSite::class.java, Bitmap::class.java, WebsiteDecoder(context, glide))
     }
 }
