@@ -85,7 +85,7 @@
             android:theme="@style/AppTheme.Launcher" />
 
         <activity-alias
-            android:name=".CustomTabActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:targetActivity=".activities.main.MainActivity"
             android:theme="@style/AppTheme.Launcher">
