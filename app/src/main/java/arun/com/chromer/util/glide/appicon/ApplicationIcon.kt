@@ -16,27 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.glide.appicon
+package arun.com.chromer.util.glide.appicon
 
-import com.bumptech.glide.Priority
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.data.DataFetcher
+import android.net.Uri
 
-class ApplicationIconDataFetcher(private val packageName: String) : DataFetcher<ApplicationIcon> {
+class ApplicationIcon(val packageName: String) {
 
-    override fun loadData(priority: Priority?, callback: DataFetcher.DataCallback<in ApplicationIcon>) {
-        callback.onDataReady(ApplicationIcon(packageName))
+    companion object {
+        const val URI_SCHEME_APPLICATION_ICON = "application-icon"
+        fun createUri(packageName: String): Uri = Uri.fromParts(URI_SCHEME_APPLICATION_ICON, packageName, null)
     }
-
-    override fun cleanup() {
-        // Do nothing.
-    }
-
-    override fun cancel() {
-        // Do nothing.
-    }
-
-    override fun getDataClass(): Class<ApplicationIcon> = ApplicationIcon::class.java
-
-    override fun getDataSource(): DataSource = DataSource.LOCAL
 }

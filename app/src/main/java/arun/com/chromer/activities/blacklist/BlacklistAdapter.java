@@ -34,9 +34,9 @@ import java.util.List;
 
 import arun.com.chromer.R;
 import arun.com.chromer.data.common.App;
-import arun.com.chromer.glide.GlideApp;
-import arun.com.chromer.glide.GlideRequests;
-import arun.com.chromer.glide.appicon.ApplicationIcon;
+import arun.com.chromer.util.glide.GlideApp;
+import arun.com.chromer.util.glide.GlideRequests;
+import arun.com.chromer.util.glide.appicon.ApplicationIcon;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observable;

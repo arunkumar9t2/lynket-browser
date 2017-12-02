@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.views.searchview;
+package arun.com.chromer.search.searchview;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

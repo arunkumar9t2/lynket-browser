@@ -16,17 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.glide.favicon
+package arun.com.chromer.util.glide.favicon
 
 import android.content.Context
 import android.graphics.*
 import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.support.annotation.ColorInt
 import arun.com.chromer.data.website.model.WebSite
-import arun.com.chromer.glide.GlideApp
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.util.ColorUtil
 import arun.com.chromer.util.Utils
+import arun.com.chromer.util.glide.GlideApp
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.Options
 import com.bumptech.glide.load.ResourceDecoder

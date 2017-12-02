@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.glide
+package arun.com.chromer.util.glide
 
 import android.app.ActivityManager
 import android.content.Context
@@ -26,11 +26,11 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import arun.com.chromer.data.website.model.WebSite
-import arun.com.chromer.glide.appicon.ApplicationIcon
-import arun.com.chromer.glide.appicon.ApplicationIconDecoder
-import arun.com.chromer.glide.appicon.ApplicationIconModelLoader
-import arun.com.chromer.glide.favicon.WebsiteDecoder
-import arun.com.chromer.glide.favicon.WebsiteModelLoader
+import arun.com.chromer.util.glide.appicon.ApplicationIcon
+import arun.com.chromer.util.glide.appicon.ApplicationIconDecoder
+import arun.com.chromer.util.glide.appicon.ApplicationIconModelLoader
+import arun.com.chromer.util.glide.favicon.WebsiteDecoder
+import arun.com.chromer.util.glide.favicon.WebsiteModelLoader
 import com.bumptech.glide.Glide
 import com.bumptech.glide.GlideBuilder
 import com.bumptech.glide.Registry

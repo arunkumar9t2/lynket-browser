@@ -42,9 +42,9 @@ import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.toBitmap
 import arun.com.chromer.extenstions.visible
-import arun.com.chromer.glide.GlideApp
-import arun.com.chromer.glide.appicon.ApplicationIcon
 import arun.com.chromer.shared.common.BaseActivity
+import arun.com.chromer.util.glide.GlideApp
+import arun.com.chromer.util.glide.appicon.ApplicationIcon
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder

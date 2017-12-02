@@ -22,7 +22,7 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
 import arun.com.chromer.shortcuts.HomeScreenShortcutViewModel;
-import arun.com.chromer.viemodel.ViewModelFactory;
+import arun.com.chromer.util.viemodel.ViewModelFactory;
 import dagger.Binds;
 import dagger.Module;
 import dagger.multibindings.IntoMap;

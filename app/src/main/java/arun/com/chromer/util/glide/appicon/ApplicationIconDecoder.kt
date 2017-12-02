@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.glide.appicon
+package arun.com.chromer.util.glide.appicon
 
 import android.content.Context
 import android.content.pm.PackageManager

@@ -41,10 +41,10 @@ import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.settings.Preferences;
-import arun.com.chromer.glide.GlideApp;
-import arun.com.chromer.glide.appicon.ApplicationIcon;
 import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Utils;
+import arun.com.chromer.util.glide.GlideApp;
+import arun.com.chromer.util.glide.appicon.ApplicationIcon;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;

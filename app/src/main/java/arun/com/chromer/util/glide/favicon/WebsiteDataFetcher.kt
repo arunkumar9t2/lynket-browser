@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.glide.favicon
+package arun.com.chromer.util.glide.favicon
 
 import arun.com.chromer.data.website.model.WebSite
 import com.bumptech.glide.Priority

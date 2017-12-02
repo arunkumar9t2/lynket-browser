@@ -28,8 +28,8 @@ import javax.inject.Singleton;
 
 import arun.com.chromer.data.website.model.WebColor;
 import arun.com.chromer.data.website.model.WebSite;
-import arun.com.chromer.parser.RxParser;
 import arun.com.chromer.util.RxUtils;
+import arun.com.chromer.util.parser.RxParser;
 import rx.Observable;
 
 /**

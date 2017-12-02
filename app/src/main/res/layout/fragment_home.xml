@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <arun.com.chromer.views.searchview.MaterialSearchView
+            <arun.com.chromer.search.searchview.MaterialSearchView
                 android:id="@+id/material_search_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

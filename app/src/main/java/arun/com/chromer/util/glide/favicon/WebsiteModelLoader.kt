@@ -16,10 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.glide.appicon
+package arun.com.chromer.util.glide.favicon
 
-import android.net.Uri
-import arun.com.chromer.glide.appicon.ApplicationIcon.Companion.URI_SCHEME_APPLICATION_ICON
+import arun.com.chromer.data.website.model.WebSite
 import com.bumptech.glide.load.Options
 import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.ModelLoader.LoadData
@@ -27,16 +26,20 @@ import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.signature.ObjectKey
 
-class ApplicationIconModelLoader : ModelLoader<Uri, ApplicationIcon> {
-    override fun buildLoadData(model: Uri, width: Int, height: Int, options: Options?): LoadData<ApplicationIcon>? {
-        return LoadData(ObjectKey(model), ApplicationIconDataFetcher(model.schemeSpecificPart))
+class WebsiteModelLoader : ModelLoader<Any, WebSite> {
+
+    override fun buildLoadData(model: Any, width: Int, height: Int, options: Options?): LoadData<WebSite>? {
+        when (model) {
+            is WebSite -> return LoadData(ObjectKey(model), WebsiteDataFetcher(webSite = model))
+            else -> throw IllegalStateException("model is not WebSite")
+        }
     }
 
-    override fun handles(model: Uri): Boolean = model.scheme == URI_SCHEME_APPLICATION_ICON
+    override fun handles(model: Any): Boolean = model is WebSite
 
-    class Factory : ModelLoaderFactory<Uri, ApplicationIcon> {
+    class Factory : ModelLoaderFactory<Any, WebSite> {
 
-        override fun build(multiFactory: MultiModelLoaderFactory?): ModelLoader<Uri, ApplicationIcon> = ApplicationIconModelLoader()
+        override fun build(multiFactory: MultiModelLoaderFactory?): ModelLoader<Any, WebSite> = WebsiteModelLoader()
 
         override fun teardown() {
             // Do nothing.

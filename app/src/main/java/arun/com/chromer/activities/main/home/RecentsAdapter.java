@@ -38,8 +38,8 @@ import arun.com.chromer.R;
 import arun.com.chromer.activities.browserintercept.BrowserInterceptActivity;
 import arun.com.chromer.data.website.model.WebSite;
 import arun.com.chromer.di.PerFragment;
-import arun.com.chromer.glide.GlideApp;
 import arun.com.chromer.shared.Constants;
+import arun.com.chromer.util.glide.GlideApp;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

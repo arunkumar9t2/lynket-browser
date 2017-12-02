@@ -31,8 +31,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import arun.com.chromer.R;
-import arun.com.chromer.glide.GlideApp;
 import arun.com.chromer.util.cache.FontCache;
+import arun.com.chromer.util.glide.GlideApp;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
