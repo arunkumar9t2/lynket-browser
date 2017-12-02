@@ -83,10 +83,9 @@ public class WebViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         baseUrl = getIntent().getDataString();
-        ButterKnife.bind(this);
-
         try {
             setContentView(R.layout.activity_web_view);
+            ButterKnife.bind(this);
 
             setSupportActionBar(toolbar);
 

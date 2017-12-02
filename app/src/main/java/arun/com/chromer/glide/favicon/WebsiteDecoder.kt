@@ -37,6 +37,7 @@ import java.util.*
 
 class WebsiteDecoder(private val context: Context, glide: Glide) : ResourceDecoder<WebSite, Bitmap> {
     private val bitmapPool: BitmapPool = glide.bitmapPool
+    val size = Utils.dpToPx(48.0)
 
     private val placeholderColors = intArrayOf(
             Color.parseColor("#D32F2F"),
@@ -52,7 +53,7 @@ class WebsiteDecoder(private val context: Context, glide: Glide) : ResourceDecod
     override fun decode(webSite: WebSite, width: Int, height: Int, options: Options?): Resource<Bitmap>? {
         // Try to load using Glide normally
         val websiteFavicon = try {
-            GlideApp.with(context).asBitmap().fitCenter().load(webSite.faviconUrl).submit(width, height).get()
+            GlideApp.with(context).asBitmap().fitCenter().load(webSite.faviconUrl).submit(size, size).get()
         } catch (e: Exception) {
             null
         }
@@ -71,7 +72,6 @@ class WebsiteDecoder(private val context: Context, glide: Glide) : ResourceDecod
     }
 
     private fun createPlaceholderImage(@ColorInt color: Int, label: String): Bitmap {
-        val size = Utils.dpToPx(48.0)
         val icon = bitmapPool.get(size, size, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(icon)
         val shadowRadius = Utils.dpToPx(1.8).toFloat()
