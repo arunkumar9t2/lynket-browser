@@ -124,12 +124,12 @@ public class WebHeadPreferenceFragment extends BasePreferenceFragment implements
     private void setupWebHeadColorPreference() {
         webHeadColor.setOnPreferenceClickListener(preference -> {
             final int chosenColor = ((ColorPreference) preference).getColor();
-            new ColorChooserDialog.Builder((LookAndFeelActivity) getActivity(), R.string.web_heads_color)
+            new ColorChooserDialog.Builder(getActivity(), R.string.web_heads_color)
                     .titleSub(R.string.web_heads_color)
                     .allowUserColorInputAlpha(false)
                     .preselect(chosenColor)
                     .dynamicButtonColor(false)
-                    .show();
+                    .show(getFragmentManager());
             return true;
         });
     }

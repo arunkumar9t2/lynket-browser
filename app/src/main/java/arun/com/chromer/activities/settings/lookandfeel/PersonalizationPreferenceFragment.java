@@ -221,12 +221,12 @@ public class PersonalizationPreferenceFragment extends BasePreferenceFragment im
     private void setupToolbarColorPreference() {
         toolbarColorPreference.setOnPreferenceClickListener(preference -> {
             int chosenColor = ((ColorPreference) preference).getColor();
-            new ColorChooserDialog.Builder((LookAndFeelActivity) getActivity(), R.string.default_toolbar_color)
+            new ColorChooserDialog.Builder(getActivity(), R.string.default_toolbar_color)
                     .titleSub(R.string.default_toolbar_color)
                     .allowUserColorInputAlpha(false)
                     .preselect(chosenColor)
                     .dynamicButtonColor(false)
-                    .show();
+                    .show(getFragmentManager());
             return true;
         });
     }
