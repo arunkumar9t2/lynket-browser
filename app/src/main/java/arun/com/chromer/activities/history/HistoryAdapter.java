@@ -34,8 +34,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import arun.com.chromer.R;
 import arun.com.chromer.activities.browserintercept.BrowserInterceptActivity;
 import arun.com.chromer.data.website.model.WebSite;
@@ -215,7 +213,7 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHold
             } else {
                 historyTitle.setText(webSite.safeLabel());
                 historySubtitle.setText(webSite.preferredUrl());
-                Glide.with(itemView.getContext())
+                GlideApp.with(itemView.getContext())
                         .load(webSite)
                         .into(historyFavicon);
 

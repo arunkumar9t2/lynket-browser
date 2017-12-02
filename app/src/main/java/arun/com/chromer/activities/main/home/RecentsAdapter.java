@@ -97,7 +97,6 @@ public class RecentsAdapter extends RecyclerView.Adapter<RecentsAdapter.RecentsV
                     itemView.getContext().startActivity(intent);
                 });
                 GlideApp.with(itemView.getContext())
-                        .asBitmap()
                         .load(website)
                         .into(icon);
             }

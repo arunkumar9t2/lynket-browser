@@ -55,7 +55,6 @@ class ChromerGlideModule : AppGlideModule() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             defaultOptions.format(if (activityManager.isLowRamDevice) PREFER_RGB_565 else PREFER_ARGB_8888)
         }
-
         defaultOptions.disallowHardwareConfig()
         builder.setDefaultRequestOptions(defaultOptions)
     }

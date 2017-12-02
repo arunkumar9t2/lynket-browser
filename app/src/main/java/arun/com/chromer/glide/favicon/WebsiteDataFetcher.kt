@@ -39,5 +39,5 @@ class WebsiteDataFetcher(private val webSite: WebSite) : DataFetcher<WebSite> {
 
     override fun getDataClass(): Class<WebSite> = WebSite::class.java
 
-    override fun getDataSource(): DataSource = DataSource.MEMORY_CACHE
+    override fun getDataSource(): DataSource = DataSource.LOCAL
 }

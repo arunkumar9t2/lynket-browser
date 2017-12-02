@@ -33,6 +33,7 @@ import com.bumptech.glide.load.ResourceDecoder
 import com.bumptech.glide.load.engine.Resource
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
 import com.bumptech.glide.load.resource.bitmap.BitmapResource
+import timber.log.Timber
 import java.util.*
 
 class WebsiteDecoder(private val context: Context, glide: Glide) : ResourceDecoder<WebSite, Bitmap> {
@@ -57,17 +58,22 @@ class WebsiteDecoder(private val context: Context, glide: Glide) : ResourceDecod
         } catch (e: Exception) {
             null
         }
-        return if (Utils.isValidFavicon(websiteFavicon)) {
-            BitmapResource.obtain(websiteFavicon!!.copy(websiteFavicon.config, true), bitmapPool)
-        } else {
-            // Draw a placeholder using theme color if it exists, else use a random color.
-            val color = if (webSite.themeColor() != Constants.NO_COLOR) {
-                webSite.themeColor()
+        return try {
+            if (Utils.isValidFavicon(websiteFavicon)) {
+                BitmapResource.obtain(websiteFavicon!!.copy(websiteFavicon.config, true), bitmapPool)
             } else {
-                placeholderColors[Random().nextInt(placeholderColors.size)]
+                // Draw a placeholder using theme color if it exists, else use a random color.
+                val color = if (webSite.themeColor() != Constants.NO_COLOR) {
+                    webSite.themeColor()
+                } else {
+                    placeholderColors[Random().nextInt(placeholderColors.size)]
+                }
+                val createdIcon = createPlaceholderImage(color, webSite.safeLabel())
+                BitmapResource.obtain(createdIcon.copy(createdIcon.config, true), bitmapPool)
             }
-            val createdIcon = createPlaceholderImage(color, webSite.safeLabel())
-            BitmapResource.obtain(createdIcon.copy(createdIcon.config, true), bitmapPool)
+        } catch (e: Exception) {
+            Timber.e(e)
+            null
         }
     }
 
