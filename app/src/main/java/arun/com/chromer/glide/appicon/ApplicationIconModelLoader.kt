@@ -27,38 +27,16 @@ import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.signature.ObjectKey
 
-class ApplicationIconModelLoader : ModelLoader<Any, ApplicationIcon> {
-
-    override fun buildLoadData(model: Any, width: Int, height: Int, options: Options?): LoadData<ApplicationIcon>? {
-        val uriStr: String
-        val uri: Uri
-
-        when (model) {
-            is String -> {
-                uriStr = model
-                uri = Uri.parse(uriStr)
-            }
-            is Uri -> {
-                uri = model
-                uriStr = uri.toString()
-            }
-            else -> throw IllegalStateException("model must either be Uri or String.")
-        }
-        val packageName = uri.schemeSpecificPart
-        return LoadData(ObjectKey(uriStr), ApplicationIconDataFetcher(packageName))
+class ApplicationIconModelLoader : ModelLoader<Uri, ApplicationIcon> {
+    override fun buildLoadData(model: Uri, width: Int, height: Int, options: Options?): LoadData<ApplicationIcon>? {
+        return LoadData(ObjectKey(model), ApplicationIconDataFetcher(model.schemeSpecificPart))
     }
 
-    override fun handles(model: Any): Boolean =
-            when (model) {
-                is String -> Uri.parse(model).scheme == URI_SCHEME_APPLICATION_ICON
-                is Uri -> model.scheme == URI_SCHEME_APPLICATION_ICON
-                else -> false
-            }
+    override fun handles(model: Uri): Boolean = model.scheme == URI_SCHEME_APPLICATION_ICON
 
+    class Factory : ModelLoaderFactory<Uri, ApplicationIcon> {
 
-    class Factory : ModelLoaderFactory<Any, ApplicationIcon> {
-
-        override fun build(multiFactory: MultiModelLoaderFactory?): ModelLoader<Any, ApplicationIcon> = ApplicationIconModelLoader()
+        override fun build(multiFactory: MultiModelLoaderFactory?): ModelLoader<Uri, ApplicationIcon> = ApplicationIconModelLoader()
 
         override fun teardown() {
             // Do nothing.

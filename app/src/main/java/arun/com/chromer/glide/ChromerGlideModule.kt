@@ -23,6 +23,7 @@ import android.content.Context
 import android.content.Context.ACTIVITY_SERVICE
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Build
 import arun.com.chromer.data.website.model.WebSite
 import arun.com.chromer.glide.appicon.ApplicationIcon
@@ -61,9 +62,10 @@ class ChromerGlideModule : AppGlideModule() {
 
     override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
         super.registerComponents(context, glide, registry)
+        registry.prepend(Uri::class.java, ApplicationIcon::class.java, ApplicationIconModelLoader.Factory())
         registry.append(ApplicationIcon::class.java, Bitmap::class.java, ApplicationIconDecoder(context, glide))
-        registry.append(Any::class.java, ApplicationIcon::class.java, ApplicationIconModelLoader.Factory())
-        registry.append(WebSite::class.java, Bitmap::class.java, WebsiteDecoder(context, glide))
+
         registry.append(Any::class.java, WebSite::class.java, WebsiteModelLoader.Factory())
+        registry.append(WebSite::class.java, Bitmap::class.java, WebsiteDecoder(context, glide))
     }
 }

@@ -30,7 +30,6 @@ import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
 import com.bumptech.glide.load.resource.bitmap.BitmapResource
 
 class ApplicationIconDecoder(private val context: Context, glide: Glide) : ResourceDecoder<ApplicationIcon, Bitmap> {
-
     private val bitmapPool: BitmapPool = glide.bitmapPool
 
     override fun handles(source: ApplicationIcon, options: Options?): Boolean = true

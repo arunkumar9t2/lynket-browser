@@ -36,7 +36,7 @@ import com.bumptech.glide.load.resource.bitmap.BitmapResource
 import timber.log.Timber
 import java.util.*
 
-class WebsiteDecoder(private val context: Context, glide: Glide) : ResourceDecoder<WebSite, Bitmap> {
+class WebsiteDecoder(private val context: Context, private val glide: Glide) : ResourceDecoder<WebSite, Bitmap> {
     private val bitmapPool: BitmapPool = glide.bitmapPool
     val size = Utils.dpToPx(48.0)
 
@@ -54,7 +54,7 @@ class WebsiteDecoder(private val context: Context, glide: Glide) : ResourceDecod
     override fun decode(webSite: WebSite, width: Int, height: Int, options: Options?): Resource<Bitmap>? {
         // Try to load using Glide normally
         val websiteFavicon = try {
-            GlideApp.with(context).asBitmap().fitCenter().load(webSite.faviconUrl).submit(size, size).get()
+            GlideApp.with(context).asBitmap().load(webSite.faviconUrl).submit(size, size).get()
         } catch (e: Exception) {
             null
         }
