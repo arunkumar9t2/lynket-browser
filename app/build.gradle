@@ -11,7 +11,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.24.5'
+        classpath 'io.fabric.tools:gradle:1.25.0'
     }
 }
 repositories {
@@ -26,8 +26,8 @@ android {
         applicationId "arun.com.chromer"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 35
-        versionName "1.7.2"
+        versionCode 36
+        versionName "1.7.3"
 
         buildConfigField "String", "BASE_64", getBase64()
         manifestPlaceholders = [crashlyticsApiKey: getFabricKey()]
