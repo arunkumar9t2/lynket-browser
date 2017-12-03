@@ -237,7 +237,7 @@ public class BrowsingOptionsActivity extends SubActivity implements Snackable, S
 
         @Override
         public BottomActionHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new BottomActionHolder(LayoutInflater.from(context).inflate(R.layout.widget_bottom_bar_actions, parent, false));
+            return new BottomActionHolder(LayoutInflater.from(context).inflate(R.layout.activity_browsing_option_bottom_actions_item_template, parent, false));
         }
 
         @Override
