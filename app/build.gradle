@@ -88,7 +88,7 @@ dependencies {
     kapt 'android.arch.lifecycle:compiler:1.0.0'
 
     // Suggestions
-    implementation 'in.arunkumarsampath:suggestions:1.0.2'
+    implementation 'in.arunkumarsampath:suggestions:1.0.3'
 
     // Intro
     implementation 'com.github.paolorotolo:appintro:4.1.0'

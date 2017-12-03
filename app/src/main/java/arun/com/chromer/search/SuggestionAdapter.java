@@ -99,7 +99,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
         return suggestionItems.get(position).hashCode();
     }
 
-    public void updateSuggestions(@NonNull List<SuggestionItem> newSuggestions) {
+    public void updateSuggestions(@NonNull List<? extends SuggestionItem> newSuggestions) {
         final SuggestionDiff suggestionDiff = new SuggestionDiff(suggestionItems, newSuggestions);
         final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(suggestionDiff, true);
         suggestionItems.clear();
@@ -136,10 +136,10 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
 
     private class SuggestionDiff extends DiffUtil.Callback {
 
-        private final List<SuggestionItem> newList;
-        private final List<SuggestionItem> oldList;
+        private final List<? extends SuggestionItem> newList;
+        private final List<? extends SuggestionItem> oldList;
 
-        SuggestionDiff(@NonNull List<SuggestionItem> oldList, @NonNull List<SuggestionItem> newList) {
+        SuggestionDiff(@NonNull List<? extends SuggestionItem> oldList, @NonNull List<? extends SuggestionItem> newList) {
             this.oldList = oldList;
             this.newList = newList;
         }

@@ -166,13 +166,13 @@ public class HomeFragment extends BaseMVPFragment<Home.View, Home.Presenter> imp
     }
 
     @Override
-    public void setSuggestions(@NonNull List<SuggestionItem> suggestions) {
+    public void setSuggestions(@NonNull List<? extends SuggestionItem> suggestions) {
         materialSearchView.setSuggestions(suggestions);
         doTransition();
     }
 
     @Override
-    public void setRecents(@NonNull List<WebSite> webSites) {
+    public void setRecents(@NonNull List<? extends WebSite> webSites) {
         recentsAdapter.setWebSites(webSites);
         if (webSites.isEmpty()) {
             recentMissingText.setVisibility(VISIBLE);

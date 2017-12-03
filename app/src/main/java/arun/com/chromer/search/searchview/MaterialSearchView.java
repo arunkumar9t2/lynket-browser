@@ -325,7 +325,7 @@ public class MaterialSearchView extends RelativeLayout implements SuggestionAdap
         suggestionAdapter.clear();
     }
 
-    public void setSuggestions(@NonNull List<SuggestionItem> suggestions) {
+    public void setSuggestions(@NonNull List<? extends SuggestionItem> suggestions) {
         suggestionAdapter.updateSuggestions(suggestions);
     }
 }

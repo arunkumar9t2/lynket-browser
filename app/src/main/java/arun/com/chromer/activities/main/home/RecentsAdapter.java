@@ -70,7 +70,7 @@ public class RecentsAdapter extends RecyclerView.Adapter<RecentsAdapter.RecentsV
         return webSites.size();
     }
 
-    void setWebSites(@NonNull List<WebSite> webSites) {
+    void setWebSites(@NonNull List<? extends WebSite> webSites) {
         this.webSites.clear();
         this.webSites.addAll(webSites);
         notifyDataSetChanged();
