@@ -143,7 +143,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     @Override
     Notification getNotification() {
         if (Utils.ANDROID_OREO) {
-            final NotificationChannel channel = new NotificationChannel(WebHeadService.class.getName(), getString(R.string.web_heads_service), NotificationManager.IMPORTANCE_HIGH);
+            final NotificationChannel channel = new NotificationChannel(WebHeadService.class.getName(), getString(R.string.web_heads_service), NotificationManager.IMPORTANCE_MIN);
             channel.setDescription(getString(R.string.app_detection_notification_channel_description));
             final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             if (notificationManager != null) {
