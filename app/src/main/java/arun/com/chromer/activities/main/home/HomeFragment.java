@@ -140,6 +140,7 @@ public class HomeFragment extends BaseMVPFragment<Home.View, Home.Presenter> imp
         super.onHiddenChanged(hidden);
         if (!hidden) {
             getActivity().setTitle(R.string.app_name);
+            presenter.loadRecents();
         }
     }
 
