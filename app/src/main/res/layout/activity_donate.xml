@@ -39,7 +39,8 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:text="@string/support_development"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:layout_marginStart="16dp" />
 
         <TextView
             android:id="@+id/thank_you"

@@ -26,7 +26,8 @@
     android:minHeight="70dp"
     android:orientation="horizontal"
     android:weightSum="1"
-    tools:ignore="RtlHardcoded">
+    tools:ignore="RtlHardcoded"
+    android:focusable="true">
 
     <ImageView
         android:id="@+id/settins_list_icon"

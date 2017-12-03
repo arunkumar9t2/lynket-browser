@@ -163,6 +163,7 @@
     <string name="share_failed_msg">Konnte nicht geteilt werden. Benutze stattdessen die Standard App</string>
     <string name="revoke_accessibility_permission">Du kannst die Berechtigung für die Bedienungshilfe jetzt deaktivieren.</string>
     <string name="last_fetched_urls">Letzte geladene URLs</string>
+    <string name="blacklist_on">Ausgeschlossene Apps %1$s</string>
     <string name="translations">Übersetzungen</string>
     <string name="merge_tabs">Tabs und Apps zusammen anzeigen</string>
     <string name="merge_tabs_explanation">Zeige Tabs zusammen mit Apps im \“Zuletzt geöffnet\”-Screen an</string>

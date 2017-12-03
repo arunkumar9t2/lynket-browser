@@ -30,6 +30,9 @@
         <item>Favoriete deel-app</item>
         <item>Gewoon delen</item>
     </string-array>
+    <string-array name="actionKeys">
+        <item>3</item>
+    </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>Rechts</item>
         <item>Links</item>
@@ -38,6 +41,11 @@
         <item>Donker</item>
         <item>Licht</item>
         <item>Automatisch</item>
+    </string-array>
+    <string-array name="articleThemeKeys">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
     </string-array>
     <string-array name="webHeadsSizeValues">
         <item>Normaal</item>
@@ -220,6 +228,7 @@
     <string name="browsing_mode_web_heads">Webheads</string>
     <string name="browsing_mode_slide_over_explanation">Websites schuiven over de huidige app.</string>
     <string name="browsing_mode_web_heads_explanation">Websites worden op de achtergrond geladen, zodat u meerdere links kan opstapelen in zwevende bellen en deze later kan openen.</string>
+    <string name="load_faster_heading">Pagina\'s sneller laden met onderstaande opties</string>
     <string name="amp">Accelerated Mobile Pages (AMP)</string>
     <string name="amp_mode">AMP-modus</string>
     <string name="article_mode">Artikelweergave</string>

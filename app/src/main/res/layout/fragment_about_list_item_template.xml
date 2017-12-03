@@ -48,9 +48,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="marquee"
-            android:maxLines="1"
             android:textAppearance="@style/Preference_TextAppearanceMaterialSubhead"
-            tools:ignore="SelectableText" />
+            tools:ignore="SelectableText"
+            android:singleLine="true" />
 
         <TextView
             android:id="@+id/about_app_subtitle"

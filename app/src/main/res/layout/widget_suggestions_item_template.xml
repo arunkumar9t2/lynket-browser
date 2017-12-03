@@ -23,7 +23,8 @@
     android:layout_height="48dp"
     android:background="?attr/selectableItemBackground"
     android:clickable="true"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:focusable="true">
 
     <ImageView
         android:id="@+id/suggestion_icon"

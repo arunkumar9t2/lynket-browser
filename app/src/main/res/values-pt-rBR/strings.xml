@@ -37,7 +37,7 @@
     <string-array name="actionValues">
         <item>Navegador secundário</item>
         <item>App para compartilhar favorito</item>
-        <item>General share</item>
+        <item>Compartilhamento geral</item>
     </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>Direita</item>
@@ -47,14 +47,24 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+    <string-array name="articleThemeValues">
+        <item>Escuro</item>
+        <item>Claro</item>
+        <item>Automático</item>
+    </string-array>
     <string-array name="webHeadsSizeValues">
         <item>Normal</item>
         <item>Pequeno</item>
+    </string-array>
+    <string-array name="webHeadsSizeKeys">
+        <item>1</item>
+        <item>2</item>
     </string-array>
     <string name="share_text">Oi! Experimente o \‘Chromer\’ para uma experiência de navegação rápida e segura! Baixe aqui https://goo.gl/992ils</string>
     <string name="share_via">Compartilhar via</string>
     <string name="custom_tab_provider_not_found">Provedor de abas personalizadas não encontrado</string>
     <string name="custom_tab_provider_not_found_expln">O Chromer precisa que você tenha um navegador compatível com Abas customizadas no seu celular. Você pode instalar o Google Chrome gratuitamente pela Play Store.</string>
+    <string name="custom_tab_provider_not_found_dialog_content"><![CDATA[Não foi possível encontrar um provedor de abas personalizadas. O Google Chrome é altamente recomendável. Você ainda pode ver páginas com o Chromer e usar o Modo Artigo, mas para uma melhor experiência, um navegador com suporte a abas personalizadas é recomendado. Instalar agora?]]></string>
     <string name="install">Instalar</string>
     <string name="licenses">Licenças</string>
     <string name="about">Sobre</string>
@@ -79,6 +89,7 @@
     <string name="copy_link">Copiar link</string>
     <string name="add_to_homescreen">Adicionar à Tela Inicial</string>
     <string name="intro_1">Olá!\nChromer é um navegador leve, seguro e rápido.</string>
+    <string name="intro_4_new">Ele pode empilhar vários links em bolhas flutuantes quando você abri-los e carregá-los em segundo plano! \n \n<b>SABER MAIS</b></string>
     <string name="how_to_use">Como usar isso?</string>
     <string name="intro_6">Apenas defina o Chromer como o seu navegador padrão, Chromer irá mostrar o link de uma forma não intrusiva.</string>
     <string name="version">Versão</string>
@@ -143,6 +154,7 @@
     <string name="icon_design">Design dos Ícones</string>
     <string name="overlay_permission_content">Para desenhar as web heads na tela, a permissão de sobreposição precisa ser concedida. Conceder agora?</string>
     <string name="webheads_intro_1">Quando você abre um link em qualquer app, uma bolha flutuante chamada web head será criada na tela e o Chromer tentará carregar o link.</string>
+    <string name="webheads_intro_2_new">Ao abrir múltiplos links, estas web heads serão automaticamente empilhadas umas sobre as outras conforme exibido. Um toque longo na web head irá abrir o menu de contexto.</string>
     <string name="webheads_intro_3">Quando você começa a arrastar uma web head, uma lixeira será exibida. Arraste a web head para a lixeira para excluí-la.</string>
     <string name="webheads_intro_4">O Chromer prioriza o último link aberto e o carrega previamente. O método recomendado é clicar nas web heads uma por uma de cima para baixo. Ativar fechar web heads ao lançar vai tornar isso sem igual.</string>
     <string name="web_head_permission_toast">Para abrir links em bolhas flutuantes, o Chromer precisa da permissão para desenhar sobre outros apps, por favor conceda para continuar ou desative as Web Heads nas configurações do Chromer.</string>
@@ -159,6 +171,7 @@
     <string name="revoke_accessibility_permission">Agora você pode revogar a permissão de acessibilidade do Chromer.</string>
     <string name="last_fetched_urls">Últimas URLs carregadas</string>
     <string name="blacklist_on">Lista negra de apps %s</string>
+    <string name="blacklist_off">Lista negra de apps desativada</string>
     <string name="translations">Traduções</string>
     <string name="merge_tabs">Mesclar abas e apps</string>
     <string name="merge_tabs_explanation">Ver suas abas junto com outros apps na tela de apps Recentes.</string>
@@ -178,4 +191,74 @@
     <string name="notifications">Notificações</string>
     <string name="webhead_size_title">Tamanho</string>
     <string name="webhead_size_dialog">Escolha o tamanho das web heads</string>
+    <string name="changelog_skipped">Changelog ignorado devido a um erro</string>
+    <string name="see_whats_new">Ver as novidades</string>
+    <string name="help_translations">Ajude a traduzir para o seu idioma</string>
+    <string name="aggressive_background_loading">Carregamento agressivo em segundo plano</string>
+    <string name="aggressive_background_loading_desc">As páginas irão carregar em segundo plano ao invés de só uma prévia</string>
+    <string name="aggresive_dia_title">Necessária a mesclagem de apps e abas</string>
+    <string name="aggresive_dia_content">O carregamento agressivo em segundo plano requer que a mesclagem de abas e apps estaja ativada. Isso foi feito para você.</string>
+    <string name="merge_tabs_off_title">Atenção</string>
+    <string name="merget_tabs_off_content">Desativar a mesclagem de abas e app também irá parar o carregamento agressivo de páginas.</string>
+    <string name="web_sites">Sites</string>
+    <string name="share_all">Compartilhar todos</string>
+    <string name="thank_you">Muito obrigado</string>
+    <string name="save_time">Economizar tempo</string>
+    <string name="multiple_links">Links múltiplos</string>
+    <string name="merge_tabs_explanation_intro">Seus apps e abas de sites da web juntos na sua tela de recentes.</string>
+    <string name="web_close_on_open_desc">As web heads irão desaparecer assim que a página for aberta</string>
+    <string name="web_close_on_open_title">Fechar web heads ao clicar.</string>
+    <string name="minimize">Minimizar</string>
+    <string name="available_actions">Ações disponíveis</string>
+    <string name="secondary_browser_launching_error_title">Erro ao abrir o navegador secundário</string>
+    <string name="launch_setting">Configurações de abertura</string>
+    <string name="secondary_browser_launch_error">Não foi possível abrir o app no navegador selecionado. Deseja editar esta configuração?</string>
+    <string name="copy_all">Copiar tudo</string>
+    <string name="choose_share_method">Escolha o método de compartilhamento</string>
+    <string name="comma_seperated">Separados por vírgula</string>
+    <string name="share_all_list">Lista - Suporte limitado de apps. Ex: Join, Pushbullet etc.</string>
+    <string name="new_tab">Abrir nova aba</string>
+    <string name="title_activity_open_with">Abrir com</string>
+    <string name="title_activity_settings">Configurações</string>
+    <string name="settings_browsing_mode">Modo de navegação</string>
+    <string name="settings_look_and_feel">Aparência</string>
+    <string name="settings_browsing_options">Opções de navegação</string>
+    <string name="title_activity_browsing_mode">Modo de navegação</string>
+    <string name="browsing_mode_slide_over">Deslizar por cima</string>
+    <string name="browsing_mode_web_heads">Ícones flutuantes</string>
+    <string name="browsing_mode_slide_over_explanation">Sites deslizam sobre o app que você está usando.</string>
+    <string name="load_faster_heading">Carregue páginas mais rápido com as opções abaixo</string>
+    <string name="amp">Páginas Móveis Aceleradas (AMP)</string>
+    <string name="amp_mode">Modo AMP</string>
+    <string name="amp_summary">Carregar páginas móveis otimizadas para uma experiência de leitura mais fluida e rápida.</string>
+    <string name="article_mode">Modo de artigo</string>
+    <string name="article_theme">Tema de artigo</string>
+    <string name="article_mode_summary">Carregar um modo de leitura elegante sem nenhum extra, somente o conteúdo que interessa.</string>
+    <string name="amp_warning_title">Aviso de AMP</string>
+    <string name="title_activity_look_and_feel">Aparência</string>
+    <string name="not_available_in_slide_mode">Não disponível no modo deslizar sobre</string>
+    <string name="title_activity_browsing_options">Opções de navegação</string>
+    <string name="grabbing_amp_link">Obtendo link AMP</string>
+    <string name="link_found">Link encontrado!</string>
+    <string name="link_not_found">Link AMP não encontrado</string>
+    <string name="open">Abrir</string>
+    <string name="open_full_page">Abrir página completa</string>
+    <string name="more">Mais</string>
+    <string name="title_history">Histórico</string>
+    <string name="deleted_items">%1$d itens apagados.</string>
+    <string name="are_you_sure">Tem certeza</string>
+    <string name="history_deletion_confirmation_content">Esta ação irá excluir todo o histórico e é irreversível.</string>
+    <string name="incognito_mode">Modo incógnito</string>
+    <string name="recents_intro">Links abertos recentemente aparecem aqui</string>
+    <string name="attention">Atenção</string>
+    <string name="manage">Gerenciar</string>
+    <string name="more_menu">Mais</string>
+    <string name="open_article_view">Abrir vista de artigos</string>
+    <string name="browse_seamlessly">Navegação incomparável</string>
+    <string name="home">Início</string>
+    <string name="no_items_present">Nenhum item presente.</string>
+    <string name="recents">Recentes</string>
+    <string name="enable_history">Histórico ativado</string>
+    <string name="enable_history_subtitle">Desativar o histórico irá parar a gravação de itens aqui.</string>
+    <string name="enable_history_subtitle_custom_tab"><![CDATA[Desativar o histórico irá parar a gravação de itens aqui. O provedor de abas personalizado, <b>%1$s</b> ainda pode registrar algo.]]></string>
 </resources>

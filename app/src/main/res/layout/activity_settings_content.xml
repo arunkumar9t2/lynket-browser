@@ -36,7 +36,8 @@
         app:cardElevation="4dp"
         app:cardUseCompatPadding="true"
         app:contentPaddingBottom="8dp"
-        app:contentPaddingTop="8dp">
+        app:contentPaddingTop="8dp"
+        android:focusable="true">
 
         <LinearLayout
             android:layout_width="match_parent"

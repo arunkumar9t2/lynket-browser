@@ -78,7 +78,8 @@
                 android:textAllCaps="true"
                 android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
                 android:textColor="@color/accent"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:focusable="true" />
 
             <TextView
                 android:id="@+id/share_all"
@@ -94,7 +95,8 @@
                 android:text="@string/share_all"
                 android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
                 android:textColor="@color/accent"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:focusable="true" />
         </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>

@@ -27,12 +27,17 @@
     </string-array>
     <string-array name="actionValues">
         <item>Navigateur secondaire</item>
-        <item>"Appli de partage préférée "</item>
-        <item>General share</item>
+        <item>Application de partage préférée</item>
+        <item>Partage général</item>
     </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>Droit</item>
         <item>Gauche</item>
+    </string-array>
+    <string-array name="articleThemeValues">
+        <item>Sombre</item>
+        <item>Clair</item>
+        <item>Automatique</item>
     </string-array>
     <string-array name="webHeadsSizeValues">
         <item>Normal</item>
@@ -44,4 +49,54 @@
     </string-array>
     <string name="share_text">Essayez \‘Chromer\’ pour une navigation rapide et sécurisée ! A télécharger ici https://goo.gl/992ils</string>
     <string name="share_via">"Partager avec… "</string>
+    <string name="custom_tab_provider_not_found">Onglet personnalisé compatible non trouvé</string>
+    <string name="custom_tab_provider_not_found_expln">Chromer exige que vous ayez au moins un Navigateur d\'onglet personnalisés compatible installé sur votre smartphone. Actuellement, il n\'y a pas d\'application qui supporte cela. Voulez-vous installer Google Chrome (Gratuit) depuis le Play Store ? Si vous l\'avez déjà, merci de le mettre à jour vers la dernière version.</string>
+    <string name="custom_tab_provider_not_found_dialog_content"><![CDATA[Impossible de trouver un navigateur d\'onglets personnalisés compatible. Google Chrome (Gratuit) est conseillé. Vous pouvez toujours consulter les pages Web au sein de Chromer et utiliser le mode Article, mais pour une meilleure expérience, un navigateur comme tel est fortement recommandé. Voulez-vous l\'installer maintenant ?]]></string>
+    <string name="install">Installer</string>
+    <string name="licenses">Licences</string>
+    <string name="about">À propos</string>
+    <string name="help_chromer_grow">Aidez à faire croître Chromer !</string>
+    <string name="share">Partager</string>
+    <string name="share_with">Partager avec %1$s</string>
+    <string name="rate_play_store">Noter sur Play Store</string>
+    <string name="feedback">Commentaires</string>
+    <string name="intro">Introduction</string>
+    <string name="send_email">Envoyer un e-mail…</string>
+    <string name="fallback_msg">Impossible d\'ouvrir un onglet personnalisé, retour au webview</string>
+    <string name="open_with">Ouvrir avec…</string>
+    <string name="open_in_browser">Ouvrir avec %1$s</string>
+    <string name="unxp_err">Erreur inattendue, réessayez</string>
+    <string name="unsupported_link">Lien non supporté, réessayez</string>
+    <string name="couldnt_load_price">Impossible de charger le prix</string>
+    <string name="coffee">Café</string>
+    <string name="lunch">Déjeuner</string>
+    <string name="premium_donation">Donation premium</string>
+    <string name="invalid_link">"Lien invalide "</string>
+    <string name="copied">Copié</string>
+    <string name="copy_link">Copier le lien</string>
+    <string name="add_to_homescreen">Ajouter à l\'écran d\'accueil</string>
+    <string name="intro_1">Salut!\nChromer est un navigateur léger, sécurisé et rapide !</string>
+    <string name="intro_4_new">Il peut empiler plusieurs liens dans des bulles flottantes quand vous les ouvrez et que vous les chargez en arrière-plan !\n\n<b>EN SAVOIR PLUS</b></string>
+    <string name="how_to_use">Comment utiliser cela ?</string>
+    <string name="intro_6">Mettez Chromer en navigateur par défaut, et Chromer affichera le lien de façon non intrusive. Ou choisissez Chromer quand souhaité.</string>
+    <string name="version">Version</string>
+    <string name="changelog">Journal des modifications</string>
+    <string name="join_google_plus">Rejoindre la communauté Google+</string>
+    <string name="share_ideas">Partager vos idées !</string>
+    <string name="support_development">Supporter le développement</string>
+    <string name="consider_donation">Faire un don</string>
+    <string name="add_to_circles">Ajouter aux cercles Google+</string>
+    <string name="follow_twitter">Suivre sur Twitter</string>
+    <string name="connect_linkedIn">Connecter avec LinkedIn</string>
+    <string name="more_apps">Plus d\'applications</string>
+    <string name="author">Auteur</string>
+    <string name="added">Ajouté</string>
+    <string name="settings">Paramètres</string>
+    <string name="colored_toolbar">Barre d\'outils colorée</string>
+    <string name="choose_animation">Animation d\'ouverture</string>
+    <string name="animation_speed">Vitesse d\'animation</string>
+    <string name="default_pref_xpln">Mettre Chromer par défaut pour ouvrir tous les liens, ou vous pouvez choisir Chromer depuis la liste lorsque montrée</string>
+    <string name="personalization">Personnalisation</string>
+    <string name="default_clear_msg">Si le navigateur est déjà par défaut, prière de l\'effacer.</string>
+    <string name="dynamic_toolbar_color">Couleur de la barre d\'outil dynamique</string>
 </resources>

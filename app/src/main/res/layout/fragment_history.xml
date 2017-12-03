@@ -37,7 +37,8 @@
             android:foreground="?attr/selectableItemBackground"
             app:cardPreventCornerOverlap="true"
             app:cardUseCompatPadding="true"
-            app:contentPadding="8dp">
+            app:contentPadding="8dp"
+            android:focusable="true">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -48,11 +49,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ellipsize="marquee"
-                    android:maxLines="1"
                     android:paddingRight="56dp"
                     android:text="@string/enable_history"
                     android:textAppearance="@style/Preference_TextAppearanceMaterialSubhead"
-                    tools:ignore="RtlHardcoded,RtlSymmetry" />
+                    tools:ignore="RtlHardcoded,RtlSymmetry"
+                    android:singleLine="true" />
 
                 <TextView
                     android:id="@+id/enable_history_subtitle"
@@ -74,7 +75,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerInParent="true"
                     android:gravity="end|center"
-                    android:minWidth="56dp" />
+                    android:minWidth="56dp"
+                    android:layout_alignParentEnd="true" />
             </RelativeLayout>
         </android.support.v7.widget.CardView>
 

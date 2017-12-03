@@ -50,10 +50,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="marquee"
-            android:maxLines="1"
             android:textAppearance="@style/Preference_TextAppearanceMaterialSubhead"
             android:textSize="14sp"
-            tools:ignore="SelectableText" />
+            tools:ignore="SelectableText"
+            android:singleLine="true" />
 
         <TextView
             android:id="@+id/web_site_sub_title"
@@ -78,7 +78,8 @@
         android:clickable="true"
         android:padding="15dp"
         android:scaleType="fitCenter"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription"
+        android:focusable="true" />
 
     <ImageView
         android:id="@+id/delete_icon"
@@ -88,5 +89,6 @@
         android:clickable="true"
         android:padding="15dp"
         android:scaleType="fitCenter"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription"
+        android:focusable="true" />
 </LinearLayout>

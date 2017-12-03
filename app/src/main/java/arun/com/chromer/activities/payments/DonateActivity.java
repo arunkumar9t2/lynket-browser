@@ -152,7 +152,7 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
     }
 
     private void loadData(final List<SkuDetails> details) {
-        final RecyclerView donateList = (RecyclerView) findViewById(R.id.donate_item_list);
+        final RecyclerView donateList = findViewById(R.id.donate_item_list);
         donateList.setLayoutManager(new LinearLayoutManager(this));
         donateList.setAdapter(new DonationAdapter(details));
     }

@@ -57,6 +57,11 @@
         <item>Светлый</item>
         <item>Автоматически</item>
     </string-array>
+    <string-array name="articleThemeKeys">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
     <string-array name="webHeadsSizeValues">
         <item>Нормальный</item>
         <item>Мелкий</item>
@@ -69,6 +74,7 @@
     <string name="share_via">Поделиться через…</string>
     <string name="custom_tab_provider_not_found">Подходящий поставщик вкладок не найден</string>
     <string name="custom_tab_provider_not_found_expln">Для использования Chromer у Вас должен быть установлен любой другой совместимый браузер. В настоящее время на вашем телефоне нет браузеров, поддерживаемых Chromer. Вы можете установить Google Chrome из Play Маркета. Если он уже установлен, пожалуйста, обновите его до последней версии.</string>
+    <string name="custom_tab_provider_not_found_dialog_content"><![CDATA[Отсутствует совместимый с Быстрыми вкладками (Custom tab) браузер на вашем устройстве. Рекомендуем браузер Google Chrome. Вы все еще можете просматривать веб-страницы в Chromer в режиме Статьи, но браузер с поддержкой Быстрых вкладок крайне рекомендуется. Хотите установить сейчас?]]></string>
     <string name="install">Установить</string>
     <string name="licenses">Лицензии</string>
     <string name="about">О программе</string>
@@ -269,4 +275,11 @@
     <string name="open_article_view">Открыть в режиме чтения</string>
     <string name="browse_seamlessly">Плавный браузинг</string>
     <string name="slide_over_explanation">Веб-страница откроется поверх текущего приложения, нажмите x, чтобы быстро вернуться назад</string>
+    <string name="overlay_missing">Похоже на вашем устройстве не предоставлены системные права для разрешения вывода информации на экран поверх других приложений (экранный оверлей). Пожалуйста, обратитесь к производителю, чтобы узнать подробнее.</string>
+    <string name="home">На главную</string>
+    <string name="no_items_present">Нет элементов.</string>
+    <string name="recents">Недавние</string>
+    <string name="enable_history">История включена</string>
+    <string name="enable_history_subtitle">Отключение истории прекратит запись информации здесь.</string>
+    <string name="enable_history_subtitle_custom_tab"><![CDATA[Отключение истории прекратит запись информации. Поставщик Быстрых вкладок, <b>%1$s</b> все еще может записывать некоторые элементы.]]></string>
 </resources>

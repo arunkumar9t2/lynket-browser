@@ -86,9 +86,9 @@ public class MaterialSearchView extends RelativeLayout implements SuggestionAdap
 
     private SuggestionAdapter suggestionAdapter;
 
-    private PublishSubject<Void> voiceIconClicks = PublishSubject.create();
-    private PublishSubject<String> searchPerforms = PublishSubject.create();
-    private PublishSubject<Void> clearClicks = PublishSubject.create();
+    private final PublishSubject<Void> voiceIconClicks = PublishSubject.create();
+    private final PublishSubject<String> searchPerforms = PublishSubject.create();
+    private final PublishSubject<Void> clearClicks = PublishSubject.create();
 
     public MaterialSearchView(Context context) {
         super(context);

@@ -44,7 +44,7 @@ public abstract class OverlayService extends BaseService {
     @Override
     public abstract IBinder onBind(Intent intent);
 
-    @IntRange(from = 1, to = Long.MAX_VALUE)
+    @IntRange(from = 1)
     abstract int getNotificationId();
 
     @NonNull

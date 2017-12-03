@@ -28,11 +28,16 @@
     <string-array name="actionValues">
         <item>İkincil tarayıcı</item>
         <item>Sık kullanılan paylaşım uygulaması</item>
-        <item>General share</item>
+        <item>Genel paylaşım</item>
     </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>Sağ</item>
         <item>Sol</item>
+    </string-array>
+    <string-array name="articleThemeValues">
+        <item>Karanlık</item>
+        <item>Açık</item>
+        <item>Otomatik</item>
     </string-array>
     <string-array name="webHeadsSizeValues">
         <item>Normal</item>
@@ -42,10 +47,10 @@
         <item>1</item>
         <item>2</item>
     </string-array>
-    <string name="share_text">\‘Chromer\’ uygulamasına ve güvenli tarayıcı deneyimine hızlıca göz at! Buradan indir https://goo.gl/992ils</string>
-    <string name="share_via">Aracılığıyla paylaş…</string>
-    <string name="custom_tab_provider_not_found">Uyumlu sekme sağlayıcısı bulunamadı</string>
-    <string name="custom_tab_provider_not_found_expln">Chromer, telefonunuzda özel sekmeleri destekleyen bir tarayıcı gerektirir. Telefonunuzda bu özelliği destekleyen bir tarayıcı mevcut değil. Google Chrome (Ücretsiz) uygulamasını Play Store üzerinden yüklemek ister misiniz? Eğer cihazınızda yüklü ise, lütfen son sürüme güncelleyin.</string>
+    <string name="share_text">Hey \‘Chromer\’ uygulamasına hızlı ve güvenli gezinti deneyimi için göz at! Buradan indir https://goo.gl/992ils</string>
+    <string name="share_via">…aracılığıyla paylaş</string>
+    <string name="custom_tab_provider_not_found">Uyumlu custom tab sağlayıcısı bulunamadı.</string>
+    <string name="custom_tab_provider_not_found_expln">Chromer, telefonunuzda custom tab uyumlu bir tarayıcı gerektirir. Telefonunuzda bu özelliği destekleyen bir tarayıcı mevcut değil. Google Chrome (Ücretsiz) uygulamasını Play Store üzerinden yüklemek ister misiniz? Eğer cihazınızda yüklü ise, lütfen son sürüme güncelleyin.</string>
     <string name="install">Yükle</string>
     <string name="licenses">Lisanslar</string>
     <string name="about">Hakkında</string>
@@ -56,8 +61,8 @@
     <string name="feedback">Geri Bildirim</string>
     <string name="intro">Giriş</string>
     <string name="send_email">E-Posta gönder…</string>
-    <string name="fallback_msg">Özel sekme açılamadı, normal tarayıcı ile açılıyor</string>
-    <string name="open_with">Şununla aç…</string>
+    <string name="fallback_msg">Custom tab açılamıyor, WebView\'a geçiliyor.</string>
+    <string name="open_with">…ile aç.</string>
     <string name="open_in_browser">%1$s \'da aç</string>
     <string name="unxp_err">Beklenmeyen hata, tekrar deneyin</string>
     <string name="unsupported_link">Desteklenmeyen bağlantı, tekrar deneyin</string>
@@ -69,7 +74,7 @@
     <string name="copied">Kopyalandı</string>
     <string name="copy_link">Bağlantıyı kopyala</string>
     <string name="add_to_homescreen">Ana Ekrana ekle</string>
-    <string name="intro_1">Merhaba!\nChromer hafif, güvenli ve güvenli bir tarayıcıdır.</string>
+    <string name="intro_1">Merhaba!\nChromer hafif, güvenli ve hızlı bir tarayıcıdır.</string>
     <string name="how_to_use">Bu nasıl kullanılır?</string>
     <string name="intro_6">Sadece Chromer varsayılan tarayıcı olarak ayarlanmış, Chromer, dahil olmadan,  bir şekilde bağlantıyı gösterecektir. Veya gerektiğinde Chromer\'i seçin.</string>
     <string name="version">Versiyon</string>
@@ -102,7 +107,7 @@
     <string name="show_notification">Bağlantı ön yüklendiğinde bildirim göster</string>
     <string name="default_toolbar_color">Varsayılan araç çubuğu rengi</string>
     <string name="choose_secondary_browser">İkincil tarayıcı</string>
-    <string name="secondary_browser_success">"%1$s İkincil varsayılan tarayıcı olarak ayarla! "</string>
+    <string name="secondary_browser_success">%1$s ikincil tarayıcı olarak ayarlı!</string>
     <string name="fav_share_success">%1$s varsayılan favori paylaşım uygulaması olarak belirle!</string>
     <string name="based_on_app">Uygulama tabanlı</string>
     <string name="based_on_web">Website tabanlı</string>

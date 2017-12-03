@@ -64,7 +64,8 @@
                         android:foreground="?android:attr/selectableItemBackground"
                         app:cardCornerRadius="2dp"
                         app:cardElevation="0dp"
-                        app:preferenceType="customTabProvider" />
+                        app:preferenceType="customTabProvider"
+                        android:focusable="true" />
 
                     <arun.com.chromer.activities.settings.widgets.AppPreferenceCardView
                         android:id="@+id/browser_preference_view"
@@ -76,7 +77,8 @@
                         android:foreground="?android:attr/selectableItemBackground"
                         app:cardCornerRadius="2dp"
                         app:cardElevation="0dp"
-                        app:preferenceType="secondaryBrowser" />
+                        app:preferenceType="secondaryBrowser"
+                        android:focusable="true" />
 
                     <arun.com.chromer.activities.settings.widgets.AppPreferenceCardView
                         android:id="@+id/favshare_preference_view"
@@ -88,7 +90,8 @@
                         android:foreground="?android:attr/selectableItemBackground"
                         app:cardCornerRadius="2dp"
                         app:cardElevation="0dp"
-                        app:preferenceType="favoriteShare" />
+                        app:preferenceType="favoriteShare"
+                        android:focusable="true" />
                 </LinearLayout>
             </RelativeLayout>
 

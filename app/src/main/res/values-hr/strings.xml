@@ -34,6 +34,11 @@
         <item>Desno</item>
         <item>Lijevo</item>
     </string-array>
+    <string-array name="articleThemeValues">
+        <item>Tamna</item>
+        <item>Svijetla</item>
+        <item>Automatska</item>
+    </string-array>
     <string-array name="webHeadsSizeValues">
         <item>Normalna</item>
         <item>Mala</item>
@@ -46,6 +51,7 @@
     <string name="share_via">Podijelite putem…</string>
     <string name="custom_tab_provider_not_found">Nije pronađen kompatibilan pružatelj prilagođenih kartica.</string>
     <string name="custom_tab_provider_not_found_expln">Chromer zahtijeva instaliran bilo koji preglednik koji je kompatibilan s prilagođenim karticama. Trenutno na telefonu nemate nijedan preglednik koji ih podržava. Želite li instalirati Google Chrome (besplatno) s Trgovine Play? Ako ga već imate, ažurirajte ga na najnoviju verziju.</string>
+    <string name="custom_tab_provider_not_found_dialog_content"><![CDATA[Na vašem uređaju nije moguće pronaći kompatibilan preglednik sa prilagođenim karticama. Preporučuje se Google Chrome (besplatan je). Svejedno možete prikazati web stranice u Chromeru i koristiti način za članke, ali za najbolje iskustvo, pružatelj prilagođenih kartica je preporučen. Želite li ga sada instalirati?]]></string>
     <string name="install">Instaliraj</string>
     <string name="licenses">Licence</string>
     <string name="about">O aplikaciji</string>
@@ -206,4 +212,51 @@
     <string name="share_all_list">Popis - ograničena podrška aplikacija. Npr.: Join, Pushbullet, itd.</string>
     <string name="new_tab">Otvori novu karticu</string>
     <string name="title_activity_open_with">Otvori s pomoću</string>
+    <string name="title_activity_settings">Postavke</string>
+    <string name="settings_browsing_mode">Način pregledavanja</string>
+    <string name="settings_look_and_feel">Izgled i osjećaj</string>
+    <string name="settings_browsing_options">Postavke pregledavanja</string>
+    <string name="title_activity_browsing_mode">Način pregledavanja</string>
+    <string name="browsing_mode_slide_over">Klizanje</string>
+    <string name="browsing_mode_web_heads">Web krugovi</string>
+    <string name="browsing_mode_slide_over_explanation">Web stranice kliznu preko aplikacije koju koristite.</string>
+    <string name="browsing_mode_web_heads_explanation">Web stranice se učitavaju u pozadini dopuštajući vam da naslažete više poveznica i onda se vratite na njih kasnije preko plutajućih oblačića na zaslonu.</string>
+    <string name="load_faster_heading">Učitajte stranice brže sa postavkama ispod</string>
+    <string name="amp">Ubrzane Mobilne Stranice (AMP)</string>
+    <string name="amp_mode">AMP Način</string>
+    <string name="amp_summary">Učitajte mobilnu optimiziranu verziju web stranice za puno brže i fluidnije iskustvo čitanja.</string>
+    <string name="article_mode">Način članka</string>
+    <string name="article_theme">Tema članka</string>
+    <string name="article_mode_summary">Učitajte način za čitanje bez dodatnih stvari fokusirajući se samo na sadržaj.</string>
+    <string name="amp_warning_title">AMP Upozorenje</string>
+    <string name="amp_warning_content"><![CDATA[U načinu <b>Klizanja</b>, dohvaćanje AMP veze stranice može potrajati. Možda će te vidjeti dijalog kada se to dogodi.]]></string>
+    <string name="title_activity_look_and_feel">Izgled i osjećaj</string>
+    <string name="not_available_in_slide_mode">Nije dostupno kod klizanja</string>
+    <string name="title_activity_browsing_options">Postavke pregledavanja</string>
+    <string name="grabbing_amp_link">Dohvaćanje AMP veze</string>
+    <string name="link_found">Veza je pronađena!</string>
+    <string name="link_not_found">AMP veza nije pronađena</string>
+    <string name="open">Otvori</string>
+    <string name="open_full_page">Otvori potpunu stranicu</string>
+    <string name="more">Više</string>
+    <string name="title_history">Povijest</string>
+    <string name="deleted_items">%1$d stavki je izbrisano.</string>
+    <string name="are_you_sure">Jeste li sigurni?</string>
+    <string name="history_deletion_confirmation_content">Ova radnja će izbrisati cijelu povijest i ne može se poništiti.</string>
+    <string name="incognito_mode">Anonimni način</string>
+    <string name="recents_intro">Nedavno otvarane veze će se ovdje pojaviti</string>
+    <string name="amp_article_combined_explanation"><![CDATA[Kada su i <b>AMP i način za članke uključeni</b>, Chromer će probati učitati AMP verziju stranice ako postoji. Ako ne, učitat će se način za članke.]]></string>
+    <string name="attention">Pažnja!</string>
+    <string name="manage">Upravljaj</string>
+    <string name="more_menu">Više</string>
+    <string name="open_article_view">Otvori prikaz artikla</string>
+    <string name="browse_seamlessly">Neprimjetno pregledavajte</string>
+    <string name="slide_over_explanation">Web stranice kliznu preko aplikacije koju koristite i možete pritisnuti X kako bi se brzo vratili u aplikaciju</string>
+    <string name="overlay_missing">Izgleda da vaš uređaj nema standarno dopuštenje za crtanje preko drugih aplikacija. Molimo kontaktirajte svog proizvođača za rješenje.</string>
+    <string name="home">Početna stranica</string>
+    <string name="no_items_present">Nema stavki.</string>
+    <string name="recents">Nedavno</string>
+    <string name="enable_history">Povijest je omogućena</string>
+    <string name="enable_history_subtitle">Onemogućavanje povijesti prestaje snimati stavke ovdje.</string>
+    <string name="enable_history_subtitle_custom_tab"><![CDATA[Onemogućavanje povijesti prestaje snimati stavke ovdje. Pružatelj prilagođenih kartica, <b>%1$s</b> može još uvijek snimati unose.]]></string>
 </resources>

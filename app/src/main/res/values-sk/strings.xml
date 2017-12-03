@@ -55,6 +55,7 @@
     <string name="share_via">Zdieľať pomocou…</string>
     <string name="custom_tab_provider_not_found">Kompatibilný poskytovateľ Custom Tabs nebol nájdený</string>
     <string name="custom_tab_provider_not_found_expln">Chromer vyžaduje aby ste mali nainštalovaný prehliadač podporujúci Custom Tabs. Momentálne na vašom zariadení nemáte prehliadač, ktorý to podporuje. Chceli by ste nainštalovať Google Chrome z Obchodu Play? Ak ho už máte, prosím, aktualizujte na najnovšiu verziu.</string>
+    <string name="custom_tab_provider_not_found_dialog_content"><![CDATA[Nie je možné nájsť kompatibilný prehliadač s podporou Custom tabs. Odporúčame Google Chrome (zdarma). Stále môžte zobrazovať stránky v Chromer a používať režim článok, ale pre najlepšie využitie je odporúčaný prehliadač s podporou Custom tabs. Chcete ho nainštalovať?]]></string>
     <string name="install">Inštalovať</string>
     <string name="licenses">Licencie</string>
     <string name="about">O aplikácii</string>
@@ -245,7 +246,7 @@
     <string name="title_history">História</string>
     <string name="deleted_items">Vymazaných položiek: %1$d</string>
     <string name="are_you_sure">Ste si istý?</string>
-    <string name="history_deletion_confirmation_content">Táto akcie vymaže celú históriu a nie je to možné vrátiť späť.</string>
+    <string name="history_deletion_confirmation_content">Táto akcia vymaže celú históriu a nie je to možné vrátiť späť.</string>
     <string name="incognito_mode">Režim inkognito</string>
     <string name="recents_intro">Tu sa zobrazia nedávno otvorené odkazy</string>
     <string name="amp_article_combined_explanation"><![CDATA[Ak sú povolené režimy <b>AMP aj článok</b>, Chromer sa pokúsi načítať AMP verziu stránky, ak je dostupná. Ak nie, bude načítaná v režime článok.]]></string>
@@ -255,4 +256,11 @@
     <string name="open_article_view">Otvoriť v zobrazení článku</string>
     <string name="browse_seamlessly">Prehliadajte hladko</string>
     <string name="slide_over_explanation">Webové stránky sa vysunú cez aplikáciu, ktorú používate a môžete použiť tlačidlo X pre rýchle vrátenie sa do aplikácie</string>
+    <string name="overlay_missing">Vyzerá to, že vaše zariadenie nemá štandardnú obrazovku pre povolenie Vykresliť cez ďalšie aplikácie. Prosím, pre vyriešenie kontaktujte výrobcu zariadenia.</string>
+    <string name="home">Domov</string>
+    <string name="no_items_present">Žiadne položky.</string>
+    <string name="recents">Nedávne</string>
+    <string name="enable_history">História je povolená</string>
+    <string name="enable_history_subtitle">Po zakázaní histórie sa prestanú zaznamenávať navštívené stránky.</string>
+    <string name="enable_history_subtitle_custom_tab"><![CDATA[Po zakázaní histórie sa prestanú zaznamenávať navštívené stránky. Poskytovateľ Custom Tabs, <b>%1$s</b>, ich ale stále zaznamenávať môže.]]></string>
 </resources>

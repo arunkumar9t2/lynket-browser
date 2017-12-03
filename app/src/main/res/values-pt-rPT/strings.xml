@@ -1,0 +1,100 @@
+<?xml version="1.0"?><!--
+  ~ Chromer
+  ~ Copyright (C) 2017 Arunkumar
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string-array name="animationValues">
+        <item>Nenhum</item>
+        <item>Deslize para a Direita</item>
+        <item>Deslize para Cima</item>
+    </string-array>
+    <string-array name="animationSpeedValues">
+        <item>Médio</item>
+        <item>Curto</item>
+    </string-array>
+    <string-array name="actionValues">
+        <item>Navegador secundário</item>
+        <item>Aplicação de partilha favorita</item>
+        <item>Partilha geral</item>
+    </string-array>
+    <string-array name="actionKeys">
+        <item>3</item>
+    </string-array>
+    <string-array name="webHeadsSpawnValues">
+        <item>Direita</item>
+        <item>Esquadra</item>
+    </string-array>
+    <string-array name="articleThemeValues">
+        <item>Escuro</item>
+        <item>Claro</item>
+        <item>Automático</item>
+    </string-array>
+    <string-array name="articleThemeKeys">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="webHeadsSizeValues">
+        <item>Normal</item>
+        <item>Pequeno</item>
+    </string-array>
+    <string-array name="webHeadsSizeKeys">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string name="share_text">Hey Experimente o \‘Chromer\’ para uma experiência de navegação rápida e segura! Faça download aqui 
+https://goo.gl/992ils</string>
+    <string name="share_via">Partilhar via…</string>
+    <string name="install">Instalação</string>
+    <string name="licenses">Licenças</string>
+    <string name="about">Sobre</string>
+    <string name="help_chromer_grow">Ajude o Chromer a crescer!</string>
+    <string name="share">Partilhe</string>
+    <string name="share_with">Partilhar com %1$s</string>
+    <string name="rate_play_store">Classifique na Play Store</string>
+    <string name="feedback">Feedback</string>
+    <string name="intro">Introdução</string>
+    <string name="send_email">Enviar email…</string>
+    <string name="open_with">Abrir com…</string>
+    <string name="open_in_browser">Abrir com %1$s</string>
+    <string name="unxp_err">Erro inesperado, tente de novo</string>
+    <string name="unsupported_link">Hiperligação não suportada, tente novamente</string>
+    <string name="couldnt_load_price">Não foi possível carregar o preço</string>
+    <string name="coffee">Café</string>
+    <string name="lunch">Almoço</string>
+    <string name="invalid_link">Hiperligação inválida</string>
+    <string name="copied">Copiado</string>
+    <string name="add_to_homescreen">Adicionar ao Ecrã Principal</string>
+    <string name="intro_1">Olá!\nO Chromer é um browser leve, seguro e rápido.</string>
+    <string name="how_to_use">Como utilizar isto?</string>
+    <string name="version">Versão</string>
+    <string name="changelog">Registro de alterações</string>
+    <string name="share_ideas">Compartilhe as suas ideias!</string>
+    <string name="consider_donation">Considere uma doação</string>
+    <string name="follow_twitter">Siga no Twitter</string>
+    <string name="connect_linkedIn">Conecte-se no LinkedIn</string>
+    <string name="more_apps">Mais aplicações</string>
+    <string name="author">Autor</string>
+    <string name="added">Adicionado</string>
+    <string name="settings">Configurações</string>
+    <string name="colored_toolbar">Barra de ferramentas colorida</string>
+    <string name="choose_animation">Animação de abertura</string>
+    <string name="animation_speed">Velocidade da animação</string>
+    <string name="personalization">Personalização</string>
+    <string name="keep_chrome_warmedup">Mantenha seu navegador na memória para o abrir mais rapidamente</string>
+    <string name="set_default_chromer">Definir como navegador padrão</string>
+    <string name="pre_fetch_desc">Pesquise a sua janela por hiperligações e carregua-as em segundo plano para uma abertura instantânea</string>
+</resources>

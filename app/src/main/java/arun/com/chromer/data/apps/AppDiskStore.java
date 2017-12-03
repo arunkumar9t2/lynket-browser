@@ -74,7 +74,7 @@ public class AppDiskStore implements AppStore, BookStore {
 
     @Override
     public boolean isPackageBlacklisted(@NonNull String packageName) {
-        return getBook().exist(packageName)
+        return getBook().contains(packageName)
                 && getApp(packageName).toBlocking().first().blackListed;
     }
 
@@ -130,7 +130,7 @@ public class AppDiskStore implements AppStore, BookStore {
 
     @Override
     public Observable<App> removeBlacklist(final String packageName) {
-        if (getBook().exist(packageName)) {
+        if (getBook().contains(packageName)) {
             return getApp(packageName)
                     .flatMap(app -> {
                         if (app != null) {

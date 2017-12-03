@@ -46,7 +46,8 @@
                 android:text="@string/incognito_mode"
                 android:textColor="@color/material_dark_color"
                 android:textSize="16sp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:focusable="true" />
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
@@ -80,7 +81,8 @@
                         android:text="@string/recents"
                         android:textColor="@color/material_dark_color"
                         android:textSize="16sp"
-                        android:visibility="visible" />
+                        android:visibility="visible"
+                        android:focusable="true" />
 
                     <View
                         android:layout_width="match_parent"
@@ -99,7 +101,8 @@
                         android:text="@string/recents_intro"
                         android:textColor="@color/material_dark_color"
                         android:textSize="14sp"
-                        android:visibility="visible" />
+                        android:visibility="visible"
+                        android:focusable="true" />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/recents_list"

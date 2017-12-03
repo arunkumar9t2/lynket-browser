@@ -58,7 +58,7 @@ public class WebHeadIntroExplainFragment extends AppIntroFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState);
         if (v != null) {
-            final TextView d = (TextView) v.findViewById(com.github.paolorotolo.appintro.R.id.description);
+            final TextView d = v.findViewById(com.github.paolorotolo.appintro.R.id.description);
             d.setBackground(ColorUtil.getRippleDrawableCompat(ContextCompat.getColor(getActivity(), R.color.accent)));
             d.setOnClickListener(v1 -> startActivity(new Intent(getActivity(), WebHeadsIntro.class)));
         }

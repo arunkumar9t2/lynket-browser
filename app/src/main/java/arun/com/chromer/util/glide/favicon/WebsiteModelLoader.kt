@@ -29,8 +29,8 @@ import com.bumptech.glide.signature.ObjectKey
 class WebsiteModelLoader : ModelLoader<Any, WebSite> {
 
     override fun buildLoadData(model: Any, width: Int, height: Int, options: Options?): LoadData<WebSite>? {
-        when (model) {
-            is WebSite -> return LoadData(ObjectKey(model), WebsiteDataFetcher(webSite = model))
+        return when (model) {
+            is WebSite -> LoadData(ObjectKey(model), WebsiteDataFetcher(webSite = model))
             else -> throw IllegalStateException("model is not WebSite")
         }
     }

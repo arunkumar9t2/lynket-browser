@@ -137,6 +137,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
         setContentScale(0.0f);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // Don't react to any touch event and consume it when we are being destroyed, if we are a
