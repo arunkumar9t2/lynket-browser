@@ -82,7 +82,8 @@
         <activity
             android:name=".activities.main.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.Launcher" />
+            android:theme="@style/AppTheme.Launcher"
+            android:windowSoftInputMode="adjustPan" />
 
         <activity-alias
             android:name=".MainActivity"

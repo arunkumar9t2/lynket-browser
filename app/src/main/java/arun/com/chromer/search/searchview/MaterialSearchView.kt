@@ -63,7 +63,6 @@ class MaterialSearchView : RelativeLayout, SuggestionAdapter.SuggestionClickList
 
     private val voiceIconClicks = PublishSubject.create<Void>()
     private val searchPerforms = PublishSubject.create<String>()
-    private val clearClicks = PublishSubject.create<Void>()
 
     val text: String
         get() = if (msv_edit_text.text == null) "" else msv_edit_text?.text.toString()
@@ -160,10 +159,6 @@ class MaterialSearchView : RelativeLayout, SuggestionAdapter.SuggestionClickList
         return searchPerforms.asObservable()
     }
 
-    fun clearClicks(): Observable<Void> {
-        return clearClicks.asObservable()
-    }
-
     private fun gainFocus() {
         handleVoiceIconState()
         setFocusedColor()
@@ -192,7 +187,7 @@ class MaterialSearchView : RelativeLayout, SuggestionAdapter.SuggestionClickList
     }
 
     private fun handleVoiceIconState() {
-        clearText = !TextUtils.isEmpty(msv_edit_text?.text)
+        clearText = !TextUtils.isEmpty(msv_edit_text?.text) || suggestionAdapter.itemCount != 0
         if (clearText) {
             msv_right_icon?.setImageDrawable(xIcon.color(if (msv_edit_text!!.hasFocus()) focusedColor else normalColor))
         } else {
@@ -224,7 +219,6 @@ class MaterialSearchView : RelativeLayout, SuggestionAdapter.SuggestionClickList
     }
 
     private fun hideSuggestions() {
-        clearClicks.onNext(null)
         suggestionAdapter.clear()
     }
 
