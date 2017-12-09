@@ -29,8 +29,6 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +36,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -71,8 +68,6 @@ public class MaterialSearchView extends RelativeLayout implements SuggestionAdap
     public ImageView menuIconView;
     @BindView(R.id.msv_right_icon)
     public ImageView voiceIconView;
-    @BindView(R.id.msv_label)
-    public TextView label;
     @BindView(R.id.msv_edit_text)
     public EditText editText;
     @BindView(R.id.search_suggestions)
@@ -136,24 +131,6 @@ public class MaterialSearchView extends RelativeLayout implements SuggestionAdap
             if (hasFocus) gainFocus();
             else loseFocus(null);
         });
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                handleVoiceIconState();
-                if (s.length() != 0) {
-                    label.setAlpha(0f);
-                } else label.setAlpha(0.5f);
-            }
-        });
         editText.setOnEditorActionListener((textView, actionId, keyEvent) -> {
             if (actionId == IME_ACTION_SEARCH) {
                 searchPerforms.onNext(getURL());
@@ -192,10 +169,8 @@ public class MaterialSearchView extends RelativeLayout implements SuggestionAdap
     }
 
     private void gainFocus() {
-        final float labelAlpha = editText.getText().length() == 0 ? 0.5f : 0f;
         final AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(
-                ObjectAnimator.ofFloat(label, "alpha", labelAlpha),
                 ObjectAnimator.ofFloat(editText, "alpha", 1).setDuration(300)
         );
         hardwareLayers();
@@ -214,7 +189,6 @@ public class MaterialSearchView extends RelativeLayout implements SuggestionAdap
     private void loseFocus(@Nullable final Runnable endAction) {
         final AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(
-                ObjectAnimator.ofFloat(label, "alpha", 1),
                 ObjectAnimator.ofFloat(editText, "alpha", 0).setDuration(300)
         );
         hardwareLayers();
@@ -239,19 +213,15 @@ public class MaterialSearchView extends RelativeLayout implements SuggestionAdap
     }
 
     private void clearLayerTypes() {
-        label.setLayerType(LAYER_TYPE_NONE, null);
         editText.setLayerType(LAYER_TYPE_NONE, null);
     }
 
     private void hardwareLayers() {
-        label.setLayerType(LAYER_TYPE_HARDWARE, null);
         editText.setLayerType(LAYER_TYPE_HARDWARE, null);
     }
 
     private void hideKeyboard() {
-        ((InputMethodManager) getContext()
-                .getSystemService(Context.INPUT_METHOD_SERVICE))
-                .hideSoftInputFromWindow(getWindowToken(), 0);
+        ((InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getWindowToken(), 0);
     }
 
     private void setFocusedColor() {
