@@ -23,7 +23,6 @@
     android:layout_height="wrap_content"
     android:clipChildren="false"
     android:clipToPadding="false"
-    android:descendantFocusability="afterDescendants"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:padding="8dp">
@@ -80,7 +79,7 @@
                     android:imeOptions="actionSearch"
                     android:inputType="textUri"
                     android:maxLines="1"
-                    android:textColor="@color/material_dark_color"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textSize="18sp" />
 
                 <ImageView

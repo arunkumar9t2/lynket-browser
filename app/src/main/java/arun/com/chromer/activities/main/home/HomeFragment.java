@@ -201,7 +201,7 @@ public class HomeFragment extends BaseMVPFragment<Home.View, Home.Presenter> imp
             }
         }));
 
-        subs.add(materialSearchView.searchPerfomed().subscribe(url -> {
+        subs.add(materialSearchView.searchPerformed().subscribe(url -> {
             materialSearchView.postDelayed(() -> launchCustomTab(url), 150);
             Answers.getInstance().logSearch(new SearchEvent());
         }));
@@ -299,7 +299,7 @@ public class HomeFragment extends BaseMVPFragment<Home.View, Home.Presenter> imp
     @OnClick(R.id.fab)
     public void onFabClick() {
         if (materialSearchView.hasFocus() && materialSearchView.getText().length() > 0) {
-            launchCustomTab(materialSearchView.getURL());
+            launchCustomTab(materialSearchView.getUrl());
         } else {
             launchCustomTab(Constants.GOOGLE_URL);
         }
