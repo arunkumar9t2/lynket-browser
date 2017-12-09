@@ -35,6 +35,7 @@ import android.widget.EditText
 import android.widget.RelativeLayout
 import arun.com.chromer.R
 import arun.com.chromer.search.suggestion.SuggestionAdapter
+import arun.com.chromer.search.suggestion.items.HistorySuggestionItem
 import arun.com.chromer.search.suggestion.items.SuggestionItem
 import arun.com.chromer.util.Utils.getSearchUrl
 import butterknife.BindColor
@@ -44,8 +45,9 @@ import com.mikepenz.iconics.IconicsDrawable
 import kotlinx.android.synthetic.main.widget_material_search_view.view.*
 import rx.Observable
 import rx.subjects.PublishSubject
+import rx.subscriptions.CompositeSubscription
 
-class MaterialSearchView : RelativeLayout, SuggestionAdapter.SuggestionClickListener {
+class MaterialSearchView : RelativeLayout {
     @BindColor(R.color.accent_icon_nofocus)
     @JvmField
     var normalColor: Int = 0
@@ -63,6 +65,8 @@ class MaterialSearchView : RelativeLayout, SuggestionAdapter.SuggestionClickList
 
     private val voiceIconClicks = PublishSubject.create<Void>()
     private val searchPerforms = PublishSubject.create<String>()
+
+    private val compositeSubs = CompositeSubscription()
 
     val text: String
         get() = if (msv_edit_text.text == null) "" else msv_edit_text?.text.toString()
@@ -100,26 +104,32 @@ class MaterialSearchView : RelativeLayout, SuggestionAdapter.SuggestionClickList
         addView(LayoutInflater.from(getContext()).inflate(R.layout.widget_material_search_view, this, false))
         ButterKnife.bind(this)
 
-        suggestionAdapter = SuggestionAdapter(getContext(), this)
+        suggestionAdapter = SuggestionAdapter(getContext())
         search_suggestions?.apply {
             layoutManager = LinearLayoutManager(getContext(), RecyclerView.VERTICAL, true)
             adapter = suggestionAdapter
             addItemDecoration(DividerItemDecoration(getContext(), VERTICAL))
         }
+
+        compositeSubs.add(suggestionAdapter.clicks()
+                .doOnNext {
+                    searchPerformed(getSearchUrl(if (it is HistorySuggestionItem) it.subTitle else it.title))
+                }.subscribe())
     }
 
     override fun onFinishInflate() {
         super.onFinishInflate()
         msv_edit_text?.setOnClickListener { performClick() }
         msv_edit_text?.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus)
+            if (hasFocus) {
                 gainFocus()
-            else
+            } else {
                 loseFocus(null)
+            }
         }
         msv_edit_text?.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == IME_ACTION_SEARCH) {
-                searchPerforms.onNext(url)
+                searchPerformed(url)
                 return@setOnEditorActionListener true
             }
             false
@@ -151,12 +161,17 @@ class MaterialSearchView : RelativeLayout, SuggestionAdapter.SuggestionClickList
         setOnClickListener { if (!msv_edit_text!!.hasFocus()) gainFocus() }
     }
 
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        compositeSubs.clear()
+    }
+
     fun voiceIconClicks(): Observable<Void> {
         return voiceIconClicks.asObservable()
     }
 
-    fun searchPerformed(): Observable<String> {
-        return searchPerforms.asObservable()
+    fun searchPerforms(): Observable<String> {
+        return searchPerforms.asObservable().filter { it != null }
     }
 
     private fun gainFocus() {
@@ -214,8 +229,8 @@ class MaterialSearchView : RelativeLayout, SuggestionAdapter.SuggestionClickList
         // no op
     }
 
-    override fun onSuggestionClicked(suggestion: String) {
-        clearFocus({ searchPerforms.onNext(getSearchUrl(suggestion)) })
+    private fun searchPerformed(url: String) {
+        clearFocus { searchPerforms.onNext(url) }
     }
 
     private fun hideSuggestions() {

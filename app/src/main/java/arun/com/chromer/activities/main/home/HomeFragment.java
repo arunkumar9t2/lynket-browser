@@ -185,7 +185,7 @@ public class HomeFragment extends BaseMVPFragment<Home.View, Home.Presenter> imp
             }
         }));
 
-        subs.add(materialSearchView.searchPerformed().subscribe(url -> {
+        subs.add(materialSearchView.searchPerforms().subscribe(url -> {
             materialSearchView.postDelayed(() -> launchCustomTab(url), 150);
             Answers.getInstance().logSearch(new SearchEvent());
         }));
