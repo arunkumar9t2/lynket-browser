@@ -75,6 +75,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
     public void onBindViewHolder(SuggestionItemHolder holder, int position) {
         final SuggestionItem suggestionItem = suggestionItems.get(position);
         holder.suggestion.setText(suggestionItem.suggestion);
+        holder.suggestionSubTitle.setText(suggestionItem.suggestion);
         setTransitionName(holder.suggestion, suggestionItem.type + suggestionItem.suggestion);
         switch (suggestionItem.type) {
             case SuggestionItem.COPY:
@@ -119,6 +120,8 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Su
     class SuggestionItemHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.suggestions_text)
         TextView suggestion;
+        @BindView(R.id.suggestions_sub_title)
+        TextView suggestionSubTitle;
         @BindView(R.id.suggestion_icon)
         ImageView icon;
 
