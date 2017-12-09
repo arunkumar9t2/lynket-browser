@@ -21,14 +21,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clipChildren="false"
     android:clipToPadding="false"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:paddingBottom="@dimen/material_search_margin_bottom"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/material_search_margin_top">
-
+    android:padding="8dp">
 
     <android.support.v7.widget.CardView
         android:id="@+id/msv_card"
@@ -42,6 +39,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/search_suggestions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:scrollbars="none"
+                tools:listitem="@layout/widget_suggestions_item_template" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -59,37 +64,25 @@
                     android:layout_marginRight="4dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:scaleType="center"
-                    tools:ignore="ContentDescription" />
+                    tools:ignore="ContentDescription"
+                    tools:src="@drawable/ic_action_amp_icon" />
 
-                <FrameLayout
+                <EditText
+                    android:id="@+id/msv_edit_text"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:layout_weight="1"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp">
-
-                    <EditText
-                        android:id="@+id/msv_edit_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:background="@android:color/transparent"
-                        android:gravity="center|start"
-                        android:imeOptions="actionSearch"
-                        android:inputType="textUri"
-                        android:maxLines="1"
-                        android:textColor="@color/material_dark_color"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:id="@+id/msv_label"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical|start"
-                        android:text="@string/search_or_type_url"
-                        android:textColor="@color/material_dark_color"
-                        android:textSize="18sp" />
-                </FrameLayout>
+                    android:background="@android:color/transparent"
+                    android:gravity="center|start"
+                    android:hint="@string/search_or_type_url"
+                    android:imeOptions="actionSearch"
+                    android:inputType="textUri"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textSize="18sp" />
 
                 <ImageView
                     android:id="@+id/msv_right_icon"
@@ -100,14 +93,9 @@
                     android:layout_marginRight="4dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:scaleType="center"
-                    tools:ignore="ContentDescription" />
+                    tools:ignore="ContentDescription"
+                    tools:src="@drawable/ic_action_amp_icon" />
             </LinearLayout>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/search_suggestions"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scrollbars="none" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </FrameLayout>

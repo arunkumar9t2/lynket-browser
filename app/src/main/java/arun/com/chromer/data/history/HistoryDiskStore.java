@@ -260,4 +260,27 @@ public class HistoryDiskStore extends SQLiteOpenHelper implements HistoryStore {
             return webSites;
         });
     }
+
+    @NonNull
+    @Override
+    public Observable<List<WebSite>> search(@NonNull String text) {
+        return Observable.fromCallable(() -> {
+            open();
+            final List<WebSite> webSites = new ArrayList<>();
+            final Cursor cursor = database.query(true,
+                    TABLE_NAME, ALL_COLUMN_PROJECTION,
+                    "(" + COLUMN_URL + " like '%" + text + "%' OR " + COLUMN_TITLE + " like '%" + text + "%')", null,
+                    null, null, ORDER_BY_TIME_DESC, "5");
+            if (cursor != null) {
+                try {
+                    while (cursor.moveToNext()) {
+                        webSites.add(WebSite.fromCursor(cursor));
+                    }
+                } finally {
+                    cursor.close();
+                }
+            }
+            return webSites;
+        });
+    }
 }

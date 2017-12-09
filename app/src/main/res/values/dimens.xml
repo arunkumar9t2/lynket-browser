@@ -26,8 +26,8 @@
     <dimen name="card_margin">16dp</dimen>
     <dimen name="arun_width">48dp</dimen>
     <dimen name="arun_height">48dp</dimen>
-    <dimen name="material_search_margin_bottom">10dp</dimen>
-    <dimen name="material_search_margin_top">10dp</dimen>
+    <dimen name="material_search_margin_bottom">8dp</dimen>
+    <dimen name="material_search_margin_top">8dp</dimen>
     <dimen name="web_head_size_normal">86dp</dimen>
     <dimen name="web_head_size_small">76dp</dimen>
     <dimen name="web_head_shadow_radius">2.5dp</dimen>

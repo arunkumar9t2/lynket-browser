@@ -56,6 +56,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
@@ -426,6 +428,13 @@ public class Utils {
     public static boolean isValidFavicon(@Nullable Bitmap favicon) {
         return favicon != null && !(favicon.getWidth() == 16 || favicon.getHeight() == 16
                 || favicon.getWidth() == 32 || favicon.getHeight() == 32);
+    }
+
+    public static boolean isOnline(@NotNull Context context) {
+        final ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null &&
+                cm.getActiveNetworkInfo().isAvailable()
+                && cm.getActiveNetworkInfo().isConnected();
     }
 
     /**

@@ -43,4 +43,5 @@
     <color name="web_head_bg">#00BCD4</color>
     <color name="error">#DD2C00</color>
     <color name="remove_web_head_color">#ff1744</color>
+    <color name="shadow_color">#40000000</color>
 </resources>

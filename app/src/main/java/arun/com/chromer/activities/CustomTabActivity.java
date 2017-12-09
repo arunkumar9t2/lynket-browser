@@ -27,6 +27,7 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -106,7 +107,7 @@ public class CustomTabActivity extends BaseActivity {
     }
 
     @Override
-    public void inject(ActivityComponent activityComponent) {
+    public void inject(@NonNull ActivityComponent activityComponent) {
         activityComponent.inject(this);
     }
 
