@@ -18,15 +18,16 @@
 
 package arun.com.chromer.activities.main.home
 
-import `in`.arunkumarsampath.suggestions.RxSuggestions
 import arun.com.chromer.data.history.BaseHistoryRepository
 import arun.com.chromer.data.website.model.WebSite
 import arun.com.chromer.di.PerFragment
-import arun.com.chromer.search.SuggestionItem
+import arun.com.chromer.search.SuggestionsEngine
+import arun.com.chromer.search.suggestion.items.SuggestionItem
 import arun.com.chromer.shared.common.Base
 import arun.com.chromer.shared.common.Snackable
 import arun.com.chromer.util.RxUtils
 import rx.Observable
+import rx.android.schedulers.AndroidSchedulers
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -39,15 +40,16 @@ internal interface Home {
 
     @PerFragment
     class Presenter @Inject
-    constructor(private val historyRepository: BaseHistoryRepository) : Base.Presenter<View>() {
+    constructor(
+            private val historyRepository: BaseHistoryRepository,
+            private val suggestionsEngine: SuggestionsEngine
+    ) : Base.Presenter<View>() {
 
         fun registerSearch(stringObservable: Observable<String>) {
             subs.add(stringObservable
-                    .compose(RxSuggestions.suggestionsTransformer())
-                    .onErrorResumeNext { Observable.just(emptyList<String>()) }
-                    .map<List<SuggestionItem>> { strings ->
-                        strings.map { SuggestionItem(it, SuggestionItem.GOOGLE) }
-                    }
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .compose(suggestionsEngine.suggestionsTransformer())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .doOnNext { suggestionItems ->
                         if (isViewAttached) {
                             view.setSuggestions(suggestionItems)

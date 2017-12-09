@@ -122,4 +122,10 @@ public class HistoryRepository implements BaseHistoryRepository {
     public Observable<List<WebSite>> recents() {
         return historyStore.recents();
     }
+
+    @NonNull
+    @Override
+    public Observable<List<WebSite>> search(@NonNull String text) {
+        return historyStore.search(text);
+    }
 }

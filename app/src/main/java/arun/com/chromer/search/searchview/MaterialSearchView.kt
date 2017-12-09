@@ -34,8 +34,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.RelativeLayout
 import arun.com.chromer.R
-import arun.com.chromer.search.SuggestionAdapter
-import arun.com.chromer.search.SuggestionItem
+import arun.com.chromer.search.suggestion.SuggestionAdapter
+import arun.com.chromer.search.suggestion.items.SuggestionItem
 import arun.com.chromer.util.Utils.getSearchUrl
 import butterknife.BindColor
 import butterknife.ButterKnife

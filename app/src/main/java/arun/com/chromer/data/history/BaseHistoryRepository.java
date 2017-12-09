@@ -53,4 +53,7 @@ public interface BaseHistoryRepository {
 
     @NonNull
     Observable<List<WebSite>> recents();
+
+    @NonNull
+    Observable<List<WebSite>> search(@NonNull String text);
 }
