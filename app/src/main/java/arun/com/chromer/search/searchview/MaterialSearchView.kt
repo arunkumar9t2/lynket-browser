@@ -171,6 +171,7 @@ class MaterialSearchView : RelativeLayout, SuggestionAdapter.SuggestionClickList
 
     private fun loseFocus(endAction: (() -> Unit)?) {
         setNormalColor()
+        msv_edit_text.text = null
         hideKeyboard()
         hideSuggestions()
         endAction?.invoke()
