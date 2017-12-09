@@ -69,7 +69,7 @@ class SuggestionAdapter(
                 .sizeDp(18)
         copyIcon = IconicsDrawable(context)
                 .icon(CommunityMaterial.Icon.cmd_content_copy)
-                .color(ContextCompat.getColor(context, R.color.md_cyan_600))
+                .color(ContextCompat.getColor(context, R.color.md_green_500))
                 .sizeDp(18)
     }
 
