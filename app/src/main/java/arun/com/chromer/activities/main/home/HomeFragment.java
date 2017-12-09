@@ -24,8 +24,6 @@ import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.transition.AutoTransition;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -61,7 +59,6 @@ import butterknife.OnClick;
 import timber.log.Timber;
 
 import static android.app.Activity.RESULT_OK;
-import static android.support.transition.TransitionManager.beginDelayedTransition;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static arun.com.chromer.shared.Constants.REQUEST_CODE_VOICE;
@@ -95,8 +92,6 @@ public class HomeFragment extends BaseMVPFragment<Home.View, Home.Presenter> imp
 
     @Inject
     WebsiteRepository websiteRepository;
-
-    private AutoTransition autoTransition;
 
     @NonNull
     @Override
@@ -150,12 +145,6 @@ public class HomeFragment extends BaseMVPFragment<Home.View, Home.Presenter> imp
         customTabManager.unbindCustomTabsService(getActivity());
     }
 
-    private void doTransition() {
-        if (getActivity() != null && !getActivity().isFinishing() && nestedScrollView != null) {
-            beginDelayedTransition(nestedScrollView, autoTransition);
-        }
-    }
-
     @Override
     public void snack(@NonNull String message) {
         ((Snackable) getActivity()).snack(message);
@@ -169,7 +158,6 @@ public class HomeFragment extends BaseMVPFragment<Home.View, Home.Presenter> imp
     @Override
     public void setSuggestions(@NonNull List<? extends SuggestionItem> suggestions) {
         materialSearchView.setSuggestions(suggestions);
-        doTransition();
     }
 
     @Override
@@ -188,10 +176,6 @@ public class HomeFragment extends BaseMVPFragment<Home.View, Home.Presenter> imp
     }
 
     private void setupMaterialSearch() {
-        autoTransition = new AutoTransition();
-        autoTransition.setDuration(150);
-        autoTransition.setInterpolator(new FastOutSlowInInterpolator());
-
         subs.add(materialSearchView.voiceIconClicks().subscribe(aVoid -> {
             Answers.getInstance().logSearch(new SearchEvent().putCustomAttribute("Mode", "Voice"));
             if (Utils.isVoiceRecognizerPresent(getActivity())) {
@@ -205,8 +189,6 @@ public class HomeFragment extends BaseMVPFragment<Home.View, Home.Presenter> imp
             materialSearchView.postDelayed(() -> launchCustomTab(url), 150);
             Answers.getInstance().logSearch(new SearchEvent());
         }));
-
-        subs.add(materialSearchView.clearClicks().subscribe(aVoid -> doTransition()));
 
         materialSearchView.clearFocus();
         presenter.registerSearch(afterTextChangeEvents(materialSearchView.getEditText())
