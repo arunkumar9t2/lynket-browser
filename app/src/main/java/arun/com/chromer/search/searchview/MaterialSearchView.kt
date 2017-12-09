@@ -65,6 +65,7 @@ class MaterialSearchView : RelativeLayout {
 
     private val voiceIconClicks = PublishSubject.create<Void>()
     private val searchPerforms = PublishSubject.create<String>()
+    private val focusChanges = PublishSubject.create<Boolean>()
 
     private val compositeSubs = CompositeSubscription()
 
@@ -174,9 +175,12 @@ class MaterialSearchView : RelativeLayout {
         return searchPerforms.asObservable().filter { it != null }
     }
 
+    fun focusChanges(): Observable<Boolean> = focusChanges.asObservable()
+
     private fun gainFocus() {
         handleVoiceIconState()
         setFocusedColor()
+        focusChanges.onNext(true)
     }
 
     private fun loseFocus(endAction: (() -> Unit)?) {
@@ -185,6 +189,7 @@ class MaterialSearchView : RelativeLayout {
         hideKeyboard()
         hideSuggestions()
         endAction?.invoke()
+        focusChanges.onNext(false)
     }
 
     private fun hideKeyboard() {
