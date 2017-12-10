@@ -206,7 +206,6 @@
     <string name="minimize">Minimaliseren</string>
     <string name="open_in_new_tab_explanation"><![CDATA[<b>In nieuw tabblad openen (5.0+) -</b> Kopieer een link of tekst op het scherm en tik dit pictogram om de link te openen of de gekopieerde tekst te zoeken in een nieuw aangepast tabblad of zwevend rondje.]]></string>
     <string name="share_action_explanation"><![CDATA[<b>Delen -</b> Snel de Android-actie <i>Delen<i> uitvoeren.]]></string>
-    <string name="minimize_action_explanation"><![CDATA[<b>Minimaliseren -</b> Zal de huidige pagina minimaliseren naar een zwevend rondje. Alleen beschikbaar als de opties <i>Webheads</i> en <i>Tabbladen samenvoegen</i> ingeschakeld zijn.]]></string>
     <string name="available_actions">Beschikbare acties</string>
     <string name="secondary_browser_launching_error_title">Fout bij laden van tweede browser</string>
     <string name="launch_setting">Instellingen van openen</string>

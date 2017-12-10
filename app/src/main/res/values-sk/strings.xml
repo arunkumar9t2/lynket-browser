@@ -203,7 +203,6 @@
     <string name="minimize">Minimalizovať</string>
     <string name="open_in_new_tab_explanation"><![CDATA[<b>Otvoriť na novej karte (5.0+) -</b> Skopírujte odkaz alebo text na obrazovke a kliknite na túto ikonu pre spustenie odkazu alebo vyhľadanie skopírovaného textu na novej karte alebo v bubline.]]></string>
     <string name="share_action_explanation"><![CDATA[<b>Zdieľať -</b> Rýchle spustenie akcie zdieľania Androidu.]]></string>
-    <string name="minimize_action_explanation"><![CDATA[<b>Minimalizovať -</b> Minimalizuje aktuálnu stránku späť do bubliny. Dostupné iba ak je povolené <i>Webové hlavičky</i> a <i>Zlúčenie kariet a aplikácií</i>.]]></string>
     <string name="available_actions">Dostupné akcie</string>
     <string name="secondary_browser_launching_error_title">Vyskytla sa chyba pri spúšťaní sekundárneho prehliadača</string>
     <string name="launch_setting">Nastavenia spustenia</string>

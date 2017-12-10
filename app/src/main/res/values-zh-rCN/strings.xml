@@ -216,7 +216,6 @@
     <string name="minimize">最小化</string>
     <string name="open_in_new_tab_explanation"><![CDATA[<b>在新标签页打开 (5.0+) -</b> 复制屏幕上的一个链接或一段文本，点击这个图标以在一个新标签或气泡中打开该链接或搜索复制的文本。]]></string>
     <string name="share_action_explanation"><![CDATA[<b>分享 -</b> 快速地执行 Android 分享动作。]]></string>
-    <string name="minimize_action_explanation"><![CDATA[<b>最小化 -</b> 将最小化当前页面到一个气泡。只在<i>链接气泡与合并标签页</i>功能开启时可用。]]></string>
     <string name="available_actions">可用动作</string>
     <string name="secondary_browser_launching_error_title">启动第二浏览器时出错</string>
     <string name="launch_setting">启动设置</string>

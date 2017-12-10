@@ -21,20 +21,22 @@ package arun.com.chromer.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.browserintercept.BrowserInterceptActivity;
+import arun.com.chromer.di.activity.ActivityComponent;
+import arun.com.chromer.shared.common.BaseActivity;
 import arun.com.chromer.util.Utils;
 
 import static android.text.InputType.TYPE_CLASS_TEXT;
 import static android.widget.Toast.LENGTH_SHORT;
 
 
-public class NewTabDialogActivity extends AppCompatActivity {
+public class NewTabDialogActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,5 +58,15 @@ public class NewTabDialogActivity extends AppCompatActivity {
                     finish();
                 })
                 .dismissListener(dialog -> finish()).show();
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return 0;
+    }
+
+    @Override
+    public void inject(@NonNull ActivityComponent activityComponent) {
+        activityComponent.inject(this);
     }
 }

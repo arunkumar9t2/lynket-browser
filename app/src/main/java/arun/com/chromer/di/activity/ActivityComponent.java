@@ -21,6 +21,7 @@ package arun.com.chromer.di.activity;
 import android.support.annotation.NonNull;
 
 import arun.com.chromer.activities.CustomTabActivity;
+import arun.com.chromer.activities.NewTabDialogActivity;
 import arun.com.chromer.activities.blacklist.BlacklistManagerActivity;
 import arun.com.chromer.activities.browserintercept.BrowserInterceptActivity;
 import arun.com.chromer.activities.browsing.article.ChromerArticleActivity;
@@ -59,4 +60,6 @@ public interface ActivityComponent {
     void inject(ChromerArticleActivity chromerArticleActivity);
 
     void inject(BrowsingOptionsActivity browsingOptionsActivity);
+
+    void inject(NewTabDialogActivity newTabDialogActivity);
 }

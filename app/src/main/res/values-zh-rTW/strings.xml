@@ -203,7 +203,6 @@
     <string name="minimize">縮小</string>
     <string name="open_in_new_tab_explanation"><![CDATA[<b>開啟新分頁(5.0+) -</b> 在畫面上複製連結或文字然後按此按鈕以開啟連結或開啟分頁或浮動氣泡搜尋該文字。]]></string>
     <string name="share_action_explanation"><![CDATA[<b>分享 -</b> 快速使用Android內置的分享功能]]></string>
-    <string name="minimize_action_explanation"><![CDATA[<b>縮小 -</b> 將現行網頁縮小至浮動氣泡。只有<i>合併顯示分頁和應用程式</i>被啟用時才適用 ]]></string>
     <string name="available_actions">可行操作</string>
     <string name="secondary_browser_launching_error_title">開啟次要瀏覽器程式時發生錯誤</string>
     <string name="launch_setting">開啟設定</string>
