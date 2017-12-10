@@ -66,11 +66,11 @@ class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> 
         final WebSite webSite = webSites.get(position);
         holder.deleteIcon.setImageDrawable(new IconicsDrawable(context)
                 .icon(CommunityMaterial.Icon.cmd_close)
-                .color(ContextCompat.getColor(context, R.color.accent_icon_nofocus))
+                .color(ContextCompat.getColor(context, R.color.accent_icon_no_focus))
                 .sizeDp(16));
         holder.shareIcon.setImageDrawable(new IconicsDrawable(context)
                 .icon(CommunityMaterial.Icon.cmd_share_variant)
-                .color(ContextCompat.getColor(context, R.color.accent_icon_nofocus))
+                .color(ContextCompat.getColor(context, R.color.accent_icon_no_focus))
                 .sizeDp(16));
         holder.url.setText(webSite.preferredUrl());
         holder.title.setText(webSite.safeLabel());

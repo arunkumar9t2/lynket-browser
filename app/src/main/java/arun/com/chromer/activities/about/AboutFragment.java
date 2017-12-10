@@ -283,7 +283,7 @@ public class AboutFragment extends Fragment {
                     holder.subtitle.setVisibility(View.GONE);
                     holder.imageView.setBackground(new IconicsDrawable(getActivity())
                             .icon(CommunityMaterial.Icon.cmd_google_play)
-                            .color(ContextCompat.getColor(getActivity(), R.color.playstore_green))
+                            .color(ContextCompat.getColor(getActivity(), R.color.play_store_green))
                             .sizeDp(24));
                     break;
             }

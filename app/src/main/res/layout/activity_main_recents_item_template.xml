@@ -20,7 +20,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:background="?attr/selectableItemBackground"
+    android:background="?attr/selectableItemBackgroundBorderless"
     android:clickable="true"
     android:focusable="true"
     android:gravity="top|center"
@@ -45,6 +45,6 @@
         android:maxLines="2"
         android:paddingLeft="2dp"
         android:paddingRight="2dp"
-        android:textColor="@color/material_dark_color"
+        android:textColor="@color/secondary_text_color"
         android:textSize="13sp" />
 </LinearLayout>

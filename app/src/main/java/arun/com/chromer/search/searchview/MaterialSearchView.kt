@@ -48,7 +48,7 @@ import rx.subjects.PublishSubject
 import rx.subscriptions.CompositeSubscription
 
 class MaterialSearchView : RelativeLayout {
-    @BindColor(R.color.accent_icon_nofocus)
+    @BindColor(R.color.accent_icon_no_focus)
     @JvmField
     var normalColor: Int = 0
     @BindColor(R.color.accent)

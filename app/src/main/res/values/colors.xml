@@ -38,10 +38,14 @@
     <color name="google_plus">#dc4e41</color>
     <color name="twitter">#55acee</color>
     <color name="linkedin">#0077b5</color>
-    <color name="playstore_green">#0f9d58</color>
-    <color name="accent_icon_nofocus">#616161</color>
+    <color name="play_store_green">#0f9d58</color>
+    <color name="accent_icon_no_focus">#616161</color>
     <color name="web_head_bg">#00BCD4</color>
     <color name="error">#DD2C00</color>
     <color name="remove_web_head_color">#ff1744</color>
     <color name="shadow_color">#40000000</color>
+
+    <color name="primary_text_color">@color/material_dark_color</color>
+    <color name="secondary_text_color">#4c4c4c</color>
+    <color name="material_grey_color">#727272</color>
 </resources>
