@@ -24,6 +24,7 @@ import javax.inject.Singleton;
 
 import arun.com.chromer.di.viewmodel.ViewModelModule;
 import arun.com.chromer.shared.AppDetectionManager;
+import arun.com.chromer.util.RxEventBus;
 import dagger.Module;
 import dagger.Provides;
 
@@ -46,5 +47,11 @@ public class AppModule {
     @Singleton
     AppDetectionManager providesAppDetectionManager() {
         return new AppDetectionManager(application);
+    }
+
+    @Provides
+    @Singleton
+    RxEventBus rxEventBus() {
+        return new RxEventBus();
     }
 }

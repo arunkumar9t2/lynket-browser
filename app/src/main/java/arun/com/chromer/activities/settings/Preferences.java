@@ -64,7 +64,7 @@ public class Preferences {
     public static final String AGGRESSIVE_LOADING = "aggressive_loading";
     private static final String WEB_HEAD_FAVICON = "webhead_favicons_pref";
     private static final String BLACKLIST = "blacklist_preference";
-    private static final String PREFERRED_PACKAGE = "preferred_package";
+    public static final String PREFERRED_CUSTOM_TAB_PACKAGE = "preferred_package";
     private static final String FIRST_RUN = "firstrun_3";
     private static final String SECONDARY_PREF = "secondary_preference";
     private static final String FAV_SHARE_PREF = "fav_share_preference";
@@ -100,7 +100,7 @@ public class Preferences {
      * @return {@link SharedPreferences} instance
      */
     @NonNull
-    private SharedPreferences getDefaultSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return PreferenceManager.getDefaultSharedPreferences(context);
     }
 
@@ -153,14 +153,14 @@ public class Preferences {
     }
 
     @Nullable
-    public String customTabApp() {
-        String packageName = getDefaultSharedPreferences().getString(PREFERRED_PACKAGE, null);
+    public String customTabPackage() {
+        String packageName = getDefaultSharedPreferences().getString(PREFERRED_CUSTOM_TAB_PACKAGE, null);
         if (packageName != null && Utils.isPackageInstalled(context, packageName))
             return packageName;
         else {
             packageName = getDefaultCustomTabApp();
             // update the new custom tab package
-            customTabApp(packageName);
+            customTabPackage(packageName);
         }
         return packageName;
     }
@@ -176,8 +176,8 @@ public class Preferences {
             return null;
     }
 
-    public void customTabApp(String string) {
-        getDefaultSharedPreferences().edit().putString(PREFERRED_PACKAGE, string).apply();
+    public void customTabPackage(String string) {
+        getDefaultSharedPreferences().edit().putString(PREFERRED_CUSTOM_TAB_PACKAGE, string).apply();
     }
 
     @Nullable

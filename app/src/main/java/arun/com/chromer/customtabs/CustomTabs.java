@@ -191,7 +191,7 @@ public class CustomTabs {
      */
     @Nullable
     private static String getCustomTabPackage(Context context) {
-        final String userPackage = Preferences.get(context).customTabApp();
+        final String userPackage = Preferences.get(context).customTabPackage();
         if (userPackage != null && userPackage.length() > 0) {
             return userPackage;
         }
@@ -562,7 +562,7 @@ public class CustomTabs {
      * Adds an open in chrome option
      */
     private void prepareOpenInChrome() {
-        final String customTabPkg = Preferences.get(activity).customTabApp();
+        final String customTabPkg = Preferences.get(activity).customTabPackage();
         if (Utils.isPackageInstalled(activity, customTabPkg)) {
             if (customTabPkg.equalsIgnoreCase(BETA_PACKAGE)
                     || customTabPkg.equalsIgnoreCase(DEV_PACKAGE)
@@ -639,7 +639,7 @@ public class CustomTabs {
     }
 
     private int chromeVariantVersion() {
-        final String customTabPackage = Preferences.get(activity).customTabApp();
+        final String customTabPackage = Preferences.get(activity).customTabPackage();
         if (Utils.isPackageInstalled(activity, customTabPackage)
                 && (customTabPackage.equalsIgnoreCase(STABLE_PACKAGE)
                 || customTabPackage.equalsIgnoreCase(DEV_PACKAGE)

@@ -33,10 +33,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -53,8 +51,6 @@ import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import arun.com.chromer.R;
@@ -68,18 +64,14 @@ import arun.com.chromer.activities.main.home.HomeFragment;
 import arun.com.chromer.activities.payments.DonateActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.activities.settings.SettingsGroupActivity;
-import arun.com.chromer.customtabs.CustomTabs;
 import arun.com.chromer.di.activity.ActivityComponent;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.shared.common.BaseMVPActivity;
-import arun.com.chromer.util.ServiceManager;
 import arun.com.chromer.util.Utils;
-import arun.com.chromer.util.cache.FontCache;
 import butterknife.BindView;
 import timber.log.Timber;
 
 import static arun.com.chromer.shared.Constants.ACTION_CLOSE_ROOT;
-import static arun.com.chromer.util.cache.FontCache.MONO;
 
 public class MainActivity extends BaseMVPActivity<MainScreen.View, MainScreen.Presenter> implements MainScreen.View {
     @BindView(R.id.bottomsheet)
@@ -114,8 +106,7 @@ public class MainActivity extends BaseMVPActivity<MainScreen.View, MainScreen.Pr
         Changelog.conditionalShow(this);
 
         setupDrawer();
-        checkAndEducateUser();
-        ServiceManager.takeCareOfServices(getApplicationContext());
+
         registerCloseReceiver();
 
         if (savedInstanceState == null) {
@@ -195,7 +186,7 @@ public class MainActivity extends BaseMVPActivity<MainScreen.View, MainScreen.Pr
             @Override
             public void onReceive(Context context, Intent intent) {
                 Timber.d("Finished from receiver");
-                MainActivity.this.finish();
+                finish();
             }
         };
         LocalBroadcastManager.getInstance(this).registerReceiver(closeReceiver, new IntentFilter(ACTION_CLOSE_ROOT));
@@ -214,7 +205,6 @@ public class MainActivity extends BaseMVPActivity<MainScreen.View, MainScreen.Pr
 
     private void setupDrawer() {
         setSupportActionBar(toolbar);
-        setToolbarTypeFace();
         final Drawer drawer = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
@@ -324,23 +314,6 @@ public class MainActivity extends BaseMVPActivity<MainScreen.View, MainScreen.Pr
                 .show();
     }
 
-    private void checkAndEducateUser() {
-        final List packages = CustomTabs.getCustomTabSupportingPackages(this);
-        if (packages.size() == 0) {
-            Answers.getInstance().logCustom(new CustomEvent("Missing provider"));
-            new MaterialDialog.Builder(this)
-                    .title(R.string.custom_tab_provider_not_found)
-                    .content(Utils.html(this, R.string.custom_tab_provider_not_found_dialog_content))
-                    .positiveText(R.string.install)
-                    .negativeText(android.R.string.no)
-                    .onPositive((dialog, which) -> {
-                        dialog.dismiss();
-                        Utils.openPlayStore(MainActivity.this, Constants.CHROME_PACKAGE);
-                        Answers.getInstance().logCustom(new CustomEvent("Install Chrome Clicked"));
-                    }).show();
-        }
-    }
-
     @Override
     public void onBackPressed() {
         if (bottomSheetLayout.isSheetShowing()) {
@@ -348,18 +321,5 @@ public class MainActivity extends BaseMVPActivity<MainScreen.View, MainScreen.Pr
             return;
         }
         super.onBackPressed();
-    }
-
-    public void setToolbarTypeFace() {
-        for (int i = 0; i < toolbar.getChildCount(); i++) {
-            final View view = toolbar.getChildAt(i);
-            if (view instanceof TextView) {
-                TextView tv = (TextView) view;
-                if (tv.getText().equals(toolbar.getTitle())) {
-                    tv.setTypeface(FontCache.get(MONO, this));
-                    break;
-                }
-            }
-        }
     }
 }

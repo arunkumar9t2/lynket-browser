@@ -29,9 +29,12 @@ import android.support.v7.widget.GridLayoutManager
 import android.view.View
 import arun.com.chromer.R
 import arun.com.chromer.activities.settings.Preferences
+import arun.com.chromer.activities.settings.browsingoptions.BrowsingOptionsActivity
 import arun.com.chromer.customtabs.CustomTabManager
+import arun.com.chromer.customtabs.CustomTabs
 import arun.com.chromer.data.website.model.WebSite
 import arun.com.chromer.di.fragment.FragmentComponent
+import arun.com.chromer.extenstions.appName
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.visible
 import arun.com.chromer.search.suggestion.items.SuggestionItem
@@ -39,9 +42,14 @@ import arun.com.chromer.shared.Constants
 import arun.com.chromer.shared.Constants.REQUEST_CODE_VOICE
 import arun.com.chromer.shared.common.BaseMVPFragment
 import arun.com.chromer.shared.common.Snackable
+import arun.com.chromer.util.RxEventBus
 import arun.com.chromer.util.Utils
 import arun.com.chromer.util.Utils.getRecognizerIntent
+import arun.com.chromer.util.glide.GlideApp
+import arun.com.chromer.util.glide.appicon.ApplicationIcon
 import arun.com.chromer.webheads.WebHeadService
+import butterknife.OnClick
+import com.afollestad.materialdialogs.MaterialDialog
 import com.jakewharton.rxbinding.widget.RxTextView.afterTextChangeEvents
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
@@ -59,9 +67,15 @@ class HomeFragment : BaseMVPFragment<Home.View, Home.Presenter>(), Home.View {
     lateinit var recentsAdapter: RecentsAdapter
     @Inject
     lateinit var homePresenter: Home.Presenter
+    @Inject
+    lateinit var rxEventBus: RxEventBus
 
     override fun createPresenter(): Home.Presenter {
         return homePresenter
+    }
+
+    override fun inject(fragmentComponent: FragmentComponent) {
+        fragmentComponent.inject(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,15 +88,13 @@ class HomeFragment : BaseMVPFragment<Home.View, Home.Presenter>(), Home.View {
         setupMaterialSearch()
         setupCustomTab()
         setupRecents()
+        setupInfoCards()
+        setupEventListeners()
     }
 
     override fun onStart() {
         super.onStart()
         customTabManager.bindCustomTabsService(activity)
-    }
-
-    override fun inject(fragmentComponent: FragmentComponent) {
-        fragmentComponent.inject(this)
     }
 
     override fun onResume() {
@@ -94,7 +106,7 @@ class HomeFragment : BaseMVPFragment<Home.View, Home.Presenter>(), Home.View {
         super.onHiddenChanged(hidden)
         if (!hidden) {
             activity?.setTitle(R.string.app_name)
-            homePresenter.loadRecents()
+            invalidateState()
         }
     }
 
@@ -165,6 +177,7 @@ class HomeFragment : BaseMVPFragment<Home.View, Home.Presenter>(), Home.View {
             setOnCheckedChangeListener { _, isChecked -> Preferences.get(context!!).incognitoMode(isChecked) }
         }
         homePresenter.loadRecents()
+        setupRecents()
     }
 
     private fun setupRecents() {
@@ -176,7 +189,47 @@ class HomeFragment : BaseMVPFragment<Home.View, Home.Presenter>(), Home.View {
         recents_list.apply {
             layoutManager = GridLayoutManager(activity, 4)
             adapter = recentsAdapter
+        }
+    }
 
+
+    private fun setupInfoCards() {
+        val customTabProvider: String? = Preferences.get(context!!).customTabPackage()
+        if (customTabProvider == null) {
+            providerDescription.text = Utils.html(context!!, getString(R.string.tab_provider_status_message_home, getString(R.string.system_webview)))
+            GlideApp.with(this)
+                    .load(ApplicationIcon.createUri(Constants.SYSTEM_WEBVIEW))
+                    .error(IconicsDrawable(context!!)
+                            .icon(CommunityMaterial.Icon.cmd_web)
+                            .colorRes(R.color.primary)
+                            .sizeDp(24))
+                    .into(providerIcon)
+        } else {
+            val appName = context!!.appName(customTabProvider)
+            providerDescription.text = Utils.html(context!!, getString(R.string.tab_provider_status_message_home, appName))
+            GlideApp.with(this)
+                    .load(ApplicationIcon.createUri(customTabProvider))
+                    .into(providerIcon)
+        }
+    }
+
+    private fun setupEventListeners() {
+        subs.add(rxEventBus.filteredEvents(BrowsingOptionsActivity.ProviderChanged::class.java).subscribe { setupInfoCards() })
+    }
+
+    @OnClick(R.id.providerChangeButton)
+    fun onProviderChangeClicked() {
+        if (CustomTabs.getCustomTabSupportingPackages(context!!).isNotEmpty()) {
+            startActivity(Intent(context, BrowsingOptionsActivity::class.java))
+        } else {
+            MaterialDialog.Builder(context!!)
+                    .title(R.string.custom_tab_provider_not_found)
+                    .content(Utils.html(context!!, R.string.custom_tab_provider_not_found_dialog_content))
+                    .positiveText(R.string.install)
+                    .negativeText(android.R.string.no)
+                    .onPositive({ _, _ ->
+                        Utils.openPlayStore(activity!!, Constants.CHROME_PACKAGE)
+                    }).show()
         }
     }
 

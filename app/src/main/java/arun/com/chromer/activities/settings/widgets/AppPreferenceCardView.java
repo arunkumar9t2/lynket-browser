@@ -104,7 +104,7 @@ public class AppPreferenceCardView extends CardView {
         switch (preferenceType) {
             case CUSTOM_TAB_PROVIDER:
                 category = getResources().getString(R.string.default_provider);
-                final String customTabProvider = Preferences.get(getContext()).customTabApp();
+                final String customTabProvider = Preferences.get(getContext()).customTabPackage();
                 if (customTabProvider != null) {
                     appName = Utils.getAppNameWithPackage(getContext(), customTabProvider);
                     appPackage = customTabProvider;
@@ -208,7 +208,7 @@ public class AppPreferenceCardView extends CardView {
         switch (preferenceType) {
             case CUSTOM_TAB_PROVIDER:
                 if (componentName != null) {
-                    Preferences.get(getContext()).customTabApp(componentName.getPackageName());
+                    Preferences.get(getContext()).customTabPackage(componentName.getPackageName());
                 }
                 break;
             case SECONDARY_BROWSER:

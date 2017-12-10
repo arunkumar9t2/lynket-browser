@@ -25,6 +25,7 @@ import arun.com.chromer.activities.blacklist.BlacklistManagerActivity;
 import arun.com.chromer.activities.browserintercept.BrowserInterceptActivity;
 import arun.com.chromer.activities.browsing.article.ChromerArticleActivity;
 import arun.com.chromer.activities.main.MainActivity;
+import arun.com.chromer.activities.settings.browsingoptions.BrowsingOptionsActivity;
 import arun.com.chromer.customtabs.CustomTabs;
 import arun.com.chromer.di.PerActivity;
 import arun.com.chromer.di.fragment.FragmentComponent;
@@ -56,4 +57,6 @@ public interface ActivityComponent {
     void inject(@NonNull HomeScreenShortcutCreatorActivity homeScreenShortcutCreatorActivity);
 
     void inject(ChromerArticleActivity chromerArticleActivity);
+
+    void inject(BrowsingOptionsActivity browsingOptionsActivity);
 }

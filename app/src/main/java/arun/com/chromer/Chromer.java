@@ -19,6 +19,7 @@
 package arun.com.chromer;
 
 import android.app.Application;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
@@ -28,6 +29,7 @@ import arun.com.chromer.di.app.AppComponent;
 import arun.com.chromer.di.app.AppModule;
 import arun.com.chromer.di.app.DaggerAppComponent;
 import arun.com.chromer.di.data.DataModule;
+import arun.com.chromer.util.ServiceManager;
 import io.fabric.sdk.android.Fabric;
 import io.paperdb.Paper;
 import timber.log.Timber;
@@ -67,6 +69,8 @@ public class Chromer extends Application {
                 .appModule(new AppModule(this))
                 .dataModule(new DataModule(this))
                 .build();
+
+        ServiceManager.takeCareOfServices(getApplicationContext());
     }
 
     public AppComponent getAppComponent() {
@@ -76,7 +80,7 @@ public class Chromer extends Application {
     private static class CrashlyticsTree extends Timber.Tree {
 
         @Override
-        protected void log(int priority, String tag, String message, Throwable t) {
+        protected void log(int priority, String tag, @NonNull String message, Throwable t) {
             if (priority == Log.VERBOSE || priority == Log.DEBUG || priority == Log.INFO) {
                 return;
             }

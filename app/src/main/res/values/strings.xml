@@ -271,6 +271,7 @@
     <string name="recents_intro">Recently opened links will appear here</string>
     <string name="amp_article_combined_explanation"><![CDATA[When both <b>AMP and Article mode is on</b>, Chromer will try to load AMP version of the page if it exists. If not article mode will be loaded.]]></string>
     <string name="attention">Attention!</string>
+    <string name="tab_provider_status_message_home"><![CDATA[Currently using <b>%1$s</b> to render web pages.]]></string>
     <string name="manage">Manage</string>
     <string name="more_menu">More</string>
     <string name="open_article_view">Open article view</string>
@@ -290,7 +291,7 @@
     <string name="app_detection_notification_channel_description">Notification will be posted when Chromer\'s app detection service is running.</string>
     <string name="app_detection_service_text">Monitoring foreground apps for dynamic toolbar color and blacklisting.</string>
     <string name="app_detection_service">App detection service</string>
-    <string name="shortcut_name">Shorcut name</string>
+    <string name="shortcut_name">Shortcut name</string>
     <string name="create_shorcut">Create shortcut</string>
     <string name="create">Create</string>
     <string name="name_cannot_be_empty">Name cannot be empty</string>
@@ -298,4 +299,6 @@
     <string name="warning">Warning</string>
     <string name="bottom_bar_crash_warning">Certain recent versions of Chrome might force close when Bottom Bar is enabled. If such an issue exists, please disable Bottom Bar until Chrome is patched.</string>
     <string name="text_you_copied">Text you copied</string>
+    <string name="system_webview">System WebView</string>
+    <string name="Change">Change</string>
 </resources>

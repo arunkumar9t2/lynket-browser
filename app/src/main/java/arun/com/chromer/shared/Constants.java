@@ -27,6 +27,10 @@ import android.net.Uri;
 public class Constants {
     public static final int NO_COLOR = -1;
 
+    // Package names
+    public static final String CHROME_PACKAGE = "com.android.chrome";
+    public static final String SYSTEM_WEBVIEW = "com.google.andorid.webview";
+
     // URL
     public static final String GOOGLE_URL = "https://www.google.com/";
     public static final String CUSTOM_TAB_URL = "https://developer.chrome.com/multidevice/android/customtabs#whentouse";
@@ -46,7 +50,7 @@ public class Constants {
     public static final String MAILID = "arunk.beece@gmail.com";
     public static final String ME = "Arunkumar";
     public static final String LOCATION = "Tamilnadu, India";
-    public static final String CHROME_PACKAGE = "com.android.chrome";
+
 
     // Intent Actions
     public static final String ACTION_TOOLBAR_COLOR_SET = "ACTION_TOOLBAR_COLOR_SET";

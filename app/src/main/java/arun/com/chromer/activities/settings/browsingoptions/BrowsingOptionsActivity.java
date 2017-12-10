@@ -41,16 +41,18 @@ import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import arun.com.chromer.R;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.activities.settings.widgets.AppPreferenceCardView;
-import arun.com.chromer.customtabs.CustomTabs;
+import arun.com.chromer.di.activity.ActivityComponent;
+import arun.com.chromer.shared.common.BaseActivity;
 import arun.com.chromer.shared.common.Snackable;
-import arun.com.chromer.shared.common.SubActivity;
+import arun.com.chromer.util.RxEventBus;
 import arun.com.chromer.util.ServiceManager;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.views.IntentPickerSheetView;
@@ -63,7 +65,7 @@ import static arun.com.chromer.shared.Constants.DUMMY_INTENT;
 import static arun.com.chromer.shared.Constants.TEXT_SHARE_INTENT;
 import static arun.com.chromer.shared.Constants.WEB_INTENT;
 
-public class BrowsingOptionsActivity extends SubActivity implements Snackable, SharedPreferences.OnSharedPreferenceChangeListener {
+public class BrowsingOptionsActivity extends BaseActivity implements Snackable, SharedPreferences.OnSharedPreferenceChangeListener {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.coordinator_layout)
@@ -81,11 +83,12 @@ public class BrowsingOptionsActivity extends SubActivity implements Snackable, S
     @BindView(R.id.bottom_bar_action_list)
     public RecyclerView recyclerView;
 
+    @Inject
+    RxEventBus eventBus;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_browsing_options);
-        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -96,8 +99,12 @@ public class BrowsingOptionsActivity extends SubActivity implements Snackable, S
                 .replace(R.id.web_head_fragment_container, WebHeadOptionsFragment.newInstance())
                 .replace(R.id.bottom_bar_preference_fragment_container, BottomBarPreferenceFragment.newInstance())
                 .commit();
-
         initBottomActions();
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.activity_browsing_options;
     }
 
     @Override
@@ -132,7 +139,12 @@ public class BrowsingOptionsActivity extends SubActivity implements Snackable, S
             case R.id.customtab_preference_view:
                 final List<IntentPickerSheetView.ActivityInfo> customTabApps = Utils.getCustomTabActivityInfos(this);
                 if (customTabApps.isEmpty()) {
-                    checkAndEducateUser(true);
+                    new MaterialDialog.Builder(this)
+                            .title(R.string.custom_tab_provider_not_found)
+                            .content(R.string.custom_tab_provider_not_found_dialog_content)
+                            .positiveText(getString(R.string.install))
+                            .negativeText(getString(android.R.string.no))
+                            .onPositive((dialog, which) -> Utils.openPlayStore(BrowsingOptionsActivity.this, CHROME_PACKAGE)).show();
                     return;
                 }
                 final IntentPickerSheetView customTabPicker = new IntentPickerSheetView(this,
@@ -143,6 +155,7 @@ public class BrowsingOptionsActivity extends SubActivity implements Snackable, S
                             customTabPreferenceView.updatePreference(activityInfo.componentName);
                             refreshCustomTabBindings();
                             snack(String.format(getString(R.string.default_provider_success), activityInfo.label));
+                            eventBus.post(new ProviderChanged());
                         });
                 customTabPicker.setFilter(IntentPickerSheetView.selfPackageExcludeFilter(this));
                 customTabPicker.setMixins(customTabApps);
@@ -179,23 +192,6 @@ public class BrowsingOptionsActivity extends SubActivity implements Snackable, S
         ServiceManager.refreshCustomTabBindings(getApplicationContext());
     }
 
-    private void checkAndEducateUser(boolean forceShow) {
-        final List packages;
-        if (!forceShow) {
-            packages = CustomTabs.getCustomTabSupportingPackages(this);
-        } else {
-            packages = Collections.EMPTY_LIST;
-        }
-        if (packages.size() == 0 || forceShow) {
-            new MaterialDialog.Builder(this)
-                    .title(getString(R.string.custom_tab_provider_not_found))
-                    .content(getString(R.string.custom_tab_provider_not_found_expln))
-                    .positiveText(getString(R.string.install))
-                    .negativeText(getString(android.R.string.no))
-                    .onPositive((dialog, which) -> Utils.openPlayStore(BrowsingOptionsActivity.this, CHROME_PACKAGE)).show();
-        }
-    }
-
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (Preferences.WEB_HEAD_ENABLED.equalsIgnoreCase(key)) {
@@ -215,6 +211,14 @@ public class BrowsingOptionsActivity extends SubActivity implements Snackable, S
     @Override
     public void snackLong(@NonNull String message) {
         Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void inject(@NonNull ActivityComponent activityComponent) {
+        activityComponent.inject(this);
+    }
+
+    public static class ProviderChanged {
     }
 
     public static class BottomActionsAdapter extends RecyclerView.Adapter<BottomActionsAdapter.BottomActionHolder> {

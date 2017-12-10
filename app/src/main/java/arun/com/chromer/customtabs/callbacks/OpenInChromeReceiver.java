@@ -36,7 +36,7 @@ public class OpenInChromeReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         final String url = intent.getDataString();
         if (url != null) {
-            final String customTabPkg = Preferences.get(context).customTabApp();
+            final String customTabPkg = Preferences.get(context).customTabPackage();
             if (Utils.isPackageInstalled(context, customTabPkg)) {
                 final Intent chromeIntentExplicit = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 final ComponentName cN = Utils.getBrowserComponentForPackage(context, customTabPkg);

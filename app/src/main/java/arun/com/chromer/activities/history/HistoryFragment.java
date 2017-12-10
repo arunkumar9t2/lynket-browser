@@ -171,7 +171,7 @@ public class HistoryFragment extends BaseMVPFragment<History.View, History.Prese
     }
 
     private CharSequence getFormattedMessage() {
-        final String provider = Preferences.get(getContext()).customTabApp();
+        final String provider = Preferences.get(getContext()).customTabPackage();
         if (provider == null) {
             return getString(R.string.enable_history_subtitle);
         } else {
