@@ -161,20 +161,18 @@ class HomeFragment : BaseMVPFragment<Home.View, Home.Presenter>(), Home.View {
             setCompoundDrawables(IconicsDrawable(context!!)
                     .icon(CommunityMaterial.Icon.cmd_incognito)
                     .colorRes(R.color.material_dark_color)
-                    .sizeDp(24), null, null, null)
+                    .sizeDp(18), null, null, null)
             setOnCheckedChangeListener { _, isChecked -> Preferences.get(context!!).incognitoMode(isChecked) }
         }
         homePresenter.loadRecents()
     }
 
     private fun setupRecents() {
-        recents_header.apply {
-            compoundDrawablePadding = Utils.dpToPx(22.0)
-            setCompoundDrawables(IconicsDrawable(context!!)
-                    .icon(CommunityMaterial.Icon.cmd_history)
-                    .colorRes(R.color.accent)
-                    .sizeDp(20), null, null, null)
-        }
+        recents_header_icon.setImageDrawable(IconicsDrawable(context!!)
+                .icon(CommunityMaterial.Icon.cmd_history)
+                .colorRes(R.color.accent)
+                .sizeDp(24))
+
         recents_list.apply {
             layoutManager = GridLayoutManager(activity, 4)
             adapter = recentsAdapter

@@ -17,6 +17,7 @@
   -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragmentHome"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -24,7 +25,8 @@
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -47,33 +49,37 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:animateLayoutChanges="true"
                 app:cardPreventCornerOverlap="true"
                 app:cardUseCompatPadding="true">
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingTop="5dp">
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/recents_header_icon"
+                        android:layout_width="24dp"
+                        android:layout_height="48dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="14dp"
+                        android:layout_marginRight="14dp"
+                        android:scaleType="center"
+                        tools:ignore="ContentDescription,RtlHardcoded"
+                        tools:src="@mipmap/ic_launcher_round" />
 
                     <TextView
                         android:id="@+id/recents_header"
                         android:layout_width="wrap_content"
                         android:layout_height="48dp"
                         android:layout_gravity="start|center"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@id/recents_header_icon"
+                        android:layout_toRightOf="@id/recents_header_icon"
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="start|center"
-                        android:paddingEnd="6dp"
-                        android:paddingLeft="6dp"
-                        android:paddingRight="6dp"
-                        android:paddingStart="6dp"
                         android:text="@string/recents"
                         android:textColor="@color/material_dark_color"
                         android:textSize="16sp"
@@ -82,20 +88,22 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.1dp"
+                        android:layout_below="@+id/recents_header"
                         android:background="@color/md_grey_600" />
 
                     <TextView
                         android:id="@+id/recent_missing_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_below="@id/recents_header"
+                        android:layout_centerInParent="true"
                         android:layout_gravity="center"
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center"
-                        android:minHeight="36dp"
-                        android:paddingTop="10dp"
+                        android:minHeight="48dp"
                         android:text="@string/recents_intro"
-                        android:textColor="@color/material_dark_color"
+                        android:textColor="@color/secondary_text_color"
                         android:textSize="14sp"
                         android:visibility="visible" />
 
@@ -103,9 +111,9 @@
                         android:id="@+id/recents_list"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:clipToPadding="false"
-                        android:paddingTop="10dp" />
-                </LinearLayout>
+                        android:layout_below="@id/recents_header"
+                        android:clipToPadding="false" />
+                </RelativeLayout>
             </android.support.v7.widget.CardView>
         </LinearLayout>
 
