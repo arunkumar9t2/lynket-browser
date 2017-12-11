@@ -37,7 +37,6 @@ import arun.com.chromer.di.fragment.FragmentComponent
 import arun.com.chromer.extenstions.appName
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.visible
-import arun.com.chromer.search.suggestion.items.SuggestionItem
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.shared.Constants.REQUEST_CODE_VOICE
 import arun.com.chromer.shared.common.BaseMVPFragment
@@ -50,7 +49,6 @@ import arun.com.chromer.util.glide.appicon.ApplicationIcon
 import arun.com.chromer.webheads.WebHeadService
 import butterknife.OnClick
 import com.afollestad.materialdialogs.MaterialDialog
-import com.jakewharton.rxbinding.widget.RxTextView.afterTextChangeEvents
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -123,10 +121,6 @@ class HomeFragment : BaseMVPFragment<Home.View, Home.Presenter>(), Home.View {
         (activity as Snackable).snackLong(message)
     }
 
-    override fun setSuggestions(suggestions: List<SuggestionItem>) {
-        material_search_view.setSuggestions(suggestions)
-    }
-
     override fun setRecents(webSites: List<WebSite>) {
         recentsAdapter.setWebSites(webSites)
         if (webSites.isEmpty()) {
@@ -153,8 +147,6 @@ class HomeFragment : BaseMVPFragment<Home.View, Home.Presenter>(), Home.View {
                 material_search_view.postDelayed({ launchCustomTab(url) }, 150)
             })
             clearFocus()
-            homePresenter.registerSearch(afterTextChangeEvents(getEditText())
-                    .map { changeEvent -> changeEvent.editable()!!.toString() })
             subs.add(focusChanges().subscribe {
                 beginDelayedTransition(fragmentHome, Fade().addTarget(shadow_layout))
                 if (it) {

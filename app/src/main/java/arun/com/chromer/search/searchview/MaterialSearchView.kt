@@ -31,23 +31,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.RelativeLayout
 import arun.com.chromer.R
+import arun.com.chromer.di.view.ViewComponent
+import arun.com.chromer.di.view.ViewModule
 import arun.com.chromer.search.suggestion.SuggestionAdapter
 import arun.com.chromer.search.suggestion.items.HistorySuggestionItem
 import arun.com.chromer.search.suggestion.items.SuggestionItem
+import arun.com.chromer.shared.common.ProvidesActivityComponent
 import arun.com.chromer.util.Utils.getSearchUrl
 import butterknife.BindColor
 import butterknife.ButterKnife
+import com.hannesdorfmann.mosby3.mvp.delegate.ViewGroupMvpDelegate
+import com.hannesdorfmann.mosby3.mvp.delegate.ViewGroupMvpDelegateImpl
+import com.hannesdorfmann.mosby3.mvp.layout.MvpRelativeLayout
+import com.jakewharton.rxbinding.widget.RxTextView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import kotlinx.android.synthetic.main.widget_material_search_view.view.*
 import rx.Observable
 import rx.subjects.PublishSubject
 import rx.subscriptions.CompositeSubscription
+import javax.inject.Inject
 
-class MaterialSearchView : RelativeLayout {
+class MaterialSearchView : MvpRelativeLayout<Search.View, Search.Presenter>, Search.View {
     @BindColor(R.color.accent_icon_no_focus)
     @JvmField
     var normalColor: Int = 0
@@ -69,13 +75,16 @@ class MaterialSearchView : RelativeLayout {
 
     private val compositeSubs = CompositeSubscription()
 
+    private var viewComponent: ViewComponent? = null
+
+    @Inject
+    lateinit var searchPresenter: Search.Presenter
+
     val text: String
         get() = if (msv_edit_text.text == null) "" else msv_edit_text?.text.toString()
 
     val url: String
         get() = getSearchUrl(text)
-
-    fun getEditText(): EditText = this.msv_edit_text
 
     constructor(context: Context) : super(context) {
         init(context)
@@ -89,7 +98,14 @@ class MaterialSearchView : RelativeLayout {
         init(context)
     }
 
+    override fun createPresenter(): Search.Presenter = searchPresenter
+
     private fun init(context: Context) {
+        if (context is ProvidesActivityComponent) {
+            viewComponent = context.activityComponent.newViewComponent(ViewModule(this))
+            viewComponent!!.inject(this)
+        }
+
         xIcon = IconicsDrawable(context)
                 .icon(CommunityMaterial.Icon.cmd_close)
                 .color(normalColor)
@@ -116,6 +132,10 @@ class MaterialSearchView : RelativeLayout {
                 .doOnNext {
                     searchPerformed(getSearchUrl(if (it is HistorySuggestionItem) it.subTitle else it.title))
                 }.subscribe())
+
+        searchPresenter.registerSearch(RxTextView.textChangeEvents(msv_edit_text)
+                .filter { it != null }
+                .map { it.text().toString() })
     }
 
     override fun onFinishInflate() {
@@ -162,8 +182,17 @@ class MaterialSearchView : RelativeLayout {
         setOnClickListener { if (!msv_edit_text!!.hasFocus()) gainFocus() }
     }
 
+    override fun getMvpDelegate(): ViewGroupMvpDelegate<Search.View, Search.Presenter> {
+        if (mvpDelegate == null) {
+            mvpDelegate = ViewGroupMvpDelegateImpl<Search.View, Search.Presenter>(this, this, false)
+        }
+        return mvpDelegate
+    }
+
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
+        viewComponent = null
+        searchPresenter.onDestroy()
         compositeSubs.clear()
     }
 
@@ -242,7 +271,7 @@ class MaterialSearchView : RelativeLayout {
         suggestionAdapter.clear()
     }
 
-    fun setSuggestions(suggestions: List<SuggestionItem>) {
-        suggestionAdapter.updateSuggestions(suggestions)
+    override fun setSuggestions(suggestionItems: List<SuggestionItem>) {
+        suggestionAdapter.updateSuggestions(suggestionItems)
     }
 }

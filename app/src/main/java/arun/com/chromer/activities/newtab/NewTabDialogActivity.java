@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.activities;
+package arun.com.chromer.activities.newtab;
 
 import android.content.Intent;
 import android.net.Uri;

@@ -21,16 +21,18 @@ package arun.com.chromer.di.activity;
 import android.support.annotation.NonNull;
 
 import arun.com.chromer.activities.CustomTabActivity;
-import arun.com.chromer.activities.NewTabDialogActivity;
 import arun.com.chromer.activities.blacklist.BlacklistManagerActivity;
 import arun.com.chromer.activities.browserintercept.BrowserInterceptActivity;
 import arun.com.chromer.activities.browsing.article.ChromerArticleActivity;
 import arun.com.chromer.activities.main.MainActivity;
+import arun.com.chromer.activities.newtab.NewTabDialogActivity;
 import arun.com.chromer.activities.settings.browsingoptions.BrowsingOptionsActivity;
 import arun.com.chromer.customtabs.CustomTabs;
 import arun.com.chromer.di.PerActivity;
 import arun.com.chromer.di.fragment.FragmentComponent;
 import arun.com.chromer.di.fragment.FragmentModule;
+import arun.com.chromer.di.view.ViewComponent;
+import arun.com.chromer.di.view.ViewModule;
 import arun.com.chromer.shortcuts.HomeScreenShortcutCreatorActivity;
 import dagger.Subcomponent;
 
@@ -40,10 +42,13 @@ import dagger.Subcomponent;
 })
 public interface ActivityComponent {
     @NonNull
+    CustomTabs customTabs();
+
+    @NonNull
     FragmentComponent newFragmentComponent(@NonNull FragmentModule fragmentModule);
 
     @NonNull
-    CustomTabs customTabs();
+    ViewComponent newViewComponent(ViewModule viewModuleF);
 
     void inject(BlacklistManagerActivity blacklistManagerActivity);
 

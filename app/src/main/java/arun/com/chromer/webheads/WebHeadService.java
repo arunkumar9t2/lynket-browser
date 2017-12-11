@@ -63,7 +63,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.NewTabDialogActivity;
+import arun.com.chromer.activities.newtab.NewTabDialogActivity;
 import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.customtabs.CustomTabManager;
 import arun.com.chromer.data.website.BaseWebsiteRepository;
