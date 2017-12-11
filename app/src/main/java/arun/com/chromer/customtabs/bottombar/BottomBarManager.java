@@ -62,7 +62,7 @@ public class BottomBarManager {
         }
         if (newTabDrawable == null) {
             newTabDrawable = new IconicsDrawable(context)
-                    .icon(CommunityMaterial.Icon.cmd_plus_box)
+                    .icon(CommunityMaterial.Icon.cmd_plus)
                     .sizeDp(24);
         }
         if (minimizeDrawable == null) {
@@ -83,9 +83,13 @@ public class BottomBarManager {
         final Bitmap article = articleDrawable.color(iconColor).toBitmap();
 
         remoteViews.setBitmap(R.id.bottom_bar_open_in_new_tab_img, "setImageBitmap", openInNewTabImage);
+        remoteViews.setTextColor(R.id.bottom_bar_open_in_new_tab_text, iconColor);
         remoteViews.setBitmap(R.id.bottom_bar_share_img, "setImageBitmap", shareImage);
+        remoteViews.setTextColor(R.id.bottom_bar_share_text, iconColor);
         remoteViews.setBitmap(R.id.bottom_bar_minimize_img, "setImageBitmap", minimize);
+        remoteViews.setTextColor(R.id.bottom_bar_minimize_text, iconColor);
         remoteViews.setBitmap(R.id.bottom_bar_article_view_img, "setImageBitmap", article);
+        remoteViews.setTextColor(R.id.bottom_bar_article_view_text, iconColor);
         return remoteViews;
     }
 
