@@ -37,10 +37,13 @@ a {
 <br></br>
 <strong>1.7.3</strong>
 <ul>
-    <li><b>NEW: </b> Round and Adaptive Icon for Android Oreo</li>
     <li><b>FIX: </b> Bottom Bar disabled by default to resolve crashes in Chrome.</li>
+    <li><b>NEW: </b> Round and Adaptive Icon for Android Oreo</li>
     <li><b>NEW: </b> History app shortcuts for 7.1</li>
     <li><b>NEW: </b> Use custom names while creating home screen shortcuts + Oreo support</li>
+    <li><b>NEW: </b> Minimize does not require web heads to be enabled./li>
+    <li><b>NEW: </b> Bottom search bar + suggestions from history./li>
+    <li><b>NEW: </b> Info card in home screen to show active provider/li>
     <li><b>IMPROVED: </b> Article mode UI and stability. Tried to reduce extra gap between text. Improved Blockquote legibility.</li>
     <li><b>FIX: </b> Chromer not opening links sometimes.</li>
     <li><b>FIX: </b> Certain languages not rendering correctly in search bar</li>
