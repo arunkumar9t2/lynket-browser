@@ -18,7 +18,10 @@
 
 package arun.com.chromer.search.searchview
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.speech.RecognizerIntent
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.DividerItemDecoration.VERTICAL
 import android.support.v7.widget.LinearLayoutManager
@@ -31,23 +34,31 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.RelativeLayout
 import arun.com.chromer.R
+import arun.com.chromer.di.view.ViewComponent
+import arun.com.chromer.di.view.ViewModule
 import arun.com.chromer.search.suggestion.SuggestionAdapter
 import arun.com.chromer.search.suggestion.items.HistorySuggestionItem
 import arun.com.chromer.search.suggestion.items.SuggestionItem
+import arun.com.chromer.shared.Constants
+import arun.com.chromer.shared.common.ProvidesActivityComponent
+import arun.com.chromer.util.Utils
 import arun.com.chromer.util.Utils.getSearchUrl
 import butterknife.BindColor
 import butterknife.ButterKnife
+import com.hannesdorfmann.mosby3.mvp.delegate.ViewGroupMvpDelegate
+import com.hannesdorfmann.mosby3.mvp.delegate.ViewGroupMvpDelegateImpl
+import com.hannesdorfmann.mosby3.mvp.layout.MvpRelativeLayout
+import com.jakewharton.rxbinding.widget.RxTextView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import kotlinx.android.synthetic.main.widget_material_search_view.view.*
 import rx.Observable
 import rx.subjects.PublishSubject
 import rx.subscriptions.CompositeSubscription
+import javax.inject.Inject
 
-class MaterialSearchView : RelativeLayout {
+class MaterialSearchView : MvpRelativeLayout<Search.View, Search.Presenter>, Search.View {
     @BindColor(R.color.accent_icon_no_focus)
     @JvmField
     var normalColor: Int = 0
@@ -63,19 +74,22 @@ class MaterialSearchView : RelativeLayout {
 
     private lateinit var suggestionAdapter: SuggestionAdapter
 
-    private val voiceIconClicks = PublishSubject.create<Void>()
+    private val voiceSearchFailed = PublishSubject.create<Void>()
     private val searchPerforms = PublishSubject.create<String>()
     private val focusChanges = PublishSubject.create<Boolean>()
 
     private val compositeSubs = CompositeSubscription()
+
+    private var viewComponent: ViewComponent? = null
+
+    @Inject
+    lateinit var searchPresenter: Search.Presenter
 
     val text: String
         get() = if (msv_edit_text.text == null) "" else msv_edit_text?.text.toString()
 
     val url: String
         get() = getSearchUrl(text)
-
-    fun getEditText(): EditText = this.msv_edit_text
 
     constructor(context: Context) : super(context) {
         init(context)
@@ -89,7 +103,14 @@ class MaterialSearchView : RelativeLayout {
         init(context)
     }
 
+    override fun createPresenter(): Search.Presenter = searchPresenter
+
     private fun init(context: Context) {
+        if (context is ProvidesActivityComponent) {
+            viewComponent = context.activityComponent.newViewComponent(ViewModule(this))
+            viewComponent!!.inject(this)
+        }
+
         xIcon = IconicsDrawable(context)
                 .icon(CommunityMaterial.Icon.cmd_close)
                 .color(normalColor)
@@ -116,6 +137,10 @@ class MaterialSearchView : RelativeLayout {
                 .doOnNext {
                     searchPerformed(getSearchUrl(if (it is HistorySuggestionItem) it.subTitle else it.title))
                 }.subscribe())
+
+        searchPresenter.registerSearch(RxTextView.textChangeEvents(msv_edit_text)
+                .filter { it != null }
+                .map { it.text().toString() })
     }
 
     override fun onFinishInflate() {
@@ -155,20 +180,45 @@ class MaterialSearchView : RelativeLayout {
                 msv_edit_text?.setText("")
                 clearFocus()
             } else {
-                voiceIconClicks.onNext(null)
+                if (Utils.isVoiceRecognizerPresent(context)) {
+                    (context as Activity).startActivityForResult(Utils.getRecognizerIntent(context), Constants.REQUEST_CODE_VOICE)
+                } else {
+                    voiceSearchFailed.onNext(null)
+                }
             }
         }
 
         setOnClickListener { if (!msv_edit_text!!.hasFocus()) gainFocus() }
     }
 
+    override fun getMvpDelegate(): ViewGroupMvpDelegate<Search.View, Search.Presenter> {
+        if (mvpDelegate == null) {
+            mvpDelegate = ViewGroupMvpDelegateImpl<Search.View, Search.Presenter>(this, this, false)
+        }
+        return mvpDelegate
+    }
+
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
+        viewComponent = null
+        searchPresenter.onDestroy()
         compositeSubs.clear()
     }
 
-    fun voiceIconClicks(): Observable<Void> {
-        return voiceIconClicks.asObservable()
+    override fun clearFocus() {
+        clearFocus(null)
+    }
+
+    override fun hasFocus(): Boolean {
+        return msv_edit_text!!.hasFocus() && super.hasFocus()
+    }
+
+    override fun setOnClickListener(l: View.OnClickListener?) {
+        // no op
+    }
+
+    fun voiceSearchFailed(): Observable<Void> {
+        return voiceSearchFailed.asObservable()
     }
 
     fun searchPerforms(): Observable<String> {
@@ -176,6 +226,19 @@ class MaterialSearchView : RelativeLayout {
     }
 
     fun focusChanges(): Observable<Boolean> = focusChanges.asObservable()
+
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == Constants.REQUEST_CODE_VOICE) {
+            when (resultCode) {
+                Activity.RESULT_OK -> {
+                    val resultList = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    if (resultList != null && !resultList.isEmpty()) {
+                        searchPerformed(Utils.getSearchUrl(resultList[0]))
+                    }
+                }
+            }
+        }
+    }
 
     private fun gainFocus() {
         handleVoiceIconState()
@@ -215,23 +278,11 @@ class MaterialSearchView : RelativeLayout {
         }
     }
 
-    override fun clearFocus() {
-        clearFocus(null)
-    }
-
     private fun clearFocus(endAction: (() -> Unit)?) {
         loseFocus(endAction)
         val view = findFocus()
         view?.clearFocus()
         super.clearFocus()
-    }
-
-    override fun hasFocus(): Boolean {
-        return msv_edit_text!!.hasFocus() && super.hasFocus()
-    }
-
-    override fun setOnClickListener(l: View.OnClickListener?) {
-        // no op
     }
 
     private fun searchPerformed(url: String) {
@@ -242,7 +293,7 @@ class MaterialSearchView : RelativeLayout {
         suggestionAdapter.clear()
     }
 
-    fun setSuggestions(suggestions: List<SuggestionItem>) {
-        suggestionAdapter.updateSuggestions(suggestions)
+    override fun setSuggestions(suggestionItems: List<SuggestionItem>) {
+        suggestionAdapter.updateSuggestions(suggestionItems)
     }
 }

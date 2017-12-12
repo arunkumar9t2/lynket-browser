@@ -81,7 +81,7 @@ public class Constants {
     public static final String EXTRA_KEY_FROM_OUR_APP = "EXTRA_KEY_FROM_OUR_APP";
     public static final String EXTRA_KEY_SKIP_EXTRACTION = "EXTRA_KEY_SKIP_EXTRACTION";
     // Request codes
-    public static final int REQUEST_CODE_VOICE = 10001;
+    public static final int REQUEST_CODE_VOICE = 112;
 
 
     private Constants() {

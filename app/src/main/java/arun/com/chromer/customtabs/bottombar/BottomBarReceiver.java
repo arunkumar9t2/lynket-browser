@@ -26,8 +26,8 @@ import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.NewTabDialogActivity;
 import arun.com.chromer.activities.browsing.article.ArticleLauncher;
+import arun.com.chromer.activities.newtab.NewTabDialogActivity;
 import arun.com.chromer.util.DocumentUtils;
 import arun.com.chromer.util.Utils;
 import timber.log.Timber;

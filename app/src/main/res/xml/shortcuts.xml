@@ -25,7 +25,7 @@
         android:shortcutShortLabel="@string/new_tab">
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetClass="arun.com.chromer.activities.NewTabDialogActivity"
+            android:targetClass="arun.com.chromer.activities.newtab.NewTabDialogActivity"
             android:targetPackage="arun.com.chromer" />
         <categories android:name="android.shortcut.conversation" />
     </shortcut>

@@ -22,20 +22,14 @@ import arun.com.chromer.data.history.BaseHistoryRepository
 import arun.com.chromer.data.website.BaseWebsiteRepository
 import arun.com.chromer.data.website.model.WebSite
 import arun.com.chromer.di.PerFragment
-import arun.com.chromer.search.SuggestionsEngine
-import arun.com.chromer.search.suggestion.items.SuggestionItem
 import arun.com.chromer.shared.common.Base
 import arun.com.chromer.shared.common.Snackable
 import arun.com.chromer.util.RxUtils
-import rx.Observable
-import rx.android.schedulers.AndroidSchedulers
 import timber.log.Timber
 import javax.inject.Inject
 
 interface Home {
     interface View : Snackable, Base.View {
-        fun setSuggestions(suggestions: List<SuggestionItem>)
-
         fun setRecents(webSites: List<WebSite>)
     }
 
@@ -43,22 +37,8 @@ interface Home {
     class Presenter @Inject
     constructor(
             private val historyRepository: BaseHistoryRepository,
-            private val suggestionsEngine: SuggestionsEngine,
             private val websiteRepository: BaseWebsiteRepository
     ) : Base.Presenter<View>() {
-
-        fun registerSearch(stringObservable: Observable<String>) {
-            subs.add(stringObservable
-                    .subscribeOn(AndroidSchedulers.mainThread())
-                    .compose(suggestionsEngine.suggestionsTransformer())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnNext { suggestionItems ->
-                        if (isViewAttached) {
-                            view.setSuggestions(suggestionItems)
-                        }
-                    }.doOnError(Timber::e)
-                    .subscribe())
-        }
 
         fun loadRecents() {
             subs.add(historyRepository.recents()

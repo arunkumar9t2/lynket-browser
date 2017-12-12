@@ -186,7 +186,7 @@
             android:noHistory="true"
             android:theme="@style/DialogTheme" />
         <activity
-            android:name=".activities.NewTabDialogActivity"
+            android:name=".activities.newtab.NewTabDialogActivity"
             android:excludeFromRecents="true"
             android:noHistory="true"
             android:theme="@style/DialogTheme" />
