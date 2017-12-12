@@ -18,7 +18,10 @@
 
 package arun.com.chromer.search.searchview
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.speech.RecognizerIntent
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.DividerItemDecoration.VERTICAL
 import android.support.v7.widget.LinearLayoutManager
@@ -37,7 +40,9 @@ import arun.com.chromer.di.view.ViewModule
 import arun.com.chromer.search.suggestion.SuggestionAdapter
 import arun.com.chromer.search.suggestion.items.HistorySuggestionItem
 import arun.com.chromer.search.suggestion.items.SuggestionItem
+import arun.com.chromer.shared.Constants
 import arun.com.chromer.shared.common.ProvidesActivityComponent
+import arun.com.chromer.util.Utils
 import arun.com.chromer.util.Utils.getSearchUrl
 import butterknife.BindColor
 import butterknife.ButterKnife
@@ -69,7 +74,7 @@ class MaterialSearchView : MvpRelativeLayout<Search.View, Search.Presenter>, Sea
 
     private lateinit var suggestionAdapter: SuggestionAdapter
 
-    private val voiceIconClicks = PublishSubject.create<Void>()
+    private val voiceSearchFailed = PublishSubject.create<Void>()
     private val searchPerforms = PublishSubject.create<String>()
     private val focusChanges = PublishSubject.create<Boolean>()
 
@@ -175,7 +180,11 @@ class MaterialSearchView : MvpRelativeLayout<Search.View, Search.Presenter>, Sea
                 msv_edit_text?.setText("")
                 clearFocus()
             } else {
-                voiceIconClicks.onNext(null)
+                if (Utils.isVoiceRecognizerPresent(context)) {
+                    (context as Activity).startActivityForResult(Utils.getRecognizerIntent(context), Constants.REQUEST_CODE_VOICE)
+                } else {
+                    voiceSearchFailed.onNext(null)
+                }
             }
         }
 
@@ -196,8 +205,20 @@ class MaterialSearchView : MvpRelativeLayout<Search.View, Search.Presenter>, Sea
         compositeSubs.clear()
     }
 
-    fun voiceIconClicks(): Observable<Void> {
-        return voiceIconClicks.asObservable()
+    override fun clearFocus() {
+        clearFocus(null)
+    }
+
+    override fun hasFocus(): Boolean {
+        return msv_edit_text!!.hasFocus() && super.hasFocus()
+    }
+
+    override fun setOnClickListener(l: View.OnClickListener?) {
+        // no op
+    }
+
+    fun voiceSearchFailed(): Observable<Void> {
+        return voiceSearchFailed.asObservable()
     }
 
     fun searchPerforms(): Observable<String> {
@@ -205,6 +226,19 @@ class MaterialSearchView : MvpRelativeLayout<Search.View, Search.Presenter>, Sea
     }
 
     fun focusChanges(): Observable<Boolean> = focusChanges.asObservable()
+
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == Constants.REQUEST_CODE_VOICE) {
+            when (resultCode) {
+                Activity.RESULT_OK -> {
+                    val resultList = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    if (resultList != null && !resultList.isEmpty()) {
+                        searchPerformed(Utils.getSearchUrl(resultList[0]))
+                    }
+                }
+            }
+        }
+    }
 
     private fun gainFocus() {
         handleVoiceIconState()
@@ -244,23 +278,11 @@ class MaterialSearchView : MvpRelativeLayout<Search.View, Search.Presenter>, Sea
         }
     }
 
-    override fun clearFocus() {
-        clearFocus(null)
-    }
-
     private fun clearFocus(endAction: (() -> Unit)?) {
         loseFocus(endAction)
         val view = findFocus()
         view?.clearFocus()
         super.clearFocus()
-    }
-
-    override fun hasFocus(): Boolean {
-        return msv_edit_text!!.hasFocus() && super.hasFocus()
-    }
-
-    override fun setOnClickListener(l: View.OnClickListener?) {
-        // no op
     }
 
     private fun searchPerformed(url: String) {

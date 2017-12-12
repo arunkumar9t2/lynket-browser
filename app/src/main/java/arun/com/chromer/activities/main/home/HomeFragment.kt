@@ -18,11 +18,9 @@
 
 package arun.com.chromer.activities.main.home
 
-import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.speech.RecognizerIntent
 import android.support.transition.Fade
 import android.support.transition.TransitionManager.beginDelayedTransition
 import android.support.v7.widget.GridLayoutManager
@@ -38,12 +36,10 @@ import arun.com.chromer.extenstions.appName
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.visible
 import arun.com.chromer.shared.Constants
-import arun.com.chromer.shared.Constants.REQUEST_CODE_VOICE
 import arun.com.chromer.shared.common.BaseMVPFragment
 import arun.com.chromer.shared.common.Snackable
 import arun.com.chromer.util.RxEventBus
 import arun.com.chromer.util.Utils
-import arun.com.chromer.util.Utils.getRecognizerIntent
 import arun.com.chromer.util.glide.GlideApp
 import arun.com.chromer.util.glide.appicon.ApplicationIcon
 import arun.com.chromer.webheads.WebHeadService
@@ -136,15 +132,11 @@ class HomeFragment : BaseMVPFragment<Home.View, Home.Presenter>(), Home.View {
 
     private fun setupMaterialSearch() {
         material_search_view.apply {
-            subs.add(voiceIconClicks().subscribe {
-                if (Utils.isVoiceRecognizerPresent(activity!!)) {
-                    startActivityForResult(getRecognizerIntent(activity!!), REQUEST_CODE_VOICE)
-                } else {
-                    snack(getString(R.string.no_voice_rec_apps))
-                }
+            subs.add(voiceSearchFailed().subscribe {
+                snack(getString(R.string.no_voice_rec_apps))
             })
             subs.add(searchPerforms().subscribe { url ->
-                material_search_view.postDelayed({ launchCustomTab(url) }, 150)
+                postDelayed({ launchCustomTab(url) }, 150)
             })
             clearFocus()
             subs.add(focusChanges().subscribe {
@@ -265,16 +257,7 @@ class HomeFragment : BaseMVPFragment<Home.View, Home.Presenter>(), Home.View {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_CODE_VOICE) {
-            when (resultCode) {
-                RESULT_OK -> {
-                    val resultList = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                    if (resultList != null && !resultList.isEmpty()) {
-                        launchCustomTab(Utils.getSearchUrl(resultList[0]))
-                    }
-                }
-            }
-        }
         super.onActivityResult(requestCode, resultCode, data)
+        material_search_view.onActivityResult(requestCode, resultCode, data)
     }
 }
