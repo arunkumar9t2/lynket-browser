@@ -20,19 +20,19 @@ package arun.com.chromer.di.activity;
 
 import android.support.annotation.NonNull;
 
-import arun.com.chromer.activities.CustomTabActivity;
-import arun.com.chromer.activities.blacklist.BlacklistManagerActivity;
-import arun.com.chromer.activities.browserintercept.BrowserInterceptActivity;
-import arun.com.chromer.activities.browsing.article.ChromerArticleActivity;
-import arun.com.chromer.activities.main.MainActivity;
-import arun.com.chromer.activities.newtab.NewTabDialogActivity;
-import arun.com.chromer.activities.settings.browsingoptions.BrowsingOptionsActivity;
-import arun.com.chromer.customtabs.CustomTabs;
-import arun.com.chromer.di.PerActivity;
+import arun.com.chromer.blacklist.BlacklistManagerActivity;
+import arun.com.chromer.browsing.article.ChromerArticleActivity;
+import arun.com.chromer.browsing.browserintercept.BrowserInterceptActivity;
+import arun.com.chromer.browsing.customtabs.CustomTabActivity;
+import arun.com.chromer.browsing.customtabs.CustomTabs;
+import arun.com.chromer.browsing.newtab.NewTabDialogActivity;
 import arun.com.chromer.di.fragment.FragmentComponent;
 import arun.com.chromer.di.fragment.FragmentModule;
+import arun.com.chromer.di.scopes.PerActivity;
 import arun.com.chromer.di.view.ViewComponent;
 import arun.com.chromer.di.view.ViewModule;
+import arun.com.chromer.home.HomeActivity;
+import arun.com.chromer.settings.browsingoptions.BrowsingOptionsActivity;
 import arun.com.chromer.shortcuts.HomeScreenShortcutCreatorActivity;
 import dagger.Subcomponent;
 
@@ -52,7 +52,7 @@ public interface ActivityComponent {
 
     void inject(BlacklistManagerActivity blacklistManagerActivity);
 
-    void inject(MainActivity mainActivity);
+    void inject(HomeActivity homeActivity);
 
     void inject(BrowserInterceptActivity browserInterceptActivity);
 

@@ -20,7 +20,7 @@ package arun.com.chromer.search
 
 import `in`.arunkumarsampath.suggestions.RxSuggestions
 import android.app.Application
-import arun.com.chromer.data.history.BaseHistoryRepository
+import arun.com.chromer.data.history.HistoryRepository
 import arun.com.chromer.search.suggestion.items.CopySuggestionItem
 import arun.com.chromer.search.suggestion.items.GoogleSuggestionItem
 import arun.com.chromer.search.suggestion.items.HistorySuggestionItem
@@ -41,7 +41,7 @@ import kotlin.collections.ArrayList
  */
 @Singleton
 class SuggestionsEngine @Inject
-constructor(private var application: Application, private val historyRepository: BaseHistoryRepository) {
+constructor(private var application: Application, private val historyRepository: HistoryRepository) {
     private val suggestionsDebounce = 200L
     private val suggestionsLimit = 5
 

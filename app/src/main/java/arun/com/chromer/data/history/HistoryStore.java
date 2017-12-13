@@ -21,5 +21,5 @@ package arun.com.chromer.data.history;
 /**
  * Created by Arunkumar on 03-03-2017.
  */
-public interface HistoryStore extends BaseHistoryRepository {
+public interface HistoryStore extends HistoryRepository {
 }

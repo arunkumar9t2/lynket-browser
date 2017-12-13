@@ -23,11 +23,11 @@
     android:title="@string/settings">
 
     <PreferenceCategory android:title="@string/web_heads">
-        <arun.com.chromer.activities.settings.widgets.ColorPreference
+        <arun.com.chromer.settings.widgets.ColorPreference
             android:key="webhead_color"
             android:title="@string/web_heads_color"
             app:color="@color/web_head_bg" />
-        <arun.com.chromer.activities.settings.widgets.IconListPreference
+        <arun.com.chromer.settings.widgets.IconListPreference
             android:defaultValue="1"
             android:dialogTitle="@string/webhead_spawn_title"
             android:entries="@array/webHeadsSpawnValues"
@@ -35,7 +35,7 @@
             android:key="webhead_spawn_preference"
             android:title="@string/webhead_spawn_summary" />
 
-        <arun.com.chromer.activities.settings.widgets.IconListPreference
+        <arun.com.chromer.settings.widgets.IconListPreference
             android:defaultValue="1"
             android:dialogTitle="@string/webhead_size_dialog"
             android:entries="@array/webHeadsSizeValues"

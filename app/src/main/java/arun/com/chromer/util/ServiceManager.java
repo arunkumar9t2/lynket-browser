@@ -24,8 +24,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 
-import arun.com.chromer.activities.settings.Preferences;
-import arun.com.chromer.shared.AppDetectService;
+import arun.com.chromer.appdetect.AppDetectService;
+import arun.com.chromer.settings.Preferences;
 import arun.com.chromer.shared.Constants;
 
 /**

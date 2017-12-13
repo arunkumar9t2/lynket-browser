@@ -21,7 +21,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="arun.com.chromer.activities.browsing.incognito.WebViewActivity">
+    tools:context=".browsing.webview.WebViewActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

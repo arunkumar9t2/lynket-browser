@@ -22,8 +22,8 @@ import android.app.Application;
 
 import javax.inject.Singleton;
 
+import arun.com.chromer.appdetect.AppDetectionManager;
 import arun.com.chromer.di.viewmodel.ViewModelModule;
-import arun.com.chromer.shared.AppDetectionManager;
 import arun.com.chromer.util.RxEventBus;
 import dagger.Module;
 import dagger.Provides;

@@ -46,8 +46,8 @@ import android.widget.TextView;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.settings.Preferences;
-import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.data.website.model.Website;
+import arun.com.chromer.settings.Preferences;
 import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;
@@ -101,7 +101,7 @@ public abstract class BaseWebHead extends FrameLayout {
     // The preferredUrl of the website that this web head represents, not allowed to change
     private final String url;
     // Website data that this web head represents
-    protected WebSite webSite;
+    protected Website website;
 
     @BindView(R.id.favicon)
     protected ImageView favicon;
@@ -138,8 +138,8 @@ public abstract class BaseWebHead extends FrameLayout {
         super(context);
         WEB_HEAD_COUNT++;
         this.url = url;
-        webSite = new WebSite();
-        webSite.url = url;
+        website = new Website();
+        website.url = url;
 
         windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         inflateContent(context);
@@ -440,7 +440,7 @@ public abstract class BaseWebHead extends FrameLayout {
 
     @NonNull
     public String getUnShortenedUrl() {
-        return webSite.preferredUrl();
+        return website.preferredUrl();
     }
 
     @Nullable
@@ -552,13 +552,13 @@ public abstract class BaseWebHead extends FrameLayout {
      * @return website data.
      */
     @NonNull
-    public WebSite getWebsite() {
-        return webSite;
+    public Website getWebsite() {
+        return website;
     }
 
-    public void setWebSite(@NonNull WebSite webSite) {
-        // Timber.d(webSite.toString());
-        this.webSite = webSite;
+    public void setWebsite(@NonNull Website website) {
+        // Timber.d(website.toString());
+        this.website = website;
     }
 
     /**

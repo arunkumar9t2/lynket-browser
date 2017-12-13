@@ -22,7 +22,7 @@ import android.content.Context
 import android.graphics.*
 import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.support.annotation.ColorInt
-import arun.com.chromer.data.website.model.WebSite
+import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.util.ColorUtil
 import arun.com.chromer.util.Utils
@@ -36,7 +36,7 @@ import com.bumptech.glide.load.resource.bitmap.BitmapResource
 import timber.log.Timber
 import java.util.*
 
-class WebsiteDecoder(private val context: Context, private val glide: Glide) : ResourceDecoder<WebSite, Bitmap> {
+class WebsiteDecoder(private val context: Context, private val glide: Glide) : ResourceDecoder<Website, Bitmap> {
     private val bitmapPool: BitmapPool = glide.bitmapPool
     val size = Utils.dpToPx(48.0)
 
@@ -49,12 +49,12 @@ class WebsiteDecoder(private val context: Context, private val glide: Glide) : R
             Color.parseColor("#2E7D32")
     )
 
-    override fun handles(source: WebSite, options: Options?): Boolean = true
+    override fun handles(source: Website, options: Options?): Boolean = true
 
-    override fun decode(webSite: WebSite, width: Int, height: Int, options: Options?): Resource<Bitmap>? {
+    override fun decode(website: Website, width: Int, height: Int, options: Options?): Resource<Bitmap>? {
         // Try to load using Glide normally
         val websiteFavicon = try {
-            GlideApp.with(context).asBitmap().load(webSite.faviconUrl).submit().get()
+            GlideApp.with(context).asBitmap().load(website.faviconUrl).submit().get()
         } catch (e: Exception) {
             null
         }
@@ -63,12 +63,12 @@ class WebsiteDecoder(private val context: Context, private val glide: Glide) : R
                 BitmapResource.obtain(websiteFavicon!!.copy(websiteFavicon.config, true), bitmapPool)
             } else {
                 // Draw a placeholder using theme color if it exists, else use a random color.
-                val color = if (webSite.themeColor() != Constants.NO_COLOR) {
-                    webSite.themeColor()
+                val color = if (website.themeColor() != Constants.NO_COLOR) {
+                    website.themeColor()
                 } else {
                     placeholderColors[Random().nextInt(placeholderColors.size)]
                 }
-                val createdIcon = createPlaceholderImage(color, webSite.safeLabel())
+                val createdIcon = createPlaceholderImage(color, website.safeLabel())
                 BitmapResource.obtain(createdIcon.copy(createdIcon.config, true), bitmapPool)
             }
         } catch (e: Exception) {

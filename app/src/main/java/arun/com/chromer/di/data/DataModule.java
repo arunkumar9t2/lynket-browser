@@ -22,22 +22,22 @@ import android.app.Application;
 
 import javax.inject.Singleton;
 
-import arun.com.chromer.activities.settings.Preferences;
 import arun.com.chromer.data.apps.AppDiskStore;
 import arun.com.chromer.data.apps.AppRepository;
-import arun.com.chromer.data.apps.BaseAppRepository;
+import arun.com.chromer.data.apps.DefaultAppRepository;
 import arun.com.chromer.data.apps.store.AppStore;
-import arun.com.chromer.data.history.BaseHistoryRepository;
-import arun.com.chromer.data.history.HistoryDiskStore;
+import arun.com.chromer.data.history.DefaultHistoryRepository;
 import arun.com.chromer.data.history.HistoryRepository;
+import arun.com.chromer.data.history.HistorySqlDiskStore;
 import arun.com.chromer.data.history.HistoryStore;
-import arun.com.chromer.data.website.BaseWebsiteRepository;
+import arun.com.chromer.data.website.DefaultWebsiteRepository;
 import arun.com.chromer.data.website.WebsiteDiskStore;
 import arun.com.chromer.data.website.WebsiteNetworkStore;
 import arun.com.chromer.data.website.WebsiteRepository;
 import arun.com.chromer.data.website.WebsiteStore;
 import arun.com.chromer.data.website.qualifiers.Disk;
 import arun.com.chromer.data.website.qualifiers.Network;
+import arun.com.chromer.settings.Preferences;
 import dagger.Module;
 import dagger.Provides;
 
@@ -63,19 +63,19 @@ public class DataModule {
 
     @Provides
     @Singleton
-    BaseAppRepository appRepository(AppRepository appRepository) {
+    AppRepository appRepository(DefaultAppRepository appRepository) {
         return appRepository;
     }
 
     @Provides
     @Singleton
-    HistoryStore historyStore(HistoryDiskStore historyDiskStore) {
-        return historyDiskStore;
+    HistoryStore historyStore(HistorySqlDiskStore historySqlDiskStore) {
+        return historySqlDiskStore;
     }
 
     @Provides
     @Singleton
-    BaseHistoryRepository historyRepository(HistoryRepository historyRepository) {
+    HistoryRepository historyRepository(DefaultHistoryRepository historyRepository) {
         return historyRepository;
     }
 
@@ -95,7 +95,7 @@ public class DataModule {
 
     @Provides
     @Singleton
-    BaseWebsiteRepository websiteRepository(WebsiteRepository websiteRepository) {
+    WebsiteRepository websiteRepository(DefaultWebsiteRepository websiteRepository) {
         return websiteRepository;
     }
 

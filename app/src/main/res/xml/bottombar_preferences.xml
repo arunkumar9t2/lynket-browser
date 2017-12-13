@@ -21,7 +21,7 @@
     android:key="settings"
     android:title="@string/settings">
     <PreferenceCategory android:title="@string/bottom_bar">
-        <arun.com.chromer.activities.settings.widgets.IconSwitchPreference
+        <arun.com.chromer.settings.widgets.IconSwitchPreference
             android:defaultValue="false"
             android:key="bottombar_enabled_preference"
             android:summary="@string/bottom_bar_pref_summary"

@@ -63,12 +63,12 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.newtab.NewTabDialogActivity;
-import arun.com.chromer.activities.settings.Preferences;
-import arun.com.chromer.customtabs.CustomTabManager;
-import arun.com.chromer.data.website.BaseWebsiteRepository;
-import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.browsing.customtabs.CustomTabManager;
+import arun.com.chromer.browsing.newtab.NewTabDialogActivity;
+import arun.com.chromer.data.website.WebsiteRepository;
+import arun.com.chromer.data.website.model.Website;
 import arun.com.chromer.di.service.ServiceComponent;
+import arun.com.chromer.settings.Preferences;
 import arun.com.chromer.util.DocumentUtils;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.util.glide.GlideApp;
@@ -126,7 +126,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     private final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Inject
-    BaseWebsiteRepository websiteRepository;
+    WebsiteRepository websiteRepository;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -287,7 +287,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
                     final WebHead webHead = webHeads.get(webHeadUrl);
                     if (webHead != null && webSite != null) {
                         warmUp(webHead);
-                        webHead.setWebSite(webSite);
+                        webHead.setWebsite(webSite);
                         ContextActivityHelper.signalUpdated(getApplication(), webHead.getWebsite());
                         final String faviconUrl = webSite.faviconUrl;
                         GlideApp.with(getApplication())
@@ -497,15 +497,15 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
 
     private void openContextActivity() {
         final ListIterator<String> it = new ArrayList<>(webHeads.keySet()).listIterator(webHeads.size());
-        final ArrayList<WebSite> webSites = new ArrayList<>();
+        final ArrayList<Website> websites = new ArrayList<>();
         while (it.hasPrevious()) {
             final String key = it.previous();
             final WebHead webHead = webHeads.get(key);
             if (webHead != null) {
-                webSites.add(webHead.getWebsite());
+                websites.add(webHead.getWebsite());
             }
         }
-        ContextActivityHelper.open(this, webSites);
+        ContextActivityHelper.open(this, websites);
     }
 
     @Override
@@ -583,9 +583,9 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
                     }
                     break;
                 case ACTION_CLOSE_WEBHEAD_BY_URL:
-                    final WebSite webSite = intent.getParcelableExtra(EXTRA_KEY_WEBSITE);
-                    if (webSite != null) {
-                        closeWebHeadByUrl(webSite.url);
+                    final Website website = intent.getParcelableExtra(EXTRA_KEY_WEBSITE);
+                    if (website != null) {
+                        closeWebHeadByUrl(website.url);
                     }
                     break;
             }
@@ -613,23 +613,23 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
 
 
     private static class ContextActivityHelper {
-        static void signalUpdated(Context context, WebSite webSite) {
+        static void signalUpdated(Context context, Website website) {
             final Intent intent = new Intent(ACTION_EVENT_WEBSITE_UPDATED);
-            intent.putExtra(EXTRA_KEY_WEBSITE, webSite);
+            intent.putExtra(EXTRA_KEY_WEBSITE, website);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         }
 
-        static void signalDeleted(Context context, WebSite webSite) {
+        static void signalDeleted(Context context, Website website) {
             final Intent intent = new Intent(ACTION_EVENT_WEBHEAD_DELETED);
-            intent.putExtra(EXTRA_KEY_WEBSITE, webSite);
+            intent.putExtra(EXTRA_KEY_WEBSITE, website);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         }
 
-        static void open(Context context, ArrayList<WebSite> webSites) {
+        static void open(Context context, ArrayList<Website> websites) {
             final Intent intent = new Intent(context, WebHeadContextActivity.class);
             intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(FLAG_ACTIVITY_CLEAR_TASK);
-            intent.putParcelableArrayListExtra(EXTRA_KEY_WEBSITE, webSites);
+            intent.putParcelableArrayListExtra(EXTRA_KEY_WEBSITE, websites);
             context.startActivity(intent);
         }
     }

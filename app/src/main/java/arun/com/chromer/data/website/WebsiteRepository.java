@@ -18,97 +18,26 @@
 
 package arun.com.chromer.data.website;
 
-import android.app.Application;
-import android.content.Context;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
-import arun.com.chromer.data.history.BaseHistoryRepository;
 import arun.com.chromer.data.website.model.WebColor;
-import arun.com.chromer.data.website.model.WebSite;
-import arun.com.chromer.data.website.qualifiers.Disk;
-import arun.com.chromer.data.website.qualifiers.Network;
-import arun.com.chromer.util.RxUtils;
+import arun.com.chromer.data.website.model.Website;
 import rx.Observable;
-import rx.schedulers.Schedulers;
-import timber.log.Timber;
-
-import static arun.com.chromer.shared.Constants.NO_COLOR;
 
 /**
- * Website repository implementation for managing and providing website data.
+ * Interface definition of Website repository which is responsible for providing
+ * {@link Website} instances containing useful website information.
+ * Will use a combination of disk cache and network parsing to provide requested website's data.
  */
-@Singleton
-public class WebsiteRepository implements BaseWebsiteRepository {
-    private final Context context;
-    private final WebsiteStore webNetworkStore;
-    private final WebsiteStore diskStore;
-    private final BaseHistoryRepository historyRepository;
+public interface WebsiteRepository {
+    @NonNull
+    Observable<Website> getWebsite(@NonNull String url);
 
-    @Inject
-    WebsiteRepository(@NonNull Application context, @Disk WebsiteStore diskStore, @Network WebsiteStore webNetworkStore, BaseHistoryRepository historyRepository) {
-        this.context = context.getApplicationContext();
-        this.webNetworkStore = webNetworkStore;
-        this.diskStore = diskStore;
-        this.historyRepository = historyRepository;
-    }
+    int getWebsiteColorSync(@NonNull final String url);
 
     @NonNull
-    @Override
-    public Observable<WebSite> getWebsite(@NonNull final String url) {
-        final Observable<WebSite> cache = diskStore.getWebsite(url)
-                .doOnNext(webSite -> {
-                    if (webSite != null) {
-                        historyRepository.update(webSite).subscribe();
-                    }
-                });
-
-        final Observable<WebSite> history = historyRepository.get(new WebSite(url))
-                .doOnNext(webSite -> {
-                    if (webSite != null) {
-                        historyRepository.update(webSite).subscribe();
-                    }
-                });
-
-        final Observable<WebSite> remote = webNetworkStore.getWebsite(url)
-                .filter(webSite -> webSite != null)
-                .doOnNext(webSite -> {
-                    diskStore.saveWebsite(webSite).subscribe();
-                    historyRepository.insert(webSite).subscribe();
-                });
-
-        return Observable.concat(cache, history, remote)
-                .first(webSite -> webSite != null)
-                .doOnError(Timber::e)
-                .compose(RxUtils.applySchedulers());
-    }
-
-    @Override
-    public int getWebsiteColorSync(@NonNull String url) {
-        return diskStore.getWebsiteColor(url).toBlocking().first().color;
-    }
+    Observable<WebColor> saveWebColor(final String url);
 
     @NonNull
-    @Override
-    public Observable<WebColor> saveWebColor(String url) {
-        return getWebsite(url)
-                .observeOn(Schedulers.io())
-                .flatMap(webSite -> {
-                    if (webSite != null && webSite.themeColor() != NO_COLOR) {
-                        return diskStore.saveWebsiteColor(Uri.parse(webSite.url).getHost(), webSite.themeColor());
-                    } else {
-                        return Observable.empty();
-                    }
-                });
-    }
-
-    @NonNull
-    @Override
-    public Observable<Void> clearCache() {
-        return diskStore.clearCache();
-    }
-
+    Observable<Void> clearCache();
 }

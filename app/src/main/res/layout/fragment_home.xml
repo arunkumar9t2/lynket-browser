@@ -188,7 +188,7 @@
         android:background="@color/shadow_color"
         android:visibility="gone" />
 
-    <arun.com.chromer.search.searchview.MaterialSearchView
+    <arun.com.chromer.search.view.MaterialSearchView
         android:id="@+id/material_search_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -18,9 +18,9 @@
 
 package arun.com.chromer.di.fragment;
 
-import arun.com.chromer.activities.history.HistoryFragment;
-import arun.com.chromer.activities.main.home.HomeFragment;
-import arun.com.chromer.di.PerFragment;
+import arun.com.chromer.di.scopes.PerFragment;
+import arun.com.chromer.history.HistoryFragment;
+import arun.com.chromer.home.fragment.HomeFragment;
 import dagger.Subcomponent;
 
 @PerFragment

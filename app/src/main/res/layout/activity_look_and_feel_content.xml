@@ -22,7 +22,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="arun.com.chromer.activities.settings.lookandfeel.LookAndFeelActivity"
+    tools:context=".settings.lookandfeel.LookAndFeelActivity"
     tools:showIn="@layout/activity_look_and_feel">
 
     <RelativeLayout

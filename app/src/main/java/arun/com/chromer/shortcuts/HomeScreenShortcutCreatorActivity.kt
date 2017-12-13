@@ -35,14 +35,14 @@ import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.ImageView
 import arun.com.chromer.R
-import arun.com.chromer.activities.browserintercept.BrowserInterceptActivity
+import arun.com.chromer.browsing.browserintercept.BrowserInterceptActivity
 import arun.com.chromer.data.Result
-import arun.com.chromer.data.website.model.WebSite
+import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.toBitmap
 import arun.com.chromer.extenstions.visible
-import arun.com.chromer.shared.common.BaseActivity
+import arun.com.chromer.shared.base.activity.BaseActivity
 import arun.com.chromer.util.glide.GlideApp
 import arun.com.chromer.util.glide.appicon.ApplicationIcon
 import butterknife.BindView
@@ -88,7 +88,7 @@ class HomeScreenShortcutCreatorActivity : BaseActivity() {
 
     class AddShortcutDialog(
             private var activity: Activity?,
-            private val webSiteObservable: Observable<Result<WebSite>>
+            private val websiteObservable: Observable<Result<Website>>
     ) : DialogInterface.OnDismissListener, TextWatcher {
         private lateinit var unbinder: Unbinder
         private var dialog: MaterialDialog? = null
@@ -108,7 +108,7 @@ class HomeScreenShortcutCreatorActivity : BaseActivity() {
 
         val subs = CompositeSubscription()
 
-        private lateinit var website: WebSite
+        private lateinit var website: Website
 
         fun show(): MaterialDialog? {
             dialog = MaterialDialog.Builder(activity!!)
@@ -142,15 +142,15 @@ class HomeScreenShortcutCreatorActivity : BaseActivity() {
             shortcutName?.addTextChangedListener(this)
             positiveButton?.isEnabled = false
 
-            subs.add(webSiteObservable.subscribe {
+            subs.add(websiteObservable.subscribe {
                 when (it) {
-                    is Result.Loading<WebSite> -> {
+                    is Result.Loading<Website> -> {
                         progressBar?.visible()
                         iconView?.gone()
                         shortcutName?.setText(R.string.loading)
                         positiveButton?.isEnabled = false
                     }
-                    is Result.Success<WebSite> -> {
+                    is Result.Success<Website> -> {
                         website = it.data
                         shortcutName?.setText(website.safeLabel())
                         GlideApp.with(activity)

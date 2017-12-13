@@ -18,15 +18,15 @@
 
 package arun.com.chromer.util.glide.favicon
 
-import arun.com.chromer.data.website.model.WebSite
+import arun.com.chromer.data.website.model.Website
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.data.DataFetcher
 
-class WebsiteDataFetcher(private val webSite: WebSite) : DataFetcher<WebSite> {
+class WebsiteDataFetcher(private val website: Website) : DataFetcher<Website> {
 
-    override fun loadData(priority: Priority?, callback: DataFetcher.DataCallback<in WebSite>) {
-        callback.onDataReady(webSite)
+    override fun loadData(priority: Priority?, callback: DataFetcher.DataCallback<in Website>) {
+        callback.onDataReady(website)
     }
 
     override fun cleanup() {
@@ -37,7 +37,7 @@ class WebsiteDataFetcher(private val webSite: WebSite) : DataFetcher<WebSite> {
         // Do nothing.
     }
 
-    override fun getDataClass(): Class<WebSite> = WebSite::class.java
+    override fun getDataClass(): Class<Website> = Website::class.java
 
     override fun getDataSource(): DataSource = DataSource.LOCAL
 }

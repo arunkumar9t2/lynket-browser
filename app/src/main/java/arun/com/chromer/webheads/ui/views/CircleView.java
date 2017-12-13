@@ -25,7 +25,7 @@ import android.support.annotation.ColorInt;
 import android.util.AttributeSet;
 import android.view.View;
 
-import arun.com.chromer.activities.settings.Preferences;
+import arun.com.chromer.settings.Preferences;
 import arun.com.chromer.util.Utils;
 
 /**

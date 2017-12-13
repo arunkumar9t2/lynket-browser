@@ -43,8 +43,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import arun.com.chromer.R;
-import arun.com.chromer.activities.settings.Preferences;
-import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.data.website.model.Website;
+import arun.com.chromer.settings.Preferences;
 import arun.com.chromer.util.DocumentUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -81,10 +81,10 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
             finish();
         }
 
-        final ArrayList<WebSite> webSites = getIntent().getParcelableArrayListExtra(EXTRA_KEY_WEBSITE);
+        final ArrayList<Website> websites = getIntent().getParcelableArrayListExtra(EXTRA_KEY_WEBSITE);
 
         websitesAdapter = new WebsiteAdapter(this, this);
-        websitesAdapter.setWebsites(webSites);
+        websitesAdapter.setWebsites(websites);
 
         websiteListView.setLayoutManager(new LinearLayoutManager(this));
         websiteListView.setAdapter(websitesAdapter);
@@ -107,39 +107,39 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
     }
 
     @Override
-    public void onWebSiteItemClicked(@NonNull WebSite webSite) {
+    public void onWebSiteItemClicked(@NonNull Website website) {
         finish();
-        DocumentUtils.smartOpenNewTab(this, webSite);
+        DocumentUtils.smartOpenNewTab(this, website);
         if (Preferences.get(this).webHeadsCloseOnOpen()) {
-            broadcastDeleteWebHead(webSite);
+            broadcastDeleteWebHead(website);
         }
     }
 
-    private void broadcastDeleteWebHead(@NonNull WebSite webSite) {
+    private void broadcastDeleteWebHead(@NonNull Website website) {
         final Intent intent = new Intent(ACTION_CLOSE_WEBHEAD_BY_URL);
-        intent.putExtra(EXTRA_KEY_WEBSITE, webSite);
+        intent.putExtra(EXTRA_KEY_WEBSITE, website);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
     @Override
-    public void onWebSiteDelete(@NonNull final WebSite webSite) {
-        final boolean shouldFinish = websitesAdapter.getWebSites().isEmpty();
+    public void onWebSiteDelete(@NonNull final Website website) {
+        final boolean shouldFinish = websitesAdapter.getWebsites().isEmpty();
         if (shouldFinish) {
             rootCardView.setVisibility(GONE);
-            broadcastDeleteWebHead(webSite);
+            broadcastDeleteWebHead(website);
             finish();
         } else
-            broadcastDeleteWebHead(webSite);
+            broadcastDeleteWebHead(website);
     }
 
     @Override
-    public void onWebSiteShare(@NonNull WebSite webSite) {
-        startActivity(Intent.createChooser(TEXT_SHARE_INTENT.putExtra(EXTRA_TEXT, webSite.url), getString(R.string.share)));
+    public void onWebSiteShare(@NonNull Website website) {
+        startActivity(Intent.createChooser(TEXT_SHARE_INTENT.putExtra(EXTRA_TEXT, website.url), getString(R.string.share)));
     }
 
     @Override
-    public void onWebSiteLongClicked(@NonNull WebSite webSite) {
-        copyToClipboard(webSite.safeLabel(), webSite.preferredUrl());
+    public void onWebSiteLongClicked(@NonNull Website website) {
+        copyToClipboard(website.safeLabel(), website.preferredUrl());
     }
 
     @OnClick(R.id.copy_all)
@@ -161,9 +161,9 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
                         startActivity(Intent.createChooser(TEXT_SHARE_INTENT.putExtra(EXTRA_TEXT, getCSVUrls().toString()), getString(R.string.share_all)));
                     } else {
                         final ArrayList<Uri> webSites = new ArrayList<>();
-                        for (WebSite webSite : websitesAdapter.getWebSites()) {
+                        for (Website website : websitesAdapter.getWebsites()) {
                             try {
-                                webSites.add(Uri.parse(webSite.preferredUrl()));
+                                webSites.add(Uri.parse(website.preferredUrl()));
                             } catch (Exception ignored) {
                             }
                         }
@@ -180,10 +180,10 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
     @NonNull
     private StringBuilder getCSVUrls() {
         final StringBuilder builder = new StringBuilder();
-        final List<WebSite> webSites = websitesAdapter.getWebSites();
-        final int size = webSites.size();
+        final List<Website> websites = websitesAdapter.getWebsites();
+        final int size = websites.size();
         for (int i = 0; i < size; i++) {
-            builder.append(webSites.get(i).preferredUrl());
+            builder.append(websites.get(i).preferredUrl());
             if (i != size - 1) {
                 builder.append(',')
                         .append(' ');
@@ -208,13 +208,13 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
                 case ACTION_EVENT_WEBHEAD_DELETED:
-                    final WebSite webSite = intent.getParcelableExtra(EXTRA_KEY_WEBSITE);
-                    if (webSite != null) {
-                        websitesAdapter.delete(webSite);
+                    final Website website = intent.getParcelableExtra(EXTRA_KEY_WEBSITE);
+                    if (website != null) {
+                        websitesAdapter.delete(website);
                     }
                     break;
                 case ACTION_EVENT_WEBSITE_UPDATED:
-                    final WebSite web = intent.getParcelableExtra(EXTRA_KEY_WEBSITE);
+                    final Website web = intent.getParcelableExtra(EXTRA_KEY_WEBSITE);
                     if (web != null) {
                         websitesAdapter.update(web);
                     }

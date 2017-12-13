@@ -18,7 +18,8 @@
 
 package arun.com.chromer.data.apps.store;
 
-import arun.com.chromer.data.apps.BaseAppRepository;
+import arun.com.chromer.data.apps.AppRepository;
+import arun.com.chromer.data.common.BookStore;
 
-public interface AppStore extends BaseAppRepository {
+public interface AppStore extends AppRepository, BookStore {
 }

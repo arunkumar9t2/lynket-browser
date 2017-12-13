@@ -18,114 +18,42 @@
 
 package arun.com.chromer.data.history;
 
-import android.app.Application;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
-import arun.com.chromer.activities.settings.Preferences;
-import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.data.website.model.Website;
 import rx.Observable;
-import timber.log.Timber;
 
 /**
- * Created by arunk on 03-03-2017.
+ * Created by Arunkumar on 03-03-2017.
  */
-@Singleton
-public class HistoryRepository implements BaseHistoryRepository {
-    private final Application application;
-    private final HistoryStore historyStore;
-    private final Preferences preferences;
-
-    @Inject
-    HistoryRepository(Application application, HistoryStore historyStore, Preferences preferences) {
-        this.application = application;
-        this.historyStore = historyStore;
-        this.preferences = preferences;
-    }
+public interface HistoryRepository {
+    @NonNull
+    Observable<Cursor> getAllItemsCursor();
 
     @NonNull
-    @Override
-    public Observable<Cursor> getAllItemsCursor() {
-        return historyStore.getAllItemsCursor();
-    }
+    Observable<Website> get(@NonNull final Website website);
 
     @NonNull
-    @Override
-    public Observable<WebSite> get(@NonNull WebSite webSite) {
-        return historyStore.get(webSite)
-                .doOnNext(saved -> {
-                    if (saved == null) {
-                        Timber.d("History miss for: %s", webSite.url);
-                    } else {
-                        Timber.d("History hit for : %s", webSite.url);
-                    }
-                });
-    }
+    Observable<Website> insert(@NonNull final Website website);
 
     @NonNull
-    @Override
-    public Observable<WebSite> insert(@NonNull final WebSite webSite) {
-        if (preferences.incognitoMode()) {
-            return Observable.just(webSite);
-        } else {
-            return historyStore.insert(webSite)
-                    .doOnNext(webSite1 -> {
-                        if (webSite1 != null) {
-                            Timber.d("Added %s to history", webSite1.url);
-                        } else {
-                            Timber.e("%s Did not add to history", webSite.url);
-                        }
-                    });
-        }
-    }
+    Observable<Website> update(@NonNull final Website website);
 
     @NonNull
-    @Override
-    public Observable<WebSite> update(@NonNull final WebSite webSite) {
-        if (preferences.incognitoMode()) {
-            return Observable.just(webSite);
-        } else {
-            return historyStore.update(webSite)
-                    .doOnNext(saved -> {
-                        if (saved != null) {
-                            Timber.d("Updated %s in history table", saved.url);
-                        }
-                    });
-        }
-    }
+    Observable<Website> delete(@NonNull final Website website);
 
     @NonNull
-    @Override
-    public Observable<WebSite> delete(@NonNull WebSite webSite) {
-        return historyStore.delete(webSite);
-    }
+    Observable<Boolean> exists(@NonNull final Website website);
 
     @NonNull
-    @Override
-    public Observable<Boolean> exists(@NonNull WebSite webSite) {
-        return historyStore.exists(webSite);
-    }
+    Observable<Integer> deleteAll();
 
     @NonNull
-    @Override
-    public Observable<Integer> deleteAll() {
-        return historyStore.deleteAll();
-    }
+    Observable<List<Website>> recents();
 
     @NonNull
-    @Override
-    public Observable<List<WebSite>> recents() {
-        return historyStore.recents();
-    }
-
-    @NonNull
-    @Override
-    public Observable<List<WebSite>> search(@NonNull String text) {
-        return historyStore.search(text);
-    }
+    Observable<List<Website>> search(@NonNull String text);
 }

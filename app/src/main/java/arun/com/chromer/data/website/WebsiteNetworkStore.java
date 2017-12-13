@@ -27,7 +27,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import arun.com.chromer.data.website.model.WebColor;
-import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.data.website.model.Website;
 import arun.com.chromer.util.RxUtils;
 import arun.com.chromer.util.parser.RxParser;
 import rx.Observable;
@@ -46,16 +46,16 @@ public class WebsiteNetworkStore implements WebsiteStore {
 
     @NonNull
     @Override
-    public Observable<WebSite> getWebsite(@NonNull String url) {
+    public Observable<Website> getWebsite(@NonNull String url) {
         return RxParser.parseUrl(url)
                 .flatMap(urlArticlePair -> {
                     if (urlArticlePair.second != null) {
-                        final WebSite extractedWebsite = WebSite.fromArticle(urlArticlePair.second);
+                        final Website extractedWebsite = Website.fromArticle(urlArticlePair.second);
                         // We preserve the original url, otherwise breaks cache.
                         extractedWebsite.url = urlArticlePair.first;
                         return Observable.just(extractedWebsite);
                     } else {
-                        return Observable.just(new WebSite(urlArticlePair.first));
+                        return Observable.just(new Website(urlArticlePair.first));
                     }
                 }).compose(RxUtils.applySchedulers());
     }
@@ -68,7 +68,7 @@ public class WebsiteNetworkStore implements WebsiteStore {
 
     @NonNull
     @Override
-    public Observable<WebSite> saveWebsite(@NonNull WebSite webSite) {
+    public Observable<Website> saveWebsite(@NonNull Website website) {
         return Observable.empty();
     }
 

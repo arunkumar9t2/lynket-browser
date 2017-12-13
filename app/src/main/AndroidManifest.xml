@@ -25,13 +25,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service android:name=".customtabs.callbacks.ClipboardService" />
+        <service android:name=".browsing.customtabs.callbacks.ClipboardService" />
         <service
-            android:name=".shared.AppDetectService"
+            android:name=".appdetect.AppDetectService"
             android:enabled="true"
             android:exported="false" />
         <service
-            android:name=".customtabs.dynamictoolbar.AppColorExtractorJob"
+            android:name=".browsing.customtabs.dynamictoolbar.AppColorExtractorJob"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
@@ -39,12 +39,12 @@
             android:enabled="true"
             android:exported="false" />
         <service
-            android:name=".customtabs.KeepAliveService"
+            android:name=".browsing.customtabs.KeepAliveService"
             android:enabled="true"
             android:exported="true"
             tools:ignore="ExportedService" />
         <service
-            android:name=".qs.WebHeadTile"
+            android:name=".webheads.qs.WebHeadTile"
             android:icon="@drawable/ic_bubble_chart_white_24dp"
             android:label="@string/web_heads"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -53,7 +53,7 @@
             </intent-filter>
         </service>
         <service
-            android:name=".qs.AmpTile"
+            android:name=".browsing.amp.qs.AmpTile"
             android:icon="@drawable/ic_action_amp_icon"
             android:label="@string/amp_mode"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -62,7 +62,7 @@
             </intent-filter>
         </service>
         <service
-            android:name=".qs.ArticleTile"
+            android:name=".browsing.article.qs.ArticleTile"
             android:icon="@drawable/ic_description_black_24dp"
             android:label="@string/article_mode"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -71,16 +71,16 @@
             </intent-filter>
         </service>
 
-        <receiver android:name=".customtabs.callbacks.ShareBroadcastReceiver" />
-        <receiver android:name=".customtabs.callbacks.FavShareBroadcastReceiver" />
-        <receiver android:name=".customtabs.callbacks.SecondaryBrowserReceiver" />
-        <receiver android:name=".customtabs.callbacks.OpenInChromeReceiver" />
-        <receiver android:name=".customtabs.callbacks.MinimizeBroadcastReceiver" />
-        <receiver android:name=".customtabs.bottombar.BottomBarReceiver" />
+        <receiver android:name=".browsing.customtabs.callbacks.ShareBroadcastReceiver" />
+        <receiver android:name=".browsing.customtabs.callbacks.FavShareBroadcastReceiver" />
+        <receiver android:name=".browsing.customtabs.callbacks.SecondaryBrowserReceiver" />
+        <receiver android:name=".browsing.customtabs.callbacks.OpenInChromeReceiver" />
+        <receiver android:name=".browsing.customtabs.callbacks.MinimizeBroadcastReceiver" />
+        <receiver android:name=".browsing.customtabs.bottombar.BottomBarReceiver" />
 
         <!-- Chromer launcher activity -->
         <activity
-            android:name=".activities.main.MainActivity"
+            android:name=".home.HomeActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.Launcher"
             android:windowSoftInputMode="adjustPan" />
@@ -88,7 +88,7 @@
         <activity-alias
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:targetActivity=".activities.main.MainActivity"
+            android:targetActivity=".home.HomeActivity"
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -103,7 +103,7 @@
 
         <!-- Entry point for browser activity -->
         <activity
-            android:name=".activities.browserintercept.BrowserInterceptActivity"
+            android:name=".browsing.browserintercept.BrowserInterceptActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat.Translucent" />
@@ -111,7 +111,7 @@
         <activity-alias
             android:name=".activities.BrowserInterceptActivity"
             android:label="@string/app_name"
-            android:targetActivity=".activities.browserintercept.BrowserInterceptActivity"
+            android:targetActivity=".browsing.browserintercept.BrowserInterceptActivity"
             android:theme="@style/Theme.AppCompat.Translucent">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -125,32 +125,32 @@
         </activity-alias>
 
         <activity
-            android:name=".activities.settings.SettingsGroupActivity"
+            android:name=".settings.SettingsGroupActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".activities.main.MainActivity"
+            android:parentActivityName=".home.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="arun.com.chromer.activities.main.MainActivity" />
+                android:value="arun.com.chromer.home.HomeActivity" />
         </activity>
         <activity
-            android:name=".activities.CustomTabActivity"
+            android:name=".browsing.customtabs.CustomTabActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat.Translucent" />
         <activity
-            android:name=".activities.browsing.article.ChromerArticleActivity"
+            android:name="arun.com.chromer.browsing.article.ChromerArticleActivity"
             android:label="@string/app_name"
             android:theme="@style/ArticleTheme" />
         <activity
-            android:name=".activities.intro.ChromerIntro"
+            android:name=".intro.ChromerIntro"
             android:label="Intro"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.intro.WebHeadsIntro"
+            android:name=".intro.WebHeadsIntro"
             android:label="Intro"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.ShareInterceptActivity"
+            android:name=".browsing.shareintercept.ShareInterceptActivity"
             android:excludeFromRecents="true"
             android:label="Open/Search with Chromer">
             <intent-filter>
@@ -169,16 +169,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.about.AboutAppActivity"
+            android:name=".about.AboutAppActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.payments.DonateActivity"
+            android:name=".payments.DonateActivity"
             android:excludeFromRecents="true"
             android:theme="@style/DialogTheme" />
         <activity
-            android:name=".activities.blacklist.BlacklistManagerActivity"
+            android:name=".blacklist.BlacklistManagerActivity"
             android:label="@string/blacklisted_apps"
-            android:parentActivityName=".activities.settings.browsingoptions.BrowsingOptionsActivity"
+            android:parentActivityName=".settings.browsingoptions.BrowsingOptionsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".webheads.ui.context.WebHeadContextActivity"
@@ -186,7 +186,7 @@
             android:noHistory="true"
             android:theme="@style/DialogTheme" />
         <activity
-            android:name=".activities.newtab.NewTabDialogActivity"
+            android:name="arun.com.chromer.browsing.newtab.NewTabDialogActivity"
             android:excludeFromRecents="true"
             android:noHistory="true"
             android:theme="@style/DialogTheme" />
@@ -196,13 +196,13 @@
             android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Translucent" />
         <activity
-            android:name=".activities.OpenIntentWithActivity"
+            android:name=".browsing.openwith.OpenIntentWithActivity"
             android:excludeFromRecents="true"
             android:label="@string/title_activity_open_with"
             android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Translucent" />
         <activity
-            android:name=".activities.ChromerOptionsActivity"
+            android:name=".browsing.optionspopup.ChromerOptionsActivity"
             android:excludeFromRecents="true"
             android:label="@string/chromer_options"
             android:noHistory="true"
@@ -214,38 +214,38 @@
             android:noHistory="true"
             android:theme="@style/DialogTheme" />
         <activity
-            android:name=".activities.settings.browsingmode.BrowsingModeActivity"
+            android:name=".settings.browsingmode.BrowsingModeActivity"
             android:label="@string/title_activity_browsing_mode"
-            android:parentActivityName=".activities.settings.SettingsGroupActivity"
+            android:parentActivityName=".settings.SettingsGroupActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="arun.com.chromer.activities.settings.SettingsGroupActivity" />
+                android:value=".settings.SettingsGroupActivity" />
         </activity>
         <activity
-            android:name=".activities.settings.lookandfeel.LookAndFeelActivity"
+            android:name=".settings.lookandfeel.LookAndFeelActivity"
             android:label="@string/title_activity_look_and_feel"
-            android:parentActivityName=".activities.settings.SettingsGroupActivity"
+            android:parentActivityName=".settings.SettingsGroupActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="arun.com.chromer.activities.settings.SettingsGroupActivity" />
+                android:value=".settings.SettingsGroupActivity" />
         </activity>
         <activity
-            android:name=".activities.settings.browsingoptions.BrowsingOptionsActivity"
+            android:name=".settings.browsingoptions.BrowsingOptionsActivity"
             android:label="@string/title_activity_browsing_options"
-            android:parentActivityName=".activities.settings.SettingsGroupActivity"
+            android:parentActivityName=".settings.SettingsGroupActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="arun.com.chromer.activities.settings.SettingsGroupActivity" />
+                android:value=".settings.SettingsGroupActivity" />
         </activity>
         <activity
-            android:name=".activities.history.HistoryActivity"
+            android:name=".history.HistoryActivity"
             android:label="@string/title_history"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.browsing.incognito.WebViewActivity"
+            android:name="arun.com.chromer.browsing.webview.WebViewActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data

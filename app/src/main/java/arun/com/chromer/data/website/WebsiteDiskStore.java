@@ -31,7 +31,7 @@ import javax.inject.Singleton;
 
 import arun.com.chromer.data.common.BookStore;
 import arun.com.chromer.data.website.model.WebColor;
-import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.data.website.model.Website;
 import io.paperdb.Book;
 import io.paperdb.Paper;
 import rx.Observable;
@@ -41,13 +41,13 @@ import xyz.klinker.android.article.data.cache.ParcelDiskCache;
 import static arun.com.chromer.shared.Constants.NO_COLOR;
 
 /**
- * Cache store to get/put {@link WebSite} objects to disk cache.
+ * Cache store to get/put {@link Website} objects to disk cache.
  */
 @Singleton
 public class WebsiteDiskStore implements WebsiteStore, BookStore {
     private final Context context;
     // Cache to store our data.
-    private ParcelDiskCache<WebSite> webSiteDiskCache;
+    private ParcelDiskCache<Website> webSiteDiskCache;
     // Cache size, currently set at 30 MB.
     private static final int DISK_CACHE_SIZE = 1024 * 1024 * 30;
 
@@ -62,7 +62,7 @@ public class WebsiteDiskStore implements WebsiteStore, BookStore {
     WebsiteDiskStore(Application context) {
         this.context = context.getApplicationContext();
         try {
-            webSiteDiskCache = ParcelDiskCache.open(context, WebSite.class.getClassLoader(), "WebSiteCache", DISK_CACHE_SIZE);
+            webSiteDiskCache = ParcelDiskCache.open(context, Website.class.getClassLoader(), "WebSiteCache", DISK_CACHE_SIZE);
         } catch (IOException e) {
             Timber.e(e);
         }
@@ -70,7 +70,7 @@ public class WebsiteDiskStore implements WebsiteStore, BookStore {
 
     @NonNull
     @Override
-    public Observable<WebSite> getWebsite(@NonNull final String url) {
+    public Observable<Website> getWebsite(@NonNull final String url) {
         return Observable.fromCallable(() -> {
             try {
                 return webSiteDiskCache.get(url.trim());
@@ -100,10 +100,10 @@ public class WebsiteDiskStore implements WebsiteStore, BookStore {
 
     @NonNull
     @Override
-    public Observable<WebSite> saveWebsite(@NonNull final WebSite webSite) {
+    public Observable<Website> saveWebsite(@NonNull final Website website) {
         return Observable.fromCallable(() -> {
             try {
-                return webSiteDiskCache.set(webSite.url, webSite);
+                return webSiteDiskCache.set(website.url, website);
             } catch (Exception e) {
                 Timber.e(e);
                 return null;

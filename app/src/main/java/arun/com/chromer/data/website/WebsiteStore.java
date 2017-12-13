@@ -22,7 +22,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 
 import arun.com.chromer.data.website.model.WebColor;
-import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.data.website.model.Website;
 import rx.Observable;
 
 /**
@@ -30,13 +30,13 @@ import rx.Observable;
  */
 public interface WebsiteStore {
     @NonNull
-    Observable<WebSite> getWebsite(@NonNull String url);
+    Observable<Website> getWebsite(@NonNull String url);
 
     @NonNull
     Observable<Void> clearCache();
 
     @NonNull
-    Observable<WebSite> saveWebsite(@NonNull WebSite webSite);
+    Observable<Website> saveWebsite(@NonNull Website website);
 
     @NonNull
     Observable<WebColor> getWebsiteColor(@NonNull final String url);

@@ -28,12 +28,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
-import arun.com.chromer.activities.CustomTabActivity;
-import arun.com.chromer.activities.browsing.article.ArticleLauncher;
-import arun.com.chromer.activities.browsing.article.ChromerArticleActivity;
-import arun.com.chromer.activities.browsing.incognito.WebViewActivity;
-import arun.com.chromer.activities.settings.Preferences;
-import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.browsing.article.ArticleLauncher;
+import arun.com.chromer.browsing.article.ChromerArticleActivity;
+import arun.com.chromer.browsing.customtabs.CustomTabActivity;
+import arun.com.chromer.browsing.webview.WebViewActivity;
+import arun.com.chromer.data.website.model.Website;
+import arun.com.chromer.settings.Preferences;
 import arun.com.chromer.webheads.WebHeadService;
 import timber.log.Timber;
 
@@ -64,31 +64,31 @@ public class DocumentUtils {
         return info;
     }
 
-    public static void smartOpenNewTab(@NonNull final Context context, @NonNull final WebSite webSite) {
-        smartOpenNewTab(context, webSite, false);
+    public static void smartOpenNewTab(@NonNull final Context context, @NonNull final Website website) {
+        smartOpenNewTab(context, website, false);
     }
 
     /**
      * Reorders a old task if it exists else opens a new tab
      *
      * @param context Context to work with
-     * @param webSite Website data
+     * @param website Website data
      */
-    public static void smartOpenNewTab(@NonNull final Context context, @NonNull final WebSite webSite, final boolean isNewTab) {
-        if (!reOrderTab(context, webSite)) {
-            if (Preferences.get(context).ampMode() && !TextUtils.isEmpty(webSite.ampUrl)) {
-                openNewCustomTab(context, webSite, isNewTab);
+    public static void smartOpenNewTab(@NonNull final Context context, @NonNull final Website website, final boolean isNewTab) {
+        if (!reOrderTab(context, website)) {
+            if (Preferences.get(context).ampMode() && !TextUtils.isEmpty(website.ampUrl)) {
+                openNewCustomTab(context, website, isNewTab);
             } else if (Preferences.get(context).articleMode()) {
-                openNewArticleTab(context, webSite, isNewTab);
+                openNewArticleTab(context, website, isNewTab);
             } else {
-                openNewCustomTab(context, webSite, isNewTab);
+                openNewCustomTab(context, website, isNewTab);
             }
         }
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     @TargetApi(LOLLIPOP)
-    public static boolean reOrderTab(@NonNull final Context context, @NonNull WebSite webSite) {
+    public static boolean reOrderTab(@NonNull final Context context, @NonNull Website website) {
         if (!Preferences.get(context).mergeTabs()) {
             return false;
         }
@@ -104,9 +104,9 @@ public class DocumentUtils {
                         || componentClassName.equals(ChromerArticleActivity.class.getName())
                         || componentClassName.equals(WebViewActivity.class.getName());
 
-                final boolean urlMatches = url.equalsIgnoreCase(webSite.url)
-                        || url.equalsIgnoreCase(webSite.preferredUrl())
-                        || url.equalsIgnoreCase(webSite.ampUrl);
+                final boolean urlMatches = url.equalsIgnoreCase(website.url)
+                        || url.equalsIgnoreCase(website.preferredUrl())
+                        || url.equalsIgnoreCase(website.ampUrl);
 
                 if (taskComponentMatches && urlMatches) {
                     Timber.d("Moved tab to front %s", url);
@@ -121,9 +121,9 @@ public class DocumentUtils {
     }
 
     @TargetApi(LOLLIPOP)
-    public static void openNewCustomTab(@NonNull final Context context, @NonNull final WebSite webSite, boolean isFromNewTab) {
+    public static void openNewCustomTab(@NonNull final Context context, @NonNull final Website website, boolean isFromNewTab) {
         final Intent customTabActivity = new Intent(context, CustomTabActivity.class);
-        final Uri usableUri = getUsableUri(context, webSite);
+        final Uri usableUri = getUsableUri(context, website);
 
         customTabActivity.setData(usableUri);
         customTabActivity.setFlags(FLAG_ACTIVITY_NEW_TASK);
@@ -133,13 +133,13 @@ public class DocumentUtils {
         }
 
         customTabActivity.putExtra(EXTRA_KEY_FROM_WEBHEAD, true);
-        customTabActivity.putExtra(EXTRA_KEY_WEBSITE, webSite);
+        customTabActivity.putExtra(EXTRA_KEY_WEBSITE, website);
         context.startActivity(customTabActivity);
     }
 
 
-    public static void openNewArticleTab(Context context, WebSite webSite, boolean newTab) {
-        ArticleLauncher.from(context, getUsableUri(context, webSite))
+    public static void openNewArticleTab(Context context, Website website, boolean newTab) {
+        ArticleLauncher.from(context, getUsableUri(context, website))
                 .applyCustomizations()
                 .forNewTab(newTab)
                 .launch();
@@ -150,16 +150,16 @@ public class DocumentUtils {
      * for opening a new tab.
      *
      * @param context Context to work with.
-     * @param webSite Website data.
+     * @param website Website data.
      * @return Uri of the website to open
      */
-    private static Uri getUsableUri(@NonNull Context context, @NonNull WebSite webSite) {
+    private static Uri getUsableUri(@NonNull Context context, @NonNull Website website) {
         if (Preferences.get(context).ampMode()) {
-            return TextUtils.isEmpty(webSite.ampUrl) ? Uri.parse(webSite.preferredUrl()) : Uri.parse(webSite.ampUrl);
+            return TextUtils.isEmpty(website.ampUrl) ? Uri.parse(website.preferredUrl()) : Uri.parse(website.ampUrl);
         } else if (Preferences.get(context).articleMode()) {
-            return Uri.parse(webSite.url);
+            return Uri.parse(website.url);
         } else {
-            return Uri.parse(webSite.preferredUrl());
+            return Uri.parse(website.preferredUrl());
         }
     }
 

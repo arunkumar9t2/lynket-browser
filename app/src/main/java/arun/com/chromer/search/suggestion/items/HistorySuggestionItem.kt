@@ -18,13 +18,12 @@
 
 package arun.com.chromer.search.suggestion.items
 
-import arun.com.chromer.data.website.model.WebSite
+import arun.com.chromer.data.website.model.Website
 
 /**
  * Created by arunk on 09-12-2017.
  */
-
-class HistorySuggestionItem(val website: WebSite) : TitleSuggestionItem(website.safeLabel(), website.url) {
+class HistorySuggestionItem(val website: Website) : TitleSuggestionItem(website.safeLabel(), website.url) {
 
     override fun getType(): Int {
         return SuggestionItem.HISTORY

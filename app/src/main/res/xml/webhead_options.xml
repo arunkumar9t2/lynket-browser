@@ -22,12 +22,12 @@
     android:title="@string/settings">
 
     <PreferenceCategory android:title="@string/web_heads">
-        <arun.com.chromer.activities.settings.widgets.IconCheckboxPreference
+        <arun.com.chromer.settings.widgets.IconCheckboxPreference
             android:defaultValue="false"
             android:key="aggressive_loading"
             android:summary="@string/aggressive_background_loading_desc"
             android:title="@string/aggressive_background_loading" />
-        <arun.com.chromer.activities.settings.widgets.IconCheckboxPreference
+        <arun.com.chromer.settings.widgets.IconCheckboxPreference
             android:defaultValue="true"
             android:key="webhead_close_onclick_pref"
             android:summary="@string/web_close_on_open_desc"

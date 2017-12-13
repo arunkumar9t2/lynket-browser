@@ -22,7 +22,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="arun.com.chromer.activities.browsing.incognito.WebViewActivity"
+    tools:context=".browsing.webview.WebViewActivity"
     tools:showIn="@layout/activity_web_view">
 
     <WebView

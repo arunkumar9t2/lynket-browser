@@ -41,7 +41,7 @@ import com.facebook.rebound.SpringListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import arun.com.chromer.activities.settings.Preferences;
+import arun.com.chromer.settings.Preferences;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.physics.MovementTracker;
 import arun.com.chromer.webheads.physics.SpringConfigs;
@@ -402,7 +402,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
     public void reveal(@Nullable final Runnable endAction) {
         Utils.doAfterLayout(this, () -> {
             setInitialSpawnLocation();
-            Timber.d("Reveal %s", webSite.url);
+            Timber.d("Reveal %s", website.url);
             animateContentScale(TOUCH_UP_SCALE, endAction);
             scaledDown = false;
         });

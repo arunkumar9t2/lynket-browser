@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import arun.com.chromer.R;
-import arun.com.chromer.data.website.model.WebSite;
+import arun.com.chromer.data.website.model.Website;
 import arun.com.chromer.util.glide.GlideApp;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,7 +47,7 @@ import butterknife.ButterKnife;
 
 class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> {
     private final Context context;
-    private final List<WebSite> webSites = new ArrayList<>();
+    private final List<Website> websites = new ArrayList<>();
     private final WebSiteAdapterListener listener;
 
     WebsiteAdapter(@NonNull Context context, @NonNull WebSiteAdapterListener listener) {
@@ -63,7 +63,7 @@ class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> 
 
     @Override
     public void onBindViewHolder(WebSiteHolder holder, int position) {
-        final WebSite webSite = webSites.get(position);
+        final Website website = websites.get(position);
         holder.deleteIcon.setImageDrawable(new IconicsDrawable(context)
                 .icon(CommunityMaterial.Icon.cmd_close)
                 .color(ContextCompat.getColor(context, R.color.accent_icon_no_focus))
@@ -72,47 +72,47 @@ class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> 
                 .icon(CommunityMaterial.Icon.cmd_share_variant)
                 .color(ContextCompat.getColor(context, R.color.accent_icon_no_focus))
                 .sizeDp(16));
-        holder.url.setText(webSite.preferredUrl());
-        holder.title.setText(webSite.safeLabel());
+        holder.url.setText(website.preferredUrl());
+        holder.title.setText(website.safeLabel());
         GlideApp.with(context)
-                .load(webSite.faviconUrl)
+                .load(website.faviconUrl)
                 .into(holder.icon);
     }
 
     @Override
     public int getItemCount() {
-        return webSites.size();
+        return websites.size();
     }
 
     @Override
     public long getItemId(int position) {
-        return webSites.get(position).hashCode();
+        return websites.get(position).hashCode();
     }
 
-    void setWebsites(ArrayList<WebSite> webSites) {
-        this.webSites.clear();
-        this.webSites.addAll(webSites);
+    void setWebsites(ArrayList<Website> websites) {
+        this.websites.clear();
+        this.websites.addAll(websites);
         notifyDataSetChanged();
     }
 
-    List<WebSite> getWebSites() {
-        return webSites;
+    List<Website> getWebsites() {
+        return websites;
     }
 
-    void delete(@NonNull WebSite webSite) {
-        final int index = webSites.indexOf(webSite);
+    void delete(@NonNull Website website) {
+        final int index = websites.indexOf(website);
         if (index != -1) {
-            webSites.remove(index);
+            websites.remove(index);
             notifyItemRemoved(index);
-            listener.onWebSiteDelete(webSite);
+            listener.onWebSiteDelete(website);
         }
     }
 
-    void update(@NonNull WebSite web) {
-        final int index = webSites.indexOf(web);
+    void update(@NonNull Website web) {
+        final int index = websites.indexOf(web);
         if (index != -1) {
-            webSites.remove(index);
-            webSites.add(index, web);
+            websites.remove(index);
+            websites.add(index, web);
             notifyItemChanged(index);
         }
     }
@@ -133,53 +133,53 @@ class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> 
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(v -> {
-                final WebSite webSite = getWebsite();
-                if (webSite != null) {
-                    listener.onWebSiteItemClicked(webSite);
+                final Website website = getWebsite();
+                if (website != null) {
+                    listener.onWebSiteItemClicked(website);
                 }
             });
 
             itemView.setOnLongClickListener(v -> {
-                final WebSite webSite = getWebsite();
-                if (webSite != null) {
-                    listener.onWebSiteLongClicked(webSite);
+                final Website website = getWebsite();
+                if (website != null) {
+                    listener.onWebSiteLongClicked(website);
                 }
                 return true;
             });
 
             deleteIcon.setOnClickListener(v -> {
-                final WebSite webSite = getWebsite();
-                if (webSite != null) {
-                    webSites.remove(webSite);
-                    listener.onWebSiteDelete(webSite);
+                final Website website = getWebsite();
+                if (website != null) {
+                    websites.remove(website);
+                    listener.onWebSiteDelete(website);
                     notifyDataSetChanged();
                 }
             });
 
             shareIcon.setOnClickListener(v -> {
-                final WebSite webSite = getWebsite();
-                if (webSite != null) {
-                    listener.onWebSiteShare(webSite);
+                final Website website = getWebsite();
+                if (website != null) {
+                    listener.onWebSiteShare(website);
                 }
             });
         }
 
         @Nullable
-        private WebSite getWebsite() {
+        private Website getWebsite() {
             final int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
-                return webSites.get(position);
+                return websites.get(position);
             } else return null;
         }
     }
 
     interface WebSiteAdapterListener {
-        void onWebSiteItemClicked(@NonNull WebSite webSite);
+        void onWebSiteItemClicked(@NonNull Website website);
 
-        void onWebSiteDelete(@NonNull WebSite webSite);
+        void onWebSiteDelete(@NonNull Website website);
 
-        void onWebSiteShare(@NonNull WebSite webSite);
+        void onWebSiteShare(@NonNull Website website);
 
-        void onWebSiteLongClicked(@NonNull WebSite webSite);
+        void onWebSiteLongClicked(@NonNull Website website);
     }
 }

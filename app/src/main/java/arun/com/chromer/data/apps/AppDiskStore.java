@@ -26,7 +26,6 @@ import javax.inject.Singleton;
 
 import arun.com.chromer.data.apps.store.AppStore;
 import arun.com.chromer.data.common.App;
-import arun.com.chromer.data.common.BookStore;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Utils;
 import io.paperdb.Book;
@@ -35,7 +34,7 @@ import rx.Observable;
 import timber.log.Timber;
 
 @Singleton
-public class AppDiskStore implements AppStore, BookStore {
+public class AppDiskStore implements AppStore {
     private final Application application;
 
     private static final String APP_BOOK_NAME = "APPS";

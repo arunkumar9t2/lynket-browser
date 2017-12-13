@@ -30,7 +30,7 @@ import android.support.annotation.Nullable;
 import android.widget.Toast;
 
 import arun.com.chromer.R;
-import arun.com.chromer.shared.common.BaseService;
+import arun.com.chromer.shared.base.service.BaseService;
 import arun.com.chromer.util.Utils;
 import timber.log.Timber;
 

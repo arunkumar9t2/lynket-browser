@@ -67,7 +67,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import arun.com.chromer.R;
-import arun.com.chromer.customtabs.CustomTabs;
+import arun.com.chromer.browsing.customtabs.CustomTabs;
 import arun.com.chromer.data.common.App;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.views.IntentPickerSheetView;

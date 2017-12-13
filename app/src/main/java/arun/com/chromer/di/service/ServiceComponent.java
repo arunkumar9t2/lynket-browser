@@ -18,8 +18,8 @@
 
 package arun.com.chromer.di.service;
 
-import arun.com.chromer.di.PerActivity;
-import arun.com.chromer.shared.AppDetectService;
+import arun.com.chromer.appdetect.AppDetectService;
+import arun.com.chromer.di.scopes.PerActivity;
 import arun.com.chromer.webheads.WebHeadService;
 import dagger.Subcomponent;
 

@@ -20,8 +20,8 @@ package arun.com.chromer.di.view;
 
 import android.support.annotation.NonNull;
 
-import arun.com.chromer.di.PerView;
-import arun.com.chromer.search.searchview.MaterialSearchView;
+import arun.com.chromer.di.scopes.PerView;
+import arun.com.chromer.search.view.MaterialSearchView;
 import dagger.Subcomponent;
 
 @PerView

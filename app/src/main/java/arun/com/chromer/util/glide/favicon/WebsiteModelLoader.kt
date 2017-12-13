@@ -18,7 +18,7 @@
 
 package arun.com.chromer.util.glide.favicon
 
-import arun.com.chromer.data.website.model.WebSite
+import arun.com.chromer.data.website.model.Website
 import com.bumptech.glide.load.Options
 import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.ModelLoader.LoadData
@@ -26,20 +26,20 @@ import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.signature.ObjectKey
 
-class WebsiteModelLoader : ModelLoader<Any, WebSite> {
+class WebsiteModelLoader : ModelLoader<Any, Website> {
 
-    override fun buildLoadData(model: Any, width: Int, height: Int, options: Options?): LoadData<WebSite>? {
+    override fun buildLoadData(model: Any, width: Int, height: Int, options: Options?): LoadData<Website>? {
         return when (model) {
-            is WebSite -> LoadData(ObjectKey(model), WebsiteDataFetcher(webSite = model))
-            else -> throw IllegalStateException("model is not WebSite")
+            is Website -> LoadData(ObjectKey(model), WebsiteDataFetcher(website = model))
+            else -> throw IllegalStateException("model is not Website")
         }
     }
 
-    override fun handles(model: Any): Boolean = model is WebSite
+    override fun handles(model: Any): Boolean = model is Website
 
-    class Factory : ModelLoaderFactory<Any, WebSite> {
+    class Factory : ModelLoaderFactory<Any, Website> {
 
-        override fun build(multiFactory: MultiModelLoaderFactory?): ModelLoader<Any, WebSite> = WebsiteModelLoader()
+        override fun build(multiFactory: MultiModelLoaderFactory?): ModelLoader<Any, Website> = WebsiteModelLoader()
 
         override fun teardown() {
             // Do nothing.

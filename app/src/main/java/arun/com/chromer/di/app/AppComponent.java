@@ -22,13 +22,13 @@ import android.support.annotation.NonNull;
 
 import javax.inject.Singleton;
 
-import arun.com.chromer.customtabs.dynamictoolbar.AppColorExtractorJob;
+import arun.com.chromer.appdetect.AppDetectionManager;
+import arun.com.chromer.browsing.customtabs.dynamictoolbar.AppColorExtractorJob;
 import arun.com.chromer.di.activity.ActivityComponent;
 import arun.com.chromer.di.activity.ActivityModule;
 import arun.com.chromer.di.data.DataModule;
 import arun.com.chromer.di.service.ServiceComponent;
 import arun.com.chromer.di.service.ServiceModule;
-import arun.com.chromer.shared.AppDetectionManager;
 import dagger.Component;
 
 @Singleton

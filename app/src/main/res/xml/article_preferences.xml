@@ -21,7 +21,7 @@
     android:key="settings"
     android:title="@string/settings">
     <PreferenceCategory android:title="@string/article_mode">
-        <arun.com.chromer.activities.settings.widgets.IconListPreference
+        <arun.com.chromer.settings.widgets.IconListPreference
             android:defaultValue="1"
             android:dialogTitle="@string/article_theme"
             android:entries="@array/articleThemeValues"

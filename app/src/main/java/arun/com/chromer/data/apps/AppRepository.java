@@ -18,78 +18,29 @@
 
 package arun.com.chromer.data.apps;
 
-import android.app.Application;
-import android.content.Context;
-import android.content.Intent;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
-import arun.com.chromer.customtabs.dynamictoolbar.AppColorExtractorJob;
-import arun.com.chromer.data.apps.store.AppStore;
 import arun.com.chromer.data.common.App;
-import arun.com.chromer.shared.Constants;
 import rx.Observable;
-import timber.log.Timber;
 
-@Singleton
-public class AppRepository implements BaseAppRepository {
-    private final Context application;
-    // Disk app store
-    private final AppStore diskStore;
-
-    @Inject
-    AppRepository(@NonNull Application application, @NonNull AppStore appStore) {
-        this.application = application;
-        this.diskStore = appStore;
-    }
+public interface AppRepository {
+    @NonNull
+    Observable<App> getApp(@NonNull String packageName);
 
     @NonNull
-    @Override
-    public Observable<App> getApp(@NonNull String packageName) {
-        return diskStore.getApp(packageName);
-    }
+    Observable<App> savApp(App app);
 
-    @NonNull
-    @Override
-    public Observable<App> savApp(App app) {
-        return diskStore.savApp(app);
-    }
+    boolean isPackageBlacklisted(@NonNull String packageName);
 
-    @Override
-    public Observable<Integer> getPackageColor(@NonNull final String packageName) {
-        return diskStore.getPackageColor(packageName)
-                .doOnNext(integer -> {
-                    if (integer == -1) {
-                        Timber.d("Color not found, starting extraction.");
-                        AppColorExtractorJob.enqueueWork(application, AppColorExtractorJob.class, AppColorExtractorJob.JOB_ID, new Intent().putExtra(Constants.EXTRA_PACKAGE_NAME, packageName));
-                    }
-                });
-    }
+    Observable<App> setPackageBlacklisted(@NonNull String packageName);
 
-    @Override
-    public Observable<App> setPackageColor(@NonNull String packageName, int color) {
-        return diskStore.setPackageColor(packageName, color);
-    }
+    @ColorInt
+    int getPackageColorSync(@NonNull String packageName);
 
-    @Override
-    public Observable<App> removeBlacklist(String packageName) {
-        return diskStore.removeBlacklist(packageName);
-    }
+    Observable<Integer> getPackageColor(@NonNull String packageName);
 
-    @Override
-    public boolean isPackageBlacklisted(@NonNull String packageName) {
-        return diskStore.isPackageBlacklisted(packageName);
-    }
+    Observable<App> setPackageColor(@NonNull String packageName, int color);
 
-    @Override
-    public Observable<App> setPackageBlacklisted(@NonNull String packageName) {
-        return diskStore.setPackageBlacklisted(packageName);
-    }
-
-    @Override
-    public int getPackageColorSync(@NonNull String packageName) {
-        return getPackageColor(packageName).toBlocking().first();
-    }
+    Observable<App> removeBlacklist(String packageName);
 }

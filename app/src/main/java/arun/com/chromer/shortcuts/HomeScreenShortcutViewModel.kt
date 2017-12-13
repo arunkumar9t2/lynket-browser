@@ -20,8 +20,8 @@ package arun.com.chromer.shortcuts
 
 import android.arch.lifecycle.ViewModel
 import arun.com.chromer.data.Result
-import arun.com.chromer.data.website.BaseWebsiteRepository
-import arun.com.chromer.data.website.model.WebSite
+import arun.com.chromer.data.website.WebsiteRepository
+import arun.com.chromer.data.website.model.Website
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -30,14 +30,14 @@ import javax.inject.Inject
 
 class HomeScreenShortcutViewModel
 @Inject
-constructor(private val websiteRepository: BaseWebsiteRepository) : ViewModel() {
+constructor(private val websiteRepository: WebsiteRepository) : ViewModel() {
 
-    private val webSiteSubject = BehaviorSubject.create<Result<WebSite>>(Result.Idle<WebSite>())
+    private val webSiteSubject = BehaviorSubject.create<Result<Website>>(Result.Idle<Website>())
 
-    fun loadWebSiteDetails(url: String): Observable<Result<WebSite>> {
-        if (webSiteSubject.value is Result.Idle<WebSite>) {
+    fun loadWebSiteDetails(url: String): Observable<Result<Website>> {
+        if (webSiteSubject.value is Result.Idle<Website>) {
             websiteRepository.getWebsite(url)
-                    .map { Result.Success(it) as Result<WebSite> }
+                    .map { Result.Success(it) as Result<Website> }
                     .onErrorReturn { Result.Failure(it) }
                     .startWith(Result.Loading())
                     .subscribeOn(Schedulers.io())
