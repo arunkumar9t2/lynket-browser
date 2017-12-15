@@ -16,28 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-buildscript {
-    ext.kotlin_version = '1.2.10'
-    repositories {
-        jcenter()
-        maven { url "https://jitpack.io" }
-        google()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
+package arun.com.chromer.di.app;
 
-allprojects {
-    repositories {
-        jcenter()
-        google()
-        maven { url "https://jitpack.io" }
-    }
-}
+import org.jetbrains.annotations.NotNull;
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+import javax.inject.Singleton;
+
+import arun.com.chromer.browsing.tabs.DefaultTabsManagerTest;
+import arun.com.chromer.di.data.TestDataModule;
+import dagger.Component;
+
+@Singleton
+@Component(modules = {
+        TestAppModule.class,
+        TestDataModule.class
+})
+public interface TestAppComponent extends AppComponent {
+
+    void inject(@NotNull DefaultTabsManagerTest defaultTabsManagerTest);
 }

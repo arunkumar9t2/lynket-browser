@@ -20,7 +20,6 @@ package arun.com.chromer.webheads;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
-import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -65,11 +64,11 @@ import javax.inject.Inject;
 import arun.com.chromer.R;
 import arun.com.chromer.browsing.customtabs.CustomTabManager;
 import arun.com.chromer.browsing.newtab.NewTabDialogActivity;
+import arun.com.chromer.browsing.tabs.DefaultTabsManager;
 import arun.com.chromer.data.website.WebsiteRepository;
 import arun.com.chromer.data.website.model.Website;
 import arun.com.chromer.di.service.ServiceComponent;
 import arun.com.chromer.settings.Preferences;
-import arun.com.chromer.util.DocumentUtils;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.util.glide.GlideApp;
 import arun.com.chromer.webheads.helper.ColorExtractionTask;
@@ -127,6 +126,9 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
 
     @Inject
     WebsiteRepository websiteRepository;
+
+    @Inject
+    DefaultTabsManager tabsManager;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -255,12 +257,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         // Add to our map
         webHeads.put(webHeadUrl, newWebHead);
 
-        if (Preferences.get(getApplication()).aggressiveLoading() && !isMinimized && !Preferences.get(this).articleMode()) {
-            DocumentUtils.openNewCustomTab(getApplication(), newWebHead.getWebsite(), isNewTab);
-            new Handler().postDelayed(() -> reveal(newWebHead), 650);
-        } else {
-            reveal(newWebHead);
-        }
+        reveal(newWebHead);
 
         preLoadForArticle(webHeadUrl);
 
@@ -436,10 +433,9 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         springChain2D.enableDisplacement();
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onWebHeadClick(@NonNull WebHead webHead) {
-        DocumentUtils.smartOpenNewTab(this, webHead.getWebsite());
+        tabsManager.openUrl(this, webHead.getWebsite(), true, true);
 
         // If user prefers to the close the head on opening the link, then call destroySelf()
         // which will take care of closing and detaching the web head

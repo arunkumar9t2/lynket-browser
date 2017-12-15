@@ -43,10 +43,7 @@ public class Chromer extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        CrashlyticsCore core = new CrashlyticsCore.Builder()
-                .disabled(BuildConfig.DEBUG)
-                .build();
-        Fabric.with(this, new Crashlytics.Builder().core(core).build());
+        initFabric();
 
         Paper.init(this);
 
@@ -71,6 +68,13 @@ public class Chromer extends Application {
                 .build();
 
         ServiceManager.takeCareOfServices(getApplicationContext());
+    }
+
+    protected void initFabric() {
+        CrashlyticsCore core = new CrashlyticsCore.Builder()
+                .disabled(BuildConfig.DEBUG)
+                .build();
+        Fabric.with(this, new Crashlytics.Builder().core(core).build());
     }
 
     public AppComponent getAppComponent() {

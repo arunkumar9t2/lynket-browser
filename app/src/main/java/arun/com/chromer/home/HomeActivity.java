@@ -19,9 +19,7 @@
 package arun.com.chromer.home;
 
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -59,7 +57,8 @@ import javax.inject.Inject;
 import arun.com.chromer.R;
 import arun.com.chromer.about.AboutAppActivity;
 import arun.com.chromer.about.changelog.Changelog;
-import arun.com.chromer.browsing.browserintercept.BrowserInterceptActivity;
+import arun.com.chromer.browsing.tabs.DefaultTabsManager;
+import arun.com.chromer.data.website.model.Website;
 import arun.com.chromer.di.activity.ActivityComponent;
 import arun.com.chromer.history.HistoryFragment;
 import arun.com.chromer.home.fragment.HomeFragment;
@@ -72,9 +71,10 @@ import arun.com.chromer.shared.Constants;
 import arun.com.chromer.shared.base.activity.BaseMVPActivity;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;
-import timber.log.Timber;
 
-import static arun.com.chromer.shared.Constants.ACTION_CLOSE_ROOT;
+import static android.content.Intent.ACTION_VIEW;
+import static arun.com.chromer.shared.Constants.APP_TESTING_URL;
+import static arun.com.chromer.shared.Constants.G_COMMUNITY_URL;
 
 public class HomeActivity extends BaseMVPActivity<HomeContract.View, HomeContract.Presenter> implements HomeContract.View {
     @BindView(R.id.bottomsheet)
@@ -93,6 +93,9 @@ public class HomeActivity extends BaseMVPActivity<HomeContract.View, HomeContrac
     @Inject
     HomeContract.Presenter presenter;
 
+    @Inject
+    DefaultTabsManager tabsManager;
+
     private BroadcastReceiver closeReceiver;
     private HistoryFragment historyFragment;
     private HomeFragment homeFragment;
@@ -109,8 +112,6 @@ public class HomeActivity extends BaseMVPActivity<HomeContract.View, HomeContrac
         Changelog.conditionalShow(this);
 
         setupDrawer();
-
-        registerCloseReceiver();
 
         if (savedInstanceState == null) {
             historyFragment = new HistoryFragment();
@@ -182,17 +183,6 @@ public class HomeActivity extends BaseMVPActivity<HomeContract.View, HomeContrac
                 break;
         }
         return true;
-    }
-
-    private void registerCloseReceiver() {
-        closeReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Timber.d("Finished from receiver");
-                finish();
-            }
-        };
-        LocalBroadcastManager.getInstance(this).registerReceiver(closeReceiver, new IntentFilter(ACTION_CLOSE_ROOT));
     }
 
     @Override
@@ -304,15 +294,10 @@ public class HomeActivity extends BaseMVPActivity<HomeContract.View, HomeContrac
                 .positiveText(R.string.join_google_plus)
                 .neutralText(R.string.become_a_tester)
                 .onPositive((dialog, which) -> {
-                    final Intent googleIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.G_COMMUNITY_URL));
+                    final Intent googleIntent = new Intent(ACTION_VIEW, Uri.parse(G_COMMUNITY_URL));
                     startActivity(googleIntent);
                 })
-                .onNeutral((dialog, which) -> {
-                    final Intent intent = new Intent(this, BrowserInterceptActivity.class);
-                    intent.putExtra(Constants.EXTRA_KEY_FROM_OUR_APP, true);
-                    intent.setData(Uri.parse(Constants.APP_TESTING_URL));
-                    startActivity(intent);
-                })
+                .onNeutral((dialog, which) -> tabsManager.openUrl(this, new Website(APP_TESTING_URL), true, false))
                 .build()
                 .show();
     }

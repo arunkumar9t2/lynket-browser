@@ -38,12 +38,12 @@ import javax.inject.Inject;
 
 import arun.com.chromer.Chromer;
 import arun.com.chromer.R;
-import arun.com.chromer.browsing.customtabs.CustomTabActivity;
 import arun.com.chromer.browsing.customtabs.callbacks.ClipboardService;
 import arun.com.chromer.browsing.customtabs.callbacks.FavShareBroadcastReceiver;
 import arun.com.chromer.browsing.customtabs.callbacks.SecondaryBrowserReceiver;
 import arun.com.chromer.browsing.openwith.OpenIntentWithActivity;
 import arun.com.chromer.browsing.optionspopup.ChromerOptionsActivity;
+import arun.com.chromer.browsing.tabs.DefaultTabsManager;
 import arun.com.chromer.data.history.DefaultHistoryRepository;
 import arun.com.chromer.data.website.model.Website;
 import arun.com.chromer.di.activity.ActivityComponent;
@@ -55,7 +55,6 @@ import timber.log.Timber;
 import xyz.klinker.android.article.ArticleActivity;
 import xyz.klinker.android.article.data.webarticle.model.WebArticle;
 
-import static android.content.Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
 import static android.graphics.Color.WHITE;
 import static arun.com.chromer.settings.Preferences.PREFERRED_ACTION_BROWSER;
 import static arun.com.chromer.settings.Preferences.PREFERRED_ACTION_FAV_SHARE;
@@ -72,6 +71,9 @@ public class ChromerArticleActivity extends ArticleActivity {
     @Inject
     DefaultHistoryRepository historyRepository;
 
+    @Inject
+    DefaultTabsManager tabsManager;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,10 +89,9 @@ public class ChromerArticleActivity extends ArticleActivity {
     @Override
     protected void onArticleLoadingFailed(Throwable throwable) {
         super.onArticleLoadingFailed(throwable);
-        // Start custom tab activity on the same task, silently killing this activity.
-        final Intent customTabActivity = new Intent(this, CustomTabActivity.class);
-        customTabActivity.setData(getIntent().getData());
-        startActivity(customTabActivity);
+        // Loading failed, try to go back to normal url tab if it exists, else start a new normal
+        // rendering tab.
+        loadInNormalTab();
         finish();
     }
 
@@ -187,13 +188,7 @@ public class ChromerArticleActivity extends ArticleActivity {
                 shareUrl();
                 break;
             case R.id.menu_open_full_page:
-                final Intent customTabActivity = new Intent(this, CustomTabActivity.class);
-                customTabActivity.setData(Uri.parse(baseUrl));
-                if (Preferences.get(this).mergeTabs()) {
-                    customTabActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-                    customTabActivity.addFlags(FLAG_ACTIVITY_MULTIPLE_TASK);
-                }
-                startActivity(customTabActivity);
+                loadInNormalTab();
                 finish();
                 break;
             case R.id.menu_more:
@@ -208,6 +203,12 @@ public class ChromerArticleActivity extends ArticleActivity {
                 break;
         }
         return true;
+    }
+
+    protected void loadInNormalTab() {
+        if (getIntent() != null && getIntent().getData() != null) {
+            tabsManager.openBrowsingTab(this, getIntent().getData(), true);
+        }
     }
 
     private void shareUrl() {

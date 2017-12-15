@@ -16,26 +16,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.browsing.browserintercept;
+package arun.com.chromer.browsing.tabs
 
-import javax.inject.Inject;
+import arun.com.chromer.ChromerRobolectricSuite
+import org.junit.Before
+import org.junit.Test
+import javax.inject.Inject
 
-import arun.com.chromer.di.scopes.PerActivity;
-import arun.com.chromer.shared.base.Base;
 
 /**
- * Created by arunk on 12-11-2017.
+ * Created by Arunkumar on 15-12-2017.
  */
-public interface BrowserIntercept {
+class DefaultTabsManagerTest : ChromerRobolectricSuite() {
+    @Inject
+    @JvmField
+    var tabs: DefaultTabsManager? = null
 
-    interface View extends Base.View {
-
+    @Before
+    fun setUp() {
+        testAppComponent.inject(this)
     }
 
-    @PerActivity
-    class Presenter extends Base.Presenter<BrowserIntercept.View> {
-        @Inject
-        public Presenter() {
-        }
+    @Test
+    fun testInject() {
+        assert(testAppComponent != null)
+        assert(tabs != null)
     }
 }

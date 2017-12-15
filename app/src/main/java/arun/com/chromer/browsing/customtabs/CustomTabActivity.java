@@ -64,7 +64,6 @@ public class CustomTabActivity extends BaseActivity {
     private BroadcastReceiver minimizeReceiver;
     private final CompositeSubscription subscriptions = new CompositeSubscription();
 
-
     @Inject
     DefaultWebsiteRepository websiteRepository;
 

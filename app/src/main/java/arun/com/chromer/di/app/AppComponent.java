@@ -24,6 +24,7 @@ import javax.inject.Singleton;
 
 import arun.com.chromer.appdetect.AppDetectionManager;
 import arun.com.chromer.browsing.customtabs.dynamictoolbar.AppColorExtractorJob;
+import arun.com.chromer.browsing.tabs.DefaultTabsManager;
 import arun.com.chromer.di.activity.ActivityComponent;
 import arun.com.chromer.di.activity.ActivityModule;
 import arun.com.chromer.di.data.DataModule;
@@ -43,8 +44,9 @@ public interface AppComponent {
     ServiceComponent newServiceComponent(ServiceModule serviceModule);
 
     @NonNull
-    void inject(AppColorExtractorJob appColorExtractorJob);
-
-    @NonNull
     AppDetectionManager appDetectionManager();
+
+    DefaultTabsManager defaultTabsManager();
+
+    void inject(AppColorExtractorJob appColorExtractorJob);
 }

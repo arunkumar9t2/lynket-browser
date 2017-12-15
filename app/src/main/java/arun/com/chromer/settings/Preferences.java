@@ -197,7 +197,6 @@ public class Preferences {
         }
         final ComponentName cN = ComponentName.unflattenFromString(flatString);
         if (cN == null) return null;
-
         return cN.getPackageName();
     }
 
@@ -380,7 +379,6 @@ public class Preferences {
     }
 
     public boolean isAppBasedToolbar() {
-        return Preferences.get(context).dynamicToolbarOnApp()
-                && Preferences.get(context).dynamicToolbar();
+        return Preferences.get(context).dynamicToolbarOnApp() && Preferences.get(context).dynamicToolbar();
     }
 }
