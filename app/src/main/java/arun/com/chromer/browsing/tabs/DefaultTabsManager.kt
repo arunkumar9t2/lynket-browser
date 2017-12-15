@@ -27,6 +27,8 @@ import android.content.Intent
 import android.content.Intent.*
 import android.net.Uri
 import android.text.TextUtils
+import android.widget.Toast
+import arun.com.chromer.BuildConfig
 import arun.com.chromer.R
 import arun.com.chromer.appdetect.AppDetectionManager
 import arun.com.chromer.browsing.article.ArticleLauncher
@@ -212,7 +214,9 @@ constructor(
         // Perform a safe copy of this intent
         val intentCopy = Intent().apply {
             data = safeIntent.data
-            putExtras(safeIntent.unsafe.extras)
+            safeIntent.unsafe.extras?.let {
+                putExtras(it)
+            }
         }
         val secondaryBrowser = preferences.secondaryBrowserPackage()
         if (secondaryBrowser == null) {
@@ -223,6 +227,9 @@ constructor(
             intentCopy.`package` = secondaryBrowser
             try {
                 activity.startActivity(intentCopy)
+                if (BuildConfig.DEBUG) {
+                    Toast.makeText(activity, "Blacklisted", Toast.LENGTH_SHORT).show()
+                }
             } catch (e: Exception) {
                 showSecondaryBrowserHandlingError(activity, activity.getText(R.string.secondary_browser_launch_error))
             }
