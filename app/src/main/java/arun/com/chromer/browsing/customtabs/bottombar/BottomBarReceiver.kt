@@ -28,7 +28,6 @@ import arun.com.chromer.R
 import arun.com.chromer.browsing.article.ArticleLauncher
 import arun.com.chromer.browsing.tabs.DefaultTabsManager
 import arun.com.chromer.shared.Constants
-import arun.com.chromer.util.DocumentUtils
 import arun.com.chromer.util.Utils
 import timber.log.Timber
 import javax.inject.Inject
@@ -108,7 +107,7 @@ class BottomBarReceiver : BroadcastReceiver() {
     inner class MinimizeUrl internal constructor(context: Context, orgUrl: String) : Command(context, orgUrl) {
 
         override fun onPerform() {
-            DocumentUtils.minimizeTaskByUrl(context!!, url)
+            tabsManager.minimizeTabByUrl(url)
         }
     }
 }

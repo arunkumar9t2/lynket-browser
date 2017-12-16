@@ -24,6 +24,7 @@ import javax.inject.Singleton;
 
 import arun.com.chromer.appdetect.AppDetectionManager;
 import arun.com.chromer.browsing.customtabs.bottombar.BottomBarReceiver;
+import arun.com.chromer.browsing.customtabs.callbacks.MinimizeBroadcastReceiver;
 import arun.com.chromer.browsing.customtabs.dynamictoolbar.AppColorExtractorJob;
 import arun.com.chromer.browsing.tabs.DefaultTabsManager;
 import arun.com.chromer.di.activity.ActivityComponent;
@@ -52,4 +53,6 @@ public interface AppComponent {
     void inject(AppColorExtractorJob appColorExtractorJob);
 
     void inject(BottomBarReceiver bottomBarReceiver);
+
+    void inject(MinimizeBroadcastReceiver minimizeBroadcastReceiver);
 }

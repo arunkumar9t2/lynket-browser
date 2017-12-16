@@ -503,7 +503,7 @@ public class CustomTabs {
      * merge tabs and apps and
      */
     private void prepareMinimize() {
-        if (!Preferences.get(activity).bottomBar() && Preferences.get(activity).mergeTabs()) {
+        if (!Preferences.get(activity).bottomBar() && Utils.ANDROID_LOLLIPOP) {
             final Intent minimizeIntent = new Intent(activity, MinimizeBroadcastReceiver.class);
             minimizeIntent.putExtra(EXTRA_KEY_ORIGINAL_URL, url);
             final PendingIntent pendingMin = PendingIntent.getBroadcast(activity, new Random().nextInt(), minimizeIntent, FLAG_UPDATE_CURRENT);

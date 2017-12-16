@@ -38,7 +38,6 @@ class CustomTabActivity : BrowsingActivity() {
 
         val overrideColor = if (website != null) website!!.themeColor() else Constants.NO_COLOR
         activityComponent.customTabs()
-
                 .forUrl(intent.dataString!!)
                 .fallbackColor(overrideColor)
                 .launch()
