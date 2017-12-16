@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.shortcuts
+package arun.com.chromer.browsing
 
 import android.arch.lifecycle.ViewModel
 import arun.com.chromer.data.Result
@@ -28,11 +28,14 @@ import rx.schedulers.Schedulers
 import rx.subjects.BehaviorSubject
 import javax.inject.Inject
 
-class HomeScreenShortcutViewModel
+/**
+ * A simple view model delivering a {@link Website} from repo.
+ */
+class BrowsingViewModel
 @Inject
 constructor(private val websiteRepository: WebsiteRepository) : ViewModel() {
 
-    private val webSiteSubject = BehaviorSubject.create<Result<Website>>(Result.Idle<Website>())
+    private val webSiteSubject = BehaviorSubject.create<Result<Website>>(Result.Idle())
 
     fun loadWebSiteDetails(url: String): Observable<Result<Website>> {
         if (webSiteSubject.value is Result.Idle<Website>) {

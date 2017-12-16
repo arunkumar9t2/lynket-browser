@@ -44,6 +44,7 @@ import arun.com.chromer.data.website.DefaultWebsiteRepository
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.extenstions.isPackageInstalled
 import arun.com.chromer.settings.Preferences
+import arun.com.chromer.shared.Constants
 import arun.com.chromer.util.DocumentUtils
 import arun.com.chromer.util.RxEventBus
 import arun.com.chromer.util.SafeIntent
@@ -86,7 +87,7 @@ constructor(
         if (preferences.ampMode()) {
             if (!TextUtils.isEmpty(website.ampUrl)) {
                 // We already got the amp url, so open it in a browsing tab.
-                openBrowsingTab(context, Uri.parse(website.ampUrl), fromNewTab = fromNewTab)
+                openBrowsingTab(context, Website(website.ampUrl), fromNewTab = fromNewTab)
             } else {
                 // Open a proxy activity, attempt an extraction then show.
             }
@@ -100,7 +101,7 @@ constructor(
         }
 
         // At last, if everything failed then launch normally in browsing activity.
-        openBrowsingTab(context, website.preferredUri(), fromNewTab = fromNewTab)
+        openBrowsingTab(context, website, fromNewTab = fromNewTab)
     }
 
     override fun reOrderTabByUrl(context: Context, website: Website): Boolean {
@@ -111,13 +112,13 @@ constructor(
                 info?.let {
                     try {
                         val intent = info.baseIntent
-                        val url = intent.dataString!!
+                        val url = intent.dataString
                         val componentClassName = intent.component!!.className
                         val taskComponentMatches = (componentClassName == CustomTabActivity::class.java.name
                                 || componentClassName == ChromerArticleActivity::class.java.name
                                 || componentClassName == WebViewActivity::class.java.name)
 
-                        val urlMatches = (url.equals(website.url, ignoreCase = true)
+                        val urlMatches = url != null && (url.equals(website.url, ignoreCase = true)
                                 || url.equals(website.preferredUrl(), ignoreCase = true)
                                 || url.equals(website.ampUrl, ignoreCase = true))
 
@@ -164,16 +165,20 @@ constructor(
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    override fun openBrowsingTab(context: Context, uri: Uri, smart: Boolean, fromNewTab: Boolean) {
-        if (!(smart && reOrderTabByUrl(context, Website(uri.toString())))) {
+    override fun openBrowsingTab(context: Context, website: Website, smart: Boolean, fromNewTab: Boolean) {
+        if (!(smart && reOrderTabByUrl(context, website))) {
             val canSafelyOpenCCT = CustomTabs.getCustomTabSupportingPackages(context).isNotEmpty()
             val isIncognito = preferences.incognitoMode()
 
             val browsingActivity = if (!isIncognito && canSafelyOpenCCT) {
-                Intent(context, CustomTabActivity::class.java).setData(uri)
+                Intent(context, CustomTabActivity::class.java)
             } else {
-                Intent(context, WebViewActivity::class.java).setData(uri)
+                Intent(context, WebViewActivity::class.java)
+            }.apply {
+                data = website.preferredUri()
+                putExtra(Constants.EXTRA_KEY_WEBSITE, website)
             }
+
             if (preferences.mergeTabs() || fromNewTab) {
                 browsingActivity.addFlags(FLAG_ACTIVITY_NEW_DOCUMENT)
                 browsingActivity.addFlags(FLAG_ACTIVITY_MULTIPLE_TASK)

@@ -21,7 +21,7 @@ package arun.com.chromer.di.viewmodel;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
-import arun.com.chromer.shortcuts.HomeScreenShortcutViewModel;
+import arun.com.chromer.browsing.BrowsingViewModel;
 import arun.com.chromer.util.viemodel.ViewModelFactory;
 import dagger.Binds;
 import dagger.Module;
@@ -31,8 +31,8 @@ import dagger.multibindings.IntoMap;
 public abstract class ViewModelModule {
     @Binds
     @IntoMap
-    @ViewModelKey(HomeScreenShortcutViewModel.class)
-    abstract ViewModel bindHomeScreenViewModule(HomeScreenShortcutViewModel homeScreenShortcutViewModel);
+    @ViewModelKey(BrowsingViewModel.class)
+    abstract ViewModel bindHomeScreenViewModule(BrowsingViewModel homeScreenShortcutViewModel);
 
     @Binds
     abstract ViewModelProvider.Factory bindViewModelFactory(ViewModelFactory factory);

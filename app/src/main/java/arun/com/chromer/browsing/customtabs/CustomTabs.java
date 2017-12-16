@@ -51,7 +51,6 @@ import javax.inject.Inject;
 
 import arun.com.chromer.Chromer;
 import arun.com.chromer.R;
-import arun.com.chromer.appdetect.AppDetectionManager;
 import arun.com.chromer.browsing.customtabs.callbacks.ClipboardService;
 import arun.com.chromer.browsing.customtabs.callbacks.FavShareBroadcastReceiver;
 import arun.com.chromer.browsing.customtabs.callbacks.MinimizeBroadcastReceiver;
@@ -138,7 +137,6 @@ public class CustomTabs {
     private boolean noAnimation = false;
 
     private final AppRepository appRepository;
-    private final AppDetectionManager appDetectionManager;
     private final WebsiteRepository websiteRepository;
 
     /**
@@ -149,11 +147,9 @@ public class CustomTabs {
     @Inject
     public CustomTabs(@NonNull Activity activity,
                       @NonNull AppRepository appRepository,
-                      @NonNull AppDetectionManager appDetectionManager,
                       @NonNull WebsiteRepository websiteRepository) {
         this.activity = activity;
         noAnimation = false;
-        this.appDetectionManager = appDetectionManager;
         this.appRepository = appRepository;
         this.websiteRepository = websiteRepository;
     }
@@ -386,7 +382,6 @@ public class CustomTabs {
                 if (Preferences.get(activity).dynamicToolbarOnApp()) {
                     setAppToolbarColor();
                 }
-
                 if (Preferences.get(activity).dynamicToolbarOnWeb()) {
                     if (overrideRequested) {
                         toolbarColor = webToolbarFallback;

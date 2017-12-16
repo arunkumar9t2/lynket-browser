@@ -21,7 +21,6 @@ package arun.com.chromer.browsing.tabs
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import arun.com.chromer.data.website.model.Website
 
 /**
@@ -37,7 +36,7 @@ interface TabsManager {
     /**
      * Opens the given Uri in a browsing tab.
      */
-    fun openBrowsingTab(context: Context, uri: Uri, smart: Boolean = false, fromNewTab: Boolean = false)
+    fun openBrowsingTab(context: Context, website: Website, smart: Boolean = false, fromNewTab: Boolean)
 
     /**
      * Returns true if it is determined that we already have any of our browsing activity has opened
