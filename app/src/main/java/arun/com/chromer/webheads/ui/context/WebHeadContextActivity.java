@@ -116,7 +116,7 @@ public class WebHeadContextActivity extends BaseActivity implements WebsiteAdapt
     @Override
     public void onWebSiteItemClicked(@NonNull Website website) {
         finish();
-        tabsManager.openUrl(this, website, true, true);
+        tabsManager.openUrl(this, website, true, true, false);
         if (Preferences.get(this).webHeadsCloseOnOpen()) {
             broadcastDeleteWebHead(website);
         }

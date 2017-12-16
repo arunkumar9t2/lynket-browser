@@ -297,7 +297,7 @@ public class HomeActivity extends BaseMVPActivity<HomeContract.View, HomeContrac
                     final Intent googleIntent = new Intent(ACTION_VIEW, Uri.parse(G_COMMUNITY_URL));
                     startActivity(googleIntent);
                 })
-                .onNeutral((dialog, which) -> tabsManager.openUrl(this, new Website(APP_TESTING_URL), true, false))
+                .onNeutral((dialog, which) -> tabsManager.openUrl(this, new Website(APP_TESTING_URL), true, false, false))
                 .build()
                 .show();
     }

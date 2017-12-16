@@ -207,7 +207,7 @@ public class ChromerArticleActivity extends ArticleActivity {
 
     protected void loadInNormalTab() {
         if (getIntent() != null && getIntent().getData() != null) {
-            tabsManager.openBrowsingTab(this, getIntent().getData(), true);
+            tabsManager.openBrowsingTab(this, getIntent().getData(), true, false);
         }
     }
 

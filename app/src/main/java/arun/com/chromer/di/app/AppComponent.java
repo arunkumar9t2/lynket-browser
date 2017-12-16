@@ -23,6 +23,7 @@ import android.support.annotation.NonNull;
 import javax.inject.Singleton;
 
 import arun.com.chromer.appdetect.AppDetectionManager;
+import arun.com.chromer.browsing.customtabs.bottombar.BottomBarReceiver;
 import arun.com.chromer.browsing.customtabs.dynamictoolbar.AppColorExtractorJob;
 import arun.com.chromer.browsing.tabs.DefaultTabsManager;
 import arun.com.chromer.di.activity.ActivityComponent;
@@ -49,4 +50,6 @@ public interface AppComponent {
     DefaultTabsManager defaultTabsManager();
 
     void inject(AppColorExtractorJob appColorExtractorJob);
+
+    void inject(BottomBarReceiver bottomBarReceiver);
 }

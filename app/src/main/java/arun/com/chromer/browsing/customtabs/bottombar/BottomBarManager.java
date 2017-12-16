@@ -30,6 +30,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
+import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.ColorUtil;
 
 /**
@@ -109,7 +110,7 @@ public class BottomBarManager {
     @NonNull
     public static PendingIntent getOnClickPendingIntent(Context context, String url) {
         final Intent broadcastIntent = new Intent(context, BottomBarReceiver.class);
-        broadcastIntent.putExtra(Intent.EXTRA_TEXT, url);
+        broadcastIntent.putExtra(Constants.EXTRA_KEY_ORIGINAL_URL, url);
         return PendingIntent.getBroadcast(context, 0, broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 

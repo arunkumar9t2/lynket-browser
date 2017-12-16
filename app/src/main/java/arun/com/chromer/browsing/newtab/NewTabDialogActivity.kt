@@ -110,7 +110,11 @@ class NewTabDialogActivity : BaseActivity() {
 
         private fun launchUrl(url: String) {
             activity?.let {
-                tabsManager.openUrl(activity!!, website = Website(url), fromApp = true, fromWebHeads = false)
+                tabsManager.openUrl(activity!!,
+                        website = Website(url),
+                        fromApp = true,
+                        fromWebHeads = false,
+                        fromNewTab = true)
             }
             dialog?.dismiss()
         }

@@ -18,6 +18,7 @@
 
 package arun.com.chromer.browsing.tabs
 
+import android.annotation.TargetApi
 import android.app.Activity
 import android.app.ActivityManager
 import android.app.Application
@@ -26,6 +27,7 @@ import android.content.Context.ACTIVITY_SERVICE
 import android.content.Intent
 import android.content.Intent.*
 import android.net.Uri
+import android.os.Build
 import android.text.TextUtils
 import android.widget.Toast
 import arun.com.chromer.BuildConfig
@@ -35,6 +37,7 @@ import arun.com.chromer.browsing.article.ArticleLauncher
 import arun.com.chromer.browsing.article.ChromerArticleActivity
 import arun.com.chromer.browsing.customtabs.CustomTabActivity
 import arun.com.chromer.browsing.customtabs.CustomTabs
+import arun.com.chromer.browsing.newtab.NewTabDialogActivity
 import arun.com.chromer.browsing.webview.WebViewActivity
 import arun.com.chromer.data.apps.DefaultAppRepository
 import arun.com.chromer.data.website.DefaultWebsiteRepository
@@ -66,7 +69,7 @@ constructor(
     // Event for minimize command.
     data class MinimizeEvent(val url: String)
 
-    override fun openUrl(context: Context, website: Website, fromApp: Boolean, fromWebHeads: Boolean) {
+    override fun openUrl(context: Context, website: Website, fromApp: Boolean, fromWebHeads: Boolean, fromNewTab: Boolean) {
         // Open in web heads mode if we this command did not come from web heads.
         if (preferences.webHeads() && !fromWebHeads) {
             openWebHeads(context, website.preferredUrl())
@@ -83,7 +86,7 @@ constructor(
         if (preferences.ampMode()) {
             if (!TextUtils.isEmpty(website.ampUrl)) {
                 // We already got the amp url, so open it in a browsing tab.
-                openBrowsingTab(context, Uri.parse(website.ampUrl))
+                openBrowsingTab(context, Uri.parse(website.ampUrl), fromNewTab = fromNewTab)
             } else {
                 // Open a proxy activity, attempt an extraction then show.
             }
@@ -97,7 +100,7 @@ constructor(
         }
 
         // At last, if everything failed then launch normally in browsing activity.
-        openBrowsingTab(context, website.preferredUri())
+        openBrowsingTab(context, website.preferredUri(), fromNewTab = fromNewTab)
     }
 
     override fun reOrderTabByUrl(context: Context, website: Website): Boolean {
@@ -151,7 +154,7 @@ constructor(
         }
 
         // Open url normally
-        openUrl(activity, Website(url), fromApp = false, fromWebHeads = false)
+        openUrl(activity, Website(url), fromApp = false)
     }
 
     private fun openArticle(context: Context, uri: Uri) {
@@ -160,29 +163,25 @@ constructor(
                 .launch()
     }
 
-    override fun openBrowsingTab(context: Context, uri: Uri, smart: Boolean) {
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    override fun openBrowsingTab(context: Context, uri: Uri, smart: Boolean, fromNewTab: Boolean) {
         if (!(smart && reOrderTabByUrl(context, Website(uri.toString())))) {
             val canSafelyOpenCCT = CustomTabs.getCustomTabSupportingPackages(context).isNotEmpty()
             val isIncognito = preferences.incognitoMode()
 
-            val tabActivity: Intent
-            if (!isIncognito && canSafelyOpenCCT) {
-                tabActivity = Intent(context, CustomTabActivity::class.java).apply {
-                    data = uri
-                }
+            val browsingActivity = if (!isIncognito && canSafelyOpenCCT) {
+                Intent(context, CustomTabActivity::class.java).setData(uri)
             } else {
-                tabActivity = Intent(context, WebViewActivity::class.java).apply {
-                    data = uri
-                }
+                Intent(context, WebViewActivity::class.java).setData(uri)
             }
-            if (preferences.mergeTabs()) {
-                tabActivity.addFlags(FLAG_ACTIVITY_NEW_DOCUMENT)
-                tabActivity.addFlags(FLAG_ACTIVITY_MULTIPLE_TASK)
+            if (preferences.mergeTabs() || fromNewTab) {
+                browsingActivity.addFlags(FLAG_ACTIVITY_NEW_DOCUMENT)
+                browsingActivity.addFlags(FLAG_ACTIVITY_MULTIPLE_TASK)
             }
             if (context !is Activity) {
-                tabActivity.addFlags(FLAG_ACTIVITY_NEW_TASK)
+                browsingActivity.addFlags(FLAG_ACTIVITY_NEW_TASK)
             }
-            context.startActivity(tabActivity)
+            context.startActivity(browsingActivity)
         }
     }
 
@@ -193,8 +192,7 @@ constructor(
             /*if (!isFromNewTab && !isFromOurApp) {
                 webHeadLauncher.addFlags(FLAG_ACTIVITY_CLEAR_TASK)
             }
-            webHeadLauncher.putExtra(EXTRA_KEY_FROM_NEW_TAB, isFromNewTab)
-            webHeadLauncher.putExtra(EXTRA_KEY_SKIP_EXTRACTION, skipExtraction)*/
+            webHeadLauncher.putExtra(EXTRA_KEY_FROM_NEW_TAB, isFromNewTab)*/
             webHeadLauncher.data = Uri.parse(url)
             context.startActivity(webHeadLauncher)
         } else {
@@ -204,6 +202,17 @@ constructor(
         if (preferences.aggressiveLoading()) {
             // Project boom boom.
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    override fun openNewTab(context: Context, url: String) {
+        val newTabIntent = Intent(context, NewTabDialogActivity::class.java).apply {
+            data = Uri.parse(url)
+            addFlags(FLAG_ACTIVITY_NEW_TASK)
+            addFlags(FLAG_ACTIVITY_NEW_DOCUMENT)
+            addFlags(FLAG_ACTIVITY_MULTIPLE_TASK)
+        }
+        context.startActivity(newTabIntent)
     }
 
 

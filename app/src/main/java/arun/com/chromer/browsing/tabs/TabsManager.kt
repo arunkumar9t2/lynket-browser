@@ -32,12 +32,12 @@ interface TabsManager {
      * Takes a {@param website} and opens in based on user preference. Checks for web heads, amp,
      * article, reordering existing tabs etc.
      */
-    fun openUrl(context: Context, website: Website, fromApp: Boolean = true, fromWebHeads: Boolean = false)
+    fun openUrl(context: Context, website: Website, fromApp: Boolean = true, fromWebHeads: Boolean = false, fromNewTab: Boolean = false)
 
     /**
      * Opens the given Uri in a browsing tab.
      */
-    fun openBrowsingTab(context: Context, uri: Uri, smart: Boolean = false)
+    fun openBrowsingTab(context: Context, uri: Uri, smart: Boolean = false, fromNewTab: Boolean = false)
 
     /**
      * Returns true if it is determined that we already have any of our browsing activity has opened
@@ -62,5 +62,8 @@ interface TabsManager {
      */
     fun openWebHeads(context: Context, url: String)
 
-
+    /**
+     * Opens new tab activity.
+     */
+    fun openNewTab(context: Context, url: String)
 }
