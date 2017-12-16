@@ -160,19 +160,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="36dp"
-                    android:layout_gravity="center|start"
-                    android:gravity="center|start"
-                    android:paddingLeft="72dp"
-                    android:paddingStart="72dp"
-                    android:text="@string/available_actions"
-                    android:textColor="@color/material_dark_light"
-                    android:textSize="14sp"
-                    android:textStyle="bold|italic"
-                    tools:ignore="RtlSymmetry" />
-
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/bottom_bar_action_list"
                     android:layout_width="match_parent"

@@ -203,7 +203,6 @@ https://goo.gl/992ils</string>
     <string name="web_close_on_open_desc">ウェブヘッドはリンクを開くと隠れます</string>
     <string name="web_close_on_open_title">ウェブヘッドはタップ時に閉じられます。</string>
     <string name="minimize">最小化</string>
-    <string name="open_in_new_tab_explanation"><![CDATA[<b>新しいタブで開く(5.0以上)-</b>画面上のリンクやテキストをコピーしてこのアイコンをタップすると、コピーしたものを新しいタブかバブルで表示するか検索します。]]></string>
     <string name="share_action_explanation"><![CDATA[<b>共有 -</b>Androidの共有機能を素早く使用できます。]]></string>
     <string name="available_actions">利用可能なアクション</string>
     <string name="secondary_browser_launching_error_title">セカンダリブラウザの起動エラー</string>

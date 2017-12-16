@@ -32,6 +32,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 import arun.com.chromer.R;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.ColorUtil;
+import arun.com.chromer.util.Utils;
 
 /**
  * Created by Arun on 06/11/2016.
@@ -43,17 +44,14 @@ public class BottomBarManager {
     private static IconicsDrawable articleDrawable;
 
     @NonNull
-    public static RemoteViews createBottomBarRemoteViews(@NonNull final Context context, final int toolbarColor, final @NonNull Config config) {
+    public static RemoteViews createBottomBarRemoteViews(@NonNull final Context context, final int toolbarColor) {
         final int iconColor = ColorUtil.getForegroundWhiteOrBlack(toolbarColor);
 
         final RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_bottom_bar_layout);
         remoteViews.setInt(R.id.bottom_bar_root, "setBackgroundColor", toolbarColor);
 
-        if (!config.minimize) {
+        if (!Utils.ANDROID_LOLLIPOP) {
             remoteViews.setViewVisibility(R.id.bottom_bar_minimize_tab, View.GONE);
-        }
-        if (!config.openInNewTab) {
-            remoteViews.setViewVisibility(R.id.bottom_bar_open_in_new_tab, View.GONE);
         }
 
         if (shareImageDrawable == null) {

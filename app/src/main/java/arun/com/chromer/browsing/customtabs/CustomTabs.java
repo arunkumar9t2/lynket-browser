@@ -52,7 +52,6 @@ import javax.inject.Inject;
 import arun.com.chromer.Chromer;
 import arun.com.chromer.R;
 import arun.com.chromer.appdetect.AppDetectionManager;
-import arun.com.chromer.browsing.customtabs.bottombar.BottomBarManager;
 import arun.com.chromer.browsing.customtabs.callbacks.ClipboardService;
 import arun.com.chromer.browsing.customtabs.callbacks.FavShareBroadcastReceiver;
 import arun.com.chromer.browsing.customtabs.callbacks.MinimizeBroadcastReceiver;
@@ -592,12 +591,8 @@ public class CustomTabs {
         if (!Preferences.get(activity).bottomBar()) {
             return;
         }
-        final BottomBarManager.Config config = new BottomBarManager.Config();
-        config.minimize = Preferences.get(activity).mergeTabs();
-        config.openInNewTab = Utils.isLollipopAbove();
-
         builder.setSecondaryToolbarViews(
-                createBottomBarRemoteViews(activity, toolbarColor, config),
+                createBottomBarRemoteViews(activity, toolbarColor),
                 getClickableIDs(),
                 getOnClickPendingIntent(activity, url)
         );

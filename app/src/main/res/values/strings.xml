@@ -220,7 +220,7 @@
     <string name="web_close_on_open_desc">Web heads will disappear once you open the link</string>
     <string name="web_close_on_open_title">Close web heads once clicked.</string>
     <string name="minimize">Minimize</string>
-    <string name="open_in_new_tab_explanation"><![CDATA[<b>Open in new tab (5.0+) -</b> Copy a link or text on screen and press this icon to launch the link or search the copied text in a new custom or bubble.]]></string>
+    <string name="new_tab_action_explanation"><![CDATA[<b>New tab -</b> Open a new tab]]></string>
     <string name="share_action_explanation"><![CDATA[<b>Share -</b> Quickly perform Android share action.]]></string>
     <string name="minimize_action_explanation"><![CDATA[<b>Minimize -</b> Will minimize the current page.]]></string>
     <string name="bottom_bar_article_mode_explanation"><![CDATA[<b>Article view -</b> Open the page in Article reader mode.]]></string>

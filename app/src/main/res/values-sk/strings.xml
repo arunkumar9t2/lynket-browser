@@ -201,7 +201,6 @@
     <string name="web_close_on_open_desc">Webové hlavičky zmiznú po otvorení odkazu</string>
     <string name="web_close_on_open_title">Zavrieť webové hlavičky po kliknutí.</string>
     <string name="minimize">Minimalizovať</string>
-    <string name="open_in_new_tab_explanation"><![CDATA[<b>Otvoriť na novej karte (5.0+) -</b> Skopírujte odkaz alebo text na obrazovke a kliknite na túto ikonu pre spustenie odkazu alebo vyhľadanie skopírovaného textu na novej karte alebo v bubline.]]></string>
     <string name="share_action_explanation"><![CDATA[<b>Zdieľať -</b> Rýchle spustenie akcie zdieľania Androidu.]]></string>
     <string name="available_actions">Dostupné akcie</string>
     <string name="secondary_browser_launching_error_title">Vyskytla sa chyba pri spúšťaní sekundárneho prehliadača</string>

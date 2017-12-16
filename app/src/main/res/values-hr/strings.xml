@@ -197,7 +197,6 @@
     <string name="web_close_on_open_desc">Plutajući mjehurići će nestati kada otvorite poveznicu</string>
     <string name="web_close_on_open_title">Zatvorite mjehuriće kada ih dodirnete.</string>
     <string name="minimize">Smanji</string>
-    <string name="open_in_new_tab_explanation"><![CDATA[<b>Otvori u novoj kartici (5.0+) -</b> kopirajte poveznicu ili tekst na zaslonu i pritisnite ovu ikonu da biste pokrenuli poveznicu ili pretražili kopirani tekst u novoj prilagođenoj kartici ili mjehuriću.]]></string>
     <string name="share_action_explanation"><![CDATA[<b>Podijeli -</b> brzo podijelite stranicu]]></string>
     <string name="available_actions">Dostupne radnje</string>
     <string name="secondary_browser_launching_error_title">Greška pri otvaranju sekundarnog preglednika</string>

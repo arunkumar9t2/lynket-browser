@@ -231,11 +231,11 @@ public class BrowsingOptionsActivity extends BaseActivity implements Snackable, 
 
         public BottomActionsAdapter(Context context) {
             this.context = context;
-            if (Utils.isLollipopAbove()) {
-                items.add(NEW_TAB);
-            }
+            items.add(NEW_TAB);
             items.add(SHARE);
-            items.add(MINIMIZE);
+            if (Utils.ANDROID_LOLLIPOP) {
+                items.add(MINIMIZE);
+            }
             items.add(ARTICLE);
         }
 
@@ -250,10 +250,10 @@ public class BrowsingOptionsActivity extends BaseActivity implements Snackable, 
             switch (items.get(position)) {
                 case NEW_TAB:
                     holder.icon.setImageDrawable(new IconicsDrawable(context)
-                            .icon(CommunityMaterial.Icon.cmd_plus_box)
+                            .icon(CommunityMaterial.Icon.cmd_plus)
                             .color(iconColor)
                             .sizeDp(18));
-                    holder.action.setText(Utils.html(context, R.string.open_in_new_tab_explanation));
+                    holder.action.setText(Utils.html(context, R.string.new_tab_action_explanation));
                     break;
                 case SHARE:
                     holder.icon.setImageDrawable(new IconicsDrawable(context)
