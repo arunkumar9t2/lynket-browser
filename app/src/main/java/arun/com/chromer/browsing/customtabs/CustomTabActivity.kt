@@ -42,7 +42,7 @@ class CustomTabActivity : BrowsingActivity() {
                 .fallbackColor(overrideColor)
                 .launch()
 
-        if (Preferences.get(this).aggressiveLoading() && !Preferences.get(this).articleMode()) {
+        if (Preferences.get(this).aggressiveLoading()) {
             delayedGoToBack()
         }
     }

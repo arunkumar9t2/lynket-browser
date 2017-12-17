@@ -18,20 +18,12 @@
 
 package arun.com.chromer.browsing.webview;
 
-import android.annotation.TargetApi;
-import android.app.ActivityManager;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 import android.view.InflateException;
 import android.view.Menu;
@@ -41,75 +33,62 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
+import org.jetbrains.annotations.NotNull;
+
 import arun.com.chromer.R;
+import arun.com.chromer.browsing.BrowsingActivity;
 import arun.com.chromer.browsing.customtabs.callbacks.ClipboardService;
 import arun.com.chromer.browsing.customtabs.callbacks.FavShareBroadcastReceiver;
 import arun.com.chromer.browsing.customtabs.callbacks.SecondaryBrowserReceiver;
 import arun.com.chromer.browsing.openwith.OpenIntentWithActivity;
 import arun.com.chromer.browsing.optionspopup.ChromerOptionsActivity;
 import arun.com.chromer.data.website.model.Website;
+import arun.com.chromer.di.activity.ActivityComponent;
 import arun.com.chromer.settings.Preferences;
 import arun.com.chromer.util.Utils;
-import arun.com.chromer.util.glide.GlideApp;
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 import static android.graphics.Color.WHITE;
-import static android.os.Build.VERSION_CODES.LOLLIPOP;
 import static arun.com.chromer.settings.Preferences.PREFERRED_ACTION_BROWSER;
 import static arun.com.chromer.settings.Preferences.PREFERRED_ACTION_FAV_SHARE;
 import static arun.com.chromer.settings.Preferences.PREFERRED_ACTION_GEN_SHARE;
-import static arun.com.chromer.shared.Constants.ACTION_MINIMIZE;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_ORIGINAL_URL;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBSITE;
 
-public class WebViewActivity extends AppCompatActivity {
+public class WebViewActivity extends BrowsingActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.web_view)
     WebView webView;
-    private String baseUrl = "";
-    private BroadcastReceiver minimizeReceiver;
-    private final CompositeSubscription subscriptions = new CompositeSubscription();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        baseUrl = getIntent().getDataString();
         try {
-            setContentView(R.layout.activity_web_view);
-            ButterKnife.bind(this);
-
             setSupportActionBar(toolbar);
 
             final Website website = getIntent().getParcelableExtra(EXTRA_KEY_WEBSITE);
-
             if (getSupportActionBar() != null) {
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 getSupportActionBar().setHomeAsUpIndicator(xyz.klinker.android.article.R.drawable.article_ic_close);
-                getSupportActionBar().setTitle(website != null ? website.safeLabel() : baseUrl);
+                getSupportActionBar().setTitle(website != null ? website.safeLabel() : getIntent().getDataString());
             }
-
-
-            /* if (Preferences.get(this).aggressiveLoading()) {
-                   delayedGoToBack();
-            }*/
-            registerMinimizeReceiver();
-            beginExtraction(website);
 
             webView.setWebViewClient(new WebViewClient() {
 
             });
             final WebSettings webSettings = webView.getSettings();
             webSettings.setJavaScriptEnabled(true);
+
             webView.loadUrl(getIntent().getDataString());
+
+            if (Preferences.get(this).aggressiveLoading()) {
+                delayedGoToBack();
+            }
         } catch (InflateException e) {
             Timber.e(e);
             Toast.makeText(this, R.string.web_view_not_found, Toast.LENGTH_LONG).show();
@@ -117,46 +96,13 @@ public class WebViewActivity extends AppCompatActivity {
         }
     }
 
-    private void beginExtraction(@Nullable Website website) {
-        if (website != null && website.title != null && website.faviconUrl != null) {
-            Timber.d("Website info exists, setting description");
-            applyDescriptionFromWebsite(website);
-        } else {
-            Timber.d("No info found, beginning parsing");
-           /* final Subscription s = DefaultWebsiteRepository.getInstance(this)
-                    .getWebsite(baseUrl)
-                    .doOnNext(this::applyDescriptionFromWebsite)
-                    .doOnError(Timber::e)
-                    .subscribe();
-            subscriptions.add(s);*/
-        }
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.activity_web_view;
     }
 
     private void delayedGoToBack() {
         new Handler().postDelayed(() -> moveTaskToBack(true), 650);
-    }
-
-    @TargetApi(LOLLIPOP)
-    private void applyDescriptionFromWebsite(@Nullable final Website website) {
-        if (website != null) {
-            final String title = website.safeLabel();
-            final String faviconUrl = website.faviconUrl;
-            if (getSupportActionBar() != null) {
-                getSupportActionBar().setTitle(title);
-            }
-            if (Utils.isLollipopAbove()) {
-                setTaskDescription(new ActivityManager.TaskDescription(title, null, website.themeColor()));
-                GlideApp.with(this)
-                        .asBitmap()
-                        .load(faviconUrl)
-                        .into(new SimpleTarget<Bitmap>() {
-                            @Override
-                            public void onResourceReady(Bitmap icon, Transition<? super Bitmap> transition) {
-                                setTaskDescription(new ActivityManager.TaskDescription(title, icon, website.themeColor()));
-                            }
-                        });
-            }
-        }
     }
 
     @Override
@@ -253,7 +199,7 @@ public class WebViewActivity extends AppCompatActivity {
                 break;
             case R.id.menu_more:
                 final Intent moreMenuActivity = new Intent(this, ChromerOptionsActivity.class);
-                moreMenuActivity.putExtra(EXTRA_KEY_ORIGINAL_URL, baseUrl);
+                moreMenuActivity.putExtra(EXTRA_KEY_ORIGINAL_URL, getIntent().getDataString());
                 moreMenuActivity.setData(getIntent().getData());
                 startActivity(moreMenuActivity);
                 break;
@@ -265,34 +211,12 @@ public class WebViewActivity extends AppCompatActivity {
     }
 
     private void shareUrl() {
-        Utils.shareText(this, baseUrl);
-    }
-
-    private void registerMinimizeReceiver() {
-        minimizeReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equalsIgnoreCase(ACTION_MINIMIZE) && intent.hasExtra(EXTRA_KEY_ORIGINAL_URL)) {
-                    final String url = intent.getStringExtra(EXTRA_KEY_ORIGINAL_URL);
-                    if (baseUrl.equalsIgnoreCase(url)) {
-                        try {
-                            Timber.d("Minimized %s", url);
-                            moveTaskToBack(true);
-                        } catch (Exception e) {
-                            Timber.e(e);
-                        }
-                    }
-                }
-            }
-        };
-        LocalBroadcastManager.getInstance(this).registerReceiver(minimizeReceiver, new IntentFilter(ACTION_MINIMIZE));
+        Utils.shareText(this, getIntent().getDataString());
     }
 
     @Override
     protected void onDestroy() {
         webView.destroy();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(minimizeReceiver);
-        subscriptions.clear();
         super.onDestroy();
     }
 
@@ -303,5 +227,15 @@ public class WebViewActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void onWebsiteLoaded(@NotNull Website website) {
+
+    }
+
+    @Override
+    public void inject(@NonNull ActivityComponent activityComponent) {
+        activityComponent.inject(this);
     }
 }
