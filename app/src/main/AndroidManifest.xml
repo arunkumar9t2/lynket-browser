@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Chromer
   ~ Copyright (C) 2017 Arunkumar
   ~
@@ -209,11 +208,6 @@
             android:noHistory="true"
             android:theme="@style/DialogTheme"
             android:windowSoftInputMode="stateVisible" />
-        <activity
-            android:name=".webheads.ui.ProxyActivity"
-            android:excludeFromRecents="true"
-            android:noHistory="true"
-            android:theme="@style/Theme.AppCompat.Translucent" />
         <activity
             android:name=".browsing.openwith.OpenIntentWithActivity"
             android:excludeFromRecents="true"

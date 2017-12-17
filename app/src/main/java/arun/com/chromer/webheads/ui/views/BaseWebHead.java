@@ -483,14 +483,6 @@ public abstract class BaseWebHead extends FrameLayout {
         }
     }
 
-    public boolean isFromNewTab() {
-        return fromNewTab;
-    }
-
-    public void setFromNewTab(boolean fromNewTab) {
-        this.fromNewTab = fromNewTab;
-    }
-
     @SuppressWarnings("UnusedParameters")
     void destroySelf(boolean receiveCallback) {
         destroyed = true;

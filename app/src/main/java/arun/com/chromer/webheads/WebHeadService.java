@@ -96,7 +96,6 @@ import static arun.com.chromer.shared.Constants.ACTION_OPEN_NEW_TAB;
 import static arun.com.chromer.shared.Constants.ACTION_REBIND_WEBHEAD_TAB_CONNECTION;
 import static arun.com.chromer.shared.Constants.ACTION_STOP_WEBHEAD_SERVICE;
 import static arun.com.chromer.shared.Constants.ACTION_WEBHEAD_COLOR_SET;
-import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_NEW_TAB;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_MINIMIZE;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_REBIND_WEBHEAD_CXN;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBHEAD_COLOR;
@@ -219,7 +218,6 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     private void processIntent(@Nullable Intent intent) {
         if (intent == null || intent.getDataString() == null) return; // don't do anything
 
-        final boolean isFromNewTab = intent.getBooleanExtra(EXTRA_KEY_FROM_NEW_TAB, false);
         final boolean isForMinimized = intent.getBooleanExtra(EXTRA_KEY_MINIMIZE, false);
 
         final String urlToLoad = intent.getDataString();
@@ -229,7 +227,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         }
 
         if (!isLinkAlreadyLoaded(urlToLoad)) {
-            addWebHead(urlToLoad, isFromNewTab);
+            addWebHead(urlToLoad);
         } else if (!isForMinimized) {
             Toast.makeText(this, R.string.already_loaded, LENGTH_SHORT).show();
         }
@@ -239,14 +237,13 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         return urlToLoad == null || webHeads.containsKey(urlToLoad);
     }
 
-    private void addWebHead(final String webHeadUrl, final boolean isNewTab) {
+    private void addWebHead(final String webHeadUrl) {
         if (springChain2D == null) {
             springChain2D = SpringChain2D.create(this);
         }
         springChain2D.clear();
 
         final WebHead newWebHead = new WebHead(/*Service*/ this, webHeadUrl, /*listener*/ this);
-        newWebHead.setFromNewTab(isNewTab);
         for (WebHead oldWebHead : webHeads.values()) {
             // Set all old web heads to slave
             oldWebHead.setMaster(false);

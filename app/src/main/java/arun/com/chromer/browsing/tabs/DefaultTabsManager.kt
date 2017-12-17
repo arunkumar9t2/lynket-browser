@@ -49,7 +49,7 @@ import arun.com.chromer.util.DocumentUtils
 import arun.com.chromer.util.RxEventBus
 import arun.com.chromer.util.SafeIntent
 import arun.com.chromer.util.Utils
-import arun.com.chromer.webheads.ui.ProxyActivity
+import arun.com.chromer.webheads.WebHeadService
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import timber.log.Timber
@@ -145,6 +145,9 @@ constructor(
 
     override fun minimizeTabByUrl(url: String) {
         rxEventBus.post(MinimizeEvent(url))
+        if (preferences.webHeads()) {
+            openWebHeads(application, url)
+        }
     }
 
     override fun processIncomingIntent(activity: Activity, intent: Intent) {
@@ -199,14 +202,11 @@ constructor(
 
     override fun openWebHeads(context: Context, url: String) {
         if (Utils.isOverlayGranted(context)) {
-            val webHeadLauncher = Intent(context, ProxyActivity::class.java)
-            webHeadLauncher.addFlags(FLAG_ACTIVITY_NEW_TASK)
-            /*if (!isFromNewTab && !isFromOurApp) {
-                webHeadLauncher.addFlags(FLAG_ACTIVITY_CLEAR_TASK)
+            val webHeadLauncher = Intent(context, WebHeadService::class.java).apply {
+                data = Uri.parse(url)
+                addFlags(FLAG_ACTIVITY_NEW_TASK)
             }
-            webHeadLauncher.putExtra(EXTRA_KEY_FROM_NEW_TAB, isFromNewTab)*/
-            webHeadLauncher.data = Uri.parse(url)
-            context.startActivity(webHeadLauncher)
+            context.startService(webHeadLauncher)
         } else {
             Utils.openDrawOverlaySettings(context)
         }
