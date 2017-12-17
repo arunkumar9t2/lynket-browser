@@ -19,11 +19,9 @@
 package arun.com.chromer.browsing.customtabs
 
 import android.os.Bundle
-import android.os.Handler
 import arun.com.chromer.browsing.BrowsingActivity
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
-import arun.com.chromer.settings.Preferences
 import arun.com.chromer.shared.Constants
 
 class CustomTabActivity : BrowsingActivity() {
@@ -41,10 +39,6 @@ class CustomTabActivity : BrowsingActivity() {
                 .forUrl(intent.dataString!!)
                 .fallbackColor(overrideColor)
                 .launch()
-
-        if (Preferences.get(this).aggressiveLoading()) {
-            delayedGoToBack()
-        }
     }
 
     override fun inject(activityComponent: ActivityComponent) {
@@ -53,10 +47,6 @@ class CustomTabActivity : BrowsingActivity() {
 
     override fun getLayoutRes(): Int {
         return 0
-    }
-
-    private fun delayedGoToBack() {
-        Handler().postDelayed({ moveTaskToBack(true) }, 650)
     }
 
     override fun onAttachedToWindow() {

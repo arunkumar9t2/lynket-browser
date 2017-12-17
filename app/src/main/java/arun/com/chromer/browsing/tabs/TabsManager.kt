@@ -47,6 +47,8 @@ interface TabsManager {
     /**
      * If a task exist with this url already then this method should minimize it a.k.a putting it in
      * the background task.
+     *
+     * After that, an attempt to open web heads is made if it is enabled.
      */
     fun minimizeTabByUrl(url: String)
 
@@ -58,8 +60,11 @@ interface TabsManager {
 
     /**
      * Opens the given {@param url} irrespective of whether web heads is on.
+     *
+     * After opening the web heads, an attempt to handle aggressive background loading is attempted
+     * if {@param fromMinimize} is {@code false}
      */
-    fun openWebHeads(context: Context, url: String)
+    fun openWebHeads(context: Context, url: String, fromMinimize: Boolean = false)
 
     /**
      * Opens new tab activity.

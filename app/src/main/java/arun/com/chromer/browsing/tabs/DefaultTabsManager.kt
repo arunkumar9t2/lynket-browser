@@ -28,6 +28,9 @@ import android.content.Intent
 import android.content.Intent.*
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.TextUtils
 import android.widget.Toast
 import arun.com.chromer.BuildConfig
@@ -146,7 +149,8 @@ constructor(
     override fun minimizeTabByUrl(url: String) {
         rxEventBus.post(MinimizeEvent(url))
         if (preferences.webHeads()) {
-            openWebHeads(application, url)
+            // When minimizing, don't try to handle aggressive loading cases.
+            openWebHeads(application, url, fromMinimize = true)
         }
     }
 
@@ -200,7 +204,7 @@ constructor(
         }
     }
 
-    override fun openWebHeads(context: Context, url: String) {
+    override fun openWebHeads(context: Context, url: String, fromMinimize: Boolean) {
         if (Utils.isOverlayGranted(context)) {
             val webHeadLauncher = Intent(context, WebHeadService::class.java).apply {
                 data = Uri.parse(url)
@@ -211,8 +215,40 @@ constructor(
             Utils.openDrawOverlaySettings(context)
         }
 
-        if (preferences.aggressiveLoading()) {
-            // Project boom boom.
+        // If this command was not issued for minimizing, then attempt aggressive loading.
+        if (preferences.aggressiveLoading() && !fromMinimize) {
+            // Register listener to track opening browsing tabs.
+            application.registerActivityLifecycleCallbacks(
+                    object : ActivityLifeCycleCallbackAdapter() {
+                        override fun onActivityStopped(activity: Activity?) {
+                            // Let's inspect this activity and find if it's what we are looking for.
+                            try {
+                                activity?.let {
+                                    val activityClass = activity.javaClass.name
+                                    if (activityClass == CustomTabActivity::class.java.name
+                                            || activityClass == WebViewActivity::class.java.name) {
+
+                                        val activityUrl = activity.intent?.dataString
+
+                                        if (url == activityUrl) {
+                                            Timber.d("Found activity $activityClass.")
+
+                                            Handler(Looper.getMainLooper()).postDelayed({
+                                                activity.moveTaskToBack(true)
+                                                Timber.d("Moved ${activityClass + activityUrl} to back")
+                                                // Unregister this callback
+                                                application.unregisterActivityLifecycleCallbacks(this)
+                                            }, 100)
+                                        }
+                                    }
+                                }
+                            } catch (e: Exception) {
+                                Timber.e(e)
+                            }
+                        }
+                    })
+
+            openBrowsingTab(context, Website(url), smart = true, fromNewTab = false)
         }
     }
 
@@ -281,5 +317,24 @@ constructor(
                     activity.startActivity(chromerIntent)
                 }
                 .dismissListener({ activity.finish() }).show()
+    }
+
+    /**
+     * Adapter to let us implement only what's needed from the interface.
+     */
+    open class ActivityLifeCycleCallbackAdapter : Application.ActivityLifecycleCallbacks {
+        override fun onActivityPaused(activity: Activity?) {}
+
+        override fun onActivityResumed(activity: Activity?) {}
+
+        override fun onActivityStarted(activity: Activity?) {}
+
+        override fun onActivityDestroyed(activity: Activity?) {}
+
+        override fun onActivitySaveInstanceState(activity: Activity?, bundle: Bundle?) {}
+
+        override fun onActivityStopped(activity: Activity?) {}
+
+        override fun onActivityCreated(activity: Activity?, bundle: Bundle?) {}
     }
 }

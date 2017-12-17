@@ -26,7 +26,6 @@ import android.content.pm.PackageManager
 import android.graphics.Color.WHITE
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.view.InflateException
 import android.view.Menu
 import android.view.MenuItem
@@ -72,10 +71,6 @@ class WebViewActivity : BrowsingActivity() {
             webSettings.javaScriptEnabled = true
 
             web_view.loadUrl(intent.dataString)
-
-            if (Preferences.get(this).aggressiveLoading()) {
-                delayedGoToBack()
-            }
         } catch (e: InflateException) {
             Timber.e(e)
             Toast.makeText(this, R.string.web_view_not_found, Toast.LENGTH_LONG).show()
@@ -86,10 +81,6 @@ class WebViewActivity : BrowsingActivity() {
 
     override fun getLayoutRes(): Int {
         return R.layout.activity_web_view
-    }
-
-    private fun delayedGoToBack() {
-        Handler().postDelayed({ moveTaskToBack(true) }, 650)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
