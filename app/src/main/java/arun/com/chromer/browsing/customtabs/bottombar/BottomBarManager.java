@@ -29,6 +29,8 @@ import android.widget.RemoteViews;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
+import java.util.Random;
+
 import arun.com.chromer.R;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.ColorUtil;
@@ -109,7 +111,7 @@ public class BottomBarManager {
     public static PendingIntent getOnClickPendingIntent(Context context, String url) {
         final Intent broadcastIntent = new Intent(context, BottomBarReceiver.class);
         broadcastIntent.putExtra(Constants.EXTRA_KEY_ORIGINAL_URL, url);
-        return PendingIntent.getBroadcast(context, 0, broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getBroadcast(context, new Random().nextInt(), broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     public static class Config {
