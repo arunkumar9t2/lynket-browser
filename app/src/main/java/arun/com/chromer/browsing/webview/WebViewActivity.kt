@@ -19,17 +19,17 @@
 package arun.com.chromer.browsing.webview
 
 import android.annotation.SuppressLint
+import android.annotation.TargetApi
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color.WHITE
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.support.v7.widget.Toolbar
 import android.view.InflateException
 import android.view.Menu
 import android.view.MenuItem
-import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import arun.com.chromer.R
@@ -45,16 +45,13 @@ import arun.com.chromer.settings.Preferences
 import arun.com.chromer.settings.Preferences.*
 import arun.com.chromer.shared.Constants.EXTRA_KEY_ORIGINAL_URL
 import arun.com.chromer.util.Utils
-import butterknife.BindView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import kotlinx.android.synthetic.main.activity_web_view.*
+import kotlinx.android.synthetic.main.content_web_view.*
 import timber.log.Timber
 
 class WebViewActivity : BrowsingActivity() {
-    @BindView(R.id.toolbar)
-    var toolbar: Toolbar? = null
-    @BindView(R.id.web_view)
-    var webView: WebView? = null
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,13 +65,13 @@ class WebViewActivity : BrowsingActivity() {
                 supportActionBar!!.title = website?.safeLabel() ?: intent.dataString
             }
 
-            webView!!.webViewClient = object : WebViewClient() {
+            web_view.webViewClient = object : WebViewClient() {
 
             }
-            val webSettings = webView!!.settings
+            val webSettings = web_view!!.settings
             webSettings.javaScriptEnabled = true
 
-            webView!!.loadUrl(intent.dataString)
+            web_view.loadUrl(intent.dataString)
 
             if (Preferences.get(this).aggressiveLoading()) {
                 delayedGoToBack()
@@ -155,6 +152,7 @@ class WebViewActivity : BrowsingActivity() {
         return true
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> finish()
@@ -167,9 +165,13 @@ class WebViewActivity : BrowsingActivity() {
             R.id.menu_open_with -> startActivity(Intent(this, OpenIntentWithActivity::class.java).setData(intent.data))
             R.id.menu_share -> shareUrl()
             R.id.menu_more -> {
-                val moreMenuActivity = Intent(this, ChromerOptionsActivity::class.java)
-                moreMenuActivity.putExtra(EXTRA_KEY_ORIGINAL_URL, intent.dataString)
-                moreMenuActivity.data = intent.data
+                val moreMenuActivity = Intent(this, ChromerOptionsActivity::class.java).apply {
+                    data = intent.data
+                    putExtra(EXTRA_KEY_ORIGINAL_URL, intent.dataString)
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
+                    addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
+                }
                 startActivity(moreMenuActivity)
             }
             R.id.menu_share_with -> sendBroadcast(Intent(this, FavShareBroadcastReceiver::class.java).setData(intent.data))
@@ -182,13 +184,13 @@ class WebViewActivity : BrowsingActivity() {
     }
 
     override fun onDestroy() {
-        webView!!.destroy()
+        web_view.destroy()
         super.onDestroy()
     }
 
     override fun onBackPressed() {
-        if (webView!!.canGoBack()) {
-            webView!!.goBack()
+        if (web_view.canGoBack()) {
+            web_view.goBack()
         } else {
             super.onBackPressed()
         }

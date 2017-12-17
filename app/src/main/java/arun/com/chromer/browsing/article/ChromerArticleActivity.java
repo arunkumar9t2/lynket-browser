@@ -55,6 +55,9 @@ import timber.log.Timber;
 import xyz.klinker.android.article.ArticleActivity;
 import xyz.klinker.android.article.data.webarticle.model.WebArticle;
 
+import static android.content.Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_DOCUMENT;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.graphics.Color.WHITE;
 import static arun.com.chromer.settings.Preferences.PREFERRED_ACTION_BROWSER;
 import static arun.com.chromer.settings.Preferences.PREFERRED_ACTION_FAV_SHARE;
@@ -196,6 +199,9 @@ public class ChromerArticleActivity extends ArticleActivity {
                 moreMenuActivity.setData(getIntent().getData());
                 moreMenuActivity.putExtra(EXTRA_KEY_ORIGINAL_URL, baseUrl);
                 moreMenuActivity.putExtra(EXTRA_KEY_FROM_ARTICLE, true);
+                moreMenuActivity.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                moreMenuActivity.addFlags(FLAG_ACTIVITY_NEW_DOCUMENT);
+                moreMenuActivity.addFlags(FLAG_ACTIVITY_MULTIPLE_TASK);
                 startActivity(moreMenuActivity);
                 break;
             case R.id.menu_share_with:
