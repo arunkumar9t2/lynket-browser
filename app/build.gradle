@@ -25,11 +25,11 @@ apply plugin: 'io.fabric'
 buildscript {
     repositories {
         maven { url 'https://maven.fabric.io/public' }
-        maven { url 'https://maven.google.com' }
+        google()
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.25.0'
+        classpath 'io.fabric.tools:gradle:1.25.1'
     }
 }
 repositories {
@@ -51,6 +51,9 @@ android {
         manifestPlaceholders = [crashlyticsApiKey: getFabricKey()]
 
         vectorDrawables.useSupportLibrary = true
+
+        // Disable crashlytics by default.
+        ext.enableCrashlytics = false
     }
     buildTypes {
         release {
@@ -63,11 +66,15 @@ android {
             lintOptions {
                 disable 'MissingTranslation'
             }
+
+            ext.enableCrashlytics = true
         }
         debug {
             applicationIdSuffix '.debug'
             versionNameSuffix '- dev'
             resValue "string", "app_name", "Chromer-dev"
+
+            ext.enableCrashlytics = false
         }
     }
 
