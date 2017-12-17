@@ -83,10 +83,6 @@ class NewTabDialogActivity : BaseActivity() {
             dialog = MaterialDialog.Builder(activity!!)
                     .title(R.string.new_tab)
                     .backgroundColorRes(R.color.card_background_light)
-                    /*.icon(IconicsDrawable(activity)
-                            .icon(CommunityMaterial.Icon.cmd_plus)
-                            .colorRes(R.color.primary)
-                            .sizeDp(24))*/
                     .customView(R.layout.activity_new_tab, false)
                     .dismissListener(this)
                     .show()
@@ -104,6 +100,8 @@ class NewTabDialogActivity : BaseActivity() {
                             Toast.makeText(activity, R.string.no_voice_rec_apps, Toast.LENGTH_SHORT).show()
                         })
             }
+
+            materialSearchView?.post { materialSearchView?.editText?.requestFocus() }
             return this
         }
 
