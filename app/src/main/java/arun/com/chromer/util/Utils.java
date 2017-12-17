@@ -69,7 +69,7 @@ import arun.com.chromer.R;
 import arun.com.chromer.browsing.customtabs.CustomTabs;
 import arun.com.chromer.data.common.App;
 import arun.com.chromer.shared.Constants;
-import arun.com.chromer.views.IntentPickerSheetView;
+import arun.com.chromer.shared.views.IntentPickerSheetView;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;

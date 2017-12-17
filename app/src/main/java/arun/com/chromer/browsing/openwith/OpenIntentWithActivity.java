@@ -26,7 +26,7 @@ import android.widget.Toast;
 import com.flipboard.bottomsheet.BottomSheetLayout;
 
 import arun.com.chromer.R;
-import arun.com.chromer.views.IntentPickerSheetView;
+import arun.com.chromer.shared.views.IntentPickerSheetView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
