@@ -113,9 +113,4 @@ public class BottomBarManager {
         broadcastIntent.putExtra(Constants.EXTRA_KEY_ORIGINAL_URL, url);
         return PendingIntent.getBroadcast(context, new Random().nextInt(), broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
-
-    public static class Config {
-        public boolean minimize = false;
-        public boolean openInNewTab = false;
-    }
 }
