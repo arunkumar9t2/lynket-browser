@@ -65,4 +65,11 @@ interface TabsManager {
      * Opens new tab activity.
      */
     fun openNewTab(context: Context, url: String)
+
+    /**
+     * Clear non browsing activities so that pressing back returns user to the app that launched
+     * the browsing tab.
+     *
+     */
+    fun clearNonBrowsingActivities()
 }

@@ -18,7 +18,6 @@
 
 package arun.com.chromer.home;
 
-import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,7 +27,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -69,6 +67,7 @@ import arun.com.chromer.settings.Preferences;
 import arun.com.chromer.settings.SettingsGroupActivity;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.shared.base.activity.BaseMVPActivity;
+import arun.com.chromer.util.RxEventBus;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 
@@ -92,11 +91,11 @@ public class HomeActivity extends BaseMVPActivity<HomeContract.View, HomeContrac
 
     @Inject
     HomeContract.Presenter presenter;
-
     @Inject
     DefaultTabsManager tabsManager;
+    @Inject
+    RxEventBus rxEventBus;
 
-    private BroadcastReceiver closeReceiver;
     private HistoryFragment historyFragment;
     private HomeFragment homeFragment;
 
@@ -145,6 +144,8 @@ public class HomeActivity extends BaseMVPActivity<HomeContract.View, HomeContrac
             }
             return false;
         });
+
+        subs.add(rxEventBus.filteredEvents(DefaultTabsManager.FinishRoot.class).subscribe(it -> finish()));
     }
 
     @Override
@@ -155,12 +156,6 @@ public class HomeActivity extends BaseMVPActivity<HomeContract.View, HomeContrac
     @Override
     protected int getLayoutRes() {
         return R.layout.activity_main;
-    }
-
-    @Override
-    protected void onDestroy() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(closeReceiver);
-        super.onDestroy();
     }
 
     @NonNull

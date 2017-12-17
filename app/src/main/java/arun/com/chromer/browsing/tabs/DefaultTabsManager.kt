@@ -70,7 +70,14 @@ constructor(
     // Event for minimize command.
     data class MinimizeEvent(val url: String)
 
+    // Event for closing non browsing activity.
+    class FinishRoot
+
     override fun openUrl(context: Context, website: Website, fromApp: Boolean, fromWebHeads: Boolean, fromNewTab: Boolean) {
+        // Clear non browsing activities if it was external intent.
+        if (!fromApp) {
+            clearNonBrowsingActivities()
+        }
         // Open in web heads mode if we this command did not come from web heads.
         if (preferences.webHeads() && !fromWebHeads) {
             openWebHeads(context, website.preferredUrl())
@@ -100,7 +107,7 @@ constructor(
             return
         }
 
-        // At last, if everything failed then launch normally in browsing activity.
+        // If everything failed then launch normally in browsing activity.
         openBrowsingTab(context, website, fromNewTab = fromNewTab)
     }
 
@@ -220,6 +227,9 @@ constructor(
         context.startActivity(newTabIntent)
     }
 
+    override fun clearNonBrowsingActivities() {
+        rxEventBus.post(FinishRoot())
+    }
 
     /**
      * Performs the blacklist action which is opening the given url in user's secondary browser.
