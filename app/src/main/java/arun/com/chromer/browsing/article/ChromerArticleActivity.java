@@ -18,16 +18,12 @@
 
 package arun.com.chromer.browsing.article;
 
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -51,7 +47,6 @@ import arun.com.chromer.di.activity.ActivityModule;
 import arun.com.chromer.settings.Preferences;
 import arun.com.chromer.util.RxUtils;
 import arun.com.chromer.util.Utils;
-import timber.log.Timber;
 import xyz.klinker.android.article.ArticleActivity;
 import xyz.klinker.android.article.data.webarticle.model.WebArticle;
 
@@ -62,13 +57,11 @@ import static android.graphics.Color.WHITE;
 import static arun.com.chromer.settings.Preferences.PREFERRED_ACTION_BROWSER;
 import static arun.com.chromer.settings.Preferences.PREFERRED_ACTION_FAV_SHARE;
 import static arun.com.chromer.settings.Preferences.PREFERRED_ACTION_GEN_SHARE;
-import static arun.com.chromer.shared.Constants.ACTION_MINIMIZE;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_ARTICLE;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_ORIGINAL_URL;
 
 public class ChromerArticleActivity extends ArticleActivity {
     private String baseUrl = "";
-    private BroadcastReceiver minimizeReceiver;
 
     ActivityComponent activityComponent;
     @Inject
@@ -86,7 +79,6 @@ public class ChromerArticleActivity extends ArticleActivity {
         activityComponent.inject(this);
 
         baseUrl = getIntent().getDataString();
-        registerMinimizeReceiver();
     }
 
     @Override
@@ -95,7 +87,6 @@ public class ChromerArticleActivity extends ArticleActivity {
         // Loading failed, try to go back to normal url tab if it exists, else start a new normal
         // rendering tab.
         loadInNormalTab();
-        finish();
     }
 
     @Override
@@ -192,7 +183,6 @@ public class ChromerArticleActivity extends ArticleActivity {
                 break;
             case R.id.menu_open_full_page:
                 loadInNormalTab();
-                finish();
                 break;
             case R.id.menu_more:
                 final Intent moreMenuActivity = new Intent(this, ChromerOptionsActivity.class);
@@ -212,6 +202,7 @@ public class ChromerArticleActivity extends ArticleActivity {
     }
 
     protected void loadInNormalTab() {
+        finish();
         if (getIntent() != null && getIntent().getDataString() != null) {
             tabsManager.openBrowsingTab(this, new Website(getIntent().getDataString()), true, false);
         }
@@ -221,29 +212,8 @@ public class ChromerArticleActivity extends ArticleActivity {
         Utils.shareText(this, baseUrl);
     }
 
-    private void registerMinimizeReceiver() {
-        minimizeReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equalsIgnoreCase(ACTION_MINIMIZE) && intent.hasExtra(EXTRA_KEY_ORIGINAL_URL)) {
-                    final String url = intent.getStringExtra(EXTRA_KEY_ORIGINAL_URL);
-                    if (baseUrl.equalsIgnoreCase(url)) {
-                        try {
-                            Timber.d("Minimized %s", url);
-                            moveTaskToBack(true);
-                        } catch (Exception e) {
-                            Timber.e(e);
-                        }
-                    }
-                }
-            }
-        };
-        LocalBroadcastManager.getInstance(this).registerReceiver(minimizeReceiver, new IntentFilter(ACTION_MINIMIZE));
-    }
-
     @Override
     protected void onDestroy() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(minimizeReceiver);
         activityComponent = null;
         super.onDestroy();
     }

@@ -56,6 +56,7 @@ import arun.com.chromer.webheads.WebHeadService
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import timber.log.Timber
+import xyz.klinker.android.article.ArticleUtils
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -173,14 +174,18 @@ constructor(
     }
 
     private fun openArticle(context: Context, uri: Uri) {
-        ArticleLauncher.from(context, uri)
-                .applyCustomizations()
-                .launch()
+        if (!reOrderTabByUrl(context, Website(uri.toString()))) {
+            ArticleLauncher.from(context, uri)
+                    .applyCustomizations()
+                    .launch()
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     override fun openBrowsingTab(context: Context, website: Website, smart: Boolean, fromNewTab: Boolean) {
-        if (!(smart && reOrderTabByUrl(context, website))) {
+        val reordered = smart && reOrderTabByUrl(context, website)
+
+        if (!reordered) {
             val canSafelyOpenCCT = CustomTabs.getCustomTabSupportingPackages(context).isNotEmpty()
             val isIncognito = preferences.incognitoMode()
 
@@ -217,38 +222,42 @@ constructor(
 
         // If this command was not issued for minimizing, then attempt aggressive loading.
         if (preferences.aggressiveLoading() && !fromMinimize) {
-            // Register listener to track opening browsing tabs.
-            application.registerActivityLifecycleCallbacks(
-                    object : ActivityLifeCycleCallbackAdapter() {
-                        override fun onActivityStopped(activity: Activity?) {
-                            // Let's inspect this activity and find if it's what we are looking for.
-                            try {
-                                activity?.let {
-                                    val activityClass = activity.javaClass.name
-                                    if (activityClass == CustomTabActivity::class.java.name
-                                            || activityClass == WebViewActivity::class.java.name) {
+            if (preferences.articleMode()) {
+                ArticleUtils.preloadArticle(context, Uri.parse(url), { })
+            } else {
+                // Register listener to track opening browsing tabs.
+                application.registerActivityLifecycleCallbacks(
+                        object : ActivityLifeCycleCallbackAdapter() {
+                            override fun onActivityStopped(activity: Activity?) {
+                                // Let's inspect this activity and find if it's what we are looking for.
+                                try {
+                                    activity?.let {
+                                        val activityClass = activity.javaClass.name
+                                        if (activityClass == CustomTabActivity::class.java.name
+                                                || activityClass == WebViewActivity::class.java.name) {
 
-                                        val activityUrl = activity.intent?.dataString
+                                            val activityUrl = activity.intent?.dataString
 
-                                        if (url == activityUrl) {
-                                            Timber.d("Found activity $activityClass.")
+                                            if (url == activityUrl) {
+                                                Timber.d("Found activity $activityClass.")
 
-                                            Handler(Looper.getMainLooper()).postDelayed({
-                                                activity.moveTaskToBack(true)
-                                                Timber.d("Moved ${activityClass + activityUrl} to back")
-                                                // Unregister this callback
-                                                application.unregisterActivityLifecycleCallbacks(this)
-                                            }, 100)
+                                                Handler(Looper.getMainLooper()).postDelayed({
+                                                    activity.moveTaskToBack(true)
+                                                    Timber.d("Moved ${activityClass + activityUrl} to back")
+                                                    // Unregister this callback
+                                                    application.unregisterActivityLifecycleCallbacks(this)
+                                                }, 100)
+                                            }
                                         }
                                     }
+                                } catch (e: Exception) {
+                                    Timber.e(e)
                                 }
-                            } catch (e: Exception) {
-                                Timber.e(e)
                             }
-                        }
-                    })
+                        })
 
-            openBrowsingTab(context, Website(url), smart = true, fromNewTab = false)
+                openBrowsingTab(context, Website(url), smart = true, fromNewTab = false)
+            }
         }
     }
 
