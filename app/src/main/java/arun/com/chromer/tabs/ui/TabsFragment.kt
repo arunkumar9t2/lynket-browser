@@ -76,6 +76,8 @@ class TabsFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        loaderSubject.onNext(0)
+        if (!isHidden) {
+            loaderSubject.onNext(0)
+        }
     }
 }
