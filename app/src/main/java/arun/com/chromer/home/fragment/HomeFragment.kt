@@ -84,7 +84,9 @@ class HomeFragment : BaseMVPFragment<HomeFragmentContract.View, HomeFragmentCont
 
     override fun onResume() {
         super.onResume()
-        invalidateState()
+        if (!isHidden) {
+            invalidateState()
+        }
     }
 
     override fun onHiddenChanged(hidden: Boolean) {

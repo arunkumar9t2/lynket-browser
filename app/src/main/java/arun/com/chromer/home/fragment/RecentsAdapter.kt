@@ -18,6 +18,7 @@
 
 package arun.com.chromer.home.fragment
 
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -60,9 +61,11 @@ constructor(val tabsManager: DefaultTabsManager) : RecyclerView.Adapter<RecentsA
     override fun getItemId(position: Int): Long = websites[position].hashCode().toLong()
 
     internal fun setWebsites(websites: List<Website>) {
+        val recentsDiff = WebsitesDiff(this.websites, websites)
+        val diffUtil = DiffUtil.calculateDiff(recentsDiff)
         this.websites.clear()
         this.websites.addAll(websites)
-        notifyDataSetChanged()
+        diffUtil.dispatchUpdatesTo(this)
     }
 
     class RecentsViewHolder(val tabsManager: DefaultTabsManager, itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -87,6 +90,28 @@ constructor(val tabsManager: DefaultTabsManager) : RecyclerView.Adapter<RecentsA
                         .load(website)
                         .into(icon!!)
             }
+        }
+    }
+
+    private inner class WebsitesDiff internal constructor(
+            private val oldList: List<Website>,
+            private val newList: List<Website>
+    ) : DiffUtil.Callback() {
+
+        override fun getOldListSize(): Int = oldList.size
+
+        override fun getNewListSize(): Int = newList.size
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return isEquals(oldItemPosition, newItemPosition)
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return isEquals(oldItemPosition, newItemPosition)
+        }
+
+        private fun isEquals(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition] == newList[newItemPosition]
         }
     }
 }

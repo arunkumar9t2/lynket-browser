@@ -51,7 +51,7 @@ constructor(val gldieRequests: GlideRequests) : RecyclerView.Adapter<TabsAdapter
         subs.add(tabsReceiver
                 // .observeOn(Schedulers.io())
                 .map {
-                    val diff = DiffUtil.calculateDiff(SuggestionDiff(tabs, it))
+                    val diff = DiffUtil.calculateDiff(TabsDiff(tabs, it))
                     tabs.clear()
                     tabs.addAll(it)
                     diff
@@ -109,21 +109,17 @@ constructor(val gldieRequests: GlideRequests) : RecyclerView.Adapter<TabsAdapter
         }
     }
 
-    private inner class SuggestionDiff internal constructor(
+    private inner class TabsDiff internal constructor(
             private val oldList: List<TabsManager.Tab>,
             private val newList: List<TabsManager.Tab>
     ) : DiffUtil.Callback() {
 
-        override fun getOldListSize(): Int {
-            return oldList.size
-        }
+        override fun getOldListSize(): Int = oldList.size
 
-        override fun getNewListSize(): Int {
-            return newList.size
-        }
+        override fun getNewListSize(): Int = newList.size
 
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return isEquals(oldItemPosition, newItemPosition)
+            return oldList[oldItemPosition].url == newList[newItemPosition].url
         }
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
