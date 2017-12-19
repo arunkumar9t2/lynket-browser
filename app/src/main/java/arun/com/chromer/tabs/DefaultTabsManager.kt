@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.browsing.tabs
+package arun.com.chromer.tabs
 
 import android.annotation.TargetApi
 import android.app.Activity
@@ -55,6 +55,7 @@ import arun.com.chromer.util.Utils
 import arun.com.chromer.webheads.WebHeadService
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
+import rx.Single
 import timber.log.Timber
 import xyz.klinker.android.article.ArticleUtils
 import javax.inject.Inject
@@ -71,11 +72,6 @@ constructor(
         val websiteRepository: DefaultWebsiteRepository,
         val rxEventBus: RxEventBus
 ) : TabsManager {
-    // Event for minimize command.
-    data class MinimizeEvent(val url: String)
-
-    // Event for closing non browsing activity.
-    class FinishRoot
 
     override fun openUrl(context: Context, website: Website, fromApp: Boolean, fromWebHeads: Boolean, fromNewTab: Boolean) {
         // Clear non browsing activities if it was external intent.
@@ -148,7 +144,7 @@ constructor(
     }
 
     override fun minimizeTabByUrl(url: String) {
-        rxEventBus.post(MinimizeEvent(url))
+        rxEventBus.post(TabsManager.MinimizeEvent(url))
         if (preferences.webHeads()) {
             // When minimizing, don't try to handle aggressive loading cases.
             openWebHeads(application, url, fromMinimize = true)
@@ -273,7 +269,7 @@ constructor(
     }
 
     override fun clearNonBrowsingActivities() {
-        rxEventBus.post(FinishRoot())
+        rxEventBus.post(TabsManager.FinishRoot())
     }
 
     /**
@@ -326,6 +322,31 @@ constructor(
                     activity.startActivity(chromerIntent)
                 }
                 .dismissListener({ activity.finish() }).show()
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    override fun getActiveTabs(): Single<List<TabsManager.Tab>> {
+        return Single.create({ onSubscribe ->
+            try {
+                val am = application.getSystemService(ACTIVITY_SERVICE) as ActivityManager
+                onSubscribe.onSuccess(am.appTasks
+                        ?.map { DocumentUtils.getTaskInfoFromTask(it) }
+                        ?.filter { it != null && it.baseIntent?.dataString != null && it.baseIntent.component != null }
+                        ?.map {
+                            val url = it.baseIntent.dataString
+                            val type = when (it.baseIntent.component.className) {
+                                CustomTabActivity::class.java.name -> CUSTOM_TAB
+                                WebViewActivity::class.java.name -> WEB_VIEW
+                                ChromerArticleActivity::class.java.name -> ARTICLE
+                                else -> OTHER
+                            }
+                            TabsManager.Tab(url, type)
+                        }?.filter { it.type != OTHER }
+                        ?.toMutableList())
+            } catch (e: Exception) {
+                onSubscribe.onError(e)
+            }
+        })
     }
 
     /**

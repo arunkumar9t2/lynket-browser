@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.browsing.tabs
+package arun.com.chromer.tabs
 
 import arun.com.chromer.ChromerRobolectricSuite
 import org.junit.Before

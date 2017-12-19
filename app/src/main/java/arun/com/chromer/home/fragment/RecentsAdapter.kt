@@ -25,9 +25,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import arun.com.chromer.R
-import arun.com.chromer.browsing.tabs.DefaultTabsManager
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.scopes.PerFragment
+import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.util.glide.GlideApp
 import butterknife.BindView
 import butterknife.ButterKnife

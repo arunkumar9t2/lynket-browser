@@ -24,11 +24,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import arun.com.chromer.R
-import arun.com.chromer.browsing.tabs.DefaultTabsManager
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.search.view.MaterialSearchView
 import arun.com.chromer.shared.base.activity.BaseActivity
+import arun.com.chromer.tabs.DefaultTabsManager
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder

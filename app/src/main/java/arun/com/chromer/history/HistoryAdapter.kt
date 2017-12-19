@@ -32,10 +32,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import arun.com.chromer.Chromer
 import arun.com.chromer.R
-import arun.com.chromer.browsing.tabs.DefaultTabsManager
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.visible
+import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.util.glide.GlideApp
 import arun.com.chromer.util.glide.GlideRequests
 import butterknife.BindView
@@ -46,7 +46,11 @@ import timber.log.Timber
 /**
  * Created by Arunkumar on 06-03-2017.
  */
-internal class HistoryAdapter(activity: Activity, private val linearLayoutManager: LinearLayoutManager) : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
+internal class HistoryAdapter(
+        activity: Activity,
+        private val linearLayoutManager: LinearLayoutManager
+) : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
+
     private val asyncWebsiteList: AsyncListUtil<Website>
     private var cursor: Cursor? = null
     private val glideRequests: GlideRequests

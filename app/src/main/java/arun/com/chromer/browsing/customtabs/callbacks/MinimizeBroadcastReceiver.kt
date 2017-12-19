@@ -22,8 +22,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import arun.com.chromer.Chromer
-import arun.com.chromer.browsing.tabs.DefaultTabsManager
 import arun.com.chromer.shared.Constants
+import arun.com.chromer.tabs.DefaultTabsManager
 import timber.log.Timber
 import javax.inject.Inject
 

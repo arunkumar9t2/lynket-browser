@@ -23,9 +23,9 @@ import android.os.Bundle
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import arun.com.chromer.R
-import arun.com.chromer.browsing.tabs.DefaultTabsManager
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.shared.base.activity.BaseActivity
+import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.util.SafeIntent
 import javax.inject.Inject
 

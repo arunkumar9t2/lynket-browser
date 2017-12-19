@@ -16,23 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.di.fragment;
+package arun.com.chromer.tabs
 
-import arun.com.chromer.di.scopes.PerFragment;
-import arun.com.chromer.history.HistoryFragment;
-import arun.com.chromer.home.fragment.HomeFragment;
-import arun.com.chromer.tabs.ui.TabsFragment;
-import dagger.Subcomponent;
+import android.support.annotation.IntDef
 
-@PerFragment
-@Subcomponent(modules = {
-        FragmentModule.class
-})
-public interface FragmentComponent {
+const val WEB_VIEW = 0L
+const val CUSTOM_TAB = 1L
+const val ARTICLE = 2L
+const val OTHER = -1L
 
-    void inject(HistoryFragment homeFragment);
-
-    void inject(HomeFragment homeFragment);
-
-    void inject(TabsFragment tabsFragment);
-}
+@IntDef(WEB_VIEW, CUSTOM_TAB, ARTICLE, OTHER)
+annotation class TabType

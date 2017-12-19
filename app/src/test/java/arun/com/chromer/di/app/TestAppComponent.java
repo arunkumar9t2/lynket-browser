@@ -22,8 +22,8 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Singleton;
 
-import arun.com.chromer.browsing.tabs.DefaultTabsManagerTest;
 import arun.com.chromer.di.data.TestDataModule;
+import arun.com.chromer.tabs.DefaultTabsManagerTest;
 import dagger.Component;
 
 @Singleton

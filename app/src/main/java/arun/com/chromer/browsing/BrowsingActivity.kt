@@ -30,11 +30,11 @@ import android.support.v7.graphics.Palette
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import arun.com.chromer.R
-import arun.com.chromer.browsing.tabs.DefaultTabsManager
 import arun.com.chromer.data.Result
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.shared.base.activity.BaseActivity
+import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.ColorUtil
 import arun.com.chromer.util.RxEventBus
 import arun.com.chromer.util.Utils
@@ -75,7 +75,7 @@ abstract class BrowsingActivity : BaseActivity() {
 
     private fun setupMinimize() {
         subs.add(rxEventBus
-                .filteredEvents(DefaultTabsManager.MinimizeEvent::class.java)
+                .filteredEvents(TabsManager.MinimizeEvent::class.java)
                 .filter { it.url.equals(intent?.dataString, ignoreCase = true) }
                 .subscribe {
                     if (Utils.ANDROID_LOLLIPOP) {

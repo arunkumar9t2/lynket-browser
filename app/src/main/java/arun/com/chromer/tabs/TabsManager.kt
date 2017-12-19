@@ -16,17 +16,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.browsing.tabs
+package arun.com.chromer.tabs
 
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import arun.com.chromer.data.website.model.Website
+import rx.Single
 
 /**
  * Helper class to manage tabs opened by Chromer. Responsible for managing Chromer's task stack.
  */
 interface TabsManager {
+    // Event for closing non browsing activity.
+    class FinishRoot
+
+    // Event for minimize command.
+    data class MinimizeEvent(val url: String)
+
+    data class Tab(val url: String, @TabType var type: Long, var website: Website? = null)
+
     /**
      * Takes a {@param website} and opens in based on user preference. Checks for web heads, amp,
      * article, reordering existing tabs etc.
@@ -77,4 +86,9 @@ interface TabsManager {
      *
      */
     fun clearNonBrowsingActivities()
+
+    /**
+     * Get active tabs serving an url.
+     */
+    fun getActiveTabs(): Single<List<Tab>>
 }

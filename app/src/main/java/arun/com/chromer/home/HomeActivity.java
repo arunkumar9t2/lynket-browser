@@ -55,7 +55,6 @@ import javax.inject.Inject;
 import arun.com.chromer.R;
 import arun.com.chromer.about.AboutAppActivity;
 import arun.com.chromer.about.changelog.Changelog;
-import arun.com.chromer.browsing.tabs.DefaultTabsManager;
 import arun.com.chromer.data.website.model.Website;
 import arun.com.chromer.di.activity.ActivityComponent;
 import arun.com.chromer.history.HistoryFragment;
@@ -67,6 +66,8 @@ import arun.com.chromer.settings.Preferences;
 import arun.com.chromer.settings.SettingsGroupActivity;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.shared.base.activity.BaseMVPActivity;
+import arun.com.chromer.tabs.DefaultTabsManager;
+import arun.com.chromer.tabs.ui.TabsFragment;
 import arun.com.chromer.util.RxEventBus;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;
@@ -98,6 +99,7 @@ public class HomeActivity extends BaseMVPActivity<HomeContract.View, HomeContrac
 
     private HistoryFragment historyFragment;
     private HomeFragment homeFragment;
+    private TabsFragment tabsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,15 +117,19 @@ public class HomeActivity extends BaseMVPActivity<HomeContract.View, HomeContrac
         if (savedInstanceState == null) {
             historyFragment = new HistoryFragment();
             homeFragment = new HomeFragment();
+            tabsFragment = new TabsFragment();
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_container, homeFragment, HomeFragment.class.getName())
                     .add(R.id.fragment_container, historyFragment, HistoryFragment.class.getName())
+                    .add(R.id.fragment_container, tabsFragment, TabsFragment.class.getName())
                     .hide(historyFragment)
+                    .hide(tabsFragment)
                     .show(homeFragment)
                     .commit();
         } else {
             historyFragment = (HistoryFragment) getSupportFragmentManager().findFragmentByTag(HistoryFragment.class.getName());
             homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+            tabsFragment = (TabsFragment) getSupportFragmentManager().findFragmentByTag(TabsFragment.class.getName());
         }
 
         bottomNavigation.setSelectedItemId(R.id.home);
@@ -132,12 +138,21 @@ public class HomeActivity extends BaseMVPActivity<HomeContract.View, HomeContrac
                 case R.id.home:
                     getSupportFragmentManager().beginTransaction()
                             .show(homeFragment)
+                            .hide(tabsFragment)
+                            .hide(historyFragment)
+                            .commit();
+                    break;
+                case R.id.tabs:
+                    getSupportFragmentManager().beginTransaction()
+                            .show(tabsFragment)
+                            .hide(homeFragment)
                             .hide(historyFragment)
                             .commit();
                     break;
                 case R.id.history:
                     getSupportFragmentManager().beginTransaction()
                             .show(historyFragment)
+                            .hide(tabsFragment)
                             .hide(homeFragment)
                             .commit();
                     break;

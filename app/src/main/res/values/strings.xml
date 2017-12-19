@@ -301,4 +301,5 @@
     <string name="text_you_copied">Text you copied</string>
     <string name="system_webview">System WebView</string>
     <string name="Change">Change</string>
+    <string name="title_tabs">Tabs</string>
 </resources>

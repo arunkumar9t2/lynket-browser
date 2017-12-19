@@ -26,6 +26,7 @@ import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import rx.subjects.BehaviorSubject
+import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
 
 /**
@@ -34,19 +35,23 @@ import javax.inject.Inject
 class BrowsingViewModel
 @Inject
 constructor(private val websiteRepository: WebsiteRepository) : ViewModel() {
-
+    private val subs = CompositeSubscription()
     private val webSiteSubject = BehaviorSubject.create<Result<Website>>(Result.Idle())
 
     fun loadWebSiteDetails(url: String): Observable<Result<Website>> {
         if (webSiteSubject.value is Result.Idle<Website>) {
-            websiteRepository.getWebsite(url)
+            subs.add(websiteRepository.getWebsite(url)
                     .map { Result.Success(it) as Result<Website> }
                     .onErrorReturn { Result.Failure(it) }
                     .startWith(Result.Loading())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(webSiteSubject)
+                    .subscribe(webSiteSubject))
         }
         return webSiteSubject
+    }
+
+    override fun onCleared() {
+        subs.clear()
     }
 }

@@ -26,7 +26,6 @@ import android.support.v7.widget.GridLayoutManager
 import android.view.View
 import arun.com.chromer.R
 import arun.com.chromer.browsing.customtabs.CustomTabs
-import arun.com.chromer.browsing.tabs.DefaultTabsManager
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.fragment.FragmentComponent
 import arun.com.chromer.extenstions.appName
@@ -37,6 +36,7 @@ import arun.com.chromer.settings.browsingoptions.BrowsingOptionsActivity
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.shared.base.Snackable
 import arun.com.chromer.shared.base.fragment.BaseMVPFragment
+import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.util.RxEventBus
 import arun.com.chromer.util.Utils
 import arun.com.chromer.util.glide.GlideApp

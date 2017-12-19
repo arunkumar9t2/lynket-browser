@@ -35,7 +35,7 @@ public class DocumentUtils {
         ActivityManager.RecentTaskInfo info = null;
         try {
             info = task.getTaskInfo();
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             Timber.d("Failed to retrieve task info: %s", e.toString());
         }
         return info;

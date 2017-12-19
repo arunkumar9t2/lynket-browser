@@ -26,8 +26,8 @@ import android.support.customtabs.CustomTabsIntent
 import arun.com.chromer.Chromer
 import arun.com.chromer.R
 import arun.com.chromer.browsing.article.ArticleLauncher
-import arun.com.chromer.browsing.tabs.DefaultTabsManager
 import arun.com.chromer.shared.Constants
+import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.util.Utils
 import timber.log.Timber
 import javax.inject.Inject

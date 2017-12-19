@@ -25,11 +25,11 @@ import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import arun.com.chromer.R
-import arun.com.chromer.browsing.tabs.DefaultTabsManager
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.shared.base.activity.BaseActivity
+import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.util.SafeIntent
 import arun.com.chromer.util.Utils
 import javax.inject.Inject
