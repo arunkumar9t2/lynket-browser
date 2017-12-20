@@ -50,8 +50,10 @@ interface TabsManager {
     /**
      * Returns true if it is determined that we already have any of our browsing activity has opened
      * this url.
+     *
+     * Optionally specify which Activity class should be brought to front
      */
-    fun reOrderTabByUrl(context: Context, website: Website): Boolean
+    fun reOrderTabByUrl(context: Context, website: Website, activityName: String? = null): Boolean
 
     /**
      * If a task exist with this url already then this method should minimize it a.k.a putting it in

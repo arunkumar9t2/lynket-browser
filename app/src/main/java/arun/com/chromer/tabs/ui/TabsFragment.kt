@@ -23,6 +23,7 @@ import android.support.v7.widget.LinearLayoutManager
 import arun.com.chromer.R
 import arun.com.chromer.di.fragment.FragmentComponent
 import arun.com.chromer.shared.base.fragment.BaseMVPFragment
+import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.glide.GlideApp
 import kotlinx.android.synthetic.main.fragment_tabs.*
@@ -35,8 +36,11 @@ import javax.inject.Inject
 class TabsFragment : BaseMVPFragment<Tabs.View, Tabs.Presenter>(), Tabs.View {
     @Inject
     lateinit var tabsPresenter: Tabs.Presenter
+    @Inject
+    lateinit var tabsManager: DefaultTabsManager
 
-    private lateinit var tabsAdapter: TabsAdapter
+    lateinit var tabsAdapter: TabsAdapter
+
     private val loaderSubject: PublishSubject<Int> = PublishSubject.create()
 
     override fun inject(fragmentComponent: FragmentComponent) {
@@ -47,8 +51,7 @@ class TabsFragment : BaseMVPFragment<Tabs.View, Tabs.Presenter>(), Tabs.View {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        tabsAdapter = TabsAdapter(GlideApp.with(this))
+        tabsAdapter = TabsAdapter(GlideApp.with(this), tabsManager)
         // Setup RecyclerView
         tabsRecyclerView.apply {
             layoutManager = LinearLayoutManager(activity)

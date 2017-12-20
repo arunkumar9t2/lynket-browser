@@ -111,7 +111,7 @@ constructor(
         openBrowsingTab(context, website, fromNewTab = fromNewTab)
     }
 
-    override fun reOrderTabByUrl(context: Context, website: Website): Boolean {
+    override fun reOrderTabByUrl(context: Context, website: Website, activityName: String?): Boolean {
         val am = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
         if (Utils.isLollipopAbove()) {
             for (task in am.appTasks) {
@@ -121,9 +121,13 @@ constructor(
                         val intent = info.baseIntent
                         val url = intent.dataString
                         val componentClassName = intent.component!!.className
-                        val taskComponentMatches = (componentClassName == CustomTabActivity::class.java.name
+
+                        val preferredActivityMatches = activityName != null && componentClassName == activityName
+                        val anyActivityMatches = (componentClassName == CustomTabActivity::class.java.name
                                 || componentClassName == ChromerArticleActivity::class.java.name
                                 || componentClassName == WebViewActivity::class.java.name)
+
+                        val taskComponentMatches = preferredActivityMatches || anyActivityMatches
 
                         val urlMatches = url != null && (url.equals(website.url, ignoreCase = true)
                                 || url.equals(website.preferredUrl(), ignoreCase = true)

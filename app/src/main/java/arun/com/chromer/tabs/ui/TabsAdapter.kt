@@ -26,7 +26,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import arun.com.chromer.R
-import arun.com.chromer.tabs.TabsManager
+import arun.com.chromer.browsing.article.ChromerArticleActivity
+import arun.com.chromer.browsing.customtabs.CustomTabActivity
+import arun.com.chromer.browsing.webview.WebViewActivity
+import arun.com.chromer.data.website.model.Website
+import arun.com.chromer.tabs.*
 import arun.com.chromer.util.glide.GlideRequests
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -37,7 +41,11 @@ import rx.subscriptions.CompositeSubscription
  * Created by arunk on 07-03-2017.
  */
 class TabsAdapter
-constructor(val glideRequests: GlideRequests) : RecyclerView.Adapter<TabsAdapter.TabsViewHolder>() {
+constructor(
+        val glideRequests: GlideRequests,
+        val tabsManager: DefaultTabsManager
+) : RecyclerView.Adapter<TabsAdapter.TabsViewHolder>() {
+
     private val tabs: ArrayList<TabsManager.Tab> = ArrayList()
     private val tabsReceiver: PublishSubject<List<TabsManager.Tab>> = PublishSubject.create()
     private val subs = CompositeSubscription()
@@ -100,6 +108,19 @@ constructor(val glideRequests: GlideRequests) : RecyclerView.Adapter<TabsAdapter
 
         init {
             ButterKnife.bind(this, itemView)
+            itemView.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    val tab = tabs[adapterPosition]
+                    val url = tab.url
+                    val preferredActivityName = when (tab.type) {
+                        WEB_VIEW -> WebViewActivity::class.java.name
+                        CUSTOM_TAB -> CustomTabActivity::class.java.name
+                        ARTICLE -> ChromerArticleActivity::class.java.name
+                        else -> null
+                    }
+                    tabsManager.reOrderTabByUrl(itemView.context, Website(url), preferredActivityName)
+                }
+            }
         }
 
         fun bind(tab: TabsManager.Tab) {
