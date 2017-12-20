@@ -19,6 +19,7 @@
 package arun.com.chromer.tabs.ui
 
 import android.os.Bundle
+import android.support.transition.TransitionManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
@@ -26,6 +27,8 @@ import android.support.v7.widget.helper.ItemTouchHelper.*
 import arun.com.chromer.R
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.fragment.FragmentComponent
+import arun.com.chromer.extenstions.gone
+import arun.com.chromer.extenstions.visible
 import arun.com.chromer.shared.base.fragment.BaseMVPFragment
 import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.tabs.TabsManager
@@ -130,5 +133,13 @@ class TabsFragment : BaseMVPFragment<Tabs.View, Tabs.Presenter>(), Tabs.View {
 
     override fun setTabs(tabs: List<TabsManager.Tab>) {
         tabsAdapter.setTabs(tabs)
+        TransitionManager.beginDelayedTransition(fragmentTabsRoot)
+        if (tabs.isEmpty()) {
+            error.visible()
+            swipe_refresh_layout.gone()
+        } else {
+            error.gone()
+            swipe_refresh_layout.visible()
+        }
     }
 }
