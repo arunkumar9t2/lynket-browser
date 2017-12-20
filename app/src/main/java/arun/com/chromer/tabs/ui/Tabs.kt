@@ -26,7 +26,6 @@ import arun.com.chromer.tabs.TabsManager
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -34,8 +33,8 @@ import javax.inject.Inject
  */
 interface Tabs {
     interface View : Base.View {
+        fun loading(loading: Boolean)
         fun setTabs(tabs: List<TabsManager.Tab>)
-        fun setTab(index: Int, tab: TabsManager.Tab)
     }
 
     @PerFragment
@@ -47,36 +46,41 @@ interface Tabs {
     ) : Base.Presenter<View>() {
 
         fun register(requester: Observable<Int>) {
-            subs.add(requester.switchMap {
-                tabsManager.getActiveTabs()
-                        .onErrorReturn { emptyList() }
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .doOnSuccess {
-                            if (isViewAttached) {
-                                view.setTabs(it)
-                                Timber.d(it.toString())
-                            }
-                        }
-                        .observeOn(Schedulers.io())
-                        .toObservable()
-                        .map { it.mapIndexed { index, tab -> Pair(index, tab) } }
-                        .flatMapIterable { it }
-                        .concatMap {
-                            val index = it.first
-                            val tab = it.second
-                            websiteRepository.getWebsite(tab.url)
-                                    .map {
-                                        tab.website = it
-                                        Pair(index, tab)
+            subs.add(requester
+                    .doOnNext { loading() }
+                    .switchMap {
+                        tabsManager.getActiveTabs()
+                                .onErrorReturn { emptyList() }
+                                .subscribeOn(Schedulers.io())
+                                .toObservable()
+                                .concatMapIterable { it }
+                                .concatMap { tab ->
+                                    websiteRepository.getWebsite(tab.url).map { website ->
+                                        tab.website = website
+                                        tab
                                     }
-                        }.observeOn(AndroidSchedulers.mainThread())
-                        .doOnNext {
-                            if (isViewAttached) {
-                                view.setTab(it.first, it.second)
-                            }
-                        }
-            }.subscribe())
+                                }.toList()
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .doOnError { stopLoading() }
+                                .doOnNext {
+                                    if (isViewAttached) {
+                                        view.loading(false)
+                                        view.setTabs(it)
+                                    }
+                                }
+                    }.subscribe())
+        }
+
+        private fun stopLoading() {
+            if (isViewAttached) {
+                view.loading(false)
+            }
+        }
+
+        private fun loading() {
+            if (isViewAttached) {
+                view.loading(true)
+            }
         }
     }
 }

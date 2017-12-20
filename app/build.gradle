@@ -131,7 +131,7 @@ dependencies {
     implementation 'com.github.paolorotolo:appintro:4.1.0'
 
     // Icons
-    implementation 'com.mikepenz:community-material-typeface:1.9.32.1@aar'
+    implementation 'com.mikepenz:community-material-typeface:2.0.46.1@aar'
 
     // Drawer
     implementation('com.mikepenz:materialdrawer:5.3.6@aar') {

@@ -20,7 +20,11 @@ package arun.com.chromer.tabs.ui
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
+import android.support.v7.widget.helper.ItemTouchHelper.*
 import arun.com.chromer.R
+import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.fragment.FragmentComponent
 import arun.com.chromer.shared.base.fragment.BaseMVPFragment
 import arun.com.chromer.tabs.DefaultTabsManager
@@ -51,21 +55,57 @@ class TabsFragment : BaseMVPFragment<Tabs.View, Tabs.Presenter>(), Tabs.View {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        tabsAdapter = TabsAdapter(GlideApp.with(this), tabsManager)
+        setupRecyclerView()
+
+        swipe_refresh_layout.apply {
+            setOnRefreshListener {
+                loadTabs()
+                isRefreshing = false
+            }
+            setColorSchemeResources(
+                    R.color.colorPrimary,
+                    R.color.colorAccent,
+                    R.color.colorPrimaryDarker)
+        }
+
+        tabsPresenter.register(loaderSubject)
+    }
+
+    private fun setupRecyclerView() {
         // Setup RecyclerView
+        tabsAdapter = TabsAdapter(GlideApp.with(this), tabsManager)
         tabsRecyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = tabsAdapter
         }
 
-        tabsPresenter.register(loaderSubject)
+        val swipeTouch = object : SimpleCallback(0, LEFT or RIGHT) {
+            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val tab = tabsAdapter.getTabAt(viewHolder.adapterPosition)
+                activity?.let {
+                    tabsManager.finishTabByUrl(activity!!, Website(tab.url), tab.getTargetActivtyName())
+                    loadTabs()
+                }
+            }
+        }
+        ItemTouchHelper(swipeTouch).apply { attachToRecyclerView(tabsRecyclerView) }
+    }
+
+    override fun loading(loading: Boolean) {
+        swipe_refresh_layout.post {
+            swipe_refresh_layout.isRefreshing = loading
+        }
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
         if (!hidden) {
             activity!!.setTitle(R.string.title_tabs)
-            loaderSubject.onNext(0)
+            loadTabs()
         }
 
     }
@@ -73,8 +113,12 @@ class TabsFragment : BaseMVPFragment<Tabs.View, Tabs.Presenter>(), Tabs.View {
     override fun onResume() {
         super.onResume()
         if (!isHidden) {
-            loaderSubject.onNext(0)
+            loadTabs()
         }
+    }
+
+    private fun loadTabs() {
+        loaderSubject.onNext(0)
     }
 
     override fun onDestroy() {
@@ -86,9 +130,5 @@ class TabsFragment : BaseMVPFragment<Tabs.View, Tabs.Presenter>(), Tabs.View {
 
     override fun setTabs(tabs: List<TabsManager.Tab>) {
         tabsAdapter.setTabs(tabs)
-    }
-
-    override fun setTab(index: Int, tab: TabsManager.Tab) {
-        tabsAdapter.setTabs(index, tab)
     }
 }

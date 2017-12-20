@@ -111,7 +111,29 @@ constructor(
         openBrowsingTab(context, website, fromNewTab = fromNewTab)
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     override fun reOrderTabByUrl(context: Context, website: Website, activityName: String?): Boolean {
+        return findTaskAndExecuteAction(context, website, activityName, { task ->
+            Timber.d("Moved tab to front $website")
+            task.moveToFront()
+        })
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    override fun finishTabByUrl(context: Context, website: Website, activityName: String?): Boolean {
+        return findTaskAndExecuteAction(context, website, activityName, { task ->
+            Timber.d("Finishing task $website")
+            task.finishAndRemoveTask()
+        })
+    }
+
+    /**
+     * Talks to activity manager and finds all active task. Then find a task that matches the input
+     * criteria which is base url and optionally and preferred activity name the url belongs to.
+     * Upon finding the task, executes {@param foundAction}
+     */
+    private fun findTaskAndExecuteAction(context: Context, website: Website, activityName: String?,
+                                         foundAction: (task: ActivityManager.AppTask) -> Unit): Boolean {
         val am = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
         if (Utils.isLollipopAbove()) {
             for (task in am.appTasks) {
@@ -122,20 +144,20 @@ constructor(
                         val url = intent.dataString
                         val componentClassName = intent.component!!.className
 
-                        val preferredActivityMatches = activityName != null && componentClassName == activityName
-                        val anyActivityMatches = (componentClassName == CustomTabActivity::class.java.name
-                                || componentClassName == ChromerArticleActivity::class.java.name
-                                || componentClassName == WebViewActivity::class.java.name)
-
-                        val taskComponentMatches = preferredActivityMatches || anyActivityMatches
-
                         val urlMatches = url != null && (url.equals(website.url, ignoreCase = true)
                                 || url.equals(website.preferredUrl(), ignoreCase = true)
                                 || url.equals(website.ampUrl, ignoreCase = true))
 
+                        val taskComponentMatches = if (activityName != null) {
+                            componentClassName == activityName
+                        } else {
+                            (componentClassName == CustomTabActivity::class.java.name
+                                    || componentClassName == ChromerArticleActivity::class.java.name
+                                    || componentClassName == WebViewActivity::class.java.name)
+                        }
+
                         if (taskComponentMatches && urlMatches) {
-                            Timber.d("Moved tab to front %s", url)
-                            task.moveToFront()
+                            foundAction.invoke(task)
                             return true
                         }
                     } catch (e: Exception) {

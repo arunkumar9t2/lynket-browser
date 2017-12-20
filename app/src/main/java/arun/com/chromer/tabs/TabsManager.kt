@@ -21,6 +21,9 @@ package arun.com.chromer.tabs
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import arun.com.chromer.browsing.article.ChromerArticleActivity
+import arun.com.chromer.browsing.customtabs.CustomTabActivity
+import arun.com.chromer.browsing.webview.WebViewActivity
 import arun.com.chromer.data.website.model.Website
 import rx.Single
 
@@ -34,7 +37,14 @@ interface TabsManager {
     // Event for minimize command.
     data class MinimizeEvent(val url: String)
 
-    data class Tab(val url: String, @TabType var type: Long, var website: Website? = null)
+    data class Tab(val url: String, @TabType var type: Long, var website: Website? = null) {
+        fun getTargetActivtyName(): String = when (type) {
+            WEB_VIEW -> WebViewActivity::class.java.name
+            CUSTOM_TAB -> CustomTabActivity::class.java.name
+            ARTICLE -> ChromerArticleActivity::class.java.name
+            else -> CustomTabActivity::class.java.name
+        }
+    }
 
     /**
      * Takes a {@param website} and opens in based on user preference. Checks for web heads, amp,
@@ -54,6 +64,11 @@ interface TabsManager {
      * Optionally specify which Activity class should be brought to front
      */
     fun reOrderTabByUrl(context: Context, website: Website, activityName: String? = null): Boolean
+
+    /**
+     * Same as {@link reOrderTabByUrl} but instead of reordering, finishes and removes the task.
+     */
+    fun finishTabByUrl(context: Context, website: Website, activityName: String? = null): Boolean
 
     /**
      * If a task exist with this url already then this method should minimize it a.k.a putting it in

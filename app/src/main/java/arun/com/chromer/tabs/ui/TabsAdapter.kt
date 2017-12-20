@@ -18,6 +18,7 @@
 
 package arun.com.chromer.tabs.ui
 
+import android.support.v4.content.ContextCompat
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -26,14 +27,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import arun.com.chromer.R
-import arun.com.chromer.browsing.article.ChromerArticleActivity
-import arun.com.chromer.browsing.customtabs.CustomTabActivity
-import arun.com.chromer.browsing.webview.WebViewActivity
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.tabs.*
 import arun.com.chromer.util.glide.GlideRequests
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.mikepenz.iconics.IconicsDrawable
 import rx.subjects.PublishSubject
 import rx.subscriptions.CompositeSubscription
 
@@ -98,13 +98,24 @@ constructor(
         notifyItemChanged(index)
     }
 
+    fun getTabAt(adapterPosition: Int): TabsManager.Tab = tabs[adapterPosition]
+
     inner class TabsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         @BindView(R.id.icon)
         @JvmField
         var icon: ImageView? = null
-        @BindView(R.id.label)
+        @BindView(R.id.websiteTitle)
         @JvmField
-        var label: TextView? = null
+        var websiteTitle: TextView? = null
+        @BindView(R.id.websiteTabMode)
+        @JvmField
+        var websiteTabMode: TextView? = null
+        @BindView(R.id.websiteTabModeIcon)
+        @JvmField
+        var websiteTabModeIcon: ImageView? = null
+        @BindView(R.id.websiteUrl)
+        @JvmField
+        var websiteUrl: TextView? = null
 
         init {
             ButterKnife.bind(this, itemView)
@@ -112,23 +123,42 @@ constructor(
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     val tab = tabs[adapterPosition]
                     val url = tab.url
-                    val preferredActivityName = when (tab.type) {
-                        WEB_VIEW -> WebViewActivity::class.java.name
-                        CUSTOM_TAB -> CustomTabActivity::class.java.name
-                        ARTICLE -> ChromerArticleActivity::class.java.name
-                        else -> null
-                    }
-                    tabsManager.reOrderTabByUrl(itemView.context, Website(url), preferredActivityName)
+                    tabsManager.reOrderTabByUrl(itemView.context, Website(url), tab.getTargetActivtyName())
                 }
             }
         }
 
         fun bind(tab: TabsManager.Tab) {
             if (tab.website != null) {
-                label?.text = tab.website?.safeLabel()
+                websiteTitle?.text = tab.website?.safeLabel()
                 glideRequests.load(tab.website).into(icon)
+                websiteUrl?.text = tab.website?.url
+
+                when (tab.type) {
+                    WEB_VIEW -> {
+                        websiteTabMode?.setText(R.string.web_view)
+                        websiteTabModeIcon?.setImageDrawable(IconicsDrawable(itemView.context)
+                                .icon(CommunityMaterial.Icon.cmd_web)
+                                .color(ContextCompat.getColor(itemView.context, R.color.md_blue_500))
+                                .sizeDp(18))
+                    }
+                    CUSTOM_TAB -> {
+                        websiteTabMode?.setText(R.string.custom_tab)
+                        websiteTabModeIcon?.setImageDrawable(IconicsDrawable(itemView.context)
+                                .icon(CommunityMaterial.Icon.cmd_google_chrome)
+                                .color(ContextCompat.getColor(itemView.context, R.color.md_orange_500))
+                                .sizeDp(18))
+                    }
+                    ARTICLE -> {
+                        websiteTabMode?.setText(R.string.article_mode)
+                        websiteTabModeIcon?.setImageDrawable(IconicsDrawable(itemView.context)
+                                .icon(CommunityMaterial.Icon.cmd_file_image)
+                                .color(ContextCompat.getColor(itemView.context, R.color.md_grey_700))
+                                .sizeDp(18))
+                    }
+                }
             } else {
-                label?.text = tab.url
+                //  websiteTitle?.text = tab.url
             }
         }
     }
@@ -154,5 +184,4 @@ constructor(
             return oldList[oldItemPosition] == newList[newItemPosition]
         }
     }
-
 }

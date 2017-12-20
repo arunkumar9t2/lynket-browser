@@ -302,4 +302,6 @@
     <string name="system_webview">System WebView</string>
     <string name="Change">Change</string>
     <string name="title_tabs">Tabs</string>
+    <string name="web_view">Web View</string>
+    <string name="custom_tab">Custom Tab</string>
 </resources>
