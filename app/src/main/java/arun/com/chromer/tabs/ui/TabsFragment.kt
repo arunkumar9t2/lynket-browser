@@ -18,13 +18,12 @@
 
 package arun.com.chromer.tabs.ui
 
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import arun.com.chromer.R
 import arun.com.chromer.di.fragment.FragmentComponent
-import arun.com.chromer.shared.base.fragment.BaseFragment
+import arun.com.chromer.shared.base.fragment.BaseMVPFragment
+import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.glide.GlideApp
 import kotlinx.android.synthetic.main.fragment_tabs.*
 import rx.subjects.PublishSubject
@@ -33,16 +32,11 @@ import javax.inject.Inject
 /**
  * Created by arunk on 20-12-2017.
  */
-class TabsFragment : BaseFragment() {
+class TabsFragment : BaseMVPFragment<Tabs.View, Tabs.Presenter>(), Tabs.View {
     @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+    lateinit var tabsPresenter: Tabs.Presenter
 
-    var tabsViewModel: TabsViewModel? = null
     private lateinit var tabsAdapter: TabsAdapter
-
-    /**
-     * Loader subject to request updates form ViewModel.
-     */
     private val loaderSubject: PublishSubject<Int> = PublishSubject.create()
 
     override fun inject(fragmentComponent: FragmentComponent) {
@@ -53,15 +47,15 @@ class TabsFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        tabsViewModel = ViewModelProviders.of(this, viewModelFactory).get(TabsViewModel::class.java)
 
         tabsAdapter = TabsAdapter(GlideApp.with(this))
         // Setup RecyclerView
         tabsRecyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = tabsAdapter
-            tabsViewModel!!.loadTabs(loaderSubject).subscribe { tabsAdapter.setTabs(it) }
         }
+
+        tabsPresenter.register(loaderSubject)
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
@@ -73,11 +67,25 @@ class TabsFragment : BaseFragment() {
 
     }
 
-
     override fun onResume() {
         super.onResume()
         if (!isHidden) {
             loaderSubject.onNext(0)
         }
+    }
+
+    override fun onDestroy() {
+        tabsAdapter.cleanUp()
+        super.onDestroy()
+    }
+
+    override fun createPresenter(): Tabs.Presenter = tabsPresenter
+
+    override fun setTabs(tabs: List<TabsManager.Tab>) {
+        tabsAdapter.setTabs(tabs)
+    }
+
+    override fun setTab(index: Int, tab: TabsManager.Tab) {
+        tabsAdapter.setTabs(index, tab)
     }
 }

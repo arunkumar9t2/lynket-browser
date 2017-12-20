@@ -37,13 +37,12 @@ import rx.subscriptions.CompositeSubscription
  * Created by arunk on 07-03-2017.
  */
 class TabsAdapter
-constructor(val gldieRequests: GlideRequests) : RecyclerView.Adapter<TabsAdapter.TabsViewHolder>() {
+constructor(val glideRequests: GlideRequests) : RecyclerView.Adapter<TabsAdapter.TabsViewHolder>() {
     private val tabs: ArrayList<TabsManager.Tab> = ArrayList()
     private val tabsReceiver: PublishSubject<List<TabsManager.Tab>> = PublishSubject.create()
     private val subs = CompositeSubscription()
 
     init {
-        setHasStableIds(true)
         setupReceiver()
     }
 
@@ -75,7 +74,7 @@ constructor(val gldieRequests: GlideRequests) : RecyclerView.Adapter<TabsAdapter
 
     override fun onViewRecycled(holder: TabsViewHolder?) {
         super.onViewRecycled(holder)
-        gldieRequests.clear(holder?.icon)
+        glideRequests.clear(holder?.icon)
     }
 
     fun cleanUp() {
@@ -86,6 +85,10 @@ constructor(val gldieRequests: GlideRequests) : RecyclerView.Adapter<TabsAdapter
         tabsReceiver.onNext(tabs)
     }
 
+    fun setTabs(index: Int, tab: TabsManager.Tab) {
+        tabs[index] = tab
+        notifyItemChanged(index)
+    }
 
     inner class TabsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         @BindView(R.id.icon)
@@ -102,9 +105,9 @@ constructor(val gldieRequests: GlideRequests) : RecyclerView.Adapter<TabsAdapter
         fun bind(tab: TabsManager.Tab) {
             if (tab.website != null) {
                 label?.text = tab.website?.safeLabel()
-                gldieRequests.load(tab.website).into(icon)
+                glideRequests.load(tab.website).into(icon)
             } else {
-                // label?.text = tab.url
+                label?.text = tab.url
             }
         }
     }
@@ -130,4 +133,5 @@ constructor(val gldieRequests: GlideRequests) : RecyclerView.Adapter<TabsAdapter
             return oldList[oldItemPosition] == newList[newItemPosition]
         }
     }
+
 }

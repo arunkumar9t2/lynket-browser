@@ -22,7 +22,6 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
 import arun.com.chromer.browsing.BrowsingViewModel;
-import arun.com.chromer.tabs.ui.TabsViewModel;
 import arun.com.chromer.util.viemodel.ViewModelFactory;
 import dagger.Binds;
 import dagger.Module;
@@ -34,11 +33,6 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(BrowsingViewModel.class)
     abstract ViewModel bindBrowsingViewModel(BrowsingViewModel browsingViewModel);
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(TabsViewModel.class)
-    abstract ViewModel bindTabsViewModel(TabsViewModel tabsViewModel);
 
     @Binds
     abstract ViewModelProvider.Factory bindViewModelFactory(ViewModelFactory factory);
