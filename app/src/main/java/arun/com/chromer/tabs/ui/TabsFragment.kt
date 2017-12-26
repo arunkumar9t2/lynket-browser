@@ -18,6 +18,9 @@
 
 package arun.com.chromer.tabs.ui
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.transition.TransitionManager
 import android.support.v7.widget.LinearLayoutManager
@@ -29,7 +32,7 @@ import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.fragment.FragmentComponent
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.visible
-import arun.com.chromer.shared.base.fragment.BaseMVPFragment
+import arun.com.chromer.shared.base.fragment.BaseFragment
 import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.glide.GlideApp
@@ -40,15 +43,17 @@ import javax.inject.Inject
 /**
  * Created by arunk on 20-12-2017.
  */
-class TabsFragment : BaseMVPFragment<Tabs.View, Tabs.Presenter>(), Tabs.View {
-    @Inject
-    lateinit var tabsPresenter: Tabs.Presenter
+class TabsFragment : BaseFragment() {
     @Inject
     lateinit var tabsManager: DefaultTabsManager
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    lateinit var tabsAdapter: TabsAdapter
+    private var tabsViewModel: TabsViewModel? = null
 
     private val loaderSubject: PublishSubject<Int> = PublishSubject.create()
+
+    lateinit var tabsAdapter: TabsAdapter
 
     override fun inject(fragmentComponent: FragmentComponent) {
         fragmentComponent.inject(this)
@@ -58,9 +63,10 @@ class TabsFragment : BaseMVPFragment<Tabs.View, Tabs.Presenter>(), Tabs.View {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        setupRecyclerView()
+        tabsViewModel = ViewModelProviders.of(this, viewModelFactory).get(TabsViewModel::class.java)
 
-        swipe_refresh_layout.apply {
+        setupRecyclerView()
+        with(swipe_refresh_layout) {
             setOnRefreshListener {
                 loadTabs()
                 isRefreshing = false
@@ -71,7 +77,19 @@ class TabsFragment : BaseMVPFragment<Tabs.View, Tabs.Presenter>(), Tabs.View {
                     R.color.colorPrimaryDarker)
         }
 
-        tabsPresenter.register(loaderSubject)
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        subs.add(tabsViewModel?.activeTabs(loaderSubject)?.subscribe())
+        tabsViewModel?.loadingLiveData
+                ?.observe(this, Observer<Boolean> { loading ->
+                    loading(loading!!)
+                })
+        tabsViewModel?.tabsData
+                ?.observe(this, Observer<MutableList<TabsManager.Tab>> {
+                    setTabs(it!!)
+                })
     }
 
     private fun setupRecyclerView() {
@@ -98,7 +116,19 @@ class TabsFragment : BaseMVPFragment<Tabs.View, Tabs.Presenter>(), Tabs.View {
         ItemTouchHelper(swipeTouch).apply { attachToRecyclerView(tabsRecyclerView) }
     }
 
-    override fun loading(loading: Boolean) {
+    private fun setTabs(tabs: List<TabsManager.Tab>) {
+        tabsAdapter.setTabs(tabs)
+        TransitionManager.beginDelayedTransition(fragmentTabsRoot)
+        if (tabs.isEmpty()) {
+            error.visible()
+            swipe_refresh_layout.gone()
+        } else {
+            error.gone()
+            swipe_refresh_layout.visible()
+        }
+    }
+
+    fun loading(loading: Boolean) {
         swipe_refresh_layout.post {
             swipe_refresh_layout.isRefreshing = loading
         }
@@ -127,19 +157,5 @@ class TabsFragment : BaseMVPFragment<Tabs.View, Tabs.Presenter>(), Tabs.View {
     override fun onDestroy() {
         tabsAdapter.cleanUp()
         super.onDestroy()
-    }
-
-    override fun createPresenter(): Tabs.Presenter = tabsPresenter
-
-    override fun setTabs(tabs: List<TabsManager.Tab>) {
-        tabsAdapter.setTabs(tabs)
-        TransitionManager.beginDelayedTransition(fragmentTabsRoot)
-        if (tabs.isEmpty()) {
-            error.visible()
-            swipe_refresh_layout.gone()
-        } else {
-            error.gone()
-            swipe_refresh_layout.visible()
-        }
     }
 }

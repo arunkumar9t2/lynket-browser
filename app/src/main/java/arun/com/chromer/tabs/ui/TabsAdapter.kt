@@ -93,11 +93,6 @@ constructor(
         tabsReceiver.onNext(tabs)
     }
 
-    fun setTabs(index: Int, tab: TabsManager.Tab) {
-        tabs[index] = tab
-        notifyItemChanged(index)
-    }
-
     fun getTabAt(adapterPosition: Int): TabsManager.Tab = tabs[adapterPosition]
 
     inner class TabsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -173,7 +168,7 @@ constructor(
         override fun getNewListSize(): Int = newList.size
 
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldList[oldItemPosition].url == newList[newItemPosition].url
+            return isEquals(oldItemPosition, newItemPosition)
         }
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
