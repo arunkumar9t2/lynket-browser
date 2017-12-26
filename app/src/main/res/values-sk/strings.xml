@@ -212,7 +212,7 @@
     <string name="choose_share_method">Zvoľte metódu zdieľania</string>
     <string name="comma_seperated">Oddelené čiarkou</string>
     <string name="share_all_list">Zoznam - Obmedzená podpora aplikácie. Napr. Join, Pushbullet, atď.</string>
-    <string name="new_tab">Otvoriť novú kartu</string>
+    <string name="open_new_tab">Otvoriť novú kartu</string>
     <string name="title_activity_open_with">Otvoriť s</string>
     <string name="title_activity_settings">Nastavenia</string>
     <string name="settings_browsing_mode">Režim prehiadania</string>

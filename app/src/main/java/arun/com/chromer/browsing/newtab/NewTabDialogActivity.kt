@@ -81,7 +81,7 @@ class NewTabDialogActivity : BaseActivity() {
 
         fun show(): NewTabDialog? {
             dialog = MaterialDialog.Builder(activity!!)
-                    .title(R.string.new_tab)
+                    .title(R.string.open_new_tab)
                     .backgroundColorRes(R.color.card_background_light)
                     .customView(R.layout.activity_new_tab, false)
                     .dismissListener(this)

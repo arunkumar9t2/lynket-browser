@@ -493,6 +493,11 @@ public class CustomTabs {
 
     private void prepareChromerOptions() {
         final Intent moreMenuActivity = new Intent(activity, ChromerOptionsActivity.class);
+        moreMenuActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        moreMenuActivity.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            moreMenuActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+        }
         moreMenuActivity.putExtra(EXTRA_KEY_ORIGINAL_URL, url);
         final PendingIntent moreMenuPending = PendingIntent.getActivity(activity, 0, moreMenuActivity, FLAG_UPDATE_CURRENT);
         builder.addMenuItem(activity.getString(R.string.chromer_options), moreMenuPending);

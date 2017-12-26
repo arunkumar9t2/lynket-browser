@@ -158,7 +158,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
                 .setPriority(PRIORITY_MIN)
                 .setContentText(getString(R.string.tap_close_all))
                 .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
-                .addAction(R.drawable.ic_add, getText(R.string.new_tab), newTab)
+                .addAction(R.drawable.ic_add, getText(R.string.open_new_tab), newTab)
                 .addAction(R.drawable.ic_list, getText(R.string.manage), contextActivity)
                 .setContentTitle(getString(R.string.web_heads_service))
                 .setContentIntent(contentIntent)

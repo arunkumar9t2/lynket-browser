@@ -58,7 +58,7 @@
             android:ellipsize="end"
             android:gravity="center"
             android:singleLine="true"
-            android:text="@string/new_tab"
+            android:text="@string/new_tab_text"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -164,7 +164,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_weight="1"
-        android:contentDescription="@string/article_mode"
+        android:contentDescription="@string/article"
         android:foreground="?android:attr/selectableItemBackground"
         android:orientation="vertical">
 
@@ -173,7 +173,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center"
-            android:contentDescription="@string/article_mode"
+            android:contentDescription="@string/article"
             android:gravity="center"
             android:padding="4dp"
             android:scaleType="fitCenter" />
@@ -186,7 +186,7 @@
             android:ellipsize="end"
             android:gravity="center"
             android:singleLine="true"
-            android:text="@string/article_mode"
+            android:text="@string/article"
             android:textSize="12sp" />
     </LinearLayout>
 </LinearLayout>

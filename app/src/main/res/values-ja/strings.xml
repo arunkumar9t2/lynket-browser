@@ -214,7 +214,7 @@ https://goo.gl/992ils</string>
     <string name="choose_share_method">共有方法を選択</string>
     <string name="comma_seperated">カンマ区切り</string>
     <string name="share_all_list">リスト - 一部のアプリのみサポートしています。例: Join, Pushbullet など</string>
-    <string name="new_tab">新しいタブを開く</string>
+    <string name="open_new_tab">新しいタブを開く</string>
     <string name="title_activity_open_with">別のアプリで開く</string>
     <string name="title_activity_settings">設定</string>
     <string name="settings_browsing_mode">ブラウジングモード</string>

@@ -21,8 +21,8 @@
         android:enabled="true"
         android:icon="@drawable/ic_shortcut_add"
         android:shortcutId="new_tab"
-        android:shortcutLongLabel="@string/new_tab"
-        android:shortcutShortLabel="@string/new_tab">
+        android:shortcutLongLabel="@string/open_new_tab"
+        android:shortcutShortLabel="@string/open_new_tab">
         <intent
             android:action="android.intent.action.VIEW"
             android:targetClass="arun.com.chromer.browsing.newtab.NewTabDialogActivity"

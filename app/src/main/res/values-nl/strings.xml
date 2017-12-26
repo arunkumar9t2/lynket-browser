@@ -215,7 +215,7 @@
     <string name="choose_share_method">Deel-methode kiezen</string>
     <string name="comma_seperated">Kommagescheiden</string>
     <string name="share_all_list">Lijst - Beperkte app-ondersteuning, bijv. Join, Pushbullet, enz.</string>
-    <string name="new_tab">Nieuw tabblad openen</string>
+    <string name="open_new_tab">Nieuw tabblad openen</string>
     <string name="title_activity_open_with">Openen met</string>
     <string name="title_activity_settings">Instellingen</string>
     <string name="settings_browsing_mode">Browsing</string>

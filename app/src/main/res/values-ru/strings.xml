@@ -231,7 +231,7 @@
     <string name="choose_share_method">Выбор способа Поделиться</string>
     <string name="comma_seperated">Разделенные запятой</string>
     <string name="share_all_list">Список - Ограниченная поддержка приложений. Например: Join, Pushbullet и т.д.</string>
-    <string name="new_tab">Открыть новую вкладку</string>
+    <string name="open_new_tab">Открыть новую вкладку</string>
     <string name="title_activity_open_with">Открыть через</string>
     <string name="title_activity_settings">Настройки</string>
     <string name="settings_browsing_mode">Режим просмотра</string>

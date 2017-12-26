@@ -212,7 +212,7 @@
     <string name="choose_share_method">選取分享方式</string>
     <string name="comma_seperated">以逗號分隔</string>
     <string name="share_all_list">清單 - 有限度的程式支援 Eg: Join by joaoapps, Pushbullet 等等.</string>
-    <string name="new_tab">開啟新分頁</string>
+    <string name="open_new_tab">開啟新分頁</string>
     <string name="title_activity_open_with">打開方法</string>
     <string name="title_activity_settings">設定</string>
     <string name="settings_browsing_mode">瀏覽模式</string>
