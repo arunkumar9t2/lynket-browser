@@ -55,7 +55,7 @@ interface TabsManager {
     /**
      * Opens the given Uri in a browsing tab.
      */
-    fun openBrowsingTab(context: Context, website: Website, smart: Boolean = false, fromNewTab: Boolean)
+    fun openBrowsingTab(context: Context, website: Website, smart: Boolean = false, fromNewTab: Boolean, activityName: String? = null)
 
     /**
      * Returns true if it is determined that we already have any of our browsing activity has opened

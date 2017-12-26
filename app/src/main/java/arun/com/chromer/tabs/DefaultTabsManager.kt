@@ -204,8 +204,8 @@ constructor(
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    override fun openBrowsingTab(context: Context, website: Website, smart: Boolean, fromNewTab: Boolean) {
-        val reordered = smart && reOrderTabByUrl(context, website)
+    override fun openBrowsingTab(context: Context, website: Website, smart: Boolean, fromNewTab: Boolean, activityName: String?) {
+        val reordered = smart && reOrderTabByUrl(context, website, activityName)
 
         if (!reordered) {
             val canSafelyOpenCCT = CustomTabs.getCustomTabSupportingPackages(context).isNotEmpty()
