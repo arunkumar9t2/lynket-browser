@@ -44,6 +44,7 @@ public class BottomBarManager {
     private static IconicsDrawable newTabDrawable;
     private static IconicsDrawable minimizeDrawable;
     private static IconicsDrawable articleDrawable;
+    private static IconicsDrawable tabsDrawable;
 
     @NonNull
     public static RemoteViews createBottomBarRemoteViews(@NonNull final Context context, final int toolbarColor) {
@@ -54,6 +55,7 @@ public class BottomBarManager {
 
         if (!Utils.ANDROID_LOLLIPOP) {
             remoteViews.setViewVisibility(R.id.bottom_bar_minimize_tab, View.GONE);
+            remoteViews.setViewVisibility(R.id.bottom_bar_tabs, View.GONE);
         }
 
         if (shareImageDrawable == null) {
@@ -78,15 +80,25 @@ public class BottomBarManager {
                     .sizeDp(24);
         }
 
+        if (tabsDrawable == null) {
+            tabsDrawable = new IconicsDrawable(context)
+                    .icon(CommunityMaterial.Icon.cmd_view_agenda)
+                    .sizeDp(24);
+        }
+
+
         final Bitmap shareImage = shareImageDrawable.color(iconColor).toBitmap();
         final Bitmap openInNewTabImage = newTabDrawable.color(iconColor).toBitmap();
         final Bitmap minimize = minimizeDrawable.color(iconColor).toBitmap();
         final Bitmap article = articleDrawable.color(iconColor).toBitmap();
+        final Bitmap tab = tabsDrawable.color(iconColor).toBitmap();
 
         remoteViews.setBitmap(R.id.bottom_bar_open_in_new_tab_img, "setImageBitmap", openInNewTabImage);
         remoteViews.setTextColor(R.id.bottom_bar_open_in_new_tab_text, iconColor);
         remoteViews.setBitmap(R.id.bottom_bar_share_img, "setImageBitmap", shareImage);
         remoteViews.setTextColor(R.id.bottom_bar_share_text, iconColor);
+        remoteViews.setBitmap(R.id.bottom_bar_tabs_img, "setImageBitmap", tab);
+        remoteViews.setTextColor(R.id.bottom_bar_tabs_text, iconColor);
         remoteViews.setBitmap(R.id.bottom_bar_minimize_img, "setImageBitmap", minimize);
         remoteViews.setTextColor(R.id.bottom_bar_minimize_text, iconColor);
         remoteViews.setBitmap(R.id.bottom_bar_article_view_img, "setImageBitmap", article);
@@ -99,6 +111,7 @@ public class BottomBarManager {
         return new int[]{
                 R.id.bottom_bar_open_in_new_tab,
                 R.id.bottom_bar_share,
+                R.id.bottom_bar_tabs,
                 R.id.bottom_bar_minimize_tab,
                 R.id.bottom_bar_article_view};
     }

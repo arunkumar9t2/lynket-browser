@@ -33,7 +33,6 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class BottomBarReceiver : BroadcastReceiver() {
-
     @Inject
     lateinit var tabsManager: DefaultTabsManager
 
@@ -51,6 +50,7 @@ class BottomBarReceiver : BroadcastReceiver() {
         when (clickedId) {
             R.id.bottom_bar_open_in_new_tab -> OpenInNewTab(context, url).perform()
             R.id.bottom_bar_share -> ShareUrl(context, url).perform()
+            R.id.bottom_bar_tabs -> TabsScreen(context, url).perform()
             R.id.bottom_bar_minimize_tab -> orgUrl?.let { MinimizeUrl(context, orgUrl).perform() }
             R.id.bottom_bar_article_view -> orgUrl?.let { ArticleView(context, orgUrl).perform() }
         }
@@ -108,6 +108,13 @@ class BottomBarReceiver : BroadcastReceiver() {
 
         override fun onPerform() {
             tabsManager.minimizeTabByUrl(url)
+        }
+    }
+
+    inner class TabsScreen internal constructor(context: Context, orgUrl: String) : Command(context, orgUrl) {
+
+        override fun onPerform() {
+            tabsManager.showTabsActivity()
         }
     }
 }

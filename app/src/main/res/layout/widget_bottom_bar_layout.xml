@@ -28,7 +28,7 @@
     android:paddingLeft="8dp"
     android:paddingRight="8dp"
     android:paddingTop="4dp"
-    android:weightSum="4">
+    android:weightSum="5">
 
     <LinearLayout
         android:id="@+id/bottom_bar_open_in_new_tab"
@@ -91,6 +91,38 @@
             android:gravity="center"
             android:singleLine="true"
             android:text="@string/share"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottom_bar_tabs"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:contentDescription="@string/minimize"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/bottom_bar_tabs_img"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:contentDescription="@string/title_tabs"
+            android:gravity="center"
+            android:padding="4dp"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:id="@+id/bottom_bar_tabs_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="@string/title_tabs"
             android:textSize="12sp" />
     </LinearLayout>
 

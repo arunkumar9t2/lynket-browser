@@ -108,4 +108,9 @@ interface TabsManager {
      * Get active tabs serving an url.
      */
     fun getActiveTabs(): Single<List<Tab>>
+
+    /**
+     * Show tabs activity
+     */
+    fun showTabsActivity()
 }

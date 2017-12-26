@@ -258,6 +258,14 @@
             android:label="@string/title_history"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".tabs.ui.TabsActivity"
+            android:documentLaunchMode="intoExisting"
+            android:exported="true"
+            android:icon="@mipmap/ic_tabs_launcher_icon"
+            android:label="@string/title_tabs"
+            android:launchMode="singleInstance"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name="arun.com.chromer.browsing.webview.WebViewActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 

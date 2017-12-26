@@ -48,6 +48,7 @@ import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.extenstions.isPackageInstalled
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.shared.Constants
+import arun.com.chromer.tabs.ui.TabsActivity
 import arun.com.chromer.util.DocumentUtils
 import arun.com.chromer.util.RxEventBus
 import arun.com.chromer.util.SafeIntent
@@ -72,7 +73,6 @@ constructor(
         val websiteRepository: DefaultWebsiteRepository,
         val rxEventBus: RxEventBus
 ) : TabsManager {
-
     override fun openUrl(context: Context, website: Website, fromApp: Boolean, fromWebHeads: Boolean, fromNewTab: Boolean) {
         // Clear non browsing activities if it was external intent.
         if (!fromApp) {
@@ -297,6 +297,13 @@ constructor(
     override fun clearNonBrowsingActivities() {
         rxEventBus.post(TabsManager.FinishRoot())
     }
+
+    override fun showTabsActivity() {
+        application.startActivity(Intent(application, TabsActivity::class.java).apply {
+            addFlags(FLAG_ACTIVITY_NEW_TASK)
+        })
+    }
+
 
     /**
      * Performs the blacklist action which is opening the given url in user's secondary browser.
