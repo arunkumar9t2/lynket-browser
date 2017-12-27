@@ -52,7 +52,7 @@ class BottomBarReceiver : BroadcastReceiver() {
             R.id.bottom_bar_share -> ShareUrl(context, url).perform()
             R.id.bottom_bar_tabs -> TabsScreen(context, url).perform()
             R.id.bottom_bar_minimize_tab -> orgUrl?.let { MinimizeUrl(context, orgUrl).perform() }
-            R.id.bottom_bar_article_view -> orgUrl?.let { ArticleView(context, orgUrl).perform() }
+            R.id.bottom_bar_article_view -> orgUrl?.let { ArticleView(context, url).perform() }
         }
     }
 
@@ -73,7 +73,7 @@ class BottomBarReceiver : BroadcastReceiver() {
         protected abstract fun onPerform()
     }
 
-    inner class ArticleView internal constructor(context: Context, orgUrl: String) : Command(context, orgUrl) {
+    inner class ArticleView internal constructor(context: Context, url: String) : Command(context, url) {
 
         override fun onPerform() {
             if (!performCalled) {
