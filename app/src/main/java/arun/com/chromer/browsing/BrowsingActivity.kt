@@ -19,6 +19,7 @@
 package arun.com.chromer.browsing
 
 import android.annotation.SuppressLint
+import android.annotation.TargetApi
 import android.app.ActivityManager
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
@@ -84,12 +85,14 @@ abstract class BrowsingActivity : BaseActivity() {
                 })
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private fun loadWebsiteMetadata() {
         val web = intent.getParcelableExtra<Website>(Constants.EXTRA_KEY_WEBSITE)
         web?.let {
             website = it
-            setTaskDescriptionFromWebsite(it)
+            if (Utils.ANDROID_LOLLIPOP) {
+                setTaskDescriptionFromWebsite(it)
+            }
         }
         browsingViewModel.loadWebSiteDetails(intent.dataString)
                 .filter { it is Result.Success && it.data != null }
@@ -108,11 +111,10 @@ abstract class BrowsingActivity : BaseActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun setTaskDescriptionFromWebsite(it: Website): Pair<String, Int> {
-        val title = it.safeLabel()
-        val themeColor = if (it.themeColor() == Constants.NO_COLOR)
-            ContextCompat.getColor(this, R.color.colorPrimary)
-        else it.themeColor()
+    private fun setTaskDescriptionFromWebsite(website: Website): Pair<String, Int> {
+        val title = website.safeLabel()
+        val themeColor = if (website.themeColor() == Constants.NO_COLOR) ContextCompat.getColor(this, R.color.colorPrimary)
+        else website.themeColor()
         // Set data without icon.
         setTaskDescription(ActivityManager.TaskDescription(title, null, themeColor))
         return Pair(title, themeColor)

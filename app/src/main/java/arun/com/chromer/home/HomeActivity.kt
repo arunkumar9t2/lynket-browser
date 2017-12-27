@@ -91,7 +91,9 @@ class HomeActivity : BaseMVPActivity<HomeContract.View, HomeContract.Presenter>(
             supportFragmentManager.beginTransaction().apply {
                 add(R.id.fragment_container, homeFragment, HomeFragment::class.java.name)
                 add(R.id.fragment_container, historyFragment, HistoryFragment::class.java.name)
-                add(R.id.fragment_container, tabsFragment, TabsFragment::class.java.name)
+                if (Utils.ANDROID_LOLLIPOP) {
+                    add(R.id.fragment_container, tabsFragment, TabsFragment::class.java.name)
+                }
                 hide(historyFragment)
                 hide(tabsFragment)
                 show(homeFragment)
@@ -99,7 +101,9 @@ class HomeActivity : BaseMVPActivity<HomeContract.View, HomeContract.Presenter>(
         } else {
             historyFragment = supportFragmentManager.findFragmentByTag(HistoryFragment::class.java.name) as HistoryFragment
             homeFragment = supportFragmentManager.findFragmentByTag(HomeFragment::class.java.name) as HomeFragment
-            tabsFragment = supportFragmentManager.findFragmentByTag(TabsFragment::class.java.name) as TabsFragment
+            if (Utils.ANDROID_LOLLIPOP) {
+                tabsFragment = supportFragmentManager.findFragmentByTag(TabsFragment::class.java.name) as TabsFragment
+            }
         }
 
         with(bottom_navigation) {
@@ -109,23 +113,32 @@ class HomeActivity : BaseMVPActivity<HomeContract.View, HomeContract.Presenter>(
                     R.id.home -> supportFragmentManager.beginTransaction()
                             .apply {
                                 show(homeFragment)
-                                hide(tabsFragment)
+                                if (Utils.ANDROID_LOLLIPOP) {
+                                    hide(tabsFragment)
+                                }
                                 hide(historyFragment)
                             }.commit()
                     R.id.tabs -> supportFragmentManager.beginTransaction()
                             .apply {
-                                show(tabsFragment)
+                                if (Utils.ANDROID_LOLLIPOP) {
+                                    show(tabsFragment)
+                                }
                                 hide(homeFragment)
                                 hide(historyFragment)
                             }.commit()
                     R.id.history -> supportFragmentManager.beginTransaction()
                             .apply {
                                 show(historyFragment)
-                                hide(tabsFragment)
+                                if (Utils.ANDROID_LOLLIPOP) {
+                                    hide(tabsFragment)
+                                }
                                 hide(homeFragment)
                             }.commit()
                 }
                 false
+            }
+            if (!Utils.ANDROID_LOLLIPOP) {
+                menu.removeItem(R.id.tabs)
             }
         }
 
