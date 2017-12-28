@@ -226,6 +226,7 @@ public class BrowsingOptionsActivity extends BaseActivity implements Snackable, 
         private static final String SHARE = "SHARE";
         private static final String MINIMIZE = "MINIMIZE";
         private static final String ARTICLE = "ARTICLE";
+        private static final String TABS = "TABS";
         private final Context context;
         private final List<String> items = new LinkedList<>();
 
@@ -234,6 +235,7 @@ public class BrowsingOptionsActivity extends BaseActivity implements Snackable, 
             items.add(NEW_TAB);
             items.add(SHARE);
             if (Utils.ANDROID_LOLLIPOP) {
+                items.add(TABS);
                 items.add(MINIMIZE);
             }
             items.add(ARTICLE);
@@ -275,6 +277,13 @@ public class BrowsingOptionsActivity extends BaseActivity implements Snackable, 
                             .color(iconColor)
                             .sizeDp(18));
                     holder.action.setText(Utils.html(context, R.string.bottom_bar_article_mode_explanation));
+                    break;
+                case TABS:
+                    holder.icon.setImageDrawable(new IconicsDrawable(context)
+                            .icon(CommunityMaterial.Icon.cmd_view_agenda)
+                            .color(iconColor)
+                            .sizeDp(18));
+                    holder.action.setText(Utils.html(context, R.string.bottom_bar_tabs_explanation));
                     break;
             }
         }

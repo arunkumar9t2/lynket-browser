@@ -224,6 +224,7 @@
     <string name="share_action_explanation"><![CDATA[<b>Share -</b> Quickly perform Android share action.]]></string>
     <string name="minimize_action_explanation"><![CDATA[<b>Minimize -</b> Will minimize the current page.]]></string>
     <string name="bottom_bar_article_mode_explanation"><![CDATA[<b>Article view -</b> Open the page in Article reader mode.]]></string>
+    <string name="bottom_bar_tabs_explanation"><![CDATA[<b>Tabs -</b> Show all active tabs]]></string>
     <string name="available_actions">Available actions</string>
     <string name="secondary_browser_launching_error_title">Error launching secondary browser</string>
     <string name="launch_setting">Launch settings</string>
