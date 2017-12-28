@@ -96,17 +96,15 @@
         <receiver android:name=".browsing.customtabs.bottombar.BottomBarReceiver" />
 
         <!-- Chromer launcher activity -->
-        <activity
-            android:name=".home.HomeActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.Launcher"
-            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".home.HomeActivity" />
 
         <activity-alias
             android:name=".MainActivity"
+            android:exported="true"
             android:label="@string/app_name"
             android:targetActivity=".home.HomeActivity"
-            android:theme="@style/AppTheme.Launcher">
+            android:theme="@style/AppTheme.Launcher"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -208,6 +206,11 @@
             android:noHistory="true"
             android:theme="@style/DialogTheme"
             android:windowSoftInputMode="stateVisible" />
+        <activity
+            android:name=".browsing.amp.AmpResolverActivity"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:theme="@style/DialogTheme" />
         <activity
             android:name=".browsing.openwith.OpenIntentWithActivity"
             android:excludeFromRecents="true"

@@ -20,6 +20,7 @@ package arun.com.chromer.tabs
 
 import android.content.Intent
 import arun.com.chromer.ChromerRobolectricSuite
+import arun.com.chromer.browsing.amp.AmpResolverActivity
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.home.HomeActivity
 import arun.com.chromer.settings.Preferences
@@ -30,6 +31,7 @@ import org.robolectric.Robolectric
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows
 import org.robolectric.Shadows.shadowOf
+import org.robolectric.shadows.ShadowApplication
 import javax.inject.Inject
 
 
@@ -78,12 +80,29 @@ class DefaultTabsManagerTest : ChromerRobolectricSuite() {
         preferences?.webHeads(true)
         val shadowApp = Shadows.shadowOf(RuntimeEnvironment.application)
 
-        tabs?.openUrl(RuntimeEnvironment.application, Website(url), fromApp = false, fromWebHeads = false)
-        assert(shadowApp.peekNextStartedService().component == Intent(RuntimeEnvironment.application, WebHeadService::class.java).component)
-        assert(shadowApp.nextStartedService.dataString == url)
+        assertWebHeadServiceLaunched(shadowApp)
 
         tabs?.openUrl(RuntimeEnvironment.application, Website(url), fromApp = false, fromWebHeads = true)
         assert(shadowApp.nextStartedService == null)
+    }
+
+    @Test
+    fun testAmpResolverOpened() {
+        clearPreferences()
+        preferences?.ampMode(true)
+
+        val shadowApp = Shadows.shadowOf(RuntimeEnvironment.application)
+        tabs?.openUrl(RuntimeEnvironment.application, Website(url), fromApp = false, fromWebHeads = false)
+        assert(shadowApp.nextStartedActivity.component == Intent(RuntimeEnvironment.application, AmpResolverActivity::class.java).component)
+
+        preferences?.webHeads(true)
+        assertWebHeadServiceLaunched(shadowApp)
+    }
+
+    private fun assertWebHeadServiceLaunched(shadowApp: ShadowApplication) {
+        tabs?.openUrl(RuntimeEnvironment.application, Website(url), fromApp = false, fromWebHeads = false)
+        assert(shadowApp.peekNextStartedService().component == Intent(RuntimeEnvironment.application, WebHeadService::class.java).component)
+        assert(shadowApp.nextStartedService.dataString == url)
     }
 
     private fun clearPreferences() {

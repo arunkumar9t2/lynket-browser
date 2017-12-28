@@ -308,4 +308,5 @@
     <string name="no_active_tabs">No active tabs</string>
     <string name="new_tab_text">New tab</string>
     <string name="article">Article</string>
+    <string name="skip">Skip</string>
 </resources>
