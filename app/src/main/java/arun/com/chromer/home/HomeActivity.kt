@@ -41,7 +41,8 @@ import arun.com.chromer.settings.SettingsGroupActivity
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.shared.Constants.APP_TESTING_URL
 import arun.com.chromer.shared.Constants.G_COMMUNITY_URL
-import arun.com.chromer.shared.base.activity.BaseMVPActivity
+import arun.com.chromer.shared.base.Snackable
+import arun.com.chromer.shared.base.activity.BaseActivity
 import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.tabs.ui.TabsFragment
@@ -60,9 +61,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.widget_bottom_sheet_layout.*
 import javax.inject.Inject
 
-class HomeActivity : BaseMVPActivity<HomeContract.View, HomeContract.Presenter>(), HomeContract.View {
-    @Inject
-    lateinit var homePresenter: HomeContract.Presenter
+class HomeActivity : BaseActivity(), Snackable {
     @Inject
     lateinit var tabsManager: DefaultTabsManager
     @Inject
@@ -151,10 +150,6 @@ class HomeActivity : BaseMVPActivity<HomeContract.View, HomeContract.Presenter>(
 
     override fun getLayoutRes(): Int {
         return R.layout.activity_main
-    }
-
-    override fun createPresenter(): HomeContract.Presenter {
-        return homePresenter
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
