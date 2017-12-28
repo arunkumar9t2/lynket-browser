@@ -96,6 +96,22 @@ public class Website implements Parcelable {
     };
 
     @NonNull
+    public static Website Ampify(@NonNull Website from) {
+        final Website website = new Website();
+        website.title = from.title;
+        website.url = from.url;
+        website.ampUrl = from.hasAmp() ? from.ampUrl : from.preferredUrl();
+        website.canonicalUrl = from.canonicalUrl;
+        website.faviconUrl = from.faviconUrl;
+        website.themeColor = from.themeColor;
+        website.bookmarked = from.bookmarked;
+        website.count = from.count;
+        website.createdAt = from.createdAt;
+        return website;
+    }
+
+
+    @NonNull
     public static Website fromArticle(@NonNull Article article) {
         final Website website = new Website();
         website.title = article.title;
@@ -131,6 +147,10 @@ public class Website implements Parcelable {
         website.createdAt = cursor.getLong(cursor.getColumnIndex(HistoryTable.COLUMN_CREATED_AT));
         website.count = cursor.getInt(cursor.getColumnIndex(HistoryTable.COLUMN_VISITED));
         return website;
+    }
+
+    public boolean hasAmp() {
+        return !TextUtils.isEmpty(ampUrl);
     }
 
     @NonNull

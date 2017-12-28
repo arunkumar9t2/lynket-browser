@@ -23,7 +23,6 @@ import android.database.Cursor
 import android.support.v7.util.AsyncListUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -179,8 +178,7 @@ internal class HistoryAdapter(
                 val position = adapterPosition
                 val website = asyncWebsiteList.getItem(position)
                 if (website != null && position != RecyclerView.NO_POSITION) {
-                    val copiedWebsite = Website(website.title, website.ampUrl, website.faviconUrl, website.canonicalUrl, website.themeColor, website.ampUrl, website.bookmarked, website.createdAt, website.count)
-                    tabsManager.openUrl(itemView.context, copiedWebsite)
+                    tabsManager.openUrl(itemView.context, Website.Ampify(website))
                 }
             }
         }
@@ -199,7 +197,7 @@ internal class HistoryAdapter(
                         .load(website)
                         .into(historyFavicon!!)
 
-                if (!TextUtils.isEmpty(website.ampUrl)) {
+                if (website.hasAmp()) {
                     historyAmp?.visible()
                 } else {
                     historyAmp?.gone()

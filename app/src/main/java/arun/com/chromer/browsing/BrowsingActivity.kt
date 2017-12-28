@@ -88,11 +88,13 @@ abstract class BrowsingActivity : BaseActivity() {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private fun loadWebsiteMetadata() {
         val web = intent.getParcelableExtra<Website>(Constants.EXTRA_KEY_WEBSITE)
-        web?.let {
-            website = it
+        website = if (web == null) {
+            Website(intent.dataString)
+        } else {
             if (Utils.ANDROID_LOLLIPOP) {
-                setTaskDescriptionFromWebsite(it)
+                setTaskDescriptionFromWebsite(web)
             }
+            web
         }
         browsingViewModel.loadWebSiteDetails(intent.dataString)
                 .filter { it is Result.Success && it.data != null }

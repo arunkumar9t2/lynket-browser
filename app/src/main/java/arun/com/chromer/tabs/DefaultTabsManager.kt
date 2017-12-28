@@ -31,11 +31,11 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.TextUtils
 import android.widget.Toast
 import arun.com.chromer.BuildConfig
 import arun.com.chromer.R
 import arun.com.chromer.appdetect.AppDetectionManager
+import arun.com.chromer.browsing.amp.AmpResolverActivity
 import arun.com.chromer.browsing.article.ArticleLauncher
 import arun.com.chromer.browsing.article.ChromerArticleActivity
 import arun.com.chromer.browsing.customtabs.CustomTabActivity
@@ -92,11 +92,18 @@ constructor(
 
         // Check if we should try to find AMP version of incoming url.
         if (preferences.ampMode()) {
-            if (!TextUtils.isEmpty(website.ampUrl)) {
+            if (website.hasAmp()) {
                 // We already got the amp url, so open it in a browsing tab.
-                openBrowsingTab(context, Website(website.ampUrl), fromNewTab = fromNewTab)
+                openBrowsingTab(context, Website.Ampify(website), fromNewTab = fromNewTab)
             } else {
-                // Open a proxy activity, attempt an extraction then show.
+                // Open a proxy activity, attempt an extraction then open the AMP url if exists.
+                val ampResolver = Intent(context, AmpResolverActivity::class.java).apply {
+                    data = website.preferredUri()
+                    if (context !is Activity) {
+                        addFlags(FLAG_ACTIVITY_NEW_TASK)
+                    }
+                }
+                context.startActivity(ampResolver)
             }
             return
         }
