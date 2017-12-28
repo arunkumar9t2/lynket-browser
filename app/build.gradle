@@ -1,3 +1,21 @@
+/*
+ * Chromer
+ * Copyright (C) 2017 Arunkumar
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
@@ -7,11 +25,11 @@ apply plugin: 'io.fabric'
 buildscript {
     repositories {
         maven { url 'https://maven.fabric.io/public' }
-        maven { url 'https://maven.google.com' }
+        google()
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.25.0'
+        classpath 'io.fabric.tools:gradle:1.25.1'
     }
 }
 repositories {
@@ -33,6 +51,9 @@ android {
         manifestPlaceholders = [crashlyticsApiKey: getFabricKey()]
 
         vectorDrawables.useSupportLibrary = true
+
+        // Disable crashlytics by default.
+        ext.enableCrashlytics = false
     }
     buildTypes {
         release {
@@ -45,11 +66,15 @@ android {
             lintOptions {
                 disable 'MissingTranslation'
             }
+
+            ext.enableCrashlytics = true
         }
         debug {
             applicationIdSuffix '.debug'
             versionNameSuffix '- dev'
             resValue "string", "app_name", "Chromer-dev"
+
+            ext.enableCrashlytics = false
         }
     }
 
@@ -61,20 +86,32 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 
+    // Tests
     testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-all:1.10.8'
+    testImplementation 'junit:junit:4.12'
+    testImplementation "org.robolectric:robolectric:3.5.1"
+
     // Debugging
     debugImplementation 'com.facebook.stetho:stetho:1.5.0'
 
     // Dependency Injection
     implementation 'com.google.dagger:dagger:2.11'
     kapt 'com.google.dagger:dagger-compiler:2.11'
+    kaptTest 'com.google.dagger:dagger-compiler:2.11'
 
     // Support
     implementation 'com.android.support:design:27.0.2'
@@ -94,7 +131,7 @@ dependencies {
     implementation 'com.github.paolorotolo:appintro:4.1.0'
 
     // Icons
-    implementation 'com.mikepenz:community-material-typeface:1.9.32.1@aar'
+    implementation 'com.mikepenz:community-material-typeface:2.0.46.1@aar'
 
     // Drawer
     implementation('com.mikepenz:materialdrawer:5.3.6@aar') {

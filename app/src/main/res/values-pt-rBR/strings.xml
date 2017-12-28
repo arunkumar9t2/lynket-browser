@@ -217,7 +217,7 @@
     <string name="choose_share_method">Escolha o método de compartilhamento</string>
     <string name="comma_seperated">Separados por vírgula</string>
     <string name="share_all_list">Lista - Suporte limitado de apps. Ex: Join, Pushbullet etc.</string>
-    <string name="new_tab">Abrir nova aba</string>
+    <string name="open_new_tab">Abrir nova aba</string>
     <string name="title_activity_open_with">Abrir com</string>
     <string name="title_activity_settings">Configurações</string>
     <string name="settings_browsing_mode">Modo de navegação</string>

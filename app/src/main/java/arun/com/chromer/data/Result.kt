@@ -19,7 +19,7 @@
 package arun.com.chromer.data
 
 sealed class Result<T> {
-    data class Success<T>(val data: T) : Result<T>()
+    data class Success<T>(val data: T?) : Result<T>()
     class Loading<T> : Result<T>()
     class Idle<T> : Result<T>()
     data class Failure<T>(val throwable: Throwable) : Result<T>()

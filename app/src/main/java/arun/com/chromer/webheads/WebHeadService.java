@@ -20,7 +20,6 @@ package arun.com.chromer.webheads;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
-import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -69,7 +68,7 @@ import arun.com.chromer.data.website.WebsiteRepository;
 import arun.com.chromer.data.website.model.Website;
 import arun.com.chromer.di.service.ServiceComponent;
 import arun.com.chromer.settings.Preferences;
-import arun.com.chromer.util.DocumentUtils;
+import arun.com.chromer.tabs.DefaultTabsManager;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.util.glide.GlideApp;
 import arun.com.chromer.webheads.helper.ColorExtractionTask;
@@ -97,10 +96,8 @@ import static arun.com.chromer.shared.Constants.ACTION_OPEN_NEW_TAB;
 import static arun.com.chromer.shared.Constants.ACTION_REBIND_WEBHEAD_TAB_CONNECTION;
 import static arun.com.chromer.shared.Constants.ACTION_STOP_WEBHEAD_SERVICE;
 import static arun.com.chromer.shared.Constants.ACTION_WEBHEAD_COLOR_SET;
-import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_NEW_TAB;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_MINIMIZE;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_REBIND_WEBHEAD_CXN;
-import static arun.com.chromer.shared.Constants.EXTRA_KEY_SKIP_EXTRACTION;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBHEAD_COLOR;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBSITE;
 import static arun.com.chromer.shared.Constants.NO_COLOR;
@@ -127,6 +124,9 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
 
     @Inject
     WebsiteRepository websiteRepository;
+
+    @Inject
+    DefaultTabsManager tabsManager;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -158,7 +158,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
                 .setPriority(PRIORITY_MIN)
                 .setContentText(getString(R.string.tap_close_all))
                 .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
-                .addAction(R.drawable.ic_add, getText(R.string.new_tab), newTab)
+                .addAction(R.drawable.ic_add, getText(R.string.open_new_tab), newTab)
                 .addAction(R.drawable.ic_list, getText(R.string.manage), contextActivity)
                 .setContentTitle(getString(R.string.web_heads_service))
                 .setContentIntent(contentIntent)
@@ -218,9 +218,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     private void processIntent(@Nullable Intent intent) {
         if (intent == null || intent.getDataString() == null) return; // don't do anything
 
-        final boolean isFromNewTab = intent.getBooleanExtra(EXTRA_KEY_FROM_NEW_TAB, false);
         final boolean isForMinimized = intent.getBooleanExtra(EXTRA_KEY_MINIMIZE, false);
-        final boolean skipExtraction = intent.getBooleanExtra(EXTRA_KEY_SKIP_EXTRACTION, false);
 
         final String urlToLoad = intent.getDataString();
         if (TextUtils.isEmpty(urlToLoad)) {
@@ -229,7 +227,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         }
 
         if (!isLinkAlreadyLoaded(urlToLoad)) {
-            addWebHead(urlToLoad, isFromNewTab, isForMinimized, skipExtraction);
+            addWebHead(urlToLoad);
         } else if (!isForMinimized) {
             Toast.makeText(this, R.string.already_loaded, LENGTH_SHORT).show();
         }
@@ -239,14 +237,13 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         return urlToLoad == null || webHeads.containsKey(urlToLoad);
     }
 
-    private void addWebHead(final String webHeadUrl, final boolean isNewTab, final boolean isMinimized, boolean skipExtraction) {
+    private void addWebHead(final String webHeadUrl) {
         if (springChain2D == null) {
             springChain2D = SpringChain2D.create(this);
         }
         springChain2D.clear();
 
         final WebHead newWebHead = new WebHead(/*Service*/ this, webHeadUrl, /*listener*/ this);
-        newWebHead.setFromNewTab(isNewTab);
         for (WebHead oldWebHead : webHeads.values()) {
             // Set all old web heads to slave
             oldWebHead.setMaster(false);
@@ -255,19 +252,11 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         // Add to our map
         webHeads.put(webHeadUrl, newWebHead);
 
-        if (Preferences.get(getApplication()).aggressiveLoading() && !isMinimized && !Preferences.get(this).articleMode()) {
-            DocumentUtils.openNewCustomTab(getApplication(), newWebHead.getWebsite(), isNewTab);
-            new Handler().postDelayed(() -> reveal(newWebHead), 650);
-        } else {
-            reveal(newWebHead);
-        }
+        reveal(newWebHead);
 
         preLoadForArticle(webHeadUrl);
 
-        // Begin metadata extractions
-        if (!skipExtraction) {
-            doExtraction(webHeadUrl);
-        }
+        doExtraction(webHeadUrl);
     }
 
     private boolean reveal(WebHead newWebHead) {
@@ -436,10 +425,9 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         springChain2D.enableDisplacement();
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onWebHeadClick(@NonNull WebHead webHead) {
-        DocumentUtils.smartOpenNewTab(this, webHead.getWebsite());
+        tabsManager.openUrl(this, webHead.getWebsite(), true, true, false);
 
         // If user prefers to the close the head on opening the link, then call destroySelf()
         // which will take care of closing and detaching the web head

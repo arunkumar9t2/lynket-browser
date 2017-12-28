@@ -26,6 +26,8 @@ import arun.com.chromer.browsing.browserintercept.BrowserInterceptActivity;
 import arun.com.chromer.browsing.customtabs.CustomTabActivity;
 import arun.com.chromer.browsing.customtabs.CustomTabs;
 import arun.com.chromer.browsing.newtab.NewTabDialogActivity;
+import arun.com.chromer.browsing.shareintercept.ShareInterceptActivity;
+import arun.com.chromer.browsing.webview.WebViewActivity;
 import arun.com.chromer.di.fragment.FragmentComponent;
 import arun.com.chromer.di.fragment.FragmentModule;
 import arun.com.chromer.di.scopes.PerActivity;
@@ -34,6 +36,7 @@ import arun.com.chromer.di.view.ViewModule;
 import arun.com.chromer.home.HomeActivity;
 import arun.com.chromer.settings.browsingoptions.BrowsingOptionsActivity;
 import arun.com.chromer.shortcuts.HomeScreenShortcutCreatorActivity;
+import arun.com.chromer.webheads.ui.context.WebHeadContextActivity;
 import dagger.Subcomponent;
 
 @PerActivity
@@ -60,11 +63,17 @@ public interface ActivityComponent {
 
     void inject(ActivityComponent activityComponent);
 
-    void inject(@NonNull HomeScreenShortcutCreatorActivity homeScreenShortcutCreatorActivity);
+    void inject(HomeScreenShortcutCreatorActivity homeScreenShortcutCreatorActivity);
 
     void inject(ChromerArticleActivity chromerArticleActivity);
 
     void inject(BrowsingOptionsActivity browsingOptionsActivity);
 
     void inject(NewTabDialogActivity newTabDialogActivity);
+
+    void inject(WebHeadContextActivity webHeadContextActivity);
+
+    void inject(ShareInterceptActivity shareInterceptActivity);
+
+    void inject(WebViewActivity webViewActivity);
 }

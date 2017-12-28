@@ -16,26 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.browsing.browserintercept;
+package arun.com.chromer.di.app;
 
-import javax.inject.Inject;
+import org.jetbrains.annotations.NotNull;
 
-import arun.com.chromer.di.scopes.PerActivity;
-import arun.com.chromer.shared.base.Base;
+import javax.inject.Singleton;
 
-/**
- * Created by arunk on 12-11-2017.
- */
-public interface BrowserIntercept {
+import arun.com.chromer.di.data.TestDataModule;
+import arun.com.chromer.tabs.DefaultTabsManagerTest;
+import dagger.Component;
 
-    interface View extends Base.View {
+@Singleton
+@Component(modules = {
+        TestAppModule.class,
+        TestDataModule.class
+})
+public interface TestAppComponent extends AppComponent {
 
-    }
-
-    @PerActivity
-    class Presenter extends Base.Presenter<BrowserIntercept.View> {
-        @Inject
-        public Presenter() {
-        }
-    }
+    void inject(@NotNull DefaultTabsManagerTest defaultTabsManagerTest);
 }

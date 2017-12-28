@@ -21,6 +21,7 @@ package arun.com.chromer.di.fragment;
 import arun.com.chromer.di.scopes.PerFragment;
 import arun.com.chromer.history.HistoryFragment;
 import arun.com.chromer.home.fragment.HomeFragment;
+import arun.com.chromer.tabs.ui.TabsFragment;
 import dagger.Subcomponent;
 
 @PerFragment
@@ -32,4 +33,6 @@ public interface FragmentComponent {
     void inject(HistoryFragment homeFragment);
 
     void inject(HomeFragment homeFragment);
+
+    void inject(TabsFragment tabsFragment);
 }

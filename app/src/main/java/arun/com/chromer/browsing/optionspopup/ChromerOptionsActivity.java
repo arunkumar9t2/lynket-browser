@@ -39,7 +39,6 @@ import arun.com.chromer.browsing.openwith.OpenIntentWithActivity;
 import arun.com.chromer.history.HistoryActivity;
 import arun.com.chromer.settings.SettingsGroupActivity;
 import arun.com.chromer.shortcuts.HomeScreenShortcutCreatorActivity;
-import arun.com.chromer.util.DocumentUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -60,7 +59,6 @@ public class ChromerOptionsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        DocumentUtils.closeRootActivity(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_more_menu);
         ButterKnife.bind(this);

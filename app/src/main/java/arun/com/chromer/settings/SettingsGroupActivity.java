@@ -19,9 +19,7 @@
 package arun.com.chromer.settings;
 
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -49,9 +47,6 @@ import arun.com.chromer.shared.base.activity.SubActivity;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
-
-import static arun.com.chromer.shared.Constants.ACTION_CLOSE_ROOT;
 
 public class SettingsGroupActivity extends SubActivity implements SettingsGroupAdapter.GroupItemClickListener {
     @BindView(R.id.toolbar)
@@ -79,7 +74,6 @@ public class SettingsGroupActivity extends SubActivity implements SettingsGroupA
         settingsListView.setAdapter(adapter);
         settingsListView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         adapter.setGroupItemClickListener(this);
-        registerCloseReceiver();
 
         setDefaultImage.setImageDrawable(new IconicsDrawable(this)
                 .icon(CommunityMaterial.Icon.cmd_auto_fix)
@@ -123,17 +117,6 @@ public class SettingsGroupActivity extends SubActivity implements SettingsGroupA
             setDefaultCard.setVisibility(View.VISIBLE);
         } else
             setDefaultCard.setVisibility(View.GONE);
-    }
-
-    private void registerCloseReceiver() {
-        closeReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Timber.d("Finished from receiver");
-                SettingsGroupActivity.this.finish();
-            }
-        };
-        LocalBroadcastManager.getInstance(this).registerReceiver(closeReceiver, new IntentFilter(ACTION_CLOSE_ROOT));
     }
 
     @Override

@@ -19,7 +19,6 @@
 package arun.com.chromer.home.fragment
 
 import arun.com.chromer.data.history.HistoryRepository
-import arun.com.chromer.data.website.WebsiteRepository
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.scopes.PerFragment
 import arun.com.chromer.shared.base.Base
@@ -36,8 +35,7 @@ interface HomeFragmentContract {
     @PerFragment
     class Presenter @Inject
     constructor(
-            private val historyRepository: HistoryRepository,
-            private val websiteRepository: WebsiteRepository
+            private val historyRepository: HistoryRepository
     ) : Base.Presenter<View>() {
 
         fun loadRecents() {
@@ -49,14 +47,6 @@ interface HomeFragmentContract {
                             view.setRecents(webSites)
                         }
                     }.subscribe())
-        }
-
-        fun logHistory(url: String) {
-            websiteRepository
-                    .getWebsite(url)
-                    .compose(RxUtils.applySchedulers())
-                    .doOnError(Timber::e)
-                    .subscribe()
         }
     }
 }

@@ -28,7 +28,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,16 +35,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.ContentViewEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import arun.com.chromer.R;
 import arun.com.chromer.data.website.model.Website;
+import arun.com.chromer.di.activity.ActivityComponent;
 import arun.com.chromer.settings.Preferences;
-import arun.com.chromer.util.DocumentUtils;
+import arun.com.chromer.shared.base.activity.BaseActivity;
+import arun.com.chromer.tabs.DefaultTabsManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -59,7 +60,7 @@ import static arun.com.chromer.shared.Constants.ACTION_EVENT_WEBSITE_UPDATED;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBSITE;
 import static arun.com.chromer.shared.Constants.TEXT_SHARE_INTENT;
 
-public class WebHeadContextActivity extends AppCompatActivity implements WebsiteAdapter.WebSiteAdapterListener {
+public class WebHeadContextActivity extends BaseActivity implements WebsiteAdapter.WebSiteAdapterListener {
     @BindView(R.id.web_sites_list)
     RecyclerView websiteListView;
     @BindView(R.id.copy_all)
@@ -71,16 +72,18 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
     private WebsiteAdapter websitesAdapter;
     private final WebHeadEventsReceiver webHeadsEventsReceiver = new WebHeadEventsReceiver();
 
+
+    @Inject
+    DefaultTabsManager tabsManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_web_head_context);
         ButterKnife.bind(this);
 
         if (getIntent() == null || getIntent().getParcelableArrayListExtra(EXTRA_KEY_WEBSITE) == null) {
             finish();
         }
-
         final ArrayList<Website> websites = getIntent().getParcelableArrayListExtra(EXTRA_KEY_WEBSITE);
 
         websitesAdapter = new WebsiteAdapter(this, this);
@@ -90,7 +93,11 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
         websiteListView.setAdapter(websitesAdapter);
 
         registerEventsReceiver();
-        Answers.getInstance().logContentView(new ContentViewEvent().putContentName("Web head context activity"));
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.activity_web_head_context;
     }
 
     private void registerEventsReceiver() {
@@ -109,7 +116,7 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
     @Override
     public void onWebSiteItemClicked(@NonNull Website website) {
         finish();
-        DocumentUtils.smartOpenNewTab(this, website);
+        tabsManager.openUrl(this, website, true, true, false);
         if (Preferences.get(this).webHeadsCloseOnOpen()) {
             broadcastDeleteWebHead(website);
         }
@@ -197,6 +204,11 @@ public class WebHeadContextActivity extends AppCompatActivity implements Website
         final ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         cm.setPrimaryClip(clip);
         Toast.makeText(this, getString(R.string.copied) + " " + url, LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void inject(@NonNull ActivityComponent activityComponent) {
+        activityComponent.inject(this);
     }
 
     /**

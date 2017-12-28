@@ -19,14 +19,12 @@
 package arun.com.chromer.home.fragment
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.support.transition.Fade
 import android.support.transition.TransitionManager.beginDelayedTransition
 import android.support.v7.widget.GridLayoutManager
 import android.view.View
 import arun.com.chromer.R
-import arun.com.chromer.browsing.customtabs.CustomTabManager
 import arun.com.chromer.browsing.customtabs.CustomTabs
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.fragment.FragmentComponent
@@ -38,31 +36,30 @@ import arun.com.chromer.settings.browsingoptions.BrowsingOptionsActivity
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.shared.base.Snackable
 import arun.com.chromer.shared.base.fragment.BaseMVPFragment
+import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.util.RxEventBus
 import arun.com.chromer.util.Utils
 import arun.com.chromer.util.glide.GlideApp
 import arun.com.chromer.util.glide.appicon.ApplicationIcon
-import arun.com.chromer.webheads.WebHeadService
 import butterknife.OnClick
 import com.afollestad.materialdialogs.MaterialDialog
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import kotlinx.android.synthetic.main.fragment_home.*
-import timber.log.Timber
 import javax.inject.Inject
 
 /**
  * Created by Arunkumar on 07-04-2017.
  */
 class HomeFragment : BaseMVPFragment<HomeFragmentContract.View, HomeFragmentContract.Presenter>(), HomeFragmentContract.View {
-    private lateinit var customTabManager: CustomTabManager
-
     @Inject
     lateinit var recentsAdapter: RecentsAdapter
     @Inject
     lateinit var homeFragmentContractPresenter: HomeFragmentContract.Presenter
     @Inject
     lateinit var rxEventBus: RxEventBus
+    @Inject
+    lateinit var tabsManger: DefaultTabsManager
 
     override fun createPresenter(): HomeFragmentContract.Presenter {
         return homeFragmentContractPresenter
@@ -80,20 +77,16 @@ class HomeFragment : BaseMVPFragment<HomeFragmentContract.View, HomeFragmentCont
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupMaterialSearch()
-        setupCustomTab()
         setupRecents()
         setupInfoCards()
         setupEventListeners()
     }
 
-    override fun onStart() {
-        super.onStart()
-        customTabManager.bindCustomTabsService(activity)
-    }
-
     override fun onResume() {
         super.onResume()
-        invalidateState()
+        if (!isHidden) {
+            invalidateState()
+        }
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
@@ -102,11 +95,6 @@ class HomeFragment : BaseMVPFragment<HomeFragmentContract.View, HomeFragmentCont
             activity?.setTitle(R.string.app_name)
             invalidateState()
         }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        customTabManager.unbindCustomTabsService(activity)
     }
 
     override fun snack(message: String) {
@@ -218,41 +206,8 @@ class HomeFragment : BaseMVPFragment<HomeFragmentContract.View, HomeFragmentCont
     }
 
     private fun launchCustomTab(url: String?) {
-        if (url != null) {
-            if (Preferences.get(context!!).webHeads()) {
-                if (Utils.isOverlayGranted(context!!)) {
-                    val webHeadService = Intent(context, WebHeadService::class.java).apply { data = Uri.parse(url) }
-                    activity?.startService(webHeadService)
-                } else {
-                    Utils.openDrawOverlaySettings(activity!!)
-                }
-            } else {
-                activityComponent.customTabs().apply {
-                    forUrl(url)
-                    withSession(customTabManager.session)
-                    launch()
-                }
-                homeFragmentContractPresenter.logHistory(url)
-            }
-        }
-    }
-
-    private fun setupCustomTab() {
-        customTabManager = CustomTabManager().apply {
-            setConnectionCallback(
-                    object : CustomTabManager.ConnectionCallback {
-                        override fun onCustomTabsConnected() {
-                            Timber.d("Connected to custom tabs")
-                            try {
-                                customTabManager.mayLaunchUrl(Uri.parse(Constants.GOOGLE_URL), null, null)
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                            }
-
-                        }
-
-                        override fun onCustomTabsDisconnected() {}
-                    })
+        if (url != null && activity != null) {
+            tabsManger.openUrl(activity!!, Website(url))
         }
     }
 

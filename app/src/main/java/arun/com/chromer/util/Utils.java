@@ -20,7 +20,6 @@ package arun.com.chromer.util;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AppOpsManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -70,7 +69,7 @@ import arun.com.chromer.R;
 import arun.com.chromer.browsing.customtabs.CustomTabs;
 import arun.com.chromer.data.common.App;
 import arun.com.chromer.shared.Constants;
-import arun.com.chromer.views.IntentPickerSheetView;
+import arun.com.chromer.shared.views.IntentPickerSheetView;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -84,6 +83,7 @@ import static android.widget.Toast.LENGTH_LONG;
 public class Utils {
 
     public static final boolean ANDROID_OREO = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
+    public static final boolean ANDROID_LOLLIPOP = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
 
     private Utils() {
         throw new RuntimeException("No instances");
@@ -414,14 +414,15 @@ public class Utils {
     }
 
     @TargetApi(Build.VERSION_CODES.M)
-    public static void openDrawOverlaySettings(@NonNull Activity activity) {
+    public static void openDrawOverlaySettings(@NonNull Context context) {
         try {
-            Toast.makeText(activity, activity.getString(R.string.web_head_permission_toast), LENGTH_LONG).show();
-            final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + activity.getPackageName()));
-            activity.startActivityForResult(intent, 0);
+            Toast.makeText(context, context.getString(R.string.web_head_permission_toast), LENGTH_LONG).show();
+            final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + context.getPackageName()));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
         } catch (Exception e) {
             Timber.e(e);
-            Toast.makeText(activity, R.string.overlay_missing, Toast.LENGTH_LONG).show();
+            Toast.makeText(context, R.string.overlay_missing, Toast.LENGTH_LONG).show();
         }
     }
 

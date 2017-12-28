@@ -51,8 +51,6 @@ import javax.inject.Inject;
 
 import arun.com.chromer.Chromer;
 import arun.com.chromer.R;
-import arun.com.chromer.appdetect.AppDetectionManager;
-import arun.com.chromer.browsing.customtabs.bottombar.BottomBarManager;
 import arun.com.chromer.browsing.customtabs.callbacks.ClipboardService;
 import arun.com.chromer.browsing.customtabs.callbacks.FavShareBroadcastReceiver;
 import arun.com.chromer.browsing.customtabs.callbacks.MinimizeBroadcastReceiver;
@@ -139,7 +137,6 @@ public class CustomTabs {
     private boolean noAnimation = false;
 
     private final AppRepository appRepository;
-    private final AppDetectionManager appDetectionManager;
     private final WebsiteRepository websiteRepository;
 
     /**
@@ -150,11 +147,9 @@ public class CustomTabs {
     @Inject
     public CustomTabs(@NonNull Activity activity,
                       @NonNull AppRepository appRepository,
-                      @NonNull AppDetectionManager appDetectionManager,
                       @NonNull WebsiteRepository websiteRepository) {
         this.activity = activity;
         noAnimation = false;
-        this.appDetectionManager = appDetectionManager;
         this.appRepository = appRepository;
         this.websiteRepository = websiteRepository;
     }
@@ -387,7 +382,6 @@ public class CustomTabs {
                 if (Preferences.get(activity).dynamicToolbarOnApp()) {
                     setAppToolbarColor();
                 }
-
                 if (Preferences.get(activity).dynamicToolbarOnWeb()) {
                     if (overrideRequested) {
                         toolbarColor = webToolbarFallback;
@@ -499,6 +493,11 @@ public class CustomTabs {
 
     private void prepareChromerOptions() {
         final Intent moreMenuActivity = new Intent(activity, ChromerOptionsActivity.class);
+        moreMenuActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        moreMenuActivity.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            moreMenuActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+        }
         moreMenuActivity.putExtra(EXTRA_KEY_ORIGINAL_URL, url);
         final PendingIntent moreMenuPending = PendingIntent.getActivity(activity, 0, moreMenuActivity, FLAG_UPDATE_CURRENT);
         builder.addMenuItem(activity.getString(R.string.chromer_options), moreMenuPending);
@@ -509,7 +508,7 @@ public class CustomTabs {
      * merge tabs and apps and
      */
     private void prepareMinimize() {
-        if (!Preferences.get(activity).bottomBar() && Preferences.get(activity).mergeTabs()) {
+        if (!Preferences.get(activity).bottomBar() && Utils.ANDROID_LOLLIPOP) {
             final Intent minimizeIntent = new Intent(activity, MinimizeBroadcastReceiver.class);
             minimizeIntent.putExtra(EXTRA_KEY_ORIGINAL_URL, url);
             final PendingIntent pendingMin = PendingIntent.getBroadcast(activity, new Random().nextInt(), minimizeIntent, FLAG_UPDATE_CURRENT);
@@ -592,12 +591,8 @@ public class CustomTabs {
         if (!Preferences.get(activity).bottomBar()) {
             return;
         }
-        final BottomBarManager.Config config = new BottomBarManager.Config();
-        config.minimize = Preferences.get(activity).mergeTabs();
-        config.openInNewTab = Utils.isLollipopAbove();
-
         builder.setSecondaryToolbarViews(
-                createBottomBarRemoteViews(activity, toolbarColor, config),
+                createBottomBarRemoteViews(activity, toolbarColor),
                 getClickableIDs(),
                 getOnClickPendingIntent(activity, url)
         );

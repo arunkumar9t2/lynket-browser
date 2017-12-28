@@ -52,10 +52,10 @@ import arun.com.chromer.settings.Preferences;
 import arun.com.chromer.settings.widgets.AppPreferenceCardView;
 import arun.com.chromer.shared.base.Snackable;
 import arun.com.chromer.shared.base.activity.BaseActivity;
+import arun.com.chromer.shared.views.IntentPickerSheetView;
 import arun.com.chromer.util.RxEventBus;
 import arun.com.chromer.util.ServiceManager;
 import arun.com.chromer.util.Utils;
-import arun.com.chromer.views.IntentPickerSheetView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -226,16 +226,18 @@ public class BrowsingOptionsActivity extends BaseActivity implements Snackable, 
         private static final String SHARE = "SHARE";
         private static final String MINIMIZE = "MINIMIZE";
         private static final String ARTICLE = "ARTICLE";
+        private static final String TABS = "TABS";
         private final Context context;
         private final List<String> items = new LinkedList<>();
 
         public BottomActionsAdapter(Context context) {
             this.context = context;
-            if (Utils.isLollipopAbove()) {
-                items.add(NEW_TAB);
-            }
+            items.add(NEW_TAB);
             items.add(SHARE);
-            items.add(MINIMIZE);
+            if (Utils.ANDROID_LOLLIPOP) {
+                items.add(TABS);
+                items.add(MINIMIZE);
+            }
             items.add(ARTICLE);
         }
 
@@ -250,10 +252,10 @@ public class BrowsingOptionsActivity extends BaseActivity implements Snackable, 
             switch (items.get(position)) {
                 case NEW_TAB:
                     holder.icon.setImageDrawable(new IconicsDrawable(context)
-                            .icon(CommunityMaterial.Icon.cmd_plus_box)
+                            .icon(CommunityMaterial.Icon.cmd_plus)
                             .color(iconColor)
                             .sizeDp(18));
-                    holder.action.setText(Utils.html(context, R.string.open_in_new_tab_explanation));
+                    holder.action.setText(Utils.html(context, R.string.new_tab_action_explanation));
                     break;
                 case SHARE:
                     holder.icon.setImageDrawable(new IconicsDrawable(context)
@@ -275,6 +277,13 @@ public class BrowsingOptionsActivity extends BaseActivity implements Snackable, 
                             .color(iconColor)
                             .sizeDp(18));
                     holder.action.setText(Utils.html(context, R.string.bottom_bar_article_mode_explanation));
+                    break;
+                case TABS:
+                    holder.icon.setImageDrawable(new IconicsDrawable(context)
+                            .icon(CommunityMaterial.Icon.cmd_view_agenda)
+                            .color(iconColor)
+                            .sizeDp(18));
+                    holder.action.setText(Utils.html(context, R.string.bottom_bar_tabs_explanation));
                     break;
             }
         }

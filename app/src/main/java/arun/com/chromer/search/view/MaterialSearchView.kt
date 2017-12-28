@@ -34,6 +34,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import arun.com.chromer.R
 import arun.com.chromer.di.view.ViewComponent
 import arun.com.chromer.di.view.ViewModule
@@ -90,6 +91,9 @@ class MaterialSearchView : MvpRelativeLayout<Search.View, Search.Presenter>, Sea
 
     val url: String
         get() = getSearchUrl(text)
+
+    val editText: EditText
+        get() = msv_edit_text
 
     constructor(context: Context) : super(context) {
         init(context)

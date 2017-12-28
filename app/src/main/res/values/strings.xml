@@ -220,10 +220,11 @@
     <string name="web_close_on_open_desc">Web heads will disappear once you open the link</string>
     <string name="web_close_on_open_title">Close web heads once clicked.</string>
     <string name="minimize">Minimize</string>
-    <string name="open_in_new_tab_explanation"><![CDATA[<b>Open in new tab (5.0+) -</b> Copy a link or text on screen and press this icon to launch the link or search the copied text in a new custom or bubble.]]></string>
+    <string name="new_tab_action_explanation"><![CDATA[<b>New tab -</b> Open a new tab]]></string>
     <string name="share_action_explanation"><![CDATA[<b>Share -</b> Quickly perform Android share action.]]></string>
     <string name="minimize_action_explanation"><![CDATA[<b>Minimize -</b> Will minimize the current page.]]></string>
     <string name="bottom_bar_article_mode_explanation"><![CDATA[<b>Article view -</b> Open the page in Article reader mode.]]></string>
+    <string name="bottom_bar_tabs_explanation"><![CDATA[<b>Tabs -</b> Show all active tabs]]></string>
     <string name="available_actions">Available actions</string>
     <string name="secondary_browser_launching_error_title">Error launching secondary browser</string>
     <string name="launch_setting">Launch settings</string>
@@ -234,7 +235,7 @@
     <string name="choose_share_method">Choose share method</string>
     <string name="comma_seperated">Comma separated</string>
     <string name="share_all_list">List - Limited app support. Eg: Join, Pushbullet etc.</string>
-    <string name="new_tab">Open new tab</string>
+    <string name="open_new_tab">Open new tab</string>
     <string name="title_activity_open_with">Open with</string>
     <string name="title_activity_settings">Settings</string>
     <string name="settings_browsing_mode">Browsing mode</string>
@@ -301,4 +302,10 @@
     <string name="text_you_copied">Text you copied</string>
     <string name="system_webview">System WebView</string>
     <string name="Change">Change</string>
+    <string name="title_tabs">Tabs</string>
+    <string name="web_view">Web View</string>
+    <string name="custom_tab">Custom Tab</string>
+    <string name="no_active_tabs">No active tabs</string>
+    <string name="new_tab_text">New tab</string>
+    <string name="article">Article</string>
 </resources>

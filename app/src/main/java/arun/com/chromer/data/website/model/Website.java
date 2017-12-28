@@ -20,6 +20,7 @@ package arun.com.chromer.data.website.model;
 
 import android.database.Cursor;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
@@ -53,6 +54,21 @@ public class Website implements Parcelable {
 
     public Website(@NonNull String url) {
         this.url = url;
+    }
+
+    public Website(String title, String url, String faviconUrl,
+                   String canonicalUrl, String themeColor,
+                   String ampUrl, boolean bookmarked,
+                   long createdAt, int count) {
+        this.title = title;
+        this.url = url;
+        this.faviconUrl = faviconUrl;
+        this.canonicalUrl = canonicalUrl;
+        this.themeColor = themeColor;
+        this.ampUrl = ampUrl;
+        this.bookmarked = bookmarked;
+        this.createdAt = createdAt;
+        this.count = count;
     }
 
     protected Website(Parcel in) {
@@ -120,6 +136,10 @@ public class Website implements Parcelable {
     @NonNull
     public String preferredUrl() {
         return canonicalUrl != null && !canonicalUrl.isEmpty() ? canonicalUrl : url;
+    }
+
+    public Uri preferredUri() {
+        return Uri.parse(preferredUrl());
     }
 
     @NonNull

@@ -21,27 +21,29 @@ package arun.com.chromer.browsing.newtab
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import arun.com.chromer.R
-import arun.com.chromer.browsing.browserintercept.BrowserInterceptActivity
+import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.search.view.MaterialSearchView
 import arun.com.chromer.shared.base.activity.BaseActivity
+import arun.com.chromer.tabs.DefaultTabsManager
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.afollestad.materialdialogs.MaterialDialog
-import com.mikepenz.community_material_typeface_library.CommunityMaterial
-import com.mikepenz.iconics.IconicsDrawable
 import rx.subscriptions.CompositeSubscription
+import javax.inject.Inject
 
 /**
  * Simple dialog activity to launch new url in a popup. Shows a search view.
  */
 class NewTabDialogActivity : BaseActivity() {
     private var newTabDialog: NewTabDialog? = null
+
+    @Inject
+    lateinit var tabsManager: DefaultTabsManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +68,7 @@ class NewTabDialogActivity : BaseActivity() {
         newTabDialog?.onActivityResult(requestCode, resultCode, data)
     }
 
-    class NewTabDialog(
+    inner class NewTabDialog(
             private var activity: Activity?
     ) : DialogInterface.OnDismissListener {
         val subs = CompositeSubscription()
@@ -79,12 +81,8 @@ class NewTabDialogActivity : BaseActivity() {
 
         fun show(): NewTabDialog? {
             dialog = MaterialDialog.Builder(activity!!)
-                    .title(R.string.new_tab)
+                    .title(R.string.open_new_tab)
                     .backgroundColorRes(R.color.card_background_light)
-                    .icon(IconicsDrawable(activity)
-                            .icon(CommunityMaterial.Icon.cmd_plus)
-                            .colorRes(R.color.primary)
-                            .sizeDp(24))
                     .customView(R.layout.activity_new_tab, false)
                     .dismissListener(this)
                     .show()
@@ -92,23 +90,30 @@ class NewTabDialogActivity : BaseActivity() {
             unbinder = ButterKnife.bind(this, dialog!!.customView!!)
 
             materialSearchView?.apply {
-                subs.add(searchPerforms().subscribe { url ->
-                    postDelayed({ launchUrl(url) }, 150)
-                })
+                subs.add(searchPerforms()
+                        .filter { it != null }
+                        .subscribe { url ->
+                            postDelayed({ launchUrl(url) }, 150)
+                        })
                 subs.add(voiceSearchFailed()
                         .subscribe {
                             Toast.makeText(activity, R.string.no_voice_rec_apps, Toast.LENGTH_SHORT).show()
                         })
             }
+
+            materialSearchView?.post { materialSearchView?.editText?.requestFocus() }
             return this
         }
 
 
-        private fun launchUrl(url: String?) {
-            activity?.startActivity(Intent(activity, BrowserInterceptActivity::class.java)
-                    .apply {
-                        data = Uri.parse(url)
-                    })
+        private fun launchUrl(url: String) {
+            activity?.let {
+                tabsManager.openUrl(activity!!,
+                        website = Website(url),
+                        fromApp = true,
+                        fromWebHeads = false,
+                        fromNewTab = true)
+            }
             dialog?.dismiss()
         }
 

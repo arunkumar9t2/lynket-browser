@@ -220,7 +220,6 @@
     <string name="web_close_on_open_desc">Плавающий шар исчезнет, как только вы откроете ссылку</string>
     <string name="web_close_on_open_title">Закрытие плавающей кнопки одним нажатием.</string>
     <string name="minimize">Свернуть</string>
-    <string name="open_in_new_tab_explanation"><![CDATA[<b>Открыть в новой вкладке (5.0+) -</b> Скопировав ссылку или текст на экране, нажмите этот значок, чтобы открыть ссылку или найти скопированный текст в новой вкладке или плавающем шаре.]]></string>
     <string name="share_action_explanation"><![CDATA[<b>Поделиться -</b> Позволяет быстро выполнить стандартное Android действие.]]></string>
     <string name="available_actions">Доступные действия</string>
     <string name="secondary_browser_launching_error_title">Ошибка запуска вторичного браузера</string>
@@ -232,7 +231,7 @@
     <string name="choose_share_method">Выбор способа Поделиться</string>
     <string name="comma_seperated">Разделенные запятой</string>
     <string name="share_all_list">Список - Ограниченная поддержка приложений. Например: Join, Pushbullet и т.д.</string>
-    <string name="new_tab">Открыть новую вкладку</string>
+    <string name="open_new_tab">Открыть новую вкладку</string>
     <string name="title_activity_open_with">Открыть через</string>
     <string name="title_activity_settings">Настройки</string>
     <string name="settings_browsing_mode">Режим просмотра</string>

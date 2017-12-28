@@ -44,7 +44,6 @@ public class HistoryActivity extends BaseActivity implements Snackable {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, new HistoryFragment())

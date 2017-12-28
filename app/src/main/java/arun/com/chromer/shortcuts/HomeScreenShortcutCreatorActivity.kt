@@ -35,6 +35,7 @@ import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.ImageView
 import arun.com.chromer.R
+import arun.com.chromer.browsing.BrowsingViewModel
 import arun.com.chromer.browsing.browserintercept.BrowserInterceptActivity
 import arun.com.chromer.data.Result
 import arun.com.chromer.data.website.model.Website
@@ -65,16 +66,16 @@ class HomeScreenShortcutCreatorActivity : BaseActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private lateinit var shortcutViewModel: HomeScreenShortcutViewModel
+    private var shortcutViewModel: BrowsingViewModel? = null
     private var shortcutDialog: MaterialDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         if (intent?.dataString != null) {
-            shortcutViewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeScreenShortcutViewModel::class.java)
+            shortcutViewModel = ViewModelProviders.of(this, viewModelFactory).get(BrowsingViewModel::class.java)
 
-            val webSiteObservable = shortcutViewModel.loadWebSiteDetails(intent.dataString)
+            val webSiteObservable = shortcutViewModel!!.loadWebSiteDetails(intent.dataString)
             shortcutDialog = AddShortcutDialog(this, webSiteObservable).show()
         } else {
             finish()
@@ -151,7 +152,7 @@ class HomeScreenShortcutCreatorActivity : BaseActivity() {
                         positiveButton?.isEnabled = false
                     }
                     is Result.Success<Website> -> {
-                        website = it.data
+                        website = it.data!!
                         shortcutName?.setText(website.safeLabel())
                         GlideApp.with(activity)
                                 .load(it.data)

@@ -170,7 +170,7 @@
     <string name="available_actions">Acciones disponibles</string>
     <string name="launch_setting">Iniciar configuración</string>
     <string name="copy_all">Copiar todo</string>
-    <string name="new_tab">Abrir nuevo tab</string>
+    <string name="open_new_tab">Abrir nuevo tab</string>
     <string name="title_activity_open_with">Abrir con</string>
     <string name="title_activity_settings">Configuraciones</string>
     <string name="settings_browsing_mode">Modo de navegación</string>

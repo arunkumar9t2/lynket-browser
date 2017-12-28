@@ -47,6 +47,6 @@
     <item
         android:id="@+id/menu_more"
         android:checkable="false"
-        android:title="@string/more"
+        android:title="@string/chromer_options"
         app:showAsAction="never" />
 </menu>
