@@ -135,21 +135,21 @@ constructor(
                         websiteTabModeIcon?.setImageDrawable(IconicsDrawable(itemView.context)
                                 .icon(CommunityMaterial.Icon.cmd_web)
                                 .color(ContextCompat.getColor(itemView.context, R.color.md_blue_500))
-                                .sizeDp(18))
+                                .sizeDp(16))
                     }
                     CUSTOM_TAB -> {
                         websiteTabMode?.setText(R.string.custom_tab)
                         websiteTabModeIcon?.setImageDrawable(IconicsDrawable(itemView.context)
                                 .icon(CommunityMaterial.Icon.cmd_google_chrome)
                                 .color(ContextCompat.getColor(itemView.context, R.color.md_orange_500))
-                                .sizeDp(18))
+                                .sizeDp(16))
                     }
                     ARTICLE -> {
                         websiteTabMode?.setText(R.string.article_mode)
                         websiteTabModeIcon?.setImageDrawable(IconicsDrawable(itemView.context)
                                 .icon(CommunityMaterial.Icon.cmd_file_image)
                                 .color(ContextCompat.getColor(itemView.context, R.color.md_grey_700))
-                                .sizeDp(18))
+                                .sizeDp(16))
                     }
                 }
             } else {
