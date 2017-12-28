@@ -52,7 +52,7 @@ class BottomBarReceiver : BroadcastReceiver() {
             R.id.bottom_bar_share -> ShareUrl(context, url).perform()
             R.id.bottom_bar_tabs -> TabsScreen(context, url).perform()
             R.id.bottom_bar_minimize_tab -> orgUrl?.let { MinimizeUrl(context, orgUrl).perform() }
-            R.id.bottom_bar_article_view -> orgUrl?.let { ArticleView(context, url).perform() }
+            R.id.bottom_bar_article_view -> ArticleView(context, url).perform()
         }
     }
 
