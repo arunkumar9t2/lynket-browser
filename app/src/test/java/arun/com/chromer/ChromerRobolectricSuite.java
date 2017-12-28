@@ -29,7 +29,7 @@ import arun.com.chromer.di.app.TestAppComponent;
 
 
 @RunWith(RobolectricTestRunner.class)
-@Config(sdk = {16, 19, 21, 25},
+@Config(sdk = {16, 21},
         constants = BuildConfig.class,
         application = ChromerTestApplication.class)
 public abstract class ChromerRobolectricSuite {

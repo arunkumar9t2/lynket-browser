@@ -134,37 +134,41 @@ constructor(
      */
     private fun findTaskAndExecuteAction(context: Context, website: Website, activityName: String?,
                                          foundAction: (task: ActivityManager.AppTask) -> Unit): Boolean {
-        val am = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
-        if (Utils.isLollipopAbove()) {
-            for (task in am.appTasks) {
-                val info = DocumentUtils.getTaskInfoFromTask(task)
-                info?.let {
-                    try {
-                        val intent = info.baseIntent
-                        val url = intent.dataString
-                        val componentClassName = intent.component!!.className
+        try {
+            val am = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
+            if (Utils.isLollipopAbove()) {
+                for (task in am.appTasks) {
+                    val info = DocumentUtils.getTaskInfoFromTask(task)
+                    info?.let {
+                        try {
+                            val intent = info.baseIntent
+                            val url = intent.dataString
+                            val componentClassName = intent.component!!.className
 
-                        val urlMatches = url != null && (url.equals(website.url, ignoreCase = true)
-                                || url.equals(website.preferredUrl(), ignoreCase = true)
-                                || url.equals(website.ampUrl, ignoreCase = true))
+                            val urlMatches = url != null && (url.equals(website.url, ignoreCase = true)
+                                    || url.equals(website.preferredUrl(), ignoreCase = true)
+                                    || url.equals(website.ampUrl, ignoreCase = true))
 
-                        val taskComponentMatches = if (activityName != null) {
-                            componentClassName == activityName
-                        } else {
-                            (componentClassName == CustomTabActivity::class.java.name
-                                    || componentClassName == ChromerArticleActivity::class.java.name
-                                    || componentClassName == WebViewActivity::class.java.name)
+                            val taskComponentMatches = if (activityName != null) {
+                                componentClassName == activityName
+                            } else {
+                                (componentClassName == CustomTabActivity::class.java.name
+                                        || componentClassName == ChromerArticleActivity::class.java.name
+                                        || componentClassName == WebViewActivity::class.java.name)
+                            }
+
+                            if (taskComponentMatches && urlMatches) {
+                                foundAction(task)
+                                return true
+                            }
+                        } catch (e: Exception) {
+                            Timber.e(e)
                         }
-
-                        if (taskComponentMatches && urlMatches) {
-                            foundAction.invoke(task)
-                            return true
-                        }
-                    } catch (e: Exception) {
-                        Timber.e(e)
                     }
                 }
             }
+        } catch (e: Exception) {
+            Timber.e(e)
         }
         return false
     }
