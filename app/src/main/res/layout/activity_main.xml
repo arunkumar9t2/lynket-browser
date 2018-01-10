@@ -61,7 +61,7 @@
             app:elevation="8dp"
             app:itemIconTint="@color/primary"
             app:itemTextColor="@color/primary"
-            app:menu="@menu/bottom_menu" />
+            app:menu="@menu/home_bottom_navigation_menu" />
     </LinearLayout>
 
     <include layout="@layout/widget_bottom_sheet_layout" />

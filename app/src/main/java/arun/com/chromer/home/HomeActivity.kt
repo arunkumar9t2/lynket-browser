@@ -23,6 +23,7 @@ import android.content.Intent.ACTION_VIEW
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v4.app.FragmentManager
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
@@ -31,6 +32,7 @@ import arun.com.chromer.about.AboutAppActivity
 import arun.com.chromer.about.changelog.Changelog
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
+import arun.com.chromer.di.scopes.PerActivity
 import arun.com.chromer.history.HistoryFragment
 import arun.com.chromer.home.fragment.HomeFragment
 import arun.com.chromer.intro.ChromerIntro
@@ -66,10 +68,10 @@ class HomeActivity : BaseActivity(), Snackable {
     lateinit var tabsManager: DefaultTabsManager
     @Inject
     lateinit var rxEventBus: RxEventBus
+    @Inject
+    lateinit var activeFragmentManagerFactory: ActiveFragmentsManager.Factory
 
-    private var historyFragment: HistoryFragment? = null
-    private var homeFragment: HomeFragment? = null
-    private var tabsFragment: TabsFragment? = null
+    private lateinit var activeFragmentManager: ActiveFragmentsManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme_NoActionBar)
@@ -82,66 +84,23 @@ class HomeActivity : BaseActivity(), Snackable {
         Changelog.conditionalShow(this)
 
         setupDrawer()
+        setupFragments(savedInstanceState)
+        setupEventListeners()
+    }
 
-        if (savedInstanceState == null) {
-            historyFragment = HistoryFragment()
-            homeFragment = HomeFragment()
-            tabsFragment = TabsFragment()
-            supportFragmentManager.beginTransaction().apply {
-                add(R.id.fragment_container, homeFragment, HomeFragment::class.java.name)
-                add(R.id.fragment_container, historyFragment, HistoryFragment::class.java.name)
-                if (Utils.ANDROID_LOLLIPOP) {
-                    add(R.id.fragment_container, tabsFragment, TabsFragment::class.java.name)
-                }
-                hide(historyFragment)
-                hide(tabsFragment)
-                show(homeFragment)
-            }.commit()
-        } else {
-            historyFragment = supportFragmentManager.findFragmentByTag(HistoryFragment::class.java.name) as HistoryFragment
-            homeFragment = supportFragmentManager.findFragmentByTag(HomeFragment::class.java.name) as HomeFragment
-            if (Utils.ANDROID_LOLLIPOP) {
-                tabsFragment = supportFragmentManager.findFragmentByTag(TabsFragment::class.java.name) as TabsFragment
-            }
-        }
+    private fun setupEventListeners() {
+        subs.add(rxEventBus.filteredEvents(TabsManager.FinishRoot::class.java).subscribe { finish() })
+    }
+
+    private fun setupFragments(savedInstanceState: Bundle?) {
+        activeFragmentManager = activeFragmentManagerFactory
+                .get(supportFragmentManager)
+                .apply { initialize(savedInstanceState) }
 
         with(bottom_navigation) {
             selectedItemId = R.id.home
-            setOnNavigationItemSelectedListener { item ->
-                when (item.itemId) {
-                    R.id.home -> supportFragmentManager.beginTransaction()
-                            .apply {
-                                show(homeFragment)
-                                if (Utils.ANDROID_LOLLIPOP) {
-                                    hide(tabsFragment)
-                                }
-                                hide(historyFragment)
-                            }.commit()
-                    R.id.tabs -> supportFragmentManager.beginTransaction()
-                            .apply {
-                                if (Utils.ANDROID_LOLLIPOP) {
-                                    show(tabsFragment)
-                                }
-                                hide(homeFragment)
-                                hide(historyFragment)
-                            }.commit()
-                    R.id.history -> supportFragmentManager.beginTransaction()
-                            .apply {
-                                show(historyFragment)
-                                if (Utils.ANDROID_LOLLIPOP) {
-                                    hide(tabsFragment)
-                                }
-                                hide(homeFragment)
-                            }.commit()
-                }
-                false
-            }
-            if (!Utils.ANDROID_LOLLIPOP) {
-                menu.removeItem(R.id.tabs)
-            }
+            setOnNavigationItemSelectedListener(activeFragmentManager::handleBottomMenuClick)
         }
-
-        subs.add(rxEventBus.filteredEvents(TabsManager.FinishRoot::class.java).subscribe { finish() })
     }
 
     override fun inject(activityComponent: ActivityComponent) {
@@ -288,5 +247,122 @@ class HomeActivity : BaseActivity(), Snackable {
             return
         }
         super.onBackPressed()
+    }
+
+    /**
+     * Since we have different available fragments based on API level, we create this class to help
+     * delegate calls to correct implementation to manage active fragments.
+     */
+    abstract class ActiveFragmentsManager(private val fragmentManager: FragmentManager) {
+        /**
+         * Based on @param[savedInstance] tries to restore existing fragments that were reattached
+         * or creates and attaches new instances.
+         */
+        abstract fun initialize(savedInstance: Bundle?)
+
+        /**
+         * Responsible for handling click events from BottomNavigationMenu. Should be delegated from
+         * [BottomNavigationView#setOnNavigationItemSelectedListener]
+         */
+        abstract fun handleBottomMenuClick(menuItem: MenuItem): Boolean
+
+        @PerActivity
+        class Factory @Inject constructor() {
+            fun get(supportFragmentManager: FragmentManager): ActiveFragmentsManager {
+                return if (Utils.ANDROID_LOLLIPOP) {
+                    LollipopActiveFragmentManager(supportFragmentManager)
+                } else {
+                    PreLollipopActiveFragmentManager(supportFragmentManager)
+                }
+            }
+        }
+    }
+
+    /**
+     * Fragment manager for Lollipop which includes the [TabsFragment]
+     */
+    class LollipopActiveFragmentManager(private val fm: FragmentManager) : ActiveFragmentsManager(fm) {
+        private var historyFragment: HistoryFragment? = null
+        private var homeFragment: HomeFragment? = null
+        private var tabsFragment: TabsFragment? = null
+
+        override fun initialize(savedInstance: Bundle?) {
+            if (savedInstance == null) {
+                historyFragment = HistoryFragment()
+                homeFragment = HomeFragment()
+                tabsFragment = TabsFragment()
+                fm.beginTransaction().apply {
+                    add(R.id.fragment_container, homeFragment, HomeFragment::class.java.name)
+                    add(R.id.fragment_container, historyFragment, HistoryFragment::class.java.name)
+                    add(R.id.fragment_container, tabsFragment, TabsFragment::class.java.name)
+                    hide(historyFragment)
+                    hide(tabsFragment)
+                    show(homeFragment)
+                }.commit()
+            } else {
+                historyFragment = fm.findFragmentByTag(HistoryFragment::class.java.name) as HistoryFragment
+                homeFragment = fm.findFragmentByTag(HomeFragment::class.java.name) as HomeFragment
+                tabsFragment = fm.findFragmentByTag(TabsFragment::class.java.name) as TabsFragment
+            }
+        }
+
+        override fun handleBottomMenuClick(menuItem: MenuItem): Boolean {
+            when (menuItem.itemId) {
+                R.id.home -> fm.beginTransaction().apply {
+                    show(homeFragment)
+                    hide(tabsFragment)
+                    hide(historyFragment)
+                }.commit()
+                R.id.tabs -> fm.beginTransaction().apply {
+                    show(tabsFragment)
+                    hide(homeFragment)
+                    hide(historyFragment)
+                }.commit()
+                R.id.history -> fm.beginTransaction().apply {
+                    show(historyFragment)
+                    hide(tabsFragment)
+                    hide(homeFragment)
+                }.commit()
+            }
+            return false
+        }
+    }
+
+    /**
+     * Fragment manager for pre lollip without [TabsFragment]
+     */
+    class PreLollipopActiveFragmentManager(private val fm: FragmentManager) : ActiveFragmentsManager(fm) {
+        private var historyFragment: HistoryFragment? = null
+        private var homeFragment: HomeFragment? = null
+
+        override fun initialize(savedInstance: Bundle?) {
+            if (savedInstance == null) {
+                historyFragment = HistoryFragment()
+                homeFragment = HomeFragment()
+                fm.beginTransaction().apply {
+                    add(R.id.fragment_container, homeFragment, HomeFragment::class.java.name)
+                    add(R.id.fragment_container, historyFragment, HistoryFragment::class.java.name)
+                    show(homeFragment)
+                    hide(historyFragment)
+                }.commit()
+            } else {
+                historyFragment = fm.findFragmentByTag(HistoryFragment::class.java.name) as HistoryFragment
+                homeFragment = fm.findFragmentByTag(HomeFragment::class.java.name) as HomeFragment
+            }
+        }
+
+        override fun handleBottomMenuClick(menuItem: MenuItem): Boolean {
+            when (menuItem.itemId) {
+                R.id.home -> fm.beginTransaction().apply {
+                    show(homeFragment)
+                    hide(historyFragment)
+                }.commit()
+                R.id.history -> fm.beginTransaction().apply {
+                    show(historyFragment)
+                    hide(homeFragment)
+                }.commit()
+            }
+            return false
+        }
     }
 }
