@@ -73,6 +73,7 @@ constructor(
         val websiteRepository: DefaultWebsiteRepository,
         val rxEventBus: RxEventBus
 ) : TabsManager {
+
     override fun openUrl(context: Context, website: Website, fromApp: Boolean, fromWebHeads: Boolean, fromNewTab: Boolean) {
         // Clear non browsing activities if it was external intent.
         if (!fromApp) {
@@ -373,10 +374,10 @@ constructor(
         return Single.create({ onSubscribe ->
             try {
                 val am = application.getSystemService(ACTIVITY_SERVICE) as ActivityManager
-                onSubscribe.onSuccess(am.appTasks
-                        ?.map { DocumentUtils.getTaskInfoFromTask(it) }
-                        ?.filter { it != null && it.baseIntent?.dataString != null && it.baseIntent.component != null }
-                        ?.map {
+                onSubscribe.onSuccess(am.appTasks!!
+                        .map { DocumentUtils.getTaskInfoFromTask(it) }
+                        .filter { it != null && it.baseIntent?.dataString != null && it.baseIntent.component != null }
+                        .map {
                             val url = it.baseIntent.dataString
                             val type = when (it.baseIntent.component.className) {
                                 CustomTabActivity::class.java.name -> CUSTOM_TAB
@@ -385,12 +386,24 @@ constructor(
                                 else -> OTHER
                             }
                             TabsManager.Tab(url, type)
-                        }?.filter { it.type != OTHER }
-                        ?.toMutableList())
+                        }.filter { it.type != OTHER }
+                        .toMutableList())
             } catch (e: Exception) {
                 onSubscribe.onError(e)
             }
         })
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    override fun closeAllTabs(): Single<List<TabsManager.Tab>> {
+        return getActiveTabs()
+                .toObservable()
+                .flatMapIterable { it }
+                .map {
+                    finishTabByUrl(application, Website(it.url), it.getTargetActivityName())
+                    it
+                }.toList()
+                .toSingle()
     }
 
     /**

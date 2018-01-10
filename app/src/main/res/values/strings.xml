@@ -309,4 +309,5 @@
     <string name="new_tab_text">New tab</string>
     <string name="article">Article</string>
     <string name="skip">Skip</string>
+    <string name="tab_deletion_confirmation_content">This action will delete all active tabs and it is not reversible.</string>
 </resources>

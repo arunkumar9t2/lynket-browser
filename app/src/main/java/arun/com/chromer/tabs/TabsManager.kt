@@ -38,7 +38,7 @@ interface TabsManager {
     data class MinimizeEvent(val url: String)
 
     data class Tab(val url: String, @TabType var type: Long, var website: Website? = null) {
-        fun getTargetActivtyName(): String = when (type) {
+        fun getTargetActivityName(): String = when (type) {
             WEB_VIEW -> WebViewActivity::class.java.name
             CUSTOM_TAB -> CustomTabActivity::class.java.name
             ARTICLE -> ChromerArticleActivity::class.java.name
@@ -56,6 +56,11 @@ interface TabsManager {
      * Opens the given Uri in a browsing tab.
      */
     fun openBrowsingTab(context: Context, website: Website, smart: Boolean = false, fromNewTab: Boolean, activityName: String? = null)
+
+    /**
+     * Closes all browsing tabs present in our process.
+     */
+    fun closeAllTabs(): Single<List<Tab>>
 
     /**
      * Returns true if it is determined that we already have any of our browsing activity has opened

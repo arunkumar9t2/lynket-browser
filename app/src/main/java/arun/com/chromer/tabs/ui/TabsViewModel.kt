@@ -23,9 +23,11 @@ import android.arch.lifecycle.ViewModel
 import arun.com.chromer.data.website.WebsiteRepository
 import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.tabs.TabsManager
-import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
+import rx.subjects.PublishSubject
+import rx.subscriptions.CompositeSubscription
+import timber.log.Timber
 import javax.inject.Inject
 
 class TabsViewModel
@@ -37,8 +39,16 @@ constructor(
     val loadingLiveData = MutableLiveData<Boolean>()
     val tabsData = MutableLiveData<MutableList<TabsManager.Tab>>()
 
-    fun activeTabs(requester: Observable<Int>): Observable<MutableList<TabsManager.Tab>> {
-        return requester
+    private val loaderSubject: PublishSubject<Int> = PublishSubject.create()
+    val subs = CompositeSubscription()
+
+    fun loadTabs() {
+        loaderSubject.onNext(0)
+    }
+
+    fun initializeTabsLoader() {
+        subs.add(loaderSubject
+                .asObservable()
                 .doOnNext { loadingLiveData.value = true }
                 .switchMap {
                     tabsManager.getActiveTabs()
@@ -59,6 +69,19 @@ constructor(
                                 loadingLiveData.value = false
                                 tabsData.value = tabs
                             }
-                }
+                }.subscribe())
+    }
+
+    fun clearAllTabs() {
+        subs.add(tabsManager.closeAllTabs()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSuccess { loadTabs() }
+                .doOnError(Timber::e)
+                .subscribe())
+    }
+
+    override fun onCleared() {
+        subs.clear()
     }
 }

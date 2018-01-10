@@ -36,8 +36,9 @@ import arun.com.chromer.shared.base.fragment.BaseFragment
 import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.glide.GlideApp
+import butterknife.OnClick
+import com.afollestad.materialdialogs.MaterialDialog
 import kotlinx.android.synthetic.main.fragment_tabs.*
-import rx.subjects.PublishSubject
 import javax.inject.Inject
 
 /**
@@ -50,8 +51,6 @@ class TabsFragment : BaseFragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private var tabsViewModel: TabsViewModel? = null
-
-    private val loaderSubject: PublishSubject<Int> = PublishSubject.create()
 
     lateinit var tabsAdapter: TabsAdapter
 
@@ -86,15 +85,15 @@ class TabsFragment : BaseFragment() {
     }
 
     private fun observeViewModel() {
-        subs.add(tabsViewModel?.activeTabs(loaderSubject)?.subscribe())
-        tabsViewModel?.loadingLiveData
-                ?.observe(this, Observer<Boolean> { loading ->
-                    loading(loading!!)
-                })
-        tabsViewModel?.tabsData
-                ?.observe(this, Observer<MutableList<TabsManager.Tab>> {
-                    setTabs(it!!)
-                })
+        tabsViewModel?.apply {
+            initializeTabsLoader()
+            loadingLiveData.observe(this@TabsFragment, Observer<Boolean> { loading ->
+                showLoading(loading!!)
+            })
+            tabsData.observe(this@TabsFragment, Observer<MutableList<TabsManager.Tab>> {
+                setTabs(it!!)
+            })
+        }
     }
 
     private fun setupRecyclerView() {
@@ -113,7 +112,7 @@ class TabsFragment : BaseFragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val tab = tabsAdapter.getTabAt(viewHolder.adapterPosition)
                 activity?.let {
-                    tabsManager.finishTabByUrl(activity!!, Website(tab.url), tab.getTargetActivtyName())
+                    tabsManager.finishTabByUrl(activity!!, Website(tab.url), tab.getTargetActivityName())
                     loadTabs()
                 }
             }
@@ -133,10 +132,8 @@ class TabsFragment : BaseFragment() {
         }
     }
 
-    fun loading(loading: Boolean) {
-        swipe_refresh_layout.post {
-            swipe_refresh_layout.isRefreshing = loading
-        }
+    private fun showLoading(loading: Boolean) {
+        swipe_refresh_layout.isRefreshing = loading
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
@@ -156,11 +153,24 @@ class TabsFragment : BaseFragment() {
     }
 
     private fun loadTabs() {
-        loaderSubject.onNext(0)
+        tabsViewModel?.loadTabs()
     }
 
     override fun onDestroy() {
         tabsAdapter.cleanUp()
         super.onDestroy()
+    }
+
+    @OnClick(R.id.fab)
+    fun onClearAllFabClick() {
+        if (tabsAdapter.itemCount != 0) {
+            MaterialDialog.Builder(activity!!)
+                    .title(R.string.are_you_sure)
+                    .content(R.string.tab_deletion_confirmation_content)
+                    .positiveText(android.R.string.yes)
+                    .negativeText(android.R.string.no)
+                    .onPositive { _, _ -> tabsViewModel?.clearAllTabs() }
+                    .show()
+        }
     }
 }

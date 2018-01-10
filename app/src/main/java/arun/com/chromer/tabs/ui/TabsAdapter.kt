@@ -118,7 +118,7 @@ constructor(
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     val tab = tabs[adapterPosition]
                     val url = tab.url
-                    tabsManager.reOrderTabByUrl(itemView.context, Website(url), tab.getTargetActivtyName())
+                    tabsManager.reOrderTabByUrl(itemView.context, Website(url), tab.getTargetActivityName())
                 }
             }
         }
