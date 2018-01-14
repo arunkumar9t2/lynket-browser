@@ -41,9 +41,7 @@ constructor(private val websiteRepository: WebsiteRepository) : ViewModel() {
     fun loadWebSiteDetails(url: String): Observable<Result<Website>> {
         if (webSiteSubject.value is Result.Idle<Website>) {
             subs.add(websiteRepository.getWebsite(url)
-                    .map { Result.Success(it) as Result<Website> }
-                    .onErrorReturn { Result.Failure(it) }
-                    .startWith(Result.Loading())
+                    .compose(Result.applyToObservable())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(webSiteSubject))
