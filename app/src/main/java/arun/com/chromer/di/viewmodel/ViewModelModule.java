@@ -22,6 +22,7 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
 import arun.com.chromer.browsing.BrowsingViewModel;
+import arun.com.chromer.home.fragment.HomeFragmentViewModel;
 import arun.com.chromer.tabs.ui.TabsViewModel;
 import arun.com.chromer.util.viemodel.ViewModelFactory;
 import dagger.Binds;
@@ -39,6 +40,11 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(TabsViewModel.class)
     abstract ViewModel tabsViewModel(TabsViewModel tabsViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(HomeFragmentViewModel.class)
+    abstract ViewModel homeFragmentViewModel(HomeFragmentViewModel homeFragmentViewModel);
 
     @Binds
     abstract ViewModelProvider.Factory bindViewModelFactory(ViewModelFactory factory);

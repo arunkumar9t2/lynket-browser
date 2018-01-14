@@ -75,7 +75,7 @@ class NewTabDialogActivity : BaseActivity() {
         private lateinit var unbinder: Unbinder
         private var dialog: MaterialDialog? = null
 
-        @BindView(R.id.material_search_view)
+        @BindView(R.id.materialSearchView)
         @JvmField
         var materialSearchView: MaterialSearchView? = null
 

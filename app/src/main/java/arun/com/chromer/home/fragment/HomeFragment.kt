@@ -18,6 +18,8 @@
 
 package arun.com.chromer.home.fragment
 
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.transition.Fade
@@ -26,6 +28,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.view.View
 import arun.com.chromer.R
 import arun.com.chromer.browsing.customtabs.CustomTabs
+import arun.com.chromer.data.Result
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.fragment.FragmentComponent
 import arun.com.chromer.extenstions.appName
@@ -35,7 +38,7 @@ import arun.com.chromer.settings.Preferences
 import arun.com.chromer.settings.browsingoptions.BrowsingOptionsActivity
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.shared.base.Snackable
-import arun.com.chromer.shared.base.fragment.BaseMVPFragment
+import arun.com.chromer.shared.base.fragment.BaseFragment
 import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.util.RxEventBus
 import arun.com.chromer.util.Utils
@@ -46,27 +49,30 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import kotlinx.android.synthetic.main.fragment_home.*
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
  * Created by Arunkumar on 07-04-2017.
  */
-class HomeFragment : BaseMVPFragment<HomeFragmentContract.View, HomeFragmentContract.Presenter>(), HomeFragmentContract.View {
+class HomeFragment : BaseFragment() {
     @Inject
     lateinit var recentsAdapter: RecentsAdapter
-    @Inject
-    lateinit var homeFragmentContractPresenter: HomeFragmentContract.Presenter
     @Inject
     lateinit var rxEventBus: RxEventBus
     @Inject
     lateinit var tabsManger: DefaultTabsManager
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    override fun createPresenter(): HomeFragmentContract.Presenter {
-        return homeFragmentContractPresenter
-    }
+    private var homeFragmentViewModel: HomeFragmentViewModel? = null
 
     override fun inject(fragmentComponent: FragmentComponent) {
         fragmentComponent.inject(this)
+    }
+
+    override fun getLayoutRes(): Int {
+        return R.layout.fragment_home
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,10 +88,16 @@ class HomeFragment : BaseMVPFragment<HomeFragmentContract.View, HomeFragmentCont
         setupEventListeners()
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        homeFragmentViewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeFragmentViewModel::class.java)
+        initRecentsLoader()
+    }
+
     override fun onResume() {
         super.onResume()
         if (!isHidden) {
-            invalidateState()
+            loadRecents()
         }
     }
 
@@ -93,19 +105,19 @@ class HomeFragment : BaseMVPFragment<HomeFragmentContract.View, HomeFragmentCont
         super.onHiddenChanged(hidden)
         if (!hidden) {
             activity?.setTitle(R.string.app_name)
-            invalidateState()
+            loadRecents()
         }
     }
 
-    override fun snack(message: String) {
+    fun snack(message: String) {
         (activity as Snackable).snack(message)
     }
 
-    override fun snackLong(message: String) {
+    fun snackLong(message: String) {
         (activity as Snackable).snackLong(message)
     }
 
-    override fun setRecents(websites: List<Website>) {
+    private fun setRecents(websites: List<Website>) {
         recentsAdapter.setWebsites(websites)
         if (websites.isEmpty()) {
             recent_missing_text.visible()
@@ -114,12 +126,8 @@ class HomeFragment : BaseMVPFragment<HomeFragmentContract.View, HomeFragmentCont
         }
     }
 
-    override fun getLayoutRes(): Int {
-        return R.layout.fragment_home
-    }
-
     private fun setupMaterialSearch() {
-        material_search_view.apply {
+        materialSearchView.apply {
             subs.add(voiceSearchFailed().subscribe {
                 snack(getString(R.string.no_voice_rec_apps))
             })
@@ -138,30 +146,34 @@ class HomeFragment : BaseMVPFragment<HomeFragmentContract.View, HomeFragmentCont
         }
     }
 
-    private fun invalidateState() {
-        incognito_mode.apply {
-            isChecked = Preferences.get(context!!).incognitoMode()
-            compoundDrawablePadding = Utils.dpToPx(5.0)
-            setCompoundDrawables(IconicsDrawable(context!!)
-                    .icon(CommunityMaterial.Icon.cmd_incognito)
-                    .colorRes(R.color.material_dark_color)
-                    .sizeDp(18), null, null, null)
-            setOnCheckedChangeListener { _, isChecked -> Preferences.get(context!!).incognitoMode(isChecked) }
-        }
-        homeFragmentContractPresenter.loadRecents()
-        setupRecents()
+    private fun loadRecents() {
+        homeFragmentViewModel?.loadRecents()
     }
 
     private fun setupRecents() {
-        recents_header_icon.setImageDrawable(IconicsDrawable(context!!)
+        recentsHeaderIcon.setImageDrawable(IconicsDrawable(context!!)
                 .icon(CommunityMaterial.Icon.cmd_history)
                 .colorRes(R.color.accent)
                 .sizeDp(24))
-
-        recents_list.apply {
+        recentsList.apply {
             layoutManager = GridLayoutManager(activity, 4)
             adapter = recentsAdapter
         }
+    }
+
+    private fun initRecentsLoader() {
+        subs.add(homeFragmentViewModel!!
+                .recentsObservable()
+                .subscribe({
+                    when (it) {
+                        is Result.Loading<List<Website>> -> {
+                            // TODO Show progress bar.
+                        }
+                        is Result.Success<List<Website>> -> {
+                            setRecents(it.data!!)
+                        }
+                    }
+                }, Timber::e))
     }
 
 
@@ -213,6 +225,6 @@ class HomeFragment : BaseMVPFragment<HomeFragmentContract.View, HomeFragmentCont
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        material_search_view.onActivityResult(requestCode, resultCode, data)
+        materialSearchView.onActivityResult(requestCode, resultCode, data)
     }
 }
