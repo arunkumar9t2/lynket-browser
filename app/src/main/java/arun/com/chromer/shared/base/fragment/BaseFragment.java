@@ -18,6 +18,7 @@
 
 package arun.com.chromer.shared.base.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -57,6 +58,16 @@ public abstract class BaseFragment extends Fragment {
                 .getActivityComponent()
                 .newFragmentComponent(new FragmentModule(this));
         inject(fragmentComponent);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
     }
 
     protected abstract void inject(FragmentComponent fragmentComponent);

@@ -91,7 +91,7 @@ class HomeFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         homeFragmentViewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeFragmentViewModel::class.java)
-        initRecentsLoader()
+        observeViewModel()
     }
 
     override fun onResume() {
@@ -161,7 +161,7 @@ class HomeFragment : BaseFragment() {
         }
     }
 
-    private fun initRecentsLoader() {
+    private fun observeViewModel() {
         subs.add(homeFragmentViewModel!!
                 .recentsObservable()
                 .subscribe({

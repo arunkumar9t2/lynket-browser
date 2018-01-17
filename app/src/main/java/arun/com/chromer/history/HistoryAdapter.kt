@@ -58,9 +58,9 @@ internal class HistoryAdapter(
     private val dataCallback = object : AsyncListUtil.DataCallback<Website>() {
         override fun refreshData(): Int {
             Timber.d("Refresh data")
-            return if (cursor == null || cursor!!.isClosed) {
-                0
-            } else cursor!!.count
+            return if (cursor != null && !cursor!!.isClosed) {
+                cursor!!.count
+            } else 0
         }
 
         override fun fillData(data: Array<Website>, startPosition: Int, itemCount: Int) {
@@ -127,12 +127,11 @@ internal class HistoryAdapter(
     }
 
     fun setCursor(cursor: Cursor?) {
-        if (this.cursor != null) {
+        if (this.cursor != null && this.cursor != cursor) {
             try {
-                this.cursor!!.close()
+                this.cursor?.close()
             } catch (ignored: Exception) {
             }
-
         }
         this.cursor = cursor
         refresh()
@@ -142,7 +141,7 @@ internal class HistoryAdapter(
         asyncWebsiteList.onRangeChanged()
     }
 
-    fun refresh() {
+    private fun refresh() {
         asyncWebsiteList.refresh()
     }
 

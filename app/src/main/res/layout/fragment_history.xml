@@ -27,7 +27,7 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.CardView
-            android:id="@+id/enable_history_card"
+            android:id="@+id/enableHistoryCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -56,7 +56,7 @@
                     android:singleLine="true" />
 
                 <TextView
-                    android:id="@+id/enable_history_subtitle"
+                    android:id="@+id/enableHistorySubtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@id/enable_history_title"
@@ -69,7 +69,7 @@
                     tools:ignore="RtlHardcoded,RtlSymmetry" />
 
                 <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/incognito_switch"
+                    android:id="@+id/incognitoSwitch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -81,12 +81,12 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/swipe_refresh_layout"
+            android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/history_list"
+                android:id="@+id/historyList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"

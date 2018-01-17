@@ -27,6 +27,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.support.v7.widget.helper.ItemTouchHelper.*
+import android.view.View
 import arun.com.chromer.R
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.fragment.FragmentComponent
@@ -65,12 +66,10 @@ class TabsFragment : BaseFragment() {
         retainInstance = true
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        tabsViewModel = ViewModelProviders.of(this, viewModelFactory).get(TabsViewModel::class.java)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-        with(swipe_refresh_layout) {
+        with(swipeRefreshLayout) {
             setOnRefreshListener {
                 loadTabs()
                 isRefreshing = false
@@ -80,7 +79,11 @@ class TabsFragment : BaseFragment() {
                     R.color.colorAccent,
                     R.color.colorPrimaryDarker)
         }
+    }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        tabsViewModel = ViewModelProviders.of(this, viewModelFactory).get(TabsViewModel::class.java)
         observeViewModel()
     }
 
@@ -125,15 +128,15 @@ class TabsFragment : BaseFragment() {
         TransitionManager.beginDelayedTransition(fragmentTabsRoot)
         if (tabs.isEmpty()) {
             error.visible()
-            swipe_refresh_layout.gone()
+            swipeRefreshLayout.gone()
         } else {
             error.gone()
-            swipe_refresh_layout.visible()
+            swipeRefreshLayout.visible()
         }
     }
 
     private fun showLoading(loading: Boolean) {
-        swipe_refresh_layout.isRefreshing = loading
+        swipeRefreshLayout.isRefreshing = loading
     }
 
     override fun onHiddenChanged(hidden: Boolean) {

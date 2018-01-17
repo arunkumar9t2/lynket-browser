@@ -71,10 +71,9 @@ public class Chromer extends Application {
     }
 
     protected void initFabric() {
-        CrashlyticsCore core = new CrashlyticsCore.Builder()
+        Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder()
                 .disabled(BuildConfig.DEBUG)
-                .build();
-        Fabric.with(this, new Crashlytics.Builder().core(core).build());
+                .build()).build());
     }
 
     public AppComponent getAppComponent() {
