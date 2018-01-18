@@ -265,7 +265,7 @@ constructor(
                             override fun onActivityStopped(activity: Activity?) {
                                 // Let's inspect this activity and find if it's what we are looking for.
                                 try {
-                                    activity?.let {
+                                    if (activity != null) {
                                         val activityClass = activity.javaClass.name
                                         if (activityClass == CustomTabActivity::class.java.name
                                                 || activityClass == WebViewActivity::class.java.name) {

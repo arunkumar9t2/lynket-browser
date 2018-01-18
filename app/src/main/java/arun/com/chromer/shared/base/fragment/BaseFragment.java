@@ -52,21 +52,16 @@ public abstract class BaseFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        fragmentComponent = ((ProvidesActivityComponent) getActivity())
-                .getActivityComponent()
-                .newFragmentComponent(new FragmentModule(this));
-        inject(fragmentComponent);
-    }
-
-    @Override
     public void onDetach() {
         super.onDetach();
     }
 
     @Override
     public void onAttach(Context context) {
+        fragmentComponent = ((ProvidesActivityComponent) getActivity())
+                .getActivityComponent()
+                .newFragmentComponent(new FragmentModule(this));
+        inject(fragmentComponent);
         super.onAttach(context);
     }
 
