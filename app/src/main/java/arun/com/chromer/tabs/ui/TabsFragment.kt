@@ -61,11 +61,6 @@ class TabsFragment : BaseFragment() {
 
     override fun getLayoutRes(): Int = R.layout.fragment_tabs
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        retainInstance = true
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()

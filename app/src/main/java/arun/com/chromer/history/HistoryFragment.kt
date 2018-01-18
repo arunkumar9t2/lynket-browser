@@ -68,11 +68,6 @@ class HistoryFragment : BaseFragment(), Snackable {
         return R.layout.fragment_history
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        retainInstance = true
-    }
-
     override fun snack(message: String) {
         (activity as Snackable).snack(message)
     }
