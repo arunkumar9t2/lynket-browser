@@ -35,6 +35,7 @@ import arun.com.chromer.di.fragment.FragmentComponent
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.shared.base.Snackable
 import arun.com.chromer.shared.base.fragment.BaseFragment
+import arun.com.chromer.util.HtmlCompat
 import arun.com.chromer.util.Utils
 import butterknife.OnClick
 import com.afollestad.materialdialogs.MaterialDialog
@@ -60,7 +61,7 @@ class HistoryFragment : BaseFragment(), Snackable {
             return if (provider == null) {
                 getString(R.string.enable_history_subtitle)
             } else {
-                Utils.html(activity!!, String.format(getString(R.string.enable_history_subtitle_custom_tab), Utils.getAppNameWithPackage(activity!!, provider)))
+                HtmlCompat.fromHtml(String.format(getString(R.string.enable_history_subtitle_custom_tab), Utils.getAppNameWithPackage(activity!!, provider)))
             }
         }
 

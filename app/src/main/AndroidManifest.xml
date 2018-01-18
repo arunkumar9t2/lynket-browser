@@ -272,6 +272,10 @@
             android:name="arun.com.chromer.browsing.webview.WebViewActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
+        <activity
+            android:name=".browsing.article.ImageViewActivity"
+            android:theme="@style/ArticleImageViewTheme" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="${crashlyticsApiKey}"

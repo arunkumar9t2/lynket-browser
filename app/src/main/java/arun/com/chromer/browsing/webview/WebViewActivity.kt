@@ -60,7 +60,7 @@ class WebViewActivity : BrowsingActivity() {
 
             if (supportActionBar != null) {
                 supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-                supportActionBar!!.setHomeAsUpIndicator(xyz.klinker.android.article.R.drawable.article_ic_close)
+                supportActionBar!!.setHomeAsUpIndicator(R.drawable.article_ic_close)
                 supportActionBar!!.title = website?.safeLabel() ?: intent.dataString
             }
 

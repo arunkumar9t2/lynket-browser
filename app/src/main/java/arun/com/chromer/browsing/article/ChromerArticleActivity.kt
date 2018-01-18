@@ -27,7 +27,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import arun.com.chromer.Chromer
 import arun.com.chromer.R
 import arun.com.chromer.browsing.customtabs.CustomTabActivity
 import arun.com.chromer.browsing.customtabs.callbacks.ClipboardService
@@ -36,26 +35,23 @@ import arun.com.chromer.browsing.customtabs.callbacks.SecondaryBrowserReceiver
 import arun.com.chromer.browsing.openwith.OpenIntentWithActivity
 import arun.com.chromer.browsing.optionspopup.ChromerOptionsActivity
 import arun.com.chromer.data.history.DefaultHistoryRepository
+import arun.com.chromer.data.webarticle.model.WebArticle
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
-import arun.com.chromer.di.activity.ActivityModule
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.settings.Preferences.*
 import arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_ARTICLE
 import arun.com.chromer.shared.Constants.EXTRA_KEY_ORIGINAL_URL
 import arun.com.chromer.tabs.DefaultTabsManager
-import arun.com.chromer.util.RxUtils
+import arun.com.chromer.util.SchedulerProvider
 import arun.com.chromer.util.Utils
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
-import xyz.klinker.android.article.ArticleActivity
-import xyz.klinker.android.article.data.webarticle.model.WebArticle
 import javax.inject.Inject
 
-class ChromerArticleActivity : ArticleActivity() {
+class ChromerArticleActivity : BaseArticleActivity() {
     private var baseUrl: String? = ""
 
-    var activityComponent: ActivityComponent? = null
     @Inject
     lateinit var historyRepository: DefaultHistoryRepository
 
@@ -64,12 +60,11 @@ class ChromerArticleActivity : ArticleActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activityComponent = (application as Chromer)
-                .appComponent
-                .newActivityComponent(ActivityModule(this))
-        activityComponent!!.inject(this)
-
         baseUrl = intent.dataString
+    }
+
+    override fun inject(activityComponent: ActivityComponent) {
+        activityComponent.inject(this)
     }
 
     override fun onArticleLoadingFailed(throwable: Throwable?) {
@@ -82,7 +77,7 @@ class ChromerArticleActivity : ArticleActivity() {
     override fun onArticleLoaded(webArticle: WebArticle) {
         super.onArticleLoaded(webArticle)
         historyRepository.insert(Website.fromArticle(webArticle))
-                .compose(RxUtils.applySchedulers())
+                .compose(SchedulerProvider.applySchedulers())
                 .subscribe()
     }
 
@@ -182,10 +177,5 @@ class ChromerArticleActivity : ArticleActivity() {
 
     private fun shareUrl() {
         Utils.shareText(this, baseUrl)
-    }
-
-    override fun onDestroy() {
-        activityComponent = null
-        super.onDestroy()
     }
 }

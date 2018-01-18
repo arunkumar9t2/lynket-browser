@@ -37,13 +37,14 @@ import arun.com.chromer.R
 import arun.com.chromer.appdetect.AppDetectionManager
 import arun.com.chromer.browsing.amp.AmpResolverActivity
 import arun.com.chromer.browsing.article.ArticleLauncher
+import arun.com.chromer.browsing.article.ArticlePreloader
 import arun.com.chromer.browsing.article.ChromerArticleActivity
 import arun.com.chromer.browsing.customtabs.CustomTabActivity
 import arun.com.chromer.browsing.customtabs.CustomTabs
 import arun.com.chromer.browsing.newtab.NewTabDialogActivity
 import arun.com.chromer.browsing.webview.WebViewActivity
-import arun.com.chromer.data.apps.DefaultAppRepository
-import arun.com.chromer.data.website.DefaultWebsiteRepository
+import arun.com.chromer.data.apps.AppRepository
+import arun.com.chromer.data.website.WebsiteRepository
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.extenstions.isPackageInstalled
 import arun.com.chromer.settings.Preferences
@@ -58,7 +59,6 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import rx.Single
 import timber.log.Timber
-import xyz.klinker.android.article.ArticleUtils
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -69,8 +69,9 @@ constructor(
         val application: Application,
         val preferences: Preferences,
         val appDetectionManager: AppDetectionManager,
-        val appRepository: DefaultAppRepository,
-        val websiteRepository: DefaultWebsiteRepository,
+        val appRepository: AppRepository,
+        val websiteRepository: WebsiteRepository,
+        val articlePreloader: ArticlePreloader,
         val rxEventBus: RxEventBus
 ) : TabsManager {
 
@@ -257,7 +258,7 @@ constructor(
         // If this command was not issued for minimizing, then attempt aggressive loading.
         if (preferences.aggressiveLoading() && !fromMinimize) {
             if (preferences.articleMode()) {
-                ArticleUtils.preloadArticle(context, Uri.parse(url), { })
+                articlePreloader.preloadArticle(Uri.parse(url), { })
             } else {
                 // Register listener to track opening browsing tabs.
                 application.registerActivityLifecycleCallbacks(

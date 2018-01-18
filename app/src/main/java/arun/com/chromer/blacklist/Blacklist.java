@@ -33,7 +33,7 @@ import arun.com.chromer.data.apps.AppRepository;
 import arun.com.chromer.data.common.App;
 import arun.com.chromer.di.scopes.PerActivity;
 import arun.com.chromer.shared.base.Base;
-import arun.com.chromer.util.RxUtils;
+import arun.com.chromer.util.SchedulerProvider;
 import arun.com.chromer.util.Utils;
 import rx.Observable;
 import rx.SingleSubscriber;
@@ -79,7 +79,7 @@ interface Blacklist {
                         return app;
                     }).distinct()
                     .toSortedList(appComparator::compare)
-                    .compose(RxUtils.applySchedulers())
+                    .compose(SchedulerProvider.applySchedulers())
                     .toSingle()
                     .subscribe(new SingleSubscriber<List<App>>() {
                         @Override
@@ -102,11 +102,11 @@ interface Blacklist {
             if (app != null) {
                 if (app.blackListed) {
                     appRepository.setPackageBlacklisted(app.packageName)
-                            .compose(RxUtils.applySchedulers())
+                            .compose(SchedulerProvider.applySchedulers())
                             .subscribe();
                 } else {
                     appRepository.removeBlacklist(app.packageName)
-                            .compose(RxUtils.applySchedulers())
+                            .compose(SchedulerProvider.applySchedulers())
                             .subscribe();
                 }
             }

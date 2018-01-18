@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Chromer
+  ~ Copyright (C) 2017 Arunkumar
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <color name="article_windowBackground">#303030</color>
+    <color name="article_imageBackground">#212121</color>
+    <color name="article_primaryText">#FFFFFFFF</color>
+    <color name="article_secondaryText">#B2FFFFFF</color>
+    <color name="article_codeblockBackground">#424242</color>
+</resources>

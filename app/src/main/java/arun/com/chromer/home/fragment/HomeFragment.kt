@@ -40,6 +40,7 @@ import arun.com.chromer.shared.Constants
 import arun.com.chromer.shared.base.Snackable
 import arun.com.chromer.shared.base.fragment.BaseFragment
 import arun.com.chromer.tabs.DefaultTabsManager
+import arun.com.chromer.util.HtmlCompat
 import arun.com.chromer.util.RxEventBus
 import arun.com.chromer.util.Utils
 import arun.com.chromer.util.glide.GlideApp
@@ -175,7 +176,7 @@ class HomeFragment : BaseFragment() {
     private fun setupInfoCards() {
         val customTabProvider: String? = Preferences.get(context!!).customTabPackage()
         if (customTabProvider == null) {
-            providerDescription.text = Utils.html(context!!, getString(R.string.tab_provider_status_message_home, getString(R.string.system_webview)))
+            providerDescription.text = HtmlCompat.fromHtml(getString(R.string.tab_provider_status_message_home, getString(R.string.system_webview)))
             GlideApp.with(this)
                     .load(ApplicationIcon.createUri(Constants.SYSTEM_WEBVIEW))
                     .error(IconicsDrawable(context!!)
@@ -185,7 +186,7 @@ class HomeFragment : BaseFragment() {
                     .into(providerIcon)
         } else {
             val appName = context!!.appName(customTabProvider)
-            providerDescription.text = Utils.html(context!!, getString(R.string.tab_provider_status_message_home, appName))
+            providerDescription.text = HtmlCompat.fromHtml(getString(R.string.tab_provider_status_message_home, appName))
             GlideApp.with(this)
                     .load(ApplicationIcon.createUri(customTabProvider))
                     .into(providerIcon)
@@ -203,7 +204,7 @@ class HomeFragment : BaseFragment() {
         } else {
             MaterialDialog.Builder(context!!)
                     .title(R.string.custom_tab_provider_not_found)
-                    .content(Utils.html(context!!, R.string.custom_tab_provider_not_found_dialog_content))
+                    .content(HtmlCompat.fromHtml(context!!.getString(R.string.custom_tab_provider_not_found_dialog_content)))
                     .positiveText(R.string.install)
                     .negativeText(android.R.string.no)
                     .onPositive({ _, _ ->

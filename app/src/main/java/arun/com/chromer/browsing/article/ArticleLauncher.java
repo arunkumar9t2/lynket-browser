@@ -30,7 +30,6 @@ import android.support.v4.content.ContextCompat;
 
 import arun.com.chromer.R;
 import arun.com.chromer.settings.Preferences;
-import xyz.klinker.android.article.ArticleIntent;
 
 import static android.content.Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;

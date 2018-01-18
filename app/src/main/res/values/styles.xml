@@ -75,6 +75,25 @@
     </style>
 
 
+    <style name="ArticleTheme.Base" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/article_colorPrimary</item>
+        <item name="colorPrimaryDark">@color/article_colorPrimaryDark</item>
+        <item name="colorAccent">@color/article_colorAccent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="ArticleTheme" parent="ArticleTheme.Base">
+
+    </style>
+
+    <style name="ArticleImageViewTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
+
+
     <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>

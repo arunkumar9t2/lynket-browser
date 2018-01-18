@@ -37,4 +37,12 @@
     <dimen name="remove_head_shadow_radius">3dp</dimen>
     <dimen name="remove_head_shadow_dx">0dp</dimen>
     <dimen name="remove_head_shadow_dy">1dp</dimen>
+
+    <dimen name="article_extraImagePadding">16dp</dimen>
+    <dimen name="article_extraBottomPadding">16dp</dimen>
+    <dimen name="article_imageParallax">96dp</dimen>
+    <dimen name="article_imageHeight">288dp</dimen>
+    <dimen name="article_minToolbarScroll">4dp</dimen>
+    <dimen name="article_articleWidth">-1px</dimen> <!-- match_parent -->
+    <dimen name="article_drag_down_dismiss_distance">192dp</dimen>
 </resources>

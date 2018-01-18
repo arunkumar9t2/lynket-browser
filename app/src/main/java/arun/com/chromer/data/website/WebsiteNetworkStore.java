@@ -28,7 +28,7 @@ import javax.inject.Singleton;
 
 import arun.com.chromer.data.website.model.WebColor;
 import arun.com.chromer.data.website.model.Website;
-import arun.com.chromer.util.RxUtils;
+import arun.com.chromer.util.SchedulerProvider;
 import arun.com.chromer.util.parser.RxParser;
 import rx.Observable;
 
@@ -57,7 +57,7 @@ public class WebsiteNetworkStore implements WebsiteStore {
                     } else {
                         return Observable.just(new Website(urlArticlePair.first));
                     }
-                }).compose(RxUtils.applySchedulers());
+                }).compose(SchedulerProvider.applySchedulers());
     }
 
     @NonNull

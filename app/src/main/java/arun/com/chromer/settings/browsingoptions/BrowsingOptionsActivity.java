@@ -53,6 +53,7 @@ import arun.com.chromer.settings.widgets.AppPreferenceCardView;
 import arun.com.chromer.shared.base.Snackable;
 import arun.com.chromer.shared.base.activity.BaseActivity;
 import arun.com.chromer.shared.views.IntentPickerSheetView;
+import arun.com.chromer.util.HtmlCompat;
 import arun.com.chromer.util.RxEventBus;
 import arun.com.chromer.util.ServiceManager;
 import arun.com.chromer.util.Utils;
@@ -255,35 +256,35 @@ public class BrowsingOptionsActivity extends BaseActivity implements Snackable, 
                             .icon(CommunityMaterial.Icon.cmd_plus)
                             .color(iconColor)
                             .sizeDp(18));
-                    holder.action.setText(Utils.html(context, R.string.new_tab_action_explanation));
+                    holder.action.setText(HtmlCompat.fromHtml(context.getString(R.string.new_tab_action_explanation)));
                     break;
                 case SHARE:
                     holder.icon.setImageDrawable(new IconicsDrawable(context)
                             .icon(CommunityMaterial.Icon.cmd_share_variant)
                             .color(iconColor)
                             .sizeDp(18));
-                    holder.action.setText(Utils.html(context, R.string.share_action_explanation));
+                    holder.action.setText(HtmlCompat.fromHtml(context.getString(R.string.share_action_explanation)));
                     break;
                 case MINIMIZE:
                     holder.icon.setImageDrawable(new IconicsDrawable(context)
                             .icon(CommunityMaterial.Icon.cmd_flip_to_back)
                             .color(iconColor)
                             .sizeDp(18));
-                    holder.action.setText(Utils.html(context, R.string.minimize_action_explanation));
+                    holder.action.setText(HtmlCompat.fromHtml(context.getString(R.string.minimize_action_explanation)));
                     break;
                 case ARTICLE:
                     holder.icon.setImageDrawable(new IconicsDrawable(context)
                             .icon(CommunityMaterial.Icon.cmd_file_image)
                             .color(iconColor)
                             .sizeDp(18));
-                    holder.action.setText(Utils.html(context, R.string.bottom_bar_article_mode_explanation));
+                    holder.action.setText(HtmlCompat.fromHtml(context.getString(R.string.bottom_bar_article_mode_explanation)));
                     break;
                 case TABS:
                     holder.icon.setImageDrawable(new IconicsDrawable(context)
                             .icon(CommunityMaterial.Icon.cmd_view_agenda)
                             .color(iconColor)
                             .sizeDp(18));
-                    holder.action.setText(Utils.html(context, R.string.bottom_bar_tabs_explanation));
+                    holder.action.setText(HtmlCompat.fromHtml(context.getString(R.string.bottom_bar_tabs_explanation)));
                     break;
             }
         }

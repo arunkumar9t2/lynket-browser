@@ -310,4 +310,5 @@
     <string name="article">Article</string>
     <string name="skip">Skip</string>
     <string name="tab_deletion_confirmation_content">This action will delete all active tabs and it is not reversible.</string>
+    <string name="article_bullet_point">•</string>
 </resources>

@@ -31,7 +31,7 @@ import arun.com.chromer.data.website.model.Website;
 import arun.com.chromer.di.scopes.PerFragment;
 import arun.com.chromer.shared.base.Base;
 import arun.com.chromer.shared.base.Snackable;
-import arun.com.chromer.util.RxUtils;
+import arun.com.chromer.util.SchedulerProvider;
 import rx.Observable;
 import timber.log.Timber;
 
@@ -60,7 +60,7 @@ interface History {
                 getView().loading(true);
             }
             subs.add(historyRepository.getAllItemsCursor()
-                    .compose(RxUtils.applySchedulers())
+                    .compose(SchedulerProvider.applySchedulers())
                     .toSingle()
                     .doOnSuccess(cursor -> {
                         if (isViewAttached()) {
@@ -76,7 +76,7 @@ interface History {
         void deleteAll(@NonNull Context context) {
             subs.add(historyRepository
                     .deleteAll()
-                    .compose(RxUtils.applySchedulers())
+                    .compose(SchedulerProvider.applySchedulers())
                     .doOnError(Timber::e)
                     .doOnNext(rows -> loadHistory())
                     .doOnNext(rows -> {
@@ -90,7 +90,7 @@ interface History {
             subs.add(webSiteObservable
                     .filter(webSite -> webSite != null && webSite.url != null)
                     .flatMap(historyRepository::delete)
-                    .compose(RxUtils.applySchedulers())
+                    .compose(SchedulerProvider.applySchedulers())
                     .doOnError(Timber::e)
                     .doOnNext(result -> loadHistory())
                     .subscribe());

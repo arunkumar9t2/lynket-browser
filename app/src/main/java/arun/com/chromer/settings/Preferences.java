@@ -28,6 +28,9 @@ import android.support.v4.content.ContextCompat;
 
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import arun.com.chromer.R;
 import arun.com.chromer.browsing.customtabs.CustomTabs;
 import arun.com.chromer.util.Utils;
@@ -37,6 +40,7 @@ import static arun.com.chromer.shared.Constants.CHROME_PACKAGE;
 /**
  * Created by Arun on 05/01/2016.
  */
+@Singleton
 public class Preferences {
     public static final String TOOLBAR_COLOR = "toolbar_color";
     public static final String WEB_HEADS_COLOR = "webhead_color";
@@ -82,6 +86,7 @@ public class Preferences {
 
     private final Context context;
 
+    @Inject
     public Preferences(@NonNull Context context) {
         this.context = context.getApplicationContext();
     }

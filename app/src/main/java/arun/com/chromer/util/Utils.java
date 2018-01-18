@@ -43,17 +43,12 @@ import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.text.Html;
-import android.text.Spanned;
 import android.util.DisplayMetrics;
 import android.util.Patterns;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -374,27 +369,6 @@ public class Utils {
         return app;
     }
 
-    @NonNull
-    public static Spanned html(@NonNull Context context, @StringRes int res) {
-        final String string = context.getString(res);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return Html.fromHtml(string, Html.FROM_HTML_MODE_LEGACY);
-        } else {
-            //noinspection deprecation
-            return Html.fromHtml(string);
-        }
-    }
-
-    @NonNull
-    public static Spanned html(@NonNull Context context, @NonNull String string) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return Html.fromHtml(string, Html.FROM_HTML_MODE_LEGACY);
-        } else {
-            //noinspection deprecation
-            return Html.fromHtml(string);
-        }
-    }
-
     public static void doAfterLayout(@NonNull final View view, @NonNull final Runnable end) {
         view.requestLayout();
         final ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
@@ -496,9 +470,6 @@ public class Utils {
             public Boolean call() throws Exception {
                 return delete(context.getApplicationContext());
             }
-        }).map(aBoolean -> {
-            Glide.get(context).clearDiskCache();
-            return aBoolean;
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnError(Timber::e)

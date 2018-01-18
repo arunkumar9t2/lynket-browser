@@ -23,7 +23,7 @@ import android.arch.lifecycle.ViewModel
 import android.database.Cursor
 import arun.com.chromer.data.history.HistoryRepository
 import arun.com.chromer.data.website.model.Website
-import arun.com.chromer.util.RxUtils
+import arun.com.chromer.util.SchedulerProvider
 import rx.subjects.PublishSubject
 import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
@@ -53,7 +53,7 @@ constructor(
                 .doOnNext { loadingLiveData.postValue(true) }
                 .switchMap {
                     historyRepository.allItemsCursor
-                }.compose(RxUtils.applySchedulers())
+                }.compose(SchedulerProvider.applySchedulers())
                 .doOnNext { loadingLiveData.postValue(false) }
                 .doOnNext(historyCursorLiveData::postValue)
                 .subscribe())
@@ -62,7 +62,7 @@ constructor(
     fun deleteAll(onSuccess: (rows: Int) -> Unit) {
         subs.add(historyRepository
                 .deleteAll()
-                .compose(RxUtils.applySchedulers())
+                .compose(SchedulerProvider.applySchedulers())
                 .doOnNext { rows ->
                     loadHistory()
                     onSuccess(rows)
@@ -73,7 +73,7 @@ constructor(
         subs.add(rx.Observable.just(website)
                 .filter { webSite -> webSite?.url != null }
                 .flatMap<Website>({ historyRepository.delete(it!!) })
-                .compose(RxUtils.applySchedulers())
+                .compose(SchedulerProvider.applySchedulers())
                 .doOnError(Timber::e)
                 .doOnNext { loadHistory() }
                 .subscribe())

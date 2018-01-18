@@ -24,6 +24,7 @@ import javax.inject.Singleton;
 
 import arun.com.chromer.appdetect.AppDetectionManager;
 import arun.com.chromer.di.viewmodel.ViewModelModule;
+import arun.com.chromer.settings.Preferences;
 import arun.com.chromer.util.RxEventBus;
 import dagger.Module;
 import dagger.Provides;
@@ -47,6 +48,12 @@ public class AppModule {
     @Singleton
     AppDetectionManager providesAppDetectionManager() {
         return new AppDetectionManager(application);
+    }
+
+    @Provides
+    @Singleton
+    Preferences providesPreferences() {
+        return Preferences.get(application);
     }
 
     @Provides

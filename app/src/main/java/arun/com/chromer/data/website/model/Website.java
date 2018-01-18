@@ -30,7 +30,7 @@ import android.text.TextUtils;
 import com.chimbori.crux.articles.Article;
 
 import arun.com.chromer.data.history.model.HistoryTable;
-import xyz.klinker.android.article.data.webarticle.model.WebArticle;
+import arun.com.chromer.data.webarticle.model.WebArticle;
 
 import static arun.com.chromer.shared.Constants.NO_COLOR;
 

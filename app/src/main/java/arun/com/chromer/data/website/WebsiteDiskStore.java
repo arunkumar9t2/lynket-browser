@@ -32,11 +32,11 @@ import javax.inject.Singleton;
 import arun.com.chromer.data.common.BookStore;
 import arun.com.chromer.data.website.model.WebColor;
 import arun.com.chromer.data.website.model.Website;
+import in.arunkumarsampath.diskcache.ParcelDiskCache;
 import io.paperdb.Book;
 import io.paperdb.Paper;
 import rx.Observable;
 import timber.log.Timber;
-import xyz.klinker.android.article.data.cache.ParcelDiskCache;
 
 import static arun.com.chromer.shared.Constants.NO_COLOR;
 

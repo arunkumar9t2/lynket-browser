@@ -16,16 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.data.website.qualifiers;
+package arun.com.chromer.util;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import android.os.Build;
+import android.support.annotation.NonNull;
+import android.text.Html;
+import android.text.Spanned;
 
-import javax.inject.Qualifier;
-
-@Qualifier
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Network {
+public class HtmlCompat {
+    public static Spanned fromHtml(@NonNull String html) {
+        final Spanned result;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            result = Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT);
+        } else {
+            //noinspection deprecation
+            result = Html.fromHtml(html);
+        }
+        return result;
+    }
 }

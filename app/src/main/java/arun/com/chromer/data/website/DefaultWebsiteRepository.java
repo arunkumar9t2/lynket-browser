@@ -27,11 +27,11 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import arun.com.chromer.data.history.HistoryRepository;
+import arun.com.chromer.data.qualifiers.Disk;
+import arun.com.chromer.data.qualifiers.Network;
 import arun.com.chromer.data.website.model.WebColor;
 import arun.com.chromer.data.website.model.Website;
-import arun.com.chromer.data.website.qualifiers.Disk;
-import arun.com.chromer.data.website.qualifiers.Network;
-import arun.com.chromer.util.RxUtils;
+import arun.com.chromer.util.SchedulerProvider;
 import rx.Observable;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
@@ -83,7 +83,7 @@ public class DefaultWebsiteRepository implements WebsiteRepository {
         return Observable.concat(cache, history, remote)
                 .first(webSite -> webSite != null)
                 .doOnError(Timber::e)
-                .compose(RxUtils.applySchedulers());
+                .compose(SchedulerProvider.applySchedulers());
     }
 
     @Override

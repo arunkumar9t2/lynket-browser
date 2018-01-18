@@ -25,6 +25,8 @@ import com.chimbori.crux.articles.Article;
 import com.chimbori.crux.articles.ArticleExtractor;
 import com.chimbori.crux.urls.CruxURL;
 
+import org.jsoup.Jsoup;
+
 import rx.Observable;
 import rx.functions.Func1;
 import timber.log.Timber;
@@ -38,23 +40,24 @@ public class RxParser {
     }
 
     public static Observable<Pair<String, Article>> parseUrl(@Nullable String url) {
-        return Observable.just(url).map(URL_TO_ARTICLE_PAIR_MAPPER);
+        return Observable.just(url).map(URL_TO_METADATA_MAPPER);
     }
 
-    public static Article parseUrlSync(@Nullable String url) {
-        return Observable.just(url).map(URL_TO_ARTICLE_PAIR_MAPPER).toBlocking().first().second;
+    public static Observable<Pair<String, Article>> parseArticle(@Nullable String url) {
+        return Observable.just(url).map(URL_TO_WEB_ARTICLE_PAIR_MAPPER);
     }
 
     /**
      * Converts the given URL to its extracted article metadata form. The extraction is not performed
      * if the given url is not a proper web url.
      */
-    private static final Func1<String, Pair<String, Article>> URL_TO_ARTICLE_PAIR_MAPPER = url -> {
+    private static final Func1<String, Pair<String, Article>> URL_TO_METADATA_MAPPER = url -> {
         Article article = null;
         try {
             final String expanded = WebsiteUtilities.unShortenUrl(url);
             final CruxURL candidateUrl = CruxURL.parse(expanded);
             if (candidateUrl.resolveRedirects().isLikelyArticle()) {
+                // We only need the head tag for meta data.
                 String webSiteString = WebsiteUtilities.headString(candidateUrl.toString());
 
                 article = ArticleExtractor
@@ -67,6 +70,26 @@ public class RxParser {
             }
         } catch (Exception | OutOfMemoryError e) {
             Timber.e(e);
+            Observable.error(e);
+        }
+        return new Pair<>(url, article);
+    };
+
+
+    private static final Func1<String, Pair<String, Article>> URL_TO_WEB_ARTICLE_PAIR_MAPPER = url -> {
+        Article article = null;
+        try {
+            // Unshortened url breaks cache since redirected url might be different.
+            // final String expanded = WebsiteUtilities.unShortenUrl(url);
+            final CruxURL cruxURL = CruxURL.parse(url);
+            final boolean isArticle = cruxURL.resolveRedirects().isLikelyArticle();
+            if (isArticle) {
+                article = ArticleExtractor.with(cruxURL.toString(), Jsoup.connect(cruxURL.toString()).get())
+                        .extractMetadata()
+                        .extractContent()
+                        .article();
+            }
+        } catch (Exception | OutOfMemoryError e) {
             Observable.error(e);
         }
         return new Pair<>(url, article);

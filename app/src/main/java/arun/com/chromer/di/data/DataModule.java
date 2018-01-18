@@ -30,14 +30,18 @@ import arun.com.chromer.data.history.DefaultHistoryRepository;
 import arun.com.chromer.data.history.HistoryRepository;
 import arun.com.chromer.data.history.HistorySqlDiskStore;
 import arun.com.chromer.data.history.HistoryStore;
+import arun.com.chromer.data.qualifiers.Disk;
+import arun.com.chromer.data.qualifiers.Network;
+import arun.com.chromer.data.webarticle.DefaultWebArticleRepository;
+import arun.com.chromer.data.webarticle.WebArticleCacheStore;
+import arun.com.chromer.data.webarticle.WebArticleNetworkStore;
+import arun.com.chromer.data.webarticle.WebArticleRepository;
+import arun.com.chromer.data.webarticle.WebArticleStore;
 import arun.com.chromer.data.website.DefaultWebsiteRepository;
 import arun.com.chromer.data.website.WebsiteDiskStore;
 import arun.com.chromer.data.website.WebsiteNetworkStore;
 import arun.com.chromer.data.website.WebsiteRepository;
 import arun.com.chromer.data.website.WebsiteStore;
-import arun.com.chromer.data.website.qualifiers.Disk;
-import arun.com.chromer.data.website.qualifiers.Network;
-import arun.com.chromer.settings.Preferences;
 import dagger.Module;
 import dagger.Provides;
 
@@ -47,12 +51,6 @@ public class DataModule {
 
     public DataModule(Application application) {
         this.application = application;
-    }
-
-    @Provides
-    @Singleton
-    Preferences providesPreferences() {
-        return Preferences.get(application);
     }
 
     @Provides
@@ -99,4 +97,23 @@ public class DataModule {
         return websiteRepository;
     }
 
+    @Provides
+    @Singleton
+    @Disk
+    WebArticleStore diskWebArticleStore(WebArticleCacheStore webArticleCacheStore) {
+        return webArticleCacheStore;
+    }
+
+    @Provides
+    @Singleton
+    @Network
+    WebArticleStore networkWebArticleStore(WebArticleNetworkStore websiteNetworkStore) {
+        return websiteNetworkStore;
+    }
+
+    @Provides
+    @Singleton
+    WebArticleRepository webArticleRepository(DefaultWebArticleRepository webArticleRepository) {
+        return webArticleRepository;
+    }
 }

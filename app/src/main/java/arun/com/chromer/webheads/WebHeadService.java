@@ -62,6 +62,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import arun.com.chromer.R;
+import arun.com.chromer.browsing.article.ArticlePreloader;
 import arun.com.chromer.browsing.customtabs.CustomTabManager;
 import arun.com.chromer.browsing.newtab.NewTabDialogActivity;
 import arun.com.chromer.data.website.WebsiteRepository;
@@ -80,7 +81,6 @@ import arun.com.chromer.webheads.ui.views.WebHead;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
-import xyz.klinker.android.article.ArticleUtils;
 
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
@@ -127,6 +127,9 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
 
     @Inject
     DefaultTabsManager tabsManager;
+
+    @Inject
+    ArticlePreloader articlePreloader;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -346,8 +349,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
 
     private void preLoadForArticle(String url) {
         if (Preferences.get(this).articleMode()) {
-            ArticleUtils.preloadArticle(this, Uri.parse(url),
-                    success -> Timber.d("Url %s preloaded, result: %b", url, success));
+            articlePreloader.preloadArticle(Uri.parse(url), success -> Timber.d("Url %s preloaded, result: %b", url, success));
         }
     }
 
