@@ -37,6 +37,8 @@ import arun.com.chromer.about.changelog.Changelog
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.di.scopes.PerActivity
+import arun.com.chromer.extenstions.circularHideWithSelfCenter
+import arun.com.chromer.extenstions.circularRevealWithSelfCenter
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.visible
 import arun.com.chromer.history.HistoryFragment
@@ -45,6 +47,7 @@ import arun.com.chromer.intro.ChromerIntro
 import arun.com.chromer.intro.WebHeadsIntro
 import arun.com.chromer.payments.DonateActivity
 import arun.com.chromer.search.behavior.MaterialSearchViewBehavior
+import arun.com.chromer.search.view.MaterialSearchView
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.settings.SettingsGroupActivity
 import arun.com.chromer.shared.Constants
@@ -107,7 +110,7 @@ class HomeActivity : BaseActivity(), Snackable {
 
     private fun setupFragments(savedInstanceState: Bundle?) {
         activeFragmentManager = activeFragmentManagerFactory
-                .get(supportFragmentManager)
+                .get(supportFragmentManager, materialSearchView)
                 .apply { initialize(savedInstanceState) }
 
         bottomNavigation.apply {
@@ -258,14 +261,19 @@ class HomeActivity : BaseActivity(), Snackable {
 
     private fun setupSearchBar() {
         materialSearchView.apply {
+            // Attach a behaviour to handle scroll
             (layoutParams as CoordinatorLayout.LayoutParams).behavior = MaterialSearchViewBehavior()
+            // Handle voice item failed
             subs.add(voiceSearchFailed().subscribe {
                 snack(getString(R.string.no_voice_rec_apps))
             })
+            // Handle search events
             subs.add(searchPerforms().subscribe { url ->
                 postDelayed({ launchCustomTab(url) }, 150)
             })
+            // No focus initially
             clearFocus()
+            // Handle focus changes
             subs.add(focusChanges().subscribe { hasFocus ->
                 TransitionManager.beginDelayedTransition(fragmentHome, Fade().apply {
                     addTarget(shadowView)
@@ -278,6 +286,8 @@ class HomeActivity : BaseActivity(), Snackable {
                     shadowView.gone()
                 }
             })
+            // Reveal the search bar with animation after layout pass
+            post { materialSearchView.circularRevealWithSelfCenter() }
         }
     }
 
@@ -322,12 +332,28 @@ class HomeActivity : BaseActivity(), Snackable {
      * Since we have different available fragments based on API level, we create this class to help
      * delegate calls to correct implementation to manage active fragments.
      */
-    abstract class ActiveFragmentsManager {
+    abstract class ActiveFragmentsManager(private val fm: FragmentManager) {
+        protected var historyFragment: HistoryFragment? = null
+        protected var homeFragment: HomeFragment? = null
         /**
          * Based on @param[savedInstance] tries to restore existing fragments that were reattached
          * or creates and attaches new instances.
          */
-        abstract fun initialize(savedInstance: Bundle?)
+        open fun initialize(savedInstance: Bundle?) {
+            if (savedInstance == null) {
+                historyFragment = HistoryFragment()
+                homeFragment = HomeFragment()
+                fm.beginTransaction().apply {
+                    add(R.id.fragment_container, homeFragment, HomeFragment::class.java.name)
+                    add(R.id.fragment_container, historyFragment, HistoryFragment::class.java.name)
+                    show(homeFragment)
+                    hide(historyFragment)
+                }.commit()
+            } else {
+                historyFragment = fm.findFragmentByTag(HistoryFragment::class.java.name) as HistoryFragment
+                homeFragment = fm.findFragmentByTag(HomeFragment::class.java.name) as HomeFragment
+            }
+        }
 
         /**
          * Responsible for handling click events from BottomNavigationMenu. Should be delegated from
@@ -337,11 +363,11 @@ class HomeActivity : BaseActivity(), Snackable {
 
         @PerActivity
         class Factory @Inject constructor() {
-            fun get(supportFragmentManager: FragmentManager): ActiveFragmentsManager {
+            fun get(supportFragmentManager: FragmentManager, materialSearchView: MaterialSearchView): ActiveFragmentsManager {
                 return if (Utils.ANDROID_LOLLIPOP) {
-                    LollipopActiveFragmentManager(supportFragmentManager)
+                    LollipopActiveFragmentManager(supportFragmentManager, materialSearchView)
                 } else {
-                    PreLollipopActiveFragmentManager(supportFragmentManager)
+                    PreLollipopActiveFragmentManager(supportFragmentManager, materialSearchView)
                 }
             }
         }
@@ -350,48 +376,51 @@ class HomeActivity : BaseActivity(), Snackable {
     /**
      * Fragment manager for Lollipop which includes the [TabsFragment]
      */
-    class LollipopActiveFragmentManager(private val fm: FragmentManager) : ActiveFragmentsManager() {
-        private var historyFragment: HistoryFragment? = null
-        private var homeFragment: HomeFragment? = null
+    class LollipopActiveFragmentManager(
+            private val fm: FragmentManager,
+            private val materialSearchView: MaterialSearchView?
+    ) : ActiveFragmentsManager(fm) {
         private var tabsFragment: TabsFragment? = null
 
         override fun initialize(savedInstance: Bundle?) {
+            super.initialize(savedInstance)
             if (savedInstance == null) {
-                historyFragment = HistoryFragment()
-                homeFragment = HomeFragment()
                 tabsFragment = TabsFragment()
                 fm.beginTransaction().apply {
-                    add(R.id.fragment_container, homeFragment, HomeFragment::class.java.name)
-                    add(R.id.fragment_container, historyFragment, HistoryFragment::class.java.name)
                     add(R.id.fragment_container, tabsFragment, TabsFragment::class.java.name)
-                    hide(historyFragment)
                     hide(tabsFragment)
-                    show(homeFragment)
                 }.commit()
             } else {
-                historyFragment = fm.findFragmentByTag(HistoryFragment::class.java.name) as HistoryFragment
-                homeFragment = fm.findFragmentByTag(HomeFragment::class.java.name) as HomeFragment
                 tabsFragment = fm.findFragmentByTag(TabsFragment::class.java.name) as TabsFragment
             }
         }
 
         override fun handleBottomMenuClick(menuItemId: Int): Boolean {
             when (menuItemId) {
-                R.id.home -> fm.beginTransaction().apply {
-                    show(homeFragment)
-                    hide(tabsFragment)
-                    hide(historyFragment)
-                }.commit()
-                R.id.tabs -> fm.beginTransaction().apply {
-                    show(tabsFragment)
-                    hide(homeFragment)
-                    hide(historyFragment)
-                }.commit()
-                R.id.history -> fm.beginTransaction().apply {
-                    show(historyFragment)
-                    hide(tabsFragment)
-                    hide(homeFragment)
-                }.commit()
+                R.id.home -> {
+                    materialSearchView?.circularRevealWithSelfCenter()
+                    fm.beginTransaction().apply {
+                        show(homeFragment)
+                        hide(historyFragment)
+                        hide(tabsFragment)
+                    }.commit()
+                }
+                R.id.history -> {
+                    materialSearchView?.circularHideWithSelfCenter()
+                    fm.beginTransaction().apply {
+                        show(historyFragment)
+                        hide(homeFragment)
+                        hide(tabsFragment)
+                    }.commit()
+                }
+                R.id.tabs -> {
+                    materialSearchView?.circularHideWithSelfCenter()
+                    fm.beginTransaction().apply {
+                        show(tabsFragment)
+                        hide(homeFragment)
+                        hide(historyFragment)
+                    }.commit()
+                }
             }
             return false
         }
@@ -400,36 +429,27 @@ class HomeActivity : BaseActivity(), Snackable {
     /**
      * Fragment manager for pre lollip without [TabsFragment]
      */
-    class PreLollipopActiveFragmentManager(private val fm: FragmentManager) : ActiveFragmentsManager() {
-        private var historyFragment: HistoryFragment? = null
-        private var homeFragment: HomeFragment? = null
-
-        override fun initialize(savedInstance: Bundle?) {
-            if (savedInstance == null) {
-                historyFragment = HistoryFragment()
-                homeFragment = HomeFragment()
-                fm.beginTransaction().apply {
-                    add(R.id.fragment_container, homeFragment, HomeFragment::class.java.name)
-                    add(R.id.fragment_container, historyFragment, HistoryFragment::class.java.name)
-                    show(homeFragment)
-                    hide(historyFragment)
-                }.commit()
-            } else {
-                historyFragment = fm.findFragmentByTag(HistoryFragment::class.java.name) as HistoryFragment
-                homeFragment = fm.findFragmentByTag(HomeFragment::class.java.name) as HomeFragment
-            }
-        }
+    class PreLollipopActiveFragmentManager(
+            private val fm: FragmentManager,
+            private val materialSearchView: MaterialSearchView?
+    ) : ActiveFragmentsManager(fm) {
 
         override fun handleBottomMenuClick(menuItemId: Int): Boolean {
             when (menuItemId) {
-                R.id.home -> fm.beginTransaction().apply {
-                    show(homeFragment)
-                    hide(historyFragment)
-                }.commit()
-                R.id.history -> fm.beginTransaction().apply {
-                    show(historyFragment)
-                    hide(homeFragment)
-                }.commit()
+                R.id.home -> {
+                    materialSearchView?.circularRevealWithSelfCenter()
+                    fm.beginTransaction().apply {
+                        show(homeFragment)
+                        hide(historyFragment)
+                    }.commit()
+                }
+                R.id.history -> {
+                    materialSearchView?.circularHideWithSelfCenter()
+                    fm.beginTransaction().apply {
+                        show(historyFragment)
+                        hide(homeFragment)
+                    }.commit()
+                }
             }
             return false
         }
