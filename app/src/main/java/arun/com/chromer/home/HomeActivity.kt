@@ -70,6 +70,7 @@ import com.mikepenz.materialdrawer.DrawerBuilder
 import com.mikepenz.materialdrawer.model.DividerDrawerItem
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
+import it.sephiroth.android.library.bottomnavigation.BottomBehavior
 import it.sephiroth.android.library.bottomnavigation.BottomNavigation
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -146,11 +147,11 @@ class HomeActivity : BaseActivity(), Snackable {
     }
 
     override fun snack(textToSnack: String) {
-        Snackbar.make(coordinator_layout, textToSnack, Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun snackLong(textToSnack: String) {
-        Snackbar.make(coordinator_layout, textToSnack, Snackbar.LENGTH_LONG).show()
+        Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_LONG).show()
     }
 
     private fun setupToolbar() {
@@ -279,8 +280,8 @@ class HomeActivity : BaseActivity(), Snackable {
                     addTarget(shadowView)
                     addTarget(bottomNavigation)
                 })
+                handleBottomBar(hasFocus)
                 if (hasFocus) {
-                    // appbar.setExpanded(false, false)
                     shadowView.visible()
                 } else {
                     shadowView.gone()
@@ -320,6 +321,21 @@ class HomeActivity : BaseActivity(), Snackable {
             onNeutral { _, _ -> tabsManager.openUrl(this@HomeActivity, Website(APP_TESTING_URL)) }
             build()
         }.show()
+    }
+
+    /**
+     * Trigger's coordinator's layout dispatch for scrolling manually.
+     */
+    private fun handleBottomBar(hide: Boolean) {
+        val bottomBehavior = (bottomNavigation.layoutParams as CoordinatorLayout.LayoutParams).behavior as BottomBehavior
+        bottomBehavior.onNestedFling(
+                coordinatorLayout,
+                bottomNavigation,
+                materialSearchView,
+                0f,
+                if (hide) 10000f else -10000f,
+                true
+        )
     }
 
 

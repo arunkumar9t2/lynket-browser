@@ -39,7 +39,7 @@ public class BrowsingModeActivity extends SubActivity implements BrowsingModeAda
     Toolbar toolbar;
     @BindView(R.id.browsing_mode_list_view)
     RecyclerView browsingModeListView;
-    @BindView(R.id.coordinator_layout)
+    @BindView(R.id.coordinatorLayout)
     CoordinatorLayout coordinatorLayout;
     private BrowsingModeAdapter adapter;
 
