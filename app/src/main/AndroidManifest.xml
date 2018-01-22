@@ -98,14 +98,16 @@
         <!-- Chromer launcher activity -->
         <activity
             android:name=".home.HomeActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan" />
 
         <activity-alias
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:targetActivity=".home.HomeActivity"
-            android:theme="@style/AppTheme.Launcher">
+            android:theme="@style/AppTheme.Launcher"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

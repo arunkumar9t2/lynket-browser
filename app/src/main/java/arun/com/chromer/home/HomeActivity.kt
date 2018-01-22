@@ -110,7 +110,7 @@ class HomeActivity : BaseActivity(), Snackable {
 
     private fun setupFragments(savedInstanceState: Bundle?) {
         activeFragmentManager = activeFragmentManagerFactory
-                .get(supportFragmentManager, materialSearchView)
+                .get(supportFragmentManager, materialSearchView, appbar)
                 .apply { initialize(savedInstanceState) }
 
         bottomNavigation.apply {
@@ -280,7 +280,7 @@ class HomeActivity : BaseActivity(), Snackable {
                     addTarget(bottomNavigation)
                 })
                 if (hasFocus) {
-                    appbar.setExpanded(false, false)
+                    // appbar.setExpanded(false, false)
                     shadowView.visible()
                 } else {
                     shadowView.gone()
@@ -363,11 +363,15 @@ class HomeActivity : BaseActivity(), Snackable {
 
         @PerActivity
         class Factory @Inject constructor() {
-            fun get(supportFragmentManager: FragmentManager, materialSearchView: MaterialSearchView): ActiveFragmentsManager {
+            fun get(
+                    supportFragmentManager: FragmentManager,
+                    materialSearchView: MaterialSearchView,
+                    appbar: AppBarLayout
+            ): ActiveFragmentsManager {
                 return if (Utils.ANDROID_LOLLIPOP) {
-                    LollipopActiveFragmentManager(supportFragmentManager, materialSearchView)
+                    LollipopActiveFragmentManager(supportFragmentManager, materialSearchView, appbar)
                 } else {
-                    PreLollipopActiveFragmentManager(supportFragmentManager, materialSearchView)
+                    PreLollipopActiveFragmentManager(supportFragmentManager, materialSearchView, appbar)
                 }
             }
         }
@@ -378,7 +382,8 @@ class HomeActivity : BaseActivity(), Snackable {
      */
     class LollipopActiveFragmentManager(
             private val fm: FragmentManager,
-            private val materialSearchView: MaterialSearchView?
+            private val materialSearchView: MaterialSearchView?,
+            private var appbar: AppBarLayout
     ) : ActiveFragmentsManager(fm) {
         private var tabsFragment: TabsFragment? = null
 
@@ -406,6 +411,7 @@ class HomeActivity : BaseActivity(), Snackable {
                     }.commit()
                 }
                 R.id.history -> {
+                    appbar.setExpanded(false)
                     materialSearchView?.circularHideWithSelfCenter()
                     fm.beginTransaction().apply {
                         show(historyFragment)
@@ -414,6 +420,7 @@ class HomeActivity : BaseActivity(), Snackable {
                     }.commit()
                 }
                 R.id.tabs -> {
+                    appbar.setExpanded(false)
                     materialSearchView?.circularHideWithSelfCenter()
                     fm.beginTransaction().apply {
                         show(tabsFragment)
@@ -431,7 +438,8 @@ class HomeActivity : BaseActivity(), Snackable {
      */
     class PreLollipopActiveFragmentManager(
             private val fm: FragmentManager,
-            private val materialSearchView: MaterialSearchView?
+            private val materialSearchView: MaterialSearchView?,
+            private val appbar: AppBarLayout
     ) : ActiveFragmentsManager(fm) {
 
         override fun handleBottomMenuClick(menuItemId: Int): Boolean {
@@ -444,6 +452,7 @@ class HomeActivity : BaseActivity(), Snackable {
                     }.commit()
                 }
                 R.id.history -> {
+                    appbar.setExpanded(false)
                     materialSearchView?.circularHideWithSelfCenter()
                     fm.beginTransaction().apply {
                         show(historyFragment)
