@@ -96,15 +96,16 @@
         <receiver android:name=".browsing.customtabs.bottombar.BottomBarReceiver" />
 
         <!-- Chromer launcher activity -->
-        <activity android:name=".home.HomeActivity" />
+        <activity
+            android:name=".home.HomeActivity"
+            android:exported="true" />
 
         <activity-alias
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:targetActivity=".home.HomeActivity"
-            android:theme="@style/AppTheme.Launcher"
-            android:windowSoftInputMode="adjustPan">
+            android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

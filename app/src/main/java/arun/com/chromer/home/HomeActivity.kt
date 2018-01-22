@@ -22,7 +22,11 @@ import android.content.Intent
 import android.content.Intent.ACTION_VIEW
 import android.net.Uri
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
+import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.Snackbar
+import android.support.transition.Fade
+import android.support.transition.TransitionManager
 import android.support.v4.app.FragmentManager
 import android.view.Menu
 import android.view.MenuItem
@@ -33,11 +37,14 @@ import arun.com.chromer.about.changelog.Changelog
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.di.scopes.PerActivity
+import arun.com.chromer.extenstions.gone
+import arun.com.chromer.extenstions.visible
 import arun.com.chromer.history.HistoryFragment
 import arun.com.chromer.home.fragment.HomeFragment
 import arun.com.chromer.intro.ChromerIntro
 import arun.com.chromer.intro.WebHeadsIntro
 import arun.com.chromer.payments.DonateActivity
+import arun.com.chromer.search.behavior.MaterialSearchViewBehavior
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.settings.SettingsGroupActivity
 import arun.com.chromer.shared.Constants
@@ -50,6 +57,7 @@ import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.tabs.ui.TabsFragment
 import arun.com.chromer.util.RxEventBus
 import arun.com.chromer.util.Utils
+import arun.com.chromer.util.glide.GlideApp
 import com.afollestad.materialdialogs.GravityEnum
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.StackingBehavior
@@ -59,8 +67,9 @@ import com.mikepenz.materialdrawer.DrawerBuilder
 import com.mikepenz.materialdrawer.model.DividerDrawerItem
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
+import it.sephiroth.android.library.bottomnavigation.BottomNavigation
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.widget_bottom_sheet_layout.*
+import kotlinx.android.synthetic.main.fragment_home.*
 import javax.inject.Inject
 
 class HomeActivity : BaseActivity(), Snackable {
@@ -70,6 +79,8 @@ class HomeActivity : BaseActivity(), Snackable {
     lateinit var rxEventBus: RxEventBus
     @Inject
     lateinit var activeFragmentManagerFactory: ActiveFragmentsManager.Factory
+    @Inject
+    lateinit var tabsManger: DefaultTabsManager
 
     private lateinit var activeFragmentManager: ActiveFragmentsManager
 
@@ -83,6 +94,8 @@ class HomeActivity : BaseActivity(), Snackable {
 
         Changelog.conditionalShow(this)
 
+        setupToolbar()
+        setupSearchBar()
         setupDrawer()
         setupFragments(savedInstanceState)
         setupEventListeners()
@@ -97,9 +110,15 @@ class HomeActivity : BaseActivity(), Snackable {
                 .get(supportFragmentManager)
                 .apply { initialize(savedInstanceState) }
 
-        with(bottom_navigation) {
-            selectedItemId = R.id.home
-            setOnNavigationItemSelectedListener(activeFragmentManager::handleBottomMenuClick)
+        bottomNavigation.apply {
+            setOnMenuItemClickListener(object : BottomNavigation.OnMenuItemSelectionListener {
+                override fun onMenuItemSelect(itemId: Int, position: Int, fromUser: Boolean) {
+                    activeFragmentManager.handleBottomMenuClick(itemId)
+                }
+
+                override fun onMenuItemReselect(itemId: Int, position: Int, fromUser: Boolean) {
+                }
+            })
         }
     }
 
@@ -131,6 +150,28 @@ class HomeActivity : BaseActivity(), Snackable {
         Snackbar.make(coordinator_layout, textToSnack, Snackbar.LENGTH_LONG).show()
     }
 
+    private fun setupToolbar() {
+        GlideApp.with(this).load(R.drawable.chromer_header_small).into(backdrop)
+        // Hide title when expanded
+        collapsingToolbar.title = " "
+        appbar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
+            var isShow = false
+            var scrollRange = -1
+
+            override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout!!.totalScrollRange
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    collapsingToolbar.title = toolbar.title
+                    isShow = true
+                } else if (isShow) {
+                    collapsingToolbar.title = " "
+                    isShow = false
+                }
+            }
+        })
+    }
 
     private fun setupDrawer() {
         setSupportActionBar(toolbar)
@@ -215,6 +256,45 @@ class HomeActivity : BaseActivity(), Snackable {
         }.setSelection(-1)
     }
 
+    private fun setupSearchBar() {
+        materialSearchView.apply {
+            (layoutParams as CoordinatorLayout.LayoutParams).behavior = MaterialSearchViewBehavior()
+            subs.add(voiceSearchFailed().subscribe {
+                snack(getString(R.string.no_voice_rec_apps))
+            })
+            subs.add(searchPerforms().subscribe { url ->
+                postDelayed({ launchCustomTab(url) }, 150)
+            })
+            clearFocus()
+            subs.add(focusChanges().subscribe { hasFocus ->
+                TransitionManager.beginDelayedTransition(fragmentHome, Fade().apply {
+                    addTarget(shadowView)
+                    addTarget(bottomNavigation)
+                })
+                if (hasFocus) {
+                    appbar.setExpanded(false, false)
+                    shadowView.visible()
+                } else {
+                    shadowView.gone()
+                }
+            })
+        }
+    }
+
+    private fun launchCustomTab(url: String?) {
+        if (url != null) {
+            tabsManger.openUrl(this, Website(url))
+        }
+    }
+
+    override fun onBackPressed() {
+        if (materialSearchView.hasFocus()) {
+            materialSearchView.clearFocus()
+            return
+        }
+        super.onBackPressed()
+    }
+
     private fun showJoinBetaDialog() {
         with(MaterialDialog.Builder(this)) {
             title(R.string.join_beta)
@@ -235,25 +315,14 @@ class HomeActivity : BaseActivity(), Snackable {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        val fragments = supportFragmentManager.fragments
-        for (fragment in fragments) {
-            fragment?.onActivityResult(requestCode, resultCode, data)
-        }
-    }
-
-    override fun onBackPressed() {
-        if (bottomsheet.isSheetShowing) {
-            bottomsheet.dismissSheet()
-            return
-        }
-        super.onBackPressed()
+        materialSearchView.onActivityResult(requestCode, resultCode, data)
     }
 
     /**
      * Since we have different available fragments based on API level, we create this class to help
      * delegate calls to correct implementation to manage active fragments.
      */
-    abstract class ActiveFragmentsManager(private val fragmentManager: FragmentManager) {
+    abstract class ActiveFragmentsManager {
         /**
          * Based on @param[savedInstance] tries to restore existing fragments that were reattached
          * or creates and attaches new instances.
@@ -264,7 +333,7 @@ class HomeActivity : BaseActivity(), Snackable {
          * Responsible for handling click events from BottomNavigationMenu. Should be delegated from
          * [BottomNavigationView#setOnNavigationItemSelectedListener]
          */
-        abstract fun handleBottomMenuClick(menuItem: MenuItem): Boolean
+        abstract fun handleBottomMenuClick(menuItemId: Int): Boolean
 
         @PerActivity
         class Factory @Inject constructor() {
@@ -281,7 +350,7 @@ class HomeActivity : BaseActivity(), Snackable {
     /**
      * Fragment manager for Lollipop which includes the [TabsFragment]
      */
-    class LollipopActiveFragmentManager(private val fm: FragmentManager) : ActiveFragmentsManager(fm) {
+    class LollipopActiveFragmentManager(private val fm: FragmentManager) : ActiveFragmentsManager() {
         private var historyFragment: HistoryFragment? = null
         private var homeFragment: HomeFragment? = null
         private var tabsFragment: TabsFragment? = null
@@ -306,8 +375,8 @@ class HomeActivity : BaseActivity(), Snackable {
             }
         }
 
-        override fun handleBottomMenuClick(menuItem: MenuItem): Boolean {
-            when (menuItem.itemId) {
+        override fun handleBottomMenuClick(menuItemId: Int): Boolean {
+            when (menuItemId) {
                 R.id.home -> fm.beginTransaction().apply {
                     show(homeFragment)
                     hide(tabsFragment)
@@ -331,7 +400,7 @@ class HomeActivity : BaseActivity(), Snackable {
     /**
      * Fragment manager for pre lollip without [TabsFragment]
      */
-    class PreLollipopActiveFragmentManager(private val fm: FragmentManager) : ActiveFragmentsManager(fm) {
+    class PreLollipopActiveFragmentManager(private val fm: FragmentManager) : ActiveFragmentsManager() {
         private var historyFragment: HistoryFragment? = null
         private var homeFragment: HomeFragment? = null
 
@@ -351,8 +420,8 @@ class HomeActivity : BaseActivity(), Snackable {
             }
         }
 
-        override fun handleBottomMenuClick(menuItem: MenuItem): Boolean {
-            when (menuItem.itemId) {
+        override fun handleBottomMenuClick(menuItemId: Int): Boolean {
+            when (menuItemId) {
                 R.id.home -> fm.beginTransaction().apply {
                     show(homeFragment)
                     hide(historyFragment)
