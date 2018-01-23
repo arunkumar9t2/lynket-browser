@@ -37,7 +37,6 @@ import arun.com.chromer.shared.base.Snackable
 import arun.com.chromer.shared.base.fragment.BaseFragment
 import arun.com.chromer.util.HtmlCompat
 import arun.com.chromer.util.Utils
-import butterknife.OnClick
 import com.afollestad.materialdialogs.MaterialDialog
 import kotlinx.android.synthetic.main.fragment_history.*
 import javax.inject.Inject
@@ -171,7 +170,6 @@ class HistoryFragment : BaseFragment(), Snackable {
         incognitoSwitch.isChecked = !preferences.incognitoMode()
     }
 
-    @OnClick(R.id.fab)
     fun onClearAllFabClick() {
         if (historyAdapter.itemCount != 0) {
             MaterialDialog.Builder(activity!!)

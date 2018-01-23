@@ -42,7 +42,7 @@ fun View.gone() {
  * Does not do anything if the view is not laid and if the device is not above lollipop.
  */
 @SuppressLint("NewApi")
-fun View.circularHideWithSelfCenter() {
+fun View.circularHideWithSelfCenter(done: (() -> Unit)? = null) {
     if (Utils.ANDROID_LOLLIPOP && isLaidOut && visibility == View.VISIBLE) {
         // get the center for the clipping circle
         val cx = width / 2
@@ -57,7 +57,8 @@ fun View.circularHideWithSelfCenter() {
             addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {
                     super.onAnimationEnd(animation)
-                    this@circularHideWithSelfCenter.hide()
+                    this@circularHideWithSelfCenter.gone()
+                    done?.invoke()
                 }
             })
             // start the animation
@@ -70,7 +71,7 @@ fun View.circularHideWithSelfCenter() {
  * Opposite of [circularHideWithSelfCenter]
  */
 @SuppressLint("NewApi")
-fun View.circularRevealWithSelfCenter() {
+fun View.circularRevealWithSelfCenter(done: (() -> Unit)? = null) {
     if (Utils.ANDROID_LOLLIPOP && isLaidOut && visibility != View.VISIBLE) {
         // get the center for the clipping circle
         val cx = width / 2
@@ -80,6 +81,12 @@ fun View.circularRevealWithSelfCenter() {
 
         // create the animation (the start radius is zero)
         ViewAnimationUtils.createCircularReveal(this, cx, cy, 0f, initialRadius.toFloat()).apply {
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    super.onAnimationEnd(animation)
+                    done?.invoke()
+                }
+            })
             // Make the view visible
             show()
             // Start the animation

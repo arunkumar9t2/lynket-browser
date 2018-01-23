@@ -75,6 +75,15 @@
         android:background="@color/shadow_color"
         android:visibility="gone" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:layout_behavior="@string/bbn_fab_default_behavior"
+        app:srcCompat="@drawable/ic_clear_all_24dp" />
+
     <arun.com.chromer.search.view.MaterialSearchView
         android:id="@+id/materialSearchView"
         android:layout_width="match_parent"

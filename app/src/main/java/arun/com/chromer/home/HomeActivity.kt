@@ -24,6 +24,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CoordinatorLayout
+import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.support.transition.Fade
 import android.support.transition.TransitionManager
@@ -61,6 +62,7 @@ import arun.com.chromer.tabs.ui.TabsFragment
 import arun.com.chromer.util.RxEventBus
 import arun.com.chromer.util.Utils
 import arun.com.chromer.util.glide.GlideApp
+import butterknife.OnClick
 import com.afollestad.materialdialogs.GravityEnum
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.StackingBehavior
@@ -73,6 +75,7 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
 import it.sephiroth.android.library.bottomnavigation.BottomBehavior
 import it.sephiroth.android.library.bottomnavigation.BottomNavigation
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import javax.inject.Inject
 
@@ -111,8 +114,10 @@ class HomeActivity : BaseActivity(), Snackable {
 
     private fun setupFragments(savedInstanceState: Bundle?) {
         activeFragmentManager = activeFragmentManagerFactory
-                .get(supportFragmentManager, materialSearchView, appbar)
+                .get(supportFragmentManager, materialSearchView, appbar, fab)
                 .apply { initialize(savedInstanceState) }
+
+        fab.hide()
 
         bottomNavigation.apply {
             setOnMenuItemClickListener(object : BottomNavigation.OnMenuItemSelectionListener {
@@ -344,13 +349,32 @@ class HomeActivity : BaseActivity(), Snackable {
         materialSearchView.onActivityResult(requestCode, resultCode, data)
     }
 
+    @OnClick(R.id.fab)
+    fun onFabClick() {
+    }
+
     /**
      * Since we have different available fragments based on API level, we create this class to help
      * delegate calls to correct implementation to manage active fragments.
      */
-    abstract class ActiveFragmentsManager(private val fm: FragmentManager) {
+    abstract class ActiveFragmentsManager(
+            private val fm: FragmentManager,
+            private var materialSearchView: MaterialSearchView,
+            private val fab: FloatingActionButton
+    ) {
         protected var historyFragment: HistoryFragment? = null
         protected var homeFragment: HomeFragment? = null
+
+        open fun revealSearch() {
+            fab.hide()
+            materialSearchView.circularRevealWithSelfCenter()
+        }
+
+        open fun hideSearch() {
+            fab.show()
+            materialSearchView.circularHideWithSelfCenter()
+        }
+
         /**
          * Based on @param[savedInstance] tries to restore existing fragments that were reattached
          * or creates and attaches new instances.
@@ -382,12 +406,13 @@ class HomeActivity : BaseActivity(), Snackable {
             fun get(
                     supportFragmentManager: FragmentManager,
                     materialSearchView: MaterialSearchView,
-                    appbar: AppBarLayout
+                    appbar: AppBarLayout,
+                    fab: FloatingActionButton
             ): ActiveFragmentsManager {
                 return if (Utils.ANDROID_LOLLIPOP) {
-                    LollipopActiveFragmentManager(supportFragmentManager, materialSearchView, appbar)
+                    LollipopActiveFragmentManager(supportFragmentManager, materialSearchView, appbar, fab)
                 } else {
-                    PreLollipopActiveFragmentManager(supportFragmentManager, materialSearchView, appbar)
+                    PreLollipopActiveFragmentManager(supportFragmentManager, materialSearchView, appbar, fab)
                 }
             }
         }
@@ -397,10 +422,11 @@ class HomeActivity : BaseActivity(), Snackable {
      * Fragment manager for Lollipop which includes the [TabsFragment]
      */
     class LollipopActiveFragmentManager(
-            private val fm: FragmentManager,
-            private val materialSearchView: MaterialSearchView?,
-            private var appbar: AppBarLayout
-    ) : ActiveFragmentsManager(fm) {
+            private var fm: FragmentManager,
+            materialSearchView: MaterialSearchView,
+            private var appbar: AppBarLayout,
+            fab: FloatingActionButton
+    ) : ActiveFragmentsManager(fm, materialSearchView, fab) {
         private var tabsFragment: TabsFragment? = null
 
         override fun initialize(savedInstance: Bundle?) {
@@ -419,7 +445,7 @@ class HomeActivity : BaseActivity(), Snackable {
         override fun handleBottomMenuClick(menuItemId: Int): Boolean {
             when (menuItemId) {
                 R.id.home -> {
-                    materialSearchView?.circularRevealWithSelfCenter()
+                    revealSearch()
                     fm.beginTransaction().apply {
                         show(homeFragment)
                         hide(historyFragment)
@@ -428,7 +454,7 @@ class HomeActivity : BaseActivity(), Snackable {
                 }
                 R.id.history -> {
                     appbar.setExpanded(false)
-                    materialSearchView?.circularHideWithSelfCenter()
+                    hideSearch()
                     fm.beginTransaction().apply {
                         show(historyFragment)
                         hide(homeFragment)
@@ -437,7 +463,7 @@ class HomeActivity : BaseActivity(), Snackable {
                 }
                 R.id.tabs -> {
                     appbar.setExpanded(false)
-                    materialSearchView?.circularHideWithSelfCenter()
+                    hideSearch()
                     fm.beginTransaction().apply {
                         show(tabsFragment)
                         hide(homeFragment)
@@ -453,15 +479,16 @@ class HomeActivity : BaseActivity(), Snackable {
      * Fragment manager for pre lollip without [TabsFragment]
      */
     class PreLollipopActiveFragmentManager(
-            private val fm: FragmentManager,
-            private val materialSearchView: MaterialSearchView?,
-            private val appbar: AppBarLayout
-    ) : ActiveFragmentsManager(fm) {
+            private var fm: FragmentManager,
+            materialSearchView: MaterialSearchView,
+            private var appbar: AppBarLayout,
+            fab: FloatingActionButton
+    ) : ActiveFragmentsManager(fm, materialSearchView, fab) {
 
         override fun handleBottomMenuClick(menuItemId: Int): Boolean {
             when (menuItemId) {
                 R.id.home -> {
-                    materialSearchView?.circularRevealWithSelfCenter()
+                    revealSearch()
                     fm.beginTransaction().apply {
                         show(homeFragment)
                         hide(historyFragment)
@@ -469,7 +496,7 @@ class HomeActivity : BaseActivity(), Snackable {
                 }
                 R.id.history -> {
                     appbar.setExpanded(false)
-                    materialSearchView?.circularHideWithSelfCenter()
+                    hideSearch()
                     fm.beginTransaction().apply {
                         show(historyFragment)
                         hide(homeFragment)

@@ -37,7 +37,6 @@ import arun.com.chromer.shared.base.fragment.BaseFragment
 import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.glide.GlideApp
-import butterknife.OnClick
 import com.afollestad.materialdialogs.MaterialDialog
 import kotlinx.android.synthetic.main.fragment_tabs.*
 import javax.inject.Inject
@@ -159,7 +158,6 @@ class TabsFragment : BaseFragment() {
         super.onDestroy()
     }
 
-    @OnClick(R.id.fab)
     fun onClearAllFabClick() {
         if (tabsAdapter.itemCount != 0) {
             MaterialDialog.Builder(activity!!)
