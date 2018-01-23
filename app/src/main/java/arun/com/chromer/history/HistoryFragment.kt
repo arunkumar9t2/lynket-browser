@@ -33,6 +33,7 @@ import android.view.View.VISIBLE
 import arun.com.chromer.R
 import arun.com.chromer.di.fragment.FragmentComponent
 import arun.com.chromer.settings.Preferences
+import arun.com.chromer.shared.FabHandler
 import arun.com.chromer.shared.base.Snackable
 import arun.com.chromer.shared.base.fragment.BaseFragment
 import arun.com.chromer.util.HtmlCompat
@@ -44,7 +45,7 @@ import javax.inject.Inject
 /**
  * Created by arunk on 07-04-2017.
  */
-class HistoryFragment : BaseFragment(), Snackable {
+class HistoryFragment : BaseFragment(), Snackable, FabHandler {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     @Inject
@@ -170,7 +171,7 @@ class HistoryFragment : BaseFragment(), Snackable {
         incognitoSwitch.isChecked = !preferences.incognitoMode()
     }
 
-    fun onClearAllFabClick() {
+    override fun onFabClick() {
         if (historyAdapter.itemCount != 0) {
             MaterialDialog.Builder(activity!!)
                     .title(R.string.are_you_sure)

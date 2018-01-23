@@ -33,6 +33,7 @@ import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.fragment.FragmentComponent
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.show
+import arun.com.chromer.shared.FabHandler
 import arun.com.chromer.shared.base.fragment.BaseFragment
 import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.tabs.TabsManager
@@ -44,7 +45,7 @@ import javax.inject.Inject
 /**
  * Created by arunk on 20-12-2017.
  */
-class TabsFragment : BaseFragment() {
+class TabsFragment : BaseFragment(), FabHandler {
     @Inject
     lateinit var tabsManager: DefaultTabsManager
     @Inject
@@ -158,7 +159,7 @@ class TabsFragment : BaseFragment() {
         super.onDestroy()
     }
 
-    fun onClearAllFabClick() {
+    override fun onFabClick() {
         if (tabsAdapter.itemCount != 0) {
             MaterialDialog.Builder(activity!!)
                     .title(R.string.are_you_sure)

@@ -54,6 +54,7 @@ import arun.com.chromer.settings.SettingsGroupActivity
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.shared.Constants.APP_TESTING_URL
 import arun.com.chromer.shared.Constants.G_COMMUNITY_URL
+import arun.com.chromer.shared.FabHandler
 import arun.com.chromer.shared.base.Snackable
 import arun.com.chromer.shared.base.activity.BaseActivity
 import arun.com.chromer.tabs.DefaultTabsManager
@@ -351,6 +352,11 @@ class HomeActivity : BaseActivity(), Snackable {
 
     @OnClick(R.id.fab)
     fun onFabClick() {
+        supportFragmentManager.fragments
+                ?.filter { !it.isHidden && it is FabHandler }
+                ?.map { it as FabHandler }
+                ?.get(0)
+                ?.onFabClick()
     }
 
     /**
