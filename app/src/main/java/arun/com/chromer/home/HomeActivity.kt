@@ -40,7 +40,7 @@ import arun.com.chromer.di.scopes.PerActivity
 import arun.com.chromer.extenstions.circularHideWithSelfCenter
 import arun.com.chromer.extenstions.circularRevealWithSelfCenter
 import arun.com.chromer.extenstions.gone
-import arun.com.chromer.extenstions.visible
+import arun.com.chromer.extenstions.show
 import arun.com.chromer.history.HistoryFragment
 import arun.com.chromer.home.fragment.HomeFragment
 import arun.com.chromer.intro.ChromerIntro
@@ -282,7 +282,7 @@ class HomeActivity : BaseActivity(), Snackable {
                 })
                 handleBottomBar(hasFocus)
                 if (hasFocus) {
-                    shadowView.visible()
+                    shadowView.show()
                 } else {
                     shadowView.gone()
                 }

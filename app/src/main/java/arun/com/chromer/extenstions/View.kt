@@ -25,7 +25,7 @@ import android.view.View
 import android.view.ViewAnimationUtils
 import arun.com.chromer.util.Utils
 
-fun View.visible() {
+fun View.show() {
     this.visibility = View.VISIBLE
 }
 
@@ -61,7 +61,7 @@ fun View.circularHideWithSelfCenter() {
                 }
             })
             // start the animation
-            anim.start()
+            start()
         }
     }
 }
@@ -81,7 +81,7 @@ fun View.circularRevealWithSelfCenter() {
         // create the animation (the start radius is zero)
         ViewAnimationUtils.createCircularReveal(this, cx, cy, 0f, initialRadius.toFloat()).apply {
             // Make the view visible
-            visible()
+            show()
             // Start the animation
             start()
         }

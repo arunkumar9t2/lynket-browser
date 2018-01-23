@@ -32,7 +32,7 @@ import arun.com.chromer.R
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.fragment.FragmentComponent
 import arun.com.chromer.extenstions.gone
-import arun.com.chromer.extenstions.visible
+import arun.com.chromer.extenstions.show
 import arun.com.chromer.shared.base.fragment.BaseFragment
 import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.tabs.TabsManager
@@ -122,11 +122,11 @@ class TabsFragment : BaseFragment() {
         tabsAdapter.setTabs(tabs)
         TransitionManager.beginDelayedTransition(fragmentTabsRoot)
         if (tabs.isEmpty()) {
-            error.visible()
+            error.show()
             swipeRefreshLayout.gone()
         } else {
             error.gone()
-            swipeRefreshLayout.visible()
+            swipeRefreshLayout.show()
         }
     }
 

@@ -33,7 +33,7 @@ import arun.com.chromer.Chromer
 import arun.com.chromer.R
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.extenstions.gone
-import arun.com.chromer.extenstions.visible
+import arun.com.chromer.extenstions.show
 import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.util.glide.GlideApp
 import arun.com.chromer.util.glide.GlideRequests
@@ -197,7 +197,7 @@ internal class HistoryAdapter(
                         .into(historyFavicon!!)
 
                 if (website.hasAmp()) {
-                    historyAmp?.visible()
+                    historyAmp?.show()
                 } else {
                     historyAmp?.gone()
                 }

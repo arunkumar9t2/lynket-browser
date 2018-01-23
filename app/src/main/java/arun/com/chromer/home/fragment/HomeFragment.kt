@@ -32,7 +32,7 @@ import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.fragment.FragmentComponent
 import arun.com.chromer.extenstions.appName
 import arun.com.chromer.extenstions.gone
-import arun.com.chromer.extenstions.visible
+import arun.com.chromer.extenstions.show
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.settings.browsingoptions.BrowsingOptionsActivity
 import arun.com.chromer.shared.Constants
@@ -112,7 +112,7 @@ class HomeFragment : BaseFragment() {
     private fun setRecents(websites: List<Website>) {
         recentsAdapter.setWebsites(websites)
         if (websites.isEmpty()) {
-            recent_missing_text.visible()
+            recent_missing_text.show()
         } else {
             recent_missing_text.gone()
         }
