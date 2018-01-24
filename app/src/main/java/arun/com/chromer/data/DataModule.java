@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.di.data;
+package arun.com.chromer.data;
 
 import android.app.Application;
 
