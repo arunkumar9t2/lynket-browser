@@ -77,8 +77,6 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
 import it.sephiroth.android.library.bottomnavigation.BottomBehavior
 import it.sephiroth.android.library.bottomnavigation.BottomNavigation
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.*
-import kotlinx.android.synthetic.main.fragment_home.*
 import javax.inject.Inject
 
 class HomeActivity : BaseActivity(), Snackable {
@@ -93,6 +91,9 @@ class HomeActivity : BaseActivity(), Snackable {
 
     private lateinit var activeFragmentManager: ActiveFragmentsManager
 
+    // Track bottom nav selection across config changes.
+    private var selectedIndex: Int = HOME
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme_NoActionBar)
         super.onCreate(savedInstanceState)
@@ -103,35 +104,14 @@ class HomeActivity : BaseActivity(), Snackable {
 
         Changelog.conditionalShow(this)
 
+        selectedIndex = savedInstanceState?.getInt(Companion.SELECTED_INDEX) ?: HOME
+
         setupToolbar()
         setupFab()
         setupSearchBar()
         setupDrawer()
         setupFragments(savedInstanceState)
         setupEventListeners()
-    }
-
-    private fun setupEventListeners() {
-        subs.add(rxEventBus.filteredEvents(TabsManager.FinishRoot::class.java).subscribe { finish() })
-    }
-
-    private fun setupFragments(savedInstanceState: Bundle?) {
-        activeFragmentManager = activeFragmentManagerFactory
-                .get(supportFragmentManager, materialSearchView, appbar, fab)
-                .apply { initialize(savedInstanceState) }
-
-        fab.hide()
-
-        bottomNavigation.apply {
-            setOnMenuItemClickListener(object : BottomNavigation.OnMenuItemSelectionListener {
-                override fun onMenuItemSelect(itemId: Int, position: Int, fromUser: Boolean) {
-                    activeFragmentManager.handleBottomMenuClick(itemId)
-                }
-
-                override fun onMenuItemReselect(itemId: Int, position: Int, fromUser: Boolean) {
-                }
-            })
-        }
     }
 
     override fun inject(activityComponent: ActivityComponent) {
@@ -162,6 +142,30 @@ class HomeActivity : BaseActivity(), Snackable {
         Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_LONG).show()
     }
 
+    private fun setupEventListeners() {
+        subs.add(rxEventBus.filteredEvents(TabsManager.FinishRoot::class.java).subscribe { finish() })
+    }
+
+    private fun setupFragments(savedInstanceState: Bundle?) {
+        activeFragmentManager = activeFragmentManagerFactory.get(supportFragmentManager, materialSearchView, appbar, fab)
+        activeFragmentManager.initialize(savedInstanceState)
+
+        bottomNavigation.setOnMenuItemClickListener(
+                object : BottomNavigation.OnMenuItemSelectionListener {
+                    override fun onMenuItemSelect(itemId: Int, position: Int, fromUser: Boolean) {
+                        activeFragmentManager.handleBottomMenuClick(itemId)
+                        selectedIndex = position
+                    }
+
+                    override fun onMenuItemReselect(itemId: Int, position: Int, fromUser: Boolean) {
+                    }
+                })
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        outState?.putInt(Companion.SELECTED_INDEX, bottomNavigation.selectedIndex)
+        super.onSaveInstanceState(outState)
+    }
 
     private fun setupFab() {
         (fab.layoutParams as CoordinatorLayout.LayoutParams).behavior = FloatingActionButtonBehavior()
@@ -289,7 +293,7 @@ class HomeActivity : BaseActivity(), Snackable {
             clearFocus()
             // Handle focus changes
             subs.add(focusChanges().subscribe { hasFocus ->
-                TransitionManager.beginDelayedTransition(fragmentHome, Fade().apply {
+                TransitionManager.beginDelayedTransition(coordinatorLayout, Fade().apply {
                     addTarget(shadowView)
                     addTarget(bottomNavigation)
                 })
@@ -300,8 +304,11 @@ class HomeActivity : BaseActivity(), Snackable {
                     shadowView.gone()
                 }
             })
+
             // Reveal the search bar with animation after layout pass
-            post { materialSearchView.circularRevealWithSelfCenter() }
+            if (selectedIndex == HOME) {
+                post { materialSearchView.circularRevealWithSelfCenter() }
+            }
         }
     }
 
@@ -393,6 +400,12 @@ class HomeActivity : BaseActivity(), Snackable {
          * or creates and attaches new instances.
          */
         open fun initialize(savedInstance: Bundle?) {
+            val selectedIndex = savedInstance?.getInt(Companion.SELECTED_INDEX) ?: HOME
+            if (selectedIndex > HOME) {
+                fab.show()
+            } else {
+                fab.hide()
+            }
             if (savedInstance == null) {
                 historyFragment = HistoryFragment()
                 homeFragment = HomeFragment()
@@ -518,5 +531,12 @@ class HomeActivity : BaseActivity(), Snackable {
             }
             return false
         }
+    }
+
+    companion object {
+        private const val HOME = 0
+        private const val TABS = 1
+        private const val HISTORY = 2
+        private const val SELECTED_INDEX = "BOTTOM_NAV_SELECTED_INDEX"
     }
 }
