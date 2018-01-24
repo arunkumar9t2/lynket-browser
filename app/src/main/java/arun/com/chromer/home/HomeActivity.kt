@@ -57,6 +57,7 @@ import arun.com.chromer.shared.Constants.G_COMMUNITY_URL
 import arun.com.chromer.shared.FabHandler
 import arun.com.chromer.shared.base.Snackable
 import arun.com.chromer.shared.base.activity.BaseActivity
+import arun.com.chromer.shared.behavior.FloatingActionButtonBehavior
 import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.tabs.ui.TabsFragment
@@ -103,6 +104,7 @@ class HomeActivity : BaseActivity(), Snackable {
         Changelog.conditionalShow(this)
 
         setupToolbar()
+        setupFab()
         setupSearchBar()
         setupDrawer()
         setupFragments(savedInstanceState)
@@ -158,6 +160,11 @@ class HomeActivity : BaseActivity(), Snackable {
 
     override fun snackLong(textToSnack: String) {
         Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_LONG).show()
+    }
+
+
+    private fun setupFab() {
+        (fab.layoutParams as CoordinatorLayout.LayoutParams).behavior = FloatingActionButtonBehavior()
     }
 
     private fun setupToolbar() {
