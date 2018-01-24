@@ -84,7 +84,6 @@ class TabsFragment : BaseFragment(), FabHandler {
 
     private fun observeViewModel() {
         tabsViewModel?.apply {
-            initializeTabsLoader()
             loadingLiveData.observe(this@TabsFragment, Observer<Boolean> { loading ->
                 showLoading(loading!!)
             })

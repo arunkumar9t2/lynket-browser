@@ -42,11 +42,7 @@ constructor(
     private val loaderSubject: PublishSubject<Int> = PublishSubject.create()
     val subs = CompositeSubscription()
 
-    fun loadTabs() {
-        loaderSubject.onNext(0)
-    }
-
-    fun initializeTabsLoader() {
+    init {
         subs.add(loaderSubject
                 .asObservable()
                 .doOnNext { loadingLiveData.value = true }
@@ -70,6 +66,11 @@ constructor(
                                 tabsData.value = tabs
                             }
                 }.subscribe())
+    }
+
+
+    fun loadTabs() {
+        loaderSubject.onNext(0)
     }
 
     fun clearAllTabs() {

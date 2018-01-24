@@ -111,7 +111,6 @@ class HistoryFragment : BaseFragment(), Snackable, FabHandler {
 
     private fun observeViewModel() {
         viewModel?.apply {
-            initHistoryLoader()
             loadingLiveData.observe(this@HistoryFragment, Observer { loading(it!!) })
             historyCursorLiveData.observe(this@HistoryFragment, Observer {
                 setCursor(it!!)
