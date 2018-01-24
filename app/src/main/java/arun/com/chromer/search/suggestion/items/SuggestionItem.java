@@ -22,7 +22,7 @@ package arun.com.chromer.search.suggestion.items;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import arun.com.chromer.search.SuggestionType;
+import arun.com.chromer.search.suggestion.SuggestionType;
 
 public interface SuggestionItem {
     int COPY = -1;

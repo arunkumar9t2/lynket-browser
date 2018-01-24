@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package arun.com.chromer.search.behavior
+package arun.com.chromer.search.view.behavior
 
 import android.content.Context
 import android.support.design.widget.CoordinatorLayout

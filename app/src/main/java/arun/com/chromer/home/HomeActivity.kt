@@ -47,8 +47,8 @@ import arun.com.chromer.home.fragment.HomeFragment
 import arun.com.chromer.intro.ChromerIntro
 import arun.com.chromer.intro.WebHeadsIntro
 import arun.com.chromer.payments.DonateActivity
-import arun.com.chromer.search.behavior.MaterialSearchViewBehavior
 import arun.com.chromer.search.view.MaterialSearchView
+import arun.com.chromer.search.view.behavior.MaterialSearchViewBehavior
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.settings.SettingsGroupActivity
 import arun.com.chromer.shared.Constants

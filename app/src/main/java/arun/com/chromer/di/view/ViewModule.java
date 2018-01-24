@@ -25,10 +25,10 @@ import dagger.Module;
 @Module
 public class ViewModule {
 
-    private final View fragment;
+    private final View view;
 
     public ViewModule(View view) {
-        this.fragment = view;
+        this.view = view;
     }
 
 }
