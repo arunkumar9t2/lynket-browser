@@ -110,13 +110,13 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 app:cardPreventCornerOverlap="true"
                 app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
@@ -154,6 +154,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
+                        android:background="?attr/selectableItemBackgroundBorderless"
                         android:gravity="center"
                         android:paddingLeft="16dp"
                         android:paddingRight="16dp"
@@ -167,18 +168,4 @@
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
-
-    <View
-        android:id="@+id/shadow_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/shadow_color"
-        android:visibility="gone" />
-
-    <arun.com.chromer.search.view.MaterialSearchView
-        android:id="@+id/materialSearchView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom" />
-
 </FrameLayout>

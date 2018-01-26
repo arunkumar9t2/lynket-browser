@@ -16,25 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.search.suggestion.items;
+package arun.com.chromer.shared
 
-
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
-import arun.com.chromer.search.suggestion.SuggestionType;
-
-public interface SuggestionItem {
-    int COPY = -1;
-    int GOOGLE = 0;
-    int HISTORY = 1;
-
-    @NonNull
-    String getTitle();
-
-    @Nullable
-    String getSubTitle();
-
-    @SuggestionType
-    int getType();
+/**
+ * Created by arunk on 24-01-2018.
+ */
+interface FabHandler {
+    /**
+     * Called when Fab is clicked.
+     */
+    fun onFabClick()
 }

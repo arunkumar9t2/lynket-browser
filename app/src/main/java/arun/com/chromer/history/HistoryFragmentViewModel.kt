@@ -43,12 +43,7 @@ constructor(
     private val loaderSubject: PublishSubject<Int> = PublishSubject.create()
     val subs = CompositeSubscription()
 
-    fun loadHistory() {
-        loaderSubject.onNext(0)
-    }
-
-
-    fun initHistoryLoader() {
+    init {
         subs.add(loaderSubject
                 .doOnNext { loadingLiveData.postValue(true) }
                 .switchMap {
@@ -57,6 +52,10 @@ constructor(
                 .doOnNext { loadingLiveData.postValue(false) }
                 .doOnNext(historyCursorLiveData::postValue)
                 .subscribe())
+    }
+
+    fun loadHistory() {
+        loaderSubject.onNext(0)
     }
 
     fun deleteAll(onSuccess: (rows: Int) -> Unit) {

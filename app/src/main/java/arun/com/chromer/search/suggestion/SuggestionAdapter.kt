@@ -31,7 +31,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import arun.com.chromer.R
 import arun.com.chromer.extenstions.gone
-import arun.com.chromer.extenstions.visible
+import arun.com.chromer.extenstions.show
 import arun.com.chromer.search.suggestion.items.SuggestionItem
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -137,7 +137,7 @@ class SuggestionAdapter(
                     suggestionSubTitle?.text = null
                 }
                 else -> {
-                    suggestionSubTitle?.visible()
+                    suggestionSubTitle?.show()
                     suggestionSubTitle?.text = suggestionItem.subTitle
                 }
             }

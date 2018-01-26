@@ -69,7 +69,7 @@ import static arun.com.chromer.shared.Constants.WEB_INTENT;
 public class BrowsingOptionsActivity extends BaseActivity implements Snackable, SharedPreferences.OnSharedPreferenceChangeListener {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.coordinator_layout)
+    @BindView(R.id.coordinatorLayout)
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.customtab_preference_view)
     AppPreferenceCardView customTabPreferenceView;

@@ -32,12 +32,12 @@ import arun.com.chromer.R
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.fragment.FragmentComponent
 import arun.com.chromer.extenstions.gone
-import arun.com.chromer.extenstions.visible
+import arun.com.chromer.extenstions.show
+import arun.com.chromer.shared.FabHandler
 import arun.com.chromer.shared.base.fragment.BaseFragment
 import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.glide.GlideApp
-import butterknife.OnClick
 import com.afollestad.materialdialogs.MaterialDialog
 import kotlinx.android.synthetic.main.fragment_tabs.*
 import javax.inject.Inject
@@ -45,7 +45,7 @@ import javax.inject.Inject
 /**
  * Created by arunk on 20-12-2017.
  */
-class TabsFragment : BaseFragment() {
+class TabsFragment : BaseFragment(), FabHandler {
     @Inject
     lateinit var tabsManager: DefaultTabsManager
     @Inject
@@ -84,7 +84,6 @@ class TabsFragment : BaseFragment() {
 
     private fun observeViewModel() {
         tabsViewModel?.apply {
-            initializeTabsLoader()
             loadingLiveData.observe(this@TabsFragment, Observer<Boolean> { loading ->
                 showLoading(loading!!)
             })
@@ -122,11 +121,11 @@ class TabsFragment : BaseFragment() {
         tabsAdapter.setTabs(tabs)
         TransitionManager.beginDelayedTransition(fragmentTabsRoot)
         if (tabs.isEmpty()) {
-            error.visible()
+            error.show()
             swipeRefreshLayout.gone()
         } else {
             error.gone()
-            swipeRefreshLayout.visible()
+            swipeRefreshLayout.show()
         }
     }
 
@@ -159,8 +158,7 @@ class TabsFragment : BaseFragment() {
         super.onDestroy()
     }
 
-    @OnClick(R.id.fab)
-    fun onClearAllFabClick() {
+    override fun onFabClick() {
         if (tabsAdapter.itemCount != 0) {
             MaterialDialog.Builder(activity!!)
                     .title(R.string.are_you_sure)

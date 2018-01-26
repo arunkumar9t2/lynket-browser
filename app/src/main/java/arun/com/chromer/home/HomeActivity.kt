@@ -22,7 +22,12 @@ import android.content.Intent
 import android.content.Intent.ACTION_VIEW
 import android.net.Uri
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
+import android.support.design.widget.CoordinatorLayout
+import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
+import android.support.transition.Fade
+import android.support.transition.TransitionManager
 import android.support.v4.app.FragmentManager
 import android.view.Menu
 import android.view.MenuItem
@@ -33,23 +38,33 @@ import arun.com.chromer.about.changelog.Changelog
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.di.scopes.PerActivity
+import arun.com.chromer.extenstions.circularHideWithSelfCenter
+import arun.com.chromer.extenstions.circularRevealWithSelfCenter
+import arun.com.chromer.extenstions.gone
+import arun.com.chromer.extenstions.show
 import arun.com.chromer.history.HistoryFragment
 import arun.com.chromer.home.fragment.HomeFragment
 import arun.com.chromer.intro.ChromerIntro
 import arun.com.chromer.intro.WebHeadsIntro
 import arun.com.chromer.payments.DonateActivity
+import arun.com.chromer.search.view.MaterialSearchView
+import arun.com.chromer.search.view.behavior.MaterialSearchViewBehavior
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.settings.SettingsGroupActivity
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.shared.Constants.APP_TESTING_URL
 import arun.com.chromer.shared.Constants.G_COMMUNITY_URL
+import arun.com.chromer.shared.FabHandler
 import arun.com.chromer.shared.base.Snackable
 import arun.com.chromer.shared.base.activity.BaseActivity
+import arun.com.chromer.shared.behavior.FloatingActionButtonBehavior
 import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.tabs.ui.TabsFragment
 import arun.com.chromer.util.RxEventBus
 import arun.com.chromer.util.Utils
+import arun.com.chromer.util.glide.GlideApp
+import butterknife.OnClick
 import com.afollestad.materialdialogs.GravityEnum
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.StackingBehavior
@@ -59,8 +74,9 @@ import com.mikepenz.materialdrawer.DrawerBuilder
 import com.mikepenz.materialdrawer.model.DividerDrawerItem
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
+import it.sephiroth.android.library.bottomnavigation.BottomBehavior
+import it.sephiroth.android.library.bottomnavigation.BottomNavigation
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.widget_bottom_sheet_layout.*
 import javax.inject.Inject
 
 class HomeActivity : BaseActivity(), Snackable {
@@ -70,8 +86,13 @@ class HomeActivity : BaseActivity(), Snackable {
     lateinit var rxEventBus: RxEventBus
     @Inject
     lateinit var activeFragmentManagerFactory: ActiveFragmentsManager.Factory
+    @Inject
+    lateinit var tabsManger: DefaultTabsManager
 
     private lateinit var activeFragmentManager: ActiveFragmentsManager
+
+    // Track bottom nav selection across config changes.
+    private var selectedIndex: Int = HOME
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme_NoActionBar)
@@ -83,24 +104,14 @@ class HomeActivity : BaseActivity(), Snackable {
 
         Changelog.conditionalShow(this)
 
+        selectedIndex = savedInstanceState?.getInt(Companion.SELECTED_INDEX) ?: HOME
+
+        setupToolbar()
+        setupFab()
+        setupSearchBar()
         setupDrawer()
         setupFragments(savedInstanceState)
         setupEventListeners()
-    }
-
-    private fun setupEventListeners() {
-        subs.add(rxEventBus.filteredEvents(TabsManager.FinishRoot::class.java).subscribe { finish() })
-    }
-
-    private fun setupFragments(savedInstanceState: Bundle?) {
-        activeFragmentManager = activeFragmentManagerFactory
-                .get(supportFragmentManager)
-                .apply { initialize(savedInstanceState) }
-
-        with(bottom_navigation) {
-            selectedItemId = R.id.home
-            setOnNavigationItemSelectedListener(activeFragmentManager::handleBottomMenuClick)
-        }
     }
 
     override fun inject(activityComponent: ActivityComponent) {
@@ -124,13 +135,64 @@ class HomeActivity : BaseActivity(), Snackable {
     }
 
     override fun snack(textToSnack: String) {
-        Snackbar.make(coordinator_layout, textToSnack, Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun snackLong(textToSnack: String) {
-        Snackbar.make(coordinator_layout, textToSnack, Snackbar.LENGTH_LONG).show()
+        Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_LONG).show()
     }
 
+    private fun setupEventListeners() {
+        subs.add(rxEventBus.filteredEvents(TabsManager.FinishRoot::class.java).subscribe { finish() })
+    }
+
+    private fun setupFragments(savedInstanceState: Bundle?) {
+        activeFragmentManager = activeFragmentManagerFactory.get(supportFragmentManager, materialSearchView, appbar, fab)
+        activeFragmentManager.initialize(savedInstanceState)
+
+        bottomNavigation.setOnMenuItemClickListener(
+                object : BottomNavigation.OnMenuItemSelectionListener {
+                    override fun onMenuItemSelect(itemId: Int, position: Int, fromUser: Boolean) {
+                        activeFragmentManager.handleBottomMenuClick(itemId)
+                        selectedIndex = position
+                    }
+
+                    override fun onMenuItemReselect(itemId: Int, position: Int, fromUser: Boolean) {
+                    }
+                })
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        outState?.putInt(Companion.SELECTED_INDEX, bottomNavigation.selectedIndex)
+        super.onSaveInstanceState(outState)
+    }
+
+    private fun setupFab() {
+        (fab.layoutParams as CoordinatorLayout.LayoutParams).behavior = FloatingActionButtonBehavior()
+    }
+
+    private fun setupToolbar() {
+        GlideApp.with(this).load(R.drawable.chromer_header_small).into(backdrop)
+        // Hide title when expanded
+        collapsingToolbar.title = " "
+        appbar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
+            var isShow = false
+            var scrollRange = -1
+
+            override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout!!.totalScrollRange
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    collapsingToolbar.title = toolbar.title
+                    isShow = true
+                } else if (isShow) {
+                    collapsingToolbar.title = " "
+                    isShow = false
+                }
+            }
+        })
+    }
 
     private fun setupDrawer() {
         setSupportActionBar(toolbar)
@@ -215,6 +277,55 @@ class HomeActivity : BaseActivity(), Snackable {
         }.setSelection(-1)
     }
 
+    private fun setupSearchBar() {
+        materialSearchView.apply {
+            // Attach a behaviour to handle scroll
+            (layoutParams as CoordinatorLayout.LayoutParams).behavior = MaterialSearchViewBehavior()
+            // Handle voice item failed
+            subs.add(voiceSearchFailed().subscribe {
+                snack(getString(R.string.no_voice_rec_apps))
+            })
+            // Handle search events
+            subs.add(searchPerforms().subscribe { url ->
+                postDelayed({ launchCustomTab(url) }, 150)
+            })
+            // No focus initially
+            clearFocus()
+            // Handle focus changes
+            subs.add(focusChanges().subscribe { hasFocus ->
+                TransitionManager.beginDelayedTransition(coordinatorLayout, Fade().apply {
+                    addTarget(shadowView)
+                    addTarget(bottomNavigation)
+                })
+                handleBottomBar(hasFocus)
+                if (hasFocus) {
+                    shadowView.show()
+                } else {
+                    shadowView.gone()
+                }
+            })
+
+            // Reveal the search bar with animation after layout pass
+            if (selectedIndex == HOME) {
+                post { materialSearchView.circularRevealWithSelfCenter() }
+            }
+        }
+    }
+
+    private fun launchCustomTab(url: String?) {
+        if (url != null) {
+            tabsManger.openUrl(this, Website(url))
+        }
+    }
+
+    override fun onBackPressed() {
+        if (materialSearchView.hasFocus()) {
+            materialSearchView.clearFocus()
+            return
+        }
+        super.onBackPressed()
+    }
+
     private fun showJoinBetaDialog() {
         with(MaterialDialog.Builder(this)) {
             title(R.string.join_beta)
@@ -232,47 +343,102 @@ class HomeActivity : BaseActivity(), Snackable {
         }.show()
     }
 
+    /**
+     * Trigger's coordinator's layout dispatch for scrolling manually.
+     */
+    private fun handleBottomBar(hide: Boolean) {
+        val bottomBehavior = (bottomNavigation.layoutParams as CoordinatorLayout.LayoutParams).behavior as BottomBehavior
+        bottomBehavior.onNestedFling(
+                coordinatorLayout,
+                bottomNavigation,
+                materialSearchView,
+                0f,
+                if (hide) 10000f else -10000f,
+                true
+        )
+    }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        val fragments = supportFragmentManager.fragments
-        for (fragment in fragments) {
-            fragment?.onActivityResult(requestCode, resultCode, data)
-        }
+        materialSearchView.onActivityResult(requestCode, resultCode, data)
     }
 
-    override fun onBackPressed() {
-        if (bottomsheet.isSheetShowing) {
-            bottomsheet.dismissSheet()
-            return
-        }
-        super.onBackPressed()
+    @OnClick(R.id.fab)
+    fun onFabClick() {
+        supportFragmentManager.fragments
+                ?.filter { !it.isHidden && it is FabHandler }
+                ?.map { it as FabHandler }
+                ?.get(0)
+                ?.onFabClick()
     }
 
     /**
      * Since we have different available fragments based on API level, we create this class to help
      * delegate calls to correct implementation to manage active fragments.
      */
-    abstract class ActiveFragmentsManager(private val fragmentManager: FragmentManager) {
+    abstract class ActiveFragmentsManager(
+            private val fm: FragmentManager,
+            private var materialSearchView: MaterialSearchView,
+            private val fab: FloatingActionButton
+    ) {
+        protected var historyFragment: HistoryFragment? = null
+        protected var homeFragment: HomeFragment? = null
+
+        open fun revealSearch() {
+            fab.hide()
+            materialSearchView.circularRevealWithSelfCenter()
+        }
+
+        open fun hideSearch() {
+            fab.show()
+            materialSearchView.circularHideWithSelfCenter()
+        }
+
         /**
          * Based on @param[savedInstance] tries to restore existing fragments that were reattached
          * or creates and attaches new instances.
          */
-        abstract fun initialize(savedInstance: Bundle?)
+        open fun initialize(savedInstance: Bundle?) {
+            val selectedIndex = savedInstance?.getInt(Companion.SELECTED_INDEX) ?: HOME
+            if (selectedIndex > HOME) {
+                fab.show()
+            } else {
+                fab.hide()
+            }
+            if (savedInstance == null) {
+                historyFragment = HistoryFragment()
+                homeFragment = HomeFragment()
+                fm.beginTransaction().apply {
+                    add(R.id.fragment_container, homeFragment, HomeFragment::class.java.name)
+                    add(R.id.fragment_container, historyFragment, HistoryFragment::class.java.name)
+                    show(homeFragment)
+                    hide(historyFragment)
+                }.commit()
+            } else {
+                historyFragment = fm.findFragmentByTag(HistoryFragment::class.java.name) as HistoryFragment
+                homeFragment = fm.findFragmentByTag(HomeFragment::class.java.name) as HomeFragment
+            }
+        }
 
         /**
          * Responsible for handling click events from BottomNavigationMenu. Should be delegated from
          * [BottomNavigationView#setOnNavigationItemSelectedListener]
          */
-        abstract fun handleBottomMenuClick(menuItem: MenuItem): Boolean
+        abstract fun handleBottomMenuClick(menuItemId: Int): Boolean
 
         @PerActivity
         class Factory @Inject constructor() {
-            fun get(supportFragmentManager: FragmentManager): ActiveFragmentsManager {
+            fun get(
+                    supportFragmentManager: FragmentManager,
+                    materialSearchView: MaterialSearchView,
+                    appbar: AppBarLayout,
+                    fab: FloatingActionButton
+            ): ActiveFragmentsManager {
                 return if (Utils.ANDROID_LOLLIPOP) {
-                    LollipopActiveFragmentManager(supportFragmentManager)
+                    LollipopActiveFragmentManager(supportFragmentManager, materialSearchView, appbar, fab)
                 } else {
-                    PreLollipopActiveFragmentManager(supportFragmentManager)
+                    PreLollipopActiveFragmentManager(supportFragmentManager, materialSearchView, appbar, fab)
                 }
             }
         }
@@ -281,48 +447,55 @@ class HomeActivity : BaseActivity(), Snackable {
     /**
      * Fragment manager for Lollipop which includes the [TabsFragment]
      */
-    class LollipopActiveFragmentManager(private val fm: FragmentManager) : ActiveFragmentsManager(fm) {
-        private var historyFragment: HistoryFragment? = null
-        private var homeFragment: HomeFragment? = null
+    class LollipopActiveFragmentManager(
+            private var fm: FragmentManager,
+            materialSearchView: MaterialSearchView,
+            private var appbar: AppBarLayout,
+            fab: FloatingActionButton
+    ) : ActiveFragmentsManager(fm, materialSearchView, fab) {
         private var tabsFragment: TabsFragment? = null
 
         override fun initialize(savedInstance: Bundle?) {
+            super.initialize(savedInstance)
             if (savedInstance == null) {
-                historyFragment = HistoryFragment()
-                homeFragment = HomeFragment()
                 tabsFragment = TabsFragment()
                 fm.beginTransaction().apply {
-                    add(R.id.fragment_container, homeFragment, HomeFragment::class.java.name)
-                    add(R.id.fragment_container, historyFragment, HistoryFragment::class.java.name)
                     add(R.id.fragment_container, tabsFragment, TabsFragment::class.java.name)
-                    hide(historyFragment)
                     hide(tabsFragment)
-                    show(homeFragment)
                 }.commit()
             } else {
-                historyFragment = fm.findFragmentByTag(HistoryFragment::class.java.name) as HistoryFragment
-                homeFragment = fm.findFragmentByTag(HomeFragment::class.java.name) as HomeFragment
                 tabsFragment = fm.findFragmentByTag(TabsFragment::class.java.name) as TabsFragment
             }
         }
 
-        override fun handleBottomMenuClick(menuItem: MenuItem): Boolean {
-            when (menuItem.itemId) {
-                R.id.home -> fm.beginTransaction().apply {
-                    show(homeFragment)
-                    hide(tabsFragment)
-                    hide(historyFragment)
-                }.commit()
-                R.id.tabs -> fm.beginTransaction().apply {
-                    show(tabsFragment)
-                    hide(homeFragment)
-                    hide(historyFragment)
-                }.commit()
-                R.id.history -> fm.beginTransaction().apply {
-                    show(historyFragment)
-                    hide(tabsFragment)
-                    hide(homeFragment)
-                }.commit()
+        override fun handleBottomMenuClick(menuItemId: Int): Boolean {
+            when (menuItemId) {
+                R.id.home -> {
+                    revealSearch()
+                    fm.beginTransaction().apply {
+                        show(homeFragment)
+                        hide(historyFragment)
+                        hide(tabsFragment)
+                    }.commit()
+                }
+                R.id.history -> {
+                    appbar.setExpanded(false)
+                    hideSearch()
+                    fm.beginTransaction().apply {
+                        show(historyFragment)
+                        hide(homeFragment)
+                        hide(tabsFragment)
+                    }.commit()
+                }
+                R.id.tabs -> {
+                    appbar.setExpanded(false)
+                    hideSearch()
+                    fm.beginTransaction().apply {
+                        show(tabsFragment)
+                        hide(homeFragment)
+                        hide(historyFragment)
+                    }.commit()
+                }
             }
             return false
         }
@@ -331,38 +504,39 @@ class HomeActivity : BaseActivity(), Snackable {
     /**
      * Fragment manager for pre lollip without [TabsFragment]
      */
-    class PreLollipopActiveFragmentManager(private val fm: FragmentManager) : ActiveFragmentsManager(fm) {
-        private var historyFragment: HistoryFragment? = null
-        private var homeFragment: HomeFragment? = null
+    class PreLollipopActiveFragmentManager(
+            private var fm: FragmentManager,
+            materialSearchView: MaterialSearchView,
+            private var appbar: AppBarLayout,
+            fab: FloatingActionButton
+    ) : ActiveFragmentsManager(fm, materialSearchView, fab) {
 
-        override fun initialize(savedInstance: Bundle?) {
-            if (savedInstance == null) {
-                historyFragment = HistoryFragment()
-                homeFragment = HomeFragment()
-                fm.beginTransaction().apply {
-                    add(R.id.fragment_container, homeFragment, HomeFragment::class.java.name)
-                    add(R.id.fragment_container, historyFragment, HistoryFragment::class.java.name)
-                    show(homeFragment)
-                    hide(historyFragment)
-                }.commit()
-            } else {
-                historyFragment = fm.findFragmentByTag(HistoryFragment::class.java.name) as HistoryFragment
-                homeFragment = fm.findFragmentByTag(HomeFragment::class.java.name) as HomeFragment
-            }
-        }
-
-        override fun handleBottomMenuClick(menuItem: MenuItem): Boolean {
-            when (menuItem.itemId) {
-                R.id.home -> fm.beginTransaction().apply {
-                    show(homeFragment)
-                    hide(historyFragment)
-                }.commit()
-                R.id.history -> fm.beginTransaction().apply {
-                    show(historyFragment)
-                    hide(homeFragment)
-                }.commit()
+        override fun handleBottomMenuClick(menuItemId: Int): Boolean {
+            when (menuItemId) {
+                R.id.home -> {
+                    revealSearch()
+                    fm.beginTransaction().apply {
+                        show(homeFragment)
+                        hide(historyFragment)
+                    }.commit()
+                }
+                R.id.history -> {
+                    appbar.setExpanded(false)
+                    hideSearch()
+                    fm.beginTransaction().apply {
+                        show(historyFragment)
+                        hide(homeFragment)
+                    }.commit()
+                }
             }
             return false
         }
+    }
+
+    companion object {
+        private const val HOME = 0
+        private const val TABS = 1
+        private const val HISTORY = 2
+        private const val SELECTED_INDEX = "BOTTOM_NAV_SELECTED_INDEX"
     }
 }

@@ -48,7 +48,7 @@ import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBHEAD_COLOR;
 public class LookAndFeelActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback, Snackable, SharedPreferences.OnSharedPreferenceChangeListener {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.coordinator_layout)
+    @BindView(R.id.coordinatorLayout)
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.error)
     TextView error;

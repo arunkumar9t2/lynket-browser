@@ -34,7 +34,7 @@ import butterknife.BindView;
 public class HistoryActivity extends BaseActivity implements Snackable {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.coordinator_layout)
+    @BindView(R.id.coordinatorLayout)
     CoordinatorLayout coordinatorLayout;
 
     @Override

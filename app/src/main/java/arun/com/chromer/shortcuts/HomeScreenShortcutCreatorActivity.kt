@@ -41,8 +41,8 @@ import arun.com.chromer.data.Result
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.extenstions.gone
+import arun.com.chromer.extenstions.show
 import arun.com.chromer.extenstions.toBitmap
-import arun.com.chromer.extenstions.visible
 import arun.com.chromer.shared.base.activity.BaseActivity
 import arun.com.chromer.util.glide.GlideApp
 import arun.com.chromer.util.glide.appicon.ApplicationIcon
@@ -146,7 +146,7 @@ class HomeScreenShortcutCreatorActivity : BaseActivity() {
             subs.add(websiteObservable.subscribe {
                 when (it) {
                     is Result.Loading<Website> -> {
-                        progressBar?.visible()
+                        progressBar?.show()
                         iconView?.gone()
                         shortcutName?.setText(R.string.loading)
                         positiveButton?.isEnabled = false
@@ -172,7 +172,7 @@ class HomeScreenShortcutCreatorActivity : BaseActivity() {
 
         private fun loadAttemptFinished() {
             progressBar?.gone()
-            iconView?.visible()
+            iconView?.show()
             enablePositiveButtonIfImageLoaded()
         }
 

@@ -59,7 +59,7 @@ public class BlacklistManagerActivity extends BaseMVPActivity<Blacklist.View, Bl
     Toolbar toolbar;
     @BindView(R.id.app_recyclerview)
     RecyclerView blackListedAppsList;
-    @BindView(R.id.coordinator_layout)
+    @BindView(R.id.coordinatorLayout)
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;

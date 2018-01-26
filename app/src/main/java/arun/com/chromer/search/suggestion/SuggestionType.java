@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.search;
+package arun.com.chromer.search.suggestion;
 
 import android.support.annotation.IntDef;
 

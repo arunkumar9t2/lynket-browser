@@ -51,11 +51,11 @@ class TabsActivity : BaseActivity(), Snackable {
     }
 
     override fun snack(textToSnack: String) {
-        Snackbar.make(coordinator_layout, textToSnack, Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun snackLong(textToSnack: String) {
-        Snackbar.make(coordinator_layout, textToSnack, Snackbar.LENGTH_LONG).show()
+        Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_LONG).show()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -22,8 +22,7 @@ import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.support.transition.Fade
-import android.support.transition.TransitionManager.beginDelayedTransition
+import android.os.Handler
 import android.support.v7.widget.GridLayoutManager
 import android.view.View
 import arun.com.chromer.R
@@ -33,13 +32,12 @@ import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.fragment.FragmentComponent
 import arun.com.chromer.extenstions.appName
 import arun.com.chromer.extenstions.gone
-import arun.com.chromer.extenstions.visible
+import arun.com.chromer.extenstions.show
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.settings.browsingoptions.BrowsingOptionsActivity
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.shared.base.Snackable
 import arun.com.chromer.shared.base.fragment.BaseFragment
-import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.util.HtmlCompat
 import arun.com.chromer.util.RxEventBus
 import arun.com.chromer.util.Utils
@@ -61,8 +59,6 @@ class HomeFragment : BaseFragment() {
     lateinit var recentsAdapter: RecentsAdapter
     @Inject
     lateinit var rxEventBus: RxEventBus
-    @Inject
-    lateinit var tabsManger: DefaultTabsManager
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -116,30 +112,14 @@ class HomeFragment : BaseFragment() {
     private fun setRecents(websites: List<Website>) {
         recentsAdapter.setWebsites(websites)
         if (websites.isEmpty()) {
-            recent_missing_text.visible()
+            recent_missing_text.show()
         } else {
             recent_missing_text.gone()
         }
     }
 
     private fun setupMaterialSearch() {
-        materialSearchView.apply {
-            subs.add(voiceSearchFailed().subscribe {
-                snack(getString(R.string.no_voice_rec_apps))
-            })
-            subs.add(searchPerforms().subscribe { url ->
-                postDelayed({ launchCustomTab(url) }, 150)
-            })
-            clearFocus()
-            subs.add(focusChanges().subscribe {
-                beginDelayedTransition(fragmentHome, Fade().addTarget(shadow_layout))
-                if (it) {
-                    shadow_layout.visible()
-                } else {
-                    shadow_layout.gone()
-                }
-            })
-        }
+
     }
 
     private fun loadRecents() {
@@ -199,28 +179,19 @@ class HomeFragment : BaseFragment() {
 
     @OnClick(R.id.providerChangeButton)
     fun onProviderChangeClicked() {
-        if (CustomTabs.getCustomTabSupportingPackages(context!!).isNotEmpty()) {
-            startActivity(Intent(context, BrowsingOptionsActivity::class.java))
-        } else {
-            MaterialDialog.Builder(context!!)
-                    .title(R.string.custom_tab_provider_not_found)
-                    .content(HtmlCompat.fromHtml(context!!.getString(R.string.custom_tab_provider_not_found_dialog_content)))
-                    .positiveText(R.string.install)
-                    .negativeText(android.R.string.no)
-                    .onPositive({ _, _ ->
-                        Utils.openPlayStore(activity!!, Constants.CHROME_PACKAGE)
-                    }).show()
-        }
-    }
-
-    private fun launchCustomTab(url: String?) {
-        if (url != null && activity != null) {
-            tabsManger.openUrl(activity!!, Website(url))
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        materialSearchView.onActivityResult(requestCode, resultCode, data)
+        Handler().postDelayed({
+            if (CustomTabs.getCustomTabSupportingPackages(context!!).isNotEmpty()) {
+                startActivity(Intent(context, BrowsingOptionsActivity::class.java))
+            } else {
+                MaterialDialog.Builder(context!!)
+                        .title(R.string.custom_tab_provider_not_found)
+                        .content(HtmlCompat.fromHtml(context!!.getString(R.string.custom_tab_provider_not_found_dialog_content)))
+                        .positiveText(R.string.install)
+                        .negativeText(android.R.string.no)
+                        .onPositive({ _, _ ->
+                            Utils.openPlayStore(activity!!, Constants.CHROME_PACKAGE)
+                        }).show()
+            }
+        }, 200)
     }
 }

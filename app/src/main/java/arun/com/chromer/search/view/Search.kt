@@ -19,7 +19,7 @@
 package arun.com.chromer.search.view
 
 import arun.com.chromer.di.scopes.PerView
-import arun.com.chromer.search.SuggestionsEngine
+import arun.com.chromer.search.suggestion.SuggestionsEngine
 import arun.com.chromer.search.suggestion.items.SuggestionItem
 import arun.com.chromer.shared.base.Base
 import rx.Observable

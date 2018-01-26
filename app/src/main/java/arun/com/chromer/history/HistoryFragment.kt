@@ -33,11 +33,11 @@ import android.view.View.VISIBLE
 import arun.com.chromer.R
 import arun.com.chromer.di.fragment.FragmentComponent
 import arun.com.chromer.settings.Preferences
+import arun.com.chromer.shared.FabHandler
 import arun.com.chromer.shared.base.Snackable
 import arun.com.chromer.shared.base.fragment.BaseFragment
 import arun.com.chromer.util.HtmlCompat
 import arun.com.chromer.util.Utils
-import butterknife.OnClick
 import com.afollestad.materialdialogs.MaterialDialog
 import kotlinx.android.synthetic.main.fragment_history.*
 import javax.inject.Inject
@@ -45,7 +45,7 @@ import javax.inject.Inject
 /**
  * Created by arunk on 07-04-2017.
  */
-class HistoryFragment : BaseFragment(), Snackable {
+class HistoryFragment : BaseFragment(), Snackable, FabHandler {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     @Inject
@@ -111,7 +111,6 @@ class HistoryFragment : BaseFragment(), Snackable {
 
     private fun observeViewModel() {
         viewModel?.apply {
-            initHistoryLoader()
             loadingLiveData.observe(this@HistoryFragment, Observer { loading(it!!) })
             historyCursorLiveData.observe(this@HistoryFragment, Observer {
                 setCursor(it!!)
@@ -171,8 +170,7 @@ class HistoryFragment : BaseFragment(), Snackable {
         incognitoSwitch.isChecked = !preferences.incognitoMode()
     }
 
-    @OnClick(R.id.fab)
-    fun onClearAllFabClick() {
+    override fun onFabClick() {
         if (historyAdapter.itemCount != 0) {
             MaterialDialog.Builder(activity!!)
                     .title(R.string.are_you_sure)
