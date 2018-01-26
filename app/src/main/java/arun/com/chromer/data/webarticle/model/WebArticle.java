@@ -120,7 +120,7 @@ public class WebArticle implements Parcelable {
         final Elements rawElements = Jsoup.parse(html).body().children();
         for (Iterator<Element> iterator = rawElements.iterator(); iterator.hasNext(); ) {
             final Element element = iterator.next();
-            if (element.html().isEmpty()) {
+            if (element.text().isEmpty()) {
                 iterator.remove();
             }
         }

@@ -64,7 +64,7 @@ public class DefaultWebArticleRepository implements WebArticleRepository {
                         Log.d(TAG, String.format("Cache miss for %s", url));
                         //noinspection Convert2MethodRef
                         return articleNetworkStore.getWebArticle(url)
-                                .filter(webArticle1 -> webArticle1 != null)
+                                .filter(remoteArticle -> remoteArticle != null)
                                 .flatMap(articleCacheStore::saveWebArticle);
                     } else {
                         Log.d(TAG, String.format("Cache hit for %s", url));

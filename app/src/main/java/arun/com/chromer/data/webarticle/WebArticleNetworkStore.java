@@ -20,6 +20,11 @@ package arun.com.chromer.data.webarticle;
 
 import android.support.annotation.NonNull;
 
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.util.Iterator;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -47,6 +52,16 @@ public class WebArticleNetworkStore implements WebArticleStore {
                     } else {
                         return Observable.just(null);
                     }
+                }).map(webArticle -> {
+                    // Clean up all the empty strings.
+                    final Elements rawElements = webArticle.elements;
+                    for (Iterator<Element> iterator = rawElements.iterator(); iterator.hasNext(); ) {
+                        final Element element = iterator.next();
+                        if (element.text().isEmpty()) {
+                            iterator.remove();
+                        }
+                    }
+                    return webArticle;
                 });
     }
 

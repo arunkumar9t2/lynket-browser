@@ -37,7 +37,6 @@ import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.shared.Constants
 import kotlinx.android.synthetic.main.activity_article_mode.*
-import timber.log.Timber
 
 abstract class BaseArticleActivity : BrowsingActivity() {
     private lateinit var browsingArticleViewModel: BrowsingArticleViewModel
@@ -56,10 +55,9 @@ abstract class BaseArticleActivity : BrowsingActivity() {
     }
 
     public override fun onCreate(savedInstanceState: Bundle?) {
+        readCustomizations()
         super.onCreate(savedInstanceState)
         url = intent.dataString
-
-        readCustomizations()
 
         setupToolbar()
 
@@ -80,14 +78,17 @@ abstract class BaseArticleActivity : BrowsingActivity() {
         super.onPostCreate(savedInstanceState)
         browsingArticleViewModel = ViewModelProviders.of(this, viewModelFactory).get(BrowsingArticleViewModel::class.java)
         subs.add(browsingArticleViewModel.loadWebSiteDetails(intent.dataString)
-                .filter { it is Result.Success && it.data != null }
-                .map { (it as Result.Success).data!! }
-                .doOnError { Timber.e(it) }
-                .subscribe { webArticle ->
-                    if (webArticle == null) {
-                        onArticleLoadingFailed(null)
-                    } else {
-                        onArticleLoaded(webArticle)
+                .subscribe { result ->
+                    when (result) {
+                        is Result.Success -> {
+                            val webArticle: WebArticle? = result.data
+                            if (webArticle == null) {
+                                onArticleLoadingFailed(null)
+                            } else {
+                                onArticleLoaded(webArticle)
+                            }
+                        }
+                        is Result.Failure -> onArticleLoadingFailed(result.throwable)
                     }
                 })
     }
