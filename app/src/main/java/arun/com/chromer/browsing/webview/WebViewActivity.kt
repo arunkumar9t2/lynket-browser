@@ -47,7 +47,7 @@ import arun.com.chromer.util.Utils
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import kotlinx.android.synthetic.main.activity_web_view.*
-import kotlinx.android.synthetic.main.content_web_view.*
+import kotlinx.android.synthetic.main.activity_web_view_content.*
 import timber.log.Timber
 
 class WebViewActivity : BrowsingActivity() {

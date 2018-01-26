@@ -21,7 +21,7 @@ package arun.com.chromer.tabs
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import arun.com.chromer.browsing.article.ChromerArticleActivity
+import arun.com.chromer.browsing.article.ArticleActivity
 import arun.com.chromer.browsing.customtabs.CustomTabActivity
 import arun.com.chromer.browsing.webview.WebViewActivity
 import arun.com.chromer.data.website.model.Website
@@ -41,7 +41,7 @@ interface TabsManager {
         fun getTargetActivityName(): String = when (type) {
             WEB_VIEW -> WebViewActivity::class.java.name
             CUSTOM_TAB -> CustomTabActivity::class.java.name
-            ARTICLE -> ChromerArticleActivity::class.java.name
+            ARTICLE -> ArticleActivity::class.java.name
             else -> CustomTabActivity::class.java.name
         }
     }

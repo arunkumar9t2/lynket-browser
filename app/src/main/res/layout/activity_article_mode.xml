@@ -22,14 +22,14 @@
     android:orientation="horizontal">
 
     <View
-        android:id="@+id/article_transparent_side_1"
+        android:id="@+id/transparentSide1"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:background="@color/article_transparentSideBackground" />
 
     <arun.com.chromer.browsing.article.view.ElasticDragDismissFrameLayout
-        android:id="@+id/article_drag_dismiss_layout"
+        android:id="@+id/dragDismissLayout"
         android:layout_width="@dimen/article_articleWidth"
         android:layout_height="match_parent">
 
@@ -39,14 +39,14 @@
             android:background="@color/article_windowBackground">
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/article_recycler_view"
+                android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars="vertical"
                 app:behavior_overlapTop="?attr/actionBarSize" />
 
             <ProgressBar
-                android:id="@+id/article_loading"
+                android:id="@+id/progressBar"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="244dp"
                 android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
                 android:indeterminate="true" />
 
             <View
-                android:id="@+id/article_status_bar"
+                android:id="@+id/statusBar"
                 android:layout_width="match_parent"
                 android:layout_height="24dp"
                 android:background="@color/article_toolbarBackground" />
@@ -68,7 +68,7 @@
                 app:elevation="0dp">
 
                 <android.support.v7.widget.Toolbar
-                    android:id="@+id/article_toolbar"
+                    android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:background="@color/article_toolbarBackground"
@@ -80,10 +80,9 @@
     </arun.com.chromer.browsing.article.view.ElasticDragDismissFrameLayout>
 
     <View
-        android:id="@+id/article_transparent_side_2"
+        android:id="@+id/transparentSide2"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:background="@color/article_transparentSideBackground" />
-
 </LinearLayout>

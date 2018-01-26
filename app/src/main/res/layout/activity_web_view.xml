@@ -37,6 +37,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_web_view" />
+    <include layout="@layout/activity_web_view_content" />
 
 </android.support.design.widget.CoordinatorLayout>

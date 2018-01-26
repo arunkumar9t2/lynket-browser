@@ -56,6 +56,11 @@ constructor(val tabsManager: DefaultTabsManager) : RecyclerView.Adapter<RecentsA
         holder.bind(website)
     }
 
+    override fun onViewDetachedFromWindow(holder: RecentsViewHolder) {
+        super.onViewDetachedFromWindow(holder)
+        GlideApp.with(holder.itemView.context).clear(holder.icon)
+    }
+
     override fun getItemCount(): Int = websites.size
 
     override fun getItemId(position: Int): Long = websites[position].hashCode().toLong()

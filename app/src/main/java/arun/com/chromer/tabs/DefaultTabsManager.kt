@@ -36,9 +36,9 @@ import arun.com.chromer.BuildConfig
 import arun.com.chromer.R
 import arun.com.chromer.appdetect.AppDetectionManager
 import arun.com.chromer.browsing.amp.AmpResolverActivity
+import arun.com.chromer.browsing.article.ArticleActivity
 import arun.com.chromer.browsing.article.ArticleLauncher
 import arun.com.chromer.browsing.article.ArticlePreloader
-import arun.com.chromer.browsing.article.ChromerArticleActivity
 import arun.com.chromer.browsing.customtabs.CustomTabActivity
 import arun.com.chromer.browsing.customtabs.CustomTabs
 import arun.com.chromer.browsing.newtab.NewTabDialogActivity
@@ -162,7 +162,7 @@ constructor(
                                 componentClassName == activityName
                             } else {
                                 (componentClassName == CustomTabActivity::class.java.name
-                                        || componentClassName == ChromerArticleActivity::class.java.name
+                                        || componentClassName == ArticleActivity::class.java.name
                                         || componentClassName == WebViewActivity::class.java.name)
                             }
 
@@ -383,7 +383,7 @@ constructor(
                             val type = when (it.baseIntent.component.className) {
                                 CustomTabActivity::class.java.name -> CUSTOM_TAB
                                 WebViewActivity::class.java.name -> WEB_VIEW
-                                ChromerArticleActivity::class.java.name -> ARTICLE
+                                ArticleActivity::class.java.name -> ARTICLE
                                 else -> OTHER
                             }
                             TabsManager.Tab(url, type)

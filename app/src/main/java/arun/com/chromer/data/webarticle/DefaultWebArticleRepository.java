@@ -47,9 +47,9 @@ public class DefaultWebArticleRepository implements WebArticleRepository {
     private final WebArticleStore articleCacheStore;
 
     @Inject
-    public DefaultWebArticleRepository(@NonNull Application application,
-                                       @Network WebArticleStore articleNetworkStore,
-                                       @Disk WebArticleStore articleCacheStore) {
+    DefaultWebArticleRepository(@NonNull Application application,
+                                @Network WebArticleStore articleNetworkStore,
+                                @Disk WebArticleStore articleCacheStore) {
         this.context = application;
         this.articleNetworkStore = articleNetworkStore;
         this.articleCacheStore = articleCacheStore;

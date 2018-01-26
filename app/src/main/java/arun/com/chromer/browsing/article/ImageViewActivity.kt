@@ -16,29 +16,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.browsing.article;
+package arun.com.chromer.browsing.article
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.ImageView;
-
-import arun.com.chromer.R;
-import arun.com.chromer.util.glide.GlideApp;
+import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
+import arun.com.chromer.R
+import arun.com.chromer.util.glide.GlideApp
+import kotlinx.android.synthetic.main.activity_image_view.*
 
 /**
  * Activity for viewing full size images from an article. Images are zoomable. You can pass in the
  * image url from an intent with .setData(url).
  */
-public final class ImageViewActivity extends AppCompatActivity {
+class ImageViewActivity : AppCompatActivity() {
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.article_activity_image_view);
-        ImageView imageView = findViewById(R.id.article_image_view);
-        final String url = getIntent().getDataString();
+    public override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_image_view)
+        val url = intent.dataString
         GlideApp.with(this)
                 .load(url)
-                .into(imageView);
+                .into(imageView)
     }
 }

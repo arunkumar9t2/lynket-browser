@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.browsing.article;
+package arun.com.chromer.browsing.article.util;
 
 import android.annotation.TargetApi;
 import android.graphics.Color;
@@ -36,11 +36,11 @@ import java.lang.reflect.Method;
 /**
  * Utilities we use, mostly for UI modification.
  */
-final class ArticleUtil {
+public final class ArticleUtil {
     /**
      * Changes the overscroll highlight effect on a recyclerview to be the given color.
      */
-    static void changeRecyclerOverscrollColors(RecyclerView recyclerView, final int color) {
+    public static void changeRecyclerOverscrollColors(RecyclerView recyclerView, final int color) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             return;
         }
@@ -86,7 +86,7 @@ final class ArticleUtil {
     /**
      * Changes the progress bar's color.
      */
-    static void changeProgressBarColors(ProgressBar progressBar, int color) {
+    public static void changeProgressBarColors(ProgressBar progressBar, int color) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             Drawable wrapDrawable = DrawableCompat.wrap(progressBar.getIndeterminateDrawable());
             DrawableCompat.setTint(wrapDrawable, color);
@@ -99,7 +99,7 @@ final class ArticleUtil {
     /**
      * Changes the text selection handle colors.
      */
-    static void changeTextSelectionHandleColors(TextView textView, int color) {
+    public static void changeTextSelectionHandleColors(TextView textView, int color) {
         textView.setHighlightColor(Color.argb(
                 40, Color.red(color), Color.green(color), Color.blue(color)));
 

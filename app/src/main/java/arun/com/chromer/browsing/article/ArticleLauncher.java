@@ -76,7 +76,7 @@ public class ArticleLauncher {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void launch() {
         final Bundle extras = builder.getExtras();
-        final Intent intent = new Intent(context, ChromerArticleActivity.class);
+        final Intent intent = new Intent(context, ArticleActivity.class);
         intent.setData(uri);
         intent.putExtras(extras);
         if (!(context instanceof Activity)) {

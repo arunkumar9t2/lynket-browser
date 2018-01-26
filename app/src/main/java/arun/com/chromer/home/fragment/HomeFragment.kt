@@ -62,7 +62,7 @@ class HomeFragment : BaseFragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private var homeFragmentViewModel: HomeFragmentViewModel? = null
+    private lateinit var homeFragmentViewModel: HomeFragmentViewModel
 
     override fun inject(fragmentComponent: FragmentComponent) {
         fragmentComponent.inject(this)
@@ -123,7 +123,7 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun loadRecents() {
-        homeFragmentViewModel?.loadRecents()
+        homeFragmentViewModel.loadRecents()
     }
 
     private fun setupRecents() {
@@ -138,7 +138,7 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun observeViewModel() {
-        subs.add(homeFragmentViewModel!!
+        subs.add(homeFragmentViewModel
                 .recentsObservable()
                 .subscribe({
                     when (it) {

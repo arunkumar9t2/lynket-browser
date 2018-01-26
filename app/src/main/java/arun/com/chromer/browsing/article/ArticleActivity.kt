@@ -34,8 +34,6 @@ import arun.com.chromer.browsing.customtabs.callbacks.FavShareBroadcastReceiver
 import arun.com.chromer.browsing.customtabs.callbacks.SecondaryBrowserReceiver
 import arun.com.chromer.browsing.openwith.OpenIntentWithActivity
 import arun.com.chromer.browsing.optionspopup.ChromerOptionsActivity
-import arun.com.chromer.data.history.DefaultHistoryRepository
-import arun.com.chromer.data.webarticle.model.WebArticle
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.settings.Preferences
@@ -43,17 +41,13 @@ import arun.com.chromer.settings.Preferences.*
 import arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_ARTICLE
 import arun.com.chromer.shared.Constants.EXTRA_KEY_ORIGINAL_URL
 import arun.com.chromer.tabs.DefaultTabsManager
-import arun.com.chromer.util.SchedulerProvider
 import arun.com.chromer.util.Utils
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import javax.inject.Inject
 
-class ChromerArticleActivity : BaseArticleActivity() {
+class ArticleActivity : BaseArticleActivity() {
     private var baseUrl: String? = ""
-
-    @Inject
-    lateinit var historyRepository: DefaultHistoryRepository
 
     @Inject
     lateinit var tabsManager: DefaultTabsManager
@@ -74,13 +68,6 @@ class ChromerArticleActivity : BaseArticleActivity() {
         loadInNormalTab()
     }
 
-    override fun onArticleLoaded(webArticle: WebArticle) {
-        super.onArticleLoaded(webArticle)
-        historyRepository.insert(Website.fromArticle(webArticle))
-                .compose(SchedulerProvider.applySchedulers())
-                .subscribe()
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.article_view_menu, menu)
         return true
@@ -99,7 +86,6 @@ class ChromerArticleActivity : BaseArticleActivity() {
                     } catch (e: PackageManager.NameNotFoundException) {
                         actionButton.isVisible = false
                     }
-
                 } else {
                     actionButton.isVisible = false
                 }
@@ -170,8 +156,8 @@ class ChromerArticleActivity : BaseArticleActivity() {
 
     private fun loadInNormalTab() {
         finish()
-        if (intent != null && intent.dataString != null) {
-            tabsManager.openBrowsingTab(this, Website(intent.dataString!!), true, false, CustomTabActivity::class.java.name)
+        if (intent?.dataString != null) {
+            tabsManager.openBrowsingTab(this, Website(intent.dataString), true, false, CustomTabActivity::class.java.name)
         }
     }
 
