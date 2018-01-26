@@ -26,7 +26,6 @@ import android.net.Uri
 import android.support.annotation.VisibleForTesting
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
-import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +33,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import arun.com.chromer.R
 import arun.com.chromer.browsing.article.util.ArticleUtil.changeTextSelectionHandleColors
+import arun.com.chromer.browsing.article.util.SuppressiveLinkMovementMethod
 import arun.com.chromer.data.webarticle.model.WebArticle
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.show
@@ -260,8 +260,7 @@ internal class ArticleAdapter(private val article: WebArticle?, private val acce
         val textView: TextView = itemView.findViewById(R.id.article_text)
 
         init {
-            this.textView.setTextIsSelectable(true)
-            this.textView.movementMethod = LinkMovementMethod.getInstance()
+            this.textView.movementMethod = SuppressiveLinkMovementMethod()
             changeTextSelectionHandleColors(this.textView, accentColor)
         }
     }
