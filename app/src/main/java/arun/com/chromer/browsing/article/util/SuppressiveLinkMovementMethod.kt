@@ -16,27 +16,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.browsing.article.util;
+package arun.com.chromer.browsing.article.util
 
-import android.text.Spannable;
-import android.text.method.LinkMovementMethod;
-import android.view.MotionEvent;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.text.Spannable
+import android.text.method.LinkMovementMethod
+import android.view.MotionEvent
+import android.widget.TextView
+import android.widget.Toast
 
-import arun.com.chromer.R;
+import arun.com.chromer.R
 
 /**
  * Created by arunk on 27-01-2018.
  */
-public class SuppressiveLinkMovementMethod extends LinkMovementMethod {
-    @Override
-    public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
-        try {
-            return super.onTouchEvent(widget, buffer, event);
-        } catch (Exception ex) {
-            Toast.makeText(widget.getContext(), R.string.unsupported_link, Toast.LENGTH_LONG).show();
-            return true;
+object SuppressiveLinkMovementMethod : LinkMovementMethod() {
+    override fun onTouchEvent(widget: TextView, buffer: Spannable, event: MotionEvent): Boolean {
+        return try {
+            super.onTouchEvent(widget, buffer, event)
+        } catch (ex: Exception) {
+            Toast.makeText(widget.context, R.string.unsupported_link, Toast.LENGTH_LONG).show()
+            true
         }
+
     }
 }

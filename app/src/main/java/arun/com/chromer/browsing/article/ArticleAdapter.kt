@@ -260,7 +260,7 @@ internal class ArticleAdapter(private val article: WebArticle?, private val acce
         val textView: TextView = itemView.findViewById(R.id.article_text)
 
         init {
-            this.textView.movementMethod = SuppressiveLinkMovementMethod()
+            this.textView.movementMethod = SuppressiveLinkMovementMethod
             changeTextSelectionHandleColors(this.textView, accentColor)
         }
     }
