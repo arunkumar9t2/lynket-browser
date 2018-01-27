@@ -43,6 +43,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions.diskCacheStrategyOf
 import com.bumptech.glide.request.RequestOptions.placeholderOf
 import org.jsoup.select.Elements
+import rx.Observable
+import rx.subjects.PublishSubject
 
 /**
  * Recycler adapter responsible for displaying the article in a recycler view. This will
@@ -62,6 +64,9 @@ internal class ArticleAdapter(
         private val requestManager: RequestManager
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var elements: Elements = Elements()
+
+    private val keywordClicks = PublishSubject.create<String>()
+    fun keywordsClicks(): Observable<String> = keywordClicks.asObservable()
 
     private val manualItemsOffset: Int
         get() {
@@ -230,7 +235,8 @@ internal class ArticleAdapter(
 
         init {
             textView.movementMethod = SuppressiveLinkMovementMethod
-            changeTextSelectionHandleColors(this.textView, accentColor)
+            changeTextSelectionHandleColors(textView, accentColor)
+            textView.setLinkTextColor(accentColor)
         }
     }
 
@@ -266,6 +272,10 @@ internal class ArticleAdapter(
         val siteName: TextView = itemView.findViewById(R.id.articleSiteName)
     }
 
+
+    /**
+     * [RecyclerView.ViewHolder] for the entire keywords item containing a list and title.
+     */
     internal inner class KeywordsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val keywordsListView: RecyclerView = itemView.findViewById(R.id.keywordsList)
         private val keywordsAdapter = KeywordsAdapter()
@@ -281,16 +291,15 @@ internal class ArticleAdapter(
             keywordsAdapter.setKeywords(keywords)
         }
 
-        inner class KeywordsItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val keywordItem: TextView = itemView.findViewById(R.id.keywordsItem)
-        }
-
-        inner class KeywordsAdapter : RecyclerView.Adapter<KeywordsItemViewHolder>() {
-            private var keywordsList = ArrayList<String>()
+        /**
+         * Keywords adapter
+         */
+        inner class KeywordsAdapter : RecyclerView.Adapter<KeywordsAdapter.KeywordsItemViewHolder>() {
+            private var keywords = ArrayList<String>()
 
             fun setKeywords(keywords: ArrayList<String>) {
-                keywordsList.clear()
-                keywordsList.addAll(keywords)
+                this.keywords.clear()
+                this.keywords.addAll(keywords)
                 this.notifyDataSetChanged()
             }
 
@@ -299,14 +308,30 @@ internal class ArticleAdapter(
             }
 
             override fun getItemCount(): Int {
-                return keywordsList.size
+                return keywords.size
             }
 
             override fun onBindViewHolder(holder: KeywordsItemViewHolder, position: Int) {
                 holder.keywordItem.apply {
-                    text = keywordsList[position]
+                    text = keywords[position]
                     (background as GradientDrawable).setColor(accentColor)
                     setTextColor(ColorUtil.getForegroundWhiteOrBlack(accentColor))
+                }
+            }
+
+            /**
+             * [RecyclerView.ViewHolder] for individual items
+             */
+            inner class KeywordsItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+                val keywordItem: TextView = itemView.findViewById(R.id.keywordsItem)
+
+                init {
+                    keywordItem.setOnClickListener {
+                        val position = adapterPosition
+                        if (position != RecyclerView.NO_POSITION) {
+                            keywordClicks.onNext(keywords[position])
+                        }
+                    }
                 }
             }
         }

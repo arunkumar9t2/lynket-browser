@@ -38,8 +38,11 @@ import arun.com.chromer.data.webarticle.model.WebArticle
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.shared.Constants
+import arun.com.chromer.tabs.DefaultTabsManager
+import arun.com.chromer.util.Utils
 import arun.com.chromer.util.glide.GlideApp
 import kotlinx.android.synthetic.main.activity_article_mode.*
+import javax.inject.Inject
 
 abstract class BaseArticleActivity : BrowsingActivity() {
     private lateinit var browsingArticleViewModel: BrowsingArticleViewModel
@@ -52,6 +55,9 @@ abstract class BaseArticleActivity : BrowsingActivity() {
     private lateinit var articleAdapter: ArticleAdapter
 
     private var articleScrollListener: ArticleScrollListener? = null
+
+    @Inject
+    lateinit var tabsManager: DefaultTabsManager
 
     override fun getLayoutRes(): Int {
         return R.layout.activity_article_mode
@@ -141,9 +147,17 @@ abstract class BaseArticleActivity : BrowsingActivity() {
     }
 
     private fun renderArticle(webArticle: WebArticle) {
-        articleAdapter = ArticleAdapter(webArticle, accentColor, GlideApp.with(this)).apply {
+        articleAdapter = ArticleAdapter(
+                webArticle,
+                accentColor,
+                GlideApp.with(this)
+        ).apply {
             setElements(webArticle.elements)
+            subs.add(keywordsClicks().map { Utils.getSearchUrl(it) }.subscribe {
+                tabsManager.openUrl(this@BaseArticleActivity, Website(it))
+            })
         }
+
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this@BaseArticleActivity)
             adapter = articleAdapter

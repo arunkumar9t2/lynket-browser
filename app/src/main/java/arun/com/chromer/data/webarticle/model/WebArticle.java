@@ -34,6 +34,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import arun.com.chromer.shared.Constants;
+
 /**
  * Parcelable clone of {@link Article}. Not fully complete though, there
  * is a limitation of not being able to parcel {@link Elements} from JSoup. This implementation has
@@ -98,7 +100,7 @@ public class WebArticle implements Parcelable {
             //noinspection Range
             return Color.parseColor(themeColor);
         } catch (Exception e) {
-            return -1;
+            return Constants.NO_COLOR;
         }
     }
 

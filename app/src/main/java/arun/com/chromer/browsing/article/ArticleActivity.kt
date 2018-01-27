@@ -40,17 +40,12 @@ import arun.com.chromer.settings.Preferences
 import arun.com.chromer.settings.Preferences.*
 import arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_ARTICLE
 import arun.com.chromer.shared.Constants.EXTRA_KEY_ORIGINAL_URL
-import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.util.Utils
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
-import javax.inject.Inject
 
 class ArticleActivity : BaseArticleActivity() {
     private var baseUrl: String? = ""
-
-    @Inject
-    lateinit var tabsManager: DefaultTabsManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -20,11 +20,13 @@ package arun.com.chromer.shared;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.ColorInt;
 
 /**
  * Created by Arun on 04/01/2016.
  */
 public class Constants {
+    @ColorInt
     public static final int NO_COLOR = -1;
 
     // Package names
