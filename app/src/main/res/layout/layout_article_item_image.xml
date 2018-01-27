@@ -20,7 +20,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <arun.com.chromer.browsing.article.view.PEWImageView
+    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/article_image"
         android:layout_width="match_parent"
         android:layout_height="@dimen/article_imageHeight"

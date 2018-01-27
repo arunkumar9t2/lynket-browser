@@ -22,9 +22,8 @@ import android.arch.lifecycle.ViewModel
 import arun.com.chromer.data.Result
 import arun.com.chromer.data.webarticle.WebArticleRepository
 import arun.com.chromer.data.webarticle.model.WebArticle
+import arun.com.chromer.util.SchedulerProvider
 import rx.Observable
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
 import rx.subjects.BehaviorSubject
 import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
@@ -42,8 +41,7 @@ constructor(private val webArticleRepository: WebArticleRepository) : ViewModel(
         if (webSiteSubject.value is Result.Idle<WebArticle>) {
             subs.add(webArticleRepository.getWebArticle(url)
                     .compose(Result.applyToObservable())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+                    .compose(SchedulerProvider.applySchedulers())
                     .subscribe(webSiteSubject))
         }
         return webSiteSubject

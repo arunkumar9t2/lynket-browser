@@ -18,10 +18,7 @@
 
 package arun.com.chromer.data.webarticle;
 
-import android.app.Application;
-import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -29,28 +26,21 @@ import javax.inject.Singleton;
 import arun.com.chromer.data.qualifiers.Disk;
 import arun.com.chromer.data.qualifiers.Network;
 import arun.com.chromer.data.webarticle.model.WebArticle;
-import arun.com.chromer.util.SchedulerProvider;
 import rx.Observable;
+import timber.log.Timber;
 
 /**
  * Website repository implementation for managing and providing website data.
  */
 @Singleton
 public class DefaultWebArticleRepository implements WebArticleRepository {
-    private static final String TAG = DefaultWebArticleRepository.class.getSimpleName();
-    @SuppressWarnings("FieldCanBeLocal")
-    private final Context context;
-
     // Network store
     private final WebArticleStore articleNetworkStore;
     // Cache store
     private final WebArticleStore articleCacheStore;
 
     @Inject
-    DefaultWebArticleRepository(@NonNull Application application,
-                                @Network WebArticleStore articleNetworkStore,
-                                @Disk WebArticleStore articleCacheStore) {
-        this.context = application;
+    DefaultWebArticleRepository(@Network WebArticleStore articleNetworkStore, @Disk WebArticleStore articleCacheStore) {
         this.articleNetworkStore = articleNetworkStore;
         this.articleCacheStore = articleCacheStore;
     }
@@ -61,15 +51,18 @@ public class DefaultWebArticleRepository implements WebArticleRepository {
         return articleCacheStore.getWebArticle(url)
                 .flatMap(webArticle -> {
                     if (webArticle == null) {
-                        Log.d(TAG, String.format("Cache miss for %s", url));
+                        Timber.d("Cache miss for %s", url);
                         //noinspection Convert2MethodRef
                         return articleNetworkStore.getWebArticle(url)
-                                .filter(remoteArticle -> remoteArticle != null)
-                                .flatMap(articleCacheStore::saveWebArticle);
+                                .flatMap(networkWebArticle -> {
+                                    if (networkWebArticle != null) {
+                                        return articleCacheStore.saveWebArticle(networkWebArticle);
+                                    } else return null;
+                                });
                     } else {
-                        Log.d(TAG, String.format("Cache hit for %s", url));
+                        Timber.d("Cache hit for %s", url);
                         return Observable.just(webArticle);
                     }
-                }).compose(SchedulerProvider.applySchedulers());
+                });
     }
 }

@@ -15,17 +15,12 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-
-<arun.com.chromer.browsing.article.view.CutLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/article_image"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/article_imageHeight"
-        android:contentDescription="@null"
-        android:scaleType="centerCrop"
-        android:src="@color/article_imageBackground" />
-
-</arun.com.chromer.browsing.article.view.CutLayout>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners android:radius="24dp" />
+    <solid android:color="@color/primary" />
+    <padding
+        android:bottom="4dp"
+        android:left="12dp"
+        android:right="12dp"
+        android:top="4dp" />
+</shape>

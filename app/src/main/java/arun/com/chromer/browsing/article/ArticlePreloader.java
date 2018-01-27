@@ -27,6 +27,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import arun.com.chromer.data.webarticle.WebArticleRepository;
+import arun.com.chromer.util.SchedulerProvider;
 
 @Singleton
 public class ArticlePreloader {
@@ -34,12 +35,13 @@ public class ArticlePreloader {
     private final WebArticleRepository webArticleRepository;
 
     @Inject
-    public ArticlePreloader(WebArticleRepository webArticleRepository) {
+    ArticlePreloader(WebArticleRepository webArticleRepository) {
         this.webArticleRepository = webArticleRepository;
     }
 
     public void preloadArticle(@NonNull Uri uri, @Nullable final ArticlePreloadListener listener) {
         webArticleRepository.getWebArticle(uri.toString())
+                .compose(SchedulerProvider.applySchedulers())
                 .doOnError(throwable -> {
                     if (listener != null) {
                         listener.onComplete(false);

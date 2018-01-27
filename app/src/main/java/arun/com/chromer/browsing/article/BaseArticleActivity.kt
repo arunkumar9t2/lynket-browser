@@ -20,6 +20,7 @@ package arun.com.chromer.browsing.article
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.annotation.CallSuper
 import android.support.annotation.ColorInt
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatDelegate
@@ -27,6 +28,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import arun.com.chromer.R
 import arun.com.chromer.browsing.BrowsingActivity
+import arun.com.chromer.browsing.article.adapter.ArticleAdapter
 import arun.com.chromer.browsing.article.util.ArticleScrollListener
 import arun.com.chromer.browsing.article.util.ArticleUtil.changeProgressBarColors
 import arun.com.chromer.browsing.article.util.ArticleUtil.changeRecyclerOverscrollColors
@@ -36,6 +38,7 @@ import arun.com.chromer.data.webarticle.model.WebArticle
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.shared.Constants
+import arun.com.chromer.util.glide.GlideApp
 import kotlinx.android.synthetic.main.activity_article_mode.*
 
 abstract class BaseArticleActivity : BrowsingActivity() {
@@ -66,6 +69,7 @@ abstract class BaseArticleActivity : BrowsingActivity() {
 
         articleScrollListener = ArticleScrollListener(toolbar, statusBar, primaryColor)
         recyclerView.addOnScrollListener(articleScrollListener)
+
         dragDismissLayout.addListener(object : ElasticDragDismissFrameLayout.ElasticDragDismissCallback() {
             override fun onDragDismissed() {
                 super.onDragDismissed()
@@ -103,11 +107,9 @@ abstract class BaseArticleActivity : BrowsingActivity() {
 
     private fun setupToolbar() {
         setSupportActionBar(toolbar)
-        if (supportActionBar != null) {
-            supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-            supportActionBar!!.setHomeAsUpIndicator(R.drawable.article_ic_close)
-            supportActionBar!!.title = null
-        }
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.article_ic_close)
+        supportActionBar?.title = null
     }
 
     override fun onWebsiteLoaded(website: Website) {
@@ -120,7 +122,7 @@ abstract class BaseArticleActivity : BrowsingActivity() {
         this.primaryColor = primaryColor
         changeRecyclerOverscrollColors(recyclerView, primaryColor)
         changeProgressBarColors(progressBar, primaryColor)
-        articleScrollListener!!.setPrimaryColor(primaryColor)
+        articleScrollListener?.setPrimaryColor(primaryColor)
     }
 
     private fun readCustomizations() {
@@ -139,8 +141,8 @@ abstract class BaseArticleActivity : BrowsingActivity() {
     }
 
     private fun renderArticle(webArticle: WebArticle) {
-        articleAdapter = ArticleAdapter(webArticle, accentColor).apply {
-            addElements(webArticle.elements)
+        articleAdapter = ArticleAdapter(webArticle, accentColor, GlideApp.with(this)).apply {
+            setElements(webArticle.elements)
         }
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this@BaseArticleActivity)
@@ -149,7 +151,7 @@ abstract class BaseArticleActivity : BrowsingActivity() {
         hideLoading()
     }
 
-
+    @CallSuper
     protected open fun onArticleLoadingFailed(throwable: Throwable?) {
         hideLoading()
     }

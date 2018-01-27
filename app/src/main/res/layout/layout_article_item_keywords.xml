@@ -23,32 +23,23 @@
     android:orientation="vertical"
     android:paddingBottom="16dp"
     android:paddingLeft="24dp"
-    android:paddingRight="24dp"
     android:paddingTop="32dp">
 
     <TextView
-        android:id="@+id/articleSiteName"
+        android:id="@+id/keywordsTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:fontFamily="sans-serif-light"
+        android:text="@string/keywords"
         android:textColor="@color/article_primaryText"
         android:textSize="14sp" />
 
-    <TextView
-        android:id="@+id/article_text"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/keywordsList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light"
-        android:textColor="@color/article_primaryText"
-        android:textSize="24sp" />
+        android:layout_height="48dp"
+        android:padding="4dp">
 
-    <TextView
-        android:id="@+id/articleTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light"
-        android:textColor="@color/article_primaryText"
-        android:textSize="12sp"
-        android:visibility="gone" />
-
+    </android.support.v7.widget.RecyclerView>
 </LinearLayout>
