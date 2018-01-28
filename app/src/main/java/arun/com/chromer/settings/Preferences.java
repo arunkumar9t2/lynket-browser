@@ -36,6 +36,7 @@ import arun.com.chromer.browsing.customtabs.CustomTabs;
 import arun.com.chromer.util.Utils;
 
 import static arun.com.chromer.shared.Constants.CHROME_PACKAGE;
+import static java.lang.Integer.parseInt;
 
 /**
  * Created by Arun on 05/01/2016.
@@ -130,7 +131,7 @@ public class Preferences {
     }
 
     public int webHeadColor() {
-        return getDefaultSharedPreferences().getInt(WEB_HEADS_COLOR, ContextCompat.getColor(context, R.color.web_head_bg));
+        return getDefaultSharedPreferences().getInt(WEB_HEADS_COLOR, ContextCompat.getColor(context, R.color.web_head_color));
     }
 
     public void webHeadColor(int selectedColor) {
@@ -142,19 +143,19 @@ public class Preferences {
     }
 
     public int animationType() {
-        return Integer.parseInt(getDefaultSharedPreferences().getString(ANIMATION_TYPE, "1"));
+        return parseInt(getDefaultSharedPreferences().getString(ANIMATION_TYPE, "1"));
     }
 
     public int animationSpeed() {
-        return Integer.parseInt(getDefaultSharedPreferences().getString(ANIMATION_SPEED, "1"));
+        return parseInt(getDefaultSharedPreferences().getString(ANIMATION_SPEED, "1"));
     }
 
     public int articleTheme() {
-        return Integer.parseInt(getDefaultSharedPreferences().getString(ARTICLE_THEME, "1"));
+        return parseInt(getDefaultSharedPreferences().getString(ARTICLE_THEME, "1"));
     }
 
     public int preferredAction() {
-        return Integer.parseInt(getDefaultSharedPreferences().getString(PREFERRED_ACTION, "1"));
+        return parseInt(getDefaultSharedPreferences().getString(PREFERRED_ACTION, "1"));
     }
 
     @Nullable
@@ -345,11 +346,11 @@ public class Preferences {
     }
 
     public int webHeadsSpawnLocation() {
-        return Integer.parseInt(getDefaultSharedPreferences().getString(WEB_HEAD_SPAWN_LOCATION, "1"));
+        return parseInt(getDefaultSharedPreferences().getString(WEB_HEAD_SPAWN_LOCATION, "1"));
     }
 
     public int webHeadsSize() {
-        return Integer.parseInt(getDefaultSharedPreferences().getString(WEB_HEAD_SIZE, "1"));
+        return parseInt(getDefaultSharedPreferences().getString(WEB_HEAD_SIZE, "1"));
     }
 
     public boolean webHeadsCloseOnOpen() {

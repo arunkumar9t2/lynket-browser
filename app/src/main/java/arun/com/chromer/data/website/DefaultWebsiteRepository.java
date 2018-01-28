@@ -31,6 +31,7 @@ import arun.com.chromer.data.qualifiers.Disk;
 import arun.com.chromer.data.qualifiers.Network;
 import arun.com.chromer.data.website.model.WebColor;
 import arun.com.chromer.data.website.model.Website;
+import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.SchedulerProvider;
 import rx.Observable;
 import rx.schedulers.Schedulers;
@@ -83,12 +84,21 @@ public class DefaultWebsiteRepository implements WebsiteRepository {
         return Observable.concat(cache, history, remote)
                 .first(webSite -> webSite != null)
                 .doOnError(Timber::e)
-                .compose(SchedulerProvider.applySchedulers());
+                .compose(SchedulerProvider.applyIoSchedulers());
     }
 
     @Override
     public int getWebsiteColorSync(@NonNull String url) {
-        return diskStore.getWebsiteColor(url).toBlocking().first().color;
+        return diskStore.getWebsiteColor(url)
+                .map(webColor -> {
+                    if (webColor.color != Constants.NO_COLOR) {
+                        saveWebColor(url).subscribe();
+                    }
+                    return webColor;
+                })
+                .toBlocking()
+                .first()
+                .color;
     }
 
     @NonNull

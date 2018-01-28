@@ -41,7 +41,7 @@ public class ArticlePreloader {
 
     public void preloadArticle(@NonNull Uri uri, @Nullable final ArticlePreloadListener listener) {
         webArticleRepository.getWebArticle(uri.toString())
-                .compose(SchedulerProvider.applySchedulers())
+                .compose(SchedulerProvider.applyIoSchedulers())
                 .doOnError(throwable -> {
                     if (listener != null) {
                         listener.onComplete(false);

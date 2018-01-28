@@ -41,7 +41,7 @@ constructor(private val webArticleRepository: WebArticleRepository) : ViewModel(
         if (webSiteSubject.value is Result.Idle<WebArticle>) {
             subs.add(webArticleRepository.getWebArticle(url)
                     .compose(Result.applyToObservable())
-                    .compose(SchedulerProvider.applySchedulers())
+                    .compose(SchedulerProvider.applyIoSchedulers())
                     .subscribe(webSiteSubject))
         }
         return webSiteSubject

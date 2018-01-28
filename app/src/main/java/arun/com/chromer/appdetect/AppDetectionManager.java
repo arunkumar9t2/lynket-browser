@@ -27,6 +27,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import arun.com.chromer.settings.Preferences;
+import arun.com.chromer.util.ServiceManager;
 import timber.log.Timber;
 
 /**
@@ -63,6 +64,9 @@ public final class AppDetectionManager {
     }
 
     public synchronized String getFilteredPackage() {
+        if (TextUtils.isEmpty(filteredPackage)) {
+            ServiceManager.startAppDetectionService(context);
+        }
         return filteredPackage;
     }
 

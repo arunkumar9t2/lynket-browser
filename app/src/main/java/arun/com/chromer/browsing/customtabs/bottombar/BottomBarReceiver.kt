@@ -21,11 +21,10 @@ package arun.com.chromer.browsing.customtabs.bottombar
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.support.customtabs.CustomTabsIntent
 import arun.com.chromer.Chromer
 import arun.com.chromer.R
-import arun.com.chromer.browsing.article.ArticleLauncher
+import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.util.Utils
@@ -56,7 +55,7 @@ class BottomBarReceiver : BroadcastReceiver() {
         }
     }
 
-    inner abstract class Command internal constructor(context: Context, internal val url: String) {
+    abstract inner class Command internal constructor(context: Context, internal val url: String) {
         internal var context: Context? = null
         internal var performCalled = false
 
@@ -79,10 +78,7 @@ class BottomBarReceiver : BroadcastReceiver() {
             if (!performCalled) {
                 throw IllegalStateException("Should call perform() instead of onPerform()")
             }
-            ArticleLauncher.from(context!!, Uri.parse(url))
-                    .applyCustomizations()
-                    .forNewTab(true)
-                    .launch()
+            tabsManager.openArticle(context!!, Website(url), true)
         }
     }
 

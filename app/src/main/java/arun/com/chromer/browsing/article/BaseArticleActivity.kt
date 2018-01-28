@@ -37,6 +37,9 @@ import arun.com.chromer.data.Result
 import arun.com.chromer.data.webarticle.model.WebArticle
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.extenstions.gone
+import arun.com.chromer.settings.Preferences
+import arun.com.chromer.settings.Preferences.THEME_DARK
+import arun.com.chromer.settings.Preferences.THEME_LIGHT
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.util.Utils
@@ -61,14 +64,16 @@ abstract class BaseArticleActivity : BrowsingActivity() {
     lateinit var tabsManager: DefaultTabsManager
     @Inject
     lateinit var menuDelegate: MenuDelegate
+    @Inject
+    lateinit var preferences: Preferences
 
     override fun getLayoutRes(): Int {
         return R.layout.activity_article_mode
     }
 
     public override fun onCreate(savedInstanceState: Bundle?) {
-        readCustomizations()
         super.onCreate(savedInstanceState)
+        readCustomizations()
         url = intent.dataString
 
         setupToolbar()
@@ -154,16 +159,17 @@ abstract class BaseArticleActivity : BrowsingActivity() {
     }
 
     private fun readCustomizations() {
-        primaryColor = intent.getIntExtra(ArticleIntent.EXTRA_TOOLBAR_COLOR, ContextCompat.getColor(this, R.color.article_colorPrimary))
-        accentColor = intent.getIntExtra(ArticleIntent.EXTRA_ACCENT_COLOR, ContextCompat.getColor(this, R.color.article_colorAccent))
-        setDayNightTheme()
-    }
+        val appPrimaryColor = ContextCompat.getColor(this, R.color.primary)
+        primaryColor = intent.getIntExtra(Constants.EXTRA_KEY_TOOLBAR_COLOR, appPrimaryColor)
 
-    private fun setDayNightTheme() {
-        val theme = intent.getIntExtra(ArticleIntent.EXTRA_THEME, ArticleIntent.THEME_AUTO)
+        accentColor = if (primaryColor != appPrimaryColor) {
+            primaryColor
+        } else ContextCompat.getColor(this, R.color.accent)
+
+        val theme = preferences.articleTheme()
         when (theme) {
-            ArticleIntent.THEME_LIGHT -> delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            ArticleIntent.THEME_DARK -> delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            THEME_LIGHT -> delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            THEME_DARK -> delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             else -> delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_AUTO)
         }
     }
@@ -198,6 +204,9 @@ abstract class BaseArticleActivity : BrowsingActivity() {
         } else {
             onArticleLoadingFailed(null)
         }
+    }
+
+    override fun onTaskColorSet(websiteThemeColor: Int) {
     }
 
     private fun hideLoading() {

@@ -27,6 +27,7 @@ import arun.com.chromer.browsing.browserintercept.BrowserInterceptActivity;
 import arun.com.chromer.browsing.customtabs.CustomTabActivity;
 import arun.com.chromer.browsing.customtabs.CustomTabs;
 import arun.com.chromer.browsing.newtab.NewTabDialogActivity;
+import arun.com.chromer.browsing.optionspopup.ChromerOptionsActivity;
 import arun.com.chromer.browsing.shareintercept.ShareInterceptActivity;
 import arun.com.chromer.browsing.webview.WebViewActivity;
 import arun.com.chromer.di.fragment.FragmentComponent;
@@ -79,4 +80,6 @@ public interface ActivityComponent {
     void inject(WebViewActivity webViewActivity);
 
     void inject(AmpResolverActivity ampResolverActivity);
+
+    void inject(ChromerOptionsActivity chromerOptionsActivity);
 }

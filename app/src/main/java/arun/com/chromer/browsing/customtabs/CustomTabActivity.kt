@@ -22,7 +22,7 @@ import android.os.Bundle
 import arun.com.chromer.browsing.BrowsingActivity
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
-import arun.com.chromer.shared.Constants
+import arun.com.chromer.shared.Constants.EXTRA_KEY_TOOLBAR_COLOR
 
 class CustomTabActivity : BrowsingActivity() {
     /**
@@ -34,10 +34,10 @@ class CustomTabActivity : BrowsingActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val overrideColor = if (website != null) website!!.themeColor() else Constants.NO_COLOR
+        val toolbarColor = intent.getIntExtra(EXTRA_KEY_TOOLBAR_COLOR, 0)
         activityComponent.customTabs()
                 .forUrl(intent.dataString!!)
-                .fallbackColor(overrideColor)
+                .toolbarColor(toolbarColor)
                 .launch()
     }
 

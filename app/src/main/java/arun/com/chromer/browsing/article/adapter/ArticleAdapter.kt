@@ -60,7 +60,7 @@ import rx.subjects.PublishSubject
  */
 internal class ArticleAdapter(
         private val article: WebArticle,
-        private val accentColor: Int,
+        private var accentColor: Int,
         private val requestManager: RequestManager
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var elements: Elements = Elements()
@@ -80,6 +80,11 @@ internal class ArticleAdapter(
             }
             return offset
         }
+
+    fun setAccentColor(accentColor: Int) {
+        this.accentColor = accentColor
+        notifyDataSetChanged()
+    }
 
     fun setElements(elements: Elements) {
         this.elements = elements
@@ -358,4 +363,5 @@ internal class ArticleAdapter(
         const val TYPE_OTHER = 15
         const val TYPE_KEYWORDS = 16
     }
+
 }

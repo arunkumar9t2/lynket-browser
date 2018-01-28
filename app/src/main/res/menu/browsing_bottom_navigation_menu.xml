@@ -19,7 +19,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:bbn_alwaysShowLabels="true"
-    app:bbn_itemColorActive="@android:color/transparent">
+    app:bbn_itemColorActive="@color/article_primaryText"
+    app:bbn_itemColorInactive="@color/article_primaryText">
     <item
         android:id="@+id/bottom_bar_open_in_new_tab"
         android:icon="@drawable/ic_plus_24dp"

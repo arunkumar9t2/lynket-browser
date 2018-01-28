@@ -31,13 +31,14 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.support.annotation.ColorInt
+import android.support.v4.content.ContextCompat
 import android.widget.Toast
 import arun.com.chromer.BuildConfig
 import arun.com.chromer.R
 import arun.com.chromer.appdetect.AppDetectionManager
 import arun.com.chromer.browsing.amp.AmpResolverActivity
 import arun.com.chromer.browsing.article.ArticleActivity
-import arun.com.chromer.browsing.article.ArticleLauncher
 import arun.com.chromer.browsing.article.ArticlePreloader
 import arun.com.chromer.browsing.customtabs.CustomTabActivity
 import arun.com.chromer.browsing.customtabs.CustomTabs
@@ -49,6 +50,7 @@ import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.extenstions.isPackageInstalled
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.shared.Constants
+import arun.com.chromer.shared.Constants.NO_COLOR
 import arun.com.chromer.tabs.ui.TabsActivity
 import arun.com.chromer.util.DocumentUtils
 import arun.com.chromer.util.RxEventBus
@@ -112,7 +114,7 @@ constructor(
 
         if (preferences.articleMode()) {
             // Launch article mode
-            openArticle(context, website.preferredUri())
+            openArticle(context, website)
             return
         }
 
@@ -208,11 +210,20 @@ constructor(
         openUrl(activity, Website(url), fromApp = false)
     }
 
-    private fun openArticle(context: Context, uri: Uri) {
-        if (!reOrderTabByUrl(context, Website(uri.toString()))) {
-            ArticleLauncher.from(context, uri)
-                    .applyCustomizations()
-                    .launch()
+    override fun openArticle(context: Context, website: Website, newTab: Boolean) {
+        if (!reOrderTabByUrl(context, website, ArticleActivity::class.java.name)) {
+            val intent = Intent(context, ArticleActivity::class.java).apply {
+                data = website.preferredUri()
+                if (context !is Activity) {
+                    addFlags(FLAG_ACTIVITY_NEW_TASK)
+                }
+                if (newTab || Preferences.get(context).mergeTabs()) {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
+                    addFlags(FLAG_ACTIVITY_MULTIPLE_TASK)
+                }
+                putExtra(Constants.EXTRA_KEY_TOOLBAR_COLOR, getToolbarColor(website))
+            }
+            context.startActivity(intent)
         }
     }
 
@@ -231,6 +242,7 @@ constructor(
             }.apply {
                 data = website.preferredUri()
                 putExtra(Constants.EXTRA_KEY_WEBSITE, website)
+                putExtra(Constants.EXTRA_KEY_TOOLBAR_COLOR, getToolbarColor(website))
             }
 
             if (preferences.mergeTabs() || fromNewTab) {
@@ -318,6 +330,73 @@ constructor(
     }
 
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    override fun getActiveTabs(): Single<List<TabsManager.Tab>> {
+        return Single.create({ onSubscribe ->
+            try {
+                val am = application.getSystemService(ACTIVITY_SERVICE) as ActivityManager
+                onSubscribe.onSuccess(am.appTasks!!
+                        .map { DocumentUtils.getTaskInfoFromTask(it) }
+                        .filter { it != null && it.baseIntent?.dataString != null && it.baseIntent.component != null }
+                        .map {
+                            val url = it.baseIntent.dataString
+                            val type = when (it.baseIntent.component.className) {
+                                CustomTabActivity::class.java.name -> CUSTOM_TAB
+                                WebViewActivity::class.java.name -> WEB_VIEW
+                                ArticleActivity::class.java.name -> ARTICLE
+                                else -> OTHER
+                            }
+                            TabsManager.Tab(url, type)
+                        }.filter { it.type != OTHER }
+                        .toMutableList())
+            } catch (e: Exception) {
+                onSubscribe.onError(e)
+            }
+        })
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    override fun closeAllTabs(): Single<List<TabsManager.Tab>> {
+        return getActiveTabs()
+                .toObservable()
+                .flatMapIterable { it }
+                .map {
+                    finishTabByUrl(application, Website(it.url), it.getTargetActivityName())
+                    it
+                }.toList()
+                .toSingle()
+    }
+
+    /**
+     * Get customized toolbar color based on user preferences
+     */
+    @ColorInt
+    private fun getToolbarColor(website: Website): Int {
+        if (preferences.isColoredToolbar) {
+            val toolbarColor = if (preferences.dynamicToolbar()) {
+                var toolbarColor = Constants.NO_COLOR
+                if (preferences.dynamicToolbarOnApp()) {
+                    toolbarColor = appRepository.getPackageColorSync(appDetectionManager.filteredPackage)
+                }
+                if (preferences.dynamicToolbarOnWeb()) {
+                    toolbarColor = websiteRepository.getWebsiteColorSync(website.url)
+                    if (toolbarColor == Constants.NO_COLOR) {
+                        toolbarColor = website.themeColor()
+                    }
+                }
+                toolbarColor
+            } else {
+                preferences.toolbarColor()
+            }
+            return if (toolbarColor != NO_COLOR) {
+                toolbarColor
+            } else {
+                ContextCompat.getColor(application, R.color.primary)
+            }
+        }
+        return ContextCompat.getColor(application, R.color.primary)
+    }
+
     /**
      * Performs the blacklist action which is opening the given url in user's secondary browser.
      */
@@ -368,43 +447,6 @@ constructor(
                     activity.startActivity(chromerIntent)
                 }
                 .dismissListener({ activity.finish() }).show()
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    override fun getActiveTabs(): Single<List<TabsManager.Tab>> {
-        return Single.create({ onSubscribe ->
-            try {
-                val am = application.getSystemService(ACTIVITY_SERVICE) as ActivityManager
-                onSubscribe.onSuccess(am.appTasks!!
-                        .map { DocumentUtils.getTaskInfoFromTask(it) }
-                        .filter { it != null && it.baseIntent?.dataString != null && it.baseIntent.component != null }
-                        .map {
-                            val url = it.baseIntent.dataString
-                            val type = when (it.baseIntent.component.className) {
-                                CustomTabActivity::class.java.name -> CUSTOM_TAB
-                                WebViewActivity::class.java.name -> WEB_VIEW
-                                ArticleActivity::class.java.name -> ARTICLE
-                                else -> OTHER
-                            }
-                            TabsManager.Tab(url, type)
-                        }.filter { it.type != OTHER }
-                        .toMutableList())
-            } catch (e: Exception) {
-                onSubscribe.onError(e)
-            }
-        })
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    override fun closeAllTabs(): Single<List<TabsManager.Tab>> {
-        return getActiveTabs()
-                .toObservable()
-                .flatMapIterable { it }
-                .map {
-                    finishTabByUrl(application, Website(it.url), it.getTargetActivityName())
-                    it
-                }.toList()
-                .toSingle()
     }
 
     /**
