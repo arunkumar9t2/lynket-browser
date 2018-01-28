@@ -138,6 +138,10 @@ abstract class BrowsingActivity : BaseActivity() {
                 .subscribe())
     }
 
+    fun getCurrentUrl(): String {
+        return intent.dataString
+    }
+
     /**
      * Called when sufficient meta data about the current website is loaded.
      *

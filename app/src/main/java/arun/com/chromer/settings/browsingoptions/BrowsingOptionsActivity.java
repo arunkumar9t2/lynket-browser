@@ -267,7 +267,7 @@ public class BrowsingOptionsActivity extends BaseActivity implements Snackable, 
                     break;
                 case MINIMIZE:
                     holder.icon.setImageDrawable(new IconicsDrawable(context)
-                            .icon(CommunityMaterial.Icon.cmd_flip_to_back)
+                            .icon(CommunityMaterial.Icon.cmd_arrow_down)
                             .color(iconColor)
                             .sizeDp(18));
                     holder.action.setText(HtmlCompat.fromHtml(context.getString(R.string.minimize_action_explanation)));

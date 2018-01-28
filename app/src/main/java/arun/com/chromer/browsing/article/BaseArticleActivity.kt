@@ -33,6 +33,7 @@ import arun.com.chromer.browsing.article.util.ArticleScrollListener
 import arun.com.chromer.browsing.article.util.ArticleUtil.changeProgressBarColors
 import arun.com.chromer.browsing.article.util.ArticleUtil.changeRecyclerOverscrollColors
 import arun.com.chromer.browsing.article.view.ElasticDragDismissFrameLayout
+import arun.com.chromer.browsing.menu.MenuDelegate
 import arun.com.chromer.data.Result
 import arun.com.chromer.data.webarticle.model.WebArticle
 import arun.com.chromer.data.website.model.Website
@@ -41,6 +42,7 @@ import arun.com.chromer.shared.Constants
 import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.util.Utils
 import arun.com.chromer.util.glide.GlideApp
+import it.sephiroth.android.library.bottomnavigation.BottomNavigation
 import kotlinx.android.synthetic.main.activity_article_mode.*
 import javax.inject.Inject
 
@@ -58,6 +60,8 @@ abstract class BaseArticleActivity : BrowsingActivity() {
 
     @Inject
     lateinit var tabsManager: DefaultTabsManager
+    @Inject
+    lateinit var menuDelegate: MenuDelegate
 
     override fun getLayoutRes(): Int {
         return R.layout.activity_article_mode
@@ -69,19 +73,45 @@ abstract class BaseArticleActivity : BrowsingActivity() {
         url = intent.dataString
 
         setupToolbar()
-
-        transparentSide1.setOnClickListener { finish() }
-        transparentSide2.setOnClickListener { finish() }
+        setupCloseListeners()
+        setupBottombar()
 
         articleScrollListener = ArticleScrollListener(toolbar, statusBar, primaryColor)
         recyclerView.addOnScrollListener(articleScrollListener)
+    }
 
-        dragDismissLayout.addListener(object : ElasticDragDismissFrameLayout.ElasticDragDismissCallback() {
-            override fun onDragDismissed() {
-                super.onDragDismissed()
-                finish()
+    private fun setupCloseListeners() {
+        transparentSide1.setOnClickListener { finish() }
+        transparentSide2.setOnClickListener { finish() }
+        dragDismissLayout.addListener(
+                object : ElasticDragDismissFrameLayout.ElasticDragDismissCallback() {
+                    override fun onDragDismissed() {
+                        finish()
+                    }
+                })
+    }
+
+
+    private fun setupBottombar() {
+        bottomNavigation.apply {
+            post {
+                bottomNavigationBackground.apply {
+                    bottomNavigationBackground.layoutParams.height = bottomNavigation.height - bottomNavigation.shadowHeight
+                    requestLayout()
+                }
             }
-        })
+            setSelectedIndex(-1, false)
+            setOnMenuItemClickListener(object : BottomNavigation.OnMenuItemSelectionListener {
+                override fun onMenuItemSelect(itemId: Int, position: Int, fromUser: Boolean) {
+                    menuDelegate.handleMenuClick(itemId)
+                    post { setSelectedIndex(-1, false) }
+                }
+
+                override fun onMenuItemReselect(itemId: Int, position: Int, fromUser: Boolean) {
+                }
+            })
+        }
+
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

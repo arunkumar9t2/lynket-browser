@@ -70,7 +70,7 @@ public class BottomBarManager {
         }
         if (minimizeDrawable == null) {
             minimizeDrawable = new IconicsDrawable(context)
-                    .icon(CommunityMaterial.Icon.cmd_flip_to_back)
+                    .icon(CommunityMaterial.Icon.cmd_arrow_down)
                     .sizeDp(24);
         }
 
