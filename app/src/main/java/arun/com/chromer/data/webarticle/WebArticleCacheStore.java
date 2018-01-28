@@ -20,7 +20,6 @@ package arun.com.chromer.data.webarticle;
 
 import android.app.Application;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.io.IOException;
 
@@ -30,6 +29,7 @@ import javax.inject.Singleton;
 import arun.com.chromer.data.webarticle.model.WebArticle;
 import in.arunkumarsampath.diskcache.ParcelDiskCache;
 import rx.Observable;
+import timber.log.Timber;
 
 /**
  * Cache store to get/put {@link WebArticle} objects to disk cache.
@@ -49,7 +49,7 @@ public class WebArticleCacheStore implements WebArticleStore {
         try {
             webSiteDiskCache = ParcelDiskCache.open(application, WebArticle.class.getClassLoader(), WebArticle.class.getName(), DISK_CACHE_SIZE);
         } catch (IOException ignored) {
-            Log.e(TAG, ignored.getMessage());
+            Timber.e(ignored.getMessage());
         }
     }
 
