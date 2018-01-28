@@ -119,5 +119,5 @@ interface TabsManager {
      */
     fun showTabsActivity()
 
-    fun openArticle(context: Context, uri: Website, newTab: Boolean = false)
+    fun openArticle(context: Context, website: Website, newTab: Boolean = false)
 }

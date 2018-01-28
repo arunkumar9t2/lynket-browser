@@ -82,7 +82,6 @@ public class FloatingActionButtonBehavior extends CoordinatorLayout.Behavior<Flo
                 t2 = navigation.getTranslationY() - navigation.getHeight() + (bottomMargin / 2);
                 t += t2;
                 result = true;
-
                 if (navigationBarHeight > 0) {
                     if (!navigation.isExpanded()) {
                         child.hide();

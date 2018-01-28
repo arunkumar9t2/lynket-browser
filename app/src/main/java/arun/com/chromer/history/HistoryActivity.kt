@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.tabs.ui
+package arun.com.chromer.history
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -27,26 +27,21 @@ import arun.com.chromer.shared.FabHandler
 import arun.com.chromer.shared.base.Snackable
 import arun.com.chromer.shared.base.activity.BaseActivity
 import butterknife.OnClick
-import kotlinx.android.synthetic.main.activity_tabs.*
+import kotlinx.android.synthetic.main.activity_history.*
 
-class TabsActivity : BaseActivity(), Snackable {
-
+class HistoryActivity : BaseActivity(), Snackable {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setSupportActionBar(toolbar)
-
         if (supportActionBar != null) {
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-            supportActionBar!!.setHomeAsUpIndicator(R.drawable.article_ic_close)
         }
-
-        if (savedInstanceState == null) {
-            supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, TabsFragment())
-                    .commit()
-        }
+        supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.fragment_container, HistoryFragment())
+                .commit()
     }
+
 
     @OnClick(R.id.fab)
     fun onFabClick() {
@@ -58,7 +53,7 @@ class TabsActivity : BaseActivity(), Snackable {
     }
 
     override fun getLayoutRes(): Int {
-        return R.layout.activity_tabs
+        return R.layout.activity_history
     }
 
     override fun snack(textToSnack: String) {
@@ -71,10 +66,19 @@ class TabsActivity : BaseActivity(), Snackable {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            finish()
+            finishWithTransition()
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        finishWithTransition()
+        super.onBackPressed()
+    }
+
+    private fun finishWithTransition() {
+        finish()
     }
 
     override fun inject(activityComponent: ActivityComponent) {

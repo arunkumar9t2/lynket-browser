@@ -70,10 +70,10 @@ class DefaultTabsManager
 constructor(
         val application: Application,
         val preferences: Preferences,
-        val appDetectionManager: AppDetectionManager,
-        val appRepository: AppRepository,
-        val websiteRepository: WebsiteRepository,
-        val articlePreloader: ArticlePreloader,
+        private val appDetectionManager: AppDetectionManager,
+        private val appRepository: AppRepository,
+        private val websiteRepository: WebsiteRepository,
+        private val articlePreloader: ArticlePreloader,
         val rxEventBus: RxEventBus
 ) : TabsManager {
 
