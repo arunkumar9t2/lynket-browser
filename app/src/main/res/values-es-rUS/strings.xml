@@ -38,6 +38,7 @@
         <item>Oscuro</item>
         <item>Claro</item>
         <item>Automático</item>
+        <item>Black</item>
     </string-array>
     <string name="share_text">¡Oye mira \'Chromer \' para una rápida y segura experiencia de navegación! Descarguela aquí https://goo.gl/992ils</string>
     <string name="share_via">"Compartir vía… "</string>

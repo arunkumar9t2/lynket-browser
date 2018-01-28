@@ -41,6 +41,7 @@
         <item>Donker</item>
         <item>Licht</item>
         <item>Automatisch</item>
+        <item>Black</item>
     </string-array>
     <string-array name="articleThemeKeys">
         <item>1</item>

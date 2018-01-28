@@ -56,11 +56,13 @@
         <item>Темный</item>
         <item>Светлый</item>
         <item>Автоматически</item>
+        <item>Black</item>
     </string-array>
     <string-array name="articleThemeKeys">
         <item>1</item>
         <item>2</item>
         <item>3</item>
+        <item>4</item>
     </string-array>
     <string-array name="webHeadsSizeValues">
         <item>Нормальный</item>

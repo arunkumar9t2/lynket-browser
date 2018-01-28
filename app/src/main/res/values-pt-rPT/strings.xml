@@ -41,11 +41,13 @@
         <item>Escuro</item>
         <item>Claro</item>
         <item>Automático</item>
+        <item>Black</item>
     </string-array>
     <string-array name="articleThemeKeys">
         <item>1</item>
         <item>2</item>
         <item>3</item>
+        <item>4</item>
     </string-array>
     <string-array name="webHeadsSizeValues">
         <item>Normal</item>

@@ -19,6 +19,8 @@
 package arun.com.chromer.browsing.article
 
 import android.arch.lifecycle.ViewModelProviders
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.annotation.CallSuper
 import android.support.annotation.ColorInt
@@ -38,8 +40,7 @@ import arun.com.chromer.data.webarticle.model.WebArticle
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.settings.Preferences
-import arun.com.chromer.settings.Preferences.THEME_DARK
-import arun.com.chromer.settings.Preferences.THEME_LIGHT
+import arun.com.chromer.settings.Preferences.*
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.util.Utils
@@ -79,6 +80,7 @@ abstract class BaseArticleActivity : BrowsingActivity() {
         setupToolbar()
         setupCloseListeners()
         setupBottombar()
+        setupTheme()
 
         articleScrollListener = ArticleScrollListener(toolbar, statusBar, primaryColor)
         recyclerView.addOnScrollListener(articleScrollListener)
@@ -116,6 +118,14 @@ abstract class BaseArticleActivity : BrowsingActivity() {
             })
         }
 
+    }
+
+    private fun setupTheme() {
+        val theme = preferences.articleTheme()
+        if (theme == Preferences.THEME_BLACK) {
+            coordinatorLayout.background = ColorDrawable(Color.BLACK)
+            bottomNavigationBackground.background = ColorDrawable(Color.BLACK)
+        }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -169,7 +179,7 @@ abstract class BaseArticleActivity : BrowsingActivity() {
         val theme = preferences.articleTheme()
         when (theme) {
             THEME_LIGHT -> delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            THEME_DARK -> delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            THEME_DARK, THEME_BLACK -> delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             else -> delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_AUTO)
         }
     }

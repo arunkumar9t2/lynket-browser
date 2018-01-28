@@ -38,6 +38,7 @@
         <item>Tamna</item>
         <item>Svijetla</item>
         <item>Automatska</item>
+        <item>Black</item>
     </string-array>
     <string-array name="webHeadsSizeValues">
         <item>Normalna</item>

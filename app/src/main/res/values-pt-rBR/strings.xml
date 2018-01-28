@@ -51,6 +51,7 @@
         <item>Escuro</item>
         <item>Claro</item>
         <item>Automático</item>
+        <item>Black</item>
     </string-array>
     <string-array name="webHeadsSizeValues">
         <item>Normal</item>
