@@ -30,9 +30,9 @@ import android.widget.Toast;
 import arun.com.chromer.R;
 
 // TODO Rewrite this using broadcast receiver
-public class ClipboardService extends IntentService {
-    public ClipboardService() {
-        super("ClipboardService");
+public class CopyToClipboardService extends IntentService {
+    public CopyToClipboardService() {
+        super("CopyToClipboardService");
     }
 
     @Override
@@ -50,6 +50,6 @@ public class ClipboardService extends IntentService {
 
     private void showToast(final String msgToShow) {
         final Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(() -> Toast.makeText(ClipboardService.this, msgToShow, Toast.LENGTH_SHORT).show());
+        handler.post(() -> Toast.makeText(CopyToClipboardService.this, msgToShow, Toast.LENGTH_SHORT).show());
     }
 }

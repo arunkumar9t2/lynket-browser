@@ -42,7 +42,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service android:name=".browsing.customtabs.callbacks.ClipboardService" />
+        <service android:name=".browsing.customtabs.callbacks.CopyToClipboardService" />
         <service
             android:name=".appdetect.AppDetectService"
             android:enabled="true"

@@ -16,18 +16,13 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".browsing.webview.WebViewActivity"
-    tools:showIn="@layout/activity_web_view">
-
-    <WebView
-        android:id="@+id/webView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible" />
-</FrameLayout>
+<resources>
+    <item name="menu_history" type="id" />
+    <item name="menu_add_to_home_screen" type="id" />
+    <item name="menu_open_full_page" type="id" />
+    <item name="menu_action_button" type="id" />
+    <item name="menu_copy_link" type="id" />
+    <item name="menu_open_with" type="id" />
+    <item name="menu_share" type="id" />
+    <item name="menu_share_with" type="id" />
+</resources>

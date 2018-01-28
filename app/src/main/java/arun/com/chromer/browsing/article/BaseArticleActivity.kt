@@ -25,7 +25,6 @@ import android.support.annotation.ColorInt
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatDelegate
 import android.support.v7.widget.LinearLayoutManager
-import android.view.MenuItem
 import arun.com.chromer.R
 import arun.com.chromer.browsing.BrowsingActivity
 import arun.com.chromer.browsing.article.adapter.ArticleAdapter
@@ -103,7 +102,7 @@ abstract class BaseArticleActivity : BrowsingActivity() {
             setSelectedIndex(-1, false)
             setOnMenuItemClickListener(object : BottomNavigation.OnMenuItemSelectionListener {
                 override fun onMenuItemSelect(itemId: Int, position: Int, fromUser: Boolean) {
-                    menuDelegate.handleMenuClick(itemId)
+                    menuDelegate.handleItemSelected(itemId)
                     post { setSelectedIndex(-1, false) }
                 }
 
@@ -133,13 +132,6 @@ abstract class BaseArticleActivity : BrowsingActivity() {
                 })
     }
 
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            finish()
-        }
-        return super.onOptionsItemSelected(item)
-    }
 
     private fun setupToolbar() {
         setSupportActionBar(toolbar)
