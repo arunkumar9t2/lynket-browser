@@ -23,7 +23,6 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.preference.SwitchPreferenceCompat;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
@@ -60,11 +59,11 @@ public class BottomBarPreferenceFragment extends BasePreferenceFragment implemen
                 .sizeDp(24));
         bottomBarPreference.setOnPreferenceChangeListener((preference, newValue) -> {
             if ((Boolean) newValue) {
-                new MaterialDialog.Builder(getActivity())
+               /* new MaterialDialog.Builder(getActivity())
                         .title(R.string.warning)
                         .content(R.string.bottom_bar_crash_warning)
                         .positiveText(android.R.string.ok)
-                        .show();
+                        .show();*/
             }
             return true;
         });
