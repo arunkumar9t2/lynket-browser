@@ -20,8 +20,10 @@ package arun.com.chromer.data.website;
 
 import android.app.Application;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v7.graphics.Palette;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -32,7 +34,9 @@ import arun.com.chromer.data.qualifiers.Network;
 import arun.com.chromer.data.website.model.WebColor;
 import arun.com.chromer.data.website.model.Website;
 import arun.com.chromer.shared.Constants;
+import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.SchedulerProvider;
+import arun.com.chromer.util.glide.GlideApp;
 import rx.Observable;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
@@ -91,7 +95,7 @@ public class DefaultWebsiteRepository implements WebsiteRepository {
     public int getWebsiteColorSync(@NonNull String url) {
         return diskStore.getWebsiteColor(url)
                 .map(webColor -> {
-                    if (webColor.color != Constants.NO_COLOR) {
+                    if (webColor.color == Constants.NO_COLOR) {
                         saveWebColor(url).subscribe();
                     }
                     return webColor;
@@ -107,11 +111,22 @@ public class DefaultWebsiteRepository implements WebsiteRepository {
         return getWebsite(url)
                 .observeOn(Schedulers.io())
                 .flatMap(webSite -> {
-                    if (webSite != null && webSite.themeColor() != NO_COLOR) {
-                        return diskStore.saveWebsiteColor(Uri.parse(webSite.url).getHost(), webSite.themeColor());
-                    } else {
-                        return Observable.empty();
-                    }
+                    if (webSite != null) {
+                        if (webSite.themeColor() != NO_COLOR) {
+                            int color = webSite.themeColor();
+                            return diskStore.saveWebsiteColor(Uri.parse(webSite.url).getHost(), color);
+                        } else {
+                            try {
+                                Bitmap bitmap = GlideApp.with(context).asBitmap().load(webSite.faviconUrl).submit().get();
+                                final Palette palette = Palette.from(bitmap).generate();
+                                int color = ColorUtil.getBestColorFromPalette(palette);
+                                return diskStore.saveWebsiteColor(Uri.parse(webSite.url).getHost(), color);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            return Observable.empty();
+                        }
+                    } else return Observable.empty();
                 });
     }
 
