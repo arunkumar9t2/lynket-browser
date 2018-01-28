@@ -35,16 +35,43 @@ a {
 <body>
 <strong>You can view this again in the about screen.</strong>
 <br></br>
-<strong>1.7.3</strong>
+
+<strong>2.0 - Beta 1</strong>
+<h4 class="list-heading">Design</h3>
 <ul>
-    <li><b>FIX: </b> Bottom Bar disabled by default to resolve crashes in Chrome.</li>
     <li><b>NEW: </b> Round and Adaptive Icon for Android Oreo</li>
-    <li><b>NEW: </b> History app shortcuts for 7.1</li>
-    <li><b>NEW: </b> Use custom names while creating home screen shortcuts + Oreo support</li>
-    <li><b>NEW: </b> Minimize does not require web heads to be enabled./li>
-    <li><b>NEW: </b> Bottom search bar + suggestions from history./li>
-    <li><b>NEW: </b> Info card in home screen to show active provider/li>
-    <li><b>IMPROVED: </b> Article mode UI and stability. Tried to reduce extra gap between text. Improved Blockquote legibility.</li>
+    <li><b>NEW: </b> New home screen with bottom search bar inspired by Google apps</li>
+    <li><b>NEW: </b> Chromer uses website favicons to calculate toolbar color.</li>
+    <li><b>NEW: </b> Bottom bar now shows text in addition to icons</li>
+</ul>
+<h4 class="list-heading">Features</h3>
+<ul>
+<li><b>NEW: <i>TABS!</i></b> See all active tabs opened by Chromer in one screen and quickly switch to them</li>
+        <li><b>NEW: </b> History app shortcuts for 7.1</li>
+         <li><b>NEW: </b> Use custom names while creating home screen shortcuts + Oreo support</li>
+          <li><b>NEW: </b> Minimize does not require web heads to be enabled.</li>
+          <li><b>NEW: </b> Search bar shows suggestions from Clipboard and History</li>
+           <li><b>NEW: </b> Info card in home screen to show active provider</li>
+            <li><b>NEW: </b> New tab dialog shows search suggestions</li>
+</ul>
+<h4 class="list-heading">Performance</h3>
+<ul>
+        <li><b>IMPROVED: </b> Multitasking performance has been greatly improved. </li>
+        <li><b>IMPROVED: </b> Does not load duplicate tabs </li>
+         <li><b>IMPROVED: </b> Aggressive background loading is smoother </li>
+</ul>
+<h4 class="list-heading">Article mode</h3>
+<ul>
+        <li><b>NEW: </b> AMOLED Black theme</li>
+        <li><b>NEW: </b> Tried to reduce extra gap between text. Improved Blockquote legibility.</li>
+        <li><b>FIX: </b> Crash when tapping on certain links</li>
+</ul>
+<h4 class="list-heading">AMP Mode</h3>
+<ul>
+        <li><b>NEW: </b> AMP resolver dialog with option to skip.</li>
+</ul>
+<h4 class="list-heading">Others</h3>
+<ul>
     <li><b>FIX: </b> Chromer not opening links sometimes.</li>
     <li><b>FIX: </b> Certain languages not rendering correctly in search bar</li>
     <li><b>IMPROVED: </b> Stability of web heads has been improved. Minor UI fixes. Change More menu name to "Chromer Options" for better clarity</li>

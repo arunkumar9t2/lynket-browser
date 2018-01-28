@@ -16,22 +16,6 @@ Chromer is available for free on the Google Play Store.
         src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
 </a>
 
-## Feature highlights
-**STANDOUT FEATURES:**  
-1. **Chrome Custom Tabs** to render web pages means faster and secure browsing experience. Instead of using *Web View*, Chromer uses Google recommended way of using CCT to view pages. 
-    * This results in *syncing your browsing activity* with the Custom Tab Provider browser, eg. Google Chrome.
-    * On top Chrome Custom Tab, Chromer provides many customizations like setting a **secondary browser, blacklisting certain apps, dynamic toolbar color etc.**
-2. **Accelerated Mobile Pages** support. Before loading a page, Chromer can find and load the AMP version instead which loads much faster. 
-    * AMP is widely getting adopted but you have to hit the AMP url manually to view the page. *Google search* does this, but not much anywhere else. Chromer solves this problem doing the **AMP conversion automatically** before loading the page.
-3. **Article mode**, a special reader mode which removes unnecessary content from webpage and shows just the content you are looking for. 
-4. **Web heads** it helps you save time by loading a page in background (5.0+ only, for other versions pre-fetch is used which only aims to reduce loading time) while enabling you to continue using the app of your choice. Floating bubbles are provided that enables you to manage multiple links. 
-    * Web heads works well with **AMP and Article modes,** saving you time.
-5. **Browsing activity syncs with Google account, if you use Google Chrome as the provider.** 
-6. Many customization options from colors to animations.
-
-
-
-
 ## Examples
 
 #### AMP mode
