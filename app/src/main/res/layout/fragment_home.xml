@@ -15,157 +15,150 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragmentHome"
+    android:id="@+id/nested_scroll_view"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:paddingBottom="56dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="8dp">
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/nested_scroll_view"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingBottom="56dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:paddingTop="8dp">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true">
 
-            <android.support.v7.widget.CardView
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardPreventCornerOverlap="true"
-                app:cardUseCompatPadding="true">
+                android:layout_height="wrap_content">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/recentsHeaderIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="48dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginRight="14dp"
+                    android:scaleType="center"
+                    tools:ignore="ContentDescription,RtlHardcoded"
+                    tools:src="@mipmap/ic_launcher_round" />
 
-                    <ImageView
-                        android:id="@+id/recentsHeaderIcon"
-                        android:layout_width="24dp"
-                        android:layout_height="48dp"
-                        android:layout_alignParentLeft="true"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="14dp"
-                        android:layout_marginRight="14dp"
-                        android:scaleType="center"
-                        tools:ignore="ContentDescription,RtlHardcoded"
-                        tools:src="@mipmap/ic_launcher_round" />
-
-                    <TextView
-                        android:id="@+id/recents_header"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:layout_gravity="start|center"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_toEndOf="@id/recentsHeaderIcon"
-                        android:layout_toRightOf="@id/recentsHeaderIcon"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="start|center"
-                        android:text="@string/recents"
-                        android:textColor="@color/material_dark_color"
-                        android:textSize="16sp"
-                        android:visibility="visible" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.1dp"
-                        android:layout_below="@+id/recents_header"
-                        android:background="@color/md_grey_600" />
-
-                    <TextView
-                        android:id="@+id/recent_missing_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/recents_header"
-                        android:layout_centerInParent="true"
-                        android:layout_gravity="center"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center"
-                        android:minHeight="48dp"
-                        android:text="@string/recents_intro"
-                        android:textColor="@color/secondary_text_color"
-                        android:textSize="14sp"
-                        android:visibility="visible" />
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/recentsList"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/recents_header"
-                        android:clipToPadding="false" />
-                </RelativeLayout>
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                app:cardPreventCornerOverlap="true"
-                app:cardUseCompatPadding="true">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                <TextView
+                    android:id="@+id/recents_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_gravity="start|center"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_toEndOf="@id/recentsHeaderIcon"
+                    android:layout_toRightOf="@id/recentsHeaderIcon"
                     android:clickable="true"
                     android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingBottom="8dp"
-                    android:paddingTop="8dp"
-                    android:weightSum="1"
-                    tools:ignore="RtlHardcoded">
+                    android:gravity="start|center"
+                    android:text="@string/recents"
+                    android:textColor="@color/material_dark_color"
+                    android:textSize="16sp"
+                    android:visibility="visible" />
 
-                    <ImageView
-                        android:id="@+id/providerIcon"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginRight="15dp"
-                        android:padding="5dp"
-                        android:scaleType="fitCenter"
-                        android:src="@mipmap/ic_launcher_round"
-                        tools:ignore="ContentDescription" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:layout_below="@+id/recents_header"
+                    android:background="@color/md_grey_600" />
 
-                    <TextView
-                        android:id="@+id/providerDescription"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:gravity="center|start"
-                        android:textColor="@color/primary_text_color"
-                        tools:text="Using Chrome to render pages" />
+                <TextView
+                    android:id="@+id/recent_missing_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/recents_header"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:minHeight="48dp"
+                    android:text="@string/recents_intro"
+                    android:textColor="@color/secondary_text_color"
+                    android:textSize="14sp"
+                    android:visibility="visible" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recentsList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/recents_header"
+                    android:clipToPadding="false" />
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:weightSum="1"
+                tools:ignore="RtlHardcoded">
+
+                <ImageView
+                    android:id="@+id/providerIcon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="15dp"
+                    android:padding="5dp"
+                    android:scaleType="fitCenter"
+                    android:src="@mipmap/ic_launcher_round"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/providerDescription"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:gravity="center|start"
+                    android:textColor="@color/primary_text_color"
+                    tools:text="Using Chrome to render pages" />
 
 
-                    <TextView
-                        android:id="@+id/providerChangeButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:gravity="center"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
-                        android:text="@string/Change"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                        android:textColor="@color/colorAccent"
-                        android:textSize="12sp" />
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/providerChangeButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:gravity="center"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:text="@string/Change"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Button"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="12sp" />
+            </LinearLayout>
 
-            </android.support.v7.widget.CardView>
-        </LinearLayout>
-
-    </android.support.v4.widget.NestedScrollView>
-</FrameLayout>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>
