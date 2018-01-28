@@ -106,7 +106,7 @@ public class Changelog {
     }
 
     private static void handleMigration(@NonNull final Activity activity) {
-        Utils.deleteCache(activity).subscribe();
+        // Utils.deleteCache(activity).subscribe();
     }
 
     private static boolean shouldShow(@NonNull final Context context) {
