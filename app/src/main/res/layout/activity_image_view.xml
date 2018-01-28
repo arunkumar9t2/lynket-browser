@@ -16,15 +16,15 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:bbn_itemColorActive="@color/primary">
-    <item
-        android:id="@+id/home"
-        android:icon="@drawable/ic_home_24dp"
-        android:title="@string/home" />
-    <item
-        android:id="@+id/history"
-        android:icon="@drawable/ic_history_24dp"
-        android:title="@string/title_history" />
-</menu>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <uk.co.senab.photoview.PhotoView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@null"
+        android:id="@+id/imageView" />
+
+</LinearLayout>

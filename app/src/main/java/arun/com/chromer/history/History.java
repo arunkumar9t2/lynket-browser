@@ -60,7 +60,7 @@ interface History {
                 getView().loading(true);
             }
             subs.add(historyRepository.getAllItemsCursor()
-                    .compose(SchedulerProvider.applySchedulers())
+                    .compose(SchedulerProvider.applyIoSchedulers())
                     .toSingle()
                     .doOnSuccess(cursor -> {
                         if (isViewAttached()) {
@@ -76,7 +76,7 @@ interface History {
         void deleteAll(@NonNull Context context) {
             subs.add(historyRepository
                     .deleteAll()
-                    .compose(SchedulerProvider.applySchedulers())
+                    .compose(SchedulerProvider.applyIoSchedulers())
                     .doOnError(Timber::e)
                     .doOnNext(rows -> loadHistory())
                     .doOnNext(rows -> {
@@ -90,7 +90,7 @@ interface History {
             subs.add(webSiteObservable
                     .filter(webSite -> webSite != null && webSite.url != null)
                     .flatMap(historyRepository::delete)
-                    .compose(SchedulerProvider.applySchedulers())
+                    .compose(SchedulerProvider.applyIoSchedulers())
                     .doOnError(Timber::e)
                     .doOnNext(result -> loadHistory())
                     .subscribe());

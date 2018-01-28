@@ -20,7 +20,7 @@ package arun.com.chromer.browsing.optionspopup;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,12 +33,17 @@ import android.widget.TextView;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
+import javax.inject.Inject;
+
 import arun.com.chromer.R;
-import arun.com.chromer.browsing.article.ArticleLauncher;
 import arun.com.chromer.browsing.openwith.OpenIntentWithActivity;
+import arun.com.chromer.data.website.model.Website;
+import arun.com.chromer.di.activity.ActivityComponent;
 import arun.com.chromer.history.HistoryActivity;
 import arun.com.chromer.settings.SettingsGroupActivity;
+import arun.com.chromer.shared.base.activity.BaseActivity;
 import arun.com.chromer.shortcuts.HomeScreenShortcutCreatorActivity;
+import arun.com.chromer.tabs.DefaultTabsManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -46,8 +51,7 @@ import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_ARTICLE;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_ORIGINAL_URL;
 
 
-public class ChromerOptionsActivity extends AppCompatActivity {
-
+public class ChromerOptionsActivity extends BaseActivity {
     @BindView(R.id.menu_header)
     TextView menuHeader;
     @BindView(R.id.menu_list)
@@ -57,22 +61,31 @@ public class ChromerOptionsActivity extends AppCompatActivity {
     private MenuListAdapter adapter;
     private boolean fromArticle;
 
+    @Inject
+    DefaultTabsManager tabsManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_more_menu);
-        ButterKnife.bind(this);
-
         fromArticle = getIntent().getBooleanExtra(EXTRA_KEY_FROM_ARTICLE, false);
-
         menuList.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MenuListAdapter();
         menuList.setAdapter(adapter);
     }
 
     @Override
+    protected int getLayoutRes() {
+        return R.layout.activity_more_menu;
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void inject(@NonNull ActivityComponent activityComponent) {
+        activityComponent.inject(this);
     }
 
     public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuItemHolder> {
@@ -130,10 +143,7 @@ public class ChromerOptionsActivity extends AppCompatActivity {
                             .colorRes(R.color.accent)
                             .sizeDp(24));
                     holder.menuText.setText(R.string.open_article_view);
-                    holder.itemView.setOnClickListener(v -> ArticleLauncher.from(ChromerOptionsActivity.this, getIntent().getData())
-                            .applyCustomizations()
-                            .forNewTab(false)
-                            .launch());
+                    holder.itemView.setOnClickListener(v -> tabsManager.openArticle(ChromerOptionsActivity.this, new Website(getIntent().getDataString()), false));
                     break;
             }
         }

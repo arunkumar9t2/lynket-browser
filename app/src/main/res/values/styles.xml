@@ -15,9 +15,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-
 <resources>
-
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
@@ -85,14 +83,11 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-    <style name="ArticleTheme" parent="ArticleTheme.Base">
-
-    </style>
+    <style name="ArticleTheme" parent="ArticleTheme.Base" />
 
     <style name="ArticleImageViewTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@android:color/black</item>
     </style>
-
 
     <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="windowNoTitle">true</item>
@@ -131,16 +126,5 @@
         <item name="android:layout_marginRight">-6dp</item>
         <item name="android:layout_marginTop">-6dp</item>
         <item name="android:layout_marginBottom">6dp</item>
-    </style>
-
-    <style name="FullWidthCard.Headers">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_below">@+id/browsing_mode_card</item>
-        <item name="android:layout_margin">10dp</item>
-        <item name="android:gravity">center|start</item>
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body2</item>
-        <item name="android:textColor">@color/accent</item>
-        <item name="android:textSize">14sp</item>
     </style>
 </resources>

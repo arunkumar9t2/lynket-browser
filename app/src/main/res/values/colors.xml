@@ -51,7 +51,7 @@
     <color name="linkedin">#0077b5</color>
     <color name="play_store_green">#0f9d58</color>
     <color name="accent_icon_no_focus">#616161</color>
-    <color name="web_head_bg">#00BCD4</color>
+    <color name="web_head_color">#00BCD4</color>
     <color name="error">#DD2C00</color>
     <color name="remove_web_head_color">#ff1744</color>
     <color name="shadow_color">#60000000</color>

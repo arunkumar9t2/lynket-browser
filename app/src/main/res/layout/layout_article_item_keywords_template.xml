@@ -16,15 +16,17 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:bbn_itemColorActive="@color/primary">
-    <item
-        android:id="@+id/home"
-        android:icon="@drawable/ic_home_24dp"
-        android:title="@string/home" />
-    <item
-        android:id="@+id/history"
-        android:icon="@drawable/ic_history_24dp"
-        android:title="@string/title_history" />
-</menu>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/keywordsItem"
+    android:layout_width="wrap_content"
+    android:layout_height="36dp"
+    android:layout_marginLeft="2dp"
+    android:layout_marginRight="2dp"
+    android:background="@drawable/rounded_corners"
+    android:ellipsize="end"
+    android:gravity="center"
+    android:maxLines="1"
+    android:maxWidth="200dp"
+    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+    tools:text="Hello" />

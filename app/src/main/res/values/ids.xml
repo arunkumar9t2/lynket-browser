@@ -16,15 +16,13 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:bbn_itemColorActive="@color/primary">
-    <item
-        android:id="@+id/home"
-        android:icon="@drawable/ic_home_24dp"
-        android:title="@string/home" />
-    <item
-        android:id="@+id/history"
-        android:icon="@drawable/ic_history_24dp"
-        android:title="@string/title_history" />
-</menu>
+<resources>
+    <item name="menu_history" type="id" />
+    <item name="menu_add_to_home_screen" type="id" />
+    <item name="menu_open_full_page" type="id" />
+    <item name="menu_action_button" type="id" />
+    <item name="menu_copy_link" type="id" />
+    <item name="menu_open_with" type="id" />
+    <item name="menu_share" type="id" />
+    <item name="menu_share_with" type="id" />
+</resources>

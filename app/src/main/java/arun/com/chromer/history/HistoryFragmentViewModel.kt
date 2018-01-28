@@ -48,7 +48,7 @@ constructor(
                 .doOnNext { loadingLiveData.postValue(true) }
                 .switchMap {
                     historyRepository.allItemsCursor
-                }.compose(SchedulerProvider.applySchedulers())
+                }.compose(SchedulerProvider.applyIoSchedulers())
                 .doOnNext { loadingLiveData.postValue(false) }
                 .doOnNext(historyCursorLiveData::postValue)
                 .subscribe())
@@ -61,7 +61,7 @@ constructor(
     fun deleteAll(onSuccess: (rows: Int) -> Unit) {
         subs.add(historyRepository
                 .deleteAll()
-                .compose(SchedulerProvider.applySchedulers())
+                .compose(SchedulerProvider.applyIoSchedulers())
                 .doOnNext { rows ->
                     loadHistory()
                     onSuccess(rows)
@@ -72,7 +72,7 @@ constructor(
         subs.add(rx.Observable.just(website)
                 .filter { webSite -> webSite?.url != null }
                 .flatMap<Website>({ historyRepository.delete(it!!) })
-                .compose(SchedulerProvider.applySchedulers())
+                .compose(SchedulerProvider.applyIoSchedulers())
                 .doOnError(Timber::e)
                 .doOnNext { loadHistory() }
                 .subscribe())

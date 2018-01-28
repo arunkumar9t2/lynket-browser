@@ -16,27 +16,18 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".browsing.webview.WebViewActivity">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".browsing.webview.WebViewActivity"
+    tools:showIn="@layout/activity_web_view">
 
-    <android.support.design.widget.AppBarLayout
+    <WebView
+        android:id="@+id/webView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    </android.support.design.widget.AppBarLayout>
-
-    <include layout="@layout/activity_web_view_content" />
-
-</android.support.design.widget.CoordinatorLayout>
+        android:layout_height="match_parent"
+        android:visibility="visible" />
+</FrameLayout>

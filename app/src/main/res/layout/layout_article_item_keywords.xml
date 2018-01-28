@@ -16,27 +16,30 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".browsing.webview.WebViewActivity">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="-32dp"
+    android:orientation="vertical"
+    android:paddingBottom="16dp"
+    android:paddingLeft="24dp"
+    android:paddingTop="32dp">
 
-    <android.support.design.widget.AppBarLayout
+    <TextView
+        android:id="@+id/keywordsTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_marginBottom="8dp"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/keywords"
+        android:textColor="@color/article_primaryText"
+        android:textSize="14sp" />
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/keywordsList"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:padding="4dp">
 
-    </android.support.design.widget.AppBarLayout>
-
-    <include layout="@layout/activity_web_view_content" />
-
-</android.support.design.widget.CoordinatorLayout>
+    </android.support.v7.widget.RecyclerView>
+</LinearLayout>

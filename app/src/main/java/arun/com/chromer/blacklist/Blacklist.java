@@ -79,7 +79,7 @@ interface Blacklist {
                         return app;
                     }).distinct()
                     .toSortedList(appComparator::compare)
-                    .compose(SchedulerProvider.applySchedulers())
+                    .compose(SchedulerProvider.applyIoSchedulers())
                     .toSingle()
                     .subscribe(new SingleSubscriber<List<App>>() {
                         @Override
@@ -102,11 +102,11 @@ interface Blacklist {
             if (app != null) {
                 if (app.blackListed) {
                     appRepository.setPackageBlacklisted(app.packageName)
-                            .compose(SchedulerProvider.applySchedulers())
+                            .compose(SchedulerProvider.applyIoSchedulers())
                             .subscribe();
                 } else {
                     appRepository.removeBlacklist(app.packageName)
-                            .compose(SchedulerProvider.applySchedulers())
+                            .compose(SchedulerProvider.applyIoSchedulers())
                             .subscribe();
                 }
             }

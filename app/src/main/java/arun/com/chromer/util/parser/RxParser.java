@@ -26,10 +26,13 @@ import com.chimbori.crux.articles.ArticleExtractor;
 import com.chimbori.crux.urls.CruxURL;
 
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import rx.Observable;
+import rx.exceptions.Exceptions;
 import rx.functions.Func1;
-import timber.log.Timber;
+
+import static arun.com.chromer.util.parser.WebsiteUtilities.headString;
 
 /**
  * Created by Arunkumar on 26-01-2017.
@@ -58,7 +61,7 @@ public class RxParser {
             final CruxURL candidateUrl = CruxURL.parse(expanded);
             if (candidateUrl.resolveRedirects().isLikelyArticle()) {
                 // We only need the head tag for meta data.
-                String webSiteString = WebsiteUtilities.headString(candidateUrl.toString());
+                String webSiteString = headString(candidateUrl.toString());
 
                 article = ArticleExtractor
                         .with(expanded, webSiteString)
@@ -69,8 +72,7 @@ public class RxParser {
                 webSiteString = null;
             }
         } catch (Exception | OutOfMemoryError e) {
-            Timber.e(e);
-            Observable.error(e);
+            throw Exceptions.propagate(e);
         }
         return new Pair<>(url, article);
     };
@@ -79,18 +81,17 @@ public class RxParser {
     private static final Func1<String, Pair<String, Article>> URL_TO_WEB_ARTICLE_PAIR_MAPPER = url -> {
         Article article = null;
         try {
-            // Unshortened url breaks cache since redirected url might be different.
-            // final String expanded = WebsiteUtilities.unShortenUrl(url);
             final CruxURL cruxURL = CruxURL.parse(url);
             final boolean isArticle = cruxURL.resolveRedirects().isLikelyArticle();
             if (isArticle) {
-                article = ArticleExtractor.with(cruxURL.toString(), Jsoup.connect(cruxURL.toString()).get())
+                final Document document = Jsoup.connect(cruxURL.toString()).get();
+                article = ArticleExtractor.with(cruxURL.toString(), document)
                         .extractMetadata()
                         .extractContent()
                         .article();
             }
         } catch (Exception | OutOfMemoryError e) {
-            Observable.error(e);
+            throw Exceptions.propagate(e);
         }
         return new Pair<>(url, article);
     };

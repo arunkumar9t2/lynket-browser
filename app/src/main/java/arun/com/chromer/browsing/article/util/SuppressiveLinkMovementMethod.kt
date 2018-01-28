@@ -16,31 +16,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.browsing.article.view;
+package arun.com.chromer.browsing.article.util
 
-import android.content.Context;
-import android.util.AttributeSet;
+import android.text.Spannable
+import android.text.method.LinkMovementMethod
+import android.view.MotionEvent
+import android.widget.TextView
+import android.widget.Toast
+
+import arun.com.chromer.R
 
 /**
- * A parallax image view that reverses the Y direction animation by default.
+ * Created by arunk on 27-01-2018.
  */
-public class PEWImageView extends com.fmsirvent.ParallaxEverywhere.PEWImageView {
-    public PEWImageView(Context context) {
-        super(context);
-        init();
-    }
+object SuppressiveLinkMovementMethod : LinkMovementMethod() {
+    override fun onTouchEvent(widget: TextView, buffer: Spannable, event: MotionEvent): Boolean {
+        return try {
+            super.onTouchEvent(widget, buffer, event)
+        } catch (ex: Exception) {
+            Toast.makeText(widget.context, R.string.unsupported_link, Toast.LENGTH_LONG).show()
+            true
+        }
 
-    public PEWImageView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
-    }
-
-    public PEWImageView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        init();
-    }
-
-    private void init() {
-        setReverseY(true);
     }
 }

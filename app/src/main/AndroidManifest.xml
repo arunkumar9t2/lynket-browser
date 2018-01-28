@@ -42,7 +42,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service android:name=".browsing.customtabs.callbacks.ClipboardService" />
+        <service android:name=".browsing.customtabs.callbacks.CopyToClipboardService" />
         <service
             android:name=".appdetect.AppDetectService"
             android:enabled="true"
@@ -156,7 +156,7 @@
             android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat.Translucent" />
         <activity
-            android:name="arun.com.chromer.browsing.article.ChromerArticleActivity"
+            android:name="arun.com.chromer.browsing.article.ArticleActivity"
             android:label="@string/app_name"
             android:theme="@style/ArticleTheme" />
         <activity

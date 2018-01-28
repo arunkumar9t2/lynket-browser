@@ -57,7 +57,7 @@ public class WebsiteNetworkStore implements WebsiteStore {
                     } else {
                         return Observable.just(new Website(urlArticlePair.first));
                     }
-                }).compose(SchedulerProvider.applySchedulers());
+                }).compose(SchedulerProvider.applyIoSchedulers());
     }
 
     @NonNull

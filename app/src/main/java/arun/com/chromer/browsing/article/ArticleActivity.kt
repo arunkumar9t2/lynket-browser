@@ -16,52 +16,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.browsing.customtabs
+package arun.com.chromer.browsing.article
 
 import android.os.Bundle
-import arun.com.chromer.browsing.BrowsingActivity
+import android.view.Menu
+import android.view.MenuItem
+import arun.com.chromer.browsing.customtabs.CustomTabActivity
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
-import arun.com.chromer.shared.Constants.EXTRA_KEY_TOOLBAR_COLOR
 
-class CustomTabActivity : BrowsingActivity() {
-    /**
-     * As soon as user presses back, this activity will get focus. We need to kill this activity else
-     * user will see a ghost tab.
-     */
-    private var isLoaded = false
+class ArticleActivity : BaseArticleActivity() {
+    private var baseUrl: String? = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val toolbarColor = intent.getIntExtra(EXTRA_KEY_TOOLBAR_COLOR, 0)
-        activityComponent.customTabs()
-                .forUrl(intent.dataString!!)
-                .toolbarColor(toolbarColor)
-                .launch()
+        baseUrl = intent.dataString
     }
 
     override fun inject(activityComponent: ActivityComponent) {
         activityComponent.inject(this)
     }
 
-    override fun getLayoutRes(): Int {
-        return 0
+    override fun onArticleLoadingFailed(throwable: Throwable?) {
+        super.onArticleLoadingFailed(throwable)
+        // Loading failed, try to go back to normal url tab if it exists, else start a new normal
+        // rendering tab.
+        finish()
+        tabsManager.openBrowsingTab(this, Website(intent.dataString), true, false, CustomTabActivity::class.java.name)
     }
 
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-        isLoaded = true
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        return menuDelegate.createOptionsMenu(menu)
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (isLoaded) {
-            finish()
-        }
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        return menuDelegate.prepareOptionsMenu(menu)
     }
 
-    override fun onWebsiteLoaded(website: Website) {
-
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return menuDelegate.handleItemSelected(item.itemId)
     }
+
 }

@@ -22,6 +22,7 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
 import arun.com.chromer.browsing.BrowsingViewModel;
+import arun.com.chromer.browsing.article.BrowsingArticleViewModel;
 import arun.com.chromer.history.HistoryFragmentViewModel;
 import arun.com.chromer.home.fragment.HomeFragmentViewModel;
 import arun.com.chromer.tabs.ui.TabsViewModel;
@@ -54,4 +55,9 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(HistoryFragmentViewModel.class)
     abstract ViewModel historyFragmentViewModel(HistoryFragmentViewModel historyFragmentViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(BrowsingArticleViewModel.class)
+    abstract ViewModel bindArticleBrowsingViewModel(BrowsingArticleViewModel browsingArticleViewModel);
 }

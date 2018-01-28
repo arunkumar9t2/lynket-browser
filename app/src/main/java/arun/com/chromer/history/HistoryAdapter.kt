@@ -39,7 +39,6 @@ import arun.com.chromer.util.glide.GlideApp
 import arun.com.chromer.util.glide.GlideRequests
 import butterknife.BindView
 import butterknife.ButterKnife
-import rx.Observable
 import timber.log.Timber
 
 /**
@@ -120,10 +119,6 @@ internal class HistoryAdapter(
             return Website.fromCursor(cursor!!)
         }
         return null
-    }
-
-    fun getWebsiteAt(position: Int): Observable<Website> {
-        return Observable.fromCallable { getItemAt(position) }
     }
 
     fun setCursor(cursor: Cursor?) {

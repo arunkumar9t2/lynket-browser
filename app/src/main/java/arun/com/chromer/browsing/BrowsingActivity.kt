@@ -38,11 +38,10 @@ import arun.com.chromer.shared.base.activity.BaseActivity
 import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.ColorUtil
 import arun.com.chromer.util.RxEventBus
+import arun.com.chromer.util.SchedulerProvider
 import arun.com.chromer.util.Utils
 import arun.com.chromer.util.glide.GlideApp
 import rx.Observable
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -131,11 +130,20 @@ abstract class BrowsingActivity : BaseActivity() {
                     val color = ColorUtil.getBestColorFromPalette(palette)
                     ActivityManager.TaskDescription(title, icon, if (color == Constants.NO_COLOR) themeColor else color)
                 }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext { setTaskDescription(it) }
+                .compose(SchedulerProvider.applyIoSchedulers())
+                .doOnNext {
+                    setTaskDescription(it)
+                    onTaskColorSet(it.primaryColor)
+                }
                 .doOnError(Timber::e)
                 .subscribe())
+    }
+
+    open fun onTaskColorSet(websiteThemeColor: Int) {
+    }
+
+    fun getCurrentUrl(): String {
+        return intent.dataString
     }
 
     /**
