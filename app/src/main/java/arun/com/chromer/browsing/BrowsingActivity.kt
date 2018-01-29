@@ -33,6 +33,7 @@ import android.widget.Toast.LENGTH_SHORT
 import arun.com.chromer.R
 import arun.com.chromer.data.Result
 import arun.com.chromer.data.website.model.Website
+import arun.com.chromer.settings.Preferences
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.shared.base.activity.BaseActivity
 import arun.com.chromer.tabs.TabsManager
@@ -53,6 +54,8 @@ abstract class BrowsingActivity : BaseActivity() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
     @Inject
     lateinit var rxEventBus: RxEventBus
+    @Inject
+    lateinit var preferences: Preferences
 
     private lateinit var browsingViewModel: BrowsingViewModel
 
@@ -126,8 +129,12 @@ abstract class BrowsingActivity : BaseActivity() {
         subs.add(Observable.just(website)
                 .map {
                     val icon = GlideApp.with(this).asBitmap().load(website).submit().get()
-                    val palette = Palette.from(icon).generate()
-                    val color = ColorUtil.getBestColorFromPalette(palette)
+                    val color = if (preferences.dynamiceToolbarEnabledAndWebEnabled()) {
+                        val palette = Palette.from(icon).generate()
+                        ColorUtil.getBestColorFromPalette(palette)
+                    } else {
+                        preferences.toolbarColor()
+                    }
                     ActivityManager.TaskDescription(title, icon, if (color == Constants.NO_COLOR) themeColor else color)
                 }
                 .compose(SchedulerProvider.applyIoSchedulers())

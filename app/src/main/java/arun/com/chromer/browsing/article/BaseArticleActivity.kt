@@ -42,6 +42,7 @@ import arun.com.chromer.extenstions.gone
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.settings.Preferences.*
 import arun.com.chromer.shared.Constants
+import arun.com.chromer.shared.Constants.EXTRA_KEY_TOOLBAR_COLOR
 import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.util.Utils
 import arun.com.chromer.util.glide.GlideApp
@@ -65,8 +66,6 @@ abstract class BaseArticleActivity : BrowsingActivity() {
     lateinit var tabsManager: DefaultTabsManager
     @Inject
     lateinit var menuDelegate: MenuDelegate
-    @Inject
-    lateinit var preferences: Preferences
 
     override fun getLayoutRes(): Int {
         return R.layout.activity_article_mode
@@ -166,19 +165,22 @@ abstract class BaseArticleActivity : BrowsingActivity() {
     }
 
     private fun setPrimaryColor(@ColorInt primaryColor: Int) {
-        this.primaryColor = primaryColor
-        changeRecyclerOverscrollColors(recyclerView, primaryColor)
-        changeProgressBarColors(progressBar, primaryColor)
-        articleScrollListener?.setPrimaryColor(primaryColor)
+        if (preferences.dynamiceToolbarEnabledAndWebEnabled()) {
+            this.primaryColor = primaryColor
+            changeRecyclerOverscrollColors(recyclerView, primaryColor)
+            changeProgressBarColors(progressBar, primaryColor)
+            articleScrollListener?.setPrimaryColor(primaryColor)
+        }
     }
 
     private fun readCustomizations() {
-        val appPrimaryColor = ContextCompat.getColor(this, R.color.primary)
-        primaryColor = intent.getIntExtra(Constants.EXTRA_KEY_TOOLBAR_COLOR, appPrimaryColor)
+        val appPrimaryColor = preferences.toolbarColor()
+        primaryColor = intent.getIntExtra(EXTRA_KEY_TOOLBAR_COLOR, appPrimaryColor)
+        accentColor = ContextCompat.getColor(this, R.color.accent)
 
-        accentColor = if (primaryColor != appPrimaryColor) {
-            primaryColor
-        } else ContextCompat.getColor(this, R.color.accent)
+        if (preferences.dynamiceToolbarEnabledAndWebEnabled()) {
+            accentColor = primaryColor
+        }
 
         val theme = preferences.articleTheme()
         when (theme) {

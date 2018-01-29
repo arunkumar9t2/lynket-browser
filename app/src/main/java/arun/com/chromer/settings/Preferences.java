@@ -288,6 +288,10 @@ public class Preferences {
         return getDefaultSharedPreferences().getBoolean(DYNAMIC_COLOR, false);
     }
 
+    public boolean dynamiceToolbarEnabledAndWebEnabled() {
+        return dynamicToolbar() && dynamicToolbarOnWeb();
+    }
+
     public void dynamicToolbar(final boolean preference) {
         getDefaultSharedPreferences().edit().putBoolean(DYNAMIC_COLOR, preference).apply();
     }
