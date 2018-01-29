@@ -85,6 +85,9 @@ class MenuDelegate @Inject constructor(
             add(0, R.id.menu_share_with, Menu.NONE, "")
             add(0, R.id.menu_history, Menu.NONE, R.string.title_history)
             add(0, R.id.menu_add_to_home_screen, Menu.NONE, R.string.add_to_homescreen)
+            if (!preferences.bottomBar()) {
+                add(0, R.id.tabs, Menu.NONE, R.string.title_tabs)
+            }
         }
         return true
     }
@@ -151,7 +154,7 @@ class MenuDelegate @Inject constructor(
             android.R.id.home -> activity.finish()
             R.id.bottom_bar_open_in_new_tab -> tabsManager.openNewTab(activity, currentUrl)
             R.id.bottom_bar_share -> shareUrl()
-            R.id.bottom_bar_tabs -> tabsManager.showTabsActivity()
+            R.id.bottom_bar_tabs, R.id.tabs -> tabsManager.showTabsActivity()
             R.id.bottom_bar_minimize_tab -> tabsManager.minimizeTabByUrl(currentUrl)
             R.id.menu_action_button -> when (preferences.preferredAction()) {
                 PREFERRED_ACTION_BROWSER -> activity.sendBroadcast(Intent(activity, SecondaryBrowserReceiver::class.java).setData(currentUri))

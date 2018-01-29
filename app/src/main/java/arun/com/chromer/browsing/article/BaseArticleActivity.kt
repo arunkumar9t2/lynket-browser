@@ -99,25 +99,29 @@ abstract class BaseArticleActivity : BrowsingActivity() {
 
 
     private fun setupBottombar() {
-        bottomNavigation.apply {
-            post {
-                bottomNavigationBackground.apply {
-                    bottomNavigationBackground.layoutParams.height = bottomNavigation.height - bottomNavigation.shadowHeight
-                    requestLayout()
+        if (preferences.bottomBar()) {
+            bottomNavigation.apply {
+                post {
+                    bottomNavigationBackground.apply {
+                        bottomNavigationBackground.layoutParams.height = bottomNavigation.height - bottomNavigation.shadowHeight
+                        requestLayout()
+                    }
                 }
+                setSelectedIndex(-1, false)
+                setOnMenuItemClickListener(object : BottomNavigation.OnMenuItemSelectionListener {
+                    override fun onMenuItemSelect(itemId: Int, position: Int, fromUser: Boolean) {
+                        menuDelegate.handleItemSelected(itemId)
+                        post { setSelectedIndex(-1, false) }
+                    }
+
+                    override fun onMenuItemReselect(itemId: Int, position: Int, fromUser: Boolean) {
+                    }
+                })
             }
-            setSelectedIndex(-1, false)
-            setOnMenuItemClickListener(object : BottomNavigation.OnMenuItemSelectionListener {
-                override fun onMenuItemSelect(itemId: Int, position: Int, fromUser: Boolean) {
-                    menuDelegate.handleItemSelected(itemId)
-                    post { setSelectedIndex(-1, false) }
-                }
-
-                override fun onMenuItemReselect(itemId: Int, position: Int, fromUser: Boolean) {
-                }
-            })
+        } else {
+            bottomNavigation.gone()
+            bottomNavigationBackground.gone()
         }
-
     }
 
     private fun setupTheme() {
