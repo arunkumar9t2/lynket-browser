@@ -85,7 +85,7 @@ class MenuDelegate @Inject constructor(
             add(0, R.id.menu_share_with, Menu.NONE, "")
             add(0, R.id.menu_history, Menu.NONE, R.string.title_history)
             add(0, R.id.menu_add_to_home_screen, Menu.NONE, R.string.add_to_homescreen)
-            if (!preferences.bottomBar()) {
+            if (!preferences.bottomBar() && Utils.ANDROID_LOLLIPOP) {
                 add(0, R.id.tabs, Menu.NONE, R.string.title_tabs)
             }
         }

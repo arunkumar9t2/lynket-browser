@@ -56,6 +56,7 @@ import arun.com.chromer.util.DocumentUtils
 import arun.com.chromer.util.RxEventBus
 import arun.com.chromer.util.SafeIntent
 import arun.com.chromer.util.Utils
+import arun.com.chromer.util.Utils.openDrawOverlaySettings
 import arun.com.chromer.webheads.WebHeadService
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
@@ -264,7 +265,7 @@ constructor(
             }
             context.startService(webHeadLauncher)
         } else {
-            Utils.openDrawOverlaySettings(context)
+            openDrawOverlaySettings(context)
         }
 
         // If this command was not issued for minimizing, then attempt aggressive loading.
