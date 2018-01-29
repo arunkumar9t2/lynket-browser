@@ -63,6 +63,7 @@ a {
 <h4 class="list-heading">Article mode</h3>
 <ul>
         <li><b>NEW: </b> AMOLED Black theme</li>
+        <li><b>NEW: </b> Bottom bar in article mode</li>
         <li><b>NEW: </b> Tried to reduce extra gap between text. Improved Blockquote legibility.</li>
         <li><b>FIX: </b> Crash when tapping on certain links</li>
 </ul>
