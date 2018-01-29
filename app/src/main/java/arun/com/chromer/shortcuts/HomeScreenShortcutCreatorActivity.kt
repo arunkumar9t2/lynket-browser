@@ -201,7 +201,7 @@ class HomeScreenShortcutCreatorActivity : BaseActivity() {
         }
 
         private fun enablePositiveButtonIfImageLoaded() {
-            iconView?.post { positiveButton?.isEnabled = iconView?.drawable != null }
+            iconView?.postDelayed({ positiveButton?.isEnabled = iconView?.drawable != null }, 200)
         }
 
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
