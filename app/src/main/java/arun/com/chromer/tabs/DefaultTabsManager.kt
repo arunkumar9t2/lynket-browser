@@ -391,10 +391,9 @@ constructor(
             return if (toolbarColor != NO_COLOR) {
                 toolbarColor
             } else {
-                ContextCompat.getColor(application, R.color.primary)
+                preferences.toolbarColor()
             }
-        }
-        return ContextCompat.getColor(application, R.color.primary)
+        } else return ContextCompat.getColor(application, R.color.primary)
     }
 
     /**
