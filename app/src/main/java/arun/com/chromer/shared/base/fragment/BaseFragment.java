@@ -69,9 +69,10 @@ public abstract class BaseFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
+        subs.clear();
         unbinder.unbind();
         fragmentComponent = null;
+        super.onDestroy();
     }
 
     @LayoutRes

@@ -154,22 +154,24 @@ class HomeFragment : BaseFragment() {
 
 
     private fun setupInfoCards() {
-        val customTabProvider: String? = Preferences.get(context!!).customTabPackage()
-        if (customTabProvider == null) {
-            providerDescription.text = HtmlCompat.fromHtml(getString(R.string.tab_provider_status_message_home, getString(R.string.system_webview)))
-            GlideApp.with(this)
-                    .load(ApplicationIcon.createUri(Constants.SYSTEM_WEBVIEW))
-                    .error(IconicsDrawable(context!!)
-                            .icon(CommunityMaterial.Icon.cmd_web)
-                            .colorRes(R.color.primary)
-                            .sizeDp(24))
-                    .into(providerIcon)
-        } else {
-            val appName = context!!.appName(customTabProvider)
-            providerDescription.text = HtmlCompat.fromHtml(getString(R.string.tab_provider_status_message_home, appName))
-            GlideApp.with(this)
-                    .load(ApplicationIcon.createUri(customTabProvider))
-                    .into(providerIcon)
+        if (isAdded && context != null) {
+            val customTabProvider: String? = Preferences.get(context!!).customTabPackage()
+            if (customTabProvider == null) {
+                providerDescription.text = HtmlCompat.fromHtml(getString(R.string.tab_provider_status_message_home, getString(R.string.system_webview)))
+                GlideApp.with(this)
+                        .load(ApplicationIcon.createUri(Constants.SYSTEM_WEBVIEW))
+                        .error(IconicsDrawable(context!!)
+                                .icon(CommunityMaterial.Icon.cmd_web)
+                                .colorRes(R.color.primary)
+                                .sizeDp(24))
+                        .into(providerIcon)
+            } else {
+                val appName = context!!.appName(customTabProvider)
+                providerDescription.text = HtmlCompat.fromHtml(getString(R.string.tab_provider_status_message_home, appName))
+                GlideApp.with(this)
+                        .load(ApplicationIcon.createUri(customTabProvider))
+                        .into(providerIcon)
+            }
         }
     }
 

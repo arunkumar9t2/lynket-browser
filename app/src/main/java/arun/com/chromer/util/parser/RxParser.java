@@ -29,7 +29,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import rx.Observable;
-import rx.exceptions.Exceptions;
 import rx.functions.Func1;
 
 import static arun.com.chromer.util.parser.WebsiteUtilities.headString;
@@ -72,7 +71,7 @@ public class RxParser {
                 webSiteString = null;
             }
         } catch (Exception | OutOfMemoryError e) {
-            throw Exceptions.propagate(e);
+            e.printStackTrace();
         }
         return new Pair<>(url, article);
     };
@@ -91,7 +90,7 @@ public class RxParser {
                         .article();
             }
         } catch (Exception | OutOfMemoryError e) {
-            throw Exceptions.propagate(e);
+            e.printStackTrace();
         }
         return new Pair<>(url, article);
     };
