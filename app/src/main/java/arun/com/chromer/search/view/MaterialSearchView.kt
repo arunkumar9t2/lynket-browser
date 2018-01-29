@@ -214,7 +214,9 @@ class MaterialSearchView : MvpRelativeLayout<Search.View, Search.Presenter>, Sea
     }
 
     override fun hasFocus(): Boolean {
-        return msv_edit_text!!.hasFocus() && super.hasFocus()
+        return if (msv_edit_text != null) {
+            msv_edit_text.hasFocus() && super.hasFocus()
+        } else super.hasFocus()
     }
 
     override fun setOnClickListener(l: View.OnClickListener?) {

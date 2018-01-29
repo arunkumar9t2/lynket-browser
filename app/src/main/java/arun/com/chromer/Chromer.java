@@ -20,6 +20,7 @@ package arun.com.chromer;
 
 import android.app.Application;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
@@ -39,6 +40,10 @@ import timber.log.Timber;
  */
 public class Chromer extends Application {
     private AppComponent appComponent;
+
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     @Override
     public void onCreate() {

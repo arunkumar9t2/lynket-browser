@@ -64,7 +64,7 @@ fun View.circularHideWithSelfCenter(done: (() -> Unit)? = null) {
             // start the animation
             start()
         }
-    }
+    } else hide()
 }
 
 /**
@@ -92,5 +92,5 @@ fun View.circularRevealWithSelfCenter(done: (() -> Unit)? = null) {
             // Start the animation
             start()
         }
-    }
+    } else show()
 }

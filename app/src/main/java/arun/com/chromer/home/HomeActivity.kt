@@ -32,6 +32,7 @@ import android.support.v4.app.FragmentManager
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
+import android.widget.Toast
 import arun.com.chromer.R
 import arun.com.chromer.about.AboutAppActivity
 import arun.com.chromer.about.changelog.Changelog
@@ -527,6 +528,9 @@ class HomeActivity : BaseActivity(), Snackable {
                         show(historyFragment)
                         hide(homeFragment)
                     }.commit()
+                }
+                R.id.tabs -> {
+                    Toast.makeText(appbar.context, R.string.feature_requires_lollipop, Toast.LENGTH_SHORT).show()
                 }
             }
             return false

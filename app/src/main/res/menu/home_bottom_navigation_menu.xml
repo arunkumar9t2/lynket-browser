@@ -24,6 +24,10 @@
         android:icon="@drawable/ic_home_24dp"
         android:title="@string/home" />
     <item
+        android:id="@+id/tabs"
+        android:icon="@drawable/ic_tab_24dp"
+        android:title="@string/title_tabs" />
+    <item
         android:id="@+id/history"
         android:icon="@drawable/ic_history_24dp"
         android:title="@string/title_history" />
