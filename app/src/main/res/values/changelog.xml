@@ -43,6 +43,7 @@ a {
     <li><b>NEW: </b> New home screen with bottom search bar inspired by Google apps</li>
     <li><b>NEW: </b> Chromer uses website favicons to calculate toolbar color.</li>
     <li><b>NEW: </b> Bottom bar now shows text in addition to icons</li>
+     <li><b>NEW: </b> Light nav bar for 8.1</li>
 </ul>
 <h4 class="list-heading">Features</h3>
 <ul>
@@ -63,7 +64,7 @@ a {
 <h4 class="list-heading">Article mode</h3>
 <ul>
         <li><b>NEW: </b> AMOLED Black theme</li>
-        <li><b>NEW: </b> Bottom bar in article mode</li>
+        <li><b>NEW: </b> Bottom bar with additional options</li>
         <li><b>NEW: </b> Tried to reduce extra gap between text. Improved Blockquote legibility.</li>
         <li><b>FIX: </b> Crash when tapping on certain links</li>
 </ul>
