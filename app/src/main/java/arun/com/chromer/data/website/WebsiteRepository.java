@@ -18,7 +18,10 @@
 
 package arun.com.chromer.data.website;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.util.Pair;
 
 import arun.com.chromer.data.website.model.WebColor;
 import arun.com.chromer.data.website.model.Website;
@@ -40,4 +43,10 @@ public interface WebsiteRepository {
 
     @NonNull
     Observable<Void> clearCache();
+
+    @NonNull
+    Pair<Bitmap, Integer> getWebsiteIconAndColor(@NonNull Website website);
+
+    @NonNull
+    Pair<Drawable, Integer> getWebsiteFaviconAndColor(@NonNull Website website);
 }

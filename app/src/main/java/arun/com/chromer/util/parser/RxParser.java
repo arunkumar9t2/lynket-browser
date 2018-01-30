@@ -30,6 +30,7 @@ import org.jsoup.nodes.Document;
 
 import rx.Observable;
 import rx.functions.Func1;
+import timber.log.Timber;
 
 import static arun.com.chromer.util.parser.WebsiteUtilities.headString;
 
@@ -71,7 +72,7 @@ public class RxParser {
                 webSiteString = null;
             }
         } catch (Exception | OutOfMemoryError e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
         return new Pair<>(url, article);
     };
@@ -90,7 +91,7 @@ public class RxParser {
                         .article();
             }
         } catch (Exception | OutOfMemoryError e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
         return new Pair<>(url, article);
     };

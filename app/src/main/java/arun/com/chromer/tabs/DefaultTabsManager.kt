@@ -262,6 +262,7 @@ constructor(
             val webHeadLauncher = Intent(context, WebHeadService::class.java).apply {
                 data = Uri.parse(url)
                 addFlags(FLAG_ACTIVITY_NEW_TASK)
+                putExtra(Constants.EXTRA_KEY_MINIMIZE, fromMinimize)
             }
             ContextCompat.startForegroundService(context, webHeadLauncher)
         } else {

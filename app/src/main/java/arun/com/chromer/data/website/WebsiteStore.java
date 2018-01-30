@@ -18,8 +18,11 @@
 
 package arun.com.chromer.data.website;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.util.Pair;
 
 import arun.com.chromer.data.website.model.WebColor;
 import arun.com.chromer.data.website.model.Website;
@@ -42,4 +45,10 @@ public interface WebsiteStore {
     Observable<WebColor> getWebsiteColor(@NonNull final String url);
 
     Observable<WebColor> saveWebsiteColor(@NonNull final String host, @ColorInt int color);
+
+    @NonNull
+    Pair<Bitmap, Integer> getWebsiteIconAndColor(@NonNull Website website);
+
+    @NonNull
+    Pair<Drawable, Integer> getWebsiteRoundIconAndColor(Website website);
 }
