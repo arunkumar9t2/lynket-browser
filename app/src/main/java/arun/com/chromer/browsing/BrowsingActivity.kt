@@ -138,12 +138,10 @@ abstract class BrowsingActivity : BaseActivity() {
                     ActivityManager.TaskDescription(title, icon, if (color == Constants.NO_COLOR) themeColor else color)
                 }
                 .compose(SchedulerProvider.applyIoSchedulers())
-                .doOnNext {
+                .subscribe({
                     setTaskDescription(it)
                     onTaskColorSet(it.primaryColor)
-                }
-                .doOnError(Timber::e)
-                .subscribe())
+                }, Timber::e))
     }
 
     open fun onTaskColorSet(websiteThemeColor: Int) {
