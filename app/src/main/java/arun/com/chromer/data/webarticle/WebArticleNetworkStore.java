@@ -53,12 +53,14 @@ public class WebArticleNetworkStore implements WebArticleStore {
                         return Observable.just(null);
                     }
                 }).map(webArticle -> {
-                    // Clean up all the empty strings.
-                    final Elements rawElements = webArticle.elements;
-                    for (Iterator<Element> iterator = rawElements.iterator(); iterator.hasNext(); ) {
-                        final Element element = iterator.next();
-                        if (element.text().isEmpty()) {
-                            iterator.remove();
+                    if (webArticle != null) {
+                        // Clean up all the empty strings.
+                        final Elements rawElements = webArticle.elements;
+                        for (Iterator<Element> iterator = rawElements.iterator(); iterator.hasNext(); ) {
+                            final Element element = iterator.next();
+                            if (element.text().isEmpty()) {
+                                iterator.remove();
+                            }
                         }
                     }
                     return webArticle;
