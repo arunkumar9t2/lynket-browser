@@ -429,11 +429,6 @@ public abstract class BaseWebHead extends FrameLayout {
     }
 
     @NonNull
-    public ImageView getFaviconView() {
-        return favicon;
-    }
-
-    @NonNull
     public String getUrl() {
         return url;
     }

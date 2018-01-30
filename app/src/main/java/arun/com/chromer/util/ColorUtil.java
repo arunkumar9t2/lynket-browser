@@ -154,22 +154,6 @@ public class ColorUtil {
         return NO_COLOR;
     }
 
-    /**
-     * Returns white or black based on color luminance
-     *
-     * @param backgroundColor the color to get foreground for
-     * @return White for darker colors and black for ligher colors
-     */
-    @ColorInt
-    public static int getForegroundWhiteOrBlack(@ColorInt int backgroundColor) {
-        double l = ColorUtils.calculateLuminance(backgroundColor);
-        if (l > 0.179) {
-            return Color.BLACK;
-        } else
-            return Color.WHITE;
-    }
-
-
     @ColorInt
     public static int getBestColorFromPalette(@Nullable Palette palette) {
         if (palette == null) {
@@ -186,6 +170,21 @@ public class ColorUtil {
                 return palette.getDarkMutedColor(NO_COLOR);
             }
         }
+    }
+
+    /**
+     * Returns white or black based on color luminance
+     *
+     * @param backgroundColor the color to get foreground for
+     * @return White for darker colors and black for ligher colors
+     */
+    @ColorInt
+    public static int getForegroundWhiteOrBlack(@ColorInt int backgroundColor) {
+        double l = ColorUtils.calculateLuminance(backgroundColor);
+        if (l > 0.179) {
+            return Color.BLACK;
+        } else
+            return Color.WHITE;
     }
 
     @NonNull

@@ -21,9 +21,10 @@ package arun.com.chromer.data.website;
 import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.v7.graphics.Palette;
+import android.util.Pair;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -34,9 +35,7 @@ import arun.com.chromer.data.qualifiers.Network;
 import arun.com.chromer.data.website.model.WebColor;
 import arun.com.chromer.data.website.model.Website;
 import arun.com.chromer.shared.Constants;
-import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.SchedulerProvider;
-import arun.com.chromer.util.glide.GlideApp;
 import rx.Observable;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
@@ -116,15 +115,10 @@ public class DefaultWebsiteRepository implements WebsiteRepository {
                             int color = webSite.themeColor();
                             return diskStore.saveWebsiteColor(Uri.parse(webSite.url).getHost(), color);
                         } else {
-                            try {
-                                Bitmap bitmap = GlideApp.with(context).asBitmap().load(webSite.faviconUrl).submit().get();
-                                final Palette palette = Palette.from(bitmap).generate();
-                                int color = ColorUtil.getBestColorFromPalette(palette);
+                            final int color = getWebsiteIconAndColor(webSite).second;
+                            if (color != Constants.NO_COLOR) {
                                 return diskStore.saveWebsiteColor(Uri.parse(webSite.url).getHost(), color);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            return Observable.empty();
+                            } else return Observable.empty();
                         }
                     } else return Observable.empty();
                 });
@@ -136,4 +130,15 @@ public class DefaultWebsiteRepository implements WebsiteRepository {
         return diskStore.clearCache();
     }
 
+    @NonNull
+    @Override
+    public Pair<Bitmap, Integer> getWebsiteIconAndColor(@NonNull Website website) {
+        return webNetworkStore.getWebsiteIconAndColor(website);
+    }
+
+    @NonNull
+    @Override
+    public Pair<Drawable, Integer> getWebsiteFaviconAndColor(@NonNull Website website) {
+        return webNetworkStore.getWebsiteRoundIconAndColor(website);
+    }
 }

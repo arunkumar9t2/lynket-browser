@@ -20,17 +20,27 @@ package arun.com.chromer.data.website;
 
 import android.app.Application;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.v7.graphics.Palette;
+import android.util.Pair;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import arun.com.chromer.data.website.model.WebColor;
 import arun.com.chromer.data.website.model.Website;
+import arun.com.chromer.shared.Constants;
+import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.SchedulerProvider;
+import arun.com.chromer.util.Utils;
+import arun.com.chromer.util.glide.GlideApp;
 import arun.com.chromer.util.parser.RxParser;
 import rx.Observable;
+import timber.log.Timber;
 
 /**
  * Network store which freshly parses website data for a given URL.
@@ -81,5 +91,38 @@ public class WebsiteNetworkStore implements WebsiteStore {
     @Override
     public Observable<WebColor> saveWebsiteColor(@NonNull String host, @ColorInt int color) {
         return Observable.empty();
+    }
+
+    @Override
+    public Pair<Bitmap, Integer> getWebsiteIconAndColor(@NonNull Website website) {
+        int color = Constants.NO_COLOR;
+        Bitmap icon = null;
+        try {
+            icon = GlideApp.with(context).asBitmap().load(website.faviconUrl).submit().get();
+            final Palette palette = Palette.from(icon).generate();
+            color = ColorUtil.getBestColorFromPalette(palette);
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+        return new Pair<>(icon, color);
+    }
+
+    @NonNull
+    @Override
+    public Pair<Drawable, Integer> getWebsiteRoundIconAndColor(Website website) {
+        int color = Constants.NO_COLOR;
+        Bitmap icon = null;
+        try {
+            icon = GlideApp.with(context).asBitmap().circleCrop().load(website.faviconUrl).submit().get();
+            final Palette palette = Palette.from(icon).clearFilters().generate();
+            color = ColorUtil.getBestColorFromPalette(palette);
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+        if (icon != null && Utils.isValidFavicon(icon)) {
+            return new Pair<>(new BitmapDrawable(context.getResources(), icon), color);
+        } else {
+            return new Pair<>(null, Constants.NO_COLOR);
+        }
     }
 }

@@ -28,7 +28,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,12 +41,9 @@ import android.support.customtabs.CustomTabsSession;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringConfig;
 import com.facebook.rebound.SpringSystem;
@@ -69,23 +65,23 @@ import arun.com.chromer.data.website.WebsiteRepository;
 import arun.com.chromer.data.website.model.Website;
 import arun.com.chromer.di.service.ServiceComponent;
 import arun.com.chromer.settings.Preferences;
+import arun.com.chromer.shared.Constants;
 import arun.com.chromer.tabs.DefaultTabsManager;
+import arun.com.chromer.util.SchedulerProvider;
 import arun.com.chromer.util.Utils;
-import arun.com.chromer.util.glide.GlideApp;
-import arun.com.chromer.webheads.helper.ColorExtractionTask;
 import arun.com.chromer.webheads.physics.SpringChain2D;
 import arun.com.chromer.webheads.ui.WebHeadContract;
 import arun.com.chromer.webheads.ui.context.WebHeadContextActivity;
 import arun.com.chromer.webheads.ui.views.Trashy;
 import arun.com.chromer.webheads.ui.views.WebHead;
-import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static android.os.AsyncTask.THREAD_POOL_EXECUTOR;
 import static android.support.v4.app.NotificationCompat.PRIORITY_MIN;
 import static android.widget.Toast.LENGTH_SHORT;
 import static arun.com.chromer.shared.Constants.ACTION_CLOSE_WEBHEAD_BY_URL;
@@ -193,9 +189,9 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     @Override
     public void onDestroy() {
         Timber.d("Exiting webhead service");
+        compositeSubscription.clear();
         WebHead.clearMasterPosition();
         removeWebHeads();
-        compositeSubscription.clear();
         if (customTabManager != null) {
             customTabManager.unbindCustomTabsService(this);
         }
@@ -272,42 +268,28 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     }
 
     private void doExtraction(final String webHeadUrl) {
-        final Subscription s = websiteRepository
-                .getWebsite(webHeadUrl)
-                .doOnError(Timber::e)
-                .doOnNext(webSite -> {
+        compositeSubscription.add(websiteRepository.getWebsite(webHeadUrl)
+                .filter(website -> website != null)
+                .compose(SchedulerProvider.applyIoSchedulers())
+                .doOnNext(website -> {
                     final WebHead webHead = webHeads.get(webHeadUrl);
-                    if (webHead != null && webSite != null) {
+                    if (webHead != null) {
                         warmUp(webHead);
-                        webHead.setWebsite(webSite);
+                        webHead.setWebsite(website);
                         ContextActivityHelper.signalUpdated(getApplication(), webHead.getWebsite());
-                        final String faviconUrl = webSite.faviconUrl;
-                        GlideApp.with(getApplication())
-                                .asBitmap()
-                                .load(faviconUrl)
-                                .into(new BitmapImageViewTarget(webHead.getFaviconView()) {
-                                    @Override
-                                    protected void setResource(Bitmap resource) {
-                                        if (resource != null) {
-                                            // dispatch themeColor extraction task
-                                            new ColorExtractionTask(webHead, resource).executeOnExecutor(THREAD_POOL_EXECUTOR);
-                                            webHead.setFaviconDrawable(getRoundedBitmapDrawable(resource));
-                                        }
-                                    }
-                                });
-                    } else if (webHead != null) {
-                        warmUp(webHead);
                     }
-                }).subscribe();
-        compositeSubscription.add(s);
-    }
-
-    @NonNull
-    private RoundedBitmapDrawable getRoundedBitmapDrawable(Bitmap resource) {
-        final RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), resource);
-        roundedBitmapDrawable.setAntiAlias(true);
-        roundedBitmapDrawable.setCircular(true);
-        return roundedBitmapDrawable;
+                })
+                .observeOn(Schedulers.io())
+                .map(website -> websiteRepository.getWebsiteFaviconAndColor(website))
+                .filter(faviconColor -> faviconColor.first != null && faviconColor.second != Constants.NO_COLOR)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(faviconColor -> {
+                    final WebHead webHead = webHeads.get(webHeadUrl);
+                    if (webHead != null) {
+                        webHead.setFaviconDrawable(faviconColor.first);
+                        webHead.setWebHeadColor(faviconColor.second);
+                    }
+                }, Timber::e));
     }
 
     private void bindToCustomTabSession() {

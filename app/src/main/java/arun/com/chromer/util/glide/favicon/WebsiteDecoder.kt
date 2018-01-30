@@ -38,7 +38,7 @@ import java.util.*
 
 class WebsiteDecoder(private val context: Context, private val glide: Glide) : ResourceDecoder<Website, Bitmap> {
     private val bitmapPool: BitmapPool = glide.bitmapPool
-    val size = Utils.dpToPx(48.0)
+    val size = Utils.dpToPx(56.0)
 
     private val placeholderColors = intArrayOf(
             Color.parseColor("#D32F2F"),
