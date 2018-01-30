@@ -263,7 +263,7 @@ constructor(
                 data = Uri.parse(url)
                 addFlags(FLAG_ACTIVITY_NEW_TASK)
             }
-            context.startService(webHeadLauncher)
+            ContextCompat.startForegroundService(context, webHeadLauncher)
         } else {
             openDrawOverlaySettings(context)
         }
