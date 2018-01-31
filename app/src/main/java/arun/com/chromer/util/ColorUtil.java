@@ -41,6 +41,11 @@ import static arun.com.chromer.shared.Constants.NO_COLOR;
  * Created by Arun on 12/06/2016.
  */
 public class ColorUtil {
+    /**
+     * Percentage to darken a color by when setting the status bar color.
+     */
+    private static final float DARKEN_COLOR_FRACTION = 0.6f;
+    private static final float CONTRAST_LIGHT_ITEM_THRESHOLD = 3f;
 
     public final static int[] ACCENT_COLORS = new int[]{
             Color.parseColor("#FF1744"),
@@ -173,6 +178,60 @@ public class ColorUtil {
     }
 
     /**
+     * Calculates the contrast between the given color and white, using the algorithm provided by
+     * the WCAG v2 in http://www.w3.org/TR/WCAG20/#contrast-ratiodef.
+     * <p>
+     * {@see https://chromium.googlesource.com/chromium/src/+/66.0.3335.4/chrome/android/java/src/org/chromium/chrome/browser/util/ColorUtils.java}
+     */
+    private static float getContrastForColor(int color) {
+        float bgR = Color.red(color) / 255f;
+        float bgG = Color.green(color) / 255f;
+        float bgB = Color.blue(color) / 255f;
+        bgR = (bgR < 0.03928f) ? bgR / 12.92f : (float) Math.pow((bgR + 0.055f) / 1.055f, 2.4f);
+        bgG = (bgG < 0.03928f) ? bgG / 12.92f : (float) Math.pow((bgG + 0.055f) / 1.055f, 2.4f);
+        bgB = (bgB < 0.03928f) ? bgB / 12.92f : (float) Math.pow((bgB + 0.055f) / 1.055f, 2.4f);
+        float bgL = 0.2126f * bgR + 0.7152f * bgG + 0.0722f * bgB;
+        return Math.abs((1.05f) / (bgL + 0.05f));
+    }
+
+    /**
+     * Darkens the given color to use on the status bar.
+     * <p>
+     * {@see https://chromium.googlesource.com/chromium/src/+/66.0.3335.4/chrome/android/java/src/org/chromium/chrome/browser/util/ColorUtils.java}
+     *
+     * @param color Color which should be darkened.
+     * @return Color that should be used for Android status bar.
+     */
+    public static int getDarkenedColorForStatusBar(int color) {
+        return getDarkenedColor(color, DARKEN_COLOR_FRACTION);
+    }
+
+    /**
+     * Darken a color to a fraction of its current brightness.
+     *
+     * @param color          The input color.
+     * @param darkenFraction The fraction of the current brightness the color should be.
+     * @return The new darkened color.
+     */
+    public static int getDarkenedColor(int color, float darkenFraction) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[2] *= darkenFraction;
+        return Color.HSVToColor(hsv);
+    }
+
+    /**
+     * Check whether lighter or darker foreground elements (i.e. text, drawables etc.)
+     * should be used depending on the given background color.
+     *
+     * @param backgroundColor The background color value which is being queried.
+     * @return Whether light colored elements should be used.
+     */
+    public static boolean shouldUseLightForegroundOnBackground(int backgroundColor) {
+        return getContrastForColor(backgroundColor) >= CONTRAST_LIGHT_ITEM_THRESHOLD;
+    }
+
+    /**
      * Returns white or black based on color luminance
      *
      * @param backgroundColor the color to get foreground for
@@ -180,11 +239,10 @@ public class ColorUtil {
      */
     @ColorInt
     public static int getForegroundWhiteOrBlack(@ColorInt int backgroundColor) {
-        double l = ColorUtils.calculateLuminance(backgroundColor);
-        if (l > 0.179) {
-            return Color.BLACK;
-        } else
+        if (shouldUseLightForegroundOnBackground(backgroundColor)) {
             return Color.WHITE;
+        } else
+            return Color.BLACK;
     }
 
     @NonNull
