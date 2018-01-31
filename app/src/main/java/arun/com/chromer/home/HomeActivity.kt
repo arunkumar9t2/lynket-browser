@@ -437,7 +437,7 @@ class HomeActivity : BaseActivity(), Snackable {
                     fab: FloatingActionButton
             ): ActiveFragmentsManager {
                 return if (Utils.ANDROID_LOLLIPOP) {
-                    LollipopActiveFragmentManager(supportFragmentManager, materialSearchView, appbar, fab)
+                    LollipopActiveFragmentManager(supportFragmentManager, materialSearchView, fab)
                 } else {
                     PreLollipopActiveFragmentManager(supportFragmentManager, materialSearchView, appbar, fab)
                 }
@@ -451,7 +451,6 @@ class HomeActivity : BaseActivity(), Snackable {
     class LollipopActiveFragmentManager(
             private var fm: FragmentManager,
             materialSearchView: MaterialSearchView,
-            private var appbar: AppBarLayout,
             fab: FloatingActionButton
     ) : ActiveFragmentsManager(fm, materialSearchView, fab) {
         private var tabsFragment: TabsFragment? = null
@@ -480,7 +479,6 @@ class HomeActivity : BaseActivity(), Snackable {
                     }.commit()
                 }
                 R.id.history -> {
-                    appbar.setExpanded(false)
                     hideSearch()
                     fm.beginTransaction().apply {
                         show(historyFragment)
@@ -489,7 +487,6 @@ class HomeActivity : BaseActivity(), Snackable {
                     }.commit()
                 }
                 R.id.tabs -> {
-                    appbar.setExpanded(false)
                     hideSearch()
                     fm.beginTransaction().apply {
                         show(tabsFragment)
@@ -522,7 +519,6 @@ class HomeActivity : BaseActivity(), Snackable {
                     }.commit()
                 }
                 R.id.history -> {
-                    appbar.setExpanded(false)
                     hideSearch()
                     fm.beginTransaction().apply {
                         show(historyFragment)
