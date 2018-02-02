@@ -19,6 +19,7 @@
 package arun.com.chromer.browsing.webview
 
 import android.annotation.SuppressLint
+import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -36,6 +37,7 @@ import arun.com.chromer.browsing.menu.MenuDelegate
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.extenstions.applyColor
+import arun.com.chromer.extenstions.setAutoHideProgress
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.util.ColorUtil
 import arun.com.chromer.util.Utils
@@ -47,6 +49,10 @@ import javax.inject.Inject
 class WebViewActivity : BrowsingActivity() {
     @Inject
     lateinit var menuDelegate: MenuDelegate
+
+    private var themeColor: Int = 0
+    private var fgColorStateList: ColorStateList = ColorStateList.valueOf(0)
+    private var foregroundColor: Int = 0
 
     override fun inject(activityComponent: ActivityComponent) {
         activityComponent.inject(this)
@@ -130,7 +136,6 @@ class WebViewActivity : BrowsingActivity() {
                 webViewClient = object : WebViewClient() {
                     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                         super.onPageStarted(view, url, favicon)
-                        showLoading()
                         setToolbarSubtitle(url)
                     }
 
@@ -143,6 +148,11 @@ class WebViewActivity : BrowsingActivity() {
                     override fun onReceivedTitle(view: WebView?, title: String?) {
                         super.onReceivedTitle(view, title)
                         setToolbarTitle(title)
+                    }
+
+                    override fun onProgressChanged(view: WebView?, newProgress: Int) {
+                        super.onProgressChanged(view, newProgress)
+                        setLoadingProgress(newProgress)
                     }
                 }
                 settings.javaScriptEnabled = true
@@ -168,9 +178,10 @@ class WebViewActivity : BrowsingActivity() {
         }
     }
 
-
     private fun setAppBarColor(themeColor: Int) {
-        val foregroundColor = ColorUtil.getForegroundWhiteOrBlack(themeColor)
+        this.themeColor = themeColor
+        foregroundColor = ColorUtil.getForegroundWhiteOrBlack(themeColor)
+        fgColorStateList = ColorStateList.valueOf(foregroundColor)
 
         toolbar.apply {
             setBackgroundColor(themeColor)
@@ -182,10 +193,20 @@ class WebViewActivity : BrowsingActivity() {
             }
         }
 
+        progressBar.apply {
+            useIntrinsicPadding = false
+            progressBackgroundTintList = ColorStateList.valueOf(themeColor)
+            progressTintList = ColorStateList.valueOf(foregroundColor)
+        }
+
         swipeRefreshLayout.setColorSchemeColors(themeColor, ColorUtil.getClosestAccentColor(themeColor))
         if (Utils.ANDROID_LOLLIPOP) {
             window.statusBarColor = ColorUtil.getDarkenedColorForStatusBar(themeColor)
         }
+    }
+
+    private fun setLoadingProgress(newProgress: Int) {
+        progressBar.setAutoHideProgress(newProgress, fgColorStateList)
     }
 
 

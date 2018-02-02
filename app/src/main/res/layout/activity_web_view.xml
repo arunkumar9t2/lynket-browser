@@ -39,6 +39,18 @@
             app:subtitleTextAppearance="@style/TextAppearance.AppCompat.Caption"
             app:titleTextAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
+        <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+            android:id="@+id/progressBar"
+            style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:indeterminate="false"
+            android:max="100"
+            android:min="0"
+            android:minHeight="3dp"
+            android:padding="0dp"
+            app:mpb_progressStyle="horizontal" />
+
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/activity_web_view_content" />
