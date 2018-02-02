@@ -22,9 +22,11 @@ import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.text.TextUtils
 import android.view.InflateException
 import android.view.Menu
 import android.view.MenuItem
+import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
@@ -33,6 +35,7 @@ import arun.com.chromer.browsing.BrowsingActivity
 import arun.com.chromer.browsing.menu.MenuDelegate
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
+import arun.com.chromer.extenstions.applyColor
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.util.ColorUtil
 import arun.com.chromer.util.Utils
@@ -92,11 +95,9 @@ class WebViewActivity : BrowsingActivity() {
         }
 
         val title = website.safeLabel()
-        val subtitle = website.url
-        toolbar.title = title
-        if (subtitle != title) {
-            toolbar.subtitle = subtitle
-        }
+        setToolbarTitle(title)
+
+        setToolbarSubtitle(website.url)
     }
 
     private fun setupSwipeRefresh() {
@@ -125,20 +126,28 @@ class WebViewActivity : BrowsingActivity() {
     @SuppressLint("SetJavaScriptEnabled")
     private fun setupWebView() {
         try {
-            webView.webViewClient = object : WebViewClient() {
-                override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                    super.onPageStarted(view, url, favicon)
-                    showLoading()
-                }
+            webView.apply {
+                webViewClient = object : WebViewClient() {
+                    override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                        super.onPageStarted(view, url, favicon)
+                        showLoading()
+                        setToolbarSubtitle(url)
+                    }
 
-                override fun onPageFinished(view: WebView?, url: String?) {
-                    super.onPageFinished(view, url)
-                    hideLoading()
+                    override fun onPageFinished(view: WebView?, url: String?) {
+                        super.onPageFinished(view, url)
+                        hideLoading()
+                    }
                 }
+                webChromeClient = object : WebChromeClient() {
+                    override fun onReceivedTitle(view: WebView?, title: String?) {
+                        super.onReceivedTitle(view, title)
+                        setToolbarTitle(title)
+                    }
+                }
+                settings.javaScriptEnabled = true
+                loadUrl(intent.dataString)
             }
-            val webSettings = webView!!.settings
-            webSettings.javaScriptEnabled = true
-            webView.loadUrl(intent.dataString)
 
         } catch (e: InflateException) {
             Timber.e(e)
@@ -147,12 +156,31 @@ class WebViewActivity : BrowsingActivity() {
         }
     }
 
+    private fun setToolbarTitle(title: String?) {
+        if (!TextUtils.isEmpty(title)) {
+            toolbar.title = title
+        }
+    }
+
+    private fun setToolbarSubtitle(subtitle: String?) {
+        if (!TextUtils.isEmpty(subtitle) && toolbar.title != subtitle) {
+            toolbar.subtitle = subtitle
+        }
+    }
+
 
     private fun setAppBarColor(themeColor: Int) {
         val foregroundColor = ColorUtil.getForegroundWhiteOrBlack(themeColor)
-        toolbar.setBackgroundColor(themeColor)
-        toolbar.setTitleTextColor(foregroundColor)
-        toolbar.setSubtitleTextColor(foregroundColor)
+
+        toolbar.apply {
+            setBackgroundColor(themeColor)
+            setTitleTextColor(foregroundColor)
+            setSubtitleTextColor(foregroundColor)
+            post {
+                navigationIcon = navigationIcon!!.applyColor(foregroundColor)
+                overflowIcon = overflowIcon!!.applyColor(foregroundColor)
+            }
+        }
 
         swipeRefreshLayout.setColorSchemeColors(themeColor, ColorUtil.getClosestAccentColor(themeColor))
         if (Utils.ANDROID_LOLLIPOP) {

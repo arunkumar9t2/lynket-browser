@@ -20,8 +20,10 @@ package arun.com.chromer.extenstions
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.PorterDuff
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.support.annotation.ColorInt
 
 /**
  * Created by arunk on 01-12-2017.
@@ -42,3 +44,8 @@ fun Drawable.toBitmap(): Bitmap {
     draw(canvas)
     return bitmap
 }
+
+/**
+ * Applies given @param color on a new [Drawable] and returns it.
+ */
+fun Drawable.applyColor(@ColorInt color: Int): Drawable = this.mutate().apply { setColorFilter(color, PorterDuff.Mode.SRC_ATOP) }
