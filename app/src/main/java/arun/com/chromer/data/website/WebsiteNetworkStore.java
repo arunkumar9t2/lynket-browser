@@ -26,6 +26,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.v7.graphics.Palette;
+import android.text.TextUtils;
 import android.util.Pair;
 
 import javax.inject.Inject;
@@ -109,7 +110,11 @@ public class WebsiteNetworkStore implements WebsiteStore {
 
     @NonNull
     @Override
-    public Pair<Drawable, Integer> getWebsiteRoundIconAndColor(Website website) {
+    public Pair<Drawable, Integer> getWebsiteRoundIconAndColor(@NonNull Website website) {
+        if (TextUtils.isEmpty(website.faviconUrl)) {
+            return new Pair<>(null, Constants.NO_COLOR);
+        }
+
         int color = Constants.NO_COLOR;
         Bitmap icon = null;
         try {
