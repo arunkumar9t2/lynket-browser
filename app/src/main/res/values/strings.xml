@@ -315,4 +315,5 @@
     <string name="article_bullet_point" translatable="false">•</string>
     <string name="keywords">Keywords</string>
     <string name="feature_requires_lollipop">This feature requires Android Lollipop</string>
+    <string name="article_loading_failed">Could not extract article.</string>
 </resources>

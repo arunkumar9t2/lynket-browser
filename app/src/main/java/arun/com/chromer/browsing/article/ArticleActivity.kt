@@ -21,6 +21,8 @@ package arun.com.chromer.browsing.article
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import arun.com.chromer.R
 import arun.com.chromer.browsing.customtabs.CustomTabActivity
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
@@ -42,6 +44,7 @@ class ArticleActivity : BaseArticleActivity() {
         // Loading failed, try to go back to normal url tab if it exists, else start a new normal
         // rendering tab.
         finish()
+        Toast.makeText(this, R.string.article_loading_failed, Toast.LENGTH_SHORT).show()
         tabsManager.openBrowsingTab(this, Website(intent.dataString), true, false, CustomTabActivity::class.java.name)
     }
 
