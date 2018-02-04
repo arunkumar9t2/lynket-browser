@@ -38,7 +38,6 @@ import com.mikepenz.iconics.IconicsDrawable;
 import java.util.ArrayList;
 import java.util.List;
 
-import arun.com.chromer.BuildConfig;
 import arun.com.chromer.R;
 import arun.com.chromer.payments.billing.IabBroadcastReceiver;
 import arun.com.chromer.payments.billing.IabHelper;
@@ -122,7 +121,7 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
         setContentView(R.layout.activity_donate);
 
         // compute your public key and store it in base64EncodedPublicKey
-        mHelper = new IabHelper(this, BuildConfig.BASE_64);
+        mHelper = new IabHelper(this, getString(R.string.playLicenseKey));
 
         // enable debug logging (for a production application, you should set this to false).
         mHelper.enableDebugLogging(false);

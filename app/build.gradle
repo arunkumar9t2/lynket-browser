@@ -22,6 +22,14 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'io.fabric'
 
+// Read from properties
+def PLAY_LICENSE_KEY = "PLAY_LICENSE_KEY"
+def FABRIC_KEY = "FABRIC_KEY"
+def properties = new Properties()
+properties.load(new FileInputStream("values.properties"))
+def playLicenseKey = properties.getProperty(PLAY_LICENSE_KEY, "\"\"")
+def fabricKey = properties.getProperty(FABRIC_KEY, "\"\"")
+
 buildscript {
     repositories {
         maven { url 'https://maven.fabric.io/public' }
@@ -29,7 +37,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.25.1'
+        classpath 'io.fabric.tools:gradle:+'
     }
 }
 repositories {
@@ -47,8 +55,8 @@ android {
         versionCode 40
         versionName "2.0 - Beta 3"
 
-        buildConfigField "String", "BASE_64", getBase64()
-        manifestPlaceholders = [crashlyticsApiKey: getFabricKey()]
+        resValue "string", "playLicenseKey", "$playLicenseKey"
+        resValue "string", "crashlyticsApiKey", "$fabricKey"
 
         vectorDrawables.useSupportLibrary = true
 
@@ -193,24 +201,4 @@ dependencies {
 
     // Disk LRU cache
     implementation project(':disk-cache')
-}
-
-static def getBase64() {
-    try {
-        Properties properties = new Properties()
-        properties.load(new FileInputStream("values.properties"))
-        return "\"" + properties.getProperty("BASE_64") + "\""
-    } catch (Exception ignored) {
-        return "\"\""
-    }
-}
-
-static def getFabricKey() {
-    try {
-        Properties properties = new Properties()
-        properties.load(new FileInputStream("values.properties"))
-        return properties.getProperty("FABRIC_KEY")
-    } catch (Exception ignored) {
-        return "\"\""
-    }
 }

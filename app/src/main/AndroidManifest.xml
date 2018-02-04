@@ -281,8 +281,7 @@
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="${crashlyticsApiKey}"
-            tools:replace="android:value" />
+            android:value="@string/crashlyticsApiKey" />
         <meta-data
             android:name="arun.com.chromer.util.glide.ChromerGlideModule"
             android:value="GlideModule" />
