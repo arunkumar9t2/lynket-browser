@@ -18,35 +18,90 @@
 
 package arun.com.chromer.browsing
 
+import android.annotation.TargetApi
+import android.app.ActivityManager
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.os.Build
 import arun.com.chromer.data.Result
 import arun.com.chromer.data.website.WebsiteRepository
 import arun.com.chromer.data.website.model.Website
+import arun.com.chromer.settings.Preferences
+import arun.com.chromer.shared.Constants
+import arun.com.chromer.util.SchedulerProvider
+import arun.com.chromer.util.Utils
 import rx.Observable
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
-import rx.subjects.BehaviorSubject
+import rx.subjects.PublishSubject
 import rx.subscriptions.CompositeSubscription
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
- * A simple view model delivering a {@link Website} from repo.
+ * A simple view model delivering a {@link Website} from repo and handling related tasks.
  */
+@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 class BrowsingViewModel
 @Inject
-constructor(private val websiteRepository: WebsiteRepository) : ViewModel() {
+constructor(
+        private val preferences: Preferences,
+        private val websiteRepository: WebsiteRepository
+) : ViewModel() {
     private val subs = CompositeSubscription()
-    private val webSiteSubject = BehaviorSubject.create<Result<Website>>(Result.Idle())
 
-    fun loadWebSiteDetails(url: String): Observable<Result<Website>> {
-        if (webSiteSubject.value is Result.Idle<Website>) {
-            subs.add(websiteRepository.getWebsite(url)
-                    .compose(Result.applyToObservable())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(webSiteSubject))
-        }
-        return webSiteSubject
+    private val websiteQueue = PublishSubject.create<String>()
+    private val taskDescriptionQueue = PublishSubject.create<Website>()
+
+    val toolbarColor = MutableLiveData<Int>()
+    val websiteLiveData = MutableLiveData<Result<Website>>()
+    val activityDescription = MutableLiveData<ActivityManager.TaskDescription>()
+
+    init {
+        // Monitor website requests
+        subs.add(websiteQueue.filter { it.isNotEmpty() }
+                .switchMap { url -> websiteRepository.getWebsite(url).compose(Result.applyToObservable()) }
+                .compose(SchedulerProvider.applyIoSchedulers())
+                .doOnError(Timber::e)
+                .subscribe({ result ->
+                    websiteLiveData.value = result
+                    if (result is Result.Success) {
+                        taskDescriptionQueue.onNext(result.data!!)
+                    }
+                }))
+
+        // Set task descriptions
+        subs.add(taskDescriptionQueue
+                .concatMap { website ->
+                    return@concatMap Observable.just(website)
+                            .map {
+                                return@map if (Utils.ANDROID_LOLLIPOP) {
+                                    ActivityManager.TaskDescription(website.safeLabel(), null, toolbarColor.value!!)
+                                } else {
+                                    null
+                                }
+                            }.doOnNext { setTaskDescription(it) }
+                            .map {
+                                val iconColor = websiteRepository.getWebsiteIconWithPlaceholderAndColor(website)
+                                val selectedToolbarColor = when {
+                                    !preferences.dynamiceToolbarEnabledAndWebEnabled() -> toolbarColor.value!!
+                                    website.themeColor() != Constants.NO_COLOR -> website.themeColor()
+                                    else -> iconColor.second
+                                }
+                                return@map if (Utils.ANDROID_LOLLIPOP) {
+                                    ActivityManager.TaskDescription(website.safeLabel(), iconColor.first, selectedToolbarColor)
+                                } else null
+                            }.doOnNext { setTaskDescription(it) }
+                            .doOnError(Timber::e)
+                            .compose(SchedulerProvider.applyIoSchedulers())
+                }.subscribe())
+    }
+
+    private fun setTaskDescription(task: ActivityManager.TaskDescription?) {
+        task?.let { toolbarColor.postValue(task.primaryColor) }
+        activityDescription.postValue(task)
+    }
+
+    fun loadWebSiteDetails(url: String) {
+        websiteQueue.onNext(url)
     }
 
     override fun onCleared() {

@@ -19,6 +19,8 @@
 package arun.com.chromer.shortcuts
 
 import android.app.Activity
+import android.arch.lifecycle.LifecycleOwner
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.content.DialogInterface
@@ -43,6 +45,7 @@ import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.show
 import arun.com.chromer.extenstions.toBitmap
+import arun.com.chromer.extenstions.watch
 import arun.com.chromer.shared.base.activity.BaseActivity
 import arun.com.chromer.util.glide.GlideApp
 import arun.com.chromer.util.glide.appicon.ApplicationIcon
@@ -54,7 +57,6 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.internal.MDButton
 import com.bumptech.glide.request.target.ImageViewTarget
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar
-import rx.Observable
 import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
 
@@ -66,7 +68,7 @@ class HomeScreenShortcutCreatorActivity : BaseActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private var shortcutViewModel: BrowsingViewModel? = null
+    private lateinit var shortcutViewModel: BrowsingViewModel
     private var shortcutDialog: MaterialDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,8 +77,9 @@ class HomeScreenShortcutCreatorActivity : BaseActivity() {
         if (intent?.dataString != null) {
             shortcutViewModel = ViewModelProviders.of(this, viewModelFactory).get(BrowsingViewModel::class.java)
 
-            val webSiteObservable = shortcutViewModel!!.loadWebSiteDetails(intent.dataString)
-            shortcutDialog = AddShortcutDialog(this, webSiteObservable).show()
+            shortcutDialog = AddShortcutDialog(this, shortcutViewModel.websiteLiveData).show()
+
+            shortcutViewModel.loadWebSiteDetails(intent.dataString)
         } else {
             finish()
         }
@@ -89,7 +92,7 @@ class HomeScreenShortcutCreatorActivity : BaseActivity() {
 
     class AddShortcutDialog(
             private var activity: Activity?,
-            private val websiteObservable: Observable<Result<Website>>
+            private val websiteLiveData: MutableLiveData<Result<Website>>
     ) : DialogInterface.OnDismissListener, TextWatcher {
         private lateinit var unbinder: Unbinder
         private var dialog: MaterialDialog? = null
@@ -143,7 +146,7 @@ class HomeScreenShortcutCreatorActivity : BaseActivity() {
             shortcutName?.addTextChangedListener(this)
             positiveButton?.isEnabled = false
 
-            subs.add(websiteObservable.subscribe {
+            websiteLiveData.watch(activity as LifecycleOwner, {
                 when (it) {
                     is Result.Loading<Website> -> {
                         progressBar?.show()
@@ -166,7 +169,6 @@ class HomeScreenShortcutCreatorActivity : BaseActivity() {
                     }
                 }
             })
-
             return dialog
         }
 

@@ -95,15 +95,14 @@ class WebViewActivity : BrowsingActivity() {
     }
 
     override fun onWebsiteLoaded(website: Website) {
-        val themeColor = website.themeColor()
-        if (themeColor != Constants.NO_COLOR && preferences.dynamiceToolbarEnabledAndWebEnabled()) {
-            setAppBarColor(themeColor)
-        }
-
         val title = website.safeLabel()
         setToolbarTitle(title)
-
         setToolbarSubtitle(website.url)
+    }
+
+    override fun onToolbarColorSet(websiteThemeColor: Int) {
+        super.onToolbarColorSet(websiteThemeColor)
+        setAppBarColor(websiteThemeColor)
     }
 
     private fun setupSwipeRefresh() {
@@ -136,7 +135,10 @@ class WebViewActivity : BrowsingActivity() {
                 webViewClient = object : WebViewClient() {
                     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                         super.onPageStarted(view, url, favicon)
-                        setToolbarSubtitle(url)
+                        url?.let {
+                            setToolbarSubtitle(url)
+                            loadWebsiteDetails(url)
+                        }
                     }
 
                     override fun onPageFinished(view: WebView?, url: String?) {

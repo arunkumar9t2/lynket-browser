@@ -49,6 +49,8 @@ import static arun.com.chromer.shared.Constants.NO_COLOR;
  */
 @Singleton
 public class WebsiteDiskStore implements WebsiteStore, BookStore {
+    public static final Pair<Bitmap, Integer> EMPTY_ICON_COLOR_PAIR = new Pair<>(null, Constants.NO_COLOR);
+    public static final Pair<Drawable, Integer> EMPTY_DRAWABLE_PAIR = new Pair<>(null, Constants.NO_COLOR);
     private final Context context;
     // Cache to store our data.
     private ParcelDiskCache<Website> webSiteDiskCache;
@@ -150,12 +152,18 @@ public class WebsiteDiskStore implements WebsiteStore, BookStore {
 
     @Override
     public Pair<Bitmap, Integer> getWebsiteIconAndColor(@NonNull Website website) {
-        return new Pair<>(null, Constants.NO_COLOR);
+        return EMPTY_ICON_COLOR_PAIR;
     }
 
     @NonNull
     @Override
     public Pair<Drawable, Integer> getWebsiteRoundIconAndColor(Website website) {
-        return new Pair<>(null, Constants.NO_COLOR);
+        return EMPTY_DRAWABLE_PAIR;
+    }
+
+    @NonNull
+    @Override
+    public Pair<Bitmap, Integer> getWebsiteIconWithPlaceholderAndColor(Website website) {
+        return EMPTY_ICON_COLOR_PAIR;
     }
 }

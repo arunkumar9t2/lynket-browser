@@ -87,6 +87,10 @@ public class DefaultWebsiteRepository implements WebsiteRepository {
         return Observable.concat(cache, history, remote)
                 .first(webSite -> webSite != null)
                 .doOnError(Timber::e)
+                .onErrorReturn(throwable -> {
+                    Timber.e(throwable);
+                    return new Website(url);
+                })
                 .compose(SchedulerProvider.applyIoSchedulers());
     }
 
@@ -138,7 +142,13 @@ public class DefaultWebsiteRepository implements WebsiteRepository {
 
     @NonNull
     @Override
-    public Pair<Drawable, Integer> getWebsiteFaviconAndColor(@NonNull Website website) {
+    public Pair<Drawable, Integer> getWebsiteRoundIconAndColor(@NonNull Website website) {
         return webNetworkStore.getWebsiteRoundIconAndColor(website);
+    }
+
+    @NonNull
+    @Override
+    public Pair<Bitmap, Integer> getWebsiteIconWithPlaceholderAndColor(@NonNull Website website) {
+        return webNetworkStore.getWebsiteIconWithPlaceholderAndColor(website);
     }
 }

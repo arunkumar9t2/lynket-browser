@@ -96,6 +96,9 @@ public class WebsiteNetworkStore implements WebsiteStore {
 
     @Override
     public Pair<Bitmap, Integer> getWebsiteIconAndColor(@NonNull Website website) {
+        if (TextUtils.isEmpty(website.faviconUrl)) {
+            return new Pair<>(null, Constants.NO_COLOR);
+        }
         int color = Constants.NO_COLOR;
         Bitmap icon = null;
         try {
@@ -114,7 +117,6 @@ public class WebsiteNetworkStore implements WebsiteStore {
         if (TextUtils.isEmpty(website.faviconUrl)) {
             return new Pair<>(null, Constants.NO_COLOR);
         }
-
         int color = Constants.NO_COLOR;
         Bitmap icon = null;
         try {
@@ -129,5 +131,20 @@ public class WebsiteNetworkStore implements WebsiteStore {
         } else {
             return new Pair<>(null, Constants.NO_COLOR);
         }
+    }
+
+    @NonNull
+    @Override
+    public Pair<Bitmap, Integer> getWebsiteIconWithPlaceholderAndColor(@NonNull Website website) {
+        int color = Constants.NO_COLOR;
+        Bitmap icon = null;
+        try {
+            icon = GlideApp.with(context).asBitmap().load(website).submit().get();
+            final Palette palette = Palette.from(icon).generate();
+            color = ColorUtil.getBestColorFromPalette(palette);
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+        return new Pair<>(icon, color);
     }
 }

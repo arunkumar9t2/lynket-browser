@@ -28,7 +28,6 @@ import android.content.Intent
 import android.content.Intent.*
 import android.net.Uri
 import android.os.Build
-import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.support.annotation.ColorInt
@@ -52,10 +51,7 @@ import arun.com.chromer.settings.Preferences
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.shared.Constants.NO_COLOR
 import arun.com.chromer.tabs.ui.TabsActivity
-import arun.com.chromer.util.DocumentUtils
-import arun.com.chromer.util.RxEventBus
-import arun.com.chromer.util.SafeIntent
-import arun.com.chromer.util.Utils
+import arun.com.chromer.util.*
 import arun.com.chromer.util.Utils.openDrawOverlaySettings
 import arun.com.chromer.webheads.WebHeadService
 import com.afollestad.materialdialogs.MaterialDialog
@@ -234,7 +230,7 @@ constructor(
 
         if (!reordered) {
             val canSafelyOpenCCT = CustomTabs.getCustomTabSupportingPackages(context).isNotEmpty()
-            val isIncognito = preferences.incognitoMode() && false // Disable auto revert to webview for now.
+            val isIncognito = preferences.incognitoMode() && true // Disable auto revert to webview for now.
 
             val browsingActivity = if (!isIncognito && canSafelyOpenCCT) {
                 Intent(context, CustomTabActivity::class.java)
@@ -448,24 +444,5 @@ constructor(
                     activity.startActivity(chromerIntent)
                 }
                 .dismissListener({ activity.finish() }).show()
-    }
-
-    /**
-     * Adapter to let us implement only what's needed from the interface.
-     */
-    open class ActivityLifeCycleCallbackAdapter : Application.ActivityLifecycleCallbacks {
-        override fun onActivityPaused(activity: Activity?) {}
-
-        override fun onActivityResumed(activity: Activity?) {}
-
-        override fun onActivityStarted(activity: Activity?) {}
-
-        override fun onActivityDestroyed(activity: Activity?) {}
-
-        override fun onActivitySaveInstanceState(activity: Activity?, bundle: Bundle?) {}
-
-        override fun onActivityStopped(activity: Activity?) {}
-
-        override fun onActivityCreated(activity: Activity?, bundle: Bundle?) {}
     }
 }

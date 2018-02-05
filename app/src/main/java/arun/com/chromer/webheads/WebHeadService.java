@@ -280,7 +280,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
                     }
                 })
                 .observeOn(Schedulers.io())
-                .map(website -> websiteRepository.getWebsiteFaviconAndColor(website))
+                .map(website -> websiteRepository.getWebsiteRoundIconAndColor(website))
                 .filter(faviconColor -> faviconColor.first != null && faviconColor.second != Constants.NO_COLOR)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(faviconColor -> {

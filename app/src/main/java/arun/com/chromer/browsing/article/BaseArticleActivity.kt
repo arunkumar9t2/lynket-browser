@@ -222,7 +222,7 @@ abstract class BaseArticleActivity : BrowsingActivity() {
         }
     }
 
-    override fun onTaskColorSet(websiteThemeColor: Int) {
+    override fun onToolbarColorSet(websiteThemeColor: Int) {
     }
 
     private fun hideLoading() {

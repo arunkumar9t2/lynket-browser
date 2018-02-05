@@ -51,4 +51,7 @@ public interface WebsiteStore {
 
     @NonNull
     Pair<Drawable, Integer> getWebsiteRoundIconAndColor(Website website);
+
+    @NonNull
+    Pair<Bitmap, Integer> getWebsiteIconWithPlaceholderAndColor(Website website);
 }

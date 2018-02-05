@@ -48,5 +48,8 @@ public interface WebsiteRepository {
     Pair<Bitmap, Integer> getWebsiteIconAndColor(@NonNull Website website);
 
     @NonNull
-    Pair<Drawable, Integer> getWebsiteFaviconAndColor(@NonNull Website website);
+    Pair<Drawable, Integer> getWebsiteRoundIconAndColor(@NonNull Website website);
+
+    @NonNull
+    Pair<Bitmap, Integer> getWebsiteIconWithPlaceholderAndColor(@NonNull Website website);
 }
