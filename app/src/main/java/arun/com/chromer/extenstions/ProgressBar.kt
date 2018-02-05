@@ -39,7 +39,7 @@ fun MaterialProgressBar.setAutoHideProgress(newProgress: Int, tint: ColorStateLi
         progress = newProgress
     }
     val transparentTint = ColorStateList.valueOf(Color.TRANSPARENT)
-    if (newProgress == 100) {
+    if (newProgress >= 99) {
         postDelayed({ progressTintList = transparentTint }, 200)
     } else if (progressTintList != tint) {
         progressTintList = tint
