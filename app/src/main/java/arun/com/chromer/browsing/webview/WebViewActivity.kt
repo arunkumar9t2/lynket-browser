@@ -69,6 +69,10 @@ class WebViewActivity : BrowsingActivity() {
         setupWebView()
     }
 
+    override fun getCurrentUrl(): String {
+        return if (webView.url != null) webView.url else super.getCurrentUrl()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         return menuDelegate.createOptionsMenu(menu)
     }
@@ -125,7 +129,6 @@ class WebViewActivity : BrowsingActivity() {
         }
         val toolbarColor = intent.getIntExtra(Constants.EXTRA_KEY_TOOLBAR_COLOR, 0)
         setAppBarColor(toolbarColor)
-
     }
 
     @SuppressLint("SetJavaScriptEnabled")

@@ -22,6 +22,7 @@ import android.annotation.SuppressLint
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import arun.com.chromer.R
@@ -47,7 +48,7 @@ abstract class BrowsingActivity : BaseActivity() {
     @Inject
     lateinit var preferences: Preferences
 
-    private lateinit var browsingViewModel: BrowsingViewModel
+    protected lateinit var browsingViewModel: BrowsingViewModel
 
     protected var website: Website? = null
 
@@ -65,7 +66,7 @@ abstract class BrowsingActivity : BaseActivity() {
         setupMinimize()
     }
 
-    fun getCurrentUrl(): String {
+    open fun getCurrentUrl(): String {
         return intent.dataString
     }
 
@@ -102,9 +103,13 @@ abstract class BrowsingActivity : BaseActivity() {
             })
 
             if (savedInstanceState == null) {
-                val websiteResult = Result.Success<Website>(intent.getParcelableExtra(Constants.EXTRA_KEY_WEBSITE))
+                val websiteResult = Result.Success(intent.getParcelableExtra(Constants.EXTRA_KEY_WEBSITE)
+                        ?: Website(getCurrentUrl()))
                 websiteLiveData.value = websiteResult
-                toolbarColor.value = intent.getIntExtra(Constants.EXTRA_KEY_TOOLBAR_COLOR, Constants.NO_COLOR)
+                toolbarColor.value = intent.getIntExtra(
+                        Constants.EXTRA_KEY_TOOLBAR_COLOR,
+                        ContextCompat.getColor(this@BrowsingActivity, R.color.colorPrimary)
+                )
             }
             loadWebSiteDetails(getCurrentUrl())
         }

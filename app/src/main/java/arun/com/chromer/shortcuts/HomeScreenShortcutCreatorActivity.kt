@@ -21,8 +21,6 @@ package arun.com.chromer.shortcuts
 import android.app.Activity
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.drawable.Drawable
@@ -37,7 +35,7 @@ import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.ImageView
 import arun.com.chromer.R
-import arun.com.chromer.browsing.BrowsingViewModel
+import arun.com.chromer.browsing.BrowsingActivity
 import arun.com.chromer.browsing.browserintercept.BrowserInterceptActivity
 import arun.com.chromer.data.Result
 import arun.com.chromer.data.website.model.Website
@@ -46,7 +44,6 @@ import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.show
 import arun.com.chromer.extenstions.toBitmap
 import arun.com.chromer.extenstions.watch
-import arun.com.chromer.shared.base.activity.BaseActivity
 import arun.com.chromer.util.glide.GlideApp
 import arun.com.chromer.util.glide.appicon.ApplicationIcon
 import butterknife.BindView
@@ -58,31 +55,19 @@ import com.afollestad.materialdialogs.internal.MDButton
 import com.bumptech.glide.request.target.ImageViewTarget
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar
 import rx.subscriptions.CompositeSubscription
-import javax.inject.Inject
 
 
-class HomeScreenShortcutCreatorActivity : BaseActivity() {
+class HomeScreenShortcutCreatorActivity : BrowsingActivity() {
     override fun getLayoutRes(): Int = 0
     override fun inject(activityComponent: ActivityComponent) = activityComponent.inject(this)
+    override fun onWebsiteLoaded(website: Website) {
+    }
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    private lateinit var shortcutViewModel: BrowsingViewModel
     private var shortcutDialog: MaterialDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        if (intent?.dataString != null) {
-            shortcutViewModel = ViewModelProviders.of(this, viewModelFactory).get(BrowsingViewModel::class.java)
-
-            shortcutDialog = AddShortcutDialog(this, shortcutViewModel.websiteLiveData).show()
-
-            shortcutViewModel.loadWebSiteDetails(intent.dataString)
-        } else {
-            finish()
-        }
+        shortcutDialog = AddShortcutDialog(this, browsingViewModel.websiteLiveData).show()
     }
 
     override fun onDestroy() {
