@@ -23,6 +23,7 @@ import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.view.View
 import android.view.ViewAnimationUtils
+import android.view.ViewGroup
 import arun.com.chromer.util.Utils
 
 fun View.show() {
@@ -93,4 +94,13 @@ fun View.circularRevealWithSelfCenter(done: (() -> Unit)? = null) {
             start()
         }
     } else show()
+}
+
+
+fun View.children(): ArrayList<View> {
+    val children = ArrayList<View>()
+    if (this is ViewGroup) {
+        (0 until childCount).mapTo(children) { getChildAt(it) }
+    }
+    return children
 }

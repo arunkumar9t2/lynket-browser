@@ -81,13 +81,6 @@
 
             </android.support.design.widget.AppBarLayout>
 
-            <View
-                android:id="@+id/bottomNavigationBackground"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="@color/article_windowBackground" />
-
             <it.sephiroth.android.library.bottomnavigation.BottomNavigation
                 android:id="@+id/bottomNavigation"
                 android:layout_width="match_parent"

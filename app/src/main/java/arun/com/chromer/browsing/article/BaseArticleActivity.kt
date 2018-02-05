@@ -39,6 +39,7 @@ import arun.com.chromer.data.Result
 import arun.com.chromer.data.webarticle.model.WebArticle
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.extenstions.gone
+import arun.com.chromer.extenstions.setMenuBackgroundColor
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.settings.Preferences.*
 import arun.com.chromer.shared.Constants
@@ -98,14 +99,10 @@ abstract class BaseArticleActivity : BrowsingActivity() {
 
 
     private fun setupBottombar() {
+        bottomNavigation.setMenuBackgroundColor(ContextCompat.getColor(this, R.color.article_windowBackground))
+
         if (preferences.bottomBar()) {
             bottomNavigation.apply {
-                post {
-                    bottomNavigationBackground.apply {
-                        bottomNavigationBackground.layoutParams.height = bottomNavigation.height - bottomNavigation.shadowHeight
-                        requestLayout()
-                    }
-                }
                 setSelectedIndex(-1, false)
                 setOnMenuItemClickListener(object : BottomNavigation.OnMenuItemSelectionListener {
                     override fun onMenuItemSelect(itemId: Int, position: Int, fromUser: Boolean) {
@@ -119,7 +116,6 @@ abstract class BaseArticleActivity : BrowsingActivity() {
             }
         } else {
             bottomNavigation.gone()
-            bottomNavigationBackground.gone()
         }
     }
 
@@ -127,7 +123,7 @@ abstract class BaseArticleActivity : BrowsingActivity() {
         val theme = preferences.articleTheme()
         if (theme == Preferences.THEME_BLACK) {
             coordinatorLayout.background = ColorDrawable(Color.BLACK)
-            bottomNavigationBackground.background = ColorDrawable(Color.BLACK)
+            bottomNavigation.setMenuBackgroundColor(Color.BLACK)
         }
     }
 
