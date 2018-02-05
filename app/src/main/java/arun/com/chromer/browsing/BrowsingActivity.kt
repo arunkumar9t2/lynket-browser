@@ -50,7 +50,7 @@ abstract class BrowsingActivity : BaseActivity() {
 
     protected lateinit var browsingViewModel: BrowsingViewModel
 
-    protected var website: Website? = null
+    var website: Website? = null
 
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {

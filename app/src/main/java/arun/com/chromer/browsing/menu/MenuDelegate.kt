@@ -34,6 +34,7 @@ import arun.com.chromer.browsing.customtabs.callbacks.CopyToClipboardService
 import arun.com.chromer.browsing.customtabs.callbacks.FavShareBroadcastReceiver
 import arun.com.chromer.browsing.customtabs.callbacks.SecondaryBrowserReceiver
 import arun.com.chromer.browsing.openwith.OpenIntentWithActivity
+import arun.com.chromer.browsing.webview.WebViewActivity
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.scopes.PerActivity
 import arun.com.chromer.history.HistoryActivity
@@ -65,8 +66,11 @@ class MenuDelegate @Inject constructor(
         get() = (activity as BrowsingActivity).getCurrentUrl()
     private val currentUri: Uri
         get() = Uri.parse(currentUrl)
+    private val website: Website
+        get() = (activity as BrowsingActivity).website ?: Website(currentUrl)
 
     private val isArticle = activity is ArticleActivity
+    private val isWebview = activity is WebViewActivity
 
     fun createOptionsMenu(menu: Menu): Boolean {
         with(menu) {
@@ -85,8 +89,9 @@ class MenuDelegate @Inject constructor(
             add(0, R.id.menu_share_with, Menu.NONE, "")
             add(0, R.id.menu_history, Menu.NONE, R.string.title_history)
             add(0, R.id.menu_add_to_home_screen, Menu.NONE, R.string.add_to_homescreen)
-            if (!preferences.bottomBar() && Utils.ANDROID_LOLLIPOP) {
-                add(0, R.id.tabs, Menu.NONE, R.string.title_tabs)
+            if (!preferences.bottomBar()) {
+                if (Utils.ANDROID_LOLLIPOP) add(0, R.id.tabs, Menu.NONE, R.string.title_tabs)
+                if (isWebview) add(0, R.id.bottom_bar_article_view, Menu.NONE, R.string.article_mode)
             }
         }
         return true
@@ -150,12 +155,13 @@ class MenuDelegate @Inject constructor(
 
     fun handleItemSelected(itemId: Int): Boolean {
         when (itemId) {
-            R.id.menu_open_full_page -> tabsManager.openBrowsingTab(activity, Website(currentUrl), true, false, CustomTabActivity::class.java.name)
+            R.id.menu_open_full_page -> tabsManager.openBrowsingTab(activity, website, true, false, CustomTabActivity::class.java.name)
             android.R.id.home -> activity.finish()
             R.id.bottom_bar_open_in_new_tab -> tabsManager.openNewTab(activity, currentUrl)
             R.id.bottom_bar_share -> shareUrl()
             R.id.bottom_bar_tabs, R.id.tabs -> tabsManager.showTabsActivity()
             R.id.bottom_bar_minimize_tab -> tabsManager.minimizeTabByUrl(currentUrl)
+            R.id.bottom_bar_article_view -> tabsManager.openArticle(activity, website, false)
             R.id.menu_action_button -> when (preferences.preferredAction()) {
                 PREFERRED_ACTION_BROWSER -> activity.sendBroadcast(Intent(activity, SecondaryBrowserReceiver::class.java).setData(currentUri))
                 PREFERRED_ACTION_FAV_SHARE -> activity.sendBroadcast(Intent(activity, FavShareBroadcastReceiver::class.java).setData(currentUri))
