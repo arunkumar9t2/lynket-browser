@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Chromer
+  ~ Copyright (C) 2017 Arunkumar
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:bbn_alwaysShowLabels="true"
+    app:bbn_itemColorActive="@color/md_white_1000"
+    app:bbn_itemColorInactive="@color/md_white_1000">
+    <item
+        android:id="@+id/bottom_bar_open_in_new_tab"
+        android:icon="@drawable/ic_plus_24dp"
+        android:title="@string/new_tab_text" />
+    <item
+        android:id="@+id/bottom_bar_share"
+        android:icon="@drawable/ic_share_24dp"
+        android:title="@string/share" />
+    <item
+        android:id="@+id/bottom_bar_tabs"
+        android:icon="@drawable/ic_tab_24dp"
+        android:title="@string/title_tabs" />
+    <item
+        android:id="@+id/bottom_bar_minimize_tab"
+        android:icon="@drawable/ic_arrow_down_24dp"
+        android:title="@string/minimize" />
+    <item
+        android:id="@+id/bottom_bar_article_view"
+        android:icon="@drawable/ic_article_24dp"
+        android:title="@string/article_mode" />
+</menu>

@@ -23,6 +23,6 @@ import it.sephiroth.android.library.bottomnavigation.FixedLayout
 
 fun BottomNavigation.setMenuBackgroundColor(color: Int) {
     post {
-        this.children().filter { it is FixedLayout }[0].setBackgroundColor(color)
+        children().first { it is FixedLayout }.setBackgroundColor(color)
     }
 }

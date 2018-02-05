@@ -76,7 +76,7 @@ public class BottomBarManager {
 
         if (articleDrawable == null) {
             articleDrawable = new IconicsDrawable(context)
-                    .icon(CommunityMaterial.Icon.cmd_file_image)
+                    .icon(CommunityMaterial.Icon.cmd_file_document)
                     .sizeDp(24);
         }
 

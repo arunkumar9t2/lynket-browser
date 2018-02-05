@@ -147,7 +147,7 @@ constructor(
                     ARTICLE -> {
                         websiteTabMode?.setText(R.string.article_mode)
                         websiteTabModeIcon?.setImageDrawable(IconicsDrawable(itemView.context)
-                                .icon(CommunityMaterial.Icon.cmd_file_image)
+                                .icon(CommunityMaterial.Icon.cmd_file_document)
                                 .color(ContextCompat.getColor(itemView.context, R.color.md_grey_700))
                                 .sizeDp(16))
                     }

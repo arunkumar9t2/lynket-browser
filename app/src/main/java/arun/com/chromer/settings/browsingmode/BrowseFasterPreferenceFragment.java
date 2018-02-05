@@ -62,7 +62,7 @@ public class BrowseFasterPreferenceFragment extends BasePreferenceFragment imple
         articleModePreference = (IconSwitchPreference) findPreference(Preferences.ARTICLE_MODE);
         if (articleModePreference != null) {
             final Drawable articleImg = new IconicsDrawable(getActivity())
-                    .icon(CommunityMaterial.Icon.cmd_file_image)
+                    .icon(CommunityMaterial.Icon.cmd_file_document)
                     .color(ContextCompat.getColor(getActivity(), R.color.android_green))
                     .sizeDp(24);
             articleModePreference.setIcon(articleImg);

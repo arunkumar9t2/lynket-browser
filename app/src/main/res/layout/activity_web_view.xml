@@ -55,4 +55,11 @@
 
     <include layout="@layout/activity_web_view_content" />
 
+    <it.sephiroth.android.library.bottomnavigation.BottomNavigation
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:bbn_entries="@menu/browsing_web_view_bottom_navigation_menu"
+        app:layout_behavior="@string/bbn_phone_view_behavior" />
 </android.support.design.widget.CoordinatorLayout>

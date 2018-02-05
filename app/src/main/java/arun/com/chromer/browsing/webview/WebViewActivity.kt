@@ -21,6 +21,7 @@ package arun.com.chromer.browsing.webview
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.text.TextUtils
@@ -38,6 +39,7 @@ import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.extenstions.applyColor
 import arun.com.chromer.extenstions.setAutoHideProgress
+import arun.com.chromer.extenstions.setMenuBackgroundColor
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.util.ColorUtil
 import arun.com.chromer.util.Utils
@@ -67,6 +69,7 @@ class WebViewActivity : BrowsingActivity() {
         setupToolbar()
         setupSwipeRefresh()
         setupWebView()
+        setupBottomBar()
     }
 
     override fun getCurrentUrl(): String {
@@ -83,6 +86,10 @@ class WebViewActivity : BrowsingActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return menuDelegate.handleItemSelected(item.itemId)
+    }
+
+    private fun setupBottomBar() {
+        menuDelegate.setupBottombar(bottomNavigation)
     }
 
     override fun onDestroy() {
@@ -202,6 +209,10 @@ class WebViewActivity : BrowsingActivity() {
             useIntrinsicPadding = false
             progressBackgroundTintList = ColorStateList.valueOf(themeColor)
             progressTintList = ColorStateList.valueOf(foregroundColor)
+        }
+
+        if (foregroundColor != Color.BLACK) {
+            bottomNavigation.setMenuBackgroundColor(themeColor)
         }
 
         swipeRefreshLayout.setColorSchemeColors(themeColor, ColorUtil.getClosestAccentColor(themeColor))

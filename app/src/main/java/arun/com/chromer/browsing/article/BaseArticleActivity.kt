@@ -47,7 +47,6 @@ import arun.com.chromer.shared.Constants.EXTRA_KEY_TOOLBAR_COLOR
 import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.util.Utils
 import arun.com.chromer.util.glide.GlideApp
-import it.sephiroth.android.library.bottomnavigation.BottomNavigation
 import kotlinx.android.synthetic.main.activity_article_mode.*
 import javax.inject.Inject
 
@@ -100,23 +99,7 @@ abstract class BaseArticleActivity : BrowsingActivity() {
 
     private fun setupBottombar() {
         bottomNavigation.setMenuBackgroundColor(ContextCompat.getColor(this, R.color.article_windowBackground))
-
-        if (preferences.bottomBar()) {
-            bottomNavigation.apply {
-                setSelectedIndex(-1, false)
-                setOnMenuItemClickListener(object : BottomNavigation.OnMenuItemSelectionListener {
-                    override fun onMenuItemSelect(itemId: Int, position: Int, fromUser: Boolean) {
-                        menuDelegate.handleItemSelected(itemId)
-                        post { setSelectedIndex(-1, false) }
-                    }
-
-                    override fun onMenuItemReselect(itemId: Int, position: Int, fromUser: Boolean) {
-                    }
-                })
-            }
-        } else {
-            bottomNavigation.gone()
-        }
+        menuDelegate.setupBottombar(bottomNavigation)
     }
 
     private fun setupTheme() {

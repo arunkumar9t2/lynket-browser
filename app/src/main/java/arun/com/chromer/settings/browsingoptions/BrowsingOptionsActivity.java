@@ -274,7 +274,7 @@ public class BrowsingOptionsActivity extends BaseActivity implements Snackable, 
                     break;
                 case ARTICLE:
                     holder.icon.setImageDrawable(new IconicsDrawable(context)
-                            .icon(CommunityMaterial.Icon.cmd_file_image)
+                            .icon(CommunityMaterial.Icon.cmd_file_document)
                             .color(iconColor)
                             .sizeDp(18));
                     holder.action.setText(HtmlCompat.fromHtml(context.getString(R.string.bottom_bar_article_mode_explanation)));

@@ -139,7 +139,7 @@ public class ChromerOptionsActivity extends BaseActivity {
                     break;
                 case 4:
                     holder.menuImage.setImageDrawable(new IconicsDrawable(holder.itemView.getContext())
-                            .icon(CommunityMaterial.Icon.cmd_file_image)
+                            .icon(CommunityMaterial.Icon.cmd_file_document)
                             .colorRes(R.color.accent)
                             .sizeDp(24));
                     holder.menuText.setText(R.string.open_article_view);

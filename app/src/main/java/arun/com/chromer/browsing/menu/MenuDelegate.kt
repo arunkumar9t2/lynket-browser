@@ -37,6 +37,7 @@ import arun.com.chromer.browsing.openwith.OpenIntentWithActivity
 import arun.com.chromer.browsing.webview.WebViewActivity
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.scopes.PerActivity
+import arun.com.chromer.extenstions.gone
 import arun.com.chromer.history.HistoryActivity
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.settings.Preferences.*
@@ -47,6 +48,7 @@ import arun.com.chromer.util.Utils.isPackageInstalled
 import arun.com.chromer.util.Utils.shareText
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import it.sephiroth.android.library.bottomnavigation.BottomNavigation
 import javax.inject.Inject
 
 /**
@@ -175,5 +177,24 @@ class MenuDelegate @Inject constructor(
             R.id.menu_add_to_home_screen -> activity.startActivity(Intent(activity, HomeScreenShortcutCreatorActivity::class.java).setData(currentUri))
         }
         return true
+    }
+
+    fun setupBottombar(bottomNavigation: BottomNavigation) {
+        if (preferences.bottomBar()) {
+            bottomNavigation.apply {
+                setSelectedIndex(-1, false)
+                setOnMenuItemClickListener(object : BottomNavigation.OnMenuItemSelectionListener {
+                    override fun onMenuItemSelect(itemId: Int, position: Int, fromUser: Boolean) {
+                        handleItemSelected(itemId)
+                        post { setSelectedIndex(-1, false) }
+                    }
+
+                    override fun onMenuItemReselect(itemId: Int, position: Int, fromUser: Boolean) {
+                    }
+                })
+            }
+        } else {
+            bottomNavigation.gone()
+        }
     }
 }
