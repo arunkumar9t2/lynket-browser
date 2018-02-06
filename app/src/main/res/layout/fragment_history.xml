@@ -27,57 +27,127 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.CardView
-            android:id="@+id/enableHistoryCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
             app:cardPreventCornerOverlap="true"
-            app:cardUseCompatPadding="true"
-            app:contentPadding="8dp">
+            app:cardUseCompatPadding="true">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/enable_history_title"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:id="@+id/historyCard"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ellipsize="marquee"
-                    android:paddingRight="56dp"
-                    android:singleLine="true"
-                    android:text="@string/enable_history"
-                    android:textAppearance="@style/Preference_TextAppearanceMaterialSubhead"
-                    tools:ignore="RtlHardcoded,RtlSymmetry" />
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:paddingBottom="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="8dp"
+                    tools:ignore="RtlSymmetry">
 
-                <TextView
-                    android:id="@+id/enableHistorySubtitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/enable_history_title"
-                    android:layout_alignStart="@id/enable_history_title"
-                    android:layout_below="@id/enable_history_title"
-                    android:paddingRight="56dp"
-                    android:text="@string/enable_history_subtitle_custom_tab"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="?android:attr/textColorSecondary"
-                    tools:ignore="RtlHardcoded,RtlSymmetry" />
+                    <ImageView
+                        android:id="@+id/incognitoIcon"
+                        android:layout_width="24dp"
+                        android:layout_height="48dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="14dp"
+                        android:layout_marginRight="23dp"
+                        android:scaleType="center"
+                        android:tint="@color/accent"
+                        app:srcCompat="@drawable/ic_article_24dp"
+                        tools:ignore="ContentDescription,RtlHardcoded"
+                        tools:src="@mipmap/ic_launcher_round" />
 
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/incognitoSwitch"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/enable_history_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/incognitoIcon"
+                        android:ellipsize="marquee"
+                        android:paddingRight="56dp"
+                        android:singleLine="true"
+                        android:text="@string/title_history"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:textSize="16sp"
+                        tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+                    <TextView
+                        android:id="@+id/enableHistorySubtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@id/enable_history_title"
+                        android:layout_alignStart="@id/enable_history_title"
+                        android:layout_below="@id/enable_history_title"
+                        android:layout_toRightOf="@+id/incognitoIcon"
+                        android:paddingRight="56dp"
+                        android:text="@string/enable_history_subtitle_custom_tab"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:textSize="14sp"
+                        tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/incognitoSwitch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:gravity="end|center"
+                        android:minWidth="56dp" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/md_grey_600" />
+
+                <RelativeLayout
+                    android:id="@+id/fullIncognitoModeCard"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerInParent="true"
-                    android:gravity="end|center"
-                    android:minWidth="56dp" />
-            </RelativeLayout>
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:paddingBottom="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingLeft="60dp"
+                    android:paddingRight="8dp"
+                    android:paddingStart="60dp"
+                    android:paddingTop="8dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left|center"
+                        android:minHeight="36dp"
+                        android:text="@string/full_incognito_mode"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                        android:textColor="?android:attr/textColorPrimary"
+                        android:textSize="14sp" />
+
+
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/fullIncognitoModeSwitch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
+                        android:minWidth="56dp" />
+                </RelativeLayout>
+            </LinearLayout>
         </android.support.v7.widget.CardView>
 
         <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"

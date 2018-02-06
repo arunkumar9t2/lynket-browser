@@ -39,6 +39,8 @@ import arun.com.chromer.shared.base.fragment.BaseFragment
 import arun.com.chromer.util.HtmlCompat
 import arun.com.chromer.util.Utils
 import com.afollestad.materialdialogs.MaterialDialog
+import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.mikepenz.iconics.IconicsDrawable
 import kotlinx.android.synthetic.main.fragment_history.*
 import javax.inject.Inject
 
@@ -54,6 +56,13 @@ class HistoryFragment : BaseFragment(), Snackable, FabHandler {
     private lateinit var historyAdapter: HistoryAdapter
 
     private var viewModel: HistoryFragmentViewModel? = null
+
+    private val incognitoImg: IconicsDrawable by lazy {
+        IconicsDrawable(activity!!)
+                .icon(CommunityMaterial.Icon.cmd_incognito)
+                .color(ContextCompat.getColor(activity!!, R.color.accent))
+                .sizeDp(24)
+    }
 
     private val formattedMessage: CharSequence
         get() {
@@ -120,9 +129,31 @@ class HistoryFragment : BaseFragment(), Snackable, FabHandler {
     }
 
     private fun setupIncognitoSwitch() {
-        enableHistoryCard.setOnClickListener { incognitoSwitch.performClick() }
+        historyCard.setOnClickListener { incognitoSwitch.performClick() }
         incognitoSwitch.setOnCheckedChangeListener { _, isChecked -> preferences.incognitoMode(!isChecked) }
         enableHistorySubtitle.text = formattedMessage
+        incognitoIcon.setImageDrawable(incognitoImg)
+
+        fullIncognitoModeCard.setOnClickListener { fullIncognitoModeSwitch.performClick() }
+        fullIncognitoModeSwitch.setOnCheckedChangeListener { _, isChecked ->
+            preferences.fullIncognitoMode(isChecked)
+            if (isChecked) {
+                incognitoSwitch.isChecked = isChecked
+                fullIncognitoModeSwitch.postDelayed({ showIncognitoDialogExplanation() }, 200)
+            }
+        }
+    }
+
+    private fun showIncognitoDialogExplanation() {
+        if (isAdded) {
+            with(MaterialDialog.Builder(activity!!)) {
+                title(R.string.incognito_mode)
+                content(R.string.full_incognito_mode_explanation)
+                positiveText(android.R.string.ok)
+                icon(incognitoImg)
+                build()
+            }.show()
+        }
     }
 
     private fun setupHistoryList() {

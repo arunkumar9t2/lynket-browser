@@ -232,7 +232,7 @@ constructor(
 
         if (!reordered) {
             val canSafelyOpenCCT = CustomTabs.getCustomTabSupportingPackages(context).isNotEmpty()
-            val isIncognito = preferences.incognitoMode() && false  // Disable auto revert to webview for now.
+            val isIncognito = preferences.incognitoMode() && preferences.fullIncognitoMode()  // Disable auto revert to webview for now.
 
             val browsingActivity = if (!isIncognito && canSafelyOpenCCT) {
                 Intent(context, CustomTabActivity::class.java)

@@ -316,4 +316,6 @@
     <string name="keywords">Keywords</string>
     <string name="feature_requires_lollipop">This feature requires Android Lollipop</string>
     <string name="article_loading_failed">Could not extract article.</string>
+    <string name="full_incognito_mode">Incognito browsing</string>
+    <string name="full_incognito_mode_explanation">For full incognito browsing Chromer will switch to Webview for rendering pages. Entries will not be recorded anywhere.</string>
 </resources>

@@ -74,7 +74,7 @@ abstract class BrowsingActivity : BaseActivity() {
         subs.add(rxEventBus
                 .filteredEvents(TabsManager.MinimizeEvent::class.java)
                 .filter { event ->
-                    event.tab.url.equals(intent.dataString, ignoreCase = true)
+                    event.tab.url.equals(getCurrentUrl(), ignoreCase = true)
                             && event.tab.getTargetActivityName() == this::class.java.name
                 }.subscribe {
                     if (Utils.ANDROID_LOLLIPOP) {

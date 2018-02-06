@@ -83,6 +83,7 @@ public class Preferences {
     public static final int THEME_AUTO = 3;
     public static final int THEME_BLACK = 4;
     public static final String INCOGNITO_MODE = "incognito_mode_pref";
+    public static final String FULL_INCOGNITO_MODE = "incognito_mode_pref";
     // Singleton instance
     private static Preferences INSTANCE;
 
@@ -263,6 +264,13 @@ public class Preferences {
         getDefaultSharedPreferences().edit().putBoolean(INCOGNITO_MODE, preference).apply();
     }
 
+    public void fullIncognitoMode(boolean preference) {
+        getDefaultSharedPreferences().edit().putBoolean(FULL_INCOGNITO_MODE, preference).apply();
+    }
+
+    public boolean fullIncognitoMode() {
+        return getDefaultSharedPreferences().getBoolean(FULL_INCOGNITO_MODE, false);
+    }
 
     public void preFetch(final boolean preference) {
         getDefaultSharedPreferences().edit().putBoolean(PRE_FETCH, preference).apply();
@@ -391,6 +399,6 @@ public class Preferences {
     }
 
     public boolean isAppBasedToolbar() {
-        return Preferences.get(context).dynamicToolbarOnApp() && Preferences.get(context).dynamicToolbar();
+        return dynamicToolbarOnApp() && dynamicToolbar();
     }
 }
