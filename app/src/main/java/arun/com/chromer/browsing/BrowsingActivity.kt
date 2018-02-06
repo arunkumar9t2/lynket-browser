@@ -73,8 +73,10 @@ abstract class BrowsingActivity : BaseActivity() {
     private fun setupMinimize() {
         subs.add(rxEventBus
                 .filteredEvents(TabsManager.MinimizeEvent::class.java)
-                .filter { it.url.equals(intent?.dataString, ignoreCase = true) }
-                .subscribe {
+                .filter { event ->
+                    event.tab.url.equals(intent.dataString, ignoreCase = true)
+                            && event.tab.getTargetActivityName() == this::class.java.name
+                }.subscribe {
                     if (Utils.ANDROID_LOLLIPOP) {
                         moveTaskToBack(true)
                     }

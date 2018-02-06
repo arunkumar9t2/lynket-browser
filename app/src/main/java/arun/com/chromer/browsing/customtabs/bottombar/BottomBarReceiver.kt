@@ -24,6 +24,7 @@ import android.content.Intent
 import android.support.customtabs.CustomTabsIntent
 import arun.com.chromer.Chromer
 import arun.com.chromer.R
+import arun.com.chromer.browsing.customtabs.CustomTabActivity
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.tabs.DefaultTabsManager
@@ -103,7 +104,7 @@ class BottomBarReceiver : BroadcastReceiver() {
     inner class MinimizeUrl internal constructor(context: Context, orgUrl: String) : Command(context, orgUrl) {
 
         override fun onPerform() {
-            tabsManager.minimizeTabByUrl(url)
+            tabsManager.minimizeTabByUrl(url, CustomTabActivity::class.java.name)
         }
     }
 

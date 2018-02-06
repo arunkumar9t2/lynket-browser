@@ -183,8 +183,8 @@ constructor(
         return false
     }
 
-    override fun minimizeTabByUrl(url: String) {
-        rxEventBus.post(TabsManager.MinimizeEvent(url))
+    override fun minimizeTabByUrl(url: String, fromClass: String) {
+        rxEventBus.post(TabsManager.MinimizeEvent(TabsManager.Tab(url, getTabType(fromClass))))
         if (preferences.webHeads()) {
             // When minimizing, don't try to handle aggressive loading cases.
             openWebHeads(application, url, fromMinimize = true)
@@ -340,12 +340,7 @@ constructor(
                         .filter { it != null && it.baseIntent?.dataString != null && it.baseIntent.component != null }
                         .map {
                             val url = it.baseIntent.dataString
-                            val type = when (it.baseIntent.component.className) {
-                                CustomTabActivity::class.java.name -> CUSTOM_TAB
-                                WebViewActivity::class.java.name -> WEB_VIEW
-                                ArticleActivity::class.java.name -> ARTICLE
-                                else -> OTHER
-                            }
+                            val type = getTabType(it.baseIntent.component.className)
                             TabsManager.Tab(url, type)
                         }.filter { it.type != OTHER }
                         .toMutableList())
@@ -365,6 +360,14 @@ constructor(
                     it
                 }.toList()
                 .toSingle()
+    }
+
+    @TabType
+    private fun getTabType(className: String): Long = when (className) {
+        CustomTabActivity::class.java.name -> CUSTOM_TAB
+        WebViewActivity::class.java.name -> WEB_VIEW
+        ArticleActivity::class.java.name -> ARTICLE
+        else -> OTHER
     }
 
     /**

@@ -162,7 +162,7 @@ class MenuDelegate @Inject constructor(
             R.id.bottom_bar_open_in_new_tab -> tabsManager.openNewTab(activity, currentUrl)
             R.id.bottom_bar_share -> shareUrl()
             R.id.bottom_bar_tabs, R.id.tabs -> tabsManager.showTabsActivity()
-            R.id.bottom_bar_minimize_tab -> tabsManager.minimizeTabByUrl(currentUrl)
+            R.id.bottom_bar_minimize_tab -> tabsManager.minimizeTabByUrl(currentUrl, activity::class.java.name)
             R.id.bottom_bar_article_view -> tabsManager.openArticle(activity, website, false)
             R.id.menu_action_button -> when (preferences.preferredAction()) {
                 PREFERRED_ACTION_BROWSER -> activity.sendBroadcast(Intent(activity, SecondaryBrowserReceiver::class.java).setData(currentUri))

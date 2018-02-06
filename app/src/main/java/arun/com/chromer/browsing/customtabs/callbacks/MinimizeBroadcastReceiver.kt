@@ -22,6 +22,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import arun.com.chromer.Chromer
+import arun.com.chromer.browsing.customtabs.CustomTabActivity
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.tabs.DefaultTabsManager
 import timber.log.Timber
@@ -36,7 +37,7 @@ class MinimizeBroadcastReceiver : BroadcastReceiver() {
         (context.applicationContext as Chromer).appComponent.inject(this)
         val url = intent.getStringExtra(Constants.EXTRA_KEY_ORIGINAL_URL)
         if (url != null) {
-            tabsManager.minimizeTabByUrl(url)
+            tabsManager.minimizeTabByUrl(url, CustomTabActivity::class.java.name)
         } else {
             Timber.e("Error minimizing")
         }

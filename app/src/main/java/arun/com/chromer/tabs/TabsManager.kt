@@ -35,7 +35,7 @@ interface TabsManager {
     class FinishRoot
 
     // Event for minimize command.
-    data class MinimizeEvent(val url: String)
+    data class MinimizeEvent(val tab: Tab)
 
     data class Tab(val url: String, @TabType var type: Long, var website: Website? = null) {
         fun getTargetActivityName(): String = when (type) {
@@ -81,7 +81,7 @@ interface TabsManager {
      *
      * After that, an attempt to open web heads is made if it is enabled.
      */
-    fun minimizeTabByUrl(url: String)
+    fun minimizeTabByUrl(url: String, fromClass: String)
 
     /**
      * Processes incoming intent from preferably external apps (could be us too) and then figures out
