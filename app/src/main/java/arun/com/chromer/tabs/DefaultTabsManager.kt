@@ -74,6 +74,12 @@ constructor(
         val rxEventBus: RxEventBus
 ) : TabsManager {
 
+    private val browsingActivitiesName = arrayListOf<String>(
+            CustomTabActivity::class.java.name,
+            ArticleActivity::class.java.name,
+            WebViewActivity::class.java.name
+    )
+
     override fun openUrl(context: Context, website: Website, fromApp: Boolean, fromWebHeads: Boolean, fromNewTab: Boolean) {
         // Clear non browsing activities if it was external intent.
         if (!fromApp) {
@@ -153,16 +159,12 @@ constructor(
                             val url = intent.dataString
                             val componentClassName = intent.component!!.className
 
-                            val urlMatches = url != null && (url.equals(website.url, ignoreCase = true)
-                                    || url.equals(website.preferredUrl(), ignoreCase = true)
-                                    || url.equals(website.ampUrl, ignoreCase = true))
+                            val urlMatches = url != null && website.matches(url)
 
                             val taskComponentMatches = if (activityName != null) {
                                 componentClassName == activityName
                             } else {
-                                (componentClassName == CustomTabActivity::class.java.name
-                                        || componentClassName == ArticleActivity::class.java.name
-                                        || componentClassName == WebViewActivity::class.java.name)
+                                browsingActivitiesName.contains(componentClassName)
                             }
 
                             if (taskComponentMatches && urlMatches) {

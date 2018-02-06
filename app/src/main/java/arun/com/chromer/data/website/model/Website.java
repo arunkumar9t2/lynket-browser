@@ -243,5 +243,11 @@ public class Website implements Parcelable {
                 ", count=" + count +
                 '}';
     }
+
+    public boolean matches(String url) {
+        return url.equalsIgnoreCase(this.url)
+                || url.equalsIgnoreCase(this.ampUrl)
+                || url.equalsIgnoreCase(preferredUrl());
+    }
 }
 
