@@ -87,6 +87,9 @@ public final class AppDetectionManager {
         // Ignore system pop ups
         if (packageName.equalsIgnoreCase("android")) return false;
 
+        // Ignore system pop ups
+        if (packageName.contains("systemui")) return false;
+
         // Ignore our app
         if (packageName.equalsIgnoreCase(context.getPackageName())) return false;
 
