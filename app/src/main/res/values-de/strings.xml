@@ -39,11 +39,6 @@
         <item>Lieblings-Teil-App</item>
         <item>General share</item>
     </string-array>
-    <string-array name="actionKeys">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>Rechts</item>
         <item>Links</item>
@@ -51,6 +46,12 @@
     <string-array name="webHeadsSpawnKeys">
         <item>1</item>
         <item>2</item>
+    </string-array>
+    <string-array name="articleThemeValues">
+        <item>Dunkel</item>
+        <item>Hell</item>
+        <item>Automatisch</item>
+        <item>Black</item>
     </string-array>
     <string-array name="webHeadsSizeValues">
         <item>Normal</item>
@@ -183,4 +184,11 @@
     <string name="notifications">Benachrichtigungen</string>
     <string name="webhead_size_title">Größe</string>
     <string name="webhead_size_dialog">Wähle die Größe der Web Heads</string>
+    <string name="merge_tabs_off_title">Achtung</string>
+    <string name="web_sites">Webseiten</string>
+    <string name="share_all">Alle teilen</string>
+    <string name="thank_you">Vielen Dank!</string>
+    <string name="save_time">Spare Zeit</string>
+    <string name="multiple_links">Mehrere Links</string>
+    <string name="copy_all">Alle kopieren</string>
 </resources>

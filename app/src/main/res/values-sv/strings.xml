@@ -32,6 +32,7 @@
     </string-array>
     <string-array name="actionKeys">
         <item>3</item>
+        <item>3</item>
     </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>Höger</item>
@@ -41,13 +42,11 @@
         <item>Mörk</item>
         <item>Ljus</item>
         <item>Automatisk</item>
-        <item>Black</item>
     </string-array>
     <string-array name="articleThemeKeys">
         <item>1</item>
         <item>2</item>
         <item>3</item>
-        <item>4</item>
     </string-array>
     <string-array name="webHeadsSizeValues">
         <item>Normal</item>

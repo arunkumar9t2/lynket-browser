@@ -28,7 +28,6 @@
     <string-array name="actionValues">
         <item>द्वितीय ब्राउज़र</item>
         <item>"पसंदीदा शेयर करने की एप्लिकेशन "</item>
-        <item>General share</item>
     </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>"दाईं "</item>

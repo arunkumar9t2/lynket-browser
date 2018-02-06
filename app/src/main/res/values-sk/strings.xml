@@ -202,7 +202,9 @@
     <string name="web_close_on_open_desc">Webové hlavičky zmiznú po otvorení odkazu</string>
     <string name="web_close_on_open_title">Zavrieť webové hlavičky po kliknutí.</string>
     <string name="minimize">Minimalizovať</string>
+    <string name="open_in_new_tab_explanation"><![CDATA[<b>Otvoriť na novej karte (5.0+) -</b> Skopírujte odkaz alebo text na obrazovke a kliknite na túto ikonu pre spustenie odkazu alebo vyhľadanie skopírovaného textu na novej karte alebo v bubline.]]></string>
     <string name="share_action_explanation"><![CDATA[<b>Zdieľať -</b> Rýchle spustenie akcie zdieľania Androidu.]]></string>
+    <string name="minimize_action_explanation"><![CDATA[<b>Minimalizovať -</b> Minimalizuje aktuálnu stránku späť do bubliny. Dostupné iba ak je povolené <i>Webové hlavičky</i> a <i>Zlúčenie kariet a aplikácií</i>.]]></string>
     <string name="available_actions">Dostupné akcie</string>
     <string name="secondary_browser_launching_error_title">Vyskytla sa chyba pri spúšťaní sekundárneho prehliadača</string>
     <string name="launch_setting">Nastavenia spustenia</string>
@@ -213,7 +215,7 @@
     <string name="choose_share_method">Zvoľte metódu zdieľania</string>
     <string name="comma_seperated">Oddelené čiarkou</string>
     <string name="share_all_list">Zoznam - Obmedzená podpora aplikácie. Napr. Join, Pushbullet, atď.</string>
-    <string name="open_new_tab">Otvoriť novú kartu</string>
+    <string name="new_tab">Otvoriť novú kartu</string>
     <string name="title_activity_open_with">Otvoriť s</string>
     <string name="title_activity_settings">Nastavenia</string>
     <string name="settings_browsing_mode">Režim prehiadania</string>

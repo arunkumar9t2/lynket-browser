@@ -36,7 +36,7 @@ import com.bumptech.glide.load.resource.bitmap.BitmapResource
 import timber.log.Timber
 import java.util.*
 
-class WebsiteDecoder(private val context: Context, private val glide: Glide) : ResourceDecoder<Website, Bitmap> {
+class WebsiteDecoder(private val context: Context, glide: Glide) : ResourceDecoder<Website, Bitmap> {
     private val bitmapPool: BitmapPool = glide.bitmapPool
     val size = Utils.dpToPx(56.0)
 
