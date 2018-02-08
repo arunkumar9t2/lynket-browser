@@ -16,25 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.di.service;
+package arun.com.chromer.di.scopes;
 
-import org.jetbrains.annotations.NotNull;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-import arun.com.chromer.appdetect.AppDetectService;
-import arun.com.chromer.di.scopes.PerService;
-import arun.com.chromer.shared.base.PreferenceQuickSettingsTile;
-import arun.com.chromer.webheads.WebHeadService;
-import dagger.Subcomponent;
+import javax.inject.Scope;
 
-@PerService
-@Subcomponent(modules = {
-        ServiceModule.class
-})
-public interface ServiceComponent {
-
-    void inject(AppDetectService appDetectService);
-
-    void inject(WebHeadService webHeadService);
-
-    void inject(@NotNull PreferenceQuickSettingsTile preferenceQuickSettingsTile);
+/**
+ * A scoping annotation to permit objects whose lifetime should
+ * conform to the life of the Activity to be memorised in the
+ * correct component.
+ */
+@Scope
+@Retention(RetentionPolicy.RUNTIME)
+public @interface PerService {
 }

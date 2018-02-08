@@ -25,10 +25,6 @@
         <item>Stredná</item>
         <item>Krátka</item>
     </string-array>
-    <string-array name="animationSpeedKeys">
-        <item>1</item>
-        <item>2</item>
-    </string-array>
     <string-array name="actionValues">
         <item>Sekundárny prehliadač</item>
         <item>Aplikácia pre zdieľanie</item>
@@ -47,10 +43,6 @@
     <string-array name="webHeadsSizeValues">
         <item>Normálne</item>
         <item>Malé</item>
-    </string-array>
-    <string-array name="webHeadsSizeKeys">
-        <item>1</item>
-        <item>2</item>
     </string-array>
     <string name="share_text">Hej, vyskúšaj \‘Chromer\’ pre rýchle a bezpečné surfovanie! Stiahni si ho tu https://goo.gl/992ils</string>
     <string name="share_via">Zdieľať pomocou…</string>

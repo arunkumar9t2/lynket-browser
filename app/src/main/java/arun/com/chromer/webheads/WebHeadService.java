@@ -92,6 +92,7 @@ import static arun.com.chromer.shared.Constants.ACTION_OPEN_NEW_TAB;
 import static arun.com.chromer.shared.Constants.ACTION_REBIND_WEBHEAD_TAB_CONNECTION;
 import static arun.com.chromer.shared.Constants.ACTION_STOP_WEBHEAD_SERVICE;
 import static arun.com.chromer.shared.Constants.ACTION_WEBHEAD_COLOR_SET;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_AMP;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_MINIMIZE;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_REBIND_WEBHEAD_CXN;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBHEAD_COLOR;
@@ -218,6 +219,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         if (intent == null || intent.getDataString() == null) return; // don't do anything
 
         final boolean isForMinimized = intent.getBooleanExtra(EXTRA_KEY_MINIMIZE, false);
+        final boolean isFromAmp = intent.getBooleanExtra(EXTRA_KEY_FROM_AMP, false);
 
         final String urlToLoad = intent.getDataString();
         if (TextUtils.isEmpty(urlToLoad)) {
@@ -226,7 +228,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         }
 
         if (!isLinkAlreadyLoaded(urlToLoad)) {
-            addWebHead(urlToLoad);
+            addWebHead(urlToLoad, isFromAmp);
         } else if (!isForMinimized) {
             Toast.makeText(this, R.string.already_loaded, LENGTH_SHORT).show();
         }
@@ -236,7 +238,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         return urlToLoad == null || webHeads.containsKey(urlToLoad);
     }
 
-    private void addWebHead(final String webHeadUrl) {
+    private void addWebHead(final String webHeadUrl, boolean isFromAmp) {
         if (springChain2D == null) {
             springChain2D = SpringChain2D.create(this);
         }
@@ -248,6 +250,8 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
             oldWebHead.setMaster(false);
         }
         newWebHead.setMaster(true);
+        newWebHead.setFromAmp(isFromAmp);
+
         // Add to our map
         webHeads.put(webHeadUrl, newWebHead);
 
@@ -411,7 +415,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
 
     @Override
     public void onWebHeadClick(@NonNull WebHead webHead) {
-        tabsManager.openUrl(this, webHead.getWebsite(), true, true, false);
+        tabsManager.openUrl(this, webHead.getWebsite(), true, true, false, webHead.isFromAmp());
 
         // If user prefers to the close the head on opening the link, then call destroySelf()
         // which will take care of closing and detaching the web head

@@ -64,6 +64,13 @@ class HistoryFragment : BaseFragment(), Snackable, FabHandler {
                 .sizeDp(24)
     }
 
+    private val historyImg: IconicsDrawable by lazy {
+        IconicsDrawable(context!!)
+                .icon(CommunityMaterial.Icon.cmd_history)
+                .colorRes(R.color.accent)
+                .sizeDp(24)
+    }
+
     private val formattedMessage: CharSequence
         get() {
             val provider = preferences.customTabPackage()
@@ -129,16 +136,22 @@ class HistoryFragment : BaseFragment(), Snackable, FabHandler {
     }
 
     private fun setupIncognitoSwitch() {
-        historyCard.setOnClickListener { incognitoSwitch.performClick() }
-        incognitoSwitch.setOnCheckedChangeListener { _, isChecked -> preferences.incognitoMode(!isChecked) }
+        historyCard.setOnClickListener { historySwitch.performClick() }
+        historySwitch.setOnCheckedChangeListener { _, isChecked ->
+            preferences.historyDisabled(!isChecked)
+            if (isChecked) {
+                fullIncognitoModeSwitch.isChecked = false
+            }
+        }
         enableHistorySubtitle.text = formattedMessage
-        incognitoIcon.setImageDrawable(incognitoImg)
+        historyIcon.setImageDrawable(historyImg)
 
+        fullIncognitoIcon.setImageDrawable(incognitoImg)
         fullIncognitoModeCard.setOnClickListener { fullIncognitoModeSwitch.performClick() }
         fullIncognitoModeSwitch.setOnCheckedChangeListener { _, isChecked ->
             preferences.fullIncognitoMode(isChecked)
             if (isChecked) {
-                incognitoSwitch.isChecked = isChecked
+                historySwitch.isChecked = false
                 fullIncognitoModeSwitch.postDelayed({ showIncognitoDialogExplanation() }, 200)
             }
         }
@@ -198,7 +211,7 @@ class HistoryFragment : BaseFragment(), Snackable, FabHandler {
     override fun onResume() {
         super.onResume()
         loadHistory()
-        incognitoSwitch.isChecked = !preferences.incognitoMode()
+        historySwitch.isChecked = !preferences.historyDisabled()
     }
 
     override fun onFabClick() {

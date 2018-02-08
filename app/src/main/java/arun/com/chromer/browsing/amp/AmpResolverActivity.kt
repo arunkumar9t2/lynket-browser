@@ -60,7 +60,7 @@ class AmpResolverActivity : BrowsingActivity() {
     }
 
     private fun launchUrl() {
-        tabsManager.openUrl(this, Website.Ampify(website!!))
+        tabsManager.openUrl(this, Website.Ampify(website!!), fromAmp = true)
         ampResolverDialog?.dismiss()
     }
 

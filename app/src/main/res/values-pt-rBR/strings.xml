@@ -21,18 +21,9 @@
         <item>Deslizar para direita</item>
         <item>Deslizar para cima</item>
     </string-array>
-    <string-array name="animationKeys">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
     <string-array name="animationSpeedValues">
         <item>Média</item>
         <item>Curta</item>
-    </string-array>
-    <string-array name="animationSpeedKeys">
-        <item>1</item>
-        <item>2</item>
     </string-array>
     <string-array name="actionValues">
         <item>Navegador secundário</item>
@@ -43,10 +34,6 @@
         <item>Direita</item>
         <item>Esquerda</item>
     </string-array>
-    <string-array name="webHeadsSpawnKeys">
-        <item>1</item>
-        <item>2</item>
-    </string-array>
     <string-array name="articleThemeValues">
         <item>Escuro</item>
         <item>Claro</item>
@@ -56,10 +43,6 @@
     <string-array name="webHeadsSizeValues">
         <item>Normal</item>
         <item>Pequeno</item>
-    </string-array>
-    <string-array name="webHeadsSizeKeys">
-        <item>1</item>
-        <item>2</item>
     </string-array>
     <string name="share_text">Oi! Experimente o \‘Chromer\’ para uma experiência de navegação rápida e segura! Baixe aqui https://goo.gl/992ils</string>
     <string name="share_via">Compartilhar via</string>

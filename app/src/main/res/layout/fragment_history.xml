@@ -54,7 +54,7 @@
                     tools:ignore="RtlSymmetry">
 
                     <ImageView
-                        android:id="@+id/incognitoIcon"
+                        android:id="@+id/historyIcon"
                         android:layout_width="24dp"
                         android:layout_height="48dp"
                         android:layout_alignParentLeft="true"
@@ -72,7 +72,7 @@
                         android:id="@+id/enable_history_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toRightOf="@+id/incognitoIcon"
+                        android:layout_toRightOf="@+id/historyIcon"
                         android:ellipsize="marquee"
                         android:paddingRight="56dp"
                         android:singleLine="true"
@@ -88,7 +88,7 @@
                         android:layout_alignLeft="@id/enable_history_title"
                         android:layout_alignStart="@id/enable_history_title"
                         android:layout_below="@id/enable_history_title"
-                        android:layout_toRightOf="@+id/incognitoIcon"
+                        android:layout_toRightOf="@+id/historyIcon"
                         android:paddingRight="56dp"
                         android:text="@string/enable_history_subtitle_custom_tab"
                         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
@@ -97,7 +97,7 @@
                         tools:ignore="RtlHardcoded,RtlSymmetry" />
 
                     <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/incognitoSwitch"
+                        android:id="@+id/historySwitch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -121,16 +121,31 @@
                     android:foreground="?attr/selectableItemBackground"
                     android:paddingBottom="8dp"
                     android:paddingEnd="8dp"
-                    android:paddingLeft="60dp"
                     android:paddingRight="8dp"
-                    android:paddingStart="60dp"
                     android:paddingTop="8dp">
+
+                    <ImageView
+                        android:id="@+id/fullIncognitoIcon"
+                        android:layout_width="24dp"
+                        android:layout_height="48dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="14dp"
+                        android:layout_marginRight="23dp"
+                        android:scaleType="center"
+                        android:tint="@color/accent"
+                        tools:ignore="ContentDescription,RtlHardcoded"
+                        tools:src="@mipmap/ic_launcher_round" />
+
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_toEndOf="@id/fullIncognitoIcon"
+                        android:layout_toRightOf="@id/fullIncognitoIcon"
                         android:gravity="left|center"
-                        android:minHeight="36dp"
+                        android:paddingRight="56dp"
                         android:text="@string/full_incognito_mode"
                         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                         android:textColor="?android:attr/textColorPrimary"

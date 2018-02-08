@@ -30,10 +30,6 @@
         <item>Favoritapp för delning</item>
         <item>Generell delning</item>
     </string-array>
-    <string-array name="actionKeys">
-        <item>3</item>
-        <item>3</item>
-    </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>Höger</item>
         <item>Vänster</item>
@@ -42,19 +38,11 @@
         <item>Mörk</item>
         <item>Ljus</item>
         <item>Automatisk</item>
-    </string-array>
-    <string-array name="articleThemeKeys">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
+        <item>Black</item>
     </string-array>
     <string-array name="webHeadsSizeValues">
         <item>Normal</item>
         <item>Liten</item>
-    </string-array>
-    <string-array name="webHeadsSizeKeys">
-        <item>1</item>
-        <item>2</item>
     </string-array>
     <string name="share_text">Hej kolla in \'Chromer\' för en snabb och säker surfupplevelse! Ladda ner här https://goo.gl/992ils</string>
     <string name="share_via">Dela med..</string>

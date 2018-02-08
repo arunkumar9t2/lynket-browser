@@ -25,10 +25,6 @@
         <item>普通</item>
         <item>簡短</item>
     </string-array>
-    <string-array name="animationSpeedKeys">
-        <item>1</item>
-        <item>2</item>
-    </string-array>
     <string-array name="actionValues">
         <item>次要瀏覽器</item>
         <item>喜好的分享應用程式</item>
@@ -42,14 +38,11 @@
         <item>暗色</item>
         <item>亮色</item>
         <item>自動</item>
+        <item>Black</item>
     </string-array>
     <string-array name="webHeadsSizeValues">
         <item>正常</item>
         <item>小</item>
-    </string-array>
-    <string-array name="webHeadsSizeKeys">
-        <item>1</item>
-        <item>2</item>
     </string-array>
     <string name="share_text">嘿！快來體驗  \‘Chromer\’  提供的快速和安全瀏覽功能！可以在這裡下載：https://goo.gl/992ils</string>
     <string name="share_via">分享至…</string>

@@ -44,12 +44,7 @@
         <item>普通</item>
         <item>小さめ</item>
     </string-array>
-    <string-array name="webHeadsSizeKeys">
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-    <string name="share_text">Chromerで、高速で安全なブラウジングを体験！ここからダウンロード
-https://goo.gl/992ils</string>
+    <string name="share_text">Chromerで、高速で安全なブラウジングを体験！ここからダウンロード https://goo.gl/992ils</string>
     <string name="share_via">共有</string>
     <string name="custom_tab_provider_not_found">互換性のあるカスタムタブプロバイダが見つかりませんでした</string>
     <string name="custom_tab_provider_not_found_expln">Chromerを使用するには、カスタムタブに対応したブラウザが必要です。 PlayストアからGoogle Chrome(無料)をインストールしますか？既にインストールしている場合は最新バージョンに更新してください。</string>

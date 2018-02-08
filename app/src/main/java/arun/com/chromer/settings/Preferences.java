@@ -83,7 +83,7 @@ public class Preferences {
     public static final int THEME_AUTO = 3;
     public static final int THEME_BLACK = 4;
     public static final String INCOGNITO_MODE = "incognito_mode_pref";
-    public static final String FULL_INCOGNITO_MODE = "incognito_mode_pref";
+    public static final String FULL_INCOGNITO_MODE = "full_incognito_mode";
     // Singleton instance
     private static Preferences INSTANCE;
 
@@ -256,11 +256,11 @@ public class Preferences {
         getDefaultSharedPreferences().edit().putBoolean(ARTICLE_MODE, preference).apply();
     }
 
-    public boolean incognitoMode() {
+    public boolean historyDisabled() {
         return getDefaultSharedPreferences().getBoolean(INCOGNITO_MODE, false);
     }
 
-    public void incognitoMode(final boolean preference) {
+    public void historyDisabled(final boolean preference) {
         getDefaultSharedPreferences().edit().putBoolean(INCOGNITO_MODE, preference).apply();
     }
 

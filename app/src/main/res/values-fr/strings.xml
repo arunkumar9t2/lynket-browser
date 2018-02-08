@@ -44,10 +44,6 @@
         <item>Normal</item>
         <item>Petit</item>
     </string-array>
-    <string-array name="webHeadsSizeKeys">
-        <item>1</item>
-        <item>2</item>
-    </string-array>
     <string name="share_text">Essayez \‘Chromer\’ pour une navigation rapide et sécurisée ! A télécharger ici https://goo.gl/992ils</string>
     <string name="share_via">"Partager avec… "</string>
     <string name="custom_tab_provider_not_found">Onglet personnalisé compatible non trouvé</string>

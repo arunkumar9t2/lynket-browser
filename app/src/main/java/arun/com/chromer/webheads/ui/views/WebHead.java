@@ -103,6 +103,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
      * {@link GestureDetectorListener#onFling(MotionEvent, MotionEvent, float, float)}has wrong polarity.
      */
     private static MovementTracker movementTracker;
+    private boolean fromAmp;
 
     /**
      * Inits the web head and attaches to the system window. It is assumed that draw over other apps
@@ -650,6 +651,14 @@ public class WebHead extends BaseWebHead implements SpringListener {
     private void destroySprings() {
         xSpring.destroy();
         ySpring.destroy();
+    }
+
+    public boolean isFromAmp() {
+        return fromAmp;
+    }
+
+    public void setFromAmp(boolean fromAmp) {
+        this.fromAmp = fromAmp;
     }
 
     /**

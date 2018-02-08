@@ -21,28 +21,14 @@
         <item>Scorri a destra</item>
         <item>Scorri su</item>
     </string-array>
-    <string-array name="animationKeys">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
     <string-array name="actionValues">
         <item>Browser secondario</item>
         <item>App di condivisione preferita</item>
         <item>General share</item>
     </string-array>
-    <string-array name="actionKeys">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>Destra</item>
         <item>Sinistra</item>
-    </string-array>
-    <string-array name="webHeadsSpawnKeys">
-        <item>1</item>
-        <item>2</item>
     </string-array>
     <string name="share_text">Hey, dai un occhiata a \'Chromer\' per una navigazione sicura e veloce! Scaricala qua http://goo.gl/922ils</string>
     <string name="share_via">Condividi con…</string>

@@ -114,18 +114,15 @@ internal class HistoryAdapter(
     }
 
     fun getItemAt(position: Int): Website? {
-        if (cursor != null) {
-            cursor!!.moveToPosition(position)
-            return Website.fromCursor(cursor!!)
-        }
-        return null
+        return asyncWebsiteList.getItem(position)
     }
 
     fun setCursor(cursor: Cursor?) {
         if (this.cursor != null && this.cursor != cursor) {
             try {
                 this.cursor?.close()
-            } catch (ignored: Exception) {
+            } catch (e: Exception) {
+                Timber.e(e)
             }
         }
         this.cursor = cursor

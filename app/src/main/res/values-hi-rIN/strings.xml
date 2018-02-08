@@ -23,23 +23,20 @@
     </string-array>
     <string-array name="animationSpeedValues">
         <item>मध्यम्</item>
-        <item>"लघु "</item>
+        <item>लघु</item>
     </string-array>
     <string-array name="actionValues">
         <item>द्वितीय ब्राउज़र</item>
-        <item>"पसंदीदा शेयर करने की एप्लिकेशन "</item>
+        <item>पसंदीदा शेयर करने की एप्लिकेशन</item>
+        <item>General share</item>
     </string-array>
     <string-array name="webHeadsSpawnValues">
-        <item>"दाईं "</item>
+        <item>दाईं</item>
         <item>बाईं</item>
     </string-array>
     <string-array name="webHeadsSizeValues">
-        <item>"साधारण "</item>
+        <item>साधारण</item>
         <item>छोटा</item>
-    </string-array>
-    <string-array name="webHeadsSizeKeys">
-        <item>१</item>
-        <item>२</item>
     </string-array>
     <string name="share_text">\"क्रोमर\" आपके शीघ्र एवं सुरक्षित इंटरनेट ब्राउजिंग के लिए! यहाँ ड़ाउनलोड़ करें https://goo.gl/992ils</string>
     <string name="share_via">… के जरिए शेयर  करें।</string>
