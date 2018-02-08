@@ -21,36 +21,18 @@
         <item>Слайд вправо</item>
         <item>Слайд вверх</item>
     </string-array>
-    <string-array name="animationKeys">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
     <string-array name="animationSpeedValues">
         <item>Средняя</item>
         <item>Быстрая</item>
-    </string-array>
-    <string-array name="animationSpeedKeys">
-        <item>1</item>
-        <item>2</item>
     </string-array>
     <string-array name="actionValues">
         <item>Вторичный браузер</item>
         <item>Избранное приложение для передачи</item>
         <item>Поделиться</item>
     </string-array>
-    <string-array name="actionKeys">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>Право</item>
         <item>Лево</item>
-    </string-array>
-    <string-array name="webHeadsSpawnKeys">
-        <item>1</item>
-        <item>2</item>
     </string-array>
     <string-array name="articleThemeValues">
         <item>Темный</item>
@@ -58,19 +40,9 @@
         <item>Автоматически</item>
         <item>Black</item>
     </string-array>
-    <string-array name="articleThemeKeys">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-    </string-array>
     <string-array name="webHeadsSizeValues">
         <item>Нормальный</item>
         <item>Мелкий</item>
-    </string-array>
-    <string-array name="webHeadsSizeKeys">
-        <item>1</item>
-        <item>2</item>
     </string-array>
     <string name="share_text">Зацените \‘Chromer\’ для быстрого и безопасного сёрфинга в интернете! Скачать здесь https://goo.gl/992ils</string>
     <string name="share_via">Поделиться через…</string>

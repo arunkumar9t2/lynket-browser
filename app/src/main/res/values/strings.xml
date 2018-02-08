@@ -21,36 +21,18 @@
         <item>Slide Right</item>
         <item>Slide Up</item>
     </string-array>
-    <string-array name="animationKeys">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
     <string-array name="animationSpeedValues">
         <item>Medium</item>
         <item>Short</item>
-    </string-array>
-    <string-array name="animationSpeedKeys">
-        <item>1</item>
-        <item>2</item>
     </string-array>
     <string-array name="actionValues">
         <item>Secondary browser</item>
         <item>Favourite share app</item>
         <item>General share</item>
     </string-array>
-    <string-array name="actionKeys">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>Right</item>
         <item>Left</item>
-    </string-array>
-    <string-array name="webHeadsSpawnKeys">
-        <item>1</item>
-        <item>2</item>
     </string-array>
     <string-array name="articleThemeValues">
         <item>Dark</item>
@@ -58,19 +40,9 @@
         <item>Auto</item>
         <item>Black</item>
     </string-array>
-    <string-array name="articleThemeKeys">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-    </string-array>
     <string-array name="webHeadsSizeValues">
         <item>Normal</item>
         <item>Small</item>
-    </string-array>
-    <string-array name="webHeadsSizeKeys">
-        <item>1</item>
-        <item>2</item>
     </string-array>
     <string name="share_text">Hey Checkout \‘Chromer\’ for quick and secure browsing experience! Download here https://goo.gl/992ils</string>
     <string name="share_via">Share via…</string>

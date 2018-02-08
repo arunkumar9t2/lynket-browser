@@ -44,11 +44,7 @@
         <item>Normal</item>
         <item>Pequeno</item>
     </string-array>
-    <string-array name="webHeadsSizeKeys">
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-    <string name="share_text">Hey Experimente o \‘Chromer\’ para uma experiência de navegação rápida e segura! Faça download aqui 
+    <string name="share_text">Hey Experimente o \‘Chromer\’ para uma experiência de navegação rápida e segura! Faça download aqui
 https://goo.gl/992ils</string>
     <string name="share_via">Partilhar via…</string>
     <string name="install">Instalação</string>

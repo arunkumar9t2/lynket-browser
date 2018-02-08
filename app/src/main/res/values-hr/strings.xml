@@ -44,10 +44,6 @@
         <item>Normalna</item>
         <item>Mala</item>
     </string-array>
-    <string-array name="webHeadsSizeKeys">
-        <item>1</item>
-        <item>2</item>
-    </string-array>
     <string name="share_text">Hej, pogledajte \“Chromer\” za brzo i sigurno iskustvo pregledavanja interneta. Preuzmite ga ovdje: https://goo.gl/992ils</string>
     <string name="share_via">Podijelite putem…</string>
     <string name="custom_tab_provider_not_found">Nije pronađen kompatibilan pružatelj prilagođenih kartica.</string>

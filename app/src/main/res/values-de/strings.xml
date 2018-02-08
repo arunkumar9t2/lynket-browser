@@ -21,18 +21,9 @@
         <item>Nach rechts wischen</item>
         <item>Nach oben wischen</item>
     </string-array>
-    <string-array name="animationKeys">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
     <string-array name="animationSpeedValues">
         <item>Mittel</item>
         <item>Schnell</item>
-    </string-array>
-    <string-array name="animationSpeedKeys">
-        <item>1</item>
-        <item>2</item>
     </string-array>
     <string-array name="actionValues">
         <item>Sekundärer Browser</item>
@@ -42,10 +33,6 @@
     <string-array name="webHeadsSpawnValues">
         <item>Rechts</item>
         <item>Links</item>
-    </string-array>
-    <string-array name="webHeadsSpawnKeys">
-        <item>1</item>
-        <item>2</item>
     </string-array>
     <string-array name="articleThemeValues">
         <item>Dunkel</item>

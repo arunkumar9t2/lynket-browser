@@ -40,18 +40,9 @@
         <item>Automatisch</item>
         <item>Black</item>
     </string-array>
-    <string-array name="articleThemeKeys">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
     <string-array name="webHeadsSizeValues">
         <item>Normaal</item>
         <item>Klein</item>
-    </string-array>
-    <string-array name="webHeadsSizeKeys">
-        <item>1</item>
-        <item>2</item>
     </string-array>
     <string name="share_text">Hey, probeer \‘Chromer\’ voor een snelle en veilige browse-ervaring! Download hier: https://goo.gl/992ils</string>
     <string name="share_via">Delen via…</string>

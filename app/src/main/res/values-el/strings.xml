@@ -38,10 +38,6 @@
         <item>Κανονικό</item>
         <item>Μικρό</item>
     </string-array>
-    <string-array name="webHeadsSizeKeys">
-        <item>1</item>
-        <item>2</item>
-    </string-array>
     <string name="share_text">Γεια Ελέγξτε το \‘Chromer\’ για γρήγορη και ασφαλή εμπειρία περιήγησης! Κατεβάσετε εδώ  https://goo.gl/992ils</string>
     <string name="share_via">Κοινοποίηση με…</string>
     <string name="custom_tab_provider_not_found">Δεν βρέθηκε συμβατός παροχέας προσαρμοσμένης σελίδας</string>

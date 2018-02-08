@@ -21,36 +21,18 @@
         <item>右侧滑出</item>
         <item>向上滑出</item>
     </string-array>
-    <string-array name="animationKeys">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
     <string-array name="animationSpeedValues">
         <item>中等</item>
         <item>较快</item>
-    </string-array>
-    <string-array name="animationSpeedKeys">
-        <item>1</item>
-        <item>2</item>
     </string-array>
     <string-array name="actionValues">
         <item>第二浏览器</item>
         <item>最喜欢的分享应用</item>
         <item>常规分享</item>
     </string-array>
-    <string-array name="actionKeys">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>右侧</item>
         <item>左侧</item>
-    </string-array>
-    <string-array name="webHeadsSpawnKeys">
-        <item>1</item>
-        <item>2</item>
     </string-array>
     <string-array name="articleThemeValues">
         <item>暗色</item>
@@ -61,10 +43,6 @@
     <string-array name="webHeadsSizeValues">
         <item>正常</item>
         <item>小</item>
-    </string-array>
-    <string-array name="webHeadsSizeKeys">
-        <item>1</item>
-        <item>2</item>
     </string-array>
     <string name="share_text">嘿 来查看下 “Chromer”  它可以让你拥有快速且安全的浏览体验！可以在这里下载 https://goo.gl/992ils</string>
     <string name="share_via">分享至…</string>
