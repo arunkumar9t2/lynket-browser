@@ -50,7 +50,7 @@ interface TabsManager {
      * Takes a {@param website} and opens in based on user preference. Checks for web heads, amp,
      * article, reordering existing tabs etc.
      */
-    fun openUrl(context: Context, website: Website, fromApp: Boolean = true, fromWebHeads: Boolean = false, fromNewTab: Boolean = false)
+    fun openUrl(context: Context, website: Website, fromApp: Boolean = true, fromWebHeads: Boolean = false, fromNewTab: Boolean = false, fromAmp: Boolean = false)
 
     /**
      * Opens the given Uri in a browsing tab.
@@ -95,7 +95,7 @@ interface TabsManager {
      * After opening the web heads, an attempt to handle aggressive background loading is attempted
      * if {@param fromMinimize} is {@code false}
      */
-    fun openWebHeads(context: Context, url: String, fromMinimize: Boolean = false)
+    fun openWebHeads(context: Context, url: String, fromMinimize: Boolean = false, fromAmp: Boolean = false)
 
     /**
      * Opens new tab activity.

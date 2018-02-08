@@ -83,7 +83,7 @@ public class Preferences {
     public static final int THEME_AUTO = 3;
     public static final int THEME_BLACK = 4;
     public static final String INCOGNITO_MODE = "incognito_mode_pref";
-    public static final String FULL_INCOGNITO_MODE = "incognito_mode_pref";
+    public static final String FULL_INCOGNITO_MODE = "full_incognito_mode";
     // Singleton instance
     private static Preferences INSTANCE;
 

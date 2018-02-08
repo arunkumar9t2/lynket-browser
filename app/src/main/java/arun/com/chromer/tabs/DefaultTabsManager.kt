@@ -80,14 +80,14 @@ constructor(
             WebViewActivity::class.java.name
     )
 
-    override fun openUrl(context: Context, website: Website, fromApp: Boolean, fromWebHeads: Boolean, fromNewTab: Boolean) {
+    override fun openUrl(context: Context, website: Website, fromApp: Boolean, fromWebHeads: Boolean, fromNewTab: Boolean, fromAmp: Boolean) {
         // Clear non browsing activities if it was external intent.
         if (!fromApp) {
             clearNonBrowsingActivities()
         }
         // Open in web heads mode if we this command did not come from web heads.
         if (preferences.webHeads() && !fromWebHeads) {
-            openWebHeads(context, website.preferredUrl())
+            openWebHeads(context, website.preferredUrl(), fromAmp)
             return
         }
 
@@ -98,11 +98,12 @@ constructor(
         }
 
         // Check if we should try to find AMP version of incoming url.
-        if (preferences.ampMode()) {
+        if (preferences.ampMode() && !fromAmp) {
             if (website.hasAmp()) {
                 // We already got the amp url, so open it in a browsing tab.
                 openBrowsingTab(context, Website.Ampify(website), fromNewTab = fromNewTab)
-            } else {
+                return
+            } else if (!fromWebHeads) {
                 // Open a proxy activity, attempt an extraction then open the AMP url if exists.
                 val ampResolver = Intent(context, AmpResolverActivity::class.java).apply {
                     data = website.preferredUri()
@@ -111,8 +112,8 @@ constructor(
                     }
                 }
                 context.startActivity(ampResolver)
+                return
             }
-            return
         }
 
         if (preferences.articleMode()) {
@@ -232,7 +233,7 @@ constructor(
 
         if (!reordered) {
             val canSafelyOpenCCT = CustomTabs.getCustomTabSupportingPackages(context).isNotEmpty()
-            val isIncognito = preferences.historyDisabled() && preferences.fullIncognitoMode()  // Disable auto revert to webview for now.
+            val isIncognito = preferences.fullIncognitoMode()  // Disable auto revert to webview for now.
 
             val browsingActivity = if (!isIncognito && canSafelyOpenCCT) {
                 Intent(context, CustomTabActivity::class.java)
@@ -255,12 +256,13 @@ constructor(
         }
     }
 
-    override fun openWebHeads(context: Context, url: String, fromMinimize: Boolean) {
+    override fun openWebHeads(context: Context, url: String, fromMinimize: Boolean, fromAmp: Boolean) {
         if (Utils.isOverlayGranted(context)) {
             val webHeadLauncher = Intent(context, WebHeadService::class.java).apply {
                 data = Uri.parse(url)
                 addFlags(FLAG_ACTIVITY_NEW_TASK)
                 putExtra(Constants.EXTRA_KEY_MINIMIZE, fromMinimize)
+                putExtra(Constants.EXTRA_KEY_FROM_AMP, fromAmp)
             }
             ContextCompat.startForegroundService(context, webHeadLauncher)
         } else {
