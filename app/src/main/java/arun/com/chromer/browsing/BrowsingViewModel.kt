@@ -97,7 +97,9 @@ constructor(
 
     private fun setTaskDescription(task: ActivityManager.TaskDescription?) {
         task?.let { toolbarColor.postValue(task.primaryColor) }
-        activityDescription.postValue(task)
+        if (Utils.ANDROID_LOLLIPOP) {
+            activityDescription.postValue(task)
+        }
     }
 
     fun loadWebSiteDetails(url: String) {

@@ -98,11 +98,11 @@ abstract class BrowsingActivity : BaseActivity() {
                 onToolbarColorSet(color!!)
             })
 
-            activityDescription.observeUntilActivityDestroyed(this@BrowsingActivity, { task ->
-                if (Utils.ANDROID_LOLLIPOP) {
+            if (Utils.ANDROID_LOLLIPOP) {
+                activityDescription.observeUntilActivityDestroyed(this@BrowsingActivity, { task ->
                     setTaskDescription(task)
-                }
-            })
+                })
+            }
 
             if (savedInstanceState == null) {
                 val websiteResult = Result.Success(intent.getParcelableExtra(Constants.EXTRA_KEY_WEBSITE)
