@@ -40,7 +40,6 @@ import arun.com.chromer.data.webarticle.model.WebArticle
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.setMenuBackgroundColor
-import arun.com.chromer.settings.Preferences
 import arun.com.chromer.settings.Preferences.*
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.shared.Constants.EXTRA_KEY_TOOLBAR_COLOR
@@ -104,9 +103,19 @@ abstract class BaseArticleActivity : BrowsingActivity() {
 
     private fun setupTheme() {
         val theme = preferences.articleTheme()
-        if (theme == Preferences.THEME_BLACK) {
-            coordinatorLayout.background = ColorDrawable(Color.BLACK)
-            bottomNavigation.setMenuBackgroundColor(Color.BLACK)
+        when (theme) {
+            THEME_BLACK -> {
+                coordinatorLayout.background = ColorDrawable(Color.BLACK)
+                bottomNavigation.setMenuBackgroundColor(Color.BLACK)
+                setNavigationBarColor(Color.BLACK)
+            }
+            THEME_DARK -> setNavigationBarColor(ContextCompat.getColor(this, R.color.article_windowBackground))
+        }
+    }
+
+    private fun setNavigationBarColor(@ColorInt color: Int) {
+        if (Utils.ANDROID_LOLLIPOP) {
+            window.navigationBarColor = color
         }
     }
 
