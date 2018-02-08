@@ -30,6 +30,7 @@ import arun.com.chromer.settings.Preferences
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.util.SchedulerProvider
 import arun.com.chromer.util.Utils
+import arun.com.chromer.util.compat.TaskDescriptionCompat
 import rx.Observable
 import rx.subjects.PublishSubject
 import rx.subscriptions.CompositeSubscription
@@ -72,13 +73,8 @@ constructor(
         subs.add(taskDescriptionQueue
                 .concatMap { website ->
                     return@concatMap Observable.just(website)
-                            .map {
-                                return@map if (Utils.ANDROID_LOLLIPOP) {
-                                    ActivityManager.TaskDescription(website.safeLabel(), null, toolbarColor.value!!)
-                                } else {
-                                    null
-                                }
-                            }.doOnNext { setTaskDescription(it) }
+                            .map { TaskDescriptionCompat(website.safeLabel(), null, toolbarColor.value!!) }
+                            .doOnNext(this::setTaskDescription)
                             .map {
                                 val iconColor = websiteRepository.getWebsiteIconWithPlaceholderAndColor(website)
                                 val selectedToolbarColor = when {
@@ -86,19 +82,19 @@ constructor(
                                     website.themeColor() != Constants.NO_COLOR -> website.themeColor()
                                     else -> iconColor.second
                                 }
-                                return@map if (Utils.ANDROID_LOLLIPOP) {
-                                    ActivityManager.TaskDescription(website.safeLabel(), iconColor.first, selectedToolbarColor)
-                                } else null
-                            }.doOnNext { setTaskDescription(it) }
+                                return@map TaskDescriptionCompat(website.safeLabel(), iconColor.first, selectedToolbarColor)
+                            }.doOnNext(this::setTaskDescription)
                             .doOnError(Timber::e)
                             .compose(SchedulerProvider.applyIoSchedulers())
                 }.subscribe())
     }
 
-    private fun setTaskDescription(task: ActivityManager.TaskDescription?) {
-        task?.let { toolbarColor.postValue(task.primaryColor) }
-        if (Utils.ANDROID_LOLLIPOP) {
-            activityDescription.postValue(task)
+    private fun setTaskDescription(task: TaskDescriptionCompat?) {
+        task?.let {
+            toolbarColor.postValue(task.color)
+            if (Utils.ANDROID_LOLLIPOP) {
+                activityDescription.postValue(task.toActivityTaskDescription())
+            }
         }
     }
 
