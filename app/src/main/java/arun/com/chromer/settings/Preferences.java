@@ -256,11 +256,11 @@ public class Preferences {
         getDefaultSharedPreferences().edit().putBoolean(ARTICLE_MODE, preference).apply();
     }
 
-    public boolean incognitoMode() {
+    public boolean historyDisabled() {
         return getDefaultSharedPreferences().getBoolean(INCOGNITO_MODE, false);
     }
 
-    public void incognitoMode(final boolean preference) {
+    public void historyDisabled(final boolean preference) {
         getDefaultSharedPreferences().edit().putBoolean(INCOGNITO_MODE, preference).apply();
     }
 
