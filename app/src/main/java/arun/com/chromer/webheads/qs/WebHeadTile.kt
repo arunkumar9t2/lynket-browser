@@ -23,7 +23,6 @@ import android.graphics.drawable.Icon
 import android.os.Build
 import android.support.annotation.RequiresApi
 import arun.com.chromer.R
-import arun.com.chromer.settings.Preferences
 import arun.com.chromer.shared.base.PreferenceQuickSettingsTile
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
@@ -34,7 +33,7 @@ import com.mikepenz.iconics.IconicsDrawable
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 class WebHeadTile : PreferenceQuickSettingsTile() {
-    override fun togglePreference() = Preferences.get(this).webHeads(!Preferences.get(this).webHeads())
+    override fun togglePreference() = preferences.webHeads(!preferences.webHeads())
 
     override fun activeLabel(): String = label()
 
@@ -44,7 +43,7 @@ class WebHeadTile : PreferenceQuickSettingsTile() {
 
     override fun inActiveLabel(): String = label()
 
-    override fun preference(): Boolean = Preferences.get(this).webHeads()
+    override fun preference(): Boolean = preferences.webHeads()
 
     private fun label() = getString(R.string.web_heads)
     private fun icon() = Icon.createWithBitmap(IconicsDrawable(this)

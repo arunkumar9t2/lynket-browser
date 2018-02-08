@@ -22,12 +22,11 @@ import android.graphics.drawable.Icon
 import android.os.Build
 import android.support.annotation.RequiresApi
 import arun.com.chromer.R
-import arun.com.chromer.settings.Preferences
 import arun.com.chromer.shared.base.PreferenceQuickSettingsTile
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 class AmpTile : PreferenceQuickSettingsTile() {
-    override fun togglePreference() = Preferences.get(this).ampMode(!Preferences.get(this).ampMode())
+    override fun togglePreference() = preferences.ampMode(!preferences.ampMode())
 
     override fun activeLabel(): String = label()
 
@@ -37,7 +36,7 @@ class AmpTile : PreferenceQuickSettingsTile() {
 
     override fun inActiveLabel(): String = label()
 
-    override fun preference(): Boolean = Preferences.get(this).ampMode()
+    override fun preference(): Boolean = preferences.ampMode()
 
     private fun label() = getString(R.string.amp_mode)
     private fun icon() = Icon.createWithResource(this, R.drawable.ic_action_amp_icon)
