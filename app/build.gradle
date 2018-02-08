@@ -26,7 +26,7 @@ apply plugin: 'io.fabric'
 def PLAY_LICENSE_KEY = "PLAY_LICENSE_KEY"
 def FABRIC_KEY = "FABRIC_KEY"
 def properties = new Properties()
-properties.load(new FileInputStream("values.properties"))
+properties.load(new FileInputStream("$rootDir/values.properties"))
 def playLicenseKey = properties.getProperty(PLAY_LICENSE_KEY, "\"\"")
 def fabricKey = properties.getProperty(FABRIC_KEY, "\"\"")
 
