@@ -194,7 +194,6 @@
     <string name="web_close_on_open_desc">當打開含連結的浮動氣泡，該浮動氣泡將會隨之消失。</string>
     <string name="web_close_on_open_title">當按下時浮動氣泡將隨之關閉。</string>
     <string name="minimize">縮小</string>
-    <string name="open_in_new_tab_explanation"><![CDATA[<b>開啟新分頁(5.0+) -</b> 在畫面上複製連結或文字然後按此按鈕以開啟連結或開啟分頁或浮動氣泡搜尋該文字。]]></string>
     <string name="share_action_explanation"><![CDATA[<b>分享 -</b> 快速使用Android內置的分享功能]]></string>
     <string name="minimize_action_explanation"><![CDATA[<b>縮小 -</b> 將現行網頁縮小至浮動氣泡。只有<i>合併顯示分頁和應用程式</i>被啟用時才適用 ]]></string>
     <string name="available_actions">可行操作</string>
@@ -207,7 +206,6 @@
     <string name="choose_share_method">選取分享方式</string>
     <string name="comma_seperated">以逗號分隔</string>
     <string name="share_all_list">清單 - 有限度的程式支援 Eg: Join by joaoapps, Pushbullet 等等.</string>
-    <string name="new_tab">開啟新分頁</string>
     <string name="title_activity_open_with">打開方法</string>
     <string name="title_activity_settings">設定</string>
     <string name="settings_browsing_mode">瀏覽模式</string>

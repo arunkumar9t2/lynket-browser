@@ -194,7 +194,6 @@
     <string name="web_close_on_open_desc">ウェブヘッドはリンクを開くと隠れます</string>
     <string name="web_close_on_open_title">ウェブヘッドはタップ時に閉じられます。</string>
     <string name="minimize">最小化</string>
-    <string name="open_in_new_tab_explanation"><![CDATA[<b>新しいタブで開く(5.0以上)-</b>画面上のリンクやテキストをコピーして、このアイコンをタップすると、コピーしたものを新しいタブ、バブルで表示または検索します。]]></string>
     <string name="share_action_explanation"><![CDATA[<b>共有 -</b>Androidの共有機能を素早く使用できます。]]></string>
     <string name="minimize_action_explanation"><![CDATA[<b>最小化 -</b>現在のページを最小化します。]]></string>
     <string name="bottom_bar_article_mode_explanation"><![CDATA[<b>記事ビュー</b>ページをリーダーモードで開きます。]]></string>
@@ -208,7 +207,6 @@
     <string name="choose_share_method">共有方法を選択</string>
     <string name="comma_seperated">カンマ区切り</string>
     <string name="share_all_list">リスト - 一部のアプリのみサポートしています。例: Join、Pushbulletなど</string>
-    <string name="new_tab">新しいタブを開く</string>
     <string name="title_activity_open_with">別のアプリで開く</string>
     <string name="title_activity_settings">設定</string>
     <string name="settings_browsing_mode">ブラウジングモード</string>

@@ -194,7 +194,6 @@
     <string name="web_close_on_open_desc">Plutajući mjehurići će nestati kada otvorite poveznicu</string>
     <string name="web_close_on_open_title">Zatvorite mjehuriće kada ih dodirnete.</string>
     <string name="minimize">Smanji</string>
-    <string name="open_in_new_tab_explanation"><![CDATA[<b>Otvori u novoj kartici (5.0+) -</b> kopirajte poveznicu ili tekst na zaslonu i pritisnite ovu ikonu da biste pokrenuli poveznicu ili pretražili kopirani tekst u novoj prilagođenoj kartici ili mjehuriću.]]></string>
     <string name="share_action_explanation"><![CDATA[<b>Podijeli -</b> brzo podijelite stranicu]]></string>
     <string name="minimize_action_explanation"><![CDATA[<b>Minimiziraj-</b> Minimizirat će trenutnu stranicu.]]></string>
     <string name="bottom_bar_article_mode_explanation"><![CDATA[<b>Način artikla -</b> Otvorite stranicu u načinu artikla.]]></string>
@@ -208,7 +207,6 @@
     <string name="choose_share_method">Odaberite način dijeljenja</string>
     <string name="comma_seperated">Odvojeno zarezom</string>
     <string name="share_all_list">Popis - ograničena podrška aplikacija. Npr.: Join, Pushbullet, itd.</string>
-    <string name="new_tab">Otvori novu karticu</string>
     <string name="title_activity_open_with">Otvori s pomoću</string>
     <string name="title_activity_settings">Postavke</string>
     <string name="settings_browsing_mode">Način pregledavanja</string>
