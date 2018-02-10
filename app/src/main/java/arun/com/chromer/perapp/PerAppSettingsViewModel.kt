@@ -14,7 +14,7 @@ import javax.inject.Inject
  * Created by arunk on 10-02-2018.
  */
 
-class PerAppSettingViewModel
+class PerAppSettingsViewModel
 @Inject
 constructor(private val appRepository: AppRepository) : ViewModel() {
     private val subs = CompositeSubscription()
