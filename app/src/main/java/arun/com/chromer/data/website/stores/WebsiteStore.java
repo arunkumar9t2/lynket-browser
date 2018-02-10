@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.data.website;
+package arun.com.chromer.data.website.stores;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;

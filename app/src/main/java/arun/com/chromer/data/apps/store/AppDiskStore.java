@@ -16,16 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.data.apps;
+package arun.com.chromer.data.apps.store;
 
 import android.app.Application;
 import android.support.annotation.NonNull;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import arun.com.chromer.data.apps.store.AppStore;
 import arun.com.chromer.data.common.App;
+import arun.com.chromer.data.common.BookStore;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.Utils;
 import io.paperdb.Book;
@@ -34,7 +36,7 @@ import rx.Observable;
 import timber.log.Timber;
 
 @Singleton
-public class AppDiskStore implements AppStore {
+public class AppDiskStore implements AppStore, BookStore {
     private final Application application;
 
     private static final String APP_BOOK_NAME = "APPS";
@@ -58,7 +60,7 @@ public class AppDiskStore implements AppStore {
 
     @NonNull
     @Override
-    public Observable<App> savApp(App app) {
+    public Observable<App> saveApp(@NonNull App app) {
         return Observable.just(app)
                 .flatMap(app1 -> {
                     if (app1 == null) {
@@ -84,12 +86,12 @@ public class AppDiskStore implements AppStore {
                     if (app != null) {
                         app.blackListed = true;
                         Timber.d("Set %s as blacklisted", app.packageName);
-                        return savApp(app);
+                        return saveApp(app);
                     } else {
                         Timber.d("Added %s and blacklisted", packageName);
                         app = Utils.createApp(application, packageName);
                         app.blackListed = true;
-                        return savApp(app);
+                        return saveApp(app);
                     }
                 });
     }
@@ -119,10 +121,10 @@ public class AppDiskStore implements AppStore {
                     if (app != null) {
                         app.color = color;
                         Timber.d("Saved %d color for %s", color, app.packageName);
-                        return savApp(app);
+                        return saveApp(app);
                     } else {
                         Timber.d("Created and saved %d color for %s", color, packageName);
-                        return savApp(Utils.createApp(application, packageName));
+                        return saveApp(Utils.createApp(application, packageName));
                     }
                 });
     }
@@ -135,7 +137,7 @@ public class AppDiskStore implements AppStore {
                         if (app != null) {
                             app.blackListed = false;
                             Timber.d("Blacklist removed %s", app.packageName);
-                            return savApp(app);
+                            return saveApp(app);
                         } else {
                             return Observable.just(null);
                         }
@@ -143,5 +145,35 @@ public class AppDiskStore implements AppStore {
         } else {
             return Observable.just(null);
         }
+    }
+
+    @NotNull
+    @Override
+    public Observable<App> getInstalledApps() {
+        return Observable.empty();
+    }
+
+    @Override
+    public boolean isPackageIncognito(@NotNull String packageName) {
+        return getBook().contains(packageName)
+                && getApp(packageName).toBlocking().first().incognito;
+    }
+
+    @NotNull
+    @Override
+    public Observable<App> setPackageIncognito(@NotNull String packageName) {
+        return getApp(packageName)
+                .flatMap(app -> {
+                    if (app != null) {
+                        app.incognito = true;
+                        Timber.d("Set %s as incognito", app.packageName);
+                        return saveApp(app);
+                    } else {
+                        Timber.d("Added %s and set incognito", packageName);
+                        app = Utils.createApp(application, packageName);
+                        app.incognito = true;
+                        return saveApp(app);
+                    }
+                });
     }
 }

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.data.webarticle;
+package arun.com.chromer.data.webarticle.stores;
 
 import android.support.annotation.NonNull;
 
@@ -28,6 +28,7 @@ import java.util.Iterator;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import arun.com.chromer.data.webarticle.WebArticleStore;
 import arun.com.chromer.data.webarticle.model.WebArticle;
 import arun.com.chromer.util.parser.RxParser;
 import rx.Observable;

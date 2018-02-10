@@ -23,12 +23,10 @@ import arun.com.chromer.ChromerRobolectricSuite
 import arun.com.chromer.browsing.amp.AmpResolverActivity
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.home.HomeActivity
-import arun.com.chromer.settings.Preferences
 import arun.com.chromer.webheads.WebHeadService
 import org.junit.Before
 import org.junit.Test
 import org.robolectric.Robolectric
-import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.shadows.ShadowApplication
@@ -42,9 +40,6 @@ class DefaultTabsManagerTest : ChromerRobolectricSuite() {
     @Inject
     @JvmField
     var tabs: DefaultTabsManager? = null
-    @Inject
-    @JvmField
-    var preferences: Preferences? = null
 
     private val url = "https://www.example.com"
 
@@ -55,9 +50,7 @@ class DefaultTabsManagerTest : ChromerRobolectricSuite() {
 
     @Test
     fun testInject() {
-        assert(testAppComponent != null)
         assert(tabs != null)
-        assert(preferences != null)
     }
 
     @Test
@@ -69,7 +62,7 @@ class DefaultTabsManagerTest : ChromerRobolectricSuite() {
         val homeActivity = Robolectric.buildActivity(HomeActivity::class.java).create().get()
         val homeActivityShadow = shadowOf(homeActivity)
 
-        tabs?.openUrl(RuntimeEnvironment.application, Website(url), fromApp = false)
+        tabs?.openUrl(application, Website(url), fromApp = false)
         assert(homeActivityShadow.isFinishing)
     }
 
@@ -78,11 +71,11 @@ class DefaultTabsManagerTest : ChromerRobolectricSuite() {
     fun testWebHeadsOpened() {
         clearPreferences()
         preferences?.webHeads(true)
-        val shadowApp = Shadows.shadowOf(RuntimeEnvironment.application)
+        val shadowApp = Shadows.shadowOf(application)
 
         assertWebHeadServiceLaunched(shadowApp)
 
-        tabs?.openUrl(RuntimeEnvironment.application, Website(url), fromApp = false, fromWebHeads = true)
+        tabs?.openUrl(application, Website(url), fromApp = false, fromWebHeads = true)
         assert(shadowApp.nextStartedService == null)
     }
 
@@ -91,22 +84,17 @@ class DefaultTabsManagerTest : ChromerRobolectricSuite() {
         clearPreferences()
         preferences?.ampMode(true)
 
-        val shadowApp = Shadows.shadowOf(RuntimeEnvironment.application)
-        tabs?.openUrl(RuntimeEnvironment.application, Website(url), fromApp = false, fromWebHeads = false)
-        assert(shadowApp.nextStartedActivity.component == Intent(RuntimeEnvironment.application, AmpResolverActivity::class.java).component)
+        val shadowApp = Shadows.shadowOf(application)
+        tabs?.openUrl(application, Website(url), fromApp = false, fromWebHeads = false)
+        assert(shadowApp.nextStartedActivity.component == Intent(application, AmpResolverActivity::class.java).component)
 
         preferences?.webHeads(true)
         assertWebHeadServiceLaunched(shadowApp)
     }
 
     private fun assertWebHeadServiceLaunched(shadowApp: ShadowApplication) {
-        tabs?.openUrl(RuntimeEnvironment.application, Website(url), fromApp = false, fromWebHeads = false)
-        assert(shadowApp.peekNextStartedService().component == Intent(RuntimeEnvironment.application, WebHeadService::class.java).component)
+        tabs?.openUrl(application, Website(url), fromApp = false, fromWebHeads = false)
+        assert(shadowApp.peekNextStartedService().component == Intent(application, WebHeadService::class.java).component)
         assert(shadowApp.nextStartedService.dataString == url)
     }
-
-    private fun clearPreferences() {
-        preferences?.defaultSharedPreferences?.edit()?.clear()?.commit()
-    }
-
 }

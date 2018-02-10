@@ -30,10 +30,11 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import arun.com.chromer.data.history.HistoryRepository;
-import arun.com.chromer.data.qualifiers.Disk;
-import arun.com.chromer.data.qualifiers.Network;
+import arun.com.chromer.data.common.qualifiers.Disk;
+import arun.com.chromer.data.common.qualifiers.Network;
 import arun.com.chromer.data.website.model.WebColor;
 import arun.com.chromer.data.website.model.Website;
+import arun.com.chromer.data.website.stores.WebsiteStore;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.SchedulerProvider;
 import rx.Observable;

@@ -35,6 +35,8 @@ public class App implements Parcelable {
     @NonNull
     public String packageName;
     public boolean blackListed;
+    public boolean incognito;
+
     @ColorInt
     public int color = -1;
 
@@ -42,16 +44,19 @@ public class App implements Parcelable {
 
     }
 
-    public App(@NonNull String appName, @NonNull String packageName, boolean blackListed) {
+    public App(@NonNull String appName, @NonNull String packageName, boolean blackListed, boolean incognito, int color) {
         this.appName = appName;
         this.packageName = packageName;
         this.blackListed = blackListed;
+        this.incognito = incognito;
+        this.color = color;
     }
 
     protected App(Parcel in) {
         appName = in.readString();
         packageName = in.readString();
         blackListed = in.readByte() != 0;
+        incognito = in.readByte() != 0;
         color = in.readInt();
     }
 
@@ -67,33 +72,6 @@ public class App implements Parcelable {
         }
     };
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        App app = (App) o;
-        return packageName.equals(app.packageName);
-
-    }
-
-    @Override
-    public int hashCode() {
-        return packageName.hashCode();
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(appName);
-        dest.writeString(packageName);
-        dest.writeByte((byte) (blackListed ? 1 : 0));
-        dest.writeInt(color);
-    }
-
     private static int blackListAwareComparison(@Nullable App lhs, @Nullable App rhs) {
         final String lhsName = lhs != null ? lhs.appName : null;
         final String rhsName = rhs != null ? rhs.appName : null;
@@ -107,6 +85,55 @@ public class App implements Parcelable {
         if (lhsName == null && rhsName == null) return 0;
 
         return lhsName.compareToIgnoreCase(rhsName);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(appName);
+        dest.writeString(packageName);
+        dest.writeByte((byte) (blackListed ? 1 : 0));
+        dest.writeByte((byte) (incognito ? 1 : 0));
+        dest.writeInt(color);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        App app = (App) o;
+
+        if (blackListed != app.blackListed) return false;
+        if (incognito != app.incognito) return false;
+        if (color != app.color) return false;
+        if (!appName.equals(app.appName)) return false;
+        return packageName.equals(app.packageName);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = appName.hashCode();
+        result = 31 * result + packageName.hashCode();
+        result = 31 * result + (blackListed ? 1 : 0);
+        result = 31 * result + (incognito ? 1 : 0);
+        result = 31 * result + color;
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "App{" +
+                "appName='" + appName + '\'' +
+                ", packageName='" + packageName + '\'' +
+                ", blackListed=" + blackListed +
+                ", incognito=" + incognito +
+                ", color=" + color +
+                '}';
     }
 
     public static class BlackListComparator implements Comparator<App> {

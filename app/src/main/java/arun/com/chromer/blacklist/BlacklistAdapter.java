@@ -18,7 +18,6 @@
 
 package arun.com.chromer.blacklist;
 
-import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.RecyclerView;
@@ -32,9 +31,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import arun.com.chromer.R;
 import arun.com.chromer.data.common.App;
-import arun.com.chromer.util.glide.GlideApp;
+import arun.com.chromer.di.scopes.PerActivity;
 import arun.com.chromer.util.glide.GlideRequests;
 import arun.com.chromer.util.glide.appicon.ApplicationIcon;
 import butterknife.BindView;
@@ -45,15 +46,17 @@ import rx.subjects.PublishSubject;
 /**
  * Created by Arun on 24/01/2016.
  */
-class BlacklistAdapter extends RecyclerView.Adapter<BlacklistAdapter.BlackListItemViewHolder> {
+@PerActivity
+public class BlacklistAdapter extends RecyclerView.Adapter<BlacklistAdapter.BlackListItemViewHolder> {
     private final List<App> apps = new ArrayList<>();
 
     private final PublishSubject<App> clickSubject = PublishSubject.create();
     private final GlideRequests glideRequests;
 
-    BlacklistAdapter(@NonNull Activity activity) {
+    @Inject
+    BlacklistAdapter(GlideRequests requests) {
         setHasStableIds(true);
-        glideRequests = GlideApp.with(activity);
+        glideRequests = requests;
     }
 
     @Override

@@ -16,10 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.data.apps.store;
+package arun.com.chromer.data.apps.qualifiers;
 
-import arun.com.chromer.data.apps.AppRepository;
-import arun.com.chromer.data.common.BookStore;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-public interface AppStore extends AppRepository, BookStore {
+import javax.inject.Qualifier;
+
+@Qualifier
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+public @interface System {
 }

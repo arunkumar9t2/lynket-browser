@@ -27,7 +27,7 @@
     tools:showIn="@layout/activity_blacklist">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/app_recyclerview"
+        android:id="@+id/appRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.data.qualifiers;
+package arun.com.chromer.data.common.qualifiers;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -27,5 +27,5 @@ import javax.inject.Qualifier;
 @Qualifier
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Network {
+public @interface Disk {
 }

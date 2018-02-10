@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Singleton;
 
+import arun.com.chromer.ChromerRobolectricSuite;
+import arun.com.chromer.data.apps.DefaultAppRepositoryTest;
 import arun.com.chromer.di.data.TestDataModule;
 import arun.com.chromer.tabs.DefaultTabsManagerTest;
 import dagger.Component;
@@ -33,5 +35,9 @@ import dagger.Component;
 })
 public interface TestAppComponent extends AppComponent {
 
+    void inject(@NotNull ChromerRobolectricSuite chromerRobolectricSuite);
+
     void inject(@NotNull DefaultTabsManagerTest defaultTabsManagerTest);
+
+    void inject(@NotNull DefaultAppRepositoryTest defaultAppRepositoryTest);
 }
