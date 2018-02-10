@@ -32,9 +32,6 @@ import com.afollestad.materialdialogs.MaterialDialog
 import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
 
-/**
- * Simple dialog activity to launch new url in a popup. Shows a search view.
- */
 class AmpResolverActivity : BrowsingActivity() {
     private var ampResolverDialog: AmpResolverDialog? = null
 
@@ -60,7 +57,11 @@ class AmpResolverActivity : BrowsingActivity() {
     }
 
     private fun launchUrl() {
-        tabsManager.openUrl(this, Website.Ampify(website!!), fromAmp = true)
+        if (website!!.hasAmp()) {
+            tabsManager.openBrowsingTab(this, Website.Ampify(website!!), fromNewTab = false)
+        } else {
+            tabsManager.openUrl(this, Website.Ampify(website!!), fromAmp = true)
+        }
         ampResolverDialog?.dismiss()
     }
 
