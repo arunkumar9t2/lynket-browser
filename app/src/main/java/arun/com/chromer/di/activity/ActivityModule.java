@@ -20,8 +20,9 @@ package arun.com.chromer.di.activity;
 
 import android.app.Activity;
 
+import com.bumptech.glide.RequestManager;
+
 import arun.com.chromer.util.glide.GlideApp;
-import arun.com.chromer.util.glide.GlideRequests;
 import dagger.Module;
 import dagger.Provides;
 
@@ -40,7 +41,7 @@ public class ActivityModule {
     }
 
     @Provides
-    GlideRequests glideRequests() {
+    RequestManager glideRequests() {
         return GlideApp.with(activity);
     }
 }

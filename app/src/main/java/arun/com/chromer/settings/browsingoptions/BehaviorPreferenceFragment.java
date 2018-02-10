@@ -30,7 +30,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
-import arun.com.chromer.blacklist.BlacklistManagerActivity;
+import arun.com.chromer.perapp.PerAppSettingsActivity;
 import arun.com.chromer.settings.Preferences;
 import arun.com.chromer.settings.preferences.BasePreferenceFragment;
 import arun.com.chromer.settings.widgets.IconSwitchPreference;
@@ -77,7 +77,7 @@ public class BehaviorPreferenceFragment extends BasePreferenceFragment {
             blackListPreference.setIcon(recentImg);
             blackListPreference.hideSwitch();
             blackListPreference.setOnPreferenceClickListener(preference -> {
-                final Intent blacklistedApps = new Intent(getActivity(), BlacklistManagerActivity.class);
+                final Intent blacklistedApps = new Intent(getActivity(), PerAppSettingsActivity.class);
                 startActivity(blacklistedApps,
                         ActivityOptions.makeCustomAnimation(getActivity(),
                                 R.anim.slide_in_right_medium,

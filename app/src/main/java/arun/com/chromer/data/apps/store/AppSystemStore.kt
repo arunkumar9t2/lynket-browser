@@ -40,7 +40,6 @@ constructor(
     override fun removeBlacklist(packageName: String): Observable<App> = Observable.empty()
 
     override fun getInstalledApps(): Observable<App> {
-        val appComparator = App.BlackListComparator()
         val pm = application.packageManager
         val intent = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER)
 
@@ -50,6 +49,5 @@ constructor(
                 .map { resolveInfo ->
                     Utils.createApp(application, resolveInfo.activityInfo.packageName)
                 }.distinct()
-                .sorted { app1, app2 -> appComparator.compare(app1, app2) }
     }
 }

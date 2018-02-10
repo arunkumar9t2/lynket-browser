@@ -91,12 +91,13 @@ class DefaultAppRepository
     }
 
     override fun allApps(): Observable<List<App>> {
+        val appComparator = App.BlackListComparator()
         return systemStore.getInstalledApps()
                 .map { app ->
                     app.blackListed = diskStore.isPackageBlacklisted(app.packageName)
                     app.incognito = diskStore.isPackageIncognito(app.packageName)
                     app
                 }
-                .toList()
+                .toSortedList({ app1, app2 -> appComparator.compare(app1, app2) })
     }
 }

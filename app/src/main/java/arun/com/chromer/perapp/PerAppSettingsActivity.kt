@@ -16,9 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.blacklist
+package arun.com.chromer.perapp
 
 import android.annotation.TargetApi
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -30,37 +31,63 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.CompoundButton
 import arun.com.chromer.R
+import arun.com.chromer.data.common.App
 import arun.com.chromer.di.activity.ActivityComponent
+import arun.com.chromer.extenstions.observeUntilActivityDestroyed
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.shared.base.Snackable
 import arun.com.chromer.shared.base.activity.BaseActivity
 import arun.com.chromer.util.ServiceManager
 import arun.com.chromer.util.Utils
+import arun.com.chromer.util.viemodel.ViewModelFactory
 import com.afollestad.materialdialogs.MaterialDialog
 import kotlinx.android.synthetic.main.activity_blacklist.*
 import kotlinx.android.synthetic.main.activity_blacklist_content.*
 import javax.inject.Inject
 
-class BlacklistManagerActivity : BaseActivity(), CompoundButton.OnCheckedChangeListener, Snackable {
-    private var blacklistAdapter: BlacklistAdapter? = null
-
+class PerAppSettingsActivity : BaseActivity(), CompoundButton.OnCheckedChangeListener, Snackable {
     @Inject
     lateinit var preferences: Preferences
     @Inject
-    lateinit var blacklisAdapter: BlacklistAdapter
+    lateinit var perAppListAdapter: PerAppListAdapter
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setupToolbar()
-
-        appRecyclerView.layoutManager = LinearLayoutManager(this)
-        appRecyclerView.adapter = blacklistAdapter
-    }
+    private lateinit var perAppViewModel: PerAppSettingViewModel
 
     override fun inject(activityComponent: ActivityComponent) {
         activityComponent.inject(this)
     }
 
+    override fun getLayoutRes(): Int = R.layout.activity_blacklist
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setupToolbar()
+        setupList()
+        observeViewModel()
+    }
+
+    private fun setupList() {
+        appRecyclerView.layoutManager = LinearLayoutManager(this)
+        appRecyclerView.adapter = perAppListAdapter
+    }
+
+
+    private fun observeViewModel() {
+        perAppViewModel = ViewModelProviders.of(this, viewModelFactory).get(PerAppSettingViewModel::class.java)
+        perAppViewModel.apply {
+            loadingLiveData.observeUntilActivityDestroyed(this@PerAppSettingsActivity, { loading(it!!) })
+            appsLiveData.observeUntilActivityDestroyed(this@PerAppSettingsActivity, { apps ->
+                setApps(apps!!)
+            })
+        }
+    }
+
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+        loadApps()
+    }
 
     private fun setupToolbar() {
         setSupportActionBar(toolbar)
@@ -69,16 +96,11 @@ class BlacklistManagerActivity : BaseActivity(), CompoundButton.OnCheckedChangeL
         swipeRefreshLayout.apply {
             setColorSchemeResources(
                     R.color.colorPrimary,
-                    R.color.colorAccent,
-                    R.color.colorPrimaryDarker)
+                    R.color.colorAccent)
             setOnRefreshListener {
-
+                loadApps()
             }
         }
-    }
-
-    override fun getLayoutRes(): Int {
-        return R.layout.activity_blacklist
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -119,16 +141,30 @@ class BlacklistManagerActivity : BaseActivity(), CompoundButton.OnCheckedChangeL
             requestUsagePermission()
         } else {
             snack(if (isChecked) getString(R.string.blacklist_on) else getString(R.string.blacklist_off))
-            Preferences.get(this).blacklist(isChecked)
+            preferences.blacklist(isChecked)
             ServiceManager.takeCareOfServices(applicationContext)
         }
     }
 
+
+    private fun loadApps() {
+        perAppViewModel.loadApps()
+    }
+
+    private fun loading(loading: Boolean) {
+        swipeRefreshLayout.isRefreshing = loading
+    }
+
+
+    private fun setApps(apps: List<App>) {
+        perAppListAdapter.setApps(apps)
+    }
+
     override fun snack(message: String) {
-        Snackbar.make(coordinatorLayout!!, message, Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun snackLong(message: String) {
-        Snackbar.make(coordinatorLayout!!, message, Snackbar.LENGTH_LONG).show()
+        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show()
     }
 }

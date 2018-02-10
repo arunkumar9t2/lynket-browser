@@ -20,7 +20,7 @@ package arun.com.chromer.di.activity;
 
 import android.support.annotation.NonNull;
 
-import arun.com.chromer.blacklist.BlacklistManagerActivity;
+import arun.com.chromer.perapp.PerAppSettingsActivity;
 import arun.com.chromer.browsing.amp.AmpResolverActivity;
 import arun.com.chromer.browsing.article.ArticleActivity;
 import arun.com.chromer.browsing.browserintercept.BrowserInterceptActivity;
@@ -55,7 +55,7 @@ public interface ActivityComponent {
     @NonNull
     ViewComponent newViewComponent(ViewModule viewModuleF);
 
-    void inject(BlacklistManagerActivity blacklistManagerActivity);
+    void inject(PerAppSettingsActivity perAppSettingsActivity);
 
     void inject(HomeActivity homeActivity);
 

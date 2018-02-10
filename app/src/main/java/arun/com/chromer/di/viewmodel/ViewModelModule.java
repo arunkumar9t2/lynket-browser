@@ -25,6 +25,7 @@ import arun.com.chromer.browsing.BrowsingViewModel;
 import arun.com.chromer.browsing.article.BrowsingArticleViewModel;
 import arun.com.chromer.history.HistoryFragmentViewModel;
 import arun.com.chromer.home.fragment.HomeFragmentViewModel;
+import arun.com.chromer.perapp.PerAppSettingViewModel;
 import arun.com.chromer.tabs.ui.TabsViewModel;
 import arun.com.chromer.util.viemodel.ViewModelFactory;
 import dagger.Binds;
@@ -60,4 +61,9 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(BrowsingArticleViewModel.class)
     abstract ViewModel bindArticleBrowsingViewModel(BrowsingArticleViewModel browsingArticleViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(PerAppSettingViewModel.class)
+    abstract ViewModel perAppSettingViewModel(PerAppSettingViewModel perAppSettingViewModel);
 }
