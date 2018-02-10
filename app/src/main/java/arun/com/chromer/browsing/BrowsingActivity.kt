@@ -52,6 +52,8 @@ abstract class BrowsingActivity : BaseActivity() {
 
     var website: Website? = null
 
+    var incognito: Boolean = false
+
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +62,9 @@ abstract class BrowsingActivity : BaseActivity() {
             finish()
             return
         }
+
+        incognito = intent.getBooleanExtra(Constants.EXTRA_KEY_INCOGNITO, false)
+
         browsingViewModel = ViewModelProviders.of(this, viewModelFactory).get(BrowsingViewModel::class.java)
 
         observeViewModel(savedInstanceState)
@@ -85,6 +90,7 @@ abstract class BrowsingActivity : BaseActivity() {
 
     private fun observeViewModel(savedInstanceState: Bundle?) {
         browsingViewModel.apply {
+            isIncognito = incognito
             websiteLiveData.observeUntilOnDestroy(this@BrowsingActivity, {
                 when (it) {
                     is Result.Success -> {

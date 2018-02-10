@@ -70,6 +70,8 @@ class MenuDelegate @Inject constructor(
         get() = Uri.parse(currentUrl)
     private val website: Website
         get() = (activity as BrowsingActivity).website ?: Website(currentUrl)
+    private val incognito: Boolean
+        get() = (activity as BrowsingActivity).incognito
 
     private val isArticle = activity is ArticleActivity
     private val isWebview = activity is WebViewActivity
@@ -157,13 +159,13 @@ class MenuDelegate @Inject constructor(
 
     fun handleItemSelected(itemId: Int): Boolean {
         when (itemId) {
-            R.id.menu_open_full_page -> tabsManager.openBrowsingTab(activity, website, true, false, CustomTabActivity::class.java.name)
+            R.id.menu_open_full_page -> tabsManager.openBrowsingTab(activity, website, true, false, CustomTabActivity::class.java.name, incognito = incognito)
             android.R.id.home -> activity.finish()
             R.id.bottom_bar_open_in_new_tab -> tabsManager.openNewTab(activity, currentUrl)
             R.id.bottom_bar_share -> shareUrl()
             R.id.bottom_bar_tabs, R.id.tabs -> tabsManager.showTabsActivity()
-            R.id.bottom_bar_minimize_tab -> tabsManager.minimizeTabByUrl(currentUrl, activity::class.java.name)
-            R.id.bottom_bar_article_view -> tabsManager.openArticle(activity, website, false)
+            R.id.bottom_bar_minimize_tab -> tabsManager.minimizeTabByUrl(currentUrl, activity::class.java.name, incognito)
+            R.id.bottom_bar_article_view -> tabsManager.openArticle(activity, website, false, incognito = incognito)
             R.id.menu_action_button -> when (preferences.preferredAction()) {
                 PREFERRED_ACTION_BROWSER -> activity.sendBroadcast(Intent(activity, SecondaryBrowserReceiver::class.java).setData(currentUri))
                 PREFERRED_ACTION_FAV_SHARE -> activity.sendBroadcast(Intent(activity, FavShareBroadcastReceiver::class.java).setData(currentUri))

@@ -74,6 +74,7 @@ import arun.com.chromer.webheads.ui.WebHeadContract;
 import arun.com.chromer.webheads.ui.context.WebHeadContextActivity;
 import arun.com.chromer.webheads.ui.views.Trashy;
 import arun.com.chromer.webheads.ui.views.WebHead;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -93,6 +94,7 @@ import static arun.com.chromer.shared.Constants.ACTION_REBIND_WEBHEAD_TAB_CONNEC
 import static arun.com.chromer.shared.Constants.ACTION_STOP_WEBHEAD_SERVICE;
 import static arun.com.chromer.shared.Constants.ACTION_WEBHEAD_COLOR_SET;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_AMP;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_INCOGNITO;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_MINIMIZE;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_REBIND_WEBHEAD_CXN;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBHEAD_COLOR;
@@ -220,6 +222,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
 
         final boolean isForMinimized = intent.getBooleanExtra(EXTRA_KEY_MINIMIZE, false);
         final boolean isFromAmp = intent.getBooleanExtra(EXTRA_KEY_FROM_AMP, false);
+        final boolean isIncognito = intent.getBooleanExtra(EXTRA_KEY_INCOGNITO, false);
 
         final String urlToLoad = intent.getDataString();
         if (TextUtils.isEmpty(urlToLoad)) {
@@ -228,7 +231,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         }
 
         if (!isLinkAlreadyLoaded(urlToLoad)) {
-            addWebHead(urlToLoad, isFromAmp);
+            addWebHead(urlToLoad, isFromAmp, isIncognito);
         } else if (!isForMinimized) {
             Toast.makeText(this, R.string.already_loaded, LENGTH_SHORT).show();
         }
@@ -238,7 +241,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         return urlToLoad == null || webHeads.containsKey(urlToLoad);
     }
 
-    private void addWebHead(final String webHeadUrl, boolean isFromAmp) {
+    private void addWebHead(final String webHeadUrl, boolean isFromAmp, boolean isIncognito) {
         if (springChain2D == null) {
             springChain2D = SpringChain2D.create(this);
         }
@@ -251,6 +254,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         }
         newWebHead.setMaster(true);
         newWebHead.setFromAmp(isFromAmp);
+        newWebHead.setIncognito(isIncognito);
 
         // Add to our map
         webHeads.put(webHeadUrl, newWebHead);
@@ -259,7 +263,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
 
         preLoadForArticle(webHeadUrl);
 
-        doExtraction(webHeadUrl);
+        doExtraction(webHeadUrl, isIncognito);
     }
 
     private boolean reveal(WebHead newWebHead) {
@@ -271,8 +275,14 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         }));
     }
 
-    private void doExtraction(final String webHeadUrl) {
-        subs.add(websiteRepository.getWebsite(webHeadUrl)
+    private void doExtraction(final String webHeadUrl, boolean isIncognito) {
+        final Observable<Website> websiteObservable;
+        if (!isIncognito) {
+            websiteObservable = websiteRepository.getWebsite(webHeadUrl);
+        } else {
+            websiteObservable = websiteRepository.getIncognitoWebsite(webHeadUrl);
+        }
+        subs.add(websiteObservable
                 .filter(website -> website != null)
                 .compose(SchedulerProvider.applyIoSchedulers())
                 .doOnNext(website -> {
@@ -418,7 +428,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
 
     @Override
     public void onWebHeadClick(@NonNull WebHead webHead) {
-        tabsManager.openUrl(this, webHead.getWebsite(), true, true, false, webHead.isFromAmp());
+        tabsManager.openUrl(this, webHead.getWebsite(), true, true, false, webHead.isFromAmp(), webHead.isIncognito());
 
         // If user prefers to the close the head on opening the link, then call destroySelf()
         // which will take care of closing and detaching the web head

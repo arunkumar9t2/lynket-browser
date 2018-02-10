@@ -50,6 +50,6 @@ constructor(
                 .filter { resolveInfo -> resolveInfo != null && !resolveInfo.activityInfo.packageName.equals(application.packageName, ignoreCase = true) }
                 .map { resolveInfo ->
                     Utils.createApp(application, resolveInfo.activityInfo.packageName)
-                }.distinct()
+                }.distinct { it.packageName }
     }
 }

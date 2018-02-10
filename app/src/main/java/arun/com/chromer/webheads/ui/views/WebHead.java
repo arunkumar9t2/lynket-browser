@@ -104,6 +104,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
      */
     private static MovementTracker movementTracker;
     private boolean fromAmp;
+    private boolean incognito;
 
     /**
      * Inits the web head and attaches to the system window. It is assumed that draw over other apps
@@ -659,6 +660,14 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
     public void setFromAmp(boolean fromAmp) {
         this.fromAmp = fromAmp;
+    }
+
+    public void setIncognito(boolean incognito) {
+        this.incognito = incognito;
+    }
+
+    public boolean isIncognito() {
+        return incognito;
     }
 
     /**

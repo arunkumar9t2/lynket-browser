@@ -49,6 +49,8 @@ constructor(
 ) : ViewModel() {
     private val subs = CompositeSubscription()
 
+    var isIncognito: Boolean = false
+
     private val websiteQueue = PublishSubject.create<String>()
     private val taskDescriptionQueue = PublishSubject.create<Website>()
 
@@ -59,7 +61,7 @@ constructor(
     init {
         // Monitor website requests
         subs.add(websiteQueue.filter { it.isNotEmpty() }
-                .switchMap { url -> websiteRepository.getWebsite(url).compose(Result.applyToObservable()) }
+                .switchMap { url -> websiteObservable(url).compose(Result.applyToObservable()) }
                 .compose(SchedulerProvider.applyIoSchedulers())
                 .doOnError(Timber::e)
                 .subscribe({ result ->
@@ -88,6 +90,10 @@ constructor(
                             .compose(SchedulerProvider.applyIoSchedulers())
                 }.subscribe())
     }
+
+    private fun websiteObservable(url: String) = if (!isIncognito) {
+        websiteRepository.getWebsite(url)
+    } else websiteRepository.getIncognitoWebsite(url)
 
     private fun setTaskDescription(task: TaskDescriptionCompat?) {
         task?.let {
