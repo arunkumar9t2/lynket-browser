@@ -26,6 +26,8 @@ import android.support.annotation.Nullable;
 
 import java.util.Comparator;
 
+import arun.com.chromer.shared.Constants;
+
 /**
  * Created by Arun on 24/01/2016.
  */
@@ -38,7 +40,7 @@ public class App implements Parcelable {
     public boolean incognito;
 
     @ColorInt
-    public int color = -1;
+    public int color = Constants.NO_COLOR;
 
     public App() {
 
@@ -72,18 +74,17 @@ public class App implements Parcelable {
         }
     };
 
-    private static int blackListAwareComparison(@Nullable App lhs, @Nullable App rhs) {
+    private static int blackListIncognitoAwareComparison(@Nullable App lhs, @Nullable App rhs) {
         final String lhsName = lhs != null ? lhs.appName : null;
         final String rhsName = rhs != null ? rhs.appName : null;
 
-        boolean lhsBlacklist = lhs != null && lhs.blackListed;
-        boolean rhsBlacklist = rhs != null && rhs.blackListed;
+        boolean lhsValueSet = lhs != null && (lhs.blackListed || lhs.incognito);
+        boolean rhsValueSet = rhs != null && (rhs.blackListed || rhs.incognito);
 
-        if (lhsBlacklist ^ rhsBlacklist) return (lhsBlacklist) ? -1 : 1;
+        if (lhsValueSet ^ rhsValueSet) return (lhsValueSet) ? -1 : 1;
         if (lhsName == null ^ rhsName == null) return lhs == null ? -1 : 1;
         //noinspection ConstantConditions
         if (lhsName == null && rhsName == null) return 0;
-
         return lhsName.compareToIgnoreCase(rhsName);
     }
 
@@ -136,11 +137,11 @@ public class App implements Parcelable {
                 '}';
     }
 
-    public static class BlackListComparator implements Comparator<App> {
+    public static class PerAppListComparator implements Comparator<App> {
 
         @Override
         public int compare(App lhs, App rhs) {
-            return blackListAwareComparison(lhs, rhs);
+            return blackListIncognitoAwareComparison(lhs, rhs);
         }
     }
 }

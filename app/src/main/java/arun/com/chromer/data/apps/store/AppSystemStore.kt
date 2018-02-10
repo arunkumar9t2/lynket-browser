@@ -31,6 +31,8 @@ constructor(
 
     override fun setPackageIncognito(packageName: String): Observable<App> = Observable.empty()
 
+    override fun removeIncognito(packageName: String): Observable<App> = Observable.empty()
+
     override fun getPackageColorSync(packageName: String): Int = Constants.NO_COLOR
 
     override fun getPackageColor(packageName: String): Observable<Int> = Observable.just(Constants.NO_COLOR)

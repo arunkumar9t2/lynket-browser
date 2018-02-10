@@ -18,13 +18,12 @@
 
 package arun.com.chromer.perapp
 
-import android.support.v7.widget.AppCompatCheckBox
+import android.app.Activity
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import arun.com.chromer.R
 import arun.com.chromer.data.common.App
@@ -33,6 +32,9 @@ import arun.com.chromer.util.glide.appicon.ApplicationIcon
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.bumptech.glide.RequestManager
+import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.mikepenz.iconics.IconicsDrawable
+import rx.subjects.PublishSubject
 import java.util.*
 import javax.inject.Inject
 
@@ -42,9 +44,47 @@ import javax.inject.Inject
 @PerActivity
 class PerAppListAdapter @Inject
 internal constructor(
+        private val activity: Activity,
         private val glideRequests: RequestManager
 ) : RecyclerView.Adapter<PerAppListAdapter.BlackListItemViewHolder>() {
     private val apps = ArrayList<App>()
+
+    private val iconSizeDp = 24
+
+    val incognitoSelections = PublishSubject.create<Pair<String, Boolean>>()
+    val blacklistSelections = PublishSubject.create<Pair<String, Boolean>>()
+
+    private val blacklistSelected: IconicsDrawable by lazy {
+        IconicsDrawable(activity).apply {
+            icon(CommunityMaterial.Icon.cmd_earth)
+            colorRes(R.color.accent)
+            sizeDp(iconSizeDp)
+        }
+    }
+
+    private val blacklistUnSelected: IconicsDrawable by lazy {
+        IconicsDrawable(activity).apply {
+            icon(CommunityMaterial.Icon.cmd_earth)
+            colorRes(R.color.material_dark_light)
+            sizeDp(iconSizeDp)
+        }
+    }
+
+    private val incognitoSelected: IconicsDrawable by lazy {
+        IconicsDrawable(activity).apply {
+            icon(CommunityMaterial.Icon.cmd_incognito)
+            colorRes(R.color.accent)
+            sizeDp(iconSizeDp)
+        }
+    }
+
+    private val incognitoUnSelected: IconicsDrawable by lazy {
+        IconicsDrawable(activity).apply {
+            icon(CommunityMaterial.Icon.cmd_incognito)
+            colorRes(R.color.material_dark_light)
+            sizeDp(iconSizeDp)
+        }
+    }
 
     init {
         setHasStableIds(true)
@@ -77,6 +117,11 @@ internal constructor(
         notifyDataSetChanged()
     }
 
+    fun setApp(index: Int, app: App) {
+        this.apps[index] = app
+        notifyItemChanged(index)
+    }
+
     inner class BlackListItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         @BindView(R.id.app_list_icon)
         @JvmField
@@ -87,22 +132,43 @@ internal constructor(
         @BindView(R.id.app_list_package)
         @JvmField
         var appPackage: TextView? = null
-        @BindView(R.id.app_list_checkbox)
+        @BindView(R.id.incognitoIcon)
         @JvmField
-        var appCheckbox: AppCompatCheckBox? = null
-        @BindView(R.id.blacklist_template_root)
+        var incognitoIcon: ImageView? = null
+        @BindView(R.id.blacklistIcon)
         @JvmField
-        var blacklistTemplateRoot: LinearLayout? = null
+        var blacklistIcon: ImageView? = null
 
         init {
             ButterKnife.bind(this, view)
-            blacklistTemplateRoot?.setOnClickListener { appCheckbox?.performClick() }
         }
 
         fun bind(app: App) {
             appName!!.text = app.appName
             appPackage!!.text = app.packageName
             glideRequests.load(ApplicationIcon.createUri(app.packageName)).into(appIcon!!)
+
+            blacklistIcon!!.apply {
+                setImageDrawable(if (app.blackListed) blacklistSelected else blacklistUnSelected)
+                setOnClickListener {
+                    if (adapterPosition != RecyclerView.NO_POSITION) {
+                        val currentApp = apps[adapterPosition]
+                        currentApp.blackListed = !currentApp.blackListed
+                        blacklistSelections.onNext(Pair(currentApp.packageName, currentApp.blackListed))
+                    }
+                }
+            }
+
+            incognitoIcon!!.apply {
+                setImageDrawable(if (app.incognito) incognitoSelected else incognitoUnSelected)
+                setOnClickListener {
+                    if (adapterPosition != RecyclerView.NO_POSITION) {
+                        val currentApp = apps[adapterPosition]
+                        currentApp.incognito = !currentApp.incognito
+                        incognitoSelections.onNext(Pair(currentApp.packageName, currentApp.incognito))
+                    }
+                }
+            }
         }
     }
 }

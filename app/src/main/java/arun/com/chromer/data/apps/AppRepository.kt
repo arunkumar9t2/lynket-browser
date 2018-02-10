@@ -36,6 +36,8 @@ interface AppRepository {
 
     fun setPackageIncognito(packageName: String): Observable<App>
 
+    fun removeIncognito(packageName: String): Observable<App>
+
     @ColorInt
     fun getPackageColorSync(packageName: String): Int
 

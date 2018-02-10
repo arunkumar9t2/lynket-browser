@@ -90,8 +90,12 @@ class DefaultAppRepository
         return diskStore.setPackageIncognito(packageName)
     }
 
+    override fun removeIncognito(packageName: String): Observable<App> {
+        return diskStore.removeIncognito(packageName)
+    }
+
     override fun allApps(): Observable<List<App>> {
-        val appComparator = App.BlackListComparator()
+        val appComparator = App.PerAppListComparator()
         return systemStore.getInstalledApps()
                 .map { app ->
                     app.blackListed = diskStore.isPackageBlacklisted(app.packageName)

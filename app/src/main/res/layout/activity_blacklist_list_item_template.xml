@@ -21,16 +21,14 @@
     android:id="@+id/blacklist_template_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
-    android:clickable="true"
-    android:focusable="true"
-    android:gravity="center|left"
+    android:gravity="center|start"
     android:minHeight="56dp"
     android:orientation="horizontal"
     android:paddingBottom="8dp"
+    android:paddingRight="8dp"
     android:paddingTop="8dp"
     android:weightSum="1"
-    tools:ignore="RtlHardcoded">
+    tools:ignore="RtlSymmetry">
 
     <ImageView
         android:id="@+id/app_list_icon"
@@ -49,8 +47,8 @@
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingEnd="16dp"
-        android:paddingRight="16dp"
+        android:paddingEnd="4dp"
+        android:paddingRight="8dp"
         tools:ignore="RtlSymmetry">
 
         <TextView
@@ -70,16 +68,41 @@
             android:id="@+id/app_list_package"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textColor="?android:attr/textColorSecondary"
             tools:ignore="SelectableText"
             tools:text="@string/app_name" />
     </LinearLayout>
 
-    <android.support.v7.widget.AppCompatCheckBox
-        android:id="@+id/app_list_checkbox"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
+    <ImageView
+        android:id="@+id/blacklistIcon"
+        android:layout_width="24dp"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:gravity="center" />
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:contentDescription="@string/choose_secondary_browser"
+        android:focusable="true"
+        android:scaleType="fitCenter"
+        tools:ignore="ContentDescription"
+        tools:src="@mipmap/ic_launcher" />
+
+    <ImageView
+        android:id="@+id/incognitoIcon"
+        android:layout_width="24dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:contentDescription="@string/incognito_mode"
+        android:focusable="true"
+        android:scaleType="fitCenter"
+        tools:ignore="ContentDescription"
+        tools:src="@mipmap/ic_launcher" />
 </LinearLayout>

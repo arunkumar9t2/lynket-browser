@@ -31,7 +31,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.CompoundButton
 import arun.com.chromer.R
-import arun.com.chromer.data.common.App
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.extenstions.watch
 import arun.com.chromer.settings.Preferences
@@ -79,7 +78,19 @@ class PerAppSettingsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLis
         perAppViewModel.apply {
             loadingLiveData.watch(this@PerAppSettingsActivity, { loading(it!!) })
             appsLiveData.watch(this@PerAppSettingsActivity, { apps ->
-                setApps(apps!!)
+                perAppListAdapter.setApps(apps!!)
+            })
+            appLiveData.watch(this@PerAppSettingsActivity, { appIndexPair ->
+                perAppListAdapter.setApp(appIndexPair!!.first, appIndexPair.second)
+            })
+        }
+
+        subs.apply {
+            add(perAppListAdapter.blacklistSelections.subscribe { selections ->
+                perAppViewModel.blacklist(selections)
+            })
+            add(perAppListAdapter.incognitoSelections.subscribe { selections ->
+                perAppViewModel.incognito(selections)
             })
         }
     }
@@ -153,11 +164,6 @@ class PerAppSettingsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLis
 
     private fun loading(loading: Boolean) {
         swipeRefreshLayout.isRefreshing = loading
-    }
-
-
-    private fun setApps(apps: List<App>) {
-        perAppListAdapter.setApps(apps)
     }
 
     override fun snack(message: String) {
