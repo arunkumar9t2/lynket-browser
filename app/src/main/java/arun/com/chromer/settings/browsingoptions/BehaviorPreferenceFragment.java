@@ -18,11 +18,11 @@
 
 package arun.com.chromer.settings.browsingoptions;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -30,15 +30,15 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import arun.com.chromer.R;
-import arun.com.chromer.blacklist.BlacklistManagerActivity;
+import arun.com.chromer.perapp.PerAppSettingsActivity;
 import arun.com.chromer.settings.Preferences;
 import arun.com.chromer.settings.preferences.BasePreferenceFragment;
 import arun.com.chromer.settings.widgets.IconSwitchPreference;
 import arun.com.chromer.util.Utils;
 
 import static arun.com.chromer.settings.Preferences.AGGRESSIVE_LOADING;
-import static arun.com.chromer.settings.Preferences.BLACKLIST_DUMMY;
 import static arun.com.chromer.settings.Preferences.MERGE_TABS_AND_APPS;
+import static arun.com.chromer.settings.Preferences.PER_APP_PREFERENCE_DUMMY;
 
 /**
  * Created by Arun on 21/06/2016.
@@ -68,21 +68,19 @@ public class BehaviorPreferenceFragment extends BasePreferenceFragment {
     }
 
     private void setupBlacklistPreference() {
-        final IconSwitchPreference blackListPreference = (IconSwitchPreference) findPreference(BLACKLIST_DUMMY);
-        if (blackListPreference != null) {
+        final IconSwitchPreference perAppSettingsPreference = (IconSwitchPreference) findPreference(PER_APP_PREFERENCE_DUMMY);
+        if (perAppSettingsPreference != null) {
             final Drawable recentImg = new IconicsDrawable(getActivity())
                     .icon(CommunityMaterial.Icon.cmd_filter_variant)
                     .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
                     .sizeDp(24);
-            blackListPreference.setIcon(recentImg);
-            blackListPreference.hideSwitch();
-            blackListPreference.setOnPreferenceClickListener(preference -> {
-                final Intent blacklistedApps = new Intent(getActivity(), BlacklistManagerActivity.class);
-                startActivity(blacklistedApps,
-                        ActivityOptions.makeCustomAnimation(getActivity(),
-                                R.anim.slide_in_right_medium,
-                                R.anim.slide_out_left_medium).toBundle()
-                );
+            perAppSettingsPreference.setIcon(recentImg);
+            perAppSettingsPreference.hideSwitch();
+            perAppSettingsPreference.setOnPreferenceClickListener(preference -> {
+                new Handler().postDelayed(() -> {
+                    final Intent perAppSettingActivity = new Intent(getActivity(), PerAppSettingsActivity.class);
+                    startActivity(perAppSettingActivity);
+                }, 150);
                 return false;
             });
         }

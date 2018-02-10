@@ -140,22 +140,16 @@ public class ElasticDragDismissFrameLayout extends FrameLayout {
                 if (draggingUp) {
                     animator = ValueAnimator.ofFloat(draggingBackground.top,
                             draggingBackground.bottom);
-                    animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                        @Override
-                        public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                            draggingBackground.top = (float) valueAnimator.getAnimatedValue();
-                            invalidate();
-                        }
+                    animator.addUpdateListener(valueAnimator -> {
+                        draggingBackground.top = (float) valueAnimator.getAnimatedValue();
+                        invalidate();
                     });
                 } else if (draggingDown) {
                     animator = ValueAnimator.ofFloat(draggingBackground.bottom,
                             draggingBackground.top);
-                    animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                        @Override
-                        public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                            draggingBackground.bottom = (float) valueAnimator.getAnimatedValue();
-                            invalidate();
-                        }
+                    animator.addUpdateListener(valueAnimator -> {
+                        draggingBackground.bottom = (float) valueAnimator.getAnimatedValue();
+                        invalidate();
                     });
                 }
 

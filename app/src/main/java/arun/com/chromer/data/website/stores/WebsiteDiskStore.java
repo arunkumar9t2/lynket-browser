@@ -16,10 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.data.website;
+package arun.com.chromer.data.website.stores;
 
 import android.app.Application;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -51,7 +50,8 @@ import static arun.com.chromer.shared.Constants.NO_COLOR;
 public class WebsiteDiskStore implements WebsiteStore, BookStore {
     public static final Pair<Bitmap, Integer> EMPTY_ICON_COLOR_PAIR = new Pair<>(null, Constants.NO_COLOR);
     public static final Pair<Drawable, Integer> EMPTY_DRAWABLE_PAIR = new Pair<>(null, Constants.NO_COLOR);
-    private final Context context;
+
+
     // Cache to store our data.
     private ParcelDiskCache<Website> webSiteDiskCache;
     // Cache size, currently set at 30 MB.
@@ -66,7 +66,6 @@ public class WebsiteDiskStore implements WebsiteStore, BookStore {
 
     @Inject
     WebsiteDiskStore(Application context) {
-        this.context = context.getApplicationContext();
         try {
             webSiteDiskCache = ParcelDiskCache.open(context, Website.class.getClassLoader(), "WebSiteCache", DISK_CACHE_SIZE);
         } catch (IOException e) {

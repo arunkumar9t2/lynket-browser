@@ -16,10 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.data.website;
+package arun.com.chromer.data.website.stores;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.util.Pair;
 
@@ -28,28 +29,29 @@ import arun.com.chromer.data.website.model.Website;
 import rx.Observable;
 
 /**
- * Interface definition of Website repository which is responsible for providing
- * {@link Website} instances containing useful website information.
- * Will use a combination of disk cache and network parsing to provide requested website's data.
+ * Created by arunk on 24-02-2017.
  */
-public interface WebsiteRepository {
+public interface WebsiteStore {
     @NonNull
     Observable<Website> getWebsite(@NonNull String url);
-
-    int getWebsiteColorSync(@NonNull final String url);
-
-    @NonNull
-    Observable<WebColor> saveWebColor(final String url);
 
     @NonNull
     Observable<Void> clearCache();
 
     @NonNull
+    Observable<Website> saveWebsite(@NonNull Website website);
+
+    @NonNull
+    Observable<WebColor> getWebsiteColor(@NonNull final String url);
+
+    Observable<WebColor> saveWebsiteColor(@NonNull final String host, @ColorInt int color);
+
+    @NonNull
     Pair<Bitmap, Integer> getWebsiteIconAndColor(@NonNull Website website);
 
     @NonNull
-    Pair<Drawable, Integer> getWebsiteRoundIconAndColor(@NonNull Website website);
+    Pair<Drawable, Integer> getWebsiteRoundIconAndColor(Website website);
 
     @NonNull
-    Pair<Bitmap, Integer> getWebsiteIconWithPlaceholderAndColor(@NonNull Website website);
+    Pair<Bitmap, Integer> getWebsiteIconWithPlaceholderAndColor(Website website);
 }

@@ -53,7 +53,7 @@ constructor(
                             .toObservable()
                             .concatMapIterable { it }
                             .concatMap { tab ->
-                                websiteRepository.getWebsite(tab.url)
+                                websiteRepository.getIncognitoWebsite(tab.url)
                                         .map { website ->
                                             tab.apply {
                                                 this.website = website

@@ -261,7 +261,6 @@
     <string name="fork_on_github">Forkaj na GitHubu</string>
     <string name="web_view_not_found">Web View je onemogućen na ovom uređaju. Nije moguće otvoriti poveznicu.</string>
     <string name="app_detection_notification_channel_description">Obavijest će biti objavljena kada je Chromerova usluga za detekciju aplikacija pokrenuta.</string>
-    <string name="app_detection_service_text">Praćenje pozadinskih aplikacija za dinamičku boju alatne trake i crnu listu.</string>
     <string name="app_detection_service">Usluga detekcije aplikacija</string>
     <string name="shortcut_name">Naziv prečaca</string>
     <string name="create_shorcut">Stvori prečac</string>

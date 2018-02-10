@@ -26,6 +26,8 @@ import android.support.annotation.Nullable;
 
 import java.util.Comparator;
 
+import arun.com.chromer.shared.Constants;
+
 /**
  * Created by Arun on 24/01/2016.
  */
@@ -35,23 +37,28 @@ public class App implements Parcelable {
     @NonNull
     public String packageName;
     public boolean blackListed;
+    public boolean incognito;
+
     @ColorInt
-    public int color = -1;
+    public int color = Constants.NO_COLOR;
 
     public App() {
 
     }
 
-    public App(@NonNull String appName, @NonNull String packageName, boolean blackListed) {
+    public App(@NonNull String appName, @NonNull String packageName, boolean blackListed, boolean incognito, int color) {
         this.appName = appName;
         this.packageName = packageName;
         this.blackListed = blackListed;
+        this.incognito = incognito;
+        this.color = color;
     }
 
     protected App(Parcel in) {
         appName = in.readString();
         packageName = in.readString();
         blackListed = in.readByte() != 0;
+        incognito = in.readByte() != 0;
         color = in.readInt();
     }
 
@@ -67,18 +74,18 @@ public class App implements Parcelable {
         }
     };
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        App app = (App) o;
-        return packageName.equals(app.packageName);
+    private static int blackListIncognitoAwareComparison(@Nullable App lhs, @Nullable App rhs) {
+        final String lhsName = lhs != null ? lhs.appName : null;
+        final String rhsName = rhs != null ? rhs.appName : null;
 
-    }
+        boolean lhsValueSet = lhs != null && (lhs.blackListed || lhs.incognito);
+        boolean rhsValueSet = rhs != null && (rhs.blackListed || rhs.incognito);
 
-    @Override
-    public int hashCode() {
-        return packageName.hashCode();
+        if (lhsValueSet ^ rhsValueSet) return (lhsValueSet) ? -1 : 1;
+        if (lhsName == null ^ rhsName == null) return lhs == null ? -1 : 1;
+        //noinspection ConstantConditions
+        if (lhsName == null && rhsName == null) return 0;
+        return lhsName.compareToIgnoreCase(rhsName);
     }
 
     @Override
@@ -91,29 +98,50 @@ public class App implements Parcelable {
         dest.writeString(appName);
         dest.writeString(packageName);
         dest.writeByte((byte) (blackListed ? 1 : 0));
+        dest.writeByte((byte) (incognito ? 1 : 0));
         dest.writeInt(color);
     }
 
-    private static int blackListAwareComparison(@Nullable App lhs, @Nullable App rhs) {
-        final String lhsName = lhs != null ? lhs.appName : null;
-        final String rhsName = rhs != null ? rhs.appName : null;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-        boolean lhsBlacklist = lhs != null && lhs.blackListed;
-        boolean rhsBlacklist = rhs != null && rhs.blackListed;
+        App app = (App) o;
 
-        if (lhsBlacklist ^ rhsBlacklist) return (lhsBlacklist) ? -1 : 1;
-        if (lhsName == null ^ rhsName == null) return lhs == null ? -1 : 1;
-        //noinspection ConstantConditions
-        if (lhsName == null && rhsName == null) return 0;
-
-        return lhsName.compareToIgnoreCase(rhsName);
+        if (blackListed != app.blackListed) return false;
+        if (incognito != app.incognito) return false;
+        if (color != app.color) return false;
+        if (!appName.equals(app.appName)) return false;
+        return packageName.equals(app.packageName);
     }
 
-    public static class BlackListComparator implements Comparator<App> {
+    @Override
+    public int hashCode() {
+        int result = appName.hashCode();
+        result = 31 * result + packageName.hashCode();
+        result = 31 * result + (blackListed ? 1 : 0);
+        result = 31 * result + (incognito ? 1 : 0);
+        result = 31 * result + color;
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "App{" +
+                "appName='" + appName + '\'' +
+                ", packageName='" + packageName + '\'' +
+                ", blackListed=" + blackListed +
+                ", incognito=" + incognito +
+                ", color=" + color +
+                '}';
+    }
+
+    public static class PerAppListComparator implements Comparator<App> {
 
         @Override
         public int compare(App lhs, App rhs) {
-            return blackListAwareComparison(lhs, rhs);
+            return blackListIncognitoAwareComparison(lhs, rhs);
         }
     }
 }

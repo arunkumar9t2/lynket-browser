@@ -23,7 +23,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".blacklist.BlacklistManagerActivity">
+    tools:context=".perapp.PerAppSettingsActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -39,7 +39,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/activity_blacklist_content" />
+    <include layout="@layout/activity_per_apps_content" />
 
     <!--<android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

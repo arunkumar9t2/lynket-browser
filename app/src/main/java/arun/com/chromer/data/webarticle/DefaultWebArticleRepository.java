@@ -23,8 +23,8 @@ import android.support.annotation.NonNull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import arun.com.chromer.data.qualifiers.Disk;
-import arun.com.chromer.data.qualifiers.Network;
+import arun.com.chromer.data.common.qualifiers.Disk;
+import arun.com.chromer.data.common.qualifiers.Network;
 import arun.com.chromer.data.webarticle.model.WebArticle;
 import rx.Observable;
 import timber.log.Timber;

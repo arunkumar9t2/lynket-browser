@@ -143,7 +143,7 @@ public class ChromerOptionsActivity extends BaseActivity {
                             .colorRes(R.color.accent)
                             .sizeDp(24));
                     holder.menuText.setText(R.string.open_article_view);
-                    holder.itemView.setOnClickListener(v -> tabsManager.openArticle(ChromerOptionsActivity.this, new Website(getIntent().getDataString()), false));
+                    holder.itemView.setOnClickListener(v -> tabsManager.openArticle(ChromerOptionsActivity.this, new Website(getIntent().getDataString()), false, false));
                     break;
             }
         }

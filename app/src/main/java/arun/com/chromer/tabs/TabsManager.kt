@@ -50,12 +50,27 @@ interface TabsManager {
      * Takes a {@param website} and opens in based on user preference. Checks for web heads, amp,
      * article, reordering existing tabs etc.
      */
-    fun openUrl(context: Context, website: Website, fromApp: Boolean = true, fromWebHeads: Boolean = false, fromNewTab: Boolean = false, fromAmp: Boolean = false)
+    fun openUrl(
+            context: Context,
+            website: Website,
+            fromApp: Boolean = true,
+            fromWebHeads: Boolean = false,
+            fromNewTab: Boolean = false,
+            fromAmp: Boolean = false,
+            incognito: Boolean = false
+    )
 
     /**
      * Opens the given Uri in a browsing tab.
      */
-    fun openBrowsingTab(context: Context, website: Website, smart: Boolean = false, fromNewTab: Boolean, activityName: String? = null)
+    fun openBrowsingTab(
+            context: Context,
+            website: Website,
+            smart: Boolean = false,
+            fromNewTab: Boolean,
+            activityName: String? = null,
+            incognito: Boolean = false
+    )
 
     /**
      * Closes all browsing tabs present in our process.
@@ -81,7 +96,7 @@ interface TabsManager {
      *
      * After that, an attempt to open web heads is made if it is enabled.
      */
-    fun minimizeTabByUrl(url: String, fromClass: String)
+    fun minimizeTabByUrl(url: String, fromClass: String, incognito: Boolean = false)
 
     /**
      * Processes incoming intent from preferably external apps (could be us too) and then figures out
@@ -95,7 +110,13 @@ interface TabsManager {
      * After opening the web heads, an attempt to handle aggressive background loading is attempted
      * if {@param fromMinimize} is {@code false}
      */
-    fun openWebHeads(context: Context, url: String, fromMinimize: Boolean = false, fromAmp: Boolean = false)
+    fun openWebHeads(
+            context: Context,
+            url: String,
+            fromMinimize: Boolean = false,
+            fromAmp: Boolean = false,
+            incognito: Boolean = false
+    )
 
     /**
      * Opens new tab activity.
@@ -119,5 +140,5 @@ interface TabsManager {
      */
     fun showTabsActivity()
 
-    fun openArticle(context: Context, website: Website, newTab: Boolean = false)
+    fun openArticle(context: Context, website: Website, newTab: Boolean = false, incognito: Boolean = false)
 }

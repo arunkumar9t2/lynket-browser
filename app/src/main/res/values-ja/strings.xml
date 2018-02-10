@@ -261,7 +261,6 @@
     <string name="fork_on_github">GitHubでフォーク</string>
     <string name="web_view_not_found">端末でWebViewが無効になっています。リンクを開けません。</string>
     <string name="app_detection_notification_channel_description">Chromerのアプリ探知サービスが稼働している間は、通知が表示されます。</string>
-    <string name="app_detection_service_text">動的なツールバーの色変更とブラックリストのためにアプリを監視しています。</string>
     <string name="app_detection_service">アプリ探知サービス</string>
     <string name="shortcut_name">ショートカットの名前</string>
     <string name="create_shorcut">ショートカットを作成</string>

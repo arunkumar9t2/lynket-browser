@@ -243,7 +243,7 @@ public class PersonalizationPreferenceFragment extends BasePreferenceFragment im
     }
 
     private void handleAppDetectionService() {
-        if (Preferences.get(getContext()).isAppBasedToolbar() || Preferences.get(getContext()).blacklist()) {
+        if (Preferences.get(getContext()).isAppBasedToolbar() || Preferences.get(getContext()).perAppSettings()) {
             ServiceManager.startAppDetectionService(getContext());
         } else {
             ServiceManager.stopAppDetectionService(getContext());

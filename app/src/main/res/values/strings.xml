@@ -126,7 +126,7 @@
     <string name="no_option_selected">No options selected</string>
     <string name="permission_required">Permission required</string>
     <string name="usage_permission_explanation_appcolor">To enable dynamic coloring of toolbar based on apps, Chromer needs your permission to know the apps you are using. Would you like to grant this permission now?</string>
-    <string name="usage_permission_explanation_blacklist">To enable blacklisting of apps, Chromer needs your permission to know the apps you are using. Would like to grant usage access permission now?</string>
+    <string name="usage_permission_explanation_per_apps">To enable per app settings, Chromer needs your permission to know the apps you are using. Would you like to grant usage access permission now?</string>
     <string name="grant">Grant</string>
     <string name="open_source_contributions">Open source stuff</string>
     <string name="search_or_type_url">Search or type URL</string>
@@ -149,14 +149,12 @@
     <string name="become_a_tester">Become a tester</string>
     <string name="join_beta_content">Beta releases are experimental builds that has the latest features but has few bugs. You can contribute to the development by joining as tester and then reporting bugs you face in the Google+ Community. \n\nPlease make sure you have joined the Google+ community, and then click the become a tester button to go to Google Play testing link. \n\nNOTE: You have to join the community to become a tester.</string>
     <string name="no_voice_rec_apps">No compatible voice recognition apps found</string>
-    <string name="blacklisted_apps">Blacklisted apps</string>
-    <string name="blacklisted_explanation">Exclude Chromer from handling links from certain apps</string>
     <string name="loading">Loading…</string>
     <string name="share_failed_msg">Could not share to the app, defaulting to normal share</string>
     <string name="revoke_accessibility_permission">You can now revoke Chromer\'s accessibility service permission.</string>
     <string name="last_fetched_urls">Last fetched urls</string>
-    <string name="blacklist_on">Blacklisting apps turned on</string>
-    <string name="blacklist_off">Blacklisting apps turned off</string>
+    <string name="per_apps_on">Per app settings turned on</string>
+    <string name="per_apps_off">Per app settings turned off</string>
     <string name="translations">Translations</string>
     <string name="merge_tabs">Merge tabs and apps</string>
     <string name="merge_tabs_explanation">See your tabs with other recent apps on your phone\'s Overview screen.</string>
@@ -264,7 +262,7 @@
     <string name="fork_on_github">Fork on GitHub</string>
     <string name="web_view_not_found">Web View disabled on device. Could not open link.</string>
     <string name="app_detection_notification_channel_description">Notification will be posted when Chromer\'s app detection service is running.</string>
-    <string name="app_detection_service_text">Monitoring foreground apps for dynamic toolbar color and blacklisting.</string>
+    <string name="app_detection_service_explanation">Monitoring foreground apps for dynamic toolbar color and per app settings.</string>
     <string name="app_detection_service">App detection service</string>
     <string name="shortcut_name">Shortcut name</string>
     <string name="create_shorcut">Create shortcut</string>
@@ -290,4 +288,6 @@
     <string name="article_loading_failed">Could not extract article.</string>
     <string name="full_incognito_mode">Incognito browsing</string>
     <string name="full_incognito_mode_explanation">For full incognito browsing Chromer will switch to Webview for rendering pages. Entries will not be recorded anywhere.</string>
+    <string name="per_app_settings">Per app settings</string>
+    <string name="per_app_settings_explanation">Configure secondary browser and incognito mode for apps individually.</string>
 </resources>

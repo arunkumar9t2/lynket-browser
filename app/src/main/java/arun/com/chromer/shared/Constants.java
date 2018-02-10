@@ -79,6 +79,7 @@ public class Constants {
     public static final String EXTRA_KEY_ORIGINAL_URL = "EXTRA_KEY_ORIGINAL_URL";
     public static final String EXTRA_KEY_FROM_ARTICLE = "EXTRA_KEY_FROM_ARTICLE";
     public static final String EXTRA_KEY_FROM_AMP = "EXTRA_KEY_FROM_AMP";
+    public static final String EXTRA_KEY_INCOGNITO = "EXTRA_KEY_INCOGNITO";
     // Request codes
     public static final int REQUEST_CODE_VOICE = 112;
 

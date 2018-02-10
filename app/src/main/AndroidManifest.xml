@@ -194,8 +194,8 @@
             android:excludeFromRecents="true"
             android:theme="@style/DialogTheme" />
         <activity
-            android:name=".blacklist.BlacklistManagerActivity"
-            android:label="@string/blacklisted_apps"
+            android:name=".perapp.PerAppSettingsActivity"
+            android:label="@string/per_app_settings"
             android:parentActivityName=".settings.browsingoptions.BrowsingOptionsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

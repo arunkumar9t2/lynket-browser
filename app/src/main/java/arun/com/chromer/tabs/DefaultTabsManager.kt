@@ -65,13 +65,13 @@ import javax.inject.Singleton
 class DefaultTabsManager
 @Inject
 constructor(
-        val application: Application,
-        val preferences: Preferences,
+        private val application: Application,
+        private val preferences: Preferences,
         private val appDetectionManager: AppDetectionManager,
         private val appRepository: AppRepository,
         private val websiteRepository: WebsiteRepository,
         private val articlePreloader: ArticlePreloader,
-        val rxEventBus: RxEventBus
+        private val rxEventBus: RxEventBus
 ) : TabsManager {
 
     private val browsingActivitiesName = arrayListOf<String>(
@@ -80,14 +80,14 @@ constructor(
             WebViewActivity::class.java.name
     )
 
-    override fun openUrl(context: Context, website: Website, fromApp: Boolean, fromWebHeads: Boolean, fromNewTab: Boolean, fromAmp: Boolean) {
+    override fun openUrl(context: Context, website: Website, fromApp: Boolean, fromWebHeads: Boolean, fromNewTab: Boolean, fromAmp: Boolean, incognito: Boolean) {
         // Clear non browsing activities if it was external intent.
         if (!fromApp) {
             clearNonBrowsingActivities()
         }
         // Open in web heads mode if we this command did not come from web heads.
         if (preferences.webHeads() && !fromWebHeads) {
-            openWebHeads(context, website.preferredUrl(), fromAmp)
+            openWebHeads(context, website.preferredUrl(), fromAmp, incognito = incognito)
             return
         }
 
@@ -101,7 +101,7 @@ constructor(
         if (preferences.ampMode() && !fromAmp) {
             if (website.hasAmp()) {
                 // We already got the amp url, so open it in a browsing tab.
-                openBrowsingTab(context, Website.Ampify(website), fromNewTab = fromNewTab)
+                openBrowsingTab(context, Website.Ampify(website), fromNewTab = fromNewTab, incognito = incognito)
                 return
             } else if (!fromWebHeads) {
                 // Open a proxy activity, attempt an extraction then open the AMP url if exists.
@@ -109,6 +109,9 @@ constructor(
                     data = website.preferredUri()
                     if (context !is Activity) {
                         addFlags(FLAG_ACTIVITY_NEW_TASK)
+                    }
+                    if (incognito) {
+                        putExtra(Constants.EXTRA_KEY_INCOGNITO, true)
                     }
                 }
                 context.startActivity(ampResolver)
@@ -118,12 +121,12 @@ constructor(
 
         if (preferences.articleMode()) {
             // Launch article mode
-            openArticle(context, website)
+            openArticle(context, website, incognito = incognito)
             return
         }
 
         // If everything failed then launch normally in browsing activity.
-        openBrowsingTab(context, website, fromNewTab = fromNewTab)
+        openBrowsingTab(context, website, fromNewTab = fromNewTab, incognito = incognito)
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -184,11 +187,11 @@ constructor(
         return false
     }
 
-    override fun minimizeTabByUrl(url: String, fromClass: String) {
+    override fun minimizeTabByUrl(url: String, fromClass: String, incognito: Boolean) {
         rxEventBus.post(TabsManager.MinimizeEvent(TabsManager.Tab(url, getTabType(fromClass))))
         if (preferences.webHeads()) {
             // When minimizing, don't try to handle aggressive loading cases.
-            openWebHeads(application, url, fromMinimize = true)
+            openWebHeads(application, url, fromMinimize = true, incognito = incognito)
         }
     }
 
@@ -198,11 +201,16 @@ constructor(
         val url = safeIntent.dataString
 
         // The first thing to check is if we should blacklist.
-        if (preferences.blacklist()) {
+        if (preferences.perAppSettings()) {
             val lastApp = appDetectionManager.nonFilteredPackage
-            if (lastApp.isNotEmpty() && appRepository.isPackageBlacklisted(lastApp)) {
-                doBlacklistAction(activity, safeIntent)
-                return
+            if (lastApp.isNotEmpty()) {
+                if (appRepository.isPackageBlacklisted(lastApp)) {
+                    doBlacklistAction(activity, safeIntent)
+                    return
+                } else if (appRepository.isPackageIncognito(lastApp)) {
+                    doIncognitoAction(activity, url)
+                    return
+                }
             }
         }
 
@@ -210,7 +218,7 @@ constructor(
         openUrl(activity, Website(url), fromApp = false)
     }
 
-    override fun openArticle(context: Context, website: Website, newTab: Boolean) {
+    override fun openArticle(context: Context, website: Website, newTab: Boolean, incognito: Boolean) {
         if (!reOrderTabByUrl(context, website, ArticleActivity::class.java.name)) {
             val intent = Intent(context, ArticleActivity::class.java).apply {
                 data = website.preferredUri()
@@ -221,6 +229,9 @@ constructor(
                     addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
                     addFlags(FLAG_ACTIVITY_MULTIPLE_TASK)
                 }
+                if (incognito) {
+                    putExtra(Constants.EXTRA_KEY_INCOGNITO, true)
+                }
                 putExtra(Constants.EXTRA_KEY_TOOLBAR_COLOR, getToolbarColor(website))
             }
             context.startActivity(intent)
@@ -228,12 +239,12 @@ constructor(
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    override fun openBrowsingTab(context: Context, website: Website, smart: Boolean, fromNewTab: Boolean, activityName: String?) {
+    override fun openBrowsingTab(context: Context, website: Website, smart: Boolean, fromNewTab: Boolean, activityName: String?, incognito: Boolean) {
         val reordered = smart && reOrderTabByUrl(context, website, activityName)
 
         if (!reordered) {
             val canSafelyOpenCCT = CustomTabs.getCustomTabSupportingPackages(context).isNotEmpty()
-            val isIncognito = preferences.fullIncognitoMode()  // Disable auto revert to webview for now.
+            val isIncognito = preferences.fullIncognitoMode() || incognito
 
             val browsingActivity = if (!isIncognito && canSafelyOpenCCT) {
                 Intent(context, CustomTabActivity::class.java)
@@ -243,6 +254,9 @@ constructor(
                 data = website.preferredUri()
                 putExtra(Constants.EXTRA_KEY_WEBSITE, website)
                 putExtra(Constants.EXTRA_KEY_TOOLBAR_COLOR, getToolbarColor(website))
+                if (isIncognito) {
+                    putExtra(Constants.EXTRA_KEY_INCOGNITO, true)
+                }
             }
 
             if (preferences.mergeTabs() || fromNewTab) {
@@ -256,13 +270,14 @@ constructor(
         }
     }
 
-    override fun openWebHeads(context: Context, url: String, fromMinimize: Boolean, fromAmp: Boolean) {
+    override fun openWebHeads(context: Context, url: String, fromMinimize: Boolean, fromAmp: Boolean, incognito: Boolean) {
         if (Utils.isOverlayGranted(context)) {
             val webHeadLauncher = Intent(context, WebHeadService::class.java).apply {
                 data = Uri.parse(url)
                 addFlags(FLAG_ACTIVITY_NEW_TASK)
                 putExtra(Constants.EXTRA_KEY_MINIMIZE, fromMinimize)
                 putExtra(Constants.EXTRA_KEY_FROM_AMP, fromAmp)
+                putExtra(Constants.EXTRA_KEY_INCOGNITO, incognito)
             }
             ContextCompat.startForegroundService(context, webHeadLauncher)
         } else {
@@ -305,7 +320,7 @@ constructor(
                             }
                         })
 
-                openBrowsingTab(context, Website(url), smart = true, fromNewTab = false)
+                openBrowsingTab(context, Website(url), smart = true, fromNewTab = false, incognito = incognito)
             }
         }
     }
@@ -399,6 +414,14 @@ constructor(
                 preferences.toolbarColor()
             }
         } else return ContextCompat.getColor(application, R.color.primary)
+    }
+
+
+    private fun doIncognitoAction(activity: Activity, url: String) {
+        openUrl(activity, Website(url), fromApp = false, incognito = true)
+        if (BuildConfig.DEBUG) {
+            Toast.makeText(activity, "Incognito", Toast.LENGTH_SHORT).show()
+        }
     }
 
     /**

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.data.webarticle;
+package arun.com.chromer.data.webarticle.stores;
 
 import android.app.Application;
 import android.support.annotation.NonNull;
@@ -26,6 +26,7 @@ import java.io.IOException;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import arun.com.chromer.data.webarticle.WebArticleStore;
 import arun.com.chromer.data.webarticle.model.WebArticle;
 import in.arunkumarsampath.diskcache.ParcelDiskCache;
 import rx.Observable;

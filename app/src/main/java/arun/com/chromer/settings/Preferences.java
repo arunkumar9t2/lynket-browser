@@ -64,11 +64,11 @@ public class Preferences {
     public static final String PRE_FETCH = "pre_fetch_preference";
     public static final String WIFI_PREFETCH = "wifi_preference";
     public static final String PRE_FETCH_NOTIFICATION = "pre_fetch_notification_preference";
-    public static final String BLACKLIST_DUMMY = "blacklist_preference_dummy";
+    public static final String PER_APP_PREFERENCE_DUMMY = "blacklist_preference_dummy";
     public static final String MERGE_TABS_AND_APPS = "merge_tabs_and_apps_preference";
     public static final String AGGRESSIVE_LOADING = "aggressive_loading";
     private static final String WEB_HEAD_FAVICON = "webhead_favicons_pref";
-    private static final String BLACKLIST = "blacklist_preference";
+    private static final String PER_APP_SETTINGS = "blacklist_preference";
     public static final String PREFERRED_CUSTOM_TAB_PACKAGE = "preferred_package";
     private static final String FIRST_RUN = "firstrun_3";
     private static final String SECONDARY_PREF = "secondary_preference";
@@ -374,12 +374,12 @@ public class Preferences {
         getDefaultSharedPreferences().edit().putBoolean(WEB_HEAD_CLOSE_ON_OPEN, preference).apply();
     }
 
-    public boolean blacklist() {
-        return getDefaultSharedPreferences().getBoolean(BLACKLIST, false);
+    public boolean perAppSettings() {
+        return getDefaultSharedPreferences().getBoolean(PER_APP_SETTINGS, false);
     }
 
-    public void blacklist(final boolean preference) {
-        getDefaultSharedPreferences().edit().putBoolean(BLACKLIST, preference).apply();
+    public void perAppSettings(final boolean preference) {
+        getDefaultSharedPreferences().edit().putBoolean(PER_APP_SETTINGS, preference).apply();
     }
 
     public boolean mergeTabs() {

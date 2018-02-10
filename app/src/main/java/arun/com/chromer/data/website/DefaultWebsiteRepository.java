@@ -29,11 +29,12 @@ import android.util.Pair;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import arun.com.chromer.data.common.qualifiers.Disk;
+import arun.com.chromer.data.common.qualifiers.Network;
 import arun.com.chromer.data.history.HistoryRepository;
-import arun.com.chromer.data.qualifiers.Disk;
-import arun.com.chromer.data.qualifiers.Network;
 import arun.com.chromer.data.website.model.WebColor;
 import arun.com.chromer.data.website.model.Website;
+import arun.com.chromer.data.website.stores.WebsiteStore;
 import arun.com.chromer.shared.Constants;
 import arun.com.chromer.util.SchedulerProvider;
 import rx.Observable;
@@ -49,21 +50,21 @@ import static arun.com.chromer.shared.Constants.NO_COLOR;
 public class DefaultWebsiteRepository implements WebsiteRepository {
     private final Context context;
     private final WebsiteStore webNetworkStore;
-    private final WebsiteStore diskStore;
+    private final WebsiteStore cacheStore;
     private final HistoryRepository historyRepository;
 
     @Inject
-    DefaultWebsiteRepository(@NonNull Application context, @Disk WebsiteStore diskStore, @Network WebsiteStore webNetworkStore, HistoryRepository historyRepository) {
+    DefaultWebsiteRepository(@NonNull Application context, @Disk WebsiteStore cacheStore, @Network WebsiteStore webNetworkStore, HistoryRepository historyRepository) {
         this.context = context.getApplicationContext();
         this.webNetworkStore = webNetworkStore;
-        this.diskStore = diskStore;
+        this.cacheStore = cacheStore;
         this.historyRepository = historyRepository;
     }
 
     @NonNull
     @Override
     public Observable<Website> getWebsite(@NonNull final String url) {
-        final Observable<Website> cache = diskStore.getWebsite(url)
+        final Observable<Website> cache = cacheStore.getWebsite(url)
                 .doOnNext(webSite -> {
                     if (webSite != null) {
                         historyRepository.insert(webSite).subscribe();
@@ -80,7 +81,7 @@ public class DefaultWebsiteRepository implements WebsiteRepository {
         final Observable<Website> remote = webNetworkStore.getWebsite(url)
                 .filter(webSite -> webSite != null)
                 .doOnNext(webSite -> {
-                    diskStore.saveWebsite(webSite).subscribe();
+                    cacheStore.saveWebsite(webSite).subscribe();
                     historyRepository.insert(webSite).subscribe();
                 });
 
@@ -94,9 +95,28 @@ public class DefaultWebsiteRepository implements WebsiteRepository {
                 .compose(SchedulerProvider.applyIoSchedulers());
     }
 
+
+    @NonNull
+    @Override
+    public Observable<Website> getIncognitoWebsite(@NonNull final String url) {
+        final Observable<Website> cache = cacheStore.getWebsite(url);
+
+        final Observable<Website> remote = webNetworkStore.getWebsite(url)
+                .filter(webSite -> webSite != null)
+                .doOnNext(webSite -> cacheStore.saveWebsite(webSite).subscribe());
+
+        return Observable.concat(cache, remote)
+                .first(webSite -> webSite != null)
+                .doOnError(Timber::e)
+                .onErrorReturn(throwable -> {
+                    Timber.e(throwable);
+                    return new Website(url);
+                }).compose(SchedulerProvider.applyIoSchedulers());
+    }
+
     @Override
     public int getWebsiteColorSync(@NonNull String url) {
-        return diskStore.getWebsiteColor(url)
+        return cacheStore.getWebsiteColor(url)
                 .map(webColor -> {
                     if (webColor.color == Constants.NO_COLOR) {
                         saveWebColor(url).subscribe();
@@ -111,17 +131,17 @@ public class DefaultWebsiteRepository implements WebsiteRepository {
     @NonNull
     @Override
     public Observable<WebColor> saveWebColor(String url) {
-        return getWebsite(url)
+        return getIncognitoWebsite(url)
                 .observeOn(Schedulers.io())
                 .flatMap(webSite -> {
                     if (webSite != null) {
                         if (webSite.themeColor() != NO_COLOR) {
                             int color = webSite.themeColor();
-                            return diskStore.saveWebsiteColor(Uri.parse(webSite.url).getHost(), color);
+                            return cacheStore.saveWebsiteColor(Uri.parse(webSite.url).getHost(), color);
                         } else {
                             final int color = getWebsiteIconAndColor(webSite).second;
                             if (color != Constants.NO_COLOR) {
-                                return diskStore.saveWebsiteColor(Uri.parse(webSite.url).getHost(), color);
+                                return cacheStore.saveWebsiteColor(Uri.parse(webSite.url).getHost(), color);
                             } else return Observable.empty();
                         }
                     } else return Observable.empty();
@@ -131,7 +151,7 @@ public class DefaultWebsiteRepository implements WebsiteRepository {
     @NonNull
     @Override
     public Observable<Void> clearCache() {
-        return diskStore.clearCache();
+        return cacheStore.clearCache();
     }
 
     @NonNull
