@@ -11,6 +11,11 @@ import javax.inject.Singleton
  */
 @Singleton
 class MockAppSystemStore @Inject constructor() : AppStore {
+
+    override fun removeIncognito(packageName: String): Observable<App> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun getApp(packageName: String): Observable<App> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
