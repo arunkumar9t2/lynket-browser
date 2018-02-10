@@ -96,7 +96,6 @@ internal constructor(
 
         init {
             ButterKnife.bind(this, view)
-            appPackage?.visibility = View.GONE
             blacklistTemplateRoot?.setOnClickListener { appCheckbox?.performClick() }
         }
 

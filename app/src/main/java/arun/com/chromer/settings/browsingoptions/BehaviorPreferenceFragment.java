@@ -18,11 +18,11 @@
 
 package arun.com.chromer.settings.browsingoptions;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -77,12 +77,10 @@ public class BehaviorPreferenceFragment extends BasePreferenceFragment {
             blackListPreference.setIcon(recentImg);
             blackListPreference.hideSwitch();
             blackListPreference.setOnPreferenceClickListener(preference -> {
-                final Intent blacklistedApps = new Intent(getActivity(), PerAppSettingsActivity.class);
-                startActivity(blacklistedApps,
-                        ActivityOptions.makeCustomAnimation(getActivity(),
-                                R.anim.slide_in_right_medium,
-                                R.anim.slide_out_left_medium).toBundle()
-                );
+                new Handler().postDelayed(() -> {
+                    final Intent perAppSettingActivity = new Intent(getActivity(), PerAppSettingsActivity.class);
+                    startActivity(perAppSettingActivity);
+                }, 150);
                 return false;
             });
         }
