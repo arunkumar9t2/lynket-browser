@@ -66,14 +66,14 @@ public class DefaultWebsiteRepository implements WebsiteRepository {
         final Observable<Website> cache = diskStore.getWebsite(url)
                 .doOnNext(webSite -> {
                     if (webSite != null) {
-                        historyRepository.update(webSite).subscribe();
+                        historyRepository.insert(webSite).subscribe();
                     }
                 });
 
         final Observable<Website> history = historyRepository.get(new Website(url))
                 .doOnNext(webSite -> {
                     if (webSite != null) {
-                        historyRepository.update(webSite).subscribe();
+                        historyRepository.insert(webSite).subscribe();
                     }
                 });
 

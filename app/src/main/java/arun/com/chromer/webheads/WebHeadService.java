@@ -117,7 +117,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     // Max visible web heads is set 6 for performance reasons.
     public static final int MAX_VISIBLE_WEB_HEADS = 5;
 
-    private final CompositeSubscription compositeSubscription = new CompositeSubscription();
+    private final CompositeSubscription subs = new CompositeSubscription();
 
     @Inject
     WebsiteRepository websiteRepository;
@@ -190,7 +190,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     @Override
     public void onDestroy() {
         Timber.d("Exiting webhead service");
-        compositeSubscription.clear();
+        subs.clear();
         WebHead.clearMasterPosition();
         removeWebHeads();
         if (customTabManager != null) {
@@ -272,7 +272,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     }
 
     private void doExtraction(final String webHeadUrl) {
-        compositeSubscription.add(websiteRepository.getWebsite(webHeadUrl)
+        subs.add(websiteRepository.getWebsite(webHeadUrl)
                 .filter(website -> website != null)
                 .compose(SchedulerProvider.applyIoSchedulers())
                 .doOnNext(website -> {
@@ -285,13 +285,16 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
                 })
                 .observeOn(Schedulers.io())
                 .map(website -> websiteRepository.getWebsiteRoundIconAndColor(website))
-                .filter(faviconColor -> faviconColor.first != null && faviconColor.second != Constants.NO_COLOR)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(faviconColor -> {
                     final WebHead webHead = webHeads.get(webHeadUrl);
                     if (webHead != null) {
-                        webHead.setFaviconDrawable(faviconColor.first);
-                        webHead.setWebHeadColor(faviconColor.second);
+                        if (faviconColor.first != null) {
+                            webHead.setFaviconDrawable(faviconColor.first);
+                        }
+                        if (faviconColor.second != Constants.NO_COLOR) {
+                            webHead.setWebHeadColor(faviconColor.second);
+                        }
                     }
                 }, Timber::e));
     }

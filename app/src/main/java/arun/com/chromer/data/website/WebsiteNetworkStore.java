@@ -129,7 +129,7 @@ public class WebsiteNetworkStore implements WebsiteStore {
         if (icon != null && Utils.isValidFavicon(icon)) {
             return new Pair<>(new BitmapDrawable(context.getResources(), icon), color);
         } else {
-            return new Pair<>(null, Constants.NO_COLOR);
+            return new Pair<>(null, color);
         }
     }
 
