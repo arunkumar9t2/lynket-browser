@@ -33,7 +33,7 @@ import android.widget.CompoundButton
 import arun.com.chromer.R
 import arun.com.chromer.data.common.App
 import arun.com.chromer.di.activity.ActivityComponent
-import arun.com.chromer.extenstions.observeUntilActivityDestroyed
+import arun.com.chromer.extenstions.observeUntilOnDestroy
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.shared.base.Snackable
 import arun.com.chromer.shared.base.activity.BaseActivity
@@ -77,8 +77,8 @@ class PerAppSettingsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLis
     private fun observeViewModel() {
         perAppViewModel = ViewModelProviders.of(this, viewModelFactory).get(PerAppSettingViewModel::class.java)
         perAppViewModel.apply {
-            loadingLiveData.observeUntilActivityDestroyed(this@PerAppSettingsActivity, { loading(it!!) })
-            appsLiveData.observeUntilActivityDestroyed(this@PerAppSettingsActivity, { apps ->
+            loadingLiveData.observeUntilOnDestroy(this@PerAppSettingsActivity, { loading(it!!) })
+            appsLiveData.observeUntilOnDestroy(this@PerAppSettingsActivity, { apps ->
                 setApps(apps!!)
             })
         }

@@ -33,7 +33,7 @@ inline fun <T> LiveData<T>.watch(owner: LifecycleOwner, crossinline observer: (T
 }
 
 
-inline fun <T> LiveData<T>.observeUntilActivityDestroyed(activity: Activity?, crossinline observer: (T?) -> Unit) {
+inline fun <T> LiveData<T>.observeUntilOnDestroy(activity: Activity?, crossinline observer: (T?) -> Unit) {
     val valueObserver: Observer<T> = Observer {
         observer(it)
     }
@@ -42,7 +42,7 @@ inline fun <T> LiveData<T>.observeUntilActivityDestroyed(activity: Activity?, cr
         override fun onActivityDestroyed(callbackActivity: Activity?) {
             if (callbackActivity == activity) {
                 callbackActivity.application?.unregisterActivityLifecycleCallbacks(this)
-                this@observeUntilActivityDestroyed.removeObserver(valueObserver)
+                this@observeUntilOnDestroy.removeObserver(valueObserver)
             }
         }
     })

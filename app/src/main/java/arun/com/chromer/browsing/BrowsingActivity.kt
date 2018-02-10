@@ -28,7 +28,7 @@ import android.widget.Toast.LENGTH_SHORT
 import arun.com.chromer.R
 import arun.com.chromer.data.Result
 import arun.com.chromer.data.website.model.Website
-import arun.com.chromer.extenstions.observeUntilActivityDestroyed
+import arun.com.chromer.extenstions.observeUntilOnDestroy
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.shared.base.activity.BaseActivity
@@ -85,7 +85,7 @@ abstract class BrowsingActivity : BaseActivity() {
 
     private fun observeViewModel(savedInstanceState: Bundle?) {
         browsingViewModel.apply {
-            websiteLiveData.observeUntilActivityDestroyed(this@BrowsingActivity, {
+            websiteLiveData.observeUntilOnDestroy(this@BrowsingActivity, {
                 when (it) {
                     is Result.Success -> {
                         website = it.data!!
@@ -94,12 +94,12 @@ abstract class BrowsingActivity : BaseActivity() {
                 }
             })
 
-            toolbarColor.observeUntilActivityDestroyed(this@BrowsingActivity, { color ->
+            toolbarColor.observeUntilOnDestroy(this@BrowsingActivity, { color ->
                 onToolbarColorSet(color!!)
             })
 
             if (Utils.ANDROID_LOLLIPOP) {
-                activityDescription.observeUntilActivityDestroyed(this@BrowsingActivity, { task ->
+                activityDescription.observeUntilOnDestroy(this@BrowsingActivity, { task ->
                     setTaskDescription(task)
                 })
             }
