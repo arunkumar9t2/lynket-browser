@@ -82,17 +82,17 @@ public class AppDiskStore implements AppStore, BookStore {
     @Override
     public Observable<App> setPackageBlacklisted(@NonNull final String packageName) {
         return getApp(packageName)
-                .flatMap(app -> {
-                    if (app != null) {
-                        app.blackListed = true;
-                        Timber.d("Set %s as blacklisted", app.packageName);
-                        return saveApp(app);
-                    } else {
-                        Timber.d("Added %s and blacklisted", packageName);
+                .map(app -> {
+                    if (app == null) {
+                        Timber.d("Created app record %s", packageName);
                         app = Utils.createApp(application, packageName);
-                        app.blackListed = true;
-                        return saveApp(app);
                     }
+                    return app;
+                }).flatMap(app -> {
+                    app.blackListed = true;
+                    app.incognito = false;
+                    Timber.d("Set %s as blacklisted", app.packageName);
+                    return saveApp(app);
                 });
     }
 
@@ -163,17 +163,17 @@ public class AppDiskStore implements AppStore, BookStore {
     @Override
     public Observable<App> setPackageIncognito(@NotNull String packageName) {
         return getApp(packageName)
-                .flatMap(app -> {
-                    if (app != null) {
-                        app.incognito = true;
-                        Timber.d("Set %s as incognito", app.packageName);
-                        return saveApp(app);
-                    } else {
-                        Timber.d("Added %s and set incognito", packageName);
+                .map(app -> {
+                    if (app == null) {
+                        Timber.d("Created app record %s", packageName);
                         app = Utils.createApp(application, packageName);
-                        app.incognito = true;
-                        return saveApp(app);
                     }
+                    return app;
+                }).flatMap(app -> {
+                    app.incognito = true;
+                    app.blackListed = false;
+                    Timber.d("Set %s as incognito", app.packageName);
+                    return saveApp(app);
                 });
     }
 }
