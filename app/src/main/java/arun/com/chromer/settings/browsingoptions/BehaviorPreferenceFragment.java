@@ -37,8 +37,8 @@ import arun.com.chromer.settings.widgets.IconSwitchPreference;
 import arun.com.chromer.util.Utils;
 
 import static arun.com.chromer.settings.Preferences.AGGRESSIVE_LOADING;
-import static arun.com.chromer.settings.Preferences.BLACKLIST_DUMMY;
 import static arun.com.chromer.settings.Preferences.MERGE_TABS_AND_APPS;
+import static arun.com.chromer.settings.Preferences.PER_APP_PREFERENCE_DUMMY;
 
 /**
  * Created by Arun on 21/06/2016.
@@ -68,15 +68,15 @@ public class BehaviorPreferenceFragment extends BasePreferenceFragment {
     }
 
     private void setupBlacklistPreference() {
-        final IconSwitchPreference blackListPreference = (IconSwitchPreference) findPreference(BLACKLIST_DUMMY);
-        if (blackListPreference != null) {
+        final IconSwitchPreference perAppSettingsPreference = (IconSwitchPreference) findPreference(PER_APP_PREFERENCE_DUMMY);
+        if (perAppSettingsPreference != null) {
             final Drawable recentImg = new IconicsDrawable(getActivity())
                     .icon(CommunityMaterial.Icon.cmd_filter_variant)
                     .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
                     .sizeDp(24);
-            blackListPreference.setIcon(recentImg);
-            blackListPreference.hideSwitch();
-            blackListPreference.setOnPreferenceClickListener(preference -> {
+            perAppSettingsPreference.setIcon(recentImg);
+            perAppSettingsPreference.hideSwitch();
+            perAppSettingsPreference.setOnPreferenceClickListener(preference -> {
                 new Handler().postDelayed(() -> {
                     final Intent perAppSettingActivity = new Intent(getActivity(), PerAppSettingsActivity.class);
                     startActivity(perAppSettingActivity);

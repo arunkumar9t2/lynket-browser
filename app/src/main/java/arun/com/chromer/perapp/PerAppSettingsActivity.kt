@@ -40,8 +40,8 @@ import arun.com.chromer.util.ServiceManager
 import arun.com.chromer.util.Utils
 import arun.com.chromer.util.viemodel.ViewModelFactory
 import com.afollestad.materialdialogs.MaterialDialog
-import kotlinx.android.synthetic.main.activity_blacklist.*
-import kotlinx.android.synthetic.main.activity_blacklist_content.*
+import kotlinx.android.synthetic.main.acitivty_per_apps.*
+import kotlinx.android.synthetic.main.activity_per_apps_content.*
 import javax.inject.Inject
 
 class PerAppSettingsActivity : BaseActivity(), CompoundButton.OnCheckedChangeListener, Snackable {
@@ -58,7 +58,7 @@ class PerAppSettingsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLis
         activityComponent.inject(this)
     }
 
-    override fun getLayoutRes(): Int = R.layout.activity_blacklist
+    override fun getLayoutRes(): Int = R.layout.acitivty_per_apps
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,14 +115,14 @@ class PerAppSettingsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLis
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.blacklist_menu, menu)
+        menuInflater.inflate(R.menu.per_apps_menu, menu)
         val menuItem = menu.findItem(R.id.blacklist_switch_item)
         if (menuItem != null) {
             val blackListSwitch = menuItem.actionView.findViewById<SwitchCompat>(R.id.blacklist_switch)
             if (blackListSwitch != null) {
-                val blackListActive = preferences.blacklist() && Utils.canReadUsageStats(this)
-                Preferences.get(this).blacklist(blackListActive)
-                blackListSwitch.isChecked = Preferences.get(this).blacklist()
+                val blackListActive = preferences.perAppSettings() && Utils.canReadUsageStats(this)
+                Preferences.get(this).perAppSettings(blackListActive)
+                blackListSwitch.isChecked = Preferences.get(this).perAppSettings()
                 blackListSwitch.setOnCheckedChangeListener(this)
             }
         }
@@ -151,8 +151,8 @@ class PerAppSettingsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLis
             buttonView.isChecked = false
             requestUsagePermission()
         } else {
-            snack(if (isChecked) getString(R.string.blacklist_on) else getString(R.string.blacklist_off))
-            preferences.blacklist(isChecked)
+            snack(if (isChecked) getString(R.string.per_apps_on) else getString(R.string.per_apps_off))
+            preferences.perAppSettings(isChecked)
             ServiceManager.takeCareOfServices(applicationContext)
         }
     }

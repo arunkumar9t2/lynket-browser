@@ -37,7 +37,7 @@ public class ServiceManager {
     }
 
     public static void takeCareOfServices(@NonNull Context context) {
-        if (Preferences.get(context).isAppBasedToolbar() || Preferences.get(context).blacklist()) {
+        if (Preferences.get(context).isAppBasedToolbar() || Preferences.get(context).perAppSettings()) {
             startAppDetectionService(context);
         } else {
             stopAppDetectionService(context);

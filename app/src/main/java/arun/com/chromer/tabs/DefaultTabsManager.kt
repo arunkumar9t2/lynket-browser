@@ -198,7 +198,7 @@ constructor(
         val url = safeIntent.dataString
 
         // The first thing to check is if we should blacklist.
-        if (preferences.blacklist()) {
+        if (preferences.perAppSettings()) {
             val lastApp = appDetectionManager.nonFilteredPackage
             if (lastApp.isNotEmpty() && appRepository.isPackageBlacklisted(lastApp)) {
                 doBlacklistAction(activity, safeIntent)

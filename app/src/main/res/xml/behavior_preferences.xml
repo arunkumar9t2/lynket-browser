@@ -28,8 +28,8 @@
         <!--suppress AndroidElementNotAllowed -->
         <arun.com.chromer.settings.widgets.IconSwitchPreference
             android:key="blacklist_preference_dummy"
-            android:summary="@string/blacklisted_explanation"
-            android:title="@string/blacklisted_apps" />
+            android:summary="@string/per_app_settings_explanation"
+            android:title="@string/per_app_settings" />
         <!--suppress AndroidElementNotAllowed -->
     </PreferenceCategory>
 </PreferenceScreen>
