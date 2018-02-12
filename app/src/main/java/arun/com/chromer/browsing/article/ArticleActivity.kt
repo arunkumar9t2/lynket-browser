@@ -45,7 +45,7 @@ class ArticleActivity : BaseArticleActivity() {
         // rendering tab.
         finish()
         Toast.makeText(this, R.string.article_loading_failed, Toast.LENGTH_SHORT).show()
-        tabsManager.openBrowsingTab(this, Website(intent.dataString), true, false, CustomTabActivity::class.java.name)
+        tabsManager.openBrowsingTab(this, Website(intent.dataString), true, false, tabsManager.browsingActivitiesName)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

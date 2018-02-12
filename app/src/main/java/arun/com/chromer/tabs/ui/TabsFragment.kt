@@ -109,7 +109,7 @@ class TabsFragment : BaseFragment(), FabHandler {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val tab = tabsAdapter.getTabAt(viewHolder.adapterPosition)
                 activity?.let {
-                    tabsManager.finishTabByUrl(activity!!, Website(tab.url), tab.getTargetActivityName())
+                    tabsManager.finishTabByUrl(activity!!, Website(tab.url), listOf(tab.getTargetActivityName()))
                     loadTabs()
                 }
             }

@@ -68,7 +68,7 @@ interface TabsManager {
             website: Website,
             smart: Boolean = false,
             fromNewTab: Boolean,
-            activityName: String? = null,
+            activityNames: List<String>? = null,
             incognito: Boolean = false
     )
 
@@ -83,12 +83,12 @@ interface TabsManager {
      *
      * Optionally specify which Activity class should be brought to front
      */
-    fun reOrderTabByUrl(context: Context, website: Website, activityName: String? = null): Boolean
+    fun reOrderTabByUrl(context: Context, website: Website, activityNames: List<String>? = null): Boolean
 
     /**
      * Same as {@link reOrderTabByUrl} but instead of reordering, finishes and removes the task.
      */
-    fun finishTabByUrl(context: Context, website: Website, activityName: String? = null): Boolean
+    fun finishTabByUrl(context: Context, website: Website, activityNames: List<String>? = null): Boolean
 
     /**
      * If a task exist with this url already then this method should minimize it a.k.a putting it in

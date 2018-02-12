@@ -159,7 +159,7 @@ class MenuDelegate @Inject constructor(
 
     fun handleItemSelected(itemId: Int): Boolean {
         when (itemId) {
-            R.id.menu_open_full_page -> tabsManager.openBrowsingTab(activity, website, true, false, CustomTabActivity::class.java.name, incognito = incognito)
+            R.id.menu_open_full_page -> tabsManager.openBrowsingTab(activity, website, true, false, listOf(CustomTabActivity::class.java.name), incognito = incognito)
             android.R.id.home -> activity.finish()
             R.id.bottom_bar_open_in_new_tab -> tabsManager.openNewTab(activity, currentUrl)
             R.id.bottom_bar_share -> shareUrl()

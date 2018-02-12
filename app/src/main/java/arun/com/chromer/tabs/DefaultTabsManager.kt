@@ -74,9 +74,14 @@ constructor(
         private val rxEventBus: RxEventBus
 ) : TabsManager {
 
-    private val browsingActivitiesName = arrayListOf<String>(
+    private val allBrowsingActivitiesName = arrayListOf<String>(
             CustomTabActivity::class.java.name,
             ArticleActivity::class.java.name,
+            WebViewActivity::class.java.name
+    )
+
+    val browsingActivitiesName = arrayListOf<String>(
+            CustomTabActivity::class.java.name,
             WebViewActivity::class.java.name
     )
 
@@ -130,16 +135,16 @@ constructor(
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    override fun reOrderTabByUrl(context: Context, website: Website, activityName: String?): Boolean {
-        return findTaskAndExecuteAction(context, website, activityName, { task ->
+    override fun reOrderTabByUrl(context: Context, website: Website, activityNames: List<String>?): Boolean {
+        return findTaskAndExecuteAction(context, website, activityNames, { task ->
             Timber.d("Moved tab to front $website")
             task.moveToFront()
         })
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    override fun finishTabByUrl(context: Context, website: Website, activityName: String?): Boolean {
-        return findTaskAndExecuteAction(context, website, activityName, { task ->
+    override fun finishTabByUrl(context: Context, website: Website, activityNames: List<String>?): Boolean {
+        return findTaskAndExecuteAction(context, website, activityNames, { task ->
             Timber.d("Finishing task $website")
             task.finishAndRemoveTask()
         })
@@ -150,7 +155,7 @@ constructor(
      * criteria which is base url and optionally and preferred activity name the url belongs to.
      * Upon finding the task, executes {@param foundAction}
      */
-    private fun findTaskAndExecuteAction(context: Context, website: Website, activityName: String?,
+    private fun findTaskAndExecuteAction(context: Context, website: Website, activityNames: List<String>?,
                                          foundAction: (task: ActivityManager.AppTask) -> Unit): Boolean {
         try {
             val am = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
@@ -165,10 +170,10 @@ constructor(
 
                             val urlMatches = url != null && website.matches(url)
 
-                            val taskComponentMatches = if (activityName != null) {
-                                componentClassName == activityName
+                            val taskComponentMatches = if (activityNames != null) {
+                                activityNames.contains(componentClassName)
                             } else {
-                                browsingActivitiesName.contains(componentClassName)
+                                allBrowsingActivitiesName.contains(componentClassName)
                             }
 
                             if (taskComponentMatches && urlMatches) {
@@ -219,7 +224,7 @@ constructor(
     }
 
     override fun openArticle(context: Context, website: Website, newTab: Boolean, incognito: Boolean) {
-        if (!reOrderTabByUrl(context, website, ArticleActivity::class.java.name)) {
+        if (!reOrderTabByUrl(context, website, listOf(ArticleActivity::class.java.name))) {
             val intent = Intent(context, ArticleActivity::class.java).apply {
                 data = website.preferredUri()
                 if (context !is Activity) {
@@ -239,8 +244,8 @@ constructor(
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    override fun openBrowsingTab(context: Context, website: Website, smart: Boolean, fromNewTab: Boolean, activityName: String?, incognito: Boolean) {
-        val reordered = smart && reOrderTabByUrl(context, website, activityName)
+    override fun openBrowsingTab(context: Context, website: Website, smart: Boolean, fromNewTab: Boolean, activityNames: List<String>?, incognito: Boolean) {
+        val reordered = smart && reOrderTabByUrl(context, website, activityNames)
 
         if (!reordered) {
             val canSafelyOpenCCT = CustomTabs.getCustomTabSupportingPackages(context).isNotEmpty()
@@ -373,7 +378,7 @@ constructor(
                 .toObservable()
                 .flatMapIterable { it }
                 .map {
-                    finishTabByUrl(application, Website(it.url), it.getTargetActivityName())
+                    finishTabByUrl(application, Website(it.url), listOf(it.getTargetActivityName()))
                     it
                 }.toList()
                 .toSingle()
