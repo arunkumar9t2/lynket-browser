@@ -76,9 +76,9 @@ public class DefaultHistoryRepository implements HistoryRepository {
             return historyStore.insert(website)
                     .doOnNext(webSite1 -> {
                         if (webSite1 != null) {
-                            Timber.d("Added %s to historyDisabled", webSite1.url);
+                            Timber.d("Added %s to history", webSite1.url);
                         } else {
-                            Timber.e("%s Did not add to historyDisabled", website.url);
+                            Timber.e("%s Did not add to history", website.url);
                         }
                     });
         }

@@ -31,6 +31,7 @@ import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.extenstions.observeUntilOnDestroy
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.shared.Constants
+import arun.com.chromer.shared.Constants.EXTRA_KEY_INCOGNITO
 import arun.com.chromer.shared.base.activity.BaseActivity
 import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.RxEventBus
@@ -63,7 +64,7 @@ abstract class BrowsingActivity : BaseActivity() {
             return
         }
 
-        incognito = intent.getBooleanExtra(Constants.EXTRA_KEY_INCOGNITO, false)
+        incognito = intent.getBooleanExtra(EXTRA_KEY_INCOGNITO, false)
 
         browsingViewModel = ViewModelProviders.of(this, viewModelFactory).get(BrowsingViewModel::class.java)
 

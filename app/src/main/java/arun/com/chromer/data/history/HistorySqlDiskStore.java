@@ -173,8 +173,10 @@ public class HistorySqlDiskStore extends SQLiteOpenHelper implements HistoryStor
                 final String[] whereArgs = {saved.url};
 
                 if (database.update(TABLE_NAME, values, whereClause, whereArgs) > 0) {
+                    Timber.d("Updated %s in db", website.url);
                     return Observable.just(saved);
                 } else {
+                    Timber.e("Update failed for %s", website.url);
                     return Observable.just(website);
                 }
             } else {
