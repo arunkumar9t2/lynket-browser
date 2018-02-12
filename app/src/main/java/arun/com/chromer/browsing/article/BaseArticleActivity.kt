@@ -40,6 +40,7 @@ import arun.com.chromer.data.webarticle.model.WebArticle
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.setMenuBackgroundColor
+import arun.com.chromer.extenstions.watch
 import arun.com.chromer.settings.Preferences.*
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.shared.Constants.EXTRA_KEY_TOOLBAR_COLOR
@@ -122,20 +123,22 @@ abstract class BaseArticleActivity : BrowsingActivity() {
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         browsingArticleViewModel = ViewModelProviders.of(this, viewModelFactory).get(BrowsingArticleViewModel::class.java)
-        subs.add(browsingArticleViewModel.loadWebSiteDetails(intent.dataString)
-                .subscribe { result ->
-                    when (result) {
-                        is Result.Success -> {
-                            val webArticle: WebArticle? = result.data
-                            if (webArticle == null) {
-                                onArticleLoadingFailed(null)
-                            } else {
-                                onArticleLoaded(webArticle)
-                            }
-                        }
-                        is Result.Failure -> onArticleLoadingFailed(result.throwable)
+        browsingArticleViewModel.articleLiveData.watch(this, { result ->
+            when (result) {
+                is Result.Success -> {
+                    val webArticle: WebArticle? = result.data
+                    if (webArticle == null) {
+                        onArticleLoadingFailed(null)
+                    } else {
+                        onArticleLoaded(webArticle)
                     }
-                })
+                }
+                is Result.Failure -> onArticleLoadingFailed(result.throwable)
+            }
+        })
+        if (savedInstanceState == null) {
+            browsingArticleViewModel.loadArticle(url!!)
+        }
     }
 
 

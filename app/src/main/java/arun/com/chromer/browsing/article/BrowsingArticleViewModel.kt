@@ -18,6 +18,7 @@
 
 package arun.com.chromer.browsing.article
 
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import arun.com.chromer.data.Result
 import arun.com.chromer.data.webarticle.WebArticleRepository
@@ -25,6 +26,7 @@ import arun.com.chromer.data.webarticle.model.WebArticle
 import arun.com.chromer.util.SchedulerProvider
 import rx.Observable
 import rx.subjects.BehaviorSubject
+import rx.subjects.PublishSubject
 import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
 
@@ -35,16 +37,25 @@ class BrowsingArticleViewModel
 @Inject
 constructor(private val webArticleRepository: WebArticleRepository) : ViewModel() {
     private val subs = CompositeSubscription()
-    private val webSiteSubject = BehaviorSubject.create<Result<WebArticle>>(Result.Idle())
 
-    fun loadWebSiteDetails(url: String): Observable<Result<WebArticle>> {
-        if (webSiteSubject.value is Result.Idle<WebArticle>) {
-            subs.add(webArticleRepository.getWebArticle(url)
-                    .compose(Result.applyToObservable())
-                    .compose(SchedulerProvider.applyIoSchedulers())
-                    .subscribe(webSiteSubject))
-        }
-        return webSiteSubject
+    private val loadingQueue = PublishSubject.create<String>()
+
+    val articleLiveData = MutableLiveData<Result<WebArticle>>()
+
+    init {
+        subs.add(loadingQueue.asObservable()
+                .concatMap {
+                    webArticleRepository
+                            .getWebArticle(it)
+                            .compose(Result.applyToObservable())
+                }.compose(SchedulerProvider.applyIoSchedulers())
+                .subscribe {
+                    articleLiveData.value = it
+                })
+    }
+
+    fun loadArticle(url: String) {
+        loadingQueue.onNext(url)
     }
 
     override fun onCleared() {
