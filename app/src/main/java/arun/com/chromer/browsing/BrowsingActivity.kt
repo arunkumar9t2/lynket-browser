@@ -134,6 +134,6 @@ abstract class BrowsingActivity : BaseActivity() {
      */
     abstract fun onWebsiteLoaded(website: Website)
 
-    open fun onToolbarColorSet(websiteThemeColor: Int) {
+    protected open fun onToolbarColorSet(websiteThemeColor: Int) {
     }
 }

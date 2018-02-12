@@ -42,9 +42,8 @@ import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.setMenuBackgroundColor
 import arun.com.chromer.extenstions.watch
 import arun.com.chromer.settings.Preferences.*
-import arun.com.chromer.shared.Constants
-import arun.com.chromer.shared.Constants.EXTRA_KEY_TOOLBAR_COLOR
 import arun.com.chromer.tabs.DefaultTabsManager
+import arun.com.chromer.util.ColorUtil
 import arun.com.chromer.util.Utils
 import arun.com.chromer.util.glide.GlideApp
 import kotlinx.android.synthetic.main.activity_article_mode.*
@@ -150,29 +149,36 @@ abstract class BaseArticleActivity : BrowsingActivity() {
     }
 
     override fun onWebsiteLoaded(website: Website) {
-        if (website.themeColor() != Constants.NO_COLOR) {
-            setPrimaryColor(website.themeColor())
-        }
     }
 
-    private fun setPrimaryColor(@ColorInt primaryColor: Int) {
-        if (preferences.dynamiceToolbarEnabledAndWebEnabled()) {
-            this.primaryColor = primaryColor
-            changeRecyclerOverscrollColors(recyclerView, primaryColor)
-            changeProgressBarColors(progressBar, primaryColor)
-            articleScrollListener?.setPrimaryColor(primaryColor)
-        }
-    }
-
-    private fun readCustomizations() {
-        val appPrimaryColor = preferences.toolbarColor()
-        primaryColor = intent.getIntExtra(EXTRA_KEY_TOOLBAR_COLOR, appPrimaryColor)
+    override fun onToolbarColorSet(websiteThemeColor: Int) {
+        primaryColor = websiteThemeColor
         accentColor = ContextCompat.getColor(this, R.color.accent)
 
-        if (preferences.dynamiceToolbarEnabledAndWebEnabled()) {
+        changeRecyclerOverscrollColors(recyclerView, primaryColor)
+        changeProgressBarColors(progressBar, primaryColor)
+        articleScrollListener?.setPrimaryColor(primaryColor)
+
+        if (preferences.dynamiceToolbarEnabledAndWebEnabled() && canUseAsAccentColor(primaryColor)) {
             accentColor = primaryColor
         }
 
+        if (::articleAdapter.isInitialized) {
+            articleAdapter.setAccentColor(accentColor)
+        }
+    }
+
+    private fun canUseAsAccentColor(primaryColor: Int): Boolean {
+        val isDark = preferences.articleTheme() != THEME_LIGHT
+        return if (isDark) {
+            !ColorUtil.shouldUseLightForegroundOnBackground(primaryColor)
+        } else {
+            ColorUtil.shouldUseLightForegroundOnBackground(primaryColor)
+        }
+    }
+
+
+    private fun readCustomizations() {
         val theme = preferences.articleTheme()
         when (theme) {
             THEME_LIGHT -> delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -211,9 +217,6 @@ abstract class BaseArticleActivity : BrowsingActivity() {
         } else {
             onArticleLoadingFailed(null)
         }
-    }
-
-    override fun onToolbarColorSet(websiteThemeColor: Int) {
     }
 
     private fun hideLoading() {
