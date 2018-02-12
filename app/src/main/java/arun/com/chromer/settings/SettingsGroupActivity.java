@@ -81,7 +81,8 @@ public class SettingsGroupActivity extends SubActivity implements SettingsGroupA
         setDefaultCard.setOnClickListener(v -> {
             final String defaultBrowser = Utils.getDefaultBrowserPackage(getApplicationContext());
             if (defaultBrowser.equalsIgnoreCase("android")
-                    || defaultBrowser.startsWith("org.cyanogenmod")) {
+                    || defaultBrowser.startsWith("org.cyanogenmod")
+                    || defaultBrowser.equalsIgnoreCase("com.huawei.android.internal.app")) {
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.GOOGLE_URL)));
             } else {
                 final Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
