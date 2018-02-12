@@ -148,6 +148,7 @@ class HistoryFragment : BaseFragment(), Snackable, FabHandler {
 
         fullIncognitoIcon.setImageDrawable(incognitoImg)
         fullIncognitoModeCard.setOnClickListener { fullIncognitoModeSwitch.performClick() }
+        fullIncognitoModeSwitch.isChecked = preferences.fullIncognitoMode()
         fullIncognitoModeSwitch.setOnCheckedChangeListener { _, isChecked ->
             preferences.fullIncognitoMode(isChecked)
             if (isChecked) {
