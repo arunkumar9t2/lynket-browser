@@ -37,8 +37,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.CustomEvent;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
@@ -203,22 +201,18 @@ public class AboutFragment extends Fragment {
                     case 2:
                         Intent communityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/communities/109754631011301174504"));
                         getActivity().startActivity(communityIntent);
-                        Answers.getInstance().logCustom(new CustomEvent("Join Community"));
                         break;
                     case 3:
                         Intent licenses = new Intent(Intent.ACTION_VIEW, Uri.parse("http://htmlpreview.github.com/?https://github.com/arunkumar9t2/chromer/blob/master/notices.html"));
                         getActivity().startActivity(licenses);
-                        Answers.getInstance().logCustom(new CustomEvent("Licenses"));
                         break;
                     case 4:
                         Intent oneSkyIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://os0l2aw.oneskyapp.com/collaboration/project/62112"));
                         getActivity().startActivity(oneSkyIntent);
-                        Answers.getInstance().logCustom(new CustomEvent("Translations"));
                         break;
                     case 5:
                         Intent sourceIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/arunkumar9t2/chromer"));
                         getActivity().startActivity(sourceIntent);
-                        Answers.getInstance().logCustom(new CustomEvent("Source clicked"));
                         break;
                 }
             }
@@ -317,22 +311,18 @@ public class AboutFragment extends Fragment {
                     case 1:
                         Intent myProfile = new Intent(Intent.ACTION_VIEW, Uri.parse("http://google.com/+arunkumar5592"));
                         getActivity().startActivity(myProfile);
-                        Answers.getInstance().logCustom(new CustomEvent("Google+"));
                         break;
                     case 2:
                         Intent twitterIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/arunkumar_9t2"));
                         getActivity().startActivity(twitterIntent);
-                        Answers.getInstance().logCustom(new CustomEvent("Twitter"));
                         break;
                     case 3:
                         Intent linkedInIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://in.linkedin.com/in/arunkumar9t2"));
                         getActivity().startActivity(linkedInIntent);
-                        Answers.getInstance().logCustom(new CustomEvent("LinkedIn"));
                         break;
                     case 4:
                         Intent github = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/arunkumar9t2/"));
                         getActivity().startActivity(github);
-                        Answers.getInstance().logCustom(new CustomEvent("GitHub"));
                         break;
                     case 5:
                         try {
@@ -340,7 +330,6 @@ public class AboutFragment extends Fragment {
                         } catch (android.content.ActivityNotFoundException anfe) {
                             getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/search?q=pub:Arunkumar")));
                         }
-                        Answers.getInstance().logCustom(new CustomEvent("More apps"));
                         break;
                 }
             }

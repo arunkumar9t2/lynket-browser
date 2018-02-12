@@ -23,7 +23,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import arun.com.chromer.R
-import arun.com.chromer.browsing.customtabs.CustomTabActivity
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
 

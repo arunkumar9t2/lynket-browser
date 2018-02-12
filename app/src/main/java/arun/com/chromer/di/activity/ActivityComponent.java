@@ -20,7 +20,6 @@ package arun.com.chromer.di.activity;
 
 import android.support.annotation.NonNull;
 
-import arun.com.chromer.perapp.PerAppSettingsActivity;
 import arun.com.chromer.browsing.amp.AmpResolverActivity;
 import arun.com.chromer.browsing.article.ArticleActivity;
 import arun.com.chromer.browsing.browserintercept.BrowserInterceptActivity;
@@ -36,6 +35,7 @@ import arun.com.chromer.di.scopes.PerActivity;
 import arun.com.chromer.di.view.ViewComponent;
 import arun.com.chromer.di.view.ViewModule;
 import arun.com.chromer.home.HomeActivity;
+import arun.com.chromer.perapp.PerAppSettingsActivity;
 import arun.com.chromer.settings.browsingoptions.BrowsingOptionsActivity;
 import arun.com.chromer.shortcuts.HomeScreenShortcutCreatorActivity;
 import arun.com.chromer.webheads.ui.context.WebHeadContextActivity;

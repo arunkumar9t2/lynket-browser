@@ -33,8 +33,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.CustomEvent;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
@@ -81,7 +79,6 @@ public class SettingsGroupActivity extends SubActivity implements SettingsGroupA
                 .sizeDp(24));
 
         setDefaultCard.setOnClickListener(v -> {
-            Answers.getInstance().logCustom(new CustomEvent("Set Default Clicked"));
             final String defaultBrowser = Utils.getDefaultBrowserPackage(getApplicationContext());
             if (defaultBrowser.equalsIgnoreCase("android")
                     || defaultBrowser.startsWith("org.cyanogenmod")) {
