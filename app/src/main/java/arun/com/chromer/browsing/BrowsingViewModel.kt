@@ -61,9 +61,11 @@ constructor(
     init {
         // Monitor website requests
         subs.add(websiteQueue.filter { it.isNotEmpty() }
-                .switchMap { url -> websiteObservable(url).compose(Result.applyToObservable()) }
-                .compose(SchedulerProvider.applyIoSchedulers())
-                .doOnError(Timber::e)
+                .switchMap { url ->
+                    websiteObservable(url)
+                            .compose(Result.applyToObservable())
+                            .compose(SchedulerProvider.applyIoSchedulers())
+                }.doOnError(Timber::e)
                 .subscribe({ result ->
                     websiteLiveData.value = result
                     if (result is Result.Success) {

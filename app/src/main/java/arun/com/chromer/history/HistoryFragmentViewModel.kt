@@ -47,9 +47,10 @@ constructor(
         subs.add(loaderSubject
                 .doOnNext { loadingLiveData.postValue(true) }
                 .switchMap {
-                    historyRepository.allItemsCursor
-                }.compose(SchedulerProvider.applyIoSchedulers())
-                .doOnNext { loadingLiveData.postValue(false) }
+                    historyRepository
+                            .allItemsCursor
+                            .compose(SchedulerProvider.applyIoSchedulers())
+                }.doOnNext { loadingLiveData.postValue(false) }
                 .doOnNext(historyCursorLiveData::postValue)
                 .subscribe())
     }
