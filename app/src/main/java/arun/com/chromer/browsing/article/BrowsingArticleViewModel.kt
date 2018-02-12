@@ -24,8 +24,6 @@ import arun.com.chromer.data.Result
 import arun.com.chromer.data.webarticle.WebArticleRepository
 import arun.com.chromer.data.webarticle.model.WebArticle
 import arun.com.chromer.util.SchedulerProvider
-import rx.Observable
-import rx.subjects.BehaviorSubject
 import rx.subjects.PublishSubject
 import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
@@ -47,11 +45,9 @@ constructor(private val webArticleRepository: WebArticleRepository) : ViewModel(
                 .concatMap {
                     webArticleRepository
                             .getWebArticle(it)
+                            .compose(SchedulerProvider.applyIoSchedulers())
                             .compose(Result.applyToObservable())
-                }.compose(SchedulerProvider.applyIoSchedulers())
-                .subscribe {
-                    articleLiveData.value = it
-                })
+                }.subscribe { articleLiveData.value = it })
     }
 
     fun loadArticle(url: String) {

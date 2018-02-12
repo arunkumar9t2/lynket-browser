@@ -57,7 +57,9 @@ public class DefaultWebArticleRepository implements WebArticleRepository {
                                 .flatMap(networkWebArticle -> {
                                     if (networkWebArticle != null) {
                                         return articleCacheStore.saveWebArticle(networkWebArticle);
-                                    } else return null;
+                                    } else {
+                                        return Observable.just(null);
+                                    }
                                 });
                     } else {
                         Timber.d("Cache hit for %s", url);
