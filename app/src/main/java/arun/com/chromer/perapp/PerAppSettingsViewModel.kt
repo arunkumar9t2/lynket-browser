@@ -36,8 +36,7 @@ constructor(private val appRepository: AppRepository) : ViewModel() {
     private fun initAppsLoader() {
         subs.add(loadingQueue.asObservable()
                 .doOnNext { loading(true) }
-                .concatMap { appRepository.allApps() }
-                .compose(SchedulerProvider.applyIoSchedulers())
+                .concatMap { appRepository.allApps().compose(SchedulerProvider.applyIoSchedulers()) }
                 .doOnNext { loading(false) }
                 .subscribe({ apps ->
                     Timber.d("Apps loaded ${apps.size}")

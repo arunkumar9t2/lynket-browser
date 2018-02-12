@@ -97,7 +97,9 @@ class PerAppSettingsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLis
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        loadApps()
+        if (savedInstanceState == null) {
+            loadApps()
+        }
     }
 
     private fun setupToolbar() {
