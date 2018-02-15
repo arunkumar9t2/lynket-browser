@@ -40,6 +40,7 @@ class BrowserInterceptActivity : BaseActivity() {
             val safeIntent = SafeIntent(intent)
             if (safeIntent.data == null) {
                 invalidLink()
+                return
             }
             defaultTabsManager.processIncomingIntent(this, intent)
         }

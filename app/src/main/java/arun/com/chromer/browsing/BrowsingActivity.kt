@@ -120,8 +120,8 @@ abstract class BrowsingActivity : BaseActivity() {
                         ContextCompat.getColor(this@BrowsingActivity, R.color.colorPrimary)
                 )
             }
-            loadWebSiteDetails(getCurrentUrl())
         }
+        loadWebsiteDetails(getCurrentUrl())
     }
 
     protected fun loadWebsiteDetails(url: String) {

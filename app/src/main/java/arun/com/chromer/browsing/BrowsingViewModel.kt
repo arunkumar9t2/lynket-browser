@@ -60,18 +60,18 @@ constructor(
 
     init {
         // Monitor website requests
-        subs.add(websiteQueue.filter { it.isNotEmpty() }
+        subs.add(websiteQueue
+                .filter { it != null && it.isNotEmpty() }
                 .switchMap { url ->
                     websiteObservable(url)
                             .compose(Result.applyToObservable())
                             .compose(SchedulerProvider.applyIoSchedulers())
-                }.doOnError(Timber::e)
-                .subscribe({ result ->
+                }.subscribe({ result ->
                     websiteLiveData.value = result
                     if (result is Result.Success) {
                         taskDescriptionQueue.onNext(result.data!!)
                     }
-                }))
+                }, Timber::e))
 
         // Set task descriptions
         subs.add(taskDescriptionQueue

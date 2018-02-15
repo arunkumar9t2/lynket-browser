@@ -20,9 +20,14 @@ package arun.com.chromer.extenstions
 
 import it.sephiroth.android.library.bottomnavigation.BottomNavigation
 import it.sephiroth.android.library.bottomnavigation.FixedLayout
+import timber.log.Timber
 
 fun BottomNavigation.setMenuBackgroundColor(color: Int) {
     post {
-        children().first { it is FixedLayout }.setBackgroundColor(color)
+        try {
+            children().first { it is FixedLayout }.setBackgroundColor(color)
+        } catch (e: Exception) {
+            Timber.e(e)
+        }
     }
 }
