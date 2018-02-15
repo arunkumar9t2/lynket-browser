@@ -51,15 +51,17 @@ import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.util.ColorUtil
 import arun.com.chromer.util.Utils
 import butterknife.OnClick
+import com.afollestad.materialdialogs.MaterialDialog
 import com.bumptech.glide.RequestManager
 import com.jakewharton.rxbinding.widget.RxSeekBar
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import kotlinx.android.synthetic.main.activity_article_mode.*
-import timber.log.Timber
 import javax.inject.Inject
 
 class ArticleActivity : BrowsingActivity() {
+
+    override fun getLayoutRes() = R.layout.activity_article_mode
 
     override fun inject(activityComponent: ActivityComponent) = activityComponent.inject(this)
 
@@ -95,9 +97,6 @@ class ArticleActivity : BrowsingActivity() {
                 .sizeDp(24)
     }
 
-    override fun getLayoutRes(): Int {
-        return R.layout.activity_article_mode
-    }
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -213,25 +212,32 @@ class ArticleActivity : BrowsingActivity() {
         val bg = ContextCompat.getColor(this, R.color.article_windowBackground)
         bottomNavigation.setMenuBackgroundColor(bg)
         menuDelegate.setupBottombar(bottomNavigation)
-        articleTextSizeCard.setCardBackgroundColor(bg)
+
+        // Text size related
         textSizeIconView.setImageDrawable(textSizeIcon)
         textSizeDismiss.setImageDrawable(dismissIcon)
-
-        subs.add(RxSeekBar.changes(textSizeSeekbar).subscribe {
-            Timber.d(it.toString())
-        })
+        textSizeSeekbar.progress = preferences.articleTextSizeIncrement()
+        subs.add(RxSeekBar
+                .changes(textSizeSeekbar)
+                .skip(1)
+                .subscribe { size ->
+                    recyclerView.post { articleAdapter.textSizeIncrementSp = size }
+                })
     }
 
     private fun setupTheme() {
         val theme = preferences.articleTheme()
         when (theme) {
-            THEME_BLACK -> {
-                coordinatorLayout.background = ColorDrawable(Color.BLACK)
-                bottomNavigation.setMenuBackgroundColor(Color.BLACK)
-                setNavigationBarColor(Color.BLACK)
-            }
+            THEME_BLACK -> handleBlackTheme()
             THEME_DARK -> setNavigationBarColor(ContextCompat.getColor(this, R.color.article_windowBackground))
         }
+    }
+
+    private fun handleBlackTheme() {
+        coordinatorLayout.background = ColorDrawable(Color.BLACK)
+        bottomNavigation.setMenuBackgroundColor(Color.BLACK)
+        articleTextSizeCard.setBackgroundColor(Color.BLACK)
+        setNavigationBarColor(Color.BLACK)
     }
 
     private fun setNavigationBarColor(@ColorInt color: Int) {
@@ -263,7 +269,8 @@ class ArticleActivity : BrowsingActivity() {
         articleAdapter = ArticleAdapter(
                 webArticle,
                 accentColor,
-                requestManager
+                requestManager,
+                preferences.articleTextSizeIncrement()
         ).apply {
             setElements(webArticle.elements)
             subs.add(keywordsClicks()
@@ -283,8 +290,19 @@ class ArticleActivity : BrowsingActivity() {
     fun onTextSizeDismiss() {
         TransitionManager.beginDelayedTransition(articleBottomLinearLayout)
         articleTextSizeCard.gone()
-    }
 
+        val currentIncrement = textSizeSeekbar.progress
+        if (currentIncrement != preferences.articleTextSizeIncrement()) {
+            with(MaterialDialog.Builder(this)) {
+                title(R.string.save_size_dialog_title)
+                content(R.string.save_size_dialog_content)
+                positiveText(android.R.string.yes)
+                negativeText(android.R.string.no)
+                onPositive { _, _ -> preferences.articleTextSizeIncrement(textSizeSeekbar.progress) }
+                build()
+            }.show()
+        }
+    }
 
     companion object {
         private const val MIN_NUM_ELEMENTS = 1

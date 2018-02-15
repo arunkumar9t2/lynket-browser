@@ -84,6 +84,7 @@ public class Preferences {
     public static final int THEME_BLACK = 4;
     public static final String INCOGNITO_MODE = "incognito_mode_pref";
     public static final String FULL_INCOGNITO_MODE = "full_incognito_mode";
+    public static final String ARTICLE_TEXT_SIZE = "article_text_size_pref";
     // Singleton instance
     private static Preferences INSTANCE;
 
@@ -270,6 +271,14 @@ public class Preferences {
 
     public boolean fullIncognitoMode() {
         return getDefaultSharedPreferences().getBoolean(FULL_INCOGNITO_MODE, false);
+    }
+
+    public void articleTextSizeIncrement(int increment) {
+        getDefaultSharedPreferences().edit().putInt(ARTICLE_TEXT_SIZE, increment).apply();
+    }
+
+    public int articleTextSizeIncrement() {
+        return getDefaultSharedPreferences().getInt(ARTICLE_TEXT_SIZE, 0);
     }
 
     public void preFetch(final boolean preference) {
