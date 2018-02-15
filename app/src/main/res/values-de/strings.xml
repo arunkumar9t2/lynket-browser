@@ -124,7 +124,6 @@
     <string name="no_option_selected">Keine Option ausgewählt</string>
     <string name="permission_required">Berechtigung erforderlich</string>
     <string name="usage_permission_explanation_appcolor">Um das dynamische Färben der Aktionsleiste (App-basiert) zu ermöglichen, braucht Chromer die Berechtigung die Apps zu kennen, die du benutzt. Möchtest du diese Berechtigung gewähren?</string>
-    <string name="usage_permission_explanation_blacklist">Um das Ausschließen von Apps über die Blacklist zu ermöglichen, braucht Chromer die Berechtigung die Apps zu kennen, die du benutzt. Möchtest du diese Berechtigung gewähren?</string>
     <string name="grant">Gewähren</string>
     <string name="open_source_contributions">Open Source Stuff</string>
     <string name="search_or_type_url">Suchen oder URL eingeben</string>
@@ -145,13 +144,10 @@
     <string name="become_a_tester">Tester werden</string>
     <string name="join_beta_content">“Beta Versionen sind experimentell. Sie haben die neuesten Funktionen, enthalten jedoch auch Fehler. Du kannst bei der Entwicklung helfen, indem du als Tester mitmachst und Fehler in der Google+ Community meldest. \n\nBitte stelle sicher,  dass du der Community beigetreten bist und klicke dann auf den Button \”Tester werden\“. \n\nBEACHTE: Du musst der Community beitreten um Tester zu werden. ”</string>
     <string name="no_voice_rec_apps">Keine kompatible Spracherkennungs App gefunden</string>
-    <string name="blacklisted_apps">Ausgeschlossene Apps (Blacklist)</string>
-    <string name="blacklisted_explanation">Verhindere, dass Chromer Links von bestimmten Apps verarbeitet</string>
     <string name="loading">Laden…</string>
     <string name="share_failed_msg">Konnte nicht geteilt werden. Benutze stattdessen die Standard App</string>
     <string name="revoke_accessibility_permission">Du kannst die Berechtigung für die Bedienungshilfe jetzt deaktivieren.</string>
     <string name="last_fetched_urls">Letzte geladene URLs</string>
-    <string name="blacklist_on">Ausgeschlossene Apps %1$s</string>
     <string name="translations">Übersetzungen</string>
     <string name="merge_tabs">Tabs und Apps zusammen anzeigen</string>
     <string name="merge_tabs_explanation">Zeige Tabs zusammen mit Apps im \“Zuletzt geöffnet\”-Screen an</string>

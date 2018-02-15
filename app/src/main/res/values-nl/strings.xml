@@ -125,7 +125,6 @@
     <string name="no_option_selected">Geen opties geselecteerd</string>
     <string name="permission_required">Toestemming nodig</string>
     <string name="usage_permission_explanation_appcolor">Om dynamische toolbarkleuren gebaseerd op apps in te schakelen heeft Chromer toestemming nodig om te weten welke apps je gebruikt. Wil je hiervoor toestemming geven?</string>
-    <string name="usage_permission_explanation_blacklist">Om apps op de zwarte lijst te zetten heeft Chromer toestemming nodig om te weten welke apps je gebruikt. Wil je hier nu toestemming voor geven?</string>
     <string name="grant">Toestaan</string>
     <string name="open_source_contributions">Open-source</string>
     <string name="search_or_type_url">Zoeken of URL typen</string>
@@ -148,14 +147,10 @@
     <string name="become_a_tester">Tester worden</string>
     <string name="join_beta_content">Bèta-versies zijn experimenteel en hebben de nieuwste functies, maar wel een aantal bugs. Je kan bijdragen aan de ontwikkeling van Chromer door tester te worden en dan alle bugs die je vindt in de Google+ community te delen.\n\nWord eerst lid van de Google+ community en klik dan op de \‘Tester worden\’\-knop om naar de Google Play test-link te gaan.\n\nLET OP: Je moet lid worden van de Google+ community om een tester te worden.</string>
     <string name="no_voice_rec_apps">Geen compatibele stemherkenning-apps gevonden</string>
-    <string name="blacklisted_apps">Apps op de zwarte lijst</string>
-    <string name="blacklisted_explanation">Chromer niet gebruiken voor links van bepaalde apps</string>
     <string name="loading">Laden…</string>
     <string name="share_failed_msg">Kan niet via de app delen, terugvallen naar normaal delen</string>
     <string name="revoke_accessibility_permission">Je kan nu de toegankelijkheidsrechten van Chromer terugdraaien.</string>
     <string name="last_fetched_urls">Laatst voorgeladen URLs</string>
-    <string name="blacklist_on">\‘Apps op de zwarte lijst\‘ is ingeschakeld</string>
-    <string name="blacklist_off">\‘Apps op de zwarte lijst\‘ is uitgeschakeld</string>
     <string name="translations">Vertalingen</string>
     <string name="merge_tabs">Tabbladen samenvoegen met apps</string>
     <string name="merge_tabs_explanation">Tabbladen samen met andere recente apps weergeven op het recente-apps-scherm</string>

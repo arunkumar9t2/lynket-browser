@@ -116,7 +116,6 @@
     <string name="permission_required">İzin gerekli</string>
     <string name="grant">İzin ver</string>
     <string name="open_source_contributions">Açık kaynak şeyi</string>
-    <string name="blacklisted_explanation">Bazı uygulamalardan gelen bağlantıları Chromer\'den dışla</string>
     <string name="loading">Yükleniyor…</string>
     <string name="translations">Çeviriler</string>
     <string name="bottom_bar">Alt bar</string>

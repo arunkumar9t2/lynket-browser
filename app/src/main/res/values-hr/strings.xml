@@ -38,7 +38,7 @@
         <item>Tamna</item>
         <item>Svijetla</item>
         <item>Automatska</item>
-        <item>Black</item>
+        <item>Crna</item>
     </string-array>
     <string-array name="webHeadsSizeValues">
         <item>Normalna</item>
@@ -126,7 +126,6 @@
     <string name="no_option_selected">Nijedna opcija nije odabrana</string>
     <string name="permission_required">Potrebno je dopuštenje</string>
     <string name="usage_permission_explanation_appcolor">Da biste omogućili dinamičko bojenje alatne trake na temelju aplikacija, Chromer treba vaše dopuštenje da bi znao kojim se aplikacijama koristite. Želite li odmah odobriti ovo dopuštenje?</string>
-    <string name="usage_permission_explanation_blacklist">Da biste omogućili stavljanje aplikacija na crnu listu, Chromer treba vaše dopuštenje da bi znao kojim se aplikacijama koristite. Želite li odmah odobriti dopuštenje pristupa upotrebi?</string>
     <string name="grant">Odobri</string>
     <string name="open_source_contributions">Stvari vezane uz otvoreni kôd</string>
     <string name="search_or_type_url">Pretražite ili upišite URL</string>
@@ -149,14 +148,10 @@
     <string name="become_a_tester">Postani tester</string>
     <string name="join_beta_content">Beta izdanja su eksperimentalne verzije s najnovijim značajkama ali i greškama. Možete doprinositi razvoju aplikacije tako da se postanete tester i onda prijavljujete greške na koje naiđete u Google+ zajednici.\n\nPrvo se pridružite Google+ zajednici, pa zatim dodirnite gumb \“Postani tester\” da otiđete na stranicu Google Playa za testiranje.\n\nNAPOMENA: Morate se pridružiti zajednici da biste postali tester.</string>
     <string name="no_voice_rec_apps">Nema pronađenih aplikacija za prepoznavanje glasa.</string>
-    <string name="blacklisted_apps">Crna lista</string>
-    <string name="blacklisted_explanation">Spriječite Chromer od otvaranja poveznica iz određenih aplikacija.</string>
     <string name="loading">Učitavanje…</string>
     <string name="share_failed_msg">Dijeljenje s aplikacijom nije moguće, preusmjeravanje na normalno dijeljenje</string>
     <string name="revoke_accessibility_permission">Sada možete ukloniti Chromerovo dopuštenje usluge pristupačnosti.</string>
     <string name="last_fetched_urls">Posljednje predučitani URL-ovi</string>
-    <string name="blacklist_on">Stavljanje aplikacija na crnu listu je.</string>
-    <string name="blacklist_off">Crna lista je isključena</string>
     <string name="translations">Prijevodi</string>
     <string name="merge_tabs">Spoji kartice i aplikacije</string>
     <string name="merge_tabs_explanation">Kartice će se prikazivati s drugim nedavnim aplikacijama na zaslonu nedavnih aplikacija.</string>
@@ -194,9 +189,11 @@
     <string name="web_close_on_open_desc">Plutajući mjehurići će nestati kada otvorite poveznicu</string>
     <string name="web_close_on_open_title">Zatvorite mjehuriće kada ih dodirnete.</string>
     <string name="minimize">Smanji</string>
+    <string name="new_tab_action_explanation"><![CDATA[<b>Nova kartica -</b> Otvori novu karticu]]></string>
     <string name="share_action_explanation"><![CDATA[<b>Podijeli -</b> brzo podijelite stranicu]]></string>
     <string name="minimize_action_explanation"><![CDATA[<b>Minimiziraj-</b> Minimizirat će trenutnu stranicu.]]></string>
     <string name="bottom_bar_article_mode_explanation"><![CDATA[<b>Način artikla -</b> Otvorite stranicu u načinu artikla.]]></string>
+    <string name="bottom_bar_tabs_explanation"><![CDATA[<b>Kartice -</b> Prikaži sve aktivne kartice]]></string>
     <string name="available_actions">Dostupne radnje</string>
     <string name="secondary_browser_launching_error_title">Greška pri otvaranju sekundarnog preglednika</string>
     <string name="launch_setting">Otvori postavke</string>
@@ -207,6 +204,7 @@
     <string name="choose_share_method">Odaberite način dijeljenja</string>
     <string name="comma_seperated">Odvojeno zarezom</string>
     <string name="share_all_list">Popis - ograničena podrška aplikacija. Npr.: Join, Pushbullet, itd.</string>
+    <string name="open_new_tab">Otvori novu karticu</string>
     <string name="title_activity_open_with">Otvori s pomoću</string>
     <string name="title_activity_settings">Postavke</string>
     <string name="settings_browsing_mode">Način pregledavanja</string>
@@ -272,4 +270,17 @@
     <string name="text_you_copied">Tekst koji ste kopirali</string>
     <string name="system_webview">WebView sustava</string>
     <string name="Change">Promijeni</string>
+    <string name="title_tabs">Kartice</string>
+    <string name="web_view">Web View</string>
+    <string name="custom_tab">Prilagođena kartica</string>
+    <string name="no_active_tabs">Nema aktivnih kartica.</string>
+    <string name="new_tab_text">Nova kartica</string>
+    <string name="article">Članak</string>
+    <string name="skip">Preskoči</string>
+    <string name="tab_deletion_confirmation_content">Ova radnja će izbrisati sve aktivne kartice i ne može poništiti.</string>
+    <string name="keywords">Ključne riječi</string>
+    <string name="feature_requires_lollipop">Ova značajka zahtijeva Android Lollipop</string>
+    <string name="article_loading_failed">Nije moguće izlučiti članak.</string>
+    <string name="full_incognito_mode">Anonimno pregledavanje</string>
+    <string name="full_incognito_mode_explanation">Za potpuno anonimno pregledavanje Chromer će se prebaciti na Webview za renderanje stranica. Unosi se neće zapisivati.</string>
 </resources>

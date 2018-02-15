@@ -40,22 +40,27 @@
         <item>Automático</item>
         <item>Black</item>
     </string-array>
+    <string-array name="webHeadsSizeValues">
+        <item>Normal</item>
+        <item>Pequeño</item>
+    </string-array>
     <string name="share_text">¡Oye mira \'Chromer \' para una rápida y segura experiencia de navegación! Descarguela aquí https://goo.gl/992ils</string>
-    <string name="share_via">"Compartir vía… "</string>
+    <string name="share_via">"Compartir vía... "</string>
     <string name="custom_tab_provider_not_found">Proveedor compatible de pestañas personalizadas no encontrado</string>
     <string name="custom_tab_provider_not_found_expln">Chromer necesita que tenga instalado algún navegador compatible con pestañas personalizadas en su teléfono. Actualmente no hay navegadores en su teléfono que lo soporten. ¿Le gustaría instalar Google Chrome (gratis) desde Play store? Si ya lo tiene, por favor actualizelo a la última versión.</string>
+    <string name="custom_tab_provider_not_found_dialog_content"><![CDATA[No se pudo encontrar ningun navegador de pestañas personalizadas compatible en su teléfono. Se recomienda Google Chrome (Gratuito). Puede seguir viendo páginas web dentro de Chromer y usar el modo Artículo, pero para una mejor experiencia, se recomienda encarecidamente un proveedor de pestañas personalizado. ¿Te gustaría instalarlo ahora?]]></string>
     <string name="install">Instalar</string>
     <string name="licenses">Licencias</string>
     <string name="about">Acerca de</string>
     <string name="help_chromer_grow">"¡Ayuda a Chromer a crecer! "</string>
     <string name="share">Compartir</string>
     <string name="share_with">Compartir con %1$s</string>
-    <string name="rate_play_store">Califiqué en la Play Store</string>
+    <string name="rate_play_store">Califiqué en Play Store</string>
     <string name="feedback">Su opinión</string>
     <string name="intro">Introducción</string>
-    <string name="send_email">"Enviar correo electrónico… "</string>
+    <string name="send_email">"Enviar correo electrónico... "</string>
     <string name="fallback_msg">No se pudo abrir la pestaña personalizada, volviendo a los navegadores normales</string>
-    <string name="open_with">Abrir con…</string>
+    <string name="open_with">Abrir con...</string>
     <string name="open_in_browser">Abrir en %1$s</string>
     <string name="unxp_err">"Error inesperado, vuelve a intentarlo "</string>
     <string name="unsupported_link">No es un vínculo compatible, Vuelve a intentarlo.</string>
@@ -121,11 +126,11 @@
     <string name="no_option_selected">Ninguna opción seleccionada</string>
     <string name="permission_required">Se necesita permiso</string>
     <string name="usage_permission_explanation_appcolor">Para activar el coloreado dinámico de la barra de herramientas según la aplicación, Chromer necesita su permiso para saber qué aplicaciones está usando. ¿Quiere conceder este permiso ahora?</string>
-    <string name="usage_permission_explanation_blacklist">Para activar la lista negra de aplicaciones, Chromer necesita su permiso para saber qué aplicaciones está usando. ¿Quiere conceder este permiso ahora?</string>
     <string name="grant">Conceder</string>
     <string name="open_source_contributions">Material de código abierto</string>
     <string name="search_or_type_url">Busque o escriba una URL</string>
     <string name="voice_prompt">Diga su consulta</string>
+    <string name="web_heads">Web Heads</string>
     <string name="webhead_spawn_summary">Generar ubicación inicial</string>
     <string name="credits">Agradecimientos</string>
     <string name="icon_design">Diseño de iconos</string>
@@ -133,12 +138,8 @@
     <string name="join_beta">Apúntese a la beta</string>
     <string name="become_a_tester">Conviértase en tester</string>
     <string name="no_voice_rec_apps">No se encontraron aplicaciones de reconocimiento de voz compatibles</string>
-    <string name="blacklisted_apps">Aplicaciones en lista negra</string>
-    <string name="blacklisted_explanation">Excluir Chromer de abrir enlaces desde ciertas aplicaciones</string>
-    <string name="loading">Cargando…</string>
+    <string name="loading">Cargando...</string>
     <string name="last_fetched_urls">Últimas urls buscadas</string>
-    <string name="blacklist_on">Lista negra de aplicaciones activada</string>
-    <string name="blacklist_off">Lista negra de aplicaciones desactivada</string>
     <string name="translations">Traducciones</string>
     <string name="merge_tabs">Mezclar pestañas y aplicaciones</string>
     <string name="already_loaded">Ya fue cargado</string>

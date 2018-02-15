@@ -24,7 +24,6 @@
     <string-array name="actionValues">
         <item>Browser secondario</item>
         <item>App di condivisione preferita</item>
-        <item>General share</item>
     </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>Destra</item>
@@ -107,7 +106,6 @@
     <string name="no_option_selected">Nessun opzione selezionata</string>
     <string name="permission_required">Permesso richiesto</string>
     <string name="usage_permission_explanation_appcolor">Per abilitare il colore dinamico della toolbar basato sull\'app, Chromer ha bisogno del permesso di sapere che app stai usando. Vorresti dargli questo permesso ora?</string>
-    <string name="usage_permission_explanation_blacklist">Per abilitare il blocco delle app, Chromer ha bisogno del permesso di sapere che app stai usando. Vorresti dargli questo permesso ora?</string>
     <string name="grant">Concedi</string>
     <string name="open_source_contributions">materiale open source</string>
     <string name="search_or_type_url">Cerca o scrivi URL</string>

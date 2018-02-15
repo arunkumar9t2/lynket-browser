@@ -38,7 +38,7 @@
         <item>ダーク</item>
         <item>ライト</item>
         <item>自動</item>
-        <item>Black</item>
+        <item>ブラック</item>
     </string-array>
     <string-array name="webHeadsSizeValues">
         <item>普通</item>
@@ -126,7 +126,6 @@
     <string name="no_option_selected">オプションが選択されていません</string>
     <string name="permission_required">権限が必要です</string>
     <string name="usage_permission_explanation_appcolor">ツールバーの色をアプリに合わせるには、使用中のアプリをChromerが取得するための権限を付与する必要があります。今すぐこの権限を付与しますか？</string>
-    <string name="usage_permission_explanation_blacklist">ブラックリストを有効にするには、使用中のアプリをChromerが取得するための権限を付与する必要があります。今すぐこの権限を付与しますか？</string>
     <string name="grant">付与</string>
     <string name="open_source_contributions">オープンソースのもの</string>
     <string name="search_or_type_url">検索またはURLを入力</string>
@@ -149,14 +148,10 @@
     <string name="become_a_tester">テスターになる</string>
     <string name="join_beta_content">ベータリリースは試験的なビルドであり、最新の機能を搭載していますが、バグを含んでいる可能性があります。バグに発見した場合はテスターとして、Google+のコミュニティから報告することで開発に貢献することができます。\n\nGoogle+コミュニティに参加していることを確かめた上で、リンクをタップしてGoogle Playのリンクに移動してください。\n\n注: テスターになるにはコミュニティに参加する必要があります。</string>
     <string name="no_voice_rec_apps">利用可能な音声認識アプリが見つかりません</string>
-    <string name="blacklisted_apps">ブラックリストに登録されたアプリ</string>
-    <string name="blacklisted_explanation">Chromerがこれらのアプリからのリンクを開かないようにする</string>
     <string name="loading">読み込み中</string>
     <string name="share_failed_msg">このアプリから共有できないため、デフォルトの共有を使用します</string>
     <string name="revoke_accessibility_permission">Chromerのユーザー補助サービスを無効にできます。</string>
     <string name="last_fetched_urls">最近読み込んだURL</string>
-    <string name="blacklist_on">ブラックリストが有効</string>
-    <string name="blacklist_off">ブラックリストが無効</string>
     <string name="translations">翻訳</string>
     <string name="merge_tabs">タブとアプリの統合</string>
     <string name="merge_tabs_explanation">タブが最近のタスクと一緒にオーバービュー画面に表示されます。</string>
@@ -194,9 +189,11 @@
     <string name="web_close_on_open_desc">ウェブヘッドはリンクを開くと隠れます</string>
     <string name="web_close_on_open_title">ウェブヘッドはタップ時に閉じられます。</string>
     <string name="minimize">最小化</string>
+    <string name="new_tab_action_explanation"><![CDATA[<b>新しいタブ</b>新しいタブを開きます]]></string>
     <string name="share_action_explanation"><![CDATA[<b>共有 -</b>Androidの共有機能を素早く使用できます。]]></string>
     <string name="minimize_action_explanation"><![CDATA[<b>最小化 -</b>現在のページを最小化します。]]></string>
     <string name="bottom_bar_article_mode_explanation"><![CDATA[<b>記事ビュー</b>ページをリーダーモードで開きます。]]></string>
+    <string name="bottom_bar_tabs_explanation"><![CDATA[<b>タブ</b>開いているタブをすべて表示します]]></string>
     <string name="available_actions">利用可能なアクション</string>
     <string name="secondary_browser_launching_error_title">セカンダリブラウザの起動エラー</string>
     <string name="launch_setting">設定を開く</string>
@@ -207,6 +204,7 @@
     <string name="choose_share_method">共有方法を選択</string>
     <string name="comma_seperated">カンマ区切り</string>
     <string name="share_all_list">リスト - 一部のアプリのみサポートしています。例: Join、Pushbulletなど</string>
+    <string name="open_new_tab">新しいタブを開く</string>
     <string name="title_activity_open_with">別のアプリで開く</string>
     <string name="title_activity_settings">設定</string>
     <string name="settings_browsing_mode">ブラウジングモード</string>
@@ -272,4 +270,17 @@
     <string name="text_you_copied">コピーしたテキスト</string>
     <string name="system_webview">システムのWebView</string>
     <string name="Change">変更</string>
+    <string name="title_tabs">タブ</string>
+    <string name="web_view">WebView</string>
+    <string name="custom_tab">カスタムタブ</string>
+    <string name="no_active_tabs">開いているタブはありません</string>
+    <string name="new_tab_text">新しいタブ</string>
+    <string name="article">記事ビュー</string>
+    <string name="skip">スキップ</string>
+    <string name="tab_deletion_confirmation_content">このアクションはすべてのタブを閉じます。</string>
+    <string name="keywords">キーワード</string>
+    <string name="feature_requires_lollipop">この機能を利用するには Android 6.0 以上が必要です</string>
+    <string name="article_loading_failed">記事を抽出することができませんでした。</string>
+    <string name="full_incognito_mode">シークレットモード</string>
+    <string name="full_incognito_mode_explanation">完全なシークレットモードのために Chromer はページのレンダーに WebView を使用します。これにより作業がどこにも記録されなくなります。</string>
 </resources>

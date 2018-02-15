@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0"?><!--
   ~ Chromer
   ~ Copyright (C) 2017 Arunkumar
   ~
@@ -15,10 +15,8 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item>
-        <!--suppress AndroidElementNotAllowed -->
-        <objectAnimator android:duration="1" android:propertyName="elevation" android:valueTo="4dp" android:valueType="floatType" />
-    </item>
-</selector>
+<resources>
+    <string-array name="animationValues">
+        <item>Pol</item>
+    </string-array>
+</resources>

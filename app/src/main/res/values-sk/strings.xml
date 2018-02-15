@@ -38,7 +38,7 @@
         <item>Tmavá</item>
         <item>Svetlá</item>
         <item>Autom.</item>
-        <item>Black</item>
+        <item>Späť</item>
     </string-array>
     <string-array name="webHeadsSizeValues">
         <item>Normálne</item>
@@ -126,7 +126,6 @@
     <string name="no_option_selected">Nie sú vybrané žiadne voľby</string>
     <string name="permission_required">Je požadované povolenie</string>
     <string name="usage_permission_explanation_appcolor">Pre povolenie dynamického zafarbenia lišty podľa aplikácie, Chromer potrebuje vaše povolenie vedieť, aké aplikácie používate. Chcete to teraz povoliť?</string>
-    <string name="usage_permission_explanation_blacklist">Pre blokovanie aplikácií, Chromer potrebuje vaše povolenie vedieť, aké aplikácie používate. Chcete to teraz povoliť?</string>
     <string name="grant">Povoliť</string>
     <string name="open_source_contributions">Open source veci</string>
     <string name="search_or_type_url">Vyhľadajte alebo zadajte adresu</string>
@@ -149,14 +148,10 @@
     <string name="become_a_tester">Staňte sa testerom</string>
     <string name="join_beta_content">Beta verzie sú experimentálne, ktoré majú najnovšie funkcie ale môžu mať chyby.  Môžete prispieť k vývoju pripojením sa ako tester a nahlasovaním chýb, ktoré nájdete v komunite Google+.\n\nProsím, uistite sa, že ste sa pripojili do Google+ komunity, a potom kliknite na tlačidlo Staňte sa testerom a prejdite na odkaz pre testovanie Google Play. \n\nPOZNÁMKA: Musíte sa pripojiť do komunity pre sprístupnenie možnosti testovania.</string>
     <string name="no_voice_rec_apps">Nebola nájdená kompatibilná aplikácia pre rozoznávanie hlasu</string>
-    <string name="blacklisted_apps">Blokované aplikácie</string>
-    <string name="blacklisted_explanation">Vylúči Chromer zo spracovávania odkazov určitých aplikácií</string>
     <string name="loading">Načítavanie…</string>
     <string name="share_failed_msg">Do aplikácie nie je možné zdieľať, presmerované do normálneho zdieľania</string>
     <string name="revoke_accessibility_permission">Teraz môžete zakázať službu Dostupnosť pre Chromer.</string>
     <string name="last_fetched_urls">Naposledy načínané adresy</string>
-    <string name="blacklist_on">Blokované aplikácie sú %s</string>
-    <string name="blacklist_off">Blokované aplikácie sú vypnuté</string>
     <string name="translations">Preklad aplikácie</string>
     <string name="merge_tabs">Zlúčenie kariet a aplikácií</string>
     <string name="merge_tabs_explanation">Zobrazí karty s ďalšími nedávnymi aplikáciami na obrazovne nedávnych aplikácií.</string>
@@ -194,8 +189,10 @@
     <string name="web_close_on_open_desc">Webové hlavičky zmiznú po otvorení odkazu</string>
     <string name="web_close_on_open_title">Zavrieť webové hlavičky po kliknutí.</string>
     <string name="minimize">Minimalizovať</string>
+    <string name="new_tab_action_explanation"><![CDATA[<b>Nová karta -</b> Otvoriť novú kartu]]></string>
     <string name="share_action_explanation"><![CDATA[<b>Zdieľať -</b> Rýchle spustenie akcie zdieľania Androidu.]]></string>
     <string name="minimize_action_explanation"><![CDATA[<b>Minimalizovať -</b> Minimalizuje aktuálnu stránku späť do bubliny. Dostupné iba ak je povolené <i>Webové hlavičky</i> a <i>Zlúčenie kariet a aplikácií</i>.]]></string>
+    <string name="bottom_bar_tabs_explanation"><![CDATA[<b>Karty -</b> Zobraziť všetky aktívne karty]]></string>
     <string name="available_actions">Dostupné akcie</string>
     <string name="secondary_browser_launching_error_title">Vyskytla sa chyba pri spúšťaní sekundárneho prehliadača</string>
     <string name="launch_setting">Nastavenia spustenia</string>
@@ -206,6 +203,7 @@
     <string name="choose_share_method">Zvoľte metódu zdieľania</string>
     <string name="comma_seperated">Oddelené čiarkou</string>
     <string name="share_all_list">Zoznam - Obmedzená podpora aplikácie. Napr. Join, Pushbullet, atď.</string>
+    <string name="open_new_tab">Otvoriť novú kartu</string>
     <string name="title_activity_open_with">Otvoriť s</string>
     <string name="title_activity_settings">Nastavenia</string>
     <string name="settings_browsing_mode">Režim prehiadania</string>
@@ -254,4 +252,18 @@
     <string name="enable_history">História je povolená</string>
     <string name="enable_history_subtitle">Po zakázaní histórie sa prestanú zaznamenávať navštívené stránky.</string>
     <string name="enable_history_subtitle_custom_tab"><![CDATA[Po zakázaní histórie sa prestanú zaznamenávať navštívené stránky. Poskytovateľ Custom Tabs, <b>%1$s</b>, ich ale stále zaznamenávať môže.]]></string>
+    <string name="source">Zdroj</string>
+    <string name="create">Vytvoriť</string>
+    <string name="name_cannot_be_empty">Meno nemôže byť prázdne</string>
+    <string name="chromer_options">Možnosti Chromer</string>
+    <string name="warning">Upozornenie</string>
+    <string name="text_you_copied">Skopírovaný text</string>
+    <string name="Change">Zmeniť</string>
+    <string name="title_tabs">Karty</string>
+    <string name="no_active_tabs">Žiadne aktívne karty.</string>
+    <string name="new_tab_text">Nová karta</string>
+    <string name="article">Článok</string>
+    <string name="skip">Preskočiť</string>
+    <string name="keywords">Kľúčové slová</string>
+    <string name="feature_requires_lollipop">Táto funkcia vyžaduje Android Lollipop</string>
 </resources>

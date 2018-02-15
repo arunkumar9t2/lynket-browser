@@ -38,7 +38,6 @@
         <item>Темный</item>
         <item>Светлый</item>
         <item>Автоматически</item>
-        <item>Black</item>
     </string-array>
     <string-array name="webHeadsSizeValues">
         <item>Нормальный</item>
@@ -126,7 +125,6 @@
     <string name="no_option_selected">Параметры не выбраны</string>
     <string name="permission_required">Необходимо разрешение</string>
     <string name="usage_permission_explanation_appcolor">Чтобы включить динамический цвет панели инструментов, основанный на приложениях, Chromer нуждается в вашем разрешении на определение используемого приложения. Предоставить доступ сейчас?</string>
-    <string name="usage_permission_explanation_blacklist">Чтобы включить чёрный список приложений, Chromer нуждается в вашем разрешении на определение приложения которое вы используете. Предоставить доступ сейчас?</string>
     <string name="grant">Предоставить</string>
     <string name="open_source_contributions">Приложение с открытым исходным кодом</string>
     <string name="search_or_type_url">Поиск</string>
@@ -149,14 +147,10 @@
     <string name="become_a_tester">Стать тестером</string>
     <string name="join_beta_content">Бета-релизы - это экспериментальные версии, в которых представлены самые новые возможности, но в них бывают баги. Вы можете присоединиться к разработке, став тестером и сообщая о найденных багах в сообществе Google+.\n\nПожалуйста, убедитесь в том, что вы присоединились к сообществу в Google+, а затем нажмите кнопку \“Стать тестером\”, чтобы вас перенаправило по тестовой ссылке Google Play.\n\nПРИМЕЧАНИЕ: Вы должны присоединиться к сообществу, чтобы стать тестером.</string>
     <string name="no_voice_rec_apps">Не найдено приложений для распознавания голоса</string>
-    <string name="blacklisted_apps">Приложения в чёрном списке</string>
-    <string name="blacklisted_explanation">Запретить Chromer обрабатывать ссылки для определенных приложений</string>
     <string name="loading">Загрузка…</string>
     <string name="share_failed_msg">Не удалось поделиться через стандартное приложение</string>
     <string name="revoke_accessibility_permission">Теперь вы можете отозвать разрешение доступности службы Chromer.</string>
     <string name="last_fetched_urls">Последние предзагруженные ссылки</string>
-    <string name="blacklist_on">Фильтрование приложений включено %s</string>
-    <string name="blacklist_off">Блокирование приложений выключено</string>
     <string name="translations">Переводы</string>
     <string name="merge_tabs">Вкладки в списке недавних приложений</string>
     <string name="merge_tabs_explanation">Вкладки Chromer будут раздельно отображены в списке недавно запущенных приложений.</string>

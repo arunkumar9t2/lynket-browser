@@ -126,7 +126,6 @@
     <string name="no_option_selected">沒有選擇選項</string>
     <string name="permission_required">需要權限</string>
     <string name="usage_permission_explanation_appcolor">要啟用動態工具欄根據應用程式變色，Chromer需要您授予獲取正在使用的應用程式權限。您要授予權限嗎？</string>
-    <string name="usage_permission_explanation_blacklist">要啟用應用程式黑名單，Chromer需要您授予正在使用的應用程式權限。您要現在授予權限嗎？</string>
     <string name="grant">授權</string>
     <string name="open_source_contributions">開放原始碼項目</string>
     <string name="search_or_type_url">搜尋或輸入網址</string>
@@ -149,14 +148,10 @@
     <string name="become_a_tester">成為測試人員</string>
     <string name="join_beta_content">測試版是具有最新功能但可能有少量錯誤的實驗性版本，您可以透過加入成為測試人員及在 Google+ 社群上回報您遇到的問題來為開發做出貢獻。\n\n請確定您已加入 Google+ 社群，然後點擊成為測試人員按鈕以獲得 Google Play 的測試連結。\n\n注意：您必需加入社群才能成為測試人員。</string>
     <string name="no_voice_rec_apps">找不到相容的語音辨識應用程式</string>
-    <string name="blacklisted_apps">黑名單應用程式</string>
-    <string name="blacklisted_explanation">在某些App排除以 Chromer 開啟連結</string>
     <string name="loading">載入中…</string>
     <string name="share_failed_msg">無法分享至應用程式，預設返回標準分享</string>
     <string name="revoke_accessibility_permission">您現在可以撤銷 Chromer 的無障礙權限。</string>
     <string name="last_fetched_urls">最近獲取的網址</string>
-    <string name="blacklist_on">黑名單應用程式 %s</string>
-    <string name="blacklist_off">黑名單應用程式已關閉</string>
     <string name="translations">翻譯</string>
     <string name="merge_tabs">合併顯示分頁和應用程式</string>
     <string name="merge_tabs_explanation">將您打開的分頁顯示於您手機上的最近的應用程式列表內。</string>

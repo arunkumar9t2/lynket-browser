@@ -38,7 +38,6 @@
         <item>暗色</item>
         <item>亮色</item>
         <item>自动</item>
-        <item>Black</item>
     </string-array>
     <string-array name="webHeadsSizeValues">
         <item>正常</item>
@@ -125,7 +124,6 @@
     <string name="no_option_selected">没有选择选项</string>
     <string name="permission_required">需要获取权限</string>
     <string name="usage_permission_explanation_appcolor">要开启根据应用动态着色工具栏，Chromer 将需要获取授权来了解当前正在使用的应用。您想要现在允许这项权限吗？</string>
-    <string name="usage_permission_explanation_blacklist">为了开启黑名单应用功能，Chromer 将需要获取授权来了解当前正在使用的应用。您想要现在允许查看使用情况权限吗？</string>
     <string name="grant">允许</string>
     <string name="open_source_contributions">开源项目</string>
     <string name="search_or_type_url">搜索或输入网址</string>
@@ -148,14 +146,10 @@
     <string name="become_a_tester">成为测试人员</string>
     <string name="join_beta_content">测试版是具备最新功能但会有少量 Bug 存在的实验性版本。您可以通过加入测试人员并在 Google+ 社群内汇报相关问题的方式来为开发做出贡献。\n\n请确保您已经加入了 Google+ 社群，然后点击成为测试人员按钮来获取 Play 商店内的测试版本链接。\n\n注意：您需要先加入社群以成为测试人员。</string>
     <string name="no_voice_rec_apps">没有找到可兼容的语音识别应用</string>
-    <string name="blacklisted_apps">黑名单应用</string>
-    <string name="blacklisted_explanation">阻止 Chromer 打开来自特定应用的链接</string>
     <string name="loading">正在加载…</string>
     <string name="share_failed_msg">无法分享到应用，默认返回标准分享</string>
     <string name="revoke_accessibility_permission">您现在可以撤销掉 Chromer 的无障碍服务了</string>
     <string name="last_fetched_urls">最近获取过的网址</string>
-    <string name="blacklist_on">黑名单应用 %s</string>
-    <string name="blacklist_off">已禁用的黑名单应用</string>
     <string name="translations">翻译</string>
     <string name="merge_tabs">合并标签页和应用</string>
     <string name="merge_tabs_explanation">您所打开的标签页和应用程序都将显示在最近任务列表内</string>
