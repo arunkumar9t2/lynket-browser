@@ -33,10 +33,12 @@ import android.view.View.VISIBLE
 import arun.com.chromer.R
 import arun.com.chromer.di.fragment.FragmentComponent
 import arun.com.chromer.settings.Preferences
+import arun.com.chromer.settings.browsingoptions.BrowsingOptionsActivity
 import arun.com.chromer.shared.FabHandler
 import arun.com.chromer.shared.base.Snackable
 import arun.com.chromer.shared.base.fragment.BaseFragment
 import arun.com.chromer.util.HtmlCompat
+import arun.com.chromer.util.RxEventBus
 import arun.com.chromer.util.Utils
 import com.afollestad.materialdialogs.MaterialDialog
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
@@ -52,6 +54,8 @@ class HistoryFragment : BaseFragment(), Snackable, FabHandler {
     lateinit var viewModelFactory: ViewModelProvider.Factory
     @Inject
     lateinit var preferences: Preferences
+    @Inject
+    lateinit var rxEventBus: RxEventBus
 
     private lateinit var historyAdapter: HistoryAdapter
 
@@ -155,6 +159,7 @@ class HistoryFragment : BaseFragment(), Snackable, FabHandler {
                 historySwitch.isChecked = false
                 fullIncognitoModeSwitch.postDelayed({ showIncognitoDialogExplanation() }, 200)
             }
+            rxEventBus.post(BrowsingOptionsActivity.ProviderChanged())
         }
     }
 

@@ -61,6 +61,8 @@ class HomeFragment : BaseFragment() {
     lateinit var rxEventBus: RxEventBus
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject
+    lateinit var preferences: Preferences
 
     private lateinit var homeFragmentViewModel: HomeFragmentViewModel
 
@@ -155,8 +157,9 @@ class HomeFragment : BaseFragment() {
 
     private fun setupInfoCards() {
         if (isAdded && context != null) {
-            val customTabProvider: String? = Preferences.get(context!!).customTabPackage()
-            if (customTabProvider == null) {
+            val customTabProvider: String? = preferences.customTabPackage()
+            val isIncognito = preferences.fullIncognitoMode()
+            if (customTabProvider == null || isIncognito) {
                 providerDescription.text = HtmlCompat.fromHtml(getString(R.string.tab_provider_status_message_home, getString(R.string.system_webview)))
                 GlideApp.with(this)
                         .load(ApplicationIcon.createUri(Constants.SYSTEM_WEBVIEW))
@@ -165,7 +168,16 @@ class HomeFragment : BaseFragment() {
                                 .colorRes(R.color.primary)
                                 .sizeDp(24))
                         .into(providerIcon)
+                if (isIncognito) {
+                    providerReason.show()
+                    providerChangeButton.gone()
+                } else {
+                    providerReason.gone()
+                    providerChangeButton.show()
+                }
             } else {
+                providerReason.gone()
+                providerChangeButton.show()
                 val appName = context!!.appName(customTabProvider)
                 providerDescription.text = HtmlCompat.fromHtml(getString(R.string.tab_provider_status_message_home, appName))
                 GlideApp.with(this)

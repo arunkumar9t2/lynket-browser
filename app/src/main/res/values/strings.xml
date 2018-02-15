@@ -290,4 +290,5 @@
     <string name="full_incognito_mode_explanation">For full incognito browsing Chromer will switch to Webview for rendering pages. Entries will not be recorded anywhere.</string>
     <string name="per_app_settings">Per app settings</string>
     <string name="per_app_settings_explanation">Configure secondary browser and incognito mode for apps individually.</string>
+    <string name="provider_web_view_incognito_reason">Required for incognito mode. Turn off incognito for choosing another provider.</string>
 </resources>
