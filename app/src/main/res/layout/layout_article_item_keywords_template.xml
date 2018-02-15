@@ -20,7 +20,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/keywordsItem"
     android:layout_width="wrap_content"
-    android:layout_height="36dp"
+    android:layout_height="wrap_content"
     android:layout_marginLeft="2dp"
     android:layout_marginRight="2dp"
     android:background="@drawable/rounded_corners"
@@ -28,5 +28,6 @@
     android:gravity="center"
     android:maxLines="1"
     android:maxWidth="200dp"
+    android:minHeight="36dp"
     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
     tools:text="Hello" />

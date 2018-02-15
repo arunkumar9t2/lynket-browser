@@ -17,6 +17,7 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal">
@@ -81,12 +82,65 @@
 
             </android.support.design.widget.AppBarLayout>
 
-            <it.sephiroth.android.library.bottomnavigation.BottomNavigation
-                android:id="@+id/bottomNavigation"
+            <LinearLayout
+                android:id="@+id/articleBottomLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                app:bbn_entries="@menu/browsing_bottom_navigation_menu" />
+                android:orientation="vertical">
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/articleTextSizeCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:visibility="gone"
+                    app:cardBackgroundColor="@color/article_windowBackground">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:orientation="horizontal"
+                        android:weightSum="1">
+
+                        <ImageView
+                            android:id="@+id/textSizeIconView"
+                            android:layout_width="24dp"
+                            android:layout_height="48dp"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginRight="8dp"
+                            android:scaleType="fitCenter"
+                            tools:ignore="RtlHardcoded" />
+
+                        <android.support.v7.widget.AppCompatSeekBar
+                            android:id="@+id/textSizeSeekbar"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:max="15" />
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/textSizeDismiss"
+                            android:layout_width="24dp"
+                            android:layout_height="48dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="16dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:padding="4dp"
+                            android:scaleType="fitCenter"
+                            tools:ignore="RtlHardcoded" />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <it.sephiroth.android.library.bottomnavigation.BottomNavigation
+                    android:id="@+id/bottomNavigation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:bbn_entries="@menu/browsing_bottom_navigation_menu" />
+            </LinearLayout>
         </android.support.design.widget.CoordinatorLayout>
     </arun.com.chromer.browsing.article.view.ElasticDragDismissFrameLayout>
 

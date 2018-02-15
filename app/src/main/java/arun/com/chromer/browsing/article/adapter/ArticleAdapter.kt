@@ -38,10 +38,12 @@ import arun.com.chromer.data.webarticle.model.WebArticle
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.util.ColorUtil
 import arun.com.chromer.util.HtmlCompat
+import arun.com.chromer.util.Utils
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions.diskCacheStrategyOf
 import com.bumptech.glide.request.RequestOptions.placeholderOf
+import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 import rx.Observable
 import rx.subjects.PublishSubject
@@ -61,7 +63,8 @@ import rx.subjects.PublishSubject
 internal class ArticleAdapter(
         private val article: WebArticle,
         private var accentColor: Int,
-        private val requestManager: RequestManager
+        private val requestManager: RequestManager,
+        articleTextSizeIncrement: Int
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var elements: Elements = Elements()
 
@@ -81,6 +84,16 @@ internal class ArticleAdapter(
             return offset
         }
 
+    var textSizeIncrementSp: Int = 0
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
+    init {
+        textSizeIncrementSp = articleTextSizeIncrement
+    }
+    
     fun setAccentColor(accentColor: Int) {
         this.accentColor = accentColor
         notifyDataSetChanged()
@@ -148,17 +161,7 @@ internal class ArticleAdapter(
                             .apply(diskCacheStrategyOf(DiskCacheStrategy.ALL))
                             .into(image)*/
                 }
-                is TextViewHolder -> {
-                    val text = elements[position - topItemCount].outerHtml()
-                    val textView = holder.textView
-                    val params = textView.layoutParams as ViewGroup.MarginLayoutParams
-                    if (position == itemCount - 1) {
-                        params.bottomMargin = textView.context.resources.getDimensionPixelSize(R.dimen.article_extraBottomPadding)
-                    } else {
-                        params.bottomMargin = 0
-                    }
-                    textView.text = HtmlCompat.fromHtml(text)
-                }
+                is TextViewHolder -> holder.bind(elements[position - topItemCount])
             }
         } else {
             when (holder) {
@@ -235,22 +238,6 @@ internal class ArticleAdapter(
         }
     }
 
-    internal open inner class TextViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val textView: TextView = itemView.findViewById(R.id.article_text)
-
-        init {
-            textView.movementMethod = SuppressiveLinkMovementMethod
-            changeTextSelectionHandleColors(textView, accentColor)
-            textView.setLinkTextColor(accentColor)
-        }
-    }
-
-    internal inner class BlockQuoteViewHolder(itemView: View) : TextViewHolder(itemView) {
-        init {
-            textView.setTextColor(accentColor)
-        }
-    }
-
     internal open inner class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val image: ImageView = itemView.findViewById(R.id.article_image)
         var url: String? = null
@@ -272,11 +259,49 @@ internal class ArticleAdapter(
 
     internal inner class HeaderImageViewHolder(itemView: View) : ImageViewHolder(itemView)
 
+    internal open inner class TextViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val textView: TextView = itemView.findViewById(R.id.article_text)
+
+        private var originalTextSize: Float = 0f
+
+        internal var calculatedSize: Float = 0f
+            get() = originalTextSize + textSizeIncrementSp
+
+        init {
+            textView.movementMethod = SuppressiveLinkMovementMethod
+            changeTextSelectionHandleColors(textView, accentColor)
+            textView.setLinkTextColor(accentColor)
+            originalTextSize = Utils.pxTosp(itemView.context, textView.textSize)
+        }
+
+        open fun bind(element: Element) {
+            val text = element.outerHtml()
+            val params = textView.layoutParams as ViewGroup.MarginLayoutParams
+            if (adapterPosition != RecyclerView.NO_POSITION && adapterPosition == itemCount - 1) {
+                params.bottomMargin = textView.context.resources.getDimensionPixelSize(R.dimen.article_extraBottomPadding)
+            } else {
+                params.bottomMargin = 0
+            }
+            textView.text = HtmlCompat.fromHtml(text)
+            textView.textSize = calculatedSize
+        }
+    }
+
+    internal inner class BlockQuoteViewHolder(itemView: View) : TextViewHolder(itemView) {
+        init {
+            textView.setTextColor(accentColor)
+        }
+    }
+
     internal inner class TitleTextViewHolder(itemView: View) : TextViewHolder(itemView) {
         val title: TextView = itemView.findViewById(R.id.articleTitle)
         val siteName: TextView = itemView.findViewById(R.id.articleSiteName)
+        override fun bind(element: Element) {
+            super.bind(element)
+            title.textSize = calculatedSize
+            siteName.textSize = calculatedSize
+        }
     }
-
 
     /**
      * [RecyclerView.ViewHolder] for the entire keywords item containing a list and title.
@@ -317,18 +342,16 @@ internal class ArticleAdapter(
             }
 
             override fun onBindViewHolder(holder: KeywordsItemViewHolder, position: Int) {
-                holder.keywordItem.apply {
-                    text = keywords[position]
-                    (background as GradientDrawable).setColor(accentColor)
-                    setTextColor(ColorUtil.getForegroundWhiteOrBlack(accentColor))
-                }
+                holder.bind(keywords[position])
             }
 
             /**
              * [RecyclerView.ViewHolder] for individual items
              */
             inner class KeywordsItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-                val keywordItem: TextView = itemView.findViewById(R.id.keywordsItem)
+                private val keywordItem: TextView = itemView.findViewById(R.id.keywordsItem)
+
+                private var originalTextSize: Float = 0f
 
                 init {
                     keywordItem.setOnClickListener {
@@ -336,6 +359,16 @@ internal class ArticleAdapter(
                         if (position != RecyclerView.NO_POSITION) {
                             keywordClicks.onNext(keywords[position])
                         }
+                    }
+                    originalTextSize = Utils.pxTosp(itemView.context, keywordItem.textSize)
+                }
+
+                fun bind(keyword: String) {
+                    keywordItem.apply {
+                        text = keyword
+                        (background as GradientDrawable).setColor(accentColor)
+                        setTextColor(ColorUtil.getForegroundWhiteOrBlack(accentColor))
+                        textSize = originalTextSize + textSizeIncrementSp
                     }
                 }
             }

@@ -25,4 +25,5 @@
     <item name="menu_open_with" type="id" />
     <item name="menu_share" type="id" />
     <item name="menu_share_with" type="id" />
+    <item name="menu_text_size" type="id" />
 </resources>

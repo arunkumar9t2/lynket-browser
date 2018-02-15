@@ -24,6 +24,10 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
+import android.support.v4.content.ContextCompat
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.ImageSpan
 import android.view.Menu
 import android.view.MenuItem
 import arun.com.chromer.R
@@ -50,6 +54,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import it.sephiroth.android.library.bottomnavigation.BottomNavigation
 import javax.inject.Inject
+
 
 /**
  * Created by arunk on 28-01-2018.
@@ -86,6 +91,11 @@ class MenuDelegate @Inject constructor(
             }
             add(0, R.id.menu_action_button, Menu.NONE, R.string.choose_secondary_browser).apply {
                 setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            }
+            if (isArticle) {
+                add(0, R.id.menu_text_size, Menu.NONE, getTextSizeMenuItemText()).apply {
+                    setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+                }
             }
             add(0, R.id.menu_copy_link, Menu.NONE, R.string.copy_link)
             add(0, R.id.menu_open_with, Menu.NONE, R.string.open_with)
@@ -197,6 +207,24 @@ class MenuDelegate @Inject constructor(
             }
         } else {
             bottomNavigation.gone()
+        }
+    }
+
+
+    private fun getTextSizeMenuItemText(): CharSequence {
+        val text = activity.getText(R.string.text_size)
+        return SpannableStringBuilder()
+                .append("*")
+                .append("   ")
+                .append(text).apply {
+            setSpan(ImageSpan(IconicsDrawable(activity)
+                    .icon(CommunityMaterial.Icon.cmd_format_size)
+                    .color(ContextCompat.getColor(activity, R.color.material_dark_light))
+                    .sizeDp(24)),
+                    0,
+                    1,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
         }
     }
 }

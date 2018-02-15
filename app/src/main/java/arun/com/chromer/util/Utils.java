@@ -260,9 +260,14 @@ public class Utils {
         return (int) ((dp * displayMetrics.density) + 0.5);
     }
 
-    public static int sp2px(float spValue) {
-        final float fontScale = Resources.getSystem().getDisplayMetrics().scaledDensity;
+    public static int sp2px(Context context, float spValue) {
+        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
         return (int) (spValue * fontScale + 0.5f);
+    }
+
+    public static float pxTosp(Context context, float px) {
+        float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
+        return px / scaledDensity;
     }
 
     @SuppressWarnings("unused")
