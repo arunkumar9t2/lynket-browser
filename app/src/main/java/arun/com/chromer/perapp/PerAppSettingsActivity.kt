@@ -123,7 +123,7 @@ class PerAppSettingsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLis
             val blackListSwitch = menuItem.actionView.findViewById<SwitchCompat>(R.id.blacklist_switch)
             if (blackListSwitch != null) {
                 val blackListActive = preferences.perAppSettings() && Utils.canReadUsageStats(this)
-                Preferences.get(this).perAppSettings(blackListActive)
+                preferences.perAppSettings(blackListActive)
                 blackListSwitch.isChecked = Preferences.get(this).perAppSettings()
                 blackListSwitch.setOnCheckedChangeListener(this)
             }
