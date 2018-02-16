@@ -34,6 +34,7 @@ import arun.com.chromer.util.glide.GlideApp
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.bumptech.glide.RequestManager
+import rx.subjects.PublishSubject
 import java.util.*
 import javax.inject.Inject
 
@@ -46,6 +47,9 @@ constructor(
         private val activity: Activity,
         private val requestManager: RequestManager
 ) : RecyclerView.Adapter<ProvidersAdapter.RecentsViewHolder>() {
+
+    val installClicks = PublishSubject.create<Provider>()
+    val selections = PublishSubject.create<Provider>()
 
     var providers = ArrayList<Provider>()
         set(value) {
@@ -89,16 +93,29 @@ constructor(
 
         init {
             ButterKnife.bind(this, itemView)
+
+            itemView.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    val provider = providers[adapterPosition]
+                    if (provider.installed) {
+                        selections.onNext(provider)
+                    } else {
+                        installClicks.onNext(provider)
+                    }
+                }
+            }
         }
 
         fun bind(provider: Provider) {
             requestManager.load(provider.iconUri).into(icon)
-            label!!.text = provider.appName
+            label?.text = provider.appName
 
-            if (provider.installed) {
-                install!!.gone()
-            } else {
-                install!!.show()
+            install?.apply {
+                if (provider.installed) {
+                    gone()
+                } else {
+                    show()
+                }
             }
         }
     }

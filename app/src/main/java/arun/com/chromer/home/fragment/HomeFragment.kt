@@ -26,7 +26,7 @@ import android.os.Handler
 import android.support.v7.widget.GridLayoutManager
 import android.view.View
 import arun.com.chromer.R
-import arun.com.chromer.browsing.customtabs.CustomTabs
+import arun.com.chromer.browsing.providerselection.ProviderSelectionActivity
 import arun.com.chromer.data.Result
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.fragment.FragmentComponent
@@ -40,11 +40,9 @@ import arun.com.chromer.shared.base.Snackable
 import arun.com.chromer.shared.base.fragment.BaseFragment
 import arun.com.chromer.util.HtmlCompat
 import arun.com.chromer.util.RxEventBus
-import arun.com.chromer.util.Utils
 import arun.com.chromer.util.glide.GlideApp
 import arun.com.chromer.util.glide.appicon.ApplicationIcon
 import butterknife.OnClick
-import com.afollestad.materialdialogs.MaterialDialog
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -194,18 +192,7 @@ class HomeFragment : BaseFragment() {
     @OnClick(R.id.providerChangeButton)
     fun onProviderChangeClicked() {
         Handler().postDelayed({
-            if (CustomTabs.getCustomTabSupportingPackages(context!!).isNotEmpty()) {
-                startActivity(Intent(context, BrowsingOptionsActivity::class.java))
-            } else {
-                MaterialDialog.Builder(context!!)
-                        .title(R.string.custom_tab_provider_not_found)
-                        .content(HtmlCompat.fromHtml(context!!.getString(R.string.custom_tab_provider_not_found_dialog_content)))
-                        .positiveText(R.string.install)
-                        .negativeText(android.R.string.no)
-                        .onPositive({ _, _ ->
-                            Utils.openPlayStore(activity!!, Constants.CHROME_PACKAGE)
-                        }).show()
-            }
+            startActivity(Intent(context, ProviderSelectionActivity::class.java))
         }, 200)
     }
 }

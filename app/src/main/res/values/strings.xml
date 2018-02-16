@@ -298,4 +298,6 @@
     <string name="webViewNotRecommended">For your Android version, using WebView is not recommended due to stability and security concerns.</string>
     <string name="webViewPros">Rendering engine bundled with your phone.</string>
     <string name="tab_providers">Supported providers</string>
+    <string name="use">Use</string>
+    <string name="compatibility">Compatibility</string>
 </resources>

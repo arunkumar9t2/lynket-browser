@@ -221,7 +221,7 @@ public class AppPreferenceCardView extends CardView {
         refreshState();
     }
 
-    private void refreshState() {
+    public void refreshState() {
         setInitialValues();
         updateUI();
     }
@@ -231,6 +231,4 @@ public class AppPreferenceCardView extends CardView {
         super.onDetachedFromWindow();
         unbinder.unbind();
     }
-
-
 }
