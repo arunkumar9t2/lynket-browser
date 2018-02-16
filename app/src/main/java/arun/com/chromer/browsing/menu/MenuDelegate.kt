@@ -81,6 +81,13 @@ class MenuDelegate @Inject constructor(
     private val isArticle = activity is ArticleActivity
     private val isWebview = activity is WebViewActivity
 
+    private val textSizeIcon: IconicsDrawable by lazy {
+        IconicsDrawable(activity)
+                .icon(CommunityMaterial.Icon.cmd_format_size)
+                .color(ContextCompat.getColor(activity, R.color.material_dark_light))
+                .sizeDp(24)
+    }
+
     fun createOptionsMenu(menu: Menu): Boolean {
         with(menu) {
             if (isArticle) {
@@ -95,6 +102,7 @@ class MenuDelegate @Inject constructor(
             if (isArticle) {
                 add(0, R.id.menu_text_size, Menu.NONE, getTextSizeMenuItemText()).apply {
                     setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+                    icon = textSizeIcon
                 }
             }
             add(0, R.id.menu_copy_link, Menu.NONE, R.string.copy_link)
@@ -216,15 +224,13 @@ class MenuDelegate @Inject constructor(
         return SpannableStringBuilder()
                 .append("*")
                 .append("   ")
-                .append(text).apply {
-            setSpan(ImageSpan(IconicsDrawable(activity)
-                    .icon(CommunityMaterial.Icon.cmd_format_size)
-                    .color(ContextCompat.getColor(activity, R.color.material_dark_light))
-                    .sizeDp(24)),
-                    0,
-                    1,
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-        }
+                .append(text)
+                .apply {
+                    setSpan(ImageSpan(textSizeIcon),
+                            0,
+                            1,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                }
     }
 }
