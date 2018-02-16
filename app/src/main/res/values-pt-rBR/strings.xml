@@ -126,7 +126,6 @@
     <string name="no_option_selected">Nenhuma opção selecionada</string>
     <string name="permission_required">Permissão exigida</string>
     <string name="usage_permission_explanation_appcolor">Para ativar a coloração dinâmica da barra de ações baseado nos apps, o Chromer precisa da sua permissão para saber os apps que você está usando. Conceder esta permissão agora?</string>
-    <string name="usage_permission_explanation_blacklist">Para colocar apps na lista, Chromer precisa da sua permissão para saber os apps que você está usando. Conceder permissão de uso agora?</string>
     <string name="grant">Conceder</string>
     <string name="open_source_contributions">Material open source</string>
     <string name="search_or_type_url">Pesquise ou digite a URL</string>
@@ -148,14 +147,10 @@
     <string name="become_a_tester">Tornar-se testador</string>
     <string name="join_beta_content">Versões beta são compilações experimentais e contém as últimas funções mas podem conter bugs. Você pode ajudar no desenvolvimento do app se tornando um testador e reportando problemas e sugestões na comunidade do Google+. \n\nCertifique-se de estar participando da comunidade do Google+, e clique no botão TORNAR-SE TESTADOR no site da Google Play. \n\nNOTA: Você precisa participar da comunidade para se tornar beta tester.</string>
     <string name="no_voice_rec_apps">Nenhum app de reconhecimento de voz foi encontrado</string>
-    <string name="blacklisted_apps">Apps na lista negra</string>
-    <string name="blacklisted_explanation">Excluir a intervenção do Chromer em certos apps</string>
     <string name="loading">Carregando…</string>
     <string name="share_failed_msg">Não foi possível compartilhar, tentando o compartilhamento normal</string>
     <string name="revoke_accessibility_permission">Agora você pode revogar a permissão de acessibilidade do Chromer.</string>
     <string name="last_fetched_urls">Últimas URLs carregadas</string>
-    <string name="blacklist_on">Lista negra de apps %s</string>
-    <string name="blacklist_off">Lista negra de apps desativada</string>
     <string name="translations">Traduções</string>
     <string name="merge_tabs">Mesclar abas e apps</string>
     <string name="merge_tabs_explanation">Ver suas abas junto com outros apps na tela de apps Recentes.</string>

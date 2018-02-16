@@ -135,7 +135,7 @@ class PerAppSettingsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLis
     private fun requestUsagePermission() {
         MaterialDialog.Builder(this)
                 .title(R.string.permission_required)
-                .content(R.string.usage_permission_explanation_blacklist)
+                .content(R.string.usage_permission_explanation_per_apps)
                 .positiveText(R.string.grant)
                 .onPositive { _, _ -> startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)) }.show()
     }
