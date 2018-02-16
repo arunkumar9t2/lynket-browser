@@ -20,9 +20,12 @@ package arun.com.chromer.browsing
 
 import android.annotation.TargetApi
 import android.app.ActivityManager
+import android.app.Application
+import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
 import android.os.Build
+import android.support.v4.content.ContextCompat
+import arun.com.chromer.R
 import arun.com.chromer.data.Result
 import arun.com.chromer.data.website.WebsiteRepository
 import arun.com.chromer.data.website.model.Website
@@ -44,9 +47,10 @@ import javax.inject.Inject
 class BrowsingViewModel
 @Inject
 constructor(
+        application: Application,
         private val preferences: Preferences,
         private val websiteRepository: WebsiteRepository
-) : ViewModel() {
+) : AndroidViewModel(application) {
     private val subs = CompositeSubscription()
 
     var isIncognito: Boolean = false
@@ -59,6 +63,8 @@ constructor(
     val activityDescription = MutableLiveData<ActivityManager.TaskDescription>()
 
     init {
+        toolbarColor.value = ContextCompat.getColor(application, R.color.colorPrimary)
+
         // Monitor website requests
         subs.add(websiteQueue
                 .filter { it != null && it.isNotEmpty() }
@@ -72,6 +78,7 @@ constructor(
                         taskDescriptionQueue.onNext(result.data!!)
                     }
                 }, Timber::e))
+
 
         // Set task descriptions
         subs.add(taskDescriptionQueue
