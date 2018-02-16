@@ -104,4 +104,6 @@ class DefaultAppRepository
                 }
                 .toSortedList({ app1, app2 -> appComparator.compare(app1, app2) })
     }
+
+    override fun allProviders() = systemStore.allProviders()
 }

@@ -14,8 +14,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-
+-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="arun.com.chromer">
@@ -156,7 +155,7 @@
             android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat.Translucent" />
         <activity
-            android:name="arun.com.chromer.browsing.article.ArticleActivity"
+            android:name=".browsing.article.ArticleActivity"
             android:label="@string/app_name"
             android:theme="@style/ArticleTheme" />
         <activity
@@ -204,7 +203,7 @@
             android:noHistory="true"
             android:theme="@style/DialogTheme" />
         <activity
-            android:name="arun.com.chromer.browsing.newtab.NewTabDialogActivity"
+            android:name=".browsing.newtab.NewTabDialogActivity"
             android:excludeFromRecents="true"
             android:noHistory="true"
             android:theme="@style/DialogTheme"
@@ -272,9 +271,12 @@
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="arun.com.chromer.browsing.webview.WebViewActivity"
+            android:name=".browsing.providerselection.ProviderSelectionActivity"
+            android:label="@string/choose_provider"
             android:theme="@style/AppTheme.NoActionBar" />
-
+        <activity
+            android:name=".browsing.webview.WebViewActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".browsing.article.ImageViewActivity"
             android:theme="@style/ArticleImageViewTheme" />
@@ -285,6 +287,7 @@
         <meta-data
             android:name="arun.com.chromer.util.glide.ChromerGlideModule"
             android:value="GlideModule" />
+
     </application>
 
 </manifest>

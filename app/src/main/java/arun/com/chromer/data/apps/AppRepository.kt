@@ -19,6 +19,7 @@
 package arun.com.chromer.data.apps
 
 import android.support.annotation.ColorInt
+import arun.com.chromer.data.apps.model.Provider
 
 import arun.com.chromer.data.common.App
 import rx.Observable
@@ -48,4 +49,6 @@ interface AppRepository {
     fun removeBlacklist(packageName: String): Observable<App>
 
     fun allApps(): Observable<List<App>>
+
+    fun allProviders(): Observable<List<Provider>>
 }

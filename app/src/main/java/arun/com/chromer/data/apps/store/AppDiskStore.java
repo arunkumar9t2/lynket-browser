@@ -23,9 +23,12 @@ import android.support.annotation.NonNull;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import arun.com.chromer.data.apps.model.Provider;
 import arun.com.chromer.data.common.App;
 import arun.com.chromer.data.common.BookStore;
 import arun.com.chromer.util.Utils;
@@ -154,5 +157,11 @@ public class AppDiskStore implements AppStore, BookStore {
                     Timber.d("Set %s as incognito", app.packageName);
                     return saveApp(app);
                 });
+    }
+
+    @NotNull
+    @Override
+    public Observable<List<Provider>> allProviders() {
+        return Observable.empty();
     }
 }

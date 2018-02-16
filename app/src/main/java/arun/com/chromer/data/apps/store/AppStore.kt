@@ -19,6 +19,7 @@
 package arun.com.chromer.data.apps.store
 
 import android.support.annotation.ColorInt
+import arun.com.chromer.data.apps.model.Provider
 import arun.com.chromer.data.common.App
 import rx.Observable
 
@@ -47,4 +48,6 @@ interface AppStore {
     fun removeBlacklist(packageName: String): Observable<App>
 
     fun getInstalledApps(): Observable<App>
+
+    fun allProviders(): Observable<List<Provider>>
 }
