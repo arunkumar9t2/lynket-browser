@@ -13,6 +13,7 @@ import android.widget.TextView
 import arun.com.chromer.R
 import arun.com.chromer.data.apps.model.Provider
 import arun.com.chromer.di.activity.ActivityComponent
+import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.watch
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.settings.browsingoptions.BrowsingOptionsActivity
@@ -135,10 +136,12 @@ class ProviderSelectionActivity : BaseActivity() {
         @BindView(R.id.icon_view)
         @JvmField
         var icon: ImageView? = null
-
         @BindView(R.id.providerDetails)
         @JvmField
         var providerDetailsTv: TextView? = null
+        @BindView(R.id.features)
+        @JvmField
+        var features: TextView? = null
 
         fun show(): ProviderDialog? {
             dialog = MaterialDialog.Builder(activity!!)
@@ -159,7 +162,12 @@ class ProviderSelectionActivity : BaseActivity() {
             unBinder = ButterKnife.bind(this, dialog!!.customView!!)
 
             GlideApp.with(activity).load(provider.iconUri).into(icon)
-            providerDetailsTv!!.text = provider.toString()
+
+            if (provider.features.isNotEmpty()) {
+                providerDetailsTv!!.text = provider.features
+            } else {
+                features!!.gone()
+            }
             return this
         }
 

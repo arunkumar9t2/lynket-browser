@@ -9,6 +9,7 @@ data class Provider(
         var packageName: String,
         var appName: String,
         var iconUri: Uri,
-        var installed: Boolean = false
+        var installed: Boolean = false,
+        var features: CharSequence = ""
 ) {
 }

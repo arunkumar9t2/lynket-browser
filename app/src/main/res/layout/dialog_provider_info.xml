@@ -37,18 +37,21 @@
         tools:src="@drawable/arun" />
 
     <TextView
+        android:id="@+id/features"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:gravity="center|start"
         android:minHeight="36dp"
-        android:text="@string/compatibility"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+        android:text="@string/features"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/providerDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="14sp"
         tools:text="@string/custom_tab" />
 </LinearLayout>

@@ -30,27 +30,66 @@ constructor(
                 Provider(
                         "com.android.chrome",
                         "Google Chrome",
-                        "https://lh3.googleusercontent.com/nYhPnY2I-e9rpqnid9u9aAODz4C04OycEGxqHG5vxFnA35OGmLMrrUmhM9eaHKJ7liB-=w300-rw".toUri()
+                        "https://lh3.googleusercontent.com/nYhPnY2I-e9rpqnid9u9aAODz4C04OycEGxqHG5vxFnA35OGmLMrrUmhM9eaHKJ7liB-=w300-rw".toUri(),
+                        features = """
+                                Latest from Google
+                                Data saver, form auto fill, Google account cloud sync
+                                Bottom Bar
+                                Web heads
+                                Aggressive background loading
+                                Action button
+                            """.trimIndent()
                 ),
                 Provider(
                         "com.brave.browser",
                         "Brave Browser",
-                        "https://lh3.googleusercontent.com/v8h4MEDGbDtwKD13-38Jqwh7UgHU7XJ76DSp3yzyF99mwQTDoM8wgDg7apwMulpQgopG=w300-rw".toUri()
+                        "https://lh3.googleusercontent.com/v8h4MEDGbDtwKD13-38Jqwh7UgHU7XJ76DSp3yzyF99mwQTDoM8wgDg7apwMulpQgopG=w300-rw".toUri(),
+                        features = """
+                                Ad block
+                                Tracking protection
+                                Bottom Bar
+                                Web heads
+                                Aggressive background loading
+                                Action button
+                            """.trimIndent()
                 ),
                 Provider(
                         "org.mozilla.focus",
                         "Firefox Focus",
-                        "https://lh3.googleusercontent.com/uoqToM7l-x3lZNjFOzNkVxEilkKfEzGh9v8BB8b6pP1l9TltE4Sxd1XGJuiksjM4a1s=w300-rw".toUri()
+                        "https://lh3.googleusercontent.com/uoqToM7l-x3lZNjFOzNkVxEilkKfEzGh9v8BB8b6pP1l9TltE4Sxd1XGJuiksjM4a1s=w300-rw".toUri(),
+                        features = """
+                                Tracking protection
+                                Always incognito
+                                Web heads
+                                Action button
+                            """.trimIndent()
                 ),
                 Provider(
                         "com.sec.android.app.sbrowser",
                         "Samsung Internet",
-                        "https://lh3.googleusercontent.com/Z2DsZU3fKSSluPHNS-6CoLk29POTX-kBYtRlkRrbvyfQZEEBLH0j8DEkwbEH4nhW6E-e=w300-rw".toUri()
+                        "https://lh3.googleusercontent.com/Z2DsZU3fKSSluPHNS-6CoLk29POTX-kBYtRlkRrbvyfQZEEBLH0j8DEkwbEH4nhW6E-e=w300-rw".toUri(),
+                        features = """
+                                Samsung Cloud and Samsung Pass
+                                Ad block
+                                Tracking protection
+                                Bottom Bar
+                                Web heads
+                                Aggressive background loading
+                                Night mode
+                            """.trimIndent()
                 ),
                 Provider(
                         "org.mozilla.fennec_aurora",
                         "Firefox Nightly",
-                        "https://lh3.googleusercontent.com/5ZYLS3ztW1XBfSf32onyhAVLq_uZQmJIYdhz8VlQwuvpB7x73jaDqtJlTtmxcsvit0I=w300-rw".toUri()
+                        "https://lh3.googleusercontent.com/5ZYLS3ztW1XBfSf32onyhAVLq_uZQmJIYdhz8VlQwuvpB7x73jaDqtJlTtmxcsvit0I=w300-rw".toUri(),
+                        features = """
+                                Firefox account sync
+                                Ad block
+                                Tracking protection
+                                Web heads
+                                Aggressive background loading
+                                Action button
+                            """.trimIndent()
                 )
         )
     }

@@ -299,5 +299,5 @@
     <string name="webViewPros">Rendering engine bundled with your phone.</string>
     <string name="tab_providers">Supported providers</string>
     <string name="use">Use</string>
-    <string name="compatibility">Compatibility</string>
+    <string name="features">Features</string>
 </resources>
