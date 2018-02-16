@@ -94,14 +94,17 @@ constructor(
         init {
             ButterKnife.bind(this, itemView)
 
+            install!!.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    val provider = providers[adapterPosition]
+                    installClicks.onNext(provider)
+                }
+            }
+
             itemView.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     val provider = providers[adapterPosition]
-                    if (provider.installed) {
-                        selections.onNext(provider)
-                    } else {
-                        installClicks.onNext(provider)
-                    }
+                    selections.onNext(provider)
                 }
             }
         }

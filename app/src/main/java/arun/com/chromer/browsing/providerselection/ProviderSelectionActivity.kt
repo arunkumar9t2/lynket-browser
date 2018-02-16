@@ -109,9 +109,7 @@ class ProviderSelectionActivity : BaseActivity() {
 
     @TargetApi(Build.VERSION_CODES.M)
     private fun onProviderSelected(provider: Provider) {
-        if (provider.installed) {
-            providerDialog = ProviderDialog(this, provider, preferences).show()
-        }
+        providerDialog = ProviderDialog(this, provider, preferences).show()
     }
 
     private fun onProviderInstallClicked(provider: Provider) {
@@ -147,10 +145,14 @@ class ProviderSelectionActivity : BaseActivity() {
                     .title(provider.appName)
                     .customView(R.layout.dialog_provider_info, false)
                     .dismissListener(this)
-                    .positiveText(R.string.use)
+                    .positiveText(if (provider.installed) R.string.use else R.string.install)
                     .onPositive({ _, _ ->
-                        preferences.customTabPackage(provider.packageName)
-                        rxEventBus.post(BrowsingOptionsActivity.ProviderChanged())
+                        if (provider.installed) {
+                            preferences.customTabPackage(provider.packageName)
+                            rxEventBus.post(BrowsingOptionsActivity.ProviderChanged())
+                        } else {
+                            Utils.openPlayStore(activity!!, provider.packageName)
+                        }
                         dismiss()
                         activity?.finish()
                     }).show()
