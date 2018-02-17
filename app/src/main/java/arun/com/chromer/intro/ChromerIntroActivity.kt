@@ -75,6 +75,11 @@ class ChromerIntroActivity : AppIntro(), ProvidesActivityComponent {
                     bgColor))
         }
 
+        addSlide(AppIntroFragment.newInstance(getString(R.string.per_app_settings),
+                getText(R.string.per_app_settings_explanation),
+                R.drawable.tutorial_per_app_settings,
+                bgColor))
+
         setColorTransitionsEnabled(true)
         showSkipButton(true)
         isProgressButtonEnabled = true
