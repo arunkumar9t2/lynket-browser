@@ -21,10 +21,7 @@ package arun.com.chromer.di.fragment
 import arun.com.chromer.di.scopes.PerFragment
 import arun.com.chromer.history.HistoryFragment
 import arun.com.chromer.home.fragment.HomeFragment
-import arun.com.chromer.intro.fragments.AppIntroFragment
-import arun.com.chromer.intro.fragments.ArticleIntroFragment
-import arun.com.chromer.intro.fragments.SlideOverExplanationFragment
-import arun.com.chromer.intro.fragments.WebHeadsIntroFragment
+import arun.com.chromer.intro.fragments.*
 import arun.com.chromer.tabs.ui.TabsFragment
 import dagger.Subcomponent
 
@@ -45,4 +42,6 @@ interface FragmentComponent {
     fun inject(webHeadsIntroFragment: WebHeadsIntroFragment)
 
     fun inject(articleIntroFragment: ArticleIntroFragment)
+
+    fun inject(providerSelectionIntroFragment: ProviderSelectionIntroFragment)
 }

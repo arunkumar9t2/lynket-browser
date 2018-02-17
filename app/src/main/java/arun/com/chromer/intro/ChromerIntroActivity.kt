@@ -26,10 +26,7 @@ import arun.com.chromer.Chromer
 import arun.com.chromer.R
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.di.activity.ActivityModule
-import arun.com.chromer.intro.fragments.AppIntroFragment
-import arun.com.chromer.intro.fragments.ArticleIntroFragment
-import arun.com.chromer.intro.fragments.SlideOverExplanationFragment
-import arun.com.chromer.intro.fragments.WebHeadsIntroFragment
+import arun.com.chromer.intro.fragments.*
 import arun.com.chromer.shared.base.ProvidesActivityComponent
 import arun.com.chromer.util.Utils
 import com.github.paolorotolo.appintro.AppIntro
@@ -57,6 +54,8 @@ class ChromerIntroActivity : AppIntro(), ProvidesActivityComponent {
 
         addSlide(SlideOverExplanationFragment())
 
+        addSlide(ProviderSelectionIntroFragment())
+
         addSlide(WebHeadsIntroFragment())
 
         addSlide(AppIntroFragment.newInstance(getString(R.string.amp),
@@ -81,7 +80,6 @@ class ChromerIntroActivity : AppIntro(), ProvidesActivityComponent {
         setColorTransitionsEnabled(true)
         showSkipButton(true)
         isProgressButtonEnabled = true
-        showStatusBar(true)
 
         // Color status bar for lollipop above
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

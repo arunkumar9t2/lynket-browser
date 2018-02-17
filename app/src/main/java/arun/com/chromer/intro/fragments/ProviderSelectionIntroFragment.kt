@@ -23,6 +23,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import arun.com.chromer.R
+import arun.com.chromer.browsing.providerselection.ProviderSelectionActivity
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.fragment.FragmentComponent
 import arun.com.chromer.shared.base.fragment.BaseFragment
@@ -33,8 +34,8 @@ import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder
 import kotlinx.android.synthetic.main.fragment_slide_over_intro.*
 import javax.inject.Inject
 
-open class ArticleIntroFragment : BaseFragment(), ISlideBackgroundColorHolder {
-    override fun getDefaultBackgroundColor(): Int = Color.parseColor("#37474F")
+open class ProviderSelectionIntroFragment : BaseFragment(), ISlideBackgroundColorHolder {
+    override fun getDefaultBackgroundColor(): Int = Color.parseColor("#A31A33")
 
     override fun setBackgroundColor(backgroundColor: Int) {
         root.setBackgroundColor(backgroundColor)
@@ -44,15 +45,15 @@ open class ArticleIntroFragment : BaseFragment(), ISlideBackgroundColorHolder {
     lateinit var tabsManager: DefaultTabsManager
 
     override fun inject(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
-    override fun getLayoutRes() = R.layout.fragment_article_intro
+    override fun getLayoutRes() = R.layout.fragment_provider_selection_intro
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        GlideApp.with(this).load(R.drawable.tutorial_article_mode).into(imageView!!)
+        GlideApp.with(this).load(R.drawable.tutorial_choose_browser).into(imageView!!)
     }
 
-    @OnClick(R.id.tryItButton)
-    fun onSeeDemoClick() {
-        tabsManager.openArticle(context!!, Website("https://www.androidpolice.com/2015/12/22/chromer-opens-all-of-your-links-in-a-chrome-custom-tab/"))
+    @OnClick(R.id.chooseProviderButton)
+    fun chooseProviderButton() {
+        startActivity(Intent(context, ProviderSelectionActivity::class.java))
     }
 }

@@ -304,4 +304,6 @@
     <string name="try_it">Try it</string>
     <string name="slide_over_fragment_close_prompt">Press X to quickly close the tab</string>
     <string name="see_demo">See Demo</string>
+    <string name="provider_intro_explanation">Chromer can work alongside your favorite browsers. \n \n For example, using Google Chrome as provider will let you sync history, use data saver and saved passwords in your Google account.</string>
+    <string name="chromer_flexible">Flexible</string>
 </resources>
