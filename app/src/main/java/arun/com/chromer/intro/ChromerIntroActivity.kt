@@ -59,7 +59,7 @@ class ChromerIntroActivity : AppIntro(), ProvidesActivityComponent {
         addSlide(WebHeadsIntroFragment())
 
         addSlide(AppIntroFragment.newInstance(getString(R.string.amp),
-                getString(R.string.amp_summary),
+                getString(R.string.tutorial_amp_intro),
                 R.drawable.tutorial_amp_mode,
                 bgColor))
 
