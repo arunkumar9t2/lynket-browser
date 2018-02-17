@@ -34,7 +34,7 @@ import kotlinx.android.synthetic.main.fragment_slide_over_intro.*
 import javax.inject.Inject
 
 open class SlideOverExplanationFragment : BaseFragment(), ISlideBackgroundColorHolder {
-    override fun getDefaultBackgroundColor(): Int = Color.parseColor("#5D9CEC")
+    override fun getDefaultBackgroundColor(): Int = Color.parseColor("#4A89DC")
 
     override fun setBackgroundColor(backgroundColor: Int) {
         root.setBackgroundColor(backgroundColor)

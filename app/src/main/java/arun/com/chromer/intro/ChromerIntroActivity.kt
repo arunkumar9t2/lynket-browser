@@ -28,9 +28,7 @@ import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.di.activity.ActivityModule
 import arun.com.chromer.intro.fragments.AppIntroFragment
 import arun.com.chromer.intro.fragments.SlideOverExplanationFragment
-import arun.com.chromer.intro.fragments.WebHeadIntroExplainFragment
 import arun.com.chromer.shared.base.ProvidesActivityComponent
-import arun.com.chromer.util.Utils
 import com.github.paolorotolo.appintro.AppIntro
 
 /**
@@ -56,7 +54,7 @@ class ChromerIntroActivity : AppIntro(), ProvidesActivityComponent {
 
         addSlide(SlideOverExplanationFragment())
 
-        addSlide(AppIntroFragment.newInstance(getString(R.string.amp),
+        /*addSlide(AppIntroFragment.newInstance(getString(R.string.amp),
                 getString(R.string.amp_summary),
                 R.drawable.amp_page,
                 bgColor))
@@ -81,16 +79,16 @@ class ChromerIntroActivity : AppIntro(), ProvidesActivityComponent {
         addSlide(AppIntroFragment.newInstance(getString(R.string.how_to_use),
                 getText(R.string.intro_6),
                 R.drawable.intro_set_default,
-                bgColor))
+                bgColor))*/
 
+        setColorTransitionsEnabled(true)
         showSkipButton(true)
         isProgressButtonEnabled = true
         showStatusBar(true)
 
         // Color status bar for lollipop above
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.statusBarColor = ContextCompat.getColor(this, R.color.colorPrimaryDarker)
-            window.navigationBarColor = ContextCompat.getColor(this, R.color.colorPrimaryDarker)
+            window.statusBarColor = bgColor
         }
     }
 

@@ -21,13 +21,23 @@ package arun.com.chromer.intro.fragments
 import android.os.Bundle
 import android.support.annotation.ColorInt
 import android.support.annotation.DrawableRes
+import android.support.v4.content.ContextCompat
 import arun.com.chromer.R
 import arun.com.chromer.di.fragment.FragmentComponent
 import arun.com.chromer.shared.base.fragment.BaseFragment
 import arun.com.chromer.util.glide.GlideApp
+import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder
 import kotlinx.android.synthetic.main.fragment_text_intro.*
 
-open class AppIntroFragment : BaseFragment() {
+open class AppIntroFragment : BaseFragment(), ISlideBackgroundColorHolder {
+    override fun getDefaultBackgroundColor(): Int = ContextCompat.getColor(context!!, R.color.colorPrimaryDarker)
+
+    override fun setBackgroundColor(backgroundColor: Int) {
+        if (root != null) {
+            root.setBackgroundColor(backgroundColor)
+        }
+    }
+
     override fun inject(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
     override fun getLayoutRes() = R.layout.fragment_text_intro
 
