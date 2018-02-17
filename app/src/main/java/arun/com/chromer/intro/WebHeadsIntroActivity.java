@@ -26,12 +26,13 @@ import android.support.v4.content.ContextCompat;
 import com.github.paolorotolo.appintro.AppIntro;
 
 import arun.com.chromer.R;
+import arun.com.chromer.intro.fragments.AppIntroFragment;
 import arun.com.chromer.util.Utils;
 
 /**
  * Created by Arun on 17/12/2015.
  */
-public class WebHeadsIntro extends AppIntro {
+public class WebHeadsIntroActivity extends AppIntro {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,28 +42,28 @@ public class WebHeadsIntro extends AppIntro {
 
         // OPTIONAL METHODS
         // Override bar/separator color
-        addSlide(AppIntroFragment.newInstance(getString(R.string.web_heads),
+        addSlide(AppIntroFragment.Companion.newInstance(getString(R.string.web_heads),
                 getText(R.string.webheads_intro_1),
                 R.drawable.intro_webheads,
                 bgColor));
 
-        addSlide(AppIntroFragment.newInstance(getString(R.string.multiple_links),
+        addSlide(AppIntroFragment.Companion.newInstance(getString(R.string.multiple_links),
                 getText(R.string.webheads_intro_2_new),
                 R.drawable.webheads_2,
                 bgColor));
 
-        addSlide(AppIntroFragment.newInstance(getString(R.string.web_heads),
+        addSlide(AppIntroFragment.Companion.newInstance(getString(R.string.web_heads),
                 getText(R.string.webheads_intro_3),
                 R.drawable.webheads_3,
                 bgColor));
 
         if (Utils.isLollipopAbove()) {
-            addSlide(AppIntroFragment.newInstance(getString(R.string.save_time),
+            addSlide(AppIntroFragment.Companion.newInstance(getString(R.string.save_time),
                     getText(R.string.webheads_intro_4_lolli),
                     R.drawable.webheads_3,
                     bgColor));
         } else {
-            addSlide(AppIntroFragment.newInstance(getString(R.string.web_heads),
+            addSlide(AppIntroFragment.Companion.newInstance(getString(R.string.web_heads),
                     getText(R.string.webheads_intro_4),
                     R.drawable.webheads_3,
                     bgColor));

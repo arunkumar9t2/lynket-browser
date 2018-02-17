@@ -45,8 +45,7 @@ import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.show
 import arun.com.chromer.history.HistoryFragment
 import arun.com.chromer.home.fragment.HomeFragment
-import arun.com.chromer.intro.ChromerIntro
-import arun.com.chromer.intro.WebHeadsIntro
+import arun.com.chromer.intro.ChromerIntroActivity
 import arun.com.chromer.payments.DonateActivity
 import arun.com.chromer.search.view.MaterialSearchView
 import arun.com.chromer.search.view.behavior.MaterialSearchViewBehavior
@@ -100,7 +99,7 @@ class HomeActivity : BaseActivity(), Snackable {
         super.onCreate(savedInstanceState)
 
         if (Preferences.get(this).isFirstRun) {
-            startActivity(Intent(this, ChromerIntro::class.java))
+            startActivity(Intent(this, ChromerIntroActivity::class.java))
         }
 
         Changelog.conditionalShow(this)
@@ -259,7 +258,7 @@ class HomeActivity : BaseActivity(), Snackable {
                         startActivity(Intent.createChooser(emailIntent, getString(R.string.send_email)))
                     }
                     3 -> Utils.openPlayStore(this@HomeActivity, packageName)
-                    4 -> startActivity(Intent(this@HomeActivity, ChromerIntro::class.java))
+                    4 -> startActivity(Intent(this@HomeActivity, ChromerIntroActivity::class.java))
                     6 -> startActivity(Intent(this@HomeActivity, DonateActivity::class.java))
                     7 -> {
                         val shareIntent = Intent(Intent.ACTION_SEND)
@@ -269,7 +268,6 @@ class HomeActivity : BaseActivity(), Snackable {
                     }
                     8 -> startActivity(Intent(this@HomeActivity, AboutAppActivity::class.java))
                     9 -> showJoinBetaDialog()
-                    10 -> startActivity(Intent(this@HomeActivity, WebHeadsIntro::class.java))
                 }
                 false
             }

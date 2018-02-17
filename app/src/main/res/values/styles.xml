@@ -35,9 +35,9 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="BrandButtonStyle" parent="Widget.AppCompat.Button.Colored">
-        <item name="colorButtonNormal">@color/accent</item>
-        <item name="android:textColor">@android:color/white</item>
+    <style name="MaterialButtonStyle" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@android:color/white</item>
+        <item name="android:textColor">@color/primary</item>
     </style>
 
     <style name="Widget.CardContent" parent="android:Widget">

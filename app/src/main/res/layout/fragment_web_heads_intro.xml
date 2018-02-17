@@ -35,16 +35,16 @@
         android:gravity="center"
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
+        android:text="@string/web_heads"
         android:textColor="@android:color/white"
-        android:textSize="20sp"
-        tools:text="@string/app_name" />
+        android:textSize="20sp" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        android:layout_weight="5.75"
+        android:layout_weight="6.5"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:scaleType="fitCenter"
@@ -55,11 +55,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_weight="2.25"
+        android:layout_weight="1.5"
         android:gravity="center"
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
+        android:text="@string/intro_4_new"
         android:textColor="@android:color/white"
-        android:textSize="16sp"
-        tools:text="@string/app_name" />
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/watchDemo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/see_demo"
+        android:theme="@style/MaterialButtonStyle" />
 </LinearLayout>

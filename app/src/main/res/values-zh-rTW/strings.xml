@@ -73,7 +73,7 @@
     <string name="copy_link">複製連結</string>
     <string name="add_to_homescreen">添加到主屏幕</string>
     <string name="intro_1">您好！\nChromer 是一個輕量、安全以及快速的網頁瀏覽器。</string>
-    <string name="intro_4_new">它可以在開啟連結時新增多個疊加式的浮動氣泡，並且於背景載入部份內容！\n\n\n\n<b>了解更多</b></string>
+    <string name="intro_4_new">它可以在開啟連結時新增多個疊加式的浮動氣泡，並且於背景載入部份內容!</string>
     <string name="how_to_use">如何使用？</string>
     <string name="intro_6">只需設定 Chromer 作為您的預設瀏覽器，Chromer 將以非入侵的方式顯示連結內容。或者您也可以在需要時選擇使用 Chromer。</string>
     <string name="version">版本</string>

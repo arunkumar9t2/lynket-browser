@@ -73,7 +73,7 @@
     <string name="copy_link">Copy link</string>
     <string name="add_to_homescreen">Add to Home Screen</string>
     <string name="intro_1">Hello! \nChromer is a light-weight, secure and a fast web browser.</string>
-    <string name="intro_4_new">It can stack multiple links in floating bubbles when you open them and then load them in background! \n \n<b>LEARN MORE</b></string>
+    <string name="intro_4_new">It can stack multiple links in floating bubbles when you open them and then load them in background!</string>
     <string name="how_to_use">How to use this?</string>
     <string name="intro_6">Just set Chromer as your default browser, Chromer will display the link in a non-intrusive way. Or choose Chromer when needed.</string>
     <string name="version">Version</string>
@@ -301,4 +301,10 @@
     <string name="use">Use</string>
     <string name="features">Features</string>
     <string name="webview_disadvantages">WebView lacks many advantages like data saver, form auto fill and cloud sync that Custom Tab providers provide. Do you still want to use WebView for rendering web pages?</string>
+    <string name="try_it">Try it</string>
+    <string name="slide_over_fragment_close_prompt">Press X to quickly close the tab</string>
+    <string name="see_demo">See Demo</string>
+    <string name="provider_intro_explanation">Chromer can work alongside your favorite browsers. \n \n For example, using Google Chrome as provider will let you sync history, use data saver and saved passwords in your Google account.</string>
+    <string name="chromer_flexible">Flexible</string>
+    <string name="tutorial_amp_intro">Chromer can find and load AMP pages automatically which leads to quicker and smoother reading experience.</string>
 </resources>

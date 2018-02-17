@@ -73,7 +73,7 @@
     <string name="copy_link">Kopiraj poveznicu</string>
     <string name="add_to_homescreen">Dodaj na početni zaslon</string>
     <string name="intro_1">Pozdrav!\nChromer je lagan, siguran i brz mrežni preglednik.</string>
-    <string name="intro_4_new">Može naslagati više poveznica u plutajuće mjehuriće kada ih otvorite te ih zatim djelomično učitati u pozadini!\n\n<b>SAZNAJTE VIŠE</b></string>
+    <string name="intro_4_new">Može naslagati više poveznica u plutajuće mjehuriće kada ih otvorite te ih zatim djelomično učitati u pozadini!</string>
     <string name="how_to_use">Kako upotrebljavati?</string>
     <string name="intro_6">Jednostavno postavite Chromer kao zadani preglednik. Chromer će prikazati poveznicu na nenametljiv način. Ili odaberite Chromer kada vam bude potreban.</string>
     <string name="version">Verzija</string>
