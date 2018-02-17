@@ -69,6 +69,15 @@
             </intent-filter>
         </service>
         <service
+            android:name=".browsing.incognito.IncognitoTile"
+            android:icon="@drawable/ic_chromer_notification"
+            android:label="@string/incognito_mode"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+        <service
             android:name=".browsing.amp.qs.AmpTile"
             android:icon="@drawable/ic_action_amp_icon"
             android:label="@string/amp_mode"
