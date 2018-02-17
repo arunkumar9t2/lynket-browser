@@ -37,11 +37,15 @@ public class ServiceManager {
     }
 
     public static void takeCareOfServices(@NonNull Context context) {
-        if (Preferences.get(context).isAppBasedToolbar() || Preferences.get(context).perAppSettings()) {
+        if (shouldRunAppDetection(context)) {
             startAppDetectionService(context);
         } else {
             stopAppDetectionService(context);
         }
+    }
+
+    private static boolean shouldRunAppDetection(@NonNull Context context) {
+        return Preferences.get(context).isAppBasedToolbar() || Preferences.get(context).perAppSettings();
     }
 
     public static void startAppDetectionService(@NonNull Context context) {
@@ -57,5 +61,12 @@ public class ServiceManager {
         final Intent intent = new Intent(Constants.ACTION_REBIND_WEBHEAD_TAB_CONNECTION);
         intent.putExtra(Constants.EXTRA_KEY_REBIND_WEBHEAD_CXN, true);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+    public static void restartAppDetectionService(Context context) {
+        if (shouldRunAppDetection(context)) {
+            stopAppDetectionService(context);
+            startAppDetectionService(context);
+        }
     }
 }

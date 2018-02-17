@@ -136,14 +136,14 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     }
 
     @Override
-    int getNotificationId() {
+    public int getNotificationId() {
         // Constant
         return 1;
     }
 
     @NonNull
     @Override
-    Notification getNotification() {
+    public Notification getNotification() {
         if (Utils.ANDROID_OREO) {
             final NotificationChannel channel = new NotificationChannel(WebHeadService.class.getName(), getString(R.string.web_heads_service), NotificationManager.IMPORTANCE_MIN);
             channel.setDescription(getString(R.string.app_detection_notification_channel_description));
@@ -155,7 +155,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         final PendingIntent contentIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_STOP_WEBHEAD_SERVICE), FLAG_UPDATE_CURRENT);
         final PendingIntent contextActivity = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_OPEN_CONTEXT_ACTIVITY), FLAG_UPDATE_CURRENT);
         final PendingIntent newTab = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_OPEN_NEW_TAB), FLAG_UPDATE_CURRENT);
-        return new NotificationCompat.Builder(this, WebHeadService.class.getName())
+        Notification notification = new NotificationCompat.Builder(this, WebHeadService.class.getName())
                 .setSmallIcon(R.drawable.ic_chromer_notification)
                 .setPriority(PRIORITY_MIN)
                 .setContentText(getString(R.string.tap_close_all))
@@ -167,6 +167,8 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
                 .setAutoCancel(false)
                 .setLocalOnly(true)
                 .build();
+        notification.flags |= Notification.FLAG_FOREGROUND_SERVICE;
+        return notification;
     }
 
     @Override
@@ -174,7 +176,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         super.onCreate();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(this)) {
-                stopSelf();
+                stopService();
                 return;
             }
         }
@@ -443,7 +445,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         webHead.setMaster(false);
         webHeads.remove(webHead.getUrl());
         if (isLastWebHead) {
-            Trashy.get(this).destroyAnimator(this::stopSelf);
+            Trashy.get(this).destroyAnimator(this::stopService);
         } else {
             selectNextMaster();
             if (!Preferences.get(this).articleMode()) {
@@ -476,7 +478,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
 
     @Override
     public void closeAll() {
-        stopSelf();
+        stopService();
     }
 
     @Override
@@ -586,7 +588,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
                 case ACTION_STOP_WEBHEAD_SERVICE:
-                    stopSelf();
+                    stopService();
                     break;
                 case ACTION_OPEN_CONTEXT_ACTIVITY:
                     openContextActivity();

@@ -307,6 +307,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
         if (coastingTask != null) {
             coastingTask.cancel();
         }
+        timer.purge();
     }
 
     /**
