@@ -33,4 +33,10 @@
         <item name="android:windowAnimationStyle">@android:style/Animation</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
+
+    <style name="MaterialButtonStyle" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:colorButtonNormal">@android:color/white</item>
+        <item name="android:textColor">@color/primary</item>
+    </style>
+
 </resources>
