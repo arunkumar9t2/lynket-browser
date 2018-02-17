@@ -36,7 +36,7 @@ a {
 <strong>You can view this again in the about screen.</strong>
 <br></br>
 
-<strong>2.0 - Beta 1</strong>
+<strong>2.0 - 2nd Anniversary Update!</strong>
 <h4 class="list-heading">Design</h3>
 <ul>
     <li><b>NEW: </b> Round and Adaptive Icon for Android Oreo</li>
@@ -56,6 +56,7 @@ a {
         <li><b>NEW: </b> Search bar shows suggestions from Clipboard and History</li>
         <li><b>NEW: </b> Info card in home screen to show active provider</li>
         <li><b>NEW: </b> New tab dialog shows search suggestions</li>
+        <li><b>NEW: </b> Better tab provider picker.</li>
 </ul>
 <h4 class="list-heading">Performance</h3>
 <ul>
