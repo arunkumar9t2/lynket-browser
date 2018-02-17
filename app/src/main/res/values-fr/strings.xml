@@ -73,7 +73,7 @@
     <string name="copy_link">Copier le lien</string>
     <string name="add_to_homescreen">Ajouter à l\'écran d\'accueil</string>
     <string name="intro_1">Salut!\nChromer est un navigateur léger, sécurisé et rapide !</string>
-    <string name="intro_4_new">Il peut empiler plusieurs liens dans des bulles flottantes quand vous les ouvrez et que vous les chargez en arrière-plan !\n\n<b>EN SAVOIR PLUS</b></string>
+    <string name="intro_4_new">Il peut empiler plusieurs liens dans des bulles flottantes quand vous les ouvrez et que vous les chargez en arrière-plan!</string>
     <string name="how_to_use">Comment utiliser cela ?</string>
     <string name="intro_6">Mettez Chromer en navigateur par défaut, et Chromer affichera le lien de façon non intrusive. Ou choisissez Chromer quand souhaité.</string>
     <string name="version">Version</string>

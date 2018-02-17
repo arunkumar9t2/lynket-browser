@@ -35,7 +35,7 @@
         android:gravity="center"
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
-        android:text="@string/browse_seamlessly"
+        android:text="@string/web_heads"
         android:textColor="@android:color/white"
         android:textSize="20sp" />
 
@@ -59,18 +59,17 @@
         android:gravity="center"
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
-        android:text="@string/slide_over_explanation"
+        android:text="@string/intro_4_new"
         android:textColor="@android:color/white"
-        android:textSize="16sp"
-        tools:text="@string/app_name" />
+        android:textSize="16sp" />
 
     <Button
-        android:id="@+id/tryItButton"
+        android:id="@+id/watchDemo"
         style="@style/MaterialButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
-        android:text="@string/try_it" />
+        android:text="@string/see_demo" />
 </LinearLayout>

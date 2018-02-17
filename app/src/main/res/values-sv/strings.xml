@@ -73,7 +73,7 @@
     <string name="copy_link">Kopiera länk</string>
     <string name="add_to_homescreen">Lägg till på hemskärmen</string>
     <string name="intro_1">Hej!\nChromer är en webbläsare som är säker, snabb och lätt på minne.</string>
-    <string name="intro_4_new">Den kan stapla länkar i svävande bubblor när du öppnar dem och laddar sedan länkar i bakgrunden!\n\n<b>LÄS MER</b></string>
+    <string name="intro_4_new">Den kan stapla länkar i svävande bubblor när du öppnar dem och laddar sedan länkar i bakgrunden!</string>
     <string name="how_to_use">Hur använder man detta?</string>
     <string name="intro_6">Ställ bara in Chromer som din standardwebbläsare, Chromer kommer visa länken på ett sätt som inte stör. Eller välj Chromer när den behövs.</string>
     <string name="version">Version</string>

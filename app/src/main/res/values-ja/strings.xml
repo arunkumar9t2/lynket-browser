@@ -73,7 +73,7 @@
     <string name="copy_link">リンクをコピー</string>
     <string name="add_to_homescreen">ホーム画面に追加</string>
     <string name="intro_1">こんにちは！\nChromerは軽くて安全で速いブラウザです。</string>
-    <string name="intro_4_new">複数のリンクを開いたり、バックグラウンドで読み込んだりするときに、リンクをフローティングバブルに保持しておくことができます！\n\n<b>詳細</b></string>
+    <string name="intro_4_new">複数のリンクを開いたり、バックグラウンドで読み込んだりするときに、リンクをフローティングバブルに保持しておくことができます</string>
     <string name="how_to_use">どうやって使うの？</string>
     <string name="intro_6">Chromerを既定のブラウザに設定するだけで、リンクはChromerで開くようになります。また、ブラウザを選択して開く際には、Chromerを選択してください。</string>
     <string name="version">バージョン</string>

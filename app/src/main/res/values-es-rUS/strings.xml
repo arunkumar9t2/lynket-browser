@@ -73,7 +73,7 @@
     <string name="copy_link">"Copiar enlace "</string>
     <string name="add_to_homescreen">Añadir a la Pantalla de Inicio</string>
     <string name="intro_1">Hola!\nChromer es un navegador ligero, seguro y rápido.\n</string>
-    <string name="intro_4_new">Puede juntar múltiples enlaces en burbujas flotantes al abrirlos y luego cargarlos en segundo plano.\n\n<b>APRENDE MÁS</b></string>
+    <string name="intro_4_new">Puede juntar múltiples enlaces en burbujas flotantes al abrirlos y luego cargarlos en segundo plano.</string>
     <string name="how_to_use">¿Como se usa?</string>
     <string name="intro_6">Simplemente establezca Chrome como navegador predeterminado, Chrome mostrará el enlace de una manera no intrusiva. O elija Chromer cuando sea necesario</string>
     <string name="version">"Versión "</string>

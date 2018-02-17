@@ -26,7 +26,6 @@ import android.support.v4.content.ContextCompat;
 import com.github.paolorotolo.appintro.AppIntro;
 
 import arun.com.chromer.R;
-import arun.com.chromer.intro.fragments.AppIntroFragment;
 import arun.com.chromer.util.Utils;
 
 /**

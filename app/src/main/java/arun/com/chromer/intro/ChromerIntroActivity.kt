@@ -28,6 +28,7 @@ import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.di.activity.ActivityModule
 import arun.com.chromer.intro.fragments.AppIntroFragment
 import arun.com.chromer.intro.fragments.SlideOverExplanationFragment
+import arun.com.chromer.intro.fragments.WebHeadsIntroFragment
 import arun.com.chromer.shared.base.ProvidesActivityComponent
 import com.github.paolorotolo.appintro.AppIntro
 
@@ -54,6 +55,7 @@ class ChromerIntroActivity : AppIntro(), ProvidesActivityComponent {
 
         addSlide(SlideOverExplanationFragment())
 
+        addSlide(WebHeadsIntroFragment())
         /*addSlide(AppIntroFragment.newInstance(getString(R.string.amp),
                 getString(R.string.amp_summary),
                 R.drawable.amp_page,
@@ -64,10 +66,7 @@ class ChromerIntroActivity : AppIntro(), ProvidesActivityComponent {
                 R.drawable.article_sample,
                 bgColor))
 
-        addSlide(WebHeadIntroExplainFragment.newInstance(getString(R.string.web_heads),
-                getText(R.string.intro_4_new),
-                R.drawable.intro_webheads,
-                bgColor));
+
 
         if (Utils.ANDROID_LOLLIPOP) {
             addSlide(AppIntroFragment.newInstance(getString(R.string.merge_tabs),
