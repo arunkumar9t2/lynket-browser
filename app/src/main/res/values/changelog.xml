@@ -68,6 +68,7 @@ a {
         <li><b>NEW: </b> AMOLED Black theme</li>
         <li><b>NEW: </b> Change text size</li>
         <li><b>NEW: </b> Bottom bar with additional options</li>
+        <li><b>NEW: </b> System bars dim automatically in article mode.</li>
         <li><b>NEW: </b> Tried to reduce extra gap between text. Improved Blockquote legibility.</li>
         <li><b>FIX: </b> Crash when tapping on certain links</li>
 </ul>
