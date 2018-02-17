@@ -294,4 +294,11 @@
     <string name="text_size">Text size</string>
     <string name="save_size_dialog_title">Save size</string>
     <string name="save_size_dialog_content">Would like to save this size?</string>
+    <string name="choose_provider">Choose provider</string>
+    <string name="webViewNotRecommended">For your Android version, using WebView is not recommended due to stability and security concerns.</string>
+    <string name="webViewPros">Rendering engine bundled with your phone.</string>
+    <string name="tab_providers">Supported providers</string>
+    <string name="use">Use</string>
+    <string name="features">Features</string>
+    <string name="webview_disadvantages">WebView lacks many advantages like data saver, form auto fill and cloud sync that Custom Tab providers provide. Do you still want to use WebView for rendering web pages?</string>
 </resources>

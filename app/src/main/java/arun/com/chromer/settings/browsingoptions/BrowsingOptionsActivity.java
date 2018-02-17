@@ -19,6 +19,7 @@
 package arun.com.chromer.settings.browsingoptions;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,7 +37,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -47,6 +47,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import arun.com.chromer.R;
+import arun.com.chromer.browsing.providerselection.ProviderSelectionActivity;
 import arun.com.chromer.di.activity.ActivityComponent;
 import arun.com.chromer.settings.Preferences;
 import arun.com.chromer.settings.widgets.AppPreferenceCardView;
@@ -61,8 +62,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static arun.com.chromer.shared.Constants.CHROME_PACKAGE;
-import static arun.com.chromer.shared.Constants.DUMMY_INTENT;
 import static arun.com.chromer.shared.Constants.TEXT_SHARE_INTENT;
 import static arun.com.chromer.shared.Constants.WEB_INTENT;
 
@@ -113,6 +112,7 @@ public class BrowsingOptionsActivity extends BaseActivity implements Snackable, 
         super.onResume();
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
         showHideErrorView();
+        customTabPreferenceView.refreshState();
     }
 
     private void initBottomActions() {
@@ -128,6 +128,7 @@ public class BrowsingOptionsActivity extends BaseActivity implements Snackable, 
         }
     }
 
+
     @Override
     protected void onPause() {
         PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
@@ -138,29 +139,7 @@ public class BrowsingOptionsActivity extends BaseActivity implements Snackable, 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.customtab_preference_view:
-                final List<IntentPickerSheetView.ActivityInfo> customTabApps = Utils.getCustomTabActivityInfos(this);
-                if (customTabApps.isEmpty()) {
-                    new MaterialDialog.Builder(this)
-                            .title(R.string.custom_tab_provider_not_found)
-                            .content(R.string.custom_tab_provider_not_found_dialog_content)
-                            .positiveText(getString(R.string.install))
-                            .negativeText(getString(android.R.string.no))
-                            .onPositive((dialog, which) -> Utils.openPlayStore(BrowsingOptionsActivity.this, CHROME_PACKAGE)).show();
-                    return;
-                }
-                final IntentPickerSheetView customTabPicker = new IntentPickerSheetView(this,
-                        DUMMY_INTENT,
-                        R.string.default_provider,
-                        activityInfo -> {
-                            bottomSheetLayout.dismissSheet();
-                            customTabPreferenceView.updatePreference(activityInfo.componentName);
-                            refreshCustomTabBindings();
-                            snack(String.format(getString(R.string.default_provider_success), activityInfo.label));
-                            eventBus.post(new ProviderChanged());
-                        });
-                customTabPicker.setFilter(IntentPickerSheetView.selfPackageExcludeFilter(this));
-                customTabPicker.setMixins(customTabApps);
-                showPicker(customTabPicker);
+                startActivity(new Intent(this, ProviderSelectionActivity.class));
                 break;
             case R.id.browser_preference_view:
                 final IntentPickerSheetView browserPicker = new IntentPickerSheetView(this,
