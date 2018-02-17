@@ -27,8 +27,10 @@ import android.support.transition.TransitionManager
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatDelegate
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import arun.com.chromer.R
 import arun.com.chromer.browsing.BrowsingActivity
@@ -97,7 +99,6 @@ class ArticleActivity : BrowsingActivity() {
                 .sizeDp(24)
     }
 
-
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         readCustomizations()
@@ -110,6 +111,12 @@ class ArticleActivity : BrowsingActivity() {
 
         articleScrollListener = ArticleScrollListener(toolbar, statusBar, primaryColor)
         recyclerView.addOnScrollListener(articleScrollListener)
+        recyclerView.addOnScrollListener(systemUiLowProfileOnScrollListener)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setLowProfileSystemUi()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -231,6 +238,11 @@ class ArticleActivity : BrowsingActivity() {
             THEME_BLACK -> handleBlackTheme()
             THEME_DARK -> setNavigationBarColor(ContextCompat.getColor(this, R.color.article_windowBackground))
         }
+        setLowProfileSystemUi()
+    }
+
+    private fun setLowProfileSystemUi() {
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE
     }
 
     private fun handleBlackTheme() {
@@ -301,6 +313,13 @@ class ArticleActivity : BrowsingActivity() {
                 onPositive { _, _ -> preferences.articleTextSizeIncrement(textSizeSeekbar.progress) }
                 build()
             }.show()
+        }
+    }
+
+
+    private val systemUiLowProfileOnScrollListener: RecyclerView.OnScrollListener = object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+            setLowProfileSystemUi()
         }
     }
 
