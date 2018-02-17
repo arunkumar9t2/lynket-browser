@@ -38,6 +38,7 @@ import arun.com.chromer.settings.browsingoptions.BrowsingOptionsActivity
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.shared.base.Snackable
 import arun.com.chromer.shared.base.fragment.BaseFragment
+import arun.com.chromer.tips.TipsActivity
 import arun.com.chromer.util.HtmlCompat
 import arun.com.chromer.util.RxEventBus
 import arun.com.chromer.util.glide.GlideApp
@@ -76,7 +77,8 @@ class HomeFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         setupMaterialSearch()
         setupRecents()
-        setupInfoCards()
+        setupProviderCard()
+        setupTipsCard()
         setupEventListeners()
     }
 
@@ -153,7 +155,7 @@ class HomeFragment : BaseFragment() {
     }
 
 
-    private fun setupInfoCards() {
+    private fun setupProviderCard() {
         if (isAdded && context != null) {
             val customTabProvider: String? = preferences.customTabPackage()
             val isIncognito = preferences.fullIncognitoMode()
@@ -186,14 +188,29 @@ class HomeFragment : BaseFragment() {
         }
     }
 
+
+    private fun setupTipsCard() {
+        tipsIcon.setImageDrawable(IconicsDrawable(context!!)
+                .icon(CommunityMaterial.Icon.cmd_lightbulb_on)
+                .colorRes(R.color.md_yellow_700)
+                .sizeDp(24))
+    }
+
     private fun setupEventListeners() {
-        subs.add(rxEventBus.filteredEvents(BrowsingOptionsActivity.ProviderChanged::class.java).subscribe { setupInfoCards() })
+        subs.add(rxEventBus.filteredEvents(BrowsingOptionsActivity.ProviderChanged::class.java).subscribe { setupProviderCard() })
     }
 
     @OnClick(R.id.providerChangeButton)
     fun onProviderChangeClicked() {
         Handler().postDelayed({
             startActivity(Intent(context, ProviderSelectionActivity::class.java))
+        }, 200)
+    }
+
+    @OnClick(R.id.tipsButton)
+    fun onTipsClicked() {
+        Handler().postDelayed({
+            startActivity(Intent(context, TipsActivity::class.java))
         }, 200)
     }
 }
