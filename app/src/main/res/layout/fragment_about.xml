@@ -128,62 +128,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="5dp" />
 
-                <LinearLayout
-                    android:id="@+id/patryk"
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/creditsRv"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:layout_marginLeft="56dp"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:padding="4dp"
-                    android:layout_marginStart="56dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Patryk Goworowski"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textColor="@color/material_dark_color"
-                        android:textSize="16sp"
-                        tools:ignore="HardcodedText" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/icon_design"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/daniel"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:layout_marginLeft="56dp"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:padding="4dp"
-                    android:layout_marginStart="56dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Daniel Ciao"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textColor="@color/material_dark_color"
-                        android:textSize="16sp"
-                        tools:ignore="HardcodedText" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/open_source_contributions"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-                </LinearLayout>
-
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false" />
             </LinearLayout>
-
         </android.support.v7.widget.CardView>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

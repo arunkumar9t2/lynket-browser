@@ -42,7 +42,7 @@ public class AboutAppActivity extends SubActivity {
         // Replace the fragment
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.about_fragment, AboutFragment.newInstance())
+                .replace(R.id.about_fragment, AboutFragment.Companion.newInstance())
                 .commit();
 
         // Color status bar for lollipop above

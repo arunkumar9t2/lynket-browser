@@ -30,8 +30,8 @@
 
     <ImageView
         android:id="@+id/about_row_item_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_gravity="center"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
@@ -48,9 +48,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="marquee"
+            android:singleLine="true"
             android:textAppearance="@style/Preference_TextAppearanceMaterialSubhead"
-            tools:ignore="SelectableText"
-            android:singleLine="true" />
+            tools:ignore="SelectableText" />
 
         <TextView
             android:id="@+id/about_app_subtitle"
@@ -62,6 +62,5 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="?android:attr/textColorSecondary"
             tools:ignore="SelectableText" />
-
     </RelativeLayout>
 </LinearLayout>
