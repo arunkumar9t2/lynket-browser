@@ -36,6 +36,7 @@ import arun.com.chromer.di.scopes.PerActivity;
 import arun.com.chromer.di.view.ViewComponent;
 import arun.com.chromer.di.view.ViewModule;
 import arun.com.chromer.home.HomeActivity;
+import arun.com.chromer.intro.ChromerIntroActivity;
 import arun.com.chromer.perapp.PerAppSettingsActivity;
 import arun.com.chromer.settings.browsingoptions.BrowsingOptionsActivity;
 import arun.com.chromer.shortcuts.HomeScreenShortcutCreatorActivity;
@@ -85,4 +86,6 @@ public interface ActivityComponent {
     void inject(ChromerOptionsActivity chromerOptionsActivity);
 
     void inject(ProviderSelectionActivity providerSelectionActivity);
+
+    void inject(ChromerIntroActivity chromerIntroActivity);
 }

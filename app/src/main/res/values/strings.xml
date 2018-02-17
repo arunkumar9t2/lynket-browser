@@ -301,4 +301,6 @@
     <string name="use">Use</string>
     <string name="features">Features</string>
     <string name="webview_disadvantages">WebView lacks many advantages like data saver, form auto fill and cloud sync that Custom Tab providers provide. Do you still want to use WebView for rendering web pages?</string>
+    <string name="try_it">Try it</string>
+    <string name="slide_over_fragment_close_prompt">Press X to quickly close the tab</string>
 </resources>

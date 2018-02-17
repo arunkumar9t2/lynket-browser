@@ -21,6 +21,8 @@ package arun.com.chromer.di.fragment;
 import arun.com.chromer.di.scopes.PerFragment;
 import arun.com.chromer.history.HistoryFragment;
 import arun.com.chromer.home.fragment.HomeFragment;
+import arun.com.chromer.intro.fragments.AppIntroFragment;
+import arun.com.chromer.intro.fragments.SlideOverExplanationFragment;
 import arun.com.chromer.tabs.ui.TabsFragment;
 import dagger.Subcomponent;
 
@@ -35,4 +37,8 @@ public interface FragmentComponent {
     void inject(HomeFragment homeFragment);
 
     void inject(TabsFragment tabsFragment);
+
+    void inject(AppIntroFragment appIntroFragment);
+
+    void inject(SlideOverExplanationFragment slideOverExplanationFragment);
 }

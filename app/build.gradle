@@ -145,7 +145,7 @@ dependencies {
     implementation 'in.arunkumarsampath:suggestions:1.0.3'
 
     // Intro
-    implementation 'com.github.paolorotolo:appintro:4.1.0'
+    implementation 'com.github.apl-devs:appintro:v4.2.3'
 
     // Icons
     implementation 'com.mikepenz:community-material-typeface:2.0.46.1@aar'

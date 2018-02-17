@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.intro;
+package arun.com.chromer.intro.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;

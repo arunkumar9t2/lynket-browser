@@ -35,9 +35,9 @@
         android:gravity="center"
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
+        android:text="@string/browse_seamlessly"
         android:textColor="@android:color/white"
-        android:textSize="20sp"
-        tools:text="@string/app_name" />
+        android:textSize="20sp" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -59,7 +59,18 @@
         android:gravity="center"
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
+        android:text="@string/slide_over_explanation"
         android:textColor="@android:color/white"
         android:textSize="16sp"
         tools:text="@string/app_name" />
+
+    <Button
+        android:id="@+id/tryItButton"
+        style="@style/MaterialButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/try_it" />
 </LinearLayout>
