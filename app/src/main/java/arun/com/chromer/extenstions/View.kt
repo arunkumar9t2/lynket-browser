@@ -21,6 +21,8 @@ package arun.com.chromer.extenstions
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
+import android.support.annotation.LayoutRes
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
@@ -103,4 +105,8 @@ fun View.children(): ArrayList<View> {
         (0 until childCount).mapTo(children) { getChildAt(it) }
     }
     return children
+}
+
+fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false): View {
+    return LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
 }

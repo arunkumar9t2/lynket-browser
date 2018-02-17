@@ -309,4 +309,12 @@
     <string name="tutorial_amp_intro">Chromer can find and load AMP pages automatically which leads to quicker and smoother reading experience.</string>
     <string name="illustrations_and_video">Illustrations and Video</string>
     <string name="beta_testers">Google+ Beta testers</string>
+    <string name="tips">Tips</string>
+    <string name="tips_description">See tips to get the best out of Chromer</string>
+    <string name="choose_provider_tip">Chromer supports any browser implementing the Custom Tab protocol. Chromer also inherits behaviour from the provider chosen. For example, using Brave will enable adblock.</string>
+    <string name="tips_secondary_browser">You can choose a secondary browser and a sharing app to quickly launch/share to them.</string>
+    <string name="tips_bottom_bar">You can use bottom bar actions Minimize and Tabs to multitask efficiently.</string>
+    <string name="tips_article_mode">Tapping keywords in article mode will automatically do a query search.</string>
+    <string name="quick_settings">Quick settings</string>
+    <string name="quick_settings_tip">You can use Chromer\'s quick settings toggle in status bar to quickly change your browsing preferences.</string>
 </resources>
