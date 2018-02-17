@@ -23,6 +23,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import arun.com.chromer.R
+import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.fragment.FragmentComponent
 import arun.com.chromer.shared.base.fragment.BaseFragment
 import arun.com.chromer.tabs.DefaultTabsManager
@@ -32,8 +33,8 @@ import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder
 import kotlinx.android.synthetic.main.fragment_slide_over_intro.*
 import javax.inject.Inject
 
-open class WebHeadsIntroFragment : BaseFragment(), ISlideBackgroundColorHolder {
-    override fun getDefaultBackgroundColor(): Int = Color.parseColor("#50268E")
+open class ArticleIntroFragment : BaseFragment(), ISlideBackgroundColorHolder {
+    override fun getDefaultBackgroundColor(): Int = Color.parseColor("#37474F")
 
     override fun setBackgroundColor(backgroundColor: Int) {
         root.setBackgroundColor(backgroundColor)
@@ -43,15 +44,15 @@ open class WebHeadsIntroFragment : BaseFragment(), ISlideBackgroundColorHolder {
     lateinit var tabsManager: DefaultTabsManager
 
     override fun inject(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
-    override fun getLayoutRes() = R.layout.fragment_web_heads_intro
+    override fun getLayoutRes() = R.layout.fragment_article_intro
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         GlideApp.with(this).load(R.drawable.tutorial_web_heads).into(imageView!!)
     }
 
-    @OnClick(R.id.watchDemo)
+    @OnClick(R.id.tryItButton)
     fun onSeeDemoClick() {
-        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=3gbz8PI8BVI&feature=youtu.be")))
+        tabsManager.openArticle(context!!, Website("https://www.androidpolice.com/2015/12/22/chromer-opens-all-of-your-links-in-a-chrome-custom-tab/"))
     }
 }

@@ -27,6 +27,7 @@ import arun.com.chromer.R
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.di.activity.ActivityModule
 import arun.com.chromer.intro.fragments.AppIntroFragment
+import arun.com.chromer.intro.fragments.ArticleIntroFragment
 import arun.com.chromer.intro.fragments.SlideOverExplanationFragment
 import arun.com.chromer.intro.fragments.WebHeadsIntroFragment
 import arun.com.chromer.shared.base.ProvidesActivityComponent
@@ -63,10 +64,7 @@ class ChromerIntroActivity : AppIntro(), ProvidesActivityComponent {
                 R.drawable.tutorial_amp_mode,
                 bgColor))
 
-        addSlide(AppIntroFragment.newInstance(getString(R.string.article_mode),
-                getText(R.string.article_mode_summary),
-                R.drawable.tutorial_article_mode,
-                bgColor))
+        addSlide(ArticleIntroFragment())
 
         if (Utils.ANDROID_LOLLIPOP) {
             addSlide(AppIntroFragment.newInstance(getString(R.string.merge_tabs),

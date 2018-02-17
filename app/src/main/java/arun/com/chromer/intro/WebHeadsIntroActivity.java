@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.intro.fragments;
+package arun.com.chromer.intro;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -26,12 +26,13 @@ import android.support.v4.content.ContextCompat;
 import com.github.paolorotolo.appintro.AppIntro;
 
 import arun.com.chromer.R;
+import arun.com.chromer.intro.fragments.AppIntroFragment;
 import arun.com.chromer.util.Utils;
 
 /**
  * Created by Arun on 17/12/2015.
  */
-public class WebHeadsIntro extends AppIntro {
+public class WebHeadsIntroActivity extends AppIntro {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

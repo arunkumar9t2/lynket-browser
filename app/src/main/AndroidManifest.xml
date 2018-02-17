@@ -163,10 +163,6 @@
             android:label="Intro"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".intro.fragments.WebHeadsIntro"
-            android:label="Intro"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".browsing.shareintercept.ShareInterceptActivity"
             android:excludeFromRecents="true"
             android:label="Open/Search with Chromer">

@@ -22,6 +22,7 @@ import arun.com.chromer.di.scopes.PerFragment
 import arun.com.chromer.history.HistoryFragment
 import arun.com.chromer.home.fragment.HomeFragment
 import arun.com.chromer.intro.fragments.AppIntroFragment
+import arun.com.chromer.intro.fragments.ArticleIntroFragment
 import arun.com.chromer.intro.fragments.SlideOverExplanationFragment
 import arun.com.chromer.intro.fragments.WebHeadsIntroFragment
 import arun.com.chromer.tabs.ui.TabsFragment
@@ -42,4 +43,6 @@ interface FragmentComponent {
     fun inject(slideOverExplanationFragment: SlideOverExplanationFragment)
 
     fun inject(webHeadsIntroFragment: WebHeadsIntroFragment)
+
+    fun inject(articleIntroFragment: ArticleIntroFragment)
 }

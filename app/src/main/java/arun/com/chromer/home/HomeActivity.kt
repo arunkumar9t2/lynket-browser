@@ -46,7 +46,6 @@ import arun.com.chromer.extenstions.show
 import arun.com.chromer.history.HistoryFragment
 import arun.com.chromer.home.fragment.HomeFragment
 import arun.com.chromer.intro.ChromerIntroActivity
-import arun.com.chromer.intro.fragments.WebHeadsIntro
 import arun.com.chromer.payments.DonateActivity
 import arun.com.chromer.search.view.MaterialSearchView
 import arun.com.chromer.search.view.behavior.MaterialSearchViewBehavior
@@ -269,7 +268,6 @@ class HomeActivity : BaseActivity(), Snackable {
                     }
                     8 -> startActivity(Intent(this@HomeActivity, AboutAppActivity::class.java))
                     9 -> showJoinBetaDialog()
-                    10 -> startActivity(Intent(this@HomeActivity, WebHeadsIntro::class.java))
                 }
                 false
             }
