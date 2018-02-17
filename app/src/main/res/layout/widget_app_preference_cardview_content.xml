@@ -44,11 +44,11 @@
         android:layout_gravity="center"
         android:fontFamily="sans-serif-condensed"
         android:gravity="center"
+        android:maxLines="1"
         android:textColor="@color/material_dark_color"
         android:textStyle="bold"
         tools:ignore="SelectableText"
-        tools:text="Firefox"
-        android:maxLines="1" />
+        tools:text="Firefox" />
 
     <Space
         android:layout_width="match_parent"

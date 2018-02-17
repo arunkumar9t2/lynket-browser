@@ -50,10 +50,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="marquee"
+            android:singleLine="true"
             android:textAppearance="@style/Preference_TextAppearanceMaterialSubhead"
             android:textSize="14sp"
-            tools:ignore="SelectableText"
-            android:singleLine="true" />
+            tools:ignore="SelectableText" />
 
         <TextView
             android:id="@+id/web_site_sub_title"
@@ -76,10 +76,10 @@
         android:layout_height="46dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
+        android:focusable="true"
         android:padding="15dp"
         android:scaleType="fitCenter"
-        tools:ignore="ContentDescription"
-        android:focusable="true" />
+        tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/delete_icon"
@@ -87,8 +87,8 @@
         android:layout_height="46dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
+        android:focusable="true"
         android:padding="15dp"
         android:scaleType="fitCenter"
-        tools:ignore="ContentDescription"
-        android:focusable="true" />
+        tools:ignore="ContentDescription" />
 </LinearLayout>

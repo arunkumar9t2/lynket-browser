@@ -71,6 +71,7 @@
                 android:layout_weight="0.5"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
+                android:focusable="true"
                 android:gravity="center"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
@@ -78,8 +79,7 @@
                 android:textAllCaps="true"
                 android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
                 android:textColor="@color/accent"
-                android:textSize="14sp"
-                android:focusable="true" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/share_all"
@@ -89,14 +89,14 @@
                 android:layout_weight="0.5"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
+                android:focusable="true"
                 android:gravity="center"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:text="@string/share_all"
                 android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
                 android:textColor="@color/accent"
-                android:textSize="14sp"
-                android:focusable="true" />
+                android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>

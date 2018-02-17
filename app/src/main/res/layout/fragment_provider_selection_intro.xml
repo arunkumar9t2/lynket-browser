@@ -65,11 +65,11 @@
 
     <Button
         android:id="@+id/chooseProviderButton"
-        android:theme="@style/MaterialButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
-        android:text="@string/choose_provider" />
+        android:text="@string/choose_provider"
+        android:theme="@style/MaterialButtonStyle" />
 </LinearLayout>

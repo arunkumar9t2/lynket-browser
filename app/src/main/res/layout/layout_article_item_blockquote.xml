@@ -21,17 +21,17 @@
     android:layout_height="wrap_content">
 
     <TextView
+        android:id="@+id/article_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-condensed"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:textColor="@color/article_colorAccent"
+        android:gravity="center"
+        android:paddingBottom="16dp"
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
-        android:paddingBottom="16dp"
         android:paddingTop="16dp"
-        android:gravity="center"
-        android:id="@+id/article_text" />
+        android:textColor="@color/article_colorAccent"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
 </FrameLayout>

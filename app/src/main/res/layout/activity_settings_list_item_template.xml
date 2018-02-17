@@ -22,12 +22,12 @@
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
     android:clickable="true"
+    android:focusable="true"
     android:gravity="center|left"
     android:minHeight="70dp"
     android:orientation="horizontal"
     android:weightSum="1"
-    tools:ignore="RtlHardcoded"
-    android:focusable="true">
+    tools:ignore="RtlHardcoded">
 
     <ImageView
         android:id="@+id/settins_list_icon"

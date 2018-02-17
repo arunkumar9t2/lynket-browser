@@ -20,9 +20,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/article_codeblockBackground"
     android:layout_marginLeft="12dp"
     android:layout_marginRight="12dp"
+    android:background="@color/article_codeblockBackground"
     tools:ignore="Overdraw">
 
     <HorizontalScrollView
@@ -31,14 +31,14 @@
         tools:ignore="UselessParent">
 
         <TextView
+            android:id="@+id/article_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="monospace"
-            android:textSize="14sp"
-            android:textColor="@color/article_secondaryText"
             android:padding="24dp"
             android:scrollHorizontally="true"
-            android:id="@+id/article_text" />
+            android:textColor="@color/article_secondaryText"
+            android:textSize="14sp" />
 
     </HorizontalScrollView>
 

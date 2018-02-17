@@ -126,6 +126,7 @@
     <string name="no_option_selected">Nijedna opcija nije odabrana</string>
     <string name="permission_required">Potrebno je dopuštenje</string>
     <string name="usage_permission_explanation_appcolor">Da biste omogućili dinamičko bojenje alatne trake na temelju aplikacija, Chromer treba vaše dopuštenje da bi znao kojim se aplikacijama koristite. Želite li odmah odobriti ovo dopuštenje?</string>
+    <string name="usage_permission_explanation_per_apps">Kako bi omogućili pojedinačne postavke za aplikacije, Chromer treba dozvolu za pristup aplikacijama koje koristite. Želite li dopustiti dozvolu za pristup korištenju aplikacija?</string>
     <string name="grant">Odobri</string>
     <string name="open_source_contributions">Stvari vezane uz otvoreni kôd</string>
     <string name="search_or_type_url">Pretražite ili upišite URL</string>
@@ -152,6 +153,8 @@
     <string name="share_failed_msg">Dijeljenje s aplikacijom nije moguće, preusmjeravanje na normalno dijeljenje</string>
     <string name="revoke_accessibility_permission">Sada možete ukloniti Chromerovo dopuštenje usluge pristupačnosti.</string>
     <string name="last_fetched_urls">Posljednje predučitani URL-ovi</string>
+    <string name="per_apps_on">Postavke za pojedinačne aplik. su uključene</string>
+    <string name="per_apps_off">Postavke za pojedinačne aplik. su isključene</string>
     <string name="translations">Prijevodi</string>
     <string name="merge_tabs">Spoji kartice i aplikacije</string>
     <string name="merge_tabs_explanation">Kartice će se prikazivati s drugim nedavnim aplikacijama na zaslonu nedavnih aplikacija.</string>
@@ -259,6 +262,7 @@
     <string name="fork_on_github">Forkaj na GitHubu</string>
     <string name="web_view_not_found">Web View je onemogućen na ovom uređaju. Nije moguće otvoriti poveznicu.</string>
     <string name="app_detection_notification_channel_description">Obavijest će biti objavljena kada je Chromerova usluga za detekciju aplikacija pokrenuta.</string>
+    <string name="app_detection_service_explanation">Praćenje pozadinskih aplikacija za dinamičnu boju alatne trake i postavke za pojedinačne aplikacije.</string>
     <string name="app_detection_service">Usluga detekcije aplikacija</string>
     <string name="shortcut_name">Naziv prečaca</string>
     <string name="create_shorcut">Stvori prečac</string>
@@ -283,4 +287,10 @@
     <string name="article_loading_failed">Nije moguće izlučiti članak.</string>
     <string name="full_incognito_mode">Anonimno pregledavanje</string>
     <string name="full_incognito_mode_explanation">Za potpuno anonimno pregledavanje Chromer će se prebaciti na Webview za renderanje stranica. Unosi se neće zapisivati.</string>
+    <string name="per_app_settings">Postavke za pojedinačne aplik.</string>
+    <string name="per_app_settings_explanation">Postavite sekundarni preglednik i anonimni način za pojedinačne aplikacije.</string>
+    <string name="provider_web_view_incognito_reason">Potrebno za anonimni način. Isključite anonimni način za odabir drugog pružatelja.</string>
+    <string name="text_size">Veličina teksta</string>
+    <string name="save_size_dialog_title">Spremi veličinu</string>
+    <string name="save_size_dialog_content">Želite li spremiti ovu veličinu?</string>
 </resources>

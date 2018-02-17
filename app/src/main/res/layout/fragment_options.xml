@@ -103,11 +103,11 @@
                 android:layout_margin="5dp"
                 android:layout_weight="0.5"
                 android:clickable="true"
+                android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
                 app:cardCornerRadius="2dp"
                 app:cardElevation="2dp"
-                app:preferenceType="customTabProvider"
-                android:focusable="true" />
+                app:preferenceType="customTabProvider" />
 
             <arun.com.chromer.settings.widgets.AppPreferenceCardView
                 android:id="@+id/browser_preference_view"
@@ -116,11 +116,11 @@
                 android:layout_margin="5dp"
                 android:layout_weight="0.5"
                 android:clickable="true"
+                android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
                 app:cardCornerRadius="2dp"
                 app:cardElevation="2dp"
-                app:preferenceType="secondaryBrowser"
-                android:focusable="true" />
+                app:preferenceType="secondaryBrowser" />
 
             <arun.com.chromer.settings.widgets.AppPreferenceCardView
                 android:id="@+id/favshare_preference_view"
@@ -129,11 +129,11 @@
                 android:layout_margin="5dp"
                 android:layout_weight="0.5"
                 android:clickable="true"
+                android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
                 app:cardCornerRadius="2dp"
                 app:cardElevation="2dp"
-                app:preferenceType="favoriteShare"
-                android:focusable="true" />
+                app:preferenceType="favoriteShare" />
         </LinearLayout>
 
         <android.support.v7.widget.CardView
