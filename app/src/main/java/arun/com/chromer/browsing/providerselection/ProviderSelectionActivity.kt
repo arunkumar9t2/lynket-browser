@@ -8,12 +8,14 @@ import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
+import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import arun.com.chromer.R
 import arun.com.chromer.data.apps.model.Provider
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.extenstions.gone
+import arun.com.chromer.extenstions.show
 import arun.com.chromer.extenstions.watch
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.settings.browsingoptions.BrowsingOptionsActivity
@@ -25,6 +27,7 @@ import arun.com.chromer.util.glide.GlideApp
 import arun.com.chromer.util.glide.appicon.ApplicationIcon
 import butterknife.BindView
 import butterknife.ButterKnife
+import butterknife.OnClick
 import butterknife.Unbinder
 import com.afollestad.materialdialogs.MaterialDialog
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
@@ -61,6 +64,15 @@ class ProviderSelectionActivity : BaseActivity() {
         observeViewModel(savedInstanceState)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            finish()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+
     private fun setupToolbar() {
         setSupportActionBar(toolbar)
         if (supportActionBar != null) {
@@ -89,6 +101,9 @@ class ProviderSelectionActivity : BaseActivity() {
                         .colorRes(R.color.primary)
                         .sizeDp(56))
                 .into(webViewImg)
+        if (!Utils.ANDROID_LOLLIPOP) {
+            webViewNotRecommended.show()
+        }
     }
 
     private fun observeViewModel(savedInstanceState: Bundle?) {
@@ -117,6 +132,19 @@ class ProviderSelectionActivity : BaseActivity() {
         if (!provider.installed) {
             Utils.openPlayStore(this, provider.packageName)
         }
+    }
+
+    @OnClick(R.id.webViewCard)
+    fun onWebViewClick() {
+        MaterialDialog.Builder(this)
+                .title(R.string.are_you_sure)
+                .content(R.string.webview_disadvantages)
+                .positiveText(android.R.string.yes)
+                .onPositive({ _, _ ->
+                    preferences.useWebView(true)
+                    notifyProviderChanged()
+                    finish()
+                }).show()
     }
 
     override fun onDestroy() {
@@ -152,7 +180,7 @@ class ProviderSelectionActivity : BaseActivity() {
                     .onPositive({ _, _ ->
                         if (provider.installed) {
                             preferences.customTabPackage(provider.packageName)
-                            rxEventBus.post(BrowsingOptionsActivity.ProviderChanged())
+                            notifyProviderChanged()
                         } else {
                             Utils.openPlayStore(activity!!, provider.packageName)
                         }
@@ -181,5 +209,9 @@ class ProviderSelectionActivity : BaseActivity() {
             unBinder.unbind()
             dialog = null
         }
+    }
+
+    private fun notifyProviderChanged() {
+        rxEventBus.post(BrowsingOptionsActivity.ProviderChanged())
     }
 }

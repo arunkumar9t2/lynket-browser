@@ -248,7 +248,7 @@ constructor(
         val reordered = smart && reOrderTabByUrl(context, website, activityNames)
 
         if (!reordered) {
-            val canSafelyOpenCCT = CustomTabs.getCustomTabSupportingPackages(context).isNotEmpty()
+            val canSafelyOpenCCT = !preferences.useWebView() && CustomTabs.getCustomTabSupportingPackages(context).isNotEmpty()
             val isIncognito = preferences.fullIncognitoMode() || incognito
 
             val browsingActivity = if (!isIncognito && canSafelyOpenCCT) {

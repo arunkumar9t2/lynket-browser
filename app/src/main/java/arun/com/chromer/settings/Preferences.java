@@ -85,6 +85,7 @@ public class Preferences {
     public static final String INCOGNITO_MODE = "incognito_mode_pref";
     public static final String FULL_INCOGNITO_MODE = "full_incognito_mode";
     public static final String ARTICLE_TEXT_SIZE = "article_text_size_pref";
+    public static final String USE_WEBVIEW_PREF = "use_webview_pref";
     // Singleton instance
     private static Preferences INSTANCE;
 
@@ -186,6 +187,7 @@ public class Preferences {
     }
 
     public void customTabPackage(String string) {
+        useWebView(false);
         getDefaultSharedPreferences().edit().putString(PREFERRED_CUSTOM_TAB_PACKAGE, string).apply();
     }
 
@@ -271,6 +273,14 @@ public class Preferences {
 
     public boolean fullIncognitoMode() {
         return getDefaultSharedPreferences().getBoolean(FULL_INCOGNITO_MODE, false);
+    }
+
+    public void useWebView(boolean preference) {
+        getDefaultSharedPreferences().edit().putBoolean(USE_WEBVIEW_PREF, preference).apply();
+    }
+
+    public boolean useWebView() {
+        return getDefaultSharedPreferences().getBoolean(USE_WEBVIEW_PREF, false);
     }
 
     public void articleTextSizeIncrement(int increment) {

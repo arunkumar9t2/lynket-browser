@@ -157,7 +157,8 @@ class HomeFragment : BaseFragment() {
         if (isAdded && context != null) {
             val customTabProvider: String? = preferences.customTabPackage()
             val isIncognito = preferences.fullIncognitoMode()
-            if (customTabProvider == null || isIncognito) {
+            val isWebView = preferences.useWebView()
+            if (customTabProvider == null || isIncognito || isWebView) {
                 providerDescription.text = HtmlCompat.fromHtml(getString(R.string.tab_provider_status_message_home, getString(R.string.system_webview)))
                 GlideApp.with(this)
                         .load(ApplicationIcon.createUri(Constants.SYSTEM_WEBVIEW))
