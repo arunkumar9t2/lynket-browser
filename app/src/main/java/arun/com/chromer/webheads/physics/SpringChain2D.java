@@ -114,28 +114,25 @@ public class SpringChain2D implements SpringListener {
     }
 
     public void performGroupMove(int masterX, int masterY) {
-        int displacement = 0;
-        Iterator lit = xSprings.descendingIterator();
-        while (lit.hasNext()) {
-            final Spring s = (Spring) lit.next();
+        int xDisplacement = 0;
+        int yDisplacement = 0;
+
+        final Iterator xIter = xSprings.descendingIterator();
+        final Iterator yIter = ySpring.descendingIterator();
+
+        while (xIter.hasNext() && yIter.hasNext()) {
+            final Spring xSpring = (Spring) xIter.next();
+            final Spring ySpring = (Spring) yIter.next();
             if (displacementEnabled) {
                 if (isRight(masterX)) {
-                    displacement += xDiff;
+                    xDisplacement += xDiff;
                 } else {
-                    displacement -= xDiff;
+                    xDisplacement -= xDiff;
                 }
+                yDisplacement += yDiff;
             }
-            s.setEndValue(masterX + displacement);
-        }
-
-        displacement = 0;
-        lit = ySpring.descendingIterator();
-        while (lit.hasNext()) {
-            final Spring s = (Spring) lit.next();
-            if (displacementEnabled) {
-                displacement += yDiff;
-            }
-            s.setEndValue(masterY + displacement);
+            xSpring.setEndValue(masterX + xDisplacement);
+            ySpring.setEndValue(masterY + yDisplacement);
         }
     }
 
