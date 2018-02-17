@@ -56,7 +56,7 @@ android {
         versionName "2.0 - RC 1"
 
         resValue "string", "playLicenseKey", "$playLicenseKey"
-        resValue "string", "crashlyticsApiKey", "$fabricKey"
+        manifestPlaceholders = [crashlyticsApiKey: "$fabricKey"]
 
         vectorDrawables.useSupportLibrary = true
 
