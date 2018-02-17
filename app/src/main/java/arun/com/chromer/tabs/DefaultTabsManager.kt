@@ -248,13 +248,12 @@ constructor(
         val reordered = smart && reOrderTabByUrl(context, website, activityNames)
 
         if (!reordered) {
-            val canSafelyOpenCCT = !preferences.useWebView() && CustomTabs.getCustomTabSupportingPackages(context).isNotEmpty()
             val isIncognito = preferences.fullIncognitoMode() || incognito
 
-            val browsingActivity = if (!isIncognito && canSafelyOpenCCT) {
-                Intent(context, CustomTabActivity::class.java)
-            } else {
+            val browsingActivity = if (shouldUseWebView(incognito)) {
                 Intent(context, WebViewActivity::class.java)
+            } else {
+                Intent(context, CustomTabActivity::class.java)
             }.apply {
                 data = website.preferredUri()
                 putExtra(Constants.EXTRA_KEY_WEBSITE, website)
@@ -273,6 +272,12 @@ constructor(
             }
             context.startActivity(browsingActivity)
         }
+    }
+
+    override fun shouldUseWebView(incognito: Boolean): Boolean {
+        val canSafelyOpenCCT = !preferences.useWebView() && CustomTabs.getCustomTabSupportingPackages(application).isNotEmpty()
+        val isIncognito = preferences.fullIncognitoMode() || incognito
+        return !(!isIncognito && canSafelyOpenCCT)
     }
 
     override fun openWebHeads(context: Context, url: String, fromMinimize: Boolean, fromAmp: Boolean, incognito: Boolean) {
@@ -294,36 +299,51 @@ constructor(
             if (preferences.articleMode()) {
                 articlePreloader.preloadArticle(Uri.parse(url), { })
             } else {
-                // Register listener to track opening browsing tabs.
-                application.registerActivityLifecycleCallbacks(
-                        object : ActivityLifeCycleCallbackAdapter() {
-                            override fun onActivityStopped(activity: Activity?) {
-                                // Let's inspect this activity and find if it's what we are looking for.
-                                try {
-                                    if (activity != null) {
-                                        val activityClass = activity.javaClass.name
-                                        if (activityClass == CustomTabActivity::class.java.name
-                                                || activityClass == WebViewActivity::class.java.name) {
-
+                if (shouldUseWebView(incognito)) {
+                    application.registerActivityLifecycleCallbacks(
+                            object : ActivityLifeCycleCallbackAdapter() {
+                                override fun onActivityStarted(activity: Activity?) {
+                                    try {
+                                        if (activity is WebViewActivity) {
                                             val activityUrl = activity.intent?.dataString
-
                                             if (url == activityUrl) {
-                                                Timber.d("Found activity $activityClass.")
-
                                                 Handler(Looper.getMainLooper()).postDelayed({
                                                     activity.moveTaskToBack(true)
-                                                    Timber.d("Moved ${activityClass + activityUrl} to back")
+                                                    Timber.d("Moved webivew  $activityUrl to back")
                                                     // Unregister this callback
                                                     application.unregisterActivityLifecycleCallbacks(this)
                                                 }, 100)
                                             }
                                         }
+                                    } catch (e: Exception) {
+                                        Timber.e(e)
                                     }
-                                } catch (e: Exception) {
-                                    Timber.e(e)
                                 }
-                            }
-                        })
+                            })
+                } else {
+                    // Register listener to track opening browsing tabs.
+                    application.registerActivityLifecycleCallbacks(
+                            object : ActivityLifeCycleCallbackAdapter() {
+                                override fun onActivityStopped(activity: Activity?) {
+                                    // Let's inspect this activity and find if it's what we are looking for.
+                                    try {
+                                        if (activity is CustomTabActivity) {
+                                            val activityUrl = activity.intent?.dataString
+                                            if (url == activityUrl) {
+                                                Handler(Looper.getMainLooper()).postDelayed({
+                                                    activity.moveTaskToBack(true)
+                                                    Timber.d("Moved webivew  $activityUrl to back")
+                                                    // Unregister this callback
+                                                    application.unregisterActivityLifecycleCallbacks(this)
+                                                }, 100)
+                                            }
+                                        }
+                                    } catch (e: Exception) {
+                                        Timber.e(e)
+                                    }
+                                }
+                            })
+                }
 
                 openBrowsingTab(context, Website(url), smart = true, fromNewTab = false, incognito = incognito)
             }

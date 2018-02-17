@@ -141,4 +141,6 @@ interface TabsManager {
     fun showTabsActivity()
 
     fun openArticle(context: Context, website: Website, newTab: Boolean = false, incognito: Boolean = false)
+
+    fun shouldUseWebView(incognito: Boolean): Boolean
 }
