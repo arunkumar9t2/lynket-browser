@@ -30,6 +30,7 @@ import arun.com.chromer.intro.fragments.AppIntroFragment
 import arun.com.chromer.intro.fragments.SlideOverExplanationFragment
 import arun.com.chromer.intro.fragments.WebHeadsIntroFragment
 import arun.com.chromer.shared.base.ProvidesActivityComponent
+import arun.com.chromer.util.Utils
 import com.github.paolorotolo.appintro.AppIntro
 
 /**
@@ -56,29 +57,23 @@ class ChromerIntroActivity : AppIntro(), ProvidesActivityComponent {
         addSlide(SlideOverExplanationFragment())
 
         addSlide(WebHeadsIntroFragment())
-        /*addSlide(AppIntroFragment.newInstance(getString(R.string.amp),
+
+        addSlide(AppIntroFragment.newInstance(getString(R.string.amp),
                 getString(R.string.amp_summary),
-                R.drawable.amp_page,
+                R.drawable.tutorial_amp_mode,
                 bgColor))
 
         addSlide(AppIntroFragment.newInstance(getString(R.string.article_mode),
                 getText(R.string.article_mode_summary),
-                R.drawable.article_sample,
+                R.drawable.tutorial_article_mode,
                 bgColor))
-
-
 
         if (Utils.ANDROID_LOLLIPOP) {
             addSlide(AppIntroFragment.newInstance(getString(R.string.merge_tabs),
                     getText(R.string.merge_tabs_explanation_intro),
-                    R.drawable.merge_tabs_apps,
+                    R.drawable.tutorial_merge_tabs_and_apps,
                     bgColor))
         }
-
-        addSlide(AppIntroFragment.newInstance(getString(R.string.how_to_use),
-                getText(R.string.intro_6),
-                R.drawable.intro_set_default,
-                bgColor))*/
 
         setColorTransitionsEnabled(true)
         showSkipButton(true)

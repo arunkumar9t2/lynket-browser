@@ -21,6 +21,7 @@ package arun.com.chromer.intro.fragments
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
+import android.support.v4.content.ContextCompat
 import android.widget.Toast
 import arun.com.chromer.R
 import arun.com.chromer.data.website.model.Website
@@ -34,7 +35,7 @@ import kotlinx.android.synthetic.main.fragment_slide_over_intro.*
 import javax.inject.Inject
 
 open class SlideOverExplanationFragment : BaseFragment(), ISlideBackgroundColorHolder {
-    override fun getDefaultBackgroundColor(): Int = Color.parseColor("#4A89DC")
+    override fun getDefaultBackgroundColor(): Int = ContextCompat.getColor(context!!, R.color.colorPrimaryDarker)
 
     override fun setBackgroundColor(backgroundColor: Int) {
         root.setBackgroundColor(backgroundColor)
