@@ -293,4 +293,27 @@
     <string name="text_size">Veličina teksta</string>
     <string name="save_size_dialog_title">Spremi veličinu</string>
     <string name="save_size_dialog_content">Želite li spremiti ovu veličinu?</string>
+    <string name="choose_provider">Odaberi pružatelja</string>
+    <string name="webViewNotRecommended">Za vašu Android verziju, korištenje WebViewa nije preporučeno zbog stabilnosti i sigurnosti.</string>
+    <string name="webViewPros">Pokretač renderanja ugrađen u vaš uređaj.</string>
+    <string name="tab_providers">Podržani pružatelji</string>
+    <string name="use">Koristi</string>
+    <string name="features">Značajke</string>
+    <string name="webview_disadvantages">WebViewu nedostaje puno prednosti kao što su štednja podataka, automatski unos teksta te usklađivanje s oblakom koje pružatelji imaju. Želite li stvarno koristiti WebView za renderanje web stranica?</string>
+    <string name="try_it">Isprobaj</string>
+    <string name="slide_over_fragment_close_prompt">Dodirnite X za brzo zatvaranje kartice</string>
+    <string name="see_demo">Prikaži uvod</string>
+    <string name="provider_intro_explanation">Chromer može raditi uz vaše omiljene preglednike.\n\nNa primjer, koristeći Google Chrome kao pružatelj omogućava vam da uskladite povijest, koristite štednju podataka i spremate lozinke u vaš Google račun.</string>
+    <string name="chromer_flexible">Fleksibilno</string>
+    <string name="tutorial_amp_intro">Chromer može pronaći i učitati AMP stranice automatski što rezultira bržim učitavanjem i lakšim čitanjem.</string>
+    <string name="illustrations_and_video">Ilustracije i video</string>
+    <string name="beta_testers">Google+ beta testeri</string>
+    <string name="tips">Savjeti</string>
+    <string name="tips_description">Pogledajte savjete kako bi izvukli najbolje iz Chromera</string>
+    <string name="choose_provider_tip">Chromer podržava bilo koji preglednik koji sadrži protokol za prilagođene kartice. Chromer također prisvaja ponašanje pružatelja. Na primjer, korištenje Bravea će omogućiti blokiranje oglasa.</string>
+    <string name="tips_secondary_browser">Možete odabrati sekundarni preglednik ili aplikaciju za dijeljenje kako bi brzo pokrenuli/podijelili sa njima.</string>
+    <string name="tips_bottom_bar">Možete koristiti donju traku kako bi radili više radnji istovremeno.</string>
+    <string name="tips_article_mode">Dodirom na ključne riječi u načinu za članke će ih automatski pretražiti</string>
+    <string name="quick_settings">Brze postavke</string>
+    <string name="quick_settings_tip">Možete koristiti Chromerove brze postavke na statusnoj traci kako bi brzinski promjenili vaše postavke pregledavanja.</string>
 </resources>
