@@ -11,14 +11,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import arun.com.chromer.R
 import arun.com.chromer.di.activity.ActivityComponent
-import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.inflate
-import arun.com.chromer.extenstions.show
 import arun.com.chromer.shared.base.activity.BaseActivity
 import arun.com.chromer.util.Utils
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.bumptech.glide.RequestManager
+import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.mikepenz.iconics.IconicsDrawable
 import kotlinx.android.synthetic.main.activity_tips.*
 import javax.inject.Inject
 
@@ -87,43 +87,60 @@ class TipsActivity : BaseActivity() {
         override fun getItemCount() = items.size
 
         override fun onBindViewHolder(holder: TipsItemHolder, position: Int) {
-            holder.image?.gone()
             when (items[position]) {
                 provider -> {
                     holder.title?.setText(R.string.choose_provider)
                     holder.subtitle?.setText(R.string.choose_provider_tip)
-                    holder.image?.show()
                     requestManager.load(R.drawable.tips_providers).into(holder.image)
+                    holder.iconView?.setImageDrawable(IconicsDrawable(this@TipsActivity)
+                            .icon(CommunityMaterial.Icon.cmd_cards)
+                            .colorRes(R.color.accent)
+                            .sizeDp(24))
                 }
                 secBrowser -> {
                     holder.title?.setText(R.string.choose_secondary_browser)
                     holder.subtitle?.setText(R.string.tips_secondary_browser)
-                    holder.image?.show()
                     requestManager.load(R.drawable.tip_secondary_browser).into(holder.image)
+                    holder.iconView?.setImageDrawable(IconicsDrawable(this@TipsActivity)
+                            .icon(CommunityMaterial.Icon.cmd_earth)
+                            .colorRes(R.color.accent)
+                            .sizeDp(24))
                 }
                 perApp -> {
                     holder.title?.setText(R.string.per_app_settings)
                     holder.subtitle?.setText(R.string.per_app_settings_explanation)
-                    holder.image?.show()
                     requestManager.load(R.drawable.tips_per_app_settings).into(holder.image)
+                    holder.iconView?.setImageDrawable(IconicsDrawable(this@TipsActivity)
+                            .icon(CommunityMaterial.Icon.cmd_apps)
+                            .colorRes(R.color.accent)
+                            .sizeDp(24))
                 }
                 bottomBar -> {
                     holder.title?.setText(R.string.bottom_bar)
                     holder.subtitle?.setText(R.string.tips_bottom_bar)
-                    holder.image?.show()
                     requestManager.load(R.drawable.tips_bottom_bar).into(holder.image)
+                    holder.iconView?.setImageDrawable(IconicsDrawable(this@TipsActivity)
+                            .icon(CommunityMaterial.Icon.cmd_drag_horizontal)
+                            .colorRes(R.color.accent)
+                            .sizeDp(24))
                 }
                 articleKeywords -> {
                     holder.title?.setText(R.string.article_mode)
                     holder.subtitle?.setText(R.string.tips_article_mode)
-                    holder.image?.show()
                     requestManager.load(R.drawable.tips_article_keywords).into(holder.image)
+                    holder.iconView?.setImageDrawable(IconicsDrawable(this@TipsActivity)
+                            .icon(CommunityMaterial.Icon.cmd_file_document)
+                            .colorRes(R.color.accent)
+                            .sizeDp(24))
                 }
                 quicksettings -> {
                     holder.title?.setText(R.string.quick_settings)
                     holder.subtitle?.setText(R.string.quick_settings_tip)
-                    holder.image?.show()
                     requestManager.load(R.drawable.tips_quick_settings).into(holder.image)
+                    holder.iconView?.setImageDrawable(IconicsDrawable(this@TipsActivity)
+                            .icon(CommunityMaterial.Icon.cmd_settings)
+                            .colorRes(R.color.accent)
+                            .sizeDp(24))
                 }
             }
         }

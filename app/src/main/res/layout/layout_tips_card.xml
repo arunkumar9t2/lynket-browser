@@ -28,11 +28,13 @@
 
         <ImageView
             android:id="@+id/icon"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_centerVertical="true" />
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -69,8 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
-                android:visibility="gone" />
+                android:scaleType="fitCenter" />
         </LinearLayout>
     </RelativeLayout>
 
