@@ -127,12 +127,12 @@ class ArticleActivity : BrowsingActivity() {
                 is Result.Success -> {
                     val webArticle: WebArticle? = result.data
                     if (webArticle == null) {
-                        onArticleLoadingFailed(null)
+                        onArticleLoadingFailed()
                     } else {
                         onArticleLoaded(webArticle)
                     }
                 }
-                is Result.Failure -> onArticleLoadingFailed(result.throwable)
+                is Result.Failure -> onArticleLoadingFailed()
             }
         })
         if (savedInstanceState == null) {
@@ -175,7 +175,7 @@ class ArticleActivity : BrowsingActivity() {
         } else menuDelegate.handleItemSelected(item.itemId)
     }
 
-    private fun onArticleLoadingFailed(throwable: Throwable?) {
+    private fun onArticleLoadingFailed() {
         hideLoading()
         // Loading failed, try to go back to normal url tab if it exists, else start a new normal
         // rendering tab.
@@ -188,7 +188,7 @@ class ArticleActivity : BrowsingActivity() {
         if (webArticle.elements != null && webArticle.elements.size >= MIN_NUM_ELEMENTS) {
             renderArticle(webArticle)
         } else {
-            onArticleLoadingFailed(null)
+            onArticleLoadingFailed()
         }
     }
 

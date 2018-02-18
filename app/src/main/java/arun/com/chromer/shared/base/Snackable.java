@@ -22,7 +22,6 @@ import android.support.annotation.NonNull;
 
 /**
  * Marker to define methods to enable {@link android.support.design.widget.Snackbar} messages.
- * Can be called from {@code {@link Base.Presenter}}
  */
 public interface Snackable {
     void snack(@NonNull final String message);

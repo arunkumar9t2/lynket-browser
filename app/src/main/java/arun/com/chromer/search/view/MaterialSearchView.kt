@@ -35,6 +35,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.RelativeLayout
 import arun.com.chromer.R
 import arun.com.chromer.di.view.ViewComponent
 import arun.com.chromer.di.view.ViewModule
@@ -47,9 +48,6 @@ import arun.com.chromer.util.Utils
 import arun.com.chromer.util.Utils.getSearchUrl
 import butterknife.BindColor
 import butterknife.ButterKnife
-import com.hannesdorfmann.mosby3.mvp.delegate.ViewGroupMvpDelegate
-import com.hannesdorfmann.mosby3.mvp.delegate.ViewGroupMvpDelegateImpl
-import com.hannesdorfmann.mosby3.mvp.layout.MvpRelativeLayout
 import com.jakewharton.rxbinding.widget.RxTextView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
@@ -59,7 +57,7 @@ import rx.subjects.PublishSubject
 import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
 
-class MaterialSearchView : MvpRelativeLayout<Search.View, Search.Presenter>, Search.View {
+class MaterialSearchView : RelativeLayout, Search.View {
     @BindColor(R.color.accent_icon_no_focus)
     @JvmField
     var normalColor: Int = 0
@@ -79,7 +77,7 @@ class MaterialSearchView : MvpRelativeLayout<Search.View, Search.Presenter>, Sea
     private val searchPerforms = PublishSubject.create<String>()
     private val focusChanges = PublishSubject.create<Boolean>()
 
-    private val compositeSubs = CompositeSubscription()
+    private val subs = CompositeSubscription()
 
     private var viewComponent: ViewComponent? = null
 
@@ -87,13 +85,13 @@ class MaterialSearchView : MvpRelativeLayout<Search.View, Search.Presenter>, Sea
     lateinit var searchPresenter: Search.Presenter
 
     val text: String
-        get() = if (msv_edit_text.text == null) "" else msv_edit_text?.text.toString()
+        get() = if (msvEditText.text == null) "" else msvEditText?.text.toString()
 
     val url: String
         get() = getSearchUrl(text)
 
     val editText: EditText
-        get() = msv_edit_text
+        get() = msvEditText
 
     constructor(context: Context) : super(context) {
         init(context)
@@ -107,12 +105,10 @@ class MaterialSearchView : MvpRelativeLayout<Search.View, Search.Presenter>, Sea
         init(context)
     }
 
-    override fun createPresenter(): Search.Presenter = searchPresenter
-
     private fun init(context: Context) {
         if (context is ProvidesActivityComponent) {
             viewComponent = context.activityComponent.newViewComponent(ViewModule(this))
-            viewComponent!!.inject(this)
+            viewComponent?.inject(this)
         }
 
         xIcon = IconicsDrawable(context)
@@ -137,34 +133,34 @@ class MaterialSearchView : MvpRelativeLayout<Search.View, Search.Presenter>, Sea
             addItemDecoration(DividerItemDecoration(getContext(), VERTICAL))
         }
 
-        compositeSubs.add(suggestionAdapter.clicks()
+        subs.add(suggestionAdapter.clicks()
                 .doOnNext {
                     searchPerformed(getSearchUrl(if (it is HistorySuggestionItem) it.subTitle else it.title))
                 }.subscribe())
 
-        searchPresenter.registerSearch(RxTextView.textChangeEvents(msv_edit_text)
+        searchPresenter.registerSearch(RxTextView.textChangeEvents(msvEditText)
                 .filter { it != null }
                 .map { it.text().toString() })
     }
 
     override fun onFinishInflate() {
         super.onFinishInflate()
-        msv_edit_text?.setOnClickListener { performClick() }
-        msv_edit_text?.setOnFocusChangeListener { _, hasFocus ->
+        msvEditText?.setOnClickListener { performClick() }
+        msvEditText?.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 gainFocus()
             } else {
                 loseFocus(null)
             }
         }
-        msv_edit_text?.setOnEditorActionListener { _, actionId, _ ->
+        msvEditText?.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == IME_ACTION_SEARCH) {
                 searchPerformed(url)
                 return@setOnEditorActionListener true
             }
             false
         }
-        msv_edit_text?.addTextChangedListener(object : TextWatcher {
+        msvEditText?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
 
             }
@@ -176,12 +172,12 @@ class MaterialSearchView : MvpRelativeLayout<Search.View, Search.Presenter>, Sea
             }
         })
 
-        msv_left_icon?.setImageDrawable(menuIcon)
+        msvLeftIcon?.setImageDrawable(menuIcon)
 
-        msv_right_icon?.setImageDrawable(voiceIcon)
-        msv_right_icon?.setOnClickListener {
+        msvRightIcon?.setImageDrawable(voiceIcon)
+        msvRightIcon?.setOnClickListener {
             if (clearText) {
-                msv_edit_text?.setText("")
+                msvEditText?.setText("")
                 clearFocus()
             } else {
                 if (Utils.isVoiceRecognizerPresent(context)) {
@@ -192,21 +188,19 @@ class MaterialSearchView : MvpRelativeLayout<Search.View, Search.Presenter>, Sea
             }
         }
 
-        setOnClickListener { if (!msv_edit_text!!.hasFocus()) gainFocus() }
+        setOnClickListener { if (!msvEditText!!.hasFocus()) gainFocus() }
     }
 
-    override fun getMvpDelegate(): ViewGroupMvpDelegate<Search.View, Search.Presenter> {
-        if (mvpDelegate == null) {
-            mvpDelegate = ViewGroupMvpDelegateImpl<Search.View, Search.Presenter>(this, this, false)
-        }
-        return mvpDelegate
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        searchPresenter.takeView(this)
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         viewComponent = null
-        searchPresenter.onDestroy()
-        compositeSubs.clear()
+        searchPresenter.cleanUp()
+        subs.clear()
     }
 
     override fun clearFocus() {
@@ -214,8 +208,8 @@ class MaterialSearchView : MvpRelativeLayout<Search.View, Search.Presenter>, Sea
     }
 
     override fun hasFocus(): Boolean {
-        return if (msv_edit_text != null) {
-            msv_edit_text.hasFocus() && super.hasFocus()
+        return if (msvEditText != null) {
+            msvEditText.hasFocus() && super.hasFocus()
         } else super.hasFocus()
     }
 
@@ -254,7 +248,7 @@ class MaterialSearchView : MvpRelativeLayout<Search.View, Search.Presenter>, Sea
 
     private fun loseFocus(endAction: (() -> Unit)?) {
         setNormalColor()
-        msv_edit_text.text = null
+        msvEditText.text = null
         hideKeyboard()
         hideSuggestions()
         endAction?.invoke()
@@ -266,21 +260,21 @@ class MaterialSearchView : MvpRelativeLayout<Search.View, Search.Presenter>, Sea
     }
 
     private fun setFocusedColor() {
-        msv_left_icon?.setImageDrawable(menuIcon.color(focusedColor))
-        msv_right_icon?.setImageDrawable(voiceIcon.color(focusedColor))
+        msvLeftIcon?.setImageDrawable(menuIcon.color(focusedColor))
+        msvRightIcon?.setImageDrawable(voiceIcon.color(focusedColor))
     }
 
     private fun setNormalColor() {
-        msv_left_icon?.setImageDrawable(menuIcon.color(normalColor))
-        msv_right_icon?.setImageDrawable(voiceIcon.color(normalColor))
+        msvLeftIcon?.setImageDrawable(menuIcon.color(normalColor))
+        msvRightIcon?.setImageDrawable(voiceIcon.color(normalColor))
     }
 
     private fun handleVoiceIconState() {
-        clearText = !TextUtils.isEmpty(msv_edit_text?.text) || suggestionAdapter.itemCount != 0
+        clearText = !TextUtils.isEmpty(msvEditText?.text) || suggestionAdapter.itemCount != 0
         if (clearText) {
-            msv_right_icon?.setImageDrawable(xIcon.color(if (msv_edit_text!!.hasFocus()) focusedColor else normalColor))
+            msvRightIcon?.setImageDrawable(xIcon.color(if (msvEditText!!.hasFocus()) focusedColor else normalColor))
         } else {
-            msv_right_icon?.setImageDrawable(voiceIcon.color(if (msv_edit_text!!.hasFocus()) focusedColor else normalColor))
+            msvRightIcon?.setImageDrawable(voiceIcon.color(if (msvEditText!!.hasFocus()) focusedColor else normalColor))
         }
     }
 

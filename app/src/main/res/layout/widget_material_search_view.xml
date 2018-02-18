@@ -60,7 +60,7 @@
                 android:weightSum="1">
 
                 <ImageView
-                    android:id="@+id/msv_left_icon"
+                    android:id="@+id/msvLeftIcon"
                     android:layout_width="42dp"
                     android:layout_height="42dp"
                     android:layout_gravity="center_vertical"
@@ -72,7 +72,7 @@
                     tools:src="@drawable/ic_action_amp_icon" />
 
                 <EditText
-                    android:id="@+id/msv_edit_text"
+                    android:id="@+id/msvEditText"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
@@ -89,7 +89,7 @@
                     android:textSize="18sp" />
 
                 <ImageView
-                    android:id="@+id/msv_right_icon"
+                    android:id="@+id/msvRightIcon"
                     android:layout_width="42dp"
                     android:layout_height="42dp"
                     android:layout_gravity="center_vertical"

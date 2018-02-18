@@ -21,35 +21,56 @@ package arun.com.chromer.search.view
 import arun.com.chromer.di.scopes.PerView
 import arun.com.chromer.search.suggestion.SuggestionsEngine
 import arun.com.chromer.search.suggestion.items.SuggestionItem
-import arun.com.chromer.shared.base.Base
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
+import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
+import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 /**
  * Created by arunk on 12-12-2017.
  */
 interface Search {
-    interface View : Base.View {
+    interface View {
         fun setSuggestions(suggestionItems: List<SuggestionItem>)
     }
 
     @PerView
     class Presenter @Inject
-    constructor(private val suggestionsEngine: SuggestionsEngine) : Base.Presenter<View>() {
+    constructor(private val suggestionsEngine: SuggestionsEngine) {
+        private var viewRef: WeakReference<Search.View>? = null
 
-        fun registerSearch(stringObservable: Observable<String>) {
-            subs.add(stringObservable
+        internal var view: Search.View? = null
+            get() = viewRef?.get()
+
+        private val subs = CompositeSubscription()
+
+        fun registerSearch(queryObservable: Observable<String>) {
+            subs.add(queryObservable
                     .subscribeOn(AndroidSchedulers.mainThread())
                     .compose(suggestionsEngine.suggestionsTransformer())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnNext { suggestionItems ->
-                        if (isViewAttached) {
-                            view.setSuggestions(suggestionItems)
-                        }
-                    }.doOnError(Timber::e)
+                    .doOnNext { suggestionItems -> view?.setSuggestions(suggestionItems) }
+                    .doOnError(Timber::e)
                     .subscribe())
+        }
+
+        fun takeView(view: Search.View) {
+            Timber.d("Took view $view")
+            viewRef?.clear()
+            viewRef = WeakReference(view)
+        }
+
+        fun detachView() {
+            Timber.d("View detached")
+            viewRef?.clear()
+            viewRef = null
+        }
+
+        fun cleanUp() {
+            detachView()
+            subs.clear()
         }
     }
 }
