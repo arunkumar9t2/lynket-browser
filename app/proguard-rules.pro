@@ -15,6 +15,8 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-optimizations !code/simplification/cast,!code/simplification/advanced,!field/*,!class/merging/*,!method/removal/parameter,!method/propagation/parameter
+
 -dontwarn sun.misc.Unsafe
 -assumenosideeffects class kotlin.jvm.internal.Intrinsics {
     static void checkParameterIsNotNull(java.lang.Object, java.lang.String);
@@ -23,10 +25,10 @@
     <fields>;
 }
 
--keepclassmembers class * implements android.os.Parcelable {
-  public static final android.os.Parcelable$Creator CREATOR;
-}
+# Parcelables
+-keep class * implements android.os.Parcelable{ *; }
 
+# Glide
 -keep class arun.com.chromer.util.glide.*
 -keep public class * implements com.bumptech.glide.module.GlideModule
 -keep public class * extends com.bumptech.glide.module.AppGlideModule
@@ -34,6 +36,8 @@
     **[] $VALUES;
     public *;
 }
+
+# Http
 -keep class org.apache.http.** { *; }
 -dontwarn org.apache.http.**
 -keep class android.net.http.** { *; }
@@ -57,9 +61,6 @@
 -dontwarn edu.umd.cs.findbugs.annotations.SuppressFBWarnings
 
 -keep public class * extends java.lang.Exception
-
--keep class com.crashlytics.** { *; }
--dontwarn com.crashlytics.**
 
 -keep class rx.schedulers.Schedulers {
     public static <methods>;

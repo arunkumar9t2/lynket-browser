@@ -33,15 +33,15 @@ inline fun <T> LiveData<T>.watch(owner: LifecycleOwner, crossinline observer: (T
 }
 
 
-inline fun <T> LiveData<T>.observeUntilOnDestroy(activity: Activity?, crossinline observer: (T?) -> Unit) {
+inline fun <T> LiveData<T>.observeUntilOnDestroy(sourceActivity: Activity?, crossinline observer: (T?) -> Unit) {
     val valueObserver: Observer<T> = Observer {
         observer(it)
     }
     this.observeForever(valueObserver)
-    activity?.application?.registerActivityLifecycleCallbacks(object : ActivityLifeCycleCallbackAdapter() {
-        override fun onActivityDestroyed(callbackActivity: Activity?) {
-            if (callbackActivity == activity) {
-                callbackActivity.application?.unregisterActivityLifecycleCallbacks(this)
+    sourceActivity?.application?.registerActivityLifecycleCallbacks(object : ActivityLifeCycleCallbackAdapter() {
+        override fun onActivityDestroyed(activity: Activity?) {
+            if (activity == sourceActivity) {
+                activity.application?.unregisterActivityLifecycleCallbacks(this)
                 this@observeUntilOnDestroy.removeObserver(valueObserver)
             }
         }

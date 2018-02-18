@@ -145,14 +145,14 @@
                         android:layout_height="48dp"
                         android:layout_toEndOf="@id/fullIncognitoIcon"
                         android:layout_toRightOf="@id/fullIncognitoIcon"
-                        android:gravity="left|start"
+                        android:gravity="center|start"
+                        android:paddingEnd="56dp"
                         android:paddingRight="56dp"
                         android:text="@string/full_incognito_mode"
                         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                         android:textColor="?android:attr/textColorPrimary"
                         android:textSize="14sp"
-                        tools:ignore="RtlSymmetry"
-                        android:paddingEnd="56dp" />
+                        tools:ignore="RtlSymmetry" />
 
 
                     <android.support.v7.widget.SwitchCompat
