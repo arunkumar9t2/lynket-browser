@@ -23,6 +23,10 @@
     <fields>;
 }
 
+-keepclassmembers class * implements android.os.Parcelable {
+  public static final android.os.Parcelable$Creator CREATOR;
+}
+
 -keep class arun.com.chromer.util.glide.*
 -keep public class * implements com.bumptech.glide.module.GlideModule
 -keep public class * extends com.bumptech.glide.module.AppGlideModule
