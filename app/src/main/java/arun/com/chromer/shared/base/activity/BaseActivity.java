@@ -20,6 +20,7 @@ package arun.com.chromer.shared.base.activity;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
 import arun.com.chromer.Chromer;
@@ -52,6 +53,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Provides
         }
     }
 
+    @NonNull
     @Override
     public ActivityComponent getActivityComponent() {
         return activityComponent;

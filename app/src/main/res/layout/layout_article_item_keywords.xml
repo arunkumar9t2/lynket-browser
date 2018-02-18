@@ -17,13 +17,16 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="-32dp"
     android:orientation="vertical"
     android:paddingBottom="16dp"
     android:paddingLeft="24dp"
-    android:paddingTop="32dp">
+    android:paddingTop="32dp"
+    tools:ignore="RtlSymmetry"
+    android:paddingStart="24dp">
 
     <TextView
         android:id="@+id/keywordsTitle"

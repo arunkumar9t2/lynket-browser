@@ -45,14 +45,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:layout_marginStart="12dp">
 
             <LinearLayout
                 android:id="@+id/websiteTabTypeLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                tools:ignore="UseCompoundDrawables">
 
                 <ImageView
                     android:id="@+id/websiteTabModeIcon"
@@ -72,7 +74,9 @@
                     android:gravity="center|start"
                     android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                     android:textSize="11sp"
-                    tools:text="@string/title_tabs" />
+                    tools:text="@string/title_tabs"
+                    android:layout_marginStart="4dp"
+                    tools:ignore="SmallSp" />
             </LinearLayout>
 
             <TextView

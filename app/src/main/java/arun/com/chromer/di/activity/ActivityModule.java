@@ -29,6 +29,7 @@ import dagger.Provides;
 @Module
 public class ActivityModule {
 
+    @SuppressWarnings("CanBeFinal")
     private Activity activity;
 
     public ActivityModule(Activity activity) {

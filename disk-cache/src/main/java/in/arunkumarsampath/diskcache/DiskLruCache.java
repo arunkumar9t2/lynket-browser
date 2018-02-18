@@ -218,6 +218,7 @@ public final class DiskLruCache implements Closeable {
             File journalFile = new File(directory, JOURNAL_FILE);
             // If journal file also exists just delete backup file.
             if (journalFile.exists()) {
+                //noinspection ResultOfMethodCallIgnored
                 backupFile.delete();
             } else {
                 renameTo(backupFile, journalFile, false);
@@ -243,6 +244,7 @@ public final class DiskLruCache implements Closeable {
         }
 
         // Create a new empty cache.
+        //noinspection ResultOfMethodCallIgnored
         directory.mkdirs();
         cache = new DiskLruCache(directory, appVersion, valueCount, maxSize);
         cache.rebuildJournal();
@@ -388,6 +390,7 @@ public final class DiskLruCache implements Closeable {
             renameTo(journalFile, journalFileBackup, true);
         }
         renameTo(journalFileTmp, journalFile, false);
+        //noinspection ResultOfMethodCallIgnored
         journalFileBackup.delete();
 
         journalWriter = new BufferedWriter(
@@ -545,6 +548,7 @@ public final class DiskLruCache implements Closeable {
             if (success) {
                 if (dirty.exists()) {
                     File clean = entry.getCleanFile(i);
+                    //noinspection ResultOfMethodCallIgnored
                     dirty.renameTo(clean);
                     long oldLength = entry.lengths[i];
                     long newLength = clean.length();
@@ -816,6 +820,7 @@ public final class DiskLruCache implements Closeable {
                     outputStream = new FileOutputStream(dirtyFile);
                 } catch (FileNotFoundException e) {
                     // Attempt to recreate the cache directory.
+                    //noinspection ResultOfMethodCallIgnored
                     directory.mkdirs();
                     try {
                         outputStream = new FileOutputStream(dirtyFile);

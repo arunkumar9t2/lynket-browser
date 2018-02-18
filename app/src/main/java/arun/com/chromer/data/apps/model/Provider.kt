@@ -11,5 +11,4 @@ data class Provider(
         var iconUri: Uri,
         var installed: Boolean = false,
         var features: CharSequence = ""
-) {
-}
+)

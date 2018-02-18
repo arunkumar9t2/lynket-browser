@@ -18,15 +18,14 @@
 
 package arun.com.chromer.about
 
+import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -35,10 +34,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-
-import com.mikepenz.community_material_typeface_library.CommunityMaterial
-import com.mikepenz.iconics.IconicsDrawable
-
 import arun.com.chromer.BuildConfig
 import arun.com.chromer.R
 import arun.com.chromer.about.changelog.Changelog
@@ -47,9 +42,9 @@ import arun.com.chromer.shared.Constants
 import arun.com.chromer.util.glide.GlideApp
 import butterknife.BindView
 import butterknife.ButterKnife
-import butterknife.OnClick
 import butterknife.Unbinder
-import com.bumptech.glide.Glide
+import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.mikepenz.iconics.IconicsDrawable
 
 /**
  * Created by Arun on 11/11/2015.
@@ -65,7 +60,7 @@ class AboutFragment : Fragment() {
     @JvmField
     var creditsRv: RecyclerView? = null
 
-    var unBinder: Unbinder? = null
+    private var unBinder: Unbinder? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_about, container, false)
@@ -334,6 +329,7 @@ class AboutFragment : Fragment() {
         private val patrykProfileImg = "https://lh3.googleusercontent.com/hZdzG3b5epdGAOtQQgwSwBEeGqbIbQGg68lTD7Nvp2caLJ0CeIRksMII52Q8J6SwZbWcbFRCiNYg2ss=w384-h383-rw-no"
         private val maxImg = "https://lh3.googleusercontent.com/lJn5h7sLkNMBlQwbZsyZyPrp0JNv8woEtX0hLg1o1uLmMri1VkVN10DM2XJkI4owV5u5MS5ABPbQ4s4=s1024-rw-no"
 
+        @SuppressLint("SetTextI18n")
         override fun onBindViewHolder(holder: ItemHolder, position: Int) {
             when (items[position]) {
                 patryk -> {

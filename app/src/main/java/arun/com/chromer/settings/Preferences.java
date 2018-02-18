@@ -401,6 +401,7 @@ public class Preferences {
         getDefaultSharedPreferences().edit().putBoolean(PER_APP_SETTINGS, preference).apply();
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean mergeTabs() {
         return Utils.isLollipopAbove() && getDefaultSharedPreferences().getBoolean(MERGE_TABS_AND_APPS, false);
     }
@@ -409,6 +410,7 @@ public class Preferences {
         getDefaultSharedPreferences().edit().putBoolean(MERGE_TABS_AND_APPS, preference).apply();
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean bottomBar() {
         return getDefaultSharedPreferences().getBoolean(BOTTOM_BAR_ENABLED, false);
     }

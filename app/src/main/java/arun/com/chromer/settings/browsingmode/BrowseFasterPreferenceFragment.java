@@ -34,9 +34,6 @@ import arun.com.chromer.settings.widgets.IconSwitchPreference;
 
 public class BrowseFasterPreferenceFragment extends BasePreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private IconSwitchPreference articleModePreference;
-    private IconSwitchPreference ampModePreference;
-
     private MaterialDialog dialog;
 
     public BrowseFasterPreferenceFragment() {
@@ -59,7 +56,7 @@ public class BrowseFasterPreferenceFragment extends BasePreferenceFragment imple
     }
 
     private void setupArticlePreference() {
-        articleModePreference = (IconSwitchPreference) findPreference(Preferences.ARTICLE_MODE);
+        IconSwitchPreference articleModePreference = (IconSwitchPreference) findPreference(Preferences.ARTICLE_MODE);
         if (articleModePreference != null) {
             final Drawable articleImg = new IconicsDrawable(getActivity())
                     .icon(CommunityMaterial.Icon.cmd_file_document)
@@ -75,7 +72,7 @@ public class BrowseFasterPreferenceFragment extends BasePreferenceFragment imple
     }
 
     private void setupAmpPreference() {
-        ampModePreference = (IconSwitchPreference) findPreference(Preferences.AMP_MODE);
+        IconSwitchPreference ampModePreference = (IconSwitchPreference) findPreference(Preferences.AMP_MODE);
         if (ampModePreference != null) {
             ampModePreference.setIcon(R.drawable.ic_action_amp_icon);
             ampModePreference.setOnPreferenceChangeListener((preference, newValue) -> {

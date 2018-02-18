@@ -67,8 +67,7 @@ public class SecondaryBrowserReceiver extends BroadcastReceiver {
         Timber.d("Attempting to launch activity with iteration");
         final Intent webIntentImplicit = new Intent(ACTION_VIEW, Uri.parse(url));
         webIntentImplicit.setFlags(FLAG_ACTIVITY_NEW_TASK);
-        @SuppressLint("InlinedApi")
-        final List<ResolveInfo> resolvedActivityList = context.getPackageManager().queryIntentActivities(webIntentImplicit, PackageManager.MATCH_ALL);
+        @SuppressLint("InlinedApi") final List<ResolveInfo> resolvedActivityList = context.getPackageManager().queryIntentActivities(webIntentImplicit, PackageManager.MATCH_ALL);
         final String secondaryPackage = Preferences.get(context).secondaryBrowserPackage();
         if (secondaryPackage != null) {
             boolean found = false;

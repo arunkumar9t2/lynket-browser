@@ -53,7 +53,7 @@ import javax.inject.Inject
 /**
  * Created by Arunkumar on 07-04-2017.
  */
-class HomeFragment : BaseFragment() {
+class HomeFragment : BaseFragment(), Snackable {
     @Inject
     lateinit var recentsAdapter: RecentsAdapter
     @Inject
@@ -103,11 +103,11 @@ class HomeFragment : BaseFragment() {
         }
     }
 
-    fun snack(message: String) {
+    override fun snack(message: String) {
         (activity as Snackable).snack(message)
     }
 
-    fun snackLong(message: String) {
+    override fun snackLong(message: String) {
         (activity as Snackable).snackLong(message)
     }
 

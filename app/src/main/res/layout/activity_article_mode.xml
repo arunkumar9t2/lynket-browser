@@ -109,6 +109,7 @@
                             android:layout_height="48dp"
                             android:layout_marginLeft="16dp"
                             android:layout_marginRight="8dp"
+                            android:contentDescription="@string/text_size"
                             android:scaleType="fitCenter"
                             tools:ignore="RtlHardcoded" />
 

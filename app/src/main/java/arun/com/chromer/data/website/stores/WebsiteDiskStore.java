@@ -149,6 +149,7 @@ public class WebsiteDiskStore implements WebsiteStore, BookStore {
         });
     }
 
+    @NonNull
     @Override
     public Pair<Bitmap, Integer> getWebsiteIconAndColor(@NonNull Website website) {
         return EMPTY_ICON_COLOR_PAIR;

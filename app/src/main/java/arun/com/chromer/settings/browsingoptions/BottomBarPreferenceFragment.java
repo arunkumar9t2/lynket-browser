@@ -57,16 +57,6 @@ public class BottomBarPreferenceFragment extends BasePreferenceFragment implemen
                 .icon(CommunityMaterial.Icon.cmd_more)
                 .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
                 .sizeDp(24));
-        bottomBarPreference.setOnPreferenceChangeListener((preference, newValue) -> {
-            if ((Boolean) newValue) {
-               /* new MaterialDialog.Builder(getActivity())
-                        .title(R.string.warning)
-                        .content(R.string.bottom_bar_crash_warning)
-                        .positiveText(android.R.string.ok)
-                        .show();*/
-            }
-            return true;
-        });
     }
 
     @Override

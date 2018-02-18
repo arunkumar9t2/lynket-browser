@@ -18,9 +18,7 @@
 
 package arun.com.chromer.intro.fragments
 
-import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import arun.com.chromer.R
 import arun.com.chromer.data.website.model.Website

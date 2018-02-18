@@ -525,6 +525,7 @@ public abstract class BaseWebHead extends FrameLayout {
                     FLAG_NOT_FOCUSABLE | FLAG_LAYOUT_NO_LIMITS | FLAG_HARDWARE_ACCELERATED,
                     TRANSLUCENT);
         } else
+            //noinspection deprecation
             return new WindowManager.LayoutParams(
                     WRAP_CONTENT,
                     WRAP_CONTENT,

@@ -58,7 +58,6 @@ public class ChromerOptionsActivity extends BaseActivity {
     RecyclerView menuList;
     @BindView(R.id.more_menu_card)
     CardView moreMenuCard;
-    private MenuListAdapter adapter;
     private boolean fromArticle;
 
     @Inject
@@ -69,7 +68,7 @@ public class ChromerOptionsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         fromArticle = getIntent().getBooleanExtra(EXTRA_KEY_FROM_ARTICLE, false);
         menuList.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MenuListAdapter();
+        MenuListAdapter adapter = new MenuListAdapter();
         menuList.setAdapter(adapter);
     }
 

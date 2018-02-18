@@ -32,6 +32,7 @@ import dagger.Provides;
 @Module(includes = ViewModelModule.class)
 public class AppModule {
 
+    @SuppressWarnings("CanBeFinal")
     Application application;
 
     public AppModule(Application application) {

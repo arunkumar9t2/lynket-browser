@@ -93,7 +93,7 @@ internal class ArticleAdapter(
     init {
         textSizeIncrementSp = articleTextSizeIncrement
     }
-    
+
     fun setAccentColor(accentColor: Int) {
         this.accentColor = accentColor
         notifyDataSetChanged()

@@ -68,7 +68,7 @@
         android:id="@+id/badge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|left"
+        android:layout_gravity="top|start"
         android:elevation="9.4dp"
         android:gravity="center"
         android:scaleType="fitCenter"

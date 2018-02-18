@@ -284,6 +284,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         } else {
             websiteObservable = websiteRepository.getIncognitoWebsite(webHeadUrl);
         }
+        //noinspection Convert2MethodRef
         subs.add(websiteObservable
                 .filter(website -> website != null)
                 .compose(SchedulerProvider.applyIoSchedulers())

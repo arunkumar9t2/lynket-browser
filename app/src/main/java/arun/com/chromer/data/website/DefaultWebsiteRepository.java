@@ -78,6 +78,7 @@ public class DefaultWebsiteRepository implements WebsiteRepository {
                     }
                 });
 
+        //noinspection Convert2MethodRef
         final Observable<Website> remote = webNetworkStore.getWebsite(url)
                 .filter(webSite -> webSite != null)
                 .doOnNext(webSite -> {
@@ -85,6 +86,7 @@ public class DefaultWebsiteRepository implements WebsiteRepository {
                     historyRepository.insert(webSite).subscribe();
                 });
 
+        //noinspection Convert2MethodRef
         return Observable.concat(cache, history, remote)
                 .first(webSite -> webSite != null)
                 .doOnError(Timber::e)
@@ -101,10 +103,12 @@ public class DefaultWebsiteRepository implements WebsiteRepository {
     public Observable<Website> getIncognitoWebsite(@NonNull final String url) {
         final Observable<Website> cache = cacheStore.getWebsite(url);
 
+        //noinspection Convert2MethodRef
         final Observable<Website> remote = webNetworkStore.getWebsite(url)
                 .filter(webSite -> webSite != null)
                 .doOnNext(webSite -> cacheStore.saveWebsite(webSite).subscribe());
 
+        //noinspection Convert2MethodRef
         return Observable.concat(cache, remote)
                 .first(webSite -> webSite != null)
                 .doOnError(Timber::e)

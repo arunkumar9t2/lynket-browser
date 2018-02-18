@@ -79,7 +79,7 @@
                         android:text="@string/title_history"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         android:textSize="16sp"
-                        tools:ignore="RtlHardcoded,RtlSymmetry" />
+                        tools:ignore="RelativeOverlap,RtlHardcoded,RtlSymmetry" />
 
                     <TextView
                         android:id="@+id/enableHistorySubtitle"
@@ -122,7 +122,8 @@
                     android:paddingBottom="8dp"
                     android:paddingEnd="8dp"
                     android:paddingRight="8dp"
-                    android:paddingTop="8dp">
+                    android:paddingTop="8dp"
+                    tools:ignore="RtlSymmetry">
 
                     <ImageView
                         android:id="@+id/fullIncognitoIcon"
@@ -144,12 +145,14 @@
                         android:layout_height="48dp"
                         android:layout_toEndOf="@id/fullIncognitoIcon"
                         android:layout_toRightOf="@id/fullIncognitoIcon"
-                        android:gravity="left|center"
+                        android:gravity="left|start"
                         android:paddingRight="56dp"
                         android:text="@string/full_incognito_mode"
                         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                         android:textColor="?android:attr/textColorPrimary"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        tools:ignore="RtlSymmetry"
+                        android:paddingEnd="56dp" />
 
 
                     <android.support.v7.widget.SwitchCompat

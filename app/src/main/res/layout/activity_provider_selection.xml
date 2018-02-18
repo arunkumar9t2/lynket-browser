@@ -78,7 +78,8 @@
                             android:layout_marginRight="16dp"
                             android:padding="2dp"
                             android:scaleType="fitCenter"
-                            tools:src="@drawable/arun" />
+                            tools:src="@drawable/arun"
+                            android:layout_marginEnd="16dp" />
 
                         <LinearLayout
                             android:layout_width="0dp"

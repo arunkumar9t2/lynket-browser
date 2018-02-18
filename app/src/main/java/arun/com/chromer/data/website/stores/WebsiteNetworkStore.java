@@ -94,6 +94,7 @@ public class WebsiteNetworkStore implements WebsiteStore {
         return Observable.empty();
     }
 
+    @NonNull
     @Override
     public Pair<Bitmap, Integer> getWebsiteIconAndColor(@NonNull Website website) {
         if (TextUtils.isEmpty(website.faviconUrl)) {

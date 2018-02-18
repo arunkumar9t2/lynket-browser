@@ -1,5 +1,6 @@
 package arun.com.chromer.data.apps
 
+import arun.com.chromer.data.apps.model.Provider
 import arun.com.chromer.data.apps.store.AppStore
 import arun.com.chromer.data.common.App
 import rx.Observable
@@ -11,6 +12,9 @@ import javax.inject.Singleton
  */
 @Singleton
 class MockAppSystemStore @Inject constructor() : AppStore {
+    override fun allProviders(): Observable<List<Provider>> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     override fun removeIncognito(packageName: String): Observable<App> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

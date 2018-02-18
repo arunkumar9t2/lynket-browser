@@ -54,5 +54,6 @@
         android:paddingRight="16dp"
         android:text="@string/about"
         android:textColor="@color/material_dark_light"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        tools:ignore="RtlSymmetry" />
 </RelativeLayout>

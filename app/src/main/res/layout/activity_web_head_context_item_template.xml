@@ -28,7 +28,7 @@
     android:orientation="horizontal"
     android:padding="10dp"
     android:paddingLeft="15dp"
-    tools:ignore="Overdraw,RtlHardcoded">
+    tools:ignore="Overdraw,RtlHardcoded,RtlSymmetry">
 
     <ImageView
         android:id="@+id/web_site_icon"

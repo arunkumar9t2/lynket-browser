@@ -45,7 +45,7 @@
         <item>Pequeño</item>
     </string-array>
     <string name="share_text">¡Oye mira \'Chromer \' para una rápida y segura experiencia de navegación! Descarguela aquí https://goo.gl/992ils</string>
-    <string name="share_via">"Compartir vía... "</string>
+    <string name="share_via">"Compartir vía… "</string>
     <string name="custom_tab_provider_not_found">Proveedor compatible de pestañas personalizadas no encontrado</string>
     <string name="custom_tab_provider_not_found_expln">Chromer necesita que tenga instalado algún navegador compatible con pestañas personalizadas en su teléfono. Actualmente no hay navegadores en su teléfono que lo soporten. ¿Le gustaría instalar Google Chrome (gratis) desde Play store? Si ya lo tiene, por favor actualizelo a la última versión.</string>
     <string name="custom_tab_provider_not_found_dialog_content"><![CDATA[No se pudo encontrar ningun navegador de pestañas personalizadas compatible en su teléfono. Se recomienda Google Chrome (Gratuito). Puede seguir viendo páginas web dentro de Chromer y usar el modo Artículo, pero para una mejor experiencia, se recomienda encarecidamente un proveedor de pestañas personalizado. ¿Te gustaría instalarlo ahora?]]></string>
@@ -58,9 +58,9 @@
     <string name="rate_play_store">Califiqué en Play Store</string>
     <string name="feedback">Su opinión</string>
     <string name="intro">Introducción</string>
-    <string name="send_email">"Enviar correo electrónico... "</string>
+    <string name="send_email">"Enviar correo electrónico… "</string>
     <string name="fallback_msg">No se pudo abrir la pestaña personalizada, volviendo a los navegadores normales</string>
-    <string name="open_with">Abrir con...</string>
+    <string name="open_with">Abrir con…</string>
     <string name="open_in_browser">Abrir en %1$s</string>
     <string name="unxp_err">"Error inesperado, vuelve a intentarlo "</string>
     <string name="unsupported_link">No es un vínculo compatible, Vuelve a intentarlo.</string>
@@ -138,7 +138,7 @@
     <string name="join_beta">Apúntese a la beta</string>
     <string name="become_a_tester">Conviértase en tester</string>
     <string name="no_voice_rec_apps">No se encontraron aplicaciones de reconocimiento de voz compatibles</string>
-    <string name="loading">Cargando...</string>
+    <string name="loading">Cargando…</string>
     <string name="last_fetched_urls">Últimas urls buscadas</string>
     <string name="translations">Traducciones</string>
     <string name="merge_tabs">Mezclar pestañas y aplicaciones</string>

@@ -170,11 +170,8 @@ constructor(
 
                             val urlMatches = url != null && website.matches(url)
 
-                            val taskComponentMatches = if (activityNames != null) {
-                                activityNames.contains(componentClassName)
-                            } else {
-                                allBrowsingActivitiesName.contains(componentClassName)
-                            }
+                            val taskComponentMatches = activityNames?.contains(componentClassName)
+                                    ?: allBrowsingActivitiesName.contains(componentClassName)
 
                             if (taskComponentMatches && urlMatches) {
                                 foundAction(task)

@@ -20,6 +20,7 @@ package arun.com.chromer.shared.base.activity;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 
 import com.hannesdorfmann.mosby3.mvp.MvpActivity;
 
@@ -63,6 +64,7 @@ public abstract class BaseMVPActivity<V extends Base.View, P extends Base.Presen
         }
     }
 
+    @NonNull
     @Inject
     public ActivityComponent getActivityComponent() {
         return activityComponent;
