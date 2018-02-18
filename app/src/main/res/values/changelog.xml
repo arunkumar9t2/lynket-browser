@@ -87,6 +87,7 @@ a {
     <li><b>IMPROVED: </b> Stability of web heads has been improved. Minor UI fixes. Change More menu name to "Chromer Options" for better clarity</li>
     <li><b>IMPROVED: </b> Sync translations</li>
 </ul>
+<hr>
 <strong>1.7.2</strong>
 <ul>
     <li><b>NEW: </b> Home screen UI with bottom bar.</li>
@@ -96,6 +97,7 @@ a {
     <li><b>NEW: </b> AMP indicator in history to show if there is an AMP version available, tapping this would launch the AMP version.</li>
     <li><b>FIXES: </b> Old website reuse bug, crash fixes, duplicate history entries.</li>
 </ul>
+<hr>
 <strong>1.7</strong>
 <h4 class="list-heading">New browsing modes!</h3>
 <ul>
@@ -122,6 +124,7 @@ a {
     <li><b>IMPROVED: </b>Performance improvements in many areas, related to storage.</li>
     <li><b>MISC: </b>Removed screen scanning option.</li>
 </ul>
+<hr>
 <strong>1.6.3</strong>
 <ul>
     <li><b>NEW:</b>Pressing new tab in bottom bar will show a dialog instead of automatically opening the link.</li>
@@ -129,6 +132,7 @@ a {
     <li>Crash fixes.</li>
     <li>Synced translations</li>
 </ul>
+<hr>
 <strong>1.6.2</strong>
 <ul>
     <li><b>NEW:</b>Open with menu item. Provides ability to open link in any browser when viewing.</li>
@@ -140,6 +144,7 @@ a {
     <li><b>IMPROVED:</b> Share all has now has two different modes - multiple and csv. Can share to more apps now.</li>
     <li><b>FIX:</b> CCT not launching when setting certain apps like Instapaper as favorite share app.</li>
 </ul>
+<hr>
 <strong>1.6.1</strong>
 <a href="https://goo.gl/photos/BzRV69ABov9zJxVu9">  View album</a>
 <ul>
@@ -150,6 +155,7 @@ a {
     <li><b>IMPROVED:</b> Translation updates.</li>
     <li><b>FIX:</b> Dynamic toolbar issues.</li>
 </ul>
+<hr>
 <strong>1.6</strong>
 <h4 class="list-heading">Web heads</h3>
 <ul>
@@ -183,6 +189,7 @@ a {
     <li><b>IMPROVED:</b> Many bug fixes and performance improvements.</li>
 </ul>
 <br></br>
+<hr>
 <strong>1.5.5.1</strong>
 <ul>
     <li><b>NEW:</b> Configure animation speed, choose between medium and short.</li>
@@ -190,6 +197,7 @@ a {
     <li><b>FIX:</b> Open in Chrome not working if Merge Tabs and Apps in Chrome was on.</li>
     <li><b>FIX:</b> Blacklist FC.</li>
 </ul>
+<hr>
 <strong>1.5.5</strong>
 <ul>
     <li><b>FIX:</b> Pre-fetching crash fixes for Samsung devices.</li>
@@ -199,6 +207,7 @@ a {
     <li><b>FIX:</b> Open in Chrome menu taking to Chrome home screen.</li>
     <li><b>IMPROVED:</b> Faster custom tab opening animation.</li>
 </ul>
+<hr>
 <strong>1.5.4</strong>
 <ul>
     <li><b>NEW:</b> Blacklisting: ability to launch your secondary browser instead of Chromer in certain apps.</li>
@@ -213,11 +222,13 @@ a {
     <li><b>FIX:</b> Secondary browser opening link twice.</li>
     <li><b>FIX:</b> Major optimizations and memory leak fixes.</li>
 </ul>
+<hr>
 <strong>1.5.3</strong>
 <ul>
     <li><b>FIX:</b> Chromer not shown in recents on some devices.</li>
     <li><b>FIX:</b> Crashes and minor bugs.</li>
 </ul>
+<hr>
 <strong>1.5.2</strong>
 <ul>
     <li><b>NEW:</b> Option to join beta program. Please join if you would like to contribute to Chromer\'s development.</li>
@@ -226,6 +237,7 @@ a {
     <li><b>FIX:</b> Open in Chromer is shown in Chrome beta and dev versions. Now a separate Open in Chrome will be shown.</li>
     <li><b>FIX:</b> Crashes and minor bugs.</li>
 </ul>
+<hr>
 <strong>1.5.1</strong>
 <ul>
     <li><b>NEW:</b> Ability to choose color of web heads.</li>
@@ -238,6 +250,7 @@ a {
     <li><b>FIX:</b> Chromer settings appearing randomly when closing custom tabs.</li>
     <li><b>FIX:</b> For 6.0+, re ask permission to draw on other apps if it was revoked with webheads turned on.</li>
 </ul>
+<hr>
 <strong>1.5</strong>
 <ul>
     <li><b>NEW: WEBHEADS -</b> Ability to stack multiple links in floating bubbles and open them later. See the separate Intro in main screen.</li>
@@ -252,10 +265,12 @@ a {
     <li><b>IMPROVED:</b> Reduced memory consumptions and general crash fixes</li>
     <li><b>IMPROVED:</b> UI layout changes</li>
 </ul>
+<hr>
 <strong>1.4.1</strong>
 <ul>
     <li>Rewritten affected code to avoid potential license violations.</li>
 </ul>
+<hr>
 <strong>1.4</strong>
 <ul>
     <li><b>NEW:</b> Pre fetching. Chromer can scan links on screen and pre load them in background for you.</li>
@@ -267,6 +282,7 @@ a {
     <li><b>IMPROVED:</b> Better setting default behaviour.</li>
     <li><b>IMPROVED:</b> Copy and share actions now target the current open page instead of first open page.</li>
 </ul>
+<hr>
 <strong>1.3</strong>
 <ul>
    <li><b>DONATE option.</b> Please donate if you like this app and to support development:)</li>
@@ -278,10 +294,12 @@ a {
    <li>Changelog screen</li>
    <li>Link to Chrome in case no custom tab provider is found</li>
 </ul>
+<hr>
 <strong>1.2.1</strong>
 <ul>
    <li>Reworked share menu. Direct share enabled for 6.0</li>
 </ul>
+<hr>
 <strong>1.2</strong>
 <ul>
    <li>Change Toolbar color to your liking.</li>
@@ -292,10 +310,12 @@ a {
    <li>Tutorial flow performance fixes.</li>
    <li>Icons and imagery updated.</li>
 </ul>
+<hr>
 <strong>1.1</strong>
 <ul>
    <li>Much requested copy and share options</li>
 </ul>
+<hr>
 <strong>1.0</strong>
 <ul>
    <li>Initial release.</li>
