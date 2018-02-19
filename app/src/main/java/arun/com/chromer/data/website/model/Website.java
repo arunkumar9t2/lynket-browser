@@ -99,8 +99,9 @@ public class Website implements Parcelable {
     public static Website Ampify(@NonNull Website from) {
         final Website website = new Website();
         website.title = from.title;
-        website.url = from.url;
-        website.ampUrl = from.hasAmp() ? from.ampUrl : from.preferredUrl();
+        final String ampUrl = from.hasAmp() ? from.ampUrl : from.url;
+        website.url = ampUrl;
+        website.ampUrl = ampUrl;
         website.canonicalUrl = from.canonicalUrl;
         website.faviconUrl = from.faviconUrl;
         website.themeColor = from.themeColor;
