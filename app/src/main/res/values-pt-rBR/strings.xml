@@ -38,7 +38,7 @@
         <item>Escuro</item>
         <item>Claro</item>
         <item>Automático</item>
-        <item>Black</item>
+        <item>Preto</item>
     </string-array>
     <string-array name="webHeadsSizeValues">
         <item>Normal</item>
@@ -126,6 +126,7 @@
     <string name="no_option_selected">Nenhuma opção selecionada</string>
     <string name="permission_required">Permissão exigida</string>
     <string name="usage_permission_explanation_appcolor">Para ativar a coloração dinâmica da barra de ações baseado nos apps, o Chromer precisa da sua permissão para saber os apps que você está usando. Conceder esta permissão agora?</string>
+    <string name="usage_permission_explanation_per_apps">Para ativar as configurações por app, o Chromer precisa da sua permissão para saber os apps que você está usando. Conceder esta permissão agora?</string>
     <string name="grant">Conceder</string>
     <string name="open_source_contributions">Material open source</string>
     <string name="search_or_type_url">Pesquise ou digite a URL</string>
@@ -139,6 +140,7 @@
     <string name="webheads_intro_1">Quando você abre um link em qualquer app, uma bolha flutuante chamada web head será criada na tela e o Chromer tentará carregar o link.</string>
     <string name="webheads_intro_2_new">Ao abrir múltiplos links, estas web heads serão automaticamente empilhadas umas sobre as outras conforme exibido. Um toque longo na web head irá abrir o menu de contexto.</string>
     <string name="webheads_intro_3">Quando você começa a arrastar uma web head, uma lixeira será exibida. Arraste a web head para a lixeira para excluí-la.</string>
+    <string name="webheads_intro_4_lolli">Carregamento em segundo plano agressivo irá carregar a página no fundo enquanto você continua a usar o app em que estas.\n<b>Uma transição de pisque pode aparecer. Isso é intencional e não um bug.</b></string>
     <string name="webheads_intro_4">O Chromer prioriza o último link aberto e o carrega previamente. O método recomendado é clicar nas web heads uma por uma de cima para baixo. Ativar fechar web heads ao lançar vai tornar isso sem igual.</string>
     <string name="web_head_permission_toast">Para abrir links em bolhas flutuantes, o Chromer precisa da permissão para desenhar sobre outros apps, por favor conceda para continuar ou desative as Web Heads nas configurações do Chromer.</string>
     <string name="tap_close_all">Toque para fechar tudo</string>
@@ -151,6 +153,8 @@
     <string name="share_failed_msg">Não foi possível compartilhar, tentando o compartilhamento normal</string>
     <string name="revoke_accessibility_permission">Agora você pode revogar a permissão de acessibilidade do Chromer.</string>
     <string name="last_fetched_urls">Últimas URLs carregadas</string>
+    <string name="per_apps_on">Configurações por app ativadas</string>
+    <string name="per_apps_off">Configurações por app desativadas</string>
     <string name="translations">Traduções</string>
     <string name="merge_tabs">Mesclar abas e apps</string>
     <string name="merge_tabs_explanation">Ver suas abas junto com outros apps na tela de apps Recentes.</string>
@@ -188,10 +192,17 @@
     <string name="web_close_on_open_desc">As web heads irão desaparecer assim que a página for aberta</string>
     <string name="web_close_on_open_title">Fechar web heads ao clicar.</string>
     <string name="minimize">Minimizar</string>
+    <string name="new_tab_action_explanation"><![CDATA[<b>Nova aba -</b> Abrir uma nova aba]]></string>
+    <string name="share_action_explanation"><![CDATA[<b>Compartilhar -</b> Execute rapidamente a ação de compartilhamento do Android.]]></string>
+    <string name="minimize_action_explanation"><![CDATA[<b>Minimizar -</b> Irá minimizar a página atual.]]></string>
+    <string name="bottom_bar_article_mode_explanation"><![CDATA[<b>Visão de artigo -</b> Abrir a página no modo Leitor de Artigo.]]></string>
+    <string name="bottom_bar_tabs_explanation"><![CDATA[<b>Abas -</b> Mostrar as abas ativas]]></string>
     <string name="available_actions">Ações disponíveis</string>
     <string name="secondary_browser_launching_error_title">Erro ao abrir o navegador secundário</string>
     <string name="launch_setting">Configurações de abertura</string>
+    <string name="secondary_browser_not_installed">Parece que o navegador secundário que você escolheu não está mais instalado em seu dispositivo. Gostaria de visitar a página de configurações para editar a preferência do navegador secundário?</string>
     <string name="secondary_browser_launch_error">Não foi possível abrir o app no navegador selecionado. Deseja editar esta configuração?</string>
+    <string name="secondary_browser_not_error">Você colocou este app na lista negra para que não intervenha mas você não definiu seu navegador secundário. Você gostaria de definir seu navegador secundário agora?</string>
     <string name="copy_all">Copiar tudo</string>
     <string name="choose_share_method">Escolha o método de compartilhamento</string>
     <string name="comma_seperated">Separados por vírgula</string>
@@ -206,6 +217,7 @@
     <string name="browsing_mode_slide_over">Deslizar por cima</string>
     <string name="browsing_mode_web_heads">Ícones flutuantes</string>
     <string name="browsing_mode_slide_over_explanation">Sites deslizam sobre o app que você está usando.</string>
+    <string name="browsing_mode_web_heads_explanation">Websites carregarão em segundo plano permitindo empilhar múltiplos links para voltar a eles mais tarde com bolhas flutuantes em sua tela.</string>
     <string name="load_faster_heading">Carregue páginas mais rápido com as opções abaixo</string>
     <string name="amp">Páginas Móveis Aceleradas (AMP)</string>
     <string name="amp_mode">Modo AMP</string>
@@ -214,6 +226,7 @@
     <string name="article_theme">Tema de artigo</string>
     <string name="article_mode_summary">Carregar um modo de leitura elegante sem nenhum extra, somente o conteúdo que interessa.</string>
     <string name="amp_warning_title">Aviso de AMP</string>
+    <string name="amp_warning_content"><![CDATA[No modo <b>Slide-over</b>, pode tomar um pequeno intervalo para obter os sites com URLs AMP. Você talvez verá um dialog enquanto isso acontece.]]></string>
     <string name="title_activity_look_and_feel">Aparência</string>
     <string name="not_available_in_slide_mode">Não disponível no modo deslizar sobre</string>
     <string name="title_activity_browsing_options">Opções de navegação</string>
@@ -229,15 +242,78 @@
     <string name="history_deletion_confirmation_content">Esta ação irá excluir todo o histórico e é irreversível.</string>
     <string name="incognito_mode">Modo incógnito</string>
     <string name="recents_intro">Links abertos recentemente aparecem aqui</string>
+    <string name="amp_article_combined_explanation"><![CDATA[Quando ambos os <b>modos AMP e Artigo estiverem ligados</b>, Chromer tentará carregar a versão AMP da página se existir. Se não, o modo artigo será carregado.]]></string>
     <string name="attention">Atenção</string>
+    <string name="tab_provider_status_message_home"><![CDATA[Usando <b>%1$s</b> para renderizar páginas.]]></string>
     <string name="manage">Gerenciar</string>
     <string name="more_menu">Mais</string>
     <string name="open_article_view">Abrir vista de artigos</string>
     <string name="browse_seamlessly">Navegação incomparável</string>
+    <string name="slide_over_explanation">Páginas deslizam encima do app em execução e você poderá apertar o X para retornar ao app rapidamente.</string>
+    <string name="overlay_missing">Seu dispositivo parece não ter a concessão padrão de overlay da tela. Por favor contate seu fabricante para solucionar isso.</string>
     <string name="home">Início</string>
     <string name="no_items_present">Nenhum item presente.</string>
     <string name="recents">Recentes</string>
     <string name="enable_history">Histórico ativado</string>
     <string name="enable_history_subtitle">Desativar o histórico irá parar a gravação de itens aqui.</string>
     <string name="enable_history_subtitle_custom_tab"><![CDATA[Desativar o histórico irá parar a gravação de itens aqui. O provedor de abas personalizado, <b>%1$s</b> ainda pode registrar algo.]]></string>
+    <string name="source">Origem</string>
+    <string name="contribute_to_chromer">Adora programar? Bifurque o Chromer e contribua.</string>
+    <string name="fork_on_github">Bifurcar no GitHub</string>
+    <string name="web_view_not_found">Web View desativado no dispositivo. Impossível abrir o link.</string>
+    <string name="app_detection_notification_channel_description">Uma notificação será exibida quando o serviço de detecção de app estiver ativo.</string>
+    <string name="app_detection_service_explanation">Monitorando apps em primeiro plano para cores dinâmicas na barra de ferramentas e configurações por app.</string>
+    <string name="app_detection_service">Serviço de detecção de app</string>
+    <string name="shortcut_name">Nome do atalho</string>
+    <string name="create_shorcut">Criar atalho</string>
+    <string name="create">Criar</string>
+    <string name="name_cannot_be_empty">O nome não pode ficar em branco</string>
+    <string name="chromer_options">Opções do Chromer</string>
+    <string name="warning">Aviso</string>
+    <string name="bottom_bar_crash_warning">Algumas versões do Chrome podem fechar forçadamente quando a barra inferior for ativada. Se for o seu caso, desative a função até que o Chrome seja corrigido por uma atualização.</string>
+    <string name="text_you_copied">Texto que você copiou</string>
+    <string name="system_webview">WebView do Sistema</string>
+    <string name="Change">Alterar</string>
+    <string name="title_tabs">Abas</string>
+    <string name="web_view">Web View</string>
+    <string name="custom_tab">Aba Personalizada</string>
+    <string name="no_active_tabs">Nenhuma aba ativa.</string>
+    <string name="new_tab_text">Nova aba</string>
+    <string name="article">Artigo</string>
+    <string name="skip">Pular</string>
+    <string name="tab_deletion_confirmation_content">Esta ação irá excluir as abas ativas e é irreversível.</string>
+    <string name="keywords">Palavras-chave</string>
+    <string name="feature_requires_lollipop">Esta função requer o Android Lollipop</string>
+    <string name="article_loading_failed">Não foi possível extrair o artigo.</string>
+    <string name="full_incognito_mode">Navegação anônima</string>
+    <string name="full_incognito_mode_explanation">Para um modo anônimo efetivo, o Chromer vai alterar para Webview para renderizar páginas. Registros não serão gravados em lugar nenhum.</string>
+    <string name="per_app_settings">Configurações por app</string>
+    <string name="per_app_settings_explanation">Configure o navegador secundário e o modo anônimo por app individualmente.</string>
+    <string name="provider_web_view_incognito_reason">Necessário para o modo anônimo. Desative o modo anônimo para escolher outro provedor.</string>
+    <string name="text_size">Tamanho do texto</string>
+    <string name="save_size_dialog_title">Salvar tamanho</string>
+    <string name="save_size_dialog_content">Gostaria de salvar este tamanho?</string>
+    <string name="choose_provider">Escolher provedor</string>
+    <string name="webViewNotRecommended">Para a sua versão do Android, não é recomendada a utilização do WebView devido a problemas com estabilidade e segurança.</string>
+    <string name="webViewPros">Motor de renderização embutido de fábrica.</string>
+    <string name="tab_providers">Provedores suportados</string>
+    <string name="use">Usar</string>
+    <string name="features">Funções</string>
+    <string name="webview_disadvantages">O WebView carece de algumas vantagens, tais como economia de dados, preenchimento automático e sincronia de histórico. Ainda deseja usar WebView como provedor?</string>
+    <string name="try_it">Testar</string>
+    <string name="slide_over_fragment_close_prompt">Pressione X para fechar a aba rapidamente</string>
+    <string name="see_demo">Ver Demo</string>
+    <string name="provider_intro_explanation">O Chromer pode funcionar com seus navegadores favoritos. \n \n Por exemplo, usar o Google Chrome como provedor te deixará sincronizar o histórico, usar economia de dados e salvar senhas na sua conta Google.</string>
+    <string name="chromer_flexible">Flexivel</string>
+    <string name="tutorial_amp_intro">O Chromer irá encontrar a carregar páginas AMP automaticamente, resultando em uma experiência mais fluida de navegação.</string>
+    <string name="illustrations_and_video">Ilustrações e Vídeo</string>
+    <string name="beta_testers">Beta testers do Google+</string>
+    <string name="tips">Dicas</string>
+    <string name="tips_description">Ver dicas para obter o melhor do Chromer</string>
+    <string name="choose_provider_tip">O Chromer suporta qualquer navegador com implementação de Abas Personalizadas. O Chromer pode herdar funções do provedor escolhido. Por exemplo, usar o Navegador Brave, irá bloquear anúncios.</string>
+    <string name="tips_secondary_browser">Você pode escolher um navegador secundário e um app de compartilhamento para abrir / compartilhar para eles rapidamente.</string>
+    <string name="tips_bottom_bar">Você pode usar a função Minimizar e Abas para um multitarefas eficiente.</string>
+    <string name="tips_article_mode">Tocando nas palavras-chave no modo artigo, uma pesquisa será feita automaticamente.</string>
+    <string name="quick_settings">Configurações rápidas</string>
+    <string name="quick_settings_tip">Você pode usar o botão do Chrome nas configurações rápidas para mudar suas preferências de navegação.</string>
 </resources>
