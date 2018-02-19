@@ -57,7 +57,18 @@ public class AppDiskStore implements AppStore, BookStore {
     @NonNull
     @Override
     public Observable<App> getApp(@NonNull final String packageName) {
-        return Observable.fromCallable(() -> getBook().read(packageName, Utils.createApp(application, packageName)));
+        return Observable.fromCallable(() -> {
+            App app = Utils.createApp(application, packageName);
+            try {
+                app = getBook().read(packageName, app);
+            } catch (Exception e) {
+                try {
+                    getBook().delete(packageName);
+                } catch (Exception ignored) {
+                }
+            }
+            return app;
+        });
     }
 
     @NonNull

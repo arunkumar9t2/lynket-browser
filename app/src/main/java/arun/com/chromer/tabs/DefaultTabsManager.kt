@@ -416,17 +416,23 @@ constructor(
     private fun getToolbarColor(website: Website): Int {
         if (preferences.isColoredToolbar) {
             val toolbarColor = if (preferences.dynamicToolbar()) {
-                var toolbarColor = Constants.NO_COLOR
+                var appColor = Constants.NO_COLOR
+                var websiteColor = Constants.NO_COLOR
+
                 if (preferences.dynamicToolbarOnApp()) {
-                    toolbarColor = appRepository.getPackageColorSync(appDetectionManager.filteredPackage)
+                    appColor = appRepository.getPackageColorSync(appDetectionManager.filteredPackage)
                 }
                 if (preferences.dynamicToolbarOnWeb()) {
-                    toolbarColor = websiteRepository.getWebsiteColorSync(website.url)
-                    if (toolbarColor == Constants.NO_COLOR) {
-                        toolbarColor = website.themeColor()
+                    websiteColor = websiteRepository.getWebsiteColorSync(website.url)
+                    if (websiteColor == Constants.NO_COLOR) {
+                        websiteColor = website.themeColor()
                     }
                 }
-                toolbarColor
+                return when {
+                    websiteColor != NO_COLOR -> websiteColor
+                    appColor != NO_COLOR -> appColor
+                    else -> NO_COLOR
+                }
             } else {
                 preferences.toolbarColor()
             }
