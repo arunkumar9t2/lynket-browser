@@ -28,6 +28,7 @@ import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.di.activity.ActivityModule
 import arun.com.chromer.intro.fragments.*
 import arun.com.chromer.shared.base.ProvidesActivityComponent
+import arun.com.chromer.util.ColorUtil
 import arun.com.chromer.util.Utils
 import com.github.paolorotolo.appintro.AppIntro
 
@@ -45,7 +46,7 @@ class ChromerIntroActivity : AppIntro(), ProvidesActivityComponent {
         inject(activityComponent!!)
         super.onCreate(savedInstanceState)
 
-        val bgColor = ContextCompat.getColor(this, R.color.colorPrimaryDarker)
+        val bgColor = ContextCompat.getColor(this, R.color.tutorialBackgrounColor)
 
         addSlide(AppIntroFragment.newInstance(getString(R.string.app_name),
                 getString(R.string.intro_1),
@@ -78,12 +79,13 @@ class ChromerIntroActivity : AppIntro(), ProvidesActivityComponent {
                 bgColor))
 
         setColorTransitionsEnabled(true)
+        showStatusBar(false)
         showSkipButton(true)
         isProgressButtonEnabled = true
 
         // Color status bar for lollipop above
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.statusBarColor = bgColor
+            window.statusBarColor = ColorUtil.getDarkenedColorForStatusBar(bgColor)
         }
     }
 

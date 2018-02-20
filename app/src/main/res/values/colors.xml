@@ -59,4 +59,5 @@
     <color name="primary_text_color">@color/material_dark_color</color>
     <color name="secondary_text_color">#4c4c4c</color>
     <color name="material_grey_color">#727272</color>
+    <color name="tutorialBackgrounColor">#20232C</color>
 </resources>

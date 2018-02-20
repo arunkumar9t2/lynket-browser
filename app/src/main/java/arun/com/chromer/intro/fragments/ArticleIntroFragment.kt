@@ -20,6 +20,7 @@ package arun.com.chromer.intro.fragments
 
 import android.graphics.Color
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import arun.com.chromer.R
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.fragment.FragmentComponent
@@ -32,7 +33,7 @@ import kotlinx.android.synthetic.main.fragment_slide_over_intro.*
 import javax.inject.Inject
 
 open class ArticleIntroFragment : BaseFragment(), ISlideBackgroundColorHolder {
-    override fun getDefaultBackgroundColor(): Int = Color.parseColor("#37474F")
+    override fun getDefaultBackgroundColor(): Int = ContextCompat.getColor(context!!, R.color.tutorialBackgrounColor)
 
     override fun setBackgroundColor(backgroundColor: Int) {
         root.setBackgroundColor(backgroundColor)

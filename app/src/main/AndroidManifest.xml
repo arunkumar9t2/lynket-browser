@@ -108,6 +108,7 @@
         <activity
             android:name=".home.HomeActivity"
             android:exported="true"
+            android:theme="@style/AppTheme.Launcher"
             android:windowSoftInputMode="adjustPan" />
 
         <activity-alias
@@ -115,7 +116,6 @@
             android:exported="true"
             android:label="@string/app_name"
             android:targetActivity=".home.HomeActivity"
-            android:theme="@style/AppTheme.Launcher"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -170,8 +170,8 @@
             android:theme="@style/ArticleTheme" />
         <activity
             android:name=".intro.ChromerIntroActivity"
-            android:label="Intro"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/intro"
+            android:theme="@style/AppTheme.Tutorial" />
         <activity
             android:name=".browsing.shareintercept.ShareInterceptActivity"
             android:excludeFromRecents="true"

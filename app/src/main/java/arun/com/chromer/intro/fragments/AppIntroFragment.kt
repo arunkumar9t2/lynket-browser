@@ -30,7 +30,7 @@ import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder
 import kotlinx.android.synthetic.main.fragment_text_intro.*
 
 open class AppIntroFragment : BaseFragment(), ISlideBackgroundColorHolder {
-    override fun getDefaultBackgroundColor(): Int = ContextCompat.getColor(context!!, R.color.colorPrimaryDarker)
+    override fun getDefaultBackgroundColor(): Int = ContextCompat.getColor(context!!, R.color.tutorialBackgrounColor)
 
     override fun setBackgroundColor(backgroundColor: Int) {
         if (root != null) {
