@@ -44,6 +44,7 @@ a {
     <li><b>NEW: </b> Chromer uses website favicons to calculate toolbar color.</li>
     <li><b>NEW: </b> Bottom bar now shows text in addition to icons</li>
     <li><b>NEW: </b> Light nav bar for 8.1</li>
+    <li><b>NEW: </b> Tips screen</li>
 </ul>
 <h4 class="list-heading">Features</h3>
 <ul>
@@ -56,7 +57,7 @@ a {
         <li><b>NEW: </b> Search bar shows suggestions from Clipboard and History</li>
         <li><b>NEW: </b> Info card in home screen to show active provider</li>
         <li><b>NEW: </b> New tab dialog shows search suggestions</li>
-        <li><b>NEW: </b> Better tab provider picker.</li>
+        <li><b>NEW: </b> Better tab provider picker. Chromer now recommends supported browsers</li>
 </ul>
 <h4 class="list-heading">Performance</h3>
 <ul>
@@ -71,7 +72,6 @@ a {
         <li><b>NEW: </b> Change text size</li>
         <li><b>NEW: </b> Bottom bar with additional options</li>
         <li><b>NEW: </b> System bars dim automatically in article mode.</li>
-        <li><b>NEW: </b> Tried to reduce extra gap between text. Improved Blockquote legibility.</li>
         <li><b>FIX: </b> Crash when tapping on certain links</li>
 </ul>
 <h4 class="list-heading">AMP Mode</h3>
