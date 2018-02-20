@@ -275,6 +275,7 @@ internal class ArticleAdapter(
         }
 
         open fun bind(element: Element) {
+            textView.setLinkTextColor(accentColor)
             val text = element.outerHtml()
             val params = textView.layoutParams as ViewGroup.MarginLayoutParams
             if (adapterPosition != RecyclerView.NO_POSITION && adapterPosition == itemCount - 1) {

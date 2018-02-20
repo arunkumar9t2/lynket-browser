@@ -18,7 +18,6 @@
 
 package arun.com.chromer.intro.fragments
 
-import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import arun.com.chromer.R
@@ -52,6 +51,6 @@ open class ArticleIntroFragment : BaseFragment(), ISlideBackgroundColorHolder {
 
     @OnClick(R.id.tryItButton)
     fun onSeeDemoClick() {
-        tabsManager.openArticle(context!!, Website("https://www.androidpolice.com/2015/12/22/chromer-opens-all-of-your-links-in-a-chrome-custom-tab/"))
+        tabsManager.openArticle(context!!, Website("https://en.wikipedia.org/wiki/Web_browser"))
     }
 }
