@@ -67,6 +67,7 @@ constructor(
 
         // Monitor website requests
         subs.add(websiteQueue
+                .onBackpressureBuffer()
                 .filter { it != null && it.isNotEmpty() }
                 .switchMap { url ->
                     websiteObservable(url)
@@ -82,6 +83,7 @@ constructor(
 
         // Set task descriptions
         subs.add(taskDescriptionQueue
+                .onBackpressureBuffer()
                 .concatMap { website ->
                     return@concatMap Observable.just(website)
                             .map { TaskDescriptionCompat(website.safeLabel(), null, toolbarColor.value!!) }
