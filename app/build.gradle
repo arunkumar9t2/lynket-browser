@@ -52,8 +52,8 @@ android {
         applicationId "arun.com.chromer"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 46
-        versionName "2.0 - RC 2"
+        versionCode 47
+        versionName "2.0"
 
         resValue "string", "playLicenseKey", "$playLicenseKey"
         manifestPlaceholders = [crashlyticsApiKey: "$fabricKey"]
