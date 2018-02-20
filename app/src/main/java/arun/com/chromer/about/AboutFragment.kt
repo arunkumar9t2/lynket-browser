@@ -301,12 +301,9 @@ class AboutFragment : Fragment() {
                         val github = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/arunkumar9t2/"))
                         activity!!.startActivity(github)
                     }
-                    5 -> try {
-                        activity!!.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://search?q=pub:Arunkumar")))
-                    } catch (anfe: android.content.ActivityNotFoundException) {
-                        activity!!.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/search?q=pub:Arunkumar")))
+                    5 -> {
+                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/dev?id=9082544673727889961")))
                     }
-
                 }
             }
         }
