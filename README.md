@@ -1,3 +1,4 @@
+
 # Chromer
 **Android browser app based on Chrome Custom Tabs.**
 
@@ -5,7 +6,7 @@
 width="200"
     hspace="10" vspace="10">
 
-Chromer utilizes Chrome Custom Tab API from Google Chrome to create a customized browsing experience while utilizing benefits of Google Chrome like data saver, saved passwords, history sync etc.
+Chromer utilizes Chrome Custom Tab API to create a customized browsing experience while adding innovative features like background loading with floating bubbles, article mode and multitasking using Android's recent menu.
 
 Chromer is available for free on the Google Play Store.
 
@@ -16,27 +17,49 @@ Chromer is available for free on the Google Play Store.
         src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
 </a>
 
-## Examples
+If you have got some time, read the introduction post on [Medium](https://medium.com/@arunkumar9t2/introducing-chromer-2-0-a-better-way-to-browse-on-android-c34ff729df1b) or watch intro [Video](https://www.youtube.com/watch?v=zjSP1-bDjkA)
 
-#### AMP mode
-![Droid Life - AMP Version](https://github.com/arunkumar9t2/chromer/raw/master/art/AMP%20Example.gif)
-#### Article mode
-![Article Mode](https://github.com/arunkumar9t2/chromer/raw/master/art/Article%20Example.gif)
-#### Web heads + Article mode
-![Multiple links web heads](https://github.com/arunkumar9t2/chromer/raw/master/art/Article%20+%20Web%20heads.gif)
+![enter image description here](https://raw.githubusercontent.com/arunkumar9t2/chromer/master/art/chromer_screenshots.png)
+
+## Features
+| Features| Demo|
+|--|--|
+| **Web heads** - Floating bubbles to load multiple links and launch them.  | ![enter image description here](https://raw.githubusercontent.com/arunkumar9t2/chromer/master/art/Web%20heads%20intro.gif) |
+| **Web heads** - Intelligently manages background loading of Custom Tabs using Android's overview screen. Uses Lollipop Document API.| ![enter image description here](https://raw.githubusercontent.com/arunkumar9t2/chromer/master/art/Background%20Loading.gif) |
+| **Provider** - Chromer works with any custom tab compatible browser. This means features like adblock, Google Account sync, data saver are inherited.  | ![enter image description here](https://raw.githubusercontent.com/arunkumar9t2/chromer/master/art/Provider%20Selection.gif) |
+| **Article mode** - Filters all unnecessary content and renders web page on a RecyclerView efficiently. Uses Crux library.  | ![enter image description here](https://raw.githubusercontent.com/arunkumar9t2/chromer/master/art/Article%20Mode.gif) |
+| **Minimize and Tabs** - Chromer can minimize the tab and also show all active tabs for you to quickly switch to.  |  ![enter image description here](https://raw.githubusercontent.com/arunkumar9t2/chromer/master/art/Multitasking.gif)|
 
 
+## Architecture and Code Structure
+Chromer is written on a MVVM Architecture and uses Dagger 2 for dependency injection. The source code is packaged based on feature.
+
+    app/src/java/<package>
+						<feature_1>\...
+						<feature_2>\...
+						shared\...
+						utils\...	
+### Architecture
+Below outlines sample structure of most screens. 
+![enter image description here](https://raw.githubusercontent.com/arunkumar9t2/chromer/master/art/Chromer%20Architecture.png)
+
+
+### Code Style
+
+ - [mNo Hungarion notation.](http://jakewharton.com/just-say-no-to-hungarian-notation/)
+ - No `Impl` suffixes for interface implementations. Instead name based on what it does. Ex: `AppStore` and implementations `AppDiskStore` and `AppSystemStore`.
+ - All new modules are preferred to be written in `Kotlin`
+ - Formatting - Android Studio Default.
 
 ## Contributions
+You are more than welcome to contribute to Chromer's development. New features are branched off of `develop` . PRs are welcome against the `develop` branch. 
+How you can help:
 
-1. If you are a developer and would like to contribute to Chromer, please consider making a **pull request** against the `develop` branch.
-2. Code format style is *Android Studio default.*
-3. I strongly welcome any criticisms on the code base.
-
-
-
+ - Grab an issue from [issues](https://github.com/arunkumar9t2/chromer/issues) section that interests you.
+ - Unit testing using Roboelectric and Dagger 2 is already setup but coverage is rather low. Adding tests to existing features would greatly help! Refer [src/test/](https://github.com/arunkumar9t2/chromer/tree/master/app/src/test/java/arun/com/chromer).
+ - Break the ice. Feel free to create an issue to discuss your ideas.
 
 ## License
 
-Chromer is licensed under the [GNU v3 Public License.](LICENSE). RxSuggestions and Article-View are licensed under Apache 2.0 License.
+Chromer is licensed under the [GNU v3 Public License.](LICENSE)
 
