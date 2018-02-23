@@ -18,14 +18,13 @@
 
 package arun.com.chromer.home.fragment
 
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import arun.com.chromer.data.Result
 import arun.com.chromer.data.history.HistoryRepository
 import arun.com.chromer.data.website.model.Website
-import rx.Observable
+import arun.com.chromer.util.SchedulerProvider
 import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
-import rx.subjects.BehaviorSubject
 import rx.subjects.PublishSubject
 import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
@@ -38,27 +37,27 @@ class HomeFragmentViewModel
 constructor(
         private val historyRepository: HistoryRepository
 ) : ViewModel() {
-    private val recentsSubject = BehaviorSubject.create<Result<List<Website>>>(Result.Idle())
+    private val recentsLoaderSubject: PublishSubject<Int> = PublishSubject.create()
 
-    private val loaderSubject: PublishSubject<Int> = PublishSubject.create()
+    val recentsResultLiveData = MutableLiveData<Result<List<Website>>>()
+
     val subs = CompositeSubscription()
 
-    fun loadRecents() {
-        loaderSubject.onNext(0)
+    init {
+        subs.add(recentsLoaderSubject.asObservable()
+                .onBackpressureLatest()
+                .concatMap {
+                    historyRepository
+                            .recents()
+                            .compose(Result.applyToObservable())
+                            .compose(SchedulerProvider.applyIoSchedulers())
+                }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { recentsResultLiveData.postValue(it) })
     }
 
-    fun recentsObservable(): Observable<Result<List<Website>>> {
-        if (recentsSubject.value is Result.Idle<List<Website>>) {
-            subs.add(loaderSubject.asObservable()
-                    .concatMap {
-                        historyRepository
-                                .recents()
-                                .compose(Result.applyToObservable())
-                    }.subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(recentsSubject))
-        }
-        return recentsSubject.asObservable()
+    fun loadRecents() {
+        recentsLoaderSubject.onNext(0)
     }
 
     override fun onCleared() {

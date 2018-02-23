@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModel
 import arun.com.chromer.data.apps.AppRepository
 import arun.com.chromer.data.common.App
 import arun.com.chromer.util.SchedulerProvider
+import rx.android.schedulers.AndroidSchedulers
 import rx.subjects.PublishSubject
 import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
@@ -35,6 +36,7 @@ constructor(private val appRepository: AppRepository) : ViewModel() {
 
     private fun initAppsLoader() {
         subs.add(loadingQueue.asObservable()
+                .onBackpressureLatest()
                 .doOnNext { loading(true) }
                 .concatMap { appRepository.allApps().compose(SchedulerProvider.applyIoSchedulers()) }
                 .doOnNext { loading(false) }
@@ -46,33 +48,39 @@ constructor(private val appRepository: AppRepository) : ViewModel() {
 
     private fun initIncognitoSub() {
         subs.add(incognitoQueue.asObservable()
+                .onBackpressureLatest()
                 .filter { !loadingLiveData.value!! }
                 .doOnNext { loading(true) }
                 .concatMap { (packageName, incognito) ->
                     if (incognito) {
                         appRepository.setPackageIncognito(packageName)
+                                .compose(SchedulerProvider.applyIoSchedulers())
                     } else {
                         appRepository.removeIncognito(packageName)
+                                .compose(SchedulerProvider.applyIoSchedulers())
                     }
-                }.doOnNext { loading(false) }
+                }.observeOn(AndroidSchedulers.mainThread())
+                .doOnNext { loading(false) }
                 .map { app -> Pair(appsLiveData.value!!.indexOfFirst { it.packageName == app.packageName }, app) }
-                .compose(SchedulerProvider.applyIoSchedulers())
                 .subscribe { appLiveData.value = it })
     }
 
     private fun initBlacklistSub() {
         subs.add(blacklistQueue.asObservable()
+                .onBackpressureLatest()
                 .filter { !loadingLiveData.value!! }
                 .doOnNext { loading(true) }
                 .concatMap { (packageName, blacklisted) ->
                     if (blacklisted) {
                         appRepository.setPackageBlacklisted(packageName)
+                                .compose(SchedulerProvider.applyIoSchedulers())
                     } else {
                         appRepository.removeBlacklist(packageName)
+                                .compose(SchedulerProvider.applyIoSchedulers())
                     }
-                }.doOnNext { loading(false) }
+                }.observeOn(AndroidSchedulers.mainThread())
+                .doOnNext { loading(false) }
                 .map { app -> Pair(appsLiveData.value!!.indexOfFirst { it.packageName == app.packageName }, app) }
-                .compose(SchedulerProvider.applyIoSchedulers())
                 .subscribe { appLiveData.value = it })
     }
 

@@ -33,6 +33,7 @@ import arun.com.chromer.di.fragment.FragmentComponent
 import arun.com.chromer.extenstions.appName
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.show
+import arun.com.chromer.extenstions.watch
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.settings.browsingoptions.BrowsingOptionsActivity
 import arun.com.chromer.shared.Constants
@@ -47,7 +48,6 @@ import butterknife.OnClick
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import kotlinx.android.synthetic.main.fragment_home.*
-import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -140,18 +140,16 @@ class HomeFragment : BaseFragment(), Snackable {
     }
 
     private fun observeViewModel() {
-        subs.add(homeFragmentViewModel
-                .recentsObservable()
-                .subscribe({
-                    when (it) {
-                        is Result.Loading<List<Website>> -> {
-                            // TODO Show progress bar.
-                        }
-                        is Result.Success<List<Website>> -> {
-                            setRecents(it.data!!)
-                        }
-                    }
-                }, Timber::e))
+        homeFragmentViewModel.recentsResultLiveData.watch(this, { result ->
+            when (result) {
+                is Result.Loading<List<Website>> -> {
+                    // TODO Show progress bar.
+                }
+                is Result.Success<List<Website>> -> {
+                    setRecents(result.data!!)
+                }
+            }
+        })
     }
 
 
