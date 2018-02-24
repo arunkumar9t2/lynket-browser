@@ -1,14 +1,14 @@
 
-# Chromer
-**Android browser app based on Chrome Custom Tabs.**
+# Lynket
+**Android browser app based on Custom Tabs protocol.**
 
 <img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" align="left"
 width="200"
     hspace="10" vspace="10">
 
-Chromer utilizes Chrome Custom Tab API to create a customized browsing experience while adding innovative features like background loading with floating bubbles, article mode and multitasking using Android's recent menu.
+Lynket utilizes Chrome Custom Tab API to create a customized browsing experience while adding innovative features like background loading with floating bubbles, article mode and multitasking using Android's recent menu.
 
-Chromer is available for free on the Google Play Store.
+Lynket is available for free on the Google Play Store.
 
 
 <a href="https://play.google.com/store/apps/details?id=arun.com.chromer">
@@ -26,13 +26,13 @@ If you have got some time, read the introduction post on [Medium](https://medium
 |--|--|
 | **Web heads** - Floating bubbles to load multiple links and launch them.  | ![enter image description here](https://raw.githubusercontent.com/arunkumar9t2/chromer/master/art/Web%20heads%20intro.gif) |
 | **Web heads** - Intelligently manages background loading of Custom Tabs using Android's overview screen. Uses Lollipop Document API.| ![enter image description here](https://raw.githubusercontent.com/arunkumar9t2/chromer/master/art/Background%20Loading.gif) |
-| **Provider** - Chromer works with any custom tab compatible browser. This means features like adblock, Google Account sync, data saver are inherited.  | ![enter image description here](https://raw.githubusercontent.com/arunkumar9t2/chromer/master/art/Provider%20Selection.gif) |
+| **Provider** - Lynket works with any custom tab compatible browser. This means features like adblock, Google Account sync, data saver are inherited.  | ![enter image description here](https://raw.githubusercontent.com/arunkumar9t2/chromer/master/art/Provider%20Selection.gif) |
 | **Article mode** - Filters all unnecessary content and renders web page on a RecyclerView efficiently. Uses Crux library.  | ![enter image description here](https://raw.githubusercontent.com/arunkumar9t2/chromer/master/art/Article%20Mode.gif) |
-| **Minimize and Tabs** - Chromer can minimize the tab and also show all active tabs for you to quickly switch to.  |  ![enter image description here](https://raw.githubusercontent.com/arunkumar9t2/chromer/master/art/Multitasking.gif)|
+| **Minimize and Tabs** - Lynket can minimize the tab and also show all active tabs for you to quickly switch to.  |  ![enter image description here](https://raw.githubusercontent.com/arunkumar9t2/chromer/master/art/Multitasking.gif)|
 
 
 ## Architecture and Code Structure
-Chromer is written on a MVVM Architecture and uses Dagger 2 for dependency injection. The source code is packaged based on feature.
+Lynket is written on a MVVM Architecture and uses Dagger 2 for dependency injection. The source code is packaged based on feature.
 
     app/src/java/<package>
 						<feature_1>\...
@@ -52,7 +52,7 @@ Below outlines sample structure of most screens.
  - Formatting - Android Studio Default.
 
 ## Contributions
-You are more than welcome to contribute to Chromer's development. New features are branched off of `develop` . PRs are welcome against the `develop` branch. 
+You are more than welcome to contribute to Lynket's development. New features are branched off of `develop` . PRs are welcome against the `develop` branch. 
 How you can help:
 
  - Grab an issue from [issues](https://github.com/arunkumar9t2/chromer/issues) section that interests you.
@@ -61,5 +61,5 @@ How you can help:
 
 ## License
 
-Chromer is licensed under the [GNU v3 Public License.](LICENSE)
+Lynket is licensed under the [GNU v3 Public License.](LICENSE)
 
