@@ -203,7 +203,7 @@ class HomeActivity : BaseActivity(), Snackable {
             withAccountHeader(
                     with(AccountHeaderBuilder()) {
                         withActivity(this@HomeActivity)
-                        withHeaderBackground(R.drawable.chromer)
+                        withHeaderBackground(R.drawable.lynket_drawer_image)
                         withHeaderBackgroundScaleType(ImageView.ScaleType.CENTER_CROP)
                         withDividerBelowHeader(true)
                         build()

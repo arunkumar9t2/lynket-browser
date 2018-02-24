@@ -53,7 +53,7 @@ android {
         applicationId "arun.com.chromer"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 48
+        versionCode 49
         versionName "2.0"
 
         resValue "string", "playLicenseKey", "$playLicenseKey"
