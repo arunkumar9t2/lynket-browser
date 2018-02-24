@@ -30,14 +30,14 @@
         <item>Destra</item>
         <item>Sinistra</item>
     </string-array>
-    <string name="share_text">Hey, dai un occhiata a \'Chromer\' per una navigazione sicura e veloce! Scaricala qua http://goo.gl/922ils</string>
+    <string name="share_text">Hey, dai un occhiata a \'Lynket\' per una navigazione sicura e veloce! Scaricala qua http://goo.gl/922ils</string>
     <string name="share_via">Condividi con…</string>
     <string name="custom_tab_provider_not_found">Nessun fornitore di custom tab trovato</string>
-    <string name="custom_tab_provider_not_found_expln">Chromer necessita di un browser con custom tab compatibile installato sul tuo telefono. Momentaneamente non ci sono browser installati che le supportano. Vorresti installare Chrome (gratis) dal play store? Se è già installato, allora aggiornalo all\'ultima versione.</string>
+    <string name="custom_tab_provider_not_found_expln">Lynket necessita di un browser con custom tab compatibile installato sul tuo telefono. Momentaneamente non ci sono browser installati che le supportano. Vorresti installare Chrome (gratis) dal play store? Se è già installato, allora aggiornalo all\'ultima versione.</string>
     <string name="install">Installa</string>
     <string name="licenses">Licenze</string>
     <string name="about">Informazioni</string>
-    <string name="help_chromer_grow">Aiuta Chromer a crescere!</string>
+    <string name="help_chromer_grow">Aiuta Lynket a crescere!</string>
     <string name="share">Condividi</string>
     <string name="share_with">Condividi con %1$s</string>
     <string name="rate_play_store">Vota sul Play store</string>
@@ -57,9 +57,9 @@
     <string name="copied">Copiato</string>
     <string name="copy_link">Copia link</string>
     <string name="add_to_homescreen">Aggiungi alla home screen</string>
-    <string name="intro_1">Ciao!\nChromer è un web browser leggero, sicuro e veloce.</string>
+    <string name="intro_1">Ciao!\nLynket è un web browser leggero, sicuro e veloce.</string>
     <string name="how_to_use">Come usare questo?</string>
-    <string name="intro_6">Imposta Chromer come broswer definitivo, e visualizzerà i link in maniera non intrusiva. O seleziona Chromer quando necessario.</string>
+    <string name="intro_6">Imposta Lynket come broswer definitivo, e visualizzerà i link in maniera non intrusiva. O seleziona Lynket quando necessario.</string>
     <string name="version">Versione</string>
     <string name="changelog">Changelog</string>
     <string name="join_google_plus">Unisciti alla Community Google+</string>
@@ -75,7 +75,7 @@
     <string name="settings">Impostazioni</string>
     <string name="colored_toolbar">Toolbar colorata</string>
     <string name="choose_animation">Animazione d\'apertura</string>
-    <string name="default_pref_xpln">Imposta Chromer per aprire tutti i link di default, oppure puoi scegliere Chromer nella lista quando appare</string>
+    <string name="default_pref_xpln">Imposta Lynket per aprire tutti i link di default, oppure puoi scegliere Lynket nella lista quando appare</string>
     <string name="personalization">Personalizzazione</string>
     <string name="default_clear_msg">è impostato come browser di default, per favore cancellalo cliccando su cancella defualt</string>
     <string name="dynamic_toolbar_color">Colore toolbar dinamico</string>
@@ -85,14 +85,14 @@
     <string name="default_provider">Fornitore di custom tab di default</string>
     <string name="pre_fetch_content">Precarica contenuto</string>
     <string name="pre_fetch_desc">Rileva link sul tuo schermo e caricali in background per lanciarli istantaneamente</string>
-    <string name="accessibility_description">Questo servizio verrà usato da Chromer per rilevare link sul tuo schermo e caricarli in background. Nessun\'altra informazione sarà processata da Chromer. Puoi sempre usare Chromer normalmente se non autorizzi questo servizio. Per maggiori informazioni, lancia l\'app Chromer.</string>
+    <string name="accessibility_description">Questo servizio verrà usato da Lynket per rilevare link sul tuo schermo e caricarli in background. Nessun\'altra informazione sarà processata da Lynket. Puoi sempre usare Lynket normalmente se non autorizzi questo servizio. Per maggiori informazioni, lancia l\'app Lynket.</string>
     <string name="accessibility_dialog_title">Permesso di accessibilità richiesto</string>
-    <string name="accessibility_dialog_desc">Per permettere a Chromer di rilevare i link in tutte le app, devi concedere il permesso al servizio di accessibilità. Per favore concedi il permesso di accessibilità nella prossima schermata, dopodichè potrai abilitare questa opzione e goderti gli avvii rapidi.</string>
+    <string name="accessibility_dialog_desc">Per permettere a Lynket di rilevare i link in tutte le app, devi concedere il permesso al servizio di accessibilità. Per favore concedi il permesso di accessibilità nella prossima schermata, dopodichè potrai abilitare questa opzione e goderti gli avvii rapidi.</string>
     <string name="open_settings">Apri impostazioni</string>
     <string name="default_toolbar_color">Colore toolbar di default</string>
     <string name="web_heads_color">Colore bolle</string>
     <string name="choose_secondary_browser">Browser secondario</string>
-    <string name="dynamic_toolbar_help">Per abilitare il colore dinamico della toolbar, Chromer deve imparare i colori. Potrebbe non funzionare inizialmente per un sito o un app, ma migliorerà con il tempo!</string>
+    <string name="dynamic_toolbar_help">Per abilitare il colore dinamico della toolbar, Lynket deve imparare i colori. Potrebbe non funzionare inizialmente per un sito o un app, ma migliorerà con il tempo!</string>
     <string name="secondary_browser_success">%1$s impostato come browser secondario!</string>
     <string name="fav_share_success">%1$s impostato come app di condivisione preferita!</string>
     <string name="default_provider_success">%1$s sarà usato come fornitore di Custom tabs!</string>
@@ -106,7 +106,7 @@
     <string name="dynamic_summary_web">Il colore sarà basato dal sito web aperto</string>
     <string name="no_option_selected">Nessun opzione selezionata</string>
     <string name="permission_required">Permesso richiesto</string>
-    <string name="usage_permission_explanation_appcolor">Per abilitare il colore dinamico della toolbar basato sull\'app, Chromer ha bisogno del permesso di sapere che app stai usando. Vorresti dargli questo permesso ora?</string>
+    <string name="usage_permission_explanation_appcolor">Per abilitare il colore dinamico della toolbar basato sull\'app, Lynket ha bisogno del permesso di sapere che app stai usando. Vorresti dargli questo permesso ora?</string>
     <string name="grant">Concedi</string>
     <string name="open_source_contributions">materiale open source</string>
     <string name="search_or_type_url">Cerca o scrivi URL</string>

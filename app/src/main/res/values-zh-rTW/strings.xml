@@ -45,15 +45,15 @@
         <item>正常</item>
         <item>小</item>
     </string-array>
-    <string name="share_text">嘿！快來體驗  \‘Chromer\’  提供的快速和安全瀏覽功能！可以在這裡下載：https://goo.gl/992ils</string>
+    <string name="share_text">嘿！快來體驗  \‘Lynket\’  提供的快速和安全瀏覽功能！可以在這裡下載：https://goo.gl/992ils</string>
     <string name="share_via">分享至…</string>
     <string name="custom_tab_provider_not_found">找不到提供相容自訂標籤頁功能的瀏覽器</string>
-    <string name="custom_tab_provider_not_found_expln">Chromer需要您在手機上安裝可相容自訂標籤頁功能的瀏覽器，目前在您的手機上沒有發現可支援該功能的瀏覽器。您要在Play Store上安裝Google Chrome（免費）嗎？如果您已安裝了，請更新它至最新版本。</string>
-    <string name="custom_tab_provider_not_found_dialog_content"><![CDATA[沒有找到相容的自定標籤頁瀏覽器。建議可使用 Google Chrome（免費），您仍可以使用Chromer 瀏覽網頁或使用 Chromer 的閱讀模式，但建議使用提供可自定標籤頁的瀏覽器使用程式。您需要安裝相關的應用程式嗎？]]></string>
+    <string name="custom_tab_provider_not_found_expln">Lynket需要您在手機上安裝可相容自訂標籤頁功能的瀏覽器，目前在您的手機上沒有發現可支援該功能的瀏覽器。您要在Play Store上安裝Google Chrome（免費）嗎？如果您已安裝了，請更新它至最新版本。</string>
+    <string name="custom_tab_provider_not_found_dialog_content"><![CDATA[沒有找到相容的自定標籤頁瀏覽器。建議可使用 Google Chrome（免費），您仍可以使用Lynket 瀏覽網頁或使用 Lynket 的閱讀模式，但建議使用提供可自定標籤頁的瀏覽器使用程式。您需要安裝相關的應用程式嗎？]]></string>
     <string name="install">安裝</string>
     <string name="licenses">開放原始碼授權</string>
     <string name="about">關於</string>
-    <string name="help_chromer_grow">協助改善 Chromer！</string>
+    <string name="help_chromer_grow">協助改善 Lynket！</string>
     <string name="share">分享</string>
     <string name="share_with">以 %1$s 分享</string>
     <string name="rate_play_store">在 Play 商店中評分</string>
@@ -73,10 +73,10 @@
     <string name="copied">已複製</string>
     <string name="copy_link">複製連結</string>
     <string name="add_to_homescreen">添加到主屏幕</string>
-    <string name="intro_1">您好！\nChromer 是一個輕量、安全以及快速的網頁瀏覽器。</string>
+    <string name="intro_1">您好！\nLynket 是一個輕量、安全以及快速的網頁瀏覽器。</string>
     <string name="intro_4_new">它可以在開啟連結時新增多個疊加式的浮動氣泡，並且於背景載入部份內容!</string>
     <string name="how_to_use">如何使用？</string>
-    <string name="intro_6">只需設定 Chromer 作為您的預設瀏覽器，Chromer 將以非入侵的方式顯示連結內容。或者您也可以在需要時選擇使用 Chromer。</string>
+    <string name="intro_6">只需設定 Lynket 作為您的預設瀏覽器，Lynket 將以非入侵的方式顯示連結內容。或者您也可以在需要時選擇使用 Lynket。</string>
     <string name="version">版本</string>
     <string name="changelog">更新日誌</string>
     <string name="join_google_plus">加入 Google+ 社群</string>
@@ -93,7 +93,7 @@
     <string name="colored_toolbar">為工具欄上色</string>
     <string name="choose_animation">開啟動畫</string>
     <string name="animation_speed">動畫速度</string>
-    <string name="default_pref_xpln">將 Chromer 設定為預設瀏覽器以打開所有連結，或您可以在選擇應用程式列表出現時選擇使用 Chromer</string>
+    <string name="default_pref_xpln">將 Lynket 設定為預設瀏覽器以打開所有連結，或您可以在選擇應用程式列表出現時選擇使用 Lynket</string>
     <string name="personalization">個人化</string>
     <string name="default_clear_msg">被設為預設瀏覽器，請點擊清除預設操作以取消它。</string>
     <string name="dynamic_toolbar_color">工具欄動態變色</string>
@@ -103,16 +103,16 @@
     <string name="default_provider">預設自訂標籤頁提供應用</string>
     <string name="pre_fetch_content">預載內容</string>
     <string name="pre_fetch_desc">掃瞄畫面上的連結並在背景載入，以便可即時打開</string>
-    <string name="accessibility_description">這項服務將被 Chromer 用於掃瞄畫面上的文字連結，並在背景載入內容。Chromer不會處理其他訊息。如果您選擇不授予此權限，您仍可使用 Chromer的輕量化模式。要了解更多資訊，請啟動Chromer應用程式。</string>
+    <string name="accessibility_description">這項服務將被 Lynket 用於掃瞄畫面上的文字連結，並在背景載入內容。Lynket不會處理其他訊息。如果您選擇不授予此權限，您仍可使用 Lynket的輕量化模式。要了解更多資訊，請啟動Lynket應用程式。</string>
     <string name="accessibility_dialog_title">需要取得協助工具權限</string>
-    <string name="accessibility_dialog_desc">想要讓 Chromer 掃瞄任何應用程式的連結，它需要您授予協助工具權限。請在接下來的畫面中授予協助工具權限，授予權限後便可啟用此選項並享受快速的開啟連結。</string>
+    <string name="accessibility_dialog_desc">想要讓 Lynket 掃瞄任何應用程式的連結，它需要您授予協助工具權限。請在接下來的畫面中授予協助工具權限，授予權限後便可啟用此選項並享受快速的開啟連結。</string>
     <string name="open_settings">開啟設定</string>
     <string name="only_on_wifi">僅在 Wi-Fi 情況下掃瞄</string>
     <string name="show_notification">當預載連結時顯示通知</string>
     <string name="default_toolbar_color">預設工具欄顏色</string>
     <string name="web_heads_color">浮動氣泡顏色</string>
     <string name="choose_secondary_browser">次選瀏覽器</string>
-    <string name="dynamic_toolbar_help">啟動了動態工具欄變色，Chromer會靜靜地學習顏色適配。起初它可能無法正確符合網頁或應用程式的顏色，但它會隨使用時間不斷改善，試試看吧！</string>
+    <string name="dynamic_toolbar_help">啟動了動態工具欄變色，Lynket會靜靜地學習顏色適配。起初它可能無法正確符合網頁或應用程式的顏色，但它會隨使用時間不斷改善，試試看吧！</string>
     <string name="secondary_browser_success">%1$s 被設定為次選瀏覽器</string>
     <string name="fav_share_success">%1$s 被設定為您的喜好分享應用程式！</string>
     <string name="default_provider_success">%1$s 將被用於提供自訂標籤頁！</string>
@@ -126,7 +126,7 @@
     <string name="dynamic_summary_web">顏色將根據開啟的網頁適配</string>
     <string name="no_option_selected">沒有選擇選項</string>
     <string name="permission_required">需要權限</string>
-    <string name="usage_permission_explanation_appcolor">要啟用動態工具欄根據應用程式變色，Chromer需要您授予獲取正在使用的應用程式權限。您要授予權限嗎？</string>
+    <string name="usage_permission_explanation_appcolor">要啟用動態工具欄根據應用程式變色，Lynket需要您授予獲取正在使用的應用程式權限。您要授予權限嗎？</string>
     <string name="grant">授權</string>
     <string name="open_source_contributions">開放原始碼項目</string>
     <string name="search_or_type_url">搜尋或輸入網址</string>
@@ -137,12 +137,12 @@
     <string name="credits">感謝</string>
     <string name="icon_design">圖示設計</string>
     <string name="overlay_permission_content">要在畫面上顯示浮動氣泡，需要授予重疊畫面的權限。您要現在授予權限嗎？</string>
-    <string name="webheads_intro_1">當您在任何應用程式打開連結時，一個浮動氣泡將被創建於屏幕上，然後Chromer會嘗試預先載入連結內容。</string>
+    <string name="webheads_intro_1">當您在任何應用程式打開連結時，一個浮動氣泡將被創建於屏幕上，然後Lynket會嘗試預先載入連結內容。</string>
     <string name="webheads_intro_2_new">當打開多個連結時，這些浮動氣泡會疊在一起，您可以輕按浮動氣泡來開啟連結目錄。</string>
     <string name="webheads_intro_3">當您拖動浮動氣泡時，將會出現一個垃圾桶圖示。拖動浮動氣泡到上面便可以刪除它。</string>
     <string name="webheads_intro_4_lolli">在不影響你目前程式的使用下，背景預載模式能令連結在點按時先在背景載入，及後能直接打開已預載網頁\n<b>使用此模式時，點接連結時會產生標籤頁閃爍的現象，這是背景預載模式必須的，而不是程式錯誤。</b></string>
-    <string name="webheads_intro_4">Chromer會優先讀取最後打開的連結並預載它。建議的使用方法是由上至下依次點開浮動氣泡。啟用\“關閉已點開的浮動氣泡\”功能可使這操作更流暢。</string>
-    <string name="web_head_permission_toast">要使用浮動氣泡打開連結，Chromer需要在其他應用程式上顯示的權限，請授予權限以繼續，或在Chromer設定中停用浮動氣泡功能。</string>
+    <string name="webheads_intro_4">Lynket會優先讀取最後打開的連結並預載它。建議的使用方法是由上至下依次點開浮動氣泡。啟用\“關閉已點開的浮動氣泡\”功能可使這操作更流暢。</string>
+    <string name="web_head_permission_toast">要使用浮動氣泡打開連結，Lynket需要在其他應用程式上顯示的權限，請授予權限以繼續，或在Lynket設定中停用浮動氣泡功能。</string>
     <string name="tap_close_all">點擊以關閉全部</string>
     <string name="web_heads_service">浮動氣泡正在運行</string>
     <string name="join_beta">加入測試版計劃</string>
@@ -151,7 +151,7 @@
     <string name="no_voice_rec_apps">找不到相容的語音辨識應用程式</string>
     <string name="loading">載入中…</string>
     <string name="share_failed_msg">無法分享至應用程式，預設返回標準分享</string>
-    <string name="revoke_accessibility_permission">您現在可以撤銷 Chromer 的無障礙權限。</string>
+    <string name="revoke_accessibility_permission">您現在可以撤銷 Lynket 的無障礙權限。</string>
     <string name="last_fetched_urls">最近獲取的網址</string>
     <string name="translations">翻譯</string>
     <string name="merge_tabs">合併顯示分頁和應用程式</string>
@@ -197,7 +197,7 @@
     <string name="launch_setting">開啟設定</string>
     <string name="secondary_browser_not_installed">你的次要瀏覽器程式已在你的系統上移除了。需要前往設定版面更改嗎？</string>
     <string name="secondary_browser_launch_error">無法使用瀏覽器程式開啟連結，需要更改設定嗎？</string>
-    <string name="secondary_browser_not_error">你已使用黑名單禁止Chromer打開連結但沒有設定次要瀏覽器程式，需要現在設定嗎？</string>
+    <string name="secondary_browser_not_error">你已使用黑名單禁止Lynket打開連結但沒有設定次要瀏覽器程式，需要現在設定嗎？</string>
     <string name="copy_all">全部複製</string>
     <string name="choose_share_method">選取分享方式</string>
     <string name="comma_seperated">以逗號分隔</string>
@@ -220,7 +220,7 @@
     <string name="article_theme">閱讀模式的顏色主題</string>
     <string name="article_mode_summary">載入文章閱讀模式的版面能夠移除像是網頁裡的按鈕、廣告等干擾物，讓您更容易閱讀顯示在螢幕上的文字。</string>
     <string name="amp_warning_title">AMP警告</string>
-    <string name="amp_warning_content"><![CDATA[當使用<b>滑入</b> 模式時，Chromer需要時間抓取加速行動版網頁的連結，當下會有提示方塊供用戶知悉。]]></string>
+    <string name="amp_warning_content"><![CDATA[當使用<b>滑入</b> 模式時，Lynket需要時間抓取加速行動版網頁的連結，當下會有提示方塊供用戶知悉。]]></string>
     <string name="title_activity_look_and_feel">樣式及外觀</string>
     <string name="not_available_in_slide_mode">在滑入模式下不可用</string>
     <string name="title_activity_browsing_options">瀏覽選項</string>
@@ -236,7 +236,7 @@
     <string name="history_deletion_confirmation_content">此操作將會清除所有記錄而且不能還原。</string>
     <string name="incognito_mode">無痕式模式</string>
     <string name="recents_intro">最近開啟的連結會在這顥示</string>
-    <string name="amp_article_combined_explanation"><![CDATA[當 <b>加速行動版網頁(AMP) 及閱讀模式被開啟時</b>，Chromer 會先加載網站提供的「加速行動版網頁」版本，不然會轉用「閱讀模式」加載網頁。]]></string>
+    <string name="amp_article_combined_explanation"><![CDATA[當 <b>加速行動版網頁(AMP) 及閱讀模式被開啟時</b>，Lynket 會先加載網站提供的「加速行動版網頁」版本，不然會轉用「閱讀模式」加載網頁。]]></string>
     <string name="attention">注意！</string>
     <string name="manage">管理</string>
     <string name="more_menu">更多</string>

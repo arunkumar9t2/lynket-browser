@@ -36,29 +36,30 @@ a {
 <body>
 <strong>You can view this again in the about screen.</strong>
 <br></br>
+<h3>Chromer is now called Lynket!</h3>
 
 <strong>2.0 - 2nd Anniversary Update!</strong>
 <h4 class="list-heading">Design</h3>
 <ul>
     <li><b>NEW: </b> Round and Adaptive Icon for Android Oreo</li>
     <li><b>NEW: </b> New home screen with bottom search bar inspired by Google apps</li>
-    <li><b>NEW: </b> Chromer uses website favicons to calculate toolbar color.</li>
+    <li><b>NEW: </b> Lynket uses website favicons to calculate toolbar color.</li>
     <li><b>NEW: </b> Bottom bar now shows text in addition to icons</li>
     <li><b>NEW: </b> Light nav bar for 8.1</li>
     <li><b>NEW: </b> Tips screen</li>
 </ul>
 <h4 class="list-heading">Features</h3>
 <ul>
-        <li><b>NEW: <i>TABS!</i></b> See all active tabs opened by Chromer in one screen and quickly switch to them</li>
+        <li><b>NEW: <i>TABS!</i></b> See all active tabs opened by Lynket in one screen and quickly switch to them</li>
         <li><b>NEW: <i>Per App Settings!</i></b> Configure secondary browser and incognito modes based on app.</li>
-        <li><b>NEW: Incognito mode!</b> By using system webview as provider.</li>
+        <li><b>NEW: <i>Incognito mode!</i></b> By using system webview as provider.</li>
         <li><b>NEW: </b> History app shortcuts for 7.1</li>
         <li><b>NEW: </b> Use custom names while creating home screen shortcuts + Oreo support</li>
         <li><b>NEW: </b> Minimize does not require web heads to be enabled.</li>
         <li><b>NEW: </b> Search bar shows suggestions from Clipboard and History</li>
         <li><b>NEW: </b> Info card in home screen to show active provider</li>
         <li><b>NEW: </b> New tab dialog shows search suggestions</li>
-        <li><b>NEW: </b> Better tab provider picker. Chromer now recommends supported browsers</li>
+        <li><b>NEW: </b> Better tab provider picker. Lynket now recommends supported browsers</li>
 </ul>
 <h4 class="list-heading">Performance</h3>
 <ul>
@@ -81,11 +82,11 @@ a {
 </ul>
 <h4 class="list-heading">Others</h3>
 <ul>
-    <li><b>FIX: </b> Chromer not opening links sometimes.</li>
+    <li><b>FIX: </b> Lynket not opening links sometimes.</li>
     <li><b>FIX: </b> Certain languages not rendering correctly in search bar</li>
     <li><b>FIX: </b> History deletion bug</li>
     <li><b>FIX: </b> Consistency in dynamic toolbar color</li>
-    <li><b>IMPROVED: </b> Stability of web heads has been improved. Minor UI fixes. Change More menu name to "Chromer Options" for better clarity</li>
+    <li><b>IMPROVED: </b> Stability of web heads has been improved. Minor UI fixes. Change More menu name to "Lynket Options" for better clarity</li>
     <li><b>IMPROVED: </b> Sync translations</li>
 </ul>
 <hr>
@@ -103,7 +104,7 @@ a {
 <h4 class="list-heading">New browsing modes!</h3>
 <ul>
     <li><b>Article view! </b> A reader mode which filters all images and ads on a page and displays only the content of the page - Full support with web heads.</li>
-    <li><b>AMP Support! </b> Chromer can now launch the AMP version of the page if it exists for faster loading and better reading experience on mobile.</li>
+    <li><b>AMP Support! </b> Lynket can now launch the AMP version of the page if it exists for faster loading and better reading experience on mobile.</li>
     <li>To <b>enable</b>, <i>Settings > Browsing mode > AMP , Article mode.</i> </li>
 </ul>
 <h4 class="list-heading">Design</h3>
@@ -113,11 +114,11 @@ a {
 </ul>
 <h4 class="list-heading">History</h3>
 <ul>
-    <li><b>NEW: </b>In addition to syncing history with Google account, Chromer now provides its own history option.</li>
+    <li><b>NEW: </b>In addition to syncing history with Google account, Lynket now provides its own history option.</li>
 </ul>
 <h4 class="list-heading">Others</h3>
 <ul>
-    <li><b>NEW: </b>Chromer opens the page in web view in case custom tab provider is not found.</li>
+    <li><b>NEW: </b>Lynket opens the page in web view in case custom tab provider is not found.</li>
     <li><b>NEW: </b>Menu option under "More" to easily open the current page in article mode.</li>
     <li><b>NEW: </b>Web head service notification now has actions for creating new tab and managing web heads</li>
     <li><b>IMPROVED: </b>Web head animations and performance.</li>
@@ -194,7 +195,7 @@ a {
 <strong>1.5.5.1</strong>
 <ul>
     <li><b>NEW:</b> Configure animation speed, choose between medium and short.</li>
-    <li><b>NEW:</b> Ability to turn off Chromer Scanning notification.</li>
+    <li><b>NEW:</b> Ability to turn off Lynket Scanning notification.</li>
     <li><b>FIX:</b> Open in Chrome not working if Merge Tabs and Apps in Chrome was on.</li>
     <li><b>FIX:</b> Blacklist FC.</li>
 </ul>
@@ -211,14 +212,14 @@ a {
 <hr>
 <strong>1.5.4</strong>
 <ul>
-    <li><b>NEW:</b> Blacklisting: ability to launch your secondary browser instead of Chromer in certain apps.</li>
+    <li><b>NEW:</b> Blacklisting: ability to launch your secondary browser instead of Lynket in certain apps.</li>
     <li><b>NEW:</b> \'X\' will be shown in search bar to quickly clear text while typing.</li>
     <li><b>NEW:</b> Launching url from main screen now respects web heads preference.</li>
     <li><b>NEW:</b> Much improved pre-fetch content. Optimized for memory and battery and shows a notification when links are pre-fetched. </li>
-    <li><b>NEW:</b> OneSky translation link in about screen; do help translate Chromer to your language by contributing as a translator.</li>
-    <li><b>FIX:</b> “Open in Chromer” issue. Separate Open in Chrome entry will be shown now.</li>
+    <li><b>NEW:</b> OneSky translation link in about screen; do help translate Lynket to your language by contributing as a translator.</li>
+    <li><b>FIX:</b> “Open in Lynket” issue. Separate Open in Chrome entry will be shown now.</li>
     <li><b>IMPROVED:</b> Tablet layout.</li>
-    <li><b>FIX:</b> Janky scrolling in Chromer main screen.</li>
+    <li><b>FIX:</b> Janky scrolling in Lynket main screen.</li>
     <li><b>FIX:</b> Layout issues when font size is increased.</li>
     <li><b>FIX:</b> Secondary browser opening link twice.</li>
     <li><b>FIX:</b> Major optimizations and memory leak fixes.</li>
@@ -226,16 +227,16 @@ a {
 <hr>
 <strong>1.5.3</strong>
 <ul>
-    <li><b>FIX:</b> Chromer not shown in recents on some devices.</li>
+    <li><b>FIX:</b> Lynket not shown in recents on some devices.</li>
     <li><b>FIX:</b> Crashes and minor bugs.</li>
 </ul>
 <hr>
 <strong>1.5.2</strong>
 <ul>
-    <li><b>NEW:</b> Option to join beta program. Please join if you would like to contribute to Chromer\'s development.</li>
+    <li><b>NEW:</b> Option to join beta program. Please join if you would like to contribute to Lynket\'s development.</li>
     <li><b>IMPROVED:</b> Minor improvements to web heads snapping to trash and webhead physics.</li>
-    <li><b>FIX:</b> Chromer getting disappeared from recents view.</li>
-    <li><b>FIX:</b> Open in Chromer is shown in Chrome beta and dev versions. Now a separate Open in Chrome will be shown.</li>
+    <li><b>FIX:</b> Lynket getting disappeared from recents view.</li>
+    <li><b>FIX:</b> Open in Lynket is shown in Chrome beta and dev versions. Now a separate Open in Chrome will be shown.</li>
     <li><b>FIX:</b> Crashes and minor bugs.</li>
 </ul>
 <hr>
@@ -244,11 +245,11 @@ a {
     <li><b>NEW:</b> Ability to choose color of web heads.</li>
     <li><b>NEW:</b> Ability to close all webheads from notification bar.</li>
     <li><b>IMPROVED:</b> Webheads dragging. Webheads now snap to trash when near.</li>
-    <li><b>IMPROVED:</b> Scrolling behaviour in Chromer settings screen.</li>
+    <li><b>IMPROVED:</b> Scrolling behaviour in Lynket settings screen.</li>
     <li><b>FIX:</b> Not able to perform search on some keyboards. Now <b>search icon</b> will be shown on your keyboard, press that to launch URL or search.</li>
     <li><b>FIX:</b> Crash when trying to install Chrome from dialog.</li>
     <li><b>FIX:</b> Multiple crashes related to webheads.</li>
-    <li><b>FIX:</b> Chromer settings appearing randomly when closing custom tabs.</li>
+    <li><b>FIX:</b> Lynket settings appearing randomly when closing custom tabs.</li>
     <li><b>FIX:</b> For 6.0+, re ask permission to draw on other apps if it was revoked with webheads turned on.</li>
 </ul>
 <hr>
@@ -260,7 +261,7 @@ a {
     <li><b>NEW:</b> Dynamic toolbar enhanced. Now can adapt color based on the launching app\'s color.</li>
     <li><b>NEW:</b> Launch screen, new icon and app intro.</li>
     <li><b>IMPROVED:</b> Better app pickers</li>
-    <li><b>IMPROVED:</b> Sharing a non url text to Chromer will now do a Google search. Also in text selection pop up in 6.0</li>
+    <li><b>IMPROVED:</b> Sharing a non url text to Lynket will now do a Google search. Also in text selection pop up in 6.0</li>
     <li><b>IMPROVED:</b> Setting default behaviour on Cyanogen devices</li>
     <li><b>IMPROVED:</b> Improved warm up and pre-fetch performance on non Chrome browsers</li>
     <li><b>IMPROVED:</b> Reduced memory consumptions and general crash fixes</li>
@@ -274,9 +275,9 @@ a {
 <hr>
 <strong>1.4</strong>
 <ul>
-    <li><b>NEW:</b> Pre fetching. Chromer can scan links on screen and pre load them in background for you.</li>
+    <li><b>NEW:</b> Pre fetching. Lynket can scan links on screen and pre load them in background for you.</li>
     <li><b>NEW:</b> Option to keep browser warmed up. Improves launch times!</li>
-    <li><b>NEW:</b> Dynamic toolbar color. Chromer can provide color based on the website, if the website has it.</li>
+    <li><b>NEW:</b> Dynamic toolbar color. Lynket can provide color based on the website, if the website has it.</li>
     <li><b>NEW:</b> Secondary browser option. Quickly get to your preferred app.</li>
     <li><b>NEW:</b> Add to home screen option.</li>
     <li><b>IMPROVED:</b> More material design</li>
@@ -287,11 +288,11 @@ a {
 <strong>1.3</strong>
 <ul>
    <li><b>DONATE option.</b> Please donate if you like this app and to support development:)</li>
-   <li>Share links to open in Chromer</li>
-   <li>For 6.0, select a text link to open in Chromer</li>
+   <li>Share links to open in Lynket</li>
+   <li>For 6.0, select a text link to open in Lynket</li>
    <li>Option to choose between multiple Chrome versions</li>
    <li>About screen</li>
-   <li>Link to Chromer G+ community</li>
+   <li>Link to Lynket G+ community</li>
    <li>Changelog screen</li>
    <li>Link to Chrome in case no custom tab provider is found</li>
 </ul>
@@ -306,7 +307,7 @@ a {
    <li>Change Toolbar color to your liking.</li>
    <li>Configure animations.</li>
    <li>Link to read about chrome custom tabs.</li>
-   <li>Option to share Chromer link to others.</li>
+   <li>Option to share Lynket link to others.</li>
    <li>Licenses dialog.</li>
    <li>Tutorial flow performance fixes.</li>
    <li>Icons and imagery updated.</li>

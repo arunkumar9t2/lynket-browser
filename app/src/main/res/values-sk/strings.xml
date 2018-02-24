@@ -45,15 +45,15 @@
         <item>Normálne</item>
         <item>Malé</item>
     </string-array>
-    <string name="share_text">Hej, vyskúšaj \‘Chromer\’ pre rýchle a bezpečné surfovanie! Stiahni si ho tu https://goo.gl/992ils</string>
+    <string name="share_text">Hej, vyskúšaj \‘Lynket\’ pre rýchle a bezpečné surfovanie! Stiahni si ho tu https://goo.gl/992ils</string>
     <string name="share_via">Zdieľať pomocou…</string>
     <string name="custom_tab_provider_not_found">Kompatibilný poskytovateľ Custom Tabs nebol nájdený</string>
-    <string name="custom_tab_provider_not_found_expln">Chromer vyžaduje aby ste mali nainštalovaný prehliadač podporujúci Custom Tabs. Momentálne na vašom zariadení nemáte prehliadač, ktorý to podporuje. Chceli by ste nainštalovať Google Chrome z Obchodu Play? Ak ho už máte, prosím, aktualizujte na najnovšiu verziu.</string>
-    <string name="custom_tab_provider_not_found_dialog_content"><![CDATA[Nie je možné nájsť kompatibilný prehliadač s podporou Custom tabs. Odporúčame Google Chrome (zdarma). Stále môžte zobrazovať stránky v Chromer a používať režim článok, ale pre najlepšie využitie je odporúčaný prehliadač s podporou Custom tabs. Chcete ho nainštalovať?]]></string>
+    <string name="custom_tab_provider_not_found_expln">Lynket vyžaduje aby ste mali nainštalovaný prehliadač podporujúci Custom Tabs. Momentálne na vašom zariadení nemáte prehliadač, ktorý to podporuje. Chceli by ste nainštalovať Google Chrome z Obchodu Play? Ak ho už máte, prosím, aktualizujte na najnovšiu verziu.</string>
+    <string name="custom_tab_provider_not_found_dialog_content"><![CDATA[Nie je možné nájsť kompatibilný prehliadač s podporou Custom tabs. Odporúčame Google Chrome (zdarma). Stále môžte zobrazovať stránky v Lynket a používať režim článok, ale pre najlepšie využitie je odporúčaný prehliadač s podporou Custom tabs. Chcete ho nainštalovať?]]></string>
     <string name="install">Inštalovať</string>
     <string name="licenses">Licencie</string>
     <string name="about">O aplikácii</string>
-    <string name="help_chromer_grow">Pomôžte Chromer rásť!</string>
+    <string name="help_chromer_grow">Pomôžte Lynket rásť!</string>
     <string name="share">Zdieľať</string>
     <string name="share_with">Zdieľať s %1$s</string>
     <string name="rate_play_store">Hodnotiť v Obchode Play</string>
@@ -73,10 +73,10 @@
     <string name="copied">Skopírované</string>
     <string name="copy_link">Skopírovať odkaz</string>
     <string name="add_to_homescreen">Pridať na domovskú stránku</string>
-    <string name="intro_1">Ahoj! \nChromer je ľahký, bezpečný a rýchly webový prehliadač.</string>
+    <string name="intro_1">Ahoj! \nLynket je ľahký, bezpečný a rýchly webový prehliadač.</string>
     <string name="intro_4_new">Môže zoskupiť viacero odkazov do plávajúcich bublín pri ich otvorení a potom ich načítať na pozadí!</string>
-    <string name="how_to_use">Ako používať Chromer?</string>
-    <string name="intro_6">Stačí nastaviť Chromer ako predvolený prehliadač, Chromer zobrazí odkaz nerušivým spôsobom. Alebo si vyberte Chromer v prípade potreby.</string>
+    <string name="how_to_use">Ako používať Lynket?</string>
+    <string name="intro_6">Stačí nastaviť Lynket ako predvolený prehliadač, Lynket zobrazí odkaz nerušivým spôsobom. Alebo si vyberte Lynket v prípade potreby.</string>
     <string name="version">Verzia</string>
     <string name="changelog">Zoznam zmien</string>
     <string name="join_google_plus">Pripojiť sa do Google+ komunity</string>
@@ -93,7 +93,7 @@
     <string name="colored_toolbar">Farebná lišta</string>
     <string name="choose_animation">Animácia otvorenia</string>
     <string name="animation_speed">Rýchlosť animácie</string>
-    <string name="default_pref_xpln">Nastavte si Chromer ako predvolený aby otváral všetky odkazy alebo si môžete vybrať Chromer zo zoznamu keď sa zobrazí</string>
+    <string name="default_pref_xpln">Nastavte si Lynket ako predvolený aby otváral všetky odkazy alebo si môžete vybrať Lynket zo zoznamu keď sa zobrazí</string>
     <string name="personalization">Personalizácia</string>
     <string name="default_clear_msg">prehliadač je nastavený ako predvolený, prosím, zrušte ho kliknutím na vymazať predvolené nastavenia.</string>
     <string name="dynamic_toolbar_color">Dynamická farba lišty</string>
@@ -103,16 +103,16 @@
     <string name="default_provider">Poskytovateľ Custom Tabs</string>
     <string name="pre_fetch_content">Prednačítanie obsahu</string>
     <string name="pre_fetch_desc">Vyhľadáva odkazy na vašej obrazovke a načítava ich na pozadí pre rýchle spustenie</string>
-    <string name="accessibility_description">Túto službu využíva Chromer pre skenovanie textových odkazov na vašej obrazovke a ich načítanie na pozadí. Žiadne ďalšie informácie nie sú spracovávané. Stále môžete používať Chromer v odľahčenom režime ak sa rozhodnete nepovoliť túto možnosť. Pre viac informácii spustite aplikáciu Chromer.</string>
+    <string name="accessibility_description">Túto službu využíva Lynket pre skenovanie textových odkazov na vašej obrazovke a ich načítanie na pozadí. Žiadne ďalšie informácie nie sú spracovávané. Stále môžete používať Lynket v odľahčenom režime ak sa rozhodnete nepovoliť túto možnosť. Pre viac informácii spustite aplikáciu Lynket.</string>
     <string name="accessibility_dialog_title">Služba Dostupnosť je vyžadovaná</string>
-    <string name="accessibility_dialog_desc">Aby Chromer mohol skenovať odkazy v ktorejkoľvek aplikácii, potrebuje povolenie pre službu Dostupnosť. Prosím, povoľte to na nasledujúcej obrazovke, potom budete môcť povoliť túto funkciu a užívať si rýchle spustenie.</string>
+    <string name="accessibility_dialog_desc">Aby Lynket mohol skenovať odkazy v ktorejkoľvek aplikácii, potrebuje povolenie pre službu Dostupnosť. Prosím, povoľte to na nasledujúcej obrazovke, potom budete môcť povoliť túto funkciu a užívať si rýchle spustenie.</string>
     <string name="open_settings">Otvoriť nastavenia</string>
     <string name="only_on_wifi">Skenovať iba cez Wi-Fi</string>
     <string name="show_notification">Zobraziť upozornenie, keď je odkaz prednačítaný</string>
     <string name="default_toolbar_color">Predvolená farba lišty</string>
     <string name="web_heads_color">Farba webových hlavičiek</string>
     <string name="choose_secondary_browser">Sekundárny prehliadač</string>
-    <string name="dynamic_toolbar_help">Pre dynamické zafarbenie lišty, sa Chromer učí farby bez zásahu užívateľa. To spočiatku nemusí byť správne pre webové stránky alebo aplikáciu, ale to sa  používaním a časom zlepší. Užite si to!</string>
+    <string name="dynamic_toolbar_help">Pre dynamické zafarbenie lišty, sa Lynket učí farby bez zásahu užívateľa. To spočiatku nemusí byť správne pre webové stránky alebo aplikáciu, ale to sa  používaním a časom zlepší. Užite si to!</string>
     <string name="secondary_browser_success">Aplikácia %1$s je nastavená ako sekundárny prehliadač!</string>
     <string name="fav_share_success">Aplikácia %1$s je nastavená ako aplikácia pre zdieľanie!</string>
     <string name="default_provider_success">Aplikácia %1$s bude použitá ako poskytovateľ Custom Tabs!</string>
@@ -126,7 +126,7 @@
     <string name="dynamic_summary_web">Farba bude zvolená podľa spustenej stránky</string>
     <string name="no_option_selected">Nie sú vybrané žiadne voľby</string>
     <string name="permission_required">Je požadované povolenie</string>
-    <string name="usage_permission_explanation_appcolor">Pre povolenie dynamického zafarbenia lišty podľa aplikácie, Chromer potrebuje vaše povolenie vedieť, aké aplikácie používate. Chcete to teraz povoliť?</string>
+    <string name="usage_permission_explanation_appcolor">Pre povolenie dynamického zafarbenia lišty podľa aplikácie, Lynket potrebuje vaše povolenie vedieť, aké aplikácie používate. Chcete to teraz povoliť?</string>
     <string name="grant">Povoliť</string>
     <string name="open_source_contributions">Open source veci</string>
     <string name="search_or_type_url">Vyhľadajte alebo zadajte adresu</string>
@@ -137,12 +137,12 @@
     <string name="credits">Zásluhy</string>
     <string name="icon_design">Dizajn ikony</string>
     <string name="overlay_permission_content">Pre vykreslenie webových hlavičiek na obrazovke, je potrebné povoliť vykreslenie cez ďalšie aplikácie. Chcete to teraz povoliť?</string>
-    <string name="webheads_intro_1">Keď otvoríte odkaz v ktorejkoľvek aplikácii, plávajúca bublina nazývaná webová hlavička bude vytvorená na obrazovke a Chromer sa pokúsi prednačítať odkaz.</string>
+    <string name="webheads_intro_1">Keď otvoríte odkaz v ktorejkoľvek aplikácii, plávajúca bublina nazývaná webová hlavička bude vytvorená na obrazovke a Lynket sa pokúsi prednačítať odkaz.</string>
     <string name="webheads_intro_2_new">Pri otvorení viacerých odkazov, webové hlavičky sa automaticky zoskupia jedna na druhú. Dlhým podržaním na webovú hlavičku sa zobrazí menu.</string>
     <string name="webheads_intro_3">Keď potiahnete webovú hlavičku, zobrazí sa kôš. Presunutím webovej hlavičky na kôš sa odstráni.</string>
     <string name="webheads_intro_4_lolli">Agresívne načítanie na pozadí, načíta stránku na pozadí aj pokým vy stále používate inú aplikáciu.\n\n <b>Pravdepodobne sa zobrazí záblesk otvorenia karty. To je zámerné a nie je chyba.</b></string>
-    <string name="webheads_intro_4">Chromer uprednostňuje posledne otvorený odkaz a prednačíta ho. Odporúčaná metóda je otvárať webové hlavičky jednu po druhej odhora až dole. Ak povolíte zatváranie webových hlavičiek po otvorení bude to bezproblémové.</string>
-    <string name="web_head_permission_toast">Pre otvorenie odkazov v plávajúcich bublinách, Chromer potrebuje povolenie Vykresliť cez ďalšie aplikácie. Prosím, povoľte to pre pokračovanie alebo zakážte webové hlavičky v nastaveniach aplikácie.</string>
+    <string name="webheads_intro_4">Lynket uprednostňuje posledne otvorený odkaz a prednačíta ho. Odporúčaná metóda je otvárať webové hlavičky jednu po druhej odhora až dole. Ak povolíte zatváranie webových hlavičiek po otvorení bude to bezproblémové.</string>
+    <string name="web_head_permission_toast">Pre otvorenie odkazov v plávajúcich bublinách, Lynket potrebuje povolenie Vykresliť cez ďalšie aplikácie. Prosím, povoľte to pre pokračovanie alebo zakážte webové hlavičky v nastaveniach aplikácie.</string>
     <string name="tap_close_all">Kliknite pre zatvorenie všetkých</string>
     <string name="web_heads_service">Slúžba pre webové hlavičky</string>
     <string name="join_beta">Pripojte sa k beta testu</string>
@@ -151,7 +151,7 @@
     <string name="no_voice_rec_apps">Nebola nájdená kompatibilná aplikácia pre rozoznávanie hlasu</string>
     <string name="loading">Načítavanie…</string>
     <string name="share_failed_msg">Do aplikácie nie je možné zdieľať, presmerované do normálneho zdieľania</string>
-    <string name="revoke_accessibility_permission">Teraz môžete zakázať službu Dostupnosť pre Chromer.</string>
+    <string name="revoke_accessibility_permission">Teraz môžete zakázať službu Dostupnosť pre Lynket.</string>
     <string name="last_fetched_urls">Naposledy načínané adresy</string>
     <string name="translations">Preklad aplikácie</string>
     <string name="merge_tabs">Zlúčenie kariet a aplikácií</string>
@@ -199,7 +199,7 @@
     <string name="launch_setting">Nastavenia spustenia</string>
     <string name="secondary_browser_not_installed">Vyzerá to, že sekundárny prehliadač, ktorý ste zvolili, už nie je nainštalovaný. Chcete zobraziť nastavenia aby ste mohli toto nastavenie zmeniť?</string>
     <string name="secondary_browser_launch_error">Odkaz nie je možné spustiť v prehliadači, ktorý ste zvolili. Chcete toto nastavenie zmeniť?</string>
-    <string name="secondary_browser_not_error">Zablokovali ste túto aplikáciu pre spúšťanie odkazov v Chromer a nenastavili ste sekundárny prehliadač. Chcete teraz nastaviť sekundárny prehliadač?</string>
+    <string name="secondary_browser_not_error">Zablokovali ste túto aplikáciu pre spúšťanie odkazov v Lynket a nenastavili ste sekundárny prehliadač. Chcete teraz nastaviť sekundárny prehliadač?</string>
     <string name="copy_all">Kopírovať všetko</string>
     <string name="choose_share_method">Zvoľte metódu zdieľania</string>
     <string name="comma_seperated">Oddelené čiarkou</string>
@@ -239,7 +239,7 @@
     <string name="history_deletion_confirmation_content">Táto akcia vymaže celú históriu a nie je to možné vrátiť späť.</string>
     <string name="incognito_mode">Režim inkognito</string>
     <string name="recents_intro">Tu sa zobrazia nedávno otvorené odkazy</string>
-    <string name="amp_article_combined_explanation"><![CDATA[Ak sú povolené režimy <b>AMP aj článok</b>, Chromer sa pokúsi načítať AMP verziu stránky, ak je dostupná. Ak nie, bude načítaná v režime článok.]]></string>
+    <string name="amp_article_combined_explanation"><![CDATA[Ak sú povolené režimy <b>AMP aj článok</b>, Lynket sa pokúsi načítať AMP verziu stránky, ak je dostupná. Ak nie, bude načítaná v režime článok.]]></string>
     <string name="attention">Upozornenie!</string>
     <string name="manage">Spravovať</string>
     <string name="more_menu">Viac</string>
@@ -256,7 +256,7 @@
     <string name="source">Zdroj</string>
     <string name="create">Vytvoriť</string>
     <string name="name_cannot_be_empty">Meno nemôže byť prázdne</string>
-    <string name="chromer_options">Možnosti Chromer</string>
+    <string name="chromer_options">Možnosti Lynket</string>
     <string name="warning">Upozornenie</string>
     <string name="text_you_copied">Skopírovaný text</string>
     <string name="Change">Zmeniť</string>

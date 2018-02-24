@@ -45,15 +45,15 @@
         <item>Normal</item>
         <item>Liten</item>
     </string-array>
-    <string name="share_text">Hej kolla in \'Chromer\' för en snabb och säker surfupplevelse! Ladda ner här https://goo.gl/992ils</string>
+    <string name="share_text">Hej kolla in \'Lynket\' för en snabb och säker surfupplevelse! Ladda ner här https://goo.gl/992ils</string>
     <string name="share_via">Dela med..</string>
     <string name="custom_tab_provider_not_found">Kompatibel självvald flikleverantör hittades ej</string>
-    <string name="custom_tab_provider_not_found_expln">Chromer kräver att du har en kompatibel flikwebbläsare på din mobil. Just nu finns det ingen sådan webbläsare. Vill du ladda ner Google Chrome (Gratis) från Play butik? Om du redan har den, vänligen uppdatera den till nyaste versionen.</string>
-    <string name="custom_tab_provider_not_found_dialog_content"><![CDATA[Kunde inte hitta en kompatibel flikwebbläsare på din mobil. Google Chrome (Gratis) rekommenderas. Du kan fortfarande se hemsidor i Chromer och använda artikelläge, men för bästa upplevelsen bör du använda en flikwebbläsare. Vill du installera en nu?]]></string>
+    <string name="custom_tab_provider_not_found_expln">Lynket kräver att du har en kompatibel flikwebbläsare på din mobil. Just nu finns det ingen sådan webbläsare. Vill du ladda ner Google Chrome (Gratis) från Play butik? Om du redan har den, vänligen uppdatera den till nyaste versionen.</string>
+    <string name="custom_tab_provider_not_found_dialog_content"><![CDATA[Kunde inte hitta en kompatibel flikwebbläsare på din mobil. Google Chrome (Gratis) rekommenderas. Du kan fortfarande se hemsidor i Lynket och använda artikelläge, men för bästa upplevelsen bör du använda en flikwebbläsare. Vill du installera en nu?]]></string>
     <string name="install">Installera</string>
     <string name="licenses">Licenser</string>
     <string name="about">Om</string>
-    <string name="help_chromer_grow">Hjälp Chromer växa!</string>
+    <string name="help_chromer_grow">Hjälp Lynket växa!</string>
     <string name="share">Dela</string>
     <string name="share_with">Dela med %1$s</string>
     <string name="rate_play_store">Lämna omdöme på Play Butik</string>
@@ -73,10 +73,10 @@
     <string name="copied">Kopierad</string>
     <string name="copy_link">Kopiera länk</string>
     <string name="add_to_homescreen">Lägg till på hemskärmen</string>
-    <string name="intro_1">Hej!\nChromer är en webbläsare som är säker, snabb och lätt på minne.</string>
+    <string name="intro_1">Hej!\nLynket är en webbläsare som är säker, snabb och lätt på minne.</string>
     <string name="intro_4_new">Den kan stapla länkar i svävande bubblor när du öppnar dem och laddar sedan länkar i bakgrunden!</string>
     <string name="how_to_use">Hur använder man detta?</string>
-    <string name="intro_6">Ställ bara in Chromer som din standardwebbläsare, Chromer kommer visa länken på ett sätt som inte stör. Eller välj Chromer när den behövs.</string>
+    <string name="intro_6">Ställ bara in Lynket som din standardwebbläsare, Lynket kommer visa länken på ett sätt som inte stör. Eller välj Lynket när den behövs.</string>
     <string name="version">Version</string>
     <string name="changelog">Uppdateringslogg</string>
     <string name="join_google_plus">Gå med i Google+ communityn</string>
@@ -93,7 +93,7 @@
     <string name="colored_toolbar">Färgat verktygsfält</string>
     <string name="choose_animation">Animation för öppning</string>
     <string name="animation_speed">Animationshastighet</string>
-    <string name="default_pref_xpln">Ställ in Chromer som standard för att öppna alla länkar, eller så kan du välja Chromer från listan när den visas</string>
+    <string name="default_pref_xpln">Ställ in Lynket som standard för att öppna alla länkar, eller så kan du välja Lynket från listan när den visas</string>
     <string name="personalization">Skräddarsy</string>
     <string name="default_clear_msg">är vald som standardwebbläsare, vänligen nollställ detta genom att rensa standardinställningarna.</string>
     <string name="dynamic_toolbar_color">Dynamisk färg för verktygsfältet</string>
@@ -103,14 +103,14 @@
     <string name="default_provider">Egen tabbleverantör</string>
     <string name="pre_fetch_content">Läs in sidor i förväg</string>
     <string name="pre_fetch_desc">Skanna din skärm för länkar och ladda in dem i bakgrunden för omedelbar uppstart</string>
-    <string name="accessibility_description">Denna tjänst kommer användas av Chromer för att skanna textlänkar på din skärm och ladda in dem i bakgrunden. Ingen annan information samlas in av Chromer. Du kan fortfarande välja att använda Chromer i lätt länge om du inte vill använda detta. För mer information startar du Chromers app.</string>
+    <string name="accessibility_description">Denna tjänst kommer användas av Lynket för att skanna textlänkar på din skärm och ladda in dem i bakgrunden. Ingen annan information samlas in av Lynket. Du kan fortfarande välja att använda Lynket i lätt länge om du inte vill använda detta. För mer information startar du Lynkets app.</string>
     <string name="accessibility_dialog_title">Åtkomstbehörighet krävs</string>
-    <string name="accessibility_dialog_desc">För att tillåta att Chromer skannar in länkar från alla appar behöver du tillåta åtkomstjänsten att göra detta. Vänligen ge Chromer åtkomst till detta i nästa skärm, efter det kan du slå på denna inställning och njuta av snabba uppstarter.</string>
+    <string name="accessibility_dialog_desc">För att tillåta att Lynket skannar in länkar från alla appar behöver du tillåta åtkomstjänsten att göra detta. Vänligen ge Lynket åtkomst till detta i nästa skärm, efter det kan du slå på denna inställning och njuta av snabba uppstarter.</string>
     <string name="open_settings">Öppna inställningar</string>
     <string name="only_on_wifi">Skanna enbart på Wi-Fi</string>
     <string name="show_notification">Visa aviseringar när en länk lästs in i förväg</string>
     <string name="default_toolbar_color">Standardfärg för verktygsfältet</string>
     <string name="web_heads_color">Färg på näthuvud</string>
     <string name="choose_secondary_browser">Sekundär webbläsare</string>
-    <string name="dynamic_toolbar_help">Slå på dynamiska färger för verktygsfältet, Chromer kommer då lära sig färgerna tyst. Färgen kanske inte bestäms automatiskt till en början, men det kommer efter användande!</string>
+    <string name="dynamic_toolbar_help">Slå på dynamiska färger för verktygsfältet, Lynket kommer då lära sig färgerna tyst. Färgen kanske inte bestäms automatiskt till en början, men det kommer efter användande!</string>
 </resources>

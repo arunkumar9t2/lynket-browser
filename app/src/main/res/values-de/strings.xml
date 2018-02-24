@@ -45,14 +45,14 @@
         <item>Normal</item>
         <item>Klein</item>
     </string-array>
-    <string name="share_text">Hey,  teste \'Chromer\' für schnelles und sicheres surfen. Hier runterladen: https://goo.gl/992ils</string>
+    <string name="share_text">Hey,  teste \'Lynket\' für schnelles und sicheres surfen. Hier runterladen: https://goo.gl/992ils</string>
     <string name="share_via">Teilen mit…</string>
     <string name="custom_tab_provider_not_found">Kein kompatibler Custom-Tab-Anbieter gefunden</string>
     <string name="custom_tab_provider_not_found_expln">Chrome benötigt einen Custom-Tab-kompatiblen Browser auf deinem Gerät. Momentan sind keine solchen Browser installiert. Würdest du Google Chrome (kostenlos) aus dem Play Store installieren? Wenn du es bereits hast, bitte aktualidiere es auf die neueste Version.</string>
     <string name="install">Installieren</string>
     <string name="licenses">Lizenzen</string>
     <string name="about">Über</string>
-    <string name="help_chromer_grow">Hilf Chromer zu wachsen!</string>
+    <string name="help_chromer_grow">Hilf Lynket zu wachsen!</string>
     <string name="share">Teilen</string>
     <string name="share_with">Teilen mit %1$s</string>
     <string name="rate_play_store">Im Play Store bewerten</string>
@@ -72,9 +72,9 @@
     <string name="copied">Kopiert</string>
     <string name="copy_link">Link kopieren</string>
     <string name="add_to_homescreen">Zum Startbildschirm hinzufügen</string>
-    <string name="intro_1">"Hallo! \nChromer ist ein schlanker, sicherer und schneller Browser. "</string>
+    <string name="intro_1">"Hallo! \nLynket ist ein schlanker, sicherer und schneller Browser. "</string>
     <string name="how_to_use">Wie funktioniert das?</string>
-    <string name="intro_6">Du musst nur Chromer als deinen Standardbrowser festlegen. Chromer wird dir den Link dann unaufdringlich anzeigen. Oder du wählst Chromer nur bei Bedarf.</string>
+    <string name="intro_6">Du musst nur Lynket als deinen Standardbrowser festlegen. Lynket wird dir den Link dann unaufdringlich anzeigen. Oder du wählst Lynket nur bei Bedarf.</string>
     <string name="version">Version</string>
     <string name="changelog">Neuigkeiten</string>
     <string name="join_google_plus">Google+ Community beitreten</string>
@@ -91,7 +91,7 @@
     <string name="colored_toolbar">Farbige Aktionsleiste</string>
     <string name="choose_animation">Animation beim Öffnen</string>
     <string name="animation_speed">Animationsgeschwindigkeit</string>
-    <string name="default_pref_xpln">Lege Chromer als Standard für das Öffnen von Links fest oder wähle Chromer aus der Liste aus wenn es angezeigt wird</string>
+    <string name="default_pref_xpln">Lege Lynket als Standard für das Öffnen von Links fest oder wähle Lynket aus der Liste aus wenn es angezeigt wird</string>
     <string name="personalization">Personalisieren</string>
     <string name="default_clear_msg">ist als Standard Browser festgelegt. Bitte ändern indem du \“Auf Standard zurücksetzen\” drückst.</string>
     <string name="dynamic_toolbar_color">Dynamische Aktionsleistensfarbe</string>
@@ -101,16 +101,16 @@
     <string name="default_provider">Custom-Tab-Anbieter</string>
     <string name="pre_fetch_content">Inhalt Vorabrufen</string>
     <string name="pre_fetch_desc">Scanne deinen Bildschirm nach Links und lade sie im Hintergrund für einen sofortigen Start</string>
-    <string name="accessibility_description">Dieser Dienst wird genutzt um Chromer Text nach Links scannen zu lassen, um diese im Hintergrund zu laden. Es werden keine anderen Informationen durch Chromer verarbeitet. Du kannst Chromer weiterhin im einfachen Modus benutzen wenn du dies nicht möchtest. Starte die Chromer app für mehr Informationen.</string>
+    <string name="accessibility_description">Dieser Dienst wird genutzt um Lynket Text nach Links scannen zu lassen, um diese im Hintergrund zu laden. Es werden keine anderen Informationen durch Lynket verarbeitet. Du kannst Lynket weiterhin im einfachen Modus benutzen wenn du dies nicht möchtest. Starte die Lynket app für mehr Informationen.</string>
     <string name="accessibility_dialog_title">Bedienungshilfe muss aktiviert sein</string>
-    <string name="accessibility_dialog_desc">Um Chromer das Scannen nach Links zu erlauben musst du die Bedienungshilfe aktivieren. Bitte aktiviere die Funktion auf dem nächsten Bildschirm. Danach kannst du die Option aktiveren und das schnellere Starten genießen.</string>
+    <string name="accessibility_dialog_desc">Um Lynket das Scannen nach Links zu erlauben musst du die Bedienungshilfe aktivieren. Bitte aktiviere die Funktion auf dem nächsten Bildschirm. Danach kannst du die Option aktiveren und das schnellere Starten genießen.</string>
     <string name="open_settings">Einstellungen öffnen</string>
     <string name="only_on_wifi">Nur bei WLAN-Verbindung scannen</string>
     <string name="show_notification">Zeige eine Benachrichtigung, während ein Link vorgeladen wird</string>
     <string name="default_toolbar_color">Standard Aktionsleistenfarbe</string>
     <string name="web_heads_color">Web Heads Farbe</string>
     <string name="choose_secondary_browser">Sekundärer Browser</string>
-    <string name="dynamic_toolbar_help">Um das dynamische Färben der Aktionsleiste zu ermöglichen, lernt Chromer im Hintergrund. Manchmal funktioniert es nicht sofort, sondern erst nach einiger Zeit.</string>
+    <string name="dynamic_toolbar_help">Um das dynamische Färben der Aktionsleiste zu ermöglichen, lernt Lynket im Hintergrund. Manchmal funktioniert es nicht sofort, sondern erst nach einiger Zeit.</string>
     <string name="secondary_browser_success">%1$s als sekundärer Browser festgelegt!</string>
     <string name="fav_share_success">%1$s als Lieblingsapp zum Teilen festgelegt!</string>
     <string name="default_provider_success">%1$s wird für das bereitstellen von Custom Tabs genutzt!</string>
@@ -124,7 +124,7 @@
     <string name="dynamic_summary_web">Die Farbe basiert auf der geöffnete Webseite</string>
     <string name="no_option_selected">Keine Option ausgewählt</string>
     <string name="permission_required">Berechtigung erforderlich</string>
-    <string name="usage_permission_explanation_appcolor">Um das dynamische Färben der Aktionsleiste (App-basiert) zu ermöglichen, braucht Chromer die Berechtigung die Apps zu kennen, die du benutzt. Möchtest du diese Berechtigung gewähren?</string>
+    <string name="usage_permission_explanation_appcolor">Um das dynamische Färben der Aktionsleiste (App-basiert) zu ermöglichen, braucht Lynket die Berechtigung die Apps zu kennen, die du benutzt. Möchtest du diese Berechtigung gewähren?</string>
     <string name="grant">Gewähren</string>
     <string name="open_source_contributions">Open Source Stuff</string>
     <string name="search_or_type_url">Suchen oder URL eingeben</string>
@@ -135,10 +135,10 @@
     <string name="credits">Credits</string>
     <string name="icon_design">Icon Design</string>
     <string name="overlay_permission_content">Um die Web Heads anzuzeigen wird die Berechtigung, etwas über anderen Apps einzublenden benötigt. Möchtest du die Berechtigung gewähren?</string>
-    <string name="webheads_intro_1">Wenn du irgendeinen Link öffnest wird eine \"schwebende Blase\" (Web Head) erstellt und Chromer versucht den Link vorab zu laden.</string>
+    <string name="webheads_intro_1">Wenn du irgendeinen Link öffnest wird eine \"schwebende Blase\" (Web Head) erstellt und Lynket versucht den Link vorab zu laden.</string>
     <string name="webheads_intro_3">Wenn du einen Web Head ziehst, erscheint eine Mülltonne. Lass den Web Head darüber los um ihn zu schließen.</string>
-    <string name="webheads_intro_4">"Chromer priorisiert den zuletzt geöffneten Link und lädt ihn vorab. Die beste Methode ist, die Web Heads nacheinander von oben nach unten auszuwählen. Die beste Erfahrung wird gewährleistet, wenn die Web Heads automatisch geschlossen werden beim Antippen. "</string>
-    <string name="web_head_permission_toast">Um Links in schwebenden Blasen zu öffnen, benötigt Chromer die Berechtigung, etwas über anderen Apps einzublenden. Bitte aktivieren oder die Web Heads deaktivieren.</string>
+    <string name="webheads_intro_4">"Lynket priorisiert den zuletzt geöffneten Link und lädt ihn vorab. Die beste Methode ist, die Web Heads nacheinander von oben nach unten auszuwählen. Die beste Erfahrung wird gewährleistet, wenn die Web Heads automatisch geschlossen werden beim Antippen. "</string>
+    <string name="web_head_permission_toast">Um Links in schwebenden Blasen zu öffnen, benötigt Lynket die Berechtigung, etwas über anderen Apps einzublenden. Bitte aktivieren oder die Web Heads deaktivieren.</string>
     <string name="tap_close_all">Drücken um alle zu schließen</string>
     <string name="web_heads_service">Web Heads Dienst</string>
     <string name="join_beta">Beta beitreten</string>

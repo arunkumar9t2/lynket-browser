@@ -39,14 +39,14 @@
         <item>Κανονικό</item>
         <item>Μικρό</item>
     </string-array>
-    <string name="share_text">Γεια Ελέγξτε το \‘Chromer\’ για γρήγορη και ασφαλή εμπειρία περιήγησης! Κατεβάσετε εδώ  https://goo.gl/992ils</string>
+    <string name="share_text">Γεια Ελέγξτε το \‘Lynket\’ για γρήγορη και ασφαλή εμπειρία περιήγησης! Κατεβάσετε εδώ  https://goo.gl/992ils</string>
     <string name="share_via">Κοινοποίηση με…</string>
     <string name="custom_tab_provider_not_found">Δεν βρέθηκε συμβατός παροχέας προσαρμοσμένης σελίδας</string>
-    <string name="custom_tab_provider_not_found_expln">Το Chromer απαιτεί να έχετε έναν περιηγητή συμβατό με Προσαρμοσμένη σελίδα. Προς το παρών δεν υπάρχουν περιηγητές ατο κινητό σας που να το υποστηρίζουν. Θα θελατε να εγκαταστήσετε το Google Chrome (Δωρεάν) από το Play Store; Εάν το έχετε ήδη, παρακαλώ αναβαθμήστε το στην τελευταία έκδοση.</string>
+    <string name="custom_tab_provider_not_found_expln">Το Lynket απαιτεί να έχετε έναν περιηγητή συμβατό με Προσαρμοσμένη σελίδα. Προς το παρών δεν υπάρχουν περιηγητές ατο κινητό σας που να το υποστηρίζουν. Θα θελατε να εγκαταστήσετε το Google Chrome (Δωρεάν) από το Play Store; Εάν το έχετε ήδη, παρακαλώ αναβαθμήστε το στην τελευταία έκδοση.</string>
     <string name="install">Εγκατάσταση</string>
     <string name="licenses">Άδειες</string>
     <string name="about">Σχετικά</string>
-    <string name="help_chromer_grow">Βοηθήστε το Chromer να μεγαλώσει!</string>
+    <string name="help_chromer_grow">Βοηθήστε το Lynket να μεγαλώσει!</string>
     <string name="share">Κοινοποίηση</string>
     <string name="share_with">Κοινοποίηση με %1$s</string>
     <string name="rate_play_store">Αξιολογήστε στο Play Store</string>
@@ -66,5 +66,5 @@
     <string name="copied">Αντιγράφτηκε</string>
     <string name="copy_link">Αντιγραφή συνδέσμου</string>
     <string name="add_to_homescreen">Προσθήκη στην Αρχική Οθόνη</string>
-    <string name="intro_1">Γεια σας!\nΤο Chromer είναι ένας ελαφρύς, ασφαλής και γρήγορος περιηγητής.</string>
+    <string name="intro_1">Γεια σας!\nΤο Lynket είναι ένας ελαφρύς, ασφαλής και γρήγορος περιηγητής.</string>
 </resources>

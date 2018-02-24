@@ -70,7 +70,7 @@ android {
             shrinkResources true
             debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            resValue "string", "app_name", "Chromer"
+            resValue "string", "app_name", "Lynket"
 
             lintOptions {
                 disable 'MissingTranslation'
@@ -85,7 +85,7 @@ android {
 
             applicationIdSuffix '.debug'
             versionNameSuffix '- dev'
-            resValue "string", "app_name", "Chromer-dev"
+            resValue "string", "app_name", "Lynket-dev"
 
             ext.enableCrashlytics = false
         }

@@ -45,14 +45,14 @@
         <item>Normal</item>
         <item>Küçük</item>
     </string-array>
-    <string name="share_text">Hey \‘Chromer\’ uygulamasına hızlı ve güvenli gezinti deneyimi için göz at! Buradan indir https://goo.gl/992ils</string>
+    <string name="share_text">Hey \‘Lynket\’ uygulamasına hızlı ve güvenli gezinti deneyimi için göz at! Buradan indir https://goo.gl/992ils</string>
     <string name="share_via">…aracılığıyla paylaş</string>
     <string name="custom_tab_provider_not_found">Uyumlu custom tab sağlayıcısı bulunamadı.</string>
-    <string name="custom_tab_provider_not_found_expln">Chromer, telefonunuzda custom tab uyumlu bir tarayıcı gerektirir. Telefonunuzda bu özelliği destekleyen bir tarayıcı mevcut değil. Google Chrome (Ücretsiz) uygulamasını Play Store üzerinden yüklemek ister misiniz? Eğer cihazınızda yüklü ise, lütfen son sürüme güncelleyin.</string>
+    <string name="custom_tab_provider_not_found_expln">Lynket, telefonunuzda custom tab uyumlu bir tarayıcı gerektirir. Telefonunuzda bu özelliği destekleyen bir tarayıcı mevcut değil. Google Chrome (Ücretsiz) uygulamasını Play Store üzerinden yüklemek ister misiniz? Eğer cihazınızda yüklü ise, lütfen son sürüme güncelleyin.</string>
     <string name="install">Yükle</string>
     <string name="licenses">Lisanslar</string>
     <string name="about">Hakkında</string>
-    <string name="help_chromer_grow">Chromer\'in büyümesine yardımcı ol!</string>
+    <string name="help_chromer_grow">Lynket\'in büyümesine yardımcı ol!</string>
     <string name="share">Paylaş</string>
     <string name="share_with">" %1$s ile paylaş"</string>
     <string name="rate_play_store">Play Store\'da oyla</string>
@@ -72,9 +72,9 @@
     <string name="copied">Kopyalandı</string>
     <string name="copy_link">Bağlantıyı kopyala</string>
     <string name="add_to_homescreen">Ana Ekrana ekle</string>
-    <string name="intro_1">Merhaba!\nChromer hafif, güvenli ve hızlı bir tarayıcıdır.</string>
+    <string name="intro_1">Merhaba!\nLynket hafif, güvenli ve hızlı bir tarayıcıdır.</string>
     <string name="how_to_use">Bu nasıl kullanılır?</string>
-    <string name="intro_6">Sadece Chromer varsayılan tarayıcı olarak ayarlanmış, Chromer, dahil olmadan,  bir şekilde bağlantıyı gösterecektir. Veya gerektiğinde Chromer\'i seçin.</string>
+    <string name="intro_6">Sadece Lynket varsayılan tarayıcı olarak ayarlanmış, Lynket, dahil olmadan,  bir şekilde bağlantıyı gösterecektir. Veya gerektiğinde Lynket\'i seçin.</string>
     <string name="version">Versiyon</string>
     <string name="changelog">Değişiklikler</string>
     <string name="join_google_plus">Google+ Topluluğuna Katıl</string>
@@ -91,7 +91,7 @@
     <string name="colored_toolbar">Renkli araç çubuğu</string>
     <string name="choose_animation">Açılış animasyonu</string>
     <string name="animation_speed">Animasyon hızı</string>
-    <string name="default_pref_xpln">Tüm bağlantıları açmak için varsayılan olarak Chromer\'i  ayarla ya da gösterildiğinde listeden Chromer\'i  seçebilirsiniz</string>
+    <string name="default_pref_xpln">Tüm bağlantıları açmak için varsayılan olarak Lynket\'i  ayarla ya da gösterildiğinde listeden Lynket\'i  seçebilirsiniz</string>
     <string name="personalization">Kişiselleştirme</string>
     <string name="default_clear_msg">varsayılan tarayıcı olarak ayarlanır, lütfen varsayılana tıklayarak temizleyin.</string>
     <string name="dynamic_toolbar_color">Dinamik araç çubuğu</string>

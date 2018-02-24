@@ -29,7 +29,7 @@ import arun.com.chromer.data.website.model.Website
 import rx.Single
 
 /**
- * Helper class to manage tabs opened by Chromer. Responsible for managing Chromer's task stack.
+ * Helper class to manage tabs opened by Lynket. Responsible for managing Lynket's task stack.
  */
 interface TabsManager {
     // Event for closing non browsing activity.
