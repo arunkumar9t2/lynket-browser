@@ -192,7 +192,7 @@ class AboutFragment : Fragment() {
                         activity!!.startActivity(oneSkyIntent)
                     }
                     5 -> {
-                        val sourceIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/arunkumar9t2/chromer"))
+                        val sourceIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/arunkumar9t2/lynket-browser"))
                         activity!!.startActivity(sourceIntent)
                     }
                 }
