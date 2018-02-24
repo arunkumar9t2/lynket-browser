@@ -1,6 +1,7 @@
 <?xml version="1.0"?><!--
-  ~ Chromer
-  ~ Copyright (C) 2017 Arunkumar
+  ~ Lynket
+  ~
+  ~ Copyright (C) 2018 Arunkumar
   ~
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
@@ -44,15 +45,15 @@
         <item>Нормальный</item>
         <item>Мелкий</item>
     </string-array>
-    <string name="share_text">Зацените \‘Chromer\’ для быстрого и безопасного сёрфинга в интернете! Скачать здесь https://goo.gl/992ils</string>
+    <string name="share_text">Зацените \‘Lynket\’ для быстрого и безопасного сёрфинга в интернете! Скачать здесь https://goo.gl/992ils</string>
     <string name="share_via">Поделиться через…</string>
     <string name="custom_tab_provider_not_found">Подходящий поставщик вкладок не найден</string>
-    <string name="custom_tab_provider_not_found_expln">Для использования Chromer у Вас должен быть установлен любой другой совместимый браузер. В настоящее время на вашем телефоне нет браузеров, поддерживаемых Chromer. Вы можете установить Google Chrome из Play Маркета. Если он уже установлен, пожалуйста, обновите его до последней версии.</string>
-    <string name="custom_tab_provider_not_found_dialog_content"><![CDATA[Отсутствует совместимый с Быстрыми вкладками (Custom tab) браузер на вашем устройстве. Рекомендуем браузер Google Chrome. Вы все еще можете просматривать веб-страницы в Chromer в режиме Статьи, но браузер с поддержкой Быстрых вкладок крайне рекомендуется. Хотите установить сейчас?]]></string>
+    <string name="custom_tab_provider_not_found_expln">Для использования Lynket у Вас должен быть установлен любой другой совместимый браузер. В настоящее время на вашем телефоне нет браузеров, поддерживаемых Lynket. Вы можете установить Google Chrome из Play Маркета. Если он уже установлен, пожалуйста, обновите его до последней версии.</string>
+    <string name="custom_tab_provider_not_found_dialog_content"><![CDATA[Отсутствует совместимый с Быстрыми вкладками (Custom tab) браузер на вашем устройстве. Рекомендуем браузер Google Chrome. Вы все еще можете просматривать веб-страницы в Lynket в режиме Статьи, но браузер с поддержкой Быстрых вкладок крайне рекомендуется. Хотите установить сейчас?]]></string>
     <string name="install">Установить</string>
     <string name="licenses">Лицензии</string>
     <string name="about">О программе</string>
-    <string name="help_chromer_grow">Помогите развитию Chromer!</string>
+    <string name="help_chromer_grow">Помогите развитию Lynket!</string>
     <string name="share">Поделиться</string>
     <string name="share_with">Поделится через %1$s</string>
     <string name="rate_play_store">Оценить в Play Маркет</string>
@@ -72,10 +73,10 @@
     <string name="copied">Скопированно</string>
     <string name="copy_link">Скопировать ссылку</string>
     <string name="add_to_homescreen">Добавить на главный экран</string>
-    <string name="intro_1">Привет!\nChromer это легкий, безопасный и быстрый веб-браузер.</string>
+    <string name="intro_1">Привет!\nLynket это легкий, безопасный и быстрый веб-браузер.</string>
     <string name="intro_4_new">Он может накапливать множество ссылок в плавающих кнопках когда вы открываете их, и потом мгновенно загружает их в фоновом режиме!</string>
     <string name="how_to_use">Как им пользоваться?</string>
-    <string name="intro_6">Просто установите Chromer в качестве браузера по умолчанию, чтобы он ненавязчиво отображал ссылки. Или выберите Chromer, когда это необходимо.</string>
+    <string name="intro_6">Просто установите Lynket в качестве браузера по умолчанию, чтобы он ненавязчиво отображал ссылки. Или выберите Lynket, когда это необходимо.</string>
     <string name="version">Версия</string>
     <string name="changelog">Изменения</string>
     <string name="join_google_plus">"Присоединиться к сообществу Google+ "</string>
@@ -92,26 +93,26 @@
     <string name="colored_toolbar">Окрашенная панель инструментов</string>
     <string name="choose_animation">Анимация открытия</string>
     <string name="animation_speed">Скорость анимации</string>
-    <string name="default_pref_xpln">Используйте Chromer по умолчанию для открытия ссылок, или вы можете выбирать Chromer из списка предложенных браузеров</string>
+    <string name="default_pref_xpln">Используйте Lynket по умолчанию для открытия ссылок, или вы можете выбирать Lynket из списка предложенных браузеров</string>
     <string name="personalization">Персонализация</string>
     <string name="default_clear_msg">установлен в качестве браузера по умолчанию, пожалуйста, уберите его, нажав \“Очистить настройки по умолчанию\”.</string>
     <string name="dynamic_toolbar_color">Динамический цвет панели инструментов</string>
-    <string name="keep_chrome_warmedup">Держать Chromer в памяти для быстрого запуска</string>
+    <string name="keep_chrome_warmedup">Держать Lynket в памяти для быстрого запуска</string>
     <string name="warmup_browser">Закрепить в памяти</string>
     <string name="set_default_chromer">Установить в качестве браузера по умолчанию</string>
     <string name="default_provider">"Поставщик вкладок по умолчанию "</string>
     <string name="pre_fetch_content">Закрепить содержимое</string>
     <string name="pre_fetch_desc">Сканировать экран на наличие ссылок и загружать их в фоновом режиме для мгновенного запуска</string>
-    <string name="accessibility_description">Этот сервис будет использоваться Chromer для сканирования текстовых ссылок на экране и загрузки их в фоновом режиме. Никакая другая информация не обрабатывается. Вы все ещё можете использовать Chromer в обычном режиме, если вы не предоставите ему возможность сканировать текстовые ссылки. Для получения дополнительной информации, запустите Chromer.</string>
+    <string name="accessibility_description">Этот сервис будет использоваться Lynket для сканирования текстовых ссылок на экране и загрузки их в фоновом режиме. Никакая другая информация не обрабатывается. Вы все ещё можете использовать Lynket в обычном режиме, если вы не предоставите ему возможность сканировать текстовые ссылки. Для получения дополнительной информации, запустите Lynket.</string>
     <string name="accessibility_dialog_title">Требуется включение \“Спец. возможностей\”</string>
-    <string name="accessibility_dialog_desc">Чтобы разрешить Chromer сканирование ссылок в любом приложении, требуется предоставление \“Спец. возможностей\”. Пожалуйста, предоставьте их на следующем экране, после чего вы можете включить эту опцию и наслаждаться быстрым запуском.</string>
+    <string name="accessibility_dialog_desc">Чтобы разрешить Lynket сканирование ссылок в любом приложении, требуется предоставление \“Спец. возможностей\”. Пожалуйста, предоставьте их на следующем экране, после чего вы можете включить эту опцию и наслаждаться быстрым запуском.</string>
     <string name="open_settings">Открыть настройки</string>
     <string name="only_on_wifi">Только через Wi-Fi</string>
     <string name="show_notification">Показать уведомление, когда ссылка загружена</string>
     <string name="default_toolbar_color">Цвет панели инструментов по умолчанию</string>
     <string name="web_heads_color">Цвет плавающей кнопки</string>
     <string name="choose_secondary_browser">Вторичный браузер</string>
-    <string name="dynamic_toolbar_help">Чтобы включить динамическое окрашивание панели инструментов, Chromer изучает цветовую палитру. Это может происходить не мгновенно, но через некоторое время использования всё нормализуется. Наслаждайтесь!</string>
+    <string name="dynamic_toolbar_help">Чтобы включить динамическое окрашивание панели инструментов, Lynket изучает цветовую палитру. Это может происходить не мгновенно, но через некоторое время использования всё нормализуется. Наслаждайтесь!</string>
     <string name="secondary_browser_success">%1$s установлен в качестве вторичного браузера!</string>
     <string name="fav_share_success">%1$s установлен в качестве любимого приложения для передачи!</string>
     <string name="default_provider_success">%1$s будет использоваться для предоставления пользовательских вкладок!</string>
@@ -125,7 +126,7 @@
     <string name="dynamic_summary_web">Цвет будет определён на основе веб-сайта</string>
     <string name="no_option_selected">Параметры не выбраны</string>
     <string name="permission_required">Необходимо разрешение</string>
-    <string name="usage_permission_explanation_appcolor">Чтобы включить динамический цвет панели инструментов, основанный на приложениях, Chromer нуждается в вашем разрешении на определение используемого приложения. Предоставить доступ сейчас?</string>
+    <string name="usage_permission_explanation_appcolor">Чтобы включить динамический цвет панели инструментов, основанный на приложениях, Lynket нуждается в вашем разрешении на определение используемого приложения. Предоставить доступ сейчас?</string>
     <string name="grant">Предоставить</string>
     <string name="open_source_contributions">Приложение с открытым исходным кодом</string>
     <string name="search_or_type_url">Поиск</string>
@@ -136,12 +137,12 @@
     <string name="credits">Благодарности</string>
     <string name="icon_design">Дизайн иконки</string>
     <string name="overlay_permission_content">Чтобы перемещать плавающие кнопки по экрану, необходимо разрешение на экранные наложения. Хотите предоставить разрешение сейчас?</string>
-    <string name="webheads_intro_1">Когда вы открываете ссылку в любом приложении, плавающая кнопка будет создана на экране, и Chromer предварительно загрузит ссылку.</string>
+    <string name="webheads_intro_1">Когда вы открываете ссылку в любом приложении, плавающая кнопка будет создана на экране, и Lynket предварительно загрузит ссылку.</string>
     <string name="webheads_intro_2_new">При открытии нескольких ссылок, эти кнопки автоматически группируются друг на друге. Длительное нажатие на шар позволяет получить доступ к контекстному меню.</string>
     <string name="webheads_intro_3">Вы можете убрать плавающую кнопку, переместив её в \“Корзину\”.</string>
     <string name="webheads_intro_4_lolli">Принудительная загрузка в фоне будет загружать страницу в фоновом режиме, пока вы продолжаете использовать приложение, в котором вы находитесь.\n <b>Можно заметить мерцание открытия вкладки. Это сделано специально и не является ошибкой.</b></string>
-    <string name="webheads_intro_4">Chromer отдаёт приоритет последней открытой ссылке и загружает её заранее. Рекомендуется открывать плавающие кнопки одну за одной от начала до конца. Плавающие кнопки расположенные рядом открываются без проблем.</string>
-    <string name="web_head_permission_toast">Чтобы открывать ссылки в плавающих кнопках Chromer необходим доступ к другим приложениям, пожалуйста, предоставьте доступ, или отключите плавающие кнопки в настройках Chromer.</string>
+    <string name="webheads_intro_4">Lynket отдаёт приоритет последней открытой ссылке и загружает её заранее. Рекомендуется открывать плавающие кнопки одну за одной от начала до конца. Плавающие кнопки расположенные рядом открываются без проблем.</string>
+    <string name="web_head_permission_toast">Чтобы открывать ссылки в плавающих кнопках Lynket необходим доступ к другим приложениям, пожалуйста, предоставьте доступ, или отключите плавающие кнопки в настройках Lynket.</string>
     <string name="tap_close_all">Нажмите, чтобы закрыть всё</string>
     <string name="web_heads_service">Настройки плавающих кнопок</string>
     <string name="join_beta">Участвовать в бета-тестировании</string>
@@ -150,11 +151,11 @@
     <string name="no_voice_rec_apps">Не найдено приложений для распознавания голоса</string>
     <string name="loading">Загрузка…</string>
     <string name="share_failed_msg">Не удалось поделиться через стандартное приложение</string>
-    <string name="revoke_accessibility_permission">Теперь вы можете отозвать разрешение доступности службы Chromer.</string>
+    <string name="revoke_accessibility_permission">Теперь вы можете отозвать разрешение доступности службы Lynket.</string>
     <string name="last_fetched_urls">Последние предзагруженные ссылки</string>
     <string name="translations">Переводы</string>
     <string name="merge_tabs">Вкладки в списке недавних приложений</string>
-    <string name="merge_tabs_explanation">Вкладки Chromer будут раздельно отображены в списке недавно запущенных приложений.</string>
+    <string name="merge_tabs_explanation">Вкладки Lynket будут раздельно отображены в списке недавно запущенных приложений.</string>
     <string name="already_loaded">Уже загружено</string>
     <string name="add_home_screen_begun">Ярлык скоро будет добавлен</string>
     <string name="bottom_bar_pref_summary">Показывать панель с дополнительными опциями</string>
@@ -196,7 +197,7 @@
     <string name="launch_setting">Настройки запуска</string>
     <string name="secondary_browser_not_installed">Похоже вторичный браузер, который вы выбрали не установлен в системе. Открыть страницу настроек для переназначения вторичного браузера?</string>
     <string name="secondary_browser_launch_error">Невозможно открыть ссылку в браузере, который вы выбрали. Хотите изменить этот параметр?</string>
-    <string name="secondary_browser_not_error">Вы добавили это приложение в чёрный список Chromer и не указали вторичный браузер. Вы бы хотели сейчас назначить вторичный браузер?</string>
+    <string name="secondary_browser_not_error">Вы добавили это приложение в чёрный список Lynket и не указали вторичный браузер. Вы бы хотели сейчас назначить вторичный браузер?</string>
     <string name="copy_all">Скопировать все</string>
     <string name="choose_share_method">Выбор способа Поделиться</string>
     <string name="comma_seperated">Разделенные запятой</string>
@@ -235,7 +236,7 @@
     <string name="history_deletion_confirmation_content">Это удалит всю историю, действие не обратимо.</string>
     <string name="incognito_mode">Режим инкогнито</string>
     <string name="recents_intro">Здесь будут показаны недавно открытые ссылки</string>
-    <string name="amp_article_combined_explanation"><![CDATA[Когда оба режима <b>AMP и Режим чтения включены</b>, Chromer попытается загрузить AMP версию страницы, если она существует. Если не существует - будет загружен Режим статьи.]]></string>
+    <string name="amp_article_combined_explanation"><![CDATA[Когда оба режима <b>AMP и Режим чтения включены</b>, Lynket попытается загрузить AMP версию страницы, если она существует. Если не существует - будет загружен Режим статьи.]]></string>
     <string name="attention">Внимание!</string>
     <string name="manage">Управление</string>
     <string name="more_menu">Больше</string>

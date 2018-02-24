@@ -1,6 +1,7 @@
 /*
- * Chromer
- * Copyright (C) 2017 Arunkumar
+ * Lynket
+ *
+ * Copyright (C) 2018 Arunkumar
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -191,7 +192,7 @@ class AboutFragment : Fragment() {
                         activity!!.startActivity(oneSkyIntent)
                     }
                     5 -> {
-                        val sourceIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/arunkumar9t2/chromer"))
+                        val sourceIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/arunkumar9t2/lynket-browser"))
                         activity!!.startActivity(sourceIntent)
                     }
                 }

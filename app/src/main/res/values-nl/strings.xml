@@ -1,6 +1,7 @@
 <?xml version="1.0"?><!--
-  ~ Chromer
-  ~ Copyright (C) 2017 Arunkumar
+  ~ Lynket
+  ~
+  ~ Copyright (C) 2018 Arunkumar
   ~
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
@@ -44,14 +45,14 @@
         <item>Normaal</item>
         <item>Klein</item>
     </string-array>
-    <string name="share_text">Hey, probeer \‘Chromer\’ voor een snelle en veilige browse-ervaring! Download hier: https://goo.gl/992ils</string>
+    <string name="share_text">Hey, probeer \‘Lynket\’ voor een snelle en veilige browse-ervaring! Download hier: https://goo.gl/992ils</string>
     <string name="share_via">Delen via…</string>
     <string name="custom_tab_provider_not_found">Geen aangepaste tabbladen-leverancier gevonden.</string>
-    <string name="custom_tab_provider_not_found_expln">Chromer vereist een browser met ondersteuning voor aangepaste tabbladen. Momenteel zijn er geen browsers met aangepaste tabbladen-ondersteuning geïnstalleerd. Wil je Google Chrome (gratis) installeren vanuit de Play Store? Als je dat al gedaan hebt, update dan naar de laatste versie.</string>
+    <string name="custom_tab_provider_not_found_expln">Lynket vereist een browser met ondersteuning voor aangepaste tabbladen. Momenteel zijn er geen browsers met aangepaste tabbladen-ondersteuning geïnstalleerd. Wil je Google Chrome (gratis) installeren vanuit de Play Store? Als je dat al gedaan hebt, update dan naar de laatste versie.</string>
     <string name="install">Installeren</string>
     <string name="licenses">Licenties</string>
     <string name="about">Over</string>
-    <string name="help_chromer_grow">Help Chromer groter te worden!</string>
+    <string name="help_chromer_grow">Help Lynket groter te worden!</string>
     <string name="share">Delen</string>
     <string name="share_with">Delen met %1$s</string>
     <string name="rate_play_store">Beoordelen in de Play Store.</string>
@@ -71,10 +72,10 @@
     <string name="copied">Gekopieerd</string>
     <string name="copy_link">Link kopiëren</string>
     <string name="add_to_homescreen">Toevoegen aan thuisscherm</string>
-    <string name="intro_1">Hallo!\nChromer is een lichtgewicht, veilige en snelle webbrowser.</string>
-    <string name="intro_4_new">Chromer kan meerdere links in zwevende rondjes opstapelen en ze dan op de achtergrond laden!</string>
+    <string name="intro_1">Hallo!\nLynket is een lichtgewicht, veilige en snelle webbrowser.</string>
+    <string name="intro_4_new">Lynket kan meerdere links in zwevende rondjes opstapelen en ze dan op de achtergrond laden!</string>
     <string name="how_to_use">Hoe gebruik je dit?</string>
-    <string name="intro_6">Stel Chromer in als standaardbrowser en Chromer zal de link op een niet-opdringerige manier laten zien. Of kies Chromer wanneer dit nodig is.</string>
+    <string name="intro_6">Stel Lynket in als standaardbrowser en Lynket zal de link op een niet-opdringerige manier laten zien. Of kies Lynket wanneer dit nodig is.</string>
     <string name="version">Versie</string>
     <string name="changelog">Changelog</string>
     <string name="join_google_plus">Google+ community</string>
@@ -91,7 +92,7 @@
     <string name="colored_toolbar">Gekleurde toolbar</string>
     <string name="choose_animation">Open-animatie</string>
     <string name="animation_speed">Animatiesnelheid</string>
-    <string name="default_pref_xpln">Stel Chromer in als standaardbrowser om alle links te openen of kies Chromer uit de lijst wanneer de lijst zichtbaar is.</string>
+    <string name="default_pref_xpln">Stel Lynket in als standaardbrowser om alle links te openen of kies Lynket uit de lijst wanneer de lijst zichtbaar is.</string>
     <string name="personalization">Personalisatie</string>
     <string name="default_clear_msg">is ingesteld als standaardbrowser. Tik op \“standaardwaarden wissen\” om omgedaan te maken.</string>
     <string name="dynamic_toolbar_color">Dynamische toolbarkleur</string>
@@ -101,16 +102,16 @@
     <string name="default_provider">Tabbladen-leverancier</string>
     <string name="pre_fetch_content">Inhoud van tevoren laden</string>
     <string name="pre_fetch_desc">Scherm scannen voor links en ze in de achtergrond laden om ze snel te kunnen openen</string>
-    <string name="accessibility_description">Deze service zal door Chromer worden gebruikt om links op het scherm te zoeken en deze op de achtergrond te laden. Geen andere informatie wordt door Chromer verwerkt. Je kan Chromer nog steeds in de lichte modus gebruiken als je ervoor kiest dit niet toe te staan. Start de Chromer app voor meer informatie.</string>
+    <string name="accessibility_description">Deze service zal door Lynket worden gebruikt om links op het scherm te zoeken en deze op de achtergrond te laden. Geen andere informatie wordt door Lynket verwerkt. Je kan Lynket nog steeds in de lichte modus gebruiken als je ervoor kiest dit niet toe te staan. Start de Lynket app voor meer informatie.</string>
     <string name="accessibility_dialog_title">Togang tot toegankelijkheid vereist</string>
-    <string name="accessibility_dialog_desc">Om Chromer toe te staan om links in alle apps te zoeken heeft het toegang nodig tot toegankelijkheid. Geef toegang op het volgende scherm, hierna kan je deze optie inschakelen en van snelle starts genieten.</string>
+    <string name="accessibility_dialog_desc">Om Lynket toe te staan om links in alle apps te zoeken heeft het toegang nodig tot toegankelijkheid. Geef toegang op het volgende scherm, hierna kan je deze optie inschakelen en van snelle starts genieten.</string>
     <string name="open_settings">Instellingen openen</string>
     <string name="only_on_wifi">Alleen scannen via wifi</string>
     <string name="show_notification">Melding weergeven wanneer een link geladen is.</string>
     <string name="default_toolbar_color">Standaardkleur toolbar</string>
     <string name="web_heads_color">Kleuren webheads</string>
     <string name="choose_secondary_browser">Tweede browser</string>
-    <string name="dynamic_toolbar_help">Om dynamische kleuren van de toolbar te gebruiken moet Chromer de kleuren leren. Dit is niet meteen zichtbaar bij een website of app, maar verbetert na verloop van tijd.</string>
+    <string name="dynamic_toolbar_help">Om dynamische kleuren van de toolbar te gebruiken moet Lynket de kleuren leren. Dit is niet meteen zichtbaar bij een website of app, maar verbetert na verloop van tijd.</string>
     <string name="secondary_browser_success">%1$s is ingesteld als tweede browser!</string>
     <string name="fav_share_success">%1$s is ingesteld als favoriete deel-app!</string>
     <string name="default_provider_success">%1$s zal worden gebruikt om aangepaste tabbladen te leveren!</string>
@@ -124,7 +125,7 @@
     <string name="dynamic_summary_web">De kleur zal worden gebaseerd op de website die wordt geopend</string>
     <string name="no_option_selected">Geen opties geselecteerd</string>
     <string name="permission_required">Toestemming nodig</string>
-    <string name="usage_permission_explanation_appcolor">Om dynamische toolbarkleuren gebaseerd op apps in te schakelen heeft Chromer toestemming nodig om te weten welke apps je gebruikt. Wil je hiervoor toestemming geven?</string>
+    <string name="usage_permission_explanation_appcolor">Om dynamische toolbarkleuren gebaseerd op apps in te schakelen heeft Lynket toestemming nodig om te weten welke apps je gebruikt. Wil je hiervoor toestemming geven?</string>
     <string name="grant">Toestaan</string>
     <string name="open_source_contributions">Open-source</string>
     <string name="search_or_type_url">Zoeken of URL typen</string>
@@ -134,22 +135,22 @@
     <string name="webhead_spawn_title">Plaats van webheads</string>
     <string name="credits">Credits</string>
     <string name="icon_design">Ontwerp van icoon</string>
-    <string name="overlay_permission_content">Om webheads op het scherm te zetten heeft Chromer toestemming nodig om over andere apps te tekenen. Wil je daar nu toestemming voor geven?</string>
-    <string name="webheads_intro_1">Wanneer je een link in welke app dan ook opent, verschijnt er een rondje genaamd <i>webhead</i> op het scherm en zal Chromer proberen de link van tevoren te laden.</string>
+    <string name="overlay_permission_content">Om webheads op het scherm te zetten heeft Lynket toestemming nodig om over andere apps te tekenen. Wil je daar nu toestemming voor geven?</string>
+    <string name="webheads_intro_1">Wanneer je een link in welke app dan ook opent, verschijnt er een rondje genaamd <i>webhead</i> op het scherm en zal Lynket proberen de link van tevoren te laden.</string>
     <string name="webheads_intro_2_new">Als er meerdere links geopend zijn stapelen webheads zich automatisch op. Hou een webhead lang ingedrukt om het optie-menu te openen.</string>
     <string name="webheads_intro_3">Wanneer je een webhead sleept verschijnt er een prullenbak. Laat de webhead boven de prullenbak los om de webhead te verwijderen.</string>
     <string name="webheads_intro_4_lolli">Agressief laden op de achtergrond laadt de pagina op de achtergrond terwijl je je huidige app niet hoeft te verlaten.\n<b>Het beeld kan knipperen als je een tabblad opent. Dit is de bedoeling en geen fout.</b></string>
-    <string name="webheads_intro_4">Chromer geeft de laatst geopende link prioriteit en laadt deze alvast. De beste manier is om van boven naar beneden op de webheads te tikken. \“Webheads sluiten\” inschakelen is het beste.</string>
-    <string name="web_head_permission_toast">Om links in zwevende rondjes te openen heeft Chromer toestemming nodig om over andere apps te tekenen. Geef toestemming om webheads te blijven gebruiken of schakel webheads uit in de instellingen van Chromer.</string>
+    <string name="webheads_intro_4">Lynket geeft de laatst geopende link prioriteit en laadt deze alvast. De beste manier is om van boven naar beneden op de webheads te tikken. \“Webheads sluiten\” inschakelen is het beste.</string>
+    <string name="web_head_permission_toast">Om links in zwevende rondjes te openen heeft Lynket toestemming nodig om over andere apps te tekenen. Geef toestemming om webheads te blijven gebruiken of schakel webheads uit in de instellingen van Lynket.</string>
     <string name="tap_close_all">Tik om alles te sluiten</string>
     <string name="web_heads_service">Webhead-service</string>
     <string name="join_beta">Bètaversie</string>
     <string name="become_a_tester">Tester worden</string>
-    <string name="join_beta_content">Bèta-versies zijn experimenteel en hebben de nieuwste functies, maar wel een aantal bugs. Je kan bijdragen aan de ontwikkeling van Chromer door tester te worden en dan alle bugs die je vindt in de Google+ community te delen.\n\nWord eerst lid van de Google+ community en klik dan op de \‘Tester worden\’\-knop om naar de Google Play test-link te gaan.\n\nLET OP: Je moet lid worden van de Google+ community om een tester te worden.</string>
+    <string name="join_beta_content">Bèta-versies zijn experimenteel en hebben de nieuwste functies, maar wel een aantal bugs. Je kan bijdragen aan de ontwikkeling van Lynket door tester te worden en dan alle bugs die je vindt in de Google+ community te delen.\n\nWord eerst lid van de Google+ community en klik dan op de \‘Tester worden\’\-knop om naar de Google Play test-link te gaan.\n\nLET OP: Je moet lid worden van de Google+ community om een tester te worden.</string>
     <string name="no_voice_rec_apps">Geen compatibele stemherkenning-apps gevonden</string>
     <string name="loading">Laden…</string>
     <string name="share_failed_msg">Kan niet via de app delen, terugvallen naar normaal delen</string>
-    <string name="revoke_accessibility_permission">Je kan nu de toegankelijkheidsrechten van Chromer terugdraaien.</string>
+    <string name="revoke_accessibility_permission">Je kan nu de toegankelijkheidsrechten van Lynket terugdraaien.</string>
     <string name="last_fetched_urls">Laatst voorgeladen URLs</string>
     <string name="translations">Vertalingen</string>
     <string name="merge_tabs">Tabbladen samenvoegen met apps</string>
@@ -195,7 +196,7 @@
     <string name="launch_setting">Instellingen van openen</string>
     <string name="secondary_browser_not_installed">Het lijkt er op dat de tweede browser die je hebt gekozen niet geïnstalleerd is op het systeem. Wil je het instellingenscherm openen om je keuze van tweede browser aan te passen?</string>
     <string name="secondary_browser_launch_error">Kan de link niet openen met de browser die je hebt gekozen. Wil je deze instelling aanpassen?</string>
-    <string name="secondary_browser_not_error">Je hebt deze app op de zwarte lijst gezet zodat deze geen links van Chromer kan openen, maar geen tweede browser gekozen. Wil je nu een tweede browser instellen?</string>
+    <string name="secondary_browser_not_error">Je hebt deze app op de zwarte lijst gezet zodat deze geen links van Lynket kan openen, maar geen tweede browser gekozen. Wil je nu een tweede browser instellen?</string>
     <string name="copy_all">Alles kopiëren</string>
     <string name="choose_share_method">Deel-methode kiezen</string>
     <string name="comma_seperated">Kommagescheiden</string>
@@ -232,7 +233,7 @@
     <string name="history_deletion_confirmation_content">Dit zal de complete geschiedenis verwijderen en kan niet ongedaan worden gemaakt.</string>
     <string name="incognito_mode">Incognitomodus</string>
     <string name="recents_intro">Recent geopende links zullen hier staan</string>
-    <string name="amp_article_combined_explanation"><![CDATA[Als <b>AMP en Artikelmodus beide ingeschakeld zijn</b>, zal Chromer proberen de AMP-versie van de pagina te laden als deze bestaat. Zo niet, zal de pagina in Artikelweergave worden geladen.]]></string>
+    <string name="amp_article_combined_explanation"><![CDATA[Als <b>AMP en Artikelmodus beide ingeschakeld zijn</b>, zal Lynket proberen de AMP-versie van de pagina te laden als deze bestaat. Zo niet, zal de pagina in Artikelweergave worden geladen.]]></string>
     <string name="attention">Let op</string>
     <string name="manage">Beheren</string>
     <string name="more_menu">Meer</string>

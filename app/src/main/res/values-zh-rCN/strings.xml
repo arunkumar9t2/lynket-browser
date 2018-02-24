@@ -1,6 +1,7 @@
 <?xml version="1.0"?><!--
-  ~ Chromer
-  ~ Copyright (C) 2017 Arunkumar
+  ~ Lynket
+  ~
+  ~ Copyright (C) 2018 Arunkumar
   ~
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
@@ -44,14 +45,14 @@
         <item>正常</item>
         <item>小</item>
     </string-array>
-    <string name="share_text">嘿 来查看下 “Chromer”  它可以让你拥有快速且安全的浏览体验！可以在这里下载 https://goo.gl/992ils</string>
+    <string name="share_text">嘿 来查看下 “Lynket”  它可以让你拥有快速且安全的浏览体验！可以在这里下载 https://goo.gl/992ils</string>
     <string name="share_via">分享至…</string>
     <string name="custom_tab_provider_not_found">没有找到可兼容的自定义标签页提供程序</string>
-    <string name="custom_tab_provider_not_found_expln">Chromer 将需要您的手机上安装有兼容自定义标签页功能的浏览器。现在在您的手机上没有检测到支持该功能的浏览器。您想在 Play 商店中安装 Chrome 浏览器（免费）吗？如果您已经安装，请将其升级至最新版本。</string>
+    <string name="custom_tab_provider_not_found_expln">Lynket 将需要您的手机上安装有兼容自定义标签页功能的浏览器。现在在您的手机上没有检测到支持该功能的浏览器。您想在 Play 商店中安装 Chrome 浏览器（免费）吗？如果您已经安装，请将其升级至最新版本。</string>
     <string name="install">安装</string>
     <string name="licenses">开源许可</string>
     <string name="about">关于</string>
-    <string name="help_chromer_grow">帮助 Chromer 成长！</string>
+    <string name="help_chromer_grow">帮助 Lynket 成长！</string>
     <string name="share">分享</string>
     <string name="share_with">分享至 %1$s</string>
     <string name="rate_play_store">在 Play 商店内评价</string>
@@ -71,10 +72,10 @@
     <string name="copied">已复制</string>
     <string name="copy_link">复制链接</string>
     <string name="add_to_homescreen">添加至主屏幕</string>
-    <string name="intro_1">您好！\nChromer 是一款轻量化，安全且高速的网页浏览器。</string>
+    <string name="intro_1">您好！\nLynket 是一款轻量化，安全且高速的网页浏览器。</string>
     <string name="intro_4_new">它可以在您点击多个链接时创建叠加式的浮动气泡并选择在后台加载它们!</string>
     <string name="how_to_use">要如何使用？</string>
-    <string name="intro_6">将 Chromer 设置成你的默认浏览器，Chromer 将会以非入侵的方式显示您所打开的链接。此外您还可以选择仅在需要时调用它。</string>
+    <string name="intro_6">将 Lynket 设置成你的默认浏览器，Lynket 将会以非入侵的方式显示您所打开的链接。此外您还可以选择仅在需要时调用它。</string>
     <string name="version">版本</string>
     <string name="changelog">更新日志</string>
     <string name="join_google_plus">加入 Google+ 社群</string>
@@ -91,7 +92,7 @@
     <string name="colored_toolbar">为工具栏上色</string>
     <string name="choose_animation">打开动画</string>
     <string name="animation_speed">动画速度</string>
-    <string name="default_pref_xpln">将 Chromer 设置为默认浏览器以打开全部链接，或者还可以在弹出程序选择列表时手动选择用 Chromer 加载</string>
+    <string name="default_pref_xpln">将 Lynket 设置为默认浏览器以打开全部链接，或者还可以在弹出程序选择列表时手动选择用 Lynket 加载</string>
     <string name="personalization">个性化</string>
     <string name="default_clear_msg">被设置为了默认浏览器，请点击清除默认操作来取消它</string>
     <string name="dynamic_toolbar_color">工具栏动态变色</string>
@@ -101,16 +102,16 @@
     <string name="default_provider">自定义标签页提供程序</string>
     <string name="pre_fetch_content">预读取内容</string>
     <string name="pre_fetch_desc">扫描屏幕上的链接并在后台加载内容以便立即打开</string>
-    <string name="accessibility_description">这项服务将被 Chromer 用来扫描屏幕上的链接并选择在后台加载它们。Chromer 不会处理除此以外任何形式的信息。即便拒绝启用该项服务您仍然可以继续使用 Chromer 中的轻量化模式。想了解更多信息，请参考 Chromer 应用内的说明。</string>
+    <string name="accessibility_description">这项服务将被 Lynket 用来扫描屏幕上的链接并选择在后台加载它们。Lynket 不会处理除此以外任何形式的信息。即便拒绝启用该项服务您仍然可以继续使用 Lynket 中的轻量化模式。想了解更多信息，请参考 Lynket 应用内的说明。</string>
     <string name="accessibility_dialog_title">需要获取无障碍权限</string>
-    <string name="accessibility_dialog_desc">为了让 Chromer 能够扫描任何应用内的链接您将需要允许程序接入无障碍服务。请在下一屏内开启无障碍服务，在操作完成后即可启用该选项并享受快速打开页面的乐趣。</string>
+    <string name="accessibility_dialog_desc">为了让 Lynket 能够扫描任何应用内的链接您将需要允许程序接入无障碍服务。请在下一屏内开启无障碍服务，在操作完成后即可启用该选项并享受快速打开页面的乐趣。</string>
     <string name="open_settings">打开设置</string>
     <string name="only_on_wifi">仅在 Wi-Fi 下扫描</string>
     <string name="show_notification">当预读取一个链接时显示通知</string>
     <string name="default_toolbar_color">默认工具栏颜色</string>
     <string name="web_heads_color">链接气泡颜色</string>
     <string name="choose_secondary_browser">第二浏览器</string>
-    <string name="dynamic_toolbar_help">开启工具栏动态变色后，Chromer 将会开始静默化学习颜色适配。起初它可能无法正确适配网站或应用，但随着时间的推移适配的效果将会不断提高。开始享受它吧！</string>
+    <string name="dynamic_toolbar_help">开启工具栏动态变色后，Lynket 将会开始静默化学习颜色适配。起初它可能无法正确适配网站或应用，但随着时间的推移适配的效果将会不断提高。开始享受它吧！</string>
     <string name="secondary_browser_success">%1$s 已被设为第二浏览器！</string>
     <string name="fav_share_success">%1$s 已被设为喜爱的分享应用！</string>
     <string name="default_provider_success">%1$s 将被用来提供自定义标签页！</string>
@@ -124,7 +125,7 @@
     <string name="dynamic_summary_web">颜色显示将跟随加载网页内的设置</string>
     <string name="no_option_selected">没有选择选项</string>
     <string name="permission_required">需要获取权限</string>
-    <string name="usage_permission_explanation_appcolor">要开启根据应用动态着色工具栏，Chromer 将需要获取授权来了解当前正在使用的应用。您想要现在允许这项权限吗？</string>
+    <string name="usage_permission_explanation_appcolor">要开启根据应用动态着色工具栏，Lynket 将需要获取授权来了解当前正在使用的应用。您想要现在允许这项权限吗？</string>
     <string name="grant">允许</string>
     <string name="open_source_contributions">开源项目</string>
     <string name="search_or_type_url">搜索或输入网址</string>
@@ -135,12 +136,12 @@
     <string name="credits">致谢</string>
     <string name="icon_design">图标设计</string>
     <string name="overlay_permission_content">想在屏幕上绘制链接气泡，需要先获取上层显示权限。您要现在允许这项权限吗？</string>
-    <string name="webheads_intro_1">当你在任何应用内打开一个链接时，一个被称作链接气泡的浮动气泡将被创建在你的屏幕上，此时 Chromer 将尝试预先获取链接里的内容。</string>
+    <string name="webheads_intro_1">当你在任何应用内打开一个链接时，一个被称作链接气泡的浮动气泡将被创建在你的屏幕上，此时 Lynket 将尝试预先获取链接里的内容。</string>
     <string name="webheads_intro_2_new">当打开多个链接式时，这些链接气泡将会彼此层叠。在链接气泡上长按可以打开预览菜单。</string>
     <string name="webheads_intro_3">当拖动一个链接气泡时，屏幕上将出现一个垃圾桶图标。将气泡放置在上面即可选择删除。</string>
     <string name="webheads_intro_4_lolli">完整后台加载功能将在您使用应用期间时后台加载网页中的内容。\n<b>在打开便签页时可能会出现闪烁情况，这是正常情况而非 Bug。</b></string>
-    <string name="webheads_intro_4">Chromer 将会优先处理用户最后打开的链接并预先获取其中的内容。推荐的使用方法是自上到下依次的打开链接气泡。启用“关闭已点开链接的气泡”选项将可以使操作变得无缝化。</string>
-    <string name="web_head_permission_toast">想要开启链接气泡功能，Chromer 将需要获取在其他应用上层显示内容的权限，请点击允许以继续或者在 Chromer 的设置中禁用链接气泡。</string>
+    <string name="webheads_intro_4">Lynket 将会优先处理用户最后打开的链接并预先获取其中的内容。推荐的使用方法是自上到下依次的打开链接气泡。启用“关闭已点开链接的气泡”选项将可以使操作变得无缝化。</string>
+    <string name="web_head_permission_toast">想要开启链接气泡功能，Lynket 将需要获取在其他应用上层显示内容的权限，请点击允许以继续或者在 Lynket 的设置中禁用链接气泡。</string>
     <string name="tap_close_all">点击关闭全部</string>
     <string name="web_heads_service">链接气泡服务</string>
     <string name="join_beta">加入测试版计划</string>
@@ -149,7 +150,7 @@
     <string name="no_voice_rec_apps">没有找到可兼容的语音识别应用</string>
     <string name="loading">正在加载…</string>
     <string name="share_failed_msg">无法分享到应用，默认返回标准分享</string>
-    <string name="revoke_accessibility_permission">您现在可以撤销掉 Chromer 的无障碍服务了</string>
+    <string name="revoke_accessibility_permission">您现在可以撤销掉 Lynket 的无障碍服务了</string>
     <string name="last_fetched_urls">最近获取过的网址</string>
     <string name="translations">翻译</string>
     <string name="merge_tabs">合并标签页和应用</string>
@@ -195,7 +196,7 @@
     <string name="launch_setting">启动设置</string>
     <string name="secondary_browser_not_installed">看起来您选定的第二浏览器已经不存在于当前系统了。您是否希望前往设置页面编辑您的第二浏览器偏好？</string>
     <string name="secondary_browser_launch_error">无法使用您选定的浏览器启动此链接。您是否希望编辑设置？</string>
-    <string name="secondary_browser_not_error">您已经将此应用列入阻止 Chromer 处理链接的黑名单，但并没有设置第二浏览器。您是否希望立刻设置您的第二浏览器？</string>
+    <string name="secondary_browser_not_error">您已经将此应用列入阻止 Lynket 处理链接的黑名单，但并没有设置第二浏览器。您是否希望立刻设置您的第二浏览器？</string>
     <string name="copy_all">全部复制</string>
     <string name="title_activity_settings">设置</string>
     <string name="settings_browsing_mode">浏览模式</string>
@@ -224,7 +225,7 @@
     <string name="history_deletion_confirmation_content">此动作将删除所有历史，且无法撤销。</string>
     <string name="incognito_mode">隐身模式</string>
     <string name="recents_intro">最近打开过的链接将显示在此处</string>
-    <string name="amp_article_combined_explanation"><![CDATA[当 <b>AMP 与文章模式同时开启</b>时，Chromer 将尝试加载该页面的 AMP 版本。如果 AMP 版本不可用，将载入文章模式。]]></string>
+    <string name="amp_article_combined_explanation"><![CDATA[当 <b>AMP 与文章模式同时开启</b>时，Lynket 将尝试加载该页面的 AMP 版本。如果 AMP 版本不可用，将载入文章模式。]]></string>
     <string name="attention">注意！</string>
     <string name="manage">管理</string>
     <string name="more_menu">更多</string>

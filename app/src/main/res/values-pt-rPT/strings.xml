@@ -1,6 +1,7 @@
 <?xml version="1.0"?><!--
-  ~ Chromer
-  ~ Copyright (C) 2017 Arunkumar
+  ~ Lynket
+  ~
+  ~ Copyright (C) 2018 Arunkumar
   ~
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
@@ -44,12 +45,12 @@
         <item>Normal</item>
         <item>Pequeno</item>
     </string-array>
-    <string name="share_text">Hey Experimente o \‘Chromer\’ para uma experiência de navegação rápida e segura! Faça download aqui https://goo.gl/992ils</string>
+    <string name="share_text">Hey Experimente o \‘Lynket\’ para uma experiência de navegação rápida e segura! Faça download aqui https://goo.gl/992ils</string>
     <string name="share_via">Partilhar via…</string>
     <string name="install">Instalação</string>
     <string name="licenses">Licenças</string>
     <string name="about">Sobre</string>
-    <string name="help_chromer_grow">Ajude o Chromer a crescer!</string>
+    <string name="help_chromer_grow">Ajude o Lynket a crescer!</string>
     <string name="share">Partilhe</string>
     <string name="share_with">Partilhar com %1$s</string>
     <string name="rate_play_store">Classifique na Play Store</string>
@@ -66,7 +67,7 @@
     <string name="invalid_link">Hiperligação inválida</string>
     <string name="copied">Copiado</string>
     <string name="add_to_homescreen">Adicionar ao Ecrã Principal</string>
-    <string name="intro_1">Olá!\nO Chromer é um browser leve, seguro e rápido.</string>
+    <string name="intro_1">Olá!\nO Lynket é um browser leve, seguro e rápido.</string>
     <string name="how_to_use">Como utilizar isto?</string>
     <string name="version">Versão</string>
     <string name="changelog">Registro de alterações</string>

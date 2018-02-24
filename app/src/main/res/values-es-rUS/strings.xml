@@ -1,20 +1,21 @@
 <?xml version="1.0"?><!--
-~ Chromer
-~ Copyright (C) 2017 Arunkumar
-~
-~ This program is free software: you can redistribute it and/or modify
-~ it under the terms of the GNU General Public License as published by
-~ the Free Software Foundation, either version 3 of the License, or
-~ (at your option) any later version.
-~
-~ This program is distributed in the hope that it will be useful,
-~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-~ GNU General Public License for more details.
-~
-~ You should have received a copy of the GNU General Public License
-~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
+  ~ Lynket
+  ~
+  ~ Copyright (C) 2018 Arunkumar
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
 <resources>
     <string-array name="animationValues">
         <item>Ninguno</item>
@@ -44,15 +45,15 @@
         <item>Normal</item>
         <item>Pequeño</item>
     </string-array>
-    <string name="share_text">¡Oye mira \'Chromer \' para una rápida y segura experiencia de navegación! Descarguela aquí https://goo.gl/992ils</string>
+    <string name="share_text">¡Oye mira \'Lynket \' para una rápida y segura experiencia de navegación! Descarguela aquí https://goo.gl/992ils</string>
     <string name="share_via">Compartir vía…</string>
     <string name="custom_tab_provider_not_found">Proveedor compatible de pestañas personalizadas no encontrado</string>
-    <string name="custom_tab_provider_not_found_expln">Chromer necesita que tenga instalado algún navegador compatible con pestañas personalizadas en su teléfono. Actualmente no hay navegadores en su teléfono que lo soporten. ¿Le gustaría instalar Google Chrome (gratis) desde Play store? Si ya lo tiene, por favor actualizelo a la última versión.</string>
-    <string name="custom_tab_provider_not_found_dialog_content"><![CDATA[No se pudo encontrar ningun navegador de pestañas personalizadas compatible en su teléfono. Se recomienda Google Chrome (Gratuito). Puede seguir viendo páginas web dentro de Chromer y usar el modo Artículo, pero para una mejor experiencia, se recomienda encarecidamente un proveedor de pestañas personalizado. ¿Te gustaría instalarlo ahora?]]></string>
+    <string name="custom_tab_provider_not_found_expln">Lynket necesita que tenga instalado algún navegador compatible con pestañas personalizadas en su teléfono. Actualmente no hay navegadores en su teléfono que lo soporten. ¿Le gustaría instalar Google Chrome (gratis) desde Play store? Si ya lo tiene, por favor actualizelo a la última versión.</string>
+    <string name="custom_tab_provider_not_found_dialog_content"><![CDATA[No se pudo encontrar ningun navegador de pestañas personalizadas compatible en su teléfono. Se recomienda Google Chrome (Gratuito). Puede seguir viendo páginas web dentro de Lynket y usar el modo Artículo, pero para una mejor experiencia, se recomienda encarecidamente un proveedor de pestañas personalizado. ¿Te gustaría instalarlo ahora?]]></string>
     <string name="install">Instalar</string>
     <string name="licenses">Licencias</string>
     <string name="about">Acerca de</string>
-    <string name="help_chromer_grow">"¡Ayuda a Chromer a crecer! "</string>
+    <string name="help_chromer_grow">"¡Ayuda a Lynket a crecer! "</string>
     <string name="share">Compartir</string>
     <string name="share_with">Compartir con</string>
     <string name="rate_play_store">Califiqué en Play Store</string>
@@ -72,10 +73,10 @@
     <string name="copied">"Copiado "</string>
     <string name="copy_link">"Copiar enlace "</string>
     <string name="add_to_homescreen">Añadir a la Pantalla de Inicio</string>
-    <string name="intro_1">Hola!\nChromer es un navegador ligero, seguro y rápido.\n</string>
+    <string name="intro_1">Hola!\nLynket es un navegador ligero, seguro y rápido.\n</string>
     <string name="intro_4_new">Puede juntar múltiples enlaces en burbujas flotantes al abrirlos y luego cargarlos en segundo plano.\n\n<b>APRENDE MÁS</b></string>
     <string name="how_to_use">¿Como se usa?</string>
-    <string name="intro_6">Simplemente establezca Chrome como navegador predeterminado, Chrome mostrará el enlace de una manera no intrusiva. O elija Chromer cuando sea necesario</string>
+    <string name="intro_6">Simplemente establezca Chrome como navegador predeterminado, Chrome mostrará el enlace de una manera no intrusiva. O elija Lynket cuando sea necesario</string>
     <string name="version">"Versión "</string>
     <string name="changelog">Registro de cambios</string>
     <string name="join_google_plus">Únete a la comunidad de Google+</string>
@@ -92,7 +93,7 @@
     <string name="colored_toolbar">Color de la Barra de Herramientas</string>
     <string name="choose_animation">Animación de apertura</string>
     <string name="animation_speed">Velocidad de animación</string>
-    <string name="default_pref_xpln">"Puede Establecer Chromer como predeterminado para abrir todos los enlaces, o puede elegir Chromer cuando se muestra la lista "</string>
+    <string name="default_pref_xpln">"Puede Establecer Lynket como predeterminado para abrir todos los enlaces, o puede elegir Lynket cuando se muestra la lista "</string>
     <string name="personalization">"Personalización "</string>
     <string name="default_clear_msg">Se establece como el navegador predeterminado, por favor, borrarlo haciendo clic en borrar valores predeterminados.</string>
     <string name="dynamic_toolbar_color">Color dinámico de la barra de herramientas</string>
@@ -102,16 +103,16 @@
     <string name="default_provider">Proveedor de pestañas personalizadas</string>
     <string name="pre_fetch_content">"Captación previa del contenido "</string>
     <string name="pre_fetch_desc">Analiza la pantalla de enlaces y carga en segundo plano para su lanzamiento instantáneo</string>
-    <string name="accessibility_description">Este servicio será utilizado por Chromer para escanear enlaces de texto en la pantalla y cargarlos en segundo plano. Chromer no procesa ninguna otra información. Todavía puede usar Chromer en modo de luz si decide no conceder esto. Para obtener más información, inicie la aplicación Chromer.</string>
+    <string name="accessibility_description">Este servicio será utilizado por Lynket para escanear enlaces de texto en la pantalla y cargarlos en segundo plano. Lynket no procesa ninguna otra información. Todavía puede usar Lynket en modo de luz si decide no conceder esto. Para obtener más información, inicie la aplicación Lynket.</string>
     <string name="accessibility_dialog_title">Se requiere permiso de accesibilidad</string>
-    <string name="accessibility_dialog_desc">Para permitir que Chromer busque enlaces en cualquier aplicación, requiere que conceda permiso de servicio de accesibilidad. Por favor concede permiso de accesibilidad en la siguiente pantalla, después de lo cual puedes habilitar esta opción y disfrutar de lanzamientos rápidos.</string>
+    <string name="accessibility_dialog_desc">Para permitir que Lynket busque enlaces en cualquier aplicación, requiere que conceda permiso de servicio de accesibilidad. Por favor concede permiso de accesibilidad en la siguiente pantalla, después de lo cual puedes habilitar esta opción y disfrutar de lanzamientos rápidos.</string>
     <string name="open_settings">Abrir ajustes</string>
     <string name="only_on_wifi">Escanear sólo en Wifi</string>
     <string name="show_notification">Mostrar notificación cuando un enlace se busca previamente</string>
     <string name="default_toolbar_color">Color predeterminado de la barra de herramientas</string>
     <string name="web_heads_color">Color de las cabezas web</string>
     <string name="choose_secondary_browser">Navegador Secundario</string>
-    <string name="dynamic_toolbar_help">Para habilitar coloración dinámica de barra de herramientas, Chromer aprende los colores en silencio. Puede que no vienen inicialmente para un sitio web o una aplicación, pero va a mejorar con el tiempo con el uso. Disfruta!</string>
+    <string name="dynamic_toolbar_help">Para habilitar coloración dinámica de barra de herramientas, Lynket aprende los colores en silencio. Puede que no vienen inicialmente para un sitio web o una aplicación, pero va a mejorar con el tiempo con el uso. Disfruta!</string>
     <string name="secondary_browser_success">%1$s Configurado como navegador secundario!</string>
     <string name="fav_share_success">%1$s es su aplicación preferida para compartir</string>
     <string name="default_provider_success">%1$s puede ser usado para proporcionar pestañas personalizadas!</string>
@@ -125,7 +126,7 @@
     <string name="dynamic_summary_web">El color se escogerá en base al sitio web lanzado</string>
     <string name="no_option_selected">Ninguna opción seleccionada</string>
     <string name="permission_required">Se necesita permiso</string>
-    <string name="usage_permission_explanation_appcolor">Para activar el coloreado dinámico de la barra de herramientas según la aplicación, Chromer necesita su permiso para saber qué aplicaciones está usando. ¿Quiere conceder este permiso ahora?</string>
+    <string name="usage_permission_explanation_appcolor">Para activar el coloreado dinámico de la barra de herramientas según la aplicación, Lynket necesita su permiso para saber qué aplicaciones está usando. ¿Quiere conceder este permiso ahora?</string>
     <string name="grant">Conceder</string>
     <string name="open_source_contributions">Material de código abierto</string>
     <string name="search_or_type_url">Busque o escriba una URL</string>
@@ -198,7 +199,7 @@
     <string name="history_deletion_confirmation_content">Está acción eliminará todo el historial y no es reversible.</string>
     <string name="incognito_mode">Modo incógnito</string>
     <string name="recents_intro">Los enlaces recientemente abiertos aparecerán aquí</string>
-    <string name="amp_article_combined_explanation"><![CDATA[Cuando ambos modos <b> AMP y Modo lectura están activados </b>, Chromer intentará cargar la versión AMP de la página si existe. Si no se cargara el modo lectura.]]></string>
+    <string name="amp_article_combined_explanation"><![CDATA[Cuando ambos modos <b> AMP y Modo lectura están activados </b>, Lynket intentará cargar la versión AMP de la página si existe. Si no se cargara el modo lectura.]]></string>
     <string name="attention">Cuidado!</string>
     <string name="more_menu">Mas</string>
     <string name="open_article_view">Ver artículo</string>

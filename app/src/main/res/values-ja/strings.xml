@@ -1,6 +1,7 @@
 <?xml version="1.0"?><!--
-  ~ Chromer
-  ~ Copyright (C) 2017 Arunkumar
+  ~ Lynket
+  ~
+  ~ Copyright (C) 2018 Arunkumar
   ~
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
@@ -44,15 +45,15 @@
         <item>普通</item>
         <item>小さめ</item>
     </string-array>
-    <string name="share_text">Chromerで、高速で安全なブラウジングを体験！ここからダウンロード https://goo.gl/992ils</string>
+    <string name="share_text">Lynketで、高速で安全なブラウジングを体験！ここからダウンロード https://goo.gl/992ils</string>
     <string name="share_via">共有</string>
     <string name="custom_tab_provider_not_found">互換性のあるカスタムタブプロバイダが見つかりませんでした</string>
-    <string name="custom_tab_provider_not_found_expln">Chromerを使用するには、カスタムタブに対応したブラウザが必要です。 PlayストアからGoogle Chrome(無料)をインストールしますか？既にインストールしている場合は最新バージョンに更新してください。</string>
-    <string name="custom_tab_provider_not_found_dialog_content"><![CDATA[カスタムタグに対応したブラウザが見つかりませんでいた。Google Chrome(無料)をおすすめします。Chromerでウェブページを表示して記事ビューを使用することはできますが、最良の体験のためにはカスタムタグプロバイダを利用することを強くおすすめします。今すぐインストールしますか？]]></string>
+    <string name="custom_tab_provider_not_found_expln">Lynketを使用するには、カスタムタブに対応したブラウザが必要です。 PlayストアからGoogle Chrome(無料)をインストールしますか？既にインストールしている場合は最新バージョンに更新してください。</string>
+    <string name="custom_tab_provider_not_found_dialog_content"><![CDATA[カスタムタグに対応したブラウザが見つかりませんでいた。Google Chrome(無料)をおすすめします。Lynketでウェブページを表示して記事ビューを使用することはできますが、最良の体験のためにはカスタムタグプロバイダを利用することを強くおすすめします。今すぐインストールしますか？]]></string>
     <string name="install">インストール</string>
     <string name="licenses">ライセンス</string>
-    <string name="about">Chromerについて</string>
-    <string name="help_chromer_grow">Chromerの成長を手伝ってください！</string>
+    <string name="about">Lynketについて</string>
+    <string name="help_chromer_grow">Lynketの成長を手伝ってください！</string>
     <string name="share">共有</string>
     <string name="share_with">%1$sで共有</string>
     <string name="rate_play_store">Playストアで評価する</string>
@@ -72,10 +73,10 @@
     <string name="copied">コピー済み</string>
     <string name="copy_link">リンクをコピー</string>
     <string name="add_to_homescreen">ホーム画面に追加</string>
-    <string name="intro_1">こんにちは！\nChromerは軽くて安全で速いブラウザです。</string>
+    <string name="intro_1">こんにちは！\nLynketは軽くて安全で速いブラウザです。</string>
     <string name="intro_4_new">複数のリンクを開いたり、バックグラウンドで読み込んだりするときに、リンクをフローティングバブルに保持しておくことができます</string>
     <string name="how_to_use">どうやって使うの？</string>
-    <string name="intro_6">Chromerを既定のブラウザに設定するだけで、リンクはChromerで開くようになります。また、ブラウザを選択して開く際には、Chromerを選択してください。</string>
+    <string name="intro_6">Lynketを既定のブラウザに設定するだけで、リンクはLynketで開くようになります。また、ブラウザを選択して開く際には、Lynketを選択してください。</string>
     <string name="version">バージョン</string>
     <string name="changelog">更新履歴</string>
     <string name="join_google_plus">Google+コミュニティに参加</string>
@@ -92,7 +93,7 @@
     <string name="colored_toolbar">ツールバーの色</string>
     <string name="choose_animation">起動アニメーション</string>
     <string name="animation_speed">アニメーション速度</string>
-    <string name="default_pref_xpln">Chromerですべてのリンクを開くように設定するか、リンクを開くブラウザのリストからChromerを選択してください。</string>
+    <string name="default_pref_xpln">Lynketですべてのリンクを開くように設定するか、リンクを開くブラウザのリストからLynketを選択してください。</string>
     <string name="personalization">カスタマイズ</string>
     <string name="default_clear_msg">が既定のブラウザに設定されています。タップして設定をクリアしてください。</string>
     <string name="dynamic_toolbar_color">ツールバーの色を動的に</string>
@@ -102,16 +103,16 @@
     <string name="default_provider">カスタムタブプロバイダ</string>
     <string name="pre_fetch_content">コンテンツを先読み</string>
     <string name="pre_fetch_desc">瞬時に開けるように、画面内のリンクをスキャンしてバックグラウンドで読み込みます</string>
-    <string name="accessibility_description">このサービスは画面内のテキストリンクをスキャンしてバックグラウンドで読み込むために使用します。Chromerはその他の情報を取得しません。この機能を許可することなく、引き続きChromerを利用することも可能です。詳しい情報は、Chromerを起動してご確認ください。</string>
+    <string name="accessibility_description">このサービスは画面内のテキストリンクをスキャンしてバックグラウンドで読み込むために使用します。Lynketはその他の情報を取得しません。この機能を許可することなく、引き続きLynketを利用することも可能です。詳しい情報は、Lynketを起動してご確認ください。</string>
     <string name="accessibility_dialog_title">ユーザー補助サービスの許可が必要です</string>
-    <string name="accessibility_dialog_desc">Chromerに、すべてのアプリでリンクのスキャンを許可するには、ユーザー補助サービスの許可が必要です。次の画面でユーザー補助サービスを許可し、このオプションを有効にすると、より高速な動作を体感できます。</string>
+    <string name="accessibility_dialog_desc">Lynketに、すべてのアプリでリンクのスキャンを許可するには、ユーザー補助サービスの許可が必要です。次の画面でユーザー補助サービスを許可し、このオプションを有効にすると、より高速な動作を体感できます。</string>
     <string name="open_settings">設定を開く</string>
     <string name="only_on_wifi">Wi-Fi時のみスキャン</string>
     <string name="show_notification">リンクの先読みを通知</string>
     <string name="default_toolbar_color">既定のツールバーの色</string>
     <string name="web_heads_color">ウェブヘッドの色</string>
     <string name="choose_secondary_browser">セカンダリブラウザ</string>
-    <string name="dynamic_toolbar_help">ツールバーの動的な色変更を有効にすると、Chromerはこっそりと色の学習を行います。はじめのうちはページやアプリに合わないかもしれませんが、使い続けるうちに改善されていきます。お楽しみください！</string>
+    <string name="dynamic_toolbar_help">ツールバーの動的な色変更を有効にすると、Lynketはこっそりと色の学習を行います。はじめのうちはページやアプリに合わないかもしれませんが、使い続けるうちに改善されていきます。お楽しみください！</string>
     <string name="secondary_browser_success">%1$sをセカンダリブラウザに設定しました！</string>
     <string name="fav_share_success">%1$sをお気に入りの共有アプリとして設定しました！</string>
     <string name="default_provider_success">%1$sがカスタムタブプロバイダとして利用されます！</string>
@@ -125,7 +126,7 @@
     <string name="dynamic_summary_web">開いたウェブサイトの色に従います</string>
     <string name="no_option_selected">オプションが選択されていません</string>
     <string name="permission_required">権限が必要です</string>
-    <string name="usage_permission_explanation_appcolor">ツールバーの色をアプリに合わせるには、使用中のアプリをChromerが取得するための権限を付与する必要があります。今すぐこの権限を付与しますか？</string>
+    <string name="usage_permission_explanation_appcolor">ツールバーの色をアプリに合わせるには、使用中のアプリをLynketが取得するための権限を付与する必要があります。今すぐこの権限を付与しますか？</string>
     <string name="grant">付与</string>
     <string name="open_source_contributions">オープンソースのもの</string>
     <string name="search_or_type_url">検索またはURLを入力</string>
@@ -140,8 +141,8 @@
     <string name="webheads_intro_2_new">複数のリンクを開いたときに、ウェブヘッドを自動でまとめます。ウェブヘッドを長押しするとメニューが開きます。</string>
     <string name="webheads_intro_3">ウェブヘッドをドラッグするとゴミ箱が表示されます。ゴミ箱にドラッグ&amp;ドロップすることで、ウェブヘッドを削除できます。</string>
     <string name="webheads_intro_4_lolli">強力なバックグラウンド読み込みを有効にすると、アプリを使っている間にもページを読み込みます。\n<b>タブが一瞬見えることがありますがバグではありません。</b></string>
-    <string name="webheads_intro_4">Chromerは最後に開いたリンクを優先的に先読みします。ウェブヘッドを上から順にタップしていく使い方がおすすめです。ページを開くと同時にウェブヘッドを削除するように設定することで、さらにシームレスに使えるようになります。</string>
-    <string name="web_head_permission_toast">リンクをバブルで開くには、Chromerに他のアプリの上に表示する権限が必要です。このまま付与するか、Chromerの設定よりウェブヘッドを無効にしてください。</string>
+    <string name="webheads_intro_4">Lynketは最後に開いたリンクを優先的に先読みします。ウェブヘッドを上から順にタップしていく使い方がおすすめです。ページを開くと同時にウェブヘッドを削除するように設定することで、さらにシームレスに使えるようになります。</string>
+    <string name="web_head_permission_toast">リンクをバブルで開くには、Lynketに他のアプリの上に表示する権限が必要です。このまま付与するか、Lynketの設定よりウェブヘッドを無効にしてください。</string>
     <string name="tap_close_all">タップしてすべて閉じる</string>
     <string name="web_heads_service">ウェブヘッドが有効です</string>
     <string name="join_beta">ベータテストに参加</string>
@@ -150,7 +151,7 @@
     <string name="no_voice_rec_apps">利用可能な音声認識アプリが見つかりません</string>
     <string name="loading">読み込み中</string>
     <string name="share_failed_msg">このアプリから共有できないため、デフォルトの共有を使用します</string>
-    <string name="revoke_accessibility_permission">Chromerのユーザー補助サービスを無効にできます。</string>
+    <string name="revoke_accessibility_permission">Lynketのユーザー補助サービスを無効にできます。</string>
     <string name="last_fetched_urls">最近読み込んだURL</string>
     <string name="translations">翻訳</string>
     <string name="merge_tabs">タブとアプリの統合</string>
@@ -199,7 +200,7 @@
     <string name="launch_setting">設定を開く</string>
     <string name="secondary_browser_not_installed">選択したセカンダリブラウザはインストールされていないようです。設定画面に移動してセカンダリブラウザの設定を変更しますか？</string>
     <string name="secondary_browser_launch_error">このリンクは選択したブラウザでは開けませんでした。設定を変更しますか？</string>
-    <string name="secondary_browser_not_error">このアプリはChromerのブラックリストに登録されていますが、セカンダリブラウザが設定されていません。今すぐセカンダリブラウザを設定しますか？</string>
+    <string name="secondary_browser_not_error">このアプリはLynketのブラックリストに登録されていますが、セカンダリブラウザが設定されていません。今すぐセカンダリブラウザを設定しますか？</string>
     <string name="copy_all">すべてコピー</string>
     <string name="choose_share_method">共有方法を選択</string>
     <string name="comma_seperated">カンマ区切り</string>
@@ -255,16 +256,16 @@
     <string name="enable_history_subtitle">履歴を無効にするとここにには何も表示されなくなります。</string>
     <string name="enable_history_subtitle_custom_tab"><![CDATA[履歴を無効にするとここにには何も表示されなくなります。カスタムタブプロバイダ(<b>%1$s</b>)が履歴を記録する可能性はあります。]]></string>
     <string name="source">ソース</string>
-    <string name="contribute_to_chromer">コーディングが好きですか？Chromerをフォークして開発に貢献してみませんか。</string>
+    <string name="contribute_to_chromer">コーディングが好きですか？Lynketをフォークして開発に貢献してみませんか。</string>
     <string name="fork_on_github">GitHubでフォーク</string>
     <string name="web_view_not_found">端末でWebViewが無効になっています。リンクを開けません。</string>
-    <string name="app_detection_notification_channel_description">Chromerのアプリ探知サービスが稼働している間は、通知が表示されます。</string>
+    <string name="app_detection_notification_channel_description">Lynketのアプリ探知サービスが稼働している間は、通知が表示されます。</string>
     <string name="app_detection_service">アプリ探知サービス</string>
     <string name="shortcut_name">ショートカットの名前</string>
     <string name="create_shorcut">ショートカットを作成</string>
     <string name="create">作成</string>
     <string name="name_cannot_be_empty">名前が空です</string>
-    <string name="chromer_options">Chromerのオプション</string>
+    <string name="chromer_options">Lynketのオプション</string>
     <string name="warning">警告</string>
     <string name="bottom_bar_crash_warning">Chromeのバージョンによってはボトムバーが有効の時に、強制終了される場合があります。その場合は、Chromeが修正されるまでボトムバーを無効にしてみてください。</string>
     <string name="text_you_copied">コピーしたテキスト</string>
@@ -282,5 +283,5 @@
     <string name="feature_requires_lollipop">この機能を利用するには Android 6.0 以上が必要です</string>
     <string name="article_loading_failed">記事を抽出することができませんでした。</string>
     <string name="full_incognito_mode">シークレットモード</string>
-    <string name="full_incognito_mode_explanation">完全なシークレットモードのために Chromer はページのレンダーに WebView を使用します。これにより作業がどこにも記録されなくなります。</string>
+    <string name="full_incognito_mode_explanation">完全なシークレットモードのために Lynket はページのレンダーに WebView を使用します。これにより作業がどこにも記録されなくなります。</string>
 </resources>

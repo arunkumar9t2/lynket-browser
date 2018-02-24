@@ -1,6 +1,7 @@
 /*
- * Chromer
- * Copyright (C) 2017 Arunkumar
+ * Lynket
+ *
+ * Copyright (C) 2018 Arunkumar
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -202,7 +203,7 @@ class HomeActivity : BaseActivity(), Snackable {
             withAccountHeader(
                     with(AccountHeaderBuilder()) {
                         withActivity(this@HomeActivity)
-                        withHeaderBackground(R.drawable.chromer)
+                        withHeaderBackground(R.drawable.lynket_drawer_image)
                         withHeaderBackgroundScaleType(ImageView.ScaleType.CENTER_CROP)
                         withDividerBelowHeader(true)
                         build()

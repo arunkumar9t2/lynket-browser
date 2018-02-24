@@ -1,6 +1,7 @@
 /*
- * Chromer
- * Copyright (C) 2017 Arunkumar
+ * Lynket
+ *
+ * Copyright (C) 2018 Arunkumar
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,7 +53,7 @@ android {
         applicationId "arun.com.chromer"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 48
+        versionCode 49
         versionName "2.0"
 
         resValue "string", "playLicenseKey", "$playLicenseKey"
@@ -69,7 +70,7 @@ android {
             shrinkResources true
             debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            resValue "string", "app_name", "Chromer"
+            resValue "string", "app_name", "Lynket"
 
             lintOptions {
                 disable 'MissingTranslation'
@@ -84,7 +85,7 @@ android {
 
             applicationIdSuffix '.debug'
             versionNameSuffix '- dev'
-            resValue "string", "app_name", "Chromer-dev"
+            resValue "string", "app_name", "Lynket-dev"
 
             ext.enableCrashlytics = false
         }
