@@ -430,8 +430,8 @@ constructor(
                     }
                 }
                 return when {
-                    websiteColor != NO_COLOR -> websiteColor
                     appColor != NO_COLOR -> appColor
+                    websiteColor != NO_COLOR -> websiteColor
                     else -> preferences.toolbarColor()
                 }
             } else {
