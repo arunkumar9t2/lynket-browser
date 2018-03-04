@@ -36,10 +36,13 @@ class CustomTabActivity : BrowsingActivity() {
         super.onCreate(savedInstanceState)
 
         val toolbarColor = intent.getIntExtra(EXTRA_KEY_TOOLBAR_COLOR, 0)
-        activityComponent.customTabs()
-                .forUrl(intent.dataString!!)
-                .toolbarColor(toolbarColor)
-                .launch()
+
+        if (savedInstanceState == null) {
+            activityComponent.customTabs()
+                    .forUrl(intent.dataString!!)
+                    .toolbarColor(toolbarColor)
+                    .launch()
+        } else finish()
     }
 
     override fun inject(activityComponent: ActivityComponent) {
