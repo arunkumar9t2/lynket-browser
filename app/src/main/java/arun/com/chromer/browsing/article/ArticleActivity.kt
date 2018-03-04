@@ -229,7 +229,11 @@ class ArticleActivity : BrowsingActivity() {
                 .changes(textSizeSeekbar)
                 .skip(1)
                 .subscribe { size ->
-                    recyclerView.post { articleAdapter.textSizeIncrementSp = size }
+                    recyclerView.post {
+                        if (::articleAdapter.isInitialized) {
+                            articleAdapter.textSizeIncrementSp = size
+                        }
+                    }
                 })
     }
 
