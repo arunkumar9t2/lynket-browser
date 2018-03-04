@@ -58,9 +58,11 @@ internal class HistoryAdapter(
     private val dataCallback = object : AsyncListUtil.DataCallback<Website>() {
         override fun refreshData(): Int {
             Timber.d("Refresh data")
-            return if (cursor != null && !cursor!!.isClosed) {
+            return try {
                 cursor!!.count
-            } else 0
+            } catch (e: Exception) {
+                0
+            }
         }
 
         override fun fillData(data: Array<Website>, startPosition: Int, itemCount: Int) {
