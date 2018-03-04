@@ -25,6 +25,7 @@
     <string-array name="actionValues">
         <item>Browser secondario</item>
         <item>App di condivisione preferita</item>
+        <item>General Share</item>
     </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>Destra</item>
