@@ -185,7 +185,7 @@ dependencies {
     implementation 'com.jakewharton.rxbinding:rxbinding:1.0.1'
 
     // Extraction
-    implementation 'com.github.chimbori:crux:-SNAPSHOT'
+    implementation 'com.github.chimbori:crux:2.0.1'
 
     // Storage
     implementation 'io.paperdb:paperdb:2.6'
