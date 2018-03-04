@@ -54,7 +54,14 @@ open class SlideOverExplanationFragment : BaseFragment(), ISlideBackgroundColorH
 
     @OnClick(R.id.tryItButton)
     fun onTryItClick() {
-        tabsManager.openBrowsingTab(context!!, Website("https://www.google.co.in/search?q=chromer"), smart = false, fromNewTab = false)
-        Handler().postDelayed({ Toast.makeText(context, R.string.slide_over_fragment_close_prompt, Toast.LENGTH_SHORT).show() }, 400)
+        tabsManager.openBrowsingTab(context!!, Website("https://goo.gl/search/lynket"), smart = false, fromNewTab = false)
+        Handler().postDelayed(
+                {
+                    if (isAdded) {
+                        Toast.makeText(context, R.string.slide_over_fragment_close_prompt, Toast.LENGTH_SHORT).show()
+                    }
+                },
+                200
+        )
     }
 }
