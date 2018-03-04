@@ -36,7 +36,8 @@
         android:layout_gravity="center"
         android:layout_marginBottom="8dp"
         android:scaleType="fitCenter"
-        tools:src="@mipmap/ic_launcher" />
+        tools:src="@mipmap/ic_launcher"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/label"

@@ -51,7 +51,8 @@
             android:text="@string/chromer_options"
             android:textAllCaps="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            tools:targetApi="lollipop" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/menu_list"

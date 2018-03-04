@@ -91,6 +91,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:padding="2dp"
-            android:src="@drawable/ic_shortcut_add" />
+            android:src="@drawable/ic_shortcut_add"
+            tools:ignore="ContentDescription" />
     </LinearLayout>
 </android.support.v7.widget.CardView>

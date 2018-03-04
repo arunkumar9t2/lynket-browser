@@ -50,7 +50,8 @@
             android:min="0"
             android:minHeight="3dp"
             android:padding="0dp"
-            app:mpb_progressStyle="horizontal" />
+            app:mpb_progressStyle="horizontal"
+            tools:targetApi="o" />
 
     </android.support.design.widget.AppBarLayout>
 

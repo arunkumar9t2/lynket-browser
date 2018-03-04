@@ -63,7 +63,7 @@ interface Search {
             viewRef = WeakReference(view)
         }
 
-        fun detachView() {
+        private fun detachView() {
             Timber.d("View detached")
             viewRef?.clear()
             viewRef = null

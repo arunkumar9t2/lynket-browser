@@ -19,6 +19,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
@@ -49,7 +50,8 @@
             android:layout_height="72dp"
             android:layout_gravity="center"
             android:layout_margin="8dp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:ignore="ContentDescription" />
     </FrameLayout>
 
     <android.support.design.widget.TextInputLayout

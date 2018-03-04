@@ -276,7 +276,8 @@
             android:icon="@mipmap/ic_tabs_launcher_icon"
             android:label="@string/title_tabs"
             android:launchMode="singleInstance"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:targetApi="lollipop" />
         <activity
             android:name=".browsing.providerselection.ProviderSelectionActivity"
             android:label="@string/choose_provider"

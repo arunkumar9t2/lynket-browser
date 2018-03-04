@@ -232,4 +232,14 @@
     <string name="open_article_view">打开文章视图</string>
     <string name="browse_seamlessly">无缝浏览</string>
     <string name="slide_over_explanation">网页会滑出到当前使用的应用上方，您可以点击 X 来快速返回到先前应用</string>
+    <string name="choose_provider">选择标签页提供程序</string>
+    <string name="webViewNotRecommended">出于稳定性和安全性考虑，对于您的Android版本，我们不推荐使用系统的WebView。</string>
+    <string name="webViewPros">您的手机自带的渲染引擎</string>
+    <string name="tab_providers">支持的标签页提供程序</string>
+    <string name="features">特性</string>
+    <string name="webview_disadvantages">WebView缺少诸如数据存储库，自动填写表单，云同步等第三方标签页具有的功能。您仍要使用WebView来渲染网页吗？</string>
+    <string name="try_it">尝试一下</string>
+    <string name="slide_over_fragment_close_prompt">点击 X 来快速关闭标签页</string>
+    <string name="see_demo">查看样例</string>
+    <string name="provider_intro_explanation">Lynket可以与您最喜爱的浏览器搭配使用。\n\n例如，把Google Chrome作为标签页提供程序将会允许你同步浏览历史，使用数据存储库和在您的Google账户上储存的密码。</string>
 </resources>

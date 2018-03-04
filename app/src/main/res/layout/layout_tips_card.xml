@@ -53,7 +53,8 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp" />
+            android:layout_marginRight="12dp"
+            tools:ignore="ContentDescription" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -90,7 +91,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:adjustViewBounds="true"
-                android:scaleType="fitCenter" />
+                android:scaleType="fitCenter"
+                tools:ignore="ContentDescription" />
         </LinearLayout>
     </RelativeLayout>
 

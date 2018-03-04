@@ -50,7 +50,7 @@ import dagger.Provides;
 
 @Module
 public class DataModule {
-    private Application application;
+    private final Application application;
 
     public DataModule(Application application) {
         this.application = application;

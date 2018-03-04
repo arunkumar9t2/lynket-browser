@@ -1,21 +1,21 @@
 <?xml version="1.0"?><!--
-  ~ Lynket
-  ~
-  ~ Copyright (C) 2018 Arunkumar
-  ~
-  ~ This program is free software: you can redistribute it and/or modify
-  ~ it under the terms of the GNU General Public License as published by
-  ~ the Free Software Foundation, either version 3 of the License, or
-  ~ (at your option) any later version.
-  ~
-  ~ This program is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~ GNU General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU General Public License
-  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
+~ Lynket
+~
+~ Copyright (C) 2018 Arunkumar
+~
+~ This program is free software: you can redistribute it and/or modify
+~ it under the terms of the GNU General Public License as published by
+~ the Free Software Foundation, either version 3 of the License, or
+~ (at your option) any later version.
+~
+~ This program is distributed in the hope that it will be useful,
+~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+~ GNU General Public License for more details.
+~
+~ You should have received a copy of the GNU General Public License
+~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
 <resources>
     <string-array name="animationValues">
         <item>Ninguno</item>
@@ -49,20 +49,20 @@
     <string name="share_via">Compartir vía…</string>
     <string name="custom_tab_provider_not_found">Proveedor compatible de pestañas personalizadas no encontrado</string>
     <string name="custom_tab_provider_not_found_expln">Lynket necesita que tenga instalado algún navegador compatible con pestañas personalizadas en su teléfono. Actualmente no hay navegadores en su teléfono que lo soporten. ¿Le gustaría instalar Google Chrome (gratis) desde Play store? Si ya lo tiene, por favor actualizelo a la última versión.</string>
-    <string name="custom_tab_provider_not_found_dialog_content"><![CDATA[No se pudo encontrar ningun navegador de pestañas personalizadas compatible en su teléfono. Se recomienda Google Chrome (Gratuito). Puede seguir viendo páginas web dentro de Lynket y usar el modo Artículo, pero para una mejor experiencia, se recomienda encarecidamente un proveedor de pestañas personalizado. ¿Te gustaría instalarlo ahora?]]></string>
+    <string name="custom_tab_provider_not_found_dialog_content"><![CDATA[No se pudo encontrar ningún navegador de pestañas personalizadas compatible en su teléfono. Se recomienda Google Chrome (Gratuito). Puede seguir viendo páginas web dentro de Lynket y usar el modo Artículo, pero para una mejor experiencia, se recomienda encarecidamente un proveedor de pestañas personalizado. ¿Te gustaría instalarlo ahora?]]></string>
     <string name="install">Instalar</string>
     <string name="licenses">Licencias</string>
     <string name="about">Acerca de</string>
     <string name="help_chromer_grow">"¡Ayuda a Lynket a crecer! "</string>
     <string name="share">Compartir</string>
-    <string name="share_with">Compartir con</string>
+    <string name="share_with">Compartir con %1$s</string>
     <string name="rate_play_store">Califiqué en Play Store</string>
     <string name="feedback">Su opinión</string>
     <string name="intro">Introducción</string>
-    <string name="send_email">Enviar correo electrónico...</string>
+    <string name="send_email">Enviar correo electrónico…</string>
     <string name="fallback_msg">No se pudo abrir la pestaña personalizada, volviendo a los navegadores normales</string>
-    <string name="open_with">Abrir con...</string>
-    <string name="open_in_browser">Abrir en</string>
+    <string name="open_with">Abrir con…</string>
+    <string name="open_in_browser">Abrir en %1$s</string>
     <string name="unxp_err">"Error inesperado, vuelve a intentarlo "</string>
     <string name="unsupported_link">No es un vínculo compatible, Vuelve a intentarlo.</string>
     <string name="couldnt_load_price">"No se pudo cargar el costo "</string>

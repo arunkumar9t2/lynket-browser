@@ -35,7 +35,8 @@
         android:layout_gravity="center"
         android:layout_margin="8dp"
         android:visibility="visible"
-        tools:src="@drawable/arun" />
+        tools:src="@drawable/arun"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/features"

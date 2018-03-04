@@ -254,6 +254,8 @@
     <string name="enable_history_subtitle">Po zakázaní histórie sa prestanú zaznamenávať navštívené stránky.</string>
     <string name="enable_history_subtitle_custom_tab"><![CDATA[Po zakázaní histórie sa prestanú zaznamenávať navštívené stránky. Poskytovateľ Custom Tabs, <b>%1$s</b>, ich ale stále zaznamenávať môže.]]></string>
     <string name="source">Zdroj</string>
+    <string name="shortcut_name">Názov skratky</string>
+    <string name="create_shorcut">Vytvoriť skratku</string>
     <string name="create">Vytvoriť</string>
     <string name="name_cannot_be_empty">Meno nemôže byť prázdne</string>
     <string name="chromer_options">Možnosti Lynket</string>
@@ -267,4 +269,16 @@
     <string name="skip">Preskočiť</string>
     <string name="keywords">Kľúčové slová</string>
     <string name="feature_requires_lollipop">Táto funkcia vyžaduje Android Lollipop</string>
+    <string name="text_size">Veľkosť textu</string>
+    <string name="save_size_dialog_title">Uložiť veľkosť</string>
+    <string name="save_size_dialog_content">Chcete uložiť túto veľkosť?</string>
+    <string name="choose_provider">Zvoľte poskytovateľa</string>
+    <string name="webViewNotRecommended">Pre vašu verziu Androidu, použitie WebView nie je odporúčané z dôvodu stability a bezpečnosti.</string>
+    <string name="tab_providers">Podporovaný poskytovatelia</string>
+    <string name="use">Použiť</string>
+    <string name="features">Funkcie</string>
+    <string name="try_it">Vyskúšať</string>
+    <string name="see_demo">Zobraziť demo</string>
+    <string name="tips">Tipy</string>
+    <string name="quick_settings">Rýchle nastavenia</string>
 </resources>

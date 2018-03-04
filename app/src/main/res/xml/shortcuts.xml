@@ -17,13 +17,15 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+<shortcuts xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <shortcut
         android:enabled="true"
         android:icon="@drawable/ic_shortcut_add"
         android:shortcutId="new_tab"
         android:shortcutLongLabel="@string/open_new_tab"
-        android:shortcutShortLabel="@string/open_new_tab">
+        android:shortcutShortLabel="@string/open_new_tab"
+        tools:targetApi="n_mr1">
         <intent
             android:action="android.intent.action.VIEW"
             android:targetClass="arun.com.chromer.browsing.newtab.NewTabDialogActivity"
@@ -36,7 +38,8 @@
         android:icon="@drawable/ic_shortcut_history"
         android:shortcutId="history"
         android:shortcutLongLabel="@string/title_history"
-        android:shortcutShortLabel="@string/title_history">
+        android:shortcutShortLabel="@string/title_history"
+        tools:targetApi="n_mr1">
         <intent
             android:action="android.intent.action.VIEW"
             android:targetClass="arun.com.chromer.history.HistoryActivity"

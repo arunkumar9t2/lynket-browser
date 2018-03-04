@@ -18,8 +18,8 @@
   -->
 <resources>
     <string-array name="animationValues">
-        <item>"Žádná "</item>
+        <item>Žádná</item>
         <item>Vysunout do prava</item>
-        <item>"Vysunout nahoru "</item>
+        <item>Vysunout nahoru</item>
     </string-array>
 </resources>
