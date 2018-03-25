@@ -2,7 +2,7 @@
 # Lynket
 **Android browser app based on Custom Tabs protocol.**
 
-<img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" align="left"
+<img src="android-app/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" align="left"
 width="200"
     hspace="10" vspace="10">
 
