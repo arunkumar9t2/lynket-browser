@@ -34,11 +34,13 @@ If you have got some time, read the introduction post on [Medium](https://medium
 ## Architecture and Code Structure
 Lynket is written on a MVVM Architecture and uses Dagger 2 for dependency injection. The source code is packaged based on feature.
 
-    app/src/java/<package>
-						<feature_1>\...
-						<feature_2>\...
-						shared\...
-						utils\...	
+```
+app/src/java/<package>
+	<feature_1>\
+	<feature_2>\
+	shared\
+	utils\
+```
 ### Architecture
 Below outlines sample structure of most screens. 
 ![enter image description here](https://raw.githubusercontent.com/arunkumar9t2/chromer/master/art/Chromer%20Architecture.png)
