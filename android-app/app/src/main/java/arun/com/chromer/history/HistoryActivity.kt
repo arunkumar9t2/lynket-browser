@@ -31,6 +31,7 @@ import butterknife.OnClick
 import kotlinx.android.synthetic.main.activity_history.*
 
 class HistoryActivity : BaseActivity(), Snackable {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setSupportActionBar(toolbar)
@@ -42,7 +43,6 @@ class HistoryActivity : BaseActivity(), Snackable {
                 .replace(R.id.fragment_container, HistoryFragment())
                 .commit()
     }
-
 
     @OnClick(R.id.fab)
     fun onFabClick() {
@@ -83,6 +83,6 @@ class HistoryActivity : BaseActivity(), Snackable {
     }
 
     override fun inject(activityComponent: ActivityComponent) {
-        activityComponent.inject(activityComponent)
+        activityComponent.inject(this)
     }
 }

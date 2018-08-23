@@ -34,11 +34,13 @@ import arun.com.chromer.di.fragment.FragmentModule
 import arun.com.chromer.di.scopes.PerActivity
 import arun.com.chromer.di.view.ViewComponent
 import arun.com.chromer.di.view.ViewModule
+import arun.com.chromer.history.HistoryActivity
 import arun.com.chromer.home.HomeActivity
 import arun.com.chromer.intro.ChromerIntroActivity
 import arun.com.chromer.perapp.PerAppSettingsActivity
 import arun.com.chromer.settings.browsingoptions.BrowsingOptionsActivity
 import arun.com.chromer.shortcuts.HomeScreenShortcutCreatorActivity
+import arun.com.chromer.tabs.ui.TabsActivity
 import arun.com.chromer.tips.TipsActivity
 import arun.com.chromer.webheads.ui.context.WebHeadContextActivity
 import dagger.Subcomponent
@@ -85,4 +87,8 @@ interface ActivityComponent {
     fun inject(chromerIntroActivity: ChromerIntroActivity)
 
     fun inject(tipsActivity: TipsActivity)
+
+    fun inject(tabsActivity: TabsActivity)
+
+    fun inject(historyActivity: HistoryActivity)
 }

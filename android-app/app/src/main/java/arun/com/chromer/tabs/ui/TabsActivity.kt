@@ -79,6 +79,6 @@ class TabsActivity : BaseActivity(), Snackable {
     }
 
     override fun inject(activityComponent: ActivityComponent) {
-        activityComponent.inject(activityComponent)
+        activityComponent.inject(this)
     }
 }
