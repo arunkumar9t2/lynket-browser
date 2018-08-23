@@ -86,10 +86,10 @@ public class RxParser {
             final boolean isArticle = cruxURL.resolveRedirects().isLikelyArticle();
             if (isArticle) {
                 final Document document = Jsoup.connect(cruxURL.toString()).get();
-                article = ArticleExtractor.with(cruxURL.toString(), document)
+                /*article = ArticleExtractor.with(cruxURL.toString(), document)
                         .extractMetadata()
                         .extractContent()
-                        .article();
+                        .article();*/
             }
         } catch (Exception | OutOfMemoryError e) {
             Timber.e(e);

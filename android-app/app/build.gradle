@@ -38,7 +38,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.25.1'
+        classpath 'io.fabric.tools:gradle:1.25.+'
     }
 }
 repositories {
@@ -47,8 +47,6 @@ repositories {
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.1'
-
     defaultConfig {
         applicationId "arun.com.chromer"
         minSdkVersion 16
@@ -114,7 +112,7 @@ android {
 dependencies {
 
     // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // Tests
@@ -185,7 +183,7 @@ dependencies {
     implementation 'com.jakewharton.rxbinding:rxbinding:1.0.1'
 
     // Extraction
-    implementation 'com.github.chimbori:crux:-SNAPSHOT'
+    implementation 'com.github.chimbori:crux:2.0.1'
 
     // Storage
     implementation 'io.paperdb:paperdb:2.6'
