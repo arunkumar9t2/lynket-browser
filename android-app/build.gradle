@@ -24,7 +24,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0-alpha06'
+        classpath 'com.android.tools.build:gradle:3.3.0-alpha10'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
