@@ -38,6 +38,13 @@ a {
 <br></br>
 <h3>Chromer is now called Lynket!</h3>
 
+<strong>2.0.2</strong>
+<ul>
+    <li><b>NEW: </b> Custom Minimize Behaviors - Minimize to web heads even if web heads are disabled.</li>
+    <li><b>FIXES: </b> AMP links not loading sometimes.</li>
+    <li><b>IMPROVED: </b> Sync translations.</li>
+</ul>
+<hr>
 <strong>2.0.1 - 2nd Anniversary Update!</strong>
 <h4 class="list-heading">Design</h3>
 <ul>
