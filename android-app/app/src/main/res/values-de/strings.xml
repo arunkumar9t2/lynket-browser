@@ -27,9 +27,9 @@
         <item>Schnell</item>
     </string-array>
     <string-array name="actionValues">
-        <item>Sekundärer Browser</item>
+        <item>Zweiter Browser</item>
         <item>Lieblings-Teil-App</item>
-        <item>General share</item>
+        <item>Allgemeines Teilen</item>
     </string-array>
     <string-array name="webHeadsSpawnValues">
         <item>Rechts</item>
@@ -39,7 +39,7 @@
         <item>Dunkel</item>
         <item>Hell</item>
         <item>Automatisch</item>
-        <item>Black</item>
+        <item>Schwarz</item>
     </string-array>
     <string-array name="webHeadsSizeValues">
         <item>Normal</item>
@@ -49,10 +49,11 @@
     <string name="share_via">Teilen mit…</string>
     <string name="custom_tab_provider_not_found">Kein kompatibler Custom-Tab-Anbieter gefunden</string>
     <string name="custom_tab_provider_not_found_expln">Chrome benötigt einen Custom-Tab-kompatiblen Browser auf deinem Gerät. Momentan sind keine solchen Browser installiert. Würdest du Google Chrome (kostenlos) aus dem Play Store installieren? Wenn du es bereits hast, bitte aktualidiere es auf die neueste Version.</string>
+    <string name="custom_tab_provider_not_found_dialog_content"><![CDATA[Es konnte kein kompatibler benutzerdefinierter Tab-Browser auf deinem Handy gefunden werden. Google Chrome (kostenlos) wird empfohlen. Du kannst immer noch Webseiten innerhalb von Lynket betrachten und den Artikelmodus verwenden, aber für die beste Erfahrung wird ein eigener Tab-Provider dringend empfohlen. Möchtest du jetzt einen installieren?]]></string>
     <string name="install">Installieren</string>
     <string name="licenses">Lizenzen</string>
     <string name="about">Über</string>
-    <string name="help_chromer_grow">Hilf Lynket zu wachsen!</string>
+    <string name="help_chromer_grow">Hilf Lynket, bekannter zu werden!</string>
     <string name="share">Teilen</string>
     <string name="share_with">Teilen mit %1$s</string>
     <string name="rate_play_store">Im Play Store bewerten</string>
@@ -135,7 +136,7 @@
     <string name="credits">Credits</string>
     <string name="icon_design">Icon Design</string>
     <string name="overlay_permission_content">Um die Web Heads anzuzeigen wird die Berechtigung, etwas über anderen Apps einzublenden benötigt. Möchtest du die Berechtigung gewähren?</string>
-    <string name="webheads_intro_1">Wenn du irgendeinen Link öffnest wird eine \"schwebende Blase\" (Web Head) erstellt und Lynket versucht den Link vorab zu laden.</string>
+    <string name="webheads_intro_1">Wenn du irgendeinen Link öffnest wird eine \"schwebende Blase\" (Web Head) erstellt und Chromer versucht den Link vorab zu laden.</string>
     <string name="webheads_intro_3">Wenn du einen Web Head ziehst, erscheint eine Mülltonne. Lass den Web Head darüber los um ihn zu schließen.</string>
     <string name="webheads_intro_4">"Lynket priorisiert den zuletzt geöffneten Link und lädt ihn vorab. Die beste Methode ist, die Web Heads nacheinander von oben nach unten auszuwählen. Die beste Erfahrung wird gewährleistet, wenn die Web Heads automatisch geschlossen werden beim Antippen. "</string>
     <string name="web_head_permission_toast">Um Links in schwebenden Blasen zu öffnen, benötigt Lynket die Berechtigung, etwas über anderen Apps einzublenden. Bitte aktivieren oder die Web Heads deaktivieren.</string>
@@ -175,4 +176,26 @@
     <string name="save_time">Spare Zeit</string>
     <string name="multiple_links">Mehrere Links</string>
     <string name="copy_all">Alle kopieren</string>
+    <string name="choose_provider">Anbieter wählen</string>
+    <string name="webViewNotRecommended">Für deine Android-Version wird die Verwendung von WebView aus Gründen der Stabilität und Sicherheit nicht empfohlen.</string>
+    <string name="webViewPros">Die Rendering-Engine, die bei deinem Smartphone mitgeliefert wird.</string>
+    <string name="tab_providers">Unterstützte Anbieter</string>
+    <string name="use">Benutzen</string>
+    <string name="features">Merkmale</string>
+    <string name="webview_disadvantages">WebView mangelt es an vielen Vorteilen wie Datensparmodus, automatisches Ausfüllen von Formularen und Cloud-Synchronisation, die andere Anbieter unterstützen. Möchtest du WebView trotzdem zum Rendern von Webseiten verwenden?</string>
+    <string name="try_it">Probiere es aus</string>
+    <string name="slide_over_fragment_close_prompt">Drücke ×, um den Tab schnell zu schließen</string>
+    <string name="see_demo">Demo ansehen</string>
+    <string name="provider_intro_explanation">Lynket kann mit deinen Lieblingsbrowsern zusammenarbeiten. \n\nWenn du beispielsweise Google Chrome als Anbieter verwendest, kannst du den Verlauf synchronisieren, den Datensparmodus benutzen und gespeicherte Passwörter in deinem Google-Konto verwenden.</string>
+    <string name="chromer_flexible">Flexibel</string>
+    <string name="tutorial_amp_intro">Lynket kann AMP-Seiten automatisch finden und laden, was zu einer schnelleren und flüssigerem Leseerfahrung führt.</string>
+    <string name="illustrations_and_video">Bilder und Video</string>
+    <string name="beta_testers">Google+ Beta-Tester</string>
+    <string name="tips">Tipps</string>
+    <string name="tips_description">Schau dir die Tipps an, um das Beste aus Lynket herauszuholen</string>
+    <string name="choose_provider_tip">Lynket unterstützt jeden Browser, der das Custom-Tab-Protokoll implementiert hat. Lynket übernimmt auch das Verhalten des gewählten Anbieters. Zum Beispiel, wenn Sie Brave benuzten, wird der Adblocker aktiviert.</string>
+    <string name="tips_secondary_browser">Du kannst einen zweiten Browser und eine Lieblingsapp zum Teilen auswählen, um die Website schnell dort aufzurufen oder zu teilen.</string>
+    <string name="tips_article_mode">Wenn Sie im Artikelmodus auf Wörter tippen, wird automatisch eine Suchanfrage durchgeführt.</string>
+    <string name="quick_settings">Schnelleinstellungen</string>
+    <string name="quick_settings_tip">Du kannst Lynkets Schnelleinstellungsschalter in der Statusleiste benutzen, um schnell deine Surfeinstellungen zu ändern.</string>
 </resources>

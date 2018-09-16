@@ -62,7 +62,7 @@
     <string name="send_email">メールを送信</string>
     <string name="fallback_msg">カスタムタブで開くことができませんでした。普通のブラウザで開きます。</string>
     <string name="open_with">別のアプリで開く</string>
-    <string name="open_in_browser">%1$sで開く</string>
+    <string name="open_in_browser">%1$s で開く</string>
     <string name="unxp_err">予期せぬエラーが発生しました。もう一度やり直してください。</string>
     <string name="unsupported_link">サポートされていないリンクです。もう一度やり直してください。</string>
     <string name="couldnt_load_price">値段を読み込めませんでした</string>
@@ -105,7 +105,7 @@
     <string name="pre_fetch_desc">瞬時に開けるように、画面内のリンクをスキャンしてバックグラウンドで読み込みます</string>
     <string name="accessibility_description">このサービスは画面内のテキストリンクをスキャンしてバックグラウンドで読み込むために使用します。Lynketはその他の情報を取得しません。この機能を許可することなく、引き続きLynketを利用することも可能です。詳しい情報は、Lynketを起動してご確認ください。</string>
     <string name="accessibility_dialog_title">ユーザー補助サービスの許可が必要です</string>
-    <string name="accessibility_dialog_desc">Lynketに、すべてのアプリでリンクのスキャンを許可するには、ユーザー補助サービスの許可が必要です。次の画面でユーザー補助サービスを許可し、このオプションを有効にすると、より高速な動作を体感できます。</string>
+    <string name="accessibility_dialog_desc">Lynket に、すべてのアプリでリンクのスキャンを許可するには、ユーザー補助サービスの許可が必要です。次の画面でユーザー補助サービスを許可し、このオプションを有効にすると、より高速な動作を体感できます。</string>
     <string name="open_settings">設定を開く</string>
     <string name="only_on_wifi">Wi-Fi時のみスキャン</string>
     <string name="show_notification">リンクの先読みを通知</string>
@@ -265,7 +265,7 @@
     <string name="create_shorcut">ショートカットを作成</string>
     <string name="create">作成</string>
     <string name="name_cannot_be_empty">名前が空です</string>
-    <string name="chromer_options">Lynketのオプション</string>
+    <string name="chromer_options">Lynket のオプション</string>
     <string name="warning">警告</string>
     <string name="bottom_bar_crash_warning">Chromeのバージョンによってはボトムバーが有効の時に、強制終了される場合があります。その場合は、Chromeが修正されるまでボトムバーを無効にしてみてください。</string>
     <string name="text_you_copied">コピーしたテキスト</string>
@@ -284,4 +284,7 @@
     <string name="article_loading_failed">記事を抽出することができませんでした。</string>
     <string name="full_incognito_mode">シークレットモード</string>
     <string name="full_incognito_mode_explanation">完全なシークレットモードのために Lynket はページのレンダーに WebView を使用します。これにより作業がどこにも記録されなくなります。</string>
+    <string name="tab_providers">サポートされているプロバイダ</string>
+    <string name="use">使う</string>
+    <string name="features">機能</string>
 </resources>
