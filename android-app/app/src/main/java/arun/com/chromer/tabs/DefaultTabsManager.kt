@@ -86,7 +86,15 @@ constructor(
             WebViewActivity::class.java.name
     )
 
-    override fun openUrl(context: Context, website: Website, fromApp: Boolean, fromWebHeads: Boolean, fromNewTab: Boolean, fromAmp: Boolean, incognito: Boolean) {
+    override fun openUrl(
+            context: Context,
+            website: Website,
+            fromApp: Boolean, // TODO Move to sealed classes
+            fromWebHeads: Boolean,
+            fromNewTab: Boolean,
+            fromAmp: Boolean,
+            incognito: Boolean
+    ) {
         // Clear non browsing activities if it was external intent.
         if (!fromApp) {
             clearNonBrowsingActivities()
@@ -137,18 +145,18 @@ constructor(
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     override fun reOrderTabByUrl(context: Context, website: Website, activityNames: List<String>?): Boolean {
-        return findTaskAndExecuteAction(context, website, activityNames, { task ->
+        return findTaskAndExecuteAction(context, website, activityNames) { task ->
             Timber.d("Moved tab to front $website")
             task.moveToFront()
-        })
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     override fun finishTabByUrl(context: Context, website: Website, activityNames: List<String>?): Boolean {
-        return findTaskAndExecuteAction(context, website, activityNames, { task ->
+        return findTaskAndExecuteAction(context, website, activityNames) { task ->
             Timber.d("Finishing task $website")
             task.finishAndRemoveTask()
-        })
+        }
     }
 
     /**
@@ -295,7 +303,7 @@ constructor(
         // If this command was not issued for minimizing, then attempt aggressive loading.
         if (preferences.aggressiveLoading() && !fromMinimize) {
             if (preferences.articleMode()) {
-                articlePreloader.preloadArticle(Uri.parse(url), { })
+                articlePreloader.preloadArticle(Uri.parse(url)) { }
             } else {
                 if (shouldUseWebView(incognito)) {
                     application.registerActivityLifecycleCallbacks(
@@ -372,10 +380,11 @@ constructor(
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     override fun getActiveTabs(): Single<List<TabsManager.Tab>> {
-        return Single.create({ onSubscribe ->
+        return Single.create { onSubscribe ->
             try {
                 val am = application.getSystemService(ACTIVITY_SERVICE) as ActivityManager
                 onSubscribe.onSuccess(am.appTasks!!
+                        .asSequence()
                         .map { DocumentUtils.getTaskInfoFromTask(it) }
                         .filter { it != null && it.baseIntent?.dataString != null && it.baseIntent.component != null }
                         .map {
@@ -387,7 +396,7 @@ constructor(
             } catch (e: Exception) {
                 onSubscribe.onError(e)
             }
-        })
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -497,6 +506,6 @@ constructor(
                     chromerIntent!!.addFlags(FLAG_ACTIVITY_CLEAR_TOP)
                     activity.startActivity(chromerIntent)
                 }
-                .dismissListener({ activity.finish() }).show()
+                .dismissListener { activity.finish() }.show()
     }
 }

@@ -103,7 +103,7 @@ public class Website implements Parcelable {
         final String ampUrl = from.hasAmp() ? from.ampUrl : from.url;
         website.url = ampUrl;
         website.ampUrl = ampUrl;
-        website.canonicalUrl = from.canonicalUrl;
+        website.canonicalUrl = ampUrl;
         website.faviconUrl = from.faviconUrl;
         website.themeColor = from.themeColor;
         website.bookmarked = from.bookmarked;
