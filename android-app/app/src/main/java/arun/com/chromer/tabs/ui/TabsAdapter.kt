@@ -81,9 +81,9 @@ constructor(
 
     override fun getItemId(position: Int): Long = tabs.hashCode().toLong()
 
-    override fun onViewRecycled(holder: TabsViewHolder?) {
+    override fun onViewRecycled(holder: TabsViewHolder) {
         super.onViewRecycled(holder)
-        glideRequests.clear(holder?.icon)
+        glideRequests.clear(holder.icon)
     }
 
     fun cleanUp() {

@@ -412,7 +412,7 @@ constructor(
     }
 
     @TabType
-    private fun getTabType(className: String): Long = when (className) {
+    private fun getTabType(className: String): Int = when (className) {
         CustomTabActivity::class.java.name -> CUSTOM_TAB
         WebViewActivity::class.java.name -> WEB_VIEW
         ArticleActivity::class.java.name -> ARTICLE

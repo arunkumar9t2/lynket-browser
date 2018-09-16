@@ -38,7 +38,7 @@ interface TabsManager {
     // Event for minimize command.
     data class MinimizeEvent(val tab: Tab)
 
-    data class Tab(val url: String, @TabType var type: Long, var website: Website? = null) {
+    data class Tab(val url: String, @param:TabType var type: Int, var website: Website? = null) {
         fun getTargetActivityName(): String = when (type) {
             WEB_VIEW -> WebViewActivity::class.java.name
             CUSTOM_TAB -> CustomTabActivity::class.java.name

@@ -99,9 +99,9 @@ internal constructor(
         holder.bind(apps[position])
     }
 
-    override fun onViewRecycled(holder: BlackListItemViewHolder?) {
+    override fun onViewRecycled(holder: BlackListItemViewHolder) {
         super.onViewRecycled(holder)
-        glideRequests.clear(holder!!.appIcon!!)
+        glideRequests.clear(holder.appIcon!!)
     }
 
     override fun getItemCount(): Int {

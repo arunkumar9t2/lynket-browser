@@ -107,9 +107,9 @@ internal class HistoryAdapter(
         holder.bind(website)
     }
 
-    override fun onViewRecycled(holder: HistoryViewHolder?) {
+    override fun onViewRecycled(holder: HistoryViewHolder) {
         super.onViewRecycled(holder)
-        glideRequests.clear(holder?.historyFavicon)
+        glideRequests.clear(holder.historyFavicon)
     }
 
     override fun getItemCount(): Int {

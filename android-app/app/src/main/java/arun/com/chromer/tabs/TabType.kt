@@ -21,10 +21,10 @@ package arun.com.chromer.tabs
 
 import android.support.annotation.IntDef
 
-const val WEB_VIEW = 0L
-const val CUSTOM_TAB = 1L
-const val ARTICLE = 2L
-const val OTHER = -1L
+const val WEB_VIEW = 0
+const val CUSTOM_TAB = 1
+const val ARTICLE = 2
+const val OTHER = -1
 
 @IntDef(WEB_VIEW, CUSTOM_TAB, ARTICLE, OTHER)
 annotation class TabType
