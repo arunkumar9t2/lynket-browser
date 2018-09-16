@@ -93,23 +93,23 @@ abstract class BrowsingActivity : BaseActivity() {
     private fun observeViewModel(savedInstanceState: Bundle?) {
         browsingViewModel.apply {
             isIncognito = incognito
-            websiteLiveData.observeUntilOnDestroy(this@BrowsingActivity, {
+            websiteLiveData.observeUntilOnDestroy(this@BrowsingActivity) {
                 when (it) {
                     is Result.Success -> {
                         website = it.data!!
                         onWebsiteLoaded(website!!)
                     }
                 }
-            })
+            }
 
-            toolbarColor.observeUntilOnDestroy(this@BrowsingActivity, { color ->
+            toolbarColor.observeUntilOnDestroy(this@BrowsingActivity) { color ->
                 onToolbarColorSet(color!!)
-            })
+            }
 
             if (Utils.ANDROID_LOLLIPOP) {
-                activityDescription.observeUntilOnDestroy(this@BrowsingActivity, { task ->
+                activityDescription.observeUntilOnDestroy(this@BrowsingActivity) { task ->
                     setTaskDescription(task)
-                })
+                }
             }
 
             if (savedInstanceState == null) {
