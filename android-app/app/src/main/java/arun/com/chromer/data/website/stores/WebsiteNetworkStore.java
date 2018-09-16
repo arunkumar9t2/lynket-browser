@@ -59,7 +59,7 @@ public class WebsiteNetworkStore implements WebsiteStore {
     @NonNull
     @Override
     public Observable<Website> getWebsite(@NonNull String url) {
-        return RxParser.parseUrl(url)
+        return RxParser.INSTANCE.parseUrl(url)
                 .flatMap(urlArticlePair -> {
                     if (urlArticlePair.second != null) {
                         final Website extractedWebsite = Website.fromArticle(urlArticlePair.second);

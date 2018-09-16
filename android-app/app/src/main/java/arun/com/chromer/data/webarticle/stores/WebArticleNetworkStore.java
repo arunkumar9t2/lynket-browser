@@ -47,7 +47,7 @@ public class WebArticleNetworkStore implements WebArticleStore {
     @NonNull
     @Override
     public Observable<WebArticle> getWebArticle(@NonNull String url) {
-        return RxParser.parseArticle(url)
+        return RxParser.INSTANCE.parseArticle(url)
                 .flatMap(urlArticlePair -> {
                     if (urlArticlePair.second != null) {
                         return Observable.just(WebArticle.fromArticle(urlArticlePair.second));
