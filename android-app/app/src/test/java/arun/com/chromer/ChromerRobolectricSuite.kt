@@ -32,13 +32,12 @@ import javax.inject.Inject
 
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [16, 21], constants = BuildConfig::class, application = ChromerTestApplication::class)
+@Config(sdk = [16, 21], application = ChromerTestApplication::class)
 abstract class ChromerRobolectricSuite {
     lateinit var testAppComponent: TestAppComponent
 
     @Inject
-    @JvmField
-    var preferences: Preferences? = null
+    lateinit var preferences: Preferences
 
     val application: Application
         get() = RuntimeEnvironment.application
@@ -51,7 +50,7 @@ abstract class ChromerRobolectricSuite {
     }
 
     internal fun clearPreferences() {
-        preferences?.defaultSharedPreferences?.edit()?.clear()?.commit()
+        preferences.defaultSharedPreferences.edit()?.clear()?.commit()
     }
 }
 

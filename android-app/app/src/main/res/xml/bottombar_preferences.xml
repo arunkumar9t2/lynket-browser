@@ -27,5 +27,11 @@
             android:key="bottombar_enabled_preference"
             android:summary="@string/bottom_bar_pref_summary"
             android:title="@string/bottom_bar_pref_title" />
+        <arun.com.chromer.settings.widgets.IconListPreference
+            android:defaultValue="1"
+            android:entries="@array/minimizePreferenceValues"
+            android:entryValues="@array/minimizePreferenceKeys"
+            android:key="minimize_behavior_preference"
+            android:title="@string/minimize_behavior" />
     </PreferenceCategory>
 </PreferenceScreen>

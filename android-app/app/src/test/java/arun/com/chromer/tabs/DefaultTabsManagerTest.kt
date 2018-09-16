@@ -39,8 +39,7 @@ import javax.inject.Inject
  */
 class DefaultTabsManagerTest : ChromerRobolectricSuite() {
     @Inject
-    @JvmField
-    var tabs: DefaultTabsManager? = null
+    lateinit var tabs: DefaultTabsManager
 
     private val url = "https://www.example.com"
 
@@ -51,46 +50,46 @@ class DefaultTabsManagerTest : ChromerRobolectricSuite() {
 
     @Test
     fun testInject() {
-        assert(tabs != null)
+        assert(::tabs.isInitialized)
     }
 
     @Test
     fun testHomeActivityClearedOnExternalIntent() {
         clearPreferences()
-        preferences?.mergeTabs(false)
-        preferences?.webHeads(false)
+        preferences.mergeTabs(false)
+        preferences.webHeads(false)
 
         val homeActivity = Robolectric.buildActivity(HomeActivity::class.java).create().get()
         val homeActivityShadow = shadowOf(homeActivity)
 
-        tabs?.openUrl(application, Website(url), fromApp = false)
+        tabs.openUrl(application, Website(url), fromApp = false)
         assert(homeActivityShadow.isFinishing)
     }
 
     @Test
     fun testFromWebheadsDoesNotLaunchNewWebHead() {
         clearPreferences()
-        preferences?.webHeads(true)
+        preferences.webHeads(true)
         val shadowApp = Shadows.shadowOf(application)
 
         assertWebHeadServiceLaunched(shadowApp)
 
-        tabs?.openUrl(application, Website(url), fromApp = false, fromWebHeads = true)
+        tabs.openUrl(application, Website(url), fromApp = false, fromWebHeads = true)
         assert(shadowApp.nextStartedService == null)
     }
 
     @Test
     fun testAmpResolverOpened() {
         clearPreferences()
-        preferences?.ampMode(true)
+        preferences.ampMode(true)
 
         val shadowApp = Shadows.shadowOf(application)
-        tabs?.openUrl(application, Website(url), fromApp = false, fromWebHeads = false)
+        tabs.openUrl(application, Website(url), fromApp = false, fromWebHeads = false)
         assert(shadowApp.nextStartedActivity.component == Intent(application, AmpResolverActivity::class.java).component)
     }
 
     private fun assertWebHeadServiceLaunched(shadowApp: ShadowApplication) {
-        tabs?.openUrl(application, Website(url), fromApp = false, fromWebHeads = false)
+        tabs.openUrl(application, Website(url), fromApp = false, fromWebHeads = false)
         assert(shadowApp.peekNextStartedService().component == Intent(application, WebHeadService::class.java).component)
         assert(shadowApp.nextStartedService.dataString == url)
     }

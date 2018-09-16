@@ -123,7 +123,7 @@ class ArticleActivity : BrowsingActivity() {
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         browsingArticleViewModel = ViewModelProviders.of(this, viewModelFactory).get(BrowsingArticleViewModel::class.java)
-        browsingArticleViewModel.articleLiveData.watch(this, { result ->
+        browsingArticleViewModel.articleLiveData.watch(this) { result ->
             when (result) {
                 is Result.Success -> {
                     val webArticle: WebArticle? = result.data
@@ -135,7 +135,7 @@ class ArticleActivity : BrowsingActivity() {
                 }
                 is Result.Failure -> onArticleLoadingFailed()
             }
-        })
+        }
         if (savedInstanceState == null) {
             browsingArticleViewModel.loadArticle(url!!)
         }

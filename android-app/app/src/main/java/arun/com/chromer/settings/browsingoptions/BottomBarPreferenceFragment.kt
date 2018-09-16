@@ -24,8 +24,11 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.preference.SwitchPreferenceCompat
 import arun.com.chromer.R
-import arun.com.chromer.settings.Preferences
+import arun.com.chromer.settings.Preferences.BOTTOM_BAR_ENABLED
+import arun.com.chromer.settings.Preferences.MINIMIZE_BEHAVIOR_PREFERENCE
 import arun.com.chromer.settings.preferences.BasePreferenceFragment
+import arun.com.chromer.settings.widgets.IconListPreference
+import arun.com.chromer.util.Utils
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 
@@ -34,29 +37,38 @@ class BottomBarPreferenceFragment : BasePreferenceFragment(), SharedPreferences.
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         addPreferencesFromResource(R.xml.bottombar_preferences)
-        // setup bottom bar preference
         setupBottomBarPreference()
+        setupMinimizePreference()
     }
 
+
     private fun setupBottomBarPreference() {
-        val bottomBarPreference = findPreference(Preferences.BOTTOM_BAR_ENABLED) as SwitchPreferenceCompat
-        bottomBarPreference.icon = IconicsDrawable(activity!!)
+        val bottomBarPreference = findPreference(BOTTOM_BAR_ENABLED) as SwitchPreferenceCompat
+        bottomBarPreference.icon = IconicsDrawable(requireContext())
                 .icon(CommunityMaterial.Icon.cmd_more)
-                .color(ContextCompat.getColor(activity!!, R.color.material_dark_light))
+                .color(ContextCompat.getColor(requireContext(), R.color.material_dark_light))
                 .sizeDp(24)
     }
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
 
+    private fun setupMinimizePreference() {
+        with(findPreference(MINIMIZE_BEHAVIOR_PREFERENCE) as IconListPreference) {
+            icon = IconicsDrawable(requireContext())
+                    .icon(CommunityMaterial.Icon.cmd_arrow_down)
+                    .color(ContextCompat.getColor(requireContext(), R.color.material_dark_light))
+                    .sizeDp(24)
+            isVisible = Utils.isLollipopAbove()
+        }
+        updatePreferenceSummary(MINIMIZE_BEHAVIOR_PREFERENCE)
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
+        updatePreferenceSummary(key)
     }
 
     companion object {
-
         fun newInstance(): BottomBarPreferenceFragment {
-            val fragment = BottomBarPreferenceFragment()
-            val args = Bundle()
-            fragment.arguments = args
-            return fragment
+            return BottomBarPreferenceFragment()
         }
     }
 }

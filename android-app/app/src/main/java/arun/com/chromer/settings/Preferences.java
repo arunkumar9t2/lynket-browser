@@ -87,6 +87,9 @@ public class Preferences {
     public static final String FULL_INCOGNITO_MODE = "full_incognito_mode";
     public static final String ARTICLE_TEXT_SIZE = "article_text_size_pref";
     public static final String USE_WEBVIEW_PREF = "use_webview_pref";
+    public static final String MINIMIZE_BEHAVIOR_PREFERENCE = "minimize_behavior_preference";
+    public static final String MINIMIZE_BEHAVIOR_PREFERENCE_KEY = "2";
+
     // Singleton instance
     private static Preferences INSTANCE;
 
@@ -282,6 +285,16 @@ public class Preferences {
 
     public boolean useWebView() {
         return getDefaultSharedPreferences().getBoolean(USE_WEBVIEW_PREF, false);
+    }
+
+    public void minimizeToWebHead(boolean preference) {
+        getDefaultSharedPreferences().edit().putBoolean(MINIMIZE_BEHAVIOR_PREFERENCE, preference).apply();
+    }
+
+    public boolean minimizeToWebHead() {
+        return getDefaultSharedPreferences()
+                .getString(MINIMIZE_BEHAVIOR_PREFERENCE, "1")
+                .equals(MINIMIZE_BEHAVIOR_PREFERENCE_KEY);
     }
 
     public void articleTextSizeIncrement(int increment) {

@@ -169,7 +169,9 @@ constructor(
         try {
             val am = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
             if (Utils.isLollipopAbove()) {
-                for (task in am.appTasks) {
+                val appTasks = am.appTasks
+                Timber.d("No of app tasks ${appTasks?.size}")
+                for (task in appTasks) {
                     val info = DocumentUtils.getTaskInfoFromTask(task)
                     info?.let {
                         try {
@@ -200,7 +202,7 @@ constructor(
 
     override fun minimizeTabByUrl(url: String, fromClass: String, incognito: Boolean) {
         rxEventBus.post(TabsManager.MinimizeEvent(TabsManager.Tab(url, getTabType(fromClass))))
-        if (preferences.webHeads()) {
+        if (preferences.webHeads() || preferences.minimizeToWebHead()) {
             // When minimizing, don't try to handle aggressive loading cases.
             openWebHeads(application, url, fromMinimize = true, incognito = incognito)
         }

@@ -319,4 +319,7 @@
     <string name="quick_settings">Quick settings</string>
     <string name="quick_settings_tip">You can use Lynket\'s quick settings toggle in status bar to quickly change your browsing preferences.</string>
     <string name="share_text_processor_label">Open/Search with Lynket</string>
+    <string name="minimize_normally">Minimize normally</string>
+    <string name="minimize_to_web_head">Minimize and open Web Head always</string>
+    <string name="minimize_behavior">Minimize behavior</string>
 </resources>

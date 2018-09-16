@@ -46,4 +46,12 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+    <string-array name="minimizePreferenceKeys">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="minimizePreferenceValues">
+        <item>@string/minimize_normally</item>
+        <item>@string/minimize_to_web_head</item>
+    </string-array>
 </resources>
