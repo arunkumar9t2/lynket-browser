@@ -176,7 +176,7 @@
         <activity
             android:name=".browsing.shareintercept.ShareInterceptActivity"
             android:excludeFromRecents="true"
-            android:label="Open/Search with Chromer">
+            android:label="@string/share_text_processor_label">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 

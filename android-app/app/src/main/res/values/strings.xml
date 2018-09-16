@@ -318,4 +318,5 @@
     <string name="tips_article_mode">Tapping keywords in article mode will automatically do a query search.</string>
     <string name="quick_settings">Quick settings</string>
     <string name="quick_settings_tip">You can use Lynket\'s quick settings toggle in status bar to quickly change your browsing preferences.</string>
+    <string name="share_text_processor_label">Open/Search with Lynket</string>
 </resources>
