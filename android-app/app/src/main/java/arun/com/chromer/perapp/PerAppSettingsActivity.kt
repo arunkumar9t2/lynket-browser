@@ -75,15 +75,16 @@ class PerAppSettingsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLis
 
 
     private fun observeViewModel() {
-        perAppViewModel = ViewModelProviders.of(this, viewModelFactory).get(PerAppSettingsViewModel::class.java)
+        val owner = this@PerAppSettingsActivity
+        perAppViewModel = ViewModelProviders.of(owner, viewModelFactory).get(PerAppSettingsViewModel::class.java)
         perAppViewModel.apply {
-            loadingLiveData.watch(this@PerAppSettingsActivity, { loading(it!!) })
-            appsLiveData.watch(this@PerAppSettingsActivity, { apps ->
+            loadingLiveData.watch(owner) { loading(it!!) }
+            appsLiveData.watch(owner) { apps ->
                 perAppListAdapter.setApps(apps!!)
-            })
-            appLiveData.watch(this@PerAppSettingsActivity, { appIndexPair ->
+            }
+            appLiveData.watch(owner) { appIndexPair ->
                 perAppListAdapter.setApp(appIndexPair!!.first, appIndexPair.second)
-            })
+            }
         }
 
         subs.apply {
