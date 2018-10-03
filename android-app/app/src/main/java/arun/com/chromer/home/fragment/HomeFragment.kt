@@ -141,7 +141,7 @@ class HomeFragment : BaseFragment(), Snackable {
     }
 
     private fun observeViewModel() {
-        homeFragmentViewModel.recentsResultLiveData.watch(this, { result ->
+        homeFragmentViewModel.recentsResultLiveData.watch(this) { result ->
             when (result) {
                 is Result.Loading<List<Website>> -> {
                     // TODO Show progress bar.
@@ -150,7 +150,7 @@ class HomeFragment : BaseFragment(), Snackable {
                     setRecents(result.data!!)
                 }
             }
-        })
+        }
     }
 
 

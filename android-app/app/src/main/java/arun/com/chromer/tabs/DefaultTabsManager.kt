@@ -231,6 +231,7 @@ constructor(
         openUrl(activity, Website(url), fromApp = false)
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     override fun openArticle(context: Context, website: Website, newTab: Boolean, incognito: Boolean) {
         if (!reOrderTabByUrl(context, website, listOf(ArticleActivity::class.java.name))) {
             val intent = Intent(context, ArticleActivity::class.java).apply {

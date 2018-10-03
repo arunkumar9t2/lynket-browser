@@ -132,7 +132,7 @@ class HomeScreenShortcutCreatorActivity : BrowsingActivity() {
             shortcutName?.addTextChangedListener(this)
             positiveButton?.isEnabled = false
 
-            websiteLiveData.watch(activity as LifecycleOwner, {
+            websiteLiveData.watch(activity as LifecycleOwner) {
                 when (it) {
                     is Result.Loading<Website> -> {
                         progressBar?.show()
@@ -154,7 +154,7 @@ class HomeScreenShortcutCreatorActivity : BrowsingActivity() {
                                 })
                     }
                 }
-            })
+            }
             return dialog
         }
 

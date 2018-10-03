@@ -68,7 +68,7 @@ abstract class OverlayService : BaseService() {
     protected fun checkForOverlayPermission() {
         if (!Utils.isOverlayGranted(this)) {
             Toast.makeText(this, getString(R.string.web_head_permission_toast), LENGTH_LONG).show()
-            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + packageName))
+            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
             Timber.d("Exited overlay service since overlay permission was revoked")

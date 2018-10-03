@@ -103,7 +103,7 @@ class DefaultAppRepository
                     app.incognito = diskStore.isPackageIncognito(app.packageName)
                     app
                 }
-                .toSortedList({ app1, app2 -> appComparator.compare(app1, app2) })
+                .toSortedList { app1, app2 -> appComparator.compare(app1, app2) }
     }
 
     override fun allProviders() = systemStore.allProviders()

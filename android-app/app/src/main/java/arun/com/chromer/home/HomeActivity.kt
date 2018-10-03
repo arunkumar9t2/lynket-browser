@@ -105,7 +105,7 @@ class HomeActivity : BaseActivity(), Snackable {
 
         Changelog.conditionalShow(this)
 
-        selectedIndex = savedInstanceState?.getInt(Companion.SELECTED_INDEX) ?: HOME
+        selectedIndex = savedInstanceState?.getInt(SELECTED_INDEX) ?: HOME
 
         setupToolbar()
         setupFab()
@@ -164,7 +164,7 @@ class HomeActivity : BaseActivity(), Snackable {
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
-        outState?.putInt(Companion.SELECTED_INDEX, bottomNavigation.selectedIndex)
+        outState?.putInt(SELECTED_INDEX, bottomNavigation.selectedIndex)
         super.onSaveInstanceState(outState)
     }
 
@@ -366,11 +366,13 @@ class HomeActivity : BaseActivity(), Snackable {
 
     @OnClick(R.id.fab)
     fun onFabClick() {
-        supportFragmentManager.fragments
-                ?.filter { !it.isHidden && it is FabHandler }
-                ?.map { it as FabHandler }
-                ?.get(0)
-                ?.onFabClick()
+        @Suppress("ReplaceSingleLineLet")
+        supportFragmentManager.fragments?.let { fragments ->
+            fragments.asSequence()
+                    .filter { !it.isHidden && it is FabHandler }
+                    .map { it as FabHandler }
+                    .toList().first().onFabClick()
+        }
     }
 
     /**
@@ -400,7 +402,7 @@ class HomeActivity : BaseActivity(), Snackable {
          * or creates and attaches new instances.
          */
         open fun initialize(savedInstance: Bundle?) {
-            val selectedIndex = savedInstance?.getInt(Companion.SELECTED_INDEX) ?: HOME
+            val selectedIndex = savedInstance?.getInt(SELECTED_INDEX) ?: HOME
             if (selectedIndex > HOME) {
                 fab.show()
             } else {

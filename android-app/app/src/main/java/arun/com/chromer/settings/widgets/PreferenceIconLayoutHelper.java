@@ -70,7 +70,7 @@ class PreferenceIconLayoutHelper {
 
             applyIconTint(imageView, checked);
         } catch (Exception e) {
-            Timber.e(e.getMessage());
+            Timber.e(e);
         }
     }
 

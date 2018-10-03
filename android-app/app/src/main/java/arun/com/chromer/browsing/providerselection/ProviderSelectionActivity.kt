@@ -130,10 +130,10 @@ class ProviderSelectionActivity : BaseActivity() {
                 .get(ProviderSelectionViewModel::class.java)
                 .apply {
                     providersLiveData.watch(
-                            this@ProviderSelectionActivity,
-                            { value ->
-                                providersAdapter.providers = value as ArrayList<Provider>
-                            })
+                            this@ProviderSelectionActivity
+                    ) { value ->
+                        providersAdapter.providers = value as ArrayList<Provider>
+                    }
 
 
                     if (savedInstanceState == null) {
@@ -159,11 +159,11 @@ class ProviderSelectionActivity : BaseActivity() {
                 .title(R.string.are_you_sure)
                 .content(R.string.webview_disadvantages)
                 .positiveText(android.R.string.yes)
-                .onPositive({ _, _ ->
+                .onPositive { _, _ ->
                     preferences.useWebView(true)
                     notifyProviderChanged()
                     finish()
-                }).show()
+                }.show()
     }
 
     override fun onDestroy() {
@@ -196,7 +196,7 @@ class ProviderSelectionActivity : BaseActivity() {
                     .customView(R.layout.dialog_provider_info, false)
                     .dismissListener(this)
                     .positiveText(if (provider.installed) R.string.use else R.string.install)
-                    .onPositive({ _, _ ->
+                    .onPositive { _, _ ->
                         if (provider.installed) {
                             preferences.customTabPackage(provider.packageName)
                             notifyProviderChanged()
@@ -205,7 +205,7 @@ class ProviderSelectionActivity : BaseActivity() {
                         }
                         dismiss()
                         activity?.finish()
-                    }).show()
+                    }.show()
             unBinder = ButterKnife.bind(this, dialog!!.customView!!)
 
             GlideApp.with(activity).load(provider.iconUri).into(icon)

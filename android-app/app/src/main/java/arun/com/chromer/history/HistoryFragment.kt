@@ -229,11 +229,11 @@ class HistoryFragment : BaseFragment(), Snackable, FabHandler {
                     .positiveText(android.R.string.yes)
                     .negativeText(android.R.string.no)
                     .onPositive { _, _ ->
-                        viewModel?.deleteAll({ rows ->
+                        viewModel?.deleteAll { rows ->
                             if (isAdded) {
                                 snack(String.format(context!!.getString(R.string.deleted_items), rows))
                             }
-                        })
+                        }
                     }.show()
         }
     }

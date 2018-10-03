@@ -47,8 +47,10 @@ class HistoryActivity : BaseActivity(), Snackable {
     @OnClick(R.id.fab)
     fun onFabClick() {
         supportFragmentManager.fragments
+                ?.asSequence()
                 ?.filter { !it.isHidden && it is FabHandler }
                 ?.map { it as FabHandler }
+                ?.toList()
                 ?.get(0)
                 ?.onFabClick()
     }

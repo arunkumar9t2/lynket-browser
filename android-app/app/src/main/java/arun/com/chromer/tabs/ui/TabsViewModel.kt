@@ -47,7 +47,7 @@ constructor(
         subs.add(loaderSubject
                 .asObservable()
                 .doOnNext { loadingLiveData.value = true }
-                .switchMap {
+                .switchMap { _ ->
                     tabsManager.getActiveTabs()
                             .onErrorReturn { emptyList() }
                             .subscribeOn(Schedulers.io())

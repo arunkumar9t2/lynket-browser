@@ -51,7 +51,7 @@ public class WebArticleCacheStore implements WebArticleStore {
         try {
             webSiteDiskCache = ParcelDiskCache.open(application, WebArticle.class.getClassLoader(), WebArticle.class.getName(), DISK_CACHE_SIZE);
         } catch (IOException ignored) {
-            Timber.e(ignored.getMessage());
+            Timber.e(ignored);
         }
     }
 

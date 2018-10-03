@@ -85,7 +85,7 @@ class AmpResolverActivity : BrowsingActivity() {
                     .content(R.string.loading)
                     .dismissListener(this)
                     .positiveText(R.string.skip)
-                    .onPositive({ _, _ -> launchUrl() })
+                    .onPositive { _, _ -> launchUrl() }
                     .show()
             return this
         }
