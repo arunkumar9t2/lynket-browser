@@ -26,6 +26,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.v7.util.DiffUtil;
 import android.text.TextUtils;
 
 import com.chimbori.crux.articles.Article;
@@ -251,5 +252,17 @@ public class Website implements Parcelable {
                 || url.equalsIgnoreCase(this.ampUrl)
                 || url.equalsIgnoreCase(preferredUrl());
     }
+
+    public static DiffUtil.ItemCallback<Website> DIFFER = new DiffUtil.ItemCallback<Website>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Website oldItem, @NonNull Website newItem) {
+            return oldItem.url.equals(newItem.url);
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Website oldItem, @NonNull Website newItem) {
+            return oldItem.equals(newItem);
+        }
+    };
 }
 
