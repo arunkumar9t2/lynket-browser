@@ -384,8 +384,8 @@ class HomeActivity : BaseActivity(), Snackable {
             private var materialSearchView: MaterialSearchView,
             private val fab: FloatingActionButton
     ) {
-        protected var historyFragment: HistoryFragment? = null
-        protected var homeFragment: HomeFragment? = null
+        protected lateinit var historyFragment: HistoryFragment
+        protected lateinit var homeFragment: HomeFragment
 
         open fun revealSearch() {
             fab.hide()
@@ -454,7 +454,7 @@ class HomeActivity : BaseActivity(), Snackable {
             materialSearchView: MaterialSearchView,
             fab: FloatingActionButton
     ) : ActiveFragmentsManager(fm, materialSearchView, fab) {
-        private var tabsFragment: TabsFragment? = null
+        private lateinit var tabsFragment: TabsFragment
 
         override fun initialize(savedInstance: Bundle?) {
             super.initialize(savedInstance)

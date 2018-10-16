@@ -38,7 +38,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.25.+'
+        classpath 'io.fabric.tools:gradle:1.26.0'
     }
 }
 repositories {
@@ -46,13 +46,15 @@ repositories {
 }
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
         applicationId "arun.com.chromer"
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 51
         versionName "2.0.2"
+
+        multiDexEnabled true
 
         resValue "string", "playLicenseKey", "$playLicenseKey"
         manifestPlaceholders = [crashlyticsApiKey: "$fabricKey"]
@@ -108,10 +110,12 @@ android {
         }
     }
 
-    android {
-        lintOptions {
-            abortOnError false
-        }
+    lintOptions {
+        abortOnError false
+    }
+
+    configurations.all {
+        resolutionStrategy.force 'com.android.support:support-v4:28.0.0'
     }
 }
 
@@ -138,11 +142,11 @@ dependencies {
     kaptTest 'com.google.dagger:dagger-compiler:2.16'
 
     // Support
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support:customtabs:27.1.1'
-    implementation 'com.android.support:preference-v14:27.1.1'
-    implementation 'com.android.support:cardview-v7:27.1.1'
-    implementation 'com.android.support:palette-v7:27.1.1'
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.android.support:customtabs:28.0.0'
+    implementation 'com.android.support:preference-v14:28.0.0'
+    implementation 'com.android.support:cardview-v7:28.0.0'
+    implementation 'com.android.support:palette-v7:28.0.0'
 
     // Architecture Components
     implementation 'android.arch.lifecycle:extensions:1.1.1'
@@ -202,4 +206,6 @@ dependencies {
 
     // Disk LRU cache
     implementation project(':disk-cache')
+
+    implementation 'com.android.support:multidex:1.0.3'
 }

@@ -74,7 +74,7 @@ abstract class BrowsingActivity : BaseActivity() {
     }
 
     open fun getCurrentUrl(): String {
-        return intent.dataString
+        return intent.dataString!!
     }
 
     private fun setupMinimize() {

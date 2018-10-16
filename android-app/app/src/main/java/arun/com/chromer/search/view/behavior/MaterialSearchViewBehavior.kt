@@ -41,7 +41,7 @@ class MaterialSearchViewBehavior : Behavior<MaterialSearchView> {
 
     override fun onAttachedToLayoutParams(lp: CoordinatorLayout.LayoutParams) {}
 
-    override fun layoutDependsOn(parent: CoordinatorLayout?, child: MaterialSearchView?, dependency: View?): Boolean {
+    override fun layoutDependsOn(parent: CoordinatorLayout, child: MaterialSearchView, dependency: View): Boolean {
         return when (dependency) {
             is BottomNavigation -> {
                 true
@@ -53,8 +53,8 @@ class MaterialSearchViewBehavior : Behavior<MaterialSearchView> {
         }
     }
 
-    override fun onDependentViewChanged(parent: CoordinatorLayout?, child: MaterialSearchView?, dependency: View?): Boolean {
-        val dependencies = parent!!.getDependencies(child!!)
+    override fun onDependentViewChanged(parent: CoordinatorLayout, child: MaterialSearchView, dependency: View): Boolean {
+        val dependencies = parent.getDependencies(child)
         val bottomMargin = (child.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin
 
         var t = 0f

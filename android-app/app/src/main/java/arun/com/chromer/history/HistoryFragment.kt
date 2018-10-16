@@ -183,7 +183,7 @@ class HistoryFragment : BaseFragment(), Snackable, FabHandler {
             historyAdapter = HistoryAdapter(activity!!, linearLayoutManager)
             adapter = historyAdapter
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     historyAdapter.onRangeChanged()
                 }
             })

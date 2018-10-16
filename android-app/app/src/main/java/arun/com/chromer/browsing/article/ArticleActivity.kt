@@ -77,7 +77,7 @@ class ArticleActivity : BrowsingActivity() {
 
     private lateinit var articleAdapter: ArticleAdapter
 
-    private var articleScrollListener: ArticleScrollListener? = null
+    private lateinit var articleScrollListener: ArticleScrollListener
 
     @Inject
     lateinit var tabsManager: DefaultTabsManager
@@ -149,7 +149,7 @@ class ArticleActivity : BrowsingActivity() {
 
         changeRecyclerOverscrollColors(recyclerView, primaryColor)
         changeProgressBarColors(progressBar, primaryColor)
-        articleScrollListener?.setPrimaryColor(primaryColor)
+        articleScrollListener.setPrimaryColor(primaryColor)
 
         if (preferences.dynamiceToolbarEnabledAndWebEnabled() && canUseAsAccentColor(primaryColor)) {
             accentColor = primaryColor
@@ -182,7 +182,7 @@ class ArticleActivity : BrowsingActivity() {
         // rendering tab.
         finish()
         Toast.makeText(this, R.string.article_loading_failed, Toast.LENGTH_SHORT).show()
-        tabsManager.openBrowsingTab(this, Website(intent.dataString), true, false, tabsManager.browsingActivitiesName)
+        tabsManager.openBrowsingTab(this, Website(intent.dataString!!), true, false, tabsManager.browsingActivitiesName)
     }
 
     private fun onArticleLoaded(webArticle: WebArticle) {
@@ -323,7 +323,7 @@ class ArticleActivity : BrowsingActivity() {
 
 
     private val systemUiLowProfileOnScrollListener: RecyclerView.OnScrollListener = object : RecyclerView.OnScrollListener() {
-        override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             setLowProfileSystemUi()
         }
     }
