@@ -24,15 +24,14 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import arun.com.chromer.R
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.scopes.PerFragment
 import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.util.glide.GlideApp
-import butterknife.BindView
 import butterknife.ButterKnife
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.activity_main_recents_item_template.*
 import java.util.*
 import javax.inject.Inject
 
@@ -40,7 +39,8 @@ import javax.inject.Inject
  * Created by arunk on 07-03-2017.
  */
 @PerFragment
-class RecentsAdapter @Inject
+class RecentsAdapter
+@Inject
 constructor(val tabsManager: DefaultTabsManager) : RecyclerView.Adapter<RecentsAdapter.RecentsViewHolder>() {
     private val websites = ArrayList<Website>()
 
@@ -48,9 +48,17 @@ constructor(val tabsManager: DefaultTabsManager) : RecyclerView.Adapter<RecentsA
         setHasStableIds(true)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecentsViewHolder {
-        return RecentsViewHolder(tabsManager, LayoutInflater.from(parent.context).inflate(R.layout.activity_main_recents_item_template, parent, false))
-    }
+    override fun onCreateViewHolder(
+            parent: ViewGroup,
+            viewType: Int
+    ) = RecentsViewHolder(
+            tabsManager,
+            LayoutInflater.from(parent.context).inflate(
+                    R.layout.activity_main_recents_item_template,
+                    parent,
+                    false
+            )
+    )
 
     override fun onBindViewHolder(holder: RecentsViewHolder, position: Int) {
         val website = websites[position]
@@ -59,7 +67,7 @@ constructor(val tabsManager: DefaultTabsManager) : RecyclerView.Adapter<RecentsA
 
     override fun onViewDetachedFromWindow(holder: RecentsViewHolder) {
         super.onViewDetachedFromWindow(holder)
-        GlideApp.with(holder.itemView.context).clear(holder.icon)
+        GlideApp.with(holder.itemView).clear(holder.icon)
     }
 
     override fun getItemCount(): Int = websites.size
@@ -74,50 +82,50 @@ constructor(val tabsManager: DefaultTabsManager) : RecyclerView.Adapter<RecentsA
         diffUtil.dispatchUpdatesTo(this)
     }
 
-    class RecentsViewHolder(val tabsManager: DefaultTabsManager, itemView: View) : RecyclerView.ViewHolder(itemView) {
-        @BindView(R.id.icon)
-        @JvmField
-        var icon: ImageView? = null
-        @BindView(R.id.label)
-        @JvmField
-        var label: TextView? = null
-
+    class RecentsViewHolder(
+            val tabsManager: DefaultTabsManager,
+            override val containerView: View
+    ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
         init {
             ButterKnife.bind(this, itemView)
         }
 
         fun bind(website: Website?) {
             if (website != null) {
-                label?.text = website.safeLabel()
+                label.text = website.safeLabel()
                 itemView.setOnClickListener {
                     tabsManager.openUrl(itemView.context, website)
                 }
-                GlideApp.with(itemView.context)
+                GlideApp.with(itemView)
                         .load(website)
-                        .into(icon!!)
+                        .into(icon)
             }
         }
     }
 
-    private inner class WebsitesDiff internal constructor(
+    private inner class WebsitesDiff
+    internal constructor(
             private val oldList: List<Website>,
             private val newList: List<Website>
     ) : DiffUtil.Callback() {
 
-        override fun getOldListSize(): Int = oldList.size
+        override fun getOldListSize() = oldList.size
 
-        override fun getNewListSize(): Int = newList.size
+        override fun getNewListSize() = newList.size
 
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return isEquals(oldItemPosition, newItemPosition)
-        }
+        override fun areItemsTheSame(
+                oldItemPosition: Int,
+                newItemPosition: Int
+        ) = isEquals(oldItemPosition, newItemPosition)
 
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return isEquals(oldItemPosition, newItemPosition)
-        }
+        override fun areContentsTheSame(
+                oldItemPosition: Int,
+                newItemPosition: Int
+        ) = isEquals(oldItemPosition, newItemPosition)
 
-        private fun isEquals(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldList[oldItemPosition] == newList[newItemPosition]
-        }
+        private fun isEquals(
+                oldItemPosition: Int,
+                newItemPosition: Int
+        ) = oldList[oldItemPosition] == newList[newItemPosition]
     }
 }

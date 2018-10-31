@@ -36,9 +36,9 @@ class TabsActivity : BaseActivity(), Snackable {
         super.onCreate(savedInstanceState)
         setSupportActionBar(toolbar)
 
-        if (supportActionBar != null) {
-            supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-            supportActionBar!!.setHomeAsUpIndicator(R.drawable.article_ic_close)
+        supportActionBar?.let {
+            it.setDisplayHomeAsUpEnabled(true)
+            it.setHomeAsUpIndicator(R.drawable.article_ic_close)
         }
 
         if (savedInstanceState == null) {
@@ -52,17 +52,14 @@ class TabsActivity : BaseActivity(), Snackable {
     @OnClick(R.id.fab)
     fun onFabClick() {
         supportFragmentManager.fragments
-                ?.asSequence()
-                ?.filter { !it.isHidden && it is FabHandler }
-                ?.map { it as FabHandler }
-                ?.toList()
-                ?.get(0)
-                ?.onFabClick()
+                .asSequence()
+                .filter { !it.isHidden && it is FabHandler }
+                .map { it as FabHandler }
+                .first()
+                .onFabClick()
     }
 
-    override fun getLayoutRes(): Int {
-        return R.layout.activity_tabs
-    }
+    override fun getLayoutRes() = R.layout.activity_tabs
 
     override fun snack(textToSnack: String) {
         Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_SHORT).show()
@@ -72,12 +69,12 @@ class TabsActivity : BaseActivity(), Snackable {
         Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_LONG).show()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
+    override fun onOptionsItemSelected(item: MenuItem) = when {
+        item.itemId == android.R.id.home -> {
             finish()
-            return true
+            true
         }
-        return super.onOptionsItemSelected(item)
+        else -> super.onOptionsItemSelected(item)
     }
 
     override fun inject(activityComponent: ActivityComponent) {

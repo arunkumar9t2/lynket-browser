@@ -366,13 +366,12 @@ class HomeActivity : BaseActivity(), Snackable {
 
     @OnClick(R.id.fab)
     fun onFabClick() {
-        @Suppress("ReplaceSingleLineLet")
-        supportFragmentManager.fragments?.let { fragments ->
-            fragments.asSequence()
-                    .filter { !it.isHidden && it is FabHandler }
-                    .map { it as FabHandler }
-                    .toList().first().onFabClick()
-        }
+        supportFragmentManager.fragments
+                .asSequence()
+                .filter { !it.isHidden && it is FabHandler }
+                .map { it as FabHandler }
+                .first()
+                .onFabClick()
     }
 
     /**
