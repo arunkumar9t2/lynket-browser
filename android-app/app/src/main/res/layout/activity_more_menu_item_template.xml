@@ -25,18 +25,19 @@
     android:clickable="true"
     android:focusable="true"
     android:gravity="center_vertical"
-    android:minHeight="56dp"
+    android:minHeight="48dp"
     android:orientation="horizontal"
-    android:padding="5dp"
     tools:ignore="Overdraw,RtlHardcoded">
 
     <ImageView
         android:id="@+id/menu_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_gravity="center"
         android:layout_marginLeft="16dp"
-        tools:ignore="ContentDescription" />
+        android:tint="@color/colorAccent"
+        tools:ignore="ContentDescription"
+        tools:srcCompat="@tools:sample/avatars[0]" />
 
     <RelativeLayout
         android:layout_width="0dp"
@@ -51,6 +52,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="marquee"
             android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-            tools:ignore="SelectableText" />
+            tools:ignore="SelectableText"
+            tools:text="@string/open_article_view" />
     </RelativeLayout>
 </LinearLayout>

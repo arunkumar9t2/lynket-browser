@@ -213,8 +213,7 @@
             android:name=".browsing.newtab.NewTabDialogActivity"
             android:excludeFromRecents="true"
             android:noHistory="true"
-            android:theme="@style/DialogTheme"
-            android:windowSoftInputMode="stateVisible" />
+            android:theme="@style/DialogTheme" />
         <activity
             android:name=".browsing.amp.AmpResolverActivity"
             android:excludeFromRecents="true"

@@ -77,7 +77,7 @@ class ArticleActivity : BrowsingActivity() {
 
     private lateinit var articleAdapter: ArticleAdapter
 
-    private lateinit var articleScrollListener: ArticleScrollListener
+    private var articleScrollListener: ArticleScrollListener? = null
 
     @Inject
     lateinit var tabsManager: DefaultTabsManager
@@ -110,18 +110,18 @@ class ArticleActivity : BrowsingActivity() {
         setupBottombar()
         setupTheme()
 
-        articleScrollListener = ArticleScrollListener(toolbar, statusBar, primaryColor)
-        recyclerView.addOnScrollListener(articleScrollListener)
+        articleScrollListener = ArticleScrollListener(toolbar, statusBar, primaryColor).also {
+            recyclerView.addOnScrollListener(it)
+        }
         recyclerView.addOnScrollListener(systemUiLowProfileOnScrollListener)
+
+        observeViewModel()
+        if (savedInstanceState == null) {
+            browsingArticleViewModel.loadArticle(url!!)
+        }
     }
 
-    override fun onResume() {
-        super.onResume()
-        setLowProfileSystemUi()
-    }
-
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
+    private fun observeViewModel() {
         browsingArticleViewModel = ViewModelProviders.of(this, viewModelFactory).get(BrowsingArticleViewModel::class.java)
         browsingArticleViewModel.articleLiveData.watch(this) { result ->
             when (result) {
@@ -136,9 +136,11 @@ class ArticleActivity : BrowsingActivity() {
                 is Result.Failure -> onArticleLoadingFailed()
             }
         }
-        if (savedInstanceState == null) {
-            browsingArticleViewModel.loadArticle(url!!)
-        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setLowProfileSystemUi()
     }
 
     override fun onWebsiteLoaded(website: Website) {}
@@ -149,7 +151,7 @@ class ArticleActivity : BrowsingActivity() {
 
         changeRecyclerOverscrollColors(recyclerView, primaryColor)
         changeProgressBarColors(progressBar, primaryColor)
-        articleScrollListener.setPrimaryColor(primaryColor)
+        articleScrollListener?.setPrimaryColor(primaryColor)
 
         if (preferences.dynamiceToolbarEnabledAndWebEnabled() && canUseAsAccentColor(primaryColor)) {
             accentColor = primaryColor

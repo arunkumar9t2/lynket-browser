@@ -85,14 +85,11 @@ class MaterialSearchView : RelativeLayout, Search.View {
     @Inject
     lateinit var searchPresenter: Search.Presenter
 
-    val text: String
-        get() = if (msvEditText.text == null) "" else msvEditText?.text.toString()
+    val text: String get() = if (msvEditText.text == null) "" else msvEditText?.text.toString()
 
-    val url: String
-        get() = getSearchUrl(text)
+    val url: String get() = getSearchUrl(text)
 
-    val editText: EditText
-        get() = msvEditText
+    val editText: EditText get() = msvEditText
 
     constructor(context: Context) : super(context) {
         init(context)
@@ -241,13 +238,13 @@ class MaterialSearchView : RelativeLayout, Search.View {
         }
     }
 
-    private fun gainFocus() {
+    fun gainFocus() {
         handleVoiceIconState()
         setFocusedColor()
         focusChanges.onNext(true)
     }
 
-    private fun loseFocus(endAction: (() -> Unit)?) {
+    fun loseFocus(endAction: (() -> Unit)?) {
         setNormalColor()
         msvEditText.text = null
         hideKeyboard()

@@ -41,9 +41,11 @@ a {
 <strong>2.0.2</strong>
 <ul>
     <li><b>NEW: </b> Custom Minimize Behaviors - Minimize to web heads even if web heads are disabled.</li>
+    <li><b>NEW: </b> New Tab and Tabs shortcuts in Menu > Lynket options</li>
     <li><b>FIXES: </b> AMP links not loading sometimes.</li>
     <li><b>FIXES: </b> Website favicons not loading when cache is cleared.</li>
     <li><b>IMPROVED: </b> Sync translations.</li>
+    <li><b>IMPROVED: </b> Open keyboard automatically on clicking new tab.</li>
 </ul>
 <hr>
 <strong>2.0.1 - 2nd Anniversary Update!</strong>

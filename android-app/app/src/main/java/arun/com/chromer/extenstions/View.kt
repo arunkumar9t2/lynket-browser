@@ -22,12 +22,15 @@ package arun.com.chromer.extenstions
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
+import android.content.Context
 import android.support.annotation.LayoutRes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import arun.com.chromer.util.Utils
+
 
 fun View.show() {
     this.visibility = View.VISIBLE
@@ -110,4 +113,13 @@ fun View.children(): ArrayList<View> {
 
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false): View {
     return LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
+}
+
+fun View.showKeyboard(force: Boolean = false) {
+    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    if (force) {
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+    } else {
+        imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+    }
 }

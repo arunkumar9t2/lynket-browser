@@ -23,17 +23,20 @@ import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import arun.com.chromer.R
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
-import arun.com.chromer.search.view.MaterialSearchView
+import arun.com.chromer.extenstions.showKeyboard
 import arun.com.chromer.shared.base.activity.BaseActivity
 import arun.com.chromer.tabs.DefaultTabsManager
-import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.afollestad.materialdialogs.MaterialDialog
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.*
+import kotlinx.android.synthetic.main.activity_new_tab.*
 import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
 
@@ -51,13 +54,9 @@ class NewTabDialogActivity : BaseActivity() {
         newTabDialog = NewTabDialog(this).show()
     }
 
-    override fun getLayoutRes(): Int {
-        return 0
-    }
+    override fun getLayoutRes() = 0
 
-    override fun inject(activityComponent: ActivityComponent) {
-        activityComponent.inject(this)
-    }
+    override fun inject(activityComponent: ActivityComponent) = activityComponent.inject(this)
 
     override fun onDestroy() {
         super.onDestroy()
@@ -71,26 +70,25 @@ class NewTabDialogActivity : BaseActivity() {
 
     inner class NewTabDialog(
             private var activity: Activity?
-    ) : DialogInterface.OnDismissListener {
-        val subs = CompositeSubscription()
-        private lateinit var unbinder: Unbinder
-        private var dialog: MaterialDialog? = null
+    ) : DialogInterface.OnDismissListener, LayoutContainer {
 
-        @BindView(R.id.materialSearchView)
-        @JvmField
-        var materialSearchView: MaterialSearchView? = null
+        override val containerView: View? get() = dialog.customView
+
+        val subs = CompositeSubscription()
+
+        private lateinit var unbinder: Unbinder
+        private lateinit var dialog: MaterialDialog
 
         fun show(): NewTabDialog? {
             dialog = MaterialDialog.Builder(activity!!)
-                    .title(R.string.open_new_tab)
-                    .backgroundColorRes(R.color.card_background_light)
+                    .backgroundColorRes(android.R.color.transparent)
                     .customView(R.layout.activity_new_tab, false)
                     .dismissListener(this)
                     .show()
 
-            unbinder = ButterKnife.bind(this, dialog!!.customView!!)
+            unbinder = ButterKnife.bind(this, dialog.customView!!)
 
-            materialSearchView?.apply {
+            materialSearchView.apply {
                 subs.add(searchPerforms()
                         .filter { it != null }
                         .subscribe { url ->
@@ -100,34 +98,37 @@ class NewTabDialogActivity : BaseActivity() {
                         .subscribe {
                             Toast.makeText(activity, R.string.no_voice_rec_apps, Toast.LENGTH_SHORT).show()
                         })
+                post {
+                    gainFocus()
+                    editText.requestFocus()
+                    showKeyboard(force = true)
+                }
             }
-
-            materialSearchView?.post { materialSearchView?.editText?.requestFocus() }
             return this
         }
 
 
         private fun launchUrl(url: String) {
             activity?.let {
-                tabsManager.openUrl(activity!!,
+                tabsManager.openUrl(it,
                         website = Website(url),
                         fromApp = true,
                         fromWebHeads = false,
                         fromNewTab = true)
             }
-            dialog?.dismiss()
+            dialog.dismiss()
         }
 
         fun dismiss() {
-            dialog?.dismiss()
+            dialog.dismiss()
         }
 
         override fun onDismiss(dialogInterface: DialogInterface?) {
+            clearFindViewByIdCache()
             subs.clear()
             activity?.finish()
             activity = null
             unbinder.unbind()
-            dialog = null
         }
 
         fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
