@@ -27,10 +27,10 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
         android:lineSpacingMultiplier="1.2"
-        android:paddingBottom="8dp"
         android:paddingLeft="24dp"
-        android:paddingRight="24dp"
         android:paddingTop="8dp"
+        android:paddingRight="24dp"
+        android:paddingBottom="8dp"
         android:textColor="@color/article_secondaryText"
         android:textSize="14sp" />
 </FrameLayout>

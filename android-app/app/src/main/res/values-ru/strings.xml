@@ -250,4 +250,27 @@
     <string name="enable_history">История включена</string>
     <string name="enable_history_subtitle">Отключение истории прекратит запись информации здесь.</string>
     <string name="enable_history_subtitle_custom_tab"><![CDATA[Отключение истории прекратит запись информации. Поставщик Быстрых вкладок, <b>%1$s</b> все еще может записывать некоторые элементы.]]></string>
+    <string name="choose_provider">Сменить поставщика</string>
+    <string name="webViewNotRecommended">Для вашей версии Android использование WebView не рекомендуется из-за проблем стабильности и безопасности.</string>
+    <string name="webViewPros">Механизм рендеринга вашего телефона.</string>
+    <string name="tab_providers">Поддерживаемые поставщики</string>
+    <string name="use">Использовать</string>
+    <string name="features">Опции</string>
+    <string name="webview_disadvantages">WebView не имеет много преимуществ, таких как сохранение данных, автоматическое заполнение и облачная синхронизация, предоставляемые поставщиками пользовательских вкладок. Вы все еще хотите использовать WebView для рендеринга веб-страниц?</string>
+    <string name="try_it">Попробуйте</string>
+    <string name="slide_over_fragment_close_prompt">Нажмите X чтобы быстро закрыть вкладку</string>
+    <string name="see_demo">Посмотреть демонстрацию</string>
+    <string name="provider_intro_explanation">Lynket может работать вместе с вашими любимыми браузерами.\n\nНапример, использование Google Chrome в качестве поставщика позволит вам синхронизировать историю, использовать хранитель данных и сохраненные пароли в своей учетной записи Google.</string>
+    <string name="chromer_flexible">Гибкий</string>
+    <string name="tutorial_amp_intro">Lynket может автоматически находить и загружать страницы AMP, что приводит к более быстрому и плавному чтению.</string>
+    <string name="illustrations_and_video">Иллюстрации и видео</string>
+    <string name="beta_testers">Бета тестеры в Google+</string>
+    <string name="tips">Подсказки</string>
+    <string name="tips_description">См. Советы, чтобы получить максимум от Lynket</string>
+    <string name="choose_provider_tip">Lynket поддерживает любой браузер, реализующий протокол пользовательской вкладки. Lynket также наследует поведение от выбранного провайдера. Например, использование Brave позволит использовать adblock.</string>
+    <string name="tips_secondary_browser">Вы можете выбрать дополнительный браузер и приложение для совместного доступа, чтобы быстро запустить/поделиться в нём</string>
+    <string name="share_text_processor_label">Открыть/Искать с помощью Lynket</string>
+    <string name="minimize_normally">Минимизировать</string>
+    <string name="minimize_to_web_head">Минимизировать и открывать заголовок всегда</string>
+    <string name="minimize_behavior">Минимизировать поведение</string>
 </resources>

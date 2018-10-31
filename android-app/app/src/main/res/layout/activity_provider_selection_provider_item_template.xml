@@ -36,8 +36,8 @@
         android:layout_gravity="center"
         android:layout_marginBottom="8dp"
         android:scaleType="fitCenter"
-        tools:src="@mipmap/ic_launcher"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription"
+        tools:src="@mipmap/ic_launcher" />
 
     <TextView
         android:id="@+id/label"
@@ -62,8 +62,8 @@
         android:clickable="true"
         android:focusable="true"
         android:gravity="center"
-        android:paddingBottom="4dp"
         android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         android:text="@string/install"
         android:textAppearance="@style/TextAppearance.AppCompat.Button"
         android:textColor="@color/colorAccent"

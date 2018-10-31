@@ -31,8 +31,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
             app:cardPreventCornerOverlap="true"
             app:cardUseCompatPadding="true">
 
@@ -48,10 +48,10 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
-                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp"
                     android:paddingEnd="8dp"
                     android:paddingRight="8dp"
-                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
                     tools:ignore="RtlSymmetry">
 
                     <ImageView
@@ -86,9 +86,9 @@
                         android:id="@+id/enableHistorySubtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignLeft="@id/enable_history_title"
-                        android:layout_alignStart="@id/enable_history_title"
                         android:layout_below="@id/enable_history_title"
+                        android:layout_alignStart="@id/enable_history_title"
+                        android:layout_alignLeft="@id/enable_history_title"
                         android:layout_toRightOf="@+id/historyIcon"
                         android:paddingRight="56dp"
                         android:text="@string/enable_history_subtitle_custom_tab"
@@ -120,10 +120,10 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
-                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp"
                     android:paddingEnd="8dp"
                     android:paddingRight="8dp"
-                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
                     tools:ignore="RtlSymmetry">
 
                     <ImageView
@@ -179,8 +179,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
-                android:paddingBottom="4dp"
                 android:paddingTop="4dp"
+                android:paddingBottom="4dp"
                 android:scrollbars="vertical" />
         </android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>

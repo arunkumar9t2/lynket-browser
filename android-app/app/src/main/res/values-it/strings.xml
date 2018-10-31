@@ -112,4 +112,5 @@
     <string name="open_source_contributions">materiale open source</string>
     <string name="search_or_type_url">Cerca o scrivi URL</string>
     <string name="web_heads">Bolle Web</string>
+    <string name="choose_provider">Scegli fornitore di default</string>
 </resources>

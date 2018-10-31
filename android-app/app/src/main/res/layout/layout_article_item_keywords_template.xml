@@ -27,8 +27,8 @@
     android:background="@drawable/rounded_corners"
     android:ellipsize="end"
     android:gravity="center"
-    android:maxLines="1"
     android:maxWidth="200dp"
+    android:maxLines="1"
     android:minHeight="36dp"
     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
     tools:text="Hello" />

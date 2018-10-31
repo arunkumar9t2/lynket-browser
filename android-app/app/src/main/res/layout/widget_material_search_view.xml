@@ -26,10 +26,10 @@
     android:clipToPadding="false"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:paddingBottom="4dp"
     android:paddingLeft="8dp"
+    android:paddingTop="4dp"
     android:paddingRight="8dp"
-    android:paddingTop="4dp">
+    android:paddingBottom="4dp">
 
     <android.support.v7.widget.CardView
         android:id="@+id/msv_card"
@@ -78,8 +78,8 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
                     android:gravity="center|start"

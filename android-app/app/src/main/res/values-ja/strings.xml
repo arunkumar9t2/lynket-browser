@@ -284,7 +284,19 @@
     <string name="article_loading_failed">記事を抽出することができませんでした。</string>
     <string name="full_incognito_mode">シークレットモード</string>
     <string name="full_incognito_mode_explanation">完全なシークレットモードのために Lynket はページのレンダーに WebView を使用します。これにより作業がどこにも記録されなくなります。</string>
+    <string name="choose_provider">プロバイダを選択</string>
+    <string name="webViewNotRecommended">ご利用の Android のバージョンでは、安定性とセキュリティの観点から WebView をおすすめできません。</string>
+    <string name="webViewPros">携帯電話に埋め込まれているレンダリングエンジン</string>
     <string name="tab_providers">サポートされているプロバイダ</string>
-    <string name="use">使う</string>
+    <string name="use">使用する</string>
     <string name="features">機能</string>
+    <string name="webview_disadvantages">WebView はカスタムタブプロバイダが持つ、データセーバー、自動入力サービス、クラウド同期など、たくさんの利点を欠いています。それでもウェブページのレンダリングに WebView を使用しますか？</string>
+    <string name="try_it">試してみる</string>
+    <string name="slide_over_fragment_close_prompt">×を押して素早くタブを閉じます</string>
+    <string name="see_demo">使い方を動画で見る</string>
+    <string name="provider_intro_explanation">Lynket はあなたのお気に入りのブラウザとあわせてご利用できます。\n\n例えば、Google Chrome をプロバイダに選択すれば、履歴を同期したり、データセーバーや保存したパスワードを使用することができます。</string>
+    <string name="share_text_processor_label">Lynket で開く/検索</string>
+    <string name="minimize_normally">普通に最小化する</string>
+    <string name="minimize_to_web_head">最小化して Web Head を表示</string>
+    <string name="minimize_behavior">最小化の動作</string>
 </resources>

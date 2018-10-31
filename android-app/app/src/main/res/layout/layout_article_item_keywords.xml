@@ -23,11 +23,11 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="-32dp"
     android:orientation="vertical"
-    android:paddingBottom="16dp"
+    android:paddingStart="24dp"
     android:paddingLeft="24dp"
     android:paddingTop="32dp"
-    tools:ignore="RtlSymmetry"
-    android:paddingStart="24dp">
+    android:paddingBottom="16dp"
+    tools:ignore="RtlSymmetry">
 
     <TextView
         android:id="@+id/keywordsTitle"

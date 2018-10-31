@@ -49,8 +49,8 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:scaleType="fitCenter"
-        tools:src="@drawable/chromer_hd_icon"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription"
+        tools:src="@drawable/chromer_hd_icon" />
 
     <TextView
         android:id="@+id/descriptionTv"
@@ -70,8 +70,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/see_demo"
         android:theme="@style/MaterialButtonStyle" />
 </LinearLayout>

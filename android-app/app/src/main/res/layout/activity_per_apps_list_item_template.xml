@@ -25,12 +25,12 @@
     android:gravity="center|start"
     android:minHeight="56dp"
     android:orientation="horizontal"
-    android:paddingBottom="8dp"
-    android:paddingRight="8dp"
     android:paddingTop="8dp"
+    android:paddingEnd="8dp"
+    android:paddingRight="8dp"
+    android:paddingBottom="8dp"
     android:weightSum="1"
-    tools:ignore="RtlSymmetry"
-    android:paddingEnd="8dp">
+    tools:ignore="RtlSymmetry">
 
     <ImageView
         android:id="@+id/app_list_icon"

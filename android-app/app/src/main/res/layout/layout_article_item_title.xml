@@ -22,10 +22,10 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="-32dp"
     android:orientation="vertical"
-    android:paddingBottom="16dp"
     android:paddingLeft="24dp"
+    android:paddingTop="32dp"
     android:paddingRight="24dp"
-    android:paddingTop="32dp">
+    android:paddingBottom="16dp">
 
     <TextView
         android:id="@+id/articleSiteName"

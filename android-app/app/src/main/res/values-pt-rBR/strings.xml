@@ -54,7 +54,7 @@
     <string name="licenses">Licenças</string>
     <string name="about">Sobre</string>
     <string name="help_chromer_grow">Ajude o Lynket a crescer!</string>
-    <string name="share">Compartilhar</string>
+    <string name="share">Enviar</string>
     <string name="share_with">Compartilhar com %1$s</string>
     <string name="rate_play_store">"Avaliar na Play Store "</string>
     <string name="feedback">Comentários</string>
@@ -317,4 +317,8 @@
     <string name="tips_article_mode">Tocando nas palavras-chave no modo artigo, uma pesquisa será feita automaticamente.</string>
     <string name="quick_settings">Configurações rápidas</string>
     <string name="quick_settings_tip">Você pode usar o botão do Chrome nas configurações rápidas para mudar suas preferências de navegação.</string>
+    <string name="share_text_processor_label">Abrir/Pesquisar via Lynket</string>
+    <string name="minimize_normally">Minimizar normalmente</string>
+    <string name="minimize_to_web_head">Minimizar e abrir web head sempre</string>
+    <string name="minimize_behavior">Comportamento ao minimizar</string>
 </resources>

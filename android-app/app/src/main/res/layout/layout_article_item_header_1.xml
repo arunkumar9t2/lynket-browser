@@ -26,10 +26,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-condensed"
-        android:paddingBottom="8dp"
         android:paddingLeft="24dp"
-        android:paddingRight="24dp"
         android:paddingTop="8dp"
+        android:paddingRight="24dp"
+        android:paddingBottom="8dp"
         android:textColor="@color/article_primaryText"
         android:textSize="20sp"
         android:textStyle="bold" />
