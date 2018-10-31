@@ -21,7 +21,10 @@ constructor(private val historyStore: HistoryStore) : PositionalDataSource<Websi
     override fun loadInitial(
             params: LoadInitialParams,
             callback: LoadInitialCallback<Website>
-    ) = callback.onResult(historyStore.loadHistoryRange(params.requestedLoadSize, params.requestedStartPosition), 0)
+    ) = callback.onResult(historyStore.loadHistoryRange(
+            params.requestedLoadSize,
+            params.requestedStartPosition
+    ), 0)
 
 
     @Singleton
