@@ -42,6 +42,7 @@ a {
 <ul>
     <li><b>NEW: </b> Custom Minimize Behaviors - Minimize to web heads even if web heads are disabled.</li>
     <li><b>FIXES: </b> AMP links not loading sometimes.</li>
+    <li><b>FIXES: </b> Website favicons not loading when cache is cleared.</li>
     <li><b>IMPROVED: </b> Sync translations.</li>
 </ul>
 <hr>
