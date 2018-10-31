@@ -33,60 +33,55 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import arun.com.chromer.BuildConfig
 import arun.com.chromer.R
 import arun.com.chromer.about.changelog.Changelog
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.util.glide.GlideApp
-import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.fragment_about.*
+import kotlinx.android.synthetic.main.fragment_about_list_item_template.*
 
 /**
  * Created by Arun on 11/11/2015.
  */
 class AboutFragment : Fragment() {
-    @BindView(R.id.about_app_version_list)
-    @JvmField
-    var chromerList: RecyclerView? = null
-    @BindView(R.id.about_author_version_list)
-    @JvmField
-    var authorList: RecyclerView? = null
-    @BindView(R.id.creditsRv)
-    @JvmField
-    var creditsRv: RecyclerView? = null
+    private lateinit var unBinder: Unbinder
 
-    private var unBinder: Unbinder? = null
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View = inflater.inflate(R.layout.fragment_about, container, false)
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val rootView = inflater.inflate(R.layout.fragment_about, container, false)
-        unBinder = ButterKnife.bind(this, rootView)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        unBinder = ButterKnife.bind(this, view)
         populateData()
-        return rootView
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        unBinder!!.unbind()
+        unBinder.unbind()
     }
 
     private fun populateData() {
-        chromerList?.apply {
+        about_app_version_list.apply {
             isNestedScrollingEnabled = false
             layoutManager = LinearLayoutManager(context)
             adapter = AppAdapter()
         }
-        authorList?.apply {
+        about_author_version_list.apply {
             isNestedScrollingEnabled = false
             layoutManager = LinearLayoutManager(context)
             adapter = AuthorAdapter()
         }
-        creditsRv?.apply {
+        creditsRv.apply {
             isNestedScrollingEnabled = false
             layoutManager = LinearLayoutManager(context)
             adapter = CreditsAdapter()
@@ -94,59 +89,63 @@ class AboutFragment : Fragment() {
     }
 
     internal inner class AppAdapter : RecyclerView.Adapter<AppAdapter.ItemHolder>() {
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
-            val view = LayoutInflater.from(activity).inflate(R.layout.fragment_about_list_item_template, parent, false)
-            return ItemHolder(view)
+            return ItemHolder(LayoutInflater.from(activity).inflate(
+                    R.layout.fragment_about_list_item_template,
+                    parent,
+                    false
+            ))
         }
 
         override fun onBindViewHolder(holder: ItemHolder, position: Int) {
-            val materialDark = ContextCompat.getColor(activity!!, R.color.accent)
-            holder.subtitle!!.visibility = View.VISIBLE
+            val materialDark = ContextCompat.getColor(requireActivity(), R.color.accent)
+            holder.about_app_subtitle.visibility = View.VISIBLE
             when (position) {
                 0 -> {
-                    holder.title!!.setText(R.string.version)
-                    holder.subtitle!!.text = BuildConfig.VERSION_NAME
-                    holder.imageView!!.background = IconicsDrawable(activity!!)
+                    holder.about_app_title.setText(R.string.version)
+                    holder.about_app_subtitle.text = BuildConfig.VERSION_NAME
+                    holder.about_row_item_image.background = IconicsDrawable(requireActivity())
                             .icon(CommunityMaterial.Icon.cmd_information_outline)
                             .color(materialDark)
                             .sizeDp(24)
                 }
                 1 -> {
-                    holder.title!!.setText(R.string.changelog)
-                    holder.subtitle!!.setText(R.string.see_whats_new)
-                    holder.imageView!!.background = IconicsDrawable(activity!!)
+                    holder.about_app_title.setText(R.string.changelog)
+                    holder.about_app_subtitle.setText(R.string.see_whats_new)
+                    holder.about_row_item_image.background = IconicsDrawable(requireActivity())
                             .icon(CommunityMaterial.Icon.cmd_chart_line)
                             .color(materialDark)
                             .sizeDp(24)
                 }
                 2 -> {
-                    holder.title!!.setText(R.string.join_google_plus)
-                    holder.subtitle!!.setText(R.string.share_ideas)
-                    holder.imageView!!.background = IconicsDrawable(activity!!)
+                    holder.about_app_title.setText(R.string.join_google_plus)
+                    holder.about_app_subtitle.setText(R.string.share_ideas)
+                    holder.about_row_item_image.background = IconicsDrawable(requireActivity())
                             .icon(CommunityMaterial.Icon.cmd_google_circles_communities)
                             .color(materialDark)
                             .sizeDp(24)
                 }
                 3 -> {
-                    holder.title!!.setText(R.string.licenses)
-                    holder.subtitle!!.visibility = View.GONE
-                    holder.imageView!!.background = IconicsDrawable(activity!!)
+                    holder.about_app_title.setText(R.string.licenses)
+                    holder.about_app_subtitle.visibility = View.GONE
+                    holder.about_row_item_image.background = IconicsDrawable(requireActivity())
                             .icon(CommunityMaterial.Icon.cmd_wallet_membership)
                             .color(materialDark)
                             .sizeDp(24)
                 }
                 4 -> {
-                    holder.title!!.setText(R.string.translations)
-                    holder.subtitle!!.setText(R.string.help_translations)
-                    holder.imageView!!.background = IconicsDrawable(activity!!)
+                    holder.about_app_title.setText(R.string.translations)
+                    holder.about_app_subtitle.setText(R.string.help_translations)
+                    holder.about_row_item_image.background = IconicsDrawable(requireActivity())
                             .icon(CommunityMaterial.Icon.cmd_translate)
                             .color(materialDark)
                             .sizeDp(24)
                 }
                 5 -> {
-                    holder.title!!.setText(R.string.source)
-                    holder.subtitle!!.setText(R.string.contribute_to_chromer)
-                    holder.imageView!!.background = IconicsDrawable(activity!!)
+                    holder.about_app_title.setText(R.string.source)
+                    holder.about_app_subtitle.setText(R.string.contribute_to_chromer)
+                    holder.about_row_item_image.background = IconicsDrawable(requireActivity())
                             .icon(CommunityMaterial.Icon.cmd_source_branch)
                             .color(materialDark)
                             .sizeDp(24)
@@ -158,19 +157,10 @@ class AboutFragment : Fragment() {
             return 6
         }
 
-        internal inner class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-            @BindView(R.id.about_row_item_image)
-            @JvmField
-            var imageView: ImageView? = null
-            @BindView(R.id.about_app_subtitle)
-            @JvmField
-            var subtitle: TextView? = null
-            @BindView(R.id.about_app_title)
-            @JvmField
-            var title: TextView? = null
+        internal inner class ItemHolder(override val containerView: View)
+            : RecyclerView.ViewHolder(containerView), LayoutContainer, View.OnClickListener {
 
             init {
-                ButterKnife.bind(this, itemView)
                 itemView.setOnClickListener(this)
             }
 
@@ -180,20 +170,32 @@ class AboutFragment : Fragment() {
                     0 -> return
                     1 -> Changelog.show(activity)
                     2 -> {
-                        val communityIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/communities/109754631011301174504"))
-                        activity!!.startActivity(communityIntent)
+                        val communityIntent = Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("https://plus.google.com/communities/109754631011301174504")
+                        )
+                        requireActivity().startActivity(communityIntent)
                     }
                     3 -> {
-                        val licenses = Intent(Intent.ACTION_VIEW, Uri.parse("http://htmlpreview.github.com/?https://github.com/arunkumar9t2/chromer/blob/master/notices.html"))
-                        activity!!.startActivity(licenses)
+                        val licenses = Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("http://htmlpreview.github.com/?https://github.com/arunkumar9t2/chromer/blob/master/notices.html")
+                        )
+                        requireActivity().startActivity(licenses)
                     }
                     4 -> {
-                        val oneSkyIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://os0l2aw.oneskyapp.com/collaboration/project/62112"))
-                        activity!!.startActivity(oneSkyIntent)
+                        val oneSkyIntent = Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("http://os0l2aw.oneskyapp.com/collaboration/project/62112")
+                        )
+                        requireActivity().startActivity(oneSkyIntent)
                     }
                     5 -> {
-                        val sourceIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/arunkumar9t2/lynket-browser"))
-                        activity!!.startActivity(sourceIntent)
+                        val sourceIntent = Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("https://github.com/arunkumar9t2/lynket-browser")
+                        )
+                        requireActivity().startActivity(sourceIntent)
                     }
                 }
             }
@@ -201,7 +203,11 @@ class AboutFragment : Fragment() {
     }
 
     internal inner class AuthorAdapter : RecyclerView.Adapter<AuthorAdapter.ItemHolder>() {
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
+
+        override fun onCreateViewHolder(
+                parent: ViewGroup,
+                viewType: Int
+        ): ItemHolder {
             val view = LayoutInflater.from(activity).inflate(R.layout.fragment_about_list_item_template, parent, false)
             return ItemHolder(view)
         }
@@ -209,54 +215,54 @@ class AboutFragment : Fragment() {
         override fun onBindViewHolder(holder: ItemHolder, position: Int) {
             when (position) {
                 0 -> {
-                    holder.title!!.text = Constants.ME
-                    holder.subtitle!!.text = Constants.LOCATION
-                    holder.imageView!!.layoutParams.height = resources.getDimension(R.dimen.arun_height).toInt()
-                    holder.imageView!!.layoutParams.width = resources.getDimension(R.dimen.arun_width).toInt()
+                    holder.about_app_title.text = Constants.ME
+                    holder.about_app_subtitle.text = Constants.LOCATION
+                    holder.about_row_item_image.layoutParams.height = resources.getDimension(R.dimen.arun_height).toInt()
+                    holder.about_row_item_image.layoutParams.width = resources.getDimension(R.dimen.arun_width).toInt()
                     val imageBitmap = BitmapFactory.decodeResource(resources, R.drawable.arun)
                     val roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(resources, imageBitmap)
                     roundedBitmapDrawable.setAntiAlias(true)
                     roundedBitmapDrawable.isCircular = true
-                    holder.imageView!!.setImageDrawable(roundedBitmapDrawable)
+                    holder.about_row_item_image.setImageDrawable(roundedBitmapDrawable)
                 }
                 1 -> {
-                    holder.title!!.setText(R.string.add_to_circles)
-                    holder.subtitle!!.visibility = View.GONE
-                    holder.imageView!!.background = IconicsDrawable(activity!!)
+                    holder.about_app_title.setText(R.string.add_to_circles)
+                    holder.about_app_subtitle.visibility = View.GONE
+                    holder.about_row_item_image.background = IconicsDrawable(requireActivity())
                             .icon(CommunityMaterial.Icon.cmd_google_circles)
-                            .color(ContextCompat.getColor(activity!!, R.color.google_plus))
+                            .color(ContextCompat.getColor(requireActivity(), R.color.google_plus))
                             .sizeDp(24)
                 }
                 2 -> {
-                    holder.title!!.setText(R.string.follow_twitter)
-                    holder.subtitle!!.visibility = View.GONE
-                    holder.imageView!!.background = IconicsDrawable(activity!!)
+                    holder.about_app_title.setText(R.string.follow_twitter)
+                    holder.about_app_subtitle.visibility = View.GONE
+                    holder.about_row_item_image.background = IconicsDrawable(requireActivity())
                             .icon(CommunityMaterial.Icon.cmd_twitter)
-                            .color(ContextCompat.getColor(activity!!, R.color.twitter))
+                            .color(ContextCompat.getColor(requireActivity(), R.color.twitter))
                             .sizeDp(24)
                 }
                 3 -> {
-                    holder.title!!.setText(R.string.connect_linkedIn)
-                    holder.subtitle!!.visibility = View.GONE
-                    holder.imageView!!.background = IconicsDrawable(activity!!)
+                    holder.about_app_title.setText(R.string.connect_linkedIn)
+                    holder.about_app_subtitle.visibility = View.GONE
+                    holder.about_row_item_image.background = IconicsDrawable(requireActivity())
                             .icon(CommunityMaterial.Icon.cmd_linkedin_box)
-                            .color(ContextCompat.getColor(activity!!, R.color.linkedin))
+                            .color(ContextCompat.getColor(requireActivity(), R.color.linkedin))
                             .sizeDp(24)
                 }
                 4 -> {
-                    holder.title!!.setText(R.string.fork_on_github)
-                    holder.subtitle!!.visibility = View.GONE
-                    holder.imageView!!.background = IconicsDrawable(activity!!)
+                    holder.about_app_title.setText(R.string.fork_on_github)
+                    holder.about_app_subtitle.visibility = View.GONE
+                    holder.about_row_item_image.background = IconicsDrawable(requireActivity())
                             .icon(CommunityMaterial.Icon.cmd_github_circle)
                             .color(Color.BLACK)
                             .sizeDp(24)
                 }
                 5 -> {
-                    holder.title!!.setText(R.string.more_apps)
-                    holder.subtitle!!.visibility = View.GONE
-                    holder.imageView!!.background = IconicsDrawable(activity!!)
+                    holder.about_app_title.setText(R.string.more_apps)
+                    holder.about_app_subtitle.visibility = View.GONE
+                    holder.about_row_item_image.background = IconicsDrawable(requireActivity())
                             .icon(CommunityMaterial.Icon.cmd_google_play)
-                            .color(ContextCompat.getColor(activity!!, R.color.play_store_green))
+                            .color(ContextCompat.getColor(requireActivity(), R.color.play_store_green))
                             .sizeDp(24)
                 }
             }
@@ -266,19 +272,10 @@ class AboutFragment : Fragment() {
             return 6
         }
 
-        internal inner class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-            @BindView(R.id.about_row_item_image)
-            @JvmField
-            var imageView: ImageView? = null
-            @BindView(R.id.about_app_subtitle)
-            @JvmField
-            var subtitle: TextView? = null
-            @BindView(R.id.about_app_title)
-            @JvmField
-            var title: TextView? = null
+        internal inner class ItemHolder(override val containerView: View)
+            : RecyclerView.ViewHolder(containerView), View.OnClickListener, LayoutContainer {
 
             init {
-                ButterKnife.bind(this, itemView)
                 itemView.setOnClickListener(this)
             }
 
@@ -288,19 +285,19 @@ class AboutFragment : Fragment() {
                     0 -> return
                     1 -> {
                         val myProfile = Intent(Intent.ACTION_VIEW, Uri.parse("http://google.com/+arunkumar5592"))
-                        activity!!.startActivity(myProfile)
+                        requireActivity().startActivity(myProfile)
                     }
                     2 -> {
                         val twitterIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/arunkumar_9t2"))
-                        activity!!.startActivity(twitterIntent)
+                        requireActivity().startActivity(twitterIntent)
                     }
                     3 -> {
                         val linkedInIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://in.linkedin.com/in/arunkumar9t2"))
-                        activity!!.startActivity(linkedInIntent)
+                        requireActivity().startActivity(linkedInIntent)
                     }
                     4 -> {
                         val github = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/arunkumar9t2/"))
-                        activity!!.startActivity(github)
+                        requireActivity().startActivity(github)
                     }
                     5 -> {
                         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/dev?id=9082544673727889961")))
@@ -311,14 +308,22 @@ class AboutFragment : Fragment() {
     }
 
     internal inner class CreditsAdapter : RecyclerView.Adapter<CreditsAdapter.ItemHolder>() {
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
-            val view = LayoutInflater.from(activity).inflate(R.layout.fragment_about_list_item_template, parent, false)
+
+        override fun onCreateViewHolder(
+                parent: ViewGroup,
+                viewType: Int
+        ): ItemHolder {
+            val view = LayoutInflater.from(activity).inflate(
+                    R.layout.fragment_about_list_item_template,
+                    parent,
+                    false
+            )
             return ItemHolder(view)
         }
 
-        val patryk = "Patryk"
-        val max = "Max"
-        val beta = "Beta Testers"
+        private val patryk = "Patryk"
+        private val max = "Max"
+        private val beta = "Beta Testers"
         private val items = arrayListOf(
                 patryk,
                 max,
@@ -331,19 +336,19 @@ class AboutFragment : Fragment() {
         override fun onBindViewHolder(holder: ItemHolder, position: Int) {
             when (items[position]) {
                 patryk -> {
-                    holder.title?.text = "Patryk Goworowski"
-                    holder.subtitle?.setText(R.string.icon_design)
-                    GlideApp.with(holder.itemView.context).load(patrykProfileImg).into(holder.imageView)
+                    holder.about_app_title.text = "Patryk Goworowski"
+                    holder.about_app_subtitle.setText(R.string.icon_design)
+                    GlideApp.with(holder.itemView.context).load(patrykProfileImg).into(holder.about_row_item_image)
                 }
                 max -> {
-                    holder.title?.text = "Max Patchs"
-                    holder.subtitle?.setText(R.string.illustrations_and_video)
-                    GlideApp.with(holder.itemView.context).load(maxImg).into(holder.imageView)
+                    holder.about_app_title.text = "Max Patchs"
+                    holder.about_app_subtitle.setText(R.string.illustrations_and_video)
+                    GlideApp.with(holder.itemView.context).load(maxImg).into(holder.about_row_item_image)
                 }
                 beta -> {
-                    holder.title?.setText(R.string.beta_testers)
-                    holder.subtitle?.gone()
-                    holder.imageView!!.setImageDrawable(IconicsDrawable(activity!!)
+                    holder.about_app_title.setText(R.string.beta_testers)
+                    holder.about_app_subtitle.gone()
+                    holder.about_row_item_image.setImageDrawable(IconicsDrawable(requireActivity())
                             .icon(CommunityMaterial.Icon.cmd_google_plus)
                             .colorRes(R.color.md_red_700)
                             .sizeDp(24))
@@ -353,51 +358,42 @@ class AboutFragment : Fragment() {
 
         override fun getItemCount() = items.size
 
-        internal inner class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-            @BindView(R.id.about_row_item_image)
-            @JvmField
-            var imageView: ImageView? = null
-            @BindView(R.id.about_app_subtitle)
-            @JvmField
-            var subtitle: TextView? = null
-            @BindView(R.id.about_app_title)
-            @JvmField
-            var title: TextView? = null
+        internal inner class ItemHolder(override val containerView: View)
+            : RecyclerView.ViewHolder(containerView), LayoutContainer, View.OnClickListener {
 
             init {
-                ButterKnife.bind(this, itemView)
                 itemView.setOnClickListener(this)
             }
 
             override fun onClick(view: View) {
                 when (items[adapterPosition]) {
                     patryk -> {
-                        activity?.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/+PatrykGoworowski")))
+                        requireActivity()
+                                .startActivity(Intent(
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse("https://plus.google.com/+PatrykGoworowski")
+                                ))
                     }
                     max -> {
-                        activity?.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/+Windows10-tutorialsBlogspot")))
+                        requireActivity()
+                                .startActivity(Intent(
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse("https://plus.google.com/+Windows10-tutorialsBlogspot")
+                                ))
                     }
                     beta -> {
-                        activity?.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/communities/109754631011301174504")))
+                        requireActivity()
+                                .startActivity(Intent(
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse("https://plus.google.com/communities/109754631011301174504")
+                                ))
                     }
                 }
             }
         }
     }
 
-    class ViewHolder {
-        var title: TextView? = null
-        var subtitle: TextView? = null
-        var imageView: ImageView? = null
-    }
-
     companion object {
-
-        fun newInstance(): AboutFragment {
-            val fragment = AboutFragment()
-            val args = Bundle()
-            fragment.arguments = args
-            return fragment
-        }
+        fun newInstance() = AboutFragment()
     }
-}// Required empty public constructor
+}
