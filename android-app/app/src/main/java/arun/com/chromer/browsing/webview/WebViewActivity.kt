@@ -73,17 +73,13 @@ class WebViewActivity : BrowsingActivity() {
         setupBottomBar()
     }
 
-    override fun getCurrentUrl(): String {
-        return if (webView.url != null) webView.url else super.getCurrentUrl()
-    }
+    override fun getCurrentUrl(): String = if (webView.url != null)
+        webView.url
+    else super.getCurrentUrl()
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        return menuDelegate.createOptionsMenu(menu)
-    }
+    override fun onCreateOptionsMenu(menu: Menu) = menuDelegate.createOptionsMenu(menu)
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        return menuDelegate.prepareOptionsMenu(menu)
-    }
+    override fun onPrepareOptionsMenu(menu: Menu) = menuDelegate.prepareOptionsMenu(menu)
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return menuDelegate.handleItemSelected(item.itemId)
@@ -130,10 +126,10 @@ class WebViewActivity : BrowsingActivity() {
 
     private fun setupToolbar() {
         setSupportActionBar(toolbar)
-        if (supportActionBar != null) {
-            supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-            supportActionBar!!.setHomeAsUpIndicator(R.drawable.article_ic_close)
-            supportActionBar!!.title = website?.safeLabel() ?: intent.dataString
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.article_ic_close)
+            title = website?.safeLabel() ?: intent.dataString
         }
         val toolbarColor = intent.getIntExtra(Constants.EXTRA_KEY_TOOLBAR_COLOR, 0)
         setAppBarColor(toolbarColor)
