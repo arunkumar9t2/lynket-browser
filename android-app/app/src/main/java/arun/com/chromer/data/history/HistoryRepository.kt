@@ -19,8 +19,8 @@
 
 package arun.com.chromer.data.history
 
-import android.database.Cursor
-
+import android.arch.lifecycle.LiveData
+import android.arch.paging.PagedList
 import arun.com.chromer.data.website.model.Website
 import rx.Observable
 
@@ -28,8 +28,6 @@ import rx.Observable
  * Created by Arunkumar on 03-03-2017.
  */
 interface HistoryRepository {
-    val allItemsCursor: Observable<Cursor>
-
     operator fun get(website: Website): Observable<Website>
 
     fun insert(website: Website): Observable<Website>
@@ -45,4 +43,10 @@ interface HistoryRepository {
     fun recents(): Observable<List<Website>>
 
     fun search(text: String): Observable<List<Website>>
+    /**
+     * Load given range specified by [limit] and [offset]
+     */
+    fun loadHistoryRange(limit: Int, offset: Int): List<Website>
+
+    fun pagedHistory(): LiveData<PagedList<Website>>
 }

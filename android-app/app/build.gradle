@@ -119,6 +119,11 @@ android {
     }
 }
 
+
+androidExtensions {
+    experimental = true
+}
+
 dependencies {
 
     // Kotlin
@@ -200,6 +205,8 @@ dependencies {
         transitive = true
     }
     implementation 'com.github.chrisbanes:PhotoView:1.3.1'
+
+    implementation "android.arch.paging:runtime:1.0.1"
 
     // Bottom navigation
     implementation 'it.sephiroth.android.library.bottomnavigation:bottom-navigation:2.0.1-rc1'

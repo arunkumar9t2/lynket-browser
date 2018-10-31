@@ -19,17 +19,17 @@
 
 package arun.com.chromer.data.history
 
-import android.annotation.SuppressLint
 import android.app.Application
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
+import android.arch.paging.PagedList
 import android.content.ContentValues
-import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import arun.com.chromer.data.history.model.HistoryTable.*
 import arun.com.chromer.data.website.model.Website
 import rx.Observable
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -44,14 +44,6 @@ internal constructor(application: Application) : SQLiteOpenHelper(application, T
     private lateinit var database: SQLiteDatabase
 
     private val isOpen @Synchronized get() = ::database.isInitialized && database.isOpen
-
-    override val allItemsCursor: Observable<Cursor>
-        @SuppressLint("Recycle")
-        get() = Observable.fromCallable {
-            open()
-            val cursor = database.rawQuery("SELECT * FROM $TABLE_NAME ORDER BY $ORDER_BY_TIME_DESC", null)
-            cursor
-        }
 
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(DATABASE_CREATE)
@@ -235,6 +227,21 @@ internal constructor(application: Application) : SQLiteOpenHelper(application, T
             websites
         }
     }
+
+    override fun loadHistoryRange(limit: Int, offset: Int): List<Website> {
+        open()
+        val cursor = database.rawQuery("SELECT * FROM $TABLE_NAME ORDER BY $ORDER_BY_TIME_DESC LIMIT $limit OFFSET $offset", null)
+        cursor.moveToFirst()
+        val websites = ArrayList<Website>()
+        while (!cursor.isAfterLast) {
+            websites += Website.fromCursor(cursor)
+            cursor.moveToNext()
+        }
+        cursor.close()
+        return websites
+    }
+
+    override fun pagedHistory(): LiveData<PagedList<Website>> = MutableLiveData()
 
     companion object {
         private const val DATABASE_VERSION = 1

@@ -21,10 +21,10 @@ package arun.com.chromer.history
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.database.Cursor
 import arun.com.chromer.data.history.HistoryRepository
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.util.SchedulerProvider
+import rx.Observable
 import rx.subjects.PublishSubject
 import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
@@ -38,22 +38,23 @@ class HistoryFragmentViewModel
 constructor(
         private val historyRepository: HistoryRepository
 ) : ViewModel() {
+
     val loadingLiveData = MutableLiveData<Boolean>()
-    val historyCursorLiveData = MutableLiveData<Cursor>()
+    var historyPagedListLiveData = historyRepository.pagedHistory()
 
     private val loaderSubject: PublishSubject<Int> = PublishSubject.create()
     val subs = CompositeSubscription()
 
     init {
-        subs.add(loaderSubject
-                .doOnNext { loadingLiveData.postValue(true) }
-                .switchMap {
-                    historyRepository
-                            .allItemsCursor
-                            .compose(SchedulerProvider.applyIoSchedulers())
-                }.doOnNext { loadingLiveData.postValue(false) }
-                .doOnNext(historyCursorLiveData::postValue)
-                .subscribe())
+        /* subs.add(loaderSubject
+                 .doOnNext { loadingLiveData.postValue(true) }
+                 .switchMap {
+                     historyRepository
+                             .allItemsCursor
+                             .compose(SchedulerProvider.applyIoSchedulers())
+                 }.doOnNext { loadingLiveData.postValue(false) }
+                 .doOnNext(historyCursorLiveData::postValue)
+                 .subscribe())*/
     }
 
     fun loadHistory() {
@@ -71,7 +72,7 @@ constructor(
     }
 
     fun deleteHistory(website: Website?) {
-        subs.add(rx.Observable.just(website)
+        subs.add(Observable.just(website)
                 .filter { webSite -> webSite?.url != null }
                 .flatMap<Website> { historyRepository.delete(it!!) }
                 .compose(SchedulerProvider.applyIoSchedulers())
@@ -81,11 +82,6 @@ constructor(
     }
 
     override fun onCleared() {
-        try {
-            historyCursorLiveData.value?.close()
-        } catch (e: Exception) {
-            Timber.e(e)
-        }
         subs.clear()
     }
 }
