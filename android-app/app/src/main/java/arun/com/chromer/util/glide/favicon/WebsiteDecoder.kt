@@ -55,7 +55,12 @@ class WebsiteDecoder(private val context: Context, glide: Glide) : ResourceDecod
     override fun decode(website: Website, width: Int, height: Int, options: Options?): Resource<Bitmap>? {
         // Try to load using Glide normally
         val websiteFavicon = try {
-            GlideApp.with(context).asBitmap().load(website.faviconUrl).submit().get()
+            GlideApp.with(context)
+                    .asBitmap()
+                    .load(website.faviconUrl)
+                    .useUnlimitedSourceGeneratorsPool(true)
+                    .submit()
+                    .get()
         } catch (e: Exception) {
             null
         }
