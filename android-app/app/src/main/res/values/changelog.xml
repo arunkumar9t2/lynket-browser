@@ -45,6 +45,7 @@ a {
     <li><b>FIXES: </b> AMP links not loading sometimes.</li>
     <li><b>FIXES: </b> Website favicons not loading when cache is cleared.</li>
     <li><b>IMPROVED: </b> Sync translations.</li>
+    <li><b>IMPROVED: </b> Android Pie Support</li>
     <li><b>IMPROVED: </b> Open keyboard automatically on clicking new tab.</li>
 </ul>
 <hr>
