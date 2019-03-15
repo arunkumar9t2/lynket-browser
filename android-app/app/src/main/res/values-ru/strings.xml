@@ -200,7 +200,7 @@
     <string name="secondary_browser_not_error">Вы добавили это приложение в чёрный список Lynket и не указали вторичный браузер. Вы бы хотели сейчас назначить вторичный браузер?</string>
     <string name="copy_all">Скопировать все</string>
     <string name="choose_share_method">Выбор способа Поделиться</string>
-    <string name="comma_seperated">Разделенные запятой</string>
+    <string name="comma_separated">Разделенные запятой</string>
     <string name="share_all_list">Список - Ограниченная поддержка приложений. Например: Join, Pushbullet и т.д.</string>
     <string name="title_activity_open_with">Открыть через</string>
     <string name="title_activity_settings">Настройки</string>

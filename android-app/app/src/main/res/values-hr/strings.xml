@@ -206,7 +206,7 @@
     <string name="secondary_browser_not_error">Stavili ste ovu aplikaciju na crnu listu što znači da ona neće otvarati poveznice u Lynketu, ali niste postavili sekundarni preglednik. Želite li ga sada postaviti?</string>
     <string name="copy_all">Kopiraj sve</string>
     <string name="choose_share_method">Odaberite način dijeljenja</string>
-    <string name="comma_seperated">Odvojeno zarezom</string>
+    <string name="comma_separated">Odvojeno zarezom</string>
     <string name="share_all_list">Popis - ograničena podrška aplikacija. Npr.: Join, Pushbullet, itd.</string>
     <string name="open_new_tab">Otvori novu karticu</string>
     <string name="title_activity_open_with">Otvori s pomoću</string>
