@@ -203,7 +203,7 @@
     <string name="secondary_browser_not_error">このアプリはLynketのブラックリストに登録されていますが、セカンダリブラウザが設定されていません。今すぐセカンダリブラウザを設定しますか？</string>
     <string name="copy_all">すべてコピー</string>
     <string name="choose_share_method">共有方法を選択</string>
-    <string name="comma_seperated">カンマ区切り</string>
+    <string name="comma_separated">カンマ区切り</string>
     <string name="share_all_list">リスト - 一部のアプリのみサポートしています。例: Join、Pushbulletなど</string>
     <string name="open_new_tab">新しいタブを開く</string>
     <string name="title_activity_open_with">別のアプリで開く</string>

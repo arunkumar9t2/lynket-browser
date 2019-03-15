@@ -158,7 +158,8 @@ public class WebHeadContextActivity extends BaseActivity implements WebsiteAdapt
     @OnClick(R.id.share_all)
     public void onShareAllClick() {
         final CharSequence[] items = new String[]{
-                getString(R.string.comma_seperated),
+                getString(R.string.comma_separated),
+                getString(R.string.new_line_separated),
                 getString(R.string.share_all_list)
         };
         new MaterialDialog.Builder(this)
@@ -167,6 +168,8 @@ public class WebHeadContextActivity extends BaseActivity implements WebsiteAdapt
                 .itemsCallbackSingleChoice(0, (dialog, itemView, which, text) -> {
                     if (which == 0) {
                         startActivity(Intent.createChooser(TEXT_SHARE_INTENT.putExtra(EXTRA_TEXT, getCSVUrls().toString()), getString(R.string.share_all)));
+                    } else if (which == 1) {
+                        startActivity(Intent.createChooser(TEXT_SHARE_INTENT.putExtra(EXTRA_TEXT, getNSVUrls().toString()), getString(R.string.share_all)));
                     } else {
                         final ArrayList<Uri> webSites = new ArrayList<>();
                         for (Website website : websitesAdapter.getWebsites()) {
@@ -195,6 +198,20 @@ public class WebHeadContextActivity extends BaseActivity implements WebsiteAdapt
             if (i != size - 1) {
                 builder.append(',')
                         .append(' ');
+            }
+        }
+        return builder;
+    }
+
+    @NonNull
+    private StringBuilder getNSVUrls() {
+        final StringBuilder builder = new StringBuilder();
+        final List<Website> websites = websitesAdapter.getWebsites();
+        final int size = websites.size();
+        for (int i = 0; i < size; i++) {
+            builder.append(websites.get(i).preferredUrl());
+            if (i != size - 1) {
+                builder.append('\n');
             }
         }
         return builder;

@@ -199,7 +199,7 @@
     <string name="secondary_browser_not_error">Je hebt deze app op de zwarte lijst gezet zodat deze geen links van Lynket kan openen, maar geen tweede browser gekozen. Wil je nu een tweede browser instellen?</string>
     <string name="copy_all">Alles kopiëren</string>
     <string name="choose_share_method">Deel-methode kiezen</string>
-    <string name="comma_seperated">Kommagescheiden</string>
+    <string name="comma_separated">Kommagescheiden</string>
     <string name="share_all_list">Lijst - Beperkte app-ondersteuning, bijv. Join, Pushbullet, enz.</string>
     <string name="title_activity_open_with">Openen met</string>
     <string name="title_activity_settings">Instellingen</string>

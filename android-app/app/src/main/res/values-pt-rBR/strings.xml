@@ -206,7 +206,7 @@
     <string name="secondary_browser_not_error">Você colocou este app na lista negra para que não intervenha mas você não definiu seu navegador secundário. Você gostaria de definir seu navegador secundário agora?</string>
     <string name="copy_all">Copiar tudo</string>
     <string name="choose_share_method">Escolha o método de compartilhamento</string>
-    <string name="comma_seperated">Separados por vírgula</string>
+    <string name="comma_separated">Separados por vírgula</string>
     <string name="share_all_list">Lista - Suporte limitado de apps. Ex: Join, Pushbullet etc.</string>
     <string name="open_new_tab">Abrir nova aba</string>
     <string name="title_activity_open_with">Abrir com</string>

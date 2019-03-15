@@ -202,7 +202,7 @@
     <string name="secondary_browser_not_error">Zablokovali ste túto aplikáciu pre spúšťanie odkazov v Lynket a nenastavili ste sekundárny prehliadač. Chcete teraz nastaviť sekundárny prehliadač?</string>
     <string name="copy_all">Kopírovať všetko</string>
     <string name="choose_share_method">Zvoľte metódu zdieľania</string>
-    <string name="comma_seperated">Oddelené čiarkou</string>
+    <string name="comma_separated">Oddelené čiarkou</string>
     <string name="share_all_list">Zoznam - Obmedzená podpora aplikácie. Napr. Join, Pushbullet, atď.</string>
     <string name="open_new_tab">Otvoriť novú kartu</string>
     <string name="title_activity_open_with">Otvoriť s</string>

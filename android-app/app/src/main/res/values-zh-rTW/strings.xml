@@ -200,7 +200,7 @@
     <string name="secondary_browser_not_error">你已使用黑名單禁止Lynket打開連結但沒有設定次要瀏覽器程式，需要現在設定嗎？</string>
     <string name="copy_all">全部複製</string>
     <string name="choose_share_method">選取分享方式</string>
-    <string name="comma_seperated">以逗號分隔</string>
+    <string name="comma_separated">以逗號分隔</string>
     <string name="share_all_list">清單 - 有限度的程式支援 Eg: Join by joaoapps, Pushbullet 等等.</string>
     <string name="title_activity_open_with">打開方法</string>
     <string name="title_activity_settings">設定</string>
