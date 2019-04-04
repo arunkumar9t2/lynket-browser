@@ -116,6 +116,7 @@ constructor(
 
                         val notification = Notification.Builder(ctx, channelId)
                                 .setContentIntent(bubbleIntent)
+                                .setGroup("bubble")
                                 .setSmallIcon(Icon.createWithResource(ctx, R.drawable.ic_chromer_notification))
                                 .setBubbleMetadata(Notification.BubbleMetadata.Builder().run {
                                     setDesiredHeight(1200)
