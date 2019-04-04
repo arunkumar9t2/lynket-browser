@@ -53,8 +53,7 @@ import arun.com.chromer.shared.Constants
 import arun.com.chromer.shared.Constants.NO_COLOR
 import arun.com.chromer.tabs.ui.TabsActivity
 import arun.com.chromer.util.*
-import arun.com.chromer.util.Utils.openDrawOverlaySettings
-import arun.com.chromer.webheads.WebHeadService
+import arun.com.chromer.webheads.FloatingBubble
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import rx.Single
@@ -72,7 +71,8 @@ constructor(
         private val appRepository: AppRepository,
         private val websiteRepository: WebsiteRepository,
         private val articlePreloader: ArticlePreloader,
-        private val rxEventBus: RxEventBus
+        private val rxEventBus: RxEventBus,
+        private val floatingBubble: FloatingBubble
 ) : TabsManager {
 
     private val allBrowsingActivitiesName = arrayListOf<String>(
@@ -164,8 +164,12 @@ constructor(
      * criteria which is base url and optionally and preferred activity name the url belongs to.
      * Upon finding the task, executes {@param foundAction}
      */
-    private fun findTaskAndExecuteAction(context: Context, website: Website, activityNames: List<String>?,
-                                         foundAction: (task: ActivityManager.AppTask) -> Unit): Boolean {
+    private fun findTaskAndExecuteAction(
+            context: Context,
+            website: Website,
+            activityNames: List<String>?,
+            foundAction: (task: ActivityManager.AppTask) -> Unit
+    ): Boolean {
         try {
             val am = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
             if (Utils.isLollipopAbove()) {
@@ -253,7 +257,14 @@ constructor(
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    override fun openBrowsingTab(context: Context, website: Website, smart: Boolean, fromNewTab: Boolean, activityNames: List<String>?, incognito: Boolean) {
+    override fun openBrowsingTab(
+            context: Context,
+            website: Website,
+            smart: Boolean,
+            fromNewTab: Boolean,
+            activityNames: List<String>?,
+            incognito: Boolean
+    ) {
         val reordered = smart && reOrderTabByUrl(context, website, activityNames)
 
         if (!reordered) {
@@ -289,19 +300,15 @@ constructor(
         return !(!isIncognito && canSafelyOpenCCT)
     }
 
-    override fun openWebHeads(context: Context, url: String, fromMinimize: Boolean, fromAmp: Boolean, incognito: Boolean) {
-        if (Utils.isOverlayGranted(context)) {
-            val webHeadLauncher = Intent(context, WebHeadService::class.java).apply {
-                data = Uri.parse(url)
-                addFlags(FLAG_ACTIVITY_NEW_TASK)
-                putExtra(Constants.EXTRA_KEY_MINIMIZE, fromMinimize)
-                putExtra(Constants.EXTRA_KEY_FROM_AMP, fromAmp)
-                putExtra(Constants.EXTRA_KEY_INCOGNITO, incognito)
-            }
-            ContextCompat.startForegroundService(context, webHeadLauncher)
-        } else {
-            openDrawOverlaySettings(context)
-        }
+    override fun openWebHeads(
+            context: Context,
+            url: String,
+            fromMinimize: Boolean,
+            fromAmp: Boolean,
+            incognito: Boolean
+    ) {
+        floatingBubble.openBubble(url, fromMinimize, fromAmp, incognito, context)
+        return
 
         // If this command was not issued for minimizing, then attempt aggressive loading.
         if (preferences.aggressiveLoading() && !fromMinimize) {

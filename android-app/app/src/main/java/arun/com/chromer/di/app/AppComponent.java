@@ -33,12 +33,15 @@ import arun.com.chromer.di.activity.ActivityModule;
 import arun.com.chromer.di.service.ServiceComponent;
 import arun.com.chromer.di.service.ServiceModule;
 import arun.com.chromer.tabs.DefaultTabsManager;
+import arun.com.chromer.webheads.BubbleModule;
 import dagger.Component;
 
 @Singleton
 @Component(modules = {
         AppModule.class,
         DataModule.class,
+
+        BubbleModule.class
 })
 public interface AppComponent {
     @NonNull

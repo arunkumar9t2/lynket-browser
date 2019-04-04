@@ -46,11 +46,12 @@ repositories {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 'android-Q'
+
     defaultConfig {
         applicationId "arun.com.chromer"
         minSdkVersion 16
-        targetSdkVersion 27
+        targetSdkVersion 'Q'
         versionCode 52
         versionName "2.0.2"
 
