@@ -17,7 +17,7 @@ Lynket is available for free on the Google Play Store.
         src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
 </a>
 
-If you have got some time, read the introduction post on [Medium](https://medium.com/@arunkumar9t2/introducing-chromer-2-0-a-better-way-to-browse-on-android-c34ff729df1b) or watch intro [Video](https://www.youtube.com/watch?v=PbB6ChrkMnE)
+If you have got some time, read the introduction post on [my blog](https://arunkumar.dev/Lynket-browser-2nd-anniversary-update/) or watch intro [Video](https://www.youtube.com/watch?v=PbB6ChrkMnE)
 
 ![enter image description here](https://raw.githubusercontent.com/arunkumar9t2/chromer/master/art/chromer_screenshots.png)
 
