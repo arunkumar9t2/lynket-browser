@@ -23,7 +23,7 @@ import android.graphics.drawable.Icon
 import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
-import android.support.annotation.RequiresApi
+import androidx.annotation.RequiresApi
 import arun.com.chromer.Chromer
 import arun.com.chromer.di.service.ServiceModule
 import arun.com.chromer.settings.Preferences

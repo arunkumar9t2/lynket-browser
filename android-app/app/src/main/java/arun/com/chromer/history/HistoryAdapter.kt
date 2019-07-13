@@ -19,13 +19,13 @@
 
 package arun.com.chromer.history
 
-import android.arch.paging.PagedListAdapter
-import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.View.GONE
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import arun.com.chromer.R
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.scopes.PerFragment

@@ -20,12 +20,14 @@
 package arun.com.chromer.settings.browsingmode;
 
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import arun.com.chromer.R;
 import arun.com.chromer.settings.Preferences;
@@ -34,7 +36,8 @@ import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class BrowsingModeActivity extends SubActivity implements BrowsingModeAdapter.BrowsingModeClickListener {
+public class
+BrowsingModeActivity extends SubActivity implements BrowsingModeAdapter.BrowsingModeClickListener {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;

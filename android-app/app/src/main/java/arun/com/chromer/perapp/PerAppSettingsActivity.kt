@@ -20,17 +20,16 @@
 package arun.com.chromer.perapp
 
 import android.annotation.TargetApi
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.support.design.widget.Snackbar
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.SwitchCompat
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.CompoundButton
+import androidx.appcompat.widget.SwitchCompat
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import arun.com.chromer.R
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.extenstions.watch
@@ -41,6 +40,7 @@ import arun.com.chromer.util.ServiceManager
 import arun.com.chromer.util.Utils
 import arun.com.chromer.util.viemodel.ViewModelFactory
 import com.afollestad.materialdialogs.MaterialDialog
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.acitivty_per_apps.*
 import kotlinx.android.synthetic.main.activity_per_apps_content.*
 import javax.inject.Inject

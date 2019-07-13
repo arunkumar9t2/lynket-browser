@@ -20,9 +20,9 @@
 package arun.com.chromer.extenstions
 
 import android.app.Activity
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import arun.com.chromer.util.ActivityLifeCycleCallbackAdapter
 
 /**

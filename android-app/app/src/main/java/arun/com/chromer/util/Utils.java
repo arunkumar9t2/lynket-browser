@@ -42,14 +42,15 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.util.Patterns;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -418,27 +419,6 @@ public class Utils {
                 && cm.getActiveNetworkInfo().isConnected();
     }
 
-    /**
-     * A helper class for providing a shadow on sheets
-     */
-    @TargetApi(21)
-    public static class ShadowOutline extends ViewOutlineProvider {
-
-        final int width;
-        final int height;
-
-        public ShadowOutline(int width, int height) {
-            this.width = width;
-            this.height = height;
-        }
-
-        @Override
-        public void getOutline(View view, Outline outline) {
-            outline.setRect(0, 0, width, height);
-        }
-    }
-
-
     public static Observable<Boolean> deleteCache(@NonNull Context context) {
         return Observable.fromCallable(new Callable<Boolean>() {
             boolean delete(Context context) {
@@ -480,5 +460,25 @@ public class Utils {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnError(Timber::e)
                 .doOnNext(result -> Timber.d("Cache deletion %b", result));
+    }
+
+    /**
+     * A helper class for providing a shadow on sheets
+     */
+    @TargetApi(21)
+    public static class ShadowOutline extends ViewOutlineProvider {
+
+        final int width;
+        final int height;
+
+        public ShadowOutline(int width, int height) {
+            this.width = width;
+            this.height = height;
+        }
+
+        @Override
+        public void getOutline(View view, Outline outline) {
+            outline.setRect(0, 0, width, height);
+        }
     }
 }

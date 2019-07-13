@@ -20,7 +20,8 @@
 package arun.com.chromer.data.webarticle.stores;
 
 import android.app.Application;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import java.io.IOException;
 
@@ -39,12 +40,10 @@ import timber.log.Timber;
 @Singleton
 public class WebArticleCacheStore implements WebArticleStore {
     private static final String TAG = WebArticleCacheStore.class.getSimpleName();
-
-    // Disk LRU cache to store articles
-    private ParcelDiskCache<WebArticle> webSiteDiskCache;
-
     // Cache size, currently set at 30 MB.
     private static final int DISK_CACHE_SIZE = 1024 * 1024 * 30;
+    // Disk LRU cache to store articles
+    private ParcelDiskCache<WebArticle> webSiteDiskCache;
 
     @Inject
     WebArticleCacheStore(Application application) {

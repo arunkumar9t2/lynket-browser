@@ -20,9 +20,10 @@
 package arun.com.chromer.settings.widgets;
 
 import android.content.Context;
-import android.support.v7.preference.ListPreference;
-import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
+
+import androidx.preference.ListPreference;
+import androidx.preference.PreferenceViewHolder;
 
 /**
  * A helper preference view without weird margin on preference icon. Attempts to alter properties on

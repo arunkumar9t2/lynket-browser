@@ -29,7 +29,7 @@ import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.signature.ObjectKey
 
 class ApplicationIconModelLoader : ModelLoader<Uri, ApplicationIcon> {
-    override fun buildLoadData(model: Uri, width: Int, height: Int, options: Options?): LoadData<ApplicationIcon>? {
+    override fun buildLoadData(model: Uri, width: Int, height: Int, options: Options): LoadData<ApplicationIcon>? {
         return LoadData(ObjectKey(model), ApplicationIconDataFetcher(model.schemeSpecificPart))
     }
 
@@ -37,7 +37,7 @@ class ApplicationIconModelLoader : ModelLoader<Uri, ApplicationIcon> {
 
     class Factory : ModelLoaderFactory<Uri, ApplicationIcon> {
 
-        override fun build(multiFactory: MultiModelLoaderFactory?): ModelLoader<Uri, ApplicationIcon> = ApplicationIconModelLoader()
+        override fun build(multiFactory: MultiModelLoaderFactory): ModelLoader<Uri, ApplicationIcon> = ApplicationIconModelLoader()
 
         override fun teardown() {
             // Do nothing.

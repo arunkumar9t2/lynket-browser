@@ -23,15 +23,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.core.content.ContextCompat;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -157,6 +158,67 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
         donateList.setAdapter(new DonationAdapter(details));
     }
 
+    private void setGreen(DonationAdapter.ViewHolder holder) {
+        if (holder != null) {
+            int color = ContextCompat.getColor(this, R.color.donate_green);
+            holder.title.setTextColor(color);
+            holder.subtitle.setTextColor(color);
+        }
+    }
+
+    private void setBlack(DonationAdapter.ViewHolder holder) {
+        if (holder != null) {
+            int color = ContextCompat.getColor(this, R.color.material_dark_color);
+            holder.title.setTextColor(color);
+            holder.subtitle.setTextColor(color);
+        }
+    }
+
+    // We're being destroyed. It's important to dispose of the helper here!
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        // very important:
+        if (mBroadcastReceiver != null) {
+            unregisterReceiver(mBroadcastReceiver);
+        }
+
+        // very important:
+        Timber.d("Destroying helper.");
+        if (mHelper != null) {
+            mHelper.dispose();
+            mHelper = null;
+        }
+    }
+
+    @Override
+    public void receivedBroadcast() {
+        // Received a broadcast notification that the inventory of items has changed
+        Timber.d("Received broadcast notification. Querying inventory.");
+        mHelper.queryInventoryAsync(mGotInventoryListener);
+    }
+
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (mHelper == null) return;
+
+        // Pass on the activity result to the helper for handling
+        if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
+            // not handled, so handle it ourselves (here's where you'd
+            // perform any handling of activity results not related to in-app
+            // billing...
+            super.onActivityResult(requestCode, resultCode, data);
+        } else {
+            Timber.d("onActivityResult handled by IABUtil.");
+        }
+    }
+
     class DonationAdapter extends RecyclerView.Adapter<DonationAdapter.ViewHolder> {
         private List<SkuDetails> details = new ArrayList<>();
 
@@ -248,67 +310,6 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
                         }
                 });
             }
-        }
-    }
-
-    private void setGreen(DonationAdapter.ViewHolder holder) {
-        if (holder != null) {
-            int color = ContextCompat.getColor(this, R.color.donate_green);
-            holder.title.setTextColor(color);
-            holder.subtitle.setTextColor(color);
-        }
-    }
-
-    private void setBlack(DonationAdapter.ViewHolder holder) {
-        if (holder != null) {
-            int color = ContextCompat.getColor(this, R.color.material_dark_color);
-            holder.title.setTextColor(color);
-            holder.subtitle.setTextColor(color);
-        }
-    }
-
-    // We're being destroyed. It's important to dispose of the helper here!
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        // very important:
-        if (mBroadcastReceiver != null) {
-            unregisterReceiver(mBroadcastReceiver);
-        }
-
-        // very important:
-        Timber.d("Destroying helper.");
-        if (mHelper != null) {
-            mHelper.dispose();
-            mHelper = null;
-        }
-    }
-
-    @Override
-    public void receivedBroadcast() {
-        // Received a broadcast notification that the inventory of items has changed
-        Timber.d("Received broadcast notification. Querying inventory.");
-        mHelper.queryInventoryAsync(mGotInventoryListener);
-    }
-
-    @Override
-    public void onClick(DialogInterface dialog, int which) {
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (mHelper == null) return;
-
-        // Pass on the activity result to the helper for handling
-        if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
-            // not handled, so handle it ourselves (here's where you'd
-            // perform any handling of activity results not related to in-app
-            // billing...
-            super.onActivityResult(requestCode, resultCode, data);
-        } else {
-            Timber.d("onActivityResult handled by IABUtil.");
         }
     }
 }

@@ -23,15 +23,16 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
-import android.support.annotation.ColorInt;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
+
+import androidx.annotation.ColorInt;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import arun.com.chromer.R;
 
@@ -45,8 +46,8 @@ public final class ArticleScrollListener extends RecyclerView.OnScrollListener {
 
     private final Toolbar toolbar;
     private final View statusBar;
-    private int primaryColor;
     private final int transparentColor;
+    private int primaryColor;
     private boolean transparentBackground = true;
     private boolean isUpdatingTranslation = false;
     private boolean isUpdatingBackground = false;

@@ -19,8 +19,8 @@
 
 package arun.com.chromer.history
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import arun.com.chromer.data.history.HistoryRepository
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.util.SchedulerProvider

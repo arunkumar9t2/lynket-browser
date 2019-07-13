@@ -22,7 +22,7 @@ package arun.com.chromer.util.glide.favicon
 import android.content.Context
 import android.graphics.*
 import android.graphics.Paint.ANTI_ALIAS_FLAG
-import android.support.annotation.ColorInt
+import androidx.annotation.ColorInt
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.util.ColorUtil
@@ -50,9 +50,9 @@ class WebsiteDecoder(private val context: Context, glide: Glide) : ResourceDecod
             Color.parseColor("#2E7D32")
     )
 
-    override fun handles(source: Website, options: Options?): Boolean = true
+    override fun handles(source: Website, options: Options): Boolean = true
 
-    override fun decode(website: Website, width: Int, height: Int, options: Options?): Resource<Bitmap>? {
+    override fun decode(website: Website, width: Int, height: Int, options: Options): Resource<Bitmap>? {
         // Try to load using Glide normally
         val websiteFavicon = try {
             GlideApp.with(context)

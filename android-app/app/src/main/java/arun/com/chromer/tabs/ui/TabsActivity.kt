@@ -20,7 +20,6 @@
 package arun.com.chromer.tabs.ui
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.view.MenuItem
 import arun.com.chromer.R
 import arun.com.chromer.di.activity.ActivityComponent
@@ -28,6 +27,7 @@ import arun.com.chromer.shared.FabHandler
 import arun.com.chromer.shared.base.Snackable
 import arun.com.chromer.shared.base.activity.BaseActivity
 import butterknife.OnClick
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_tabs.*
 
 class TabsActivity : BaseActivity(), Snackable {

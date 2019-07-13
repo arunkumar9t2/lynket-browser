@@ -35,15 +35,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.provider.Settings;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.customtabs.CustomTabsSession;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.widget.Toast;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.browser.customtabs.CustomTabsSession;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringConfig;
@@ -84,8 +85,8 @@ import timber.log.Timber;
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static android.support.v4.app.NotificationCompat.PRIORITY_MIN;
 import static android.widget.Toast.LENGTH_SHORT;
+import static androidx.core.app.NotificationCompat.PRIORITY_MIN;
 import static arun.com.chromer.shared.Constants.ACTION_CLOSE_WEBHEAD_BY_URL;
 import static arun.com.chromer.shared.Constants.ACTION_EVENT_WEBHEAD_DELETED;
 import static arun.com.chromer.shared.Constants.ACTION_EVENT_WEBSITE_UPDATED;
@@ -104,24 +105,61 @@ import static arun.com.chromer.shared.Constants.NO_COLOR;
 
 public class WebHeadService extends OverlayService implements WebHeadContract,
         CustomTabManager.ConnectionCallback {
+    // Max visible web heads is set 6 for performance reasons.
+    public static final int MAX_VISIBLE_WEB_HEADS = 5;
+    // Connection manager instance to connect and warm up custom tab providers
+    private static CustomTabManager customTabManager;
     /**
      * Reference to all the web heads created on screen. Ordered in the order of creation by using
      * {@link LinkedHashMap}. The key must be unique and is usually the url the web head represents.
      */
     private final Map<String, WebHead> webHeads = new LinkedHashMap<>();
-    // Connection manager instance to connect and warm up custom tab providers
-    private static CustomTabManager customTabManager;
     // The base spring system to create our springs.
     private final SpringSystem springSystem = SpringSystem.create();
-    // Clubbed movement manager
-    private SpringChain2D springChain2D;
-    // State variable to know if we connected successfully to CT provider.
-    private boolean customTabConnected;
-    // Max visible web heads is set 6 for performance reasons.
-    public static final int MAX_VISIBLE_WEB_HEADS = 5;
-
     private final CompositeSubscription subs = new CompositeSubscription();
-
+    private final BroadcastReceiver localReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch (intent.getAction()) {
+                case ACTION_REBIND_WEBHEAD_TAB_CONNECTION:
+                    final boolean shouldRebind = intent.getBooleanExtra(EXTRA_KEY_REBIND_WEBHEAD_CXN, false);
+                    if (shouldRebind) {
+                        bindToCustomTabSession();
+                    }
+                    break;
+                case ACTION_WEBHEAD_COLOR_SET:
+                    final int webHeadColor = intent.getIntExtra(EXTRA_KEY_WEBHEAD_COLOR, NO_COLOR);
+                    if (webHeadColor != NO_COLOR) {
+                        updateWebHeadColors(webHeadColor);
+                    }
+                    break;
+                case ACTION_CLOSE_WEBHEAD_BY_URL:
+                    final Website website = intent.getParcelableExtra(EXTRA_KEY_WEBSITE);
+                    if (website != null) {
+                        closeWebHeadByUrl(website.url);
+                    }
+                    break;
+            }
+        }
+    };
+    private final BroadcastReceiver notificationActionReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch (intent.getAction()) {
+                case ACTION_STOP_WEBHEAD_SERVICE:
+                    stopService();
+                    break;
+                case ACTION_OPEN_CONTEXT_ACTIVITY:
+                    openContextActivity();
+                    break;
+                case ACTION_OPEN_NEW_TAB:
+                    final Intent newTabIntent = new Intent(context, NewTabDialogActivity.class);
+                    newTabIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(newTabIntent);
+                    break;
+            }
+        }
+    };
     @Inject
     WebsiteRepository websiteRepository;
 
@@ -130,6 +168,17 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
 
     @Inject
     ArticlePreloader articlePreloader;
+    // Clubbed movement manager
+    private SpringChain2D springChain2D;
+    // State variable to know if we connected successfully to CT provider.
+    private boolean customTabConnected;
+
+    public static CustomTabsSession getTabSession() {
+        if (customTabManager != null) {
+            return customTabManager.getSession();
+        }
+        return null;
+    }
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -204,13 +253,6 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         Trashy.destroy();
         unregisterReceivers();
         super.onDestroy();
-    }
-
-    public static CustomTabsSession getTabSession() {
-        if (customTabManager != null) {
-            return customTabManager.getSession();
-        }
-        return null;
     }
 
     @Override
@@ -328,7 +370,6 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         if (customTabManager.bindCustomTabsService(this)) Timber.d("Binding successful");
     }
 
-
     private void warmUp(WebHead webHead) {
         if (!Preferences.get(this).aggressiveLoading()) {
             if (customTabConnected) {
@@ -359,7 +400,6 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     private void deferPreload(@NonNull final String urlToLoad) {
         new Handler().postDelayed(() -> preLoadUrl(urlToLoad), 300);
     }
-
 
     private void removeWebHeads() {
         for (WebHead webhead : webHeads.values()) {
@@ -523,18 +563,6 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         Trashy.disappear();
     }
 
-    private class WebHeadNavigationCallback extends CustomTabManager.NavigationCallback {
-        @Override
-        public void onNavigationEvent(int navigationEvent, Bundle extras) {
-            switch (navigationEvent) {
-                case TAB_SHOWN:
-                    break;
-                case TAB_HIDDEN:
-                    break;
-            }
-        }
-    }
-
     private void registerReceivers() {
         final IntentFilter localEvents = new IntentFilter();
         localEvents.addAction(ACTION_WEBHEAD_COLOR_SET);
@@ -559,52 +587,6 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         }
     }
 
-    private final BroadcastReceiver localReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            switch (intent.getAction()) {
-                case ACTION_REBIND_WEBHEAD_TAB_CONNECTION:
-                    final boolean shouldRebind = intent.getBooleanExtra(EXTRA_KEY_REBIND_WEBHEAD_CXN, false);
-                    if (shouldRebind) {
-                        bindToCustomTabSession();
-                    }
-                    break;
-                case ACTION_WEBHEAD_COLOR_SET:
-                    final int webHeadColor = intent.getIntExtra(EXTRA_KEY_WEBHEAD_COLOR, NO_COLOR);
-                    if (webHeadColor != NO_COLOR) {
-                        updateWebHeadColors(webHeadColor);
-                    }
-                    break;
-                case ACTION_CLOSE_WEBHEAD_BY_URL:
-                    final Website website = intent.getParcelableExtra(EXTRA_KEY_WEBSITE);
-                    if (website != null) {
-                        closeWebHeadByUrl(website.url);
-                    }
-                    break;
-            }
-        }
-    };
-
-    private final BroadcastReceiver notificationActionReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            switch (intent.getAction()) {
-                case ACTION_STOP_WEBHEAD_SERVICE:
-                    stopService();
-                    break;
-                case ACTION_OPEN_CONTEXT_ACTIVITY:
-                    openContextActivity();
-                    break;
-                case ACTION_OPEN_NEW_TAB:
-                    final Intent newTabIntent = new Intent(context, NewTabDialogActivity.class);
-                    newTabIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(newTabIntent);
-                    break;
-            }
-        }
-    };
-
-
     private static class ContextActivityHelper {
         static void signalUpdated(Context context, Website website) {
             final Intent intent = new Intent(ACTION_EVENT_WEBSITE_UPDATED);
@@ -624,6 +606,18 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
             intent.addFlags(FLAG_ACTIVITY_CLEAR_TASK);
             intent.putParcelableArrayListExtra(EXTRA_KEY_WEBSITE, websites);
             context.startActivity(intent);
+        }
+    }
+
+    private class WebHeadNavigationCallback extends CustomTabManager.NavigationCallback {
+        @Override
+        public void onNavigationEvent(int navigationEvent, Bundle extras) {
+            switch (navigationEvent) {
+                case TAB_SHOWN:
+                    break;
+                case TAB_HIDDEN:
+                    break;
+            }
         }
     }
 }

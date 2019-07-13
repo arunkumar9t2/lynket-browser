@@ -21,8 +21,8 @@ package arun.com.chromer.settings.browsingoptions
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.preference.SwitchPreferenceCompat
+import androidx.core.content.ContextCompat
+import androidx.preference.SwitchPreferenceCompat
 import arun.com.chromer.R
 import arun.com.chromer.settings.Preferences.BOTTOM_BAR_ENABLED
 import arun.com.chromer.settings.Preferences.MINIMIZE_BEHAVIOR_PREFERENCE

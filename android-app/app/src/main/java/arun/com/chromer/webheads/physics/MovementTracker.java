@@ -19,8 +19,9 @@
 
 package arun.com.chromer.webheads.physics;
 
-import android.support.annotation.NonNull;
 import android.view.MotionEvent;
+
+import androidx.annotation.NonNull;
 
 import java.util.Collection;
 import java.util.LinkedList;

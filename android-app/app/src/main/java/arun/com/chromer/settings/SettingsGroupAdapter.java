@@ -20,13 +20,14 @@
 package arun.com.chromer.settings;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -91,6 +92,10 @@ class SettingsGroupAdapter extends RecyclerView.Adapter<SettingsGroupAdapter.Set
         settingsItems.clear();
     }
 
+    public interface GroupItemClickListener {
+        void onGroupItemClicked(int position, final View view);
+    }
+
     public class SettingsItemViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.settins_list_icon)
         ImageView icon;
@@ -131,9 +136,5 @@ class SettingsGroupAdapter extends RecyclerView.Adapter<SettingsGroupAdapter.Set
                     break;
             }
         }
-    }
-
-    public interface GroupItemClickListener {
-        void onGroupItemClicked(int position, final View view);
     }
 }

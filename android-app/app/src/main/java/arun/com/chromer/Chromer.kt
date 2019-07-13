@@ -21,9 +21,9 @@ package arun.com.chromer
 
 import android.app.Application
 import android.content.Context
-import android.support.multidex.MultiDex
-import android.support.v7.app.AppCompatDelegate
 import android.util.Log
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.multidex.MultiDex
 import arun.com.chromer.data.DataModule
 import arun.com.chromer.di.app.AppComponent
 import arun.com.chromer.di.app.AppModule

@@ -31,9 +31,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import android.support.annotation.ColorInt
-import android.support.v4.content.ContextCompat
 import android.widget.Toast
+import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
 import arun.com.chromer.BuildConfig
 import arun.com.chromer.R
 import arun.com.chromer.appdetect.AppDetectionManager

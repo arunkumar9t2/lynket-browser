@@ -23,9 +23,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import java.util.List;
 
@@ -68,12 +69,7 @@ public class Preferences {
     public static final String PER_APP_PREFERENCE_DUMMY = "blacklist_preference_dummy";
     public static final String MERGE_TABS_AND_APPS = "merge_tabs_and_apps_preference";
     public static final String AGGRESSIVE_LOADING = "aggressive_loading";
-    private static final String WEB_HEAD_FAVICON = "webhead_favicons_pref";
-    private static final String PER_APP_SETTINGS = "blacklist_preference";
     public static final String PREFERRED_CUSTOM_TAB_PACKAGE = "preferred_package";
-    private static final String FIRST_RUN = "firstrun_3";
-    private static final String SECONDARY_PREF = "secondary_preference";
-    private static final String FAV_SHARE_PREF = "fav_share_preference";
     public static final String DYNAMIC_COLOR_APP = "dynamic_color_app";
     public static final String DYNAMIC_COLOR_WEB = "dynamic_color_web";
     public static final String AMP_MODE = "amp_mode_pref";
@@ -89,7 +85,11 @@ public class Preferences {
     public static final String USE_WEBVIEW_PREF = "use_webview_pref";
     public static final String MINIMIZE_BEHAVIOR_PREFERENCE = "minimize_behavior_preference";
     public static final String MINIMIZE_BEHAVIOR_PREFERENCE_KEY = "2";
-
+    private static final String WEB_HEAD_FAVICON = "webhead_favicons_pref";
+    private static final String PER_APP_SETTINGS = "blacklist_preference";
+    private static final String FIRST_RUN = "firstrun_3";
+    private static final String SECONDARY_PREF = "secondary_preference";
+    private static final String FAV_SHARE_PREF = "fav_share_preference";
     // Singleton instance
     private static Preferences INSTANCE;
 

@@ -19,8 +19,8 @@
 
 package arun.com.chromer.perapp
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import arun.com.chromer.data.apps.AppRepository
 import arun.com.chromer.data.common.App
 import arun.com.chromer.util.SchedulerProvider

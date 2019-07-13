@@ -26,7 +26,7 @@ import com.bumptech.glide.load.data.DataFetcher
 
 class WebsiteDataFetcher(private val website: Website) : DataFetcher<Website> {
 
-    override fun loadData(priority: Priority?, callback: DataFetcher.DataCallback<in Website>) {
+    override fun loadData(priority: Priority, callback: DataFetcher.DataCallback<in Website>) {
         callback.onDataReady(website)
     }
 

@@ -19,13 +19,13 @@
 
 package arun.com.chromer.home.fragment
 
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.support.v7.widget.GridLayoutManager
 import android.view.View
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
 import arun.com.chromer.R
 import arun.com.chromer.browsing.providerselection.ProviderSelectionActivity
 import arun.com.chromer.data.Result
