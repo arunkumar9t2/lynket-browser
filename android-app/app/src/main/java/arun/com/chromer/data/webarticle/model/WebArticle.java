@@ -22,8 +22,9 @@ package arun.com.chromer.data.webarticle.model;
 import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 
 import com.chimbori.crux.articles.Article;
 
@@ -45,6 +46,17 @@ import arun.com.chromer.shared.Constants;
  * faster than parsing the whole HTML content of the page.
  */
 public class WebArticle implements Parcelable {
+    public static final Creator<WebArticle> CREATOR = new Creator<WebArticle>() {
+        @Override
+        public WebArticle createFromParcel(Parcel in) {
+            return new WebArticle(in);
+        }
+
+        @Override
+        public WebArticle[] newArray(int size) {
+            return new WebArticle[size];
+        }
+    };
     public String url = "";
     public String originalUrl = "";
     public String title = "";
@@ -66,43 +78,6 @@ public class WebArticle implements Parcelable {
 
     public WebArticle(@NonNull String url) {
         this.url = url;
-    }
-
-    public static final Creator<WebArticle> CREATOR = new Creator<WebArticle>() {
-        @Override
-        public WebArticle createFromParcel(Parcel in) {
-            return new WebArticle(in);
-        }
-
-        @Override
-        public WebArticle[] newArray(int size) {
-            return new WebArticle[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @NonNull
-    public String preferredUrl() {
-        return canonicalUrl != null && !canonicalUrl.isEmpty() ? canonicalUrl : url;
-    }
-
-    @NonNull
-    public String safeLabel() {
-        return title != null && !title.isEmpty() ? title : preferredUrl();
-    }
-
-    @ColorInt
-    public int themeColor() {
-        try {
-            //noinspection Range
-            return Color.parseColor(themeColor);
-        } catch (Exception e) {
-            return Constants.NO_COLOR;
-        }
     }
 
     protected WebArticle(Parcel in) {
@@ -132,24 +107,6 @@ public class WebArticle implements Parcelable {
         keywords = in.createStringArrayList();
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(url);
-        dest.writeString(originalUrl);
-        dest.writeString(title);
-        dest.writeString(description);
-        dest.writeString(siteName);
-        dest.writeString(themeColor);
-        dest.writeString(ampUrl);
-        dest.writeString(canonicalUrl);
-        dest.writeString(imageUrl);
-        dest.writeString(videoUrl);
-        dest.writeString(feedUrl);
-        dest.writeString(faviconUrl);
-        dest.writeString(elements.toString());
-        dest.writeStringList(keywords);
-    }
-
     @NonNull
     public static WebArticle fromArticle(@NonNull Article article) {
         final WebArticle webArticle = new WebArticle();
@@ -171,5 +128,48 @@ public class WebArticle implements Parcelable {
             webArticle.keywords.addAll(article.keywords);
         }
         return webArticle;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @NonNull
+    public String preferredUrl() {
+        return canonicalUrl != null && !canonicalUrl.isEmpty() ? canonicalUrl : url;
+    }
+
+    @NonNull
+    public String safeLabel() {
+        return title != null && !title.isEmpty() ? title : preferredUrl();
+    }
+
+    @ColorInt
+    public int themeColor() {
+        try {
+            //noinspection Range
+            return Color.parseColor(themeColor);
+        } catch (Exception e) {
+            return Constants.NO_COLOR;
+        }
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(url);
+        dest.writeString(originalUrl);
+        dest.writeString(title);
+        dest.writeString(description);
+        dest.writeString(siteName);
+        dest.writeString(themeColor);
+        dest.writeString(ampUrl);
+        dest.writeString(canonicalUrl);
+        dest.writeString(imageUrl);
+        dest.writeString(videoUrl);
+        dest.writeString(feedUrl);
+        dest.writeString(faviconUrl);
+        dest.writeString(elements.toString());
+        dest.writeStringList(keywords);
     }
 }

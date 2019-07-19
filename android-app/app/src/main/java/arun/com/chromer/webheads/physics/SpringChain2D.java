@@ -20,9 +20,10 @@
 package arun.com.chromer.webheads.physics;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
+
+import androidx.annotation.NonNull;
 
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringListener;
@@ -39,17 +40,13 @@ import arun.com.chromer.webheads.WebHeadService;
  * Custom spring chain helper that simplifies maintaining 2 separate chains for X and Y axis.
  */
 public class SpringChain2D implements SpringListener {
-    private final LinkedList<Spring> xSprings = new LinkedList<>();
-    private final LinkedList<Spring> ySpring = new LinkedList<>();
-
-    private Spring xMasterSpring;
-    private Spring yMasterSpring;
-
-    private final int sDispWidth;
-
     private static final int xDiff = Utils.dpToPx(4);
     private static final int yDiff = Utils.dpToPx(1.7);
-
+    private final LinkedList<Spring> xSprings = new LinkedList<>();
+    private final LinkedList<Spring> ySpring = new LinkedList<>();
+    private final int sDispWidth;
+    private Spring xMasterSpring;
+    private Spring yMasterSpring;
     private boolean displacementEnabled = true;
 
     private SpringChain2D(int dispWidth) {

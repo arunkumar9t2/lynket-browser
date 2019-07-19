@@ -24,11 +24,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.v7.graphics.Palette;
 import android.text.TextUtils;
 import android.util.Pair;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.palette.graphics.Palette;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

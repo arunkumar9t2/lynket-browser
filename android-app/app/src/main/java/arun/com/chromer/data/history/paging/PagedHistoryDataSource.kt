@@ -19,8 +19,8 @@
 
 package arun.com.chromer.data.history.paging
 
-import android.arch.paging.DataSource
-import android.arch.paging.PositionalDataSource
+import androidx.paging.DataSource
+import androidx.paging.PositionalDataSource
 import arun.com.chromer.data.history.HistoryStore
 import arun.com.chromer.data.website.model.Website
 import javax.inject.Inject

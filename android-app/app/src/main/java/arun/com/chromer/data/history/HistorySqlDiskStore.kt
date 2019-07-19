@@ -20,12 +20,12 @@
 package arun.com.chromer.data.history
 
 import android.app.Application
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.paging.PagedList
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.paging.PagedList
 import arun.com.chromer.data.history.model.HistoryTable.*
 import arun.com.chromer.data.website.model.Website
 import rx.Observable

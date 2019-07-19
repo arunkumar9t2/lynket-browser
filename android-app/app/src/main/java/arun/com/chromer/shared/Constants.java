@@ -21,7 +21,8 @@ package arun.com.chromer.shared;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.annotation.ColorInt;
+
+import androidx.annotation.ColorInt;
 
 /**
  * Created by Arun on 04/01/2016.

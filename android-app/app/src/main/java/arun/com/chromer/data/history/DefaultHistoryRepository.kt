@@ -19,9 +19,9 @@
 
 package arun.com.chromer.data.history
 
-import android.arch.lifecycle.LiveData
-import android.arch.paging.LivePagedListBuilder
-import android.arch.paging.PagedList
+import androidx.lifecycle.LiveData
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import arun.com.chromer.data.history.paging.PagedHistoryDataSource
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.settings.Preferences

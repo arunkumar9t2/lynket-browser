@@ -21,15 +21,15 @@ package arun.com.chromer.browsing.providerselection
 
 import android.annotation.TargetApi
 import android.app.Activity
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
-import android.support.v7.widget.GridLayoutManager
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
 import arun.com.chromer.R
 import arun.com.chromer.data.apps.model.Provider
 import arun.com.chromer.di.activity.ActivityComponent
@@ -208,7 +208,7 @@ class ProviderSelectionActivity : BaseActivity() {
                     }.show()
             unBinder = ButterKnife.bind(this, dialog!!.customView!!)
 
-            GlideApp.with(activity).load(provider.iconUri).into(icon)
+            GlideApp.with(activity!!).load(provider.iconUri).into(icon!!)
 
             if (provider.features.isNotEmpty()) {
                 providerDetailsTv!!.text = provider.features

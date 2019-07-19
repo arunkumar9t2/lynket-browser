@@ -21,13 +21,14 @@ package arun.com.chromer.settings.widgets;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v7.preference.PreferenceViewHolder;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.preference.PreferenceViewHolder;
 
 import com.mikepenz.iconics.IconicsDrawable;
 
@@ -56,7 +57,7 @@ class PreferenceIconLayoutHelper {
      */
     static void applyLayoutChanges(@NonNull PreferenceViewHolder holder, boolean checked) {
         try {
-            final LinearLayout iconFrame = (LinearLayout) holder.findViewById(android.support.v7.preference.R.id.icon_frame);
+            final LinearLayout iconFrame = (LinearLayout) holder.findViewById(androidx.preference.R.id.icon_frame);
             final ImageView imageView = (ImageView) holder.findViewById(android.R.id.icon);
 
             if (iconFrame.getMinimumWidth() != 0) {

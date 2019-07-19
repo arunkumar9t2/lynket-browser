@@ -20,9 +20,10 @@
 package arun.com.chromer.shared.base.activity;
 
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import arun.com.chromer.Chromer;
 import arun.com.chromer.di.activity.ActivityComponent;
@@ -33,10 +34,9 @@ import butterknife.Unbinder;
 import rx.subscriptions.CompositeSubscription;
 
 public abstract class BaseActivity extends AppCompatActivity implements ProvidesActivityComponent {
-    protected Unbinder unbinder;
-
-    ActivityComponent activityComponent;
     protected final CompositeSubscription subs = new CompositeSubscription();
+    protected Unbinder unbinder;
+    ActivityComponent activityComponent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -30,12 +30,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.text.SpannableString;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -43,6 +37,13 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 
 import com.mikepenz.iconics.IconicsDrawable;
 
@@ -97,13 +98,10 @@ public abstract class BaseWebHead extends FrameLayout {
     private static int masterY;
     // Window parameters used to track and update web heads post creation;
     final WindowManager.LayoutParams windowParams;
-    // Color of web head when removed
-    int deleteColor = NO_COLOR;
     // The preferredUrl of the website that this web head represents, not allowed to change
     private final String url;
     // Website data that this web head represents
     protected Website website;
-
     @BindView(R.id.favicon)
     protected ImageView favicon;
     @BindView(R.id.indicator)
@@ -114,7 +112,9 @@ public abstract class BaseWebHead extends FrameLayout {
     protected CircleView revealView;
     @BindView(R.id.badge)
     protected TextView badgeView;
-
+    protected boolean spawnCoordSet;
+    // Color of web head when removed
+    int deleteColor = NO_COLOR;
     // Display dimensions
     int dispWidth, dispHeight;
     // The content view group which host all our elements
@@ -127,12 +127,11 @@ public abstract class BaseWebHead extends FrameLayout {
     boolean master;
     // If this web head is being queued to be displayed on screen.
     boolean inQueue;
-    // Flag to know if this web head was created for opening in new tab
-    private boolean fromNewTab;
-    protected boolean spawnCoordSet;
     // Color of the web head
     @ColorInt
     int webHeadColor;
+    // Flag to know if this web head was created for opening in new tab
+    private boolean fromNewTab;
 
     @SuppressLint("RtlHardcoded")
     BaseWebHead(@NonNull final Context context, @NonNull final String url) {

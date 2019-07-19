@@ -24,12 +24,13 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
+
+import androidx.core.view.ViewCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,12 +53,12 @@ import arun.com.chromer.R;
 public class ElasticDragDismissFrameLayout extends FrameLayout {
 
     private static Interpolator fastOutSlowInInterpolator;
-    // configurable attribs
-    private float dragDismissDistance = Float.MAX_VALUE;
     private final float dragDismissFraction = -1f;
     private final float dragDismissScale = 1f;
-    private boolean shouldScale = false;
     private final float dragElasticity = 0.5f;
+    // configurable attribs
+    private float dragDismissDistance = Float.MAX_VALUE;
+    private boolean shouldScale = false;
     // state
     private float totalDrag;
     private boolean draggingDown = false;

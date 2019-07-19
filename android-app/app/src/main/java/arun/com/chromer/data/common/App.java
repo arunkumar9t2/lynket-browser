@@ -21,9 +21,10 @@ package arun.com.chromer.data.common;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.Comparator;
 
@@ -33,13 +34,23 @@ import arun.com.chromer.shared.Constants;
  * Created by Arun on 24/01/2016.
  */
 public class App implements Parcelable {
+    public static final Creator<App> CREATOR = new Creator<App>() {
+        @Override
+        public App createFromParcel(Parcel in) {
+            return new App(in);
+        }
+
+        @Override
+        public App[] newArray(int size) {
+            return new App[size];
+        }
+    };
     @NonNull
     public String appName;
     @NonNull
     public String packageName;
     public boolean blackListed;
     public boolean incognito;
-
     @ColorInt
     public int color = Constants.NO_COLOR;
 
@@ -62,18 +73,6 @@ public class App implements Parcelable {
         incognito = in.readByte() != 0;
         color = in.readInt();
     }
-
-    public static final Creator<App> CREATOR = new Creator<App>() {
-        @Override
-        public App createFromParcel(Parcel in) {
-            return new App(in);
-        }
-
-        @Override
-        public App[] newArray(int size) {
-            return new App[size];
-        }
-    };
 
     private static int blackListIncognitoAwareComparison(@Nullable App lhs, @Nullable App rhs) {
         final String lhsName = lhs != null ? lhs.appName : null;

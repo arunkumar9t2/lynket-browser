@@ -25,7 +25,7 @@ import com.bumptech.glide.load.data.DataFetcher
 
 class ApplicationIconDataFetcher(private val packageName: String) : DataFetcher<ApplicationIcon> {
 
-    override fun loadData(priority: Priority?, callback: DataFetcher.DataCallback<in ApplicationIcon>) {
+    override fun loadData(priority: Priority, callback: DataFetcher.DataCallback<in ApplicationIcon>) {
         callback.onDataReady(ApplicationIcon(packageName))
     }
 

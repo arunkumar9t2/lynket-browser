@@ -20,15 +20,16 @@
 package arun.com.chromer.webheads.ui.context;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -90,14 +91,14 @@ class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> 
         return websites.get(position).hashCode();
     }
 
+    List<Website> getWebsites() {
+        return websites;
+    }
+
     void setWebsites(ArrayList<Website> websites) {
         this.websites.clear();
         this.websites.addAll(websites);
         notifyDataSetChanged();
-    }
-
-    List<Website> getWebsites() {
-        return websites;
     }
 
     void delete(@NonNull Website website) {
@@ -116,6 +117,16 @@ class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> 
             websites.add(index, web);
             notifyItemChanged(index);
         }
+    }
+
+    interface WebSiteAdapterListener {
+        void onWebSiteItemClicked(@NonNull Website website);
+
+        void onWebSiteDelete(@NonNull Website website);
+
+        void onWebSiteShare(@NonNull Website website);
+
+        void onWebSiteLongClicked(@NonNull Website website);
     }
 
     class WebSiteHolder extends RecyclerView.ViewHolder {
@@ -172,15 +183,5 @@ class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> 
                 return websites.get(position);
             } else return null;
         }
-    }
-
-    interface WebSiteAdapterListener {
-        void onWebSiteItemClicked(@NonNull Website website);
-
-        void onWebSiteDelete(@NonNull Website website);
-
-        void onWebSiteShare(@NonNull Website website);
-
-        void onWebSiteLongClicked(@NonNull Website website);
     }
 }

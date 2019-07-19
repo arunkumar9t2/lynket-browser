@@ -22,8 +22,8 @@ package arun.com.chromer.util.compat
 import android.app.ActivityManager
 import android.graphics.Bitmap
 import android.os.Build
-import android.support.annotation.ColorInt
-import android.support.annotation.RequiresApi
+import androidx.annotation.ColorInt
+import androidx.annotation.RequiresApi
 
 /**
  * Created by arunk on 09-02-2018.

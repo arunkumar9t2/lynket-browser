@@ -21,8 +21,8 @@ package arun.com.chromer.intro
 
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import arun.com.chromer.Chromer
 import arun.com.chromer.R
 import arun.com.chromer.di.activity.ActivityComponent

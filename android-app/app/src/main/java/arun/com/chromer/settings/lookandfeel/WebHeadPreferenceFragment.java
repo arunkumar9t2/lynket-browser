@@ -25,7 +25,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
+
+import androidx.core.content.ContextCompat;
 
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
@@ -53,7 +54,18 @@ public class WebHeadPreferenceFragment extends BasePreferenceFragment implements
     };
 
     private final IntentFilter webHeadColorFilter = new IntentFilter(Constants.ACTION_WEBHEAD_COLOR_SET);
-
+    private final BroadcastReceiver colorSelectionReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int selectedColor = intent.getIntExtra(EXTRA_KEY_WEBHEAD_COLOR, 0);
+            if (selectedColor != 0) {
+                final ColorPreference preference = (ColorPreference) findPreference(WEB_HEADS_COLOR);
+                if (preference != null) {
+                    preference.setColor(selectedColor);
+                }
+            }
+        }
+    };
     private ColorPreference webHeadColor;
     private IconListPreference spawnLocation;
     private IconListPreference webHeadSize;
@@ -77,7 +89,6 @@ public class WebHeadPreferenceFragment extends BasePreferenceFragment implements
         setIcons();
         setupWebHeadColorPreference();
     }
-
 
     @Override
     public void onResume() {
@@ -104,7 +115,6 @@ public class WebHeadPreferenceFragment extends BasePreferenceFragment implements
         spawnLocation = (IconListPreference) findPreference(WEB_HEAD_SPAWN_LOCATION);
         webHeadSize = (IconListPreference) findPreference(WEB_HEAD_SIZE);
     }
-
 
     private void setIcons() {
         int materialLight = ContextCompat.getColor(getActivity(), R.color.material_dark_light);
@@ -141,17 +151,4 @@ public class WebHeadPreferenceFragment extends BasePreferenceFragment implements
             enableDisablePreference(webHeadsEnabled, SUMMARY_GROUP);
         }
     }
-
-    private final BroadcastReceiver colorSelectionReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int selectedColor = intent.getIntExtra(EXTRA_KEY_WEBHEAD_COLOR, 0);
-            if (selectedColor != 0) {
-                final ColorPreference preference = (ColorPreference) findPreference(WEB_HEADS_COLOR);
-                if (preference != null) {
-                    preference.setColor(selectedColor);
-                }
-            }
-        }
-    };
 }

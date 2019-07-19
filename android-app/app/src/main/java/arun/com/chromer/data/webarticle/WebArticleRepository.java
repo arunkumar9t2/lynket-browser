@@ -19,7 +19,7 @@
 
 package arun.com.chromer.data.webarticle;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import arun.com.chromer.data.webarticle.model.WebArticle;
 import rx.Observable;

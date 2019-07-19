@@ -19,9 +19,9 @@
 
 package arun.com.chromer.util.parser;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.WorkerThread;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -223,11 +223,6 @@ class WebsiteUtilities {
         Converter() {
         }
 
-        public Converter setMaxBytes(int maxBytes) {
-            this.maxBytes = maxBytes;
-            return this;
-        }
-
         /**
          * Tries to extract type of encoding for the given content type.
          *
@@ -252,6 +247,29 @@ class WebsiteUtilities {
             if (charset.length() == 0)
                 charset = ISO;
             return charset;
+        }
+
+        @NonNull
+        static String encodingCleanup(final String str) {
+            final StringBuilder sb = new StringBuilder();
+            boolean startedWithCorrectString = false;
+            for (int i = 0; i < str.length(); i++) {
+                char c = str.charAt(i);
+                if (Character.isDigit(c) || Character.isLetter(c) || c == '-' || c == '_') {
+                    startedWithCorrectString = true;
+                    sb.append(c);
+                    continue;
+                }
+
+                if (startedWithCorrectString)
+                    break;
+            }
+            return sb.toString().trim();
+        }
+
+        public Converter setMaxBytes(int maxBytes) {
+            this.maxBytes = maxBytes;
+            return this;
         }
 
         @NonNull
@@ -461,24 +479,6 @@ class WebsiteUtilities {
                 }
             }
             return null;
-        }
-
-        @NonNull
-        static String encodingCleanup(final String str) {
-            final StringBuilder sb = new StringBuilder();
-            boolean startedWithCorrectString = false;
-            for (int i = 0; i < str.length(); i++) {
-                char c = str.charAt(i);
-                if (Character.isDigit(c) || Character.isLetter(c) || c == '-' || c == '_') {
-                    startedWithCorrectString = true;
-                    sb.append(c);
-                    continue;
-                }
-
-                if (startedWithCorrectString)
-                    break;
-            }
-            return sb.toString().trim();
         }
     }
 }

@@ -23,9 +23,10 @@ import android.app.Application;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
 import android.util.Pair;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 
 import java.io.IOException;
 
@@ -51,19 +52,11 @@ import static arun.com.chromer.shared.Constants.NO_COLOR;
 public class WebsiteDiskStore implements WebsiteStore, BookStore {
     public static final Pair<Bitmap, Integer> EMPTY_ICON_COLOR_PAIR = new Pair<>(null, Constants.NO_COLOR);
     public static final Pair<Drawable, Integer> EMPTY_DRAWABLE_PAIR = new Pair<>(null, Constants.NO_COLOR);
-
-
-    // Cache to store our data.
-    private ParcelDiskCache<Website> webSiteDiskCache;
     // Cache size, currently set at 30 MB.
     private static final int DISK_CACHE_SIZE = 1024 * 1024 * 30;
-
     private static final String THEME_COLOR_BOOK = "THEME_COLOR_BOOK";
-
-    @Override
-    public Book getBook() {
-        return Paper.book(THEME_COLOR_BOOK);
-    }
+    // Cache to store our data.
+    private ParcelDiskCache<Website> webSiteDiskCache;
 
     @Inject
     WebsiteDiskStore(Application context) {
@@ -72,6 +65,11 @@ public class WebsiteDiskStore implements WebsiteStore, BookStore {
         } catch (IOException e) {
             Timber.e(e);
         }
+    }
+
+    @Override
+    public Book getBook() {
+        return Paper.book(THEME_COLOR_BOOK);
     }
 
     @NonNull

@@ -23,17 +23,14 @@ import android.content.Intent
 import android.content.Intent.ACTION_VIEW
 import android.net.Uri
 import android.os.Bundle
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.CoordinatorLayout
-import android.support.design.widget.FloatingActionButton
-import android.support.design.widget.Snackbar
-import android.support.transition.Fade
-import android.support.transition.TransitionManager
-import android.support.v4.app.FragmentManager
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.fragment.app.FragmentManager
+import androidx.transition.Fade
+import androidx.transition.TransitionManager
 import arun.com.chromer.R
 import arun.com.chromer.about.AboutAppActivity
 import arun.com.chromer.about.changelog.Changelog
@@ -69,6 +66,9 @@ import butterknife.OnClick
 import com.afollestad.materialdialogs.GravityEnum
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.StackingBehavior
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.DrawerBuilder
@@ -115,13 +115,9 @@ class HomeActivity : BaseActivity(), Snackable {
         setupEventListeners()
     }
 
-    override fun inject(activityComponent: ActivityComponent) {
-        activityComponent.inject(this)
-    }
+    override fun inject(activityComponent: ActivityComponent) = activityComponent.inject(this)
 
-    override fun getLayoutRes(): Int {
-        return R.layout.activity_main
-    }
+    override fun getLayoutRes() = R.layout.activity_main
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.home_menu, menu)
@@ -151,16 +147,15 @@ class HomeActivity : BaseActivity(), Snackable {
         activeFragmentManager = activeFragmentManagerFactory.get(supportFragmentManager, materialSearchView, appbar, fab)
         activeFragmentManager.initialize(savedInstanceState)
 
-        bottomNavigation.setOnMenuItemClickListener(
-                object : BottomNavigation.OnMenuItemSelectionListener {
-                    override fun onMenuItemSelect(itemId: Int, position: Int, fromUser: Boolean) {
-                        activeFragmentManager.handleBottomMenuClick(itemId)
-                        selectedIndex = position
-                    }
+        bottomNavigation.setOnMenuItemClickListener(object : BottomNavigation.OnMenuItemSelectionListener {
+            override fun onMenuItemSelect(itemId: Int, position: Int, fromUser: Boolean) {
+                activeFragmentManager.handleBottomMenuClick(itemId)
+                selectedIndex = position
+            }
 
-                    override fun onMenuItemReselect(itemId: Int, position: Int, fromUser: Boolean) {
-                    }
-                })
+            override fun onMenuItemReselect(itemId: Int, position: Int, fromUser: Boolean) {
+            }
+        })
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -251,8 +246,7 @@ class HomeActivity : BaseActivity(), Snackable {
                             .withSelectable(false)
             )
             withOnDrawerItemClickListener { _, _, drawerItem ->
-                val i = drawerItem.identifier.toInt()
-                when (i) {
+                when (drawerItem.identifier.toInt()) {
                     2 -> {
                         val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", Constants.MAILID, null))
                         emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
@@ -429,18 +423,26 @@ class HomeActivity : BaseActivity(), Snackable {
         abstract fun handleBottomMenuClick(menuItemId: Int): Boolean
 
         @PerActivity
-        class Factory @Inject constructor() {
+        class Factory
+        @Inject constructor() {
             fun get(
                     supportFragmentManager: FragmentManager,
                     materialSearchView: MaterialSearchView,
                     appbar: AppBarLayout,
                     fab: FloatingActionButton
-            ): ActiveFragmentsManager {
-                return if (Utils.ANDROID_LOLLIPOP) {
-                    LollipopActiveFragmentManager(supportFragmentManager, materialSearchView, fab)
-                } else {
-                    PreLollipopActiveFragmentManager(supportFragmentManager, materialSearchView, appbar, fab)
-                }
+            ): ActiveFragmentsManager = if (Utils.ANDROID_LOLLIPOP) {
+                LollipopActiveFragmentManager(
+                        supportFragmentManager,
+                        materialSearchView,
+                        fab
+                )
+            } else {
+                PreLollipopActiveFragmentManager(
+                        supportFragmentManager,
+                        materialSearchView,
+                        appbar,
+                        fab
+                )
             }
         }
     }

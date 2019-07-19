@@ -19,7 +19,7 @@
 
 package arun.com.chromer.webheads.ui;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.facebook.rebound.Spring;
 

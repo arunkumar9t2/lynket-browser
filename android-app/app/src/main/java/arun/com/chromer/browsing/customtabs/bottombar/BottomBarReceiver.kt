@@ -22,7 +22,7 @@ package arun.com.chromer.browsing.customtabs.bottombar
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.support.customtabs.CustomTabsIntent
+import androidx.browser.customtabs.CustomTabsIntent
 import arun.com.chromer.Chromer
 import arun.com.chromer.R
 import arun.com.chromer.browsing.customtabs.CustomTabActivity

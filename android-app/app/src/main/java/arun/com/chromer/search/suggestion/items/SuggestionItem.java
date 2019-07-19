@@ -20,8 +20,8 @@
 package arun.com.chromer.search.suggestion.items;
 
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import arun.com.chromer.search.suggestion.SuggestionType;
 

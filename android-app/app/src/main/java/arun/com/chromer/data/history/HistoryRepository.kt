@@ -19,8 +19,8 @@
 
 package arun.com.chromer.data.history
 
-import android.arch.lifecycle.LiveData
-import android.arch.paging.PagedList
+import androidx.lifecycle.LiveData
+import androidx.paging.PagedList
 import arun.com.chromer.data.website.model.Website
 import rx.Observable
 

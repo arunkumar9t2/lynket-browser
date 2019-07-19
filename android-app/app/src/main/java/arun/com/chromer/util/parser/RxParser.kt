@@ -19,7 +19,7 @@
 
 package arun.com.chromer.util.parser
 
-import android.support.v4.util.Pair
+import androidx.core.util.Pair
 import arun.com.chromer.util.parser.WebsiteUtilities.headString
 import com.chimbori.crux.articles.Article
 import com.chimbori.crux.articles.ArticleExtractor

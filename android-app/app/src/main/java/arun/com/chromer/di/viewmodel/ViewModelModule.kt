@@ -19,8 +19,8 @@
 
 package arun.com.chromer.di.viewmodel
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 
 import arun.com.chromer.browsing.BrowsingViewModel
 import arun.com.chromer.browsing.article.BrowsingArticleViewModel

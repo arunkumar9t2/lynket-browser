@@ -19,7 +19,7 @@
 
 package arun.com.chromer.util
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 
 open class SimpleAdapterDataSetObserver(private val onAnyChanges: () -> Unit) : RecyclerView.AdapterDataObserver() {
     override fun onChanged() = onAnyChanges()

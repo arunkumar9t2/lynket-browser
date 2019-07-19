@@ -19,7 +19,7 @@
 
 package arun.com.chromer.tabs
 
-import android.support.annotation.IntDef
+import androidx.annotation.IntDef
 
 const val WEB_VIEW = 0
 const val CUSTOM_TAB = 1

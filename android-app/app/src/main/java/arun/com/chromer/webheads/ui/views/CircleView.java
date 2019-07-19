@@ -22,9 +22,10 @@ package arun.com.chromer.webheads.ui.views;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.support.annotation.ColorInt;
 import android.util.AttributeSet;
 import android.view.View;
+
+import androidx.annotation.ColorInt;
 
 import arun.com.chromer.settings.Preferences;
 import arun.com.chromer.util.Utils;

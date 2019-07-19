@@ -19,10 +19,10 @@
 
 package arun.com.chromer.shared.base;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
- * Marker to define methods to enable {@link android.support.design.widget.Snackbar} messages.
+ * Marker to define methods to enable {@link com.google.android.material.snackbar.Snackbar} messages.
  */
 public interface Snackable {
     void snack(@NonNull final String message);
