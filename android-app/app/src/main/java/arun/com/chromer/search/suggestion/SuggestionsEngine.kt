@@ -64,13 +64,13 @@ constructor(private var application: Application, private val historyRepository:
      */
     fun suggestionsTransformer(): Transformer<String, List<SuggestionItem>> {
         return Transformer { suggestion ->
-            val deviceSuggestions = Observable.just(listOf(CopySuggestionItem(application)))
+            val deviceSuggestions = just(listOf(CopySuggestionItem(application)))
             return@Transformer suggestion
                     .observeOn(Schedulers.io())
                     .compose(emptyStringFilter())
                     .switchMap { query ->
-                        val googleSuggestions = Observable.just(query).compose(googleTransformer())
-                        val historySuggestions = Observable.just(query).compose(historyTransformer())
+                        val googleSuggestions = just(query).compose(googleTransformer())
+                        val historySuggestions = just(query).compose(historyTransformer())
 
                         return@switchMap Observable.zip(
                                 googleSuggestions,

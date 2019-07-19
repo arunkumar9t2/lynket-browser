@@ -211,7 +211,7 @@ class MaterialSearchView : RelativeLayout, Search.View {
         } else super.hasFocus()
     }
 
-    override fun setOnClickListener(l: View.OnClickListener?) {
+    override fun setOnClickListener(l: OnClickListener?) {
         // no op
     }
 
@@ -231,7 +231,7 @@ class MaterialSearchView : RelativeLayout, Search.View {
                 Activity.RESULT_OK -> {
                     val resultList = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                     if (resultList != null && !resultList.isEmpty()) {
-                        searchPerformed(Utils.getSearchUrl(resultList[0]))
+                        searchPerformed(getSearchUrl(resultList[0]))
                     }
                 }
             }

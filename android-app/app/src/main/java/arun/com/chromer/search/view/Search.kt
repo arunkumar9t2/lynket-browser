@@ -40,9 +40,9 @@ interface Search {
     @PerView
     class Presenter @Inject
     constructor(private val suggestionsEngine: SuggestionsEngine) {
-        private var viewRef: WeakReference<Search.View>? = null
+        private var viewRef: WeakReference<View>? = null
 
-        internal var view: Search.View? = null
+        internal var view: View? = null
             get() = viewRef?.get()
 
         private val subs = CompositeSubscription()
@@ -57,7 +57,7 @@ interface Search {
                     .subscribe())
         }
 
-        fun takeView(view: Search.View) {
+        fun takeView(view: View) {
             Timber.d("Took view $view")
             viewRef?.clear()
             viewRef = WeakReference(view)

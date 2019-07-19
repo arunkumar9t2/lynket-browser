@@ -32,9 +32,9 @@ sealed class Result<T> {
         fun <T> applyToObservable(): Observable.Transformer<T, Result<T>> {
             return Observable.Transformer { sourceObservable ->
                 sourceObservable
-                        .map { Result.Success(it) as Result<T> }
-                        .onErrorReturn { Result.Failure(it) }
-                        .startWith(Result.Loading())
+                        .map { Success(it) as Result<T> }
+                        .onErrorReturn { Failure(it) }
+                        .startWith(Loading())
             }
         }
     }

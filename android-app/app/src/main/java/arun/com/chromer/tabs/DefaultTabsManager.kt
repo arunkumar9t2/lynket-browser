@@ -240,7 +240,7 @@ constructor(
                     addFlags(FLAG_ACTIVITY_NEW_TASK)
                 }
                 if (newTab || Preferences.get(context).mergeTabs()) {
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
+                    addFlags(FLAG_ACTIVITY_NEW_DOCUMENT)
                     addFlags(FLAG_ACTIVITY_MULTIPLE_TASK)
                 }
                 if (incognito) {
@@ -429,15 +429,15 @@ constructor(
     private fun getToolbarColor(website: Website): Int {
         if (preferences.isColoredToolbar) {
             if (preferences.dynamicToolbar()) {
-                var appColor = Constants.NO_COLOR
-                var websiteColor = Constants.NO_COLOR
+                var appColor = NO_COLOR
+                var websiteColor = NO_COLOR
 
                 if (preferences.dynamicToolbarOnApp()) {
                     appColor = appRepository.getPackageColorSync(appDetectionManager.filteredPackage)
                 }
                 if (preferences.dynamicToolbarOnWeb()) {
                     websiteColor = websiteRepository.getWebsiteColorSync(website.url)
-                    if (websiteColor == Constants.NO_COLOR) {
+                    if (websiteColor == NO_COLOR) {
                         websiteColor = website.themeColor()
                     }
                 }

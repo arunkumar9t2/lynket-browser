@@ -70,7 +70,7 @@ class DefaultTabsManagerTest : ChromerRobolectricSuite() {
     fun testFromWebheadsDoesNotLaunchNewWebHead() {
         clearPreferences()
         preferences.webHeads(true)
-        val shadowApp = Shadows.shadowOf(application)
+        val shadowApp = shadowOf(application)
 
         assertWebHeadServiceLaunched(shadowApp)
 
@@ -83,7 +83,7 @@ class DefaultTabsManagerTest : ChromerRobolectricSuite() {
         clearPreferences()
         preferences.ampMode(true)
 
-        val shadowApp = Shadows.shadowOf(application)
+        val shadowApp = shadowOf(application)
         tabs.openUrl(application, Website(url), fromApp = false, fromWebHeads = false)
         assert(shadowApp.nextStartedActivity.component == Intent(application, AmpResolverActivity::class.java).component)
     }
