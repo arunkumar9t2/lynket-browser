@@ -57,7 +57,10 @@ import arun.com.chromer.util.Utils.openDrawOverlaySettings
 import arun.com.chromer.webheads.WebHeadService
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
+import rx.Completable
 import rx.Single
+import rx.schedulers.Schedulers
+import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -74,6 +77,8 @@ constructor(
         private val articlePreloader: ArticlePreloader,
         private val rxEventBus: RxEventBus
 ) : TabsManager {
+
+    private val subs = CompositeSubscription()
 
     private val allBrowsingActivitiesName = arrayListOf<String>(
             CustomTabActivity::class.java.name,
@@ -94,6 +99,31 @@ constructor(
             fromNewTab: Boolean,
             fromAmp: Boolean,
             incognito: Boolean
+    ) {
+        Completable
+                .fromAction {
+                    openUrlInternal(
+                            fromApp,
+                            fromWebHeads,
+                            context,
+                            website,
+                            fromAmp,
+                            incognito,
+                            fromNewTab
+                    )
+                }.subscribeOn(Schedulers.computation())
+                .subscribe()
+                .let(subs::add)
+    }
+
+    private fun openUrlInternal(
+            fromApp: Boolean,
+            fromWebHeads: Boolean,
+            context: Context,
+            website: Website,
+            fromAmp: Boolean,
+            incognito: Boolean,
+            fromNewTab: Boolean
     ) {
         // Clear non browsing activities if it was external intent.
         if (!fromApp) {
