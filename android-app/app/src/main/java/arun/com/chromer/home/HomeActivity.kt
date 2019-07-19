@@ -115,13 +115,9 @@ class HomeActivity : BaseActivity(), Snackable {
         setupEventListeners()
     }
 
-    override fun inject(activityComponent: ActivityComponent) {
-        activityComponent.inject(this)
-    }
+    override fun inject(activityComponent: ActivityComponent) = activityComponent.inject(this)
 
-    override fun getLayoutRes(): Int {
-        return R.layout.activity_main
-    }
+    override fun getLayoutRes() = R.layout.activity_main
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.home_menu, menu)
@@ -151,16 +147,15 @@ class HomeActivity : BaseActivity(), Snackable {
         activeFragmentManager = activeFragmentManagerFactory.get(supportFragmentManager, materialSearchView, appbar, fab)
         activeFragmentManager.initialize(savedInstanceState)
 
-        bottomNavigation.setOnMenuItemClickListener(
-                object : BottomNavigation.OnMenuItemSelectionListener {
-                    override fun onMenuItemSelect(itemId: Int, position: Int, fromUser: Boolean) {
-                        activeFragmentManager.handleBottomMenuClick(itemId)
-                        selectedIndex = position
-                    }
+        bottomNavigation.setOnMenuItemClickListener(object : BottomNavigation.OnMenuItemSelectionListener {
+            override fun onMenuItemSelect(itemId: Int, position: Int, fromUser: Boolean) {
+                activeFragmentManager.handleBottomMenuClick(itemId)
+                selectedIndex = position
+            }
 
-                    override fun onMenuItemReselect(itemId: Int, position: Int, fromUser: Boolean) {
-                    }
-                })
+            override fun onMenuItemReselect(itemId: Int, position: Int, fromUser: Boolean) {
+            }
+        })
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -251,8 +246,7 @@ class HomeActivity : BaseActivity(), Snackable {
                             .withSelectable(false)
             )
             withOnDrawerItemClickListener { _, _, drawerItem ->
-                val i = drawerItem.identifier.toInt()
-                when (i) {
+                when (drawerItem.identifier.toInt()) {
                     2 -> {
                         val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", Constants.MAILID, null))
                         emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
@@ -429,18 +423,26 @@ class HomeActivity : BaseActivity(), Snackable {
         abstract fun handleBottomMenuClick(menuItemId: Int): Boolean
 
         @PerActivity
-        class Factory @Inject constructor() {
+        class Factory
+        @Inject constructor() {
             fun get(
                     supportFragmentManager: FragmentManager,
                     materialSearchView: MaterialSearchView,
                     appbar: AppBarLayout,
                     fab: FloatingActionButton
-            ): ActiveFragmentsManager {
-                return if (Utils.ANDROID_LOLLIPOP) {
-                    LollipopActiveFragmentManager(supportFragmentManager, materialSearchView, fab)
-                } else {
-                    PreLollipopActiveFragmentManager(supportFragmentManager, materialSearchView, appbar, fab)
-                }
+            ): ActiveFragmentsManager = if (Utils.ANDROID_LOLLIPOP) {
+                LollipopActiveFragmentManager(
+                        supportFragmentManager,
+                        materialSearchView,
+                        fab
+                )
+            } else {
+                PreLollipopActiveFragmentManager(
+                        supportFragmentManager,
+                        materialSearchView,
+                        appbar,
+                        fab
+                )
             }
         }
     }

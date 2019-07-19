@@ -70,9 +70,11 @@ open class Chromer : Application() {
     }
 
     protected open fun initFabric() {
-        Fabric.with(this, Crashlytics.Builder().core(CrashlyticsCore.Builder()
+        val core = CrashlyticsCore.Builder()
                 .disabled(BuildConfig.DEBUG)
-                .build()).build())
+                .build()
+        val crashlytics = Crashlytics.Builder().core(core).build()
+        Fabric.with(this, crashlytics)
     }
 
     override fun attachBaseContext(base: Context) {
