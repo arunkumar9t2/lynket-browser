@@ -15,7 +15,7 @@ jobs:
     - name: Set gradle permissions
       run: sudo chmod +x android-app/gradlew
     - name: Download dependencies
-      run: android-app/gradlew dependencies
+      run: android-app/gradlew app:dependencies
     - name: Build debug
       run: |
         cd android-app
