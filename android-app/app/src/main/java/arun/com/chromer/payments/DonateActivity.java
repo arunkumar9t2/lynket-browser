@@ -30,9 +30,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.core.content.ContextCompat;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -123,7 +123,7 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
         setContentView(R.layout.activity_donate);
 
         // compute your public key and store it in base64EncodedPublicKey
-        mHelper = new IabHelper(this, getString(R.string.playLicenseKey));
+        mHelper = new IabHelper(this, getString(R.string.play_license_key));
 
         // enable debug logging (for a production application, you should set this to false).
         mHelper.enableDebugLogging(false);
