@@ -23,14 +23,6 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'io.fabric'
 
-// Read from properties
-def PLAY_LICENSE_KEY = "PLAY_LICENSE_KEY"
-def FABRIC_KEY = "FABRIC_KEY"
-def properties = new Properties()
-properties.load(new FileInputStream("$rootDir/values.properties"))
-def playLicenseKey = properties.getProperty(PLAY_LICENSE_KEY, "\"\"")
-def fabricKey = properties.getProperty(FABRIC_KEY, "\"\"")
-
 buildscript {
     repositories {
         maven { url 'https://maven.fabric.io/public' }
@@ -56,8 +48,8 @@ android {
 
         multiDexEnabled true
 
-        resValue "string", "playLicenseKey", "$playLicenseKey"
-        manifestPlaceholders = [crashlyticsApiKey: "$fabricKey"]
+        resValue "string", "play_license_key", "$PLAY_LICENSE_KEY"
+        manifestPlaceholders = [FABRIC_KEY: "$FABRIC_KEY"]
 
         vectorDrawables.useSupportLibrary = true
 
