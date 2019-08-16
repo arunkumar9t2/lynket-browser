@@ -17,7 +17,7 @@ jobs:
     - name: Download dependencies
       run: |
         cd android-app
-        gradlew app:dependencies
+        ./gradlew app:dependencies
     - name: Build debug
       run: |
         cd android-app
