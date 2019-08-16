@@ -37,6 +37,14 @@ allprojects {
         maven { url "https://jitpack.io" }
         jcenter()
     }
+
+    configurations {
+        all {
+            resolutionStrategy {
+                force "org.ow2.asm:asm:7.0"
+            }
+        }
+    }
 }
 
 task clean(type: Delete) {
