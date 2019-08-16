@@ -23,4 +23,9 @@ jobs:
       run: |
         cd android-app
         ./gradlew assembleDebug
+    
+    - name: Test debug
+      run: |
+        cd android-app
+        ./gradlew testDebugUnitTest
         
