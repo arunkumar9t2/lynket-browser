@@ -32,32 +32,29 @@ buildscript {
 }
 
 allprojects {
-    def baseAndroidGroup = 'dev.arunkumar.android'
-    version = '1.0.0'
-    def repoUrl = "https://raw.github.com/arunkumar9t2/base-android/master/maven-repo"
+    def repoUrl = "https://raw.github.com/arunkumar9t2/base-android/master/maven-repo/"
+    def baseAndroid = "dev.arunkumar.android"
 
     repositories {
         google()
         maven { url "https://jitpack.io" }
         jcenter()
         maven {
-            url "${repoUrl}/releases"
-            //noinspection UnstableApiUsage
+            url "${repoUrl}releases"
             mavenContent {
                 releasesOnly()
             }
             content {
-                includeGroup baseAndroidGroup
+                includeGroup baseAndroid
             }
         }
         maven {
-            url "${repoUrl}/snapshots"
-            //noinspection UnstableApiUsage
+            url "${repoUrl}snapshots"
             mavenContent {
                 snapshotsOnly()
             }
             content {
-                includeGroup baseAndroidGroup
+                includeGroup baseAndroid
             }
         }
     }
@@ -66,6 +63,7 @@ allprojects {
         all {
             resolutionStrategy {
                 force "org.ow2.asm:asm:7.0"
+                cacheChangingModulesFor 0, 'seconds'
             }
         }
     }

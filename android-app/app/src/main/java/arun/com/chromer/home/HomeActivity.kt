@@ -80,8 +80,6 @@ class HomeActivity : BaseActivity(), Snackable {
     @Inject
     lateinit var rxEventBus: RxEventBus
     @Inject
-    lateinit var activeFragmentManagerFactory: ActiveFragmentsManager.Factory
-    @Inject
     lateinit var tabsManger: TabsManager
 
     override fun inject(activityComponent: ActivityComponent) = activityComponent.inject(this)

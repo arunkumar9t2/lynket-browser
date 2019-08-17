@@ -132,6 +132,14 @@ dependencies {
     testImplementation 'androidx.test:runner:1.2.0'
     testImplementation 'androidx.test:rules:1.2.0'
 
+    // Personal libs
+    implementation 'in.arunkumarsampath:suggestions:1.0.3'
+    implementation 'dev.arunkumar.android:common:master-SNAPSHOT'
+    implementation 'dev.arunkumar.android:dagger-base:master-SNAPSHOT'
+    implementation 'dev.arunkumar.android:logging:master-SNAPSHOT'
+    implementation 'dev.arunkumar.android:dagger-viewmodel:master-SNAPSHOT'
+    implementation 'dev.arunkumar.android:viewmodel-utils:master-SNAPSHOT'
+
     // Dependency Injection
     implementation 'com.google.dagger:dagger:2.23.2'
     kapt 'com.google.dagger:dagger-compiler:2.23.2'
@@ -152,13 +160,9 @@ dependencies {
     implementation 'androidx.palette:palette-ktx:1.0.0'
     implementation 'androidx.sqlite:sqlite-ktx:2.0.1'
 
-
     // Architecture Components
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
     kapt 'androidx.lifecycle:lifecycle-common-java8:2.0.0'
-
-    // Suggestions
-    implementation 'in.arunkumarsampath:suggestions:1.0.3'
 
     // Intro
     implementation 'com.github.apl-devs:appintro:v4.2.3'
@@ -206,6 +210,10 @@ dependencies {
     implementation 'com.jakewharton.rxbinding3:rxbinding-appcompat:3.0.0'
     implementation 'com.jakewharton.rxbinding3:rxbinding-recyclerview:3.0.0'
     implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
+
+    // Epoxy for recycler view
+    implementation 'com.airbnb.android:epoxy:3.7.0'
+    kapt 'com.airbnb.android:epoxy-processor:3.7.0'
 
     // Storage
     implementation 'io.paperdb:paperdb:2.6'
