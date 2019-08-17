@@ -66,13 +66,9 @@ class HomeFragment : BaseFragment(), Snackable {
 
     private lateinit var homeFragmentViewModel: HomeFragmentViewModel
 
-    override fun inject(fragmentComponent: FragmentComponent) {
-        fragmentComponent.inject(this)
-    }
+    override fun inject(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
 
-    override fun getLayoutRes(): Int {
-        return R.layout.fragment_home
-    }
+    override fun getLayoutRes(): Int = R.layout.fragment_home
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -196,7 +192,9 @@ class HomeFragment : BaseFragment(), Snackable {
     }
 
     private fun setupEventListeners() {
-        subs.add(rxEventBus.filteredEvents(BrowsingOptionsActivity.ProviderChanged::class.java).subscribe { setupProviderCard() })
+        subs.add(rxEventBus
+                .filteredEvents<BrowsingOptionsActivity.ProviderChanged>()
+                .subscribe { setupProviderCard() })
     }
 
     @OnClick(R.id.providerChangeButton)

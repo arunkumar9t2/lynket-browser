@@ -17,41 +17,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.util;
+package arun.com.chromer.util
 
-import rx.Observable;
-import rx.subjects.PublishSubject;
+import rx.Observable
+import rx.subjects.PublishSubject
 
 /**
  * A simple event bus built with RxJava
  */
-public class RxEventBus {
+class RxEventBus {
 
-    private final PublishSubject<Object> publishSubject;
-
-    public RxEventBus() {
-        publishSubject = PublishSubject.create();
-    }
-
+    private val publishSubject: PublishSubject<Any> = PublishSubject.create()
     /**
      * Posts an object (usually an Event) to the bus
      */
-    public void post(Object event) {
-        publishSubject.onNext(event);
+    fun post(event: Any) {
+        publishSubject.onNext(event)
     }
 
     /**
      * Observable that will emmit everything posted to the event bus.
      */
-    public Observable<Object> events() {
-        return publishSubject.asObservable();
-    }
+    fun events(): Observable<Any> = publishSubject.asObservable()
 
     /**
      * Observable that only emits events of a specific class.
      * Use this if you only want to subscribe to one type of events.
      */
-    public <T> Observable<T> filteredEvents(final Class<T> eventClass) {
-        return events().ofType(eventClass);
-    }
+    inline fun <reified T> filteredEvents(): Observable<T> = events().ofType(T::class.java)
 }

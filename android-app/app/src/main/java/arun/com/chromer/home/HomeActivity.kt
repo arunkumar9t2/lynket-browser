@@ -139,7 +139,7 @@ class HomeActivity : BaseActivity(), Snackable {
     }
 
     private fun setupEventListeners() {
-        subs.add(rxEventBus.filteredEvents(TabsManager.FinishRoot::class.java).subscribe { finish() })
+        subs.add(rxEventBus.filteredEvents<TabsManager.FinishRoot>().subscribe { finish() })
     }
 
     private fun setupFragments(savedInstanceState: Bundle?) {

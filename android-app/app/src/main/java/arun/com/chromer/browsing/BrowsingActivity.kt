@@ -79,7 +79,7 @@ abstract class BrowsingActivity : BaseActivity() {
 
     private fun setupMinimize() {
         subs.add(rxEventBus
-                .filteredEvents(TabsManager.MinimizeEvent::class.java)
+                .filteredEvents<TabsManager.MinimizeEvent>()
                 .filter { event ->
                     event.tab.url.equals(getCurrentUrl(), ignoreCase = true)
                             && event.tab.getTargetActivityName() == this::class.java.name
