@@ -128,11 +128,8 @@ dependencies {
     testImplementation 'org.mockito:mockito-all:1.10.8'
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:4.2'
-    testImplementation 'androidx.test:runner:1.1.0'
-    testImplementation 'androidx.test:rules:1.1.0'
-
-    // Debugging
-    debugImplementation 'com.facebook.stetho:stetho:1.5.0'
+    testImplementation 'androidx.test:runner:1.2.0'
+    testImplementation 'androidx.test:rules:1.2.0'
 
     // Dependency Injection
     implementation 'com.google.dagger:dagger:2.23.2'
@@ -146,6 +143,7 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.palette:palette:1.0.0'
     implementation 'androidx.paging:paging-runtime:2.1.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
 
 
     // Architecture Components
@@ -176,8 +174,8 @@ dependencies {
     kapt 'com.jakewharton:butterknife-compiler:10.1.0'
 
     // Image loading
-    implementation 'com.github.bumptech.glide:glide:4.8.0'
-    kapt 'com.github.bumptech.glide:compiler:4.8.0'
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    kapt 'com.github.bumptech.glide:compiler:4.9.0'
 
     // Bottom sheet
     implementation 'com.flipboard:bottomsheet-core:1.5.1'
@@ -206,6 +204,4 @@ dependencies {
 
     // Disk LRU cache
     implementation project(':disk-cache')
-
-    implementation 'androidx.multidex:multidex:2.0.1'
 }

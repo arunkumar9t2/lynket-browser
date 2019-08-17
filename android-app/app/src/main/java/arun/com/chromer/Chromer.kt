@@ -54,7 +54,6 @@ open class Chromer : Application() {
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
-            // Stetho.initializeWithDefaults(this);
             /*StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                     //.detectAll()
                     .penaltyLog()

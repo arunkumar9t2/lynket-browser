@@ -32,10 +32,34 @@ buildscript {
 }
 
 allprojects {
+    def baseAndroidGroup = 'dev.arunkumar.android'
+    version = '1.0.0'
+    def repoUrl = "https://raw.github.com/arunkumar9t2/base-android/master/maven-repo"
+
     repositories {
         google()
         maven { url "https://jitpack.io" }
         jcenter()
+        maven {
+            url "${repoUrl}/releases"
+            //noinspection UnstableApiUsage
+            mavenContent {
+                releasesOnly()
+            }
+            content {
+                includeGroup baseAndroidGroup
+            }
+        }
+        maven {
+            url "${repoUrl}/snapshots"
+            //noinspection UnstableApiUsage
+            mavenContent {
+                snapshotsOnly()
+            }
+            content {
+                includeGroup baseAndroidGroup
+            }
+        }
     }
 
     configurations {

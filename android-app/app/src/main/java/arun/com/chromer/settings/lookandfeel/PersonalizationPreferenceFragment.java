@@ -31,7 +31,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 
 import androidx.core.content.ContextCompat;
-import androidx.preference.SwitchPreferenceCompat;
+import androidx.preference.SwitchPreference;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
@@ -215,7 +215,7 @@ public class PersonalizationPreferenceFragment extends BasePreferenceFragment im
 
     private void setupDynamicToolbar() {
         dynamicColorPreference.setOnPreferenceClickListener(preference -> {
-            final SwitchPreferenceCompat switchCompat = (SwitchPreferenceCompat) preference;
+            final SwitchPreference switchCompat = (SwitchPreference) preference;
             final boolean isChecked = switchCompat.isChecked();
             if (isChecked) {
                 new MaterialDialog.Builder(getActivity())
