@@ -55,13 +55,10 @@ import arun.com.chromer.shared.Constants.G_COMMUNITY_URL
 import arun.com.chromer.shared.FabHandler
 import arun.com.chromer.shared.base.Snackable
 import arun.com.chromer.shared.base.activity.BaseActivity
-import arun.com.chromer.shared.behavior.FloatingActionButtonBehavior
 import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.tabs.ui.TabsFragment
 import arun.com.chromer.util.RxEventBus
 import arun.com.chromer.util.Utils
-import arun.com.chromer.util.glide.GlideApp
-import butterknife.OnClick
 import com.afollestad.materialdialogs.GravityEnum
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.StackingBehavior
@@ -74,8 +71,6 @@ import com.mikepenz.materialdrawer.DrawerBuilder
 import com.mikepenz.materialdrawer.model.DividerDrawerItem
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
-import it.sephiroth.android.library.bottomnavigation.BottomBehavior
-import it.sephiroth.android.library.bottomnavigation.BottomNavigation
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
@@ -89,10 +84,8 @@ class HomeActivity : BaseActivity(), Snackable {
     @Inject
     lateinit var tabsManger: TabsManager
 
-    private lateinit var activeFragmentManager: ActiveFragmentsManager
-
-    // Track bottom nav selection across config changes.
-    private var selectedIndex: Int = HOME
+    override fun inject(activityComponent: ActivityComponent) = activityComponent.inject(this)
+    override fun getLayoutRes() = R.layout.activity_main
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme_NoActionBar)
@@ -104,19 +97,10 @@ class HomeActivity : BaseActivity(), Snackable {
 
         Changelog.conditionalShow(this)
 
-        selectedIndex = savedInstanceState?.getInt(SELECTED_INDEX) ?: HOME
-
-        setupToolbar()
-        setupFab()
         setupSearchBar()
         setupDrawer()
-        setupFragments(savedInstanceState)
         setupEventListeners()
     }
-
-    override fun inject(activityComponent: ActivityComponent) = activityComponent.inject(this)
-
-    override fun getLayoutRes() = R.layout.activity_main
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.home_menu, menu)
@@ -142,58 +126,9 @@ class HomeActivity : BaseActivity(), Snackable {
         subs.add(rxEventBus.filteredEvents<TabsManager.FinishRoot>().subscribe { finish() })
     }
 
-    private fun setupFragments(savedInstanceState: Bundle?) {
-        activeFragmentManager = activeFragmentManagerFactory.get(supportFragmentManager, materialSearchView, appbar, fab)
-        activeFragmentManager.initialize(savedInstanceState)
-
-        bottomNavigation.setOnMenuItemClickListener(object : BottomNavigation.OnMenuItemSelectionListener {
-            override fun onMenuItemSelect(itemId: Int, position: Int, fromUser: Boolean) {
-                activeFragmentManager.handleBottomMenuClick(itemId)
-                selectedIndex = position
-            }
-
-            override fun onMenuItemReselect(itemId: Int, position: Int, fromUser: Boolean) {
-            }
-        })
-    }
-
-    override fun onSaveInstanceState(outState: Bundle?) {
-        outState?.putInt(SELECTED_INDEX, bottomNavigation.selectedIndex)
-        super.onSaveInstanceState(outState)
-    }
-
-    private fun setupFab() {
-        (fab.layoutParams as CoordinatorLayout.LayoutParams).behavior = FloatingActionButtonBehavior()
-    }
-
-    private fun setupToolbar() {
-        GlideApp.with(this).load(R.drawable.chromer_header_small).into(backdrop)
-        // Hide title when expanded
-        collapsingToolbar.title = " "
-        appbar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
-            var isShow = false
-            var scrollRange = -1
-
-            override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
-                if (scrollRange == -1) {
-                    scrollRange = appBarLayout!!.totalScrollRange
-                }
-                if (scrollRange + verticalOffset == 0) {
-                    collapsingToolbar.title = toolbar.title
-                    isShow = true
-                } else if (isShow) {
-                    collapsingToolbar.title = " "
-                    isShow = false
-                }
-            }
-        })
-    }
-
     private fun setupDrawer() {
-        setSupportActionBar(toolbar)
         with(DrawerBuilder()) {
             withActivity(this@HomeActivity)
-            withToolbar(toolbar)
             withAccountHeader(
                     with(AccountHeaderBuilder()) {
                         withActivity(this@HomeActivity)
@@ -288,20 +223,13 @@ class HomeActivity : BaseActivity(), Snackable {
             subs.add(focusChanges().subscribe { hasFocus ->
                 TransitionManager.beginDelayedTransition(coordinatorLayout, Fade().apply {
                     addTarget(shadowView)
-                    addTarget(bottomNavigation)
                 })
-                handleBottomBar(hasFocus)
                 if (hasFocus) {
                     shadowView.show()
                 } else {
                     shadowView.gone()
                 }
             })
-
-            // Reveal the search bar with animation after layout pass
-            if (selectedIndex == HOME) {
-                post { materialSearchView.circularRevealWithSelfCenter() }
-            }
         }
     }
 
@@ -336,28 +264,11 @@ class HomeActivity : BaseActivity(), Snackable {
         }.show()
     }
 
-    /**
-     * Trigger's coordinator's layout dispatch for scrolling manually.
-     */
-    private fun handleBottomBar(hide: Boolean) {
-        val bottomBehavior = (bottomNavigation.layoutParams as CoordinatorLayout.LayoutParams).behavior as BottomBehavior
-        bottomBehavior.onNestedFling(
-                coordinatorLayout,
-                bottomNavigation,
-                materialSearchView,
-                0f,
-                if (hide) 10000f else -10000f,
-                true
-        )
-    }
-
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         materialSearchView.onActivityResult(requestCode, resultCode, data)
     }
 
-    @OnClick(R.id.fab)
     fun onFabClick() {
         supportFragmentManager.fragments
                 .asSequence()
