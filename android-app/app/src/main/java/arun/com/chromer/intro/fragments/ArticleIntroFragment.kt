@@ -25,7 +25,7 @@ import arun.com.chromer.R
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.fragment.FragmentComponent
 import arun.com.chromer.shared.base.fragment.BaseFragment
-import arun.com.chromer.tabs.DefaultTabsManager
+import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.glide.GlideApp
 import butterknife.OnClick
 import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder
@@ -40,7 +40,7 @@ open class ArticleIntroFragment : BaseFragment(), ISlideBackgroundColorHolder {
     }
 
     @Inject
-    lateinit var tabsManager: DefaultTabsManager
+    lateinit var tabsManager: TabsManager
 
     override fun inject(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
     override fun getLayoutRes() = R.layout.fragment_article_intro

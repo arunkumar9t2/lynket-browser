@@ -22,7 +22,6 @@ package arun.com.chromer.tabs.ui
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import arun.com.chromer.data.website.WebsiteRepository
-import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.tabs.TabsManager
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -34,7 +33,7 @@ import javax.inject.Inject
 class TabsViewModel
 @Inject
 constructor(
-        private val tabsManager: DefaultTabsManager,
+        private val tabsManager: TabsManager,
         private val websiteRepository: WebsiteRepository
 ) : ViewModel() {
     val loadingLiveData = MutableLiveData<Boolean>()

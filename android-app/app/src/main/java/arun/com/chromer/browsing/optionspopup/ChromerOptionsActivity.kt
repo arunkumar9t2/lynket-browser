@@ -36,7 +36,7 @@ import arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_ARTICLE
 import arun.com.chromer.shared.Constants.EXTRA_KEY_ORIGINAL_URL
 import arun.com.chromer.shared.base.activity.BaseActivity
 import arun.com.chromer.shortcuts.HomeScreenShortcutCreatorActivity
-import arun.com.chromer.tabs.DefaultTabsManager
+import arun.com.chromer.tabs.TabsManager
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import kotlinx.android.extensions.LayoutContainer
@@ -50,7 +50,7 @@ class ChromerOptionsActivity : BaseActivity() {
     private var fromArticle: Boolean = false
 
     @Inject
-    lateinit var tabsManager: DefaultTabsManager
+    lateinit var tabsManager: TabsManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

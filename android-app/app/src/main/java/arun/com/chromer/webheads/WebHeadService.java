@@ -68,7 +68,7 @@ import arun.com.chromer.data.website.model.Website;
 import arun.com.chromer.di.service.ServiceComponent;
 import arun.com.chromer.settings.Preferences;
 import arun.com.chromer.shared.Constants;
-import arun.com.chromer.tabs.DefaultTabsManager;
+import arun.com.chromer.tabs.TabsManager;
 import arun.com.chromer.util.SchedulerProvider;
 import arun.com.chromer.util.Utils;
 import arun.com.chromer.webheads.physics.SpringChain2D;
@@ -164,7 +164,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     WebsiteRepository websiteRepository;
 
     @Inject
-    DefaultTabsManager tabsManager;
+    TabsManager tabsManager;
 
     @Inject
     ArticlePreloader articlePreloader;

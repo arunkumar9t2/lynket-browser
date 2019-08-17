@@ -48,7 +48,7 @@ import arun.com.chromer.data.website.model.Website;
 import arun.com.chromer.di.activity.ActivityComponent;
 import arun.com.chromer.settings.Preferences;
 import arun.com.chromer.shared.base.activity.BaseActivity;
-import arun.com.chromer.tabs.DefaultTabsManager;
+import arun.com.chromer.tabs.TabsManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -73,7 +73,7 @@ public class WebHeadContextActivity extends BaseActivity implements WebsiteAdapt
     @BindView(R.id.context_activity_card_view)
     CardView rootCardView;
     @Inject
-    DefaultTabsManager tabsManager;
+    TabsManager tabsManager;
     private WebsiteAdapter websitesAdapter;
 
     @Override

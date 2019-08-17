@@ -28,7 +28,6 @@ import arun.com.chromer.webheads.WebHeadService
 import org.junit.Before
 import org.junit.Test
 import org.robolectric.Robolectric
-import org.robolectric.Shadows
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.shadows.ShadowApplication
 import javax.inject.Inject
@@ -39,7 +38,7 @@ import javax.inject.Inject
  */
 class DefaultTabsManagerTest : ChromerRobolectricSuite() {
     @Inject
-    lateinit var tabs: DefaultTabsManager
+    lateinit var tabs: TabsManager
 
     private val url = "https://www.example.com"
 

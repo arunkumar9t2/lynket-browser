@@ -47,7 +47,7 @@ import arun.com.chromer.history.HistoryActivity
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.settings.Preferences.*
 import arun.com.chromer.shortcuts.HomeScreenShortcutCreatorActivity
-import arun.com.chromer.tabs.DefaultTabsManager
+import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.Utils
 import arun.com.chromer.util.Utils.isPackageInstalled
 import arun.com.chromer.util.Utils.shareText
@@ -64,7 +64,7 @@ import javax.inject.Inject
 @PerActivity
 class MenuDelegate @Inject constructor(
         val activity: Activity,
-        val tabsManager: DefaultTabsManager,
+        val tabsManager: TabsManager,
         val preferences: Preferences
 ) {
     /**

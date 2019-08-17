@@ -80,17 +80,6 @@ constructor(
 
     private val subs = CompositeSubscription()
 
-    private val allBrowsingActivitiesName = arrayListOf<String>(
-            CustomTabActivity::class.java.name,
-            ArticleActivity::class.java.name,
-            WebViewActivity::class.java.name
-    )
-
-    val browsingActivitiesName = arrayListOf<String>(
-            CustomTabActivity::class.java.name,
-            WebViewActivity::class.java.name
-    )
-
     override fun openUrl(
             context: Context,
             website: Website,
@@ -212,7 +201,7 @@ constructor(
                             val urlMatches = url != null && website.matches(url)
 
                             val taskComponentMatches = activityNames?.contains(componentClassName)
-                                    ?: allBrowsingActivitiesName.contains(componentClassName)
+                                    ?: TabsManager.allBrowsingActivitiesName.contains(componentClassName)
 
                             if (taskComponentMatches && urlMatches) {
                                 foundAction(task)

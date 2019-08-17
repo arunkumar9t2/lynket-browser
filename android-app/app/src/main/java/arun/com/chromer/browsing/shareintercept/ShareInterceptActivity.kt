@@ -30,7 +30,7 @@ import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.shared.base.activity.BaseActivity
-import arun.com.chromer.tabs.DefaultTabsManager
+import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.SafeIntent
 import arun.com.chromer.util.Utils
 import javax.inject.Inject
@@ -39,7 +39,7 @@ import javax.inject.Inject
 class ShareInterceptActivity : BaseActivity() {
 
     @Inject
-    lateinit var tabsManager: DefaultTabsManager
+    lateinit var tabsManager: TabsManager
 
     @TargetApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {

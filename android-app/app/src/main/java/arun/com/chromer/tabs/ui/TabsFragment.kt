@@ -37,7 +37,6 @@ import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.show
 import arun.com.chromer.shared.FabHandler
 import arun.com.chromer.shared.base.fragment.BaseFragment
-import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.glide.GlideApp
 import com.afollestad.materialdialogs.MaterialDialog
@@ -49,7 +48,7 @@ import javax.inject.Inject
  */
 class TabsFragment : BaseFragment(), FabHandler {
     @Inject
-    lateinit var tabsManager: DefaultTabsManager
+    lateinit var tabsManager: TabsManager
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
