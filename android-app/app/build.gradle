@@ -37,6 +37,11 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 
+kapt {
+    useBuildCache = true
+    correctErrorTypes = true
+}
+
 android {
     compileSdkVersion 28
     defaultConfig {
