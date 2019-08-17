@@ -32,6 +32,19 @@ import rx.Single
  * Helper class to manage tabs opened by Lynket. Responsible for managing Lynket's task stack.
  */
 interface TabsManager {
+
+    companion object {
+        val allBrowsingActivitiesName = arrayListOf<String>(
+                CustomTabActivity::class.java.name,
+                ArticleActivity::class.java.name,
+                WebViewActivity::class.java.name
+        )
+        val browsingActivitiesName = arrayListOf<String>(
+                CustomTabActivity::class.java.name,
+                WebViewActivity::class.java.name
+        )
+    }
+
     // Event for closing non browsing activity.
     class FinishRoot
 

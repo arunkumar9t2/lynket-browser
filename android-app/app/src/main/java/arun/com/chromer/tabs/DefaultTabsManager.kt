@@ -57,7 +57,10 @@ import arun.com.chromer.util.Utils.openDrawOverlaySettings
 import arun.com.chromer.webheads.WebHeadService
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
+import rx.Completable
 import rx.Single
+import rx.schedulers.Schedulers
+import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -75,16 +78,7 @@ constructor(
         private val rxEventBus: RxEventBus
 ) : TabsManager {
 
-    private val allBrowsingActivitiesName = arrayListOf<String>(
-            CustomTabActivity::class.java.name,
-            ArticleActivity::class.java.name,
-            WebViewActivity::class.java.name
-    )
-
-    val browsingActivitiesName = arrayListOf<String>(
-            CustomTabActivity::class.java.name,
-            WebViewActivity::class.java.name
-    )
+    private val subs = CompositeSubscription()
 
     override fun openUrl(
             context: Context,
@@ -94,6 +88,31 @@ constructor(
             fromNewTab: Boolean,
             fromAmp: Boolean,
             incognito: Boolean
+    ) {
+        Completable
+                .fromAction {
+                    openUrlInternal(
+                            fromApp,
+                            fromWebHeads,
+                            context,
+                            website,
+                            fromAmp,
+                            incognito,
+                            fromNewTab
+                    )
+                }.subscribeOn(Schedulers.computation())
+                .subscribe()
+                .let(subs::add)
+    }
+
+    private fun openUrlInternal(
+            fromApp: Boolean,
+            fromWebHeads: Boolean,
+            context: Context,
+            website: Website,
+            fromAmp: Boolean,
+            incognito: Boolean,
+            fromNewTab: Boolean
     ) {
         // Clear non browsing activities if it was external intent.
         if (!fromApp) {
@@ -182,7 +201,7 @@ constructor(
                             val urlMatches = url != null && website.matches(url)
 
                             val taskComponentMatches = activityNames?.contains(componentClassName)
-                                    ?: allBrowsingActivitiesName.contains(componentClassName)
+                                    ?: TabsManager.allBrowsingActivitiesName.contains(componentClassName)
 
                             if (taskComponentMatches && urlMatches) {
                                 foundAction(task)

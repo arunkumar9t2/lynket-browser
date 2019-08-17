@@ -28,6 +28,8 @@ import org.mockito.MockitoAnnotations
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
+import rx.plugins.RxJavaHooks
+import rx.schedulers.Schedulers
 import javax.inject.Inject
 
 
@@ -45,8 +47,16 @@ abstract class ChromerRobolectricSuite {
     @Before
     fun setup() {
         MockitoAnnotations.initMocks(this)
+        setupRxSchedulers()
         testAppComponent = (application as ChromerTestApplication).appComponent as TestAppComponent
         testAppComponent.inject(this)
+    }
+
+
+    private fun setupRxSchedulers() {
+        RxJavaHooks.setOnComputationScheduler { Schedulers.trampoline() }
+        RxJavaHooks.setOnIOScheduler { Schedulers.trampoline() }
+        RxJavaHooks.setOnNewThreadScheduler { Schedulers.trampoline() }
     }
 
     internal fun clearPreferences() {

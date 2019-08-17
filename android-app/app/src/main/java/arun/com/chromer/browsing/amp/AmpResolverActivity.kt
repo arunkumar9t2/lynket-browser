@@ -28,7 +28,7 @@ import arun.com.chromer.R
 import arun.com.chromer.browsing.BrowsingActivity
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
-import arun.com.chromer.tabs.DefaultTabsManager
+import arun.com.chromer.tabs.TabsManager
 import com.afollestad.materialdialogs.MaterialDialog
 import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
@@ -37,7 +37,7 @@ class AmpResolverActivity : BrowsingActivity() {
     private var ampResolverDialog: AmpResolverDialog? = null
 
     @Inject
-    lateinit var tabsManager: DefaultTabsManager
+    lateinit var tabsManager: TabsManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

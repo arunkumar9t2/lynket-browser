@@ -29,7 +29,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import arun.com.chromer.R
 import arun.com.chromer.data.website.model.Website
-import arun.com.chromer.tabs.*
+import arun.com.chromer.tabs.ARTICLE
+import arun.com.chromer.tabs.CUSTOM_TAB
+import arun.com.chromer.tabs.TabsManager
+import arun.com.chromer.tabs.WEB_VIEW
 import arun.com.chromer.util.glide.GlideRequests
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -44,7 +47,7 @@ import rx.subscriptions.CompositeSubscription
 class TabsAdapter
 constructor(
         val glideRequests: GlideRequests,
-        val tabsManager: DefaultTabsManager
+        val tabsManager: TabsManager
 ) : RecyclerView.Adapter<TabsAdapter.TabsViewHolder>() {
 
     private val tabs: ArrayList<TabsManager.Tab> = ArrayList()

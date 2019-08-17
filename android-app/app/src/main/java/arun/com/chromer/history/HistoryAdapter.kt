@@ -32,7 +32,7 @@ import arun.com.chromer.di.scopes.PerFragment
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.inflate
 import arun.com.chromer.extenstions.show
-import arun.com.chromer.tabs.DefaultTabsManager
+import arun.com.chromer.tabs.TabsManager
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.bumptech.glide.RequestManager
@@ -45,7 +45,7 @@ import javax.inject.Inject
 class HistoryAdapter
 @Inject
 constructor(
-        private val defaultTabsManager: DefaultTabsManager,
+        private val defaultTabsManager: TabsManager,
         private val requestManager: RequestManager
 ) : PagedListAdapter<Website, HistoryAdapter.HistoryViewHolder>(Website.DIFFER) {
 

@@ -33,11 +33,13 @@ import arun.com.chromer.di.activity.ActivityModule;
 import arun.com.chromer.di.service.ServiceComponent;
 import arun.com.chromer.di.service.ServiceModule;
 import arun.com.chromer.tabs.DefaultTabsManager;
+import arun.com.chromer.tabs.TabsModule;
 import dagger.Component;
 
 @Singleton
 @Component(modules = {
         AppModule.class,
+        TabsModule.class,
         DataModule.class,
 })
 public interface AppComponent {

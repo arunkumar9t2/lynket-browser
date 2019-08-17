@@ -50,7 +50,7 @@ import arun.com.chromer.extenstions.setMenuBackgroundColor
 import arun.com.chromer.extenstions.show
 import arun.com.chromer.extenstions.watch
 import arun.com.chromer.settings.Preferences.*
-import arun.com.chromer.tabs.DefaultTabsManager
+import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.ColorUtil
 import arun.com.chromer.util.Utils
 import butterknife.OnClick
@@ -80,7 +80,7 @@ class ArticleActivity : BrowsingActivity() {
     private var articleScrollListener: ArticleScrollListener? = null
 
     @Inject
-    lateinit var tabsManager: DefaultTabsManager
+    lateinit var tabsManager: TabsManager
     @Inject
     lateinit var menuDelegate: MenuDelegate
     @Inject
@@ -184,7 +184,13 @@ class ArticleActivity : BrowsingActivity() {
         // rendering tab.
         finish()
         Toast.makeText(this, R.string.article_loading_failed, Toast.LENGTH_SHORT).show()
-        tabsManager.openBrowsingTab(this, Website(intent.dataString!!), true, false, tabsManager.browsingActivitiesName)
+        tabsManager.openBrowsingTab(
+                this,
+                Website(intent.dataString!!),
+                smart = true,
+                fromNewTab = false,
+                activityNames = TabsManager.browsingActivitiesName
+        )
     }
 
     private fun onArticleLoaded(webArticle: WebArticle) {

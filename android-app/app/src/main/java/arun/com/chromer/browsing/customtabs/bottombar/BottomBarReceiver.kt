@@ -28,14 +28,14 @@ import arun.com.chromer.R
 import arun.com.chromer.browsing.customtabs.CustomTabActivity
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.shared.Constants
-import arun.com.chromer.tabs.DefaultTabsManager
+import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.Utils
 import timber.log.Timber
 import javax.inject.Inject
 
 class BottomBarReceiver : BroadcastReceiver() {
     @Inject
-    lateinit var tabsManager: DefaultTabsManager
+    lateinit var tabsManager: TabsManager
 
     override fun onReceive(context: Context, intent: Intent) {
         (context.applicationContext as Chromer).appComponent.inject(this)

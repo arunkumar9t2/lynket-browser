@@ -56,7 +56,6 @@ import arun.com.chromer.shared.FabHandler
 import arun.com.chromer.shared.base.Snackable
 import arun.com.chromer.shared.base.activity.BaseActivity
 import arun.com.chromer.shared.behavior.FloatingActionButtonBehavior
-import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.tabs.ui.TabsFragment
 import arun.com.chromer.util.RxEventBus
@@ -82,13 +81,13 @@ import javax.inject.Inject
 
 class HomeActivity : BaseActivity(), Snackable {
     @Inject
-    lateinit var tabsManager: DefaultTabsManager
+    lateinit var tabsManager: TabsManager
     @Inject
     lateinit var rxEventBus: RxEventBus
     @Inject
     lateinit var activeFragmentManagerFactory: ActiveFragmentsManager.Factory
     @Inject
-    lateinit var tabsManger: DefaultTabsManager
+    lateinit var tabsManger: TabsManager
 
     private lateinit var activeFragmentManager: ActiveFragmentsManager
 

@@ -30,7 +30,7 @@ import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.extenstions.showKeyboard
 import arun.com.chromer.shared.base.activity.BaseActivity
-import arun.com.chromer.tabs.DefaultTabsManager
+import arun.com.chromer.tabs.TabsManager
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.afollestad.materialdialogs.MaterialDialog
@@ -47,7 +47,7 @@ class NewTabDialogActivity : BaseActivity() {
     private var newTabDialog: NewTabDialog? = null
 
     @Inject
-    lateinit var tabsManager: DefaultTabsManager
+    lateinit var tabsManager: TabsManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
