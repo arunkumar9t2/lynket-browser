@@ -27,11 +27,13 @@ import arun.com.chromer.ChromerRobolectricSuite;
 import arun.com.chromer.data.apps.DefaultAppRepositoryTest;
 import arun.com.chromer.di.data.TestDataModule;
 import arun.com.chromer.tabs.DefaultTabsManagerTest;
+import arun.com.chromer.tabs.TabsModule;
 import dagger.Component;
 
 @Singleton
 @Component(modules = {
         TestAppModule.class,
+        TabsModule.class,
         TestDataModule.class
 })
 public interface TestAppComponent extends AppComponent {
