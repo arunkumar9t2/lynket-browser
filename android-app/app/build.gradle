@@ -139,6 +139,8 @@ dependencies {
     implementation 'dev.arunkumar.android:logging:master-SNAPSHOT'
     implementation 'dev.arunkumar.android:dagger-viewmodel:master-SNAPSHOT'
     implementation 'dev.arunkumar.android:viewmodel-utils:master-SNAPSHOT'
+    implementation 'dev.arunkumar.android:epoxy-utils:master-SNAPSHOT'
+    implementation 'dev.arunkumar.android:rx-utils:master-SNAPSHOT'
 
     // Dependency Injection
     implementation 'com.google.dagger:dagger:2.23.2'

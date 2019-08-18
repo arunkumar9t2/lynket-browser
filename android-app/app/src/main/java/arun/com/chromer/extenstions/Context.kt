@@ -22,6 +22,7 @@ package arun.com.chromer.extenstions
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import androidx.annotation.StringRes
 
 /**
  * Created by Arunkumar on 10-12-2017.
@@ -46,4 +47,24 @@ fun Context.appName(packageName: String): String {
         null
     }
     return (if (ai != null) pm.getApplicationLabel(ai) else "(unknown)") as String
+}
+
+data class StringResource(
+        @param:StringRes val resource: Int,
+        val args: List<String> = emptyList(),
+        val resourceArgs: List<Int> = emptyList()
+)
+
+fun Context.resolveStringResource(stringResource: StringResource): String {
+    return when {
+        stringResource.args.isNotEmpty() -> getString(
+                stringResource.resource,
+                *stringResource.args.toTypedArray()
+        )
+        stringResource.resourceArgs.isNotEmpty() -> getString(
+                stringResource.resource,
+                *stringResource.resourceArgs.map(::getString).toTypedArray()
+        )
+        else -> getString(stringResource.resource)
+    }
 }

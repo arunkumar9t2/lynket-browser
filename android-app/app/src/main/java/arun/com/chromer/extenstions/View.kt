@@ -17,6 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+@file:Suppress("NOTHING_TO_INLINE")
+
 package arun.com.chromer.extenstions
 
 import android.animation.Animator
@@ -32,16 +34,18 @@ import androidx.annotation.LayoutRes
 import arun.com.chromer.util.Utils
 
 
-fun View.show() {
-    this.visibility = View.VISIBLE
+inline fun View.show(condition: Boolean = true) {
+    visibility = if (condition) View.VISIBLE else View.INVISIBLE
 }
 
-fun View.hide() {
-    this.visibility = View.INVISIBLE
+inline fun View.hide(condition: Boolean = true) {
+    visibility = if (condition) View.INVISIBLE else View.VISIBLE
 }
 
-fun View.gone() {
-    this.visibility = View.GONE
+inline fun View.gone(condition: Boolean = true) {
+    visibility = if (condition) View.GONE else {
+        View.VISIBLE
+    }
 }
 
 /**

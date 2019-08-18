@@ -28,6 +28,8 @@ import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.transition.Fade
 import androidx.transition.TransitionManager
 import arun.com.chromer.R
@@ -36,11 +38,9 @@ import arun.com.chromer.about.changelog.Changelog
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.di.scopes.PerActivity
-import arun.com.chromer.extenstions.circularHideWithSelfCenter
-import arun.com.chromer.extenstions.circularRevealWithSelfCenter
-import arun.com.chromer.extenstions.gone
-import arun.com.chromer.extenstions.show
+import arun.com.chromer.extenstions.*
 import arun.com.chromer.history.HistoryFragment
+import arun.com.chromer.home.epoxycontroller.HomeFeedController
 import arun.com.chromer.home.fragment.HomeFragment
 import arun.com.chromer.intro.ChromerIntroActivity
 import arun.com.chromer.payments.DonateActivity
@@ -69,19 +69,31 @@ import com.mikepenz.materialdrawer.DrawerBuilder
 import com.mikepenz.materialdrawer.model.DividerDrawerItem
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
+import dagger.Binds
+import dagger.Module
+import dagger.multibindings.IntoMap
+import dev.arunkumar.android.dagger.viewmodel.UsesViewModel
+import dev.arunkumar.android.dagger.viewmodel.ViewModelKey
+import dev.arunkumar.android.dagger.viewmodel.viewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-class HomeActivity : BaseActivity(), Snackable {
+class HomeActivity : BaseActivity(), Snackable, UsesViewModel {
     @Inject
     lateinit var tabsManager: TabsManager
     @Inject
     lateinit var rxEventBus: RxEventBus
     @Inject
     lateinit var tabsManger: TabsManager
+    @Inject
+    override lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val homeActivityViewModel by viewModel<HomeActivityViewModel>()
 
     override fun inject(activityComponent: ActivityComponent) = activityComponent.inject(this)
     override fun getLayoutRes() = R.layout.activity_main
+
+    private val homeFeedController = HomeFeedController()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme_NoActionBar)
@@ -95,6 +107,7 @@ class HomeActivity : BaseActivity(), Snackable {
 
         setupSearchBar()
         setupDrawer()
+        setupFeed()
         setupEventListeners()
     }
 
@@ -120,6 +133,13 @@ class HomeActivity : BaseActivity(), Snackable {
 
     private fun setupEventListeners() {
         subs.add(rxEventBus.filteredEvents<TabsManager.FinishRoot>().subscribe { finish() })
+    }
+
+    private fun setupFeed() {
+        homeFeedRecyclerView.setController(homeFeedController)
+        homeActivityViewModel.providerInfoLiveData.watch(this) { providerInfo ->
+            homeFeedController.customTabProviderInfo = providerInfo
+        }
     }
 
     private fun setupDrawer() {
@@ -437,6 +457,14 @@ class HomeActivity : BaseActivity(), Snackable {
             }
             return false
         }
+    }
+
+    @Module
+    abstract class HomeBuilder {
+        @Binds
+        @IntoMap
+        @ViewModelKey(HomeActivityViewModel::class)
+        abstract fun bindHomeViewModel(homeViewModel: HomeActivityViewModel): ViewModel
     }
 
     companion object {
