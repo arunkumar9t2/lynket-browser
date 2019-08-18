@@ -21,10 +21,8 @@ package arun.com.chromer.search.suggestion
 
 import `in`.arunkumarsampath.suggestions.RxSuggestions
 import android.app.Application
+import arun.com.chromer.R
 import arun.com.chromer.data.history.HistoryRepository
-import arun.com.chromer.search.suggestion.items.CopySuggestionItem
-import arun.com.chromer.search.suggestion.items.GoogleSuggestionItem
-import arun.com.chromer.search.suggestion.items.HistorySuggestionItem
 import arun.com.chromer.search.suggestion.items.SuggestionItem
 import arun.com.chromer.util.Utils
 import rx.Observable
@@ -36,13 +34,19 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.collections.ArrayList
+import kotlin.math.max
+import kotlin.math.min
 
 /**
  * Helper class that collates suggestions from multiple sources and publishes them in a single stream.
  */
 @Singleton
-class SuggestionsEngine @Inject
-constructor(private var application: Application, private val historyRepository: HistoryRepository) {
+class SuggestionsEngine
+@Inject
+constructor(
+        private var application: Application,
+        private val historyRepository: HistoryRepository
+) {
     private val suggestionsDebounce = 200L
     private val suggestionsLimit = 5
 
@@ -54,7 +58,7 @@ constructor(private var application: Application, private val historyRepository:
             stringObservable
                     .filter { s -> s != null }
                     .map { it.trim { query -> query <= ' ' } }
-                    .filter { s -> !s.isEmpty() }
+                    .filter { s -> s.isNotEmpty() }
         }
     }
 
@@ -64,7 +68,10 @@ constructor(private var application: Application, private val historyRepository:
      */
     fun suggestionsTransformer(): Transformer<String, List<SuggestionItem>> {
         return Transformer { suggestion ->
-            val deviceSuggestions = just(listOf(CopySuggestionItem(application)))
+            val deviceSuggestions = just(listOf(SuggestionItem.CopySuggestionItem(
+                    Utils.getClipBoardText(application) ?: "",
+                    application.getString(R.string.text_you_copied)
+            )))
             return@Transformer suggestion
                     .observeOn(Schedulers.io())
                     .compose(emptyStringFilter())
@@ -88,8 +95,8 @@ constructor(private var application: Application, private val historyRepository:
                             suggestions.addAll(googleList)
 
                             // Based on current length, figure out an index which we can use to fill history items.
-                            val currentLength = Math.min(suggestions.size, suggestionsLimit)
-                            var insertIndex = Math.min(Math.max(suggestionsLimit - 2, currentLength - historyList.size), currentLength)
+                            val currentLength = min(suggestions.size, suggestionsLimit)
+                            var insertIndex = min(max(suggestionsLimit - 2, currentLength - historyList.size), currentLength)
                             val historyMutable = historyList.toMutableList()
 
                             while (insertIndex < suggestionsLimit && historyMutable.isNotEmpty()) {
@@ -106,7 +113,6 @@ constructor(private var application: Application, private val historyRepository:
         }
     }
 
-
     /**
      * Fetches suggestions from Google and converts it to {@link GoogleSuggestionItem}
      */
@@ -116,11 +122,11 @@ constructor(private var application: Application, private val historyRepository:
                 return@Transformer just(emptyList())
             } else return@Transformer query
                     .compose(RxSuggestions.suggestionsTransformer(suggestionsLimit))
-                    .map { it.map { query -> GoogleSuggestionItem(query) } as List<SuggestionItem> }
-                    .onErrorReturn { Collections.emptyList() }
+                    .map<List<SuggestionItem>> {
+                        it.map { query -> SuggestionItem.GoogleSuggestionItem(query) }
+                    }.onErrorReturn { Collections.emptyList() }
         }
     }
-
 
     /**
      * Fetches matching items from History database and converts them to list of suggestions.
@@ -130,13 +136,16 @@ constructor(private var application: Application, private val historyRepository:
             return@Transformer query
                     .debounce(suggestionsDebounce, TimeUnit.MILLISECONDS)
                     .switchMap { historyRepository.search(it) }
-                    .map {
+                    .map<List<SuggestionItem>> {
                         it.asSequence()
-                                .map { query -> HistorySuggestionItem(query) }
-                                .take(suggestionsLimit)
-                                .toList() as List<SuggestionItem>
+                                .map { website ->
+                                    SuggestionItem.HistorySuggestionItem(
+                                            website.safeLabel(),
+                                            website.url
+                                    )
+                                }.take(suggestionsLimit)
+                                .toList()
                     }.onErrorReturn { emptyList() }
         }
     }
-
 }
