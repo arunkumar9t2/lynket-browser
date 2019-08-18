@@ -43,7 +43,7 @@ internal constructor(
 ) : HistoryRepository {
 
     override fun get(website: Website): Observable<Website> {
-        return historyStore[website]
+        return historyStore.get(website)
                 .doOnNext { saved ->
                     if (saved == null) {
                         Timber.d("History miss for: %s", website.url)

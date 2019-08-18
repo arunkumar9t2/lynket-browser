@@ -28,7 +28,7 @@ import rx.Observable
  * Created by Arunkumar on 03-03-2017.
  */
 interface HistoryRepository {
-    operator fun get(website: Website): Observable<Website>
+    fun get(website: Website): Observable<Website>
 
     fun insert(website: Website): Observable<Website>
 
