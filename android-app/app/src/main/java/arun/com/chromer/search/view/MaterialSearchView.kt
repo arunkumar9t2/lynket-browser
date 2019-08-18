@@ -28,7 +28,6 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -105,8 +104,10 @@ class MaterialSearchView : RelativeLayout, Search.View {
 
     private fun init(context: Context) {
         if (context is ProvidesActivityComponent) {
-            viewComponent = context.activityComponent.newViewComponent(ViewModule(this))
-            viewComponent?.inject(this)
+            viewComponent = context
+                    .activityComponent
+                    .newViewComponent(ViewModule(this))
+                    .also { it.inject(this) }
         }
 
         xIcon = IconicsDrawable(context)
@@ -230,7 +231,7 @@ class MaterialSearchView : RelativeLayout, Search.View {
             when (resultCode) {
                 Activity.RESULT_OK -> {
                     val resultList = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                    if (resultList != null && !resultList.isEmpty()) {
+                    if (resultList != null && resultList.isNotEmpty()) {
                         searchPerformed(getSearchUrl(resultList[0]))
                     }
                 }

@@ -27,9 +27,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import arun.com.chromer.R
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.show
@@ -75,7 +75,11 @@ class SuggestionAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SuggestionItemHolder {
-        return SuggestionItemHolder(layoutInflater.inflate(R.layout.widget_suggestions_item_template, parent, false))
+        return SuggestionItemHolder(layoutInflater.inflate(
+                R.layout.widget_suggestions_item_template,
+                parent,
+                false
+        ))
     }
 
     override fun onBindViewHolder(holder: SuggestionItemHolder, position: Int) {
@@ -83,13 +87,9 @@ class SuggestionAdapter(
         holder.bind(suggestionItem)
     }
 
-    override fun getItemCount(): Int {
-        return suggestionItems.size
-    }
+    override fun getItemCount(): Int = suggestionItems.size
 
-    override fun getItemId(position: Int): Long {
-        return suggestionItems[position].hashCode().toLong()
-    }
+    override fun getItemId(position: Int): Long = suggestionItems[position].hashCode().toLong()
 
     fun updateSuggestions(newSuggestions: List<SuggestionItem>) {
         val suggestionDiff = SuggestionDiff(suggestionItems, newSuggestions)

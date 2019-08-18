@@ -27,7 +27,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.FragmentManager
 import androidx.transition.Fade
 import androidx.transition.TransitionManager
@@ -46,7 +45,6 @@ import arun.com.chromer.home.fragment.HomeFragment
 import arun.com.chromer.intro.ChromerIntroActivity
 import arun.com.chromer.payments.DonateActivity
 import arun.com.chromer.search.view.MaterialSearchView
-import arun.com.chromer.search.view.behavior.MaterialSearchViewBehavior
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.settings.SettingsGroupActivity
 import arun.com.chromer.shared.Constants
@@ -205,8 +203,6 @@ class HomeActivity : BaseActivity(), Snackable {
 
     private fun setupSearchBar() {
         materialSearchView.apply {
-            // Attach a behaviour to handle scroll
-            (layoutParams as CoordinatorLayout.LayoutParams).behavior = MaterialSearchViewBehavior()
             // Handle voice item failed
             subs.add(voiceSearchFailed().subscribe {
                 snack(getString(R.string.no_voice_rec_apps))

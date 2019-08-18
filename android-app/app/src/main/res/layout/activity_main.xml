@@ -17,12 +17,12 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/card_background_light"
     tools:context="arun.com.chromer.home.HomeActivity">
 
     <View
@@ -32,11 +32,19 @@
         android:background="@color/shadow_color"
         android:visibility="gone" />
 
+    <com.airbnb.epoxy.EpoxyRecyclerView
+        android:id="@+id/homeFeedRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <arun.com.chromer.search.view.MaterialSearchView
         android:id="@+id/materialSearchView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:visibility="invisible" />
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
 
