@@ -45,6 +45,7 @@
         android:ellipsize="end"
         android:fontFamily="sans-serif-condensed"
         android:gravity="center"
+        android:maxLength="35"
         android:maxLines="2"
         android:paddingLeft="2dp"
         android:paddingRight="2dp"

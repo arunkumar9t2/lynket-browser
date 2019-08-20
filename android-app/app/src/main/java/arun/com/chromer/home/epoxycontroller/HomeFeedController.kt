@@ -7,6 +7,7 @@ import arun.com.chromer.home.epoxycontroller.model.CustomTabProviderInfo
 import arun.com.chromer.home.epoxycontroller.model.headerLayout
 import arun.com.chromer.home.epoxycontroller.model.providerInfo
 import arun.com.chromer.home.epoxycontroller.model.recentsCard
+import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.epoxy.indeterminateProgress
 import com.airbnb.epoxy.AsyncEpoxyController
 import dev.arunkumar.common.result.Result
@@ -15,7 +16,10 @@ import javax.inject.Inject
 
 class HomeFeedController
 @Inject
-constructor(private val application: Application) : AsyncEpoxyController() {
+constructor(
+        private val application: Application,
+        private val tabsManager: TabsManager
+) : AsyncEpoxyController() {
 
     var customTabProviderInfo: CustomTabProviderInfo? = null
         set(value) {
@@ -50,6 +54,7 @@ constructor(private val application: Application) : AsyncEpoxyController() {
                     recentsCard {
                         id("recents-card")
                         websites(recents.data)
+                        tabsManager(tabsManager)
                     }
                 }
                 is Result.Loading -> {

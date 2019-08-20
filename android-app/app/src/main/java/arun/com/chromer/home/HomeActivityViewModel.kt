@@ -21,7 +21,6 @@ import dev.arunkumar.common.result.Result
 import hu.akarnokd.rxjava.interop.RxJavaInterop
 import io.reactivex.Observable
 import io.reactivex.Single
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @SuppressLint("CheckResult")
@@ -49,7 +48,6 @@ constructor(
 
     private fun bindRecentsInfo() {
         RxJavaInterop.toV2Flowable(historyRepository.recents())
-                .delay(3, TimeUnit.SECONDS, schedulerProvider.pool)
                 .asResult()
                 .compose(schedulerProvider.ioToUi())
                 .subscribe(recentsLiveData::setValue)
