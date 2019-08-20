@@ -1,7 +1,10 @@
 package arun.com.chromer.home.epoxycontroller.model
 
+import android.content.Intent
+import android.view.View
 import arun.com.chromer.R
 import arun.com.chromer.data.website.model.Website
+import arun.com.chromer.history.HistoryActivity
 import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.glide.GlideApp
 import com.airbnb.epoxy.EpoxyAttribute
@@ -42,6 +45,10 @@ abstract class RecentsCardModel : KotlinEpoxyModelWithHolder<RecentsCardModel.Vi
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     lateinit var tabsManager: TabsManager
 
+    private val historyClickListener = View.OnClickListener { view ->
+        view.context.startActivity(Intent(view.context, HistoryActivity::class.java))
+    }
+
     override fun bind(holder: ViewHolder) {
         holder.apply {
             recentsHeaderIcon.setImageDrawable(
@@ -59,6 +66,7 @@ abstract class RecentsCardModel : KotlinEpoxyModelWithHolder<RecentsCardModel.Vi
                     }
                 }
             }
+            historyButton.setOnClickListener(historyClickListener)
         }
     }
 
