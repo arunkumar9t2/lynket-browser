@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardPreventCornerOverlap="true"
+    app:cardUseCompatPadding="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/recentsHeaderIcon"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:padding="4dp"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toTopOf="@+id/divider"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription,RtlHardcoded"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/historyButton"
+            style="@style/BorderlessButton"
+            android:text="@string/title_history"
+            app:layout_constraintBottom_toTopOf="@+id/recentsEpoxyGrid"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/recents_header"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/recents_header"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="start|center"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:gravity="start|center"
+            android:text="@string/recents"
+            android:textColor="@color/material_dark_color"
+            android:textSize="16sp"
+            android:visibility="visible"
+            app:layout_constraintLeft_toRightOf="@id/recentsHeaderIcon"
+            app:layout_constraintStart_toEndOf="@id/recentsHeaderIcon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/md_grey_600"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recents_header" />
+
+
+        <com.airbnb.epoxy.EpoxyRecyclerView
+            android:id="@+id/recentsEpoxyGrid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recents_header"
+            tools:itemCount="8"
+            tools:listitem="@layout/activity_main_recents_item_template"
+            tools:spanCount="4" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

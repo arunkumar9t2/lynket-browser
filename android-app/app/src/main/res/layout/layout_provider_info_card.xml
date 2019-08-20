@@ -13,20 +13,16 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:focusable="true"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:weightSum="1"
         tools:ignore="RtlHardcoded">
 
         <ImageView
             android:id="@+id/providerIcon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_margin="5dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
             android:scaleType="fitCenter"
@@ -73,16 +69,8 @@
 
         <TextView
             android:id="@+id/providerChangeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:gravity="center"
+            style="@style/BorderlessButton"
             android:text="@string/Change"
-            android:textAppearance="@style/TextAppearance.AppCompat.Button"
-            android:textColor="@color/colorAccent"
-            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

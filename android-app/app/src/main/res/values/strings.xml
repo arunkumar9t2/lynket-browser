@@ -323,4 +323,6 @@
     <string name="minimize_normally">Minimize normally</string>
     <string name="minimize_to_web_head">Minimize and open Web Head always</string>
     <string name="minimize_behavior">Minimize behavior</string>
+    <string name="status">Status</string>
+    <string name="pages">Pages</string>
 </resources>

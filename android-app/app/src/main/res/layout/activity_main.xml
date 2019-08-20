@@ -32,11 +32,6 @@
         android:background="@color/shadow_color"
         android:visibility="gone" />
 
-    <com.airbnb.epoxy.EpoxyRecyclerView
-        android:id="@+id/homeFeedRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
     <arun.com.chromer.search.view.MaterialSearchView
         android:id="@+id/materialSearchView"
         android:layout_width="0dp"
@@ -45,6 +40,14 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         tools:visibility="visible" />
+
+    <com.airbnb.epoxy.EpoxyRecyclerView
+        android:id="@+id/homeFeedRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

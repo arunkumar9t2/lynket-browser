@@ -93,7 +93,8 @@ class HomeActivity : BaseActivity(), Snackable, UsesViewModel {
     override fun inject(activityComponent: ActivityComponent) = activityComponent.inject(this)
     override fun getLayoutRes() = R.layout.activity_main
 
-    private val homeFeedController = HomeFeedController()
+    @Inject
+    lateinit var homeFeedController: HomeFeedController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme_NoActionBar)
@@ -137,8 +138,14 @@ class HomeActivity : BaseActivity(), Snackable, UsesViewModel {
 
     private fun setupFeed() {
         homeFeedRecyclerView.setController(homeFeedController)
-        homeActivityViewModel.providerInfoLiveData.watch(this) { providerInfo ->
-            homeFeedController.customTabProviderInfo = providerInfo
+        val owner = this
+        homeActivityViewModel.run {
+            providerInfoLiveData.watch(owner) { providerInfo ->
+                homeFeedController.customTabProviderInfo = providerInfo
+            }
+            recentsLiveData.watch(owner) { recentWebsites ->
+                homeFeedController.recentWebSites = recentWebsites
+            }
         }
     }
 
