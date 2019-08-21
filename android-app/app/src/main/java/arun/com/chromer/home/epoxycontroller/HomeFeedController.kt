@@ -44,23 +44,23 @@ constructor(
                 providerInfo(it)
             }
         }
-        if (recentWebSites.hasValue) {
-            when (val recents = recentWebSites) {
-                is Result.Success -> {
-                    headerLayout {
-                        id("pages-header")
-                        title(application.getString(R.string.pages))
-                    }
-                    recentsCard {
-                        id("recents-card")
-                        websites(recents.data)
-                        tabsManager(tabsManager)
-                    }
+
+        headerLayout {
+            id("pages-header")
+            title(application.getString(R.string.pages))
+        }
+
+        when (val recents = recentWebSites) {
+            is Result.Success -> {
+                recentsCard {
+                    id("recents-card")
+                    websites(recents.data)
+                    tabsManager(tabsManager)
                 }
-                is Result.Loading -> {
-                    indeterminateProgress {
-                        id("recents-progress")
-                    }
+            }
+            is Result.Loading -> {
+                indeterminateProgress {
+                    id("recents-progress")
                 }
             }
         }

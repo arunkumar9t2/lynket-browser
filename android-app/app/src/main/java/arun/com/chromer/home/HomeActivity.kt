@@ -30,6 +30,7 @@ import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.transition.Fade
 import androidx.transition.TransitionManager
 import arun.com.chromer.R
@@ -137,7 +138,10 @@ class HomeActivity : BaseActivity(), Snackable, UsesViewModel {
     }
 
     private fun setupFeed() {
-        homeFeedRecyclerView.setController(homeFeedController)
+        homeFeedRecyclerView.apply {
+            setController(homeFeedController)
+            (itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
+        }
         val owner = this
         homeActivityViewModel.run {
             providerInfoLiveData.watch(owner) { providerInfo ->
