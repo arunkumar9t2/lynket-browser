@@ -9,10 +9,8 @@ import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.extenstions.StringResource
 import arun.com.chromer.extenstions.appName
 import arun.com.chromer.home.epoxycontroller.model.CustomTabProviderInfo
-import arun.com.chromer.settings.Preferences
-import arun.com.chromer.settings.browsingoptions.BrowsingOptionsActivity.ProviderChanged
+import arun.com.chromer.settings.RxPreferences
 import arun.com.chromer.shared.Constants
-import arun.com.chromer.util.RxEventBus
 import arun.com.chromer.util.glide.appicon.ApplicationIcon
 import dev.arunkumar.android.result.asResult
 import dev.arunkumar.android.rxschedulers.SchedulerProvider
@@ -20,7 +18,7 @@ import dev.arunkumar.android.viewmodel.RxViewModel
 import dev.arunkumar.common.result.Result
 import hu.akarnokd.rxjava.interop.RxJavaInterop
 import io.reactivex.Observable
-import io.reactivex.Single
+import io.reactivex.functions.Function3
 import javax.inject.Inject
 
 @SuppressLint("CheckResult")
@@ -28,8 +26,7 @@ class HomeActivityViewModel
 @Inject
 constructor(
         private val application: Application,
-        private val rxEventBus: RxEventBus,
-        private val preferences: Preferences,
+        private val rxPreferences: RxPreferences,
         private val schedulerProvider: SchedulerProvider,
         private val historyRepository: HistoryRepository
 ) : RxViewModel() {
@@ -54,39 +51,34 @@ constructor(
     }
 
     private fun bindProviderInfo() {
-        Observable
-                .mergeArray(
-                        Observable.just(ProviderChanged()),
-                        RxJavaInterop.toV2Observable(rxEventBus.filteredEvents<ProviderChanged>())
-                ).flatMapSingle {
-                    Single.fromCallable {
-                        val customTabProvider: String? = preferences.customTabPackage()
-                        val isIncognito = preferences.fullIncognitoMode()
-                        val isWebView = preferences.useWebView()
-                        if (customTabProvider == null || isIncognito || isWebView) {
-                            CustomTabProviderInfo(
-                                    iconUri = ApplicationIcon.createUri(Constants.SYSTEM_WEBVIEW),
-                                    providerDescription = StringResource(
-                                            R.string.tab_provider_status_message_home,
-                                            resourceArgs = listOf(R.string.system_webview)
-                                    ),
-                                    providerReason = StringResource(R.string.provider_web_view_incognito_reason),
-                                    allowChange = !isIncognito
-                            )
-                        } else {
-                            val appName = application.appName(customTabProvider)
-                            CustomTabProviderInfo(
-                                    iconUri = ApplicationIcon.createUri(customTabProvider),
-                                    providerDescription = StringResource(
-                                            R.string.tab_provider_status_message_home,
-                                            listOf(appName)
-                                    ),
-                                    providerReason = StringResource(0)
-                            )
-                        }
+        Observable.combineLatest(
+                rxPreferences.customTabProviderPref.observe(),
+                rxPreferences.incognitoPref.observe(),
+                rxPreferences.webviewPref.observe(),
+                Function3 { customTabProvider: String, isIncognito: Boolean, isWebView: Boolean ->
+                    if (customTabProvider.isEmpty() || isIncognito || isWebView) {
+                        CustomTabProviderInfo(
+                                iconUri = ApplicationIcon.createUri(Constants.SYSTEM_WEBVIEW),
+                                providerDescription = StringResource(
+                                        R.string.tab_provider_status_message_home,
+                                        resourceArgs = listOf(R.string.system_webview)
+                                ),
+                                providerReason = StringResource(R.string.provider_web_view_incognito_reason),
+                                allowChange = !isIncognito
+                        )
+                    } else {
+                        val appName = application.appName(customTabProvider)
+                        CustomTabProviderInfo(
+                                iconUri = ApplicationIcon.createUri(customTabProvider),
+                                providerDescription = StringResource(
+                                        R.string.tab_provider_status_message_home,
+                                        listOf(appName)
+                                ),
+                                providerReason = StringResource(0)
+                        )
                     }
-                }.untilCleared()
-                .compose(schedulerProvider.poolToUi())
+                }).compose(schedulerProvider.poolToUi())
+                .untilCleared()
                 .subscribe(providerInfoLiveData::setValue)
     }
 }

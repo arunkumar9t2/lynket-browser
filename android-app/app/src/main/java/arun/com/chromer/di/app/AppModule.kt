@@ -24,6 +24,7 @@ import arun.com.chromer.appdetect.AppDetectionManager
 import arun.com.chromer.di.viewmodel.ViewModelModule
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.util.RxEventBus
+import com.afollestad.rxkprefs.rxkPrefs
 import dagger.Module
 import dagger.Provides
 import dev.arunkumar.android.AppSchedulersModule
@@ -54,6 +55,10 @@ open class AppModule(var application: Application) {
     internal fun providesPreferences(): Preferences {
         return Preferences.get(application)
     }
+
+    @Provides
+    @Singleton
+    internal fun providersRxkprefs(application: Application) = rxkPrefs(application)
 
     @Provides
     @Singleton

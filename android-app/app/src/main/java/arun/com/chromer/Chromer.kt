@@ -24,7 +24,6 @@ import android.content.Context
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex
-import arun.com.chromer.data.DataModule
 import arun.com.chromer.di.app.AppComponent
 import arun.com.chromer.di.app.AppModule
 import arun.com.chromer.di.app.DaggerAppComponent
@@ -43,7 +42,6 @@ open class Chromer : Application() {
     open val appComponent: AppComponent by lazy {
         DaggerAppComponent.builder()
                 .appModule(AppModule(this))
-                .dataModule(DataModule(this))
                 .build()
     }
 
