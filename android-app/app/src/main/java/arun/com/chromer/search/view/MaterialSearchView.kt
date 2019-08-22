@@ -36,6 +36,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import arun.com.chromer.R
 import arun.com.chromer.di.view.ViewComponent
 import arun.com.chromer.search.suggestion.SuggestionAdapter
@@ -137,6 +138,7 @@ class MaterialSearchView : FrameLayout {
         ButterKnife.bind(this)
 
         searchSuggestions.apply {
+            (itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
             layoutManager = LinearLayoutManager(getContext(), RecyclerView.VERTICAL, true)
             adapter = suggestionAdapter.apply {
                 onChanges {
