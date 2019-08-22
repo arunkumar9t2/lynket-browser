@@ -19,59 +19,49 @@
 
 package arun.com.chromer.search.view
 
+import android.annotation.SuppressLint
 import arun.com.chromer.di.scopes.PerView
+import arun.com.chromer.di.view.Detaches
 import arun.com.chromer.search.suggestion.SuggestionsEngine
 import arun.com.chromer.search.suggestion.items.SuggestionItem
-import rx.Observable
-import rx.android.schedulers.AndroidSchedulers
-import rx.subscriptions.CompositeSubscription
+import com.jakewharton.rxrelay2.BehaviorRelay
+import dev.arunkumar.android.logging.logd
+import dev.arunkumar.android.rxschedulers.SchedulerProvider
+import hu.akarnokd.rxjava.interop.RxJavaInterop
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Observable
 import timber.log.Timber
-import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 /**
  * Created by arunk on 12-12-2017.
  */
+@SuppressLint("CheckResult")
 interface Search {
-    interface View {
-        fun setSuggestions(suggestionItems: List<SuggestionItem>)
-    }
-
     @PerView
-    class Presenter @Inject
-    constructor(private val suggestionsEngine: SuggestionsEngine) {
-        private var viewRef: WeakReference<View>? = null
-
-        internal var view: View? = null
-            get() = viewRef?.get()
-
-        private val subs = CompositeSubscription()
+    class SearchPresenter
+    @Inject
+    constructor(
+            private val suggestionsEngine: SuggestionsEngine,
+            private val schedulerProvider: SchedulerProvider,
+            @param:Detaches
+            private val detaches: Observable<Unit>
+    ) {
+        private val suggestionsSubject = BehaviorRelay.create<List<SuggestionItem>>()
+        val suggestions = suggestionsSubject.hide()
 
         fun registerSearch(queryObservable: Observable<String>) {
-            subs.add(queryObservable
-                    .subscribeOn(AndroidSchedulers.mainThread())
-                    .compose(suggestionsEngine.suggestionsTransformer())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnNext { suggestionItems -> view?.setSuggestions(suggestionItems) }
+            queryObservable
+                    .doOnNext { logd("") }
+                    .toFlowable(BackpressureStrategy.LATEST)
+                    .compose(RxJavaInterop.toV2Transformer(suggestionsEngine.suggestionsTransformer()))
+                    .toObservable()
                     .doOnError(Timber::e)
-                    .subscribe())
-        }
-
-        fun takeView(view: View) {
-            Timber.d("Took view $view")
-            viewRef?.clear()
-            viewRef = WeakReference(view)
-        }
-
-        private fun detachView() {
-            Timber.d("View detached")
-            viewRef?.clear()
-            viewRef = null
+                    .takeUntil(detaches)
+                    .subscribe { suggestionsSubject.accept(it) }
         }
 
         fun cleanUp() {
-            detachView()
-            subs.clear()
         }
     }
 }

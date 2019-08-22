@@ -25,6 +25,8 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.jakewharton.rxrelay2.PublishRelay;
+
 import arun.com.chromer.Chromer;
 import arun.com.chromer.di.activity.ActivityComponent;
 import arun.com.chromer.di.activity.ActivityModule;
@@ -37,6 +39,8 @@ public abstract class BaseActivity extends AppCompatActivity implements Provides
     protected final CompositeSubscription subs = new CompositeSubscription();
     protected Unbinder unbinder;
     ActivityComponent activityComponent;
+
+    protected final PublishRelay<Integer> destroyEvents = PublishRelay.create();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Provides
 
     @Override
     protected void onDestroy() {
+        destroyEvents.accept(0);
         subs.clear();
         if (unbinder != null) {
             unbinder.unbind();

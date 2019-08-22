@@ -63,7 +63,7 @@ constructor(
     }
 
     /**
-     * Converts a stream of strings into stream of list of suggestion items collated from device'c
+     * Converts a stream of strings into stream of list of suggestions items collated from device'c
      * clipboard, history and google suggestions.
      */
     fun suggestionsTransformer(): Transformer<String, List<SuggestionItem>> {

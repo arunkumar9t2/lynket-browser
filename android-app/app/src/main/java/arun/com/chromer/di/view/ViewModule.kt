@@ -17,19 +17,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.di.view;
+package arun.com.chromer.di.view
 
-import android.view.View;
-
-import dagger.Module;
+import android.view.View
+import arun.com.chromer.di.scopes.PerView
+import com.jakewharton.rxbinding3.view.detaches
+import dagger.Module
+import dagger.Provides
+import io.reactivex.Observable
 
 @Module
-public class ViewModule {
-
-    private final View view;
-
-    public ViewModule(View view) {
-        this.view = view;
-    }
-
+object ViewModule {
+    @Provides
+    @PerView
+    @Detaches
+    @JvmStatic
+    fun detaches(view: View): Observable<Unit> = view.detaches()
 }

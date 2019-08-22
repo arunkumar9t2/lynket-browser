@@ -29,8 +29,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.SimpleItemAnimator
-import androidx.transition.Fade
-import androidx.transition.TransitionManager
 import arun.com.chromer.R
 import arun.com.chromer.about.AboutAppActivity
 import arun.com.chromer.about.changelog.Changelog
@@ -226,26 +224,32 @@ class HomeActivity : BaseActivity(), Snackable, UsesViewModel {
     private fun setupSearchBar() {
         materialSearchView.apply {
             // Handle voice item failed
-            subs.add(voiceSearchFailed().subscribe {
-                snack(getString(R.string.no_voice_rec_apps))
-            })
+            voiceSearchFailed()
+                    .takeUntil(destroyEvents)
+                    .subscribe {
+                        snack(getString(R.string.no_voice_rec_apps))
+                    }
+
             // Handle search events
-            subs.add(searchPerforms().subscribe { url ->
-                postDelayed({ launchCustomTab(url) }, 150)
-            })
+            searchPerforms()
+                    .takeUntil(destroyEvents)
+                    .subscribe { url ->
+                        postDelayed({ launchCustomTab(url) }, 150)
+                    }
+
             // No focus initially
             clearFocus()
+
             // Handle focus changes
-            subs.add(focusChanges().subscribe { hasFocus ->
-                TransitionManager.beginDelayedTransition(coordinatorLayout, Fade().apply {
-                    addTarget(shadowView)
-                })
-                if (hasFocus) {
-                    shadowView.show()
-                } else {
-                    shadowView.gone()
-                }
-            })
+            focusChanges()
+                    .takeUntil(destroyEvents)
+                    .subscribe { hasFocus ->
+                        if (hasFocus) {
+                            shadowView.show()
+                        } else {
+                            shadowView.gone()
+                        }
+                    }
         }
     }
 

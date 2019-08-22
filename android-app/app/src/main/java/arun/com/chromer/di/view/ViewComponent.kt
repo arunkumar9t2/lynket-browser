@@ -17,18 +17,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.di.view;
+package arun.com.chromer.di.view
 
-import androidx.annotation.NonNull;
-
-import arun.com.chromer.di.scopes.PerView;
-import arun.com.chromer.search.view.MaterialSearchView;
-import dagger.Subcomponent;
+import android.view.View
+import arun.com.chromer.di.scopes.PerView
+import arun.com.chromer.search.view.MaterialSearchView
+import dagger.BindsInstance
+import dagger.Subcomponent
 
 @PerView
-@Subcomponent(modules = {
-        ViewModule.class
-})
-public interface ViewComponent {
-    void inject(@NonNull MaterialSearchView materialSearchView);
+@Subcomponent(modules = [ViewModule::class])
+interface ViewComponent {
+    fun inject(materialSearchView: MaterialSearchView)
+
+    @Subcomponent.Factory
+    interface Factory {
+        fun create(@BindsInstance view: View): ViewComponent
+    }
 }

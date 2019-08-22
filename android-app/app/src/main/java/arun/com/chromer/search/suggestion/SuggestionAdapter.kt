@@ -38,10 +38,10 @@ import arun.com.chromer.search.suggestion.items.SuggestionItem
 import arun.com.chromer.search.suggestion.items.SuggestionItem.Companion.SuggestionItemDiffCallback
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.widget_suggestions_item_template.*
-import rx.Observable
-import rx.subjects.PublishSubject
 
 /**
  * Created by Arun on 03/08/2016.
@@ -75,7 +75,7 @@ class SuggestionAdapter(
 
     private val clicks = PublishSubject.create<SuggestionItem>()
 
-    fun clicks(): Observable<SuggestionItem> = clicks.asObservable()
+    fun clicks(): Observable<SuggestionItem> = clicks.hide()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SuggestionItemHolder {
         return SuggestionItemHolder(

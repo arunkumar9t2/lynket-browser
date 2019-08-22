@@ -24,11 +24,9 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import arun.com.chromer.R
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
-import arun.com.chromer.extenstions.showKeyboard
 import arun.com.chromer.shared.base.activity.BaseActivity
 import arun.com.chromer.tabs.TabsManager
 import butterknife.ButterKnife
@@ -88,7 +86,7 @@ class NewTabDialogActivity : BaseActivity() {
 
             unbinder = ButterKnife.bind(this, dialog.customView!!)
 
-            materialSearchView.apply {
+            /*materialSearchView.apply {
                 subs.add(searchPerforms()
                         .filter { it != null }
                         .subscribe { url ->
@@ -103,7 +101,7 @@ class NewTabDialogActivity : BaseActivity() {
                     editText.requestFocus()
                     showKeyboard(force = true)
                 }
-            }
+            }*/
             return this
         }
 

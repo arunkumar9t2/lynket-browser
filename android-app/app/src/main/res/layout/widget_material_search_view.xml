@@ -16,93 +16,90 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/msv_root"
+    android:id="@+id/msvCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="4dp"
     android:clipChildren="false"
     android:clipToPadding="false"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:paddingLeft="8dp"
-    android:paddingTop="4dp"
-    android:paddingRight="8dp"
-    android:paddingBottom="4dp">
+    app:cardElevation="2dp"
+    app:cardPreventCornerOverlap="true"
+    app:cardUseCompatPadding="true">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/msv_card"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/cardview_light_background"
-        app:cardElevation="2dp"
-        app:cardPreventCornerOverlap="true"
-        app:cardUseCompatPadding="true">
+        android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/searchSuggestions"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:nestedScrollingEnabled="false"
+            android:scrollbars="none"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/msvEditText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/widget_suggestions_item_template"
+            tools:targetApi="lollipop"
+            tools:visibility="visible" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/search_suggestions"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                android:scrollbars="none"
-                tools:listitem="@layout/widget_suggestions_item_template"
-                tools:targetApi="lollipop" />
+        <ImageView
+            android:id="@+id/msvLeftIcon"
+            android:layout_width="48dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/msvEditText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/searchSuggestions"
+            tools:ignore="ContentDescription"
+            tools:src="@drawable/ic_hamburger" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:weightSum="1">
+        <EditText
+            android:id="@+id/msvEditText"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:background="@android:color/transparent"
+            android:gravity="center|start"
+            android:hint="@string/search_or_type_url"
+            android:imeOptions="actionSearch"
+            android:inputType="textUri"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toStartOf="@+id/msvRightIcon"
+            app:layout_constraintStart_toEndOf="@+id/msvLeftIcon"
+            app:layout_constraintTop_toBottomOf="@+id/searchSuggestions" />
 
-                <ImageView
-                    android:id="@+id/msvLeftIcon"
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:scaleType="center"
-                    tools:ignore="ContentDescription"
-                    tools:src="@drawable/ic_action_amp_icon" />
-
-                <EditText
-                    android:id="@+id/msvEditText"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:gravity="center|start"
-                    android:hint="@string/search_or_type_url"
-                    android:imeOptions="actionSearch"
-                    android:inputType="textUri"
-                    android:maxLines="1"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="18sp" />
-
-                <ImageView
-                    android:id="@+id/msvRightIcon"
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:scaleType="center"
-                    tools:ignore="ContentDescription"
-                    tools:src="@drawable/ic_action_amp_icon" />
-            </LinearLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-</FrameLayout>
+        <ImageView
+            android:id="@+id/msvRightIcon"
+            android:layout_width="48dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/msvEditText"
+            app:layout_constraintTop_toBottomOf="@+id/searchSuggestions"
+            tools:ignore="ContentDescription"
+            tools:src="@drawable/ic_settings_24dp"
+            tools:tint="@color/accent_icon_no_focus" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
