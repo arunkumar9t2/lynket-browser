@@ -23,8 +23,6 @@ import android.content.Intent
 import android.content.Intent.ACTION_VIEW
 import android.net.Uri
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.FragmentManager
@@ -64,6 +62,7 @@ import com.afollestad.materialdialogs.StackingBehavior
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.DrawerBuilder
@@ -76,6 +75,7 @@ import dagger.multibindings.IntoMap
 import dev.arunkumar.android.dagger.viewmodel.UsesViewModel
 import dev.arunkumar.android.dagger.viewmodel.ViewModelKey
 import dev.arunkumar.android.dagger.viewmodel.viewModel
+import hu.akarnokd.rxjava.interop.RxJavaInterop
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
@@ -113,18 +113,6 @@ class HomeActivity : BaseActivity(), Snackable, UsesViewModel {
         setupEventListeners()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.home_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_settings -> startActivity(Intent(this, SettingsGroupActivity::class.java))
-        }
-        return true
-    }
-
     override fun snack(textToSnack: String) {
         Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_SHORT).show()
     }
@@ -135,6 +123,9 @@ class HomeActivity : BaseActivity(), Snackable, UsesViewModel {
 
     private fun setupEventListeners() {
         subs.add(rxEventBus.filteredEvents<TabsManager.FinishRoot>().subscribe { finish() })
+        subs.add(RxJavaInterop.toV1Subscription(settingsIcon.clicks().subscribe {
+            startActivity(Intent(this, SettingsGroupActivity::class.java))
+        }))
     }
 
     private fun setupFeed() {
