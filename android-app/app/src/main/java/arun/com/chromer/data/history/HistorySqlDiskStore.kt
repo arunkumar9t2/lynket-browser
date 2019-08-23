@@ -28,6 +28,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
 import arun.com.chromer.data.history.model.HistoryTable.*
 import arun.com.chromer.data.website.model.Website
+import com.jakewharton.rxrelay2.PublishRelay
 import rx.Observable
 import timber.log.Timber
 import javax.inject.Inject
@@ -39,11 +40,29 @@ import javax.inject.Singleton
 @Singleton
 class HistorySqlDiskStore
 @Inject
-internal constructor(application: Application) : SQLiteOpenHelper(application, TABLE_NAME, null, DATABASE_VERSION), HistoryStore {
+internal constructor(application: Application) : SQLiteOpenHelper(
+        application,
+        TABLE_NAME,
+        null,
+        DATABASE_VERSION
+), HistoryStore {
 
     private lateinit var database: SQLiteDatabase
 
     private val isOpen @Synchronized get() = ::database.isInitialized && database.isOpen
+
+    private val changesRelay = PublishRelay.create<Int>()
+
+    override fun changes(): io.reactivex.Observable<Int> = changesRelay.hide()
+
+    private fun <T> changesTransformer() = Observable.Transformer<T, T> { upstream ->
+        upstream.map {
+            changesRelay.accept(0)
+            it
+        }
+    }
+
+    private fun <T> Observable<T>.broadcastChanges(): Observable<T> = compose(changesTransformer())
 
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(DATABASE_CREATE)
@@ -90,7 +109,7 @@ internal constructor(application: Application) : SQLiteOpenHelper(application, T
 
     override fun insert(website: Website): Observable<Website> {
         return exists(website)
-                .flatMap { exists ->
+                .flatMap<Website> { exists ->
                     if (exists!!) {
                         return@flatMap update(website)
                     } else {
@@ -110,7 +129,7 @@ internal constructor(application: Application) : SQLiteOpenHelper(application, T
                             Observable.just(null)
                         }
                     }
-                }
+                }.broadcastChanges()
     }
 
     override fun update(website: Website): Observable<Website> {
@@ -140,7 +159,7 @@ internal constructor(application: Application) : SQLiteOpenHelper(application, T
             } else {
                 return@flatMap Observable.just(website)
             }
-        }
+        }.broadcastChanges()
     }
 
     override fun delete(website: Website): Observable<Website> {
@@ -154,7 +173,7 @@ internal constructor(application: Application) : SQLiteOpenHelper(application, T
                 Timber.e("Deletion failed for %s", website.url)
             }
             website
-        }
+        }.broadcastChanges()
     }
 
     override fun exists(website: Website): Observable<Boolean> {
@@ -180,11 +199,11 @@ internal constructor(application: Application) : SQLiteOpenHelper(application, T
         return Observable.fromCallable {
             open()
             database.delete(TABLE_NAME, "1", null)
-        }
+        }.broadcastChanges()
     }
 
-    override fun recents(): Observable<List<Website>> {
-        return Observable.fromCallable {
+    override fun recents(): io.reactivex.Observable<List<Website>> {
+        val recentObservable = io.reactivex.Observable.fromCallable<List<Website>> {
             open()
             val websites = ArrayList<Website>()
             database.query(
@@ -203,6 +222,7 @@ internal constructor(application: Application) : SQLiteOpenHelper(application, T
             }
             websites
         }
+        return changes().switchMap { recentObservable }.startWith(recentObservable)
     }
 
     override fun search(text: String): Observable<List<Website>> {

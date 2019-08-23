@@ -40,7 +40,7 @@ interface HistoryRepository {
 
     fun deleteAll(): Observable<Int>
 
-    fun recents(): Observable<List<Website>>
+    fun recents(): io.reactivex.Observable<List<Website>>
 
     fun search(text: String): Observable<List<Website>>
     /**
@@ -49,4 +49,6 @@ interface HistoryRepository {
     fun loadHistoryRange(limit: Int, offset: Int): List<Website>
 
     fun pagedHistory(): LiveData<PagedList<Website>>
+
+    fun changes(): io.reactivex.Observable<Int>
 }

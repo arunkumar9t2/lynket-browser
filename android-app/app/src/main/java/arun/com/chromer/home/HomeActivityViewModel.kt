@@ -16,7 +16,6 @@ import dev.arunkumar.android.result.asResult
 import dev.arunkumar.android.rxschedulers.SchedulerProvider
 import dev.arunkumar.android.viewmodel.RxViewModel
 import dev.arunkumar.common.result.Result
-import hu.akarnokd.rxjava.interop.RxJavaInterop
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import javax.inject.Inject
@@ -44,7 +43,7 @@ constructor(
     }
 
     private fun bindRecentsInfo() {
-        RxJavaInterop.toV2Flowable(historyRepository.recents())
+        historyRepository.recents()
                 .asResult()
                 .compose(schedulerProvider.ioToUi())
                 .subscribe(recentsLiveData::setValue)
