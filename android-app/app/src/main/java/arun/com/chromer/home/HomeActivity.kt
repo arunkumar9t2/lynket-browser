@@ -19,6 +19,7 @@
 
 package arun.com.chromer.home
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.Intent.ACTION_VIEW
 import android.net.Uri
@@ -77,6 +78,7 @@ import hu.akarnokd.rxjava.interop.RxJavaInterop
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
+@SuppressLint("CheckResult")
 class HomeActivity : BaseActivity(), Snackable, UsesViewModel {
     @Inject
     lateinit var tabsManager: TabsManager
@@ -86,14 +88,16 @@ class HomeActivity : BaseActivity(), Snackable, UsesViewModel {
     lateinit var tabsManger: TabsManager
     @Inject
     override lateinit var viewModelFactory: ViewModelProvider.Factory
-
     private val homeActivityViewModel by viewModel<HomeActivityViewModel>()
 
     override fun inject(activityComponent: ActivityComponent) = activityComponent.inject(this)
+
     override fun getLayoutRes() = R.layout.activity_main
 
     @Inject
     lateinit var homeFeedController: HomeFeedController
+    @Inject
+    lateinit var tabsLifecycleObserver: TabsLifecycleObserver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme_NoActionBar)
@@ -124,6 +128,13 @@ class HomeActivity : BaseActivity(), Snackable, UsesViewModel {
         subs.add(RxJavaInterop.toV1Subscription(settingsIcon.clicks().subscribe {
             startActivity(Intent(this, SettingsGroupActivity::class.java))
         }))
+    }
+
+    override fun onStart() {
+        super.onStart()
+        tabsLifecycleObserver.activeTabs().subscribe { tabs ->
+            homeFeedController.tabs = tabs
+        }
     }
 
     private fun setupFeed() {

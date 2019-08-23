@@ -119,7 +119,7 @@ class ChromerOptionsActivity : BaseActivity() {
                     }
                 }
                 tabs -> {
-                    holder.menu_image.setImageResource(R.drawable.ic_tab_24dp)
+                    holder.menu_image.setImageResource(R.drawable.ic_tabs_24dp)
                     holder.menu_text.setText(R.string.title_tabs)
                     holder.itemView.setOnClickListener {
                         tabsManager.showTabsActivity()

@@ -325,7 +325,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
         if (!isIncognito) {
             websiteObservable = websiteRepository.getWebsite(webHeadUrl);
         } else {
-            websiteObservable = websiteRepository.getIncognitoWebsite(webHeadUrl);
+            websiteObservable = websiteRepository.getWebsiteReadOnly(webHeadUrl);
         }
         //noinspection Convert2MethodRef
         subs.add(websiteObservable

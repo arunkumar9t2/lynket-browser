@@ -20,7 +20,7 @@
         tools:ignore="RtlHardcoded">
 
         <ImageView
-            android:id="@+id/providerIcon"
+            android:id="@+id/tabsIcon"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginStart="8dp"
@@ -28,14 +28,15 @@
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
             android:scaleType="fitCenter"
+            android:tint="@color/primary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription"
-            tools:src="@tools:sample/avatars" />
+            app:srcCompat="@drawable/ic_tabs_24dp"
+            tools:ignore="ContentDescription" />
 
         <TextView
-            android:id="@+id/providerDescription"
+            android:id="@+id/tabsDescription"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -44,35 +45,16 @@
             android:layout_marginRight="16dp"
             android:gravity="center|start"
             android:textColor="@color/primary_text_color"
-            app:layout_constraintBottom_toTopOf="@+id/providerReason"
-            app:layout_constraintEnd_toStartOf="@+id/providerChangeButton"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/providerIcon"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Using Chrome to render pages" />
-
-
-        <TextView
-            android:id="@+id/providerReason"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:gravity="center|start"
-            android:text="@string/provider_web_view_incognito_reason"
-            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-            android:textColor="@color/secondary_text_color"
-            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/providerChangeButton"
-            app:layout_constraintStart_toStartOf="@+id/providerDescription"
-            app:layout_constraintTop_toBottomOf="@+id/providerDescription"
-            tools:text="Incognito mode explanation and some very long irrelevant tests " />
+            app:layout_constraintEnd_toStartOf="@+id/tabsButton"
+            app:layout_constraintStart_toEndOf="@+id/tabsIcon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="3 active tabs" />
 
         <TextView
-            android:id="@+id/providerChangeButton"
+            android:id="@+id/tabsButton"
             style="@style/BorderlessButton"
-            android:text="@string/Change"
+            android:text="@string/title_tabs"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

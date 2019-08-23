@@ -83,7 +83,7 @@ internal constructor(
     }
 
 
-    override fun getIncognitoWebsite(url: String): Observable<Website> {
+    override fun getWebsiteReadOnly(url: String): Observable<Website> {
         val cache = cacheStore.getWebsite(url)
         val history = historyRepository.get(Website(url))
         val remote = webNetworkStore.getWebsite(url)
@@ -111,7 +111,7 @@ internal constructor(
     }
 
     override fun saveWebColor(url: String): Observable<WebColor> {
-        return getIncognitoWebsite(url)
+        return getWebsiteReadOnly(url)
                 .observeOn(Schedulers.io())
                 .flatMap { webSite ->
                     if (webSite != null) {

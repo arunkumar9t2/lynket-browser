@@ -3,10 +3,7 @@ package arun.com.chromer.home.epoxycontroller
 import android.app.Application
 import arun.com.chromer.R
 import arun.com.chromer.data.website.model.Website
-import arun.com.chromer.home.epoxycontroller.model.CustomTabProviderInfo
-import arun.com.chromer.home.epoxycontroller.model.headerLayout
-import arun.com.chromer.home.epoxycontroller.model.providerInfo
-import arun.com.chromer.home.epoxycontroller.model.recentsCard
+import arun.com.chromer.home.epoxycontroller.model.*
 import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.epoxy.indeterminateProgress
 import com.airbnb.epoxy.AsyncEpoxyController
@@ -33,12 +30,29 @@ constructor(
             requestDelayedModelBuild(0)
         }
 
+    var tabs: List<TabsManager.Tab> = emptyList()
+        set(value) {
+            field = value
+            requestDelayedModelBuild(0)
+        }
+
     override fun buildModels() {
-        customTabProviderInfo?.let {
+        if (tabs.isNotEmpty() && customTabProviderInfo != null) {
             headerLayout {
                 id("status-header")
                 title(application.getString(R.string.status))
             }
+        }
+
+        if (tabs.isNotEmpty()) {
+            tabsInfo {
+                id("tabs-info")
+                tabs(tabs)
+                tabsManager(tabsManager)
+            }
+        }
+
+        customTabProviderInfo?.let {
             providerInfo {
                 id("provider-info")
                 providerInfo(it)

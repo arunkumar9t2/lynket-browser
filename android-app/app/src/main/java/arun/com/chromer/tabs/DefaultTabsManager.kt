@@ -402,21 +402,22 @@ constructor(
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     override fun getActiveTabs(): Single<List<TabsManager.Tab>> {
-        return Single.create { onSubscribe ->
+        return Single.create { emitter ->
             try {
                 val am = application.getSystemService(ACTIVITY_SERVICE) as ActivityManager
-                onSubscribe.onSuccess(am.appTasks!!
+                emitter.onSuccess((am.appTasks ?: emptyList<ActivityManager.AppTask>())
                         .asSequence()
-                        .map { DocumentUtils.getTaskInfoFromTask(it) }
+                        .map(DocumentUtils::getTaskInfoFromTask)
                         .filter { it != null && it.baseIntent?.dataString != null && it.baseIntent.component != null }
                         .map {
-                            val url = it.baseIntent.dataString
+                            val url = it.baseIntent.dataString!!
+                            @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
                             val type = getTabType(it.baseIntent.component.className)
                             TabsManager.Tab(url, type)
                         }.filter { it.type != OTHER }
                         .toMutableList())
             } catch (e: Exception) {
-                onSubscribe.onError(e)
+                emitter.onError(e)
             }
         }
     }

@@ -21,8 +21,11 @@ package arun.com.chromer.di.activity;
 
 import android.app.Activity;
 
+import androidx.lifecycle.LifecycleOwner;
+
 import com.bumptech.glide.RequestManager;
 
+import arun.com.chromer.di.scopes.PerActivity;
 import arun.com.chromer.util.glide.GlideApp;
 import dagger.Module;
 import dagger.Provides;
@@ -45,5 +48,11 @@ public class ActivityModule {
     @Provides
     RequestManager glideRequests() {
         return GlideApp.with(activity);
+    }
+
+    @Provides
+    @PerActivity
+    LifecycleOwner owner(Activity activity) {
+        return (LifecycleOwner) activity;
     }
 }
