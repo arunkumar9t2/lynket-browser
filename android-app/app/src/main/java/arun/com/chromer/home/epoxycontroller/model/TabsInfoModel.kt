@@ -1,11 +1,6 @@
 package arun.com.chromer.home.epoxycontroller.model
 
-import `in`.arunkumarsampath.transitionx.prepareAutoTransition
-import android.view.ViewGroup
-import androidx.core.view.postDelayed
 import arun.com.chromer.R
-import arun.com.chromer.extenstions.circularRevealWithSelfCenter
-import arun.com.chromer.extenstions.gone
 import arun.com.chromer.tabs.TabsManager
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -28,7 +23,7 @@ abstract class TabsInfoModel : KotlinEpoxyModelWithHolder<TabsInfoModel.ViewHold
         holder.tabsButton.setOnClickListener {
             tabsManager.showTabsActivity()
         }
-        holder.containerView.post {
+        /*holder.containerView.post {
             if (!revealed) {
                 holder.tabsRevealView.run {
                     post {
@@ -42,7 +37,7 @@ abstract class TabsInfoModel : KotlinEpoxyModelWithHolder<TabsInfoModel.ViewHold
                 }
                 revealed = true
             }
-        }
+        }*/
     }
 
     class ViewHolder : KotlinHolder()
