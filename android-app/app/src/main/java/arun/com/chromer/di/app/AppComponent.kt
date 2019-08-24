@@ -31,6 +31,7 @@ import arun.com.chromer.di.service.ServiceModule
 import arun.com.chromer.home.HomeActivity
 import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.tabs.TabsModule
+import arun.com.chromer.util.drawer.GlideDrawerImageLoader
 import dagger.Component
 import javax.inject.Singleton
 
@@ -43,6 +44,9 @@ import javax.inject.Singleton
     DataModule::class
 ])
 interface AppComponent {
+
+    fun glideDrawerImageLoader(): GlideDrawerImageLoader
+
     fun newActivityComponent(activityModule: ActivityModule): ActivityComponent
 
     fun newServiceComponent(serviceModule: ServiceModule): ServiceComponent

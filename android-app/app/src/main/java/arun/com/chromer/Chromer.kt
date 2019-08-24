@@ -30,6 +30,7 @@ import arun.com.chromer.di.app.DaggerAppComponent
 import arun.com.chromer.util.ServiceManager
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
+import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import io.fabric.sdk.android.Fabric
 import io.paperdb.Paper
 import timber.log.Timber
@@ -64,6 +65,13 @@ open class Chromer : Application() {
             Timber.plant(CrashlyticsTree())
         }
         ServiceManager.takeCareOfServices(applicationContext)
+
+        initMaterialDrawer()
+    }
+
+    private fun initMaterialDrawer() {
+        DrawerImageLoader.init(appComponent.glideDrawerImageLoader())
+                .withHandleAllUris(true)
     }
 
     protected open fun initFabric() {
