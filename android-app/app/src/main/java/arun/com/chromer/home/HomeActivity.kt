@@ -24,28 +24,25 @@ import android.content.Intent
 import android.content.Intent.ACTION_VIEW
 import android.net.Uri
 import android.os.Bundle
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.SimpleItemAnimator
 import arun.com.chromer.R
-import arun.com.chromer.about.AboutAppActivity
 import arun.com.chromer.about.changelog.Changelog
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.di.scopes.PerActivity
 import arun.com.chromer.extenstions.*
 import arun.com.chromer.history.HistoryFragment
+import arun.com.chromer.home.bottomsheet.HomeBottomSheet
 import arun.com.chromer.home.epoxycontroller.HomeFeedController
 import arun.com.chromer.home.fragment.HomeFragment
 import arun.com.chromer.intro.ChromerIntroActivity
-import arun.com.chromer.payments.DonateActivity
 import arun.com.chromer.search.view.MaterialSearchView
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.settings.SettingsGroupActivity
-import arun.com.chromer.shared.Constants
 import arun.com.chromer.shared.Constants.APP_TESTING_URL
 import arun.com.chromer.shared.Constants.G_COMMUNITY_URL
 import arun.com.chromer.shared.FabHandler
@@ -62,12 +59,6 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding3.view.clicks
-import com.mikepenz.community_material_typeface_library.CommunityMaterial
-import com.mikepenz.materialdrawer.AccountHeaderBuilder
-import com.mikepenz.materialdrawer.DrawerBuilder
-import com.mikepenz.materialdrawer.model.DividerDrawerItem
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -110,7 +101,6 @@ class HomeActivity : BaseActivity(), Snackable, UsesViewModel {
         Changelog.conditionalShow(this)
 
         setupSearchBar()
-        setupDrawer()
         setupFeed()
         setupEventListeners()
     }
@@ -153,85 +143,6 @@ class HomeActivity : BaseActivity(), Snackable, UsesViewModel {
         }
     }
 
-    private fun setupDrawer() {
-        with(DrawerBuilder()) {
-            withActivity(this@HomeActivity)
-            withAccountHeader(
-                    with(AccountHeaderBuilder()) {
-                        withActivity(this@HomeActivity)
-                        withHeaderBackground(R.drawable.lynket_drawer_image)
-                        withHeaderBackgroundScaleType(ImageView.ScaleType.CENTER_CROP)
-                        withDividerBelowHeader(true)
-                        build()
-                    })
-            addStickyDrawerItems()
-            addDrawerItems(
-                    PrimaryDrawerItem()
-                            .withName(getString(R.string.intro))
-                            .withIdentifier(4)
-                            .withIcon(CommunityMaterial.Icon.cmd_clipboard_text)
-                            .withSelectable(false),
-                    PrimaryDrawerItem()
-                            .withName(getString(R.string.feedback))
-                            .withIdentifier(2)
-                            .withIcon(CommunityMaterial.Icon.cmd_message_text)
-                            .withSelectable(false),
-                    PrimaryDrawerItem()
-                            .withName(getString(R.string.rate_play_store))
-                            .withIdentifier(3)
-                            .withIcon(CommunityMaterial.Icon.cmd_comment_text)
-                            .withSelectable(false),
-                    PrimaryDrawerItem()
-                            .withName(R.string.join_beta)
-                            .withIdentifier(9)
-                            .withIcon(CommunityMaterial.Icon.cmd_beta)
-                            .withSelectable(false),
-                    DividerDrawerItem(),
-                    SecondaryDrawerItem()
-                            .withName(getString(R.string.share))
-                            .withIcon(CommunityMaterial.Icon.cmd_share_variant)
-                            .withDescription(getString(R.string.help_chromer_grow))
-                            .withIdentifier(7)
-                            .withSelectable(false),
-                    SecondaryDrawerItem()
-                            .withName(getString(R.string.support_development))
-                            .withDescription(R.string.consider_donation)
-                            .withIcon(CommunityMaterial.Icon.cmd_heart)
-                            .withIconColorRes(R.color.accent)
-                            .withIdentifier(6)
-                            .withSelectable(false),
-                    SecondaryDrawerItem()
-                            .withName(getString(R.string.about))
-                            .withIcon(CommunityMaterial.Icon.cmd_information)
-                            .withIdentifier(8)
-                            .withSelectable(false)
-            )
-            withOnDrawerItemClickListener { _, _, drawerItem ->
-                when (drawerItem.identifier.toInt()) {
-                    2 -> {
-                        val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", Constants.MAILID, null))
-                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
-                        startActivity(Intent.createChooser(emailIntent, getString(R.string.send_email)))
-                    }
-                    3 -> Utils.openPlayStore(this@HomeActivity, packageName)
-                    4 -> startActivity(Intent(this@HomeActivity, ChromerIntroActivity::class.java))
-                    6 -> startActivity(Intent(this@HomeActivity, DonateActivity::class.java))
-                    7 -> {
-                        val shareIntent = Intent(Intent.ACTION_SEND)
-                        shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text))
-                        shareIntent.type = "text/plain"
-                        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_via)))
-                    }
-                    8 -> startActivity(Intent(this@HomeActivity, AboutAppActivity::class.java))
-                    9 -> showJoinBetaDialog()
-                }
-                false
-            }
-            withDelayDrawerClickEvent(200)
-            build()
-        }.setSelection(-1)
-    }
-
     private fun setupSearchBar() {
         materialSearchView.apply {
             // Handle voice item failed
@@ -260,6 +171,13 @@ class HomeActivity : BaseActivity(), Snackable, UsesViewModel {
                         } else {
                             shadowView.gone()
                         }
+                    }
+
+            // Menu clicks
+            menuClicks()
+                    .takeUntil(lifecycleEvents.destroys)
+                    .subscribe {
+                        HomeBottomSheet().show(supportFragmentManager, "home-bottom-shher")
                     }
         }
     }

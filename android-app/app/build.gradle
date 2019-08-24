@@ -175,7 +175,7 @@ dependencies {
     implementation 'com.mikepenz:community-material-typeface:2.0.46.1@aar'
 
     // Drawer
-    implementation('com.mikepenz:materialdrawer:5.3.6@aar') {
+    implementation('com.mikepenz:materialdrawer:6.1.2@aar') {
         transitive = true
     }
 

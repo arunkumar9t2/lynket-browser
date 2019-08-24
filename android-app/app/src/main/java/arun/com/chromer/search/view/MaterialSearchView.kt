@@ -48,6 +48,7 @@ import arun.com.chromer.util.Utils.getSearchUrl
 import arun.com.chromer.util.recyclerview.onChanges
 import butterknife.BindColor
 import butterknife.ButterKnife
+import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.view.detaches
 import com.jakewharton.rxbinding3.view.focusChanges
 import com.jakewharton.rxbinding3.widget.afterTextChangeEvents
@@ -244,6 +245,8 @@ class MaterialSearchView : FrameLayout {
     fun searchPerforms(): Observable<String> = searchPerforms.hide()
 
     fun focusChanges(): Observable<Boolean> = focusChanges.hide()
+
+    fun menuClicks() = msvLeftIcon.clicks().share()
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE_VOICE) {
