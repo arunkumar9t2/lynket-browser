@@ -25,7 +25,6 @@ import arun.com.chromer.di.view.Detaches
 import arun.com.chromer.search.suggestion.SuggestionsEngine
 import arun.com.chromer.search.suggestion.items.SuggestionItem
 import com.jakewharton.rxrelay2.BehaviorRelay
-import dev.arunkumar.android.logging.logd
 import dev.arunkumar.android.rxschedulers.SchedulerProvider
 import hu.akarnokd.rxjava.interop.RxJavaInterop
 import io.reactivex.BackpressureStrategy
@@ -48,11 +47,10 @@ interface Search {
             private val detaches: Observable<Unit>
     ) {
         private val suggestionsSubject = BehaviorRelay.create<List<SuggestionItem>>()
-        val suggestions = suggestionsSubject.hide()
+        val suggestions: Observable<List<SuggestionItem>> = suggestionsSubject.hide()
 
         fun registerSearch(queryObservable: Observable<String>) {
             queryObservable
-                    .doOnNext { logd("") }
                     .toFlowable(BackpressureStrategy.LATEST)
                     .compose(RxJavaInterop.toV2Transformer(suggestionsEngine.suggestionsTransformer()))
                     .toObservable()

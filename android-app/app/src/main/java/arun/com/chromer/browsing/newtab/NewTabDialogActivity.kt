@@ -24,9 +24,11 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import arun.com.chromer.R
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
+import arun.com.chromer.extenstions.showKeyboard
 import arun.com.chromer.shared.base.activity.BaseActivity
 import arun.com.chromer.tabs.TabsManager
 import butterknife.ButterKnife
@@ -86,22 +88,23 @@ class NewTabDialogActivity : BaseActivity() {
 
             unbinder = ButterKnife.bind(this, dialog.customView!!)
 
-            /*materialSearchView.apply {
-                subs.add(searchPerforms()
-                        .filter { it != null }
+            materialSearchView.apply {
+                searchPerforms()
+                        .takeUntil(lifecycleEvents.destroys)
                         .subscribe { url ->
                             postDelayed({ launchUrl(url) }, 150)
-                        })
-                subs.add(voiceSearchFailed()
+                        }
+                voiceSearchFailed()
+                        .takeUntil(lifecycleEvents.destroys)
                         .subscribe {
                             Toast.makeText(activity, R.string.no_voice_rec_apps, Toast.LENGTH_SHORT).show()
-                        })
+                        }
                 post {
                     gainFocus()
                     editText.requestFocus()
                     showKeyboard(force = true)
                 }
-            }*/
+            }
             return this
         }
 
