@@ -31,7 +31,8 @@
 
         <TextView
             android:id="@+id/historyButton"
-            style="@style/BorderlessButton"
+            style="@style/FeedBorderlessButton"
+            android:layout_height="0dp"
             android:text="@string/title_history"
             app:layout_constraintBottom_toTopOf="@+id/recentsEpoxyGrid"
             app:layout_constraintEnd_toEndOf="parent"
