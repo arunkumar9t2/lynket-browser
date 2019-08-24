@@ -133,6 +133,7 @@ dependencies {
 
     // Personal libs
     implementation 'in.arunkumarsampath:suggestions:1.0.3'
+    implementation 'in.arunkumarsampath:transition-x:1.1.0'
     implementation 'dev.arunkumar.android:common:master-SNAPSHOT'
     implementation 'dev.arunkumar.android:dagger-base:master-SNAPSHOT'
     implementation 'dev.arunkumar.android:logging:master-SNAPSHOT'

@@ -32,6 +32,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.LayoutRes
 import arun.com.chromer.util.Utils
+import kotlin.math.hypot
 
 
 inline fun View.show(condition: Boolean = true) {
@@ -88,7 +89,7 @@ fun View.circularRevealWithSelfCenter(done: (() -> Unit)? = null) {
         val cx = width / 2
         val cy = height / 2
         // get the initial radius for the clipping circle
-        val initialRadius = Math.hypot(cx.toDouble(), cy.toDouble())
+        val initialRadius = hypot(cx.toDouble(), cy.toDouble())
 
         // create the animation (the start radius is zero)
         ViewAnimationUtils.createCircularReveal(this, cx, cy, 0f, initialRadius.toFloat()).apply {

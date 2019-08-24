@@ -34,6 +34,8 @@
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
 
+    <uses-sdk tools:overrideLibrary="in.arunkumarsampath.transitionx" />
+
     <application
         android:name=".Chromer"
         android:allowBackup="false"
