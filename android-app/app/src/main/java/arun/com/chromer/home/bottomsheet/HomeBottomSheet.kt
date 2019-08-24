@@ -1,6 +1,7 @@
 package arun.com.chromer.home.bottomsheet
 
 import android.content.Intent
+import android.content.Intent.*
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,6 +23,16 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import kotlinx.android.synthetic.main.layout_home_bottom_sheet.*
 
 class HomeBottomSheet : BottomSheetDialogFragment() {
+
+    companion object {
+        private const val INTRO = 1L
+        private const val FEEDBACK = 2L
+        private const val RATE = 3L
+        private const val BETA = 4L
+        private const val SHARE = 5L
+        private const val DONATION = 6L
+        private const val ABOUT = 7L
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -46,22 +57,22 @@ class HomeBottomSheet : BottomSheetDialogFragment() {
             addDrawerItems(
                     PrimaryDrawerItem()
                             .withName(getString(R.string.intro))
-                            .withIdentifier(4)
+                            .withIdentifier(INTRO)
                             .withIcon(CommunityMaterial.Icon.cmd_clipboard_text)
                             .withSelectable(false),
                     PrimaryDrawerItem()
                             .withName(getString(R.string.feedback))
-                            .withIdentifier(2)
+                            .withIdentifier(FEEDBACK)
                             .withIcon(CommunityMaterial.Icon.cmd_message_text)
                             .withSelectable(false),
                     PrimaryDrawerItem()
                             .withName(getString(R.string.rate_play_store))
-                            .withIdentifier(3)
+                            .withIdentifier(RATE)
                             .withIcon(CommunityMaterial.Icon.cmd_comment_text)
                             .withSelectable(false),
                     PrimaryDrawerItem()
                             .withName(R.string.join_beta)
-                            .withIdentifier(9)
+                            .withIdentifier(BETA)
                             .withIcon(CommunityMaterial.Icon.cmd_beta)
                             .withSelectable(false),
                     DividerDrawerItem(),
@@ -69,38 +80,38 @@ class HomeBottomSheet : BottomSheetDialogFragment() {
                             .withName(getString(R.string.share))
                             .withIcon(CommunityMaterial.Icon.cmd_share_variant)
                             .withDescription(getString(R.string.help_chromer_grow))
-                            .withIdentifier(7)
+                            .withIdentifier(SHARE)
                             .withSelectable(false),
                     PrimaryDrawerItem()
                             .withName(getString(R.string.support_development))
                             .withDescription(R.string.consider_donation)
                             .withIcon(CommunityMaterial.Icon.cmd_heart)
                             .withIconColorRes(R.color.accent)
-                            .withIdentifier(6)
+                            .withIdentifier(DONATION)
                             .withSelectable(false),
                     PrimaryDrawerItem()
                             .withName(getString(R.string.about))
                             .withIcon(CommunityMaterial.Icon.cmd_information)
-                            .withIdentifier(8)
+                            .withIdentifier(ABOUT)
                             .withSelectable(false)
             )
             withOnDrawerItemClickListener { _, _, drawerItem ->
-                when (drawerItem.identifier.toInt()) {
-                    2 -> {
-                        val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", Constants.MAILID, null))
-                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
-                        startActivity(Intent.createChooser(emailIntent, getString(R.string.send_email)))
+                when (drawerItem.identifier) {
+                    FEEDBACK -> {
+                        val emailIntent = Intent(ACTION_SENDTO, Uri.fromParts("mailto", Constants.MAILID, null))
+                        emailIntent.putExtra(EXTRA_SUBJECT, getString(R.string.app_name))
+                        startActivity(createChooser(emailIntent, getString(R.string.send_email)))
                     }
-                    3 -> Utils.openPlayStore(requireActivity(), requireActivity().packageName)
-                    4 -> startActivity(Intent(requireActivity(), ChromerIntroActivity::class.java))
-                    6 -> startActivity(Intent(requireActivity(), DonateActivity::class.java))
-                    7 -> {
-                        val shareIntent = Intent(Intent.ACTION_SEND)
-                        shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text))
+                    RATE -> Utils.openPlayStore(requireActivity(), requireActivity().packageName)
+                    INTRO -> startActivity(Intent(requireActivity(), ChromerIntroActivity::class.java))
+                    DONATION -> startActivity(Intent(requireActivity(), DonateActivity::class.java))
+                    SHARE -> {
+                        val shareIntent = Intent(ACTION_SEND)
+                        shareIntent.putExtra(EXTRA_TEXT, getString(R.string.share_text))
                         shareIntent.type = "text/plain"
-                        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_via)))
+                        startActivity(createChooser(shareIntent, getString(R.string.share_via)))
                     }
-                    8 -> startActivity(Intent(requireActivity(), AboutAppActivity::class.java))
+                    ABOUT -> startActivity(Intent(requireActivity(), AboutAppActivity::class.java))
                 }
                 false
             }
