@@ -236,14 +236,14 @@ class HomeActivity : BaseActivity(), Snackable, UsesViewModel {
         materialSearchView.apply {
             // Handle voice item failed
             voiceSearchFailed()
-                    .takeUntil(destroyEvents)
+                    .takeUntil(lifecycleEvents.destroys)
                     .subscribe {
                         snack(getString(R.string.no_voice_rec_apps))
                     }
 
             // Handle search events
             searchPerforms()
-                    .takeUntil(destroyEvents)
+                    .takeUntil(lifecycleEvents.destroys)
                     .subscribe { url ->
                         postDelayed({ launchCustomTab(url) }, 150)
                     }
@@ -253,7 +253,7 @@ class HomeActivity : BaseActivity(), Snackable, UsesViewModel {
 
             // Handle focus changes
             focusChanges()
-                    .takeUntil(destroyEvents)
+                    .takeUntil(lifecycleEvents.destroys)
                     .subscribe { hasFocus ->
                         if (hasFocus) {
                             shadowView.show()

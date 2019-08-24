@@ -37,7 +37,7 @@ constructor(
         }
 
     override fun buildModels() {
-        if (tabs.isNotEmpty() && customTabProviderInfo != null) {
+        if (tabs.isNotEmpty() || customTabProviderInfo != null) {
             headerLayout {
                 id("status-header")
                 title(application.getString(R.string.status))

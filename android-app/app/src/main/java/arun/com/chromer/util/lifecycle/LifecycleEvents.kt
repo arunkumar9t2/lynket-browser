@@ -5,8 +5,12 @@ import androidx.lifecycle.Lifecycle.Event.*
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
+import arun.com.chromer.di.scopes.PerActivity
+import arun.com.chromer.di.scopes.PerFragment
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
+import javax.inject.Inject
+import javax.inject.Qualifier
 
 open class LifecycleEvents constructor(lifecycleOwner: LifecycleOwner) : LifecycleObserver {
 
@@ -55,3 +59,19 @@ open class LifecycleEvents constructor(lifecycleOwner: LifecycleOwner) : Lifecyc
     val stops = lifecycleEventRelay.filter { it == ON_STOP }
     val destroys = lifecycleEventRelay.filter { it == ON_DESTROY }
 }
+
+@Qualifier
+annotation class ActivityLifecycle
+
+@Qualifier
+annotation class FragmentLifcecycle
+
+@PerActivity
+class ActivityLifecycleEvents
+@Inject
+constructor(@ActivityLifecycle lifecycleOwner: LifecycleOwner) : LifecycleEvents(lifecycleOwner)
+
+@PerFragment
+class FragmentLifecycle
+@Inject
+constructor(@FragmentLifcecycle lifecycleOwner: LifecycleOwner) : LifecycleEvents(lifecycleOwner)

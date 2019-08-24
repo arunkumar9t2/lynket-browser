@@ -3,6 +3,7 @@ package arun.com.chromer.home
 import androidx.lifecycle.LifecycleOwner
 import arun.com.chromer.di.scopes.PerActivity
 import arun.com.chromer.tabs.TabsManager
+import arun.com.chromer.util.lifecycle.ActivityLifecycle
 import arun.com.chromer.util.lifecycle.LifecycleEvents
 import dev.arunkumar.android.rxschedulers.SchedulerProvider
 import hu.akarnokd.rxjava.interop.RxJavaInterop
@@ -14,6 +15,7 @@ import javax.inject.Inject
 class TabsLifecycleObserver
 @Inject
 constructor(
+        @ActivityLifecycle
         lifecycleOwner: LifecycleOwner,
         private val tabsManager: TabsManager,
         private val schedulerProvider: SchedulerProvider
