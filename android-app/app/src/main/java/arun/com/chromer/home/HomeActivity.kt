@@ -19,80 +19,76 @@
 
 package arun.com.chromer.home
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.Intent.ACTION_VIEW
 import android.net.Uri
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.ImageView
 import android.widget.Toast
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.FragmentManager
-import androidx.transition.Fade
-import androidx.transition.TransitionManager
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.SimpleItemAnimator
 import arun.com.chromer.R
-import arun.com.chromer.about.AboutAppActivity
 import arun.com.chromer.about.changelog.Changelog
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.di.scopes.PerActivity
-import arun.com.chromer.extenstions.circularHideWithSelfCenter
-import arun.com.chromer.extenstions.circularRevealWithSelfCenter
-import arun.com.chromer.extenstions.gone
-import arun.com.chromer.extenstions.show
+import arun.com.chromer.extenstions.*
 import arun.com.chromer.history.HistoryFragment
+import arun.com.chromer.home.bottomsheet.HomeBottomSheet
+import arun.com.chromer.home.epoxycontroller.HomeFeedController
 import arun.com.chromer.home.fragment.HomeFragment
 import arun.com.chromer.intro.ChromerIntroActivity
-import arun.com.chromer.payments.DonateActivity
 import arun.com.chromer.search.view.MaterialSearchView
-import arun.com.chromer.search.view.behavior.MaterialSearchViewBehavior
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.settings.SettingsGroupActivity
-import arun.com.chromer.shared.Constants
 import arun.com.chromer.shared.Constants.APP_TESTING_URL
 import arun.com.chromer.shared.Constants.G_COMMUNITY_URL
 import arun.com.chromer.shared.FabHandler
 import arun.com.chromer.shared.base.Snackable
 import arun.com.chromer.shared.base.activity.BaseActivity
-import arun.com.chromer.shared.behavior.FloatingActionButtonBehavior
 import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.tabs.ui.TabsFragment
 import arun.com.chromer.util.RxEventBus
 import arun.com.chromer.util.Utils
-import arun.com.chromer.util.glide.GlideApp
-import butterknife.OnClick
 import com.afollestad.materialdialogs.GravityEnum
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.StackingBehavior
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
-import com.mikepenz.community_material_typeface_library.CommunityMaterial
-import com.mikepenz.materialdrawer.AccountHeaderBuilder
-import com.mikepenz.materialdrawer.DrawerBuilder
-import com.mikepenz.materialdrawer.model.DividerDrawerItem
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
-import it.sephiroth.android.library.bottomnavigation.BottomBehavior
-import it.sephiroth.android.library.bottomnavigation.BottomNavigation
+import com.jakewharton.rxbinding3.view.clicks
+import dagger.Binds
+import dagger.Module
+import dagger.multibindings.IntoMap
+import dev.arunkumar.android.dagger.viewmodel.UsesViewModel
+import dev.arunkumar.android.dagger.viewmodel.ViewModelKey
+import dev.arunkumar.android.dagger.viewmodel.viewModel
+import hu.akarnokd.rxjava.interop.RxJavaInterop
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-class HomeActivity : BaseActivity(), Snackable {
+@SuppressLint("CheckResult")
+class HomeActivity : BaseActivity(), Snackable, UsesViewModel {
     @Inject
     lateinit var tabsManager: TabsManager
     @Inject
     lateinit var rxEventBus: RxEventBus
     @Inject
-    lateinit var activeFragmentManagerFactory: ActiveFragmentsManager.Factory
-    @Inject
     lateinit var tabsManger: TabsManager
+    @Inject
+    override lateinit var viewModelFactory: ViewModelProvider.Factory
+    private val homeActivityViewModel by viewModel<HomeActivityViewModel>()
 
-    private lateinit var activeFragmentManager: ActiveFragmentsManager
+    override fun inject(activityComponent: ActivityComponent) = activityComponent.inject(this)
 
-    // Track bottom nav selection across config changes.
-    private var selectedIndex: Int = HOME
+    override fun getLayoutRes() = R.layout.activity_main
+
+    @Inject
+    lateinit var homeFeedController: HomeFeedController
+    @Inject
+    lateinit var tabsLifecycleObserver: TabsLifecycleObserver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme_NoActionBar)
@@ -104,30 +100,9 @@ class HomeActivity : BaseActivity(), Snackable {
 
         Changelog.conditionalShow(this)
 
-        selectedIndex = savedInstanceState?.getInt(SELECTED_INDEX) ?: HOME
-
-        setupToolbar()
-        setupFab()
         setupSearchBar()
-        setupDrawer()
-        setupFragments(savedInstanceState)
+        setupFeed()
         setupEventListeners()
-    }
-
-    override fun inject(activityComponent: ActivityComponent) = activityComponent.inject(this)
-
-    override fun getLayoutRes() = R.layout.activity_main
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.home_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_settings -> startActivity(Intent(this, SettingsGroupActivity::class.java))
-        }
-        return true
     }
 
     override fun snack(textToSnack: String) {
@@ -139,169 +114,71 @@ class HomeActivity : BaseActivity(), Snackable {
     }
 
     private fun setupEventListeners() {
-        subs.add(rxEventBus.filteredEvents(TabsManager.FinishRoot::class.java).subscribe { finish() })
+        subs.add(rxEventBus.filteredEvents<TabsManager.FinishRoot>().subscribe { finish() })
+        subs.add(RxJavaInterop.toV1Subscription(settingsIcon.clicks().subscribe {
+            startActivity(Intent(this, SettingsGroupActivity::class.java))
+        }))
     }
 
-    private fun setupFragments(savedInstanceState: Bundle?) {
-        activeFragmentManager = activeFragmentManagerFactory.get(supportFragmentManager, materialSearchView, appbar, fab)
-        activeFragmentManager.initialize(savedInstanceState)
+    override fun onStart() {
+        super.onStart()
+        tabsLifecycleObserver.activeTabs().subscribe { tabs ->
+            homeFeedController.tabs = tabs
+        }
+    }
 
-        bottomNavigation.setOnMenuItemClickListener(object : BottomNavigation.OnMenuItemSelectionListener {
-            override fun onMenuItemSelect(itemId: Int, position: Int, fromUser: Boolean) {
-                activeFragmentManager.handleBottomMenuClick(itemId)
-                selectedIndex = position
+    private fun setupFeed() {
+        homeFeedRecyclerView.apply {
+            setController(homeFeedController)
+            (itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
+        }
+        val owner = this
+        homeActivityViewModel.run {
+            providerInfoLiveData.watch(owner) { providerInfo ->
+                homeFeedController.customTabProviderInfo = providerInfo
             }
-
-            override fun onMenuItemReselect(itemId: Int, position: Int, fromUser: Boolean) {
+            recentsLiveData.watch(owner) { recentWebsites ->
+                homeFeedController.recentWebSites = recentWebsites
             }
-        })
-    }
-
-    override fun onSaveInstanceState(outState: Bundle?) {
-        outState?.putInt(SELECTED_INDEX, bottomNavigation.selectedIndex)
-        super.onSaveInstanceState(outState)
-    }
-
-    private fun setupFab() {
-        (fab.layoutParams as CoordinatorLayout.LayoutParams).behavior = FloatingActionButtonBehavior()
-    }
-
-    private fun setupToolbar() {
-        GlideApp.with(this).load(R.drawable.chromer_header_small).into(backdrop)
-        // Hide title when expanded
-        collapsingToolbar.title = " "
-        appbar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
-            var isShow = false
-            var scrollRange = -1
-
-            override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
-                if (scrollRange == -1) {
-                    scrollRange = appBarLayout!!.totalScrollRange
-                }
-                if (scrollRange + verticalOffset == 0) {
-                    collapsingToolbar.title = toolbar.title
-                    isShow = true
-                } else if (isShow) {
-                    collapsingToolbar.title = " "
-                    isShow = false
-                }
-            }
-        })
-    }
-
-    private fun setupDrawer() {
-        setSupportActionBar(toolbar)
-        with(DrawerBuilder()) {
-            withActivity(this@HomeActivity)
-            withToolbar(toolbar)
-            withAccountHeader(
-                    with(AccountHeaderBuilder()) {
-                        withActivity(this@HomeActivity)
-                        withHeaderBackground(R.drawable.lynket_drawer_image)
-                        withHeaderBackgroundScaleType(ImageView.ScaleType.CENTER_CROP)
-                        withDividerBelowHeader(true)
-                        build()
-                    })
-            addStickyDrawerItems()
-            addDrawerItems(
-                    PrimaryDrawerItem()
-                            .withName(getString(R.string.intro))
-                            .withIdentifier(4)
-                            .withIcon(CommunityMaterial.Icon.cmd_clipboard_text)
-                            .withSelectable(false),
-                    PrimaryDrawerItem()
-                            .withName(getString(R.string.feedback))
-                            .withIdentifier(2)
-                            .withIcon(CommunityMaterial.Icon.cmd_message_text)
-                            .withSelectable(false),
-                    PrimaryDrawerItem()
-                            .withName(getString(R.string.rate_play_store))
-                            .withIdentifier(3)
-                            .withIcon(CommunityMaterial.Icon.cmd_comment_text)
-                            .withSelectable(false),
-                    PrimaryDrawerItem()
-                            .withName(R.string.join_beta)
-                            .withIdentifier(9)
-                            .withIcon(CommunityMaterial.Icon.cmd_beta)
-                            .withSelectable(false),
-                    DividerDrawerItem(),
-                    SecondaryDrawerItem()
-                            .withName(getString(R.string.share))
-                            .withIcon(CommunityMaterial.Icon.cmd_share_variant)
-                            .withDescription(getString(R.string.help_chromer_grow))
-                            .withIdentifier(7)
-                            .withSelectable(false),
-                    SecondaryDrawerItem()
-                            .withName(getString(R.string.support_development))
-                            .withDescription(R.string.consider_donation)
-                            .withIcon(CommunityMaterial.Icon.cmd_heart)
-                            .withIconColorRes(R.color.accent)
-                            .withIdentifier(6)
-                            .withSelectable(false),
-                    SecondaryDrawerItem()
-                            .withName(getString(R.string.about))
-                            .withIcon(CommunityMaterial.Icon.cmd_information)
-                            .withIdentifier(8)
-                            .withSelectable(false)
-            )
-            withOnDrawerItemClickListener { _, _, drawerItem ->
-                when (drawerItem.identifier.toInt()) {
-                    2 -> {
-                        val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", Constants.MAILID, null))
-                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
-                        startActivity(Intent.createChooser(emailIntent, getString(R.string.send_email)))
-                    }
-                    3 -> Utils.openPlayStore(this@HomeActivity, packageName)
-                    4 -> startActivity(Intent(this@HomeActivity, ChromerIntroActivity::class.java))
-                    6 -> startActivity(Intent(this@HomeActivity, DonateActivity::class.java))
-                    7 -> {
-                        val shareIntent = Intent(Intent.ACTION_SEND)
-                        shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text))
-                        shareIntent.type = "text/plain"
-                        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_via)))
-                    }
-                    8 -> startActivity(Intent(this@HomeActivity, AboutAppActivity::class.java))
-                    9 -> showJoinBetaDialog()
-                }
-                false
-            }
-            withDelayDrawerClickEvent(200)
-            build()
-        }.setSelection(-1)
+        }
     }
 
     private fun setupSearchBar() {
         materialSearchView.apply {
-            // Attach a behaviour to handle scroll
-            (layoutParams as CoordinatorLayout.LayoutParams).behavior = MaterialSearchViewBehavior()
             // Handle voice item failed
-            subs.add(voiceSearchFailed().subscribe {
-                snack(getString(R.string.no_voice_rec_apps))
-            })
+            voiceSearchFailed()
+                    .takeUntil(lifecycleEvents.destroys)
+                    .subscribe {
+                        snack(getString(R.string.no_voice_rec_apps))
+                    }
+
             // Handle search events
-            subs.add(searchPerforms().subscribe { url ->
-                postDelayed({ launchCustomTab(url) }, 150)
-            })
+            searchPerforms()
+                    .takeUntil(lifecycleEvents.destroys)
+                    .subscribe { url ->
+                        postDelayed({ launchCustomTab(url) }, 150)
+                    }
+
             // No focus initially
             clearFocus()
-            // Handle focus changes
-            subs.add(focusChanges().subscribe { hasFocus ->
-                TransitionManager.beginDelayedTransition(coordinatorLayout, Fade().apply {
-                    addTarget(shadowView)
-                    addTarget(bottomNavigation)
-                })
-                handleBottomBar(hasFocus)
-                if (hasFocus) {
-                    shadowView.show()
-                } else {
-                    shadowView.gone()
-                }
-            })
 
-            // Reveal the search bar with animation after layout pass
-            if (selectedIndex == HOME) {
-                post { materialSearchView.circularRevealWithSelfCenter() }
-            }
+            // Handle focus changes
+            focusChanges()
+                    .takeUntil(lifecycleEvents.destroys)
+                    .subscribe { hasFocus ->
+                        if (hasFocus) {
+                            shadowView.show()
+                        } else {
+                            shadowView.gone()
+                        }
+                    }
+
+            // Menu clicks
+            menuClicks()
+                    .takeUntil(lifecycleEvents.destroys)
+                    .subscribe {
+                        HomeBottomSheet().show(supportFragmentManager, "home-bottom-shher")
+                    }
         }
     }
 
@@ -336,28 +213,11 @@ class HomeActivity : BaseActivity(), Snackable {
         }.show()
     }
 
-    /**
-     * Trigger's coordinator's layout dispatch for scrolling manually.
-     */
-    private fun handleBottomBar(hide: Boolean) {
-        val bottomBehavior = (bottomNavigation.layoutParams as CoordinatorLayout.LayoutParams).behavior as BottomBehavior
-        bottomBehavior.onNestedFling(
-                coordinatorLayout,
-                bottomNavigation,
-                materialSearchView,
-                0f,
-                if (hide) 10000f else -10000f,
-                true
-        )
-    }
-
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         materialSearchView.onActivityResult(requestCode, resultCode, data)
     }
 
-    @OnClick(R.id.fab)
     fun onFabClick() {
         supportFragmentManager.fragments
                 .asSequence()
@@ -532,6 +392,14 @@ class HomeActivity : BaseActivity(), Snackable {
             }
             return false
         }
+    }
+
+    @Module
+    abstract class HomeBuilder {
+        @Binds
+        @IntoMap
+        @ViewModelKey(HomeActivityViewModel::class)
+        abstract fun bindHomeViewModel(homeViewModel: HomeActivityViewModel): ViewModel
     }
 
     companion object {

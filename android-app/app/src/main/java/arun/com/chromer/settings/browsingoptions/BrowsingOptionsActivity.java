@@ -274,7 +274,7 @@ public class BrowsingOptionsActivity extends BaseActivity implements Snackable, 
             return items.size();
         }
 
-        class BottomActionHolder extends RecyclerView.ViewHolder {
+        static class BottomActionHolder extends RecyclerView.ViewHolder {
             @BindView(R.id.bottom_action)
             TextView action;
             @BindView(R.id.bottom_icon)

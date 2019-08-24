@@ -25,149 +25,106 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import arun.com.chromer.R
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.show
+import arun.com.chromer.search.suggestion.items.COPY
+import arun.com.chromer.search.suggestion.items.GOOGLE
+import arun.com.chromer.search.suggestion.items.HISTORY
 import arun.com.chromer.search.suggestion.items.SuggestionItem
-import butterknife.BindView
-import butterknife.ButterKnife
+import arun.com.chromer.search.suggestion.items.SuggestionItem.Companion.SuggestionItemDiffCallback
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
-import rx.Observable
-import rx.subjects.PublishSubject
-import java.util.*
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.widget_suggestions_item_template.*
 
 /**
  * Created by Arun on 03/08/2016.
  */
 class SuggestionAdapter(
         context: Context
-) : RecyclerView.Adapter<SuggestionAdapter.SuggestionItemHolder>() {
-    private val searchIcon: Drawable
-    private val historyIcon: Drawable
-    private val copyIcon: Drawable
-    private val suggestionItems = ArrayList<SuggestionItem>()
-    private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
+) : ListAdapter<SuggestionItem, SuggestionAdapter.SuggestionItemHolder>(SuggestionItemDiffCallback) {
 
-    private val clicks = PublishSubject.create<SuggestionItem>()
-
-    fun clicks(): Observable<SuggestionItem> = clicks.asObservable()
-
-    init {
-        setHasStableIds(true)
-        searchIcon = IconicsDrawable(context)
+    private val searchIcon: Drawable by lazy {
+        IconicsDrawable(context)
                 .icon(CommunityMaterial.Icon.cmd_magnify)
                 .color(ContextCompat.getColor(context, R.color.material_dark_light))
                 .sizeDp(18)
-        historyIcon = IconicsDrawable(context)
+    }
+
+    private val historyIcon: Drawable by lazy {
+        IconicsDrawable(context)
                 .icon(CommunityMaterial.Icon.cmd_history)
                 .color(ContextCompat.getColor(context, R.color.md_red_500))
                 .sizeDp(18)
-        copyIcon = IconicsDrawable(context)
+    }
+
+    private val copyIcon: Drawable by lazy {
+        IconicsDrawable(context)
                 .icon(CommunityMaterial.Icon.cmd_content_copy)
                 .color(ContextCompat.getColor(context, R.color.md_green_500))
                 .sizeDp(18)
     }
 
+    private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
+
+    private val clicks = PublishSubject.create<SuggestionItem>()
+
+    fun clicks(): Observable<SuggestionItem> = clicks.hide()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SuggestionItemHolder {
-        return SuggestionItemHolder(layoutInflater.inflate(R.layout.widget_suggestions_item_template, parent, false))
+        return SuggestionItemHolder(
+                layoutInflater.inflate(
+                        R.layout.widget_suggestions_item_template,
+                        parent,
+                        false
+                ),
+                ::getItem
+        )
     }
 
-    override fun onBindViewHolder(holder: SuggestionItemHolder, position: Int) {
-        val suggestionItem = suggestionItems[position]
-        holder.bind(suggestionItem)
-    }
+    override fun onBindViewHolder(
+            holder: SuggestionItemHolder,
+            position: Int
+    ) = holder.bind(getItem(position))
 
-    override fun getItemCount(): Int {
-        return suggestionItems.size
-    }
+    fun clear() = submitList(emptyList())
 
-    override fun getItemId(position: Int): Long {
-        return suggestionItems[position].hashCode().toLong()
-    }
-
-    fun updateSuggestions(newSuggestions: List<SuggestionItem>) {
-        val suggestionDiff = SuggestionDiff(suggestionItems, newSuggestions)
-        val diffResult = DiffUtil.calculateDiff(suggestionDiff, true)
-        suggestionItems.clear()
-        suggestionItems.addAll(newSuggestions)
-        diffResult.dispatchUpdatesTo(this)
-    }
-
-    fun clear() {
-        suggestionItems.clear()
-        notifyDataSetChanged()
-    }
-
-    inner class SuggestionItemHolder(view: View) : RecyclerView.ViewHolder(view) {
-        @BindView(R.id.suggestions_text)
-        @JvmField
-        var suggestion: TextView? = null
-        @BindView(R.id.suggestions_sub_title)
-        @JvmField
-        var suggestionSubTitle: TextView? = null
-        @BindView(R.id.suggestion_icon)
-        @JvmField
-        var icon: ImageView? = null
+    inner class SuggestionItemHolder(
+            override val containerView: View,
+            item: (position: Int) -> SuggestionItem
+    ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
         init {
-            ButterKnife.bind(this, view)
-            view.setOnClickListener {
-                val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION) {
-                    clicks.onNext(suggestionItems[position])
-                }
+            containerView.setOnClickListener {
+                adapterPosition
+                        .takeIf { adapterPosition != RecyclerView.NO_POSITION }
+                        ?.let { position -> clicks.onNext(item(position)) }
             }
         }
 
         fun bind(suggestionItem: SuggestionItem) {
-            suggestion?.text = suggestionItem.title
+            suggestions_text.text = suggestionItem.title
             when (suggestionItem.type) {
-                SuggestionItem.COPY -> icon?.setImageDrawable(copyIcon)
-                SuggestionItem.HISTORY -> icon?.setImageDrawable(historyIcon)
-                SuggestionItem.GOOGLE -> icon?.setImageDrawable(searchIcon)
+                COPY -> suggestion_icon.setImageDrawable(copyIcon)
+                HISTORY -> suggestion_icon.setImageDrawable(historyIcon)
+                GOOGLE -> suggestion_icon.setImageDrawable(searchIcon)
             }
             when {
                 TextUtils.isEmpty(suggestionItem.subTitle) -> {
-                    suggestionSubTitle?.gone()
-                    suggestionSubTitle?.text = null
+                    suggestions_sub_title.gone()
+                    suggestions_sub_title.text = null
                 }
                 else -> {
-                    suggestionSubTitle?.show()
-                    suggestionSubTitle?.text = suggestionItem.subTitle
+                    suggestions_sub_title.show()
+                    suggestions_sub_title.text = suggestionItem.subTitle
                 }
             }
-        }
-    }
-
-    private inner class SuggestionDiff internal constructor(
-            private val oldList: List<SuggestionItem>,
-            private val newList: List<SuggestionItem>
-    ) : DiffUtil.Callback() {
-
-        override fun getOldListSize(): Int {
-            return oldList.size
-        }
-
-        override fun getNewListSize(): Int {
-            return newList.size
-        }
-
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return isEquals(oldItemPosition, newItemPosition)
-        }
-
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return isEquals(oldItemPosition, newItemPosition)
-        }
-
-        private fun isEquals(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldList[oldItemPosition] == newList[newItemPosition]
         }
     }
 }

@@ -24,13 +24,13 @@ import android.content.Context
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex
-import arun.com.chromer.data.DataModule
 import arun.com.chromer.di.app.AppComponent
 import arun.com.chromer.di.app.AppModule
 import arun.com.chromer.di.app.DaggerAppComponent
 import arun.com.chromer.util.ServiceManager
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
+import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import io.fabric.sdk.android.Fabric
 import io.paperdb.Paper
 import timber.log.Timber
@@ -43,7 +43,6 @@ open class Chromer : Application() {
     open val appComponent: AppComponent by lazy {
         DaggerAppComponent.builder()
                 .appModule(AppModule(this))
-                .dataModule(DataModule(this))
                 .build()
     }
 
@@ -66,6 +65,13 @@ open class Chromer : Application() {
             Timber.plant(CrashlyticsTree())
         }
         ServiceManager.takeCareOfServices(applicationContext)
+
+        initMaterialDrawer()
+    }
+
+    private fun initMaterialDrawer() {
+        DrawerImageLoader.init(appComponent.glideDrawerImageLoader())
+                .withHandleAllUris(true)
     }
 
     protected open fun initFabric() {

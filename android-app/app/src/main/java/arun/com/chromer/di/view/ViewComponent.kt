@@ -17,14 +17,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.search.suggestion.items
+package arun.com.chromer.di.view
 
-/**
- * Created by arunk on 09-12-2017.
- */
-class GoogleSuggestionItem(title: String) : TitleSuggestionItem(title, null) {
+import android.view.View
+import arun.com.chromer.di.scopes.PerView
+import arun.com.chromer.search.view.MaterialSearchView
+import dagger.BindsInstance
+import dagger.Subcomponent
 
-    override fun getType(): Int {
-        return SuggestionItem.GOOGLE
+@PerView
+@Subcomponent(modules = [ViewModule::class])
+interface ViewComponent {
+    fun inject(materialSearchView: MaterialSearchView)
+
+    @Subcomponent.Factory
+    interface Factory {
+        fun create(@BindsInstance view: View): ViewComponent
     }
 }

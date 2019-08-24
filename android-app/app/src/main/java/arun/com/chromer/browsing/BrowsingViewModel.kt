@@ -105,7 +105,7 @@ constructor(
 
     private fun websiteObservable(url: String) = if (!isIncognito) {
         websiteRepository.getWebsite(url)
-    } else websiteRepository.getIncognitoWebsite(url)
+    } else websiteRepository.getWebsiteReadOnly(url)
 
     private fun setTaskDescription(task: TaskDescriptionCompat?) {
         task?.let {

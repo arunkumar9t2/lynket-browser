@@ -89,15 +89,16 @@ class NewTabDialogActivity : BaseActivity() {
             unbinder = ButterKnife.bind(this, dialog.customView!!)
 
             materialSearchView.apply {
-                subs.add(searchPerforms()
-                        .filter { it != null }
+                searchPerforms()
+                        .takeUntil(lifecycleEvents.destroys)
                         .subscribe { url ->
                             postDelayed({ launchUrl(url) }, 150)
-                        })
-                subs.add(voiceSearchFailed()
+                        }
+                voiceSearchFailed()
+                        .takeUntil(lifecycleEvents.destroys)
                         .subscribe {
                             Toast.makeText(activity, R.string.no_voice_rec_apps, Toast.LENGTH_SHORT).show()
-                        })
+                        }
                 post {
                     gainFocus()
                     editText.requestFocus()

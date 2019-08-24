@@ -28,7 +28,7 @@ import rx.Observable
  * Created by Arunkumar on 03-03-2017.
  */
 interface HistoryRepository {
-    operator fun get(website: Website): Observable<Website>
+    fun get(website: Website): Observable<Website>
 
     fun insert(website: Website): Observable<Website>
 
@@ -40,7 +40,7 @@ interface HistoryRepository {
 
     fun deleteAll(): Observable<Int>
 
-    fun recents(): Observable<List<Website>>
+    fun recents(): io.reactivex.Observable<List<Website>>
 
     fun search(text: String): Observable<List<Website>>
     /**
@@ -49,4 +49,6 @@ interface HistoryRepository {
     fun loadHistoryRange(limit: Int, offset: Int): List<Website>
 
     fun pagedHistory(): LiveData<PagedList<Website>>
+
+    fun changes(): io.reactivex.Observable<Int>
 }

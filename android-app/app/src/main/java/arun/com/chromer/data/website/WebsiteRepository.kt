@@ -35,7 +35,7 @@ import rx.Observable
 interface WebsiteRepository {
     fun getWebsite(url: String): Observable<Website>
 
-    fun getIncognitoWebsite(url: String): Observable<Website>
+    fun getWebsiteReadOnly(url: String): Observable<Website>
 
     fun getWebsiteColorSync(url: String): Int
 

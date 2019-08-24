@@ -17,22 +17,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.di.viewmodel;
+package arun.com.chromer.di.view
 
-import androidx.lifecycle.ViewModel;
+import android.view.View
+import arun.com.chromer.di.scopes.PerView
+import com.jakewharton.rxbinding3.view.detaches
+import dagger.Module
+import dagger.Provides
+import io.reactivex.Observable
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-import dagger.MapKey;
-
-@Documented
-@Target({ElementType.METHOD})
-@Retention(RetentionPolicy.RUNTIME)
-@MapKey
-@interface ViewModelKey {
-    Class<? extends ViewModel> value();
+@Module
+object ViewModule {
+    @Provides
+    @PerView
+    @Detaches
+    @JvmStatic
+    fun detaches(view: View): Observable<Unit> = view.detaches()
 }

@@ -17,16 +17,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.search.suggestion;
+package arun.com.chromer
 
-import androidx.annotation.IntDef;
+import arun.com.chromer.di.app.AppComponent
+import arun.com.chromer.di.app.DaggerTestAppComponent
+import arun.com.chromer.di.app.TestAppModule
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+class ChromerTestApplication : Chromer() {
 
-import arun.com.chromer.search.suggestion.items.SuggestionItem;
+    override val appComponent: AppComponent by lazy {
+        DaggerTestAppComponent.builder()
+                .testAppModule(TestAppModule(this))
+                .build()
+    }
 
-@Retention(RetentionPolicy.SOURCE)
-@IntDef({SuggestionItem.COPY, SuggestionItem.GOOGLE, SuggestionItem.HISTORY})
-public @interface SuggestionType {
+    override fun initFabric() {}
 }
