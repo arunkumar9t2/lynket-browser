@@ -21,10 +21,10 @@ package arun.com.chromer.search.view
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
-import android.speech.RecognizerIntent
-import android.text.TextUtils
+import android.speech.RecognizerIntent.EXTRA_RESULTS
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH
@@ -66,12 +66,12 @@ import javax.inject.Inject
 class MaterialSearchView : FrameLayout {
     @BindColor(R.color.accent_icon_no_focus)
     @JvmField
-    var normalColor: Int = 0
+    var normalColor = 0
     @BindColor(R.color.accent)
     @JvmField
-    var focusedColor: Int = 0
+    var focusedColor = 0
 
-    private var clearText = false
+    private var viewComponent: ViewComponent? = null
 
     private val xIcon: IconicsDrawable by lazy {
         IconicsDrawable(context)
@@ -94,16 +94,14 @@ class MaterialSearchView : FrameLayout {
 
     private val suggestionAdapter by lazy { SuggestionAdapter(context) }
 
+    @Inject
+    lateinit var searchPresenter: SearchPresenter
+    @Inject
+    lateinit var schedulerProvider: SchedulerProvider
+
     private val voiceSearchFailed = PublishSubject.create<Any>()
     private val searchPerforms = PublishSubject.create<String>()
     private val focusChanges = PublishSubject.create<Boolean>()
-
-    private var viewComponent: ViewComponent? = null
-
-    @Inject
-    lateinit var searchPresenter: Search.SearchPresenter
-    @Inject
-    lateinit var schedulerProvider: SchedulerProvider
 
     val text: String get() = if (msvEditText.text == null) "" else msvEditText?.text.toString()
 
@@ -160,7 +158,7 @@ class MaterialSearchView : FrameLayout {
                     if (hasFocus) {
                         gainFocus()
                     } else {
-                        loseFocus(null)
+                        loseFocus()
                     }
                 }
         msvEditText.editorActionEvents { it.actionId == IME_ACTION_SEARCH }
@@ -168,13 +166,6 @@ class MaterialSearchView : FrameLayout {
                 .takeUntil(detaches())
                 .subscribe(::searchPerformed)
 
-        msvEditText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == IME_ACTION_SEARCH) {
-                searchPerformed(url)
-                return@setOnEditorActionListener true
-            }
-            false
-        }
         msvEditText.afterTextChangeEvents()
                 .takeUntil(detaches())
                 .subscribe {
@@ -183,16 +174,22 @@ class MaterialSearchView : FrameLayout {
 
         msvLeftIcon.setImageDrawable(menuIcon)
 
-        msvRightIcon.setImageDrawable(voiceIcon)
-        msvRightIcon.setOnClickListener {
-            if (clearText) {
-                msvEditText?.setText("")
-                clearFocus()
-            } else {
-                if (Utils.isVoiceRecognizerPresent(context)) {
-                    (context as Activity).startActivityForResult(Utils.getRecognizerIntent(context), REQUEST_CODE_VOICE)
+
+        msvRightIcon.run {
+            setImageDrawable(voiceIcon)
+            setOnClickListener {
+                if (text.isNotEmpty()) {
+                    msvEditText?.setText("")
+                    clearFocus()
                 } else {
-                    voiceSearchFailed.onNext(Any())
+                    if (Utils.isVoiceRecognizerPresent(context)) {
+                        (context as Activity).startActivityForResult(
+                                Utils.getRecognizerIntent(context),
+                                REQUEST_CODE_VOICE
+                        )
+                    } else {
+                        voiceSearchFailed.onNext(Any())
+                    }
                 }
             }
         }
@@ -225,13 +222,6 @@ class MaterialSearchView : FrameLayout {
         clearFocus(null)
     }
 
-    private fun clearFocus(endAction: (() -> Unit)?) {
-        loseFocus(endAction)
-        val view = findFocus()
-        view?.clearFocus()
-        super.clearFocus()
-    }
-
     override fun hasFocus(): Boolean {
         return if (msvEditText != null) {
             msvEditText.hasFocus() && super.hasFocus()
@@ -246,13 +236,13 @@ class MaterialSearchView : FrameLayout {
 
     fun focusChanges(): Observable<Boolean> = focusChanges.hide()
 
-    fun menuClicks() = msvLeftIcon.clicks().share()
+    fun menuClicks(): Observable<Unit> = msvLeftIcon.clicks().share()
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE_VOICE) {
             when (resultCode) {
-                Activity.RESULT_OK -> {
-                    val resultList = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                RESULT_OK -> {
+                    val resultList = data?.getStringArrayListExtra(EXTRA_RESULTS)
                     if (resultList != null && resultList.isNotEmpty()) {
                         searchPerformed(getSearchUrl(resultList[0]))
                     }
@@ -267,14 +257,23 @@ class MaterialSearchView : FrameLayout {
         focusChanges.onNext(true)
     }
 
-    fun loseFocus(endAction: (() -> Unit)?) {
+    fun loseFocus(endAction: (() -> Unit)? = null) {
         setNormalColor()
         msvEditText.text = null
         hideKeyboard()
         hideSuggestions()
         endAction?.invoke()
         focusChanges.onNext(false)
+        handleVoiceIconState()
     }
+
+    private fun clearFocus(endAction: (() -> Unit)?) {
+        loseFocus(endAction)
+        val view = findFocus()
+        view?.clearFocus()
+        super.clearFocus()
+    }
+
 
     private fun hideKeyboard() {
         (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(windowToken, 0)
@@ -291,8 +290,7 @@ class MaterialSearchView : FrameLayout {
     }
 
     private fun handleVoiceIconState() {
-        clearText = !TextUtils.isEmpty(msvEditText.text) || suggestionAdapter.itemCount != 0
-        if (clearText) {
+        if (text.isNotEmpty()) {
             msvRightIcon.setImageDrawable(xIcon.color(if (msvEditText.hasFocus()) focusedColor else normalColor))
         } else {
             msvRightIcon.setImageDrawable(voiceIcon.color(if (msvEditText.hasFocus()) focusedColor else normalColor))
