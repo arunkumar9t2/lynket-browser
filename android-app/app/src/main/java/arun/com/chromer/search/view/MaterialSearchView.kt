@@ -63,7 +63,14 @@ import kotlinx.android.synthetic.main.widget_material_search_view.view.*
 import javax.inject.Inject
 
 @SuppressLint("CheckResult")
-class MaterialSearchView : FrameLayout {
+class MaterialSearchView
+@JvmOverloads
+constructor(
+        context: Context,
+        attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0
+) : FrameLayout(context, attrs, defStyleAttr) {
+
     @BindColor(R.color.accent_icon_no_focus)
     @JvmField
     var normalColor = 0
@@ -109,19 +116,7 @@ class MaterialSearchView : FrameLayout {
 
     val editText: EditText get() = msvEditText
 
-    constructor(context: Context) : super(context) {
-        init(context)
-    }
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init(context)
-    }
-
-    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {
-        init(context)
-    }
-
-    private fun init(context: Context) {
+    init {
         if (context is ProvidesActivityComponent) {
             viewComponent = context
                     .activityComponent
@@ -129,7 +124,7 @@ class MaterialSearchView : FrameLayout {
                     .also { component -> component.inject(this) }
         }
 
-        addView(LayoutInflater.from(getContext()).inflate(
+        addView(LayoutInflater.from(context).inflate(
                 R.layout.widget_material_search_view,
                 this,
                 false
@@ -138,13 +133,13 @@ class MaterialSearchView : FrameLayout {
 
         searchSuggestions.apply {
             (itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
-            layoutManager = LinearLayoutManager(getContext(), RecyclerView.VERTICAL, true)
+            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, true)
             adapter = suggestionAdapter.apply {
                 onChanges {
                     searchSuggestions.isGone = itemCount == 0
                 }
             }
-            addItemDecoration(DividerItemDecoration(getContext(), VERTICAL))
+            addItemDecoration(DividerItemDecoration(context, VERTICAL))
         }
     }
 
