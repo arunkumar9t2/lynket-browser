@@ -35,10 +35,11 @@ import androidx.core.view.isGone
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import arun.com.chromer.R
 import arun.com.chromer.di.view.ViewComponent
+import arun.com.chromer.extenstions.hide
+import arun.com.chromer.extenstions.show
 import arun.com.chromer.search.suggestion.SuggestionAdapter
 import arun.com.chromer.search.suggestion.items.SuggestionItem
 import arun.com.chromer.shared.Constants.REQUEST_CODE_VOICE
@@ -133,7 +134,7 @@ constructor(
 
         searchSuggestions.apply {
             (itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
-            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, true)
+            layoutManager = LinearLayoutManager(context, VERTICAL, true)
             adapter = suggestionAdapter.apply {
                 onChanges {
                     searchSuggestions.isGone = itemCount == 0
@@ -146,31 +147,32 @@ constructor(
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        msvEditText.setOnClickListener { performClick() }
-        msvEditText.focusChanges()
-                .takeUntil(detaches())
-                .subscribe { hasFocus ->
-                    if (hasFocus) {
-                        gainFocus()
-                    } else {
-                        loseFocus()
+        msvEditText.run {
+            setOnClickListener { performClick() }
+            focusChanges()
+                    .takeUntil(detaches())
+                    .subscribe { hasFocus ->
+                        if (hasFocus) {
+                            gainFocus()
+                        } else {
+                            loseFocus()
+                        }
                     }
-                }
-        msvEditText.editorActionEvents { it.actionId == IME_ACTION_SEARCH }
-                .map { url }
-                .takeUntil(detaches())
-                .subscribe(::searchPerformed)
-
-        msvEditText.afterTextChangeEvents()
-                .takeUntil(detaches())
-                .subscribe {
-                    handleVoiceIconState()
-                }
+            editorActionEvents { event -> event.actionId == IME_ACTION_SEARCH }
+                    .map { url }
+                    .takeUntil(detaches())
+                    .subscribe(::searchPerformed)
+            afterTextChangeEvents()
+                    .skipInitialValue()
+                    .takeUntil(detaches())
+                    .subscribe {
+                        handleIconsState()
+                    }
+        }
 
         msvLeftIcon.setImageDrawable(menuIcon)
 
-
-        msvRightIcon.run {
+        msvVoiceIcon.run {
             setImageDrawable(voiceIcon)
             setOnClickListener {
                 if (text.isNotEmpty()) {
@@ -189,7 +191,11 @@ constructor(
             }
         }
 
-        setOnClickListener { if (!msvEditText!!.hasFocus()) gainFocus() }
+        msvClearIcon.clicks().subscribe {
+            msvEditText.text = null
+        }
+
+        setOnClickListener { if (!msvEditText.hasFocus()) gainFocus() }
 
         suggestionAdapter.clicks()
                 .doOnNext {
@@ -197,14 +203,7 @@ constructor(
                 }.takeUntil(detaches())
                 .subscribe()
 
-        searchPresenter.registerSearch(
-                msvEditText.textChanges()
-                        .skipInitialValue()
-                        .map { it.toString() }
-                        .takeUntil(detaches())
-        )
-
-        searchPresenter.suggestions.observeOn(schedulerProvider.ui).subscribe(::setSuggestions)
+        setupPresenter()
     }
 
     override fun onDetachedFromWindow() {
@@ -247,7 +246,7 @@ constructor(
     }
 
     fun gainFocus() {
-        handleVoiceIconState()
+        handleIconsState()
         setFocusedColor()
         focusChanges.onNext(true)
     }
@@ -259,7 +258,19 @@ constructor(
         hideSuggestions()
         endAction?.invoke()
         focusChanges.onNext(false)
-        handleVoiceIconState()
+        handleIconsState()
+    }
+
+    private fun setupPresenter() {
+        searchPresenter.run {
+            registerSearch(
+                    msvEditText.textChanges()
+                            .skipInitialValue()
+                            .map { it.toString() }
+                            .takeUntil(detaches())
+            )
+            suggestions.observeOn(schedulerProvider.ui).subscribe(::setSuggestions)
+        }
     }
 
     private fun clearFocus(endAction: (() -> Unit)?) {
@@ -276,19 +287,30 @@ constructor(
 
     private fun setFocusedColor() {
         msvLeftIcon.setImageDrawable(menuIcon.color(focusedColor))
-        msvRightIcon.setImageDrawable(voiceIcon.color(focusedColor))
+        msvClearIcon.setImageDrawable(menuIcon.color(focusedColor))
+        msvVoiceIcon.setImageDrawable(voiceIcon.color(focusedColor))
     }
 
     private fun setNormalColor() {
         msvLeftIcon.setImageDrawable(menuIcon.color(normalColor))
-        msvRightIcon.setImageDrawable(voiceIcon.color(normalColor))
+        msvClearIcon.setImageDrawable(menuIcon.color(normalColor))
+        msvVoiceIcon.setImageDrawable(voiceIcon.color(normalColor))
     }
 
-    private fun handleVoiceIconState() {
+    private fun handleIconsState() {
+        val color = if (msvEditText.hasFocus()) focusedColor else normalColor
         if (text.isNotEmpty()) {
-            msvRightIcon.setImageDrawable(xIcon.color(if (msvEditText.hasFocus()) focusedColor else normalColor))
+            msvClearIcon.run {
+                setImageDrawable(xIcon.color(color))
+                show()
+            }
+            msvVoiceIcon.setImageDrawable(voiceIcon.color(color))
         } else {
-            msvRightIcon.setImageDrawable(voiceIcon.color(if (msvEditText.hasFocus()) focusedColor else normalColor))
+            msvClearIcon.run {
+                setImageDrawable(xIcon.color(color))
+                hide()
+            }
+            msvVoiceIcon.setImageDrawable(voiceIcon.color(color))
         }
     }
 
