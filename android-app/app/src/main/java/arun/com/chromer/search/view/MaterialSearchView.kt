@@ -19,6 +19,7 @@
 
 package arun.com.chromer.search.view
 
+import `in`.arunkumarsampath.transitionx.prepareTransition
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Activity.RESULT_OK
@@ -32,20 +33,20 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.FrameLayout
 import androidx.core.view.isGone
+import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import arun.com.chromer.R
 import arun.com.chromer.di.view.ViewComponent
-import arun.com.chromer.extenstions.hide
-import arun.com.chromer.extenstions.show
 import arun.com.chromer.search.suggestion.SuggestionAdapter
 import arun.com.chromer.search.suggestion.items.SuggestionItem
 import arun.com.chromer.shared.Constants.REQUEST_CODE_VOICE
 import arun.com.chromer.shared.base.ProvidesActivityComponent
 import arun.com.chromer.util.Utils
 import arun.com.chromer.util.Utils.getSearchUrl
+import arun.com.chromer.util.animations.spring
 import arun.com.chromer.util.recyclerview.onChanges
 import butterknife.BindColor
 import butterknife.ButterKnife
@@ -61,6 +62,7 @@ import dev.arunkumar.android.rxschedulers.SchedulerProvider
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.widget_material_search_view.view.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @SuppressLint("CheckResult")
@@ -164,10 +166,10 @@ constructor(
                     .subscribe(::searchPerformed)
             afterTextChangeEvents()
                     .skipInitialValue()
+                    .debounce(100, TimeUnit.MILLISECONDS)
                     .takeUntil(detaches())
-                    .subscribe {
-                        handleIconsState()
-                    }
+                    .observeOn(schedulerProvider.ui)
+                    .subscribe { handleIconsState() }
         }
 
         msvLeftIcon.setImageDrawable(menuIcon)
@@ -302,13 +304,13 @@ constructor(
         if (text.isNotEmpty()) {
             msvClearIcon.run {
                 setImageDrawable(xIcon.color(color))
-                show()
+                spring(SpringAnimation.ALPHA).animateToFinalPosition(1F)
             }
             msvVoiceIcon.setImageDrawable(voiceIcon.color(color))
         } else {
             msvClearIcon.run {
                 setImageDrawable(xIcon.color(color))
-                hide()
+                spring(SpringAnimation.ALPHA).animateToFinalPosition(0F)
             }
             msvVoiceIcon.setImageDrawable(voiceIcon.color(color))
         }
