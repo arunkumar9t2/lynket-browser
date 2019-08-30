@@ -6,18 +6,25 @@ import androidx.core.content.ContextCompat
 import arun.com.chromer.R
 import arun.com.chromer.di.scopes.PerView
 import arun.com.chromer.search.suggestion.items.SuggestionItem
+import arun.com.chromer.search.suggestion.items.SuggestionItem.HistorySuggestionItem
 import arun.com.chromer.search.suggestion.model.suggestionLayout
+import arun.com.chromer.shared.epxoy.model.websiteLayout
+import arun.com.chromer.tabs.TabsManager
 import com.airbnb.epoxy.AsyncEpoxyController
 import com.jakewharton.rxrelay2.PublishRelay
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import dev.arunkumar.android.epoxy.span.TotalSpanOverride
 import io.reactivex.Observable
 import javax.inject.Inject
 
 @PerView
 class SuggestionController
 @Inject
-constructor(private val activity: Activity) : AsyncEpoxyController() {
+constructor(
+        private val activity: Activity,
+        private val tabsManager: TabsManager
+) : AsyncEpoxyController() {
 
     private val clicksSubject = PublishRelay.create<SuggestionItem>()
 
@@ -77,11 +84,22 @@ constructor(private val activity: Activity) : AsyncEpoxyController() {
                 copyIcon(copyIcon)
                 historyIcon(historyIcon)
                 searchIcon(searchIcon)
+                spanSizeOverride(TotalSpanOverride)
                 onClickListener { _ ->
                     clicksSubject.accept(suggestion)
                 }
             }
         }
+
+        historySuggestions
+                .filterIsInstance<HistorySuggestionItem>()
+                .forEach { suggestion ->
+                    websiteLayout {
+                        id(suggestion.hashCode())
+                        website(suggestion.website)
+                        tabsManager(tabsManager)
+                    }
+                }
 
         googleSuggestions.forEach { suggestion ->
             suggestionLayout {
@@ -90,19 +108,7 @@ constructor(private val activity: Activity) : AsyncEpoxyController() {
                 copyIcon(copyIcon)
                 historyIcon(historyIcon)
                 searchIcon(searchIcon)
-                onClickListener { _ ->
-                    clicksSubject.accept(suggestion)
-                }
-            }
-        }
-
-        historySuggestions.forEach { suggestion ->
-            suggestionLayout {
-                id(suggestion.hashCode())
-                suggestionItem(suggestion)
-                copyIcon(copyIcon)
-                historyIcon(historyIcon)
-                searchIcon(searchIcon)
+                spanSizeOverride(TotalSpanOverride)
                 onClickListener { _ ->
                     clicksSubject.accept(suggestion)
                 }

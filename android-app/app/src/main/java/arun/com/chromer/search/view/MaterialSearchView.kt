@@ -32,9 +32,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.FrameLayout
 import androidx.dynamicanimation.animation.SpringAnimation
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import arun.com.chromer.R
 import arun.com.chromer.di.view.ViewComponent
@@ -143,8 +142,7 @@ constructor(
 
         searchSuggestions.apply {
             (itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
-            layoutManager = LinearLayoutManager(context, VERTICAL, true)
-            addItemDecoration(DividerItemDecoration(context, VERTICAL))
+            layoutManager = GridLayoutManager(context, 4, RecyclerView.VERTICAL, true)
             setController(suggestionController)
             clipToPadding = true
         }

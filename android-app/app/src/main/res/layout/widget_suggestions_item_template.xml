@@ -81,4 +81,11 @@
             android:visibility="gone"
             tools:text="@string/search_or_type_url" />
     </LinearLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="0.15dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/md_light_dividers" />
 </RelativeLayout>

@@ -142,7 +142,7 @@ constructor(
                                             website.safeLabel(),
                                             website.url
                                     )
-                                }.toList()
+                                }.take(4).toList()
                     }.onErrorReturn { emptyList() }
         }
     }
