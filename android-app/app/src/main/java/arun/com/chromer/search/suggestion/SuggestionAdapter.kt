@@ -109,20 +109,20 @@ class SuggestionAdapter(
         }
 
         fun bind(suggestionItem: SuggestionItem) {
-            suggestions_text.text = suggestionItem.title
+            suggestionsText.text = suggestionItem.title
             when (suggestionItem.type) {
-                COPY -> suggestion_icon.setImageDrawable(copyIcon)
-                HISTORY -> suggestion_icon.setImageDrawable(historyIcon)
-                GOOGLE -> suggestion_icon.setImageDrawable(searchIcon)
+                COPY -> suggestionIcon.setImageDrawable(copyIcon)
+                HISTORY -> suggestionIcon.setImageDrawable(historyIcon)
+                GOOGLE -> suggestionIcon.setImageDrawable(searchIcon)
             }
             when {
                 TextUtils.isEmpty(suggestionItem.subTitle) -> {
-                    suggestions_sub_title.gone()
-                    suggestions_sub_title.text = null
+                    suggestionsSubTitle.gone()
+                    suggestionsSubTitle.text = null
                 }
                 else -> {
-                    suggestions_sub_title.show()
-                    suggestions_sub_title.text = suggestionItem.subTitle
+                    suggestionsSubTitle.show()
+                    suggestionsSubTitle.text = suggestionItem.subTitle
                 }
             }
         }

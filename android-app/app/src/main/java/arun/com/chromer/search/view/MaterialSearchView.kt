@@ -19,7 +19,6 @@
 
 package arun.com.chromer.search.view
 
-import `in`.arunkumarsampath.transitionx.prepareTransition
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Activity.RESULT_OK
@@ -32,7 +31,6 @@ import android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.FrameLayout
-import androidx.core.view.isGone
 import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
@@ -40,14 +38,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import arun.com.chromer.R
 import arun.com.chromer.di.view.ViewComponent
-import arun.com.chromer.search.suggestion.SuggestionAdapter
+import arun.com.chromer.extenstions.gone
+import arun.com.chromer.search.suggestion.SuggestionController
 import arun.com.chromer.search.suggestion.items.SuggestionItem
+import arun.com.chromer.search.suggestion.items.SuggestionItem.HistorySuggestionItem
 import arun.com.chromer.shared.Constants.REQUEST_CODE_VOICE
 import arun.com.chromer.shared.base.ProvidesActivityComponent
 import arun.com.chromer.util.Utils
 import arun.com.chromer.util.Utils.getSearchUrl
 import arun.com.chromer.util.animations.spring
-import arun.com.chromer.util.recyclerview.onChanges
 import butterknife.BindColor
 import butterknife.ButterKnife
 import com.jakewharton.rxbinding3.view.clicks
@@ -102,12 +101,12 @@ constructor(
                 .sizeDp(18)
     }
 
-    private val suggestionAdapter by lazy { SuggestionAdapter(context) }
-
     @Inject
     lateinit var searchPresenter: SearchPresenter
     @Inject
     lateinit var schedulerProvider: SchedulerProvider
+    @Inject
+    lateinit var suggestionController: SuggestionController
 
     private val voiceSearchFailed = PublishSubject.create<Any>()
     private val searchPerforms = PublishSubject.create<String>()
@@ -137,12 +136,8 @@ constructor(
         searchSuggestions.apply {
             (itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
             layoutManager = LinearLayoutManager(context, VERTICAL, true)
-            adapter = suggestionAdapter.apply {
-                onChanges {
-                    searchSuggestions.isGone = itemCount == 0
-                }
-            }
             addItemDecoration(DividerItemDecoration(context, VERTICAL))
+            setController(suggestionController)
         }
     }
 
@@ -199,12 +194,15 @@ constructor(
 
         setOnClickListener { if (!msvEditText.hasFocus()) gainFocus() }
 
-        suggestionAdapter.clicks()
-                .doOnNext {
-                    searchPerformed(getSearchUrl(if (it is SuggestionItem.HistorySuggestionItem) it.subTitle else it.title))
-                }.takeUntil(detaches())
-                .subscribe()
-
+        suggestionController.clicks
+                .takeUntil(detaches())
+                .subscribe { suggestionItem ->
+                    val searchText = getSearchUrl(when (suggestionItem) {
+                        is HistorySuggestionItem -> suggestionItem.subTitle
+                        else -> suggestionItem.title
+                    })
+                    searchPerformed(searchText)
+                }
         setupPresenter()
     }
 
@@ -320,9 +318,12 @@ constructor(
         clearFocus { searchPerforms.onNext(url) }
     }
 
-    private fun hideSuggestions() = suggestionAdapter.clear()
+    private fun hideSuggestions() {
+        suggestionController.clear()
+    }
 
     private fun setSuggestions(suggestionItems: List<SuggestionItem>) {
-        suggestionAdapter.submitList(suggestionItems)
+        searchSuggestions.gone(suggestionItems.isEmpty())
+        suggestionController.suggestions = suggestionItems
     }
 }

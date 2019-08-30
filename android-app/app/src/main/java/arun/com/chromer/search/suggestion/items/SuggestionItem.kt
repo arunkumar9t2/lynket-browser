@@ -49,7 +49,6 @@ sealed class SuggestionItem(
     companion object {
 
         object SuggestionItemDiffCallback : DiffUtil.ItemCallback<SuggestionItem>() {
-
             override fun areItemsTheSame(
                     oldItem: SuggestionItem,
                     newItem: SuggestionItem
