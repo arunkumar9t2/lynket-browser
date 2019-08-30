@@ -44,13 +44,18 @@
             android:layout_marginLeft="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:nestedScrollingEnabled="false"
+            android:clipToPadding="true"
+            android:nestedScrollingEnabled="true"
+            android:paddingBottom="48dp"
             android:scrollbars="none"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/msvEditText"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:spanCount="4"
+            tools:itemCount="12"
+            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/widget_suggestions_item_template"
             tools:targetApi="lollipop"
             tools:visibility="visible" />
@@ -63,7 +68,7 @@
             android:scaleType="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/searchSuggestions"
+            app:layout_constraintTop_toTopOf="@+id/msvEditText"
             tools:ignore="ContentDescription"
             tools:src="@drawable/ic_hamburger" />
 
@@ -77,6 +82,7 @@
             android:gravity="center|start"
             android:hint="@string/search_or_type_url"
             android:imeOptions="actionSearch"
+            android:importantForAutofill="no"
             android:inputType="textUri"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -94,7 +100,7 @@
             android:scaleType="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/msvVoiceIcon"
-            app:layout_constraintTop_toBottomOf="@+id/searchSuggestions"
+            app:layout_constraintTop_toTopOf="@+id/msvEditText"
             tools:ignore="ContentDescription"
             tools:src="@drawable/ic_clear_all_24dp"
             tools:tint="@color/accent_icon_no_focus" />
@@ -107,9 +113,16 @@
             android:scaleType="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/searchSuggestions"
+            app:layout_constraintTop_toTopOf="@+id/msvEditText"
             tools:ignore="ContentDescription"
             tools:src="@drawable/ic_settings_24dp"
             tools:tint="@color/accent_icon_no_focus" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/msvEditTextBarrier"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:barrierDirection="top"
+            app:constraint_referenced_ids="msvEditText" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

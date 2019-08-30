@@ -274,6 +274,7 @@
     <string name="warning">Warning</string>
     <string name="bottom_bar_crash_warning">Certain recent versions of Chrome might force close when Bottom Bar is enabled. If such an issue exists, please disable Bottom Bar until Chrome is patched.</string>
     <string name="text_you_copied">Text you copied</string>
+    <string name="link_you_copied">Link you copied</string>
     <string name="system_webview">System WebView</string>
     <string name="Change">Change</string>
     <string name="title_tabs">Tabs</string>

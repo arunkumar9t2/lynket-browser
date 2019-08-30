@@ -19,17 +19,19 @@
 
 package arun.com.chromer.search.suggestion.items
 
-import android.annotation.SuppressLint
-import androidx.recyclerview.widget.DiffUtil
+import arun.com.chromer.data.website.model.Website
+import arun.com.chromer.search.suggestion.items.SuggestionType.*
 
-const val COPY = -1
-const val GOOGLE = 0
-const val HISTORY = 1
+enum class SuggestionType {
+    COPY,
+    GOOGLE,
+    HISTORY
+}
 
 sealed class SuggestionItem(
         open val title: String,
         open val subTitle: String? = null,
-        val type: Int = GOOGLE
+        val type: SuggestionType = GOOGLE
 ) {
     data class CopySuggestionItem(
             override val title: String,
@@ -42,23 +44,8 @@ sealed class SuggestionItem(
     ) : SuggestionItem(title, subTitle, GOOGLE)
 
     data class HistorySuggestionItem(
+            val website: Website,
             override val title: String,
             override val subTitle: String? = null
     ) : SuggestionItem(title, subTitle, HISTORY)
-
-    companion object {
-
-        object SuggestionItemDiffCallback : DiffUtil.ItemCallback<SuggestionItem>() {
-            override fun areItemsTheSame(
-                    oldItem: SuggestionItem,
-                    newItem: SuggestionItem
-            ) = oldItem == newItem
-
-            @SuppressLint("DiffUtilEquals")
-            override fun areContentsTheSame(
-                    oldItem: SuggestionItem,
-                    newItem: SuggestionItem
-            ) = oldItem == newItem
-        }
-    }
 }

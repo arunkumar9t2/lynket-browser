@@ -6,10 +6,8 @@ import android.view.View
 import arun.com.chromer.R
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.show
-import arun.com.chromer.search.suggestion.items.COPY
-import arun.com.chromer.search.suggestion.items.GOOGLE
-import arun.com.chromer.search.suggestion.items.HISTORY
 import arun.com.chromer.search.suggestion.items.SuggestionItem
+import arun.com.chromer.search.suggestion.items.SuggestionType.*
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyAttribute.Option.DoNotHash
 import com.airbnb.epoxy.EpoxyModelClass
@@ -36,8 +34,8 @@ abstract class SuggestionLayoutModel : KotlinEpoxyModelWithHolder<SuggestionLayo
             suggestionsText.text = suggestionItem.title
             when (suggestionItem.type) {
                 COPY -> suggestionIcon.setImageDrawable(copyIcon)
-                HISTORY -> suggestionIcon.setImageDrawable(historyIcon)
                 GOOGLE -> suggestionIcon.setImageDrawable(searchIcon)
+                HISTORY -> suggestionIcon.setImageDrawable(historyIcon)
             }
             when {
                 TextUtils.isEmpty(suggestionItem.subTitle) -> {

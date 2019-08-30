@@ -81,5 +81,4 @@
             android:visibility="gone"
             tools:text="@string/search_or_type_url" />
     </LinearLayout>
-
 </RelativeLayout>

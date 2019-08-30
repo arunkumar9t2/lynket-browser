@@ -42,11 +42,14 @@ import arun.com.chromer.extenstions.gone
 import arun.com.chromer.search.suggestion.SuggestionController
 import arun.com.chromer.search.suggestion.items.SuggestionItem
 import arun.com.chromer.search.suggestion.items.SuggestionItem.HistorySuggestionItem
+import arun.com.chromer.search.suggestion.items.SuggestionType
+import arun.com.chromer.search.suggestion.items.SuggestionType.*
 import arun.com.chromer.shared.Constants.REQUEST_CODE_VOICE
 import arun.com.chromer.shared.base.ProvidesActivityComponent
 import arun.com.chromer.util.Utils
 import arun.com.chromer.util.Utils.getSearchUrl
 import arun.com.chromer.util.animations.spring
+import arun.com.chromer.util.epoxy.intercepts
 import butterknife.BindColor
 import butterknife.ButterKnife
 import com.jakewharton.rxbinding3.view.clicks
@@ -125,7 +128,6 @@ constructor(
                     .viewComponentFactory().create(this)
                     .also { component -> component.inject(this) }
         }
-
         addView(LayoutInflater.from(context).inflate(
                 R.layout.widget_material_search_view,
                 this,
@@ -133,11 +135,18 @@ constructor(
         ))
         ButterKnife.bind(this)
 
+        suggestionController.intercepts()
+                .map { it.isEmpty() }
+                .takeUntil(detaches())
+                .observeOn(schedulerProvider.ui)
+                .subscribe(searchSuggestions::gone)
+
         searchSuggestions.apply {
             (itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
             layoutManager = LinearLayoutManager(context, VERTICAL, true)
             addItemDecoration(DividerItemDecoration(context, VERTICAL))
             setController(suggestionController)
+            clipToPadding = true
         }
     }
 
@@ -209,7 +218,6 @@ constructor(
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         viewComponent = null
-        searchPresenter.cleanUp()
     }
 
     override fun clearFocus() {
@@ -263,13 +271,15 @@ constructor(
 
     private fun setupPresenter() {
         searchPresenter.run {
-            registerSearch(
-                    msvEditText.textChanges()
-                            .skipInitialValue()
-                            .map { it.toString() }
-                            .takeUntil(detaches())
-            )
-            suggestions.observeOn(schedulerProvider.ui).subscribe(::setSuggestions)
+            val queryObservable = msvEditText.textChanges()
+                    .skipInitialValue()
+                    .map { it.toString() }
+                    .takeUntil(detaches())
+            registerSearch(queryObservable)
+            suggestions.observeOn(schedulerProvider.ui)
+                    .subscribe { (suggestionType, suggestions) ->
+                        setSuggestions(suggestionType, suggestions)
+                    }
         }
     }
 
@@ -322,8 +332,12 @@ constructor(
         suggestionController.clear()
     }
 
-    private fun setSuggestions(suggestionItems: List<SuggestionItem>) {
-        searchSuggestions.gone(suggestionItems.isEmpty())
-        suggestionController.suggestions = suggestionItems
+    private fun setSuggestions(
+            suggestionType: SuggestionType,
+            suggestionItems: List<SuggestionItem>
+    ) = when (suggestionType) {
+        COPY -> suggestionController.copySuggestions = suggestionItems
+        GOOGLE -> suggestionController.googleSuggestions = suggestionItems
+        HISTORY -> suggestionController.historySuggestions = suggestionItems
     }
 }

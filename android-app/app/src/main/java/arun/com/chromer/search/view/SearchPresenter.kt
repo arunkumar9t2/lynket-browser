@@ -5,10 +5,10 @@ import arun.com.chromer.di.scopes.PerView
 import arun.com.chromer.di.view.Detaches
 import arun.com.chromer.search.suggestion.SuggestionsEngine
 import arun.com.chromer.search.suggestion.items.SuggestionItem
-import com.jakewharton.rxrelay2.BehaviorRelay
+import arun.com.chromer.search.suggestion.items.SuggestionType
+import com.jakewharton.rxrelay2.PublishRelay
 import dev.arunkumar.android.rxschedulers.SchedulerProvider
-import hu.akarnokd.rxjava.interop.RxJavaInterop
-import io.reactivex.BackpressureStrategy
+import io.reactivex.BackpressureStrategy.LATEST
 import io.reactivex.Observable
 import timber.log.Timber
 import javax.inject.Inject
@@ -23,20 +23,16 @@ constructor(
         @param:Detaches
         private val detaches: Observable<Unit>
 ) {
-    private val suggestionsSubject = BehaviorRelay.create<List<SuggestionItem>>()
-    val suggestions: Observable<List<SuggestionItem>> = suggestionsSubject.hide()
+    private val suggestionsSubject = PublishRelay.create<Pair<SuggestionType, List<SuggestionItem>>>()
+    val suggestions: Observable<Pair<SuggestionType, List<SuggestionItem>>> = suggestionsSubject.hide()
 
     fun registerSearch(queryObservable: Observable<String>) {
         queryObservable
-                .toFlowable(BackpressureStrategy.LATEST)
-                .compose(RxJavaInterop.toV2Transformer(suggestionsEngine.suggestionsTransformer()))
-                .toObservable()
+                .toFlowable(LATEST)
+                .compose(suggestionsEngine.suggestionsTransformer())
                 .doOnError(Timber::e)
-                .takeUntil(detaches)
                 .observeOn(schedulerProvider.ui)
-                .subscribe { suggestionsSubject.accept(it) }
-    }
-
-    fun cleanUp() {
+                .takeUntil(detaches.toFlowable(LATEST))
+                .subscribe(suggestionsSubject::accept)
     }
 }

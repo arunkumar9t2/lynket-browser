@@ -31,7 +31,7 @@ import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.glide.GlideApp
 import butterknife.ButterKnife
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.activity_main_recents_item_template.*
+import kotlinx.android.synthetic.main.widget_website_grid_item.*
 import java.util.*
 import javax.inject.Inject
 
@@ -54,7 +54,7 @@ constructor(val tabsManager: TabsManager) : RecyclerView.Adapter<RecentsAdapter.
     ) = RecentsViewHolder(
             tabsManager,
             LayoutInflater.from(parent.context).inflate(
-                    R.layout.activity_main_recents_item_template,
+                    R.layout.widget_website_grid_item,
                     parent,
                     false
             )

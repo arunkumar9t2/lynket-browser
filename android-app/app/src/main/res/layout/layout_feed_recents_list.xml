@@ -64,7 +64,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/recents_header" />
 
-
         <com.airbnb.epoxy.EpoxyRecyclerView
             android:id="@+id/recentsEpoxyGrid"
             android:layout_width="match_parent"
@@ -75,6 +74,6 @@
             app:layout_constraintTop_toBottomOf="@id/recents_header"
             app:spanCount="4"
             tools:itemCount="8"
-            tools:listitem="@layout/activity_main_recents_item_template" />
+            tools:listitem="@layout/widget_website_grid_item" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

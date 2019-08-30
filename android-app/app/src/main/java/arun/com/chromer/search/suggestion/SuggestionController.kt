@@ -4,7 +4,7 @@ import android.app.Activity
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import arun.com.chromer.R
-import arun.com.chromer.di.scopes.PerActivity
+import arun.com.chromer.di.scopes.PerView
 import arun.com.chromer.search.suggestion.items.SuggestionItem
 import arun.com.chromer.search.suggestion.model.suggestionLayout
 import com.airbnb.epoxy.AsyncEpoxyController
@@ -14,7 +14,7 @@ import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.Observable
 import javax.inject.Inject
 
-@PerActivity
+@PerView
 class SuggestionController
 @Inject
 constructor(private val activity: Activity) : AsyncEpoxyController() {
@@ -44,18 +44,59 @@ constructor(private val activity: Activity) : AsyncEpoxyController() {
                 .sizeDp(18)
     }
 
-    var suggestions: List<SuggestionItem> = emptyList()
+    var copySuggestions: List<SuggestionItem> = emptyList()
+        set(value) {
+            field = value
+            requestDelayedModelBuild(0)
+        }
+
+    var googleSuggestions: List<SuggestionItem> = emptyList()
+        set(value) {
+            field = value
+            requestDelayedModelBuild(0)
+        }
+
+    var historySuggestions: List<SuggestionItem> = emptyList()
         set(value) {
             field = value
             requestDelayedModelBuild(0)
         }
 
     fun clear() {
-        suggestions = emptyList()
+        copySuggestions = emptyList()
+        googleSuggestions = emptyList()
+        historySuggestions = emptyList()
     }
 
+
     override fun buildModels() {
-        suggestions.forEach { suggestion ->
+        copySuggestions.forEach { suggestion ->
+            suggestionLayout {
+                id(suggestion.hashCode())
+                suggestionItem(suggestion)
+                copyIcon(copyIcon)
+                historyIcon(historyIcon)
+                searchIcon(searchIcon)
+                onClickListener { _ ->
+                    clicksSubject.accept(suggestion)
+                }
+            }
+        }
+
+        googleSuggestions.forEach { suggestion ->
+            suggestionLayout {
+                id(suggestion.hashCode())
+                suggestionItem(suggestion)
+                copyIcon(copyIcon)
+                historyIcon(historyIcon)
+                searchIcon(searchIcon)
+                onClickListener { _ ->
+                    clicksSubject.accept(suggestion)
+                }
+            }
+        }
+
+        historySuggestions.forEach { suggestion ->
             suggestionLayout {
                 id(suggestion.hashCode())
                 suggestionItem(suggestion)
