@@ -66,23 +66,21 @@ constructor(
                 Utils.getClipBoardText(application) ?: ""
             }.subscribeOn(schedulerProvider.ui)
             .subscribeOn(schedulerProvider.pool)
-            .map<List<SuggestionItem>> { copiedText ->
+            .map { copiedText ->
                 if (copiedText.isEmpty()) {
                     emptyList()
                 } else {
-                    val copySuggestionItem = CopySuggestionItem(
-                            copiedText,
+                    val fullCopiedText = CopySuggestionItem(
+                            copiedText.trim(),
                             application.getString(R.string.text_you_copied)
                     )
-                    mutableListOf<SuggestionItem>(copySuggestionItem).apply {
-                        addAll(Utils.findURLs(copiedText)
-                                .map { link ->
-                                    CopySuggestionItem(
-                                            link,
-                                            application.getString(R.string.link_you_copied)
-                                    )
-                                })
-                    }
+                    val extractedLinks = Utils.findURLs(copiedText)
+                            .map {
+                                CopySuggestionItem(it, application.getString(R.string.link_you_copied))
+                            }.toMutableList()
+                    extractedLinks.apply {
+                        add(fullCopiedText)
+                    }.distinctBy { it.title.trim() }
                 }
             }
 
