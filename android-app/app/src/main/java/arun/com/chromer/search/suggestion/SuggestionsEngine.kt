@@ -98,8 +98,10 @@ constructor(
                     .switchMap { query ->
                         val deviceSuggestions = deviceSuggestions().map { COPY to it }
                         val googleSuggestions = Flowable.just(query)
+                                .observeOn(schedulerProvider.io)
                                 .compose(googleTransformer())
                                 .map { GOOGLE to it }
+                                .observeOn(schedulerProvider.pool)
                         val historySuggestions = Flowable.just(query)
                                 .compose(historyTransformer())
                                 .map { HISTORY to it }

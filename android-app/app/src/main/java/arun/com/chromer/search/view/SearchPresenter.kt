@@ -11,6 +11,7 @@ import dev.arunkumar.android.rxschedulers.SchedulerProvider
 import io.reactivex.BackpressureStrategy.LATEST
 import io.reactivex.Observable
 import timber.log.Timber
+import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 
 @SuppressLint("CheckResult")
@@ -29,9 +30,9 @@ constructor(
     fun registerSearch(queryObservable: Observable<String>) {
         queryObservable
                 .toFlowable(LATEST)
+                .debounce(200, MILLISECONDS, schedulerProvider.pool)
                 .compose(suggestionsEngine.suggestionsTransformer())
                 .doOnError(Timber::e)
-                .observeOn(schedulerProvider.ui)
                 .takeUntil(detaches.toFlowable(LATEST))
                 .subscribe(suggestionsSubject::accept)
     }
