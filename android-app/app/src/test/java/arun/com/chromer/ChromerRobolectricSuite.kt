@@ -24,7 +24,6 @@ import arun.com.chromer.di.app.TestAppComponent
 import arun.com.chromer.settings.Preferences
 import org.junit.Before
 import org.junit.runner.RunWith
-import org.mockito.MockitoAnnotations
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
@@ -46,7 +45,6 @@ abstract class ChromerRobolectricSuite {
 
     @Before
     fun setup() {
-        MockitoAnnotations.initMocks(this)
         setupRxSchedulers()
         testAppComponent = (application as ChromerTestApplication).appComponent as TestAppComponent
         testAppComponent.inject(this)
