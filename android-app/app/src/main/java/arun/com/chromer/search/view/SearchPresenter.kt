@@ -43,6 +43,15 @@ constructor(
                 .subscribe(suggestionsSubject::accept)
     }
 
+    fun registerSearchProviderClicks(searchProviderClicks: Observable<SearchProvider>) {
+        searchProviderClicks
+                .observeOn(schedulerProvider.pool)
+                .map { it.name }
+                .observeOn(schedulerProvider.ui)
+                .takeUntil(detaches)
+                .subscribe(rxPreferences.searchEngine)
+    }
+
     val searchEngines: Observable<List<SearchProvider>> = searchProviders
             .availableProviders
             .toObservable()

@@ -47,7 +47,7 @@ class SearchProviders
 
         val GOOGLE_SEARCH_PROVIDER = SearchProvider(
                 name = GOOGLE,
-                iconUri = "https://lh3.googleusercontent.com/DKoidc0T3T1KvYC2stChcX9zwmjKj1pgmg3hXzGBDQXM8RG_7JjgiuS0CLOh8DUa7as=s192-rw".toUri(),
+                iconUri = "https://cdn3.iconfinder.com/data/icons/google-suits-1/32/1_google_search_logo_engine_service_suits-256.png".toUri(),
                 searchUrlPrefix = "https://www.google.com/search?q="
         )
     }

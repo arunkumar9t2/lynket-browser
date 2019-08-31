@@ -32,9 +32,11 @@ constructor(
         private val tabsManager: TabsManager
 ) : AsyncEpoxyController() {
 
-    private val clicksSubject = PublishRelay.create<SuggestionItem>()
+    private val suggestionsClicksRelay = PublishRelay.create<SuggestionItem>()
+    private val searchProviderRelay = PublishRelay.create<SearchProvider>()
 
-    val suggestionClicks: Observable<SuggestionItem> get() = clicksSubject.hide()
+    val suggestionClicks: Observable<SuggestionItem> = suggestionsClicksRelay.hide()
+    val searchProviderClicks: Observable<SearchProvider> = searchProviderRelay.hide()
 
     private val searchIcon: Drawable by lazy {
         IconicsDrawable(activity)
@@ -103,6 +105,10 @@ constructor(
                     id(searchProvider.hashCode())
                     searchProvider(searchProvider)
                     spanSizeOverride { _, _, _ -> 2 }
+                    onClick { _ ->
+                        searchProviderRelay.accept(searchProvider)
+                        showSearchProviders = false
+                    }
                 }
             }
             headerLayout {
@@ -128,7 +134,7 @@ constructor(
                 searchIcon(searchIcon)
                 spanSizeOverride(TotalSpanOverride)
                 onClickListener { _ ->
-                    clicksSubject.accept(suggestion)
+                    suggestionsClicksRelay.accept(suggestion)
                 }
             }
         }
@@ -160,7 +166,7 @@ constructor(
                 searchIcon(searchIcon)
                 spanSizeOverride(TotalSpanOverride)
                 onClickListener { _ ->
-                    clicksSubject.accept(suggestion)
+                    suggestionsClicksRelay.accept(suggestion)
                 }
             }
         }

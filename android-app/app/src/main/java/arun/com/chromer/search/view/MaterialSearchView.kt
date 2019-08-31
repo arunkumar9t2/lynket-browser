@@ -125,6 +125,10 @@ constructor(
 
     val editText: EditText get() = msvEditText
 
+    fun voiceSearchFailed(): Observable<Any> = voiceSearchFailed.hide()
+
+    fun searchPerforms(): Observable<String> = searchPerformed.hide()
+
     private val searchTermChanges by lazy {
         msvEditText.textChanges()
                 .skipInitialValue()
@@ -197,13 +201,25 @@ constructor(
         } else super.hasFocus()
     }
 
-    override fun setOnClickListener(onClickListener: OnClickListener?) = Unit
-
-    fun voiceSearchFailed(): Observable<Any> = voiceSearchFailed.hide()
-
-    fun searchPerforms(): Observable<String> = searchPerformed.hide()
-
     fun focusChanges(): Observable<Boolean> = focusChanges.hide()
+
+    fun gainFocus() {
+        handleIconsState()
+        setFocusedColor()
+        focusChanges.onNext(true)
+    }
+
+    fun loseFocus(endAction: (() -> Unit)? = null) {
+        setNormalColor()
+        msvEditText.text = null
+        hideKeyboard()
+        hideSuggestions()
+        focusChanges.onNext(false)
+        handleIconsState()
+        endAction?.invoke()
+    }
+
+    override fun setOnClickListener(onClickListener: OnClickListener?) = Unit
 
     fun menuClicks(): Observable<Unit> = msvLeftIcon
             .clicks()
@@ -221,22 +237,6 @@ constructor(
                 }
             }
         }
-    }
-
-    fun gainFocus() {
-        handleIconsState()
-        setFocusedColor()
-        focusChanges.onNext(true)
-    }
-
-    fun loseFocus(endAction: (() -> Unit)? = null) {
-        setNormalColor()
-        msvEditText.text = null
-        hideKeyboard()
-        hideSuggestions()
-        focusChanges.onNext(false)
-        handleIconsState()
-        endAction?.invoke()
     }
 
     private fun setupLeftIcon() {
@@ -331,6 +331,8 @@ constructor(
                     .subscribe { searchProviders ->
                         suggestionController.searchProviders = searchProviders
                     }
+
+            registerSearchProviderClicks(suggestionController.searchProviderClicks)
         }
     }
 
