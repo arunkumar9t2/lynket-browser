@@ -24,6 +24,8 @@ import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.speech.RecognizerIntent.EXTRA_RESULTS
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -31,13 +33,15 @@ import android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.FrameLayout
+import android.widget.ImageView
 import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import androidx.recyclerview.widget.SimpleItemAnimator
 import arun.com.chromer.R
 import arun.com.chromer.di.view.ViewComponent
 import arun.com.chromer.extenstions.gone
+import arun.com.chromer.search.provider.SearchProvider
 import arun.com.chromer.search.suggestion.SuggestionController
 import arun.com.chromer.search.suggestion.items.SuggestionItem
 import arun.com.chromer.search.suggestion.items.SuggestionItem.HistorySuggestionItem
@@ -49,21 +53,22 @@ import arun.com.chromer.util.Utils
 import arun.com.chromer.util.Utils.getSearchUrl
 import arun.com.chromer.util.animations.spring
 import arun.com.chromer.util.epoxy.intercepts
+import arun.com.chromer.util.glide.GlideApp
 import butterknife.BindColor
 import butterknife.ButterKnife
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.view.detaches
 import com.jakewharton.rxbinding3.view.focusChanges
-import com.jakewharton.rxbinding3.widget.afterTextChangeEvents
 import com.jakewharton.rxbinding3.widget.editorActionEvents
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import dev.arunkumar.android.rxschedulers.SchedulerProvider
 import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
+import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.widget_material_search_view.view.*
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @SuppressLint("CheckResult")
@@ -111,14 +116,21 @@ constructor(
     lateinit var suggestionController: SuggestionController
 
     private val voiceSearchFailed = PublishSubject.create<Any>()
-    private val searchPerforms = PublishSubject.create<String>()
-    private val focusChanges = PublishSubject.create<Boolean>()
+    private val searchPerformed = PublishSubject.create<String>()
+    private val focusChanges = BehaviorSubject.createDefault(false)
 
-    val text: String get() = if (msvEditText.text == null) "" else msvEditText?.text.toString()
+    val text get() = if (msvEditText.text == null) "" else msvEditText.text.toString()
 
-    val url: String get() = getSearchUrl(text)
+    val url get() = getSearchUrl(text)
 
     val editText: EditText get() = msvEditText
+
+    private val searchTermChanges by lazy {
+        msvEditText.textChanges()
+                .skipInitialValue()
+                .takeUntil(detaches())
+                .share()
+    }
 
     init {
         if (context is ProvidesActivityComponent) {
@@ -142,7 +154,7 @@ constructor(
 
         searchSuggestions.apply {
             (itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
-            layoutManager = GridLayoutManager(context, 4, RecyclerView.VERTICAL, true)
+            layoutManager = GridLayoutManager(context, 4, VERTICAL, true)
             setController(suggestionController)
             clipToPadding = true
         }
@@ -151,57 +163,14 @@ constructor(
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        msvEditText.run {
-            setOnClickListener { performClick() }
-            focusChanges()
-                    .takeUntil(detaches())
-                    .subscribe { hasFocus ->
-                        if (hasFocus) {
-                            gainFocus()
-                        } else {
-                            loseFocus()
-                        }
-                    }
-            editorActionEvents { event -> event.actionId == IME_ACTION_SEARCH }
-                    .map { url }
-                    .takeUntil(detaches())
-                    .subscribe(::searchPerformed)
-            afterTextChangeEvents()
-                    .skipInitialValue()
-                    .debounce(100, TimeUnit.MILLISECONDS)
-                    .takeUntil(detaches())
-                    .observeOn(schedulerProvider.ui)
-                    .subscribe { handleIconsState() }
-        }
-
-        msvLeftIcon.setImageDrawable(menuIcon)
-
-        msvVoiceIcon.run {
-            setImageDrawable(voiceIcon)
-            setOnClickListener {
-                if (text.isNotEmpty()) {
-                    msvEditText?.setText("")
-                    clearFocus()
-                } else {
-                    if (Utils.isVoiceRecognizerPresent(context)) {
-                        (context as Activity).startActivityForResult(
-                                Utils.getRecognizerIntent(context),
-                                REQUEST_CODE_VOICE
-                        )
-                    } else {
-                        voiceSearchFailed.onNext(Any())
-                    }
-                }
-            }
-        }
-
-        msvClearIcon.clicks().subscribe {
-            msvEditText.text = null
-        }
-
         setOnClickListener { if (!msvEditText.hasFocus()) gainFocus() }
+        setupEditText()
+        setupLeftIcon()
+        setupVoiceIcon()
 
-        suggestionController.clicks
+        msvClearIcon.clicks().subscribe { msvEditText.text = null }
+
+        suggestionController.suggestionClicks
                 .takeUntil(detaches())
                 .subscribe { suggestionItem ->
                     val searchText = getSearchUrl(when (suggestionItem) {
@@ -232,11 +201,14 @@ constructor(
 
     fun voiceSearchFailed(): Observable<Any> = voiceSearchFailed.hide()
 
-    fun searchPerforms(): Observable<String> = searchPerforms.hide()
+    fun searchPerforms(): Observable<String> = searchPerformed.hide()
 
     fun focusChanges(): Observable<Boolean> = focusChanges.hide()
 
-    fun menuClicks(): Observable<Unit> = msvLeftIcon.clicks().share()
+    fun menuClicks(): Observable<Unit> = msvLeftIcon
+            .clicks()
+            .filter { focusChanges.value == false }
+            .share()
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE_VOICE) {
@@ -244,7 +216,7 @@ constructor(
                 RESULT_OK -> {
                     val resultList = data?.getStringArrayListExtra(EXTRA_RESULTS)
                     if (resultList != null && resultList.isNotEmpty()) {
-                        searchPerformed(getSearchUrl(resultList[0]))
+                        searchPerformed(getSearchUrl(resultList.first()))
                     }
                 }
             }
@@ -262,21 +234,102 @@ constructor(
         msvEditText.text = null
         hideKeyboard()
         hideSuggestions()
-        endAction?.invoke()
         focusChanges.onNext(false)
         handleIconsState()
+        endAction?.invoke()
+    }
+
+    private fun setupLeftIcon() {
+        class CompositeIconResource(val drawable: Drawable? = null, val uri: Uri? = null) {
+            fun apply(view: ImageView) {
+                when {
+                    drawable != null -> view.setImageDrawable(drawable)
+                    uri != null -> GlideApp.with(view).load(uri).into(view)
+                }
+            }
+        }
+        msvLeftIcon.run {
+            setImageDrawable(menuIcon)
+            clicks().takeUntil(detaches()).subscribe {
+                suggestionController.showSearchProviders = true
+            }
+            Observable.combineLatest(
+                    focusChanges,
+                    searchPresenter.selectedSearchProvider,
+                    BiFunction<Boolean, SearchProvider, CompositeIconResource> { hasFocus, searchProvider ->
+                        if (hasFocus) {
+                            CompositeIconResource(uri = searchProvider.iconUri)
+                        } else {
+                            CompositeIconResource(drawable = menuIcon)
+                        }
+                    }
+            ).compose(schedulerProvider.poolToUi())
+                    .takeUntil(detaches())
+                    .subscribe { iconResource -> iconResource.apply(this) }
+        }
+        searchTermChanges.subscribe {
+            suggestionController.showSearchProviders = false
+        }
+    }
+
+    private fun setupVoiceIcon() {
+        msvVoiceIcon.run {
+            setImageDrawable(voiceIcon)
+            setOnClickListener {
+                if (text.isNotEmpty()) {
+                    msvEditText?.setText("")
+                    clearFocus()
+                } else {
+                    if (Utils.isVoiceRecognizerPresent(context)) {
+                        (context as Activity).startActivityForResult(
+                                Utils.getRecognizerIntent(context),
+                                REQUEST_CODE_VOICE
+                        )
+                    } else {
+                        voiceSearchFailed.onNext(Any())
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setupEditText() {
+        msvEditText.run {
+            setOnClickListener { performClick() }
+            focusChanges()
+                    .takeUntil(detaches())
+                    .subscribe { hasFocus ->
+                        if (hasFocus) {
+                            gainFocus()
+                        } else {
+                            loseFocus()
+                        }
+                    }
+            editorActionEvents { event -> event.actionId == IME_ACTION_SEARCH }
+                    .map { url }
+                    .takeUntil(detaches())
+                    .subscribe(::searchPerformed)
+            searchTermChanges
+                    .takeUntil(detaches())
+                    .observeOn(schedulerProvider.ui)
+                    .subscribe { handleIconsState() }
+        }
     }
 
     private fun setupPresenter() {
         searchPresenter.run {
-            val queryObservable = msvEditText.textChanges()
-                    .skipInitialValue()
-                    .map { it.toString() }
-                    .takeUntil(detaches())
-            registerSearch(queryObservable)
-            suggestions.observeOn(schedulerProvider.ui)
+            registerSearch(searchTermChanges.map { it.toString() })
+
+            suggestions.takeUntil(detaches())
+                    .observeOn(schedulerProvider.ui)
                     .subscribe { (suggestionType, suggestions) ->
                         setSuggestions(suggestionType, suggestions)
+                    }
+
+            searchEngines.takeUntil(detaches())
+                    .observeOn(schedulerProvider.ui)
+                    .subscribe { searchProviders ->
+                        suggestionController.searchProviders = searchProviders
                     }
         }
     }
@@ -323,7 +376,7 @@ constructor(
     }
 
     private fun searchPerformed(url: String) {
-        clearFocus { searchPerforms.onNext(url) }
+        clearFocus { searchPerformed.onNext(url) }
     }
 
     private fun hideSuggestions() {

@@ -31,6 +31,7 @@ import arun.com.chromer.util.ServiceManager
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
+import com.uber.rxdogtag.RxDogTag
 import io.fabric.sdk.android.Fabric
 import io.paperdb.Paper
 import timber.log.Timber
@@ -52,6 +53,7 @@ open class Chromer : Application() {
         Paper.init(this)
 
         if (BuildConfig.DEBUG) {
+            RxDogTag.install()
             Timber.plant(Timber.DebugTree())
             /*StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                     //.detectAll()

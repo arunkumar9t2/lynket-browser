@@ -213,6 +213,8 @@ dependencies {
     implementation 'com.jakewharton.rxbinding3:rxbinding-recyclerview:3.0.0'
     implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
 
+    implementation "com.uber.rxdogtag:rxdogtag:0.2.0"
+
     // RxPrefs
     implementation "com.afollestad:rxkprefs:1.2.5"
 

@@ -327,4 +327,5 @@
     <string name="minimize_behavior">Minimize behavior</string>
     <string name="status">Status</string>
     <string name="pages">Pages</string>
+    <string name="pick_search_engines">Pick search engine</string>
 </resources>

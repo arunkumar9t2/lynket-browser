@@ -15,6 +15,6 @@ abstract class HeaderLayoutModel : KotlinEpoxyModelWithHolder<HeaderLayoutModel.
     lateinit var title: String
 
     override fun bind(holder: ViewHolder) {
-        holder.feedHeader.text = title
+        holder.header.text = title
     }
 }

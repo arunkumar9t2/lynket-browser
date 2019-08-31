@@ -5,6 +5,8 @@ import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import arun.com.chromer.R
 import arun.com.chromer.di.scopes.PerView
+import arun.com.chromer.search.provider.SearchProvider
+import arun.com.chromer.search.provider.searchProviderLayout
 import arun.com.chromer.search.suggestion.items.SuggestionItem
 import arun.com.chromer.search.suggestion.items.SuggestionItem.HistorySuggestionItem
 import arun.com.chromer.search.suggestion.model.suggestionLayout
@@ -29,7 +31,7 @@ constructor(
 
     private val clicksSubject = PublishRelay.create<SuggestionItem>()
 
-    val clicks: Observable<SuggestionItem> get() = clicksSubject.hide()
+    val suggestionClicks: Observable<SuggestionItem> get() = clicksSubject.hide()
 
     private val searchIcon: Drawable by lazy {
         IconicsDrawable(activity)
@@ -52,6 +54,7 @@ constructor(
                 .sizeDp(18)
     }
 
+
     var copySuggestions: List<SuggestionItem> = emptyList()
         set(value) {
             field = value
@@ -70,6 +73,18 @@ constructor(
             requestDelayedModelBuild(0)
         }
 
+    var searchProviders: List<SearchProvider> = emptyList()
+        set(value) {
+            field = value
+            requestDelayedModelBuild(0)
+        }
+
+    var showSearchProviders = false
+        set(value) {
+            field = value
+            requestDelayedModelBuild(0)
+        }
+
     fun clear() {
         copySuggestions = emptyList()
         googleSuggestions = emptyList()
@@ -78,6 +93,22 @@ constructor(
 
 
     override fun buildModels() {
+        if (searchProviders.isNotEmpty() && showSearchProviders) {
+            searchProviders.forEach { searchProvider ->
+                searchProviderLayout {
+                    id(searchProvider.hashCode())
+                    searchProvider(searchProvider)
+                    spanSizeOverride { _, _, _ -> 2 }
+                }
+            }
+            headerLayout {
+                id("search-engines")
+                title(activity.getString(R.string.pick_search_engines))
+                spanSizeOverride(TotalSpanOverride)
+            }
+            return
+        }
+
         copySuggestions.forEach { suggestion ->
             suggestionLayout {
                 id(suggestion.hashCode())
