@@ -118,14 +118,11 @@ androidExtensions {
 }
 
 dependencies {
-
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // Tests
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'org.mockito:mockito-all:1.10.8'
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:4.2.1'
     testImplementation 'androidx.test:runner:1.2.0'
