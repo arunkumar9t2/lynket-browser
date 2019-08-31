@@ -8,6 +8,7 @@ import arun.com.chromer.di.scopes.PerView
 import arun.com.chromer.search.suggestion.items.SuggestionItem
 import arun.com.chromer.search.suggestion.items.SuggestionItem.HistorySuggestionItem
 import arun.com.chromer.search.suggestion.model.suggestionLayout
+import arun.com.chromer.shared.epxoy.model.headerLayout
 import arun.com.chromer.shared.epxoy.model.websiteLayout
 import arun.com.chromer.tabs.TabsManager
 import com.airbnb.epoxy.AsyncEpoxyController
@@ -93,11 +94,19 @@ constructor(
 
         historySuggestions
                 .filterIsInstance<HistorySuggestionItem>()
-                .forEach { suggestion ->
+                .onEach { suggestion ->
                     websiteLayout {
                         id(suggestion.hashCode())
                         website(suggestion.website)
                         tabsManager(tabsManager)
+                    }
+                }.count().let { size ->
+                    if (size != 0) {
+                        headerLayout {
+                            id("history-header")
+                            title(activity.getString(R.string.title_history))
+                            spanSizeOverride(TotalSpanOverride)
+                        }
                     }
                 }
 

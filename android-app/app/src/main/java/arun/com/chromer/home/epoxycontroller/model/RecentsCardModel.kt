@@ -5,6 +5,7 @@ import android.view.View
 import arun.com.chromer.R
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.history.HistoryActivity
+import arun.com.chromer.shared.epxoy.model.websiteLayout
 import arun.com.chromer.tabs.TabsManager
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -35,7 +36,11 @@ abstract class RecentsCardModel : KotlinEpoxyModelWithHolder<RecentsCardModel.Vi
             )
             recentsEpoxyGrid.withModels {
                 websites.forEach { website ->
-
+                    websiteLayout {
+                        id(website.hashCode())
+                        website(website)
+                        tabsManager(tabsManager)
+                    }
                 }
             }
             historyButton.setOnClickListener(historyClickListener)
