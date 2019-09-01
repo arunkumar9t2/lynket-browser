@@ -70,4 +70,10 @@ constructor(
             }.replay(1)
             .refCount()
             .observeOn(schedulerProvider.ui)
+
+
+    fun getSearchUrl(searchUrl: String): Observable<String> {
+        return selectedSearchProvider.take(1)
+                .map { provider -> provider.getSearchUrl(searchUrl) }
+    }
 }

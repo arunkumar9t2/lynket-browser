@@ -23,12 +23,12 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.speech.RecognizerIntent.EXTRA_RESULTS
 import android.util.AttributeSet
-import android.view.LayoutInflater
 import android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -39,8 +39,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import androidx.recyclerview.widget.SimpleItemAnimator
 import arun.com.chromer.R
+import arun.com.chromer.di.view.Detaches
 import arun.com.chromer.di.view.ViewComponent
 import arun.com.chromer.extenstions.gone
+import arun.com.chromer.extenstions.inflate
 import arun.com.chromer.search.provider.SearchProvider
 import arun.com.chromer.search.suggestion.SuggestionController
 import arun.com.chromer.search.suggestion.items.SuggestionItem
@@ -50,14 +52,12 @@ import arun.com.chromer.search.suggestion.items.SuggestionType.*
 import arun.com.chromer.shared.Constants.REQUEST_CODE_VOICE
 import arun.com.chromer.shared.base.ProvidesActivityComponent
 import arun.com.chromer.util.Utils
-import arun.com.chromer.util.Utils.getSearchUrl
 import arun.com.chromer.util.animations.spring
 import arun.com.chromer.util.epoxy.intercepts
 import arun.com.chromer.util.glide.GlideApp
 import butterknife.BindColor
 import butterknife.ButterKnife
 import com.jakewharton.rxbinding3.view.clicks
-import com.jakewharton.rxbinding3.view.detaches
 import com.jakewharton.rxbinding3.view.focusChanges
 import com.jakewharton.rxbinding3.widget.editorActionEvents
 import com.jakewharton.rxbinding3.widget.textChanges
@@ -65,10 +65,12 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import dev.arunkumar.android.rxschedulers.SchedulerProvider
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.widget_material_search_view.view.*
+import timber.log.Timber
 import javax.inject.Inject
 
 @SuppressLint("CheckResult")
@@ -80,14 +82,14 @@ constructor(
         defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
+    private var viewComponent: ViewComponent? = null
+
     @BindColor(R.color.accent_icon_no_focus)
     @JvmField
     var normalColor = 0
     @BindColor(R.color.accent)
     @JvmField
     var focusedColor = 0
-
-    private var viewComponent: ViewComponent? = null
 
     private val xIcon: IconicsDrawable by lazy {
         IconicsDrawable(context)
@@ -114,27 +116,38 @@ constructor(
     lateinit var schedulerProvider: SchedulerProvider
     @Inject
     lateinit var suggestionController: SuggestionController
+    @Inject
+    @field:Detaches
+    lateinit var viewDetaches: Observable<Unit>
 
     private val voiceSearchFailed = PublishSubject.create<Any>()
     private val searchPerformed = PublishSubject.create<String>()
     private val focusChanges = BehaviorSubject.createDefault(false)
 
-    val text get() = if (msvEditText.text == null) "" else msvEditText.text.toString()
+    private val searchQuery get() = if (msvEditText.text == null) "" else msvEditText.text.toString()
 
-    val url get() = getSearchUrl(text)
+    private val url: Single<String> by lazy {
+        Observable.fromCallable { searchQuery }
+                .subscribeOn(schedulerProvider.ui)
+                .observeOn(schedulerProvider.pool)
+                .concatMap(searchPresenter::getSearchUrl)
+                .firstOrError()
+    }
+
+    private val searchTermChanges by lazy {
+        msvEditText.textChanges()
+                .skipInitialValue()
+                .takeUntil(viewDetaches)
+                .share()
+    }
 
     val editText: EditText get() = msvEditText
 
     fun voiceSearchFailed(): Observable<Any> = voiceSearchFailed.hide()
 
-    fun searchPerforms(): Observable<String> = searchPerformed.hide()
-
-    private val searchTermChanges by lazy {
-        msvEditText.textChanges()
-                .skipInitialValue()
-                .takeUntil(detaches())
-                .share()
-    }
+    fun searchPerforms(): Observable<String> = searchPerformed
+            .hide()
+            .switchMap(searchPresenter::getSearchUrl)
 
     init {
         if (context is ProvidesActivityComponent) {
@@ -143,18 +156,8 @@ constructor(
                     .viewComponentFactory().create(this)
                     .also { component -> component.inject(this) }
         }
-        addView(LayoutInflater.from(context).inflate(
-                R.layout.widget_material_search_view,
-                this,
-                false
-        ))
+        addView(inflate(R.layout.widget_material_search_view))
         ButterKnife.bind(this)
-
-        suggestionController.intercepts()
-                .map { it.isEmpty() }
-                .takeUntil(detaches())
-                .observeOn(schedulerProvider.ui)
-                .subscribe(searchSuggestions::gone)
 
         searchSuggestions.apply {
             (itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
@@ -174,15 +177,7 @@ constructor(
 
         msvClearIcon.clicks().subscribe { msvEditText.text = null }
 
-        suggestionController.suggestionClicks
-                .takeUntil(detaches())
-                .subscribe { suggestionItem ->
-                    val searchText = getSearchUrl(when (suggestionItem) {
-                        is HistorySuggestionItem -> suggestionItem.subTitle
-                        else -> suggestionItem.title
-                    })
-                    searchPerformed(searchText)
-                }
+        setupSuggestionController()
         setupPresenter()
     }
 
@@ -195,10 +190,9 @@ constructor(
         clearFocus(null)
     }
 
-    override fun hasFocus(): Boolean {
-        return if (msvEditText != null) {
-            msvEditText.hasFocus() && super.hasFocus()
-        } else super.hasFocus()
+    override fun hasFocus() = when {
+        msvEditText != null -> msvEditText.hasFocus() && super.hasFocus()
+        else -> super.hasFocus()
     }
 
     fun focusChanges(): Observable<Boolean> = focusChanges.hide()
@@ -232,7 +226,7 @@ constructor(
                 RESULT_OK -> {
                     val resultList = data?.getStringArrayListExtra(EXTRA_RESULTS)
                     if (resultList != null && resultList.isNotEmpty()) {
-                        searchPerformed(getSearchUrl(resultList.first()))
+                        searchPerformed(resultList.first())
                     }
                 }
             }
@@ -250,7 +244,7 @@ constructor(
         }
         msvLeftIcon.run {
             setImageDrawable(menuIcon)
-            clicks().takeUntil(detaches()).subscribe {
+            clicks().takeUntil(viewDetaches).subscribe {
                 suggestionController.showSearchProviders = true
             }
             Observable.combineLatest(
@@ -264,7 +258,7 @@ constructor(
                         }
                     }
             ).compose(schedulerProvider.poolToUi())
-                    .takeUntil(detaches())
+                    .takeUntil(viewDetaches)
                     .subscribe { iconResource -> iconResource.apply(this) }
         }
         searchTermChanges.subscribe {
@@ -276,7 +270,7 @@ constructor(
         msvVoiceIcon.run {
             setImageDrawable(voiceIcon)
             setOnClickListener {
-                if (text.isNotEmpty()) {
+                if (searchQuery.isNotEmpty()) {
                     msvEditText?.setText("")
                     clearFocus()
                 } else {
@@ -297,7 +291,7 @@ constructor(
         msvEditText.run {
             setOnClickListener { performClick() }
             focusChanges()
-                    .takeUntil(detaches())
+                    .takeUntil(viewDetaches)
                     .subscribe { hasFocus ->
                         if (hasFocus) {
                             gainFocus()
@@ -306,11 +300,12 @@ constructor(
                         }
                     }
             editorActionEvents { event -> event.actionId == IME_ACTION_SEARCH }
-                    .map { url }
-                    .takeUntil(detaches())
+                    .map { searchQuery }
+                    .observeOn(schedulerProvider.ui)
+                    .takeUntil(viewDetaches)
                     .subscribe(::searchPerformed)
             searchTermChanges
-                    .takeUntil(detaches())
+                    .takeUntil(viewDetaches)
                     .observeOn(schedulerProvider.ui)
                     .subscribe { handleIconsState() }
         }
@@ -320,13 +315,13 @@ constructor(
         searchPresenter.run {
             registerSearch(searchTermChanges.map { it.toString() })
 
-            suggestions.takeUntil(detaches())
+            suggestions.takeUntil(viewDetaches)
                     .observeOn(schedulerProvider.ui)
                     .subscribe { (suggestionType, suggestions) ->
                         setSuggestions(suggestionType, suggestions)
                     }
 
-            searchEngines.takeUntil(detaches())
+            searchEngines.takeUntil(viewDetaches)
                     .observeOn(schedulerProvider.ui)
                     .subscribe { searchProviders ->
                         suggestionController.searchProviders = searchProviders
@@ -334,6 +329,26 @@ constructor(
 
             registerSearchProviderClicks(suggestionController.searchProviderClicks)
         }
+    }
+
+    private fun setupSuggestionController() {
+        suggestionController.intercepts()
+                .map { it.isEmpty() }
+                .observeOn(schedulerProvider.ui)
+                .takeUntil(viewDetaches)
+                .subscribe(searchSuggestions::gone)
+
+        suggestionController.suggestionClicks
+                .observeOn(schedulerProvider.pool)
+                .map { suggestionItem ->
+                    when (suggestionItem) {
+                        is HistorySuggestionItem -> suggestionItem.subTitle
+                        else -> suggestionItem.title
+                    } ?: ""
+                }.filter { it.isNotEmpty() }
+                .observeOn(schedulerProvider.ui)
+                .takeUntil(viewDetaches)
+                .subscribe(::searchPerformed)
     }
 
     private fun clearFocus(endAction: (() -> Unit)?) {
@@ -345,7 +360,7 @@ constructor(
 
 
     private fun hideKeyboard() {
-        (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(windowToken, 0)
+        (context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(windowToken, 0)
     }
 
     private fun setFocusedColor() {
@@ -362,7 +377,7 @@ constructor(
 
     private fun handleIconsState() {
         val color = if (msvEditText.hasFocus()) focusedColor else normalColor
-        if (text.isNotEmpty()) {
+        if (searchQuery.isNotEmpty()) {
             msvClearIcon.run {
                 setImageDrawable(xIcon.color(color))
                 spring(SpringAnimation.ALPHA).animateToFinalPosition(1F)
@@ -377,8 +392,9 @@ constructor(
         }
     }
 
-    private fun searchPerformed(url: String) {
-        clearFocus { searchPerformed.onNext(url) }
+    private fun searchPerformed(searchQuery: String) {
+        Timber.d("Search performed : $searchQuery")
+        clearFocus { searchPerformed.onNext(searchQuery) }
     }
 
     private fun hideSuggestions() {

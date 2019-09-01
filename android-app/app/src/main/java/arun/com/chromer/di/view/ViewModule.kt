@@ -32,5 +32,5 @@ object ViewModule {
     @PerView
     @Detaches
     @JvmStatic
-    fun detaches(view: View): Observable<Unit> = view.detaches()
+    fun detaches(view: View): Observable<Unit> = view.detaches().share()
 }

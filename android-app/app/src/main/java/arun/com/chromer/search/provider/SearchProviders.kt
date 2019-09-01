@@ -1,8 +1,10 @@
 package arun.com.chromer.search.provider
 
 import android.net.Uri
+import android.util.Patterns.WEB_URL
 import androidx.core.net.toUri
 import io.reactivex.Single
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -11,7 +13,14 @@ data class SearchProvider(
         val iconUri: Uri,
         val searchUrlPrefix: String
 ) {
-    fun getSearchUrl(text: String) = searchUrlPrefix + text.replace(" ", "+")
+    fun getSearchUrl(text: String): String {
+        return if (WEB_URL.matcher(text).matches()) {
+            when {
+                !text.toLowerCase(Locale.getDefault()).matches("^\\w+://.*".toRegex()) -> "http://$text"
+                else -> text
+            }
+        } else searchUrlPrefix + text.replace(" ", "+")
+    }
 }
 
 @Singleton
