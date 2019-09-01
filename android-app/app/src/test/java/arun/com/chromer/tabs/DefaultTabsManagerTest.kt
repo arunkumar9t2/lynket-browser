@@ -54,7 +54,7 @@ class DefaultTabsManagerTest : ChromerRobolectricSuite() {
     }
 
     @Test
-    @Ignore
+    @Ignore("Has issues causing timeout on CI")
     fun testHomeActivityClearedOnExternalIntent() {
         clearPreferences()
         preferences.mergeTabs(false)
