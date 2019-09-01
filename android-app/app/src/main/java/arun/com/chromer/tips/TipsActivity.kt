@@ -21,13 +21,13 @@ package arun.com.chromer.tips
 
 import android.os.Build
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import arun.com.chromer.R
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.extenstions.inflate
@@ -110,7 +110,7 @@ class TipsActivity : BaseActivity() {
                 provider -> {
                     holder.title?.setText(R.string.choose_provider)
                     holder.subtitle?.setText(R.string.choose_provider_tip)
-                    requestManager.load(R.drawable.tips_providers).into(holder.image)
+                    requestManager.load(R.drawable.tips_providers).into(holder.image!!)
                     holder.iconView?.setImageDrawable(IconicsDrawable(this@TipsActivity)
                             .icon(CommunityMaterial.Icon.cmd_cards)
                             .colorRes(R.color.accent)
@@ -119,7 +119,7 @@ class TipsActivity : BaseActivity() {
                 secBrowser -> {
                     holder.title?.setText(R.string.choose_secondary_browser)
                     holder.subtitle?.setText(R.string.tips_secondary_browser)
-                    requestManager.load(R.drawable.tip_secondary_browser).into(holder.image)
+                    requestManager.load(R.drawable.tip_secondary_browser).into(holder.image!!)
                     holder.iconView?.setImageDrawable(IconicsDrawable(this@TipsActivity)
                             .icon(CommunityMaterial.Icon.cmd_earth)
                             .colorRes(R.color.accent)
@@ -128,7 +128,7 @@ class TipsActivity : BaseActivity() {
                 perApp -> {
                     holder.title?.setText(R.string.per_app_settings)
                     holder.subtitle?.setText(R.string.per_app_settings_explanation)
-                    requestManager.load(R.drawable.tips_per_app_settings).into(holder.image)
+                    requestManager.load(R.drawable.tips_per_app_settings).into(holder.image!!)
                     holder.iconView?.setImageDrawable(IconicsDrawable(this@TipsActivity)
                             .icon(CommunityMaterial.Icon.cmd_apps)
                             .colorRes(R.color.accent)
@@ -137,7 +137,7 @@ class TipsActivity : BaseActivity() {
                 bottomBar -> {
                     holder.title?.setText(R.string.bottom_bar)
                     holder.subtitle?.setText(R.string.tips_bottom_bar)
-                    requestManager.load(R.drawable.tips_bottom_bar).into(holder.image)
+                    requestManager.load(R.drawable.tips_bottom_bar).into(holder.image!!)
                     holder.iconView?.setImageDrawable(IconicsDrawable(this@TipsActivity)
                             .icon(CommunityMaterial.Icon.cmd_drag_horizontal)
                             .colorRes(R.color.accent)
@@ -146,7 +146,7 @@ class TipsActivity : BaseActivity() {
                 articleKeywords -> {
                     holder.title?.setText(R.string.article_mode)
                     holder.subtitle?.setText(R.string.tips_article_mode)
-                    requestManager.load(R.drawable.tips_article_keywords).into(holder.image)
+                    requestManager.load(R.drawable.tips_article_keywords).into(holder.image!!)
                     holder.iconView?.setImageDrawable(IconicsDrawable(this@TipsActivity)
                             .icon(CommunityMaterial.Icon.cmd_file_document)
                             .colorRes(R.color.accent)
@@ -155,7 +155,7 @@ class TipsActivity : BaseActivity() {
                 quicksettings -> {
                     holder.title?.setText(R.string.quick_settings)
                     holder.subtitle?.setText(R.string.quick_settings_tip)
-                    requestManager.load(R.drawable.tips_quick_settings).into(holder.image)
+                    requestManager.load(R.drawable.tips_quick_settings).into(holder.image!!)
                     holder.iconView?.setImageDrawable(IconicsDrawable(this@TipsActivity)
                             .icon(CommunityMaterial.Icon.cmd_settings)
                             .colorRes(R.color.accent)

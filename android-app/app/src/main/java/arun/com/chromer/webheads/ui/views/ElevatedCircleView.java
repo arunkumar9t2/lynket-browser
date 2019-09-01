@@ -71,7 +71,7 @@ public class ElevatedCircleView extends CircleView {
     }
 
     /**
-     * Use only on pre L devices. For post L use {@link android.support.v4.view.ViewCompat#setElevation(View, float)}.
+     * Use only on pre L devices. For post L use {@link androidx.core.view.ViewCompat#setElevation(View, float)}.
      * No op when called for post L devices.
      */
     public void clearElevation() {

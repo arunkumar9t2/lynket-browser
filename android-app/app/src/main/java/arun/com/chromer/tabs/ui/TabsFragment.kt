@@ -19,16 +19,17 @@
 
 package arun.com.chromer.tabs.ui
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.transition.TransitionManager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
-import android.support.v7.widget.helper.ItemTouchHelper.*
 import android.view.View
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.ItemTouchHelper.LEFT
+import androidx.recyclerview.widget.ItemTouchHelper.RIGHT
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.TransitionManager
 import arun.com.chromer.R
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.fragment.FragmentComponent
@@ -36,7 +37,6 @@ import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.show
 import arun.com.chromer.shared.FabHandler
 import arun.com.chromer.shared.base.fragment.BaseFragment
-import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.glide.GlideApp
 import com.afollestad.materialdialogs.MaterialDialog
@@ -48,7 +48,7 @@ import javax.inject.Inject
  */
 class TabsFragment : BaseFragment(), FabHandler {
     @Inject
-    lateinit var tabsManager: DefaultTabsManager
+    lateinit var tabsManager: TabsManager
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -102,7 +102,7 @@ class TabsFragment : BaseFragment(), FabHandler {
             adapter = tabsAdapter
         }
 
-        val swipeTouch = object : SimpleCallback(0, LEFT or RIGHT) {
+        val swipeTouch = object : ItemTouchHelper.SimpleCallback(0, LEFT or RIGHT) {
             override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
                 return false
             }

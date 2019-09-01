@@ -25,14 +25,14 @@ import android.content.Intent
 import arun.com.chromer.Chromer
 import arun.com.chromer.browsing.customtabs.CustomTabActivity
 import arun.com.chromer.shared.Constants
-import arun.com.chromer.tabs.DefaultTabsManager
+import arun.com.chromer.tabs.TabsManager
 import timber.log.Timber
 import javax.inject.Inject
 
 class MinimizeBroadcastReceiver : BroadcastReceiver() {
 
     @Inject
-    lateinit var tabsManager: DefaultTabsManager
+    lateinit var tabsManager: TabsManager
 
     override fun onReceive(context: Context, intent: Intent) {
         (context.applicationContext as Chromer).appComponent.inject(this)

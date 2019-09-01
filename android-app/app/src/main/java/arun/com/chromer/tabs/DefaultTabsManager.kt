@@ -31,9 +31,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import android.support.annotation.ColorInt
-import android.support.v4.content.ContextCompat
 import android.widget.Toast
+import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
 import arun.com.chromer.BuildConfig
 import arun.com.chromer.R
 import arun.com.chromer.appdetect.AppDetectionManager
@@ -56,7 +56,10 @@ import arun.com.chromer.util.*
 import arun.com.chromer.webheads.FloatingBubble
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
+import rx.Completable
 import rx.Single
+import rx.schedulers.Schedulers
+import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -75,16 +78,7 @@ constructor(
         private val floatingBubble: FloatingBubble
 ) : TabsManager {
 
-    private val allBrowsingActivitiesName = arrayListOf<String>(
-            CustomTabActivity::class.java.name,
-            ArticleActivity::class.java.name,
-            WebViewActivity::class.java.name
-    )
-
-    val browsingActivitiesName = arrayListOf<String>(
-            CustomTabActivity::class.java.name,
-            WebViewActivity::class.java.name
-    )
+    private val subs = CompositeSubscription()
 
     override fun openUrl(
             context: Context,
@@ -94,6 +88,31 @@ constructor(
             fromNewTab: Boolean,
             fromAmp: Boolean,
             incognito: Boolean
+    ) {
+        Completable
+                .fromAction {
+                    openUrlInternal(
+                            fromApp,
+                            fromWebHeads,
+                            context,
+                            website,
+                            fromAmp,
+                            incognito,
+                            fromNewTab
+                    )
+                }.subscribeOn(Schedulers.computation())
+                .subscribe()
+                .let(subs::add)
+    }
+
+    private fun openUrlInternal(
+            fromApp: Boolean,
+            fromWebHeads: Boolean,
+            context: Context,
+            website: Website,
+            fromAmp: Boolean,
+            incognito: Boolean,
+            fromNewTab: Boolean
     ) {
         // Clear non browsing activities if it was external intent.
         if (!fromApp) {
@@ -186,7 +205,7 @@ constructor(
                             val urlMatches = url != null && website.matches(url)
 
                             val taskComponentMatches = activityNames?.contains(componentClassName)
-                                    ?: allBrowsingActivitiesName.contains(componentClassName)
+                                    ?: TabsManager.allBrowsingActivitiesName.contains(componentClassName)
 
                             if (taskComponentMatches && urlMatches) {
                                 foundAction(task)
@@ -244,7 +263,7 @@ constructor(
                     addFlags(FLAG_ACTIVITY_NEW_TASK)
                 }
                 if (newTab || Preferences.get(context).mergeTabs()) {
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
+                    addFlags(FLAG_ACTIVITY_NEW_DOCUMENT)
                     addFlags(FLAG_ACTIVITY_MULTIPLE_TASK)
                 }
                 if (incognito) {
@@ -390,21 +409,22 @@ constructor(
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     override fun getActiveTabs(): Single<List<TabsManager.Tab>> {
-        return Single.create { onSubscribe ->
+        return Single.create { emitter ->
             try {
                 val am = application.getSystemService(ACTIVITY_SERVICE) as ActivityManager
-                onSubscribe.onSuccess(am.appTasks!!
+                emitter.onSuccess((am.appTasks ?: emptyList<ActivityManager.AppTask>())
                         .asSequence()
-                        .map { DocumentUtils.getTaskInfoFromTask(it) }
+                        .map(DocumentUtils::getTaskInfoFromTask)
                         .filter { it != null && it.baseIntent?.dataString != null && it.baseIntent.component != null }
                         .map {
-                            val url = it.baseIntent.dataString
+                            val url = it.baseIntent.dataString!!
+                            @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
                             val type = getTabType(it.baseIntent.component.className)
                             TabsManager.Tab(url, type)
                         }.filter { it.type != OTHER }
                         .toMutableList())
             } catch (e: Exception) {
-                onSubscribe.onError(e)
+                emitter.onError(e)
             }
         }
     }
@@ -436,15 +456,15 @@ constructor(
     private fun getToolbarColor(website: Website): Int {
         if (preferences.isColoredToolbar) {
             if (preferences.dynamicToolbar()) {
-                var appColor = Constants.NO_COLOR
-                var websiteColor = Constants.NO_COLOR
+                var appColor = NO_COLOR
+                var websiteColor = NO_COLOR
 
                 if (preferences.dynamicToolbarOnApp()) {
                     appColor = appRepository.getPackageColorSync(appDetectionManager.filteredPackage)
                 }
                 if (preferences.dynamicToolbarOnWeb()) {
                     websiteColor = websiteRepository.getWebsiteColorSync(website.url)
-                    if (websiteColor == Constants.NO_COLOR) {
+                    if (websiteColor == NO_COLOR) {
                         websiteColor = website.themeColor()
                     }
                 }

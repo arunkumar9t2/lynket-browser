@@ -19,13 +19,11 @@
 
 package arun.com.chromer.home.fragment
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import arun.com.chromer.data.Result
 import arun.com.chromer.data.history.HistoryRepository
 import arun.com.chromer.data.website.model.Website
-import arun.com.chromer.util.SchedulerProvider
-import rx.android.schedulers.AndroidSchedulers
 import rx.subjects.PublishSubject
 import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
@@ -45,16 +43,16 @@ constructor(
     val subs = CompositeSubscription()
 
     init {
-        subs.add(recentsLoaderSubject.asObservable()
-                .onBackpressureLatest()
-                .concatMap {
-                    historyRepository
-                            .recents()
-                            .compose(Result.applyToObservable())
-                            .compose(SchedulerProvider.applyIoSchedulers())
-                }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { recentsResultLiveData.postValue(it) })
+        /* subs.add(recentsLoaderSubject.asObservable()
+                 .onBackpressureLatest()
+                 .concatMap {
+                     historyRepository
+                             .recents()
+                             .compose(Result.applyToObservable())
+                             .compose(SchedulerProvider.applyIoSchedulers())
+                 }
+                 .observeOn(AndroidSchedulers.mainThread())
+                 .subscribe { recentsResultLiveData.postValue(it) })*/
     }
 
     fun loadRecents() {

@@ -24,10 +24,11 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.v7.util.DiffUtil;
 import android.text.TextUtils;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 
 import com.chimbori.crux.articles.Article;
 
@@ -40,6 +41,28 @@ import static arun.com.chromer.shared.Constants.NO_COLOR;
  * Created by Arun on 05/09/2016.
  */
 public class Website implements Parcelable {
+    public static final Creator<Website> CREATOR = new Creator<Website>() {
+        @Override
+        public Website createFromParcel(Parcel in) {
+            return new Website(in);
+        }
+
+        @Override
+        public Website[] newArray(int size) {
+            return new Website[size];
+        }
+    };
+    public static DiffUtil.ItemCallback<Website> DIFFER = new DiffUtil.ItemCallback<Website>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Website oldItem, @NonNull Website newItem) {
+            return oldItem.url.equals(newItem.url);
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Website oldItem, @NonNull Website newItem) {
+            return oldItem.equals(newItem);
+        }
+    };
     public String title;
     public String url;
     public String faviconUrl;
@@ -85,18 +108,6 @@ public class Website implements Parcelable {
         count = in.readInt();
     }
 
-    public static final Creator<Website> CREATOR = new Creator<Website>() {
-        @Override
-        public Website createFromParcel(Parcel in) {
-            return new Website(in);
-        }
-
-        @Override
-        public Website[] newArray(int size) {
-            return new Website[size];
-        }
-    };
-
     @NonNull
     public static Website Ampify(@NonNull Website from) {
         final Website website = new Website();
@@ -112,7 +123,6 @@ public class Website implements Parcelable {
         website.createdAt = from.createdAt;
         return website;
     }
-
 
     @NonNull
     public static Website fromArticle(@NonNull Article article) {
@@ -158,7 +168,7 @@ public class Website implements Parcelable {
 
     @NonNull
     public String preferredUrl() {
-        return canonicalUrl != null && !canonicalUrl.isEmpty() ? canonicalUrl : url;
+        return url;
     }
 
     public Uri preferredUri() {
@@ -252,17 +262,5 @@ public class Website implements Parcelable {
                 || url.equalsIgnoreCase(this.ampUrl)
                 || url.equalsIgnoreCase(preferredUrl());
     }
-
-    public static DiffUtil.ItemCallback<Website> DIFFER = new DiffUtil.ItemCallback<Website>() {
-        @Override
-        public boolean areItemsTheSame(@NonNull Website oldItem, @NonNull Website newItem) {
-            return oldItem.url.equals(newItem.url);
-        }
-
-        @Override
-        public boolean areContentsTheSame(@NonNull Website oldItem, @NonNull Website newItem) {
-            return oldItem.equals(newItem);
-        }
-    };
 }
 

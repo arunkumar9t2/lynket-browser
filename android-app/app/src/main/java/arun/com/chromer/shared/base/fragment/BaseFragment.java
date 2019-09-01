@@ -21,13 +21,14 @@ package arun.com.chromer.shared.base.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import arun.com.chromer.di.fragment.FragmentComponent;
 import arun.com.chromer.di.fragment.FragmentModule;
@@ -40,10 +41,9 @@ import rx.subscriptions.CompositeSubscription;
  * Created by Arunkumar on 05-04-2017.
  */
 public abstract class BaseFragment extends Fragment {
+    protected final CompositeSubscription subs = new CompositeSubscription();
     private FragmentComponent fragmentComponent;
     private Unbinder unbinder;
-
-    protected final CompositeSubscription subs = new CompositeSubscription();
 
     @Nullable
     @Override

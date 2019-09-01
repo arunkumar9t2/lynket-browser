@@ -21,122 +21,129 @@ package arun.com.chromer.search.suggestion
 
 import `in`.arunkumarsampath.suggestions.RxSuggestions
 import android.app.Application
+import arun.com.chromer.R
 import arun.com.chromer.data.history.HistoryRepository
-import arun.com.chromer.search.suggestion.items.CopySuggestionItem
-import arun.com.chromer.search.suggestion.items.GoogleSuggestionItem
-import arun.com.chromer.search.suggestion.items.HistorySuggestionItem
 import arun.com.chromer.search.suggestion.items.SuggestionItem
+import arun.com.chromer.search.suggestion.items.SuggestionItem.*
+import arun.com.chromer.search.suggestion.items.SuggestionType
+import arun.com.chromer.search.suggestion.items.SuggestionType.*
 import arun.com.chromer.util.Utils
-import rx.Observable
-import rx.Observable.Transformer
-import rx.Observable.just
-import rx.schedulers.Schedulers
-import java.util.*
+import dev.arunkumar.android.rxschedulers.SchedulerProvider
+import hu.akarnokd.rxjava.interop.RxJavaInterop
+import io.reactivex.Flowable
+import io.reactivex.FlowableTransformer
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.collections.ArrayList
 
 /**
  * Helper class that collates suggestions from multiple sources and publishes them in a single stream.
  */
 @Singleton
-class SuggestionsEngine @Inject
-constructor(private var application: Application, private val historyRepository: HistoryRepository) {
+class SuggestionsEngine
+@Inject
+constructor(
+        private var application: Application,
+        private val historyRepository: HistoryRepository,
+        private val schedulerProvider: SchedulerProvider
+) {
     private val suggestionsDebounce = 200L
-    private val suggestionsLimit = 5
+    private val suggestionsLimit = 12
 
     /**
      * Trims and filters empty strings in stream.
      */
-    private fun emptyStringFilter(): Transformer<String, String> {
-        return Transformer { stringObservable ->
+    private fun emptyStringFilter(): FlowableTransformer<String, String> {
+        return FlowableTransformer { stringObservable ->
             stringObservable
-                    .filter { s -> s != null }
                     .map { it.trim { query -> query <= ' ' } }
-                    .filter { s -> !s.isEmpty() }
+                    .filter { s -> s.isNotEmpty() }
         }
     }
 
+    private fun deviceSuggestions() = Flowable
+            .fromCallable {
+                Utils.getClipBoardText(application) ?: ""
+            }.subscribeOn(schedulerProvider.ui)
+            .subscribeOn(schedulerProvider.pool)
+            .map { copiedText ->
+                if (copiedText.isEmpty()) {
+                    emptyList()
+                } else {
+                    val fullCopiedText = CopySuggestionItem(
+                            copiedText.trim(),
+                            application.getString(R.string.text_you_copied)
+                    )
+                    val extractedLinks = Utils.findURLs(copiedText)
+                            .map {
+                                CopySuggestionItem(it, application.getString(R.string.link_you_copied))
+                            }.toMutableList()
+                    extractedLinks.apply {
+                        add(fullCopiedText)
+                    }.distinctBy { it.title.trim() }
+                }
+            }
+
     /**
-     * Converts a stream of strings into stream of list of suggestion items collated from device'c
+     * Converts a stream of strings into stream of list of suggestions items collated from device'c
      * clipboard, history and google suggestions.
      */
-    fun suggestionsTransformer(): Transformer<String, List<SuggestionItem>> {
-        return Transformer { suggestion ->
-            val deviceSuggestions = Observable.just(listOf(CopySuggestionItem(application)))
-            return@Transformer suggestion
-                    .observeOn(Schedulers.io())
+    fun suggestionsTransformer(): FlowableTransformer<String, Pair<SuggestionType, List<SuggestionItem>>> {
+        return FlowableTransformer { suggestion ->
+            suggestion
+                    .observeOn(schedulerProvider.pool)
                     .compose(emptyStringFilter())
                     .switchMap { query ->
-                        val googleSuggestions = Observable.just(query).compose(googleTransformer())
-                        val historySuggestions = Observable.just(query).compose(historyTransformer())
-
-                        return@switchMap Observable.zip(
+                        val deviceSuggestions = deviceSuggestions().map { COPY to it }
+                        val googleSuggestions = Flowable.just(query)
+                                .observeOn(schedulerProvider.io)
+                                .compose(googleTransformer())
+                                .map { GOOGLE to it }
+                                .observeOn(schedulerProvider.pool)
+                        val historySuggestions = Flowable.just(query)
+                                .compose(historyTransformer())
+                                .map { HISTORY to it }
+                        Flowable.mergeArray(
+                                deviceSuggestions,
                                 googleSuggestions,
-                                historySuggestions,
-                                deviceSuggestions
-                        ) { googleList, historyList, deviceList ->
-                            val copyItem = deviceList[0]
-                            val suggestions = ArrayList<SuggestionItem>()
-
-                            // Add copy item if it is valid
-                            if (!copyItem.title.isEmpty()) {
-                                suggestions.add(copyItem)
-                            }
-                            // Add all Google suggestions
-                            suggestions.addAll(googleList)
-
-                            // Based on current length, figure out an index which we can use to fill history items.
-                            val currentLength = Math.min(suggestions.size, suggestionsLimit)
-                            var insertIndex = Math.min(Math.max(suggestionsLimit - 2, currentLength - historyList.size), currentLength)
-                            val historyMutable = historyList.toMutableList()
-
-                            while (insertIndex < suggestionsLimit && historyMutable.isNotEmpty()) {
-                                if (insertIndex >= suggestions.size) {
-                                    suggestions.add(insertIndex, historyMutable.removeAt(0))
-                                } else {
-                                    suggestions[insertIndex] = historyMutable.removeAt(0)
-                                }
-                                insertIndex++
-                            }
-                            suggestions.take(suggestionsLimit)
-                        }.onErrorReturn { emptyList() }
+                                historySuggestions
+                        )
                     }
         }
     }
 
-
     /**
      * Fetches suggestions from Google and converts it to {@link GoogleSuggestionItem}
      */
-    private fun googleTransformer(): Transformer<String, List<SuggestionItem>> {
-        return Transformer { query ->
+    private fun googleTransformer(): FlowableTransformer<String, List<SuggestionItem>> {
+        return FlowableTransformer { query ->
             if (!Utils.isOnline(application)) {
-                return@Transformer just(emptyList())
-            } else return@Transformer query
-                    .compose(RxSuggestions.suggestionsTransformer(suggestionsLimit))
-                    .map { it.map { query -> GoogleSuggestionItem(query) } as List<SuggestionItem> }
-                    .onErrorReturn { Collections.emptyList() }
-        }
-    }
-
-
-    /**
-     * Fetches matching items from History database and converts them to list of suggestions.
-     */
-    private fun historyTransformer(): Transformer<String, List<SuggestionItem>> {
-        return Transformer { query ->
-            return@Transformer query
-                    .debounce(suggestionsDebounce, TimeUnit.MILLISECONDS)
-                    .switchMap { historyRepository.search(it) }
-                    .map {
-                        it.asSequence()
-                                .map { query -> HistorySuggestionItem(query) }
-                                .take(suggestionsLimit)
-                                .toList() as List<SuggestionItem>
+                Flowable.just(emptyList())
+            } else query
+                    .compose(RxJavaInterop.toV2Transformer(RxSuggestions.suggestionsTransformer(suggestionsLimit)))
+                    .map<List<SuggestionItem>> {
+                        it.map { query -> GoogleSuggestionItem(query) }
                     }.onErrorReturn { emptyList() }
         }
     }
 
+    /**
+     * Fetches matching items from History database and converts them to list of suggestions.
+     */
+    private fun historyTransformer(): FlowableTransformer<String, List<SuggestionItem>> {
+        return FlowableTransformer { query ->
+            query.debounce(suggestionsDebounce, TimeUnit.MILLISECONDS)
+                    .switchMap { RxJavaInterop.toV2Flowable(historyRepository.search(it)) }
+                    .map<List<SuggestionItem>> { suggestions ->
+                        suggestions.asSequence()
+                                .map { website ->
+                                    HistorySuggestionItem(
+                                            website,
+                                            website.safeLabel(),
+                                            website.url
+                                    )
+                                }.take(4).toList()
+                    }.onErrorReturn { emptyList() }
+        }
+    }
 }

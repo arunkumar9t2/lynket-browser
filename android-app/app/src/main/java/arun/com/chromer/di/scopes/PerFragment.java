@@ -26,7 +26,7 @@ import javax.inject.Scope;
 
 /**
  * Scoping annotation to confine object lifetime to lifecycle of a
- * {@link android.support.v4.app.Fragment}
+ * {@link androidx.core.app.Fragment}
  */
 @Scope
 @Retention(RetentionPolicy.RUNTIME)

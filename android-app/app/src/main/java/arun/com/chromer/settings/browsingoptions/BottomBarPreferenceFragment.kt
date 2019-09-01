@@ -21,8 +21,8 @@ package arun.com.chromer.settings.browsingoptions
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.preference.SwitchPreferenceCompat
+import androidx.core.content.ContextCompat
+import androidx.preference.SwitchPreference
 import arun.com.chromer.R
 import arun.com.chromer.settings.Preferences.BOTTOM_BAR_ENABLED
 import arun.com.chromer.settings.Preferences.MINIMIZE_BEHAVIOR_PREFERENCE
@@ -43,7 +43,7 @@ class BottomBarPreferenceFragment : BasePreferenceFragment(), SharedPreferences.
 
 
     private fun setupBottomBarPreference() {
-        val bottomBarPreference = findPreference(BOTTOM_BAR_ENABLED) as SwitchPreferenceCompat
+        val bottomBarPreference = findPreference(BOTTOM_BAR_ENABLED) as SwitchPreference
         bottomBarPreference.icon = IconicsDrawable(requireContext())
                 .icon(CommunityMaterial.Icon.cmd_more)
                 .color(ContextCompat.getColor(requireContext(), R.color.material_dark_light))

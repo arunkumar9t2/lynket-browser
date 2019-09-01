@@ -27,14 +27,15 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.BounceInterpolator;
 import android.widget.FrameLayout;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
@@ -98,6 +99,41 @@ public class Trashy extends FrameLayout {
         Trashy.windowManager.addView(this, windowParams);
     }
 
+    public static void init(@NonNull Context context) {
+        get(context);
+    }
+
+    /**
+     * Returns an instance of this view. If the view is not initialized, then a new view is created
+     * and returned.
+     * The returned view might not have been laid out yet.
+     *
+     * @param context
+     * @return
+     */
+    public synchronized static Trashy get(@NonNull Context context) {
+        if (INSTANCE != null)
+            return INSTANCE;
+        else {
+            Timber.d("Creating new instance of remove web head");
+            WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            INSTANCE = new Trashy(context, windowManager);
+            return INSTANCE;
+        }
+    }
+
+    public static void destroy() {
+        if (INSTANCE != null) {
+            INSTANCE.destroySelf();
+        }
+    }
+
+    public static void disappear() {
+        if (INSTANCE != null) {
+            INSTANCE.hide();
+        }
+    }
+
     @SuppressLint("RtlHardcoded")
     private void setInitialLocation() {
         final DisplayMetrics metrics = new DisplayMetrics();
@@ -134,41 +170,6 @@ public class Trashy extends FrameLayout {
     private void updateView() {
         if (windowParams != null) {
             windowManager.updateViewLayout(this, windowParams);
-        }
-    }
-
-    public static void init(@NonNull Context context) {
-        get(context);
-    }
-
-    /**
-     * Returns an instance of this view. If the view is not initialized, then a new view is created
-     * and returned.
-     * The returned view might not have been laid out yet.
-     *
-     * @param context
-     * @return
-     */
-    public synchronized static Trashy get(@NonNull Context context) {
-        if (INSTANCE != null)
-            return INSTANCE;
-        else {
-            Timber.d("Creating new instance of remove web head");
-            WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-            INSTANCE = new Trashy(context, windowManager);
-            return INSTANCE;
-        }
-    }
-
-    public static void destroy() {
-        if (INSTANCE != null) {
-            INSTANCE.destroySelf();
-        }
-    }
-
-    public static void disappear() {
-        if (INSTANCE != null) {
-            INSTANCE.hide();
         }
     }
 

@@ -19,8 +19,9 @@
 
 package arun.com.chromer.shared.base.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Created by Arunkumar on 19-02-2017.

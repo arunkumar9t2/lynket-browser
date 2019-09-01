@@ -21,16 +21,17 @@ package arun.com.chromer
 
 import android.app.Application
 import android.content.Context
-import android.support.multidex.MultiDex
-import android.support.v7.app.AppCompatDelegate
 import android.util.Log
-import arun.com.chromer.data.DataModule
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.multidex.MultiDex
 import arun.com.chromer.di.app.AppComponent
 import arun.com.chromer.di.app.AppModule
 import arun.com.chromer.di.app.DaggerAppComponent
 import arun.com.chromer.util.ServiceManager
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
+import com.mikepenz.materialdrawer.util.DrawerImageLoader
+import com.uber.rxdogtag.RxDogTag
 import io.fabric.sdk.android.Fabric
 import io.paperdb.Paper
 import timber.log.Timber
@@ -43,7 +44,6 @@ open class Chromer : Application() {
     open val appComponent: AppComponent by lazy {
         DaggerAppComponent.builder()
                 .appModule(AppModule(this))
-                .dataModule(DataModule(this))
                 .build()
     }
 
@@ -53,8 +53,8 @@ open class Chromer : Application() {
         Paper.init(this)
 
         if (BuildConfig.DEBUG) {
+            RxDogTag.install()
             Timber.plant(Timber.DebugTree())
-            // Stetho.initializeWithDefaults(this);
             /*StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                     //.detectAll()
                     .penaltyLog()
@@ -67,12 +67,21 @@ open class Chromer : Application() {
             Timber.plant(CrashlyticsTree())
         }
         ServiceManager.takeCareOfServices(applicationContext)
+
+        initMaterialDrawer()
+    }
+
+    private fun initMaterialDrawer() {
+        DrawerImageLoader.init(appComponent.glideDrawerImageLoader())
+                .withHandleAllUris(true)
     }
 
     protected open fun initFabric() {
-        Fabric.with(this, Crashlytics.Builder().core(CrashlyticsCore.Builder()
+        val core = CrashlyticsCore.Builder()
                 .disabled(BuildConfig.DEBUG)
-                .build()).build())
+                .build()
+        val crashlytics = Crashlytics.Builder().core(core).build()
+        Fabric.with(this, crashlytics)
     }
 
     override fun attachBaseContext(base: Context) {

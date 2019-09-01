@@ -23,14 +23,6 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'io.fabric'
 
-// Read from properties
-def PLAY_LICENSE_KEY = "PLAY_LICENSE_KEY"
-def FABRIC_KEY = "FABRIC_KEY"
-def properties = new Properties()
-properties.load(new FileInputStream("$rootDir/values.properties"))
-def playLicenseKey = properties.getProperty(PLAY_LICENSE_KEY, "\"\"")
-def fabricKey = properties.getProperty(FABRIC_KEY, "\"\"")
-
 buildscript {
     repositories {
         maven { url 'https://maven.fabric.io/public' }
@@ -38,27 +30,36 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.26.0'
+        classpath 'io.fabric.tools:gradle:1.29.0'
     }
 }
 repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 
+kapt {
+    useBuildCache = true
+    correctErrorTypes = true
+}
+
 android {
-    compileSdkVersion 'android-Q'
+    compileSdkVersion 28
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 
     defaultConfig {
         applicationId "arun.com.chromer"
         minSdkVersion 16
-        targetSdkVersion 'Q'
+        targetSdkVersion 27
         versionCode 52
         versionName "2.0.2"
 
         multiDexEnabled true
 
-        resValue "string", "playLicenseKey", "$playLicenseKey"
-        manifestPlaceholders = [crashlyticsApiKey: "$fabricKey"]
+        resValue "string", "play_license_key", "$PLAY_LICENSE_KEY"
+        manifestPlaceholders = [FABRIC_KEY: "$FABRIC_KEY"]
 
         vectorDrawables.useSupportLibrary = true
 
@@ -96,11 +97,6 @@ android {
         exclude 'META-INF/rxjava.properties'
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
     dexOptions {
         preDexLibraries true
     }
@@ -114,10 +110,6 @@ android {
     lintOptions {
         abortOnError false
     }
-
-    configurations.all {
-        resolutionStrategy.force 'com.android.support:support-v4:28.0.0'
-    }
 }
 
 
@@ -126,40 +118,54 @@ androidExtensions {
 }
 
 dependencies {
-
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // Tests
     testImplementation 'junit:junit:4.12'
-    testImplementation 'org.mockito:mockito-all:1.10.8'
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'org.robolectric:robolectric:3.8'
-    testImplementation "com.android.support.test:runner:1.0.2"
-    testImplementation "com.android.support.test:rules:1.0.2"
+    testImplementation 'org.robolectric:robolectric:4.3'
+    testImplementation 'androidx.test:core:1.2.0'
+    testImplementation 'androidx.test:runner:1.2.0'
+    testImplementation 'androidx.test:rules:1.2.0'
 
-    // Debugging
-    debugImplementation 'com.facebook.stetho:stetho:1.5.0'
+    // Personal libs
+    implementation 'in.arunkumarsampath:suggestions:1.0.3'
+    implementation 'in.arunkumarsampath:transition-x:1.1.0'
+    implementation 'dev.arunkumar.android:common:master-SNAPSHOT'
+    implementation 'dev.arunkumar.android:dagger-base:master-SNAPSHOT'
+    implementation 'dev.arunkumar.android:logging:master-SNAPSHOT'
+    implementation 'dev.arunkumar.android:dagger-viewmodel:master-SNAPSHOT'
+    implementation 'dev.arunkumar.android:viewmodel-utils:master-SNAPSHOT'
+    implementation 'dev.arunkumar.android:epoxy-utils:master-SNAPSHOT'
+    implementation 'dev.arunkumar.android:rx-utils:master-SNAPSHOT'
 
     // Dependency Injection
-    implementation 'com.google.dagger:dagger:2.16'
-    kapt 'com.google.dagger:dagger-compiler:2.16'
-    kaptTest 'com.google.dagger:dagger-compiler:2.16'
+    implementation 'com.google.dagger:dagger:2.23.2'
+    kapt 'com.google.dagger:dagger-compiler:2.23.2'
+    kaptTest 'com.google.dagger:dagger-compiler:2.23.2'
 
-    // Support
-    implementation 'com.android.support:design:28.0.0'
-    implementation 'com.android.support:customtabs:28.0.0'
-    implementation 'com.android.support:preference-v14:28.0.0'
-    implementation 'com.android.support:cardview-v7:28.0.0'
-    implementation 'com.android.support:palette-v7:28.0.0'
+    // AndroidX
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation "androidx.core:core:1.0.2"
+    implementation 'androidx.browser:browser:1.0.0'
+    implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.palette:palette:1.0.0'
+    implementation 'androidx.paging:paging-runtime:2.1.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation "androidx.constraintlayout:constraintlayout:1.1.3"
+    implementation "androidx.dynamicanimation:dynamicanimation:1.0.0"
+
+    // Android KTX
+    implementation 'androidx.core:core-ktx:1.0.2'
+    implementation 'androidx.fragment:fragment-ktx:1.0.0'
+    implementation 'androidx.palette:palette-ktx:1.0.0'
+    implementation 'androidx.sqlite:sqlite-ktx:2.0.1'
 
     // Architecture Components
-    implementation 'android.arch.lifecycle:extensions:1.1.1'
-    kapt 'android.arch.lifecycle:compiler:1.1.1'
-
-    // Suggestions
-    implementation 'in.arunkumarsampath:suggestions:1.0.3'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    kapt 'androidx.lifecycle:lifecycle-common-java8:2.0.0'
 
     // Intro
     implementation 'com.github.apl-devs:appintro:v4.2.3'
@@ -168,7 +174,7 @@ dependencies {
     implementation 'com.mikepenz:community-material-typeface:2.0.46.1@aar'
 
     // Drawer
-    implementation('com.mikepenz:materialdrawer:5.3.6@aar') {
+    implementation('com.mikepenz:materialdrawer:6.1.2@aar') {
         transitive = true
     }
 
@@ -178,12 +184,12 @@ dependencies {
 
     // Butterknife, Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
-    implementation 'com.jakewharton:butterknife:8.8.1'
-    kapt 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation 'com.jakewharton:butterknife:10.1.0'
+    kapt 'com.jakewharton:butterknife-compiler:10.1.0'
 
     // Image loading
-    implementation 'com.github.bumptech.glide:glide:4.4.0'
-    kapt 'com.github.bumptech.glide:compiler:4.4.0'
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    kapt 'com.github.bumptech.glide:compiler:4.9.0'
 
     // Bottom sheet
     implementation 'com.flipboard:bottomsheet-core:1.5.1'
@@ -196,24 +202,37 @@ dependencies {
     implementation 'com.github.nekocode:Badge:1.2'
 
     // Reactive
-    implementation 'io.reactivex:rxjava:1.3.0'
+    implementation 'io.reactivex:rxjava:1.3.8'
     implementation 'io.reactivex:rxandroid:1.2.1'
     implementation 'com.jakewharton.rxbinding:rxbinding:1.0.1'
+    // Rx2
+    implementation "com.github.akarnokd:rxjava2-interop:0.13.7"
+    implementation "io.reactivex.rxjava2:rxjava:2.2.10"
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'com.jakewharton.rxbinding3:rxbinding:3.0.0'
+    implementation 'com.jakewharton.rxbinding3:rxbinding-appcompat:3.0.0'
+    implementation 'com.jakewharton.rxbinding3:rxbinding-recyclerview:3.0.0'
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
+
+    implementation "com.uber.rxdogtag:rxdogtag:0.2.0"
+
+    // RxPrefs
+    implementation "com.afollestad:rxkprefs:1.2.5"
+
+    // Epoxy for recycler view
+    implementation 'com.airbnb.android:epoxy:3.7.0'
+    kapt 'com.airbnb.android:epoxy-processor:3.7.0'
 
     // Storage
     implementation 'io.paperdb:paperdb:2.6'
-    implementation('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics:2.10.1@aar') {
         transitive = true
     }
     implementation 'com.github.chrisbanes:PhotoView:1.3.1'
-
-    implementation "android.arch.paging:runtime:1.0.1"
 
     // Bottom navigation
     implementation 'it.sephiroth.android.library.bottomnavigation:bottom-navigation:2.0.1-rc1'
 
     // Disk LRU cache
     implementation project(':disk-cache')
-
-    implementation 'com.android.support:multidex:1.0.3'
 }

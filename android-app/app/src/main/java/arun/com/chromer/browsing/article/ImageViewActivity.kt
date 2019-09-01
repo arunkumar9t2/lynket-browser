@@ -20,7 +20,7 @@
 package arun.com.chromer.browsing.article
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import arun.com.chromer.R
 import arun.com.chromer.util.glide.GlideApp
 import kotlinx.android.synthetic.main.activity_image_view.*

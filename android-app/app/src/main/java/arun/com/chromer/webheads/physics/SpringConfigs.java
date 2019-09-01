@@ -26,11 +26,11 @@ import com.facebook.rebound.SpringConfig;
  */
 
 public class SpringConfigs {
-    private SpringConfigs() {
-        throw new AssertionError("no instances");
-    }
-
     public static final SpringConfig FLING = SpringConfig.fromOrigamiTensionAndFriction(50, 5);
     public static final SpringConfig DRAG = SpringConfig.fromOrigamiTensionAndFriction(0, 1.8);
     public static final SpringConfig SNAP = SpringConfig.fromOrigamiTensionAndFriction(100, 7);
+
+    private SpringConfigs() {
+        throw new AssertionError("no instances");
+    }
 }

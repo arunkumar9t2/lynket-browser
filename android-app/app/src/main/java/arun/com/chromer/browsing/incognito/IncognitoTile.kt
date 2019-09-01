@@ -22,7 +22,7 @@ package arun.com.chromer.browsing.incognito
 import android.graphics.Color
 import android.graphics.drawable.Icon
 import android.os.Build
-import android.support.annotation.RequiresApi
+import androidx.annotation.RequiresApi
 import arun.com.chromer.R
 import arun.com.chromer.shared.base.PreferenceQuickSettingsTile
 import com.mikepenz.community_material_typeface_library.CommunityMaterial

@@ -48,11 +48,11 @@ class ChromerGlideModule : AppGlideModule() {
         return false
     }
 
-    override fun applyOptions(context: Context?, builder: GlideBuilder?) {
-        builder!!.setDefaultTransitionOptions(Drawable::class.java, DrawableTransitionOptions.withCrossFade())
+    override fun applyOptions(context: Context, builder: GlideBuilder) {
+        builder.setDefaultTransitionOptions(Drawable::class.java, DrawableTransitionOptions.withCrossFade())
 
         val defaultOptions = RequestOptions()
-        val activityManager = context!!.getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        val activityManager = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             defaultOptions.format(if (activityManager.isLowRamDevice) PREFER_RGB_565 else PREFER_ARGB_8888)

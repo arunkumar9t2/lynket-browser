@@ -19,9 +19,7 @@
 
 package arun.com.chromer.di.viewmodel
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
-
+import androidx.lifecycle.ViewModel
 import arun.com.chromer.browsing.BrowsingViewModel
 import arun.com.chromer.browsing.article.BrowsingArticleViewModel
 import arun.com.chromer.browsing.providerselection.ProviderSelectionViewModel
@@ -29,16 +27,13 @@ import arun.com.chromer.history.HistoryFragmentViewModel
 import arun.com.chromer.home.fragment.HomeFragmentViewModel
 import arun.com.chromer.perapp.PerAppSettingsViewModel
 import arun.com.chromer.tabs.ui.TabsViewModel
-import arun.com.chromer.util.viemodel.ViewModelFactory
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
+import dev.arunkumar.android.dagger.viewmodel.ViewModelKey
 
 @Module
 abstract class ViewModelModule {
-    @Binds
-    internal abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
-
     @Binds
     @IntoMap
     @ViewModelKey(BrowsingViewModel::class)

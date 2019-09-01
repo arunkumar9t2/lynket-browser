@@ -27,13 +27,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -47,7 +48,7 @@ import arun.com.chromer.data.website.model.Website;
 import arun.com.chromer.di.activity.ActivityComponent;
 import arun.com.chromer.settings.Preferences;
 import arun.com.chromer.shared.base.activity.BaseActivity;
-import arun.com.chromer.tabs.DefaultTabsManager;
+import arun.com.chromer.tabs.TabsManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -62,6 +63,7 @@ import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBSITE;
 import static arun.com.chromer.shared.Constants.TEXT_SHARE_INTENT;
 
 public class WebHeadContextActivity extends BaseActivity implements WebsiteAdapter.WebSiteAdapterListener {
+    private final WebHeadEventsReceiver webHeadsEventsReceiver = new WebHeadEventsReceiver();
     @BindView(R.id.web_sites_list)
     RecyclerView websiteListView;
     @BindView(R.id.copy_all)
@@ -70,12 +72,9 @@ public class WebHeadContextActivity extends BaseActivity implements WebsiteAdapt
     TextView shareAll;
     @BindView(R.id.context_activity_card_view)
     CardView rootCardView;
-    private WebsiteAdapter websitesAdapter;
-    private final WebHeadEventsReceiver webHeadsEventsReceiver = new WebHeadEventsReceiver();
-
-
     @Inject
-    DefaultTabsManager tabsManager;
+    TabsManager tabsManager;
+    private WebsiteAdapter websitesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

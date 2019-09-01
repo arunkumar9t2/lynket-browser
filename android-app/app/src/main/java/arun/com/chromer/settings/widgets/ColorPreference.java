@@ -21,12 +21,13 @@ package arun.com.chromer.settings.widgets;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.annotation.ColorInt;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
 import android.view.View;
+
+import androidx.annotation.ColorInt;
+import androidx.core.content.ContextCompat;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceViewHolder;
 
 import arun.com.chromer.R;
 
@@ -38,7 +39,7 @@ public class ColorPreference extends Preference {
     @ColorInt
     private int color = 0;
 
-    private int DEFAULT_COLOR = 0;
+    private int defaultColor = 0;
 
     public ColorPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -58,7 +59,7 @@ public class ColorPreference extends Preference {
     private void init(Context context, AttributeSet attrs) {
         setWidgetLayoutResource(R.layout.widget_color_preference);
 
-        DEFAULT_COLOR = ContextCompat.getColor(getContext(), R.color.colorPrimary);
+        defaultColor = ContextCompat.getColor(getContext(), R.color.colorPrimary);
 
         if (attrs != null) {
             TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.ColorPreference);
@@ -73,7 +74,7 @@ public class ColorPreference extends Preference {
     @Override
     protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
         if (restorePersistedValue) {
-            color = this.getPersistedInt(DEFAULT_COLOR);
+            color = this.getPersistedInt(defaultColor);
         } else {
             color = (int) defaultValue;
             persistInt(color);
@@ -82,7 +83,7 @@ public class ColorPreference extends Preference {
 
     @Override
     protected Object onGetDefaultValue(TypedArray a, int index) {
-        return a.getInteger(index, DEFAULT_COLOR);
+        return a.getInteger(index, defaultColor);
     }
 
     @Override

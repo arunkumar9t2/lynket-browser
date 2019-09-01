@@ -26,14 +26,14 @@ import android.widget.Toast.LENGTH_SHORT
 import arun.com.chromer.R
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.shared.base.activity.BaseActivity
-import arun.com.chromer.tabs.DefaultTabsManager
+import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.SafeIntent
 import javax.inject.Inject
 
 @SuppressLint("GoogleAppIndexingApiWarning")
 class BrowserInterceptActivity : BaseActivity() {
     @Inject
-    lateinit var defaultTabsManager: DefaultTabsManager
+    lateinit var defaultTabsManager: TabsManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

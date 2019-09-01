@@ -20,9 +20,10 @@
 package arun.com.chromer.util;
 
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.text.Html;
 import android.text.Spanned;
+
+import androidx.annotation.NonNull;
 
 public class HtmlCompat {
     public static Spanned fromHtml(@NonNull String html) {

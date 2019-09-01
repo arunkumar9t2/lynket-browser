@@ -27,13 +27,14 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.view.animation.Interpolator;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringConfig;
@@ -66,6 +67,23 @@ import static arun.com.chromer.webheads.ui.views.Trashy.MAGNETISM_THRESHOLD;
 public class WebHead extends BaseWebHead implements SpringListener {
     private static final float TOUCH_DOWN_SCALE = 1f;
     private static final float TOUCH_UP_SCALE = 1f;
+    // As per material guidelines, fast out slow in recommended for shrink/expand animations
+    private static final Interpolator FAST_OUT_SLOW_IN_INTERPOLATOR = new FastOutSlowInInterpolator();
+    private static final Timer timer = new Timer();
+    // Minimum horizontal velocity that we need to move the web head from one end of the scree to another
+    private static int MINIMUM_HORIZONTAL_FLING_VELOCITY = 0;
+    /**
+     * Movement tracker instance that is used to adjust X and Y velocity calculated by {@link #gestureDetector}.
+     * This is needed since sometimes velocities coming from
+     * {@link GestureDetectorListener#onFling(MotionEvent, MotionEvent, float, float)}has wrong polarity.
+     */
+    private static MovementTracker movementTracker;
+    // Touch slop of the device
+    private final int touchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
+    // Gesture detector to recognize fling and click on web heads
+    private final GestureDetector gestureDetector = new GestureDetector(getContext(), new GestureDetectorListener());
+    // The interaction listener that clients can provide to listen for events on webhead.
+    private final WebHeadContract webHeadContract;
     // Coordinate of remove web head that we can lock on to.
     private int[] trashLockingCoordinates;
     // True when being dragged, otherwise false
@@ -80,30 +98,11 @@ public class WebHead extends BaseWebHead implements SpringListener {
     private boolean scaledDown;
     // If web head is resting on the sides
     private boolean isCoasting = false;
-    // Minimum horizontal velocity that we need to move the web head from one end of the scree to another
-    private static int MINIMUM_HORIZONTAL_FLING_VELOCITY = 0;
-    // Touch slop of the device
-    private final int touchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
-    // Gesture detector to recognize fling and click on web heads
-    private final GestureDetector gestureDetector = new GestureDetector(getContext(), new GestureDetectorListener());
     // Individual springs to control X, Y
     private Spring xSpring, ySpring;
-    // As per material guidelines, fast out slow in recommended for shrink/expand animations
-    private static final Interpolator FAST_OUT_SLOW_IN_INTERPOLATOR = new FastOutSlowInInterpolator();
-
     private float posX, posY;
     private int initialDownX, initialDownY;
-
-    private static final Timer timer = new Timer();
     private TimerTask coastingTask;
-    // The interaction listener that clients can provide to listen for events on webhead.
-    private final WebHeadContract webHeadContract;
-    /**
-     * Movement tracker instance that is used to adjust X and Y velocity calculated by {@link #gestureDetector}.
-     * This is needed since sometimes velocities coming from
-     * {@link GestureDetectorListener#onFling(MotionEvent, MotionEvent, float, float)}has wrong polarity.
-     */
-    private static MovementTracker movementTracker;
     private boolean fromAmp;
     private boolean incognito;
 
@@ -664,12 +663,32 @@ public class WebHead extends BaseWebHead implements SpringListener {
         this.fromAmp = fromAmp;
     }
 
+    public boolean isIncognito() {
+        return incognito;
+    }
+
     public void setIncognito(boolean incognito) {
         this.incognito = incognito;
     }
 
-    public boolean isIncognito() {
-        return incognito;
+    @Override
+    public String toString() {
+        return "Webhead " + getUrl() + "master: " + String.valueOf(isMaster());
+    }
+
+    static class SpringInterpolator implements android.view.animation.Interpolator {
+        double amp = 1;
+        double frequency = 10;
+
+        SpringInterpolator(double amplitude, double frequency) {
+            amp = amplitude;
+            this.frequency = frequency;
+        }
+
+        public float getInterpolation(float time) {
+            return (float) (-1 * Math.pow(Math.E, -time / amp) *
+                    Math.cos(frequency * time) + 1);
+        }
     }
 
     /**
@@ -758,26 +777,6 @@ public class WebHead extends BaseWebHead implements SpringListener {
         private void sendCallback() {
             Trashy.disappear();
             webHeadContract.onWebHeadClick(WebHead.this);
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "Webhead " + getUrl() + "master: " + String.valueOf(isMaster());
-    }
-
-    static class SpringInterpolator implements android.view.animation.Interpolator {
-        double amp = 1;
-        double frequency = 10;
-
-        SpringInterpolator(double amplitude, double frequency) {
-            amp = amplitude;
-            this.frequency = frequency;
-        }
-
-        public float getInterpolation(float time) {
-            return (float) (-1 * Math.pow(Math.E, -time / amp) *
-                    Math.cos(frequency * time) + 1);
         }
     }
 }

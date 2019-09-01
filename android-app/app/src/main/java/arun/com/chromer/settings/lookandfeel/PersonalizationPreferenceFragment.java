@@ -29,8 +29,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.preference.SwitchPreferenceCompat;
+
+import androidx.core.content.ContextCompat;
+import androidx.preference.SwitchPreference;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
@@ -69,7 +70,18 @@ public class PersonalizationPreferenceFragment extends BasePreferenceFragment im
     };
 
     private final IntentFilter toolbarColorSetFilter = new IntentFilter(ACTION_TOOLBAR_COLOR_SET);
-
+    private final BroadcastReceiver colorSelectionReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final int selectedColor = intent.getIntExtra(EXTRA_KEY_TOOLBAR_COLOR, NO_COLOR);
+            if (selectedColor != NO_COLOR) {
+                final ColorPreference preference = (ColorPreference) findPreference(TOOLBAR_COLOR);
+                if (preference != null) {
+                    preference.setColor(selectedColor);
+                }
+            }
+        }
+    };
     private IconSwitchPreference dynamicColorPreference;
     private IconSwitchPreference coloredToolbarPreference;
     private ColorPreference toolbarColorPreference;
@@ -160,7 +172,6 @@ public class PersonalizationPreferenceFragment extends BasePreferenceFragment im
                 .sizeDp(24));
     }
 
-
     private void updatePreferenceStates(String key) {
         if (key.equalsIgnoreCase(TOOLBAR_COLOR_PREF)) {
             final boolean coloredToolbar = Preferences.get(getContext()).isColoredToolbar();
@@ -204,7 +215,7 @@ public class PersonalizationPreferenceFragment extends BasePreferenceFragment im
 
     private void setupDynamicToolbar() {
         dynamicColorPreference.setOnPreferenceClickListener(preference -> {
-            final SwitchPreferenceCompat switchCompat = (SwitchPreferenceCompat) preference;
+            final SwitchPreference switchCompat = (SwitchPreference) preference;
             final boolean isChecked = switchCompat.isChecked();
             if (isChecked) {
                 new MaterialDialog.Builder(getActivity())
@@ -217,7 +228,6 @@ public class PersonalizationPreferenceFragment extends BasePreferenceFragment im
             return false;
         });
     }
-
 
     private void setupToolbarColorPreference() {
         toolbarColorPreference.setOnPreferenceClickListener(preference -> {
@@ -250,17 +260,4 @@ public class PersonalizationPreferenceFragment extends BasePreferenceFragment im
             ServiceManager.stopAppDetectionService(getContext());
         }
     }
-
-    private final BroadcastReceiver colorSelectionReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final int selectedColor = intent.getIntExtra(EXTRA_KEY_TOOLBAR_COLOR, NO_COLOR);
-            if (selectedColor != NO_COLOR) {
-                final ColorPreference preference = (ColorPreference) findPreference(TOOLBAR_COLOR);
-                if (preference != null) {
-                    preference.setColor(selectedColor);
-                }
-            }
-        }
-    };
 }

@@ -33,10 +33,11 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
 import java.util.List;
 import java.util.SortedMap;
@@ -50,7 +51,7 @@ import arun.com.chromer.shared.base.service.BaseService;
 import arun.com.chromer.util.Utils;
 import timber.log.Timber;
 
-import static android.support.v4.app.NotificationCompat.PRIORITY_MIN;
+import static androidx.core.app.NotificationCompat.PRIORITY_MIN;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_CLEAR_LAST_TOP_APP;
 
 public class AppDetectService extends BaseService {
@@ -58,16 +59,16 @@ public class AppDetectService extends BaseService {
     private static final int POLLING_INTERVAL = 400;
 
     private static final String CHANNEL_ID = "App detection service";
-
+    // Handler to run our polling.
+    private final Handler detectorHandler = new Handler();
+    @Inject
+    AppDetectionManager appDetectionManager;
     // Needed to turn off polling when screen is turned off.
     private BroadcastReceiver screenStateReceiver;
-
     // Flag to control polling.
     private boolean stopPolling = false;
     // Detector to get current foreground app.
     private AppDetector appDetector = () -> "";
-    // Handler to run our polling.
-    private final Handler detectorHandler = new Handler();
     // The runnable which runs out detector.
     private final Runnable appDetectorRunnable = new Runnable() {
 
@@ -84,9 +85,6 @@ public class AppDetectService extends BaseService {
             }
         }
     };
-
-    @Inject
-    AppDetectionManager appDetectionManager;
 
     private void clearLastAppIfNeeded(Intent intent) {
         if (intent != null && intent.getBooleanExtra(EXTRA_KEY_CLEAR_LAST_TOP_APP, false)) {

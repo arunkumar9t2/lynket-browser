@@ -19,13 +19,13 @@
 
 package arun.com.chromer.home.fragment
 
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.support.v7.widget.GridLayoutManager
 import android.view.View
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
 import arun.com.chromer.R
 import arun.com.chromer.browsing.providerselection.ProviderSelectionActivity
 import arun.com.chromer.data.Result
@@ -49,6 +49,7 @@ import butterknife.OnClick
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.layout_provider_info_card.*
 import javax.inject.Inject
 
 /**
@@ -66,13 +67,9 @@ class HomeFragment : BaseFragment(), Snackable {
 
     private lateinit var homeFragmentViewModel: HomeFragmentViewModel
 
-    override fun inject(fragmentComponent: FragmentComponent) {
-        fragmentComponent.inject(this)
-    }
+    override fun inject(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
 
-    override fun getLayoutRes(): Int {
-        return R.layout.fragment_home
-    }
+    override fun getLayoutRes(): Int = R.layout.fragment_home
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -196,7 +193,9 @@ class HomeFragment : BaseFragment(), Snackable {
     }
 
     private fun setupEventListeners() {
-        subs.add(rxEventBus.filteredEvents(BrowsingOptionsActivity.ProviderChanged::class.java).subscribe { setupProviderCard() })
+        subs.add(rxEventBus
+                .filteredEvents<BrowsingOptionsActivity.ProviderChanged>()
+                .subscribe { setupProviderCard() })
     }
 
     @OnClick(R.id.providerChangeButton)

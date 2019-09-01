@@ -21,7 +21,8 @@ package arun.com.chromer.webheads.helper;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.support.v7.graphics.Palette;
+
+import androidx.palette.graphics.Palette;
 
 import java.lang.ref.WeakReference;
 

@@ -19,7 +19,7 @@
 
 package arun.com.chromer.data.apps.store
 
-import android.support.annotation.ColorInt
+import androidx.annotation.ColorInt
 import arun.com.chromer.data.apps.model.Provider
 import arun.com.chromer.data.common.App
 import rx.Observable

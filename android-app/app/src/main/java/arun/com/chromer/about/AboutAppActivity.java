@@ -21,8 +21,9 @@ package arun.com.chromer.about;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.Toolbar;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import arun.com.chromer.R;
 import arun.com.chromer.shared.base.activity.SubActivity;

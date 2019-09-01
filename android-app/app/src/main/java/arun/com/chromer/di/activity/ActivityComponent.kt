@@ -33,7 +33,6 @@ import arun.com.chromer.di.fragment.FragmentComponent
 import arun.com.chromer.di.fragment.FragmentModule
 import arun.com.chromer.di.scopes.PerActivity
 import arun.com.chromer.di.view.ViewComponent
-import arun.com.chromer.di.view.ViewModule
 import arun.com.chromer.history.HistoryActivity
 import arun.com.chromer.home.HomeActivity
 import arun.com.chromer.intro.ChromerIntroActivity
@@ -52,7 +51,7 @@ interface ActivityComponent {
 
     fun newFragmentComponent(fragmentModule: FragmentModule): FragmentComponent
 
-    fun newViewComponent(viewModuleF: ViewModule): ViewComponent
+    fun viewComponentFactory(): ViewComponent.Factory
 
     fun inject(perAppSettingsActivity: PerAppSettingsActivity)
 

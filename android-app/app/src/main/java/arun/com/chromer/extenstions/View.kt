@@ -17,31 +17,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+@file:Suppress("NOTHING_TO_INLINE")
+
 package arun.com.chromer.extenstions
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.content.Context
-import android.support.annotation.LayoutRes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.annotation.LayoutRes
 import arun.com.chromer.util.Utils
+import kotlin.math.hypot
 
 
-fun View.show() {
-    this.visibility = View.VISIBLE
+inline fun View.show(condition: Boolean = true) {
+    visibility = if (condition) View.VISIBLE else View.INVISIBLE
 }
 
-fun View.hide() {
-    this.visibility = View.INVISIBLE
+inline fun View.hide(condition: Boolean = true) {
+    visibility = if (condition) View.INVISIBLE else View.VISIBLE
 }
 
-fun View.gone() {
-    this.visibility = View.GONE
+inline fun View.gone(condition: Boolean = true) {
+    visibility = if (condition) View.GONE else {
+        View.VISIBLE
+    }
 }
 
 /**
@@ -84,7 +89,7 @@ fun View.circularRevealWithSelfCenter(done: (() -> Unit)? = null) {
         val cx = width / 2
         val cy = height / 2
         // get the initial radius for the clipping circle
-        val initialRadius = Math.hypot(cx.toDouble(), cy.toDouble())
+        val initialRadius = hypot(cx.toDouble(), cy.toDouble())
 
         // create the animation (the start radius is zero)
         ViewAnimationUtils.createCircularReveal(this, cx, cy, 0f, initialRadius.toFloat()).apply {

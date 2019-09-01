@@ -25,11 +25,12 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.StateListDrawable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.graphics.ColorUtils;
-import android.support.v7.graphics.Palette;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.graphics.ColorUtils;
+import androidx.palette.graphics.Palette;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -42,12 +43,6 @@ import static arun.com.chromer.shared.Constants.NO_COLOR;
  * Created by Arun on 12/06/2016.
  */
 public class ColorUtil {
-    /**
-     * Percentage to darken a color by when setting the status bar color.
-     */
-    private static final float DARKEN_COLOR_FRACTION = 0.6f;
-    private static final float CONTRAST_LIGHT_ITEM_THRESHOLD = 3f;
-
     public final static int[] ACCENT_COLORS = new int[]{
             Color.parseColor("#FF1744"),
             Color.parseColor("#F50057"),
@@ -66,7 +61,6 @@ public class ColorUtil {
             Color.parseColor("#FF9100"),
             Color.parseColor("#FF3D00")
     };
-
     public final static int[] PLACEHOLDER_COLORS = new int[]{
             Color.parseColor("#D32F2F"),
             Color.parseColor("#C2185B"),
@@ -75,7 +69,6 @@ public class ColorUtil {
             Color.parseColor("#37474F"),
             Color.parseColor("#2E7D32")
     };
-
     public final static int[] ACCENT_COLORS_700 = new int[]{
             Color.parseColor("#D32F2F"),
             Color.parseColor("#C2185B"),
@@ -95,6 +88,11 @@ public class ColorUtil {
             Color.parseColor("#DD2C00"),
             Color.parseColor("#455A64")
     };
+    /**
+     * Percentage to darken a color by when setting the status bar color.
+     */
+    private static final float DARKEN_COLOR_FRACTION = 0.6f;
+    private static final float CONTRAST_LIGHT_ITEM_THRESHOLD = 3f;
 
     @NonNull
     public static List<Palette.Swatch> getSwatchListFromPalette(@NonNull Palette palette) {

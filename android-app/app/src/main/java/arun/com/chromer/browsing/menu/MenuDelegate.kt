@@ -25,12 +25,12 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
-import android.support.v4.content.ContextCompat
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ImageSpan
 import android.view.Menu
 import android.view.MenuItem
+import androidx.core.content.ContextCompat
 import arun.com.chromer.R
 import arun.com.chromer.browsing.BrowsingActivity
 import arun.com.chromer.browsing.article.ArticleActivity
@@ -47,7 +47,7 @@ import arun.com.chromer.history.HistoryActivity
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.settings.Preferences.*
 import arun.com.chromer.shortcuts.HomeScreenShortcutCreatorActivity
-import arun.com.chromer.tabs.DefaultTabsManager
+import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.Utils
 import arun.com.chromer.util.Utils.isPackageInstalled
 import arun.com.chromer.util.Utils.shareText
@@ -64,7 +64,7 @@ import javax.inject.Inject
 @PerActivity
 class MenuDelegate @Inject constructor(
         val activity: Activity,
-        val tabsManager: DefaultTabsManager,
+        val tabsManager: TabsManager,
         val preferences: Preferences
 ) {
     /**

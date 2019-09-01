@@ -21,11 +21,11 @@ package arun.com.chromer.browsing.optionspopup
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import arun.com.chromer.R
 import arun.com.chromer.browsing.openwith.OpenIntentWithActivity
 import arun.com.chromer.data.website.model.Website
@@ -36,7 +36,7 @@ import arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_ARTICLE
 import arun.com.chromer.shared.Constants.EXTRA_KEY_ORIGINAL_URL
 import arun.com.chromer.shared.base.activity.BaseActivity
 import arun.com.chromer.shortcuts.HomeScreenShortcutCreatorActivity
-import arun.com.chromer.tabs.DefaultTabsManager
+import arun.com.chromer.tabs.TabsManager
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import kotlinx.android.extensions.LayoutContainer
@@ -50,7 +50,7 @@ class ChromerOptionsActivity : BaseActivity() {
     private var fromArticle: Boolean = false
 
     @Inject
-    lateinit var tabsManager: DefaultTabsManager
+    lateinit var tabsManager: TabsManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -119,7 +119,7 @@ class ChromerOptionsActivity : BaseActivity() {
                     }
                 }
                 tabs -> {
-                    holder.menu_image.setImageResource(R.drawable.ic_tab_24dp)
+                    holder.menu_image.setImageResource(R.drawable.ic_tabs_24dp)
                     holder.menu_text.setText(R.string.title_tabs)
                     holder.itemView.setOnClickListener {
                         tabsManager.showTabsActivity()

@@ -19,19 +19,19 @@
 
 package arun.com.chromer.home.fragment
 
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import arun.com.chromer.R
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.scopes.PerFragment
-import arun.com.chromer.tabs.DefaultTabsManager
+import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.glide.GlideApp
 import butterknife.ButterKnife
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.activity_main_recents_item_template.*
+import kotlinx.android.synthetic.main.widget_website_grid_item.*
 import java.util.*
 import javax.inject.Inject
 
@@ -41,7 +41,7 @@ import javax.inject.Inject
 @PerFragment
 class RecentsAdapter
 @Inject
-constructor(val tabsManager: DefaultTabsManager) : RecyclerView.Adapter<RecentsAdapter.RecentsViewHolder>() {
+constructor(val tabsManager: TabsManager) : RecyclerView.Adapter<RecentsAdapter.RecentsViewHolder>() {
     private val websites = ArrayList<Website>()
 
     init {
@@ -54,7 +54,7 @@ constructor(val tabsManager: DefaultTabsManager) : RecyclerView.Adapter<RecentsA
     ) = RecentsViewHolder(
             tabsManager,
             LayoutInflater.from(parent.context).inflate(
-                    R.layout.activity_main_recents_item_template,
+                    R.layout.widget_website_grid_item,
                     parent,
                     false
             )
@@ -83,7 +83,7 @@ constructor(val tabsManager: DefaultTabsManager) : RecyclerView.Adapter<RecentsA
     }
 
     class RecentsViewHolder(
-            val tabsManager: DefaultTabsManager,
+            val tabsManager: TabsManager,
             override val containerView: View
     ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
         init {

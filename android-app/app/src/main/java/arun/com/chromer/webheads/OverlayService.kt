@@ -26,9 +26,9 @@ import android.content.Intent
 import android.net.Uri
 import android.os.IBinder
 import android.provider.Settings
-import android.support.annotation.IntRange
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
+import androidx.annotation.IntRange
 import arun.com.chromer.R
 import arun.com.chromer.shared.base.service.BaseService
 import arun.com.chromer.util.ServiceManager

@@ -35,14 +35,14 @@
         android:layout_width="@dimen/article_articleWidth"
         android:layout_height="match_parent">
 
-        <android.support.design.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/coordinatorLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/article_windowBackground">
 
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -65,7 +65,7 @@
                 android:layout_height="24dp"
                 android:background="@color/article_toolbarBackground" />
 
-            <android.support.design.widget.AppBarLayout
+            <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
@@ -73,7 +73,7 @@
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:elevation="0dp">
 
-                <android.support.v7.widget.Toolbar
+                <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
@@ -81,7 +81,7 @@
                     app:layout_scrollFlags=""
                     app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-            </android.support.design.widget.AppBarLayout>
+            </com.google.android.material.appbar.AppBarLayout>
 
             <LinearLayout
                 android:id="@+id/articleBottomLinearLayout"
@@ -90,7 +90,7 @@
                 android:layout_gravity="bottom"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.CardView
+                <androidx.cardview.widget.CardView
                     android:id="@+id/articleTextSizeCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -114,7 +114,7 @@
                             android:scaleType="fitCenter"
                             tools:ignore="RtlHardcoded" />
 
-                        <android.support.v7.widget.AppCompatSeekBar
+                        <androidx.appcompat.widget.AppCompatSeekBar
                             android:id="@+id/textSizeSeekbar"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -122,7 +122,7 @@
                             android:layout_weight="1"
                             android:max="15" />
 
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/textSizeDismiss"
                             android:layout_width="24dp"
                             android:layout_height="48dp"
@@ -135,7 +135,7 @@
                             android:scaleType="fitCenter"
                             tools:ignore="RtlHardcoded" />
                     </LinearLayout>
-                </android.support.v7.widget.CardView>
+                </androidx.cardview.widget.CardView>
 
                 <it.sephiroth.android.library.bottomnavigation.BottomNavigation
                     android:id="@+id/bottomNavigation"
@@ -143,7 +143,7 @@
                     android:layout_height="wrap_content"
                     app:bbn_entries="@menu/browsing_bottom_navigation_menu" />
             </LinearLayout>
-        </android.support.design.widget.CoordinatorLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </arun.com.chromer.browsing.article.view.ElasticDragDismissFrameLayout>
 
     <View

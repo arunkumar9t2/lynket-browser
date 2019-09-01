@@ -20,16 +20,17 @@
 package arun.com.chromer.settings.widgets;
 
 import android.content.Context;
-import android.support.v7.preference.PreferenceViewHolder;
-import android.support.v7.preference.SwitchPreferenceCompat;
 import android.util.AttributeSet;
 import android.view.View;
+
+import androidx.preference.PreferenceViewHolder;
+import androidx.preference.SwitchPreference;
 
 /**
  * A helper preference view without weird margin on preference icon. Attempts to alter properties on
  * icon frame and icon itself so that it looks better
  */
-public class IconSwitchPreference extends SwitchPreferenceCompat {
+public class IconSwitchPreference extends SwitchPreference {
     private boolean hideSwitch;
 
     public IconSwitchPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
@@ -52,7 +53,7 @@ public class IconSwitchPreference extends SwitchPreferenceCompat {
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
         PreferenceIconLayoutHelper.applyLayoutChanges(holder, isEnabled());
-        final View switchView = holder.findViewById(android.support.v7.preference.R.id.switchWidget);
+        final View switchView = holder.findViewById(androidx.preference.R.id.switchWidget);
         if (hideSwitch && switchView != null) {
             switchView.setVisibility(View.GONE);
         }

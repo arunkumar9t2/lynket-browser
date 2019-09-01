@@ -20,7 +20,8 @@
 package arun.com.chromer.data.apps.store;
 
 import android.app.Application;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -40,9 +41,8 @@ import timber.log.Timber;
 
 @Singleton
 public class AppDiskStore implements AppStore, BookStore {
-    private final Application application;
-
     private static final String APP_BOOK_NAME = "APPS";
+    private final Application application;
 
     @Inject
     AppDiskStore(Application application) {

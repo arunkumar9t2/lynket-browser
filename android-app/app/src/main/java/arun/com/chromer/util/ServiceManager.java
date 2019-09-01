@@ -21,9 +21,10 @@ package arun.com.chromer.util;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import arun.com.chromer.appdetect.AppDetectService;
 import arun.com.chromer.settings.Preferences;

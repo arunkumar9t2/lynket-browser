@@ -19,20 +19,20 @@
 
 package arun.com.chromer.browsing.article
 
-import android.arch.lifecycle.ViewModelProviders
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.support.annotation.ColorInt
-import android.support.transition.TransitionManager
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatDelegate
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.ColorInt
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.TransitionManager
 import arun.com.chromer.R
 import arun.com.chromer.browsing.BrowsingActivity
 import arun.com.chromer.browsing.article.adapter.ArticleAdapter
@@ -50,7 +50,7 @@ import arun.com.chromer.extenstions.setMenuBackgroundColor
 import arun.com.chromer.extenstions.show
 import arun.com.chromer.extenstions.watch
 import arun.com.chromer.settings.Preferences.*
-import arun.com.chromer.tabs.DefaultTabsManager
+import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.ColorUtil
 import arun.com.chromer.util.Utils
 import butterknife.OnClick
@@ -80,7 +80,7 @@ class ArticleActivity : BrowsingActivity() {
     private var articleScrollListener: ArticleScrollListener? = null
 
     @Inject
-    lateinit var tabsManager: DefaultTabsManager
+    lateinit var tabsManager: TabsManager
     @Inject
     lateinit var menuDelegate: MenuDelegate
     @Inject
@@ -184,7 +184,13 @@ class ArticleActivity : BrowsingActivity() {
         // rendering tab.
         finish()
         Toast.makeText(this, R.string.article_loading_failed, Toast.LENGTH_SHORT).show()
-        tabsManager.openBrowsingTab(this, Website(intent.dataString!!), true, false, tabsManager.browsingActivitiesName)
+        tabsManager.openBrowsingTab(
+                this,
+                Website(intent.dataString!!),
+                smart = true,
+                fromNewTab = false,
+                activityNames = TabsManager.browsingActivitiesName
+        )
     }
 
     private fun onArticleLoaded(webArticle: WebArticle) {
@@ -293,7 +299,7 @@ class ArticleActivity : BrowsingActivity() {
         ).apply {
             setElements(webArticle.elements)
             subs.add(keywordsClicks()
-                    .map { Utils.getSearchUrl(it) }
+                    .map { Utils.getSearchUrl(it) } // TODO Migrate to search provider
                     .subscribe { url ->
                         tabsManager.openUrl(this@ArticleActivity, Website(url))
                     })

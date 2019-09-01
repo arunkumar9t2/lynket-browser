@@ -19,7 +19,7 @@
 
 package arun.com.chromer.data.website.model;
 
-import android.support.annotation.ColorInt;
+import androidx.annotation.ColorInt;
 
 public class WebColor {
     public String host;

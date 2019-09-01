@@ -19,13 +19,13 @@
 
 package arun.com.chromer.shared.base;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import arun.com.chromer.di.activity.ActivityComponent;
 
 /**
  * Created by arunk on 12-11-2017.
- * Marker interface to define a contract to let {@code {@link android.support.v4.app.Fragment}} retrieve
+ * Marker interface to define a contract to let {@code {@link androidx.core.app.Fragment}} retrieve
  * the {@link ActivityComponent} without explicitly depending on any sub class of {@link android.app.Activity}
  */
 public interface ProvidesActivityComponent {

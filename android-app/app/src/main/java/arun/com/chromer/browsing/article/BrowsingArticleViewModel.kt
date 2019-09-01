@@ -19,8 +19,8 @@
 
 package arun.com.chromer.browsing.article
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import arun.com.chromer.data.Result
 import arun.com.chromer.data.webarticle.WebArticleRepository
 import arun.com.chromer.data.webarticle.model.WebArticle

@@ -32,13 +32,14 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.customtabs.CustomTabsIntent;
-import android.support.customtabs.CustomTabsSession;
-import android.support.v4.graphics.ColorUtils;
 import android.widget.Toast;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.browser.customtabs.CustomTabsSession;
+import androidx.core.graphics.ColorUtils;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -142,31 +143,6 @@ public class CustomTabs {
     }
 
     /**
-     * Opens the URL on a Custom Tab if possible. Otherwise fallsback to opening it on a WebView.
-     */
-    private void openCustomTab() {
-        final String packageName = getCustomTabPackage(activity);
-        final CustomTabsIntent customTabsIntent = builder.build();
-        final Uri uri = Uri.parse(url);
-        if (packageName != null) {
-            customTabsIntent.intent.setPackage(packageName);
-            final Intent keepAliveIntent = new Intent();
-            keepAliveIntent.setClassName(activity.getPackageName(), KeepAliveService.class.getCanonicalName());
-            customTabsIntent.intent.putExtra(EXTRA_CUSTOM_TABS_KEEP_ALIVE, keepAliveIntent);
-            try {
-                customTabsIntent.launchUrl(activity, uri);
-                Timber.d("Launched url: %s", uri.toString());
-            } catch (Exception e) {
-                CUSTOM_TABS_FALLBACK.openUri(activity, uri);
-                Timber.e("Called fallback even though a package was found, weird Exception : %s", e.toString());
-            }
-        } else {
-            Timber.e("Called fallback since no package found!");
-            CUSTOM_TABS_FALLBACK.openUri(activity, uri);
-        }
-    }
-
-    /**
      * Attempts to find the custom the best custom tab package to use.
      *
      * @return A package that supports custom tab, null if not present
@@ -228,6 +204,31 @@ public class CustomTabs {
         serviceIntent.setAction(ACTION_CUSTOM_TABS_CONNECTION);
         serviceIntent.setPackage(packageName);
         return pm.resolveService(serviceIntent, 0) != null;
+    }
+
+    /**
+     * Opens the URL on a Custom Tab if possible. Otherwise fallsback to opening it on a WebView.
+     */
+    private void openCustomTab() {
+        final String packageName = getCustomTabPackage(activity);
+        final CustomTabsIntent customTabsIntent = builder.build();
+        final Uri uri = Uri.parse(url);
+        if (packageName != null) {
+            customTabsIntent.intent.setPackage(packageName);
+            final Intent keepAliveIntent = new Intent();
+            keepAliveIntent.setClassName(activity.getPackageName(), KeepAliveService.class.getCanonicalName());
+            customTabsIntent.intent.putExtra(EXTRA_CUSTOM_TABS_KEEP_ALIVE, keepAliveIntent);
+            try {
+                customTabsIntent.launchUrl(activity, uri);
+                Timber.d("Launched url: %s", uri.toString());
+            } catch (Exception e) {
+                CUSTOM_TABS_FALLBACK.openUri(activity, uri);
+                Timber.e("Called fallback even though a package was found, weird Exception : %s", e.toString());
+            }
+        } else {
+            Timber.e("Called fallback since no package found!");
+            CUSTOM_TABS_FALLBACK.openUri(activity, uri);
+        }
     }
 
     public CustomTabs withSession(@Nullable CustomTabsSession session) {

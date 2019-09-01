@@ -20,21 +20,20 @@
 package arun.com.chromer.shortcuts
 
 import android.app.Activity
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.MutableLiveData
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
-import android.support.design.widget.TextInputLayout
-import android.support.v4.content.pm.ShortcutInfoCompat
-import android.support.v4.content.pm.ShortcutManagerCompat
-import android.support.v4.graphics.drawable.IconCompat
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.core.content.pm.ShortcutInfoCompat
+import androidx.core.content.pm.ShortcutManagerCompat
+import androidx.core.graphics.drawable.IconCompat
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
 import arun.com.chromer.R
 import arun.com.chromer.browsing.BrowsingActivity
 import arun.com.chromer.browsing.browserintercept.BrowserInterceptActivity
@@ -54,6 +53,7 @@ import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.internal.MDButton
 import com.bumptech.glide.request.target.ImageViewTarget
+import com.google.android.material.textfield.TextInputLayout
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar
 import rx.subscriptions.CompositeSubscription
 
@@ -143,9 +143,9 @@ class HomeScreenShortcutCreatorActivity : BrowsingActivity() {
                     is Result.Success<Website> -> {
                         website = it.data!!
                         shortcutName?.setText(website.safeLabel())
-                        GlideApp.with(activity)
+                        GlideApp.with(activity!!)
                                 .load(it.data)
-                                .error(GlideApp.with(activity).load(ApplicationIcon.createUri(activity!!.packageName)))
+                                .error(GlideApp.with(activity!!).load(ApplicationIcon.createUri(activity!!.packageName)))
                                 .into(object : ImageViewTarget<Drawable>(iconView) {
                                     override fun setResource(resource: Drawable?) {
                                         iconView?.setImageDrawable(resource)

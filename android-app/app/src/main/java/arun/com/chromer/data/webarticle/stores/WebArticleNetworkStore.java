@@ -19,7 +19,7 @@
 
 package arun.com.chromer.data.webarticle.stores;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
