@@ -154,6 +154,12 @@ constructor(
                             title(activity.getString(R.string.title_history))
                             spanSizeOverride(TotalSpanOverride)
                         }
+                        spaceLayout {
+                            id("history-header-space")
+                            spaceHeight(activity.dpToPx(4.0))
+                            spaceWidth(MATCH_PARENT)
+                            spanSizeOverride(TotalSpanOverride)
+                        }
                     }
                 }
 

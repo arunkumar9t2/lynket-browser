@@ -65,7 +65,6 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import dev.arunkumar.android.rxschedulers.SchedulerProvider
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
@@ -125,14 +124,6 @@ constructor(
     private val focusChanges = BehaviorSubject.createDefault(false)
 
     private val searchQuery get() = if (msvEditText.text == null) "" else msvEditText.text.toString()
-
-    private val url: Single<String> by lazy {
-        Observable.fromCallable { searchQuery }
-                .subscribeOn(schedulerProvider.ui)
-                .observeOn(schedulerProvider.pool)
-                .concatMap(searchPresenter::getSearchUrl)
-                .firstOrError()
-    }
 
     private val searchTermChanges by lazy {
         msvEditText.textChanges()
@@ -289,7 +280,6 @@ constructor(
 
     private fun setupEditText() {
         msvEditText.run {
-            setOnClickListener { performClick() }
             focusChanges()
                     .takeUntil(viewDetaches)
                     .subscribe { hasFocus ->
