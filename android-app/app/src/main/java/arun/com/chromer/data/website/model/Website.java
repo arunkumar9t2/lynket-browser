@@ -168,7 +168,7 @@ public class Website implements Parcelable {
 
     @NonNull
     public String preferredUrl() {
-        return canonicalUrl != null && !canonicalUrl.isEmpty() ? canonicalUrl : url;
+        return url;
     }
 
     public Uri preferredUri() {
