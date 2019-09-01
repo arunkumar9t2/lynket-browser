@@ -1,4 +1,4 @@
-package arun.com.chromer.home.epoxycontroller.model
+package arun.com.chromer.shared.epxoy.model
 
 import arun.com.chromer.R
 import com.airbnb.epoxy.EpoxyAttribute
@@ -9,12 +9,12 @@ import kotlinx.android.synthetic.main.layout_feed_header.*
 
 @EpoxyModelClass(layout = R.layout.layout_feed_header)
 abstract class HeaderLayoutModel : KotlinEpoxyModelWithHolder<HeaderLayoutModel.ViewHolder>() {
+    class ViewHolder : KotlinHolder()
+
     @EpoxyAttribute
     lateinit var title: String
 
     override fun bind(holder: ViewHolder) {
-        holder.feedHeader.text = title
+        holder.header.text = title
     }
-
-    class ViewHolder : KotlinHolder()
 }

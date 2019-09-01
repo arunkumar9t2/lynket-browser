@@ -3,7 +3,11 @@ package arun.com.chromer.home.epoxycontroller
 import android.app.Application
 import arun.com.chromer.R
 import arun.com.chromer.data.website.model.Website
-import arun.com.chromer.home.epoxycontroller.model.*
+import arun.com.chromer.home.epoxycontroller.model.CustomTabProviderInfo
+import arun.com.chromer.home.epoxycontroller.model.providerInfo
+import arun.com.chromer.home.epoxycontroller.model.recentsCard
+import arun.com.chromer.home.epoxycontroller.model.tabsInfo
+import arun.com.chromer.shared.epxoy.model.headerLayout
 import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.epoxy.indeterminateProgress
 import com.airbnb.epoxy.AsyncEpoxyController

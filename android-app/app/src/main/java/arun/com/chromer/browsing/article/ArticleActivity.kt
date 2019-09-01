@@ -299,7 +299,7 @@ class ArticleActivity : BrowsingActivity() {
         ).apply {
             setElements(webArticle.elements)
             subs.add(keywordsClicks()
-                    .map { Utils.getSearchUrl(it) }
+                    .map { Utils.getSearchUrl(it) } // TODO Migrate to search provider
                     .subscribe { url ->
                         tabsManager.openUrl(this@ArticleActivity, Website(url))
                     })
