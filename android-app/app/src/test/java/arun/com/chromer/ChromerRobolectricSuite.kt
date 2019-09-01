@@ -20,12 +20,12 @@
 package arun.com.chromer
 
 import android.app.Application
+import androidx.test.core.app.ApplicationProvider
 import arun.com.chromer.di.app.TestAppComponent
 import arun.com.chromer.settings.Preferences
 import org.junit.Before
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import rx.plugins.RxJavaHooks
 import rx.schedulers.Schedulers
@@ -40,8 +40,7 @@ abstract class ChromerRobolectricSuite {
     @Inject
     lateinit var preferences: Preferences
 
-    val application: Application
-        get() = RuntimeEnvironment.application
+    val application: Application get() = ApplicationProvider.getApplicationContext()
 
     @Before
     fun setup() {

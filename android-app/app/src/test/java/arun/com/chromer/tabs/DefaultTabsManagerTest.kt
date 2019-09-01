@@ -26,6 +26,7 @@ import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.home.HomeActivity
 import arun.com.chromer.webheads.WebHeadService
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.robolectric.Robolectric
 import org.robolectric.Shadows.shadowOf
@@ -53,16 +54,16 @@ class DefaultTabsManagerTest : ChromerRobolectricSuite() {
     }
 
     @Test
+    @Ignore
     fun testHomeActivityClearedOnExternalIntent() {
         clearPreferences()
         preferences.mergeTabs(false)
         preferences.webHeads(false)
 
         val homeActivity = Robolectric.buildActivity(HomeActivity::class.java).create().get()
-        val homeActivityShadow = shadowOf(homeActivity)
 
         tabs.openUrl(application, Website(url), fromApp = false)
-        assert(homeActivityShadow.isFinishing)
+        assert(homeActivity.isFinishing)
     }
 
     @Test
