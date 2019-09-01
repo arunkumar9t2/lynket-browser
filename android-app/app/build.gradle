@@ -43,7 +43,7 @@ kapt {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -52,7 +52,7 @@ android {
     defaultConfig {
         applicationId "arun.com.chromer"
         minSdkVersion 16
-        targetSdkVersion 27
+        targetSdkVersion 29
         versionCode 52
         versionName "2.0.2"
 

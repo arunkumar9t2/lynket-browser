@@ -7,8 +7,8 @@ import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.graphics.drawable.Icon
 import android.net.Uri
 import android.os.Build
-import android.support.annotation.RequiresApi
-import android.support.v4.content.ContextCompat
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import arun.com.chromer.R
 import arun.com.chromer.browsing.webview.WebViewActivity
 import arun.com.chromer.data.website.WebsiteRepository

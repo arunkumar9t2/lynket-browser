@@ -32,6 +32,7 @@ import arun.com.chromer.home.HomeActivity
 import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.tabs.TabsModule
 import arun.com.chromer.util.drawer.GlideDrawerImageLoader
+import arun.com.chromer.webheads.BubbleModule
 import dagger.Component
 import javax.inject.Singleton
 
@@ -41,7 +42,8 @@ import javax.inject.Singleton
 
     HomeActivity.HomeBuilder::class,
     TabsModule::class,
-    DataModule::class
+    DataModule::class,
+    BubbleModule::class
 ])
 interface AppComponent {
 
