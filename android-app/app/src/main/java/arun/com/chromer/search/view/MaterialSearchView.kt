@@ -140,6 +140,8 @@ constructor(
             .hide()
             .switchMap(searchPresenter::getSearchUrl)
 
+    private val leftIconClicks by lazy { msvLeftIcon.clicks().share() }
+
     init {
         if (context is ProvidesActivityComponent) {
             viewComponent = context
@@ -206,8 +208,7 @@ constructor(
 
     override fun setOnClickListener(onClickListener: OnClickListener?) = Unit
 
-    fun menuClicks(): Observable<Unit> = msvLeftIcon
-            .clicks()
+    fun menuClicks(): Observable<Unit> = leftIconClicks
             .filter { focusChanges.value == false }
             .share()
 
@@ -235,9 +236,11 @@ constructor(
         }
         msvLeftIcon.run {
             setImageDrawable(menuIcon)
-            clicks().takeUntil(viewDetaches).subscribe {
-                suggestionController.showSearchProviders = true
-            }
+            leftIconClicks
+                    .filter { focusChanges.value == true }
+                    .takeUntil(viewDetaches).subscribe {
+                        suggestionController.showSearchProviders = true
+                    }
             Observable.combineLatest(
                     focusChanges,
                     searchPresenter.selectedSearchProvider,
