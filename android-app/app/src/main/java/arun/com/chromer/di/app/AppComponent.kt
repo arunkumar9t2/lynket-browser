@@ -23,6 +23,7 @@ import arun.com.chromer.appdetect.AppDetectionManager
 import arun.com.chromer.browsing.customtabs.bottombar.BottomBarReceiver
 import arun.com.chromer.browsing.customtabs.callbacks.MinimizeBroadcastReceiver
 import arun.com.chromer.browsing.customtabs.dynamictoolbar.AppColorExtractorJob
+import arun.com.chromer.bubbles.BubbleModule
 import arun.com.chromer.data.DataModule
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.di.activity.ActivityModule
@@ -32,7 +33,6 @@ import arun.com.chromer.home.HomeActivity
 import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.tabs.TabsModule
 import arun.com.chromer.util.drawer.GlideDrawerImageLoader
-import arun.com.chromer.webheads.BubbleModule
 import dagger.Component
 import javax.inject.Singleton
 

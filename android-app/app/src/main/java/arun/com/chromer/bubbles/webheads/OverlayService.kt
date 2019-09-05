@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.webheads
+package arun.com.chromer.bubbles.webheads
 
 import android.app.Notification
 import android.app.NotificationManager

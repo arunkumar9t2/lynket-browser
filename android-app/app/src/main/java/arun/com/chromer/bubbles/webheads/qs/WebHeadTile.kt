@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.webheads.qs
+package arun.com.chromer.bubbles.webheads.qs
 
 import android.graphics.Color
 import android.graphics.drawable.Icon

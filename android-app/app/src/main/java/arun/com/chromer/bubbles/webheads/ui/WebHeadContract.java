@@ -17,13 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.webheads.ui;
+package arun.com.chromer.bubbles.webheads.ui;
 
 import androidx.annotation.NonNull;
 
 import com.facebook.rebound.Spring;
 
-import arun.com.chromer.webheads.ui.views.WebHead;
+import arun.com.chromer.bubbles.webheads.ui.views.WebHead;
 
 /**
  * Created by Arun on 08/08/2016.

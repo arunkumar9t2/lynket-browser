@@ -22,9 +22,9 @@ package arun.com.chromer.tabs
 import android.content.Intent
 import arun.com.chromer.ChromerRobolectricSuite
 import arun.com.chromer.browsing.amp.AmpResolverActivity
+import arun.com.chromer.bubbles.webheads.WebHeadService
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.home.HomeActivity
-import arun.com.chromer.webheads.WebHeadService
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test

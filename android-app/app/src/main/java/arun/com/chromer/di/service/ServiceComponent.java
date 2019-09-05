@@ -22,9 +22,9 @@ package arun.com.chromer.di.service;
 import org.jetbrains.annotations.NotNull;
 
 import arun.com.chromer.appdetect.AppDetectService;
+import arun.com.chromer.bubbles.webheads.WebHeadService;
 import arun.com.chromer.di.scopes.PerService;
 import arun.com.chromer.shared.base.PreferenceQuickSettingsTile;
-import arun.com.chromer.webheads.WebHeadService;
 import dagger.Subcomponent;
 
 @PerService

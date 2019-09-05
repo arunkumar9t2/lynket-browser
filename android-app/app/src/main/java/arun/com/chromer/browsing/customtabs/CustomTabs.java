@@ -60,9 +60,9 @@ import arun.com.chromer.browsing.customtabs.callbacks.ShareBroadcastReceiver;
 import arun.com.chromer.browsing.openwith.OpenIntentWithActivity;
 import arun.com.chromer.browsing.optionspopup.ChromerOptionsActivity;
 import arun.com.chromer.browsing.webview.WebViewActivity;
+import arun.com.chromer.bubbles.webheads.WebHeadService;
 import arun.com.chromer.settings.Preferences;
 import arun.com.chromer.util.Utils;
-import arun.com.chromer.webheads.WebHeadService;
 import timber.log.Timber;
 
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;

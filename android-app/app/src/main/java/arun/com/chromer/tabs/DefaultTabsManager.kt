@@ -19,6 +19,7 @@
 
 package arun.com.chromer.tabs
 
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
 import android.app.ActivityManager
@@ -44,6 +45,7 @@ import arun.com.chromer.browsing.customtabs.CustomTabActivity
 import arun.com.chromer.browsing.customtabs.CustomTabs
 import arun.com.chromer.browsing.newtab.NewTabDialogActivity
 import arun.com.chromer.browsing.webview.WebViewActivity
+import arun.com.chromer.bubbles.FloatingBubble
 import arun.com.chromer.data.apps.AppRepository
 import arun.com.chromer.data.website.WebsiteRepository
 import arun.com.chromer.data.website.model.Website
@@ -53,7 +55,6 @@ import arun.com.chromer.shared.Constants
 import arun.com.chromer.shared.Constants.NO_COLOR
 import arun.com.chromer.tabs.ui.TabsActivity
 import arun.com.chromer.util.*
-import arun.com.chromer.webheads.FloatingBubble
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import rx.Completable
@@ -407,6 +408,7 @@ constructor(
     }
 
 
+    @SuppressLint("NewApi")
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     override fun getActiveTabs(): Single<List<TabsManager.Tab>> {
         return Single.create { emitter ->
@@ -419,7 +421,7 @@ constructor(
                         .map {
                             val url = it.baseIntent.dataString!!
                             @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-                            val type = getTabType(it.baseIntent.component.className)
+                            val type = getTabType(it.baseIntent.component!!.className)
                             TabsManager.Tab(url, type)
                         }.filter { it.type != OTHER }
                         .toMutableList())

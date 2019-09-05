@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.webheads.ui.context;
+package arun.com.chromer.bubbles.webheads.ui.context;
 
 import android.content.BroadcastReceiver;
 import android.content.ClipData;

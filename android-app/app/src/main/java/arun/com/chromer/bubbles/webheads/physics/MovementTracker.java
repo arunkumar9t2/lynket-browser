@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.webheads.physics;
+package arun.com.chromer.bubbles.webheads.physics;
 
 import android.view.MotionEvent;
 

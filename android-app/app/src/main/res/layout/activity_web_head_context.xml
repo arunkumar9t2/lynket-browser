@@ -29,7 +29,7 @@
     app:cardElevation="10dp"
     app:cardPreventCornerOverlap="true"
     app:cardUseCompatPadding="true"
-    tools:context="arun.com.chromer.webheads.ui.context.WebHeadContextActivity">
+    tools:context=".bubbles.webheads.ui.context.WebHeadContextActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

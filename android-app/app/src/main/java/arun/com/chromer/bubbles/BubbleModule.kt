@@ -1,5 +1,7 @@
-package arun.com.chromer.webheads
+package arun.com.chromer.bubbles
 
+import arun.com.chromer.bubbles.system.NativeFloatingBubble
+import arun.com.chromer.bubbles.webheads.WebHeadsFloatingBubble
 import dagger.Module
 import dagger.Provides
 

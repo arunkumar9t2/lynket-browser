@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.webheads;
+package arun.com.chromer.bubbles.webheads;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
@@ -63,6 +63,11 @@ import arun.com.chromer.R;
 import arun.com.chromer.browsing.article.ArticlePreloader;
 import arun.com.chromer.browsing.customtabs.CustomTabManager;
 import arun.com.chromer.browsing.newtab.NewTabDialogActivity;
+import arun.com.chromer.bubbles.webheads.physics.SpringChain2D;
+import arun.com.chromer.bubbles.webheads.ui.WebHeadContract;
+import arun.com.chromer.bubbles.webheads.ui.context.WebHeadContextActivity;
+import arun.com.chromer.bubbles.webheads.ui.views.Trashy;
+import arun.com.chromer.bubbles.webheads.ui.views.WebHead;
 import arun.com.chromer.data.website.WebsiteRepository;
 import arun.com.chromer.data.website.model.Website;
 import arun.com.chromer.di.service.ServiceComponent;
@@ -71,11 +76,6 @@ import arun.com.chromer.shared.Constants;
 import arun.com.chromer.tabs.TabsManager;
 import arun.com.chromer.util.SchedulerProvider;
 import arun.com.chromer.util.Utils;
-import arun.com.chromer.webheads.physics.SpringChain2D;
-import arun.com.chromer.webheads.ui.WebHeadContract;
-import arun.com.chromer.webheads.ui.context.WebHeadContextActivity;
-import arun.com.chromer.webheads.ui.views.Trashy;
-import arun.com.chromer.webheads.ui.views.WebHead;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;

@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.webheads.physics;
+package arun.com.chromer.bubbles.webheads.physics;
 
 import android.content.Context;
 import android.util.DisplayMetrics;
@@ -31,8 +31,8 @@ import com.facebook.rebound.SpringListener;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import arun.com.chromer.bubbles.webheads.WebHeadService;
 import arun.com.chromer.util.Utils;
-import arun.com.chromer.webheads.WebHeadService;
 
 
 /**

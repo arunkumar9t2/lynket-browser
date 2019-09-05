@@ -55,7 +55,7 @@
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
-            android:name=".webheads.WebHeadService"
+            android:name="arun.com.chromer.bubbles.webheads.WebHeadService"
             android:enabled="true"
             android:exported="false" />
         <service
@@ -64,7 +64,7 @@
             android:exported="true"
             tools:ignore="ExportedService" />
         <service
-            android:name=".webheads.qs.WebHeadTile"
+            android:name="arun.com.chromer.bubbles.webheads.qs.WebHeadTile"
             android:icon="@drawable/ic_bubble_chart_white_24dp"
             android:label="@string/web_heads"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -210,7 +210,7 @@
             android:parentActivityName=".settings.browsingoptions.BrowsingOptionsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".webheads.ui.context.WebHeadContextActivity"
+            android:name="arun.com.chromer.bubbles.webheads.ui.context.WebHeadContextActivity"
             android:excludeFromRecents="true"
             android:noHistory="true"
             android:theme="@style/DialogTheme" />

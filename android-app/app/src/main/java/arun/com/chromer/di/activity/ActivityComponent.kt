@@ -29,6 +29,7 @@ import arun.com.chromer.browsing.optionspopup.ChromerOptionsActivity
 import arun.com.chromer.browsing.providerselection.ProviderSelectionActivity
 import arun.com.chromer.browsing.shareintercept.ShareInterceptActivity
 import arun.com.chromer.browsing.webview.WebViewActivity
+import arun.com.chromer.bubbles.webheads.ui.context.WebHeadContextActivity
 import arun.com.chromer.di.fragment.FragmentComponent
 import arun.com.chromer.di.fragment.FragmentModule
 import arun.com.chromer.di.scopes.PerActivity
@@ -41,7 +42,6 @@ import arun.com.chromer.settings.browsingoptions.BrowsingOptionsActivity
 import arun.com.chromer.shortcuts.HomeScreenShortcutCreatorActivity
 import arun.com.chromer.tabs.ui.TabsActivity
 import arun.com.chromer.tips.TipsActivity
-import arun.com.chromer.webheads.ui.context.WebHeadContextActivity
 import dagger.Subcomponent
 
 @PerActivity
