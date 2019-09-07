@@ -28,6 +28,7 @@ import arun.com.chromer.di.app.AppComponent
 import arun.com.chromer.di.app.AppModule
 import arun.com.chromer.di.app.DaggerAppComponent
 import arun.com.chromer.util.ServiceManager
+import com.airbnb.epoxy.EpoxyController
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
@@ -69,6 +70,12 @@ open class Chromer : Application() {
         ServiceManager.takeCareOfServices(applicationContext)
 
         initMaterialDrawer()
+
+        initEpoxy()
+    }
+
+    private fun initEpoxy() {
+        EpoxyController.setGlobalDebugLoggingEnabled(true)
     }
 
     private fun initMaterialDrawer() {
