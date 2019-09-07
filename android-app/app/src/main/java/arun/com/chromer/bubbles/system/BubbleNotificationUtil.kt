@@ -64,7 +64,7 @@ constructor(
                 PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        val bubbleIcon: Icon = bubbleData.icon?.let(Icon::createWithBitmap)
+        val bubbleIcon: Icon = bubbleData.icon?.let(Icon::createWithAdaptiveBitmap)
                 ?: Icon.createWithResource(context, R.mipmap.ic_launcher)
 
         val bubbleNotification = Notification.Builder(context, BUBBLE_NOTIFICATION_CHANNEL_ID).run {

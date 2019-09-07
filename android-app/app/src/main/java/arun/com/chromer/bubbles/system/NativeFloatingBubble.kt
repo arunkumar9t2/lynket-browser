@@ -13,9 +13,11 @@ import arun.com.chromer.shared.Constants
 import com.jakewharton.rxrelay2.PublishRelay
 import dev.arunkumar.android.rxschedulers.SchedulerProvider
 import hu.akarnokd.rxjava.interop.RxJavaInterop
-import io.reactivex.BackpressureStrategy
+import io.reactivex.BackpressureStrategy.BUFFER
+import io.reactivex.Flowable
 import timber.log.Timber
 import java.lang.ref.WeakReference
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -44,23 +46,9 @@ constructor(
     private val loadQueue = PublishRelay.create<BubbleLoadData>()
 
     init {
-        loadQueue.toFlowable(BackpressureStrategy.BUFFER)
+        loadQueue.toFlowable(BUFFER)
                 .observeOn(schedulerProvider.pool)
-                .flatMapSingle(bubbleNotificationUtil::showBubbles)
-                .flatMap { bubbleData ->
-                    RxJavaInterop.toV2Flowable(websiteRepository.getWebsite(bubbleData.website.url))
-                            .subscribeOn(schedulerProvider.io)
-                            .map { website ->
-                                val iconColorPair = websiteRepository.getWebsiteIconWithPlaceholderAndColor(website)
-                                bubbleData.copy(
-                                        website = website,
-                                        icon = iconColorPair.first,
-                                        color = iconColorPair.second
-                                )
-                            }.onErrorReturnItem(bubbleData)
-                }
-                .observeOn(schedulerProvider.pool)
-                .flatMapSingle(bubbleNotificationUtil::showBubbles)
+                .flatMap(::postBubbleNotification)
                 .doOnError(Timber::e)
                 .subscribe()
     }
@@ -78,4 +66,23 @@ constructor(
             incognito,
             WeakReference(context)
     ))
+
+    private fun postBubbleNotification(bubbleLoadData: BubbleLoadData): Flowable<BubbleLoadData>? {
+        return bubbleNotificationUtil.showBubbles(bubbleLoadData)
+                .delay(1, TimeUnit.SECONDS, schedulerProvider.pool)
+                .toFlowable()
+                .flatMap { bubbleData ->
+                    RxJavaInterop.toV2Flowable(websiteRepository.getWebsite(bubbleData.website.url))
+                            .subscribeOn(schedulerProvider.io)
+                            .observeOn(schedulerProvider.pool)
+                            .map { website ->
+                                val iconColorPair = websiteRepository.getWebsiteIconWithPlaceholderAndColor(website)
+                                bubbleData.copy(
+                                        website = website,
+                                        icon = iconColorPair.first,
+                                        color = iconColorPair.second
+                                )
+                            }.onErrorReturnItem(bubbleData)
+                }.flatMapSingle(bubbleNotificationUtil::showBubbles)
+    }
 }
