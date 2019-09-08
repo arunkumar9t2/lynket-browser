@@ -3,6 +3,7 @@ package arun.com.chromer.home.epoxycontroller.model
 import arun.com.chromer.R
 import arun.com.chromer.tabs.TabsManager
 import com.airbnb.epoxy.EpoxyAttribute
+import com.airbnb.epoxy.EpoxyAttribute.Option.DoNotHash
 import com.airbnb.epoxy.EpoxyModelClass
 import dev.arunkumar.android.epoxy.model.KotlinEpoxyModelWithHolder
 import dev.arunkumar.android.epoxy.model.KotlinHolder
@@ -12,15 +13,19 @@ import kotlinx.android.synthetic.main.layout_tabs_info_card.*
 abstract class TabsInfoModel : KotlinEpoxyModelWithHolder<TabsInfoModel.ViewHolder>() {
     @EpoxyAttribute
     lateinit var tabs: List<TabsManager.Tab>
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    @EpoxyAttribute(DoNotHash)
     lateinit var tabsManager: TabsManager
 
     private var revealed = false
 
     override fun bind(holder: ViewHolder) {
         super.bind(holder)
-        holder.tabsDescription.text = holder.tabsDescription.context.getString(R.string.active_tabs, tabs.size)
-        holder.tabsButton.setOnClickListener {
+        holder.tabsDescription.text = holder.tabsDescription.context.resources.getQuantityString(
+                R.plurals.active_tabs,
+                tabs.size,
+                tabs.size
+        )
+        holder.containerView.setOnClickListener {
             tabsManager.showTabsActivity()
         }
         /*holder.containerView.post {

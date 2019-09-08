@@ -281,7 +281,10 @@
     <string name="web_view">Web View</string>
     <string name="custom_tab">Custom Tab</string>
     <string name="no_active_tabs">No active tabs.</string>
-    <string name="active_tabs">%1$d active tabs.</string>
+    <plurals name="active_tabs">
+        <item quantity="one">%1$d active tab.</item>
+        <item quantity="other">%1$d active tabs.</item>
+    </plurals>
     <string name="new_tab_text">New tab</string>
     <string name="article">Article</string>
     <string name="skip">Skip</string>

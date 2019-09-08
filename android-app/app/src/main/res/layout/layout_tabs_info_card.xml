@@ -7,14 +7,14 @@
     android:layout_marginLeft="8dp"
     android:layout_marginTop="4dp"
     android:layout_marginRight="8dp"
+    android:clickable="true"
+    android:focusable="true"
     app:cardPreventCornerOverlap="true"
     app:cardUseCompatPadding="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         tools:ignore="RtlHardcoded">
@@ -44,21 +44,11 @@
             android:gravity="center|start"
             android:textColor="@color/primary_text_color"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tabsButton"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tabsIcon"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="3 active tabs" />
 
-        <TextView
-            android:id="@+id/tabsButton"
-            style="@style/FeedBorderlessButton"
-            android:layout_height="0dp"
-            android:paddingStart="16dp"
-            android:paddingLeft="16dp"
-            android:text="@string/title_tabs"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
