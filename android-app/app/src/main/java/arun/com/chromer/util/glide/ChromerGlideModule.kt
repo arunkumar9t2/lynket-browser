@@ -44,9 +44,8 @@ import com.bumptech.glide.request.RequestOptions
 
 @GlideModule
 class ChromerGlideModule : AppGlideModule() {
-    override fun isManifestParsingEnabled(): Boolean {
-        return false
-    }
+
+    override fun isManifestParsingEnabled() = false
 
     override fun applyOptions(context: Context, builder: GlideBuilder) {
         builder.setDefaultTransitionOptions(Drawable::class.java, DrawableTransitionOptions.withCrossFade())

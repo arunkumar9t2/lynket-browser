@@ -29,9 +29,13 @@ import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.signature.ObjectKey
 
 class ApplicationIconModelLoader : ModelLoader<Uri, ApplicationIcon> {
-    override fun buildLoadData(model: Uri, width: Int, height: Int, options: Options): LoadData<ApplicationIcon>? {
-        return LoadData(ObjectKey(model), ApplicationIconDataFetcher(model.schemeSpecificPart))
-    }
+
+    override fun buildLoadData(
+            model: Uri,
+            width: Int,
+            height: Int,
+            options: Options
+    ) = LoadData(ObjectKey(model), ApplicationIconDataFetcher(model.schemeSpecificPart))
 
     override fun handles(model: Uri): Boolean = model.scheme == URI_SCHEME_APPLICATION_ICON
 
