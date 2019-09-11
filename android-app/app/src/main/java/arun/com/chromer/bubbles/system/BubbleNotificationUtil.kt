@@ -2,11 +2,14 @@ package arun.com.chromer.bubbles.system
 
 import android.app.*
 import android.app.NotificationManager.IMPORTANCE_HIGH
+import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
+import android.graphics.Point
 import android.graphics.drawable.Icon
 import android.net.Uri
 import android.os.Build
+import android.view.WindowManager
 import androidx.annotation.RequiresApi
 import arun.com.chromer.R
 import arun.com.chromer.browsing.webview.WebViewActivity
@@ -67,6 +70,10 @@ constructor(
         val bubbleIcon: Icon = bubbleData.icon?.let(Icon::createWithAdaptiveBitmap)
                 ?: Icon.createWithResource(context, R.mipmap.ic_launcher)
 
+        val displayHeight = (application.getSystemService(Context.WINDOW_SERVICE) as WindowManager)
+                .defaultDisplay
+                .let { display -> Point().apply(display::getSize).y }
+
         val bubbleNotification = Notification.Builder(context, BUBBLE_NOTIFICATION_CHANNEL_ID).run {
             setContentTitle(website.safeLabel())
             setContentText(website.preferredUrl())
@@ -83,6 +90,7 @@ constructor(
                 setIntent(bubbleIntent)
                 setAutoExpandBubble(false)
                 setSuppressNotification(true)
+                setDesiredHeight(displayHeight)
                 build()
             })
             addPerson(Person.Builder().run {
