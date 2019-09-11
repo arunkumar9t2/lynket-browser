@@ -6,6 +6,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
 import androidx.annotation.RequiresApi
+import arun.com.chromer.browsing.icons.WebsiteIconsProvider
 import arun.com.chromer.bubbles.FloatingBubble
 import arun.com.chromer.data.website.WebsiteRepository
 import arun.com.chromer.data.website.model.Website
@@ -40,7 +41,8 @@ constructor(
         private val application: Application,
         private val schedulerProvider: SchedulerProvider,
         private val websiteRepository: WebsiteRepository,
-        private val bubbleNotificationUtil: BubbleNotificationUtil
+        private val bubbleNotificationUtil: BubbleNotificationUtil,
+        private val websiteIconsProvider: WebsiteIconsProvider
 ) : FloatingBubble {
 
     private val loadQueue = PublishRelay.create<BubbleLoadData>()
@@ -48,7 +50,7 @@ constructor(
     init {
         loadQueue.toFlowable(BUFFER)
                 .observeOn(schedulerProvider.pool)
-                .flatMap(::postBubbleNotification)
+                .flatMap(::showBubble)
                 .doOnError(Timber::e)
                 .subscribe()
     }
@@ -67,21 +69,23 @@ constructor(
             WeakReference(context)
     ))
 
-    private fun postBubbleNotification(bubbleLoadData: BubbleLoadData): Flowable<BubbleLoadData>? {
+    private fun showBubble(bubbleLoadData: BubbleLoadData): Flowable<BubbleLoadData>? {
         return bubbleNotificationUtil.showBubbles(bubbleLoadData)
-                .delay(1, TimeUnit.SECONDS, schedulerProvider.pool)
+                .delay(1, TimeUnit.SECONDS, schedulerProvider.pool) // Avoid notification throttling
                 .toFlowable()
                 .flatMap { bubbleData ->
                     RxJavaInterop.toV2Flowable(websiteRepository.getWebsite(bubbleData.website.url))
                             .subscribeOn(schedulerProvider.io)
                             .observeOn(schedulerProvider.pool)
-                            .map { website ->
-                                val iconColorPair = websiteRepository.getWebsiteIconWithPlaceholderAndColor(website)
-                                bubbleData.copy(
-                                        website = website,
-                                        icon = iconColorPair.first,
-                                        color = iconColorPair.second
-                                )
+                            .flatMapSingle { website ->
+                                websiteIconsProvider.getBubbleIconAndColor(website)
+                                        .map { iconData ->
+                                            bubbleData.copy(
+                                                    website = website,
+                                                    icon = iconData.icon,
+                                                    color = iconData.color
+                                            )
+                                        }
                             }.onErrorReturnItem(bubbleData)
                 }.flatMapSingle(bubbleNotificationUtil::showBubbles)
     }

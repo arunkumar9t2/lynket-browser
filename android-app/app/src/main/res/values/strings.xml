@@ -331,4 +331,6 @@
     <string name="status">Status</string>
     <string name="pages">Pages</string>
     <string name="pick_search_engines">Pick search engine</string>
+    <string name="bubble_notification_channel_name">Bubbles notification channel</string>
+    <string name="bubble_notification_channel_description">Channel for showing bubbles</string>
 </resources>
