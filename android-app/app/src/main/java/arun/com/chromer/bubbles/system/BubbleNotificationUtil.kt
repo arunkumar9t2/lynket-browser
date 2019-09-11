@@ -12,7 +12,7 @@ import android.os.Build
 import android.view.WindowManager
 import androidx.annotation.RequiresApi
 import arun.com.chromer.R
-import arun.com.chromer.browsing.webview.WebViewActivity
+import arun.com.chromer.browsing.webview.EmbeddableWebViewActivity
 import arun.com.chromer.shared.Constants
 import io.reactivex.Single
 import javax.inject.Inject
@@ -61,7 +61,7 @@ constructor(
         val bubbleIntent = PendingIntent.getActivity(
                 context,
                 website.url.hashCode(),
-                Intent(context, WebViewActivity::class.java).apply {
+                Intent(context, EmbeddableWebViewActivity::class.java).apply {
                     data = Uri.parse(website.url)
                 },
                 PendingIntent.FLAG_UPDATE_CURRENT
