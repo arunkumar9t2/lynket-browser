@@ -25,36 +25,39 @@ import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import arun.com.chromer.R
 import arun.com.chromer.data.Result
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.extenstions.observeUntilOnDestroy
 import arun.com.chromer.settings.Preferences
-import arun.com.chromer.shared.Constants
-import arun.com.chromer.shared.Constants.EXTRA_KEY_INCOGNITO
+import arun.com.chromer.shared.Constants.*
 import arun.com.chromer.shared.base.activity.BaseActivity
 import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.RxEventBus
 import arun.com.chromer.util.Utils
+import dev.arunkumar.android.dagger.viewmodel.UsesViewModel
+import dev.arunkumar.android.dagger.viewmodel.viewModel
 import javax.inject.Inject
+
+private const val EXTRA_CURRENT_LOADING_URL = "EXTRA_CURRENT_LOADING_URL"
 
 /**
  * Class definition for activity that shows a webpage.
  */
-abstract class BrowsingActivity : BaseActivity() {
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+abstract class BrowsingActivity : BaseActivity(), UsesViewModel {
     @Inject
     lateinit var rxEventBus: RxEventBus
     @Inject
     lateinit var preferences: Preferences
+    @Inject
+    override lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    protected lateinit var browsingViewModel: BrowsingViewModel
+    protected val browsingViewModel by viewModel<BrowsingViewModel>()
 
     var website: Website? = null
-
     var incognito: Boolean = false
+
+    protected var currentLoadingUrl: String? = null
 
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,18 +67,12 @@ abstract class BrowsingActivity : BaseActivity() {
             finish()
             return
         }
-
         incognito = intent.getBooleanExtra(EXTRA_KEY_INCOGNITO, false)
-
-        browsingViewModel = ViewModelProviders.of(this, viewModelFactory).get(BrowsingViewModel::class.java)
-
         observeViewModel(savedInstanceState)
         setupMinimize()
     }
 
-    open fun getCurrentUrl(): String {
-        return intent.dataString!!
-    }
+    open fun getCurrentUrl(): String = intent.dataString!!
 
     private fun setupMinimize() {
         subs.add(rxEventBus
@@ -111,22 +108,39 @@ abstract class BrowsingActivity : BaseActivity() {
                     setTaskDescription(task)
                 }
             }
+        }
 
-            if (savedInstanceState == null) {
-                val websiteResult = Result.Success(intent.getParcelableExtra(Constants.EXTRA_KEY_WEBSITE)
+        when (savedInstanceState) {
+            null -> {
+                val websiteResult = Result.Success(intent.getParcelableExtra(EXTRA_KEY_WEBSITE)
                         ?: Website(getCurrentUrl()))
-                websiteLiveData.value = websiteResult
-                toolbarColor.value = intent.getIntExtra(
-                        Constants.EXTRA_KEY_TOOLBAR_COLOR,
+                browsingViewModel.websiteLiveData.value = websiteResult
+                browsingViewModel.toolbarColor.value = intent.getIntExtra(
+                        EXTRA_KEY_TOOLBAR_COLOR,
                         ContextCompat.getColor(this@BrowsingActivity, R.color.colorPrimary)
                 )
+                loadWebsiteDetails(getCurrentUrl())
+            }
+            else -> {
+                // Restore state
+                val previousUrl = savedInstanceState.getString(EXTRA_CURRENT_LOADING_URL)
+                if (previousUrl == null) {
+                    loadWebsiteDetails(getCurrentUrl())
+                } else {
+                    loadWebsiteDetails(previousUrl)
+                }
             }
         }
-        loadWebsiteDetails(getCurrentUrl())
     }
 
     protected fun loadWebsiteDetails(url: String) {
         browsingViewModel.loadWebSiteDetails(url)
+        currentLoadingUrl = url
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(EXTRA_CURRENT_LOADING_URL, currentLoadingUrl)
     }
 
     /**
