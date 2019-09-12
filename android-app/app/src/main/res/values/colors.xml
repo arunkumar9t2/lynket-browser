@@ -57,6 +57,7 @@
     <color name="error">#DD2C00</color>
     <color name="remove_web_head_color">#ff1744</color>
     <color name="shadow_color">#60000000</color>
+    <color name="android_10_color">#30DD81</color>
 
     <color name="primary_text_color">@color/material_dark_color</color>
     <color name="secondary_text_color">#4c4c4c</color>

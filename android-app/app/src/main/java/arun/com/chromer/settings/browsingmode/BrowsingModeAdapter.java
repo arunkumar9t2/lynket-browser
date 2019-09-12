@@ -19,8 +19,9 @@
 
 package arun.com.chromer.settings.browsingmode;
 
-import android.content.Context;
+import android.app.Application;
 import android.graphics.Color;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,39 +31,58 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import arun.com.chromer.R;
+import arun.com.chromer.di.scopes.PerActivity;
 import arun.com.chromer.settings.Preferences;
+import arun.com.chromer.settings.RxPreferences;
+import arun.com.chromer.util.ColorUtil;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.mikepenz.community_material_typeface_library.CommunityMaterial.Icon;
 
 /**
  * Created by Arunkumar on 19-02-2017.
  */
+@PerActivity
 class BrowsingModeAdapter extends RecyclerView.Adapter<BrowsingModeAdapter.BrowsingModeViewHolder> {
-    private final Context context;
     private final List<String> settingsItems = new ArrayList<>();
+    private final RxPreferences rxPreferences;
+
     private BrowsingModeClickListener browsingModeClickListener = (position, view) -> {
-        // no-op
     };
 
-    BrowsingModeAdapter(@NonNull final Context context) {
+    @Inject
+    BrowsingModeAdapter(@NonNull final Application application, final RxPreferences rxPreferences) {
         setHasStableIds(true);
-        this.context = context.getApplicationContext();
-        settingsItems.add(context.getString(R.string.browsing_mode_slide_over));
-        settingsItems.add(context.getString(R.string.browsing_mode_web_heads));
+        this.rxPreferences = rxPreferences;
+        settingsItems.add(application.getString(R.string.browsing_mode_slide_over));
+        settingsItems.add(application.getString(R.string.browsing_mode_web_heads));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            settingsItems.add(application.getString(R.string.browsing_mode_native_bubbles));
+        }
     }
 
     @Override
     public BrowsingModeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new BrowsingModeViewHolder(LayoutInflater.from(context).inflate(R.layout.activity_browsing_mode_item_template, parent, false));
+        return new BrowsingModeViewHolder(
+                LayoutInflater.from(parent.getContext()).inflate(
+                        R.layout.activity_browsing_mode_item_template,
+                        parent,
+                        false
+                ),
+                rxPreferences
+        );
     }
 
     @Override
@@ -98,7 +118,11 @@ class BrowsingModeAdapter extends RecyclerView.Adapter<BrowsingModeAdapter.Brows
         void onModeClicked(int position, final View view);
     }
 
-    public static class BrowsingModeViewHolder extends RecyclerView.ViewHolder {
+    public static final int SLIDE_OVER = 0;
+    public static final int WEB_HEADS = 1;
+    public static final int NATIVE_BUBBLES = 2;
+
+    static class BrowsingModeViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.icon)
         ImageView icon;
         @BindView(R.id.title)
@@ -110,8 +134,11 @@ class BrowsingModeAdapter extends RecyclerView.Adapter<BrowsingModeAdapter.Brows
         @BindView(R.id.browsing_mode_root)
         CardView browsingModeRoot;
 
-        BrowsingModeViewHolder(View itemView) {
+        private final RxPreferences rxPreferences;
+
+        BrowsingModeViewHolder(View itemView, final RxPreferences rxPreferences) {
             super(itemView);
+            this.rxPreferences = rxPreferences;
             ButterKnife.bind(this, itemView);
         }
 
@@ -119,34 +146,57 @@ class BrowsingModeAdapter extends RecyclerView.Adapter<BrowsingModeAdapter.Brows
             title.setText(item);
             final int position = getAdapterPosition();
             final boolean webHeads = Preferences.get(selector.getContext()).webHeads();
+            final boolean nativeBubbles = rxPreferences.getNativeBubbles().get();
+            browsingModeRoot.setForeground(ColorUtil.getRippleDrawableCompat(Color.parseColor("#42ffffff")));
             switch (position) {
-                case 0:
+                case SLIDE_OVER:
                     icon.setImageDrawable(new IconicsDrawable(icon.getContext())
-                            .icon(CommunityMaterial.Icon.cmd_open_in_app)
+                            .icon(Icon.cmd_open_in_app)
                             .color(Color.WHITE)
                             .sizeDp(24));
                     selector.setImageDrawable(new IconicsDrawable(selector.getContext())
-                            .icon(webHeads ? CommunityMaterial.Icon.cmd_checkbox_blank_circle_outline : CommunityMaterial.Icon.cmd_checkbox_marked_circle)
+                            .icon(webHeads || nativeBubbles
+                                    ? Icon.cmd_checkbox_blank_circle_outline
+                                    : Icon.cmd_checkbox_marked_circle)
                             .color(Color.WHITE)
                             .sizeDp(24));
                     title.setTextColor(Color.WHITE);
                     subtitle.setTextColor(Color.WHITE);
                     subtitle.setText(R.string.browsing_mode_slide_over_explanation);
-                    browsingModeRoot.setCardBackgroundColor(ContextCompat.getColor(browsingModeRoot.getContext(), R.color.md_blue_600));
+                    browsingModeRoot.setCardBackgroundColor(ContextCompat.getColor(browsingModeRoot.getContext(), R.color.md_light_blue_A700));
                     break;
-                case 1:
+                case WEB_HEADS:
                     icon.setImageDrawable(new IconicsDrawable(icon.getContext())
-                            .icon(CommunityMaterial.Icon.cmd_chart_bubble)
+                            .icon(Icon.cmd_chart_bubble)
                             .color(Color.WHITE)
                             .sizeDp(24));
                     selector.setImageDrawable(new IconicsDrawable(selector.getContext())
-                            .icon(!webHeads ? CommunityMaterial.Icon.cmd_checkbox_blank_circle_outline : CommunityMaterial.Icon.cmd_checkbox_marked_circle)
+                            .icon(!webHeads
+                                    ? Icon.cmd_checkbox_blank_circle_outline
+                                    : Icon.cmd_checkbox_marked_circle)
                             .color(Color.WHITE)
                             .sizeDp(24));
                     title.setTextColor(Color.WHITE);
                     subtitle.setTextColor(Color.WHITE);
                     subtitle.setText(R.string.browsing_mode_web_heads_explanation);
-                    browsingModeRoot.setCardBackgroundColor(Color.parseColor("#8CC152"));
+                    browsingModeRoot.setCardBackgroundColor(ContextCompat.getColor(browsingModeRoot.getContext(), R.color.md_green_700));
+                    break;
+                case NATIVE_BUBBLES:
+                    final int materialDarkColor = ContextCompat.getColor(icon.getContext(), R.color.material_dark_color);
+                    icon.setImageDrawable(new IconicsDrawable(icon.getContext())
+                            .icon(Icon.cmd_android_head)
+                            .color(materialDarkColor)
+                            .sizeDp(24));
+                    selector.setImageDrawable(new IconicsDrawable(selector.getContext())
+                            .icon(!nativeBubbles
+                                    ? Icon.cmd_checkbox_blank_circle_outline
+                                    : Icon.cmd_checkbox_marked_circle)
+                            .color(materialDarkColor)
+                            .sizeDp(24));
+                    title.setTextColor(materialDarkColor);
+                    subtitle.setTextColor(ColorUtils.setAlphaComponent(materialDarkColor, (int) (0.8 * 255)));
+                    subtitle.setText(R.string.browsing_mode_native_bubbles_explanation);
+                    browsingModeRoot.setCardBackgroundColor(ContextCompat.getColor(browsingModeRoot.getContext(), R.color.android_10_color));
                     break;
             }
         }

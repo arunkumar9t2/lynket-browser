@@ -38,6 +38,7 @@ import arun.com.chromer.history.HistoryActivity
 import arun.com.chromer.home.HomeActivity
 import arun.com.chromer.intro.ChromerIntroActivity
 import arun.com.chromer.perapp.PerAppSettingsActivity
+import arun.com.chromer.settings.browsingmode.BrowsingModeActivity
 import arun.com.chromer.settings.browsingoptions.BrowsingOptionsActivity
 import arun.com.chromer.shortcuts.HomeScreenShortcutCreatorActivity
 import arun.com.chromer.tabs.ui.TabsActivity
@@ -90,4 +91,6 @@ interface ActivityComponent {
     fun inject(tabsActivity: TabsActivity)
 
     fun inject(historyActivity: HistoryActivity)
+
+    fun inject(browsingModeActivity: BrowsingModeActivity)
 }

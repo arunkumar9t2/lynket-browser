@@ -22,22 +22,28 @@ package arun.com.chromer.settings.browsingmode;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.snackbar.Snackbar;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
+
+import javax.inject.Inject;
 
 import arun.com.chromer.R;
+import arun.com.chromer.di.activity.ActivityComponent;
 import arun.com.chromer.settings.Preferences;
-import arun.com.chromer.shared.base.activity.SubActivity;
+import arun.com.chromer.settings.RxPreferences;
+import arun.com.chromer.shared.base.activity.BaseActivity;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
-public class
-BrowsingModeActivity extends SubActivity implements BrowsingModeAdapter.BrowsingModeClickListener {
+public class BrowsingModeActivity extends BaseActivity implements BrowsingModeAdapter.BrowsingModeClickListener {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -45,18 +51,30 @@ BrowsingModeActivity extends SubActivity implements BrowsingModeAdapter.Browsing
     RecyclerView browsingModeListView;
     @BindView(R.id.coordinatorLayout)
     CoordinatorLayout coordinatorLayout;
-    private BrowsingModeAdapter adapter;
+
+    @Inject
+    RxPreferences rxPreferences;
+
+    @Inject
+    BrowsingModeAdapter adapter;
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.activity_browsing_mode;
+    }
+
+    @Override
+    public void inject(@NonNull ActivityComponent activityComponent) {
+        activityComponent.inject(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_browsing_mode);
-        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        adapter = new BrowsingModeAdapter(this);
         browsingModeListView.setLayoutManager(new LinearLayoutManager(this));
         browsingModeListView.setAdapter(adapter);
         adapter.setBrowsingModeClickListener(this);
@@ -81,8 +99,13 @@ BrowsingModeActivity extends SubActivity implements BrowsingModeAdapter.Browsing
 
     @Override
     public void onModeClicked(int position, View view) {
-        Preferences.get(this).webHeads(position == 1);
-        if (position == 1) {
+        boolean webHeadsEnabled = position == BrowsingModeAdapter.WEB_HEADS;
+        boolean nativeBubbles = position == BrowsingModeAdapter.NATIVE_BUBBLES;
+
+        rxPreferences.getNativeBubbles().set(nativeBubbles);
+        Preferences.get(this).webHeads(webHeadsEnabled);
+
+        if (webHeadsEnabled) {
             if (Utils.isOverlayGranted(this)) {
                 Preferences.get(this).webHeads(true);
             } else {
@@ -95,7 +118,17 @@ BrowsingModeActivity extends SubActivity implements BrowsingModeAdapter.Browsing
                 });
                 snackbar.show();
             }
-        } else Preferences.get(this).webHeads(false);
+        } else if (nativeBubbles) {
+            new MaterialDialog.Builder(this)
+                    .title(R.string.browsing_mode_native_bubbles)
+                    .content(R.string.browsing_mode_native_bubbles_warning)
+                    .positiveText(R.string.browsing_mode_native_bubbles_guide)
+                    .icon(new IconicsDrawable(this)
+                            .icon(CommunityMaterial.Icon.cmd_android_head)
+                            .colorRes(R.color.material_dark_color)
+                            .sizeDp(24)
+                    ).show();
+        }
         adapter.notifyDataSetChanged();
     }
 }
