@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi
 import arun.com.chromer.R
 import arun.com.chromer.browsing.webview.EmbeddableWebViewActivity
 import arun.com.chromer.shared.Constants
+import arun.com.chromer.util.Utils
 import io.reactivex.Single
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -90,7 +91,7 @@ constructor(
                 setIntent(bubbleIntent)
                 setAutoExpandBubble(false)
                 setSuppressNotification(true)
-                setDesiredHeight(displayHeight)
+                setDesiredHeight(Utils.pxToDp((displayHeight * 0.8).toInt()))
                 build()
             })
             addPerson(Person.Builder().run {
