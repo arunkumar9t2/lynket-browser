@@ -24,6 +24,7 @@ import android.content.Context
 import android.content.Intent
 import arun.com.chromer.browsing.article.ArticleActivity
 import arun.com.chromer.browsing.customtabs.CustomTabActivity
+import arun.com.chromer.browsing.webview.EmbeddableWebViewActivity
 import arun.com.chromer.browsing.webview.WebViewActivity
 import arun.com.chromer.data.website.model.Website
 import rx.Single
@@ -34,14 +35,21 @@ import rx.Single
 interface TabsManager {
 
     companion object {
-        val allBrowsingActivitiesName = arrayListOf<String>(
-                CustomTabActivity::class.java.name,
-                ArticleActivity::class.java.name,
-                WebViewActivity::class.java.name
+        val CUSTOM_TAB_ACTIVITY = CustomTabActivity::class.java.name
+        val ARTICLE_ACTIVITY = ArticleActivity::class.java.name
+        val WEBVIEW_ACTIVITY = WebViewActivity::class.java.name
+        val EMBEDDABLE_WEBVIEW_ACTIVITY = EmbeddableWebViewActivity::class.java.name
+
+        val ALL_BROWSING_ACTIVITIES = arrayListOf(
+                CUSTOM_TAB_ACTIVITY,
+                ARTICLE_ACTIVITY,
+                WEBVIEW_ACTIVITY,
+                EMBEDDABLE_WEBVIEW_ACTIVITY
         )
-        val browsingActivitiesName = arrayListOf<String>(
-                CustomTabActivity::class.java.name,
-                WebViewActivity::class.java.name
+        val FULL_BROWSING_ACTIVITIES = arrayListOf(
+                CUSTOM_TAB_ACTIVITY,
+                WEBVIEW_ACTIVITY,
+                EMBEDDABLE_WEBVIEW_ACTIVITY
         )
     }
 

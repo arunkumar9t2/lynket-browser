@@ -30,8 +30,6 @@ import android.content.Intent
 import android.content.Intent.*
 import android.net.Uri
 import android.os.Build
-import android.os.Handler
-import android.os.Looper
 import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
@@ -40,7 +38,7 @@ import arun.com.chromer.R
 import arun.com.chromer.appdetect.AppDetectionManager
 import arun.com.chromer.browsing.amp.AmpResolverActivity
 import arun.com.chromer.browsing.article.ArticleActivity
-import arun.com.chromer.browsing.article.ArticlePreloader
+import arun.com.chromer.browsing.backgroundloading.BackgroundLoadingStrategyFactory
 import arun.com.chromer.browsing.customtabs.CustomTabActivity
 import arun.com.chromer.browsing.customtabs.CustomTabs
 import arun.com.chromer.browsing.newtab.NewTabDialogActivity
@@ -51,10 +49,12 @@ import arun.com.chromer.data.website.WebsiteRepository
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.extenstions.isPackageInstalled
 import arun.com.chromer.settings.Preferences
-import arun.com.chromer.shared.Constants
-import arun.com.chromer.shared.Constants.NO_COLOR
+import arun.com.chromer.shared.Constants.*
 import arun.com.chromer.tabs.ui.TabsActivity
-import arun.com.chromer.util.*
+import arun.com.chromer.util.DocumentUtils
+import arun.com.chromer.util.RxEventBus
+import arun.com.chromer.util.SafeIntent
+import arun.com.chromer.util.Utils
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import rx.Completable
@@ -74,7 +74,7 @@ constructor(
         private val appDetectionManager: AppDetectionManager,
         private val appRepository: AppRepository,
         private val websiteRepository: WebsiteRepository,
-        private val articlePreloader: ArticlePreloader,
+        private val backgroundLoadingStrategyFactory: BackgroundLoadingStrategyFactory,
         private val rxEventBus: RxEventBus,
         private val floatingBubble: FloatingBubble
 ) : TabsManager {
@@ -145,7 +145,7 @@ constructor(
                         addFlags(FLAG_ACTIVITY_NEW_TASK)
                     }
                     if (incognito) {
-                        putExtra(Constants.EXTRA_KEY_INCOGNITO, true)
+                        putExtra(EXTRA_KEY_INCOGNITO, true)
                     }
                 }
                 context.startActivity(ampResolver)
@@ -206,7 +206,7 @@ constructor(
                             val urlMatches = url != null && website.matches(url)
 
                             val taskComponentMatches = activityNames?.contains(componentClassName)
-                                    ?: TabsManager.allBrowsingActivitiesName.contains(componentClassName)
+                                    ?: TabsManager.ALL_BROWSING_ACTIVITIES.contains(componentClassName)
 
                             if (taskComponentMatches && urlMatches) {
                                 foundAction(task)
@@ -268,9 +268,9 @@ constructor(
                     addFlags(FLAG_ACTIVITY_MULTIPLE_TASK)
                 }
                 if (incognito) {
-                    putExtra(Constants.EXTRA_KEY_INCOGNITO, true)
+                    putExtra(EXTRA_KEY_INCOGNITO, true)
                 }
-                putExtra(Constants.EXTRA_KEY_TOOLBAR_COLOR, getToolbarColor(website))
+                putExtra(EXTRA_KEY_TOOLBAR_COLOR, getToolbarColor(website))
             }
             context.startActivity(intent)
         }
@@ -296,10 +296,10 @@ constructor(
                 Intent(context, CustomTabActivity::class.java)
             }.apply {
                 data = website.preferredUri()
-                putExtra(Constants.EXTRA_KEY_WEBSITE, website)
-                putExtra(Constants.EXTRA_KEY_TOOLBAR_COLOR, getToolbarColor(website))
+                putExtra(EXTRA_KEY_WEBSITE, website)
+                putExtra(EXTRA_KEY_TOOLBAR_COLOR, getToolbarColor(website))
                 if (isIncognito) {
-                    putExtra(Constants.EXTRA_KEY_INCOGNITO, true)
+                    putExtra(EXTRA_KEY_INCOGNITO, true)
                 }
             }
 
@@ -328,60 +328,22 @@ constructor(
             incognito: Boolean
     ) {
         floatingBubble.openBubble(url, fromMinimize, fromAmp, incognito, context)
-        return
-
         // If this command was not issued for minimizing, then attempt aggressive loading.
         if (preferences.aggressiveLoading() && !fromMinimize) {
             if (preferences.articleMode()) {
-                articlePreloader.preloadArticle(Uri.parse(url)) { }
+                backgroundLoadingStrategyFactory[ARTICLE].perform(url)
             } else {
-                if (shouldUseWebView(incognito)) {
-                    application.registerActivityLifecycleCallbacks(
-                            object : ActivityLifeCycleCallbackAdapter() {
-                                override fun onActivityStarted(activity: Activity?) {
-                                    try {
-                                        if (activity is WebViewActivity) {
-                                            val activityUrl = activity.intent?.dataString
-                                            if (url == activityUrl) {
-                                                Handler(Looper.getMainLooper()).postDelayed({
-                                                    activity.moveTaskToBack(true)
-                                                    Timber.d("Moved webivew  $activityUrl to back")
-                                                    // Unregister this callback
-                                                    application.unregisterActivityLifecycleCallbacks(this)
-                                                }, 100)
-                                            }
-                                        }
-                                    } catch (e: Exception) {
-                                        Timber.e(e)
-                                    }
-                                }
-                            })
-                } else {
-                    // Register listener to track opening browsing tabs.
-                    application.registerActivityLifecycleCallbacks(
-                            object : ActivityLifeCycleCallbackAdapter() {
-                                override fun onActivityStopped(activity: Activity?) {
-                                    // Let's inspect this activity and find if it's what we are looking for.
-                                    try {
-                                        if (activity is CustomTabActivity) {
-                                            val activityUrl = activity.intent?.dataString
-                                            if (url == activityUrl) {
-                                                Handler(Looper.getMainLooper()).postDelayed({
-                                                    activity.moveTaskToBack(true)
-                                                    Timber.d("Moved webivew  $activityUrl to back")
-                                                    // Unregister this callback
-                                                    application.unregisterActivityLifecycleCallbacks(this)
-                                                }, 100)
-                                            }
-                                        }
-                                    } catch (e: Exception) {
-                                        Timber.e(e)
-                                    }
-                                }
-                            })
+                when {
+                    shouldUseWebView(incognito) -> backgroundLoadingStrategyFactory[WEB_VIEW].perform(url)
+                    else -> backgroundLoadingStrategyFactory[CUSTOM_TAB].perform(url)
                 }
-
-                openBrowsingTab(context, Website(url), smart = true, fromNewTab = false, incognito = incognito)
+                openBrowsingTab(
+                        context,
+                        Website(url),
+                        smart = true,
+                        fromNewTab = false,
+                        incognito = incognito
+                )
             }
         }
     }
@@ -519,6 +481,7 @@ constructor(
             showSecondaryBrowserHandlingError(activity, activity.getText(R.string.secondary_browser_not_installed))
         }
     }
+
 
     /**
      * Shows a error dialog for various blacklist errors.
