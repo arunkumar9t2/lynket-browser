@@ -21,8 +21,6 @@ package arun.com.chromer.home
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.Intent.ACTION_VIEW
-import android.net.Uri
 import android.os.Bundle
 import androidx.core.view.postDelayed
 import androidx.lifecycle.ViewModel
@@ -40,15 +38,10 @@ import arun.com.chromer.home.epoxycontroller.HomeFeedController
 import arun.com.chromer.intro.ChromerIntroActivity
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.settings.SettingsGroupActivity
-import arun.com.chromer.shared.Constants.APP_TESTING_URL
-import arun.com.chromer.shared.Constants.G_COMMUNITY_URL
 import arun.com.chromer.shared.base.Snackable
 import arun.com.chromer.shared.base.activity.BaseActivity
 import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.RxEventBus
-import com.afollestad.materialdialogs.GravityEnum
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.StackingBehavior
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding3.view.clicks
 import dagger.Binds
@@ -182,23 +175,6 @@ class HomeActivity : BaseActivity(), Snackable, UsesViewModel {
             return
         }
         super.onBackPressed()
-    }
-
-    private fun showJoinBetaDialog() {
-        with(MaterialDialog.Builder(this)) {
-            title(R.string.join_beta)
-            content(R.string.join_beta_content)
-            btnStackedGravity(GravityEnum.END)
-            stackingBehavior(StackingBehavior.ALWAYS)
-            positiveText(R.string.join_google_plus)
-            neutralText(R.string.become_a_tester)
-            onPositive { _, _ ->
-                val googleIntent = Intent(ACTION_VIEW, Uri.parse(G_COMMUNITY_URL))
-                startActivity(googleIntent)
-            }
-            onNeutral { _, _ -> tabsManager.openUrl(this@HomeActivity, Website(APP_TESTING_URL)) }
-            build()
-        }.show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.net.toUri
 import arun.com.chromer.R
 import arun.com.chromer.about.AboutAppActivity
 import arun.com.chromer.intro.ChromerIntroActivity
@@ -102,6 +103,7 @@ class HomeBottomSheet : BottomSheetDialogFragment() {
                         emailIntent.putExtra(EXTRA_SUBJECT, getString(R.string.app_name))
                         startActivity(createChooser(emailIntent, getString(R.string.send_email)))
                     }
+                    BETA -> startActivity(Intent(ACTION_VIEW, "https://play.google.com/apps/testing/arun.com.chromer".toUri()))
                     RATE -> Utils.openPlayStore(requireActivity(), requireActivity().packageName)
                     INTRO -> startActivity(Intent(requireActivity(), ChromerIntroActivity::class.java))
                     DONATION -> startActivity(Intent(requireActivity(), DonateActivity::class.java))
