@@ -28,7 +28,7 @@ private fun Application.safeActivityStarted(action: (Activity, UnRegisterAction)
                     Timber.e(e)
                     unRegisterAction()
                 }
-            }
+            } ?: unRegisterAction()
         }
     })
 }
@@ -49,7 +49,7 @@ abstract class BrowsingBackgroundLoadingStrategy(
                         startedActivity.moveTaskToBack(true)
                         Timber.d("Moved $activityUrl to back")
                         unRegisterAction()
-                    }, 100, MILLISECONDS)
+                    }, 150, MILLISECONDS)
                 }
             }
         }
