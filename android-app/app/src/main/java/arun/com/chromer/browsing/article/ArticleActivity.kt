@@ -27,7 +27,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.ColorInt
-import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate.*
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -49,6 +49,7 @@ import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.setMenuBackgroundColor
 import arun.com.chromer.extenstions.show
 import arun.com.chromer.extenstions.watch
+import arun.com.chromer.search.provider.SearchProviders
 import arun.com.chromer.settings.Preferences.*
 import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.ColorUtil
@@ -59,13 +60,12 @@ import com.bumptech.glide.RequestManager
 import com.jakewharton.rxbinding.widget.RxSeekBar
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import hu.akarnokd.rxjava.interop.RxJavaInterop
 import kotlinx.android.synthetic.main.activity_article_mode.*
 import javax.inject.Inject
 
 class ArticleActivity : BrowsingActivity() {
-
     override fun getLayoutRes() = R.layout.activity_article_mode
-
     override fun inject(activityComponent: ActivityComponent) = activityComponent.inject(this)
 
     private lateinit var browsingArticleViewModel: BrowsingArticleViewModel
@@ -85,6 +85,8 @@ class ArticleActivity : BrowsingActivity() {
     lateinit var menuDelegate: MenuDelegate
     @Inject
     lateinit var requestManager: RequestManager
+    @Inject
+    lateinit var searchProviders: SearchProviders
 
     private val textSizeIcon: IconicsDrawable by lazy {
         IconicsDrawable(this)
@@ -110,9 +112,11 @@ class ArticleActivity : BrowsingActivity() {
         setupBottombar()
         setupTheme()
 
-        articleScrollListener = ArticleScrollListener(toolbar, statusBar, primaryColor).also {
-            recyclerView.addOnScrollListener(it)
-        }
+        articleScrollListener = ArticleScrollListener(
+                toolbar,
+                statusBar,
+                primaryColor
+        ).also(recyclerView::addOnScrollListener)
         recyclerView.addOnScrollListener(systemUiLowProfileOnScrollListener)
 
         observeViewModel()
@@ -126,7 +130,7 @@ class ArticleActivity : BrowsingActivity() {
         browsingArticleViewModel.articleLiveData.watch(this) { result ->
             when (result) {
                 is Result.Success -> {
-                    val webArticle: WebArticle? = result.data
+                    val webArticle = result.data
                     if (webArticle == null) {
                         onArticleLoadingFailed()
                     } else {
@@ -162,21 +166,15 @@ class ArticleActivity : BrowsingActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        return menuDelegate.createOptionsMenu(menu)
-    }
+    override fun onCreateOptionsMenu(menu: Menu) = menuDelegate.createOptionsMenu(menu)
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        return menuDelegate.prepareOptionsMenu(menu)
-    }
+    override fun onPrepareOptionsMenu(menu: Menu) = menuDelegate.prepareOptionsMenu(menu)
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return if (item.itemId == R.id.menu_text_size) {
-            TransitionManager.beginDelayedTransition(articleBottomLinearLayout)
-            articleTextSizeCard.show()
-            true
-        } else menuDelegate.handleItemSelected(item.itemId)
-    }
+    override fun onOptionsItemSelected(item: MenuItem) = if (item.itemId == R.id.menu_text_size) {
+        TransitionManager.beginDelayedTransition(articleBottomLinearLayout)
+        articleTextSizeCard.show()
+        true
+    } else menuDelegate.handleItemSelected(item.itemId)
 
     private fun onArticleLoadingFailed() {
         hideLoading()
@@ -282,11 +280,10 @@ class ArticleActivity : BrowsingActivity() {
 
 
     private fun readCustomizations() {
-        val theme = preferences.articleTheme()
-        when (theme) {
-            THEME_LIGHT -> delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            THEME_DARK, THEME_BLACK -> delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            else -> delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_AUTO)
+        when (preferences.articleTheme()) {
+            THEME_LIGHT -> delegate.setLocalNightMode(MODE_NIGHT_NO)
+            THEME_DARK, THEME_BLACK -> delegate.setLocalNightMode(MODE_NIGHT_YES)
+            else -> delegate.setLocalNightMode(MODE_NIGHT_AUTO)
         }
     }
 
@@ -298,11 +295,15 @@ class ArticleActivity : BrowsingActivity() {
                 preferences.articleTextSizeIncrement()
         ).apply {
             setElements(webArticle.elements)
-            subs.add(keywordsClicks()
-                    .map { Utils.getSearchUrl(it) } // TODO Migrate to search provider
+            RxJavaInterop.toV2Observable(keywordsClicks())
+                    .switchMap { key ->
+                        browsingArticleViewModel
+                                .selectedSearchProvider
+                                .map { searchProvider -> searchProvider.getSearchUrl(key) }
+                    }.takeUntil(lifecycleEvents.destroys)
                     .subscribe { url ->
                         tabsManager.openUrl(this@ArticleActivity, Website(url))
-                    })
+                    }
         }
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this@ArticleActivity)
@@ -330,7 +331,7 @@ class ArticleActivity : BrowsingActivity() {
     }
 
 
-    private val systemUiLowProfileOnScrollListener: RecyclerView.OnScrollListener = object : RecyclerView.OnScrollListener() {
+    private val systemUiLowProfileOnScrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             setLowProfileSystemUi()
         }

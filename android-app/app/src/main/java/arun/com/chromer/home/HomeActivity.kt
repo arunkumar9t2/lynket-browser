@@ -24,8 +24,7 @@ import android.content.Intent
 import android.content.Intent.ACTION_VIEW
 import android.net.Uri
 import android.os.Bundle
-import android.widget.Toast
-import androidx.fragment.app.FragmentManager
+import androidx.core.view.postDelayed
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.SimpleItemAnimator
@@ -33,30 +32,23 @@ import arun.com.chromer.R
 import arun.com.chromer.about.changelog.Changelog
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
-import arun.com.chromer.di.scopes.PerActivity
-import arun.com.chromer.extenstions.*
-import arun.com.chromer.history.HistoryFragment
+import arun.com.chromer.extenstions.gone
+import arun.com.chromer.extenstions.show
+import arun.com.chromer.extenstions.watch
 import arun.com.chromer.home.bottomsheet.HomeBottomSheet
 import arun.com.chromer.home.epoxycontroller.HomeFeedController
-import arun.com.chromer.home.fragment.HomeFragment
 import arun.com.chromer.intro.ChromerIntroActivity
-import arun.com.chromer.search.view.MaterialSearchView
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.settings.SettingsGroupActivity
 import arun.com.chromer.shared.Constants.APP_TESTING_URL
 import arun.com.chromer.shared.Constants.G_COMMUNITY_URL
-import arun.com.chromer.shared.FabHandler
 import arun.com.chromer.shared.base.Snackable
 import arun.com.chromer.shared.base.activity.BaseActivity
 import arun.com.chromer.tabs.TabsManager
-import arun.com.chromer.tabs.ui.TabsFragment
 import arun.com.chromer.util.RxEventBus
-import arun.com.chromer.util.Utils
 import com.afollestad.materialdialogs.GravityEnum
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.StackingBehavior
-import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding3.view.clicks
 import dagger.Binds
@@ -156,7 +148,9 @@ class HomeActivity : BaseActivity(), Snackable, UsesViewModel {
             searchPerforms()
                     .takeUntil(lifecycleEvents.destroys)
                     .subscribe { url ->
-                        postDelayed({ launchCustomTab(url) }, 150)
+                        postDelayed(150) {
+                            tabsManger.openUrl(this@HomeActivity, Website(url))
+                        }
                     }
 
             // No focus initially
@@ -179,12 +173,6 @@ class HomeActivity : BaseActivity(), Snackable, UsesViewModel {
                     .subscribe {
                         HomeBottomSheet().show(supportFragmentManager, "home-bottom-shher")
                     }
-        }
-    }
-
-    private fun launchCustomTab(url: String?) {
-        if (url != null) {
-            tabsManger.openUrl(this, Website(url))
         }
     }
 
@@ -218,194 +206,11 @@ class HomeActivity : BaseActivity(), Snackable, UsesViewModel {
         materialSearchView.onActivityResult(requestCode, resultCode, data)
     }
 
-    fun onFabClick() {
-        supportFragmentManager.fragments
-                .asSequence()
-                .filter { !it.isHidden && it is FabHandler }
-                .map { it as FabHandler }
-                .first()
-                .onFabClick()
-    }
-
-    /**
-     * Since we have different available fragments based on API level, we create this class to help
-     * delegate calls to correct implementation to manage active fragments.
-     */
-    abstract class ActiveFragmentsManager(
-            private val fm: FragmentManager,
-            private var materialSearchView: MaterialSearchView,
-            private val fab: FloatingActionButton
-    ) {
-        protected lateinit var historyFragment: HistoryFragment
-        protected lateinit var homeFragment: HomeFragment
-
-        open fun revealSearch() {
-            fab.hide()
-            materialSearchView.circularRevealWithSelfCenter()
-        }
-
-        open fun hideSearch() {
-            fab.show()
-            materialSearchView.circularHideWithSelfCenter()
-        }
-
-        /**
-         * Based on @param[savedInstance] tries to restore existing fragments that were reattached
-         * or creates and attaches new instances.
-         */
-        open fun initialize(savedInstance: Bundle?) {
-            val selectedIndex = savedInstance?.getInt(SELECTED_INDEX) ?: HOME
-            if (selectedIndex > HOME) {
-                fab.show()
-            } else {
-                fab.hide()
-            }
-            if (savedInstance == null) {
-                historyFragment = HistoryFragment()
-                homeFragment = HomeFragment()
-                fm.beginTransaction().apply {
-                    add(R.id.fragment_container, homeFragment, HomeFragment::class.java.name)
-                    add(R.id.fragment_container, historyFragment, HistoryFragment::class.java.name)
-                    show(homeFragment)
-                    hide(historyFragment)
-                }.commit()
-            } else {
-                historyFragment = fm.findFragmentByTag(HistoryFragment::class.java.name) as HistoryFragment
-                homeFragment = fm.findFragmentByTag(HomeFragment::class.java.name) as HomeFragment
-            }
-        }
-
-        /**
-         * Responsible for handling click events from BottomNavigationMenu. Should be delegated from
-         * [BottomNavigationView#setOnNavigationItemSelectedListener]
-         */
-        abstract fun handleBottomMenuClick(menuItemId: Int): Boolean
-
-        @PerActivity
-        class Factory
-        @Inject constructor() {
-            fun get(
-                    supportFragmentManager: FragmentManager,
-                    materialSearchView: MaterialSearchView,
-                    appbar: AppBarLayout,
-                    fab: FloatingActionButton
-            ): ActiveFragmentsManager = if (Utils.ANDROID_LOLLIPOP) {
-                LollipopActiveFragmentManager(
-                        supportFragmentManager,
-                        materialSearchView,
-                        fab
-                )
-            } else {
-                PreLollipopActiveFragmentManager(
-                        supportFragmentManager,
-                        materialSearchView,
-                        appbar,
-                        fab
-                )
-            }
-        }
-    }
-
-    /**
-     * Fragment manager for Lollipop which includes the [TabsFragment]
-     */
-    class LollipopActiveFragmentManager(
-            private var fm: FragmentManager,
-            materialSearchView: MaterialSearchView,
-            fab: FloatingActionButton
-    ) : ActiveFragmentsManager(fm, materialSearchView, fab) {
-        private lateinit var tabsFragment: TabsFragment
-
-        override fun initialize(savedInstance: Bundle?) {
-            super.initialize(savedInstance)
-            if (savedInstance == null) {
-                tabsFragment = TabsFragment()
-                fm.beginTransaction().apply {
-                    add(R.id.fragment_container, tabsFragment, TabsFragment::class.java.name)
-                    hide(tabsFragment)
-                }.commit()
-            } else {
-                tabsFragment = fm.findFragmentByTag(TabsFragment::class.java.name) as TabsFragment
-            }
-        }
-
-        override fun handleBottomMenuClick(menuItemId: Int): Boolean {
-            when (menuItemId) {
-                R.id.home -> {
-                    revealSearch()
-                    fm.beginTransaction().apply {
-                        show(homeFragment)
-                        hide(historyFragment)
-                        hide(tabsFragment)
-                    }.commit()
-                }
-                R.id.history -> {
-                    hideSearch()
-                    fm.beginTransaction().apply {
-                        show(historyFragment)
-                        hide(homeFragment)
-                        hide(tabsFragment)
-                    }.commit()
-                }
-                R.id.tabs -> {
-                    hideSearch()
-                    fm.beginTransaction().apply {
-                        show(tabsFragment)
-                        hide(homeFragment)
-                        hide(historyFragment)
-                    }.commit()
-                }
-            }
-            return false
-        }
-    }
-
-    /**
-     * Fragment manager for pre lollip without [TabsFragment]
-     */
-    class PreLollipopActiveFragmentManager(
-            private var fm: FragmentManager,
-            materialSearchView: MaterialSearchView,
-            private var appbar: AppBarLayout,
-            fab: FloatingActionButton
-    ) : ActiveFragmentsManager(fm, materialSearchView, fab) {
-
-        override fun handleBottomMenuClick(menuItemId: Int): Boolean {
-            when (menuItemId) {
-                R.id.home -> {
-                    revealSearch()
-                    fm.beginTransaction().apply {
-                        show(homeFragment)
-                        hide(historyFragment)
-                    }.commit()
-                }
-                R.id.history -> {
-                    hideSearch()
-                    fm.beginTransaction().apply {
-                        show(historyFragment)
-                        hide(homeFragment)
-                    }.commit()
-                }
-                R.id.tabs -> {
-                    Toast.makeText(appbar.context, R.string.feature_requires_lollipop, Toast.LENGTH_SHORT).show()
-                }
-            }
-            return false
-        }
-    }
-
     @Module
     abstract class HomeBuilder {
         @Binds
         @IntoMap
         @ViewModelKey(HomeActivityViewModel::class)
         abstract fun bindHomeViewModel(homeViewModel: HomeActivityViewModel): ViewModel
-    }
-
-    companion object {
-        private const val HOME = 0
-        private const val TABS = 1
-        private const val HISTORY = 2
-        private const val SELECTED_INDEX = "BOTTOM_NAV_SELECTED_INDEX"
     }
 }

@@ -43,7 +43,6 @@ import android.os.Build;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.util.DisplayMetrics;
-import android.util.Patterns;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
@@ -236,18 +235,6 @@ public class Utils {
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
-    }
-
-    @NonNull
-    public static String getSearchUrl(@Nullable String text) {
-        if (text == null) text = "";
-        if (Patterns.WEB_URL.matcher(text).matches()) {
-            if (!text.toLowerCase().matches("^\\w+://.*")) {
-                text = "http://" + text;
-            }
-            return text;
-        } else
-            return Constants.G_SEARCH_URL + text.replace(" ", "+");
     }
 
     public static boolean isVoiceRecognizerPresent(@NonNull Context context) {
