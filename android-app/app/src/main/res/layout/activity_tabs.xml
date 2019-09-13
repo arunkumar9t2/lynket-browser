@@ -51,6 +51,5 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:layout_behavior="@string/bbn_fab_default_behavior"
         app:srcCompat="@drawable/ic_clear_all_24dp" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
