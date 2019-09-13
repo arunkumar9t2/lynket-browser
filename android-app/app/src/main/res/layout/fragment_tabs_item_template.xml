@@ -90,7 +90,8 @@
                 android:maxLines="3"
                 android:paddingBottom="4dp"
                 android:textAppearance="@style/TextAppearance.Compat.Notification.Title"
-                android:textSize="16sp"
+                android:textColor="@color/primary_text_color"
+                android:textSize="14sp"
                 tools:text="Test" />
 
             <TextView

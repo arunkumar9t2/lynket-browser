@@ -22,21 +22,19 @@ package arun.com.chromer.tabs.ui
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import arun.com.chromer.R
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.tabs.*
 import arun.com.chromer.util.glide.GlideRequests
-import butterknife.BindView
 import butterknife.ButterKnife
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
-import rx.subjects.PublishSubject
-import rx.subscriptions.CompositeSubscription
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.fragment_tabs_item_template.*
 
 /**
  * Created by arunk on 07-03-2017.
@@ -45,109 +43,75 @@ class TabsAdapter
 constructor(
         val glideRequests: GlideRequests,
         val tabsManager: TabsManager
-) : RecyclerView.Adapter<TabsAdapter.TabsViewHolder>() {
+) : ListAdapter<TabsManager.Tab, TabsAdapter.TabsViewHolder>(TabDiff) {
 
-    private val tabs: ArrayList<TabsManager.Tab> = ArrayList()
-    private val tabsReceiver: PublishSubject<List<TabsManager.Tab>> = PublishSubject.create()
-    private val subs = CompositeSubscription()
+    override fun onCreateViewHolder(
+            parent: ViewGroup,
+            viewType: Int
+    ) = TabsViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                    R.layout.fragment_tabs_item_template,
+                    parent,
+                    false
+            ),
+            ::getItem
+    )
 
-    init {
-        setupReceiver()
-    }
-
-    private fun setupReceiver() {
-        subs.add(tabsReceiver
-                // .observeOn(Schedulers.io())
-                .map {
-                    val diff = DiffUtil.calculateDiff(TabsDiff(tabs, it))
-                    tabs.clear()
-                    tabs.addAll(it)
-                    diff
-                }
-                // .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext { it.dispatchUpdatesTo(this) }
-                .subscribe())
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TabsViewHolder {
-        return TabsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.fragment_tabs_item_template, parent, false))
-    }
-
-    override fun onBindViewHolder(holder: TabsViewHolder, position: Int) {
-        holder.bind(tabs[position])
-    }
-
-    override fun getItemCount(): Int = tabs.size
-
-    override fun getItemId(position: Int): Long = tabs.hashCode().toLong()
+    override fun onBindViewHolder(
+            holder: TabsViewHolder,
+            position: Int
+    ) = holder.bind(getItem(position))
 
     override fun onViewRecycled(holder: TabsViewHolder) {
         super.onViewRecycled(holder)
-        glideRequests.clear(holder.icon!!)
+        glideRequests.clear(holder.icon)
     }
 
-    fun cleanUp() {
-        subs.clear()
-    }
+    fun getTabAt(adapterPosition: Int): TabsManager.Tab = getItem(adapterPosition)
 
-    fun setTabs(tabs: List<TabsManager.Tab>) {
-        tabsReceiver.onNext(tabs)
-    }
-
-    fun getTabAt(adapterPosition: Int): TabsManager.Tab = tabs[adapterPosition]
-
-    inner class TabsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        @BindView(R.id.icon)
-        @JvmField
-        var icon: ImageView? = null
-        @BindView(R.id.websiteTitle)
-        @JvmField
-        var websiteTitle: TextView? = null
-        @BindView(R.id.websiteTabMode)
-        @JvmField
-        var websiteTabMode: TextView? = null
-        @BindView(R.id.websiteTabModeIcon)
-        @JvmField
-        var websiteTabModeIcon: ImageView? = null
-        @BindView(R.id.websiteUrl)
-        @JvmField
-        var websiteUrl: TextView? = null
+    inner class TabsViewHolder(
+            override val containerView: View,
+            getItem: (Int) -> TabsManager.Tab
+    ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
         init {
             ButterKnife.bind(this, itemView)
             itemView.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
-                    val tab = tabs[adapterPosition]
+                    val tab = getItem(adapterPosition)
                     val url = tab.url
-                    tabsManager.reOrderTabByUrl(itemView.context, Website(url), listOf(tab.getTargetActivityName()))
+                    tabsManager.reOrderTabByUrl(
+                            itemView.context,
+                            Website(url),
+                            listOf(tab.getTargetActivityName())
+                    )
                 }
             }
         }
 
         fun bind(tab: TabsManager.Tab) {
             if (tab.website != null) {
-                websiteTitle?.text = tab.website?.safeLabel()
+                websiteTitle.text = tab.website?.safeLabel()
                 glideRequests.load(tab.website).into(icon!!)
-                websiteUrl?.text = tab.website?.url
-
+                websiteUrl.text = tab.website?.url
                 when (tab.type) {
                     WEB_VIEW, WEB_VIEW_EMBEDDED -> {
-                        websiteTabMode?.setText(R.string.web_view)
-                        websiteTabModeIcon?.setImageDrawable(IconicsDrawable(itemView.context)
+                        websiteTabMode.setText(R.string.web_view)
+                        websiteTabModeIcon.setImageDrawable(IconicsDrawable(itemView.context)
                                 .icon(CommunityMaterial.Icon.cmd_web)
                                 .color(ContextCompat.getColor(itemView.context, R.color.md_blue_500))
                                 .sizeDp(16))
                     }
                     CUSTOM_TAB -> {
-                        websiteTabMode?.setText(R.string.custom_tab)
-                        websiteTabModeIcon?.setImageDrawable(IconicsDrawable(itemView.context)
+                        websiteTabMode.setText(R.string.custom_tab)
+                        websiteTabModeIcon.setImageDrawable(IconicsDrawable(itemView.context)
                                 .icon(CommunityMaterial.Icon.cmd_google_chrome)
                                 .color(ContextCompat.getColor(itemView.context, R.color.md_orange_500))
                                 .sizeDp(16))
                     }
                     ARTICLE -> {
-                        websiteTabMode?.setText(R.string.article_mode)
-                        websiteTabModeIcon?.setImageDrawable(IconicsDrawable(itemView.context)
+                        websiteTabMode.setText(R.string.article_mode)
+                        websiteTabModeIcon.setImageDrawable(IconicsDrawable(itemView.context)
                                 .icon(CommunityMaterial.Icon.cmd_file_document)
                                 .color(ContextCompat.getColor(itemView.context, R.color.md_grey_700))
                                 .sizeDp(16))
@@ -159,25 +123,16 @@ constructor(
         }
     }
 
-    private inner class TabsDiff internal constructor(
-            private val oldList: List<TabsManager.Tab>,
-            private val newList: List<TabsManager.Tab>
-    ) : DiffUtil.Callback() {
+    private object TabDiff : DiffUtil.ItemCallback<TabsManager.Tab>() {
 
-        override fun getOldListSize(): Int = oldList.size
+        override fun areItemsTheSame(
+                oldItem: TabsManager.Tab,
+                newItem: TabsManager.Tab
+        ): Boolean = oldItem == newItem
 
-        override fun getNewListSize(): Int = newList.size
-
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return isEquals(oldItemPosition, newItemPosition)
-        }
-
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return isEquals(oldItemPosition, newItemPosition)
-        }
-
-        private fun isEquals(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldList[oldItemPosition] == newList[newItemPosition]
-        }
+        override fun areContentsTheSame(
+                oldItem: TabsManager.Tab,
+                newItem: TabsManager.Tab
+        ): Boolean = oldItem == newItem
     }
 }

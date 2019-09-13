@@ -119,7 +119,7 @@ class TabsFragment : BaseFragment(), FabHandler {
     }
 
     private fun setTabs(tabs: List<TabsManager.Tab>) {
-        tabsAdapter.setTabs(tabs)
+        tabsAdapter.submitList(tabs)
         TransitionManager.beginDelayedTransition(fragmentTabsRoot)
         if (tabs.isEmpty()) {
             error.show()
@@ -152,11 +152,6 @@ class TabsFragment : BaseFragment(), FabHandler {
 
     private fun loadTabs() {
         tabsViewModel?.loadTabs()
-    }
-
-    override fun onDestroy() {
-        tabsAdapter.cleanUp()
-        super.onDestroy()
     }
 
     override fun onFabClick() {
