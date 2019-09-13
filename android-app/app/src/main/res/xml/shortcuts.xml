@@ -46,5 +46,19 @@
             android:targetPackage="arun.com.chromer" />
         <categories android:name="android.shortcut.conversation" />
     </shortcut>
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_tabs"
+        android:shortcutId="tabs"
+        android:shortcutLongLabel="@string/title_tabs"
+        android:shortcutShortLabel="@string/title_tabs"
+        tools:targetApi="n_mr1">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="arun.com.chromer.tabs.ui.TabsActivity"
+            android:targetPackage="arun.com.chromer" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
     <!-- Specify more shortcuts here. -->
 </shortcuts>
