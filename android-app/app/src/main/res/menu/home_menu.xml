@@ -24,4 +24,8 @@
         android:icon="@drawable/ic_settings_24dp"
         android:title="@string/settings"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_tips"
+        android:title="@string/tips"
+        app:showAsAction="always" />
 </menu>

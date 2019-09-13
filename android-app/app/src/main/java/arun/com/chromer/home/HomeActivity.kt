@@ -41,16 +41,17 @@ import arun.com.chromer.settings.SettingsGroupActivity
 import arun.com.chromer.shared.base.Snackable
 import arun.com.chromer.shared.base.activity.BaseActivity
 import arun.com.chromer.tabs.TabsManager
+import arun.com.chromer.tips.TipsActivity
 import arun.com.chromer.util.RxEventBus
 import com.google.android.material.snackbar.Snackbar
-import com.jakewharton.rxbinding3.view.clicks
+import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.mikepenz.iconics.IconicsDrawable
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import dev.arunkumar.android.dagger.viewmodel.UsesViewModel
 import dev.arunkumar.android.dagger.viewmodel.ViewModelKey
 import dev.arunkumar.android.dagger.viewmodel.viewModel
-import hu.akarnokd.rxjava.interop.RxJavaInterop
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
@@ -85,6 +86,7 @@ class HomeActivity : BaseActivity(), Snackable, UsesViewModel {
 
         Changelog.conditionalShow(this)
 
+        setupToolbar()
         setupSearchBar()
         setupFeed()
         setupEventListeners()
@@ -98,11 +100,21 @@ class HomeActivity : BaseActivity(), Snackable, UsesViewModel {
         Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_LONG).show()
     }
 
+    private fun setupToolbar() {
+        tipsIcon.setImageDrawable(IconicsDrawable(this)
+                .icon(CommunityMaterial.Icon.cmd_lightbulb_on)
+                .colorRes(R.color.md_yellow_700)
+                .sizeDp(24))
+    }
+
     private fun setupEventListeners() {
         subs.add(rxEventBus.filteredEvents<TabsManager.FinishRoot>().subscribe { finish() })
-        subs.add(RxJavaInterop.toV1Subscription(settingsIcon.clicks().subscribe {
+        settingsIcon.setOnClickListener {
             startActivity(Intent(this, SettingsGroupActivity::class.java))
-        }))
+        }
+        tipsIcon.setOnClickListener {
+            startActivity(Intent(this, TipsActivity::class.java))
+        }
     }
 
     override fun onStart() {

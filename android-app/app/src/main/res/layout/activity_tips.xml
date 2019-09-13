@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:clipToPadding="false"
         android:paddingTop="8dp"
-        android:paddingBottom="56dp"
+        android:paddingBottom="8dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     </androidx.recyclerview.widget.RecyclerView>
