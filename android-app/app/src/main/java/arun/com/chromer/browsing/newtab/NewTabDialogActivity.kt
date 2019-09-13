@@ -25,6 +25,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
 import android.widget.Toast
 import arun.com.chromer.R
@@ -88,7 +89,10 @@ class NewTabDialogActivity : BaseActivity() {
                     .dismissListener(this)
                     .show()
 
-            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.window?.let { diaWindow ->
+                diaWindow.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                diaWindow.setGravity(Gravity.BOTTOM)
+            }
 
             unbinder = ButterKnife.bind(this, dialog.customView!!)
 
