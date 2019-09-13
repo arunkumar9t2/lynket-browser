@@ -19,6 +19,7 @@
 
 package arun.com.chromer.browsing.article
 
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -46,7 +47,6 @@ import arun.com.chromer.data.webarticle.model.WebArticle
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.extenstions.gone
-import arun.com.chromer.extenstions.setMenuBackgroundColor
 import arun.com.chromer.extenstions.show
 import arun.com.chromer.extenstions.watch
 import arun.com.chromer.search.provider.SearchProviders
@@ -224,7 +224,7 @@ class ArticleActivity : BrowsingActivity() {
 
     private fun setupBottombar() {
         val bg = ContextCompat.getColor(this, R.color.article_windowBackground)
-        bottomNavigation.setMenuBackgroundColor(bg)
+        bottomNavigation.background = ColorDrawable(bg)
         menuDelegate.setupBottombar(bottomNavigation)
 
         // Text size related
@@ -244,8 +244,7 @@ class ArticleActivity : BrowsingActivity() {
     }
 
     private fun setupTheme() {
-        val theme = preferences.articleTheme()
-        when (theme) {
+        when (preferences.articleTheme()) {
             THEME_BLACK -> handleBlackTheme()
             THEME_DARK -> setNavigationBarColor(ContextCompat.getColor(this, R.color.article_windowBackground))
         }
@@ -257,8 +256,13 @@ class ArticleActivity : BrowsingActivity() {
     }
 
     private fun handleBlackTheme() {
-        coordinatorLayout.background = ColorDrawable(Color.BLACK)
-        bottomNavigation.setMenuBackgroundColor(Color.BLACK)
+        val blackDrawable = ColorDrawable(Color.BLACK)
+        coordinatorLayout.background = blackDrawable
+        bottomNavigation.apply {
+            background = blackDrawable
+            itemIconTintList = ColorStateList.valueOf(Color.WHITE)
+            itemIconTintList = ColorStateList.valueOf(Color.WHITE)
+        }
         articleTextSizeCard.setBackgroundColor(Color.BLACK)
         setNavigationBarColor(Color.BLACK)
     }

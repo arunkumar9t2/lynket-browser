@@ -22,7 +22,7 @@ package arun.com.chromer.browsing.webview
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
-import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.InflateException
@@ -41,7 +41,6 @@ import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.extenstions.applyColor
 import arun.com.chromer.extenstions.setAutoHideProgress
-import arun.com.chromer.extenstions.setMenuBackgroundColor
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.util.ColorUtil
 import arun.com.chromer.util.Utils
@@ -210,9 +209,9 @@ open class WebViewActivity : BrowsingActivity() {
             progressTintList = ColorStateList.valueOf(foregroundColor)
         }
 
-        if (foregroundColor != Color.BLACK) {
-            bottomNavigation.setMenuBackgroundColor(themeColor)
-        }
+        bottomNavigation.background = ColorDrawable(themeColor)
+        bottomNavigation.itemIconTintList = ColorStateList.valueOf(foregroundColor)
+        bottomNavigation.itemTextColor = ColorStateList.valueOf(foregroundColor)
 
         swipeRefreshLayout.setColorSchemeColors(themeColor, ColorUtil.getClosestAccentColor(themeColor))
         if (Utils.ANDROID_LOLLIPOP) {

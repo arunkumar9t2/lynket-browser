@@ -51,9 +51,9 @@ import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.Utils
 import arun.com.chromer.util.Utils.isPackageInstalled
 import arun.com.chromer.util.Utils.shareText
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
-import it.sephiroth.android.library.bottomnavigation.BottomNavigation
 import javax.inject.Inject
 
 
@@ -201,19 +201,10 @@ class MenuDelegate @Inject constructor(
         return true
     }
 
-    fun setupBottombar(bottomNavigation: BottomNavigation) {
+    fun setupBottombar(bottomNavigation: BottomNavigationView) {
         if (preferences.bottomBar()) {
-            bottomNavigation.apply {
-                setSelectedIndex(-1, false)
-                setOnMenuItemClickListener(object : BottomNavigation.OnMenuItemSelectionListener {
-                    override fun onMenuItemSelect(itemId: Int, position: Int, fromUser: Boolean) {
-                        handleItemSelected(itemId)
-                        post { setSelectedIndex(-1, false) }
-                    }
-
-                    override fun onMenuItemReselect(itemId: Int, position: Int, fromUser: Boolean) {
-                    }
-                })
+            bottomNavigation.setOnNavigationItemSelectedListener { menuItem ->
+                handleItemSelected(menuItem.itemId)
             }
         } else {
             bottomNavigation.gone()
