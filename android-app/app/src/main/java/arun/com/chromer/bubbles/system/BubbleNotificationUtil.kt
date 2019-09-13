@@ -58,6 +58,24 @@ constructor(
         }
     }
 
+    private fun updateGroupSummaryNotification(lastNotificationColor: Int) {
+        val bubblesSummaryNotification = Notification.Builder(application, BUBBLE_NOTIFICATION_CHANNEL_ID).run {
+            setContentTitle(application.getString(R.string.bubble_notification_group_title))
+            setContentText(application.getString(R.string.bubble_notification_group_description))
+            setGroup(BUBBLE_NOTIFICATION_GROUP)
+            setGroupSummary(true)
+            setAllowSystemGeneratedContextualActions(true)
+            setColor(lastNotificationColor)
+            setColorized(true)
+            setLocalOnly(true)
+            setOngoing(false)
+            setSmallIcon(Icon.createWithResource(application, R.drawable.ic_chromer_notification))
+            setLargeIcon(Icon.createWithResource(application, R.mipmap.ic_launcher_round))
+            build()
+        }
+        notificationManager.notify(BUBBLE_NOTIFICATION_GROUP.hashCode(), bubblesSummaryNotification)
+    }
+
     fun showBubbles(bubbleData: BubbleLoadData): Single<BubbleLoadData> = Single.fromCallable {
         createNotificationChannel()
         val context = bubbleData.contextRef.get() ?: application
@@ -84,7 +102,7 @@ constructor(
             setContentTitle(website.safeLabel())
             setContentText(website.preferredUrl())
             setGroup(BUBBLE_NOTIFICATION_GROUP)
-            setAllowSystemGeneratedContextualActions(false)
+            setAllowSystemGeneratedContextualActions(true)
             bubbleData.color.takeIf { it != Constants.NO_COLOR }?.let(::setColor)
             setColorized(true)
             setLocalOnly(true)
@@ -108,6 +126,7 @@ constructor(
             })
             build()
         }
+        updateGroupSummaryNotification(bubbleData.color)
         notificationManager.notify(website.url.hashCode(), bubbleNotification)
         bubbleData
     }.doOnError(Timber::e).onErrorReturnItem(bubbleData)
