@@ -39,7 +39,7 @@ import dev.arunkumar.android.dagger.viewmodel.UsesViewModel
 import dev.arunkumar.android.dagger.viewmodel.viewModel
 import javax.inject.Inject
 
-private const val EXTRA_CURRENT_LOADING_URL = "EXTRA_CURRENT_LOADING_URL"
+const val EXTRA_CURRENT_LOADING_URL = "EXTRA_CURRENT_LOADING_URL"
 
 /**
  * Class definition for activity that shows a webpage.

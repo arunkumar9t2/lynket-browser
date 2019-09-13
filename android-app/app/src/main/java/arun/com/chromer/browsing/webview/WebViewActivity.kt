@@ -35,6 +35,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import arun.com.chromer.R
 import arun.com.chromer.browsing.BrowsingActivity
+import arun.com.chromer.browsing.EXTRA_CURRENT_LOADING_URL
 import arun.com.chromer.browsing.menu.MenuDelegate
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
@@ -65,7 +66,7 @@ open class WebViewActivity : BrowsingActivity() {
         super.onCreate(savedInstanceState)
         setupToolbar()
         setupSwipeRefresh()
-        setupWebView()
+        setupWebView(savedInstanceState)
         setupBottomBar()
     }
 
@@ -132,7 +133,7 @@ open class WebViewActivity : BrowsingActivity() {
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun setupWebView() {
+    private fun setupWebView(savedInstanceState: Bundle?) {
         try {
             webView.apply {
                 webViewClient = object : WebViewClient() {
@@ -161,7 +162,12 @@ open class WebViewActivity : BrowsingActivity() {
                     }
                 }
                 settings.javaScriptEnabled = true
-                loadUrl(intent.dataString)
+                val previousUrl = savedInstanceState?.getString(EXTRA_CURRENT_LOADING_URL)
+                if (previousUrl == null) {
+                    loadUrl(intent.dataString)
+                } else {
+                    loadUrl(previousUrl)
+                }
             }
 
         } catch (e: InflateException) {
