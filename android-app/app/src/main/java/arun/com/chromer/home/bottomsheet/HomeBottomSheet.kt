@@ -49,7 +49,7 @@ class HomeBottomSheet : BottomSheetDialogFragment() {
             withAccountHeader(
                     AccountHeaderBuilder().run {
                         withActivity(requireActivity())
-                        withHeaderBackground(R.drawable.lynket_drawer_image)
+                        withHeaderBackground(R.drawable.chromer_header_small)
                         withHeaderBackgroundScaleType(ImageView.ScaleType.CENTER_CROP)
                         withDividerBelowHeader(true)
                         build()
