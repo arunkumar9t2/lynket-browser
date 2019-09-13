@@ -36,10 +36,12 @@ import com.mikepenz.iconics.IconicsDrawable;
 import javax.inject.Inject;
 
 import arun.com.chromer.R;
+import arun.com.chromer.data.website.model.Website;
 import arun.com.chromer.di.activity.ActivityComponent;
 import arun.com.chromer.settings.Preferences;
 import arun.com.chromer.settings.RxPreferences;
 import arun.com.chromer.shared.base.activity.BaseActivity;
+import arun.com.chromer.tabs.TabsManager;
 import arun.com.chromer.util.Utils;
 import butterknife.BindView;
 
@@ -57,6 +59,8 @@ public class BrowsingModeActivity extends BaseActivity implements BrowsingModeAd
 
     @Inject
     BrowsingModeAdapter adapter;
+    @Inject
+    TabsManager tabsManager;
 
     @Override
     protected int getLayoutRes() {
@@ -123,6 +127,15 @@ public class BrowsingModeActivity extends BaseActivity implements BrowsingModeAd
                     .title(R.string.browsing_mode_native_bubbles)
                     .content(R.string.browsing_mode_native_bubbles_warning)
                     .positiveText(R.string.browsing_mode_native_bubbles_guide)
+                    .onPositive((dialog, which) -> {
+                        tabsManager.openUrl(this,
+                                new Website("https://github.com/arunkumar9t2/lynket-browser/wiki/Android-10-Bubbles-Guide"),
+                                true,
+                                false,
+                                false,
+                                false,
+                                false);
+                    })
                     .icon(new IconicsDrawable(this)
                             .icon(CommunityMaterial.Icon.cmd_android_head)
                             .colorRes(R.color.material_dark_color)
