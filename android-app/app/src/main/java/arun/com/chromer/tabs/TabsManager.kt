@@ -27,6 +27,7 @@ import arun.com.chromer.browsing.customtabs.CustomTabActivity
 import arun.com.chromer.browsing.webview.EmbeddableWebViewActivity
 import arun.com.chromer.browsing.webview.WebViewActivity
 import arun.com.chromer.data.website.model.Website
+import io.reactivex.Completable
 import rx.Single
 
 /**
@@ -134,7 +135,7 @@ interface TabsManager {
      * Processes incoming intent from preferably external apps (could be us too) and then figures out
      * how to handle the intent and launch a new url.
      */
-    fun processIncomingIntent(activity: Activity, intent: Intent)
+    fun processIncomingIntent(activity: Activity, intent: Intent): Completable
 
     /**
      * Opens the given {@param url} irrespective of whether web heads is on.

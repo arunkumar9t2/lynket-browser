@@ -60,10 +60,9 @@ import arun.com.chromer.util.SafeIntent
 import arun.com.chromer.util.Utils
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
-import rx.Completable
+import dev.arunkumar.android.rxschedulers.SchedulerProvider
+import io.reactivex.Completable
 import rx.Single
-import rx.schedulers.Schedulers
-import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -80,10 +79,9 @@ constructor(
         private val backgroundLoadingStrategyFactory: BackgroundLoadingStrategyFactory,
         private val rxEventBus: RxEventBus,
         private val floatingBubbleFactory: FloatingBubbleFactory,
-        private val rxPreferences: RxPreferences
+        private val rxPreferences: RxPreferences,
+        private val schedulerProvider: SchedulerProvider
 ) : TabsManager {
-
-    private val subs = CompositeSubscription()
 
     override fun openUrl(
             context: Context,
@@ -94,31 +92,27 @@ constructor(
             fromAmp: Boolean,
             incognito: Boolean
     ) {
-        Completable
-                .fromAction {
-                    openUrlInternal(
-                            fromApp,
-                            fromWebHeads,
-                            context,
-                            website,
-                            fromAmp,
-                            incognito,
-                            fromNewTab
-                    )
-                }.subscribeOn(Schedulers.computation())
+        openUrlInternal(
+                context,
+                website,
+                fromApp,
+                fromWebHeads,
+                fromNewTab,
+                fromAmp,
+                incognito
+        ).subscribeOn(schedulerProvider.pool)
                 .subscribe()
-                .let(subs::add)
     }
 
     private fun openUrlInternal(
-            fromApp: Boolean,
-            fromWebHeads: Boolean,
             context: Context,
             website: Website,
-            fromAmp: Boolean,
-            incognito: Boolean,
-            fromNewTab: Boolean
-    ) {
+            fromApp: Boolean = true,
+            fromWebHeads: Boolean = false,
+            fromNewTab: Boolean = false,
+            fromAmp: Boolean = false,
+            incognito: Boolean = false
+    ): Completable = Completable.fromAction {
         // Clear non browsing activities if it was external intent.
         if (!fromApp) {
             clearNonBrowsingActivities()
@@ -126,13 +120,13 @@ constructor(
         // Open in web heads mode if we this command did not come from web heads.
         if ((preferences.webHeads() || rxPreferences.nativeBubbles.get()) && !fromWebHeads) {
             openWebHeads(context, website = website, fromMinimize = fromAmp, incognito = incognito)
-            return
+            return@fromAction
         }
 
         // Check if already an instance for this URL is there in our tasks
         if (reOrderTabByUrl(context, website)) {
             // Just bring it to front
-            return
+            return@fromAction
         }
 
         // Check if we should try to find AMP version of incoming url.
@@ -140,7 +134,7 @@ constructor(
             if (website.hasAmp()) {
                 // We already got the amp url, so open it in a browsing tab.
                 openBrowsingTab(context, Website.Ampify(website), fromNewTab = fromNewTab, incognito = incognito)
-                return
+                return@fromAction
             } else if (!fromWebHeads) {
                 // Open a proxy activity, attempt an extraction then open the AMP url if exists.
                 val ampResolver = Intent(context, AmpResolverActivity::class.java).apply {
@@ -153,16 +147,15 @@ constructor(
                     }
                 }
                 context.startActivity(ampResolver)
-                return
+                return@fromAction
             }
         }
 
         if (preferences.articleMode()) {
             // Launch article mode
             openArticle(context, website, incognito = incognito)
-            return
+            return@fromAction
         }
-
         // If everything failed then launch normally in browsing activity.
         openBrowsingTab(context, website, fromNewTab = fromNewTab, incognito = incognito)
     }
@@ -236,28 +229,33 @@ constructor(
         }
     }
 
-    override fun processIncomingIntent(activity: Activity, intent: Intent) {
-        // Safety check against malicious intents
-        val safeIntent = SafeIntent(intent)
-        val url = safeIntent.dataString
+    override fun processIncomingIntent(
+            activity: Activity,
+            intent: Intent
+    ): Completable = io.reactivex.Single
+            .fromCallable<String> {
+                // Safety check against malicious intents
+                val safeIntent = SafeIntent(intent)
+                val url = safeIntent.dataString
 
-        // The first thing to check is if we should blacklist.
-        if (preferences.perAppSettings()) {
-            val lastApp = appDetectionManager.nonFilteredPackage
-            if (lastApp.isNotEmpty()) {
-                if (appRepository.isPackageBlacklisted(lastApp)) {
-                    doBlacklistAction(activity, safeIntent)
-                    return
-                } else if (appRepository.isPackageIncognito(lastApp)) {
-                    doIncognitoAction(activity, url)
-                    return
+                // The first thing to check is if we should blacklist.
+                if (preferences.perAppSettings()) {
+                    val lastApp = appDetectionManager.nonFilteredPackage
+                    if (lastApp.isNotEmpty()) {
+                        if (appRepository.isPackageBlacklisted(lastApp)) {
+                            doBlacklistAction(activity, safeIntent)
+                            return@fromCallable url
+                        } else if (appRepository.isPackageIncognito(lastApp)) {
+                            doIncognitoAction(activity, url)
+                            return@fromCallable url
+                        }
+                    }
                 }
-            }
-        }
-
-        // Open url normally
-        openUrl(activity, Website(url), fromApp = false)
-    }
+                return@fromCallable url
+            }.flatMapCompletable { openUrlInternal(activity, Website(it), fromApp = false) }
+            .doOnError { Timber.e(it, "Critical error when processing incoming intent") }
+            .onErrorComplete()
+            .compose(schedulerProvider.poolToUi<Any>())
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     override fun openArticle(context: Context, website: Website, newTab: Boolean, incognito: Boolean) {

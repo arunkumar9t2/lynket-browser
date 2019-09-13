@@ -28,12 +28,15 @@ import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.shared.base.activity.BaseActivity
 import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.SafeIntent
+import io.reactivex.rxkotlin.subscribeBy
 import javax.inject.Inject
 
 @SuppressLint("GoogleAppIndexingApiWarning")
 class BrowserInterceptActivity : BaseActivity() {
     @Inject
     lateinit var defaultTabsManager: TabsManager
+
+    override fun getLayoutRes() = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,15 +47,18 @@ class BrowserInterceptActivity : BaseActivity() {
                 return
             }
             defaultTabsManager.processIncomingIntent(this, intent)
+                    .subscribeBy(onComplete = {
+                        finish()
+                    })
+        } ?: run {
+            finish()
         }
-        finish()
+
     }
 
     override fun inject(activityComponent: ActivityComponent) {
         activityComponent.inject(this)
     }
-
-    override fun getLayoutRes() = 0
 
     private fun invalidLink() {
         Toast.makeText(this, getString(R.string.unsupported_link), LENGTH_SHORT).show()
