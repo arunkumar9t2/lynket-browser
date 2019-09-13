@@ -51,7 +51,7 @@ import java.util.Random;
 import javax.inject.Inject;
 
 import arun.com.chromer.R;
-import arun.com.chromer.browsing.customtabs.callbacks.CopyToClipboardService;
+import arun.com.chromer.browsing.customtabs.callbacks.CopyToClipboardReceiver;
 import arun.com.chromer.browsing.customtabs.callbacks.FavShareBroadcastReceiver;
 import arun.com.chromer.browsing.customtabs.callbacks.MinimizeBroadcastReceiver;
 import arun.com.chromer.browsing.customtabs.callbacks.OpenInChromeReceiver;
@@ -462,9 +462,9 @@ public class CustomTabs {
     }
 
     private void prepareCopyLink() {
-        final Intent clipboardIntent = new Intent(activity, CopyToClipboardService.class);
+        final Intent clipboardIntent = new Intent(activity, CopyToClipboardReceiver.class);
         clipboardIntent.putExtra(EXTRA_KEY_ORIGINAL_URL, url);
-        final PendingIntent serviceIntentPending = PendingIntent.getService(activity, 0, clipboardIntent, FLAG_UPDATE_CURRENT);
+        final PendingIntent serviceIntentPending = PendingIntent.getBroadcast(activity, 0, clipboardIntent, FLAG_UPDATE_CURRENT);
         builder.addMenuItem(activity.getString(R.string.copy_link), serviceIntentPending);
     }
 

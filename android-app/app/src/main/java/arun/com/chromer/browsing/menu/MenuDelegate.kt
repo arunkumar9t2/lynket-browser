@@ -35,7 +35,7 @@ import arun.com.chromer.R
 import arun.com.chromer.browsing.BrowsingActivity
 import arun.com.chromer.browsing.article.ArticleActivity
 import arun.com.chromer.browsing.customtabs.CustomTabActivity
-import arun.com.chromer.browsing.customtabs.callbacks.CopyToClipboardService
+import arun.com.chromer.browsing.customtabs.callbacks.CopyToClipboardReceiver
 import arun.com.chromer.browsing.customtabs.callbacks.FavShareBroadcastReceiver
 import arun.com.chromer.browsing.customtabs.callbacks.SecondaryBrowserReceiver
 import arun.com.chromer.browsing.openwith.OpenIntentWithActivity
@@ -190,7 +190,7 @@ class MenuDelegate @Inject constructor(
                 PREFERRED_ACTION_FAV_SHARE -> activity.sendBroadcast(Intent(activity, FavShareBroadcastReceiver::class.java).setData(currentUri))
                 PREFERRED_ACTION_GEN_SHARE -> shareUrl()
             }
-            R.id.menu_copy_link -> activity.startService(Intent(activity, CopyToClipboardService::class.java).setData(currentUri))
+            R.id.menu_copy_link -> activity.sendBroadcast(Intent(activity, CopyToClipboardReceiver::class.java).setData(currentUri))
             R.id.menu_open_with -> activity.startActivity(Intent(activity, OpenIntentWithActivity::class.java).setData(currentUri))
             R.id.menu_share -> shareUrl()
             R.id.menu_share_with -> activity.sendBroadcast(Intent(activity, FavShareBroadcastReceiver::class.java).setData(currentUri))

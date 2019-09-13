@@ -46,7 +46,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <service android:name=".browsing.customtabs.callbacks.CopyToClipboardService" />
         <service
             android:name=".appdetect.AppDetectService"
             android:enabled="true"
@@ -102,6 +101,7 @@
         </service>
 
         <receiver android:name=".browsing.customtabs.callbacks.ShareBroadcastReceiver" />
+        <receiver android:name=".browsing.customtabs.callbacks.CopyToClipboardReceiver" />
         <receiver android:name=".browsing.customtabs.callbacks.FavShareBroadcastReceiver" />
         <receiver android:name=".browsing.customtabs.callbacks.SecondaryBrowserReceiver" />
         <receiver android:name=".browsing.customtabs.callbacks.OpenInChromeReceiver" />
