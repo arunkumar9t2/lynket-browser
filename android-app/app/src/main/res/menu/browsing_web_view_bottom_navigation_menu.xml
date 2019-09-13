@@ -32,7 +32,7 @@
         android:title="@string/share" />
     <item
         android:id="@+id/bottom_bar_minimize_tab"
-        android:icon="@drawable/ic_arrow_down_24dp"
+        android:icon="@drawable/ic_arrow_down"
         android:title="@string/minimize" />
     <item
         android:id="@+id/bottom_bar_article_view"

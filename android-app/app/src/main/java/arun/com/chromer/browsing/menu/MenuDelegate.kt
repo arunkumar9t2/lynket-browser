@@ -83,10 +83,11 @@ class MenuDelegate @Inject constructor(
     private val isWebview = activity is WebViewActivity
 
     private val textSizeIcon: IconicsDrawable by lazy {
-        IconicsDrawable(activity)
-                .icon(CommunityMaterial.Icon.cmd_format_size)
-                .color(ContextCompat.getColor(activity, R.color.material_dark_light))
-                .sizeDp(24)
+        IconicsDrawable(activity).apply {
+            icon(CommunityMaterial.Icon.cmd_format_size)
+            color(ContextCompat.getColor(activity, R.color.material_dark_light))
+            sizeDp(24)
+        }
     }
 
     fun createOptionsMenu(menu: Menu): Boolean {
