@@ -25,7 +25,6 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground"
     android:gravity="center|start"
     android:orientation="horizontal"
     android:weightSum="1"
@@ -49,7 +48,8 @@
             android:layout_gravity="center"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            tools:ignore="ContentDescription,RtlHardcoded" />
+            tools:ignore="ContentDescription,RtlHardcoded"
+            tools:src="@tools:sample/avatars" />
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -67,7 +67,8 @@
                 android:paddingBottom="4dp"
                 android:textAppearance="@style/Preference_TextAppearanceMaterialSubhead"
                 android:textSize="16sp"
-                tools:ignore="SelectableText" />
+                tools:ignore="SelectableText"
+                tools:text="@tools:sample/full_names" />
 
             <TextView
                 android:id="@+id/subtitle"
@@ -79,7 +80,8 @@
                 android:paddingBottom="4dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="?android:attr/textColorSecondary"
-                tools:ignore="SelectableText" />
+                tools:ignore="SelectableText"
+                tools:text="@tools:sample/lorem" />
 
         </RelativeLayout>
 
@@ -91,7 +93,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:padding="2dp"
-            android:src="@drawable/ic_shortcut_add"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"
+            tools:src="@tools:sample/avatars" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

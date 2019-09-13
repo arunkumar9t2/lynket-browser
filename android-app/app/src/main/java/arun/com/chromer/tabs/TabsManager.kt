@@ -24,8 +24,10 @@ import android.content.Context
 import android.content.Intent
 import arun.com.chromer.browsing.article.ArticleActivity
 import arun.com.chromer.browsing.customtabs.CustomTabActivity
+import arun.com.chromer.browsing.webview.EmbeddableWebViewActivity
 import arun.com.chromer.browsing.webview.WebViewActivity
 import arun.com.chromer.data.website.model.Website
+import io.reactivex.Completable
 import rx.Single
 
 /**
@@ -34,14 +36,21 @@ import rx.Single
 interface TabsManager {
 
     companion object {
-        val allBrowsingActivitiesName = arrayListOf<String>(
-                CustomTabActivity::class.java.name,
-                ArticleActivity::class.java.name,
-                WebViewActivity::class.java.name
+        val CUSTOM_TAB_ACTIVITY = CustomTabActivity::class.java.name
+        val ARTICLE_ACTIVITY = ArticleActivity::class.java.name
+        val WEBVIEW_ACTIVITY = WebViewActivity::class.java.name
+        val EMBEDDABLE_WEBVIEW_ACTIVITY = EmbeddableWebViewActivity::class.java.name
+
+        val ALL_BROWSING_ACTIVITIES = arrayListOf(
+                CUSTOM_TAB_ACTIVITY,
+                ARTICLE_ACTIVITY,
+                WEBVIEW_ACTIVITY,
+                EMBEDDABLE_WEBVIEW_ACTIVITY
         )
-        val browsingActivitiesName = arrayListOf<String>(
-                CustomTabActivity::class.java.name,
-                WebViewActivity::class.java.name
+        val FULL_BROWSING_ACTIVITIES = arrayListOf(
+                CUSTOM_TAB_ACTIVITY,
+                WEBVIEW_ACTIVITY,
+                EMBEDDABLE_WEBVIEW_ACTIVITY
         )
     }
 
@@ -54,10 +63,20 @@ interface TabsManager {
     data class Tab(val url: String, @param:TabType var type: Int, var website: Website? = null) {
         fun getTargetActivityName(): String = when (type) {
             WEB_VIEW -> WebViewActivity::class.java.name
+            WEB_VIEW_EMBEDDED -> EmbeddableWebViewActivity::class.java.name
             CUSTOM_TAB -> CustomTabActivity::class.java.name
             ARTICLE -> ArticleActivity::class.java.name
             else -> CustomTabActivity::class.java.name
         }
+    }
+
+    @TabType
+    fun getTabType(className: String): Int = when (className) {
+        CustomTabActivity::class.java.name -> CUSTOM_TAB
+        WebViewActivity::class.java.name -> WEB_VIEW
+        EmbeddableWebViewActivity::class.java.name -> WEB_VIEW_EMBEDDED
+        ArticleActivity::class.java.name -> ARTICLE
+        else -> OTHER
     }
 
     /**
@@ -116,7 +135,7 @@ interface TabsManager {
      * Processes incoming intent from preferably external apps (could be us too) and then figures out
      * how to handle the intent and launch a new url.
      */
-    fun processIncomingIntent(activity: Activity, intent: Intent)
+    fun processIncomingIntent(activity: Activity, intent: Intent): Completable
 
     /**
      * Opens the given {@param url} irrespective of whether web heads is on.
@@ -126,7 +145,7 @@ interface TabsManager {
      */
     fun openWebHeads(
             context: Context,
-            url: String,
+            website: Website,
             fromMinimize: Boolean = false,
             fromAmp: Boolean = false,
             incognito: Boolean = false

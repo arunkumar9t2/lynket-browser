@@ -49,21 +49,17 @@ import kotlinx.android.synthetic.main.activity_web_view_content.*
 import timber.log.Timber
 import javax.inject.Inject
 
-class WebViewActivity : BrowsingActivity() {
+open class WebViewActivity : BrowsingActivity() {
     @Inject
     lateinit var menuDelegate: MenuDelegate
 
-    private var themeColor: Int = 0
+    private var themeColor = 0
     private var fgColorStateList: ColorStateList = ColorStateList.valueOf(0)
-    private var foregroundColor: Int = 0
+    private var foregroundColor = 0
 
-    override fun inject(activityComponent: ActivityComponent) {
-        activityComponent.inject(this)
-    }
+    override fun inject(activityComponent: ActivityComponent) = activityComponent.inject(this)
 
-    override fun getLayoutRes(): Int {
-        return R.layout.activity_web_view
-    }
+    override fun getLayoutRes(): Int = R.layout.activity_web_view
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

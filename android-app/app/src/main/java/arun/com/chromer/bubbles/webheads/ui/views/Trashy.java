@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.webheads.ui.views;
+package arun.com.chromer.bubbles.webheads.ui.views;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

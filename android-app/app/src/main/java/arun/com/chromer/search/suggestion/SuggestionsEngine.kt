@@ -32,6 +32,8 @@ import dev.arunkumar.android.rxschedulers.SchedulerProvider
 import hu.akarnokd.rxjava.interop.RxJavaInterop
 import io.reactivex.Flowable
 import io.reactivex.FlowableTransformer
+import timber.log.Timber
+import timber.log.Timber.e
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -121,6 +123,7 @@ constructor(
                 Flowable.just(emptyList())
             } else query
                     .compose(RxJavaInterop.toV2Transformer(RxSuggestions.suggestionsTransformer(suggestionsLimit)))
+                    .doOnError(Timber::e)
                     .map<List<SuggestionItem>> {
                         it.map { query -> GoogleSuggestionItem(query) }
                     }.onErrorReturn { emptyList() }

@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.webheads.ui.views;
+package arun.com.chromer.bubbles.webheads.ui.views;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

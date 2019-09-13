@@ -189,7 +189,7 @@ class ArticleActivity : BrowsingActivity() {
                 Website(intent.dataString!!),
                 smart = true,
                 fromNewTab = false,
-                activityNames = TabsManager.browsingActivitiesName
+                activityNames = TabsManager.FULL_BROWSING_ACTIVITIES
         )
     }
 

@@ -43,7 +43,7 @@ kapt {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -52,7 +52,7 @@ android {
     defaultConfig {
         applicationId "arun.com.chromer"
         minSdkVersion 16
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 52
         versionName "2.0.2"
 
@@ -200,6 +200,7 @@ dependencies {
 
     // Badge
     implementation 'com.github.nekocode:Badge:1.2'
+    implementation 'com.github.duanhong169:drawabletoolbox:1.0.7'
 
     // Reactive
     implementation 'io.reactivex:rxjava:1.3.8'

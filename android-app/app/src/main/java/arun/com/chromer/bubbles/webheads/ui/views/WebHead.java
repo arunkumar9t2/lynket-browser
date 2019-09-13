@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer.webheads.ui.views;
+package arun.com.chromer.bubbles.webheads.ui.views;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -43,11 +43,11 @@ import com.facebook.rebound.SpringListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import arun.com.chromer.bubbles.webheads.physics.MovementTracker;
+import arun.com.chromer.bubbles.webheads.physics.SpringConfigs;
+import arun.com.chromer.bubbles.webheads.ui.WebHeadContract;
 import arun.com.chromer.settings.Preferences;
 import arun.com.chromer.util.Utils;
-import arun.com.chromer.webheads.physics.MovementTracker;
-import arun.com.chromer.webheads.physics.SpringConfigs;
-import arun.com.chromer.webheads.ui.WebHeadContract;
 import timber.log.Timber;
 
 import static android.view.Gravity.LEFT;
@@ -57,8 +57,8 @@ import static android.view.MotionEvent.ACTION_CANCEL;
 import static android.view.MotionEvent.ACTION_DOWN;
 import static android.view.MotionEvent.ACTION_MOVE;
 import static android.view.MotionEvent.ACTION_UP;
-import static arun.com.chromer.webheads.physics.SpringConfigs.FLING;
-import static arun.com.chromer.webheads.ui.views.Trashy.MAGNETISM_THRESHOLD;
+import static arun.com.chromer.bubbles.webheads.physics.SpringConfigs.FLING;
+import static arun.com.chromer.bubbles.webheads.ui.views.Trashy.MAGNETISM_THRESHOLD;
 
 /**
  * Web head object which adds draggable and gesture functionality.

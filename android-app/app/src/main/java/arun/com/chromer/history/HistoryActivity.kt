@@ -80,10 +80,6 @@ class HistoryActivity : BaseActivity(), Snackable {
         super.onBackPressed()
     }
 
-    private fun finishWithTransition() {
-        finish()
-    }
-
     override fun inject(activityComponent: ActivityComponent) {
         activityComponent.inject(this)
     }

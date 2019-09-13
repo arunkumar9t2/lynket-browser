@@ -19,7 +19,9 @@
 
 package arun.com.chromer.shared.base.activity;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
@@ -77,5 +79,22 @@ public abstract class BaseActivity extends AppCompatActivity implements Provides
         }
         activityComponent = null;
         super.onDestroy();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finishWithTransition();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    protected void finishWithTransition() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            finishAfterTransition();
+        } else {
+            finish();
+        }
     }
 }

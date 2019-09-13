@@ -19,6 +19,7 @@
 
 package arun.com.chromer.tabs
 
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
 import android.app.ActivityManager
@@ -29,8 +30,6 @@ import android.content.Intent
 import android.content.Intent.*
 import android.net.Uri
 import android.os.Build
-import android.os.Handler
-import android.os.Looper
 import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
@@ -39,28 +38,31 @@ import arun.com.chromer.R
 import arun.com.chromer.appdetect.AppDetectionManager
 import arun.com.chromer.browsing.amp.AmpResolverActivity
 import arun.com.chromer.browsing.article.ArticleActivity
-import arun.com.chromer.browsing.article.ArticlePreloader
+import arun.com.chromer.browsing.backgroundloading.BackgroundLoadingStrategyFactory
 import arun.com.chromer.browsing.customtabs.CustomTabActivity
 import arun.com.chromer.browsing.customtabs.CustomTabs
 import arun.com.chromer.browsing.newtab.NewTabDialogActivity
 import arun.com.chromer.browsing.webview.WebViewActivity
+import arun.com.chromer.bubbles.BubbleType.NATIVE
+import arun.com.chromer.bubbles.BubbleType.WEB_HEADS
+import arun.com.chromer.bubbles.FloatingBubbleFactory
 import arun.com.chromer.data.apps.AppRepository
 import arun.com.chromer.data.website.WebsiteRepository
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.extenstions.isPackageInstalled
 import arun.com.chromer.settings.Preferences
-import arun.com.chromer.shared.Constants
-import arun.com.chromer.shared.Constants.NO_COLOR
+import arun.com.chromer.settings.RxPreferences
+import arun.com.chromer.shared.Constants.*
 import arun.com.chromer.tabs.ui.TabsActivity
-import arun.com.chromer.util.*
-import arun.com.chromer.util.Utils.openDrawOverlaySettings
-import arun.com.chromer.webheads.WebHeadService
+import arun.com.chromer.util.DocumentUtils
+import arun.com.chromer.util.RxEventBus
+import arun.com.chromer.util.SafeIntent
+import arun.com.chromer.util.Utils
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
-import rx.Completable
+import dev.arunkumar.android.rxschedulers.SchedulerProvider
+import io.reactivex.Completable
 import rx.Single
-import rx.schedulers.Schedulers
-import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -74,11 +76,12 @@ constructor(
         private val appDetectionManager: AppDetectionManager,
         private val appRepository: AppRepository,
         private val websiteRepository: WebsiteRepository,
-        private val articlePreloader: ArticlePreloader,
-        private val rxEventBus: RxEventBus
+        private val backgroundLoadingStrategyFactory: BackgroundLoadingStrategyFactory,
+        private val rxEventBus: RxEventBus,
+        private val floatingBubbleFactory: FloatingBubbleFactory,
+        private val rxPreferences: RxPreferences,
+        private val schedulerProvider: SchedulerProvider
 ) : TabsManager {
-
-    private val subs = CompositeSubscription()
 
     override fun openUrl(
             context: Context,
@@ -89,45 +92,41 @@ constructor(
             fromAmp: Boolean,
             incognito: Boolean
     ) {
-        Completable
-                .fromAction {
-                    openUrlInternal(
-                            fromApp,
-                            fromWebHeads,
-                            context,
-                            website,
-                            fromAmp,
-                            incognito,
-                            fromNewTab
-                    )
-                }.subscribeOn(Schedulers.computation())
+        openUrlInternal(
+                context,
+                website,
+                fromApp,
+                fromWebHeads,
+                fromNewTab,
+                fromAmp,
+                incognito
+        ).subscribeOn(schedulerProvider.pool)
                 .subscribe()
-                .let(subs::add)
     }
 
     private fun openUrlInternal(
-            fromApp: Boolean,
-            fromWebHeads: Boolean,
             context: Context,
             website: Website,
-            fromAmp: Boolean,
-            incognito: Boolean,
-            fromNewTab: Boolean
-    ) {
+            fromApp: Boolean = true,
+            fromWebHeads: Boolean = false,
+            fromNewTab: Boolean = false,
+            fromAmp: Boolean = false,
+            incognito: Boolean = false
+    ): Completable = Completable.fromAction {
         // Clear non browsing activities if it was external intent.
         if (!fromApp) {
             clearNonBrowsingActivities()
         }
         // Open in web heads mode if we this command did not come from web heads.
-        if (preferences.webHeads() && !fromWebHeads) {
-            openWebHeads(context, website.preferredUrl(), fromAmp, incognito = incognito)
-            return
+        if ((preferences.webHeads() || rxPreferences.nativeBubbles.get()) && !fromWebHeads) {
+            openWebHeads(context, website = website, fromMinimize = fromAmp, incognito = incognito)
+            return@fromAction
         }
 
         // Check if already an instance for this URL is there in our tasks
         if (reOrderTabByUrl(context, website)) {
             // Just bring it to front
-            return
+            return@fromAction
         }
 
         // Check if we should try to find AMP version of incoming url.
@@ -135,7 +134,7 @@ constructor(
             if (website.hasAmp()) {
                 // We already got the amp url, so open it in a browsing tab.
                 openBrowsingTab(context, Website.Ampify(website), fromNewTab = fromNewTab, incognito = incognito)
-                return
+                return@fromAction
             } else if (!fromWebHeads) {
                 // Open a proxy activity, attempt an extraction then open the AMP url if exists.
                 val ampResolver = Intent(context, AmpResolverActivity::class.java).apply {
@@ -144,20 +143,19 @@ constructor(
                         addFlags(FLAG_ACTIVITY_NEW_TASK)
                     }
                     if (incognito) {
-                        putExtra(Constants.EXTRA_KEY_INCOGNITO, true)
+                        putExtra(EXTRA_KEY_INCOGNITO, true)
                     }
                 }
                 context.startActivity(ampResolver)
-                return
+                return@fromAction
             }
         }
 
         if (preferences.articleMode()) {
             // Launch article mode
             openArticle(context, website, incognito = incognito)
-            return
+            return@fromAction
         }
-
         // If everything failed then launch normally in browsing activity.
         openBrowsingTab(context, website, fromNewTab = fromNewTab, incognito = incognito)
     }
@@ -183,8 +181,12 @@ constructor(
      * criteria which is base url and optionally and preferred activity name the url belongs to.
      * Upon finding the task, executes {@param foundAction}
      */
-    private fun findTaskAndExecuteAction(context: Context, website: Website, activityNames: List<String>?,
-                                         foundAction: (task: ActivityManager.AppTask) -> Unit): Boolean {
+    private fun findTaskAndExecuteAction(
+            context: Context,
+            website: Website,
+            activityNames: List<String>?,
+            foundAction: (task: ActivityManager.AppTask) -> Unit
+    ): Boolean {
         try {
             val am = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
             if (Utils.isLollipopAbove()) {
@@ -201,7 +203,7 @@ constructor(
                             val urlMatches = url != null && website.matches(url)
 
                             val taskComponentMatches = activityNames?.contains(componentClassName)
-                                    ?: TabsManager.allBrowsingActivitiesName.contains(componentClassName)
+                                    ?: TabsManager.ALL_BROWSING_ACTIVITIES.contains(componentClassName)
 
                             if (taskComponentMatches && urlMatches) {
                                 foundAction(task)
@@ -221,34 +223,39 @@ constructor(
 
     override fun minimizeTabByUrl(url: String, fromClass: String, incognito: Boolean) {
         rxEventBus.post(TabsManager.MinimizeEvent(TabsManager.Tab(url, getTabType(fromClass))))
-        if (preferences.webHeads() || preferences.minimizeToWebHead()) {
+        if (preferences.webHeads() || rxPreferences.nativeBubbles.get() || preferences.minimizeToWebHead()) {
             // When minimizing, don't try to handle aggressive loading cases.
-            openWebHeads(application, url, fromMinimize = true, incognito = incognito)
+            openWebHeads(application, website = Website(url), fromMinimize = true, incognito = incognito)
         }
     }
 
-    override fun processIncomingIntent(activity: Activity, intent: Intent) {
-        // Safety check against malicious intents
-        val safeIntent = SafeIntent(intent)
-        val url = safeIntent.dataString
+    override fun processIncomingIntent(
+            activity: Activity,
+            intent: Intent
+    ): Completable = io.reactivex.Single
+            .fromCallable<String> {
+                // Safety check against malicious intents
+                val safeIntent = SafeIntent(intent)
+                val url = safeIntent.dataString
 
-        // The first thing to check is if we should blacklist.
-        if (preferences.perAppSettings()) {
-            val lastApp = appDetectionManager.nonFilteredPackage
-            if (lastApp.isNotEmpty()) {
-                if (appRepository.isPackageBlacklisted(lastApp)) {
-                    doBlacklistAction(activity, safeIntent)
-                    return
-                } else if (appRepository.isPackageIncognito(lastApp)) {
-                    doIncognitoAction(activity, url)
-                    return
+                // The first thing to check is if we should blacklist.
+                if (preferences.perAppSettings()) {
+                    val lastApp = appDetectionManager.nonFilteredPackage
+                    if (lastApp.isNotEmpty()) {
+                        if (appRepository.isPackageBlacklisted(lastApp)) {
+                            doBlacklistAction(activity, safeIntent)
+                            return@fromCallable url
+                        } else if (appRepository.isPackageIncognito(lastApp)) {
+                            doIncognitoAction(activity, url)
+                            return@fromCallable url
+                        }
+                    }
                 }
-            }
-        }
-
-        // Open url normally
-        openUrl(activity, Website(url), fromApp = false)
-    }
+                return@fromCallable url
+            }.flatMapCompletable { openUrlInternal(activity, Website(it), fromApp = false) }
+            .doOnError { Timber.e(it, "Critical error when processing incoming intent") }
+            .onErrorComplete()
+            .compose(schedulerProvider.poolToUi<Any>())
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     override fun openArticle(context: Context, website: Website, newTab: Boolean, incognito: Boolean) {
@@ -263,16 +270,23 @@ constructor(
                     addFlags(FLAG_ACTIVITY_MULTIPLE_TASK)
                 }
                 if (incognito) {
-                    putExtra(Constants.EXTRA_KEY_INCOGNITO, true)
+                    putExtra(EXTRA_KEY_INCOGNITO, true)
                 }
-                putExtra(Constants.EXTRA_KEY_TOOLBAR_COLOR, getToolbarColor(website))
+                putExtra(EXTRA_KEY_TOOLBAR_COLOR, customizedWebsiteColor(website))
             }
             context.startActivity(intent)
         }
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    override fun openBrowsingTab(context: Context, website: Website, smart: Boolean, fromNewTab: Boolean, activityNames: List<String>?, incognito: Boolean) {
+    override fun openBrowsingTab(
+            context: Context,
+            website: Website,
+            smart: Boolean,
+            fromNewTab: Boolean,
+            activityNames: List<String>?,
+            incognito: Boolean
+    ) {
         val reordered = smart && reOrderTabByUrl(context, website, activityNames)
 
         if (!reordered) {
@@ -284,10 +298,10 @@ constructor(
                 Intent(context, CustomTabActivity::class.java)
             }.apply {
                 data = website.preferredUri()
-                putExtra(Constants.EXTRA_KEY_WEBSITE, website)
-                putExtra(Constants.EXTRA_KEY_TOOLBAR_COLOR, getToolbarColor(website))
+                putExtra(EXTRA_KEY_WEBSITE, website)
+                putExtra(EXTRA_KEY_TOOLBAR_COLOR, customizedWebsiteColor(website))
                 if (isIncognito) {
-                    putExtra(Constants.EXTRA_KEY_INCOGNITO, true)
+                    putExtra(EXTRA_KEY_INCOGNITO, true)
                 }
             }
 
@@ -308,72 +322,48 @@ constructor(
         return !(!isIncognito && canSafelyOpenCCT)
     }
 
-    override fun openWebHeads(context: Context, url: String, fromMinimize: Boolean, fromAmp: Boolean, incognito: Boolean) {
-        if (Utils.isOverlayGranted(context)) {
-            val webHeadLauncher = Intent(context, WebHeadService::class.java).apply {
-                data = Uri.parse(url)
-                addFlags(FLAG_ACTIVITY_NEW_TASK)
-                putExtra(Constants.EXTRA_KEY_MINIMIZE, fromMinimize)
-                putExtra(Constants.EXTRA_KEY_FROM_AMP, fromAmp)
-                putExtra(Constants.EXTRA_KEY_INCOGNITO, incognito)
-            }
-            ContextCompat.startForegroundService(context, webHeadLauncher)
-        } else {
-            openDrawOverlaySettings(context)
-        }
+    override fun openWebHeads(
+            context: Context,
+            website: Website,
+            fromMinimize: Boolean,
+            fromAmp: Boolean,
+            incognito: Boolean
+    ) {
+        val url = website.preferredUrl()
+        val bubbles = rxPreferences.nativeBubbles.get()
+        val webHeads = preferences.webHeads()
+
+        floatingBubbleFactory[if (bubbles) NATIVE else WEB_HEADS].openBubble(
+                website,
+                fromMinimize,
+                fromAmp,
+                incognito,
+                context,
+                customizedWebsiteColor(website)
+        )
+
+        val shouldUseWebView = shouldUseWebView(incognito)
 
         // If this command was not issued for minimizing, then attempt aggressive loading.
         if (preferences.aggressiveLoading() && !fromMinimize) {
-            if (preferences.articleMode()) {
-                articlePreloader.preloadArticle(Uri.parse(url)) { }
-            } else {
-                if (shouldUseWebView(incognito)) {
-                    application.registerActivityLifecycleCallbacks(
-                            object : ActivityLifeCycleCallbackAdapter() {
-                                override fun onActivityStarted(activity: Activity?) {
-                                    try {
-                                        if (activity is WebViewActivity) {
-                                            val activityUrl = activity.intent?.dataString
-                                            if (url == activityUrl) {
-                                                Handler(Looper.getMainLooper()).postDelayed({
-                                                    activity.moveTaskToBack(true)
-                                                    Timber.d("Moved webivew  $activityUrl to back")
-                                                    // Unregister this callback
-                                                    application.unregisterActivityLifecycleCallbacks(this)
-                                                }, 100)
-                                            }
-                                        }
-                                    } catch (e: Exception) {
-                                        Timber.e(e)
-                                    }
-                                }
-                            })
-                } else {
-                    // Register listener to track opening browsing tabs.
-                    application.registerActivityLifecycleCallbacks(
-                            object : ActivityLifeCycleCallbackAdapter() {
-                                override fun onActivityStopped(activity: Activity?) {
-                                    // Let's inspect this activity and find if it's what we are looking for.
-                                    try {
-                                        if (activity is CustomTabActivity) {
-                                            val activityUrl = activity.intent?.dataString
-                                            if (url == activityUrl) {
-                                                Handler(Looper.getMainLooper()).postDelayed({
-                                                    activity.moveTaskToBack(true)
-                                                    Timber.d("Moved webivew  $activityUrl to back")
-                                                    // Unregister this callback
-                                                    application.unregisterActivityLifecycleCallbacks(this)
-                                                }, 100)
-                                            }
-                                        }
-                                    } catch (e: Exception) {
-                                        Timber.e(e)
-                                    }
-                                }
-                            })
+            when {
+                preferences.articleMode() -> backgroundLoadingStrategyFactory[ARTICLE].perform(url)
+                else -> {
+                    if (shouldUseWebView) {
+                        if (!bubbles) {
+                            backgroundLoadingStrategyFactory[WEB_VIEW].perform(url)
+                        }
+                    } else {
+                        backgroundLoadingStrategyFactory[CUSTOM_TAB].perform(url)
+                    }
+                    openBrowsingTab(
+                            context,
+                            website,
+                            smart = true,
+                            fromNewTab = false,
+                            incognito = incognito
+                    )
                 }
-
-                openBrowsingTab(context, Website(url), smart = true, fromNewTab = false, incognito = incognito)
             }
         }
     }
@@ -400,6 +390,7 @@ constructor(
     }
 
 
+    @SuppressLint("NewApi")
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     override fun getActiveTabs(): Single<List<TabsManager.Tab>> {
         return Single.create { emitter ->
@@ -412,7 +403,7 @@ constructor(
                         .map {
                             val url = it.baseIntent.dataString!!
                             @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-                            val type = getTabType(it.baseIntent.component.className)
+                            val type = getTabType(it.baseIntent.component!!.className)
                             TabsManager.Tab(url, type)
                         }.filter { it.type != OTHER }
                         .toMutableList())
@@ -434,19 +425,11 @@ constructor(
                 .toSingle()
     }
 
-    @TabType
-    private fun getTabType(className: String): Int = when (className) {
-        CustomTabActivity::class.java.name -> CUSTOM_TAB
-        WebViewActivity::class.java.name -> WEB_VIEW
-        ArticleActivity::class.java.name -> ARTICLE
-        else -> OTHER
-    }
-
     /**
      * Get customized toolbar color based on user preferences
      */
     @ColorInt
-    private fun getToolbarColor(website: Website): Int {
+    private fun customizedWebsiteColor(website: Website): Int {
         if (preferences.isColoredToolbar) {
             if (preferences.dynamicToolbar()) {
                 var appColor = NO_COLOR
@@ -510,6 +493,7 @@ constructor(
             showSecondaryBrowserHandlingError(activity, activity.getText(R.string.secondary_browser_not_installed))
         }
     }
+
 
     /**
      * Shows a error dialog for various blacklist errors.

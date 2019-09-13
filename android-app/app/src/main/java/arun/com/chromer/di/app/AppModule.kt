@@ -20,41 +20,29 @@
 package arun.com.chromer.di.app
 
 import android.app.Application
-import arun.com.chromer.appdetect.AppDetectionManager
+import arun.com.chromer.browsing.icons.DefaultWebsiteIconsProvider
+import arun.com.chromer.browsing.icons.WebsiteIconsProvider
 import arun.com.chromer.di.viewmodel.ViewModelModule
 import arun.com.chromer.settings.Preferences
 import arun.com.chromer.util.RxEventBus
 import com.afollestad.rxkprefs.rxkPrefs
 import dagger.Module
 import dagger.Provides
-import dev.arunkumar.android.AppSchedulersModule
 import dev.arunkumar.android.dagger.viewmodel.DefaultViewModelsBuilder
 import javax.inject.Singleton
 
 @Module(includes = [
     ViewModelModule::class,
-    DefaultViewModelsBuilder::class,
-    AppSchedulersModule::class
+    DefaultViewModelsBuilder::class
 ])
 open class AppModule(var application: Application) {
+    @Provides
+    @Singleton
+    internal fun providesApplication(): Application = application
 
     @Provides
     @Singleton
-    internal fun providesApplication(): Application {
-        return application
-    }
-
-    @Provides
-    @Singleton
-    internal fun providesAppDetectionManager(): AppDetectionManager {
-        return AppDetectionManager(application)
-    }
-
-    @Provides
-    @Singleton
-    internal fun providesPreferences(): Preferences {
-        return Preferences.get(application)
-    }
+    internal fun providesPreferences(): Preferences = Preferences.get(application)
 
     @Provides
     @Singleton
@@ -63,4 +51,10 @@ open class AppModule(var application: Application) {
     @Provides
     @Singleton
     internal fun rxEventBus(): RxEventBus = RxEventBus()
+
+    @Provides
+    @Singleton
+    internal fun websiteIconProvider(defaultWebsiteIconsProvider: DefaultWebsiteIconsProvider): WebsiteIconsProvider {
+        return defaultWebsiteIconsProvider
+    }
 }

@@ -331,4 +331,12 @@
     <string name="status">Status</string>
     <string name="pages">Pages</string>
     <string name="pick_search_engines">Pick search engine</string>
+    <string name="bubble_notification_channel_name">Bubbles notification channel</string>
+    <string name="bubble_notification_channel_description">Channel for showing bubbles</string>
+    <string name="browsing_mode_native_bubbles_explanation">Use Android 10\'s native bubbles to load multiple links in floating windows.</string>
+    <string name="browsing_mode_native_bubbles">Native Bubbles (Beta)</string>
+    <string name="browsing_mode_native_bubbles_warning">Native bubbles integration is in beta and requires extra steps to be enabled. Please note that current implementation is not final and may change in the future. \n\nKnown issues:\nOnly WebView provider works with floating window.</string>
+    <string name="browsing_mode_native_bubbles_guide">Guide</string>
+    <string name="bubble_notification_group_title">Active bubbles</string>
+    <string name="bubble_notification_group_description">Showing bubble notifications, swipe to expand</string>
 </resources>
