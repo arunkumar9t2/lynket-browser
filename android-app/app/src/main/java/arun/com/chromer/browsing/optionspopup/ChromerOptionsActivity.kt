@@ -55,8 +55,8 @@ class ChromerOptionsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         fromArticle = intent.getBooleanExtra(EXTRA_KEY_FROM_ARTICLE, false)
-        menu_list.layoutManager = LinearLayoutManager(this)
-        menu_list.adapter = MenuListAdapter()
+        moreMenuList.layoutManager = LinearLayoutManager(this)
+        moreMenuList.adapter = MenuListAdapter()
     }
 
     override fun getLayoutRes() = R.layout.activity_more_menu

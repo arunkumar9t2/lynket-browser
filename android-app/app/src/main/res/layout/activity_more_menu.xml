@@ -38,7 +38,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/menu_header"
+            android:id="@+id/moreMenuHeader"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_gravity="center|start"
@@ -55,7 +55,7 @@
             tools:targetApi="lollipop" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/menu_list"
+            android:id="@+id/moreMenuList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="8dp"
