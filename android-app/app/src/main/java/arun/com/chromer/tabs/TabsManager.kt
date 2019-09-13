@@ -62,10 +62,20 @@ interface TabsManager {
     data class Tab(val url: String, @param:TabType var type: Int, var website: Website? = null) {
         fun getTargetActivityName(): String = when (type) {
             WEB_VIEW -> WebViewActivity::class.java.name
+            WEB_VIEW_EMBEDDED -> EmbeddableWebViewActivity::class.java.name
             CUSTOM_TAB -> CustomTabActivity::class.java.name
             ARTICLE -> ArticleActivity::class.java.name
             else -> CustomTabActivity::class.java.name
         }
+    }
+
+    @TabType
+    fun getTabType(className: String): Int = when (className) {
+        CustomTabActivity::class.java.name -> CUSTOM_TAB
+        WebViewActivity::class.java.name -> WEB_VIEW
+        EmbeddableWebViewActivity::class.java.name -> WEB_VIEW_EMBEDDED
+        ArticleActivity::class.java.name -> ARTICLE
+        else -> OTHER
     }
 
     /**

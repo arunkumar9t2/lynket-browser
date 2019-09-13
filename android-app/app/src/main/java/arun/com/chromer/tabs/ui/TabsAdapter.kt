@@ -29,10 +29,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import arun.com.chromer.R
 import arun.com.chromer.data.website.model.Website
-import arun.com.chromer.tabs.ARTICLE
-import arun.com.chromer.tabs.CUSTOM_TAB
-import arun.com.chromer.tabs.TabsManager
-import arun.com.chromer.tabs.WEB_VIEW
+import arun.com.chromer.tabs.*
 import arun.com.chromer.util.glide.GlideRequests
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -134,7 +131,7 @@ constructor(
                 websiteUrl?.text = tab.website?.url
 
                 when (tab.type) {
-                    WEB_VIEW -> {
+                    WEB_VIEW, WEB_VIEW_EMBEDDED -> {
                         websiteTabMode?.setText(R.string.web_view)
                         websiteTabModeIcon?.setImageDrawable(IconicsDrawable(itemView.context)
                                 .icon(CommunityMaterial.Icon.cmd_web)

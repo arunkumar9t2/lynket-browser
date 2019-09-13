@@ -427,14 +427,6 @@ constructor(
                 .toSingle()
     }
 
-    @TabType
-    private fun getTabType(className: String): Int = when (className) {
-        CustomTabActivity::class.java.name -> CUSTOM_TAB
-        WebViewActivity::class.java.name -> WEB_VIEW
-        ArticleActivity::class.java.name -> ARTICLE
-        else -> OTHER
-    }
-
     /**
      * Get customized toolbar color based on user preferences
      */
