@@ -134,7 +134,7 @@ interface TabsManager {
      */
     fun openWebHeads(
             context: Context,
-            url: String,
+            website: Website,
             fromMinimize: Boolean = false,
             fromAmp: Boolean = false,
             incognito: Boolean = false

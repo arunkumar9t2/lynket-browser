@@ -1,7 +1,6 @@
 package arun.com.chromer.bubbles.system
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
@@ -16,6 +15,7 @@ import dev.arunkumar.android.rxschedulers.SchedulerProvider
 import hu.akarnokd.rxjava.interop.RxJavaInterop
 import io.reactivex.BackpressureStrategy.BUFFER
 import io.reactivex.Flowable
+import io.reactivex.rxkotlin.subscribeBy
 import timber.log.Timber
 import java.lang.ref.WeakReference
 import java.util.concurrent.TimeUnit
@@ -38,7 +38,6 @@ data class BubbleLoadData(
 class NativeFloatingBubble
 @Inject
 constructor(
-        private val application: Application,
         private val schedulerProvider: SchedulerProvider,
         private val websiteRepository: WebsiteRepository,
         private val bubbleNotificationUtil: BubbleNotificationUtil,
@@ -51,25 +50,26 @@ constructor(
         loadQueue.toFlowable(BUFFER)
                 .observeOn(schedulerProvider.pool)
                 .flatMap(::showBubble)
-                .doOnError(Timber::e)
-                .subscribe()
+                .subscribeBy(onError = Timber::e)
     }
 
     override fun openBubble(
-            url: String,
+            website: Website,
             fromMinimize: Boolean,
             fromAmp: Boolean,
             incognito: Boolean,
-            context: Context?
+            context: Context?,
+            color: Int
     ) = loadQueue.accept(BubbleLoadData(
-            Website(url),
-            fromMinimize,
-            fromAmp,
-            incognito,
-            WeakReference(context)
+            website = website,
+            fromMinimize = fromMinimize,
+            fromAmp = fromAmp,
+            incognito = incognito,
+            contextRef = WeakReference(context),
+            color = color
     ))
 
-    private fun showBubble(bubbleLoadData: BubbleLoadData): Flowable<BubbleLoadData>? {
+    private fun showBubble(bubbleLoadData: BubbleLoadData): Flowable<BubbleLoadData> {
         return bubbleNotificationUtil.showBubbles(bubbleLoadData)
                 .delay(1, TimeUnit.SECONDS, schedulerProvider.pool) // Avoid notification throttling
                 .toFlowable()

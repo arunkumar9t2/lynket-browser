@@ -23,7 +23,6 @@ import arun.com.chromer.appdetect.AppDetectionManager
 import arun.com.chromer.browsing.customtabs.bottombar.BottomBarReceiver
 import arun.com.chromer.browsing.customtabs.callbacks.MinimizeBroadcastReceiver
 import arun.com.chromer.browsing.customtabs.dynamictoolbar.AppColorExtractorJob
-import arun.com.chromer.bubbles.BubbleModule
 import arun.com.chromer.data.DataModule
 import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.di.activity.ActivityModule
@@ -42,8 +41,7 @@ import javax.inject.Singleton
 
     HomeActivity.HomeBuilder::class,
     TabsModule::class,
-    DataModule::class,
-    BubbleModule::class
+    DataModule::class
 ])
 interface AppComponent {
 

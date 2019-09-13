@@ -4,9 +4,9 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
-import android.net.Uri
 import androidx.core.content.ContextCompat
 import arun.com.chromer.bubbles.FloatingBubble
+import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.shared.Constants.*
 import arun.com.chromer.util.Utils
 import javax.inject.Inject
@@ -19,16 +19,17 @@ class WebHeadsFloatingBubble
 constructor(private val application: Application) : FloatingBubble {
 
     override fun openBubble(
-            url: String,
+            website: Website,
             fromMinimize: Boolean,
             fromAmp: Boolean,
             incognito: Boolean,
-            context: Context?
+            context: Context?,
+            color: Int
     ) {
         (context ?: application).let { ctx ->
             if (Utils.isOverlayGranted(ctx)) {
                 val webHeadLauncher = Intent(ctx, WebHeadService::class.java).apply {
-                    data = Uri.parse(url)
+                    data = website.preferredUri()
                     addFlags(FLAG_ACTIVITY_NEW_TASK)
                     putExtra(EXTRA_KEY_MINIMIZE, fromMinimize)
                     putExtra(EXTRA_KEY_FROM_AMP, fromAmp)

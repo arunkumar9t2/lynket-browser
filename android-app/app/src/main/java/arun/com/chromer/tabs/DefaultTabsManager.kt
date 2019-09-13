@@ -43,12 +43,15 @@ import arun.com.chromer.browsing.customtabs.CustomTabActivity
 import arun.com.chromer.browsing.customtabs.CustomTabs
 import arun.com.chromer.browsing.newtab.NewTabDialogActivity
 import arun.com.chromer.browsing.webview.WebViewActivity
-import arun.com.chromer.bubbles.FloatingBubble
+import arun.com.chromer.bubbles.BubbleType.NATIVE
+import arun.com.chromer.bubbles.BubbleType.WEB_HEADS
+import arun.com.chromer.bubbles.FloatingBubbleFactory
 import arun.com.chromer.data.apps.AppRepository
 import arun.com.chromer.data.website.WebsiteRepository
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.extenstions.isPackageInstalled
 import arun.com.chromer.settings.Preferences
+import arun.com.chromer.settings.RxPreferences
 import arun.com.chromer.shared.Constants.*
 import arun.com.chromer.tabs.ui.TabsActivity
 import arun.com.chromer.util.DocumentUtils
@@ -76,7 +79,8 @@ constructor(
         private val websiteRepository: WebsiteRepository,
         private val backgroundLoadingStrategyFactory: BackgroundLoadingStrategyFactory,
         private val rxEventBus: RxEventBus,
-        private val floatingBubble: FloatingBubble
+        private val floatingBubbleFactory: FloatingBubbleFactory,
+        private val rxPreferences: RxPreferences
 ) : TabsManager {
 
     private val subs = CompositeSubscription()
@@ -120,8 +124,8 @@ constructor(
             clearNonBrowsingActivities()
         }
         // Open in web heads mode if we this command did not come from web heads.
-        if (preferences.webHeads() && !fromWebHeads) {
-            openWebHeads(context, website.preferredUrl(), fromAmp, incognito = incognito)
+        if ((preferences.webHeads() || rxPreferences.nativeBubbles.get()) && !fromWebHeads) {
+            openWebHeads(context, website = website, fromMinimize = fromAmp, incognito = incognito)
             return
         }
 
@@ -226,9 +230,9 @@ constructor(
 
     override fun minimizeTabByUrl(url: String, fromClass: String, incognito: Boolean) {
         rxEventBus.post(TabsManager.MinimizeEvent(TabsManager.Tab(url, getTabType(fromClass))))
-        if (preferences.webHeads() || preferences.minimizeToWebHead()) {
+        if (preferences.webHeads() || rxPreferences.nativeBubbles.get() || preferences.minimizeToWebHead()) {
             // When minimizing, don't try to handle aggressive loading cases.
-            openWebHeads(application, url, fromMinimize = true, incognito = incognito)
+            openWebHeads(application, website = Website(url), fromMinimize = true, incognito = incognito)
         }
     }
 
@@ -270,7 +274,7 @@ constructor(
                 if (incognito) {
                     putExtra(EXTRA_KEY_INCOGNITO, true)
                 }
-                putExtra(EXTRA_KEY_TOOLBAR_COLOR, getToolbarColor(website))
+                putExtra(EXTRA_KEY_TOOLBAR_COLOR, customizedWebsiteColor(website))
             }
             context.startActivity(intent)
         }
@@ -297,7 +301,7 @@ constructor(
             }.apply {
                 data = website.preferredUri()
                 putExtra(EXTRA_KEY_WEBSITE, website)
-                putExtra(EXTRA_KEY_TOOLBAR_COLOR, getToolbarColor(website))
+                putExtra(EXTRA_KEY_TOOLBAR_COLOR, customizedWebsiteColor(website))
                 if (isIncognito) {
                     putExtra(EXTRA_KEY_INCOGNITO, true)
                 }
@@ -322,28 +326,46 @@ constructor(
 
     override fun openWebHeads(
             context: Context,
-            url: String,
+            website: Website,
             fromMinimize: Boolean,
             fromAmp: Boolean,
             incognito: Boolean
     ) {
-        floatingBubble.openBubble(url, fromMinimize, fromAmp, incognito, context)
+        val url = website.preferredUrl()
+        val bubbles = rxPreferences.nativeBubbles.get()
+        val webHeads = preferences.webHeads()
+
+        floatingBubbleFactory[if (bubbles) NATIVE else WEB_HEADS].openBubble(
+                website,
+                fromMinimize,
+                fromAmp,
+                incognito,
+                context,
+                customizedWebsiteColor(website)
+        )
+
+        val shouldUseWebView = shouldUseWebView(incognito)
+
         // If this command was not issued for minimizing, then attempt aggressive loading.
         if (preferences.aggressiveLoading() && !fromMinimize) {
-            if (preferences.articleMode()) {
-                backgroundLoadingStrategyFactory[ARTICLE].perform(url)
-            } else {
-                when {
-                    shouldUseWebView(incognito) -> backgroundLoadingStrategyFactory[WEB_VIEW].perform(url)
-                    else -> backgroundLoadingStrategyFactory[CUSTOM_TAB].perform(url)
+            when {
+                preferences.articleMode() -> backgroundLoadingStrategyFactory[ARTICLE].perform(url)
+                else -> {
+                    if (shouldUseWebView) {
+                        if (!bubbles) {
+                            backgroundLoadingStrategyFactory[WEB_VIEW].perform(url)
+                        }
+                    } else {
+                        backgroundLoadingStrategyFactory[CUSTOM_TAB].perform(url)
+                    }
+                    openBrowsingTab(
+                            context,
+                            website,
+                            smart = true,
+                            fromNewTab = false,
+                            incognito = incognito
+                    )
                 }
-                openBrowsingTab(
-                        context,
-                        Website(url),
-                        smart = true,
-                        fromNewTab = false,
-                        incognito = incognito
-                )
             }
         }
     }
@@ -417,7 +439,7 @@ constructor(
      * Get customized toolbar color based on user preferences
      */
     @ColorInt
-    private fun getToolbarColor(website: Website): Int {
+    private fun customizedWebsiteColor(website: Website): Int {
         if (preferences.isColoredToolbar) {
             if (preferences.dynamicToolbar()) {
                 var appColor = NO_COLOR

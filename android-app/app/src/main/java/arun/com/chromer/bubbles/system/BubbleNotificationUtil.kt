@@ -6,16 +6,20 @@ import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.graphics.Point
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Icon
 import android.net.Uri
 import android.os.Build
 import android.view.WindowManager
 import androidx.annotation.RequiresApi
+import androidx.core.graphics.drawable.toBitmap
 import arun.com.chromer.R
 import arun.com.chromer.browsing.webview.EmbeddableWebViewActivity
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.util.Utils
+import dev.arunkumar.common.context.dpToPx
 import io.reactivex.Single
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -68,8 +72,9 @@ constructor(
                 PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        val bubbleIcon: Icon = bubbleData.icon?.let(Icon::createWithAdaptiveBitmap)
-                ?: Icon.createWithResource(context, R.mipmap.ic_launcher)
+        val bubbleIcon: Icon = bubbleData.icon
+                ?.let(Icon::createWithAdaptiveBitmap)
+                ?: bubbleData.fallbackIcon()
 
         val displayHeight = (application.getSystemService(Context.WINDOW_SERVICE) as WindowManager)
                 .defaultDisplay
@@ -105,5 +110,13 @@ constructor(
         }
         notificationManager.notify(website.url.hashCode(), bubbleNotification)
         bubbleData
+    }.doOnError(Timber::e).onErrorReturnItem(bubbleData)
+
+    private fun BubbleLoadData.fallbackIcon(): Icon = if (color != Constants.NO_COLOR) {
+        val iconSize = application.dpToPx(108.0)
+        Icon.createWithAdaptiveBitmap(ColorDrawable(color).toBitmap(width = iconSize, height = iconSize))
+    } else {
+        Icon.createWithResource(application, R.mipmap.ic_launcher)
     }
 }
+

@@ -20,7 +20,6 @@
 package arun.com.chromer.di.app
 
 import arun.com.chromer.ChromerRobolectricSuite
-import arun.com.chromer.bubbles.BubbleModule
 import arun.com.chromer.data.apps.DefaultAppRepositoryTest
 import arun.com.chromer.di.data.TestDataModule
 import arun.com.chromer.home.HomeActivity
@@ -35,8 +34,7 @@ import javax.inject.Singleton
             TestAppModule::class,
             HomeActivity.HomeBuilder::class,
             TabsModule::class,
-            TestDataModule::class,
-            BubbleModule::class
+            TestDataModule::class
         ]
 )
 interface TestAppComponent : AppComponent {
