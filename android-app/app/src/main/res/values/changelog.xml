@@ -46,7 +46,6 @@ a {
     <li><b>IMPROVED: </b> If clipboard contains multiple links, extract them and show as individual suggestion items in search bar</li>
     <li><b>FIX: </b> Menu -> Copy Link does not work/slow sometimes</li>
     <li><b>FIX: </b> Webview provider bottom bar not respecting toolbar color setting</li>
-    <li><b>FIX: </b> History sometimes not refreshing when items are deleted</li>
     <li><b>NEW: </b> Suggest Kiwi and Vivaldi providers</li>
     <li><b>NEW: </b> Option to have new line separated list when sharing multiple links</li>
     <li><b>IMPROVED: </b> Android 10 support</li>
