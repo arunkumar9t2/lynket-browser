@@ -39,7 +39,7 @@ a {
 <strong>2.1</strong>
 <h4 class="list-heading">General</h4>
 <ul>
-    <li><b>NEW: Android 10 - Bubbles support.</b> New browsing mode that use Android\'s native bubbles for web multitasking. Requires extra steps to be enabled, please follow this <a href="https://github.com/arunkumar9t2/lynket-browser/wiki/Android-10-Bubbles-Guide">guide</a>.</li>
+    <li><b>NEW: Android 10 - Bubbles support!</b> New browsing mode that use Android\'s native bubbles for web multitasking. Requires extra steps to be enabled, please follow this <a href="https://github.com/arunkumar9t2/lynket-browser/wiki/Android-10-Bubbles-Guide">guide</a>.</li>
     <li><b>NEW: </b> Ability to change default <b>search engine.</b></li>
     <li><b>NEW: </b> Tabs launcher shortcut (Android 7.1+)</li>
     <li><b>IMPROVED: </b> Webview provider load performance after getting killed in background</li>
