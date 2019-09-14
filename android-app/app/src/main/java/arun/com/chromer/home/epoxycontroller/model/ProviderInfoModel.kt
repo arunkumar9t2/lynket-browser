@@ -11,6 +11,8 @@ import arun.com.chromer.util.HtmlCompat
 import arun.com.chromer.util.glide.GlideApp
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.mikepenz.iconics.IconicsDrawable
 import dev.arunkumar.android.epoxy.model.KotlinEpoxyModelWithHolder
 import dev.arunkumar.android.epoxy.model.KotlinHolder
 import kotlinx.android.synthetic.main.layout_provider_info_card.*
@@ -30,6 +32,10 @@ abstract class ProviderInfoModel : KotlinEpoxyModelWithHolder<ProviderInfoModel.
     override fun bind(holder: ViewHolder) {
         GlideApp.with(holder.providerIcon)
                 .load(providerInfo.iconUri)
+                .error(IconicsDrawable(holder.providerIcon.context)
+                        .icon(CommunityMaterial.Icon.cmd_web)
+                        .colorRes(R.color.primary)
+                        .sizeDp(36))
                 .into(holder.providerIcon)
         holder.providerDescription.run {
             text = HtmlCompat.fromHtml(context.resolveStringResource(providerInfo.providerDescription))
