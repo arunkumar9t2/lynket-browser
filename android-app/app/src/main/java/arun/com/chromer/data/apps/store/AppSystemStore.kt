@@ -109,6 +109,33 @@ constructor(
                                 Aggressive background loading
                                 Action button
                             """.trimIndent()
+                ),
+                Provider(
+                        "com.kiwibrowser.browser",
+                        "Kiwi Browser",
+                        "https://lh3.googleusercontent.com/IpPy16lik1fLrJs0fkaFuKrUm6Hw9Q3KDa2gLbewoze0Ko39gEIOyDECYOZBFJLHGeo=s300-rw".toUri(),
+                        features = """
+                                Dark mode
+                                Ad block
+                                Tracking protection
+                                Web heads
+                                Bottom Bar
+                                Aggressive background loading
+                                Extensions support
+                            """.trimIndent()
+                ),
+                Provider(
+                        "com.vivaldi.browser",
+                        "Vivaldi Browser",
+                        "https://lh3.googleusercontent.com/xL5ky9AeFvI5VC6jRPKJf_0fMj0NKJYKRWc0wkl_5LFy9BCWc1OauInLmSfFP8soJLkg=s300-rw".toUri(),
+                        features = """
+                                Dark mode
+                                Web heads
+                                Aggressive background loading
+                                Speed Dial
+                                Bottom Bar
+                                Desktop Sync
+                            """.trimIndent()
                 )
         )
     }
