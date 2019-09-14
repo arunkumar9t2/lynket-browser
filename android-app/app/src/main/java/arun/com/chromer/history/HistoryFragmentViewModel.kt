@@ -25,6 +25,7 @@ import arun.com.chromer.data.history.HistoryRepository
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.util.SchedulerProvider
 import rx.Observable
+import rx.subjects.PublishSubject
 import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
 import javax.inject.Inject
@@ -41,10 +42,23 @@ constructor(
     val loadingLiveData = MutableLiveData<Boolean>()
     var historyPagedListLiveData = historyRepository.pagedHistory()
 
+    private val loaderSubject: PublishSubject<Int> = PublishSubject.create()
     val subs = CompositeSubscription()
 
-    fun invalidate() {
-        historyPagedListLiveData.value?.dataSource?.invalidate()
+    init {
+        /* subs.add(loaderSubject
+                 .doOnNext { loadingLiveData.postValue(true) }
+                 .switchMap {
+                     historyRepository
+                             .allItemsCursor
+                             .compose(SchedulerProvider.applyIoSchedulers())
+                 }.doOnNext { loadingLiveData.postValue(false) }
+                 .doOnNext(historyCursorLiveData::postValue)
+                 .subscribe())*/
+    }
+
+    fun loadHistory() {
+        loaderSubject.onNext(0)
     }
 
     fun deleteAll(onSuccess: (rows: Int) -> Unit) {
@@ -52,7 +66,7 @@ constructor(
                 .deleteAll()
                 .compose(SchedulerProvider.applyIoSchedulers())
                 .doOnNext { rows ->
-                    invalidate()
+                    loadHistory()
                     onSuccess(rows)
                 }.subscribe())
     }
@@ -60,9 +74,10 @@ constructor(
     fun deleteHistory(website: Website?) {
         subs.add(Observable.just(website)
                 .filter { webSite -> webSite?.url != null }
-                .flatMap { historyRepository.delete(it!!) }
+                .flatMap<Website> { historyRepository.delete(it!!) }
                 .compose(SchedulerProvider.applyIoSchedulers())
                 .doOnError(Timber::e)
+                .doOnNext { loadHistory() }
                 .subscribe())
     }
 

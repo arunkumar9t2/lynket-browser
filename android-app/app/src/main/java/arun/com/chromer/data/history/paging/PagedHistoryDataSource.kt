@@ -23,9 +23,6 @@ import androidx.paging.DataSource
 import androidx.paging.PositionalDataSource
 import arun.com.chromer.data.history.HistoryStore
 import arun.com.chromer.data.website.model.Website
-import dev.arunkumar.android.rxschedulers.SchedulerProvider
-import io.reactivex.disposables.CompositeDisposable
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Provider
 import javax.inject.Singleton
@@ -33,22 +30,7 @@ import javax.inject.Singleton
 @Singleton
 class PagedHistoryDataSource
 @Inject
-constructor(
-        private val historyStore: HistoryStore,
-        private val schedulerProvider: SchedulerProvider
-) : PositionalDataSource<Website>() {
-
-    private val compositeDisposable = CompositeDisposable()
-
-    init {
-        addInvalidatedCallback { compositeDisposable.clear() }
-        compositeDisposable.add(
-                historyStore.changes()
-                        .debounce(200, TimeUnit.MILLISECONDS)
-                        .subscribe { invalidate() }
-        )
-    }
-
+constructor(private val historyStore: HistoryStore) : PositionalDataSource<Website>() {
 
     override fun loadRange(
             params: LoadRangeParams,
