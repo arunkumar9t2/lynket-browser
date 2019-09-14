@@ -23,7 +23,7 @@
 <head>
 <style>
 body {
-   font-size: 0.915em;
+   font-size: 0.85em;
 }
 .list-heading {
     color: #FF4081;
@@ -34,10 +34,34 @@ a {
 </style>
 </head>
 <body>
-<strong>You can view this again in the about screen.</strong>
+<strong>You can view this again in the About screen.</strong>
 <br></br>
-<h3>Chromer is now called Lynket!</h3>
-
+<strong>2.1</strong>
+<h4 class="list-heading">General</h4>
+<ul>
+    <li><b>NEW: Android 10 - Bubbles support.</b> New browsing mode that use Android\'s native bubbles for web multitasking. Requires extra steps to be enabled, please follow this <a href="https://github.com/arunkumar9t2/lynket-browser/wiki/Android-10-Bubbles-Guide">guide</a>.</li>
+    <li><b>NEW: </b> Ability to change default <b>search engine.</b></li>
+    <li><b>NEW: </b> Tabs launcher shortcut (Android 7.1+)</li>
+    <li><b>IMPROVED: </b> Webview provider load performance after getting killed in background</li>
+    <li><b>IMPROVED: </b> If clipboard contains multiple links, extract them and show as individual suggestion items in search bar</li>
+    <li><b>FIX: </b> Menu -> Copy Link does not work/slow sometimes</li>
+    <li><b>FIX: </b> Webview provider bottom bar not respecting toolbar color setting</li>
+    <li><b>FIX: </b> History sometimes not refreshing when items are deleted</li>
+    <li><b>NEW: </b> Suggest Kiwi and Vivaldi providers</li>
+    <li><b>IMPROVED: </b> Android 10 support</li>
+</ul>
+<h4 class="list-heading">Design</h4>
+<ul>
+    <li><b>NEW: </b> Light weight and simpler app home screen</li>
+    <li><b>IMPROVED: </b> Show search suggestion for history items as grid with favicons</li>
+    <li><b>IMPROVED: </b> New Tab search bar aligned to screen bottom</li>
+</ul>
+<h4 class="list-heading">Performance</h4>
+<ul>
+    <li><b>IMPROVED: </b> Improved custom tabs and app launch performance (reduce jank)</li>
+    <li><b>IMPROVED: </b> Tabs switching performance</li>
+</ul>
+<hr>
 <strong>2.0.2</strong>
 <ul>
     <li><b>NEW: </b> Custom Minimize Behaviors - Minimize to web heads even if web heads are disabled.</li>
@@ -50,7 +74,7 @@ a {
 </ul>
 <hr>
 <strong>2.0.1 - 2nd Anniversary Update!</strong>
-<h4 class="list-heading">Design</h3>
+<h4 class="list-heading">Design</h4>
 <ul>
     <li><b>NEW: </b> Round and Adaptive Icon for Android Oreo</li>
     <li><b>NEW: </b> New home screen with bottom search bar inspired by Google apps</li>
@@ -59,7 +83,7 @@ a {
     <li><b>NEW: </b> Light nav bar for 8.1</li>
     <li><b>NEW: </b> Tips screen</li>
 </ul>
-<h4 class="list-heading">Features</h3>
+<h4 class="list-heading">Features</h4>
 <ul>
         <li><b>NEW: <i>TABS!</i></b> See all active tabs opened by Lynket in one screen and quickly switch to them</li>
         <li><b>NEW: <i>Per App Settings!</i></b> Configure secondary browser and incognito modes based on app.</li>
@@ -72,14 +96,14 @@ a {
         <li><b>NEW: </b> New tab dialog shows search suggestions</li>
         <li><b>NEW: </b> Better tab provider picker. Lynket now recommends supported browsers</li>
 </ul>
-<h4 class="list-heading">Performance</h3>
+<h4 class="list-heading">Performance</h4>
 <ul>
         <li><b>IMPROVED: </b> Multitasking performance has been greatly improved. </li>
         <li><b>IMPROVED: </b> Does not load duplicate tabs </li>
         <li><b>IMPROVED: </b> Aggressive background loading is smoother</li>
         <li><b>IMPROVED: </b> 40% smaller APK size</li>
 </ul>
-<h4 class="list-heading">Article mode</h3>
+<h4 class="list-heading">Article mode</h4>
 <ul>
         <li><b>NEW: </b> AMOLED Black theme</li>
         <li><b>NEW: </b> Change text size</li>
@@ -87,11 +111,11 @@ a {
         <li><b>NEW: </b> System bars dim automatically in article mode.</li>
         <li><b>FIX: </b> Crash when tapping on certain links</li>
 </ul>
-<h4 class="list-heading">AMP Mode</h3>
+<h4 class="list-heading">AMP Mode</h4>
 <ul>
         <li><b>NEW: </b> AMP resolver dialog with option to skip.</li>
 </ul>
-<h4 class="list-heading">Others</h3>
+<h4 class="list-heading">Others</h4>
 <ul>
     <li><b>FIX: </b> Lynket not opening links sometimes.</li>
     <li><b>FIX: </b> Certain languages not rendering correctly in search bar</li>
