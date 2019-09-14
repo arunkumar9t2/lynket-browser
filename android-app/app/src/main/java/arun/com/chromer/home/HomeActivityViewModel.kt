@@ -62,7 +62,9 @@ constructor(
                                         R.string.tab_provider_status_message_home,
                                         resourceArgs = listOf(R.string.system_webview)
                                 ),
-                                providerReason = StringResource(R.string.provider_web_view_incognito_reason),
+                                providerReason = if (isIncognito)
+                                    StringResource(R.string.provider_web_view_incognito_reason)
+                                else StringResource(0),
                                 allowChange = !isIncognito
                         )
                     } else {
