@@ -127,7 +127,6 @@ class HistoryFragment : BaseFragment(), Snackable, FabHandler {
             loadingLiveData.observe(owner, Observer { loading(it!!) })
             historyPagedListLiveData.observe(owner, Observer { historyAdapter.submitList(it) })
         }
-        loadHistory()
     }
 
     private fun setupIncognitoSwitch() {
@@ -197,7 +196,10 @@ class HistoryFragment : BaseFragment(), Snackable, FabHandler {
 
         swipeRefreshLayout.apply {
             setColorSchemeColors(ContextCompat.getColor(context!!, R.color.colorPrimary), ContextCompat.getColor(context!!, R.color.accent))
-            setOnRefreshListener { loadHistory() }
+            setOnRefreshListener {
+                viewModel.invalidate()
+                isRefreshing = false
+            }
         }
 
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, LEFT or RIGHT) {
@@ -214,15 +216,10 @@ class HistoryFragment : BaseFragment(), Snackable, FabHandler {
         }).attachToRecyclerView(historyList)
     }
 
-    private fun loadHistory() {
-        viewModel.loadHistory()
-    }
-
     override fun inject(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
 
     override fun onResume() {
         super.onResume()
-        loadHistory()
         historySwitch.isChecked = !preferences.historyDisabled()
     }
 
