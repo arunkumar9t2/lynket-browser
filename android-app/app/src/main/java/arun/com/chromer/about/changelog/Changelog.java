@@ -72,7 +72,9 @@ public class Changelog {
 
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                    if (url.equalsIgnoreCase("https://goo.gl/photos/BzRV69ABov9zJxVu9")) {
+                    // FIXME Sorry future me but I have to ship this today
+                    if (url.equalsIgnoreCase("https://goo.gl/photos/BzRV69ABov9zJxVu9")
+                            || url.equalsIgnoreCase("https://github.com/arunkumar9t2/lynket-browser/wiki/Android-10-Bubbles-Guide")) {
                         Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                         activity.startActivity(i);
                         return true;
