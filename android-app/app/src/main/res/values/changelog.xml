@@ -48,6 +48,7 @@ a {
     <li><b>FIX: </b> Webview provider bottom bar not respecting toolbar color setting</li>
     <li><b>FIX: </b> History sometimes not refreshing when items are deleted</li>
     <li><b>NEW: </b> Suggest Kiwi and Vivaldi providers</li>
+    <li><b>NEW: </b> Option to have new line separated list when sharing multiple links</li>
     <li><b>IMPROVED: </b> Android 10 support</li>
 </ul>
 <h4 class="list-heading">Design</h4>
