@@ -89,14 +89,14 @@ class AboutFragment : Fragment() {
     }
 
     internal inner class AppAdapter : RecyclerView.Adapter<AppAdapter.ItemHolder>() {
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
-            return ItemHolder(LayoutInflater.from(activity).inflate(
-                    R.layout.fragment_about_list_item_template,
-                    parent,
-                    false
-            ))
-        }
+        override fun onCreateViewHolder(
+                parent: ViewGroup,
+                viewType: Int
+        ) = ItemHolder(LayoutInflater.from(activity).inflate(
+                R.layout.fragment_about_list_item_template,
+                parent,
+                false
+        ))
 
         override fun onBindViewHolder(holder: ItemHolder, position: Int) {
             val materialDark = ContextCompat.getColor(requireActivity(), R.color.accent)
@@ -119,14 +119,22 @@ class AboutFragment : Fragment() {
                             .sizeDp(24)
                 }
                 2 -> {
-                    holder.about_app_title.setText(R.string.join_google_plus)
-                    holder.about_app_subtitle.setText(R.string.share_ideas)
+                    holder.about_app_title.setText(R.string.follow_twitter)
+                    holder.about_app_subtitle.visibility = View.GONE
                     holder.about_row_item_image.background = IconicsDrawable(requireActivity())
-                            .icon(CommunityMaterial.Icon.cmd_google_circles_communities)
+                            .icon(CommunityMaterial.Icon.cmd_twitter)
                             .color(materialDark)
                             .sizeDp(24)
                 }
                 3 -> {
+                    holder.about_app_title.setText(R.string.discuss_on_reddit)
+                    holder.about_app_subtitle.visibility = View.GONE
+                    holder.about_row_item_image.background = IconicsDrawable(requireActivity())
+                            .icon(CommunityMaterial.Icon.cmd_reddit)
+                            .color(materialDark)
+                            .sizeDp(24)
+                }
+                4 -> {
                     holder.about_app_title.setText(R.string.licenses)
                     holder.about_app_subtitle.visibility = View.GONE
                     holder.about_row_item_image.background = IconicsDrawable(requireActivity())
@@ -134,7 +142,7 @@ class AboutFragment : Fragment() {
                             .color(materialDark)
                             .sizeDp(24)
                 }
-                4 -> {
+                5 -> {
                     holder.about_app_title.setText(R.string.translations)
                     holder.about_app_subtitle.setText(R.string.help_translations)
                     holder.about_row_item_image.background = IconicsDrawable(requireActivity())
@@ -142,7 +150,7 @@ class AboutFragment : Fragment() {
                             .color(materialDark)
                             .sizeDp(24)
                 }
-                5 -> {
+                6 -> {
                     holder.about_app_title.setText(R.string.source)
                     holder.about_app_subtitle.setText(R.string.contribute_to_chromer)
                     holder.about_row_item_image.background = IconicsDrawable(requireActivity())
@@ -154,7 +162,7 @@ class AboutFragment : Fragment() {
         }
 
         override fun getItemCount(): Int {
-            return 6
+            return 7
         }
 
         internal inner class ItemHolder(override val containerView: View)
@@ -165,32 +173,38 @@ class AboutFragment : Fragment() {
             }
 
             override fun onClick(view: View) {
-                val position = adapterPosition
-                when (position) {
+                when (adapterPosition) {
                     0 -> return
                     1 -> Changelog.show(activity)
                     2 -> {
+                        val twitterIntent = Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("https://twitter.com/LynketApp")
+                        )
+                        requireActivity().startActivity(twitterIntent)
+                    }
+                    3 -> {
                         val communityIntent = Intent(
                                 Intent.ACTION_VIEW,
-                                Uri.parse("https://plus.google.com/communities/109754631011301174504")
+                                Uri.parse("https://www.reddit.com/r/lynket/")
                         )
                         requireActivity().startActivity(communityIntent)
                     }
-                    3 -> {
+                    4 -> {
                         val licenses = Intent(
                                 Intent.ACTION_VIEW,
                                 Uri.parse("http://htmlpreview.github.com/?https://github.com/arunkumar9t2/chromer/blob/master/notices.html")
                         )
                         requireActivity().startActivity(licenses)
                     }
-                    4 -> {
+                    5 -> {
                         val oneSkyIntent = Intent(
                                 Intent.ACTION_VIEW,
                                 Uri.parse("http://os0l2aw.oneskyapp.com/collaboration/project/62112")
                         )
                         requireActivity().startActivity(oneSkyIntent)
                     }
-                    5 -> {
+                    6 -> {
                         val sourceIntent = Intent(
                                 Intent.ACTION_VIEW,
                                 Uri.parse("https://github.com/arunkumar9t2/lynket-browser")

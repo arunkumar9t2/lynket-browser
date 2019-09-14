@@ -339,4 +339,5 @@
     <string name="browsing_mode_native_bubbles_guide">Guide</string>
     <string name="bubble_notification_group_title">Active bubbles</string>
     <string name="bubble_notification_group_description">Showing bubble notifications, swipe to expand</string>
+    <string name="discuss_on_reddit">Discuss on Reddit</string>
 </resources>
