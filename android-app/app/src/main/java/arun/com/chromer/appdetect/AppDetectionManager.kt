@@ -22,7 +22,6 @@ package arun.com.chromer.appdetect
 import android.app.Application
 import android.text.TextUtils
 import arun.com.chromer.settings.Preferences
-import arun.com.chromer.util.ServiceManager
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -37,12 +36,6 @@ constructor(private val application: Application) {
 
     // Last detected package name of app;
     var filteredPackage = ""
-        get() {
-            if (TextUtils.isEmpty(field)) {
-                ServiceManager.startAppDetectionService(application)
-            }
-            return field
-        }
 
     @get:Synchronized
     var nonFilteredPackage = ""

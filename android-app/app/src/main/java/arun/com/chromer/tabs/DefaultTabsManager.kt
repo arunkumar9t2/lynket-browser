@@ -30,6 +30,8 @@ import android.content.Intent
 import android.content.Intent.*
 import android.net.Uri
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
@@ -54,10 +56,7 @@ import arun.com.chromer.settings.Preferences
 import arun.com.chromer.settings.RxPreferences
 import arun.com.chromer.shared.Constants.*
 import arun.com.chromer.tabs.ui.TabsActivity
-import arun.com.chromer.util.DocumentUtils
-import arun.com.chromer.util.RxEventBus
-import arun.com.chromer.util.SafeIntent
-import arun.com.chromer.util.Utils
+import arun.com.chromer.util.*
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import dev.arunkumar.android.rxschedulers.SchedulerProvider
@@ -233,26 +232,32 @@ constructor(
             activity: Activity,
             intent: Intent
     ): Completable = io.reactivex.Single
-            .fromCallable<String> {
+            .fromCallable<Pair<String, Boolean>> {
                 // Safety check against malicious intents
                 val safeIntent = SafeIntent(intent)
                 val url = safeIntent.dataString
-
+                var proceed = true
                 // The first thing to check is if we should blacklist.
                 if (preferences.perAppSettings()) {
                     val lastApp = appDetectionManager.nonFilteredPackage
                     if (lastApp.isNotEmpty()) {
                         if (appRepository.isPackageBlacklisted(lastApp)) {
                             doBlacklistAction(activity, safeIntent)
-                            return@fromCallable url
+                            proceed = false
                         } else if (appRepository.isPackageIncognito(lastApp)) {
                             doIncognitoAction(activity, url)
-                            return@fromCallable url
+                            proceed = false
                         }
                     }
                 }
-                return@fromCallable url
-            }.flatMapCompletable { openUrlInternal(activity, Website(it), fromApp = false) }
+                url to proceed
+            }.flatMapCompletable { (url, proceed) ->
+                if (proceed) {
+                    openUrlInternal(activity, Website(url), fromApp = false)
+                } else {
+                    Completable.complete()
+                }
+            }
             .doOnError { Timber.e(it, "Critical error when processing incoming intent") }
             .onErrorComplete()
             .compose(schedulerProvider.poolToUi<Any>())
@@ -436,7 +441,12 @@ constructor(
                 var websiteColor = NO_COLOR
 
                 if (preferences.dynamicToolbarOnApp()) {
-                    appColor = appRepository.getPackageColorSync(appDetectionManager.filteredPackage)
+                    val lastApp = appDetectionManager.filteredPackage
+                    if (lastApp.isEmpty()) {
+                        ServiceManager.startAppDetectionService(application)
+                    } else {
+                        appColor = appRepository.getPackageColorSync(lastApp)
+                    }
                 }
                 if (preferences.dynamicToolbarOnWeb()) {
                     websiteColor = websiteRepository.getWebsiteColorSync(website.url)
@@ -459,7 +469,9 @@ constructor(
     private fun doIncognitoAction(activity: Activity, url: String) {
         openUrl(activity, Website(url), fromApp = false, incognito = true)
         if (BuildConfig.DEBUG) {
-            Toast.makeText(activity, "Incognito", Toast.LENGTH_SHORT).show()
+            Handler(Looper.getMainLooper()).post {
+                Toast.makeText(activity, "Incognito", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -499,20 +511,22 @@ constructor(
      * Shows a error dialog for various blacklist errors.
      */
     private fun showSecondaryBrowserHandlingError(activity: Activity, message: CharSequence) {
-        MaterialDialog.Builder(activity)
-                .title(R.string.secondary_browser_launching_error_title)
-                .content(message)
-                .iconRes(R.mipmap.ic_launcher)
-                .positiveText(R.string.launch_setting)
-                .negativeText(android.R.string.cancel)
-                .theme(Theme.LIGHT)
-                .positiveColorRes(R.color.colorAccent)
-                .negativeColorRes(R.color.colorAccent)
-                .onPositive { _, _ ->
-                    val chromerIntent = activity.packageManager.getLaunchIntentForPackage(activity.packageName)
-                    chromerIntent!!.addFlags(FLAG_ACTIVITY_CLEAR_TOP)
-                    activity.startActivity(chromerIntent)
-                }
-                .dismissListener { activity.finish() }.show()
+        Handler(Looper.getMainLooper()).post {
+            MaterialDialog.Builder(activity)
+                    .title(R.string.secondary_browser_launching_error_title)
+                    .content(message)
+                    .iconRes(R.mipmap.ic_launcher)
+                    .positiveText(R.string.launch_setting)
+                    .negativeText(android.R.string.cancel)
+                    .theme(Theme.LIGHT)
+                    .positiveColorRes(R.color.colorAccent)
+                    .negativeColorRes(R.color.colorAccent)
+                    .onPositive { _, _ ->
+                        val chromerIntent = activity.packageManager.getLaunchIntentForPackage(activity.packageName)
+                        chromerIntent!!.addFlags(FLAG_ACTIVITY_CLEAR_TOP)
+                        activity.startActivity(chromerIntent)
+                    }
+                    .dismissListener { activity.finish() }.show()
+        }
     }
 }
