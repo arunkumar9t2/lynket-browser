@@ -426,7 +426,7 @@ public class Preferences {
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean bottomBar() {
-        return getDefaultSharedPreferences().getBoolean(BOTTOM_BAR_ENABLED, false);
+        return getDefaultSharedPreferences().getBoolean(BOTTOM_BAR_ENABLED, true);
     }
 
     public void bottomBar(final boolean preference) {
