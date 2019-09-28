@@ -44,13 +44,13 @@ class WebsiteDecoder(private val context: Context, glide: Glide) : ResourceDecod
 
     private val placeholderColors = intArrayOf(
             Color.parseColor("#3891A6"),
-            Color.parseColor("#4C5B5C"),
             Color.parseColor("#FDE74C"),
             Color.parseColor("#DB5461"),
             Color.parseColor("#EC4E20"),
             Color.parseColor("#6EEB83"),
             Color.parseColor("#29335C"),
-            Color.parseColor("#E3655B")
+            Color.parseColor("#BDE4A8"),
+            Color.parseColor("#A491D3")
     )
 
     override fun handles(source: Website, options: Options): Boolean = true
