@@ -417,7 +417,7 @@ public class Preferences {
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean mergeTabs() {
-        return Utils.isLollipopAbove() && getDefaultSharedPreferences().getBoolean(MERGE_TABS_AND_APPS, false);
+        return Utils.isLollipopAbove() && getDefaultSharedPreferences().getBoolean(MERGE_TABS_AND_APPS, true);
     }
 
     public void mergeTabs(final boolean preference) {
