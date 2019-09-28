@@ -197,7 +197,10 @@ class HistoryFragment : BaseFragment(), Snackable, FabHandler {
 
         swipeRefreshLayout.apply {
             setColorSchemeColors(ContextCompat.getColor(context!!, R.color.colorPrimary), ContextCompat.getColor(context!!, R.color.accent))
-            setOnRefreshListener { loadHistory() }
+            setOnRefreshListener {
+                loadHistory()
+                isRefreshing = false
+            }
         }
 
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, LEFT or RIGHT) {
