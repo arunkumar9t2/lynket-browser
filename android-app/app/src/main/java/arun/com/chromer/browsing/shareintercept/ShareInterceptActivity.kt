@@ -21,25 +21,31 @@ package arun.com.chromer.browsing.shareintercept
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.content.Intent
+import android.content.Intent.*
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import arun.com.chromer.R
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.di.activity.ActivityComponent
-import arun.com.chromer.shared.Constants
+import arun.com.chromer.search.provider.SearchProviders
 import arun.com.chromer.shared.base.activity.BaseActivity
 import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.SafeIntent
 import arun.com.chromer.util.Utils
+import io.reactivex.rxkotlin.subscribeBy
+import timber.log.Timber
 import javax.inject.Inject
 
 @SuppressLint("GoogleAppIndexingApiWarning")
 class ShareInterceptActivity : BaseActivity() {
 
+    override fun getLayoutRes() = 0
+
     @Inject
     lateinit var tabsManager: TabsManager
+    @Inject
+    lateinit var searchProviders: SearchProviders
 
     @TargetApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,12 +55,14 @@ class ShareInterceptActivity : BaseActivity() {
             val action = safeIntent.action
             var text: String? = null
             when (action) {
-                Intent.ACTION_SEND -> if (safeIntent.hasExtra(Intent.EXTRA_TEXT)) {
-                    text = intent.extras?.getCharSequence(Intent.EXTRA_TEXT)?.toString()
+                ACTION_SEND -> if (safeIntent.hasExtra(EXTRA_TEXT)) {
+                    text = intent.extras?.getCharSequence(EXTRA_TEXT)?.toString()
                 }
-                Intent.ACTION_PROCESS_TEXT -> text = safeIntent.getStringExtra(Intent.EXTRA_PROCESS_TEXT)
+                ACTION_PROCESS_TEXT -> text = safeIntent.getStringExtra(EXTRA_PROCESS_TEXT)
             }
-            findAndOpenLink(text)
+            if (text?.isNotEmpty() == true) {
+                findAndOpenLink(text)
+            }
         } catch (exception: Exception) {
             invalidLink()
         } finally {
@@ -66,27 +74,29 @@ class ShareInterceptActivity : BaseActivity() {
         activityComponent.inject(this)
     }
 
-    override fun getLayoutRes(): Int = 0
-
-
-    private fun findAndOpenLink(receivedText: String?) {
-        var text: String? = receivedText ?: return
-        val urls = Utils.findURLs(text)
-        if (!urls.isEmpty()) {
+    @SuppressLint("CheckResult")
+    private fun findAndOpenLink(receivedText: String) {
+        val urls = Utils.findURLs(receivedText)
+        if (urls.isNotEmpty()) {
             // use only the first link
             val url = urls[0]
             openLink(url)
         } else {
-            // No urls were found, so lets do a google search with the text received.
-            text = Constants.G_SEARCH_URL + text!!.replace(" ", "+")
-            openLink(text)
+            searchProviders.selectedProvider
+                    .firstOrError()
+                    .map { it.getSearchUrl(receivedText) }
+                    .subscribeBy(
+                            onSuccess = ::openLink,
+                            onError = Timber::e
+                    )
         }
     }
 
     private fun openLink(url: String?) {
-        if (url != null) {
-            tabsManager.openUrl(this, website = Website(url))
-        } else invalidLink()
+        when (url) {
+            null -> invalidLink()
+            else -> tabsManager.openUrl(this, website = Website(url))
+        }
         finish()
     }
 

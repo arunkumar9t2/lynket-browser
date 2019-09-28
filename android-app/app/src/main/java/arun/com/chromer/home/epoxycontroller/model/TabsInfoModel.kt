@@ -1,6 +1,11 @@
 package arun.com.chromer.home.epoxycontroller.model
 
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import arun.com.chromer.R
+import arun.com.chromer.extenstions.gone
+import arun.com.chromer.extenstions.show
 import arun.com.chromer.tabs.TabsManager
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyAttribute.Option.DoNotHash
@@ -16,7 +21,7 @@ abstract class TabsInfoModel : KotlinEpoxyModelWithHolder<TabsInfoModel.ViewHold
     @EpoxyAttribute(DoNotHash)
     lateinit var tabsManager: TabsManager
 
-    private var revealed = false
+    private var init = false
 
     override fun bind(holder: ViewHolder) {
         super.bind(holder)
@@ -28,21 +33,30 @@ abstract class TabsInfoModel : KotlinEpoxyModelWithHolder<TabsInfoModel.ViewHold
         holder.containerView.setOnClickListener {
             tabsManager.showTabsActivity()
         }
-        /*holder.containerView.post {
-            if (!revealed) {
-                holder.tabsRevealView.run {
-                    post {
-                        circularRevealWithSelfCenter {
-                            postDelayed(50) {
-                                (holder.containerView as ViewGroup).prepareAutoTransition()
-                                gone()
-                            }
-                        }
+        if (!init) {
+            holder.tabsPreviewRecyclerView.apply {
+                (itemAnimator as? DefaultItemAnimator)?.supportsChangeAnimations = false
+                layoutManager = LinearLayoutManager(
+                        holder.containerView.context,
+                        RecyclerView.HORIZONTAL,
+                        false
+                )
+            }
+            init = true
+        }
+        if (tabs.isEmpty()) {
+            holder.tabsPreviewRecyclerView.gone()
+        } else {
+            holder.tabsPreviewRecyclerView.show()
+            holder.tabsPreviewRecyclerView.withModels {
+                tabs.forEach { tab ->
+                    tab {
+                        id(tab.hashCode())
+                        tab(tab)
                     }
                 }
-                revealed = true
             }
-        }*/
+        }
     }
 
     class ViewHolder : KotlinHolder()

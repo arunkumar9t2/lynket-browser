@@ -11,7 +11,7 @@ class ArticleBackgroundLoadingStrategy
 @Inject
 constructor(private val articlePreloader: ArticlePreloader) : BackgroundLoadingStrategy {
 
-    override fun perform(url: String) {
+    override fun prepare(url: String) {
         articlePreloader.preloadArticle(Uri.parse(url)) { success ->
             Timber.d("Article mode preloading for $url: $success")
         }

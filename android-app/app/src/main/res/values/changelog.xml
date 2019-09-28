@@ -36,6 +36,13 @@ a {
 <body>
 <strong>You can view this again in the About screen.</strong>
 <br></br>
+<strong>2.1.1</strong>
+<ul>
+    <li><b>FIX: </b> Open/Search with Lynket option not using selected search engine</li>
+    <li><b>FIX: </b> Aggressive background loading - sometimes tab not minimizing automatically.</li>
+    <li><b>IMPROVED: </b> Use Vibrant palette for placeholder icons</li>
+    <li><b>IMPROVED: </b> Preview tab icons in home screen</li>
+</ul>
 <strong>2.1</strong>
 <h4 class="list-heading">General</h4>
 <ul>

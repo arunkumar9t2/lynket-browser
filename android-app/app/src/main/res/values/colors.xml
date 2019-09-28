@@ -63,4 +63,6 @@
     <color name="secondary_text_color">#4c4c4c</color>
     <color name="material_grey_color">#727272</color>
     <color name="tutorialBackgrounColor">#20232C</color>
+
+    <color name="home_tabs_icon_color">#266DD3</color>
 </resources>

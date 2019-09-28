@@ -26,7 +26,6 @@ import arun.com.chromer.data.webarticle.WebArticleRepository
 import arun.com.chromer.data.webarticle.model.WebArticle
 import arun.com.chromer.search.provider.SearchProvider
 import arun.com.chromer.search.provider.SearchProviders
-import arun.com.chromer.settings.RxPreferences
 import arun.com.chromer.util.SchedulerProvider
 import io.reactivex.Observable
 import rx.subjects.PublishSubject
@@ -40,9 +39,7 @@ class BrowsingArticleViewModel
 @Inject
 constructor(
         private val webArticleRepository: WebArticleRepository,
-        private val schedulerProvider: dev.arunkumar.android.rxschedulers.SchedulerProvider,
-        private val searchProviders: SearchProviders,
-        private val rxPreferences: RxPreferences
+        searchProviders: SearchProviders
 ) : ViewModel() {
     private val subs = CompositeSubscription()
 
@@ -60,21 +57,7 @@ constructor(
                 }.subscribe { articleLiveData.value = it })
     }
 
-    val selectedSearchProvider: Observable<SearchProvider> = rxPreferences
-            .searchEngine
-            .observe()
-            .observeOn(schedulerProvider.pool)
-            .switchMap { selectedEngine ->
-                searchProviders
-                        .availableProviders
-                        .toObservable()
-                        .flatMapIterable { it }
-                        .filter { it.name == selectedEngine }
-                        .first(SearchProviders.GOOGLE_SEARCH_PROVIDER)
-                        .toObservable()
-            }.replay(1)
-            .refCount()
-            .observeOn(schedulerProvider.ui)
+    val selectedSearchProvider: Observable<SearchProvider> = searchProviders.selectedProvider
 
     fun loadArticle(url: String) = loadingQueue.onNext(url)
 

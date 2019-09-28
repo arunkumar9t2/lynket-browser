@@ -28,7 +28,7 @@
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
             android:scaleType="fitCenter"
-            android:tint="@color/primary"
+            android:tint="@color/home_tabs_icon_color"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -43,11 +43,31 @@
             android:layout_marginLeft="16dp"
             android:gravity="center|start"
             android:textColor="@color/primary_text_color"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tabsPreviewRecyclerView"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/tabsIcon"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="3 active tabs" />
+
+        <com.airbnb.epoxy.EpoxyRecyclerView
+            android:id="@+id/tabsPreviewRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="4dp"
+            android:foregroundGravity="left"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tabsIcon"
+            app:layout_constraintTop_toBottomOf="@+id/tabsDescription"
+            tools:itemCount="8"
+            tools:listitem="@layout/widget_tab_model_preview" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

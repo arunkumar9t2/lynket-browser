@@ -180,7 +180,7 @@ public class Preferences {
     }
 
     @Nullable
-    private String getDefaultCustomTabApp() {
+    public String getDefaultCustomTabApp() {
         if (CustomTabs.isPackageSupportCustomTabs(context, CHROME_PACKAGE))
             return CHROME_PACKAGE;
         final List<String> supportingPackages = CustomTabs.getCustomTabSupportingPackages(context);
@@ -417,14 +417,13 @@ public class Preferences {
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean mergeTabs() {
-        return Utils.isLollipopAbove() && getDefaultSharedPreferences().getBoolean(MERGE_TABS_AND_APPS, false);
+        return Utils.isLollipopAbove() && getDefaultSharedPreferences().getBoolean(MERGE_TABS_AND_APPS, true);
     }
 
     public void mergeTabs(final boolean preference) {
         getDefaultSharedPreferences().edit().putBoolean(MERGE_TABS_AND_APPS, preference).apply();
     }
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean bottomBar() {
         return getDefaultSharedPreferences().getBoolean(BOTTOM_BAR_ENABLED, true);
     }

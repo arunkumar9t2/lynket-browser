@@ -48,9 +48,12 @@
                 android:paddingBottom="8dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lynketHeader"
                 tools:itemCount="5"
-                tools:listitem="@layout/layout_provider_info_card" />
+                tools:listitem="@layout/layout_provider_info_card"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/lynketHeader"
@@ -103,6 +106,7 @@
                 android:id="@+id/materialSearchView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
