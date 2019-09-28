@@ -9,6 +9,7 @@ import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.extenstions.StringResource
 import arun.com.chromer.extenstions.appName
 import arun.com.chromer.home.epoxycontroller.model.CustomTabProviderInfo
+import arun.com.chromer.settings.Preferences
 import arun.com.chromer.settings.RxPreferences
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.util.glide.appicon.ApplicationIcon
@@ -27,7 +28,8 @@ constructor(
         private val application: Application,
         private val rxPreferences: RxPreferences,
         private val schedulerProvider: SchedulerProvider,
-        private val historyRepository: HistoryRepository
+        private val historyRepository: HistoryRepository,
+        private val preferences: Preferences
 ) : RxViewModel() {
 
     val providerInfoLiveData = MutableLiveData<CustomTabProviderInfo>()
@@ -51,7 +53,12 @@ constructor(
 
     private fun bindProviderInfo() {
         Observable.combineLatest(
-                rxPreferences.customTabProviderPref.observe(),
+                rxPreferences.customTabProviderPref.observe().map { packageName ->
+                    when {
+                        packageName.isEmpty() -> preferences.defaultCustomTabApp ?: ""
+                        else -> packageName
+                    }
+                },
                 rxPreferences.incognitoPref.observe(),
                 rxPreferences.webviewPref.observe(),
                 Function3 { customTabProvider: String, isIncognito: Boolean, isWebView: Boolean ->

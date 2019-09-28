@@ -180,7 +180,7 @@ public class Preferences {
     }
 
     @Nullable
-    private String getDefaultCustomTabApp() {
+    public String getDefaultCustomTabApp() {
         if (CustomTabs.isPackageSupportCustomTabs(context, CHROME_PACKAGE))
             return CHROME_PACKAGE;
         final List<String> supportingPackages = CustomTabs.getCustomTabSupportingPackages(context);
