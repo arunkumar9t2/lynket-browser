@@ -19,14 +19,16 @@
 
 package arun.com.chromer.util.glide.favicon
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
+import android.graphics.Bitmap.Config.ARGB_8888
 import android.graphics.Paint.ANTI_ALIAS_FLAG
 import androidx.annotation.ColorInt
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.util.ColorUtil
-import arun.com.chromer.util.Utils
+import arun.com.chromer.util.Utils.*
 import arun.com.chromer.util.glide.GlideApp
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.Options
@@ -35,19 +37,20 @@ import com.bumptech.glide.load.engine.Resource
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
 import com.bumptech.glide.load.resource.bitmap.BitmapResource
 import timber.log.Timber
-import java.util.*
 
 class WebsiteDecoder(private val context: Context, glide: Glide) : ResourceDecoder<Website, Bitmap> {
     private val bitmapPool: BitmapPool = glide.bitmapPool
-    val size = Utils.dpToPx(56.0)
+    private val size = dpToPx(56.0)
 
     private val placeholderColors = intArrayOf(
-            Color.parseColor("#D32F2F"),
-            Color.parseColor("#C2185B"),
-            Color.parseColor("#303F9F"),
-            Color.parseColor("#6A1B9A"),
-            Color.parseColor("#37474F"),
-            Color.parseColor("#2E7D32")
+            Color.parseColor("#3891A6"),
+            Color.parseColor("#4C5B5C"),
+            Color.parseColor("#FDE74C"),
+            Color.parseColor("#DB5461"),
+            Color.parseColor("#EC4E20"),
+            Color.parseColor("#6EEB83"),
+            Color.parseColor("#29335C"),
+            Color.parseColor("#E3655B")
     )
 
     override fun handles(source: Website, options: Options): Boolean = true
@@ -65,14 +68,14 @@ class WebsiteDecoder(private val context: Context, glide: Glide) : ResourceDecod
             null
         }
         return try {
-            if (Utils.isValidFavicon(websiteFavicon)) {
+            if (isValidFavicon(websiteFavicon)) {
                 BitmapResource.obtain(websiteFavicon!!.copy(websiteFavicon.config, true), bitmapPool)
             } else {
                 // Draw a placeholder using theme color if it exists, else use a random color.
                 val color = if (website.themeColor() != Constants.NO_COLOR) {
                     website.themeColor()
                 } else {
-                    placeholderColors[Random().nextInt(placeholderColors.size)]
+                    placeholderColors.random()
                 }
                 val createdIcon = createPlaceholderImage(color, website.safeLabel())
                 BitmapResource.obtain(createdIcon.copy(createdIcon.config, true), bitmapPool)
@@ -83,24 +86,29 @@ class WebsiteDecoder(private val context: Context, glide: Glide) : ResourceDecod
         }
     }
 
+    @SuppressLint("DefaultLocale")
     private fun createPlaceholderImage(@ColorInt color: Int, label: String): Bitmap {
-        val icon = bitmapPool.get(size, size, Bitmap.Config.ARGB_8888)
+        val icon = bitmapPool.get(size, size, ARGB_8888)
         val canvas = Canvas(icon)
-        val shadowRadius = Utils.dpToPx(1.8).toFloat()
-        val shadowDx = Utils.dpToPx(0.1).toFloat()
-        val shadowDy = Utils.dpToPx(1.0).toFloat()
-        val textSize = Utils.dpToPx(24.0).toFloat()
+        val shadowRadius = dpToPx(1.8).toFloat()
+        val shadowDx = dpToPx(0.1).toFloat()
+        val shadowDy = dpToPx(0.8).toFloat()
+        val textSize = dpToPx(24.0).toFloat()
 
         val bgPaint = Paint(ANTI_ALIAS_FLAG).apply {
             style = Paint.Style.FILL
             setColor(color)
-            setShadowLayer(shadowRadius, shadowDx, shadowDy, Color.parseColor("#44000000"))
+            setShadowLayer(shadowRadius, shadowDx, shadowDy, Color.parseColor("#33000000"))
         }
 
-        val padding = Utils.dpToPx(1.0)
-        val corner = Utils.dpToPx(3.0)
-        canvas.drawRoundRect(RectF(padding.toFloat(), padding.toFloat(), (size - padding).toFloat(), (size - padding).toFloat()),
-                corner.toFloat(), corner.toFloat(), bgPaint)
+        val padding = dpToPx(1.0)
+
+        canvas.drawCircle(
+                (size / 2).toFloat() - padding / 2,
+                (size / 2).toFloat() - padding / 2,
+                (size / 2).toFloat() - padding,
+                bgPaint
+        )
 
         val textPaint = Paint(ANTI_ALIAS_FLAG).apply {
             typeface = Typeface.defaultFromStyle(Typeface.NORMAL)
@@ -108,7 +116,7 @@ class WebsiteDecoder(private val context: Context, glide: Glide) : ResourceDecod
             setColor(ColorUtil.getForegroundWhiteOrBlack(color))
             style = Paint.Style.FILL
         }
-        drawTextInCanvasCentre(canvas, textPaint, Utils.getFirstLetter(label).toUpperCase())
+        drawTextInCanvasCentre(canvas, textPaint, getFirstLetter(label).toUpperCase())
         return icon
     }
 
