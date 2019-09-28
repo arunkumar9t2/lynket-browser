@@ -3,6 +3,9 @@ package arun.com.chromer.search.provider
 import android.net.Uri
 import android.util.Patterns.WEB_URL
 import androidx.core.net.toUri
+import arun.com.chromer.settings.RxPreferences
+import dev.arunkumar.android.rxschedulers.SchedulerProvider
+import io.reactivex.Observable
 import io.reactivex.Single
 import java.util.*
 import javax.inject.Inject
@@ -25,7 +28,11 @@ data class SearchProvider(
 
 @Singleton
 class SearchProviders
-@Inject constructor() {
+@Inject
+constructor(
+        rxPreferences: RxPreferences,
+        schedulerProvider: SchedulerProvider
+) {
 
     val availableProviders: Single<List<SearchProvider>> = Single.fromCallable {
         listOf(
@@ -47,6 +54,21 @@ class SearchProviders
                 )
         )
     }
+
+    val selectedProvider: Observable<SearchProvider> = rxPreferences
+            .searchEngine
+            .observe()
+            .observeOn(schedulerProvider.pool)
+            .switchMap { selectedEngine ->
+                availableProviders
+                        .toObservable()
+                        .flatMapIterable { it }
+                        .filter { it.name == selectedEngine }
+                        .first(GOOGLE_SEARCH_PROVIDER)
+                        .toObservable()
+            }.replay(1)
+            .refCount()
+            .observeOn(schedulerProvider.ui)
 
     companion object {
         const val GOOGLE = "Google"

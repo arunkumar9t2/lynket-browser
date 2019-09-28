@@ -96,13 +96,13 @@ constructor(
                 .color(normalColor)
                 .sizeDp(16)
     }
-    private val voiceIcon: IconicsDrawable  by lazy {
+    private val voiceIcon: IconicsDrawable by lazy {
         IconicsDrawable(context)
                 .icon(CommunityMaterial.Icon.cmd_microphone)
                 .color(normalColor)
                 .sizeDp(18)
     }
-    private val menuIcon: IconicsDrawable  by lazy {
+    private val menuIcon: IconicsDrawable by lazy {
         IconicsDrawable(context)
                 .icon(CommunityMaterial.Icon.cmd_menu)
                 .color(normalColor)

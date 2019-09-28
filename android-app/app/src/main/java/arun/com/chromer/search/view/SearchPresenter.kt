@@ -5,7 +5,6 @@ import arun.com.chromer.di.scopes.PerView
 import arun.com.chromer.di.view.Detaches
 import arun.com.chromer.search.provider.SearchProvider
 import arun.com.chromer.search.provider.SearchProviders
-import arun.com.chromer.search.provider.SearchProviders.Companion.GOOGLE_SEARCH_PROVIDER
 import arun.com.chromer.search.suggestion.SuggestionsEngine
 import arun.com.chromer.search.suggestion.items.SuggestionItem
 import arun.com.chromer.search.suggestion.items.SuggestionType
@@ -58,19 +57,7 @@ constructor(
             .subscribeOn(schedulerProvider.pool)
             .share()
 
-    val selectedSearchProvider: Observable<SearchProvider> = rxPreferences
-            .searchEngine
-            .observe()
-            .observeOn(schedulerProvider.pool)
-            .switchMap { selectedEngine ->
-                searchEngines.flatMapIterable { it }
-                        .filter { it.name == selectedEngine }
-                        .first(GOOGLE_SEARCH_PROVIDER)
-                        .toObservable()
-            }.replay(1)
-            .refCount()
-            .observeOn(schedulerProvider.ui)
-
+    val selectedSearchProvider: Observable<SearchProvider> = searchProviders.selectedProvider
 
     fun getSearchUrl(searchUrl: String): Observable<String> {
         return selectedSearchProvider.take(1)
