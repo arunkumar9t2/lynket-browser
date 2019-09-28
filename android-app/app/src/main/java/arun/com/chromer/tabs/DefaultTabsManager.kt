@@ -34,7 +34,7 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
 import androidx.annotation.ColorInt
-import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getColor
 import arun.com.chromer.BuildConfig
 import arun.com.chromer.R
 import arun.com.chromer.appdetect.AppDetectionManager
@@ -352,14 +352,14 @@ constructor(
         // If this command was not issued for minimizing, then attempt aggressive loading.
         if (preferences.aggressiveLoading() && !fromMinimize) {
             when {
-                preferences.articleMode() -> backgroundLoadingStrategyFactory[ARTICLE].perform(url)
+                preferences.articleMode() -> backgroundLoadingStrategyFactory[ARTICLE].prepare(url)
                 else -> {
                     if (shouldUseWebView) {
                         if (!bubbles) {
-                            backgroundLoadingStrategyFactory[WEB_VIEW].perform(url)
+                            backgroundLoadingStrategyFactory[WEB_VIEW].prepare(url)
                         }
                     } else {
-                        backgroundLoadingStrategyFactory[CUSTOM_TAB].perform(url)
+                        backgroundLoadingStrategyFactory[CUSTOM_TAB].prepare(url)
                     }
                     openBrowsingTab(
                             context,
@@ -449,9 +449,10 @@ constructor(
                     }
                 }
                 if (preferences.dynamicToolbarOnWeb()) {
-                    websiteColor = websiteRepository.getWebsiteColorSync(website.url)
-                    if (websiteColor == NO_COLOR) {
-                        websiteColor = website.themeColor()
+                    websiteColor = if (website.themeColor() != NO_COLOR) {
+                        website.themeColor()
+                    } else {
+                        websiteRepository.getWebsiteColorSync(website.url)
                     }
                 }
                 return when {
@@ -462,7 +463,7 @@ constructor(
             } else {
                 return preferences.toolbarColor()
             }
-        } else return ContextCompat.getColor(application, R.color.primary)
+        } else return getColor(application, R.color.primary)
     }
 
 
