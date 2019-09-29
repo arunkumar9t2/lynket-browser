@@ -1,5 +1,6 @@
 package arun.com.chromer.home.epoxycontroller.model
 
+import android.view.View
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,8 +22,6 @@ abstract class TabsInfoModel : KotlinEpoxyModelWithHolder<TabsInfoModel.ViewHold
     @EpoxyAttribute(DoNotHash)
     lateinit var tabsManager: TabsManager
 
-    private var init = false
-
     override fun bind(holder: ViewHolder) {
         super.bind(holder)
         holder.tabsDescription.text = holder.tabsDescription.context.resources.getQuantityString(
@@ -30,19 +29,8 @@ abstract class TabsInfoModel : KotlinEpoxyModelWithHolder<TabsInfoModel.ViewHold
                 tabs.size,
                 tabs.size
         )
-        holder.containerView.setOnClickListener {
+        holder.tabsCard.setOnClickListener {
             tabsManager.showTabsActivity()
-        }
-        if (!init) {
-            holder.tabsPreviewRecyclerView.apply {
-                (itemAnimator as? DefaultItemAnimator)?.supportsChangeAnimations = false
-                layoutManager = LinearLayoutManager(
-                        holder.containerView.context,
-                        RecyclerView.HORIZONTAL,
-                        false
-                )
-            }
-            init = true
         }
         if (tabs.isEmpty()) {
             holder.tabsPreviewRecyclerView.gone()
@@ -53,11 +41,24 @@ abstract class TabsInfoModel : KotlinEpoxyModelWithHolder<TabsInfoModel.ViewHold
                     tab {
                         id(tab.hashCode())
                         tab(tab)
+                        tabsManager(tabsManager)
                     }
                 }
             }
         }
     }
 
-    class ViewHolder : KotlinHolder()
+    class ViewHolder : KotlinHolder() {
+        override fun bindView(itemView: View) {
+            super.bindView(itemView)
+            tabsPreviewRecyclerView.apply {
+                (itemAnimator as? DefaultItemAnimator)?.supportsChangeAnimations = false
+                layoutManager = LinearLayoutManager(
+                        containerView.context,
+                        RecyclerView.HORIZONTAL,
+                        false
+                )
+            }
+        }
+    }
 }

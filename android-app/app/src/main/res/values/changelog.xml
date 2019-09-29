@@ -36,6 +36,10 @@ a {
 <body>
 <strong>You can view this again in the About screen.</strong>
 <br></br>
+<strong>2.1.2</strong>
+<ul>
+    <li><b>FIX: </b> Clear text communication error.</li>
+</ul>
 <strong>2.1.1</strong>
 <ul>
     <li><b>FIX: </b> Open/Search with Lynket option not using selected search engine</li>
