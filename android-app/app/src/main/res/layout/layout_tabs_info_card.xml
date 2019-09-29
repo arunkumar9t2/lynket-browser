@@ -2,13 +2,12 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tabsCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="8dp"
     android:layout_marginTop="4dp"
     android:layout_marginRight="8dp"
-    android:clickable="true"
-    android:focusable="true"
     app:cardPreventCornerOverlap="true"
     app:cardUseCompatPadding="true">
 
@@ -44,7 +43,7 @@
             android:gravity="center|start"
             android:textColor="@color/primary_text_color"
             app:layout_constraintBottom_toTopOf="@+id/tabsPreviewRecyclerView"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tabsButton"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/tabsIcon"
             app:layout_constraintTop_toTopOf="parent"
@@ -61,13 +60,26 @@
             android:foregroundGravity="left"
             android:orientation="horizontal"
             android:visibility="gone"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tabsButton"
             app:layout_constraintStart_toEndOf="@+id/tabsIcon"
             app:layout_constraintTop_toBottomOf="@+id/tabsDescription"
             tools:itemCount="8"
-            tools:listitem="@layout/widget_tab_model_preview" />
+            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/widget_tab_model_preview"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tabsButton"
+            style="@style/FeedBorderlessButton"
+            android:layout_height="0dp"
+            android:paddingStart="8dp"
+            android:paddingLeft="8dp"
+            android:text="@string/title_tabs"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

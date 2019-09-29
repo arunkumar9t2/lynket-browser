@@ -49,8 +49,7 @@ class WebsiteDecoder(private val context: Context, glide: Glide) : ResourceDecod
             Color.parseColor("#EC4E20"),
             Color.parseColor("#6EEB83"),
             Color.parseColor("#29335C"),
-            Color.parseColor("#BDE4A8"),
-            Color.parseColor("#A491D3")
+            Color.parseColor("#BDE4A8")
     )
 
     override fun handles(source: Website, options: Options): Boolean = true
