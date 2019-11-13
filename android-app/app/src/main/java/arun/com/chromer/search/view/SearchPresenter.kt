@@ -12,10 +12,17 @@ import arun.com.chromer.settings.RxPreferences
 import com.jakewharton.rxrelay2.PublishRelay
 import dev.arunkumar.android.rxschedulers.SchedulerProvider
 import io.reactivex.BackpressureStrategy.LATEST
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import timber.log.Timber
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
+
+data class SuggestionResult(
+        val query: String,
+        val suggestionType: SuggestionType,
+        val suggestions: List<SuggestionItem>
+)
 
 @SuppressLint("CheckResult")
 @PerView
@@ -29,17 +36,20 @@ constructor(
         searchProviders: SearchProviders,
         private val rxPreferences: RxPreferences
 ) {
-    private val suggestionsSubject = PublishRelay.create<Pair<SuggestionType, List<SuggestionItem>>>()
-    val suggestions: Observable<Pair<SuggestionType, List<SuggestionItem>>> = suggestionsSubject.hide()
+    private val suggestionsSubject = PublishRelay.create<SuggestionResult>()
+    val suggestions: Observable<SuggestionResult> = suggestionsSubject.hide()
 
     fun registerSearch(queryObservable: Observable<String>) {
         queryObservable
                 .toFlowable(LATEST)
                 .debounce(200, MILLISECONDS, schedulerProvider.pool)
                 .doOnNext { Timber.d(it) }
-                .compose(suggestionsEngine.suggestionsTransformer())
-                .publish(suggestionsEngine.distinctSuggestionsPublishSelector())
-                .takeUntil(detaches.toFlowable(LATEST))
+                .flatMap { query ->
+                    Flowable.just(query)
+                            .compose(suggestionsEngine.suggestionsTransformer())
+                            .publish(suggestionsEngine.distinctSuggestionsPublishSelector())
+                            .map { SuggestionResult(query, it.first, it.second) }
+                }.takeUntil(detaches.toFlowable(LATEST))
                 .subscribe(suggestionsSubject::accept)
     }
 

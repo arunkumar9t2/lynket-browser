@@ -59,6 +59,7 @@ constructor(
                 .sizeDp(18)
     }
 
+    var query: String = ""
 
     var copySuggestions: List<SuggestionItem> = emptyList()
         set(value) {
@@ -146,6 +147,7 @@ constructor(
                         id(suggestion.hashCode())
                         website(suggestion.website)
                         tabsManager(tabsManager)
+                        query(query)
                     }
                 }.count().let { size ->
                     if (size != 0) {
@@ -171,6 +173,7 @@ constructor(
                 historyIcon(historyIcon)
                 searchIcon(searchIcon)
                 spanSizeOverride(TotalSpanOverride)
+                query(query)
                 onClickListener { _ ->
                     suggestionsClicksRelay.accept(suggestion)
                 }
