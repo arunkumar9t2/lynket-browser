@@ -32,8 +32,8 @@ import dev.arunkumar.android.rxschedulers.SchedulerProvider
 import hu.akarnokd.rxjava.interop.RxJavaInterop
 import io.reactivex.Flowable
 import io.reactivex.FlowableTransformer
+import io.reactivex.functions.Function
 import timber.log.Timber
-import timber.log.Timber.e
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -112,6 +112,21 @@ constructor(
                         )
                     }
         }
+    }
+
+    /**
+     * A function selector that transforms a source [Flowable] emitted from a [suggestionsTransformer]
+     * such that each [SuggestionType] and its [List] of [SuggestionItem]s are unique.
+     */
+    fun distinctSuggestionsPublishSelector() = Function<
+            Flowable<Pair<SuggestionType, List<SuggestionItem>>>,
+            Flowable<Pair<SuggestionType, List<SuggestionItem>>>
+            > { source ->
+        Flowable.mergeArray(
+                source.filter { it.first == COPY }.distinctUntilChanged(),
+                source.filter { it.first == GOOGLE }.distinctUntilChanged(),
+                source.filter { it.first == HISTORY }.distinctUntilChanged()
+        )
     }
 
     /**

@@ -26,7 +26,7 @@ constructor(
         private val schedulerProvider: SchedulerProvider,
         @param:Detaches
         private val detaches: Observable<Unit>,
-        private val searchProviders: SearchProviders,
+        searchProviders: SearchProviders,
         private val rxPreferences: RxPreferences
 ) {
     private val suggestionsSubject = PublishRelay.create<Pair<SuggestionType, List<SuggestionItem>>>()
@@ -38,6 +38,7 @@ constructor(
                 .debounce(200, MILLISECONDS, schedulerProvider.pool)
                 .doOnNext { Timber.d(it) }
                 .compose(suggestionsEngine.suggestionsTransformer())
+                .publish(suggestionsEngine.distinctSuggestionsPublishSelector())
                 .takeUntil(detaches.toFlowable(LATEST))
                 .subscribe(suggestionsSubject::accept)
     }
