@@ -1,12 +1,8 @@
 package arun.com.chromer.search.suggestion.model
 
-import android.graphics.Typeface.BOLD
 import android.graphics.drawable.Drawable
 import android.text.TextUtils
-import android.text.style.StyleSpan
 import android.view.View
-import androidx.core.text.set
-import androidx.core.text.toSpannable
 import arun.com.chromer.R
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.show
@@ -35,18 +31,7 @@ abstract class SuggestionLayoutModel : KotlinEpoxyModelWithHolder<SuggestionLayo
     override fun bind(holder: ViewHolder) {
         super.bind(holder)
         holder.apply {
-            val query = suggestionItem.query
-            val titleSpannable = suggestionItem.title.toSpannable()
-
-            if (query.isNotEmpty()) {
-                val start = titleSpannable.indexOf(query, ignoreCase = true)
-                if (start != -1) {
-                    titleSpannable[start, start + query.length] = StyleSpan(BOLD)
-                }
-            }
-
-            suggestionsText.text = titleSpannable
-
+            suggestionsText.text = suggestionItem.title
             when (suggestionItem.type) {
                 COPY -> suggestionIcon.setImageDrawable(copyIcon)
                 GOOGLE -> suggestionIcon.setImageDrawable(searchIcon)

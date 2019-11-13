@@ -19,7 +19,7 @@
 
 package arun.com.chromer.search.suggestion
 
-import `in`.arunkumarsampath.suggestions.RxSuggestions.suggestionsTransformer
+import `in`.arunkumarsampath.suggestions.RxSuggestions
 import android.app.Application
 import arun.com.chromer.R
 import arun.com.chromer.data.history.HistoryRepository
@@ -29,8 +29,7 @@ import arun.com.chromer.search.suggestion.items.SuggestionType
 import arun.com.chromer.search.suggestion.items.SuggestionType.*
 import arun.com.chromer.util.Utils
 import dev.arunkumar.android.rxschedulers.SchedulerProvider
-import hu.akarnokd.rxjava.interop.RxJavaInterop.toV2Flowable
-import hu.akarnokd.rxjava.interop.RxJavaInterop.toV2Transformer
+import hu.akarnokd.rxjava.interop.RxJavaInterop
 import io.reactivex.Flowable
 import io.reactivex.FlowableTransformer
 import io.reactivex.functions.Function
@@ -51,6 +50,8 @@ constructor(
         private val schedulerProvider: SchedulerProvider
 ) {
     private val suggestionsDebounce = 200L
+    private val suggestionsLimit = 12
+
     /**
      * Trims and filters empty strings in stream.
      */
@@ -72,17 +73,12 @@ constructor(
                     emptyList()
                 } else {
                     val fullCopiedText = CopySuggestionItem(
-                            "",
                             copiedText.trim(),
                             application.getString(R.string.text_you_copied)
                     )
                     val extractedLinks = Utils.findURLs(copiedText)
                             .map {
-                                CopySuggestionItem(
-                                        "",
-                                        it,
-                                        application.getString(R.string.link_you_copied)
-                                )
+                                CopySuggestionItem(it, application.getString(R.string.link_you_copied))
                             }.toMutableList()
                     extractedLinks.apply {
                         add(fullCopiedText)
@@ -137,17 +133,14 @@ constructor(
      * Fetches suggestions from Google and converts it to {@link GoogleSuggestionItem}
      */
     private fun googleTransformer(): FlowableTransformer<String, List<SuggestionItem>> {
-        return FlowableTransformer { upstream ->
+        return FlowableTransformer { query ->
             if (!Utils.isOnline(application)) {
                 Flowable.just(emptyList())
-            } else upstream
-                    .switchMap { query ->
-                        Flowable.just(query)
-                                .compose(toV2Transformer(suggestionsTransformer(5)))
-                                .map { query to it }
-                    }.doOnError(Timber::e)
-                    .map<List<SuggestionItem>> { (query, suggestions) ->
-                        suggestions.map { suggestion -> GoogleSuggestionItem(query, suggestion) }
+            } else query
+                    .compose(RxJavaInterop.toV2Transformer(RxSuggestions.suggestionsTransformer(suggestionsLimit)))
+                    .doOnError(Timber::e)
+                    .map<List<SuggestionItem>> {
+                        it.map { query -> GoogleSuggestionItem(query) }
                     }.onErrorReturn { emptyList() }
         }
     }
@@ -156,15 +149,13 @@ constructor(
      * Fetches matching items from History database and converts them to list of suggestions.
      */
     private fun historyTransformer(): FlowableTransformer<String, List<SuggestionItem>> {
-        return FlowableTransformer { upstream ->
-            upstream.debounce(suggestionsDebounce, TimeUnit.MILLISECONDS)
-                    .switchMap { query ->
-                        toV2Flowable(historyRepository.search(query)).map { query to it }
-                    }.map<List<SuggestionItem>> { (query, suggestions) ->
+        return FlowableTransformer { query ->
+            query.debounce(suggestionsDebounce, TimeUnit.MILLISECONDS)
+                    .switchMap { RxJavaInterop.toV2Flowable(historyRepository.search(it)) }
+                    .map<List<SuggestionItem>> { suggestions ->
                         suggestions.asSequence()
                                 .map { website ->
                                     HistorySuggestionItem(
-                                            query,
                                             website,
                                             website.safeLabel(),
                                             website.url

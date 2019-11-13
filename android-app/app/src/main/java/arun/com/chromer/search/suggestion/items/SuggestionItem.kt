@@ -29,27 +29,23 @@ enum class SuggestionType {
 }
 
 sealed class SuggestionItem(
-        open val query: String,
         open val title: String,
         open val subTitle: String? = null,
         val type: SuggestionType = GOOGLE
 ) {
     data class CopySuggestionItem(
-            override val query: String,
             override val title: String,
             override val subTitle: String
-    ) : SuggestionItem(query, title, subTitle, COPY)
+    ) : SuggestionItem(title, subTitle, COPY)
 
     data class GoogleSuggestionItem(
-            override val query: String,
             override val title: String,
             override val subTitle: String? = null
-    ) : SuggestionItem(query, title, subTitle, GOOGLE)
+    ) : SuggestionItem(title, subTitle, GOOGLE)
 
     data class HistorySuggestionItem(
-            override val query: String,
             val website: Website,
             override val title: String,
             override val subTitle: String? = null
-    ) : SuggestionItem(query, title, subTitle, HISTORY)
+    ) : SuggestionItem(title, subTitle, HISTORY)
 }
