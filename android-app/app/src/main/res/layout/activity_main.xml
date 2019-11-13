@@ -44,6 +44,7 @@
                 android:id="@+id/homeFeedRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:overScrollMode="never"
                 android:clipToPadding="false"
                 android:paddingBottom="8dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
