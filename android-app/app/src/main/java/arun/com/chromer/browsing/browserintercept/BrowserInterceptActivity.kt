@@ -25,6 +25,7 @@ import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import arun.com.chromer.R
 import arun.com.chromer.di.activity.ActivityComponent
+import arun.com.chromer.extenstions.finishAndRemoveTaskCompat
 import arun.com.chromer.shared.base.activity.BaseActivity
 import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.SafeIntent
@@ -47,11 +48,9 @@ class BrowserInterceptActivity : BaseActivity() {
                 return
             }
             defaultTabsManager.processIncomingIntent(this, intent)
-                    .subscribeBy(onComplete = {
-                        finish()
-                    })
+                    .subscribeBy(onComplete = { finishAndRemoveTaskCompat() })
         } ?: run {
-            finish()
+            finishAndRemoveTaskCompat()
         }
 
     }
@@ -62,6 +61,6 @@ class BrowserInterceptActivity : BaseActivity() {
 
     private fun invalidLink() {
         Toast.makeText(this, getString(R.string.unsupported_link), LENGTH_SHORT).show()
-        finish()
+        finishAndRemoveTaskCompat()
     }
 }
