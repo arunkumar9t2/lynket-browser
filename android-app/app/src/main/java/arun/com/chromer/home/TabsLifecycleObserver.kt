@@ -42,6 +42,7 @@ constructor(
                             }.toList()
                             .toObservable()
                             .startWith(tabs)
+                            .debounce(200, TimeUnit.MILLISECONDS)
                 }
                 .takeUntil(stops)
                 .compose(schedulerProvider.poolToUi())
