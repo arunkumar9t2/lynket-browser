@@ -9,6 +9,7 @@ import arun.com.chromer.bubbles.FloatingBubble
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.shared.Constants.*
 import arun.com.chromer.util.Utils
+import dev.arunkumar.android.rxschedulers.SchedulerProvider
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -16,7 +17,10 @@ import javax.inject.Singleton
 @Singleton
 class WebHeadsFloatingBubble
 @Inject
-constructor(private val application: Application) : FloatingBubble {
+constructor(
+        private val application: Application,
+        private val schedulerProvider: SchedulerProvider
+) : FloatingBubble {
 
     override fun openBubble(
             website: Website,
@@ -37,7 +41,9 @@ constructor(private val application: Application) : FloatingBubble {
                 }
                 ContextCompat.startForegroundService(ctx, webHeadLauncher)
             } else {
-                Utils.openDrawOverlaySettings(ctx)
+                schedulerProvider.ui.scheduleDirect {
+                    Utils.openDrawOverlaySettings(ctx)
+                }
             }
         }
     }
