@@ -19,7 +19,7 @@
 
 package arun.com.chromer.search.suggestion
 
-import `in`.arunkumarsampath.suggestions.RxSuggestions
+import `in`.arunkumarsampath.suggestions.RxSuggestions.suggestionsTransformer
 import android.app.Application
 import arun.com.chromer.R
 import arun.com.chromer.data.history.HistoryRepository
@@ -29,12 +29,13 @@ import arun.com.chromer.search.suggestion.items.SuggestionType
 import arun.com.chromer.search.suggestion.items.SuggestionType.*
 import arun.com.chromer.util.Utils
 import dev.arunkumar.android.rxschedulers.SchedulerProvider
-import hu.akarnokd.rxjava.interop.RxJavaInterop
+import hu.akarnokd.rxjava.interop.RxJavaInterop.toV2Flowable
+import hu.akarnokd.rxjava.interop.RxJavaInterop.toV2Transformer
 import io.reactivex.Flowable
 import io.reactivex.FlowableTransformer
+import io.reactivex.functions.Function
 import timber.log.Timber
-import timber.log.Timber.e
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -50,7 +51,6 @@ constructor(
         private val schedulerProvider: SchedulerProvider
 ) {
     private val suggestionsDebounce = 200L
-    private val suggestionsLimit = 12
 
     /**
      * Trims and filters empty strings in stream.
@@ -91,8 +91,8 @@ constructor(
      * clipboard, history and google suggestions.
      */
     fun suggestionsTransformer(): FlowableTransformer<String, Pair<SuggestionType, List<SuggestionItem>>> {
-        return FlowableTransformer { suggestion ->
-            suggestion
+        return FlowableTransformer { upstream ->
+            upstream
                     .observeOn(schedulerProvider.pool)
                     .compose(emptyStringFilter())
                     .switchMap { query ->
@@ -115,14 +115,29 @@ constructor(
     }
 
     /**
+     * A function selector that transforms a source [Flowable] emitted from a [suggestionsTransformer]
+     * such that each [SuggestionType] and its [List] of [SuggestionItem]s are unique.
+     */
+    fun distinctSuggestionsPublishSelector() = Function<
+            Flowable<Pair<SuggestionType, List<SuggestionItem>>>,
+            Flowable<Pair<SuggestionType, List<SuggestionItem>>>
+            > { source ->
+        Flowable.mergeArray(
+                source.filter { it.first == COPY }.distinctUntilChanged(),
+                source.filter { it.first == GOOGLE }.distinctUntilChanged(),
+                source.filter { it.first == HISTORY }.distinctUntilChanged()
+        )
+    }
+
+    /**
      * Fetches suggestions from Google and converts it to {@link GoogleSuggestionItem}
      */
     private fun googleTransformer(): FlowableTransformer<String, List<SuggestionItem>> {
-        return FlowableTransformer { query ->
+        return FlowableTransformer { upstream ->
             if (!Utils.isOnline(application)) {
                 Flowable.just(emptyList())
-            } else query
-                    .compose(RxJavaInterop.toV2Transformer(RxSuggestions.suggestionsTransformer(suggestionsLimit)))
+            } else upstream
+                    .compose(toV2Transformer(suggestionsTransformer(5)))
                     .doOnError(Timber::e)
                     .map<List<SuggestionItem>> {
                         it.map { query -> GoogleSuggestionItem(query) }
@@ -134,9 +149,9 @@ constructor(
      * Fetches matching items from History database and converts them to list of suggestions.
      */
     private fun historyTransformer(): FlowableTransformer<String, List<SuggestionItem>> {
-        return FlowableTransformer { query ->
-            query.debounce(suggestionsDebounce, TimeUnit.MILLISECONDS)
-                    .switchMap { RxJavaInterop.toV2Flowable(historyRepository.search(it)) }
+        return FlowableTransformer { upstream ->
+            upstream.debounce(suggestionsDebounce, MILLISECONDS)
+                    .switchMap { toV2Flowable(historyRepository.search(it)) }
                     .map<List<SuggestionItem>> { suggestions ->
                         suggestions.asSequence()
                                 .map { website ->
