@@ -325,7 +325,12 @@ constructor(
                 .map { it.isEmpty() }
                 .observeOn(schedulerProvider.ui)
                 .takeUntil(viewDetaches)
-                .subscribe(searchSuggestions::gone)
+                .subscribe { isEmpty ->
+                    searchSuggestions.gone(isEmpty)
+                    if (!isEmpty) {
+                        searchSuggestions.scrollToPosition(0)
+                    }
+                }
 
         suggestionController.suggestionClicks
                 .observeOn(schedulerProvider.pool)
