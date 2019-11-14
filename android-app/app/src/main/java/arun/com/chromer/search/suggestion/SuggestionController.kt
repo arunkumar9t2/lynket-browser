@@ -33,9 +33,11 @@ constructor(
 ) : AsyncEpoxyController() {
 
     private val suggestionsClicksRelay = PublishRelay.create<SuggestionItem>()
+    private val suggestionLongClickRelay = PublishRelay.create<SuggestionItem>()
     private val searchProviderRelay = PublishRelay.create<SearchProvider>()
 
     val suggestionClicks: Observable<SuggestionItem> = suggestionsClicksRelay.hide()
+    val suggestionLongClicks: Observable<SuggestionItem> = suggestionLongClickRelay.hide()
     val searchProviderClicks: Observable<SearchProvider> = searchProviderRelay.hide()
 
     private val searchIcon: Drawable by lazy {
@@ -59,6 +61,7 @@ constructor(
                 .sizeDp(18)
     }
 
+    var query: String = ""
 
     var copySuggestions: List<SuggestionItem> = emptyList()
         set(value) {
@@ -136,6 +139,10 @@ constructor(
                 onClickListener { _ ->
                     suggestionsClicksRelay.accept(suggestion)
                 }
+                onLongClickListener { _ ->
+                    suggestionLongClickRelay.accept(suggestion)
+                    return@onLongClickListener true
+                }
             }
         }
 
@@ -146,6 +153,7 @@ constructor(
                         id(suggestion.hashCode())
                         website(suggestion.website)
                         tabsManager(tabsManager)
+                        query(query)
                     }
                 }.count().let { size ->
                     if (size != 0) {
@@ -171,8 +179,13 @@ constructor(
                 historyIcon(historyIcon)
                 searchIcon(searchIcon)
                 spanSizeOverride(TotalSpanOverride)
+                query(query)
                 onClickListener { _ ->
                     suggestionsClicksRelay.accept(suggestion)
+                }
+                onLongClickListener { _ ->
+                    suggestionLongClickRelay.accept(suggestion)
+                    return@onLongClickListener true
                 }
             }
         }

@@ -3,11 +3,13 @@ package arun.com.chromer.search.suggestion.model
 import android.graphics.drawable.Drawable
 import android.text.TextUtils
 import android.view.View
+import androidx.core.text.toSpannable
 import arun.com.chromer.R
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.show
 import arun.com.chromer.search.suggestion.items.SuggestionItem
 import arun.com.chromer.search.suggestion.items.SuggestionType.*
+import arun.com.chromer.util.makeMatchingBold
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyAttribute.Option.DoNotHash
 import com.airbnb.epoxy.EpoxyModelClass
@@ -27,11 +29,15 @@ abstract class SuggestionLayoutModel : KotlinEpoxyModelWithHolder<SuggestionLayo
     lateinit var searchIcon: Drawable
     @EpoxyAttribute(DoNotHash)
     lateinit var onClickListener: View.OnClickListener
+    @EpoxyAttribute(DoNotHash)
+    lateinit var onLongClickListener: View.OnLongClickListener
+    @EpoxyAttribute
+    var query: String = ""
 
     override fun bind(holder: ViewHolder) {
         super.bind(holder)
         holder.apply {
-            suggestionsText.text = suggestionItem.title
+            suggestionsText.text = suggestionItem.title.toSpannable().makeMatchingBold(query)
             when (suggestionItem.type) {
                 COPY -> suggestionIcon.setImageDrawable(copyIcon)
                 GOOGLE -> suggestionIcon.setImageDrawable(searchIcon)
@@ -48,6 +54,7 @@ abstract class SuggestionLayoutModel : KotlinEpoxyModelWithHolder<SuggestionLayo
                 }
             }
             containerView.setOnClickListener(onClickListener)
+            containerView.setOnLongClickListener(onLongClickListener)
         }
     }
 

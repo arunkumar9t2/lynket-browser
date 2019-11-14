@@ -19,7 +19,6 @@
 
 package arun.com.chromer.browsing.article
 
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -256,13 +255,8 @@ class ArticleActivity : BrowsingActivity() {
     }
 
     private fun handleBlackTheme() {
-        val blackDrawable = ColorDrawable(Color.BLACK)
-        coordinatorLayout.background = blackDrawable
-        bottomNavigation.apply {
-            background = blackDrawable
-            itemIconTintList = ColorStateList.valueOf(Color.WHITE)
-            itemIconTintList = ColorStateList.valueOf(Color.WHITE)
-        }
+        coordinatorLayout.setBackgroundColor(Color.BLACK)
+        bottomNavigation.setBackgroundColor(Color.BLACK)
         articleTextSizeCard.setBackgroundColor(Color.BLACK)
         setNavigationBarColor(Color.BLACK)
     }

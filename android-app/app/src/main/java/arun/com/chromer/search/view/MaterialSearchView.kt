@@ -45,9 +45,7 @@ import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.inflate
 import arun.com.chromer.search.provider.SearchProvider
 import arun.com.chromer.search.suggestion.SuggestionController
-import arun.com.chromer.search.suggestion.items.SuggestionItem
 import arun.com.chromer.search.suggestion.items.SuggestionItem.HistorySuggestionItem
-import arun.com.chromer.search.suggestion.items.SuggestionType
 import arun.com.chromer.search.suggestion.items.SuggestionType.*
 import arun.com.chromer.shared.Constants.REQUEST_CODE_VOICE
 import arun.com.chromer.shared.base.ProvidesActivityComponent
@@ -310,9 +308,7 @@ constructor(
 
             suggestions.takeUntil(viewDetaches)
                     .observeOn(schedulerProvider.ui)
-                    .subscribe { (suggestionType, suggestions) ->
-                        setSuggestions(suggestionType, suggestions)
-                    }
+                    .subscribe(::setSuggestions)
 
             searchEngines.takeUntil(viewDetaches)
                     .observeOn(schedulerProvider.ui)
@@ -329,7 +325,12 @@ constructor(
                 .map { it.isEmpty() }
                 .observeOn(schedulerProvider.ui)
                 .takeUntil(viewDetaches)
-                .subscribe(searchSuggestions::gone)
+                .subscribe { isEmpty ->
+                    searchSuggestions.gone(isEmpty)
+                    if (!isEmpty) {
+                        searchSuggestions.scrollToPosition(0)
+                    }
+                }
 
         suggestionController.suggestionClicks
                 .observeOn(schedulerProvider.pool)
@@ -342,6 +343,14 @@ constructor(
                 .observeOn(schedulerProvider.ui)
                 .takeUntil(viewDetaches)
                 .subscribe(::searchPerformed)
+
+        suggestionController.suggestionLongClicks
+                .filter { it.title.isNotEmpty() }
+                .takeUntil(viewDetaches)
+                .subscribe {
+                    msvEditText.setText(it.title)
+                    msvEditText.setSelection(it.title.length)
+                }
     }
 
     private fun clearFocus(endAction: (() -> Unit)?) {
@@ -394,12 +403,13 @@ constructor(
         suggestionController.clear()
     }
 
-    private fun setSuggestions(
-            suggestionType: SuggestionType,
-            suggestionItems: List<SuggestionItem>
-    ) = when (suggestionType) {
-        COPY -> suggestionController.copySuggestions = suggestionItems
-        GOOGLE -> suggestionController.googleSuggestions = suggestionItems
-        HISTORY -> suggestionController.historySuggestions = suggestionItems
+    private fun setSuggestions(suggestionResult: SuggestionResult) {
+        suggestionController.query = suggestionResult.query.trim()
+        val suggestion = suggestionResult.suggestions
+        return when (suggestionResult.suggestionType) {
+            COPY -> suggestionController.copySuggestions = suggestion
+            GOOGLE -> suggestionController.googleSuggestions = suggestion
+            HISTORY -> suggestionController.historySuggestions = suggestion
+        }
     }
 }

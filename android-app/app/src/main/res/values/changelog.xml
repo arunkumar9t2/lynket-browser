@@ -36,6 +36,12 @@ a {
 <body>
 <strong>You can view this again in the About screen.</strong>
 <br></br>
+<strong>2.1.3</strong>
+<ul>
+    <li>Fixed Article view appearing transparent for Amoled black theme</li>
+    <li>Search suggestions improvements - reduce flicker, highlight matching query, long tap to edit suggestion</li>
+    <li>Crash fixes</li>
+</ul>
 <strong>2.1.2</strong>
 <ul>
     <li><b>FIX: </b> Clear text communication error.</li>
