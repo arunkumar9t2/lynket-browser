@@ -343,6 +343,14 @@ constructor(
                 .observeOn(schedulerProvider.ui)
                 .takeUntil(viewDetaches)
                 .subscribe(::searchPerformed)
+
+        suggestionController.suggestionLongClicks
+                .filter { it.title.isNotEmpty() }
+                .takeUntil(viewDetaches)
+                .subscribe {
+                    msvEditText.setText(it.title)
+                    msvEditText.setSelection(it.title.length)
+                }
     }
 
     private fun clearFocus(endAction: (() -> Unit)?) {

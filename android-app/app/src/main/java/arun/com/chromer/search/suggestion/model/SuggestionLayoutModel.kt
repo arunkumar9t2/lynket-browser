@@ -29,6 +29,8 @@ abstract class SuggestionLayoutModel : KotlinEpoxyModelWithHolder<SuggestionLayo
     lateinit var searchIcon: Drawable
     @EpoxyAttribute(DoNotHash)
     lateinit var onClickListener: View.OnClickListener
+    @EpoxyAttribute(DoNotHash)
+    lateinit var onLongClickListener: View.OnLongClickListener
     @EpoxyAttribute
     var query: String = ""
 
@@ -52,6 +54,7 @@ abstract class SuggestionLayoutModel : KotlinEpoxyModelWithHolder<SuggestionLayo
                 }
             }
             containerView.setOnClickListener(onClickListener)
+            containerView.setOnLongClickListener(onLongClickListener)
         }
     }
 
