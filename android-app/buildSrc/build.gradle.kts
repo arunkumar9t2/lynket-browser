@@ -14,7 +14,7 @@ dependencies {
 }
 
 gradlePlugin {
-    val greeting by plugins.creating {
+    val lynketBuild by plugins.creating {
         id = "lynket-build"
         implementationClass = "dev.arunkumar.lynket.buildplugin.BuildPlugin"
     }
