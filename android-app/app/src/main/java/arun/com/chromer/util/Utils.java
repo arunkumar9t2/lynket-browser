@@ -329,7 +329,7 @@ public class Utils {
             shareIntent.setType("text/plain");
             shareIntent.putExtra(Intent.EXTRA_TEXT, url);
 
-            final Intent chooserIntent = Intent.createChooser(shareIntent, "Share url..");
+            final Intent chooserIntent = Intent.createChooser(shareIntent, "Share URL via");
             chooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(chooserIntent);
         } else {
