@@ -23,11 +23,13 @@ buildscript {
     repositories {
         google()
         maven { url "https://jitpack.io" }
+        maven { url "https://plugins.gradle.org/m2/" }
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.3'
+        classpath 'com.android.tools.build:gradle:3.6.0-rc03'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "gradle.plugin.dev.arunkumar:scabbard-gradle-plugin:0.1.0"
     }
 }
 
