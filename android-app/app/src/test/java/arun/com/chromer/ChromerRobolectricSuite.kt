@@ -33,7 +33,7 @@ import javax.inject.Inject
 
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [16, 21], application = ChromerTestApplication::class)
+@Config(sdk = [19, 21], application = ChromerTestApplication::class)
 abstract class ChromerRobolectricSuite {
     lateinit var testAppComponent: TestAppComponent
 
