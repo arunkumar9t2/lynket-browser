@@ -17,25 +17,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'io.fabric'
-apply plugin: 'scabbard.gradle'
+apply plugin: "com.android.application"
+apply plugin: "kotlin-android"
+apply plugin: "kotlin-kapt"
+apply plugin: "kotlin-android-extensions"
+apply plugin: "io.fabric"
+apply plugin: "scabbard.gradle"
 
 buildscript {
     repositories {
-        maven { url 'https://maven.fabric.io/public' }
+        maven { url "https://maven.fabric.io/public" }
         google()
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.29.0'
+        classpath "io.fabric.tools:gradle:1.29.0"
     }
 }
 repositories {
-    maven { url 'https://maven.fabric.io/public' }
+    maven { url "https://maven.fabric.io/public" }
 }
 
 kapt {
@@ -76,11 +76,11 @@ android {
             minifyEnabled true
             shrinkResources true
             debuggable false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             resValue "string", "app_name", "Lynket"
 
             lintOptions {
-                disable 'MissingTranslation'
+                disable "MissingTranslation"
             }
 
             ext.enableCrashlytics = true
@@ -90,8 +90,8 @@ android {
             shrinkResources false
             debuggable true
 
-            applicationIdSuffix '.debug'
-            versionNameSuffix '- dev'
+            applicationIdSuffix ".debug"
+            versionNameSuffix "- dev"
             resValue "string", "app_name", "Lynket-dev"
 
             ext.enableCrashlytics = false
@@ -99,7 +99,7 @@ android {
     }
 
     packagingOptions {
-        exclude 'META-INF/rxjava.properties'
+        exclude "META-INF/rxjava.properties"
     }
 
     dexOptions {
@@ -125,100 +125,100 @@ androidExtensions {
 dependencies {
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ["*.jar"], dir: "libs")
 
     // Tests
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'org.robolectric:robolectric:4.3'
-    testImplementation 'androidx.test:core:1.2.0'
-    testImplementation 'androidx.test:runner:1.2.0'
-    testImplementation 'androidx.test:rules:1.2.0'
+    testImplementation "junit:junit:4.12"
+    testImplementation "org.robolectric:robolectric:4.3"
+    testImplementation "androidx.test:core:1.2.0"
+    testImplementation "androidx.test:runner:1.2.0"
+    testImplementation "androidx.test:rules:1.2.0"
 
     // Personal libs
-    implementation 'in.arunkumarsampath:suggestions:1.0.3'
-    implementation 'in.arunkumarsampath:transition-x:1.1.0'
-    implementation 'dev.arunkumar.android:common:master-SNAPSHOT'
-    implementation 'dev.arunkumar.android:dagger-base:master-SNAPSHOT'
-    implementation 'dev.arunkumar.android:logging:master-SNAPSHOT'
-    implementation 'dev.arunkumar.android:dagger-viewmodel:master-SNAPSHOT'
-    implementation 'dev.arunkumar.android:viewmodel-utils:master-SNAPSHOT'
-    implementation 'dev.arunkumar.android:epoxy-utils:master-SNAPSHOT'
-    implementation 'dev.arunkumar.android:rx-utils:master-SNAPSHOT'
+    implementation "in.arunkumarsampath:suggestions:1.0.3"
+    implementation "in.arunkumarsampath:transition-x:1.1.0"
+    implementation "dev.arunkumar.android:common:master-SNAPSHOT"
+    implementation "dev.arunkumar.android:dagger-base:master-SNAPSHOT"
+    implementation "dev.arunkumar.android:logging:master-SNAPSHOT"
+    implementation "dev.arunkumar.android:dagger-viewmodel:master-SNAPSHOT"
+    implementation "dev.arunkumar.android:viewmodel-utils:master-SNAPSHOT"
+    implementation "dev.arunkumar.android:epoxy-utils:master-SNAPSHOT"
+    implementation "dev.arunkumar.android:rx-utils:master-SNAPSHOT"
 
     // Dependency Injection
-    implementation 'com.google.dagger:dagger:2.23.2'
-    kapt 'com.google.dagger:dagger-compiler:2.23.2'
-    kaptTest 'com.google.dagger:dagger-compiler:2.23.2'
+    implementation "com.google.dagger:dagger:2.23.2"
+    kapt "com.google.dagger:dagger-compiler:2.23.2"
+    kaptTest "com.google.dagger:dagger-compiler:2.23.2"
 
     // AndroidX
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation "com.google.android.material:material:1.0.0"
     implementation "androidx.core:core:1.0.2"
-    implementation 'androidx.browser:browser:1.0.0'
-    implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
-    implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.palette:palette:1.0.0'
-    implementation 'androidx.paging:paging-runtime:2.1.0'
-    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation "androidx.browser:browser:1.0.0"
+    implementation "androidx.legacy:legacy-preference-v14:1.0.0"
+    implementation "androidx.cardview:cardview:1.0.0"
+    implementation "androidx.palette:palette:1.0.0"
+    implementation "androidx.paging:paging-runtime:2.1.0"
+    implementation "androidx.multidex:multidex:2.0.1"
     implementation "androidx.constraintlayout:constraintlayout:1.1.3"
     implementation "androidx.dynamicanimation:dynamicanimation:1.0.0"
 
     // Android KTX
-    implementation 'androidx.core:core-ktx:1.0.2'
-    implementation 'androidx.fragment:fragment-ktx:1.0.0'
-    implementation 'androidx.palette:palette-ktx:1.0.0'
-    implementation 'androidx.sqlite:sqlite-ktx:2.0.1'
+    implementation "androidx.core:core-ktx:1.0.2"
+    implementation "androidx.fragment:fragment-ktx:1.0.0"
+    implementation "androidx.palette:palette-ktx:1.0.0"
+    implementation "androidx.sqlite:sqlite-ktx:2.0.1"
 
     // Architecture Components
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
-    kapt 'androidx.lifecycle:lifecycle-common-java8:2.0.0'
+    implementation "androidx.lifecycle:lifecycle-extensions:2.0.0"
+    kapt "androidx.lifecycle:lifecycle-common-java8:2.0.0"
 
     // Intro
-    implementation 'com.github.apl-devs:appintro:v4.2.3'
+    implementation "com.github.apl-devs:appintro:v4.2.3"
 
     // Icons
-    implementation 'com.mikepenz:community-material-typeface:2.0.46.1@aar'
+    implementation "com.mikepenz:community-material-typeface:2.0.46.1@aar"
 
     // Drawer
-    implementation('com.mikepenz:materialdrawer:6.1.2@aar') {
+    implementation("com.mikepenz:materialdrawer:6.1.2@aar") {
         transitive = true
     }
 
     // Dialogs
-    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
-    implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
+    implementation "com.afollestad.material-dialogs:core:0.9.6.0"
+    implementation "com.afollestad.material-dialogs:commons:0.9.6.0"
 
     // Butterknife, Timber
-    implementation 'com.jakewharton.timber:timber:4.7.1'
-    implementation 'com.jakewharton:butterknife:10.1.0'
-    kapt 'com.jakewharton:butterknife-compiler:10.1.0'
+    implementation "com.jakewharton.timber:timber:4.7.1"
+    implementation "com.jakewharton:butterknife:10.1.0"
+    kapt "com.jakewharton:butterknife-compiler:10.1.0"
 
     // Image loading
-    implementation 'com.github.bumptech.glide:glide:4.9.0'
-    kapt 'com.github.bumptech.glide:compiler:4.9.0'
+    implementation "com.github.bumptech.glide:glide:4.9.0"
+    kapt "com.github.bumptech.glide:compiler:4.9.0"
 
     // Bottom sheet
-    implementation 'com.flipboard:bottomsheet-core:1.5.1'
-    implementation 'com.flipboard:bottomsheet-commons:1.5.1'
+    implementation "com.flipboard:bottomsheet-core:1.5.1"
+    implementation "com.flipboard:bottomsheet-commons:1.5.1"
 
     // Animations
-    implementation 'com.facebook.rebound:rebound:0.3.8'
+    implementation "com.facebook.rebound:rebound:0.3.8"
 
     // Badge
-    implementation 'com.github.nekocode:Badge:1.2'
-    implementation 'com.github.duanhong169:drawabletoolbox:1.0.7'
+    implementation "com.github.nekocode:Badge:1.2"
+    implementation "com.github.duanhong169:drawabletoolbox:1.0.7"
 
     // Reactive
-    implementation 'io.reactivex:rxjava:1.3.8'
-    implementation 'io.reactivex:rxandroid:1.2.1'
-    implementation 'com.jakewharton.rxbinding:rxbinding:1.0.1'
+    implementation "io.reactivex:rxjava:1.3.8"
+    implementation "io.reactivex:rxandroid:1.2.1"
+    implementation "com.jakewharton.rxbinding:rxbinding:1.0.1"
     // Rx2
     implementation "com.github.akarnokd:rxjava2-interop:0.13.7"
     implementation "io.reactivex.rxjava2:rxjava:2.2.10"
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'com.jakewharton.rxbinding3:rxbinding:3.0.0'
-    implementation 'com.jakewharton.rxbinding3:rxbinding-appcompat:3.0.0'
-    implementation 'com.jakewharton.rxbinding3:rxbinding-recyclerview:3.0.0'
-    implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
+    implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
+    implementation "com.jakewharton.rxbinding3:rxbinding:3.0.0"
+    implementation "com.jakewharton.rxbinding3:rxbinding-appcompat:3.0.0"
+    implementation "com.jakewharton.rxbinding3:rxbinding-recyclerview:3.0.0"
+    implementation "io.reactivex.rxjava2:rxkotlin:2.4.0"
 
     implementation "com.uber.rxdogtag:rxdogtag:0.2.0"
 
@@ -226,18 +226,18 @@ dependencies {
     implementation "com.afollestad:rxkprefs:1.2.5"
 
     // Epoxy for recycler view
-    implementation 'com.airbnb.android:epoxy:3.7.0'
-    kapt 'com.airbnb.android:epoxy-processor:3.7.0'
+    implementation "com.airbnb.android:epoxy:3.7.0"
+    kapt "com.airbnb.android:epoxy-processor:3.7.0"
 
     // Storage
-    implementation 'io.paperdb:paperdb:2.6'
-    implementation('com.crashlytics.sdk.android:crashlytics:2.10.1@aar') {
+    implementation "io.paperdb:paperdb:2.6"
+    implementation("com.crashlytics.sdk.android:crashlytics:2.10.1@aar") {
         transitive = true
     }
-    implementation 'com.github.chrisbanes:PhotoView:1.3.1'
+    implementation "com.github.chrisbanes:PhotoView:1.3.1"
 
-    implementation 'com.github.florent37:shapeofview:1.4.7'
+    implementation "com.github.florent37:shapeofview:1.4.7"
 
     // Disk LRU cache
-    implementation project(':disk-cache')
+    implementation project(":disk-cache")
 }
