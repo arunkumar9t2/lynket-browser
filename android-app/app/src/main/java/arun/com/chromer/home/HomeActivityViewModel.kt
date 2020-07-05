@@ -13,15 +13,15 @@ import arun.com.chromer.settings.Preferences
 import arun.com.chromer.settings.RxPreferences
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.util.glide.appicon.ApplicationIcon
-import dev.arunkumar.android.result.asResult
+import dev.arunkumar.android.result.asResource
 import dev.arunkumar.android.rxschedulers.SchedulerProvider
 import dev.arunkumar.android.viewmodel.RxViewModel
-import dev.arunkumar.common.result.Result
+import dev.arunkumar.common.result.Resource
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import javax.inject.Inject
 
-@SuppressLint("CheckResult")
+@SuppressLint("CheckResource")
 class HomeActivityViewModel
 @Inject
 constructor(
@@ -33,7 +33,7 @@ constructor(
 ) : RxViewModel() {
 
     val providerInfoLiveData = MutableLiveData<CustomTabProviderInfo>()
-    val recentsLiveData = MutableLiveData<Result<List<Website>>>()
+    val recentsLiveData = MutableLiveData<Resource<List<Website>>>()
 
     init {
         start()
@@ -46,7 +46,7 @@ constructor(
 
     private fun bindRecentsInfo() {
         historyRepository.recents()
-                .asResult()
+                .asResource()
                 .compose(schedulerProvider.ioToUi())
                 .subscribe(recentsLiveData::setValue)
     }

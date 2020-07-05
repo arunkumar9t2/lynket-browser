@@ -56,7 +56,7 @@ android {
 
     defaultConfig {
         applicationId "arun.com.chromer"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 28
         versionCode 56
         versionName "2.1.3"

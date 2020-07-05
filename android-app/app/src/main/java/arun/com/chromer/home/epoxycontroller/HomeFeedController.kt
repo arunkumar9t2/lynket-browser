@@ -11,7 +11,7 @@ import arun.com.chromer.shared.epxoy.model.headerLayout
 import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.epoxy.indeterminateProgress
 import com.airbnb.epoxy.AsyncEpoxyController
-import dev.arunkumar.common.result.Result
+import dev.arunkumar.common.result.Resource
 import dev.arunkumar.common.result.idle
 import javax.inject.Inject
 
@@ -28,7 +28,7 @@ constructor(
             requestDelayedModelBuild(0)
         }
 
-    var recentWebSites: Result<List<Website>> = idle()
+    var recentWebSites: Resource<List<Website>> = idle()
         set(value) {
             field = value
             requestDelayedModelBuild(0)
@@ -69,14 +69,14 @@ constructor(
         }
 
         when (val recents = recentWebSites) {
-            is Result.Success -> {
+            is Resource.Success -> {
                 recentsCard {
                     id("recents-card")
                     websites(recents.data)
                     tabsManager(tabsManager)
                 }
             }
-            is Result.Loading -> {
+            is Resource.Loading -> {
                 indeterminateProgress {
                     id("recents-progress")
                 }

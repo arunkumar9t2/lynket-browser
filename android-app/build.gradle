@@ -19,7 +19,7 @@
 apply plugin: 'lynket-build'
 
 buildscript {
-    ext.kotlin_version = '1.3.61'
+    ext.kotlin_version = '1.3.72'
     repositories {
         google()
         maven { url "https://jitpack.io" }
@@ -27,14 +27,14 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.0-rc03'
+        classpath 'com.android.tools.build:gradle:3.6.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "gradle.plugin.dev.arunkumar:scabbard-gradle-plugin:0.1.0"
+        classpath "gradle.plugin.dev.arunkumar:scabbard-gradle-plugin:0.3.0"
     }
 }
 
 allprojects {
-    def repoUrl = "https://raw.github.com/arunkumar9t2/base-android/master/maven-repo/"
+    def repoUrl = "https://raw.github.com/arunkumar9t2/base-android/master/maven-repo"
     def baseAndroid = "dev.arunkumar.android"
 
     repositories {
@@ -42,7 +42,7 @@ allprojects {
         maven { url "https://jitpack.io" }
         jcenter()
         maven {
-            url "${repoUrl}releases"
+            url "${repoUrl}/releases"
             mavenContent {
                 releasesOnly()
             }
@@ -51,7 +51,7 @@ allprojects {
             }
         }
         maven {
-            url "${repoUrl}snapshots"
+            url "${repoUrl}/snapshots"
             mavenContent {
                 snapshotsOnly()
             }
