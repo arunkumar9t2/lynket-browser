@@ -30,21 +30,21 @@ import arun.com.chromer.util.ActivityLifeCycleCallbackAdapter
  */
 
 inline fun <T> LiveData<T>.watch(owner: LifecycleOwner, crossinline observer: (T) -> Unit) {
-    this.observe(owner, Observer { observer(it) })
+  this.observe(owner, Observer { observer(it) })
 }
 
 
 inline fun <T> LiveData<T>.observeUntilOnDestroy(sourceActivity: Activity?, crossinline observer: (T) -> Unit) {
-    val valueObserver: Observer<T> = Observer {
-        observer(it)
+  val valueObserver: Observer<T> = Observer {
+    observer(it)
+  }
+  this.observeForever(valueObserver)
+  sourceActivity?.application?.registerActivityLifecycleCallbacks(object : ActivityLifeCycleCallbackAdapter() {
+    override fun onActivityDestroyed(activity: Activity?) {
+      if (activity == sourceActivity) {
+        activity.application?.unregisterActivityLifecycleCallbacks(this)
+        this@observeUntilOnDestroy.removeObserver(valueObserver)
+      }
     }
-    this.observeForever(valueObserver)
-    sourceActivity?.application?.registerActivityLifecycleCallbacks(object : ActivityLifeCycleCallbackAdapter() {
-        override fun onActivityDestroyed(activity: Activity?) {
-            if (activity == sourceActivity) {
-                activity.application?.unregisterActivityLifecycleCallbacks(this)
-                this@observeUntilOnDestroy.removeObserver(valueObserver)
-            }
-        }
-    })
+  })
 }

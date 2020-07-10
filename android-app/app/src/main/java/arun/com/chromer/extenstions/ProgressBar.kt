@@ -34,15 +34,15 @@ import me.zhanghai.android.materialprogressbar.MaterialProgressBar
  * Hides the progress bar when @param progress reaches 100.
  */
 fun MaterialProgressBar.setAutoHideProgress(newProgress: Int, tint: ColorStateList) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        setProgress(newProgress, true)
-    } else {
-        progress = newProgress
-    }
-    val transparentTint = ColorStateList.valueOf(Color.TRANSPARENT)
-    if (newProgress >= 99) {
-        postDelayed({ progressTintList = transparentTint }, 200)
-    } else if (progressTintList != tint) {
-        progressTintList = tint
-    }
+  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+    setProgress(newProgress, true)
+  } else {
+    progress = newProgress
+  }
+  val transparentTint = ColorStateList.valueOf(Color.TRANSPARENT)
+  if (newProgress >= 99) {
+    postDelayed({ progressTintList = transparentTint }, 200)
+  } else if (progressTintList != tint) {
+    progressTintList = tint
+  }
 }

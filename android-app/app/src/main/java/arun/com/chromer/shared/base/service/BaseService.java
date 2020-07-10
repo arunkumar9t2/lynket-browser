@@ -31,22 +31,22 @@ import arun.com.chromer.di.service.ServiceModule;
 
 public abstract class BaseService extends Service {
 
-    private ServiceComponent serviceComponent;
+  private ServiceComponent serviceComponent;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        serviceComponent = ((Chromer) getApplication())
-                .getAppComponent()
-                .newServiceComponent(new ServiceModule(this));
-        inject(serviceComponent);
-    }
+  @Override
+  public void onCreate() {
+    super.onCreate();
+    serviceComponent = ((Chromer) getApplication())
+        .getAppComponent()
+        .newServiceComponent(new ServiceModule(this));
+    inject(serviceComponent);
+  }
 
-    protected abstract void inject(ServiceComponent serviceComponent);
+  protected abstract void inject(ServiceComponent serviceComponent);
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        serviceComponent = null;
-    }
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+    serviceComponent = null;
+  }
 }

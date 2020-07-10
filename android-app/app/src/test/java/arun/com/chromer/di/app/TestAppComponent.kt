@@ -31,17 +31,17 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [
-    TestSchedulersModule::class,
-    TestAppModule::class,
-    HomeActivity.HomeBuilder::class,
-    TabsModule::class,
-    TestDataModule::class
+  TestSchedulersModule::class,
+  TestAppModule::class,
+  HomeActivity.HomeBuilder::class,
+  TabsModule::class,
+  TestDataModule::class
 ])
 interface TestAppComponent : AppComponent {
 
-    fun inject(chromerRobolectricSuite: ChromerRobolectricSuite)
+  fun inject(chromerRobolectricSuite: ChromerRobolectricSuite)
 
-    fun inject(defaultTabsManagerTest: DefaultTabsManagerTest)
+  fun inject(defaultTabsManagerTest: DefaultTabsManagerTest)
 
-    fun inject(defaultAppRepositoryTest: DefaultAppRepositoryTest)
+  fun inject(defaultAppRepositoryTest: DefaultAppRepositoryTest)
 }

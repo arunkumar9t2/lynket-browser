@@ -42,74 +42,74 @@ import timber.log.Timber
  */
 open class Chromer : Application() {
 
-    open val appComponent: AppComponent by lazy {
-        DaggerAppComponent.builder()
-                .appModule(AppModule(this))
-                .build()
+  open val appComponent: AppComponent by lazy {
+    DaggerAppComponent.builder()
+        .appModule(AppModule(this))
+        .build()
+  }
+
+  override fun onCreate() {
+    super.onCreate()
+    initFabric()
+    Paper.init(this)
+
+    if (BuildConfig.DEBUG) {
+      RxDogTag.install()
+      Timber.plant(Timber.DebugTree())
+      /*StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+              //.detectAll()
+              .penaltyLog()
+              .build());
+      StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+              .detectAll()
+              .penaltyLog()
+              .build());*/
+    } else {
+      Timber.plant(CrashlyticsTree())
     }
+    ServiceManager.takeCareOfServices(applicationContext)
 
-    override fun onCreate() {
-        super.onCreate()
-        initFabric()
-        Paper.init(this)
+    initMaterialDrawer()
 
-        if (BuildConfig.DEBUG) {
-            RxDogTag.install()
-            Timber.plant(Timber.DebugTree())
-            /*StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-                    //.detectAll()
-                    .penaltyLog()
-                    .build());
-            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-                    .detectAll()
-                    .penaltyLog()
-                    .build());*/
-        } else {
-            Timber.plant(CrashlyticsTree())
-        }
-        ServiceManager.takeCareOfServices(applicationContext)
+    initEpoxy()
+  }
 
-        initMaterialDrawer()
+  private fun initEpoxy() {
+    EpoxyController.setGlobalDebugLoggingEnabled(true)
+  }
 
-        initEpoxy()
+  private fun initMaterialDrawer() {
+    DrawerImageLoader.init(appComponent.glideDrawerImageLoader())
+        .withHandleAllUris(true)
+  }
+
+  protected open fun initFabric() {
+    val core = CrashlyticsCore.Builder()
+        .disabled(BuildConfig.DEBUG)
+        .build()
+    val crashlytics = Crashlytics.Builder().core(core).build()
+    Fabric.with(this, crashlytics)
+  }
+
+  override fun attachBaseContext(base: Context) {
+    super.attachBaseContext(base)
+    MultiDex.install(this)
+  }
+
+  private class CrashlyticsTree : Timber.Tree() {
+
+    override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
+      if (priority == Log.VERBOSE || priority == Log.DEBUG || priority == Log.INFO) {
+        return
+      }
+      Crashlytics.logException(t)
     }
+  }
 
-    private fun initEpoxy() {
-        EpoxyController.setGlobalDebugLoggingEnabled(true)
+  companion object {
+
+    init {
+      AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
     }
-
-    private fun initMaterialDrawer() {
-        DrawerImageLoader.init(appComponent.glideDrawerImageLoader())
-                .withHandleAllUris(true)
-    }
-
-    protected open fun initFabric() {
-        val core = CrashlyticsCore.Builder()
-                .disabled(BuildConfig.DEBUG)
-                .build()
-        val crashlytics = Crashlytics.Builder().core(core).build()
-        Fabric.with(this, crashlytics)
-    }
-
-    override fun attachBaseContext(base: Context) {
-        super.attachBaseContext(base)
-        MultiDex.install(this)
-    }
-
-    private class CrashlyticsTree : Timber.Tree() {
-
-        override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
-            if (priority == Log.VERBOSE || priority == Log.DEBUG || priority == Log.INFO) {
-                return
-            }
-            Crashlytics.logException(t)
-        }
-    }
-
-    companion object {
-
-        init {
-            AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
-        }
-    }
+  }
 }

@@ -42,111 +42,111 @@ import arun.com.chromer.R;
  */
 public final class ArticleScrollListener extends RecyclerView.OnScrollListener {
 
-    private static final int ANIMATION_DURATION = 200; // ms
+  private static final int ANIMATION_DURATION = 200; // ms
 
-    private final Toolbar toolbar;
-    private final View statusBar;
-    private final int transparentColor;
-    private int primaryColor;
-    private boolean transparentBackground = true;
-    private boolean isUpdatingTranslation = false;
-    private boolean isUpdatingBackground = false;
+  private final Toolbar toolbar;
+  private final View statusBar;
+  private final int transparentColor;
+  private int primaryColor;
+  private boolean transparentBackground = true;
+  private boolean isUpdatingTranslation = false;
+  private boolean isUpdatingBackground = false;
 
-    public ArticleScrollListener(Toolbar toolbar, View statusBar, int primaryColor) {
-        this.toolbar = toolbar;
-        this.statusBar = statusBar;
-        this.primaryColor = primaryColor;
-        this.transparentColor = ContextCompat.getColor(toolbar.getContext(), R.color.article_toolbarBackground);
+  public ArticleScrollListener(Toolbar toolbar, View statusBar, int primaryColor) {
+    this.toolbar = toolbar;
+    this.statusBar = statusBar;
+    this.primaryColor = primaryColor;
+    this.transparentColor = ContextCompat.getColor(toolbar.getContext(), R.color.article_toolbarBackground);
+  }
+
+  @Override
+  public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+    super.onScrollStateChanged(recyclerView, newState);
+    final LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
+    int firstItem = manager.findFirstCompletelyVisibleItemPosition();
+    if (newState == RecyclerView.SCROLL_STATE_IDLE && !transparentBackground &&
+        firstItem == 0 && !isUpdatingBackground) {
+      animateBackgroundColor(primaryColor, transparentColor, new DecelerateInterpolator());
+      transparentBackground = true;
     }
+  }
 
-    @Override
-    public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-        super.onScrollStateChanged(recyclerView, newState);
-        final LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
-        int firstItem = manager.findFirstCompletelyVisibleItemPosition();
-        if (newState == RecyclerView.SCROLL_STATE_IDLE && !transparentBackground &&
-                firstItem == 0 && !isUpdatingBackground) {
-            animateBackgroundColor(primaryColor, transparentColor, new DecelerateInterpolator());
-            transparentBackground = true;
-        }
+  @Override
+  public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+    super.onScrolled(recyclerView, dx, dy);
+
+    int minDistance = toolbar.getContext().getResources()
+        .getDimensionPixelSize(R.dimen.article_minToolbarScroll);
+    if (Math.abs(dy) < minDistance) {
+      return;
     }
+    if (dy > 0 && toolbar.getTranslationY() == 0) {
+      Interpolator interpolator = new AccelerateInterpolator();
 
-    @Override
-    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-        super.onScrolled(recyclerView, dx, dy);
+      if (!isUpdatingTranslation) {
+        animateTranslation(-1 * toolbar.getHeight(), interpolator);
+      }
 
-        int minDistance = toolbar.getContext().getResources()
-                .getDimensionPixelSize(R.dimen.article_minToolbarScroll);
-        if (Math.abs(dy) < minDistance) {
-            return;
-        }
-        if (dy > 0 && toolbar.getTranslationY() == 0) {
-            Interpolator interpolator = new AccelerateInterpolator();
+      if (transparentBackground && !isUpdatingBackground) {
+        animateBackgroundColor(transparentColor, primaryColor, interpolator);
+        transparentBackground = false;
+      }
+    } else if (dy < 0 && toolbar.getTranslationY() != 0) {
+      Interpolator interpolator = new DecelerateInterpolator();
 
-            if (!isUpdatingTranslation) {
-                animateTranslation(-1 * toolbar.getHeight(), interpolator);
-            }
+      if (!isUpdatingTranslation) {
+        animateTranslation(0, interpolator);
+      }
 
-            if (transparentBackground && !isUpdatingBackground) {
-                animateBackgroundColor(transparentColor, primaryColor, interpolator);
-                transparentBackground = false;
-            }
-        } else if (dy < 0 && toolbar.getTranslationY() != 0) {
-            Interpolator interpolator = new DecelerateInterpolator();
-
-            if (!isUpdatingTranslation) {
-                animateTranslation(0, interpolator);
-            }
-
-            LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
-            int firstItem = manager.findFirstVisibleItemPosition();
-            if (!transparentBackground && firstItem == 0 && !isUpdatingBackground) {
-                animateBackgroundColor(primaryColor, transparentColor, interpolator);
-                transparentBackground = true;
-            }
-        }
+      LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
+      int firstItem = manager.findFirstVisibleItemPosition();
+      if (!transparentBackground && firstItem == 0 && !isUpdatingBackground) {
+        animateBackgroundColor(primaryColor, transparentColor, interpolator);
+        transparentBackground = true;
+      }
     }
+  }
 
-    public void setPrimaryColor(@ColorInt int primaryColor) {
-        this.primaryColor = primaryColor;
-    }
+  public void setPrimaryColor(@ColorInt int primaryColor) {
+    this.primaryColor = primaryColor;
+  }
 
-    private void animateTranslation(int to, Interpolator interpolator) {
-        toolbar.animate()
-                .translationY(to)
-                .setDuration(ANIMATION_DURATION)
-                .setInterpolator(interpolator)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        isUpdatingTranslation = false;
-                    }
-                })
-                .start();
-        isUpdatingTranslation = true;
-    }
+  private void animateTranslation(int to, Interpolator interpolator) {
+    toolbar.animate()
+        .translationY(to)
+        .setDuration(ANIMATION_DURATION)
+        .setInterpolator(interpolator)
+        .setListener(new AnimatorListenerAdapter() {
+          @Override
+          public void onAnimationEnd(Animator animation) {
+            super.onAnimationEnd(animation);
+            isUpdatingTranslation = false;
+          }
+        })
+        .start();
+    isUpdatingTranslation = true;
+  }
 
-    private void animateBackgroundColor(int from, int to, Interpolator interpolator) {
-        final ValueAnimator anim = new ValueAnimator();
-        anim.setIntValues(from, to);
-        anim.setEvaluator(new ArgbEvaluator());
-        anim.setInterpolator(interpolator);
-        anim.addUpdateListener(valueAnimator -> {
-            toolbar.setBackgroundColor((Integer) valueAnimator.getAnimatedValue());
-            statusBar.setBackgroundColor((Integer) valueAnimator.getAnimatedValue());
-        });
-        anim.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                isUpdatingBackground = false;
-            }
-        });
+  private void animateBackgroundColor(int from, int to, Interpolator interpolator) {
+    final ValueAnimator anim = new ValueAnimator();
+    anim.setIntValues(from, to);
+    anim.setEvaluator(new ArgbEvaluator());
+    anim.setInterpolator(interpolator);
+    anim.addUpdateListener(valueAnimator -> {
+      toolbar.setBackgroundColor((Integer) valueAnimator.getAnimatedValue());
+      statusBar.setBackgroundColor((Integer) valueAnimator.getAnimatedValue());
+    });
+    anim.addListener(new AnimatorListenerAdapter() {
+      @Override
+      public void onAnimationEnd(Animator animation) {
+        super.onAnimationEnd(animation);
+        isUpdatingBackground = false;
+      }
+    });
 
-        anim.setDuration(ANIMATION_DURATION);
-        anim.start();
-        isUpdatingBackground = true;
-    }
+    anim.setDuration(ANIMATION_DURATION);
+    anim.start();
+    isUpdatingBackground = true;
+  }
 
 }

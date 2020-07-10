@@ -40,68 +40,69 @@ import javax.inject.Inject
 @SuppressLint("GoogleAppIndexingApiWarning")
 class ShareInterceptActivity : BaseActivity() {
 
-    override fun getLayoutRes() = 0
+  override fun getLayoutRes() = 0
 
-    @Inject
-    lateinit var tabsManager: TabsManager
-    @Inject
-    lateinit var searchProviders: SearchProviders
+  @Inject
+  lateinit var tabsManager: TabsManager
 
-    @TargetApi(Build.VERSION_CODES.M)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val safeIntent = SafeIntent(intent)
-        try {
-            val action = safeIntent.action
-            var text: String? = null
-            when (action) {
-                ACTION_SEND -> if (safeIntent.hasExtra(EXTRA_TEXT)) {
-                    text = intent.extras?.getCharSequence(EXTRA_TEXT)?.toString()
-                }
-                ACTION_PROCESS_TEXT -> text = safeIntent.getStringExtra(EXTRA_PROCESS_TEXT)
-            }
-            if (text?.isNotEmpty() == true) {
-                findAndOpenLink(text)
-            }
-        } catch (exception: Exception) {
-            invalidLink()
-        } finally {
-            finish()
+  @Inject
+  lateinit var searchProviders: SearchProviders
+
+  @TargetApi(Build.VERSION_CODES.M)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    val safeIntent = SafeIntent(intent)
+    try {
+      val action = safeIntent.action
+      var text: String? = null
+      when (action) {
+        ACTION_SEND -> if (safeIntent.hasExtra(EXTRA_TEXT)) {
+          text = intent.extras?.getCharSequence(EXTRA_TEXT)?.toString()
         }
+        ACTION_PROCESS_TEXT -> text = safeIntent.getStringExtra(EXTRA_PROCESS_TEXT)
+      }
+      if (text?.isNotEmpty() == true) {
+        findAndOpenLink(text)
+      }
+    } catch (exception: Exception) {
+      invalidLink()
+    } finally {
+      finish()
     }
+  }
 
-    override fun inject(activityComponent: ActivityComponent) {
-        activityComponent.inject(this)
-    }
+  override fun inject(activityComponent: ActivityComponent) {
+    activityComponent.inject(this)
+  }
 
-    @SuppressLint("CheckResult")
-    private fun findAndOpenLink(receivedText: String) {
-        val urls = Utils.findURLs(receivedText)
-        if (urls.isNotEmpty()) {
-            // use only the first link
-            val url = urls[0]
-            openLink(url)
-        } else {
-            searchProviders.selectedProvider
-                    .firstOrError()
-                    .map { it.getSearchUrl(receivedText) }
-                    .subscribeBy(
-                            onSuccess = ::openLink,
-                            onError = Timber::e
-                    )
-        }
+  @SuppressLint("CheckResult")
+  private fun findAndOpenLink(receivedText: String) {
+    val urls = Utils.findURLs(receivedText)
+    if (urls.isNotEmpty()) {
+      // use only the first link
+      val url = urls[0]
+      openLink(url)
+    } else {
+      searchProviders.selectedProvider
+          .firstOrError()
+          .map { it.getSearchUrl(receivedText) }
+          .subscribeBy(
+              onSuccess = ::openLink,
+              onError = Timber::e
+          )
     }
+  }
 
-    private fun openLink(url: String?) {
-        when (url) {
-            null -> invalidLink()
-            else -> tabsManager.openUrl(this, website = Website(url))
-        }
-        finish()
+  private fun openLink(url: String?) {
+    when (url) {
+      null -> invalidLink()
+      else -> tabsManager.openUrl(this, website = Website(url))
     }
+    finish()
+  }
 
-    private fun invalidLink() {
-        Toast.makeText(this, getString(R.string.invalid_link), Toast.LENGTH_SHORT).show()
-        finish()
-    }
+  private fun invalidLink() {
+    Toast.makeText(this, getString(R.string.invalid_link), Toast.LENGTH_SHORT).show()
+    finish()
+  }
 }

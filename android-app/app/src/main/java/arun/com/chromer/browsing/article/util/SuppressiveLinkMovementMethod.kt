@@ -31,13 +31,13 @@ import arun.com.chromer.R
  * Created by arunk on 27-01-2018.
  */
 object SuppressiveLinkMovementMethod : LinkMovementMethod() {
-    override fun onTouchEvent(widget: TextView, buffer: Spannable, event: MotionEvent): Boolean {
-        return try {
-            super.onTouchEvent(widget, buffer, event)
-        } catch (ex: Exception) {
-            Toast.makeText(widget.context, R.string.unsupported_link, Toast.LENGTH_LONG).show()
-            true
-        }
-
+  override fun onTouchEvent(widget: TextView, buffer: Spannable, event: MotionEvent): Boolean {
+    return try {
+      super.onTouchEvent(widget, buffer, event)
+    } catch (ex: Exception) {
+      Toast.makeText(widget.context, R.string.unsupported_link, Toast.LENGTH_LONG).show()
+      true
     }
+
+  }
 }

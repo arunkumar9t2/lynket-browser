@@ -30,20 +30,20 @@ import androidx.annotation.ColorInt
  * Created by arunk on 01-12-2017.
  */
 fun Drawable.toBitmap(): Bitmap {
-    if (this is BitmapDrawable && bitmap != null) {
-        return bitmap
-    }
-
-    val bitmap = if (intrinsicWidth <= 0 || intrinsicHeight <= 0) {
-        // Single color bitmap will be created of 1x1 pixel.
-        Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
-    } else {
-        Bitmap.createBitmap(intrinsicWidth, intrinsicHeight, Bitmap.Config.ARGB_8888)
-    }
-    val canvas = Canvas(bitmap)
-    setBounds(0, 0, canvas.width, canvas.height)
-    draw(canvas)
+  if (this is BitmapDrawable && bitmap != null) {
     return bitmap
+  }
+
+  val bitmap = if (intrinsicWidth <= 0 || intrinsicHeight <= 0) {
+    // Single color bitmap will be created of 1x1 pixel.
+    Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+  } else {
+    Bitmap.createBitmap(intrinsicWidth, intrinsicHeight, Bitmap.Config.ARGB_8888)
+  }
+  val canvas = Canvas(bitmap)
+  setBounds(0, 0, canvas.width, canvas.height)
+  draw(canvas)
+  return bitmap
 }
 
 /**

@@ -48,49 +48,49 @@ import dagger.Subcomponent
 @PerActivity
 @Subcomponent(modules = [(ActivityModule::class)])
 interface ActivityComponent {
-    fun customTabs(): CustomTabs
+  fun customTabs(): CustomTabs
 
-    fun newFragmentComponent(fragmentModule: FragmentModule): FragmentComponent
+  fun newFragmentComponent(fragmentModule: FragmentModule): FragmentComponent
 
-    fun viewComponentFactory(): ViewComponent.Factory
+  fun viewComponentFactory(): ViewComponent.Factory
 
-    fun inject(perAppSettingsActivity: PerAppSettingsActivity)
+  fun inject(perAppSettingsActivity: PerAppSettingsActivity)
 
-    fun inject(homeActivity: HomeActivity)
+  fun inject(homeActivity: HomeActivity)
 
-    fun inject(browserInterceptActivity: BrowserInterceptActivity)
+  fun inject(browserInterceptActivity: BrowserInterceptActivity)
 
-    fun inject(customTabActivity: CustomTabActivity)
+  fun inject(customTabActivity: CustomTabActivity)
 
-    fun inject(activityComponent: ActivityComponent)
+  fun inject(activityComponent: ActivityComponent)
 
-    fun inject(homeScreenShortcutCreatorActivity: HomeScreenShortcutCreatorActivity)
+  fun inject(homeScreenShortcutCreatorActivity: HomeScreenShortcutCreatorActivity)
 
-    fun inject(articleActivity: ArticleActivity)
+  fun inject(articleActivity: ArticleActivity)
 
-    fun inject(browsingOptionsActivity: BrowsingOptionsActivity)
+  fun inject(browsingOptionsActivity: BrowsingOptionsActivity)
 
-    fun inject(newTabDialogActivity: NewTabDialogActivity)
+  fun inject(newTabDialogActivity: NewTabDialogActivity)
 
-    fun inject(webHeadContextActivity: WebHeadContextActivity)
+  fun inject(webHeadContextActivity: WebHeadContextActivity)
 
-    fun inject(shareInterceptActivity: ShareInterceptActivity)
+  fun inject(shareInterceptActivity: ShareInterceptActivity)
 
-    fun inject(webViewActivity: WebViewActivity)
+  fun inject(webViewActivity: WebViewActivity)
 
-    fun inject(ampResolverActivity: AmpResolverActivity)
+  fun inject(ampResolverActivity: AmpResolverActivity)
 
-    fun inject(chromerOptionsActivity: ChromerOptionsActivity)
+  fun inject(chromerOptionsActivity: ChromerOptionsActivity)
 
-    fun inject(providerSelectionActivity: ProviderSelectionActivity)
+  fun inject(providerSelectionActivity: ProviderSelectionActivity)
 
-    fun inject(chromerIntroActivity: ChromerIntroActivity)
+  fun inject(chromerIntroActivity: ChromerIntroActivity)
 
-    fun inject(tipsActivity: TipsActivity)
+  fun inject(tipsActivity: TipsActivity)
 
-    fun inject(tabsActivity: TabsActivity)
+  fun inject(tabsActivity: TabsActivity)
 
-    fun inject(historyActivity: HistoryActivity)
+  fun inject(historyActivity: HistoryActivity)
 
-    fun inject(browsingModeActivity: BrowsingModeActivity)
+  fun inject(browsingModeActivity: BrowsingModeActivity)
 }

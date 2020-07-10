@@ -39,116 +39,116 @@ import java.lang.reflect.Method;
  * Utilities we use, mostly for UI modification.
  */
 public final class ArticleUtil {
-    /**
-     * Changes the overscroll highlight effect on a recyclerview to be the given color.
-     */
-    public static void changeRecyclerOverscrollColors(RecyclerView recyclerView, final int color) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            return;
-        }
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            private boolean invoked = false;
-
-            @Override
-            @TargetApi(21)
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-
-                // only invoke this once
-                if (invoked) {
-                    return;
-                } else {
-                    invoked = true;
-                }
-
-                try {
-                    final Class<?> clazz = RecyclerView.class;
-
-                    for (final String name : new String[]{"ensureTopGlow", "ensureBottomGlow"}) {
-                        Method method = clazz.getDeclaredMethod(name);
-                        method.setAccessible(true);
-                        method.invoke(recyclerView);
-                    }
-
-                    for (final String name : new String[]{"mTopGlow", "mBottomGlow"}) {
-                        final Field field = clazz.getDeclaredField(name);
-                        field.setAccessible(true);
-                        final Object edge = field.get(recyclerView);
-                        final Field fEdgeEffect = edge.getClass().getDeclaredField("mEdgeEffect");
-                        fEdgeEffect.setAccessible(true);
-                        ((EdgeEffect) fEdgeEffect.get(edge)).setColor(color);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+  /**
+   * Changes the overscroll highlight effect on a recyclerview to be the given color.
+   */
+  public static void changeRecyclerOverscrollColors(RecyclerView recyclerView, final int color) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+      return;
     }
+    recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+      private boolean invoked = false;
 
-    /**
-     * Changes the progress bar's color.
-     */
-    public static void changeProgressBarColors(ProgressBar progressBar, int color) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            Drawable wrapDrawable = DrawableCompat.wrap(progressBar.getIndeterminateDrawable());
-            DrawableCompat.setTint(wrapDrawable, color);
-            progressBar.setIndeterminateDrawable(DrawableCompat.unwrap(wrapDrawable));
+      @Override
+      @TargetApi(21)
+      public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+        super.onScrollStateChanged(recyclerView, newState);
+
+        // only invoke this once
+        if (invoked) {
+          return;
         } else {
-            progressBar.getIndeterminateDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
+          invoked = true;
         }
-    }
-
-    /**
-     * Changes the text selection handle colors.
-     */
-    public static void changeTextSelectionHandleColors(TextView textView, int color) {
-        textView.setHighlightColor(Color.argb(
-                40, Color.red(color), Color.green(color), Color.blue(color)));
 
         try {
-            Field editorField = TextView.class.getDeclaredField("mEditor");
-            if (!editorField.isAccessible()) {
-                editorField.setAccessible(true);
-            }
+          final Class<?> clazz = RecyclerView.class;
 
-            Object editor = editorField.get(textView);
-            Class<?> editorClass = editor.getClass();
+          for (final String name : new String[]{"ensureTopGlow", "ensureBottomGlow"}) {
+            Method method = clazz.getDeclaredMethod(name);
+            method.setAccessible(true);
+            method.invoke(recyclerView);
+          }
 
-            String[] handleNames = {
-                    "mSelectHandleLeft",
-                    "mSelectHandleRight",
-                    "mSelectHandleCenter"
-            };
-            String[] resNames = {
-                    "mTextSelectHandleLeftRes",
-                    "mTextSelectHandleRightRes",
-                    "mTextSelectHandleRes"
-            };
-
-            for (int i = 0; i < handleNames.length; i++) {
-                Field handleField = editorClass.getDeclaredField(handleNames[i]);
-                if (!handleField.isAccessible()) {
-                    handleField.setAccessible(true);
-                }
-
-                Drawable handleDrawable = (Drawable) handleField.get(editor);
-
-                if (handleDrawable == null) {
-                    Field resField = TextView.class.getDeclaredField(resNames[i]);
-                    if (!resField.isAccessible()) {
-                        resField.setAccessible(true);
-                    }
-                    int resId = resField.getInt(textView);
-                    handleDrawable = ContextCompat.getDrawable(textView.getContext(), resId);
-                }
-
-                if (handleDrawable != null) {
-                    Drawable drawable = handleDrawable.mutate();
-                    drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
-                    handleField.set(editor, drawable);
-                }
-            }
-        } catch (Exception ignored) {
+          for (final String name : new String[]{"mTopGlow", "mBottomGlow"}) {
+            final Field field = clazz.getDeclaredField(name);
+            field.setAccessible(true);
+            final Object edge = field.get(recyclerView);
+            final Field fEdgeEffect = edge.getClass().getDeclaredField("mEdgeEffect");
+            fEdgeEffect.setAccessible(true);
+            ((EdgeEffect) fEdgeEffect.get(edge)).setColor(color);
+          }
+        } catch (Exception e) {
+          e.printStackTrace();
         }
+      }
+    });
+  }
+
+  /**
+   * Changes the progress bar's color.
+   */
+  public static void changeProgressBarColors(ProgressBar progressBar, int color) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+      Drawable wrapDrawable = DrawableCompat.wrap(progressBar.getIndeterminateDrawable());
+      DrawableCompat.setTint(wrapDrawable, color);
+      progressBar.setIndeterminateDrawable(DrawableCompat.unwrap(wrapDrawable));
+    } else {
+      progressBar.getIndeterminateDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
     }
+  }
+
+  /**
+   * Changes the text selection handle colors.
+   */
+  public static void changeTextSelectionHandleColors(TextView textView, int color) {
+    textView.setHighlightColor(Color.argb(
+        40, Color.red(color), Color.green(color), Color.blue(color)));
+
+    try {
+      Field editorField = TextView.class.getDeclaredField("mEditor");
+      if (!editorField.isAccessible()) {
+        editorField.setAccessible(true);
+      }
+
+      Object editor = editorField.get(textView);
+      Class<?> editorClass = editor.getClass();
+
+      String[] handleNames = {
+          "mSelectHandleLeft",
+          "mSelectHandleRight",
+          "mSelectHandleCenter"
+      };
+      String[] resNames = {
+          "mTextSelectHandleLeftRes",
+          "mTextSelectHandleRightRes",
+          "mTextSelectHandleRes"
+      };
+
+      for (int i = 0; i < handleNames.length; i++) {
+        Field handleField = editorClass.getDeclaredField(handleNames[i]);
+        if (!handleField.isAccessible()) {
+          handleField.setAccessible(true);
+        }
+
+        Drawable handleDrawable = (Drawable) handleField.get(editor);
+
+        if (handleDrawable == null) {
+          Field resField = TextView.class.getDeclaredField(resNames[i]);
+          if (!resField.isAccessible()) {
+            resField.setAccessible(true);
+          }
+          int resId = resField.getInt(textView);
+          handleDrawable = ContextCompat.getDrawable(textView.getContext(), resId);
+        }
+
+        if (handleDrawable != null) {
+          Drawable drawable = handleDrawable.mutate();
+          drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+          handleField.set(editor, drawable);
+        }
+      }
+    } catch (Exception ignored) {
+    }
+  }
 }

@@ -34,33 +34,33 @@ import javax.inject.Inject
 
 @SuppressLint("GoogleAppIndexingApiWarning")
 class BrowserInterceptActivity : BaseActivity() {
-    @Inject
-    lateinit var defaultTabsManager: TabsManager
+  @Inject
+  lateinit var defaultTabsManager: TabsManager
 
-    override fun getLayoutRes() = 0
+  override fun getLayoutRes() = 0
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        intent?.let {
-            val safeIntent = SafeIntent(intent)
-            if (safeIntent.data == null) {
-                invalidLink()
-                return
-            }
-            defaultTabsManager.processIncomingIntent(this, intent)
-                    .subscribeBy(onComplete = { finishAndRemoveTaskCompat() })
-        } ?: run {
-            finishAndRemoveTaskCompat()
-        }
-
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    intent?.let {
+      val safeIntent = SafeIntent(intent)
+      if (safeIntent.data == null) {
+        invalidLink()
+        return
+      }
+      defaultTabsManager.processIncomingIntent(this, intent)
+          .subscribeBy(onComplete = { finishAndRemoveTaskCompat() })
+    } ?: run {
+      finishAndRemoveTaskCompat()
     }
 
-    override fun inject(activityComponent: ActivityComponent) {
-        activityComponent.inject(this)
-    }
+  }
 
-    private fun invalidLink() {
-        Toast.makeText(this, getString(R.string.unsupported_link), LENGTH_SHORT).show()
-        finishAndRemoveTaskCompat()
-    }
+  override fun inject(activityComponent: ActivityComponent) {
+    activityComponent.inject(this)
+  }
+
+  private fun invalidLink() {
+    Toast.makeText(this, getString(R.string.unsupported_link), LENGTH_SHORT).show()
+    finishAndRemoveTaskCompat()
+  }
 }

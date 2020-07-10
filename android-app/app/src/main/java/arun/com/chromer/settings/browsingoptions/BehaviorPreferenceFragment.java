@@ -47,83 +47,83 @@ import static arun.com.chromer.settings.Preferences.PER_APP_PREFERENCE_DUMMY;
  */
 public class BehaviorPreferenceFragment extends BasePreferenceFragment {
 
-    private IconSwitchPreference mergeTabsPreference;
+  private IconSwitchPreference mergeTabsPreference;
 
-    public BehaviorPreferenceFragment() {
-        // Required empty public constructor
+  public BehaviorPreferenceFragment() {
+    // Required empty public constructor
+  }
+
+  public static BehaviorPreferenceFragment newInstance() {
+    final BehaviorPreferenceFragment fragment = new BehaviorPreferenceFragment();
+    Bundle args = new Bundle();
+    fragment.setArguments(args);
+    return fragment;
+  }
+
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    addPreferencesFromResource(R.xml.behavior_preferences);
+    setupMergeTabsPreference();
+    setupBlacklistPreference();
+
+  }
+
+  private void setupBlacklistPreference() {
+    final IconSwitchPreference perAppSettingsPreference = (IconSwitchPreference) findPreference(PER_APP_PREFERENCE_DUMMY);
+    if (perAppSettingsPreference != null) {
+      final Drawable recentImg = new IconicsDrawable(getActivity())
+          .icon(CommunityMaterial.Icon.cmd_filter_variant)
+          .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
+          .sizeDp(24);
+      perAppSettingsPreference.setIcon(recentImg);
+      perAppSettingsPreference.hideSwitch();
+      perAppSettingsPreference.setOnPreferenceClickListener(preference -> {
+        new Handler().postDelayed(() -> {
+          final Intent perAppSettingActivity = new Intent(getActivity(), PerAppSettingsActivity.class);
+          startActivity(perAppSettingActivity);
+        }, 150);
+        return false;
+      });
     }
+  }
 
-    public static BehaviorPreferenceFragment newInstance() {
-        final BehaviorPreferenceFragment fragment = new BehaviorPreferenceFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.behavior_preferences);
-        setupMergeTabsPreference();
-        setupBlacklistPreference();
-
-    }
-
-    private void setupBlacklistPreference() {
-        final IconSwitchPreference perAppSettingsPreference = (IconSwitchPreference) findPreference(PER_APP_PREFERENCE_DUMMY);
-        if (perAppSettingsPreference != null) {
-            final Drawable recentImg = new IconicsDrawable(getActivity())
-                    .icon(CommunityMaterial.Icon.cmd_filter_variant)
-                    .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
-                    .sizeDp(24);
-            perAppSettingsPreference.setIcon(recentImg);
-            perAppSettingsPreference.hideSwitch();
-            perAppSettingsPreference.setOnPreferenceClickListener(preference -> {
-                new Handler().postDelayed(() -> {
-                    final Intent perAppSettingActivity = new Intent(getActivity(), PerAppSettingsActivity.class);
-                    startActivity(perAppSettingActivity);
-                }, 150);
-                return false;
-            });
+  private void setupMergeTabsPreference() {
+    mergeTabsPreference = (IconSwitchPreference) findPreference(MERGE_TABS_AND_APPS);
+    if (mergeTabsPreference != null) {
+      final Drawable recentImg = new IconicsDrawable(getActivity())
+          .icon(CommunityMaterial.Icon.cmd_animation)
+          .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
+          .sizeDp(24);
+      mergeTabsPreference.setIcon(recentImg);
+      mergeTabsPreference.setOnPreferenceChangeListener((preference, newValue) -> {
+        if (!((Boolean) newValue) && Preferences.get(getContext()).aggressiveLoading()) {
+          new MaterialDialog.Builder(getActivity())
+              .title(R.string.merge_tabs_off_title)
+              .content(R.string.merget_tabs_off_content)
+              .positiveText(android.R.string.ok)
+              .show();
+          Preferences.get(getContext()).aggressiveLoading(false);
         }
+        return true;
+      });
     }
+  }
 
-    private void setupMergeTabsPreference() {
-        mergeTabsPreference = (IconSwitchPreference) findPreference(MERGE_TABS_AND_APPS);
-        if (mergeTabsPreference != null) {
-            final Drawable recentImg = new IconicsDrawable(getActivity())
-                    .icon(CommunityMaterial.Icon.cmd_animation)
-                    .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
-                    .sizeDp(24);
-            mergeTabsPreference.setIcon(recentImg);
-            mergeTabsPreference.setOnPreferenceChangeListener((preference, newValue) -> {
-                if (!((Boolean) newValue) && Preferences.get(getContext()).aggressiveLoading()) {
-                    new MaterialDialog.Builder(getActivity())
-                            .title(R.string.merge_tabs_off_title)
-                            .content(R.string.merget_tabs_off_content)
-                            .positiveText(android.R.string.ok)
-                            .show();
-                    Preferences.get(getContext()).aggressiveLoading(false);
-                }
-                return true;
-            });
-        }
+  @Override
+  public void onResume() {
+    super.onResume();
+    if (!Utils.isLollipopAbove()) {
+      mergeTabsPreference.setVisible(false);
     }
+  }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (!Utils.isLollipopAbove()) {
-            mergeTabsPreference.setVisible(false);
-        }
+  @Override
+  public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+    if (key.equalsIgnoreCase(AGGRESSIVE_LOADING)) {
+      if (Preferences.get(getContext()).aggressiveLoading()) {
+        mergeTabsPreference.setChecked(true);
+      }
     }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equalsIgnoreCase(AGGRESSIVE_LOADING)) {
-            if (Preferences.get(getContext()).aggressiveLoading()) {
-                mergeTabsPreference.setChecked(true);
-            }
-        }
-    }
+  }
 }

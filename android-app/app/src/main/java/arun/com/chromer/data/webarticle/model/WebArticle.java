@@ -46,130 +46,130 @@ import arun.com.chromer.shared.Constants;
  * faster than parsing the whole HTML content of the page.
  */
 public class WebArticle implements Parcelable {
-    public static final Creator<WebArticle> CREATOR = new Creator<WebArticle>() {
-        @Override
-        public WebArticle createFromParcel(Parcel in) {
-            return new WebArticle(in);
-        }
-
-        @Override
-        public WebArticle[] newArray(int size) {
-            return new WebArticle[size];
-        }
-    };
-    public String url = "";
-    public String originalUrl = "";
-    public String title = "";
-    public String description = "";
-    public String siteName = "";
-    public String themeColor = "";
-    public String ampUrl = "";
-    public String canonicalUrl = "";
-    public String imageUrl = "";
-    public String videoUrl = "";
-    public String feedUrl = "";
-    public String faviconUrl = "";
-    public List<String> keywords = new ArrayList<>();
-    public Elements elements;
-
-    public WebArticle() {
-
-    }
-
-    public WebArticle(@NonNull String url) {
-        this.url = url;
-    }
-
-    protected WebArticle(Parcel in) {
-        url = in.readString();
-        originalUrl = in.readString();
-        title = in.readString();
-        description = in.readString();
-        siteName = in.readString();
-        themeColor = in.readString();
-        ampUrl = in.readString();
-        canonicalUrl = in.readString();
-        imageUrl = in.readString();
-        videoUrl = in.readString();
-        feedUrl = in.readString();
-        faviconUrl = in.readString();
-
-        final String html = in.readString();
-        final Elements rawElements = Jsoup.parse(html).body().children();
-        for (Iterator<Element> iterator = rawElements.iterator(); iterator.hasNext(); ) {
-            final Element element = iterator.next();
-            if (element.text().isEmpty()) {
-                iterator.remove();
-            }
-        }
-        elements = rawElements;
-
-        keywords = in.createStringArrayList();
-    }
-
-    @NonNull
-    public static WebArticle fromArticle(@NonNull Article article) {
-        final WebArticle webArticle = new WebArticle();
-        webArticle.url = article.url;
-        webArticle.originalUrl = article.originalUrl;
-        webArticle.title = article.title;
-        webArticle.description = article.description;
-        webArticle.siteName = article.siteName;
-        webArticle.themeColor = article.themeColor;
-        webArticle.ampUrl = article.ampUrl;
-        webArticle.canonicalUrl = article.canonicalUrl;
-        webArticle.imageUrl = article.imageUrl;
-        webArticle.videoUrl = article.videoUrl;
-        webArticle.feedUrl = article.feedUrl;
-        webArticle.faviconUrl = article.faviconUrl;
-        webArticle.elements = article.document.children();
-        webArticle.keywords = new ArrayList<>();
-        if (article.keywords != null) {
-            webArticle.keywords.addAll(article.keywords);
-        }
-        return webArticle;
+  public static final Creator<WebArticle> CREATOR = new Creator<WebArticle>() {
+    @Override
+    public WebArticle createFromParcel(Parcel in) {
+      return new WebArticle(in);
     }
 
     @Override
-    public int describeContents() {
-        return 0;
+    public WebArticle[] newArray(int size) {
+      return new WebArticle[size];
     }
+  };
+  public String url = "";
+  public String originalUrl = "";
+  public String title = "";
+  public String description = "";
+  public String siteName = "";
+  public String themeColor = "";
+  public String ampUrl = "";
+  public String canonicalUrl = "";
+  public String imageUrl = "";
+  public String videoUrl = "";
+  public String feedUrl = "";
+  public String faviconUrl = "";
+  public List<String> keywords = new ArrayList<>();
+  public Elements elements;
 
-    @NonNull
-    public String preferredUrl() {
-        return canonicalUrl != null && !canonicalUrl.isEmpty() ? canonicalUrl : url;
-    }
+  public WebArticle() {
 
-    @NonNull
-    public String safeLabel() {
-        return title != null && !title.isEmpty() ? title : preferredUrl();
-    }
+  }
 
-    @ColorInt
-    public int themeColor() {
-        try {
-            //noinspection Range
-            return Color.parseColor(themeColor);
-        } catch (Exception e) {
-            return Constants.NO_COLOR;
-        }
-    }
+  public WebArticle(@NonNull String url) {
+    this.url = url;
+  }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(url);
-        dest.writeString(originalUrl);
-        dest.writeString(title);
-        dest.writeString(description);
-        dest.writeString(siteName);
-        dest.writeString(themeColor);
-        dest.writeString(ampUrl);
-        dest.writeString(canonicalUrl);
-        dest.writeString(imageUrl);
-        dest.writeString(videoUrl);
-        dest.writeString(feedUrl);
-        dest.writeString(faviconUrl);
-        dest.writeString(elements.toString());
-        dest.writeStringList(keywords);
+  protected WebArticle(Parcel in) {
+    url = in.readString();
+    originalUrl = in.readString();
+    title = in.readString();
+    description = in.readString();
+    siteName = in.readString();
+    themeColor = in.readString();
+    ampUrl = in.readString();
+    canonicalUrl = in.readString();
+    imageUrl = in.readString();
+    videoUrl = in.readString();
+    feedUrl = in.readString();
+    faviconUrl = in.readString();
+
+    final String html = in.readString();
+    final Elements rawElements = Jsoup.parse(html).body().children();
+    for (Iterator<Element> iterator = rawElements.iterator(); iterator.hasNext(); ) {
+      final Element element = iterator.next();
+      if (element.text().isEmpty()) {
+        iterator.remove();
+      }
     }
+    elements = rawElements;
+
+    keywords = in.createStringArrayList();
+  }
+
+  @NonNull
+  public static WebArticle fromArticle(@NonNull Article article) {
+    final WebArticle webArticle = new WebArticle();
+    webArticle.url = article.url;
+    webArticle.originalUrl = article.originalUrl;
+    webArticle.title = article.title;
+    webArticle.description = article.description;
+    webArticle.siteName = article.siteName;
+    webArticle.themeColor = article.themeColor;
+    webArticle.ampUrl = article.ampUrl;
+    webArticle.canonicalUrl = article.canonicalUrl;
+    webArticle.imageUrl = article.imageUrl;
+    webArticle.videoUrl = article.videoUrl;
+    webArticle.feedUrl = article.feedUrl;
+    webArticle.faviconUrl = article.faviconUrl;
+    webArticle.elements = article.document.children();
+    webArticle.keywords = new ArrayList<>();
+    if (article.keywords != null) {
+      webArticle.keywords.addAll(article.keywords);
+    }
+    return webArticle;
+  }
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @NonNull
+  public String preferredUrl() {
+    return canonicalUrl != null && !canonicalUrl.isEmpty() ? canonicalUrl : url;
+  }
+
+  @NonNull
+  public String safeLabel() {
+    return title != null && !title.isEmpty() ? title : preferredUrl();
+  }
+
+  @ColorInt
+  public int themeColor() {
+    try {
+      //noinspection Range
+      return Color.parseColor(themeColor);
+    } catch (Exception e) {
+      return Constants.NO_COLOR;
+    }
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(url);
+    dest.writeString(originalUrl);
+    dest.writeString(title);
+    dest.writeString(description);
+    dest.writeString(siteName);
+    dest.writeString(themeColor);
+    dest.writeString(ampUrl);
+    dest.writeString(canonicalUrl);
+    dest.writeString(imageUrl);
+    dest.writeString(videoUrl);
+    dest.writeString(feedUrl);
+    dest.writeString(faviconUrl);
+    dest.writeString(elements.toString());
+    dest.writeStringList(keywords);
+  }
 }

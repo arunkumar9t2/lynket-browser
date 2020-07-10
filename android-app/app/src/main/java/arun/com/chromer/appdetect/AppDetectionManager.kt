@@ -34,61 +34,61 @@ class AppDetectionManager
 @Inject
 constructor(private val application: Application) {
 
-    // Last detected package name of app;
-    var filteredPackage = ""
+  // Last detected package name of app;
+  var filteredPackage = ""
 
-    @get:Synchronized
-    var nonFilteredPackage = ""
-        private set
+  @get:Synchronized
+  var nonFilteredPackage = ""
+    private set
 
-    @Synchronized
-    fun logPackage(appPackage: String) {
-        if (TextUtils.isEmpty(appPackage)) {
-            return
-        }
-        if (!nonFilteredPackage.equals(appPackage, ignoreCase = true) && nonFilterPackage(appPackage)) {
-            nonFilteredPackage = appPackage
-        }
-        if (!filteredPackage.equals(appPackage, ignoreCase = true) && filterPackage(appPackage)) {
-            filteredPackage = appPackage
-        }
-        Timber.d("Current package: %s", appPackage)
+  @Synchronized
+  fun logPackage(appPackage: String) {
+    if (TextUtils.isEmpty(appPackage)) {
+      return
     }
-
-    @Synchronized
-    fun clear() {
-        nonFilteredPackage = ""
-        filteredPackage = nonFilteredPackage
+    if (!nonFilteredPackage.equals(appPackage, ignoreCase = true) && nonFilterPackage(appPackage)) {
+      nonFilteredPackage = appPackage
     }
-
-
-    private fun nonFilterPackage(appPackage: String): Boolean {
-        return if (appPackage.equals("android", ignoreCase = true)) {   // Ignore system pop ups
-            false
-        } else !appPackage.equals(application.packageName, ignoreCase = true) // Ignore our app
-
+    if (!filteredPackage.equals(appPackage, ignoreCase = true) && filterPackage(appPackage)) {
+      filteredPackage = appPackage
     }
+    Timber.d("Current package: %s", appPackage)
+  }
 
-    private fun filterPackage(packageName: String): Boolean {
-        // Ignore system pop ups
-        if (packageName.equals("android", ignoreCase = true)) return false
+  @Synchronized
+  fun clear() {
+    nonFilteredPackage = ""
+    filteredPackage = nonFilteredPackage
+  }
 
-        // Ignore system pop ups
-        if (packageName.contains("systemui")) return false
 
-        // Ignore our app
-        if (packageName.equals(application.packageName, ignoreCase = true)) return false
+  private fun nonFilterPackage(appPackage: String): Boolean {
+    return if (appPackage.equals("android", ignoreCase = true)) {   // Ignore system pop ups
+      false
+    } else !appPackage.equals(application.packageName, ignoreCase = true) // Ignore our app
 
-        // Chances are that we picked the opening custom tab, so let's ignore our default provider
-        // to be safe
-        if (packageName.equals(Preferences.get(application).customTabPackage()!!, ignoreCase = true)) return false
+  }
 
-        // Ignore google quick search box
-        return !packageName.equals("com.google.android.googlequicksearchbox", ignoreCase = true)
-        // There can also be cases where there is no default provider set, so lets ignore all possible
-        // custom tab providers to be sure. This is safe since browsers don't call our app anyways.
+  private fun filterPackage(packageName: String): Boolean {
+    // Ignore system pop ups
+    if (packageName.equals("android", ignoreCase = true)) return false
 
-        // Commenting, research needed
-        // if (mCustomTabPackages.contains(packageName)) return true;
-    }
+    // Ignore system pop ups
+    if (packageName.contains("systemui")) return false
+
+    // Ignore our app
+    if (packageName.equals(application.packageName, ignoreCase = true)) return false
+
+    // Chances are that we picked the opening custom tab, so let's ignore our default provider
+    // to be safe
+    if (packageName.equals(Preferences.get(application).customTabPackage()!!, ignoreCase = true)) return false
+
+    // Ignore google quick search box
+    return !packageName.equals("com.google.android.googlequicksearchbox", ignoreCase = true)
+    // There can also be cases where there is no default provider set, so lets ignore all possible
+    // custom tab providers to be sure. This is safe since browsers don't call our app anyways.
+
+    // Commenting, research needed
+    // if (mCustomTabPackages.contains(packageName)) return true;
+  }
 }

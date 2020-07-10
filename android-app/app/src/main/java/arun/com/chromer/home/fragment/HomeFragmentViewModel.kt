@@ -34,32 +34,32 @@ import javax.inject.Inject
 class HomeFragmentViewModel
 @Inject
 constructor(
-        private val historyRepository: HistoryRepository
+    private val historyRepository: HistoryRepository
 ) : ViewModel() {
-    private val recentsLoaderSubject: PublishSubject<Int> = PublishSubject.create()
+  private val recentsLoaderSubject: PublishSubject<Int> = PublishSubject.create()
 
-    val recentsResultLiveData = MutableLiveData<Result<List<Website>>>()
+  val recentsResultLiveData = MutableLiveData<Result<List<Website>>>()
 
-    val subs = CompositeSubscription()
+  val subs = CompositeSubscription()
 
-    init {
-        /* subs.add(recentsLoaderSubject.asObservable()
-                 .onBackpressureLatest()
-                 .concatMap {
-                     historyRepository
-                             .recents()
-                             .compose(Result.applyToObservable())
-                             .compose(SchedulerProvider.applyIoSchedulers())
-                 }
-                 .observeOn(AndroidSchedulers.mainThread())
-                 .subscribe { recentsResultLiveData.postValue(it) })*/
-    }
+  init {
+    /* subs.add(recentsLoaderSubject.asObservable()
+             .onBackpressureLatest()
+             .concatMap {
+                 historyRepository
+                         .recents()
+                         .compose(Result.applyToObservable())
+                         .compose(SchedulerProvider.applyIoSchedulers())
+             }
+             .observeOn(AndroidSchedulers.mainThread())
+             .subscribe { recentsResultLiveData.postValue(it) })*/
+  }
 
-    fun loadRecents() {
-        recentsLoaderSubject.onNext(0)
-    }
+  fun loadRecents() {
+    recentsLoaderSubject.onNext(0)
+  }
 
-    override fun onCleared() {
-        subs.clear()
-    }
+  override fun onCleared() {
+    subs.clear()
+  }
 }

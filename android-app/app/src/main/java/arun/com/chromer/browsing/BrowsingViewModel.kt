@@ -48,79 +48,79 @@ import javax.inject.Inject
 class BrowsingViewModel
 @Inject
 constructor(
-        application: Application,
-        private val preferences: Preferences,
-        private val websiteRepository: WebsiteRepository
+    application: Application,
+    private val preferences: Preferences,
+    private val websiteRepository: WebsiteRepository
 ) : AndroidViewModel(application) {
-    private val subs = CompositeSubscription()
+  private val subs = CompositeSubscription()
 
-    var isIncognito: Boolean = false
+  var isIncognito: Boolean = false
 
-    private val websiteQueue = PublishSubject.create<String>()
-    private val taskDescriptionQueue = PublishSubject.create<Website>()
+  private val websiteQueue = PublishSubject.create<String>()
+  private val taskDescriptionQueue = PublishSubject.create<Website>()
 
-    val toolbarColor = MutableLiveData<Int>()
-    val websiteLiveData = MutableLiveData<Result<Website>>()
-    val activityDescription = MutableLiveData<ActivityManager.TaskDescription>()
+  val toolbarColor = MutableLiveData<Int>()
+  val websiteLiveData = MutableLiveData<Result<Website>>()
+  val activityDescription = MutableLiveData<ActivityManager.TaskDescription>()
 
-    init {
-        toolbarColor.value = ContextCompat.getColor(application, R.color.colorPrimary)
+  init {
+    toolbarColor.value = ContextCompat.getColor(application, R.color.colorPrimary)
 
-        // Monitor website requests
-        subs.add(websiteQueue
-                .onBackpressureBuffer()
-                .filter { it != null && it.isNotEmpty() }
-                .switchMap { url ->
-                    websiteObservable(url)
-                            .compose(Result.applyToObservable())
-                            .compose(SchedulerProvider.applyIoSchedulers())
-                }.subscribe({ result ->
-                    websiteLiveData.value = result
-                    if (result is Result.Success) {
-                        taskDescriptionQueue.onNext(result.data!!)
-                    }
-                }, Timber::e))
+    // Monitor website requests
+    subs.add(websiteQueue
+        .onBackpressureBuffer()
+        .filter { it != null && it.isNotEmpty() }
+        .switchMap { url ->
+          websiteObservable(url)
+              .compose(Result.applyToObservable())
+              .compose(SchedulerProvider.applyIoSchedulers())
+        }.subscribe({ result ->
+          websiteLiveData.value = result
+          if (result is Result.Success) {
+            taskDescriptionQueue.onNext(result.data!!)
+          }
+        }, Timber::e))
 
 
-        // Set task descriptions
-        subs.add(taskDescriptionQueue
-                .onBackpressureBuffer()
-                .concatMap { website ->
-                    return@concatMap Observable.just(website)
-                            .map { TaskDescriptionCompat(website.safeLabel(), null, toolbarColor.value!!) }
-                            .doOnNext(this::setTaskDescription)
-                            .map {
-                                val iconColor = websiteRepository.getWebsiteIconWithPlaceholderAndColor(website)
-                                val selectedToolbarColor = when {
-                                    !preferences.dynamiceToolbarEnabledAndWebEnabled() -> toolbarColor.value!!
-                                    website.themeColor() != Constants.NO_COLOR -> website.themeColor()
-                                    else -> iconColor.second
-                                }
-                                return@map TaskDescriptionCompat(website.safeLabel(), iconColor.first, selectedToolbarColor)
-                            }.doOnNext(this::setTaskDescription)
-                            .doOnError(Timber::e)
-                            .compose(SchedulerProvider.applyIoSchedulers())
-                }.subscribe())
+    // Set task descriptions
+    subs.add(taskDescriptionQueue
+        .onBackpressureBuffer()
+        .concatMap { website ->
+          return@concatMap Observable.just(website)
+              .map { TaskDescriptionCompat(website.safeLabel(), null, toolbarColor.value!!) }
+              .doOnNext(this::setTaskDescription)
+              .map {
+                val iconColor = websiteRepository.getWebsiteIconWithPlaceholderAndColor(website)
+                val selectedToolbarColor = when {
+                  !preferences.dynamiceToolbarEnabledAndWebEnabled() -> toolbarColor.value!!
+                  website.themeColor() != Constants.NO_COLOR -> website.themeColor()
+                  else -> iconColor.second
+                }
+                return@map TaskDescriptionCompat(website.safeLabel(), iconColor.first, selectedToolbarColor)
+              }.doOnNext(this::setTaskDescription)
+              .doOnError(Timber::e)
+              .compose(SchedulerProvider.applyIoSchedulers())
+        }.subscribe())
+  }
+
+  private fun websiteObservable(url: String) = if (!isIncognito) {
+    websiteRepository.getWebsite(url)
+  } else websiteRepository.getWebsiteReadOnly(url)
+
+  private fun setTaskDescription(task: TaskDescriptionCompat?) {
+    task?.let {
+      toolbarColor.postValue(task.color)
+      if (Utils.ANDROID_LOLLIPOP) {
+        activityDescription.postValue(task.toActivityTaskDescription())
+      }
     }
+  }
 
-    private fun websiteObservable(url: String) = if (!isIncognito) {
-        websiteRepository.getWebsite(url)
-    } else websiteRepository.getWebsiteReadOnly(url)
+  fun loadWebSiteDetails(url: String) {
+    websiteQueue.onNext(url)
+  }
 
-    private fun setTaskDescription(task: TaskDescriptionCompat?) {
-        task?.let {
-            toolbarColor.postValue(task.color)
-            if (Utils.ANDROID_LOLLIPOP) {
-                activityDescription.postValue(task.toActivityTaskDescription())
-            }
-        }
-    }
-
-    fun loadWebSiteDetails(url: String) {
-        websiteQueue.onNext(url)
-    }
-
-    override fun onCleared() {
-        subs.clear()
-    }
+  override fun onCleared() {
+    subs.clear()
+  }
 }

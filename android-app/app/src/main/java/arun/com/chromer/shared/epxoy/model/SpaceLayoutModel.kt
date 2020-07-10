@@ -10,18 +10,19 @@ import dev.arunkumar.android.epoxy.model.KotlinHolder
 
 @EpoxyModelClass(layout = R.layout.widget_space_layout)
 abstract class SpaceLayoutModel : KotlinEpoxyModelWithHolder<SpaceLayoutModel.ViewHolder>() {
-    class ViewHolder : KotlinHolder()
+  class ViewHolder : KotlinHolder()
 
-    @EpoxyAttribute
-    var spaceHeight: Int = 0
-    @EpoxyAttribute
-    var spaceWidth: Int = 0
+  @EpoxyAttribute
+  var spaceHeight: Int = 0
 
-    override fun bind(holder: ViewHolder) {
-        super.bind(holder)
-        holder.containerView.updateLayoutParams<ViewGroup.LayoutParams> {
-            height = spaceHeight
-            width = spaceWidth
-        }
+  @EpoxyAttribute
+  var spaceWidth: Int = 0
+
+  override fun bind(holder: ViewHolder) {
+    super.bind(holder)
+    holder.containerView.updateLayoutParams<ViewGroup.LayoutParams> {
+      height = spaceHeight
+      width = spaceWidth
     }
+  }
 }

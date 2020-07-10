@@ -34,85 +34,85 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class BottomBarReceiver : BroadcastReceiver() {
-    @Inject
-    lateinit var tabsManager: TabsManager
+  @Inject
+  lateinit var tabsManager: TabsManager
 
-    override fun onReceive(context: Context, intent: Intent) {
-        (context.applicationContext as Chromer).appComponent.inject(this)
+  override fun onReceive(context: Context, intent: Intent) {
+    (context.applicationContext as Chromer).appComponent.inject(this)
 
-        val clickedId = intent.getIntExtra(CustomTabsIntent.EXTRA_REMOTEVIEWS_CLICKED_ID, -1)
-        val url = intent.dataString
-        val orgUrl = intent.getStringExtra(Constants.EXTRA_KEY_ORIGINAL_URL)
-        if (url == null || clickedId == -1) {
-            Timber.d("Skipped bottom bar callback")
-            return
-        }
-
-        when (clickedId) {
-            R.id.bottom_bar_open_in_new_tab -> OpenInNewTab(context, url).perform()
-            R.id.bottom_bar_share -> ShareUrl(context, url).perform()
-            R.id.bottom_bar_tabs -> TabsScreen(context, url).perform()
-            R.id.bottom_bar_minimize_tab -> orgUrl?.let { MinimizeUrl(context, orgUrl).perform() }
-            R.id.bottom_bar_article_view -> ArticleView(context, url).perform()
-        }
+    val clickedId = intent.getIntExtra(CustomTabsIntent.EXTRA_REMOTEVIEWS_CLICKED_ID, -1)
+    val url = intent.dataString
+    val orgUrl = intent.getStringExtra(Constants.EXTRA_KEY_ORIGINAL_URL)
+    if (url == null || clickedId == -1) {
+      Timber.d("Skipped bottom bar callback")
+      return
     }
 
-    abstract inner class Command internal constructor(context: Context, internal val url: String) {
-        internal var context: Context? = null
-        internal var performCalled = false
+    when (clickedId) {
+      R.id.bottom_bar_open_in_new_tab -> OpenInNewTab(context, url).perform()
+      R.id.bottom_bar_share -> ShareUrl(context, url).perform()
+      R.id.bottom_bar_tabs -> TabsScreen(context, url).perform()
+      R.id.bottom_bar_minimize_tab -> orgUrl?.let { MinimizeUrl(context, orgUrl).perform() }
+      R.id.bottom_bar_article_view -> ArticleView(context, url).perform()
+    }
+  }
 
-        init {
-            this.context = context.applicationContext
-        }
+  abstract inner class Command internal constructor(context: Context, internal val url: String) {
+    internal var context: Context? = null
+    internal var performCalled = false
 
-        internal fun perform() {
-            performCalled = true
-            onPerform()
-            context = null
-        }
-
-        protected abstract fun onPerform()
+    init {
+      this.context = context.applicationContext
     }
 
-    inner class ArticleView internal constructor(context: Context, url: String) : Command(context, url) {
-
-        override fun onPerform() {
-            if (!performCalled) {
-                throw IllegalStateException("Should call perform() instead of onPerform()")
-            }
-            tabsManager.openArticle(context!!, Website(url), true)
-        }
+    internal fun perform() {
+      performCalled = true
+      onPerform()
+      context = null
     }
 
-    inner class OpenInNewTab internal constructor(context: Context, url: String) : Command(context, url) {
+    protected abstract fun onPerform()
+  }
 
-        override fun onPerform() {
-            if (!performCalled) {
-                throw IllegalStateException("Should call perform() instead of onPerform()")
-            }
-            tabsManager.openNewTab(context!!, url)
-        }
+  inner class ArticleView internal constructor(context: Context, url: String) : Command(context, url) {
 
+    override fun onPerform() {
+      if (!performCalled) {
+        throw IllegalStateException("Should call perform() instead of onPerform()")
+      }
+      tabsManager.openArticle(context!!, Website(url), true)
+    }
+  }
+
+  inner class OpenInNewTab internal constructor(context: Context, url: String) : Command(context, url) {
+
+    override fun onPerform() {
+      if (!performCalled) {
+        throw IllegalStateException("Should call perform() instead of onPerform()")
+      }
+      tabsManager.openNewTab(context!!, url)
     }
 
-    inner class ShareUrl internal constructor(context: Context, url: String) : Command(context, url) {
+  }
 
-        override fun onPerform() {
-            Utils.shareText(context!!, url)
-        }
+  inner class ShareUrl internal constructor(context: Context, url: String) : Command(context, url) {
+
+    override fun onPerform() {
+      Utils.shareText(context!!, url)
     }
+  }
 
-    inner class MinimizeUrl internal constructor(context: Context, orgUrl: String) : Command(context, orgUrl) {
+  inner class MinimizeUrl internal constructor(context: Context, orgUrl: String) : Command(context, orgUrl) {
 
-        override fun onPerform() {
-            tabsManager.minimizeTabByUrl(url, CustomTabActivity::class.java.name)
-        }
+    override fun onPerform() {
+      tabsManager.minimizeTabByUrl(url, CustomTabActivity::class.java.name)
     }
+  }
 
-    inner class TabsScreen internal constructor(context: Context, orgUrl: String) : Command(context, orgUrl) {
+  inner class TabsScreen internal constructor(context: Context, orgUrl: String) : Command(context, orgUrl) {
 
-        override fun onPerform() {
-            tabsManager.showTabsActivity()
-        }
+    override fun onPerform() {
+      tabsManager.showTabsActivity()
     }
+  }
 }

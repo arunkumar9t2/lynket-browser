@@ -23,29 +23,29 @@ import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.search.suggestion.items.SuggestionType.*
 
 enum class SuggestionType {
-    COPY,
-    GOOGLE,
-    HISTORY
+  COPY,
+  GOOGLE,
+  HISTORY
 }
 
 sealed class SuggestionItem(
-        open val title: String,
-        open val subTitle: String? = null,
-        val type: SuggestionType = GOOGLE
+    open val title: String,
+    open val subTitle: String? = null,
+    val type: SuggestionType = GOOGLE
 ) {
-    data class CopySuggestionItem(
-            override val title: String,
-            override val subTitle: String
-    ) : SuggestionItem(title, subTitle, COPY)
+  data class CopySuggestionItem(
+      override val title: String,
+      override val subTitle: String
+  ) : SuggestionItem(title, subTitle, COPY)
 
-    data class GoogleSuggestionItem(
-            override val title: String,
-            override val subTitle: String? = null
-    ) : SuggestionItem(title, subTitle, GOOGLE)
+  data class GoogleSuggestionItem(
+      override val title: String,
+      override val subTitle: String? = null
+  ) : SuggestionItem(title, subTitle, GOOGLE)
 
-    data class HistorySuggestionItem(
-            val website: Website,
-            override val title: String,
-            override val subTitle: String? = null
-    ) : SuggestionItem(title, subTitle, HISTORY)
+  data class HistorySuggestionItem(
+      val website: Website,
+      override val title: String,
+      override val subTitle: String? = null
+  ) : SuggestionItem(title, subTitle, HISTORY)
 }

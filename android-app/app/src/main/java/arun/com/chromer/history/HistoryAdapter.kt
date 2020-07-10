@@ -45,79 +45,82 @@ import javax.inject.Inject
 class HistoryAdapter
 @Inject
 constructor(
-        private val defaultTabsManager: TabsManager,
-        private val requestManager: RequestManager
+    private val defaultTabsManager: TabsManager,
+    private val requestManager: RequestManager
 ) : PagedListAdapter<Website, HistoryAdapter.HistoryViewHolder>(Website.DIFFER) {
 
-    override fun onCreateViewHolder(
-            parent: ViewGroup,
-            position: Int
-    ): HistoryViewHolder = HistoryViewHolder(parent.inflate(R.layout.activity_history_list_item_template))
+  override fun onCreateViewHolder(
+      parent: ViewGroup,
+      position: Int
+  ): HistoryViewHolder = HistoryViewHolder(parent.inflate(R.layout.activity_history_list_item_template))
 
-    override fun onBindViewHolder(
-            historyViewHolder: HistoryViewHolder,
-            position: Int
-    ) = historyViewHolder.bind(getItem(position))
+  override fun onBindViewHolder(
+      historyViewHolder: HistoryViewHolder,
+      position: Int
+  ) = historyViewHolder.bind(getItem(position))
 
-    fun getItemAt(adapterPosition: Int) = getItem(adapterPosition)
+  fun getItemAt(adapterPosition: Int) = getItem(adapterPosition)
 
-    /**
-     * History ViewHolder to render history items
-     */
-    inner class HistoryViewHolder(
-            itemView: View
-    ) : RecyclerView.ViewHolder(itemView) {
-        @BindView(R.id.history_title)
-        @JvmField
-        var historyTitle: TextView? = null
-        @BindView(R.id.history_favicon)
-        @JvmField
-        var historyFavicon: ImageView? = null
-        @BindView(R.id.history_subtitle)
-        @JvmField
-        var historySubtitle: TextView? = null
-        @BindView(R.id.history_amp)
-        @JvmField
-        var historyAmp: ImageView? = null
+  /**
+   * History ViewHolder to render history items
+   */
+  inner class HistoryViewHolder(
+      itemView: View
+  ) : RecyclerView.ViewHolder(itemView) {
+    @BindView(R.id.history_title)
+    @JvmField
+    var historyTitle: TextView? = null
 
-        init {
-            ButterKnife.bind(this, itemView)
-            itemView.setOnClickListener {
-                val position = adapterPosition
-                val website = getItem(position)
-                if (website != null && position != RecyclerView.NO_POSITION) {
-                    defaultTabsManager.openUrl(itemView.context, website)
-                }
-            }
+    @BindView(R.id.history_favicon)
+    @JvmField
+    var historyFavicon: ImageView? = null
 
-            historyAmp?.setOnClickListener {
-                val position = adapterPosition
-                val website = getItem(position)
-                if (website != null && position != RecyclerView.NO_POSITION) {
-                    defaultTabsManager.openUrl(itemView.context, Website.Ampify(website))
-                }
-            }
+    @BindView(R.id.history_subtitle)
+    @JvmField
+    var historySubtitle: TextView? = null
+
+    @BindView(R.id.history_amp)
+    @JvmField
+    var historyAmp: ImageView? = null
+
+    init {
+      ButterKnife.bind(this, itemView)
+      itemView.setOnClickListener {
+        val position = adapterPosition
+        val website = getItem(position)
+        if (website != null && position != RecyclerView.NO_POSITION) {
+          defaultTabsManager.openUrl(itemView.context, website)
         }
+      }
 
-        fun bind(website: Website?) {
-            if (website == null) {
-                historyTitle?.setText(R.string.loading)
-                historySubtitle?.setText(R.string.loading)
-                historyFavicon?.setImageDrawable(null)
-                historyAmp?.visibility = GONE
-                requestManager.clear(historyFavicon!!)
-            } else {
-                historyTitle?.text = website.safeLabel()
-                historySubtitle?.text = website.preferredUrl()
-                requestManager
-                        .load(website)
-                        .into(historyFavicon!!)
-                if (website.hasAmp()) {
-                    historyAmp?.show()
-                } else {
-                    historyAmp?.gone()
-                }
-            }
+      historyAmp?.setOnClickListener {
+        val position = adapterPosition
+        val website = getItem(position)
+        if (website != null && position != RecyclerView.NO_POSITION) {
+          defaultTabsManager.openUrl(itemView.context, Website.Ampify(website))
         }
+      }
     }
+
+    fun bind(website: Website?) {
+      if (website == null) {
+        historyTitle?.setText(R.string.loading)
+        historySubtitle?.setText(R.string.loading)
+        historyFavicon?.setImageDrawable(null)
+        historyAmp?.visibility = GONE
+        requestManager.clear(historyFavicon!!)
+      } else {
+        historyTitle?.text = website.safeLabel()
+        historySubtitle?.text = website.preferredUrl()
+        requestManager
+            .load(website)
+            .into(historyFavicon!!)
+        if (website.hasAmp()) {
+          historyAmp?.show()
+        } else {
+          historyAmp?.gone()
+        }
+      }
+    }
+  }
 }

@@ -56,159 +56,162 @@ import javax.inject.Inject
  * Created by Arunkumar on 07-04-2017.
  */
 class HomeFragment : BaseFragment(), Snackable {
-    @Inject
-    lateinit var recentsAdapter: RecentsAdapter
-    @Inject
-    lateinit var rxEventBus: RxEventBus
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-    @Inject
-    lateinit var preferences: Preferences
+  @Inject
+  lateinit var recentsAdapter: RecentsAdapter
 
-    private lateinit var homeFragmentViewModel: HomeFragmentViewModel
+  @Inject
+  lateinit var rxEventBus: RxEventBus
 
-    override fun inject(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
+  @Inject
+  lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    override fun getLayoutRes(): Int = R.layout.fragment_home
+  @Inject
+  lateinit var preferences: Preferences
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupMaterialSearch()
-        setupRecents()
-        setupProviderCard()
-        setupTipsCard()
-        setupEventListeners()
+  private lateinit var homeFragmentViewModel: HomeFragmentViewModel
+
+  override fun inject(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
+
+  override fun getLayoutRes(): Int = R.layout.fragment_home
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    setupMaterialSearch()
+    setupRecents()
+    setupProviderCard()
+    setupTipsCard()
+    setupEventListeners()
+  }
+
+  override fun onActivityCreated(savedInstanceState: Bundle?) {
+    super.onActivityCreated(savedInstanceState)
+    homeFragmentViewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeFragmentViewModel::class.java)
+    observeViewModel()
+  }
+
+  override fun onResume() {
+    super.onResume()
+    if (!isHidden) {
+      loadRecents()
     }
+  }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        homeFragmentViewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeFragmentViewModel::class.java)
-        observeViewModel()
+  override fun onHiddenChanged(hidden: Boolean) {
+    super.onHiddenChanged(hidden)
+    if (!hidden) {
+      activity?.setTitle(R.string.app_name)
+      loadRecents()
     }
+  }
 
-    override fun onResume() {
-        super.onResume()
-        if (!isHidden) {
-            loadRecents()
+  override fun snack(message: String) {
+    (activity as Snackable).snack(message)
+  }
+
+  override fun snackLong(message: String) {
+    (activity as Snackable).snackLong(message)
+  }
+
+  private fun setRecents(websites: List<Website>) {
+    recentsAdapter.setWebsites(websites)
+    if (websites.isEmpty()) {
+      recent_missing_text.show()
+    } else {
+      recent_missing_text.gone()
+    }
+  }
+
+  private fun setupMaterialSearch() {
+
+  }
+
+  private fun loadRecents() {
+    homeFragmentViewModel.loadRecents()
+  }
+
+  private fun setupRecents() {
+    recentsHeaderIcon.setImageDrawable(IconicsDrawable(context!!)
+        .icon(CommunityMaterial.Icon.cmd_history)
+        .colorRes(R.color.accent)
+        .sizeDp(24))
+    recentsList.apply {
+      layoutManager = GridLayoutManager(activity, 4)
+      adapter = recentsAdapter
+    }
+  }
+
+  private fun observeViewModel() {
+    homeFragmentViewModel.recentsResultLiveData.watch(this) { result ->
+      when (result) {
+        is Result.Loading<List<Website>> -> {
+          // TODO Show progress bar.
         }
-    }
-
-    override fun onHiddenChanged(hidden: Boolean) {
-        super.onHiddenChanged(hidden)
-        if (!hidden) {
-            activity?.setTitle(R.string.app_name)
-            loadRecents()
+        is Result.Success<List<Website>> -> {
+          setRecents(result.data!!)
         }
+      }
     }
+  }
 
-    override fun snack(message: String) {
-        (activity as Snackable).snack(message)
-    }
 
-    override fun snackLong(message: String) {
-        (activity as Snackable).snackLong(message)
-    }
-
-    private fun setRecents(websites: List<Website>) {
-        recentsAdapter.setWebsites(websites)
-        if (websites.isEmpty()) {
-            recent_missing_text.show()
+  private fun setupProviderCard() {
+    if (isAdded && context != null) {
+      val customTabProvider: String? = preferences.customTabPackage()
+      val isIncognito = preferences.fullIncognitoMode()
+      val isWebView = preferences.useWebView()
+      if (customTabProvider == null || isIncognito || isWebView) {
+        providerDescription.text = HtmlCompat.fromHtml(getString(R.string.tab_provider_status_message_home, getString(R.string.system_webview)))
+        GlideApp.with(this)
+            .load(ApplicationIcon.createUri(Constants.SYSTEM_WEBVIEW))
+            .error(IconicsDrawable(context!!)
+                .icon(CommunityMaterial.Icon.cmd_web)
+                .colorRes(R.color.primary)
+                .sizeDp(24))
+            .into(providerIcon)
+        if (isIncognito) {
+          providerReason.show()
+          providerChangeButton.gone()
         } else {
-            recent_missing_text.gone()
+          providerReason.gone()
+          providerChangeButton.show()
         }
+      } else {
+        providerReason.gone()
+        providerChangeButton.show()
+        val appName = context!!.appName(customTabProvider)
+        providerDescription.text = HtmlCompat.fromHtml(getString(R.string.tab_provider_status_message_home, appName))
+        GlideApp.with(this)
+            .load(ApplicationIcon.createUri(customTabProvider))
+            .into(providerIcon)
+      }
     }
-
-    private fun setupMaterialSearch() {
-
-    }
-
-    private fun loadRecents() {
-        homeFragmentViewModel.loadRecents()
-    }
-
-    private fun setupRecents() {
-        recentsHeaderIcon.setImageDrawable(IconicsDrawable(context!!)
-                .icon(CommunityMaterial.Icon.cmd_history)
-                .colorRes(R.color.accent)
-                .sizeDp(24))
-        recentsList.apply {
-            layoutManager = GridLayoutManager(activity, 4)
-            adapter = recentsAdapter
-        }
-    }
-
-    private fun observeViewModel() {
-        homeFragmentViewModel.recentsResultLiveData.watch(this) { result ->
-            when (result) {
-                is Result.Loading<List<Website>> -> {
-                    // TODO Show progress bar.
-                }
-                is Result.Success<List<Website>> -> {
-                    setRecents(result.data!!)
-                }
-            }
-        }
-    }
+  }
 
 
-    private fun setupProviderCard() {
-        if (isAdded && context != null) {
-            val customTabProvider: String? = preferences.customTabPackage()
-            val isIncognito = preferences.fullIncognitoMode()
-            val isWebView = preferences.useWebView()
-            if (customTabProvider == null || isIncognito || isWebView) {
-                providerDescription.text = HtmlCompat.fromHtml(getString(R.string.tab_provider_status_message_home, getString(R.string.system_webview)))
-                GlideApp.with(this)
-                        .load(ApplicationIcon.createUri(Constants.SYSTEM_WEBVIEW))
-                        .error(IconicsDrawable(context!!)
-                                .icon(CommunityMaterial.Icon.cmd_web)
-                                .colorRes(R.color.primary)
-                                .sizeDp(24))
-                        .into(providerIcon)
-                if (isIncognito) {
-                    providerReason.show()
-                    providerChangeButton.gone()
-                } else {
-                    providerReason.gone()
-                    providerChangeButton.show()
-                }
-            } else {
-                providerReason.gone()
-                providerChangeButton.show()
-                val appName = context!!.appName(customTabProvider)
-                providerDescription.text = HtmlCompat.fromHtml(getString(R.string.tab_provider_status_message_home, appName))
-                GlideApp.with(this)
-                        .load(ApplicationIcon.createUri(customTabProvider))
-                        .into(providerIcon)
-            }
-        }
-    }
+  private fun setupTipsCard() {
+    tipsIcon.setImageDrawable(IconicsDrawable(context!!)
+        .icon(CommunityMaterial.Icon.cmd_lightbulb_on)
+        .colorRes(R.color.md_yellow_700)
+        .sizeDp(24))
+  }
 
+  private fun setupEventListeners() {
+    subs.add(rxEventBus
+        .filteredEvents<BrowsingOptionsActivity.ProviderChanged>()
+        .subscribe { setupProviderCard() })
+  }
 
-    private fun setupTipsCard() {
-        tipsIcon.setImageDrawable(IconicsDrawable(context!!)
-                .icon(CommunityMaterial.Icon.cmd_lightbulb_on)
-                .colorRes(R.color.md_yellow_700)
-                .sizeDp(24))
-    }
+  @OnClick(R.id.providerChangeButton)
+  fun onProviderChangeClicked() {
+    Handler().postDelayed({
+      startActivity(Intent(context, ProviderSelectionActivity::class.java))
+    }, 200)
+  }
 
-    private fun setupEventListeners() {
-        subs.add(rxEventBus
-                .filteredEvents<BrowsingOptionsActivity.ProviderChanged>()
-                .subscribe { setupProviderCard() })
-    }
-
-    @OnClick(R.id.providerChangeButton)
-    fun onProviderChangeClicked() {
-        Handler().postDelayed({
-            startActivity(Intent(context, ProviderSelectionActivity::class.java))
-        }, 200)
-    }
-
-    @OnClick(R.id.tipsButton)
-    fun onTipsClicked() {
-        Handler().postDelayed({
-            startActivity(Intent(context, TipsActivity::class.java))
-        }, 200)
-    }
+  @OnClick(R.id.tipsButton)
+  fun onTipsClicked() {
+    Handler().postDelayed({
+      startActivity(Intent(context, TipsActivity::class.java))
+    }, 200)
+  }
 }

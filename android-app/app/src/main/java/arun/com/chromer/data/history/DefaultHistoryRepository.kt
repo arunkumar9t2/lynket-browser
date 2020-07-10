@@ -37,73 +37,73 @@ import javax.inject.Singleton
 class DefaultHistoryRepository
 @Inject
 internal constructor(
-        private val historyStore: HistoryStore,
-        private val preferences: Preferences,
-        private val pagedHistoryDataSourceFactory: PagedHistoryDataSource.Factory
+    private val historyStore: HistoryStore,
+    private val preferences: Preferences,
+    private val pagedHistoryDataSourceFactory: PagedHistoryDataSource.Factory
 ) : HistoryRepository {
 
-    override fun changes(): io.reactivex.Observable<Int> = historyStore.changes()
+  override fun changes(): io.reactivex.Observable<Int> = historyStore.changes()
 
-    override fun get(website: Website): Observable<Website> {
-        return historyStore.get(website)
-                .doOnNext { saved ->
-                    if (saved == null) {
-                        Timber.d("History miss for: %s", website.url)
-                    } else {
-                        Timber.d("History hit for : %s", website.url)
-                    }
-                }
-    }
-
-    override fun insert(website: Website): Observable<Website> {
-        return if (preferences.historyDisabled()) {
-            Observable.just(website)
-        } else {
-            historyStore.insert(website)
-                    .doOnNext { webSite1 ->
-                        if (webSite1 != null) {
-                            Timber.d("Added %s to history", webSite1.url)
-                        } else {
-                            Timber.e("%s Did not add to history", website.url)
-                        }
-                    }
+  override fun get(website: Website): Observable<Website> {
+    return historyStore.get(website)
+        .doOnNext { saved ->
+          if (saved == null) {
+            Timber.d("History miss for: %s", website.url)
+          } else {
+            Timber.d("History hit for : %s", website.url)
+          }
         }
+  }
+
+  override fun insert(website: Website): Observable<Website> {
+    return if (preferences.historyDisabled()) {
+      Observable.just(website)
+    } else {
+      historyStore.insert(website)
+          .doOnNext { webSite1 ->
+            if (webSite1 != null) {
+              Timber.d("Added %s to history", webSite1.url)
+            } else {
+              Timber.e("%s Did not add to history", website.url)
+            }
+          }
     }
+  }
 
-    override fun update(website: Website): Observable<Website> {
-        return if (preferences.historyDisabled()) {
-            Observable.just(website)
-        } else {
-            historyStore.update(website)
-                    .doOnNext { saved ->
-                        if (saved != null) {
-                            Timber.d("Updated %s in history table", saved.url)
-                        }
-                    }
-        }
+  override fun update(website: Website): Observable<Website> {
+    return if (preferences.historyDisabled()) {
+      Observable.just(website)
+    } else {
+      historyStore.update(website)
+          .doOnNext { saved ->
+            if (saved != null) {
+              Timber.d("Updated %s in history table", saved.url)
+            }
+          }
     }
+  }
 
-    override fun pagedHistory(): LiveData<PagedList<Website>> {
-        val pagedListConfig = PagedList.Config.Builder()
-                .setEnablePlaceholders(false)
-                .setInitialLoadSizeHint(10)
-                .setPageSize(20)
-                .build()
-        return LivePagedListBuilder(pagedHistoryDataSourceFactory, pagedListConfig).build()
-    }
+  override fun pagedHistory(): LiveData<PagedList<Website>> {
+    val pagedListConfig = PagedList.Config.Builder()
+        .setEnablePlaceholders(false)
+        .setInitialLoadSizeHint(10)
+        .setPageSize(20)
+        .build()
+    return LivePagedListBuilder(pagedHistoryDataSourceFactory, pagedListConfig).build()
+  }
 
-    override fun loadHistoryRange(
-            limit: Int,
-            offset: Int
-    ) = historyStore.loadHistoryRange(limit, offset)
+  override fun loadHistoryRange(
+      limit: Int,
+      offset: Int
+  ) = historyStore.loadHistoryRange(limit, offset)
 
-    override fun delete(website: Website) = historyStore.delete(website)
+  override fun delete(website: Website) = historyStore.delete(website)
 
-    override fun exists(website: Website) = historyStore.exists(website)
+  override fun exists(website: Website) = historyStore.exists(website)
 
-    override fun deleteAll() = historyStore.deleteAll()
+  override fun deleteAll() = historyStore.deleteAll()
 
-    override fun recents() = historyStore.recents()
+  override fun recents() = historyStore.recents()
 
-    override fun search(text: String) = historyStore.search(text)
+  override fun search(text: String) = historyStore.search(text)
 }

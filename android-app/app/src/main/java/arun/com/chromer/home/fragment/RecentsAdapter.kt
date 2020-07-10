@@ -42,90 +42,90 @@ import javax.inject.Inject
 class RecentsAdapter
 @Inject
 constructor(val tabsManager: TabsManager) : RecyclerView.Adapter<RecentsAdapter.RecentsViewHolder>() {
-    private val websites = ArrayList<Website>()
+  private val websites = ArrayList<Website>()
 
+  init {
+    setHasStableIds(true)
+  }
+
+  override fun onCreateViewHolder(
+      parent: ViewGroup,
+      viewType: Int
+  ) = RecentsViewHolder(
+      tabsManager,
+      LayoutInflater.from(parent.context).inflate(
+          R.layout.widget_website_grid_item,
+          parent,
+          false
+      )
+  )
+
+  override fun onBindViewHolder(holder: RecentsViewHolder, position: Int) {
+    val website = websites[position]
+    holder.bind(website)
+  }
+
+  override fun onViewDetachedFromWindow(holder: RecentsViewHolder) {
+    super.onViewDetachedFromWindow(holder)
+    GlideApp.with(holder.itemView).clear(holder.icon)
+  }
+
+  override fun getItemCount(): Int = websites.size
+
+  override fun getItemId(position: Int): Long = websites[position].hashCode().toLong()
+
+  internal fun setWebsites(websites: List<Website>) {
+    val recentsDiff = WebsitesDiff(this.websites, websites)
+    val diffUtil = DiffUtil.calculateDiff(recentsDiff)
+    this.websites.clear()
+    this.websites.addAll(websites)
+    diffUtil.dispatchUpdatesTo(this)
+  }
+
+  class RecentsViewHolder(
+      val tabsManager: TabsManager,
+      override val containerView: View
+  ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
     init {
-        setHasStableIds(true)
+      ButterKnife.bind(this, itemView)
     }
 
-    override fun onCreateViewHolder(
-            parent: ViewGroup,
-            viewType: Int
-    ) = RecentsViewHolder(
-            tabsManager,
-            LayoutInflater.from(parent.context).inflate(
-                    R.layout.widget_website_grid_item,
-                    parent,
-                    false
-            )
-    )
-
-    override fun onBindViewHolder(holder: RecentsViewHolder, position: Int) {
-        val website = websites[position]
-        holder.bind(website)
-    }
-
-    override fun onViewDetachedFromWindow(holder: RecentsViewHolder) {
-        super.onViewDetachedFromWindow(holder)
-        GlideApp.with(holder.itemView).clear(holder.icon)
-    }
-
-    override fun getItemCount(): Int = websites.size
-
-    override fun getItemId(position: Int): Long = websites[position].hashCode().toLong()
-
-    internal fun setWebsites(websites: List<Website>) {
-        val recentsDiff = WebsitesDiff(this.websites, websites)
-        val diffUtil = DiffUtil.calculateDiff(recentsDiff)
-        this.websites.clear()
-        this.websites.addAll(websites)
-        diffUtil.dispatchUpdatesTo(this)
-    }
-
-    class RecentsViewHolder(
-            val tabsManager: TabsManager,
-            override val containerView: View
-    ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-        init {
-            ButterKnife.bind(this, itemView)
+    fun bind(website: Website?) {
+      if (website != null) {
+        label.text = website.safeLabel()
+        itemView.setOnClickListener {
+          tabsManager.openUrl(itemView.context, website)
         }
-
-        fun bind(website: Website?) {
-            if (website != null) {
-                label.text = website.safeLabel()
-                itemView.setOnClickListener {
-                    tabsManager.openUrl(itemView.context, website)
-                }
-                GlideApp.with(itemView)
-                        .load(website)
-                        .into(icon)
-            }
-        }
+        GlideApp.with(itemView)
+            .load(website)
+            .into(icon)
+      }
     }
+  }
 
-    private inner class WebsitesDiff
-    internal constructor(
-            private val oldList: List<Website>,
-            private val newList: List<Website>
-    ) : DiffUtil.Callback() {
+  private inner class WebsitesDiff
+  internal constructor(
+      private val oldList: List<Website>,
+      private val newList: List<Website>
+  ) : DiffUtil.Callback() {
 
-        override fun getOldListSize() = oldList.size
+    override fun getOldListSize() = oldList.size
 
-        override fun getNewListSize() = newList.size
+    override fun getNewListSize() = newList.size
 
-        override fun areItemsTheSame(
-                oldItemPosition: Int,
-                newItemPosition: Int
-        ) = isEquals(oldItemPosition, newItemPosition)
+    override fun areItemsTheSame(
+        oldItemPosition: Int,
+        newItemPosition: Int
+    ) = isEquals(oldItemPosition, newItemPosition)
 
-        override fun areContentsTheSame(
-                oldItemPosition: Int,
-                newItemPosition: Int
-        ) = isEquals(oldItemPosition, newItemPosition)
+    override fun areContentsTheSame(
+        oldItemPosition: Int,
+        newItemPosition: Int
+    ) = isEquals(oldItemPosition, newItemPosition)
 
-        private fun isEquals(
-                oldItemPosition: Int,
-                newItemPosition: Int
-        ) = oldList[oldItemPosition] == newList[newItemPosition]
-    }
+    private fun isEquals(
+        oldItemPosition: Int,
+        newItemPosition: Int
+    ) = oldList[oldItemPosition] == newList[newItemPosition]
+  }
 }

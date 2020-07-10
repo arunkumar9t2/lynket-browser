@@ -23,8 +23,8 @@ package arun.com.chromer.shared
  * Created by arunk on 24-01-2018.
  */
 interface FabHandler {
-    /**
-     * Called when Fab is clicked.
-     */
-    fun onFabClick()
+  /**
+   * Called when Fab is clicked.
+   */
+  fun onFabClick()
 }

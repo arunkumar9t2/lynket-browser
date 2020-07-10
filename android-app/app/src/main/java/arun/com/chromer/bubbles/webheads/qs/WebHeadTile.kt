@@ -34,21 +34,21 @@ import com.mikepenz.iconics.IconicsDrawable
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 class WebHeadTile : PreferenceQuickSettingsTile() {
-    override fun togglePreference() = preferences.webHeads(!preferences.webHeads())
+  override fun togglePreference() = preferences.webHeads(!preferences.webHeads())
 
-    override fun activeLabel(): String = label()
+  override fun activeLabel(): String = label()
 
-    override fun inActiveIcon(): Icon = icon()
+  override fun inActiveIcon(): Icon = icon()
 
-    override fun activeIcon(): Icon = icon()
+  override fun activeIcon(): Icon = icon()
 
-    override fun inActiveLabel(): String = label()
+  override fun inActiveLabel(): String = label()
 
-    override fun preference(): Boolean = preferences.webHeads()
+  override fun preference(): Boolean = preferences.webHeads()
 
-    private fun label() = getString(R.string.web_heads)
-    private fun icon() = Icon.createWithBitmap(IconicsDrawable(this)
-            .icon(CommunityMaterial.Icon.cmd_chart_bubble)
-            .color(Color.WHITE)
-            .sizeDp(24).toBitmap())
+  private fun label() = getString(R.string.web_heads)
+  private fun icon() = Icon.createWithBitmap(IconicsDrawable(this)
+      .icon(CommunityMaterial.Icon.cmd_chart_bubble)
+      .color(Color.WHITE)
+      .sizeDp(24).toBitmap())
 }

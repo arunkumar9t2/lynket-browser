@@ -38,78 +38,78 @@ import com.github.paolorotolo.appintro.AppIntro
  */
 class ChromerIntroActivity : AppIntro(), ProvidesActivityComponent {
 
-    private var activityComponent: ActivityComponent? = null
+  private var activityComponent: ActivityComponent? = null
 
-    public override fun onCreate(savedInstanceState: Bundle?) {
-        activityComponent = (application as Chromer)
-                .appComponent
-                .newActivityComponent(ActivityModule(this))
-        inject(activityComponent!!)
-        super.onCreate(savedInstanceState)
+  public override fun onCreate(savedInstanceState: Bundle?) {
+    activityComponent = (application as Chromer)
+        .appComponent
+        .newActivityComponent(ActivityModule(this))
+    inject(activityComponent!!)
+    super.onCreate(savedInstanceState)
 
-        val bgColor = ContextCompat.getColor(this, R.color.tutorialBackgrounColor)
+    val bgColor = ContextCompat.getColor(this, R.color.tutorialBackgrounColor)
 
-        addSlide(AppIntroFragment.newInstance(getString(R.string.app_name),
-                getString(R.string.intro_1),
-                R.drawable.chromer_hd_icon,
-                bgColor))
+    addSlide(AppIntroFragment.newInstance(getString(R.string.app_name),
+        getString(R.string.intro_1),
+        R.drawable.chromer_hd_icon,
+        bgColor))
 
-        addSlide(SlideOverExplanationFragment())
+    addSlide(SlideOverExplanationFragment())
 
-        addSlide(ProviderSelectionIntroFragment())
+    addSlide(ProviderSelectionIntroFragment())
 
-        addSlide(WebHeadsIntroFragment())
+    addSlide(WebHeadsIntroFragment())
 
-        addSlide(AppIntroFragment.newInstance(getString(R.string.amp),
-                getString(R.string.tutorial_amp_intro),
-                R.drawable.tutorial_amp_mode,
-                bgColor))
+    addSlide(AppIntroFragment.newInstance(getString(R.string.amp),
+        getString(R.string.tutorial_amp_intro),
+        R.drawable.tutorial_amp_mode,
+        bgColor))
 
-        addSlide(ArticleIntroFragment())
+    addSlide(ArticleIntroFragment())
 
-        if (Utils.ANDROID_LOLLIPOP) {
-            addSlide(AppIntroFragment.newInstance(getString(R.string.merge_tabs),
-                    getText(R.string.merge_tabs_explanation_intro),
-                    R.drawable.tutorial_merge_tabs_and_apps,
-                    bgColor))
-        }
-
-        addSlide(AppIntroFragment.newInstance(getString(R.string.per_app_settings),
-                getText(R.string.per_app_settings_explanation),
-                R.drawable.tutorial_per_app_settings,
-                bgColor))
-
-        setColorTransitionsEnabled(true)
-        showStatusBar(false)
-        showSkipButton(true)
-        isProgressButtonEnabled = true
-
-        // Color status bar for lollipop above
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.statusBarColor = ColorUtil.getDarkenedColorForStatusBar(bgColor)
-        }
+    if (Utils.ANDROID_LOLLIPOP) {
+      addSlide(AppIntroFragment.newInstance(getString(R.string.merge_tabs),
+          getText(R.string.merge_tabs_explanation_intro),
+          R.drawable.tutorial_merge_tabs_and_apps,
+          bgColor))
     }
 
-    override fun onSkipPressed(currentFragment: Fragment?) {
-        super.onSkipPressed(currentFragment)
-        finish()
-    }
+    addSlide(AppIntroFragment.newInstance(getString(R.string.per_app_settings),
+        getText(R.string.per_app_settings_explanation),
+        R.drawable.tutorial_per_app_settings,
+        bgColor))
 
-    override fun onDonePressed(currentFragment: Fragment?) {
-        super.onDonePressed(currentFragment)
-        finish()
-    }
+    setColorTransitionsEnabled(true)
+    showStatusBar(false)
+    showSkipButton(true)
+    isProgressButtonEnabled = true
 
-    override fun getActivityComponent(): ActivityComponent {
-        return activityComponent!!
+    // Color status bar for lollipop above
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      window.statusBarColor = ColorUtil.getDarkenedColorForStatusBar(bgColor)
     }
+  }
 
-    override fun inject(activityComponent: ActivityComponent) {
-        activityComponent.inject(this)
-    }
+  override fun onSkipPressed(currentFragment: Fragment?) {
+    super.onSkipPressed(currentFragment)
+    finish()
+  }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        activityComponent = null
-    }
+  override fun onDonePressed(currentFragment: Fragment?) {
+    super.onDonePressed(currentFragment)
+    finish()
+  }
+
+  override fun getActivityComponent(): ActivityComponent {
+    return activityComponent!!
+  }
+
+  override fun inject(activityComponent: ActivityComponent) {
+    activityComponent.inject(this)
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    activityComponent = null
+  }
 }

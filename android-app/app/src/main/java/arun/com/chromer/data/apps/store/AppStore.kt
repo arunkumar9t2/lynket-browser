@@ -25,30 +25,30 @@ import arun.com.chromer.data.common.App
 import rx.Observable
 
 interface AppStore {
-    fun getApp(packageName: String): Observable<App>
+  fun getApp(packageName: String): Observable<App>
 
-    fun saveApp(app: App): Observable<App>
+  fun saveApp(app: App): Observable<App>
 
-    fun isPackageBlacklisted(packageName: String): Boolean
+  fun isPackageBlacklisted(packageName: String): Boolean
 
-    fun setPackageBlacklisted(packageName: String): Observable<App>
+  fun setPackageBlacklisted(packageName: String): Observable<App>
 
-    fun isPackageIncognito(packageName: String): Boolean
+  fun isPackageIncognito(packageName: String): Boolean
 
-    fun setPackageIncognito(packageName: String): Observable<App>
+  fun setPackageIncognito(packageName: String): Observable<App>
 
-    fun removeIncognito(packageName: String): Observable<App>
+  fun removeIncognito(packageName: String): Observable<App>
 
-    @ColorInt
-    fun getPackageColorSync(packageName: String): Int
+  @ColorInt
+  fun getPackageColorSync(packageName: String): Int
 
-    fun getPackageColor(packageName: String): Observable<Int>
+  fun getPackageColor(packageName: String): Observable<Int>
 
-    fun setPackageColor(packageName: String, color: Int): Observable<App>
+  fun setPackageColor(packageName: String, color: Int): Observable<App>
 
-    fun removeBlacklist(packageName: String): Observable<App>
+  fun removeBlacklist(packageName: String): Observable<App>
 
-    fun getInstalledApps(): Observable<App>
+  fun getInstalledApps(): Observable<App>
 
-    fun allProviders(): Observable<List<Provider>>
+  fun allProviders(): Observable<List<Provider>>
 }

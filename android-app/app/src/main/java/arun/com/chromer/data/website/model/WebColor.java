@@ -22,16 +22,16 @@ package arun.com.chromer.data.website.model;
 import androidx.annotation.ColorInt;
 
 public class WebColor {
-    public String host;
-    @ColorInt
-    public int color;
+  public String host;
+  @ColorInt
+  public int color;
 
-    WebColor() {
+  WebColor() {
 
-    }
+  }
 
-    public WebColor(String host, int color) {
-        this.host = host;
-        this.color = color;
-    }
+  public WebColor(String host, int color) {
+    this.host = host;
+    this.color = color;
+  }
 }

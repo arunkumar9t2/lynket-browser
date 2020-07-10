@@ -27,22 +27,23 @@ import rx.subjects.PublishSubject
  */
 class RxEventBus {
 
-    private val publishSubject: PublishSubject<Any> = PublishSubject.create()
-    /**
-     * Posts an object (usually an Event) to the bus
-     */
-    fun post(event: Any) {
-        publishSubject.onNext(event)
-    }
+  private val publishSubject: PublishSubject<Any> = PublishSubject.create()
 
-    /**
-     * Observable that will emmit everything posted to the event bus.
-     */
-    fun events(): Observable<Any> = publishSubject.asObservable()
+  /**
+   * Posts an object (usually an Event) to the bus
+   */
+  fun post(event: Any) {
+    publishSubject.onNext(event)
+  }
 
-    /**
-     * Observable that only emits events of a specific class.
-     * Use this if you only want to subscribe to one type of events.
-     */
-    inline fun <reified T> filteredEvents(): Observable<T> = events().ofType(T::class.java)
+  /**
+   * Observable that will emmit everything posted to the event bus.
+   */
+  fun events(): Observable<Any> = publishSubject.asObservable()
+
+  /**
+   * Observable that only emits events of a specific class.
+   * Use this if you only want to subscribe to one type of events.
+   */
+  inline fun <reified T> filteredEvents(): Observable<T> = events().ofType(T::class.java)
 }

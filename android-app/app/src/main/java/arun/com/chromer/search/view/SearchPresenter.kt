@@ -19,9 +19,9 @@ import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 
 data class SuggestionResult(
-        val query: String,
-        val suggestionType: SuggestionType,
-        val suggestions: List<SuggestionItem>
+    val query: String,
+    val suggestionType: SuggestionType,
+    val suggestions: List<SuggestionItem>
 )
 
 @SuppressLint("CheckResult")
@@ -29,49 +29,49 @@ data class SuggestionResult(
 class SearchPresenter
 @Inject
 constructor(
-        private val suggestionsEngine: SuggestionsEngine,
-        private val schedulerProvider: SchedulerProvider,
-        @param:Detaches
-        private val detaches: Observable<Unit>,
-        searchProviders: SearchProviders,
-        private val rxPreferences: RxPreferences
+    private val suggestionsEngine: SuggestionsEngine,
+    private val schedulerProvider: SchedulerProvider,
+    @param:Detaches
+    private val detaches: Observable<Unit>,
+    searchProviders: SearchProviders,
+    private val rxPreferences: RxPreferences
 ) {
-    private val suggestionsSubject = PublishRelay.create<SuggestionResult>()
-    val suggestions: Observable<SuggestionResult> = suggestionsSubject.hide()
+  private val suggestionsSubject = PublishRelay.create<SuggestionResult>()
+  val suggestions: Observable<SuggestionResult> = suggestionsSubject.hide()
 
-    fun registerSearch(queryObservable: Observable<String>) {
-        queryObservable
-                .toFlowable(LATEST)
-                .debounce(200, MILLISECONDS, schedulerProvider.pool)
-                .doOnNext { Timber.d(it) }
-                .flatMap { query ->
-                    Flowable.just(query)
-                            .compose(suggestionsEngine.suggestionsTransformer())
-                            .publish(suggestionsEngine.distinctSuggestionsPublishSelector())
-                            .map { SuggestionResult(query, it.first, it.second) }
-                }.takeUntil(detaches.toFlowable(LATEST))
-                .subscribe(suggestionsSubject::accept)
-    }
+  fun registerSearch(queryObservable: Observable<String>) {
+    queryObservable
+        .toFlowable(LATEST)
+        .debounce(200, MILLISECONDS, schedulerProvider.pool)
+        .doOnNext { Timber.d(it) }
+        .flatMap { query ->
+          Flowable.just(query)
+              .compose(suggestionsEngine.suggestionsTransformer())
+              .publish(suggestionsEngine.distinctSuggestionsPublishSelector())
+              .map { SuggestionResult(query, it.first, it.second) }
+        }.takeUntil(detaches.toFlowable(LATEST))
+        .subscribe(suggestionsSubject::accept)
+  }
 
-    fun registerSearchProviderClicks(searchProviderClicks: Observable<SearchProvider>) {
-        searchProviderClicks
-                .observeOn(schedulerProvider.pool)
-                .map { it.name }
-                .observeOn(schedulerProvider.ui)
-                .takeUntil(detaches)
-                .subscribe(rxPreferences.searchEngine)
-    }
+  fun registerSearchProviderClicks(searchProviderClicks: Observable<SearchProvider>) {
+    searchProviderClicks
+        .observeOn(schedulerProvider.pool)
+        .map { it.name }
+        .observeOn(schedulerProvider.ui)
+        .takeUntil(detaches)
+        .subscribe(rxPreferences.searchEngine)
+  }
 
-    val searchEngines: Observable<List<SearchProvider>> = searchProviders
-            .availableProviders
-            .toObservable()
-            .subscribeOn(schedulerProvider.pool)
-            .share()
+  val searchEngines: Observable<List<SearchProvider>> = searchProviders
+      .availableProviders
+      .toObservable()
+      .subscribeOn(schedulerProvider.pool)
+      .share()
 
-    val selectedSearchProvider: Observable<SearchProvider> = searchProviders.selectedProvider
+  val selectedSearchProvider: Observable<SearchProvider> = searchProviders.selectedProvider
 
-    fun getSearchUrl(searchUrl: String): Observable<String> {
-        return selectedSearchProvider.take(1)
-                .map { provider -> provider.getSearchUrl(searchUrl) }
-    }
+  fun getSearchUrl(searchUrl: String): Observable<String> {
+    return selectedSearchProvider.take(1)
+        .map { provider -> provider.getSearchUrl(searchUrl) }
+  }
 }

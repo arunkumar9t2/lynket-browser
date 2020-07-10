@@ -38,29 +38,29 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [
-    AppSchedulersModule::class,
+  AppSchedulersModule::class,
 
-    AppModule::class,
+  AppModule::class,
 
-    HomeActivity.HomeBuilder::class,
-    TabsModule::class,
-    DataModule::class
+  HomeActivity.HomeBuilder::class,
+  TabsModule::class,
+  DataModule::class
 ])
 interface AppComponent {
 
-    fun glideDrawerImageLoader(): GlideDrawerImageLoader
+  fun glideDrawerImageLoader(): GlideDrawerImageLoader
 
-    fun newActivityComponent(activityModule: ActivityModule): ActivityComponent
+  fun newActivityComponent(activityModule: ActivityModule): ActivityComponent
 
-    fun newServiceComponent(serviceModule: ServiceModule): ServiceComponent
+  fun newServiceComponent(serviceModule: ServiceModule): ServiceComponent
 
-    fun appDetectionManager(): AppDetectionManager
+  fun appDetectionManager(): AppDetectionManager
 
-    fun defaultTabsManager(): DefaultTabsManager
+  fun defaultTabsManager(): DefaultTabsManager
 
-    fun inject(appColorExtractorJob: AppColorExtractorJob)
+  fun inject(appColorExtractorJob: AppColorExtractorJob)
 
-    fun inject(bottomBarReceiver: BottomBarReceiver)
+  fun inject(bottomBarReceiver: BottomBarReceiver)
 
-    fun inject(minimizeBroadcastReceiver: MinimizeBroadcastReceiver)
+  fun inject(minimizeBroadcastReceiver: MinimizeBroadcastReceiver)
 }

@@ -23,13 +23,13 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 data class BubbleLoadData(
-        val website: Website,
-        val fromMinimize: Boolean,
-        val fromAmp: Boolean,
-        val incognito: Boolean,
-        val contextRef: WeakReference<Context?> = WeakReference(null),
-        val icon: Bitmap? = null,
-        val color: Int = Constants.NO_COLOR
+    val website: Website,
+    val fromMinimize: Boolean,
+    val fromAmp: Boolean,
+    val incognito: Boolean,
+    val contextRef: WeakReference<Context?> = WeakReference(null),
+    val icon: Bitmap? = null,
+    val color: Int = Constants.NO_COLOR
 )
 
 @RequiresApi(Build.VERSION_CODES.Q)
@@ -38,55 +38,55 @@ data class BubbleLoadData(
 class NativeFloatingBubble
 @Inject
 constructor(
-        private val schedulerProvider: SchedulerProvider,
-        private val websiteRepository: WebsiteRepository,
-        private val bubbleNotificationUtil: BubbleNotificationUtil,
-        private val websiteIconsProvider: WebsiteIconsProvider
+    private val schedulerProvider: SchedulerProvider,
+    private val websiteRepository: WebsiteRepository,
+    private val bubbleNotificationUtil: BubbleNotificationUtil,
+    private val websiteIconsProvider: WebsiteIconsProvider
 ) : FloatingBubble {
 
-    private val loadQueue = PublishRelay.create<BubbleLoadData>()
+  private val loadQueue = PublishRelay.create<BubbleLoadData>()
 
-    init {
-        loadQueue.toFlowable(BUFFER)
-                .observeOn(schedulerProvider.pool)
-                .flatMap(::showBubble)
-                .subscribeBy(onError = Timber::e)
-    }
+  init {
+    loadQueue.toFlowable(BUFFER)
+        .observeOn(schedulerProvider.pool)
+        .flatMap(::showBubble)
+        .subscribeBy(onError = Timber::e)
+  }
 
-    override fun openBubble(
-            website: Website,
-            fromMinimize: Boolean,
-            fromAmp: Boolean,
-            incognito: Boolean,
-            context: Context?,
-            color: Int
-    ) = loadQueue.accept(BubbleLoadData(
-            website = website,
-            fromMinimize = fromMinimize,
-            fromAmp = fromAmp,
-            incognito = incognito,
-            contextRef = WeakReference(context),
-            color = color
-    ))
+  override fun openBubble(
+      website: Website,
+      fromMinimize: Boolean,
+      fromAmp: Boolean,
+      incognito: Boolean,
+      context: Context?,
+      color: Int
+  ) = loadQueue.accept(BubbleLoadData(
+      website = website,
+      fromMinimize = fromMinimize,
+      fromAmp = fromAmp,
+      incognito = incognito,
+      contextRef = WeakReference(context),
+      color = color
+  ))
 
-    private fun showBubble(bubbleLoadData: BubbleLoadData): Flowable<BubbleLoadData> {
-        return bubbleNotificationUtil.showBubbles(bubbleLoadData)
-                .delay(1, TimeUnit.SECONDS, schedulerProvider.pool) // Avoid notification throttling
-                .toFlowable()
-                .flatMap { bubbleData ->
-                    RxJavaInterop.toV2Flowable(websiteRepository.getWebsite(bubbleData.website.url))
-                            .subscribeOn(schedulerProvider.io)
-                            .observeOn(schedulerProvider.pool)
-                            .flatMapSingle { website ->
-                                websiteIconsProvider.getBubbleIconAndColor(website)
-                                        .map { iconData ->
-                                            bubbleData.copy(
-                                                    website = website,
-                                                    icon = iconData.icon,
-                                                    color = iconData.color
-                                            )
-                                        }
-                            }.onErrorReturnItem(bubbleData)
-                }.flatMapSingle(bubbleNotificationUtil::showBubbles)
-    }
+  private fun showBubble(bubbleLoadData: BubbleLoadData): Flowable<BubbleLoadData> {
+    return bubbleNotificationUtil.showBubbles(bubbleLoadData)
+        .delay(1, TimeUnit.SECONDS, schedulerProvider.pool) // Avoid notification throttling
+        .toFlowable()
+        .flatMap { bubbleData ->
+          RxJavaInterop.toV2Flowable(websiteRepository.getWebsite(bubbleData.website.url))
+              .subscribeOn(schedulerProvider.io)
+              .observeOn(schedulerProvider.pool)
+              .flatMapSingle { website ->
+                websiteIconsProvider.getBubbleIconAndColor(website)
+                    .map { iconData ->
+                      bubbleData.copy(
+                          website = website,
+                          icon = iconData.icon,
+                          color = iconData.color
+                      )
+                    }
+              }.onErrorReturnItem(bubbleData)
+        }.flatMapSingle(bubbleNotificationUtil::showBubbles)
+  }
 }

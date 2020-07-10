@@ -27,17 +27,17 @@ import android.os.Bundle
  * Adapter to let us implement only what's needed from the interface.
  */
 open class ActivityLifeCycleCallbackAdapter : Application.ActivityLifecycleCallbacks {
-    override fun onActivityPaused(activity: Activity?) {}
+  override fun onActivityPaused(activity: Activity?) {}
 
-    override fun onActivityResumed(activity: Activity?) {}
+  override fun onActivityResumed(activity: Activity?) {}
 
-    override fun onActivityStarted(activity: Activity?) {}
+  override fun onActivityStarted(activity: Activity?) {}
 
-    override fun onActivityDestroyed(activity: Activity?) {}
+  override fun onActivityDestroyed(activity: Activity?) {}
 
-    override fun onActivitySaveInstanceState(activity: Activity?, bundle: Bundle?) {}
+  override fun onActivitySaveInstanceState(activity: Activity?, bundle: Bundle?) {}
 
-    override fun onActivityStopped(activity: Activity?) {}
+  override fun onActivityStopped(activity: Activity?) {}
 
-    override fun onActivityCreated(activity: Activity?, bundle: Bundle?) {}
+  override fun onActivityCreated(activity: Activity?, bundle: Bundle?) {}
 }

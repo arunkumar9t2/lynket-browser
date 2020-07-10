@@ -40,38 +40,38 @@ import rx.Observable;
 @Singleton
 public class WebArticleNetworkStore implements WebArticleStore {
 
-    @Inject
-    WebArticleNetworkStore() {
-    }
+  @Inject
+  WebArticleNetworkStore() {
+  }
 
-    @NonNull
-    @Override
-    public Observable<WebArticle> getWebArticle(@NonNull String url) {
-        return RxParser.INSTANCE.parseArticle(url)
-                .flatMap(urlArticlePair -> {
-                    if (urlArticlePair.second != null) {
-                        return Observable.just(WebArticle.fromArticle(urlArticlePair.second));
-                    } else {
-                        return Observable.just(null);
-                    }
-                }).map(webArticle -> {
-                    if (webArticle != null) {
-                        // Clean up all the empty strings.
-                        final Elements rawElements = webArticle.elements;
-                        for (Iterator<Element> iterator = rawElements.iterator(); iterator.hasNext(); ) {
-                            final Element element = iterator.next();
-                            if (element.text().isEmpty()) {
-                                iterator.remove();
-                            }
-                        }
-                    }
-                    return webArticle;
-                });
-    }
+  @NonNull
+  @Override
+  public Observable<WebArticle> getWebArticle(@NonNull String url) {
+    return RxParser.INSTANCE.parseArticle(url)
+        .flatMap(urlArticlePair -> {
+          if (urlArticlePair.second != null) {
+            return Observable.just(WebArticle.fromArticle(urlArticlePair.second));
+          } else {
+            return Observable.just(null);
+          }
+        }).map(webArticle -> {
+          if (webArticle != null) {
+            // Clean up all the empty strings.
+            final Elements rawElements = webArticle.elements;
+            for (Iterator<Element> iterator = rawElements.iterator(); iterator.hasNext(); ) {
+              final Element element = iterator.next();
+              if (element.text().isEmpty()) {
+                iterator.remove();
+              }
+            }
+          }
+          return webArticle;
+        });
+  }
 
-    @NonNull
-    @Override
-    public Observable<WebArticle> saveWebArticle(@NonNull WebArticle webSite) {
-        return Observable.empty();
-    }
+  @NonNull
+  @Override
+  public Observable<WebArticle> saveWebArticle(@NonNull WebArticle webSite) {
+    return Observable.empty();
+  }
 }

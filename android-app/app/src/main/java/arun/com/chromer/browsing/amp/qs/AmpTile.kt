@@ -27,18 +27,18 @@ import arun.com.chromer.shared.base.PreferenceQuickSettingsTile
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 class AmpTile : PreferenceQuickSettingsTile() {
-    override fun togglePreference() = preferences.ampMode(!preferences.ampMode())
+  override fun togglePreference() = preferences.ampMode(!preferences.ampMode())
 
-    override fun activeLabel(): String = label()
+  override fun activeLabel(): String = label()
 
-    override fun inActiveIcon(): Icon = icon()
+  override fun inActiveIcon(): Icon = icon()
 
-    override fun activeIcon(): Icon = icon()
+  override fun activeIcon(): Icon = icon()
 
-    override fun inActiveLabel(): String = label()
+  override fun inActiveLabel(): String = label()
 
-    override fun preference(): Boolean = preferences.ampMode()
+  override fun preference(): Boolean = preferences.ampMode()
 
-    private fun label() = getString(R.string.amp_mode)
-    private fun icon() = Icon.createWithResource(this, R.drawable.ic_action_amp_icon)
+  private fun label() = getString(R.string.amp_mode)
+  private fun icon() = Icon.createWithResource(this, R.drawable.ic_action_amp_icon)
 }

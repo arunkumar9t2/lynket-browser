@@ -31,25 +31,25 @@ import androidx.preference.PreferenceViewHolder;
  */
 public class IconListPreference extends ListPreference {
 
-    public IconListPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
+  public IconListPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    super(context, attrs, defStyleAttr, defStyleRes);
+  }
 
-    public IconListPreference(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-    }
+  public IconListPreference(Context context, AttributeSet attrs, int defStyleAttr) {
+    super(context, attrs, defStyleAttr);
+  }
 
-    public IconListPreference(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
+  public IconListPreference(Context context, AttributeSet attrs) {
+    super(context, attrs);
+  }
 
-    public IconListPreference(Context context) {
-        super(context);
-    }
+  public IconListPreference(Context context) {
+    super(context);
+  }
 
-    @Override
-    public void onBindViewHolder(PreferenceViewHolder holder) {
-        super.onBindViewHolder(holder);
-        PreferenceIconLayoutHelper.applyLayoutChanges(holder, isEnabled());
-    }
+  @Override
+  public void onBindViewHolder(PreferenceViewHolder holder) {
+    super.onBindViewHolder(holder);
+    PreferenceIconLayoutHelper.applyLayoutChanges(holder, isEnabled());
+  }
 }

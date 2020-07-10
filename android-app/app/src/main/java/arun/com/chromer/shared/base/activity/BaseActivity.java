@@ -39,62 +39,61 @@ import butterknife.Unbinder;
 import rx.subscriptions.CompositeSubscription;
 
 public abstract class BaseActivity extends AppCompatActivity implements ProvidesActivityComponent {
-    protected final CompositeSubscription subs = new CompositeSubscription();
-    protected Unbinder unbinder;
-    ActivityComponent activityComponent;
+  protected final CompositeSubscription subs = new CompositeSubscription();
+  protected Unbinder unbinder;
+  @Inject
+  protected ActivityLifecycleEvents lifecycleEvents;
+  ActivityComponent activityComponent;
 
-    @Inject
-    protected ActivityLifecycleEvents lifecycleEvents;
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    activityComponent = ((Chromer) getApplication())
+        .getAppComponent()
+        .newActivityComponent(new ActivityModule(this));
+    inject(activityComponent);
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        activityComponent = ((Chromer) getApplication())
-                .getAppComponent()
-                .newActivityComponent(new ActivityModule(this));
-        inject(activityComponent);
+    super.onCreate(savedInstanceState);
 
-        super.onCreate(savedInstanceState);
-
-        @LayoutRes int layoutRes = getLayoutRes();
-        if (layoutRes != 0) {
-            setContentView(getLayoutRes());
-            unbinder = ButterKnife.bind(this);
-        }
+    @LayoutRes int layoutRes = getLayoutRes();
+    if (layoutRes != 0) {
+      setContentView(getLayoutRes());
+      unbinder = ButterKnife.bind(this);
     }
+  }
 
-    @NonNull
-    @Override
-    public ActivityComponent getActivityComponent() {
-        return activityComponent;
+  @NonNull
+  @Override
+  public ActivityComponent getActivityComponent() {
+    return activityComponent;
+  }
+
+  @LayoutRes
+  protected abstract int getLayoutRes();
+
+  @Override
+  protected void onDestroy() {
+    subs.clear();
+    if (unbinder != null) {
+      unbinder.unbind();
     }
+    activityComponent = null;
+    super.onDestroy();
+  }
 
-    @LayoutRes
-    protected abstract int getLayoutRes();
-
-    @Override
-    protected void onDestroy() {
-        subs.clear();
-        if (unbinder != null) {
-            unbinder.unbind();
-        }
-        activityComponent = null;
-        super.onDestroy();
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    if (item.getItemId() == android.R.id.home) {
+      finishWithTransition();
+      return true;
     }
+    return super.onOptionsItemSelected(item);
+  }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finishWithTransition();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+  protected void finishWithTransition() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      finishAfterTransition();
+    } else {
+      finish();
     }
-
-    protected void finishWithTransition() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            finishAfterTransition();
-        } else {
-            finish();
-        }
-    }
+  }
 }

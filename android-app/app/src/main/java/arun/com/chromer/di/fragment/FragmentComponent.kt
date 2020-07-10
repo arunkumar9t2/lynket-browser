@@ -30,19 +30,19 @@ import dagger.Subcomponent
 @Subcomponent(modules = [(FragmentModule::class)])
 interface FragmentComponent {
 
-    fun inject(homeFragment: HistoryFragment)
+  fun inject(homeFragment: HistoryFragment)
 
-    fun inject(homeFragment: HomeFragment)
+  fun inject(homeFragment: HomeFragment)
 
-    fun inject(tabsFragment: TabsFragment)
+  fun inject(tabsFragment: TabsFragment)
 
-    fun inject(appIntroFragment: AppIntroFragment)
+  fun inject(appIntroFragment: AppIntroFragment)
 
-    fun inject(slideOverExplanationFragment: SlideOverExplanationFragment)
+  fun inject(slideOverExplanationFragment: SlideOverExplanationFragment)
 
-    fun inject(webHeadsIntroFragment: WebHeadsIntroFragment)
+  fun inject(webHeadsIntroFragment: WebHeadsIntroFragment)
 
-    fun inject(articleIntroFragment: ArticleIntroFragment)
+  fun inject(articleIntroFragment: ArticleIntroFragment)
 
-    fun inject(providerSelectionIntroFragment: ProviderSelectionIntroFragment)
+  fun inject(providerSelectionIntroFragment: ProviderSelectionIntroFragment)
 }

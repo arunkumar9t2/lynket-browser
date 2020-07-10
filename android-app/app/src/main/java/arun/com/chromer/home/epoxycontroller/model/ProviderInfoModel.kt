@@ -18,42 +18,42 @@ import dev.arunkumar.android.epoxy.model.KotlinHolder
 import kotlinx.android.synthetic.main.layout_provider_info_card.*
 
 data class CustomTabProviderInfo(
-        val iconUri: Uri,
-        val providerDescription: StringResource,
-        val providerReason: StringResource,
-        val allowChange: Boolean = true
+    val iconUri: Uri,
+    val providerDescription: StringResource,
+    val providerReason: StringResource,
+    val allowChange: Boolean = true
 )
 
 @EpoxyModelClass(layout = R.layout.layout_provider_info_card)
 abstract class ProviderInfoModel : KotlinEpoxyModelWithHolder<ProviderInfoModel.ViewHolder>() {
-    @EpoxyAttribute
-    lateinit var providerInfo: CustomTabProviderInfo
+  @EpoxyAttribute
+  lateinit var providerInfo: CustomTabProviderInfo
 
-    override fun bind(holder: ViewHolder) {
-        GlideApp.with(holder.providerIcon)
-                .load(providerInfo.iconUri)
-                .error(IconicsDrawable(holder.providerIcon.context)
-                        .icon(CommunityMaterial.Icon.cmd_web)
-                        .colorRes(R.color.primary)
-                        .sizeDp(36))
-                .into(holder.providerIcon)
-        holder.providerDescription.run {
-            text = HtmlCompat.fromHtml(context.resolveStringResource(providerInfo.providerDescription))
-        }
-        if (providerInfo.providerReason.resource != 0) {
-            holder.providerReason.run {
-                text = context.resolveStringResource(providerInfo.providerReason)
-            }
-        } else {
-            holder.providerReason.gone()
-        }
-        holder.providerChangeButton.run {
-            gone(!providerInfo.allowChange)
-            setOnClickListener {
-                context.startActivity(Intent(context, ProviderSelectionActivity::class.java))
-            }
-        }
+  override fun bind(holder: ViewHolder) {
+    GlideApp.with(holder.providerIcon)
+        .load(providerInfo.iconUri)
+        .error(IconicsDrawable(holder.providerIcon.context)
+            .icon(CommunityMaterial.Icon.cmd_web)
+            .colorRes(R.color.primary)
+            .sizeDp(36))
+        .into(holder.providerIcon)
+    holder.providerDescription.run {
+      text = HtmlCompat.fromHtml(context.resolveStringResource(providerInfo.providerDescription))
     }
+    if (providerInfo.providerReason.resource != 0) {
+      holder.providerReason.run {
+        text = context.resolveStringResource(providerInfo.providerReason)
+      }
+    } else {
+      holder.providerReason.gone()
+    }
+    holder.providerChangeButton.run {
+      gone(!providerInfo.allowChange)
+      setOnClickListener {
+        context.startActivity(Intent(context, ProviderSelectionActivity::class.java))
+      }
+    }
+  }
 
-    class ViewHolder : KotlinHolder()
+  class ViewHolder : KotlinHolder()
 }

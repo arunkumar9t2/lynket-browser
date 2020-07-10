@@ -28,10 +28,10 @@ import dagger.Subcomponent
 @PerView
 @Subcomponent(modules = [ViewModule::class])
 interface ViewComponent {
-    fun inject(materialSearchView: MaterialSearchView)
+  fun inject(materialSearchView: MaterialSearchView)
 
-    @Subcomponent.Factory
-    interface Factory {
-        fun create(@BindsInstance view: View): ViewComponent
-    }
+  @Subcomponent.Factory
+  interface Factory {
+    fun create(@BindsInstance view: View): ViewComponent
+  }
 }

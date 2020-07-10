@@ -29,18 +29,18 @@ import arun.com.chromer.di.activity.ActivityComponent;
  * the {@link ActivityComponent} without explicitly depending on any sub class of {@link android.app.Activity}
  */
 public interface ProvidesActivityComponent {
-    /**
-     * The Activity component for which the fragment component will be sub component of.
-     *
-     * @return Instantiated {@link ActivityComponent}
-     */
-    @NonNull
-    ActivityComponent getActivityComponent();
+  /**
+   * The Activity component for which the fragment component will be sub component of.
+   *
+   * @return Instantiated {@link ActivityComponent}
+   */
+  @NonNull
+  ActivityComponent getActivityComponent();
 
-    /**
-     * Delegates inject calls to component definitions.
-     *
-     * @param activityComponent Current component.
-     */
-    void inject(@NonNull ActivityComponent activityComponent);
+  /**
+   * Delegates inject calls to component definitions.
+   *
+   * @param activityComponent Current component.
+   */
+  void inject(@NonNull ActivityComponent activityComponent);
 }

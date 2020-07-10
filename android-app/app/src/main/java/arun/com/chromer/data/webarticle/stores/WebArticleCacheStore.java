@@ -39,42 +39,42 @@ import timber.log.Timber;
  */
 @Singleton
 public class WebArticleCacheStore implements WebArticleStore {
-    private static final String TAG = WebArticleCacheStore.class.getSimpleName();
-    // Cache size, currently set at 30 MB.
-    private static final int DISK_CACHE_SIZE = 1024 * 1024 * 30;
-    // Disk LRU cache to store articles
-    private ParcelDiskCache<WebArticle> webSiteDiskCache;
+  private static final String TAG = WebArticleCacheStore.class.getSimpleName();
+  // Cache size, currently set at 30 MB.
+  private static final int DISK_CACHE_SIZE = 1024 * 1024 * 30;
+  // Disk LRU cache to store articles
+  private ParcelDiskCache<WebArticle> webSiteDiskCache;
 
-    @Inject
-    WebArticleCacheStore(Application application) {
-        try {
-            webSiteDiskCache = ParcelDiskCache.open(application, WebArticle.class.getClassLoader(), WebArticle.class.getName(), DISK_CACHE_SIZE);
-        } catch (IOException ignored) {
-            Timber.e(ignored);
-        }
+  @Inject
+  WebArticleCacheStore(Application application) {
+    try {
+      webSiteDiskCache = ParcelDiskCache.open(application, WebArticle.class.getClassLoader(), WebArticle.class.getName(), DISK_CACHE_SIZE);
+    } catch (IOException ignored) {
+      Timber.e(ignored);
     }
+  }
 
-    @NonNull
-    @Override
-    public Observable<WebArticle> getWebArticle(@NonNull final String url) {
-        return Observable.fromCallable(() -> {
-            try {
-                return webSiteDiskCache.get(url.trim());
-            } catch (Exception e) {
-                return null;
-            }
-        });
-    }
+  @NonNull
+  @Override
+  public Observable<WebArticle> getWebArticle(@NonNull final String url) {
+    return Observable.fromCallable(() -> {
+      try {
+        return webSiteDiskCache.get(url.trim());
+      } catch (Exception e) {
+        return null;
+      }
+    });
+  }
 
-    @NonNull
-    @Override
-    public Observable<WebArticle> saveWebArticle(@NonNull final WebArticle webSite) {
-        return Observable.fromCallable(() -> {
-            try {
-                return webSiteDiskCache.set(webSite.url, webSite);
-            } catch (Exception e) {
-                return webSite;
-            }
-        });
-    }
+  @NonNull
+  @Override
+  public Observable<WebArticle> saveWebArticle(@NonNull final WebArticle webSite) {
+    return Observable.fromCallable(() -> {
+      try {
+        return webSiteDiskCache.set(webSite.url, webSite);
+      } catch (Exception e) {
+        return webSite;
+      }
+    });
+  }
 }

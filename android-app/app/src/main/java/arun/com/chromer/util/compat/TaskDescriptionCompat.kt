@@ -29,13 +29,13 @@ import androidx.annotation.RequiresApi
  * Created by arunk on 09-02-2018.
  */
 data class TaskDescriptionCompat(
-        var label: String?,
-        var icon: Bitmap?,
-        @ColorInt var color: Int
+    var label: String?,
+    var icon: Bitmap?,
+    @ColorInt var color: Int
 ) {
-    /**
-     * Convert to [ActivityManager.TaskDescription]
-     */
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    fun toActivityTaskDescription(): ActivityManager.TaskDescription = ActivityManager.TaskDescription(label, icon, color)
+  /**
+   * Convert to [ActivityManager.TaskDescription]
+   */
+  @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+  fun toActivityTaskDescription(): ActivityManager.TaskDescription = ActivityManager.TaskDescription(label, icon, color)
 }

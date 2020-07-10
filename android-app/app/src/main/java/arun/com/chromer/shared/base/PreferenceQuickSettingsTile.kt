@@ -36,91 +36,91 @@ import javax.inject.Inject
  */
 abstract class PreferenceQuickSettingsTile : TileService() {
 
-    @Inject
-    internal lateinit var preferences: Preferences
+  @Inject
+  internal lateinit var preferences: Preferences
 
-    override fun onCreate() {
-        super.onCreate()
-        (application as Chromer).appComponent
-                .newServiceComponent(ServiceModule(this))
-                .inject(this)
+  override fun onCreate() {
+    super.onCreate()
+    (application as Chromer).appComponent
+        .newServiceComponent(ServiceModule(this))
+        .inject(this)
+  }
+
+  /**
+   * Called when the tile is added to the Quick Settings.
+   */
+  override fun onTileAdded() {
+    Timber.d("Tile added")
+    updateTile()
+  }
+
+  /**
+   * Called when this tile begins listening for events.
+   */
+  override fun onStartListening() {
+    Timber.d("Start listening")
+    updateTile()
+  }
+
+  /**
+   * Called when the user taps the tile.
+   */
+  override fun onClick() {
+    togglePreference()
+    updateTile()
+  }
+
+  abstract fun togglePreference()
+
+  /**
+   * Called when this tile moves out of the listening state.
+   */
+  override fun onStopListening() {
+    Timber.d("Stop Listening")
+  }
+
+  /**
+   * Called when the user removes this tile from Quick Settings.
+   */
+  override fun onTileRemoved() {
+    Timber.d("Tile removed")
+  }
+
+  // Changes the appearance of the tile.
+  private fun updateTile() {
+    val tile = qsTile
+    if (tile != null) {
+      val ampActive = preference()
+      val newIcon: Icon
+      val newLabel: String
+      val newState: Int
+      // Change the tile to match the service status.
+      if (ampActive) {
+        newLabel = activeLabel()
+        newIcon = activeIcon()
+        newState = Tile.STATE_ACTIVE
+      } else {
+        newLabel = inActiveLabel()
+        newIcon = inActiveIcon()
+        newState = Tile.STATE_INACTIVE
+      }
+      // Change the UI of the tile.
+      tile.label = newLabel
+      tile.icon = newIcon
+      tile.state = newState
+
+      // Need to call updateTile for the tile to pick up changes.
+      tile.updateTile()
     }
+  }
 
-    /**
-     * Called when the tile is added to the Quick Settings.
-     */
-    override fun onTileAdded() {
-        Timber.d("Tile added")
-        updateTile()
-    }
+  abstract fun activeLabel(): String
 
-    /**
-     * Called when this tile begins listening for events.
-     */
-    override fun onStartListening() {
-        Timber.d("Start listening")
-        updateTile()
-    }
+  abstract fun inActiveIcon(): Icon
 
-    /**
-     * Called when the user taps the tile.
-     */
-    override fun onClick() {
-        togglePreference()
-        updateTile()
-    }
+  abstract fun activeIcon(): Icon
 
-    abstract fun togglePreference()
+  abstract fun inActiveLabel(): String
 
-    /**
-     * Called when this tile moves out of the listening state.
-     */
-    override fun onStopListening() {
-        Timber.d("Stop Listening")
-    }
-
-    /**
-     * Called when the user removes this tile from Quick Settings.
-     */
-    override fun onTileRemoved() {
-        Timber.d("Tile removed")
-    }
-
-    // Changes the appearance of the tile.
-    private fun updateTile() {
-        val tile = qsTile
-        if (tile != null) {
-            val ampActive = preference()
-            val newIcon: Icon
-            val newLabel: String
-            val newState: Int
-            // Change the tile to match the service status.
-            if (ampActive) {
-                newLabel = activeLabel()
-                newIcon = activeIcon()
-                newState = Tile.STATE_ACTIVE
-            } else {
-                newLabel = inActiveLabel()
-                newIcon = inActiveIcon()
-                newState = Tile.STATE_INACTIVE
-            }
-            // Change the UI of the tile.
-            tile.label = newLabel
-            tile.icon = newIcon
-            tile.state = newState
-
-            // Need to call updateTile for the tile to pick up changes.
-            tile.updateTile()
-        }
-    }
-
-    abstract fun activeLabel(): String
-
-    abstract fun inActiveIcon(): Icon
-
-    abstract fun activeIcon(): Icon
-
-    abstract fun inActiveLabel(): String
-
-    abstract fun preference(): Boolean
+  abstract fun preference(): Boolean
 }

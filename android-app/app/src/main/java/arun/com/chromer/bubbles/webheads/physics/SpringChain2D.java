@@ -40,129 +40,129 @@ import arun.com.chromer.util.Utils;
  * Custom spring chain helper that simplifies maintaining 2 separate chains for X and Y axis.
  */
 public class SpringChain2D implements SpringListener {
-    private static final int xDiff = Utils.dpToPx(4);
-    private static final int yDiff = Utils.dpToPx(1.7);
-    private final LinkedList<Spring> xSprings = new LinkedList<>();
-    private final LinkedList<Spring> ySpring = new LinkedList<>();
-    private final int sDispWidth;
-    private Spring xMasterSpring;
-    private Spring yMasterSpring;
-    private boolean displacementEnabled = true;
+  private static final int xDiff = Utils.dpToPx(4);
+  private static final int yDiff = Utils.dpToPx(1.7);
+  private final LinkedList<Spring> xSprings = new LinkedList<>();
+  private final LinkedList<Spring> ySpring = new LinkedList<>();
+  private final int sDispWidth;
+  private Spring xMasterSpring;
+  private Spring yMasterSpring;
+  private boolean displacementEnabled = true;
 
-    private SpringChain2D(int dispWidth) {
-        this.sDispWidth = dispWidth;
+  private SpringChain2D(int dispWidth) {
+    this.sDispWidth = dispWidth;
+  }
+
+  public static SpringChain2D create(Context context) {
+    final DisplayMetrics metrics = new DisplayMetrics();
+    WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+    windowManager.getDefaultDisplay().getMetrics(metrics);
+    return new SpringChain2D(metrics.widthPixels);
+  }
+
+  public void clear() {
+    if (xMasterSpring != null) {
+      xMasterSpring.removeListener(this);
     }
-
-    public static SpringChain2D create(Context context) {
-        final DisplayMetrics metrics = new DisplayMetrics();
-        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        windowManager.getDefaultDisplay().getMetrics(metrics);
-        return new SpringChain2D(metrics.widthPixels);
+    if (yMasterSpring != null) {
+      yMasterSpring.removeListener(this);
     }
+    for (final Spring spring : xSprings) {
+      spring.removeListener(this);
+    }
+    for (final Spring spring : ySpring) {
+      spring.removeListener(this);
+    }
+    xSprings.clear();
+    ySpring.clear();
+  }
 
-    public void clear() {
-        if (xMasterSpring != null) {
-            xMasterSpring.removeListener(this);
+  public void setMasterSprings(@NonNull Spring xMaster, @NonNull Spring yMaster) {
+    xMasterSpring = xMaster;
+    yMasterSpring = yMaster;
+    xMasterSpring.addListener(this);
+    yMasterSpring.addListener(this);
+  }
+
+  public void addSlaveSprings(@NonNull Spring xSpring, @NonNull Spring ySpring) {
+    if (xSprings.size() <= WebHeadService.MAX_VISIBLE_WEB_HEADS) {
+      xSprings.add(xSpring);
+      this.ySpring.add(ySpring);
+    }
+  }
+
+  @Override
+  public void onSpringUpdate(Spring spring) {
+    final int masterX = (int) xMasterSpring.getCurrentValue();
+    final int masterY = (int) yMasterSpring.getCurrentValue();
+    performGroupMove(masterX, masterY);
+  }
+
+  public void rest() {
+    Iterator lit = xSprings.descendingIterator();
+    while (lit.hasNext()) {
+      final Spring s = (Spring) lit.next();
+      s.setAtRest();
+    }
+    lit = ySpring.descendingIterator();
+    while (lit.hasNext()) {
+      final Spring s = (Spring) lit.next();
+      s.setAtRest();
+    }
+  }
+
+  public void performGroupMove(int masterX, int masterY) {
+    int xDisplacement = 0;
+    int yDisplacement = 0;
+
+    final Iterator xIter = xSprings.descendingIterator();
+    final Iterator yIter = ySpring.descendingIterator();
+
+    while (xIter.hasNext() && yIter.hasNext()) {
+      final Spring xSpring = (Spring) xIter.next();
+      final Spring ySpring = (Spring) yIter.next();
+      if (displacementEnabled) {
+        if (isRight(masterX)) {
+          xDisplacement += xDiff;
+        } else {
+          xDisplacement -= xDiff;
         }
-        if (yMasterSpring != null) {
-            yMasterSpring.removeListener(this);
-        }
-        for (final Spring spring : xSprings) {
-            spring.removeListener(this);
-        }
-        for (final Spring spring : ySpring) {
-            spring.removeListener(this);
-        }
-        xSprings.clear();
-        ySpring.clear();
+        yDisplacement += yDiff;
+      }
+      xSpring.setEndValue(masterX + xDisplacement);
+      ySpring.setEndValue(masterY + yDisplacement);
     }
+  }
 
-    public void setMasterSprings(@NonNull Spring xMaster, @NonNull Spring yMaster) {
-        xMasterSpring = xMaster;
-        yMasterSpring = yMaster;
-        xMasterSpring.addListener(this);
-        yMasterSpring.addListener(this);
-    }
+  /**
+   * Used to determine if the given pixel is to the left or the right of the screen.
+   *
+   * @return true if right
+   */
+  private boolean isRight(int x) {
+    return x > (sDispWidth / 2);
+  }
 
-    public void addSlaveSprings(@NonNull Spring xSpring, @NonNull Spring ySpring) {
-        if (xSprings.size() <= WebHeadService.MAX_VISIBLE_WEB_HEADS) {
-            xSprings.add(xSpring);
-            this.ySpring.add(ySpring);
-        }
-    }
+  @Override
+  public void onSpringAtRest(Spring spring) {
 
-    @Override
-    public void onSpringUpdate(Spring spring) {
-        final int masterX = (int) xMasterSpring.getCurrentValue();
-        final int masterY = (int) yMasterSpring.getCurrentValue();
-        performGroupMove(masterX, masterY);
-    }
+  }
 
-    public void rest() {
-        Iterator lit = xSprings.descendingIterator();
-        while (lit.hasNext()) {
-            final Spring s = (Spring) lit.next();
-            s.setAtRest();
-        }
-        lit = ySpring.descendingIterator();
-        while (lit.hasNext()) {
-            final Spring s = (Spring) lit.next();
-            s.setAtRest();
-        }
-    }
+  @Override
+  public void onSpringActivate(Spring spring) {
 
-    public void performGroupMove(int masterX, int masterY) {
-        int xDisplacement = 0;
-        int yDisplacement = 0;
+  }
 
-        final Iterator xIter = xSprings.descendingIterator();
-        final Iterator yIter = ySpring.descendingIterator();
+  @Override
+  public void onSpringEndStateChange(Spring spring) {
 
-        while (xIter.hasNext() && yIter.hasNext()) {
-            final Spring xSpring = (Spring) xIter.next();
-            final Spring ySpring = (Spring) yIter.next();
-            if (displacementEnabled) {
-                if (isRight(masterX)) {
-                    xDisplacement += xDiff;
-                } else {
-                    xDisplacement -= xDiff;
-                }
-                yDisplacement += yDiff;
-            }
-            xSpring.setEndValue(masterX + xDisplacement);
-            ySpring.setEndValue(masterY + yDisplacement);
-        }
-    }
+  }
 
-    /**
-     * Used to determine if the given pixel is to the left or the right of the screen.
-     *
-     * @return true if right
-     */
-    private boolean isRight(int x) {
-        return x > (sDispWidth / 2);
-    }
+  public void disableDisplacement() {
+    displacementEnabled = false;
+  }
 
-    @Override
-    public void onSpringAtRest(Spring spring) {
-
-    }
-
-    @Override
-    public void onSpringActivate(Spring spring) {
-
-    }
-
-    @Override
-    public void onSpringEndStateChange(Spring spring) {
-
-    }
-
-    public void disableDisplacement() {
-        displacementEnabled = false;
-    }
-
-    public void enableDisplacement() {
-        displacementEnabled = true;
-    }
+  public void enableDisplacement() {
+    displacementEnabled = true;
+  }
 }

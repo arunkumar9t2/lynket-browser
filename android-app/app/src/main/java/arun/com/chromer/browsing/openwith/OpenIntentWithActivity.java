@@ -39,39 +39,39 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class OpenIntentWithActivity extends AppCompatActivity {
 
-    @BindView(R.id.bottomsheet)
-    BottomSheetLayout bottomSheet;
+  @BindView(R.id.bottomsheet)
+  BottomSheetLayout bottomSheet;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_open_with);
-        ButterKnife.bind(this);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_open_with);
+    ButterKnife.bind(this);
 
-        bottomSheet.addOnSheetDismissedListener(bottomSheetLayout -> finish());
+    bottomSheet.addOnSheetDismissedListener(bottomSheetLayout -> finish());
 
-        if (getIntent() != null && getIntent().getDataString() != null) {
-            final Intent webSiteIntent = new Intent(ACTION_VIEW, getIntent().getData());
-            final IntentPickerSheetView browserPicker = new IntentPickerSheetView(this,
-                    webSiteIntent,
-                    R.string.open_with,
-                    activityInfo -> {
-                        bottomSheet.dismissSheet();
-                        webSiteIntent.setComponent(activityInfo.componentName);
-                        webSiteIntent.setFlags(FLAG_ACTIVITY_CLEAR_TASK | FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(webSiteIntent);
-                        finish();
-                    });
-            browserPicker.setFilter(IntentPickerSheetView.selfPackageExcludeFilter(this));
-            bottomSheet.showWithSheetView(browserPicker);
-        } else {
-            invalidLink();
+    if (getIntent() != null && getIntent().getDataString() != null) {
+      final Intent webSiteIntent = new Intent(ACTION_VIEW, getIntent().getData());
+      final IntentPickerSheetView browserPicker = new IntentPickerSheetView(this,
+          webSiteIntent,
+          R.string.open_with,
+          activityInfo -> {
+            bottomSheet.dismissSheet();
+            webSiteIntent.setComponent(activityInfo.componentName);
+            webSiteIntent.setFlags(FLAG_ACTIVITY_CLEAR_TASK | FLAG_ACTIVITY_NEW_TASK);
+            startActivity(webSiteIntent);
             finish();
-        }
+          });
+      browserPicker.setFilter(IntentPickerSheetView.selfPackageExcludeFilter(this));
+      bottomSheet.showWithSheetView(browserPicker);
+    } else {
+      invalidLink();
+      finish();
     }
+  }
 
-    private void invalidLink() {
-        Toast.makeText(this, getString(R.string.invalid_link), Toast.LENGTH_SHORT).show();
-        finish();
-    }
+  private void invalidLink() {
+    Toast.makeText(this, getString(R.string.invalid_link), Toast.LENGTH_SHORT).show();
+    finish();
+  }
 }

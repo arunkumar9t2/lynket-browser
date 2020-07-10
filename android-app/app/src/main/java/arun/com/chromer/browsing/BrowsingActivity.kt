@@ -45,110 +45,112 @@ const val EXTRA_CURRENT_LOADING_URL = "EXTRA_CURRENT_LOADING_URL"
  * Class definition for activity that shows a webpage.
  */
 abstract class BrowsingActivity : BaseActivity(), UsesViewModel {
-    @Inject
-    lateinit var rxEventBus: RxEventBus
-    @Inject
-    lateinit var preferences: Preferences
-    @Inject
-    override lateinit var viewModelFactory: ViewModelProvider.Factory
+  @Inject
+  lateinit var rxEventBus: RxEventBus
 
-    protected val browsingViewModel by viewModel<BrowsingViewModel>()
+  @Inject
+  lateinit var preferences: Preferences
 
-    var website: Website? = null
-    var incognito: Boolean = false
+  @Inject
+  override lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    protected var currentLoadingUrl: String? = null
+  protected val browsingViewModel by viewModel<BrowsingViewModel>()
 
-    @SuppressLint("NewApi")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (intent?.data == null) {
-            Toast.makeText(this, getString(R.string.unsupported_link), LENGTH_SHORT).show()
-            finish()
-            return
+  var website: Website? = null
+  var incognito: Boolean = false
+
+  protected var currentLoadingUrl: String? = null
+
+  @SuppressLint("NewApi")
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    if (intent?.data == null) {
+      Toast.makeText(this, getString(R.string.unsupported_link), LENGTH_SHORT).show()
+      finish()
+      return
+    }
+    incognito = intent.getBooleanExtra(EXTRA_KEY_INCOGNITO, false)
+    observeViewModel(savedInstanceState)
+    setupMinimize()
+  }
+
+  open fun getCurrentUrl(): String = intent.dataString!!
+
+  private fun setupMinimize() {
+    subs.add(rxEventBus
+        .filteredEvents<TabsManager.MinimizeEvent>()
+        .filter { event ->
+          event.tab.url.equals(getCurrentUrl(), ignoreCase = true)
+              && event.tab.getTargetActivityName() == this::class.java.name
+        }.subscribe {
+          if (Utils.ANDROID_LOLLIPOP) {
+            moveTaskToBack(true)
+          }
+        })
+  }
+
+  private fun observeViewModel(savedInstanceState: Bundle?) {
+    browsingViewModel.apply {
+      isIncognito = incognito
+      websiteLiveData.observeUntilOnDestroy(this@BrowsingActivity) {
+        when (it) {
+          is Result.Success -> {
+            website = it.data!!
+            onWebsiteLoaded(website!!)
+          }
         }
-        incognito = intent.getBooleanExtra(EXTRA_KEY_INCOGNITO, false)
-        observeViewModel(savedInstanceState)
-        setupMinimize()
-    }
+      }
 
-    open fun getCurrentUrl(): String = intent.dataString!!
+      toolbarColor.observeUntilOnDestroy(this@BrowsingActivity) { color ->
+        onToolbarColorSet(color!!)
+      }
 
-    private fun setupMinimize() {
-        subs.add(rxEventBus
-                .filteredEvents<TabsManager.MinimizeEvent>()
-                .filter { event ->
-                    event.tab.url.equals(getCurrentUrl(), ignoreCase = true)
-                            && event.tab.getTargetActivityName() == this::class.java.name
-                }.subscribe {
-                    if (Utils.ANDROID_LOLLIPOP) {
-                        moveTaskToBack(true)
-                    }
-                })
-    }
-
-    private fun observeViewModel(savedInstanceState: Bundle?) {
-        browsingViewModel.apply {
-            isIncognito = incognito
-            websiteLiveData.observeUntilOnDestroy(this@BrowsingActivity) {
-                when (it) {
-                    is Result.Success -> {
-                        website = it.data!!
-                        onWebsiteLoaded(website!!)
-                    }
-                }
-            }
-
-            toolbarColor.observeUntilOnDestroy(this@BrowsingActivity) { color ->
-                onToolbarColorSet(color!!)
-            }
-
-            if (Utils.ANDROID_LOLLIPOP) {
-                activityDescription.observeUntilOnDestroy(this@BrowsingActivity) { task ->
-                    setTaskDescription(task)
-                }
-            }
+      if (Utils.ANDROID_LOLLIPOP) {
+        activityDescription.observeUntilOnDestroy(this@BrowsingActivity) { task ->
+          setTaskDescription(task)
         }
+      }
+    }
 
-        when (savedInstanceState) {
-            null -> {
-                val websiteResult = Result.Success(intent.getParcelableExtra(EXTRA_KEY_WEBSITE)
-                        ?: Website(getCurrentUrl()))
-                browsingViewModel.websiteLiveData.value = websiteResult
-                browsingViewModel.toolbarColor.value = intent.getIntExtra(
-                        EXTRA_KEY_TOOLBAR_COLOR,
-                        ContextCompat.getColor(this@BrowsingActivity, R.color.colorPrimary)
-                )
-                loadWebsiteDetails(getCurrentUrl())
-            }
-            else -> {
-                // Restore state
-                val previousUrl = savedInstanceState.getString(EXTRA_CURRENT_LOADING_URL)
-                if (previousUrl == null) {
-                    loadWebsiteDetails(getCurrentUrl())
-                } else {
-                    loadWebsiteDetails(previousUrl)
-                }
-            }
+    when (savedInstanceState) {
+      null -> {
+        val websiteResult = Result.Success(intent.getParcelableExtra(EXTRA_KEY_WEBSITE)
+            ?: Website(getCurrentUrl()))
+        browsingViewModel.websiteLiveData.value = websiteResult
+        browsingViewModel.toolbarColor.value = intent.getIntExtra(
+            EXTRA_KEY_TOOLBAR_COLOR,
+            ContextCompat.getColor(this@BrowsingActivity, R.color.colorPrimary)
+        )
+        loadWebsiteDetails(getCurrentUrl())
+      }
+      else -> {
+        // Restore state
+        val previousUrl = savedInstanceState.getString(EXTRA_CURRENT_LOADING_URL)
+        if (previousUrl == null) {
+          loadWebsiteDetails(getCurrentUrl())
+        } else {
+          loadWebsiteDetails(previousUrl)
         }
+      }
     }
+  }
 
-    protected fun loadWebsiteDetails(url: String) {
-        browsingViewModel.loadWebSiteDetails(url)
-        currentLoadingUrl = url
-    }
+  protected fun loadWebsiteDetails(url: String) {
+    browsingViewModel.loadWebSiteDetails(url)
+    currentLoadingUrl = url
+  }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(EXTRA_CURRENT_LOADING_URL, currentLoadingUrl)
-    }
+  override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
+    outState.putString(EXTRA_CURRENT_LOADING_URL, currentLoadingUrl)
+  }
 
-    /**
-     * Called when meta data about the current website is loaded.
-     *
-     */
-    abstract fun onWebsiteLoaded(website: Website)
+  /**
+   * Called when meta data about the current website is loaded.
+   *
+   */
+  abstract fun onWebsiteLoaded(website: Website)
 
-    protected open fun onToolbarColorSet(websiteThemeColor: Int) {
-    }
+  protected open fun onToolbarColorSet(websiteThemeColor: Int) {
+  }
 }

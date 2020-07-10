@@ -34,27 +34,27 @@ import dagger.Provides;
 @Module
 public class ActivityModule {
 
-    @SuppressWarnings("CanBeFinal")
-    private Activity activity;
+  @SuppressWarnings("CanBeFinal")
+  private Activity activity;
 
-    public ActivityModule(Activity activity) {
-        this.activity = activity;
-    }
+  public ActivityModule(Activity activity) {
+    this.activity = activity;
+  }
 
-    @Provides
-    Activity activity() {
-        return activity;
-    }
+  @Provides
+  Activity activity() {
+    return activity;
+  }
 
-    @Provides
-    RequestManager glideRequests() {
-        return GlideApp.with(activity);
-    }
+  @Provides
+  RequestManager glideRequests() {
+    return GlideApp.with(activity);
+  }
 
-    @Provides
-    @PerActivity
-    @ActivityLifecycle
-    LifecycleOwner owner(Activity activity) {
-        return (LifecycleOwner) activity;
-    }
+  @Provides
+  @PerActivity
+  @ActivityLifecycle
+  LifecycleOwner owner(Activity activity) {
+    return (LifecycleOwner) activity;
+  }
 }

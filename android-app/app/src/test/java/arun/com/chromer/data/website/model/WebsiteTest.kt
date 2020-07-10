@@ -25,17 +25,17 @@ import org.junit.Test
 
 class WebsiteTest : ChromerRobolectricSuite() {
 
-    @Test
-    fun ampify() {
-        val website = Website().apply {
-            ampUrl = "http://www.yahoo.com"
-            url = "http://www.google.com"
-            canonicalUrl = "http://www.google.com"
-        }
-        val ampified = Website.Ampify(website)
-
-        assertEquals(website.ampUrl, ampified.ampUrl)
-        assertEquals(website.ampUrl, ampified.url)
-        assertEquals(website.ampUrl, ampified.canonicalUrl)
+  @Test
+  fun ampify() {
+    val website = Website().apply {
+      ampUrl = "http://www.yahoo.com"
+      url = "http://www.google.com"
+      canonicalUrl = "http://www.google.com"
     }
+    val ampified = Website.Ampify(website)
+
+    assertEquals(website.ampUrl, ampified.ampUrl)
+    assertEquals(website.ampUrl, ampified.url)
+    assertEquals(website.ampUrl, ampified.canonicalUrl)
+  }
 }

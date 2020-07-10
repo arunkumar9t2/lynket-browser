@@ -26,14 +26,14 @@ import android.text.Spanned;
 import androidx.annotation.NonNull;
 
 public class HtmlCompat {
-    public static Spanned fromHtml(@NonNull String html) {
-        final Spanned result;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            result = Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT);
-        } else {
-            //noinspection deprecation
-            result = Html.fromHtml(html);
-        }
-        return result;
+  public static Spanned fromHtml(@NonNull String html) {
+    final Spanned result;
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+      result = Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT);
+    } else {
+      //noinspection deprecation
+      result = Html.fromHtml(html);
     }
+    return result;
+  }
 }

@@ -35,31 +35,31 @@ import static android.widget.Toast.LENGTH_SHORT;
 public class FavShareBroadcastReceiver extends BroadcastReceiver {
 
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        final String url = intent.getDataString();
-        if (url != null) {
-            final Intent openAppIntent = new Intent(Intent.ACTION_SEND);
-            openAppIntent.putExtra(EXTRA_TEXT, url);
-            openAppIntent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-            openAppIntent.setComponent(ComponentName.unflattenFromString(Preferences.get(context).favShareComponent()));
-            try {
-                context.startActivity(openAppIntent);
-            } catch (Exception e) {
-                defaultShare(context, url);
-            }
-        } else {
-            Toast.makeText(context, context.getString(R.string.unsupported_link), LENGTH_SHORT).show();
-        }
+  @Override
+  public void onReceive(Context context, Intent intent) {
+    final String url = intent.getDataString();
+    if (url != null) {
+      final Intent openAppIntent = new Intent(Intent.ACTION_SEND);
+      openAppIntent.putExtra(EXTRA_TEXT, url);
+      openAppIntent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+      openAppIntent.setComponent(ComponentName.unflattenFromString(Preferences.get(context).favShareComponent()));
+      try {
+        context.startActivity(openAppIntent);
+      } catch (Exception e) {
+        defaultShare(context, url);
+      }
+    } else {
+      Toast.makeText(context, context.getString(R.string.unsupported_link), LENGTH_SHORT).show();
     }
+  }
 
-    private void defaultShare(Context context, String url) {
-        Toast.makeText(context, context.getString(R.string.share_failed_msg), LENGTH_SHORT).show();
-        final Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("text/plain");
-        shareIntent.putExtra(EXTRA_TEXT, url);
-        final Intent chooserIntent = Intent.createChooser(shareIntent, context.getString(R.string.share_via));
-        chooserIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(chooserIntent);
-    }
+  private void defaultShare(Context context, String url) {
+    Toast.makeText(context, context.getString(R.string.share_failed_msg), LENGTH_SHORT).show();
+    final Intent shareIntent = new Intent(Intent.ACTION_SEND);
+    shareIntent.setType("text/plain");
+    shareIntent.putExtra(EXTRA_TEXT, url);
+    final Intent chooserIntent = Intent.createChooser(shareIntent, context.getString(R.string.share_via));
+    chooserIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
+    context.startActivity(chooserIntent);
+  }
 }

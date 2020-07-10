@@ -34,21 +34,21 @@ import com.mikepenz.iconics.IconicsDrawable
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 class IncognitoTile : PreferenceQuickSettingsTile() {
-    override fun togglePreference() = preferences.fullIncognitoMode(!preferences.fullIncognitoMode())
+  override fun togglePreference() = preferences.fullIncognitoMode(!preferences.fullIncognitoMode())
 
-    override fun activeLabel(): String = label()
+  override fun activeLabel(): String = label()
 
-    override fun inActiveIcon(): Icon = icon()
+  override fun inActiveIcon(): Icon = icon()
 
-    override fun activeIcon(): Icon = icon()
+  override fun activeIcon(): Icon = icon()
 
-    override fun inActiveLabel(): String = label()
+  override fun inActiveLabel(): String = label()
 
-    override fun preference(): Boolean = preferences.fullIncognitoMode()
+  override fun preference(): Boolean = preferences.fullIncognitoMode()
 
-    private fun label() = getString(R.string.incognito_mode)
-    private fun icon() = Icon.createWithBitmap(IconicsDrawable(this)
-            .icon(CommunityMaterial.Icon.cmd_incognito)
-            .color(Color.WHITE)
-            .sizeDp(24).toBitmap())
+  private fun label() = getString(R.string.incognito_mode)
+  private fun icon() = Icon.createWithBitmap(IconicsDrawable(this)
+      .icon(CommunityMaterial.Icon.cmd_incognito)
+      .color(Color.WHITE)
+      .sizeDp(24).toBitmap())
 }

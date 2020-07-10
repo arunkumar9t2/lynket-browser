@@ -30,8 +30,8 @@ import arun.com.chromer.util.Utils;
  */
 public class ShareBroadcastReceiver extends BroadcastReceiver {
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        Utils.shareText(context, intent.getDataString());
-    }
+  @Override
+  public void onReceive(Context context, Intent intent) {
+    Utils.shareText(context, intent.getDataString());
+  }
 }

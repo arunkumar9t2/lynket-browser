@@ -57,148 +57,152 @@ import javax.inject.Inject
 
 @SuppressLint("CheckResult")
 class HomeActivity : BaseActivity(), Snackable, UsesViewModel {
-    @Inject
-    lateinit var tabsManager: TabsManager
-    @Inject
-    lateinit var rxEventBus: RxEventBus
-    @Inject
-    lateinit var tabsManger: TabsManager
-    @Inject
-    override lateinit var viewModelFactory: ViewModelProvider.Factory
-    private val homeActivityViewModel by viewModel<HomeActivityViewModel>()
+  @Inject
+  lateinit var tabsManager: TabsManager
 
-    override fun inject(activityComponent: ActivityComponent) = activityComponent.inject(this)
+  @Inject
+  lateinit var rxEventBus: RxEventBus
 
-    override fun getLayoutRes() = R.layout.activity_main
+  @Inject
+  lateinit var tabsManger: TabsManager
 
-    @Inject
-    lateinit var homeFeedController: HomeFeedController
-    @Inject
-    lateinit var tabsLifecycleObserver: TabsLifecycleObserver
+  @Inject
+  override lateinit var viewModelFactory: ViewModelProvider.Factory
+  private val homeActivityViewModel by viewModel<HomeActivityViewModel>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.AppTheme_NoActionBar)
-        super.onCreate(savedInstanceState)
+  override fun inject(activityComponent: ActivityComponent) = activityComponent.inject(this)
 
-        if (Preferences.get(this).isFirstRun) {
-            startActivity(Intent(this, ChromerIntroActivity::class.java))
-        }
+  override fun getLayoutRes() = R.layout.activity_main
 
-        Changelog.conditionalShow(this)
+  @Inject
+  lateinit var homeFeedController: HomeFeedController
 
-        setupToolbar()
-        setupSearchBar()
-        setupFeed()
-        setupEventListeners()
+  @Inject
+  lateinit var tabsLifecycleObserver: TabsLifecycleObserver
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    setTheme(R.style.AppTheme_NoActionBar)
+    super.onCreate(savedInstanceState)
+
+    if (Preferences.get(this).isFirstRun) {
+      startActivity(Intent(this, ChromerIntroActivity::class.java))
     }
 
-    override fun snack(textToSnack: String) {
-        Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_SHORT).show()
-    }
+    Changelog.conditionalShow(this)
 
-    override fun snackLong(textToSnack: String) {
-        Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_LONG).show()
-    }
+    setupToolbar()
+    setupSearchBar()
+    setupFeed()
+    setupEventListeners()
+  }
 
-    private fun setupToolbar() {
-        tipsIcon.setImageDrawable(IconicsDrawable(this)
-                .icon(CommunityMaterial.Icon.cmd_lightbulb_on)
-                .colorRes(R.color.md_yellow_700)
-                .sizeDp(24))
-    }
+  override fun snack(textToSnack: String) {
+    Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_SHORT).show()
+  }
 
-    private fun setupEventListeners() {
-        subs.add(rxEventBus.filteredEvents<TabsManager.FinishRoot>().subscribe { finish() })
-        settingsIcon.setOnClickListener {
-            startActivity(Intent(this, SettingsGroupActivity::class.java))
-        }
-        tipsIcon.setOnClickListener {
-            startActivity(Intent(this, TipsActivity::class.java))
-        }
-    }
+  override fun snackLong(textToSnack: String) {
+    Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_LONG).show()
+  }
 
-    override fun onStart() {
-        super.onStart()
-        tabsLifecycleObserver.activeTabs().subscribe { tabs ->
-            homeFeedController.tabs = tabs
-        }
-    }
+  private fun setupToolbar() {
+    tipsIcon.setImageDrawable(IconicsDrawable(this)
+        .icon(CommunityMaterial.Icon.cmd_lightbulb_on)
+        .colorRes(R.color.md_yellow_700)
+        .sizeDp(24))
+  }
 
-    private fun setupFeed() {
-        homeFeedRecyclerView.apply {
-            setController(homeFeedController)
-            (itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
-        }
-        val owner = this
-        homeActivityViewModel.run {
-            providerInfoLiveData.watch(owner) { providerInfo ->
-                homeFeedController.customTabProviderInfo = providerInfo
+  private fun setupEventListeners() {
+    subs.add(rxEventBus.filteredEvents<TabsManager.FinishRoot>().subscribe { finish() })
+    settingsIcon.setOnClickListener {
+      startActivity(Intent(this, SettingsGroupActivity::class.java))
+    }
+    tipsIcon.setOnClickListener {
+      startActivity(Intent(this, TipsActivity::class.java))
+    }
+  }
+
+  override fun onStart() {
+    super.onStart()
+    tabsLifecycleObserver.activeTabs().subscribe { tabs ->
+      homeFeedController.tabs = tabs
+    }
+  }
+
+  private fun setupFeed() {
+    homeFeedRecyclerView.apply {
+      setController(homeFeedController)
+      (itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
+    }
+    val owner = this
+    homeActivityViewModel.run {
+      providerInfoLiveData.watch(owner) { providerInfo ->
+        homeFeedController.customTabProviderInfo = providerInfo
+      }
+      recentsLiveData.watch(owner) { recentWebsites ->
+        homeFeedController.recentWebSites = recentWebsites
+      }
+    }
+  }
+
+  private fun setupSearchBar() {
+    materialSearchView.apply {
+      // Handle voice item failed
+      voiceSearchFailed()
+          .takeUntil(lifecycleEvents.destroys)
+          .subscribe {
+            snack(getString(R.string.no_voice_rec_apps))
+          }
+
+      // Handle search events
+      searchPerforms()
+          .takeUntil(lifecycleEvents.destroys)
+          .subscribe { url ->
+            postDelayed(150) {
+              tabsManger.openUrl(this@HomeActivity, Website(url))
             }
-            recentsLiveData.watch(owner) { recentWebsites ->
-                homeFeedController.recentWebSites = recentWebsites
+          }
+
+      // No focus initially
+      clearFocus()
+
+      // Handle focus changes
+      focusChanges()
+          .takeUntil(lifecycleEvents.destroys)
+          .subscribe { hasFocus ->
+            if (hasFocus) {
+              shadowView.show()
+            } else {
+              shadowView.gone()
             }
-        }
+          }
+
+      // Menu clicks
+      menuClicks()
+          .takeUntil(lifecycleEvents.destroys)
+          .subscribe {
+            HomeBottomSheet().show(supportFragmentManager, "home-bottom-shher")
+          }
     }
+  }
 
-    private fun setupSearchBar() {
-        materialSearchView.apply {
-            // Handle voice item failed
-            voiceSearchFailed()
-                    .takeUntil(lifecycleEvents.destroys)
-                    .subscribe {
-                        snack(getString(R.string.no_voice_rec_apps))
-                    }
-
-            // Handle search events
-            searchPerforms()
-                    .takeUntil(lifecycleEvents.destroys)
-                    .subscribe { url ->
-                        postDelayed(150) {
-                            tabsManger.openUrl(this@HomeActivity, Website(url))
-                        }
-                    }
-
-            // No focus initially
-            clearFocus()
-
-            // Handle focus changes
-            focusChanges()
-                    .takeUntil(lifecycleEvents.destroys)
-                    .subscribe { hasFocus ->
-                        if (hasFocus) {
-                            shadowView.show()
-                        } else {
-                            shadowView.gone()
-                        }
-                    }
-
-            // Menu clicks
-            menuClicks()
-                    .takeUntil(lifecycleEvents.destroys)
-                    .subscribe {
-                        HomeBottomSheet().show(supportFragmentManager, "home-bottom-shher")
-                    }
-        }
+  override fun onBackPressed() {
+    if (materialSearchView.hasFocus()) {
+      materialSearchView.clearFocus()
+      return
     }
+    super.onBackPressed()
+  }
 
-    override fun onBackPressed() {
-        if (materialSearchView.hasFocus()) {
-            materialSearchView.clearFocus()
-            return
-        }
-        super.onBackPressed()
-    }
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
+    materialSearchView.onActivityResult(requestCode, resultCode, data)
+  }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        materialSearchView.onActivityResult(requestCode, resultCode, data)
-    }
-
-    @Module
-    abstract class HomeBuilder {
-        @Binds
-        @IntoMap
-        @ViewModelKey(HomeActivityViewModel::class)
-        abstract fun bindHomeViewModel(homeViewModel: HomeActivityViewModel): ViewModel
-    }
+  @Module
+  abstract class HomeBuilder {
+    @Binds
+    @IntoMap
+    @ViewModelKey(HomeActivityViewModel::class)
+    abstract fun bindHomeViewModel(homeViewModel: HomeActivityViewModel): ViewModel
+  }
 }

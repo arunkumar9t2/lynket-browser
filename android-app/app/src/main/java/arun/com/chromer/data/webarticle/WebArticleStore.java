@@ -25,9 +25,9 @@ import arun.com.chromer.data.webarticle.model.WebArticle;
 import rx.Observable;
 
 public interface WebArticleStore {
-    @NonNull
-    Observable<WebArticle> getWebArticle(@NonNull String url);
+  @NonNull
+  Observable<WebArticle> getWebArticle(@NonNull String url);
 
-    @NonNull
-    Observable<WebArticle> saveWebArticle(@NonNull WebArticle webSite);
+  @NonNull
+  Observable<WebArticle> saveWebArticle(@NonNull WebArticle webSite);
 }

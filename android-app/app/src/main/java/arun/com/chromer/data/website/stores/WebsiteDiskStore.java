@@ -50,119 +50,119 @@ import static arun.com.chromer.shared.Constants.NO_COLOR;
  */
 @Singleton
 public class WebsiteDiskStore implements WebsiteStore, BookStore {
-    public static final Pair<Bitmap, Integer> EMPTY_ICON_COLOR_PAIR = new Pair<>(null, Constants.NO_COLOR);
-    public static final Pair<Drawable, Integer> EMPTY_DRAWABLE_PAIR = new Pair<>(null, Constants.NO_COLOR);
-    // Cache size, currently set at 30 MB.
-    private static final int DISK_CACHE_SIZE = 1024 * 1024 * 30;
-    private static final String THEME_COLOR_BOOK = "THEME_COLOR_BOOK";
-    // Cache to store our data.
-    private ParcelDiskCache<Website> webSiteDiskCache;
+  public static final Pair<Bitmap, Integer> EMPTY_ICON_COLOR_PAIR = new Pair<>(null, Constants.NO_COLOR);
+  public static final Pair<Drawable, Integer> EMPTY_DRAWABLE_PAIR = new Pair<>(null, Constants.NO_COLOR);
+  // Cache size, currently set at 30 MB.
+  private static final int DISK_CACHE_SIZE = 1024 * 1024 * 30;
+  private static final String THEME_COLOR_BOOK = "THEME_COLOR_BOOK";
+  // Cache to store our data.
+  private ParcelDiskCache<Website> webSiteDiskCache;
 
-    @Inject
-    WebsiteDiskStore(Application context) {
-        try {
-            webSiteDiskCache = ParcelDiskCache.open(context, Website.class.getClassLoader(), "WebSiteCache", DISK_CACHE_SIZE);
-        } catch (IOException e) {
-            Timber.e(e);
-        }
+  @Inject
+  WebsiteDiskStore(Application context) {
+    try {
+      webSiteDiskCache = ParcelDiskCache.open(context, Website.class.getClassLoader(), "WebSiteCache", DISK_CACHE_SIZE);
+    } catch (IOException e) {
+      Timber.e(e);
     }
+  }
 
-    @Override
-    public Book getBook() {
-        return Paper.book(THEME_COLOR_BOOK);
-    }
+  @Override
+  public Book getBook() {
+    return Paper.book(THEME_COLOR_BOOK);
+  }
 
-    @NonNull
-    @Override
-    public Observable<Website> getWebsite(@NonNull final String url) {
-        return Observable.fromCallable(() -> {
-            try {
-                return webSiteDiskCache.get(url.trim());
-            } catch (Exception e) {
-                Timber.e(e);
-                return null;
-            }
-        }).doOnNext(webSite -> {
-            if (webSite == null) {
-                Timber.d("Cache miss for: %s", url);
-            } else {
-                Timber.d("Cache hit for : %s", url);
-            }
-        });
-    }
+  @NonNull
+  @Override
+  public Observable<Website> getWebsite(@NonNull final String url) {
+    return Observable.fromCallable(() -> {
+      try {
+        return webSiteDiskCache.get(url.trim());
+      } catch (Exception e) {
+        Timber.e(e);
+        return null;
+      }
+    }).doOnNext(webSite -> {
+      if (webSite == null) {
+        Timber.d("Cache miss for: %s", url);
+      } else {
+        Timber.d("Cache hit for : %s", url);
+      }
+    });
+  }
 
-    @NonNull
-    @Override
-    public Observable<Void> clearCache() {
-        return Observable.fromCallable(() -> {
-            if (webSiteDiskCache != null) {
-                webSiteDiskCache.clear();
-            }
-            return null;
-        });
-    }
+  @NonNull
+  @Override
+  public Observable<Void> clearCache() {
+    return Observable.fromCallable(() -> {
+      if (webSiteDiskCache != null) {
+        webSiteDiskCache.clear();
+      }
+      return null;
+    });
+  }
 
-    @NonNull
-    @Override
-    public Observable<Website> saveWebsite(@NonNull final Website website) {
-        return Observable.fromCallable(() -> {
-            try {
-                return webSiteDiskCache.set(website.url, website);
-            } catch (Exception e) {
-                Timber.e(e);
-                return null;
-            }
-        }).doOnNext(webSite1 -> {
-            if (webSite1 != null) {
-                Timber.d("Put %s to cache", webSite1.url);
-            }
-        });
-    }
+  @NonNull
+  @Override
+  public Observable<Website> saveWebsite(@NonNull final Website website) {
+    return Observable.fromCallable(() -> {
+      try {
+        return webSiteDiskCache.set(website.url, website);
+      } catch (Exception e) {
+        Timber.e(e);
+        return null;
+      }
+    }).doOnNext(webSite1 -> {
+      if (webSite1 != null) {
+        Timber.d("Put %s to cache", webSite1.url);
+      }
+    });
+  }
 
-    @NonNull
-    @Override
-    public Observable<WebColor> getWebsiteColor(@NonNull final String url) {
-        return Observable.fromCallable(() -> {
-            try {
-                return (WebColor) getBook().read(Uri.parse(url).getHost());
-            } catch (Exception e) {
-                Timber.e(e);
-                return null;
-            }
-        }).map(webColor -> {
-            if (webColor == null) {
-                return new WebColor(Uri.parse(url).getHost(), NO_COLOR);
-            } else return webColor;
-        });
-    }
+  @NonNull
+  @Override
+  public Observable<WebColor> getWebsiteColor(@NonNull final String url) {
+    return Observable.fromCallable(() -> {
+      try {
+        return (WebColor) getBook().read(Uri.parse(url).getHost());
+      } catch (Exception e) {
+        Timber.e(e);
+        return null;
+      }
+    }).map(webColor -> {
+      if (webColor == null) {
+        return new WebColor(Uri.parse(url).getHost(), NO_COLOR);
+      } else return webColor;
+    });
+  }
 
-    @Override
-    public Observable<WebColor> saveWebsiteColor(@NonNull String host, @ColorInt int color) {
-        return Observable.fromCallable(() -> {
-            try {
-                return getBook().write(host, new WebColor(host, color)).read(host);
-            } catch (Exception e) {
-                Timber.e(e);
-                return new WebColor(host, NO_COLOR);
-            }
-        });
-    }
+  @Override
+  public Observable<WebColor> saveWebsiteColor(@NonNull String host, @ColorInt int color) {
+    return Observable.fromCallable(() -> {
+      try {
+        return getBook().write(host, new WebColor(host, color)).read(host);
+      } catch (Exception e) {
+        Timber.e(e);
+        return new WebColor(host, NO_COLOR);
+      }
+    });
+  }
 
-    @NonNull
-    @Override
-    public Pair<Bitmap, Integer> getWebsiteIconAndColor(@NonNull Website website) {
-        return EMPTY_ICON_COLOR_PAIR;
-    }
+  @NonNull
+  @Override
+  public Pair<Bitmap, Integer> getWebsiteIconAndColor(@NonNull Website website) {
+    return EMPTY_ICON_COLOR_PAIR;
+  }
 
-    @NonNull
-    @Override
-    public Pair<Drawable, Integer> getWebsiteRoundIconAndColor(Website website) {
-        return EMPTY_DRAWABLE_PAIR;
-    }
+  @NonNull
+  @Override
+  public Pair<Drawable, Integer> getWebsiteRoundIconAndColor(Website website) {
+    return EMPTY_DRAWABLE_PAIR;
+  }
 
-    @NonNull
-    @Override
-    public Pair<Bitmap, Integer> getWebsiteIconWithPlaceholderAndColor(Website website) {
-        return EMPTY_ICON_COLOR_PAIR;
-    }
+  @NonNull
+  @Override
+  public Pair<Bitmap, Integer> getWebsiteIconWithPlaceholderAndColor(Website website) {
+    return EMPTY_ICON_COLOR_PAIR;
+  }
 }

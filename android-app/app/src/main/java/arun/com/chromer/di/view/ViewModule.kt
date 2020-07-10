@@ -28,9 +28,9 @@ import io.reactivex.Observable
 
 @Module
 object ViewModule {
-    @Provides
-    @PerView
-    @Detaches
-    @JvmStatic
-    fun detaches(view: View): Observable<Unit> = view.detaches().share()
+  @Provides
+  @PerView
+  @Detaches
+  @JvmStatic
+  fun detaches(view: View): Observable<Unit> = view.detaches().share()
 }

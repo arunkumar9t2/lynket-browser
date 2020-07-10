@@ -30,27 +30,27 @@ import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
 import com.bumptech.glide.load.resource.bitmap.BitmapResource
 
 class ApplicationIconDecoder(
-        private val context: Context,
-        glide: Glide
+    private val context: Context,
+    glide: Glide
 ) : ResourceDecoder<ApplicationIcon, Bitmap> {
-    private val bitmapPool: BitmapPool = glide.bitmapPool
+  private val bitmapPool: BitmapPool = glide.bitmapPool
 
-    override fun handles(source: ApplicationIcon, options: Options): Boolean = true
+  override fun handles(source: ApplicationIcon, options: Options): Boolean = true
 
-    override fun decode(
-            source: ApplicationIcon,
-            with: Int,
-            height: Int,
-            options: Options
-    ) = try {
-        val packageName = source.packageName
-        val packageManager = context.packageManager
-        packageManager.getApplicationIcon(packageName).toBitmap().let { bitmap ->
-            val bitmapCopy = bitmap.copy(bitmap.config, true)
-            BitmapResource.obtain(bitmapCopy, bitmapPool)
-        }
-    } catch (e: PackageManager.NameNotFoundException) {
-        null
+  override fun decode(
+      source: ApplicationIcon,
+      with: Int,
+      height: Int,
+      options: Options
+  ) = try {
+    val packageName = source.packageName
+    val packageManager = context.packageManager
+    packageManager.getApplicationIcon(packageName).toBitmap().let { bitmap ->
+      val bitmapCopy = bitmap.copy(bitmap.config, true)
+      BitmapResource.obtain(bitmapCopy, bitmapPool)
     }
+  } catch (e: PackageManager.NameNotFoundException) {
+    null
+  }
 }
 

@@ -35,29 +35,29 @@ import javax.inject.Inject
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [19, 21], application = ChromerTestApplication::class)
 abstract class ChromerRobolectricSuite {
-    lateinit var testAppComponent: TestAppComponent
+  lateinit var testAppComponent: TestAppComponent
 
-    @Inject
-    lateinit var preferences: Preferences
+  @Inject
+  lateinit var preferences: Preferences
 
-    val application: Application get() = ApplicationProvider.getApplicationContext()
+  val application: Application get() = ApplicationProvider.getApplicationContext()
 
-    @Before
-    fun setup() {
-        setupRxSchedulers()
-        testAppComponent = (application as ChromerTestApplication).appComponent as TestAppComponent
-        testAppComponent.inject(this)
-    }
+  @Before
+  fun setup() {
+    setupRxSchedulers()
+    testAppComponent = (application as ChromerTestApplication).appComponent as TestAppComponent
+    testAppComponent.inject(this)
+  }
 
 
-    private fun setupRxSchedulers() {
-        RxJavaHooks.setOnComputationScheduler { Schedulers.trampoline() }
-        RxJavaHooks.setOnIOScheduler { Schedulers.trampoline() }
-        RxJavaHooks.setOnNewThreadScheduler { Schedulers.trampoline() }
-    }
+  private fun setupRxSchedulers() {
+    RxJavaHooks.setOnComputationScheduler { Schedulers.trampoline() }
+    RxJavaHooks.setOnIOScheduler { Schedulers.trampoline() }
+    RxJavaHooks.setOnNewThreadScheduler { Schedulers.trampoline() }
+  }
 
-    internal fun clearPreferences() {
-        preferences.defaultSharedPreferences.edit()?.clear()?.commit()
-    }
+  internal fun clearPreferences() {
+    preferences.defaultSharedPreferences.edit()?.clear()?.commit()
+  }
 }
 

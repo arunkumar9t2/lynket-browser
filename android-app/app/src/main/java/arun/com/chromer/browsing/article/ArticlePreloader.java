@@ -34,36 +34,36 @@ import arun.com.chromer.util.SchedulerProvider;
 @Singleton
 public class ArticlePreloader {
 
-    private final WebArticleRepository webArticleRepository;
+  private final WebArticleRepository webArticleRepository;
 
-    @Inject
-    ArticlePreloader(WebArticleRepository webArticleRepository) {
-        this.webArticleRepository = webArticleRepository;
-    }
+  @Inject
+  ArticlePreloader(WebArticleRepository webArticleRepository) {
+    this.webArticleRepository = webArticleRepository;
+  }
 
-    public void preloadArticle(@NonNull Uri uri, @Nullable final ArticlePreloadListener listener) {
-        webArticleRepository.getWebArticle(uri.toString())
-                .compose(SchedulerProvider.applyIoSchedulers())
-                .doOnError(throwable -> {
-                    if (listener != null) {
-                        listener.onComplete(false);
-                    }
-                })
-                .subscribe(webArticle -> {
-                    if (listener != null) {
-                        listener.onComplete(true);
-                    }
-                });
-    }
+  public void preloadArticle(@NonNull Uri uri, @Nullable final ArticlePreloadListener listener) {
+    webArticleRepository.getWebArticle(uri.toString())
+        .compose(SchedulerProvider.applyIoSchedulers())
+        .doOnError(throwable -> {
+          if (listener != null) {
+            listener.onComplete(false);
+          }
+        })
+        .subscribe(webArticle -> {
+          if (listener != null) {
+            listener.onComplete(true);
+          }
+        });
+  }
 
-    public interface ArticlePreloadListener {
-        /**
-         * Called when preload process has been completed. Can rely on {@param success} to know
-         * whether it was success or not.
-         *
-         * @param success true if success, else false.
-         */
-        @MainThread
-        void onComplete(boolean success);
-    }
+  public interface ArticlePreloadListener {
+    /**
+     * Called when preload process has been completed. Can rely on {@param success} to know
+     * whether it was success or not.
+     *
+     * @param success true if success, else false.
+     */
+    @MainThread
+    void onComplete(boolean success);
+  }
 }

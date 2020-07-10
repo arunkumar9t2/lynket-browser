@@ -9,12 +9,12 @@ import kotlinx.android.synthetic.main.layout_feed_header.*
 
 @EpoxyModelClass(layout = R.layout.layout_feed_header)
 abstract class HeaderLayoutModel : KotlinEpoxyModelWithHolder<HeaderLayoutModel.ViewHolder>() {
-    class ViewHolder : KotlinHolder()
+  class ViewHolder : KotlinHolder()
 
-    @EpoxyAttribute
-    lateinit var title: String
+  @EpoxyAttribute
+  lateinit var title: String
 
-    override fun bind(holder: ViewHolder) {
-        holder.header.text = title
-    }
+  override fun bind(holder: ViewHolder) {
+    holder.header.text = title
+  }
 }

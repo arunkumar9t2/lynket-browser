@@ -35,63 +35,63 @@ import arun.com.chromer.util.Utils;
  * devices to accommodate shadows if needed.
  */
 public class CircleView extends View {
-    /**
-     * Paint used to draw the circle background
-     */
-    final Paint mBgPaint;
+  /**
+   * Paint used to draw the circle background
+   */
+  final Paint mBgPaint;
 
-    @ColorInt
-    private int mColor;
+  @ColorInt
+  private int mColor;
 
-    public CircleView(Context context) {
-        this(context, null, 0);
+  public CircleView(Context context) {
+    this(context, null, 0);
+  }
+
+  public CircleView(Context context, AttributeSet attrs) {
+    this(context, attrs, 0);
+  }
+
+  public CircleView(Context context, AttributeSet attrs, int defStyleAttr) {
+    super(context, attrs, defStyleAttr);
+    mBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    mBgPaint.setStyle(Paint.Style.FILL);
+    mColor = Preferences.get(getContext()).webHeadColor();
+    mBgPaint.setColor(mColor);
+  }
+
+  @Override
+  protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    setMeasuredDimension(getMeasuredWidth(), getMeasuredWidth());
+  }
+
+  @Override
+  protected void onDraw(Canvas canvas) {
+    super.onDraw(canvas);
+    float outerRadius;
+    if (Utils.isLollipopAbove()) {
+      outerRadius = getMeasuredWidth() / 2;
+      canvas.drawCircle(getMeasuredWidth() / 2,
+          getMeasuredWidth() / 2,
+          outerRadius,
+          mBgPaint);
+    } else {
+      outerRadius = (float) (getMeasuredWidth() / 2.4);
+      canvas.drawCircle(getMeasuredWidth() / 2,
+          getMeasuredWidth() / 2,
+          outerRadius,
+          mBgPaint);
     }
+  }
 
-    public CircleView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
+  @ColorInt
+  public int getColor() {
+    return mColor;
+  }
 
-    public CircleView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        mBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mBgPaint.setStyle(Paint.Style.FILL);
-        mColor = Preferences.get(getContext()).webHeadColor();
-        mBgPaint.setColor(mColor);
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        setMeasuredDimension(getMeasuredWidth(), getMeasuredWidth());
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        float outerRadius;
-        if (Utils.isLollipopAbove()) {
-            outerRadius = getMeasuredWidth() / 2;
-            canvas.drawCircle(getMeasuredWidth() / 2,
-                    getMeasuredWidth() / 2,
-                    outerRadius,
-                    mBgPaint);
-        } else {
-            outerRadius = (float) (getMeasuredWidth() / 2.4);
-            canvas.drawCircle(getMeasuredWidth() / 2,
-                    getMeasuredWidth() / 2,
-                    outerRadius,
-                    mBgPaint);
-        }
-    }
-
-    @ColorInt
-    public int getColor() {
-        return mColor;
-    }
-
-    public void setColor(@ColorInt int color) {
-        mColor = color;
-        mBgPaint.setColor(color);
-        invalidate();
-    }
+  public void setColor(@ColorInt int color) {
+    mColor = color;
+    mBgPaint.setColor(color);
+    invalidate();
+  }
 }

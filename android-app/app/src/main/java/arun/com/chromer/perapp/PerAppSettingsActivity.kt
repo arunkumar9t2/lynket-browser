@@ -47,136 +47,138 @@ import kotlinx.android.synthetic.main.activity_per_apps_content.*
 import javax.inject.Inject
 
 class PerAppSettingsActivity : BaseActivity(), CompoundButton.OnCheckedChangeListener, Snackable {
-    @Inject
-    lateinit var preferences: Preferences
-    @Inject
-    lateinit var perAppListAdapter: PerAppListAdapter
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
+  @Inject
+  lateinit var preferences: Preferences
 
-    private lateinit var perAppViewModel: PerAppSettingsViewModel
+  @Inject
+  lateinit var perAppListAdapter: PerAppListAdapter
 
-    override fun inject(activityComponent: ActivityComponent) {
-        activityComponent.inject(this)
+  @Inject
+  lateinit var viewModelFactory: ViewModelFactory
+
+  private lateinit var perAppViewModel: PerAppSettingsViewModel
+
+  override fun inject(activityComponent: ActivityComponent) {
+    activityComponent.inject(this)
+  }
+
+  override fun getLayoutRes(): Int = R.layout.acitivty_per_apps
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setupToolbar()
+    setupList()
+    observeViewModel()
+  }
+
+  private fun setupList() {
+    appRecyclerView.layoutManager = LinearLayoutManager(this)
+    appRecyclerView.adapter = perAppListAdapter
+    (appRecyclerView.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
+  }
+
+
+  private fun observeViewModel() {
+    val owner = this@PerAppSettingsActivity
+    perAppViewModel = ViewModelProviders.of(owner, viewModelFactory).get(PerAppSettingsViewModel::class.java)
+    perAppViewModel.apply {
+      loadingLiveData.watch(owner) { loading(it!!) }
+      appsLiveData.watch(owner) { apps ->
+        perAppListAdapter.setApps(apps!!)
+      }
+      appLiveData.watch(owner) { appIndexPair ->
+        perAppListAdapter.setApp(appIndexPair!!.first, appIndexPair.second)
+      }
     }
 
-    override fun getLayoutRes(): Int = R.layout.acitivty_per_apps
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setupToolbar()
-        setupList()
-        observeViewModel()
+    subs.apply {
+      add(perAppListAdapter.blacklistSelections.subscribe { selections ->
+        perAppViewModel.blacklist(selections)
+      })
+      add(perAppListAdapter.incognitoSelections.subscribe { selections ->
+        perAppViewModel.incognito(selections)
+      })
     }
+  }
 
-    private fun setupList() {
-        appRecyclerView.layoutManager = LinearLayoutManager(this)
-        appRecyclerView.adapter = perAppListAdapter
-        (appRecyclerView.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
+  override fun onPostCreate(savedInstanceState: Bundle?) {
+    super.onPostCreate(savedInstanceState)
+    if (savedInstanceState == null) {
+      loadApps()
     }
+  }
 
+  private fun setupToolbar() {
+    setSupportActionBar(toolbar)
+    supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-    private fun observeViewModel() {
-        val owner = this@PerAppSettingsActivity
-        perAppViewModel = ViewModelProviders.of(owner, viewModelFactory).get(PerAppSettingsViewModel::class.java)
-        perAppViewModel.apply {
-            loadingLiveData.watch(owner) { loading(it!!) }
-            appsLiveData.watch(owner) { apps ->
-                perAppListAdapter.setApps(apps!!)
-            }
-            appLiveData.watch(owner) { appIndexPair ->
-                perAppListAdapter.setApp(appIndexPair!!.first, appIndexPair.second)
-            }
-        }
-
-        subs.apply {
-            add(perAppListAdapter.blacklistSelections.subscribe { selections ->
-                perAppViewModel.blacklist(selections)
-            })
-            add(perAppListAdapter.incognitoSelections.subscribe { selections ->
-                perAppViewModel.incognito(selections)
-            })
-        }
+    swipeRefreshLayout.apply {
+      setColorSchemeResources(
+          R.color.colorPrimary,
+          R.color.colorAccent)
+      setOnRefreshListener {
+        loadApps()
+      }
     }
+  }
 
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-        if (savedInstanceState == null) {
-            loadApps()
-        }
+  override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    menuInflater.inflate(R.menu.per_apps_menu, menu)
+    val menuItem = menu.findItem(R.id.blacklist_switch_item)
+    if (menuItem != null) {
+      val blackListSwitch = menuItem.actionView.findViewById<SwitchCompat>(R.id.blacklist_switch)
+      if (blackListSwitch != null) {
+        val blackListActive = preferences.perAppSettings() && Utils.canReadUsageStats(this)
+        preferences.perAppSettings(blackListActive)
+        blackListSwitch.isChecked = Preferences.get(this).perAppSettings()
+        blackListSwitch.setOnCheckedChangeListener(this)
+      }
     }
+    return true
+  }
 
-    private fun setupToolbar() {
-        setSupportActionBar(toolbar)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+  private fun requestUsagePermission() {
+    MaterialDialog.Builder(this)
+        .title(R.string.permission_required)
+        .content(R.string.usage_permission_explanation_per_apps)
+        .positiveText(R.string.grant)
+        .onPositive { _, _ -> startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)) }.show()
+  }
 
-        swipeRefreshLayout.apply {
-            setColorSchemeResources(
-                    R.color.colorPrimary,
-                    R.color.colorAccent)
-            setOnRefreshListener {
-                loadApps()
-            }
-        }
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    if (item.itemId == android.R.id.home) {
+      finish()
+      return true
     }
+    return super.onOptionsItemSelected(item)
+  }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.per_apps_menu, menu)
-        val menuItem = menu.findItem(R.id.blacklist_switch_item)
-        if (menuItem != null) {
-            val blackListSwitch = menuItem.actionView.findViewById<SwitchCompat>(R.id.blacklist_switch)
-            if (blackListSwitch != null) {
-                val blackListActive = preferences.perAppSettings() && Utils.canReadUsageStats(this)
-                preferences.perAppSettings(blackListActive)
-                blackListSwitch.isChecked = Preferences.get(this).perAppSettings()
-                blackListSwitch.setOnCheckedChangeListener(this)
-            }
-        }
-        return true
+  override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
+    if (isChecked && !Utils.canReadUsageStats(applicationContext)) {
+      buttonView.isChecked = false
+      requestUsagePermission()
+    } else {
+      snack(if (isChecked) getString(R.string.per_apps_on) else getString(R.string.per_apps_off))
+      preferences.perAppSettings(isChecked)
+      ServiceManager.takeCareOfServices(applicationContext)
     }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun requestUsagePermission() {
-        MaterialDialog.Builder(this)
-                .title(R.string.permission_required)
-                .content(R.string.usage_permission_explanation_per_apps)
-                .positiveText(R.string.grant)
-                .onPositive { _, _ -> startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)) }.show()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            finish()
-            return true
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
-        if (isChecked && !Utils.canReadUsageStats(applicationContext)) {
-            buttonView.isChecked = false
-            requestUsagePermission()
-        } else {
-            snack(if (isChecked) getString(R.string.per_apps_on) else getString(R.string.per_apps_off))
-            preferences.perAppSettings(isChecked)
-            ServiceManager.takeCareOfServices(applicationContext)
-        }
-    }
+  }
 
 
-    private fun loadApps() {
-        perAppViewModel.loadApps()
-    }
+  private fun loadApps() {
+    perAppViewModel.loadApps()
+  }
 
-    private fun loading(loading: Boolean) {
-        swipeRefreshLayout.isRefreshing = loading
-    }
+  private fun loading(loading: Boolean) {
+    swipeRefreshLayout.isRefreshing = loading
+  }
 
-    override fun snack(message: String) {
-        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_SHORT).show()
-    }
+  override fun snack(message: String) {
+    Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_SHORT).show()
+  }
 
-    override fun snackLong(message: String) {
-        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show()
-    }
+  override fun snackLong(message: String) {
+    Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show()
+  }
 }

@@ -33,19 +33,19 @@ import rx.Observable
  * Will use a combination of disk cache and network parsing to provide requested website's data.
  */
 interface WebsiteRepository {
-    fun getWebsite(url: String): Observable<Website>
+  fun getWebsite(url: String): Observable<Website>
 
-    fun getWebsiteReadOnly(url: String): Observable<Website>
+  fun getWebsiteReadOnly(url: String): Observable<Website>
 
-    fun getWebsiteColorSync(url: String): Int
+  fun getWebsiteColorSync(url: String): Int
 
-    fun saveWebColor(url: String): Observable<WebColor>
+  fun saveWebColor(url: String): Observable<WebColor>
 
-    fun clearCache(): Observable<Void>
+  fun clearCache(): Observable<Void>
 
-    fun getWebsiteIconAndColor(website: Website): Pair<Bitmap, Int>
+  fun getWebsiteIconAndColor(website: Website): Pair<Bitmap, Int>
 
-    fun getWebsiteRoundIconAndColor(website: Website): Pair<Drawable, Int>
+  fun getWebsiteRoundIconAndColor(website: Website): Pair<Drawable, Int>
 
-    fun getWebsiteIconWithPlaceholderAndColor(website: Website): Pair<Bitmap, Int>
+  fun getWebsiteIconWithPlaceholderAndColor(website: Website): Pair<Bitmap, Int>
 }

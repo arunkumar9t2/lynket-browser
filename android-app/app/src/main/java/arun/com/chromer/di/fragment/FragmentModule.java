@@ -27,10 +27,10 @@ import dagger.Module;
 @Module
 public class FragmentModule {
 
-    private final Fragment fragment;
+  private final Fragment fragment;
 
-    public FragmentModule(Fragment fragment) {
-        this.fragment = fragment;
-    }
+  public FragmentModule(Fragment fragment) {
+    this.fragment = fragment;
+  }
 
 }

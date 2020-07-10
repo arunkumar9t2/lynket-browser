@@ -27,18 +27,18 @@ import arun.com.chromer.shared.base.PreferenceQuickSettingsTile
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 class ArticleTile : PreferenceQuickSettingsTile() {
-    override fun togglePreference() = preferences.articleMode(!preferences.articleMode())
+  override fun togglePreference() = preferences.articleMode(!preferences.articleMode())
 
-    override fun activeLabel(): String = label()
+  override fun activeLabel(): String = label()
 
-    override fun inActiveIcon(): Icon = icon()
+  override fun inActiveIcon(): Icon = icon()
 
-    override fun activeIcon(): Icon = icon()
+  override fun activeIcon(): Icon = icon()
 
-    override fun inActiveLabel(): String = label()
+  override fun inActiveLabel(): String = label()
 
-    override fun preference(): Boolean = preferences.articleMode()
+  override fun preference(): Boolean = preferences.articleMode()
 
-    private fun label() = getString(R.string.article_mode)
-    private fun icon() = Icon.createWithResource(this, R.drawable.ic_description_black_24dp)
+  private fun label() = getString(R.string.article_mode)
+  private fun icon() = Icon.createWithResource(this, R.drawable.ic_description_black_24dp)
 }

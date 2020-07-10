@@ -45,131 +45,135 @@ import javax.inject.Inject
 @PerActivity
 class PerAppListAdapter @Inject
 internal constructor(
-        private val activity: Activity,
-        private val glideRequests: RequestManager
+    private val activity: Activity,
+    private val glideRequests: RequestManager
 ) : RecyclerView.Adapter<PerAppListAdapter.BlackListItemViewHolder>() {
-    private val apps = ArrayList<App>()
+  private val apps = ArrayList<App>()
 
-    private val iconSizeDp = 24
+  private val iconSizeDp = 24
 
-    val incognitoSelections: PublishSubject<Pair<String, Boolean>> = PublishSubject.create<Pair<String, Boolean>>()
-    val blacklistSelections: PublishSubject<Pair<String, Boolean>> = PublishSubject.create<Pair<String, Boolean>>()
+  val incognitoSelections: PublishSubject<Pair<String, Boolean>> = PublishSubject.create<Pair<String, Boolean>>()
+  val blacklistSelections: PublishSubject<Pair<String, Boolean>> = PublishSubject.create<Pair<String, Boolean>>()
 
-    private val blacklistSelected: IconicsDrawable by lazy {
-        IconicsDrawable(activity).apply {
-            icon(CommunityMaterial.Icon.cmd_earth)
-            colorRes(R.color.accent)
-            sizeDp(iconSizeDp)
-        }
+  private val blacklistSelected: IconicsDrawable by lazy {
+    IconicsDrawable(activity).apply {
+      icon(CommunityMaterial.Icon.cmd_earth)
+      colorRes(R.color.accent)
+      sizeDp(iconSizeDp)
     }
+  }
 
-    private val blacklistUnSelected: IconicsDrawable by lazy {
-        IconicsDrawable(activity).apply {
-            icon(CommunityMaterial.Icon.cmd_earth)
-            colorRes(R.color.material_dark_light)
-            sizeDp(iconSizeDp)
-        }
+  private val blacklistUnSelected: IconicsDrawable by lazy {
+    IconicsDrawable(activity).apply {
+      icon(CommunityMaterial.Icon.cmd_earth)
+      colorRes(R.color.material_dark_light)
+      sizeDp(iconSizeDp)
     }
+  }
 
-    private val incognitoSelected: IconicsDrawable by lazy {
-        IconicsDrawable(activity).apply {
-            icon(CommunityMaterial.Icon.cmd_incognito)
-            colorRes(R.color.accent)
-            sizeDp(iconSizeDp)
-        }
+  private val incognitoSelected: IconicsDrawable by lazy {
+    IconicsDrawable(activity).apply {
+      icon(CommunityMaterial.Icon.cmd_incognito)
+      colorRes(R.color.accent)
+      sizeDp(iconSizeDp)
     }
+  }
 
-    private val incognitoUnSelected: IconicsDrawable by lazy {
-        IconicsDrawable(activity).apply {
-            icon(CommunityMaterial.Icon.cmd_incognito)
-            colorRes(R.color.material_dark_light)
-            sizeDp(iconSizeDp)
-        }
+  private val incognitoUnSelected: IconicsDrawable by lazy {
+    IconicsDrawable(activity).apply {
+      icon(CommunityMaterial.Icon.cmd_incognito)
+      colorRes(R.color.material_dark_light)
+      sizeDp(iconSizeDp)
     }
+  }
+
+  init {
+    setHasStableIds(true)
+  }
+
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BlackListItemViewHolder {
+    return BlackListItemViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.activity_per_apps_list_item_template, parent, false))
+  }
+
+  override fun onBindViewHolder(holder: BlackListItemViewHolder, position: Int) {
+    holder.bind(apps[position])
+  }
+
+  override fun onViewRecycled(holder: BlackListItemViewHolder) {
+    super.onViewRecycled(holder)
+    glideRequests.clear(holder.appIcon!!)
+  }
+
+  override fun getItemCount(): Int {
+    return apps.size
+  }
+
+  override fun getItemId(position: Int): Long {
+    return apps[position].hashCode().toLong()
+  }
+
+  fun setApps(apps: List<App>) {
+    this.apps.clear()
+    this.apps.addAll(apps)
+    notifyDataSetChanged()
+  }
+
+  fun setApp(index: Int, app: App) {
+    this.apps[index] = app
+    notifyItemChanged(index)
+  }
+
+  inner class BlackListItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    @BindView(R.id.app_list_icon)
+    @JvmField
+    var appIcon: ImageView? = null
+
+    @BindView(R.id.app_list_name)
+    @JvmField
+    var appName: TextView? = null
+
+    @BindView(R.id.app_list_package)
+    @JvmField
+    var appPackage: TextView? = null
+
+    @BindView(R.id.incognitoIcon)
+    @JvmField
+    var incognitoIcon: ImageView? = null
+
+    @BindView(R.id.blacklistIcon)
+    @JvmField
+    var blacklistIcon: ImageView? = null
 
     init {
-        setHasStableIds(true)
+      ButterKnife.bind(this, view)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BlackListItemViewHolder {
-        return BlackListItemViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.activity_per_apps_list_item_template, parent, false))
-    }
+    fun bind(app: App) {
+      appName!!.text = app.appName
+      appPackage!!.text = app.packageName
+      glideRequests.load(ApplicationIcon.createUri(app.packageName)).into(appIcon!!)
 
-    override fun onBindViewHolder(holder: BlackListItemViewHolder, position: Int) {
-        holder.bind(apps[position])
-    }
-
-    override fun onViewRecycled(holder: BlackListItemViewHolder) {
-        super.onViewRecycled(holder)
-        glideRequests.clear(holder.appIcon!!)
-    }
-
-    override fun getItemCount(): Int {
-        return apps.size
-    }
-
-    override fun getItemId(position: Int): Long {
-        return apps[position].hashCode().toLong()
-    }
-
-    fun setApps(apps: List<App>) {
-        this.apps.clear()
-        this.apps.addAll(apps)
-        notifyDataSetChanged()
-    }
-
-    fun setApp(index: Int, app: App) {
-        this.apps[index] = app
-        notifyItemChanged(index)
-    }
-
-    inner class BlackListItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        @BindView(R.id.app_list_icon)
-        @JvmField
-        var appIcon: ImageView? = null
-        @BindView(R.id.app_list_name)
-        @JvmField
-        var appName: TextView? = null
-        @BindView(R.id.app_list_package)
-        @JvmField
-        var appPackage: TextView? = null
-        @BindView(R.id.incognitoIcon)
-        @JvmField
-        var incognitoIcon: ImageView? = null
-        @BindView(R.id.blacklistIcon)
-        @JvmField
-        var blacklistIcon: ImageView? = null
-
-        init {
-            ButterKnife.bind(this, view)
+      blacklistIcon!!.apply {
+        setImageDrawable(if (app.blackListed) blacklistSelected else blacklistUnSelected)
+        setOnClickListener {
+          if (adapterPosition != RecyclerView.NO_POSITION) {
+            val currentApp = apps[adapterPosition]
+            currentApp.blackListed = !currentApp.blackListed
+            blacklistSelections.onNext(Pair(currentApp.packageName, currentApp.blackListed))
+          }
         }
+      }
 
-        fun bind(app: App) {
-            appName!!.text = app.appName
-            appPackage!!.text = app.packageName
-            glideRequests.load(ApplicationIcon.createUri(app.packageName)).into(appIcon!!)
-
-            blacklistIcon!!.apply {
-                setImageDrawable(if (app.blackListed) blacklistSelected else blacklistUnSelected)
-                setOnClickListener {
-                    if (adapterPosition != RecyclerView.NO_POSITION) {
-                        val currentApp = apps[adapterPosition]
-                        currentApp.blackListed = !currentApp.blackListed
-                        blacklistSelections.onNext(Pair(currentApp.packageName, currentApp.blackListed))
-                    }
-                }
-            }
-
-            incognitoIcon!!.apply {
-                setImageDrawable(if (app.incognito) incognitoSelected else incognitoUnSelected)
-                setOnClickListener {
-                    if (adapterPosition != RecyclerView.NO_POSITION) {
-                        val currentApp = apps[adapterPosition]
-                        currentApp.incognito = !currentApp.incognito
-                        incognitoSelections.onNext(Pair(currentApp.packageName, currentApp.incognito))
-                    }
-                }
-            }
+      incognitoIcon!!.apply {
+        setImageDrawable(if (app.incognito) incognitoSelected else incognitoUnSelected)
+        setOnClickListener {
+          if (adapterPosition != RecyclerView.NO_POSITION) {
+            val currentApp = apps[adapterPosition]
+            currentApp.incognito = !currentApp.incognito
+            incognitoSelections.onNext(Pair(currentApp.packageName, currentApp.incognito))
+          }
         }
+      }
     }
+  }
 }

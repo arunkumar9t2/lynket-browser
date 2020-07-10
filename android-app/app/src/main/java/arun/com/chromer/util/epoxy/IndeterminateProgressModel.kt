@@ -7,5 +7,5 @@ import dev.arunkumar.android.epoxy.model.KotlinHolder
 
 @EpoxyModelClass(layout = R.layout.layout_progress_indeterminate)
 abstract class IndeterminateProgressModel : KotlinEpoxyModelWithHolder<IndeterminateProgressModel.ViewHolder>() {
-    class ViewHolder : KotlinHolder()
+  class ViewHolder : KotlinHolder()
 }

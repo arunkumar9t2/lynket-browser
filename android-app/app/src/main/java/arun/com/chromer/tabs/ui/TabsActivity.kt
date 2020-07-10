@@ -32,52 +32,52 @@ import kotlinx.android.synthetic.main.activity_tabs.*
 
 class TabsActivity : BaseActivity(), Snackable {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setSupportActionBar(toolbar)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setSupportActionBar(toolbar)
 
-        supportActionBar?.let {
-            it.setDisplayHomeAsUpEnabled(true)
-            it.setHomeAsUpIndicator(R.drawable.article_ic_close)
-        }
-
-        if (savedInstanceState == null) {
-            supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, TabsFragment())
-                    .commit()
-        }
+    supportActionBar?.let {
+      it.setDisplayHomeAsUpEnabled(true)
+      it.setHomeAsUpIndicator(R.drawable.article_ic_close)
     }
 
-    @OnClick(R.id.fab)
-    fun onFabClick() {
-        supportFragmentManager.fragments
-                .asSequence()
-                .filter { !it.isHidden && it is FabHandler }
-                .map { it as FabHandler }
-                .first()
-                .onFabClick()
+    if (savedInstanceState == null) {
+      supportFragmentManager
+          .beginTransaction()
+          .replace(R.id.fragment_container, TabsFragment())
+          .commit()
     }
+  }
 
-    override fun getLayoutRes() = R.layout.activity_tabs
+  @OnClick(R.id.fab)
+  fun onFabClick() {
+    supportFragmentManager.fragments
+        .asSequence()
+        .filter { !it.isHidden && it is FabHandler }
+        .map { it as FabHandler }
+        .first()
+        .onFabClick()
+  }
 
-    override fun snack(textToSnack: String) {
-        Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_SHORT).show()
+  override fun getLayoutRes() = R.layout.activity_tabs
+
+  override fun snack(textToSnack: String) {
+    Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_SHORT).show()
+  }
+
+  override fun snackLong(textToSnack: String) {
+    Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_LONG).show()
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem) = when {
+    item.itemId == android.R.id.home -> {
+      finish()
+      true
     }
+    else -> super.onOptionsItemSelected(item)
+  }
 
-    override fun snackLong(textToSnack: String) {
-        Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_LONG).show()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem) = when {
-        item.itemId == android.R.id.home -> {
-            finish()
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
-    }
-
-    override fun inject(activityComponent: ActivityComponent) {
-        activityComponent.inject(this)
-    }
+  override fun inject(activityComponent: ActivityComponent) {
+    activityComponent.inject(this)
+  }
 }

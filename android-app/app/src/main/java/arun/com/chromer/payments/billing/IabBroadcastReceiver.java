@@ -37,27 +37,27 @@ import android.content.Intent;
  * has been acquired.</p>
  */
 public class IabBroadcastReceiver extends BroadcastReceiver {
-    /**
-     * The Intent action that this Receiver should filter for.
-     */
-    public static final String ACTION = "com.android.vending.billing.PURCHASES_UPDATED";
-    private final IabBroadcastListener mListener;
+  /**
+   * The Intent action that this Receiver should filter for.
+   */
+  public static final String ACTION = "com.android.vending.billing.PURCHASES_UPDATED";
+  private final IabBroadcastListener mListener;
 
-    public IabBroadcastReceiver(IabBroadcastListener listener) {
-        mListener = listener;
-    }
+  public IabBroadcastReceiver(IabBroadcastListener listener) {
+    mListener = listener;
+  }
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        if (mListener != null) {
-            mListener.receivedBroadcast();
-        }
+  @Override
+  public void onReceive(Context context, Intent intent) {
+    if (mListener != null) {
+      mListener.receivedBroadcast();
     }
+  }
 
-    /**
-     * Listener interface for received broadcast messages.
-     */
-    public interface IabBroadcastListener {
-        void receivedBroadcast();
-    }
+  /**
+   * Listener interface for received broadcast messages.
+   */
+  public interface IabBroadcastListener {
+    void receivedBroadcast();
+  }
 }

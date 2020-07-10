@@ -36,17 +36,17 @@ import kotlin.math.hypot
 
 
 inline fun View.show(condition: Boolean = true) {
-    visibility = if (condition) View.VISIBLE else View.INVISIBLE
+  visibility = if (condition) View.VISIBLE else View.INVISIBLE
 }
 
 inline fun View.hide(condition: Boolean = true) {
-    visibility = if (condition) View.INVISIBLE else View.VISIBLE
+  visibility = if (condition) View.INVISIBLE else View.VISIBLE
 }
 
 inline fun View.gone(condition: Boolean = true) {
-    visibility = if (condition) View.GONE else {
-        View.VISIBLE
-    }
+  visibility = if (condition) View.GONE else {
+    View.VISIBLE
+  }
 }
 
 /**
@@ -55,28 +55,28 @@ inline fun View.gone(condition: Boolean = true) {
  */
 @SuppressLint("NewApi")
 fun View.circularHideWithSelfCenter(done: (() -> Unit)? = null) {
-    if (Utils.ANDROID_LOLLIPOP && isLaidOut && visibility == View.VISIBLE) {
-        // get the center for the clipping circle
-        val cx = width / 2
-        val cy = height / 2
-        // get the initial radius for the clipping circle
-        val initialRadius = Math.hypot(cx.toDouble(), cy.toDouble())
+  if (Utils.ANDROID_LOLLIPOP && isLaidOut && visibility == View.VISIBLE) {
+    // get the center for the clipping circle
+    val cx = width / 2
+    val cy = height / 2
+    // get the initial radius for the clipping circle
+    val initialRadius = Math.hypot(cx.toDouble(), cy.toDouble())
 
-        // create the animation (the final radius is zero)
-        val anim = ViewAnimationUtils.createCircularReveal(this, cx, cy, initialRadius.toFloat(), 0f)
-        anim.apply {
-            // make the view invisible when the animation is done
-            addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
-                    super.onAnimationEnd(animation)
-                    this@circularHideWithSelfCenter.gone()
-                    done?.invoke()
-                }
-            })
-            // start the animation
-            start()
+    // create the animation (the final radius is zero)
+    val anim = ViewAnimationUtils.createCircularReveal(this, cx, cy, initialRadius.toFloat(), 0f)
+    anim.apply {
+      // make the view invisible when the animation is done
+      addListener(object : AnimatorListenerAdapter() {
+        override fun onAnimationEnd(animation: Animator?) {
+          super.onAnimationEnd(animation)
+          this@circularHideWithSelfCenter.gone()
+          done?.invoke()
         }
-    } else hide()
+      })
+      // start the animation
+      start()
+    }
+  } else hide()
 }
 
 /**
@@ -84,47 +84,47 @@ fun View.circularHideWithSelfCenter(done: (() -> Unit)? = null) {
  */
 @SuppressLint("NewApi")
 fun View.circularRevealWithSelfCenter(done: (() -> Unit)? = null) {
-    if (Utils.ANDROID_LOLLIPOP && isLaidOut && visibility != View.VISIBLE) {
-        // get the center for the clipping circle
-        val cx = width / 2
-        val cy = height / 2
-        // get the initial radius for the clipping circle
-        val initialRadius = hypot(cx.toDouble(), cy.toDouble())
+  if (Utils.ANDROID_LOLLIPOP && isLaidOut && visibility != View.VISIBLE) {
+    // get the center for the clipping circle
+    val cx = width / 2
+    val cy = height / 2
+    // get the initial radius for the clipping circle
+    val initialRadius = hypot(cx.toDouble(), cy.toDouble())
 
-        // create the animation (the start radius is zero)
-        ViewAnimationUtils.createCircularReveal(this, cx, cy, 0f, initialRadius.toFloat()).apply {
-            addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
-                    super.onAnimationEnd(animation)
-                    done?.invoke()
-                }
-            })
-            // Make the view visible
-            show()
-            // Start the animation
-            start()
+    // create the animation (the start radius is zero)
+    ViewAnimationUtils.createCircularReveal(this, cx, cy, 0f, initialRadius.toFloat()).apply {
+      addListener(object : AnimatorListenerAdapter() {
+        override fun onAnimationEnd(animation: Animator?) {
+          super.onAnimationEnd(animation)
+          done?.invoke()
         }
-    } else show()
+      })
+      // Make the view visible
+      show()
+      // Start the animation
+      start()
+    }
+  } else show()
 }
 
 
 fun View.children(): ArrayList<View> {
-    val children = ArrayList<View>()
-    if (this is ViewGroup) {
-        (0 until childCount).mapTo(children) { getChildAt(it) }
-    }
-    return children
+  val children = ArrayList<View>()
+  if (this is ViewGroup) {
+    (0 until childCount).mapTo(children) { getChildAt(it) }
+  }
+  return children
 }
 
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false): View {
-    return LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
+  return LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
 }
 
 fun View.showKeyboard(force: Boolean = false) {
-    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    if (force) {
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
-    } else {
-        imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
-    }
+  val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+  if (force) {
+    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+  } else {
+    imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+  }
 }

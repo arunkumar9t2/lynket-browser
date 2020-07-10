@@ -22,20 +22,20 @@ package arun.com.chromer.data
 import rx.Observable
 
 sealed class Result<T> {
-    data class Success<T>(val data: T?) : Result<T>()
-    class Loading<T> : Result<T>()
-    class Idle<T> : Result<T>()
-    data class Failure<T>(val throwable: Throwable) : Result<T>()
+  data class Success<T>(val data: T?) : Result<T>()
+  class Loading<T> : Result<T>()
+  class Idle<T> : Result<T>()
+  data class Failure<T>(val throwable: Throwable) : Result<T>()
 
 
-    companion object {
-        fun <T> applyToObservable(): Observable.Transformer<T, Result<T>> {
-            return Observable.Transformer { sourceObservable ->
-                sourceObservable
-                        .map { Success(it) as Result<T> }
-                        .onErrorReturn { Failure(it) }
-                        .startWith(Loading())
-            }
-        }
+  companion object {
+    fun <T> applyToObservable(): Observable.Transformer<T, Result<T>> {
+      return Observable.Transformer { sourceObservable ->
+        sourceObservable
+            .map { Success(it) as Result<T> }
+            .onErrorReturn { Failure(it) }
+            .startWith(Loading())
+      }
     }
+  }
 }

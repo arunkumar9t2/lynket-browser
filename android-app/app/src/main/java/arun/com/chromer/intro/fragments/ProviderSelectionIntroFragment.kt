@@ -34,25 +34,25 @@ import kotlinx.android.synthetic.main.fragment_slide_over_intro.*
 import javax.inject.Inject
 
 open class ProviderSelectionIntroFragment : BaseFragment(), ISlideBackgroundColorHolder {
-    override fun getDefaultBackgroundColor(): Int = ContextCompat.getColor(context!!, R.color.tutorialBackgrounColor)
+  override fun getDefaultBackgroundColor(): Int = ContextCompat.getColor(context!!, R.color.tutorialBackgrounColor)
 
-    override fun setBackgroundColor(backgroundColor: Int) {
-        root.setBackgroundColor(backgroundColor)
-    }
+  override fun setBackgroundColor(backgroundColor: Int) {
+    root.setBackgroundColor(backgroundColor)
+  }
 
-    @Inject
-    lateinit var tabsManager: TabsManager
+  @Inject
+  lateinit var tabsManager: TabsManager
 
-    override fun inject(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
-    override fun getLayoutRes() = R.layout.fragment_provider_selection_intro
+  override fun inject(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
+  override fun getLayoutRes() = R.layout.fragment_provider_selection_intro
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        GlideApp.with(this).load(R.drawable.tutorial_choose_browser).into(imageView!!)
-    }
+  override fun onActivityCreated(savedInstanceState: Bundle?) {
+    super.onActivityCreated(savedInstanceState)
+    GlideApp.with(this).load(R.drawable.tutorial_choose_browser).into(imageView!!)
+  }
 
-    @OnClick(R.id.chooseProviderButton)
-    fun chooseProviderButton() {
-        startActivity(Intent(context, ProviderSelectionActivity::class.java))
-    }
+  @OnClick(R.id.chooseProviderButton)
+  fun chooseProviderButton() {
+    startActivity(Intent(context, ProviderSelectionActivity::class.java))
+  }
 }

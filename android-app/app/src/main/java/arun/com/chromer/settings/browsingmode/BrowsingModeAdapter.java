@@ -56,149 +56,146 @@ import static com.mikepenz.community_material_typeface_library.CommunityMaterial
  */
 @PerActivity
 class BrowsingModeAdapter extends RecyclerView.Adapter<BrowsingModeAdapter.BrowsingModeViewHolder> {
-    private final List<String> settingsItems = new ArrayList<>();
-    private final RxPreferences rxPreferences;
+  public static final int SLIDE_OVER = 0;
+  public static final int WEB_HEADS = 1;
+  public static final int NATIVE_BUBBLES = 2;
+  private final List<String> settingsItems = new ArrayList<>();
+  private final RxPreferences rxPreferences;
+  private BrowsingModeClickListener browsingModeClickListener = (position, view) -> {
+  };
 
-    private BrowsingModeClickListener browsingModeClickListener = (position, view) -> {
+  @Inject
+  BrowsingModeAdapter(@NonNull final Application application, final RxPreferences rxPreferences) {
+    setHasStableIds(true);
+    this.rxPreferences = rxPreferences;
+    settingsItems.add(application.getString(R.string.browsing_mode_slide_over));
+    settingsItems.add(application.getString(R.string.browsing_mode_web_heads));
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+      settingsItems.add(application.getString(R.string.browsing_mode_native_bubbles));
+    }
+  }
+
+  @Override
+  public BrowsingModeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    return new BrowsingModeViewHolder(
+        LayoutInflater.from(parent.getContext()).inflate(
+            R.layout.activity_browsing_mode_item_template,
+            parent,
+            false
+        ),
+        rxPreferences
+    );
+  }
+
+  @Override
+  public void onBindViewHolder(final BrowsingModeViewHolder holder, int position) {
+    holder.bind(settingsItems.get(position));
+    holder.itemView.setOnClickListener(v -> {
+      if (holder.getAdapterPosition() != RecyclerView.NO_POSITION)
+        browsingModeClickListener.onModeClicked(holder.getAdapterPosition(), holder.itemView);
+    });
+  }
+
+  @Override
+  public long getItemId(int position) {
+    return settingsItems.get(position).hashCode();
+  }
+
+  @Override
+  public int getItemCount() {
+    return settingsItems.size();
+  }
+
+  void setBrowsingModeClickListener(@NonNull BrowsingModeClickListener browsingModeClickListener) {
+    this.browsingModeClickListener = browsingModeClickListener;
+  }
+
+  void cleanUp() {
+    browsingModeClickListener = (position, view) -> {
     };
+    settingsItems.clear();
+  }
 
-    @Inject
-    BrowsingModeAdapter(@NonNull final Application application, final RxPreferences rxPreferences) {
-        setHasStableIds(true);
-        this.rxPreferences = rxPreferences;
-        settingsItems.add(application.getString(R.string.browsing_mode_slide_over));
-        settingsItems.add(application.getString(R.string.browsing_mode_web_heads));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            settingsItems.add(application.getString(R.string.browsing_mode_native_bubbles));
-        }
+  interface BrowsingModeClickListener {
+    void onModeClicked(int position, final View view);
+  }
+
+  static class BrowsingModeViewHolder extends RecyclerView.ViewHolder {
+    private final RxPreferences rxPreferences;
+    @BindView(R.id.icon)
+    ImageView icon;
+    @BindView(R.id.title)
+    TextView title;
+    @BindView(R.id.subtitle)
+    TextView subtitle;
+    @BindView(R.id.browsing_mode_selector)
+    ImageView selector;
+    @BindView(R.id.browsing_mode_root)
+    CardView browsingModeRoot;
+
+    BrowsingModeViewHolder(View itemView, final RxPreferences rxPreferences) {
+      super(itemView);
+      this.rxPreferences = rxPreferences;
+      ButterKnife.bind(this, itemView);
     }
 
-    @Override
-    public BrowsingModeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new BrowsingModeViewHolder(
-                LayoutInflater.from(parent.getContext()).inflate(
-                        R.layout.activity_browsing_mode_item_template,
-                        parent,
-                        false
-                ),
-                rxPreferences
-        );
+    void bind(@NonNull final String item) {
+      title.setText(item);
+      final int position = getAdapterPosition();
+      final boolean webHeads = Preferences.get(selector.getContext()).webHeads();
+      final boolean nativeBubbles = rxPreferences.getNativeBubbles().get();
+      browsingModeRoot.setForeground(ColorUtil.getRippleDrawableCompat(Color.parseColor("#42ffffff")));
+      switch (position) {
+        case SLIDE_OVER:
+          icon.setImageDrawable(new IconicsDrawable(icon.getContext())
+              .icon(Icon.cmd_open_in_app)
+              .color(Color.WHITE)
+              .sizeDp(24));
+          selector.setImageDrawable(new IconicsDrawable(selector.getContext())
+              .icon(webHeads || nativeBubbles
+                  ? Icon.cmd_checkbox_blank_circle_outline
+                  : Icon.cmd_checkbox_marked_circle)
+              .color(Color.WHITE)
+              .sizeDp(24));
+          title.setTextColor(Color.WHITE);
+          subtitle.setTextColor(Color.WHITE);
+          subtitle.setText(R.string.browsing_mode_slide_over_explanation);
+          browsingModeRoot.setCardBackgroundColor(ContextCompat.getColor(browsingModeRoot.getContext(), R.color.md_light_blue_A700));
+          break;
+        case WEB_HEADS:
+          icon.setImageDrawable(new IconicsDrawable(icon.getContext())
+              .icon(Icon.cmd_chart_bubble)
+              .color(Color.WHITE)
+              .sizeDp(24));
+          selector.setImageDrawable(new IconicsDrawable(selector.getContext())
+              .icon(!webHeads
+                  ? Icon.cmd_checkbox_blank_circle_outline
+                  : Icon.cmd_checkbox_marked_circle)
+              .color(Color.WHITE)
+              .sizeDp(24));
+          title.setTextColor(Color.WHITE);
+          subtitle.setTextColor(Color.WHITE);
+          subtitle.setText(R.string.browsing_mode_web_heads_explanation);
+          browsingModeRoot.setCardBackgroundColor(ContextCompat.getColor(browsingModeRoot.getContext(), R.color.md_green_700));
+          break;
+        case NATIVE_BUBBLES:
+          final int materialDarkColor = ContextCompat.getColor(icon.getContext(), R.color.material_dark_color);
+          icon.setImageDrawable(new IconicsDrawable(icon.getContext())
+              .icon(Icon.cmd_android_head)
+              .color(materialDarkColor)
+              .sizeDp(24));
+          selector.setImageDrawable(new IconicsDrawable(selector.getContext())
+              .icon(!nativeBubbles
+                  ? Icon.cmd_checkbox_blank_circle_outline
+                  : Icon.cmd_checkbox_marked_circle)
+              .color(materialDarkColor)
+              .sizeDp(24));
+          title.setTextColor(materialDarkColor);
+          subtitle.setTextColor(ColorUtils.setAlphaComponent(materialDarkColor, (int) (0.8 * 255)));
+          subtitle.setText(R.string.browsing_mode_native_bubbles_explanation);
+          browsingModeRoot.setCardBackgroundColor(ContextCompat.getColor(browsingModeRoot.getContext(), R.color.android_10_color));
+          break;
+      }
     }
-
-    @Override
-    public void onBindViewHolder(final BrowsingModeViewHolder holder, int position) {
-        holder.bind(settingsItems.get(position));
-        holder.itemView.setOnClickListener(v -> {
-            if (holder.getAdapterPosition() != RecyclerView.NO_POSITION)
-                browsingModeClickListener.onModeClicked(holder.getAdapterPosition(), holder.itemView);
-        });
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return settingsItems.get(position).hashCode();
-    }
-
-    @Override
-    public int getItemCount() {
-        return settingsItems.size();
-    }
-
-    void setBrowsingModeClickListener(@NonNull BrowsingModeClickListener browsingModeClickListener) {
-        this.browsingModeClickListener = browsingModeClickListener;
-    }
-
-    void cleanUp() {
-        browsingModeClickListener = (position, view) -> {
-        };
-        settingsItems.clear();
-    }
-
-    interface BrowsingModeClickListener {
-        void onModeClicked(int position, final View view);
-    }
-
-    public static final int SLIDE_OVER = 0;
-    public static final int WEB_HEADS = 1;
-    public static final int NATIVE_BUBBLES = 2;
-
-    static class BrowsingModeViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.icon)
-        ImageView icon;
-        @BindView(R.id.title)
-        TextView title;
-        @BindView(R.id.subtitle)
-        TextView subtitle;
-        @BindView(R.id.browsing_mode_selector)
-        ImageView selector;
-        @BindView(R.id.browsing_mode_root)
-        CardView browsingModeRoot;
-
-        private final RxPreferences rxPreferences;
-
-        BrowsingModeViewHolder(View itemView, final RxPreferences rxPreferences) {
-            super(itemView);
-            this.rxPreferences = rxPreferences;
-            ButterKnife.bind(this, itemView);
-        }
-
-        void bind(@NonNull final String item) {
-            title.setText(item);
-            final int position = getAdapterPosition();
-            final boolean webHeads = Preferences.get(selector.getContext()).webHeads();
-            final boolean nativeBubbles = rxPreferences.getNativeBubbles().get();
-            browsingModeRoot.setForeground(ColorUtil.getRippleDrawableCompat(Color.parseColor("#42ffffff")));
-            switch (position) {
-                case SLIDE_OVER:
-                    icon.setImageDrawable(new IconicsDrawable(icon.getContext())
-                            .icon(Icon.cmd_open_in_app)
-                            .color(Color.WHITE)
-                            .sizeDp(24));
-                    selector.setImageDrawable(new IconicsDrawable(selector.getContext())
-                            .icon(webHeads || nativeBubbles
-                                    ? Icon.cmd_checkbox_blank_circle_outline
-                                    : Icon.cmd_checkbox_marked_circle)
-                            .color(Color.WHITE)
-                            .sizeDp(24));
-                    title.setTextColor(Color.WHITE);
-                    subtitle.setTextColor(Color.WHITE);
-                    subtitle.setText(R.string.browsing_mode_slide_over_explanation);
-                    browsingModeRoot.setCardBackgroundColor(ContextCompat.getColor(browsingModeRoot.getContext(), R.color.md_light_blue_A700));
-                    break;
-                case WEB_HEADS:
-                    icon.setImageDrawable(new IconicsDrawable(icon.getContext())
-                            .icon(Icon.cmd_chart_bubble)
-                            .color(Color.WHITE)
-                            .sizeDp(24));
-                    selector.setImageDrawable(new IconicsDrawable(selector.getContext())
-                            .icon(!webHeads
-                                    ? Icon.cmd_checkbox_blank_circle_outline
-                                    : Icon.cmd_checkbox_marked_circle)
-                            .color(Color.WHITE)
-                            .sizeDp(24));
-                    title.setTextColor(Color.WHITE);
-                    subtitle.setTextColor(Color.WHITE);
-                    subtitle.setText(R.string.browsing_mode_web_heads_explanation);
-                    browsingModeRoot.setCardBackgroundColor(ContextCompat.getColor(browsingModeRoot.getContext(), R.color.md_green_700));
-                    break;
-                case NATIVE_BUBBLES:
-                    final int materialDarkColor = ContextCompat.getColor(icon.getContext(), R.color.material_dark_color);
-                    icon.setImageDrawable(new IconicsDrawable(icon.getContext())
-                            .icon(Icon.cmd_android_head)
-                            .color(materialDarkColor)
-                            .sizeDp(24));
-                    selector.setImageDrawable(new IconicsDrawable(selector.getContext())
-                            .icon(!nativeBubbles
-                                    ? Icon.cmd_checkbox_blank_circle_outline
-                                    : Icon.cmd_checkbox_marked_circle)
-                            .color(materialDarkColor)
-                            .sizeDp(24));
-                    title.setTextColor(materialDarkColor);
-                    subtitle.setTextColor(ColorUtils.setAlphaComponent(materialDarkColor, (int) (0.8 * 255)));
-                    subtitle.setText(R.string.browsing_mode_native_bubbles_explanation);
-                    browsingModeRoot.setCardBackgroundColor(ContextCompat.getColor(browsingModeRoot.getContext(), R.color.android_10_color));
-                    break;
-            }
-        }
-    }
+  }
 }

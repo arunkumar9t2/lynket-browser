@@ -29,20 +29,20 @@ import arun.com.chromer.bubbles.webheads.ui.views.WebHead;
  * Created by Arun on 08/08/2016.
  */
 public interface WebHeadContract {
-    void onWebHeadClick(@NonNull WebHead webHead);
+  void onWebHeadClick(@NonNull WebHead webHead);
 
-    void onWebHeadDestroyed(@NonNull WebHead webHead, boolean isLastWebHead);
+  void onWebHeadDestroyed(@NonNull WebHead webHead, boolean isLastWebHead);
 
-    void onMasterWebHeadMoved(int x, int y);
+  void onMasterWebHeadMoved(int x, int y);
 
-    @NonNull
-    Spring newSpring();
+  @NonNull
+  Spring newSpring();
 
-    void onMasterLockedToTrashy();
+  void onMasterLockedToTrashy();
 
-    void onMasterReleasedFromTrashy();
+  void onMasterReleasedFromTrashy();
 
-    void closeAll();
+  void closeAll();
 
-    void onMasterLongClick();
+  void onMasterLongClick();
 }

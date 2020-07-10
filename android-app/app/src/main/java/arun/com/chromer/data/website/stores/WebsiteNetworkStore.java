@@ -50,104 +50,104 @@ import timber.log.Timber;
  */
 @Singleton
 public class WebsiteNetworkStore implements WebsiteStore {
-    private final Context context;
+  private final Context context;
 
-    @Inject
-    WebsiteNetworkStore(@NonNull Application application) {
-        this.context = application.getApplicationContext();
-    }
+  @Inject
+  WebsiteNetworkStore(@NonNull Application application) {
+    this.context = application.getApplicationContext();
+  }
 
-    @NonNull
-    @Override
-    public Observable<Website> getWebsite(@NonNull String url) {
-        return RxParser.INSTANCE.parseUrl(url)
-                .flatMap(urlArticlePair -> {
-                    if (urlArticlePair.second != null) {
-                        final Website extractedWebsite = Website.fromArticle(urlArticlePair.second);
-                        // We preserve the original url, otherwise breaks cache.
-                        extractedWebsite.url = urlArticlePair.first;
-                        return Observable.just(extractedWebsite);
-                    } else {
-                        return Observable.just(new Website(urlArticlePair.first));
-                    }
-                }).compose(SchedulerProvider.applyIoSchedulers());
-    }
+  @NonNull
+  @Override
+  public Observable<Website> getWebsite(@NonNull String url) {
+    return RxParser.INSTANCE.parseUrl(url)
+        .flatMap(urlArticlePair -> {
+          if (urlArticlePair.second != null) {
+            final Website extractedWebsite = Website.fromArticle(urlArticlePair.second);
+            // We preserve the original url, otherwise breaks cache.
+            extractedWebsite.url = urlArticlePair.first;
+            return Observable.just(extractedWebsite);
+          } else {
+            return Observable.just(new Website(urlArticlePair.first));
+          }
+        }).compose(SchedulerProvider.applyIoSchedulers());
+  }
 
-    @NonNull
-    @Override
-    public Observable<Void> clearCache() {
-        return Observable.empty();
-    }
+  @NonNull
+  @Override
+  public Observable<Void> clearCache() {
+    return Observable.empty();
+  }
 
-    @NonNull
-    @Override
-    public Observable<Website> saveWebsite(@NonNull Website website) {
-        return Observable.empty();
-    }
+  @NonNull
+  @Override
+  public Observable<Website> saveWebsite(@NonNull Website website) {
+    return Observable.empty();
+  }
 
-    @NonNull
-    @Override
-    public Observable<WebColor> getWebsiteColor(@NonNull String url) {
-        return Observable.empty();
-    }
+  @NonNull
+  @Override
+  public Observable<WebColor> getWebsiteColor(@NonNull String url) {
+    return Observable.empty();
+  }
 
-    @Override
-    public Observable<WebColor> saveWebsiteColor(@NonNull String host, @ColorInt int color) {
-        return Observable.empty();
-    }
+  @Override
+  public Observable<WebColor> saveWebsiteColor(@NonNull String host, @ColorInt int color) {
+    return Observable.empty();
+  }
 
-    @NonNull
-    @Override
-    public Pair<Bitmap, Integer> getWebsiteIconAndColor(@NonNull Website website) {
-        if (TextUtils.isEmpty(website.faviconUrl)) {
-            return new Pair<>(null, Constants.NO_COLOR);
-        }
-        int color = Constants.NO_COLOR;
-        Bitmap icon = null;
-        try {
-            icon = GlideApp.with(context).asBitmap().load(website.faviconUrl).submit().get();
-            final Palette palette = Palette.from(icon).generate();
-            color = ColorUtil.getBestColorFromPalette(palette);
-        } catch (Exception e) {
-            Timber.e(e);
-        }
-        return new Pair<>(icon, color);
+  @NonNull
+  @Override
+  public Pair<Bitmap, Integer> getWebsiteIconAndColor(@NonNull Website website) {
+    if (TextUtils.isEmpty(website.faviconUrl)) {
+      return new Pair<>(null, Constants.NO_COLOR);
     }
+    int color = Constants.NO_COLOR;
+    Bitmap icon = null;
+    try {
+      icon = GlideApp.with(context).asBitmap().load(website.faviconUrl).submit().get();
+      final Palette palette = Palette.from(icon).generate();
+      color = ColorUtil.getBestColorFromPalette(palette);
+    } catch (Exception e) {
+      Timber.e(e);
+    }
+    return new Pair<>(icon, color);
+  }
 
-    @NonNull
-    @Override
-    public Pair<Drawable, Integer> getWebsiteRoundIconAndColor(@NonNull Website website) {
-        if (TextUtils.isEmpty(website.faviconUrl)) {
-            return new Pair<>(null, Constants.NO_COLOR);
-        }
-        int color = Constants.NO_COLOR;
-        Bitmap icon = null;
-        try {
-            icon = GlideApp.with(context).asBitmap().circleCrop().load(website.faviconUrl).submit().get();
-            final Palette palette = Palette.from(icon).clearFilters().generate();
-            color = ColorUtil.getBestColorFromPalette(palette);
-        } catch (Exception e) {
-            Timber.e(e);
-        }
-        if (Utils.isValidFavicon(icon)) {
-            return new Pair<>(new BitmapDrawable(context.getResources(), icon), color);
-        } else {
-            return new Pair<>(null, color);
-        }
+  @NonNull
+  @Override
+  public Pair<Drawable, Integer> getWebsiteRoundIconAndColor(@NonNull Website website) {
+    if (TextUtils.isEmpty(website.faviconUrl)) {
+      return new Pair<>(null, Constants.NO_COLOR);
     }
+    int color = Constants.NO_COLOR;
+    Bitmap icon = null;
+    try {
+      icon = GlideApp.with(context).asBitmap().circleCrop().load(website.faviconUrl).submit().get();
+      final Palette palette = Palette.from(icon).clearFilters().generate();
+      color = ColorUtil.getBestColorFromPalette(palette);
+    } catch (Exception e) {
+      Timber.e(e);
+    }
+    if (Utils.isValidFavicon(icon)) {
+      return new Pair<>(new BitmapDrawable(context.getResources(), icon), color);
+    } else {
+      return new Pair<>(null, color);
+    }
+  }
 
-    @NonNull
-    @Override
-    public Pair<Bitmap, Integer> getWebsiteIconWithPlaceholderAndColor(@NonNull Website website) {
-        int color = Constants.NO_COLOR;
-        Bitmap icon = null;
-        try {
-            icon = GlideApp.with(context).asBitmap().load(website).submit().get();
-            final Palette palette = Palette.from(icon).generate();
-            color = ColorUtil.getBestColorFromPalette(palette);
-        } catch (Exception e) {
-            Timber.e(e);
-        }
-        return new Pair<>(icon, color);
+  @NonNull
+  @Override
+  public Pair<Bitmap, Integer> getWebsiteIconWithPlaceholderAndColor(@NonNull Website website) {
+    int color = Constants.NO_COLOR;
+    Bitmap icon = null;
+    try {
+      icon = GlideApp.with(context).asBitmap().load(website).submit().get();
+      final Palette palette = Palette.from(icon).generate();
+      color = ColorUtil.getBestColorFromPalette(palette);
+    } catch (Exception e) {
+      Timber.e(e);
     }
+    return new Pair<>(icon, color);
+  }
 }

@@ -59,144 +59,147 @@ import rx.subscriptions.CompositeSubscription
 
 
 class HomeScreenShortcutCreatorActivity : BrowsingActivity() {
-    override fun getLayoutRes(): Int = 0
-    override fun inject(activityComponent: ActivityComponent) = activityComponent.inject(this)
-    override fun onWebsiteLoaded(website: Website) {
-    }
+  override fun getLayoutRes(): Int = 0
+  override fun inject(activityComponent: ActivityComponent) = activityComponent.inject(this)
+  override fun onWebsiteLoaded(website: Website) {
+  }
 
-    private var shortcutDialog: MaterialDialog? = null
+  private var shortcutDialog: MaterialDialog? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        shortcutDialog = AddShortcutDialog(this, browsingViewModel.websiteLiveData).show()
-    }
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    shortcutDialog = AddShortcutDialog(this, browsingViewModel.websiteLiveData).show()
+  }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        shortcutDialog?.dismiss()
-    }
+  override fun onDestroy() {
+    super.onDestroy()
+    shortcutDialog?.dismiss()
+  }
 
-    class AddShortcutDialog(
-            private var activity: Activity?,
-            private val websiteLiveData: MutableLiveData<Result<Website>>
-    ) : DialogInterface.OnDismissListener, TextWatcher {
-        private lateinit var unbinder: Unbinder
-        private var dialog: MaterialDialog? = null
+  class AddShortcutDialog(
+      private var activity: Activity?,
+      private val websiteLiveData: MutableLiveData<Result<Website>>
+  ) : DialogInterface.OnDismissListener, TextWatcher {
+    private lateinit var unbinder: Unbinder
+    private var dialog: MaterialDialog? = null
 
-        @BindView(R.id.icon_view)
-        @JvmField
-        var iconView: ImageView? = null
-        @BindView(R.id.shortcut_name)
-        @JvmField
-        var shortcutName: EditText? = null
-        @BindView(R.id.shortcut_name_wrapper)
-        @JvmField
-        var shortcutNameWrapper: TextInputLayout? = null
-        @BindView(R.id.extract_progress)
-        @JvmField
-        var progressBar: MaterialProgressBar? = null
+    @BindView(R.id.icon_view)
+    @JvmField
+    var iconView: ImageView? = null
 
-        val subs = CompositeSubscription()
+    @BindView(R.id.shortcut_name)
+    @JvmField
+    var shortcutName: EditText? = null
 
-        private lateinit var website: Website
+    @BindView(R.id.shortcut_name_wrapper)
+    @JvmField
+    var shortcutNameWrapper: TextInputLayout? = null
 
-        fun show(): MaterialDialog? {
-            dialog = MaterialDialog.Builder(activity!!)
-                    .title(R.string.create_shorcut)
-                    .customView(R.layout.dialog_create_shorcut_layout, false)
-                    .dismissListener(this)
-                    .positiveText(R.string.create)
-                    .autoDismiss(true)
-                    .onPositive { _, _ ->
-                        if (ShortcutManagerCompat.isRequestPinShortcutSupported(activity!!)) {
-                            ShortcutManagerCompat.requestPinShortcut(
-                                    activity!!,
-                                    ShortcutInfoCompat.Builder(activity!!, website.url)
-                                            .setIcon(IconCompat.createWithBitmap(iconView?.drawable?.toBitmap()))
-                                            .setIntent(Intent(activity, BrowserInterceptActivity::class.java).apply {
-                                                action = Intent.ACTION_VIEW
-                                                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                                                data = Uri.parse(website.preferredUrl())
-                                            })
-                                            .setLongLabel(shortcutName?.text.toString())
-                                            .setShortLabel(shortcutName?.text.toString())
-                                            .build(),
-                                    null
-                            )
-                        }
-                    }
-                    .show()
-            val dialogView = dialog!!.customView
-            unbinder = ButterKnife.bind(this, dialogView!!)
-            shortcutName?.addTextChangedListener(this)
+    @BindView(R.id.extract_progress)
+    @JvmField
+    var progressBar: MaterialProgressBar? = null
+
+    val subs = CompositeSubscription()
+
+    private lateinit var website: Website
+
+    fun show(): MaterialDialog? {
+      dialog = MaterialDialog.Builder(activity!!)
+          .title(R.string.create_shorcut)
+          .customView(R.layout.dialog_create_shorcut_layout, false)
+          .dismissListener(this)
+          .positiveText(R.string.create)
+          .autoDismiss(true)
+          .onPositive { _, _ ->
+            if (ShortcutManagerCompat.isRequestPinShortcutSupported(activity!!)) {
+              ShortcutManagerCompat.requestPinShortcut(
+                  activity!!,
+                  ShortcutInfoCompat.Builder(activity!!, website.url)
+                      .setIcon(IconCompat.createWithBitmap(iconView?.drawable?.toBitmap()))
+                      .setIntent(Intent(activity, BrowserInterceptActivity::class.java).apply {
+                        action = Intent.ACTION_VIEW
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        data = Uri.parse(website.preferredUrl())
+                      })
+                      .setLongLabel(shortcutName?.text.toString())
+                      .setShortLabel(shortcutName?.text.toString())
+                      .build(),
+                  null
+              )
+            }
+          }
+          .show()
+      val dialogView = dialog!!.customView
+      unbinder = ButterKnife.bind(this, dialogView!!)
+      shortcutName?.addTextChangedListener(this)
+      positiveButton?.isEnabled = false
+
+      websiteLiveData.watch(activity as LifecycleOwner) {
+        when (it) {
+          is Result.Loading<Website> -> {
+            progressBar?.show()
+            iconView?.gone()
+            shortcutName?.setText(R.string.loading)
             positiveButton?.isEnabled = false
-
-            websiteLiveData.watch(activity as LifecycleOwner) {
-                when (it) {
-                    is Result.Loading<Website> -> {
-                        progressBar?.show()
-                        iconView?.gone()
-                        shortcutName?.setText(R.string.loading)
-                        positiveButton?.isEnabled = false
-                    }
-                    is Result.Success<Website> -> {
-                        website = it.data!!
-                        shortcutName?.setText(website.safeLabel())
-                        GlideApp.with(activity!!)
-                                .load(it.data)
-                                .error(GlideApp.with(activity!!).load(ApplicationIcon.createUri(activity!!.packageName)))
-                                .into(object : ImageViewTarget<Drawable>(iconView) {
-                                    override fun setResource(resource: Drawable?) {
-                                        iconView?.setImageDrawable(resource)
-                                        loadAttemptFinished()
-                                    }
-                                })
-                    }
-                }
-            }
-            return dialog
+          }
+          is Result.Success<Website> -> {
+            website = it.data!!
+            shortcutName?.setText(website.safeLabel())
+            GlideApp.with(activity!!)
+                .load(it.data)
+                .error(GlideApp.with(activity!!).load(ApplicationIcon.createUri(activity!!.packageName)))
+                .into(object : ImageViewTarget<Drawable>(iconView) {
+                  override fun setResource(resource: Drawable?) {
+                    iconView?.setImageDrawable(resource)
+                    loadAttemptFinished()
+                  }
+                })
+          }
         }
-
-        private fun loadAttemptFinished() {
-            progressBar?.gone()
-            iconView?.show()
-            enablePositiveButtonIfImageLoaded()
-        }
-
-        override fun onDismiss(dialogInterface: DialogInterface) {
-            subs.clear()
-            activity?.finish()
-            activity = null
-            unbinder.unbind()
-            dialog = null
-        }
-
-        private val positiveButton: MDButton?
-            get() {
-                return dialog?.getActionButton(DialogAction.POSITIVE)
-            }
-
-        override fun afterTextChanged(editable: Editable?) {
-            if (editable.toString().trim { it <= ' ' }.isEmpty()) {
-                shortcutNameWrapper?.isErrorEnabled = true
-                shortcutNameWrapper?.error = activity!!.getString(R.string.name_cannot_be_empty)
-                positiveButton?.isEnabled = false
-            } else {
-                shortcutNameWrapper?.isErrorEnabled = false
-                enablePositiveButtonIfImageLoaded()
-            }
-        }
-
-        private fun enablePositiveButtonIfImageLoaded() {
-            iconView?.postDelayed({ positiveButton?.isEnabled = iconView?.drawable != null }, 200)
-        }
-
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-        }
-
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-        }
+      }
+      return dialog
     }
+
+    private fun loadAttemptFinished() {
+      progressBar?.gone()
+      iconView?.show()
+      enablePositiveButtonIfImageLoaded()
+    }
+
+    override fun onDismiss(dialogInterface: DialogInterface) {
+      subs.clear()
+      activity?.finish()
+      activity = null
+      unbinder.unbind()
+      dialog = null
+    }
+
+    private val positiveButton: MDButton?
+      get() {
+        return dialog?.getActionButton(DialogAction.POSITIVE)
+      }
+
+    override fun afterTextChanged(editable: Editable?) {
+      if (editable.toString().trim { it <= ' ' }.isEmpty()) {
+        shortcutNameWrapper?.isErrorEnabled = true
+        shortcutNameWrapper?.error = activity!!.getString(R.string.name_cannot_be_empty)
+        positiveButton?.isEnabled = false
+      } else {
+        shortcutNameWrapper?.isErrorEnabled = false
+        enablePositiveButtonIfImageLoaded()
+      }
+    }
+
+    private fun enablePositiveButtonIfImageLoaded() {
+      iconView?.postDelayed({ positiveButton?.isEnabled = iconView?.drawable != null }, 200)
+    }
+
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+    }
+
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+    }
+  }
 }
 

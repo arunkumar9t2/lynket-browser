@@ -29,13 +29,13 @@ import dagger.Subcomponent;
 
 @PerService
 @Subcomponent(modules = {
-        ServiceModule.class
+    ServiceModule.class
 })
 public interface ServiceComponent {
 
-    void inject(AppDetectService appDetectService);
+  void inject(AppDetectService appDetectService);
 
-    void inject(WebHeadService webHeadService);
+  void inject(WebHeadService webHeadService);
 
-    void inject(@NotNull PreferenceQuickSettingsTile preferenceQuickSettingsTile);
+  void inject(@NotNull PreferenceQuickSettingsTile preferenceQuickSettingsTile);
 }

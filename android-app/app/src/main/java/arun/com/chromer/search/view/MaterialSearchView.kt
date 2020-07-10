@@ -74,342 +74,346 @@ import javax.inject.Inject
 class MaterialSearchView
 @JvmOverloads
 constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
-    private var viewComponent: ViewComponent? = null
+  private var viewComponent: ViewComponent? = null
 
-    @BindColor(R.color.accent_icon_no_focus)
-    @JvmField
-    var normalColor = 0
-    @BindColor(R.color.accent)
-    @JvmField
-    var focusedColor = 0
+  @BindColor(R.color.accent_icon_no_focus)
+  @JvmField
+  var normalColor = 0
 
-    private val xIcon: IconicsDrawable by lazy {
-        IconicsDrawable(context)
-                .icon(CommunityMaterial.Icon.cmd_close)
-                .color(normalColor)
-                .sizeDp(16)
+  @BindColor(R.color.accent)
+  @JvmField
+  var focusedColor = 0
+
+  private val xIcon: IconicsDrawable by lazy {
+    IconicsDrawable(context)
+        .icon(CommunityMaterial.Icon.cmd_close)
+        .color(normalColor)
+        .sizeDp(16)
+  }
+  private val voiceIcon: IconicsDrawable by lazy {
+    IconicsDrawable(context)
+        .icon(CommunityMaterial.Icon.cmd_microphone)
+        .color(normalColor)
+        .sizeDp(18)
+  }
+  private val menuIcon: IconicsDrawable by lazy {
+    IconicsDrawable(context)
+        .icon(CommunityMaterial.Icon.cmd_menu)
+        .color(normalColor)
+        .sizeDp(18)
+  }
+
+  @Inject
+  lateinit var searchPresenter: SearchPresenter
+
+  @Inject
+  lateinit var schedulerProvider: SchedulerProvider
+
+  @Inject
+  lateinit var suggestionController: SuggestionController
+
+  @Inject
+  @field:Detaches
+  lateinit var viewDetaches: Observable<Unit>
+
+  private val voiceSearchFailed = PublishSubject.create<Any>()
+  private val searchPerformed = PublishSubject.create<String>()
+  private val focusChanges = BehaviorSubject.createDefault(false)
+
+  private val searchQuery get() = if (msvEditText.text == null) "" else msvEditText.text.toString()
+
+  private val searchTermChanges by lazy {
+    msvEditText.textChanges()
+        .skipInitialValue()
+        .takeUntil(viewDetaches)
+        .share()
+  }
+
+  val editText: EditText get() = msvEditText
+
+  fun voiceSearchFailed(): Observable<Any> = voiceSearchFailed.hide()
+
+  fun searchPerforms(): Observable<String> = searchPerformed
+      .hide()
+      .switchMap(searchPresenter::getSearchUrl)
+
+  private val leftIconClicks by lazy { msvLeftIcon.clicks().share() }
+
+  init {
+    if (context is ProvidesActivityComponent) {
+      viewComponent = context
+          .activityComponent
+          .viewComponentFactory().create(this)
+          .also { component -> component.inject(this) }
     }
-    private val voiceIcon: IconicsDrawable by lazy {
-        IconicsDrawable(context)
-                .icon(CommunityMaterial.Icon.cmd_microphone)
-                .color(normalColor)
-                .sizeDp(18)
+    addView(inflate(R.layout.widget_material_search_view))
+    ButterKnife.bind(this)
+
+    searchSuggestions.apply {
+      (itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
+      layoutManager = GridLayoutManager(context, 4, VERTICAL, true)
+      setController(suggestionController)
+      clipToPadding = true
     }
-    private val menuIcon: IconicsDrawable by lazy {
-        IconicsDrawable(context)
-                .icon(CommunityMaterial.Icon.cmd_menu)
-                .color(normalColor)
-                .sizeDp(18)
-    }
+  }
 
-    @Inject
-    lateinit var searchPresenter: SearchPresenter
-    @Inject
-    lateinit var schedulerProvider: SchedulerProvider
-    @Inject
-    lateinit var suggestionController: SuggestionController
-    @Inject
-    @field:Detaches
-    lateinit var viewDetaches: Observable<Unit>
 
-    private val voiceSearchFailed = PublishSubject.create<Any>()
-    private val searchPerformed = PublishSubject.create<String>()
-    private val focusChanges = BehaviorSubject.createDefault(false)
+  override fun onAttachedToWindow() {
+    super.onAttachedToWindow()
+    setOnClickListener { if (!msvEditText.hasFocus()) gainFocus() }
+    setupEditText()
+    setupLeftIcon()
+    setupVoiceIcon()
 
-    private val searchQuery get() = if (msvEditText.text == null) "" else msvEditText.text.toString()
+    msvClearIcon.clicks().subscribe { msvEditText.text = null }
 
-    private val searchTermChanges by lazy {
-        msvEditText.textChanges()
-                .skipInitialValue()
-                .takeUntil(viewDetaches)
-                .share()
-    }
+    setupSuggestionController()
+    setupPresenter()
+  }
 
-    val editText: EditText get() = msvEditText
+  override fun onDetachedFromWindow() {
+    super.onDetachedFromWindow()
+    viewComponent = null
+  }
 
-    fun voiceSearchFailed(): Observable<Any> = voiceSearchFailed.hide()
+  override fun clearFocus() {
+    clearFocus(null)
+  }
 
-    fun searchPerforms(): Observable<String> = searchPerformed
-            .hide()
-            .switchMap(searchPresenter::getSearchUrl)
+  override fun hasFocus() = when {
+    msvEditText != null -> msvEditText.hasFocus() && super.hasFocus()
+    else -> super.hasFocus()
+  }
 
-    private val leftIconClicks by lazy { msvLeftIcon.clicks().share() }
+  fun focusChanges(): Observable<Boolean> = focusChanges.hide()
 
-    init {
-        if (context is ProvidesActivityComponent) {
-            viewComponent = context
-                    .activityComponent
-                    .viewComponentFactory().create(this)
-                    .also { component -> component.inject(this) }
+  fun gainFocus() {
+    handleIconsState()
+    setFocusedColor()
+    focusChanges.onNext(true)
+  }
+
+  fun loseFocus(endAction: (() -> Unit)? = null) {
+    setNormalColor()
+    msvEditText.text = null
+    hideKeyboard()
+    hideSuggestions()
+    focusChanges.onNext(false)
+    handleIconsState()
+    endAction?.invoke()
+  }
+
+  override fun setOnClickListener(onClickListener: OnClickListener?) = Unit
+
+  fun menuClicks(): Observable<Unit> = leftIconClicks
+      .filter { focusChanges.value == false }
+      .share()
+
+  fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    if (requestCode == REQUEST_CODE_VOICE) {
+      when (resultCode) {
+        RESULT_OK -> {
+          val resultList = data?.getStringArrayListExtra(EXTRA_RESULTS)
+          if (resultList != null && resultList.isNotEmpty()) {
+            searchPerformed(resultList.first())
+          }
         }
-        addView(inflate(R.layout.widget_material_search_view))
-        ButterKnife.bind(this)
+      }
+    }
+  }
 
-        searchSuggestions.apply {
-            (itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
-            layoutManager = GridLayoutManager(context, 4, VERTICAL, true)
-            setController(suggestionController)
-            clipToPadding = true
+  private fun setupLeftIcon() {
+    class CompositeIconResource(val drawable: Drawable? = null, val uri: Uri? = null) {
+      fun apply(view: ImageView) {
+        when {
+          drawable != null -> view.setImageDrawable(drawable)
+          uri != null -> GlideApp.with(view).load(uri).into(view)
         }
+      }
     }
-
-
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-        setOnClickListener { if (!msvEditText.hasFocus()) gainFocus() }
-        setupEditText()
-        setupLeftIcon()
-        setupVoiceIcon()
-
-        msvClearIcon.clicks().subscribe { msvEditText.text = null }
-
-        setupSuggestionController()
-        setupPresenter()
-    }
-
-    override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-        viewComponent = null
-    }
-
-    override fun clearFocus() {
-        clearFocus(null)
-    }
-
-    override fun hasFocus() = when {
-        msvEditText != null -> msvEditText.hasFocus() && super.hasFocus()
-        else -> super.hasFocus()
-    }
-
-    fun focusChanges(): Observable<Boolean> = focusChanges.hide()
-
-    fun gainFocus() {
-        handleIconsState()
-        setFocusedColor()
-        focusChanges.onNext(true)
-    }
-
-    fun loseFocus(endAction: (() -> Unit)? = null) {
-        setNormalColor()
-        msvEditText.text = null
-        hideKeyboard()
-        hideSuggestions()
-        focusChanges.onNext(false)
-        handleIconsState()
-        endAction?.invoke()
-    }
-
-    override fun setOnClickListener(onClickListener: OnClickListener?) = Unit
-
-    fun menuClicks(): Observable<Unit> = leftIconClicks
-            .filter { focusChanges.value == false }
-            .share()
-
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_CODE_VOICE) {
-            when (resultCode) {
-                RESULT_OK -> {
-                    val resultList = data?.getStringArrayListExtra(EXTRA_RESULTS)
-                    if (resultList != null && resultList.isNotEmpty()) {
-                        searchPerformed(resultList.first())
-                    }
-                }
+    msvLeftIcon.run {
+      setImageDrawable(menuIcon)
+      leftIconClicks
+          .filter { focusChanges.value == true }
+          .takeUntil(viewDetaches).subscribe {
+            suggestionController.showSearchProviders = true
+          }
+      Observable.combineLatest(
+          focusChanges,
+          searchPresenter.selectedSearchProvider,
+          BiFunction<Boolean, SearchProvider, CompositeIconResource> { hasFocus, searchProvider ->
+            if (hasFocus) {
+              CompositeIconResource(uri = searchProvider.iconUri)
+            } else {
+              CompositeIconResource(drawable = menuIcon)
             }
-        }
+          }
+      ).compose(schedulerProvider.poolToUi())
+          .takeUntil(viewDetaches)
+          .subscribe { iconResource -> iconResource.apply(this) }
     }
-
-    private fun setupLeftIcon() {
-        class CompositeIconResource(val drawable: Drawable? = null, val uri: Uri? = null) {
-            fun apply(view: ImageView) {
-                when {
-                    drawable != null -> view.setImageDrawable(drawable)
-                    uri != null -> GlideApp.with(view).load(uri).into(view)
-                }
-            }
-        }
-        msvLeftIcon.run {
-            setImageDrawable(menuIcon)
-            leftIconClicks
-                    .filter { focusChanges.value == true }
-                    .takeUntil(viewDetaches).subscribe {
-                        suggestionController.showSearchProviders = true
-                    }
-            Observable.combineLatest(
-                    focusChanges,
-                    searchPresenter.selectedSearchProvider,
-                    BiFunction<Boolean, SearchProvider, CompositeIconResource> { hasFocus, searchProvider ->
-                        if (hasFocus) {
-                            CompositeIconResource(uri = searchProvider.iconUri)
-                        } else {
-                            CompositeIconResource(drawable = menuIcon)
-                        }
-                    }
-            ).compose(schedulerProvider.poolToUi())
-                    .takeUntil(viewDetaches)
-                    .subscribe { iconResource -> iconResource.apply(this) }
-        }
-        searchTermChanges.subscribe {
-            suggestionController.showSearchProviders = false
-        }
+    searchTermChanges.subscribe {
+      suggestionController.showSearchProviders = false
     }
+  }
 
-    private fun setupVoiceIcon() {
-        msvVoiceIcon.run {
-            setImageDrawable(voiceIcon)
-            setOnClickListener {
-                if (searchQuery.isNotEmpty()) {
-                    msvEditText?.setText("")
-                    clearFocus()
-                } else {
-                    if (Utils.isVoiceRecognizerPresent(context)) {
-                        (context as Activity).startActivityForResult(
-                                Utils.getRecognizerIntent(context),
-                                REQUEST_CODE_VOICE
-                        )
-                    } else {
-                        voiceSearchFailed.onNext(Any())
-                    }
-                }
-            }
-        }
-    }
-
-    private fun setupEditText() {
-        msvEditText.run {
-            focusChanges()
-                    .takeUntil(viewDetaches)
-                    .subscribe { hasFocus ->
-                        if (hasFocus) {
-                            gainFocus()
-                        } else {
-                            loseFocus()
-                        }
-                    }
-            editorActionEvents { event -> event.actionId == IME_ACTION_SEARCH }
-                    .map { searchQuery }
-                    .observeOn(schedulerProvider.ui)
-                    .takeUntil(viewDetaches)
-                    .subscribe(::searchPerformed)
-            searchTermChanges
-                    .takeUntil(viewDetaches)
-                    .observeOn(schedulerProvider.ui)
-                    .subscribe { handleIconsState() }
-        }
-    }
-
-    private fun setupPresenter() {
-        searchPresenter.run {
-            registerSearch(searchTermChanges.map { it.toString() })
-
-            suggestions.takeUntil(viewDetaches)
-                    .observeOn(schedulerProvider.ui)
-                    .subscribe(::setSuggestions)
-
-            searchEngines.takeUntil(viewDetaches)
-                    .observeOn(schedulerProvider.ui)
-                    .subscribe { searchProviders ->
-                        suggestionController.searchProviders = searchProviders
-                    }
-
-            registerSearchProviderClicks(suggestionController.searchProviderClicks)
-        }
-    }
-
-    private fun setupSuggestionController() {
-        suggestionController.intercepts()
-                .map { it.isEmpty() }
-                .observeOn(schedulerProvider.ui)
-                .takeUntil(viewDetaches)
-                .subscribe { isEmpty ->
-                    searchSuggestions.gone(isEmpty)
-                    if (!isEmpty) {
-                        searchSuggestions.scrollToPosition(0)
-                    }
-                }
-
-        suggestionController.suggestionClicks
-                .observeOn(schedulerProvider.pool)
-                .map { suggestionItem ->
-                    when (suggestionItem) {
-                        is HistorySuggestionItem -> suggestionItem.subTitle
-                        else -> suggestionItem.title
-                    } ?: ""
-                }.filter { it.isNotEmpty() }
-                .observeOn(schedulerProvider.ui)
-                .takeUntil(viewDetaches)
-                .subscribe(::searchPerformed)
-
-        suggestionController.suggestionLongClicks
-                .filter { it.title.isNotEmpty() }
-                .takeUntil(viewDetaches)
-                .subscribe {
-                    msvEditText.setText(it.title)
-                    msvEditText.setSelection(it.title.length)
-                }
-    }
-
-    private fun clearFocus(endAction: (() -> Unit)?) {
-        loseFocus(endAction)
-        val view = findFocus()
-        view?.clearFocus()
-        super.clearFocus()
-    }
-
-
-    private fun hideKeyboard() {
-        (context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(windowToken, 0)
-    }
-
-    private fun setFocusedColor() {
-        msvLeftIcon.setImageDrawable(menuIcon.color(focusedColor))
-        msvClearIcon.setImageDrawable(menuIcon.color(focusedColor))
-        msvVoiceIcon.setImageDrawable(voiceIcon.color(focusedColor))
-    }
-
-    private fun setNormalColor() {
-        msvLeftIcon.setImageDrawable(menuIcon.color(normalColor))
-        msvClearIcon.setImageDrawable(menuIcon.color(normalColor))
-        msvVoiceIcon.setImageDrawable(voiceIcon.color(normalColor))
-    }
-
-    private fun handleIconsState() {
-        val color = if (msvEditText.hasFocus()) focusedColor else normalColor
+  private fun setupVoiceIcon() {
+    msvVoiceIcon.run {
+      setImageDrawable(voiceIcon)
+      setOnClickListener {
         if (searchQuery.isNotEmpty()) {
-            msvClearIcon.run {
-                setImageDrawable(xIcon.color(color))
-                spring(SpringAnimation.ALPHA).animateToFinalPosition(1F)
-            }
-            msvVoiceIcon.setImageDrawable(voiceIcon.color(color))
+          msvEditText?.setText("")
+          clearFocus()
         } else {
-            msvClearIcon.run {
-                setImageDrawable(xIcon.color(color))
-                spring(SpringAnimation.ALPHA).animateToFinalPosition(0F)
+          if (Utils.isVoiceRecognizerPresent(context)) {
+            (context as Activity).startActivityForResult(
+                Utils.getRecognizerIntent(context),
+                REQUEST_CODE_VOICE
+            )
+          } else {
+            voiceSearchFailed.onNext(Any())
+          }
+        }
+      }
+    }
+  }
+
+  private fun setupEditText() {
+    msvEditText.run {
+      focusChanges()
+          .takeUntil(viewDetaches)
+          .subscribe { hasFocus ->
+            if (hasFocus) {
+              gainFocus()
+            } else {
+              loseFocus()
             }
-            msvVoiceIcon.setImageDrawable(voiceIcon.color(color))
+          }
+      editorActionEvents { event -> event.actionId == IME_ACTION_SEARCH }
+          .map { searchQuery }
+          .observeOn(schedulerProvider.ui)
+          .takeUntil(viewDetaches)
+          .subscribe(::searchPerformed)
+      searchTermChanges
+          .takeUntil(viewDetaches)
+          .observeOn(schedulerProvider.ui)
+          .subscribe { handleIconsState() }
+    }
+  }
+
+  private fun setupPresenter() {
+    searchPresenter.run {
+      registerSearch(searchTermChanges.map { it.toString() })
+
+      suggestions.takeUntil(viewDetaches)
+          .observeOn(schedulerProvider.ui)
+          .subscribe(::setSuggestions)
+
+      searchEngines.takeUntil(viewDetaches)
+          .observeOn(schedulerProvider.ui)
+          .subscribe { searchProviders ->
+            suggestionController.searchProviders = searchProviders
+          }
+
+      registerSearchProviderClicks(suggestionController.searchProviderClicks)
+    }
+  }
+
+  private fun setupSuggestionController() {
+    suggestionController.intercepts()
+        .map { it.isEmpty() }
+        .observeOn(schedulerProvider.ui)
+        .takeUntil(viewDetaches)
+        .subscribe { isEmpty ->
+          searchSuggestions.gone(isEmpty)
+          if (!isEmpty) {
+            searchSuggestions.scrollToPosition(0)
+          }
         }
-    }
 
-    private fun searchPerformed(searchQuery: String) {
-        Timber.d("Search performed : $searchQuery")
-        clearFocus { searchPerformed.onNext(searchQuery) }
-    }
+    suggestionController.suggestionClicks
+        .observeOn(schedulerProvider.pool)
+        .map { suggestionItem ->
+          when (suggestionItem) {
+            is HistorySuggestionItem -> suggestionItem.subTitle
+            else -> suggestionItem.title
+          } ?: ""
+        }.filter { it.isNotEmpty() }
+        .observeOn(schedulerProvider.ui)
+        .takeUntil(viewDetaches)
+        .subscribe(::searchPerformed)
 
-    private fun hideSuggestions() {
-        suggestionController.clear()
-    }
-
-    private fun setSuggestions(suggestionResult: SuggestionResult) {
-        suggestionController.query = suggestionResult.query.trim()
-        val suggestion = suggestionResult.suggestions
-        return when (suggestionResult.suggestionType) {
-            COPY -> suggestionController.copySuggestions = suggestion
-            GOOGLE -> suggestionController.googleSuggestions = suggestion
-            HISTORY -> suggestionController.historySuggestions = suggestion
+    suggestionController.suggestionLongClicks
+        .filter { it.title.isNotEmpty() }
+        .takeUntil(viewDetaches)
+        .subscribe {
+          msvEditText.setText(it.title)
+          msvEditText.setSelection(it.title.length)
         }
+  }
+
+  private fun clearFocus(endAction: (() -> Unit)?) {
+    loseFocus(endAction)
+    val view = findFocus()
+    view?.clearFocus()
+    super.clearFocus()
+  }
+
+
+  private fun hideKeyboard() {
+    (context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(windowToken, 0)
+  }
+
+  private fun setFocusedColor() {
+    msvLeftIcon.setImageDrawable(menuIcon.color(focusedColor))
+    msvClearIcon.setImageDrawable(menuIcon.color(focusedColor))
+    msvVoiceIcon.setImageDrawable(voiceIcon.color(focusedColor))
+  }
+
+  private fun setNormalColor() {
+    msvLeftIcon.setImageDrawable(menuIcon.color(normalColor))
+    msvClearIcon.setImageDrawable(menuIcon.color(normalColor))
+    msvVoiceIcon.setImageDrawable(voiceIcon.color(normalColor))
+  }
+
+  private fun handleIconsState() {
+    val color = if (msvEditText.hasFocus()) focusedColor else normalColor
+    if (searchQuery.isNotEmpty()) {
+      msvClearIcon.run {
+        setImageDrawable(xIcon.color(color))
+        spring(SpringAnimation.ALPHA).animateToFinalPosition(1F)
+      }
+      msvVoiceIcon.setImageDrawable(voiceIcon.color(color))
+    } else {
+      msvClearIcon.run {
+        setImageDrawable(xIcon.color(color))
+        spring(SpringAnimation.ALPHA).animateToFinalPosition(0F)
+      }
+      msvVoiceIcon.setImageDrawable(voiceIcon.color(color))
     }
+  }
+
+  private fun searchPerformed(searchQuery: String) {
+    Timber.d("Search performed : $searchQuery")
+    clearFocus { searchPerformed.onNext(searchQuery) }
+  }
+
+  private fun hideSuggestions() {
+    suggestionController.clear()
+  }
+
+  private fun setSuggestions(suggestionResult: SuggestionResult) {
+    suggestionController.query = suggestionResult.query.trim()
+    val suggestion = suggestionResult.suggestions
+    return when (suggestionResult.suggestionType) {
+      COPY -> suggestionController.copySuggestions = suggestion
+      GOOGLE -> suggestionController.googleSuggestions = suggestion
+      HISTORY -> suggestionController.historySuggestions = suggestion
+    }
+  }
 }

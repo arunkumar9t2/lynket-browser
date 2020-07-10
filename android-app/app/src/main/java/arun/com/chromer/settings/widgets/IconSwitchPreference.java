@@ -31,39 +31,39 @@ import androidx.preference.SwitchPreference;
  * icon frame and icon itself so that it looks better
  */
 public class IconSwitchPreference extends SwitchPreference {
-    private boolean hideSwitch;
+  private boolean hideSwitch;
 
-    public IconSwitchPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
+  public IconSwitchPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    super(context, attrs, defStyleAttr, defStyleRes);
+  }
 
-    public IconSwitchPreference(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-    }
+  public IconSwitchPreference(Context context, AttributeSet attrs, int defStyleAttr) {
+    super(context, attrs, defStyleAttr);
+  }
 
-    public IconSwitchPreference(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
+  public IconSwitchPreference(Context context, AttributeSet attrs) {
+    super(context, attrs);
+  }
 
-    public IconSwitchPreference(Context context) {
-        super(context);
-    }
+  public IconSwitchPreference(Context context) {
+    super(context);
+  }
 
-    @Override
-    public void onBindViewHolder(PreferenceViewHolder holder) {
-        super.onBindViewHolder(holder);
-        PreferenceIconLayoutHelper.applyLayoutChanges(holder, isEnabled());
-        final View switchView = holder.findViewById(androidx.preference.R.id.switchWidget);
-        if (hideSwitch && switchView != null) {
-            switchView.setVisibility(View.GONE);
-        }
+  @Override
+  public void onBindViewHolder(PreferenceViewHolder holder) {
+    super.onBindViewHolder(holder);
+    PreferenceIconLayoutHelper.applyLayoutChanges(holder, isEnabled());
+    final View switchView = holder.findViewById(androidx.preference.R.id.switchWidget);
+    if (hideSwitch && switchView != null) {
+      switchView.setVisibility(View.GONE);
     }
+  }
 
-    public void hideSwitch() {
-        hideSwitch = true;
-    }
+  public void hideSwitch() {
+    hideSwitch = true;
+  }
 
-    public void showSwitch() {
-        hideSwitch = false;
-    }
+  public void showSwitch() {
+    hideSwitch = false;
+  }
 }

@@ -17,35 +17,36 @@ import kotlinx.android.synthetic.main.layout_feed_recents_list.*
 
 @EpoxyModelClass(layout = R.layout.layout_feed_recents_list)
 abstract class RecentsCardModel : KotlinEpoxyModelWithHolder<RecentsCardModel.ViewHolder>() {
-    @EpoxyAttribute
-    lateinit var websites: List<Website>
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
-    lateinit var tabsManager: TabsManager
+  @EpoxyAttribute
+  lateinit var websites: List<Website>
 
-    private val historyClickListener = View.OnClickListener { view ->
-        view.context.startActivity(Intent(view.context, HistoryActivity::class.java))
-    }
+  @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+  lateinit var tabsManager: TabsManager
 
-    override fun bind(holder: ViewHolder) {
-        holder.apply {
-            recentsHeaderIcon.setImageDrawable(
-                    IconicsDrawable(holder.containerView.context)
-                            .icon(CommunityMaterial.Icon.cmd_history)
-                            .colorRes(R.color.accent)
-                            .sizeDp(24)
-            )
-            recentsEpoxyGrid.withModels {
-                websites.forEach { website ->
-                    websiteLayout {
-                        id(website.hashCode())
-                        website(website)
-                        tabsManager(tabsManager)
-                    }
-                }
-            }
-            historyButton.setOnClickListener(historyClickListener)
+  private val historyClickListener = View.OnClickListener { view ->
+    view.context.startActivity(Intent(view.context, HistoryActivity::class.java))
+  }
+
+  override fun bind(holder: ViewHolder) {
+    holder.apply {
+      recentsHeaderIcon.setImageDrawable(
+          IconicsDrawable(holder.containerView.context)
+              .icon(CommunityMaterial.Icon.cmd_history)
+              .colorRes(R.color.accent)
+              .sizeDp(24)
+      )
+      recentsEpoxyGrid.withModels {
+        websites.forEach { website ->
+          websiteLayout {
+            id(website.hashCode())
+            website(website)
+            tabsManager(tabsManager)
+          }
         }
+      }
+      historyButton.setOnClickListener(historyClickListener)
     }
+  }
 
-    class ViewHolder : KotlinHolder()
+  class ViewHolder : KotlinHolder()
 }

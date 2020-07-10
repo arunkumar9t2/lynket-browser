@@ -35,37 +35,37 @@ import timber.log.Timber;
  */
 @Singleton
 public class DefaultWebArticleRepository implements WebArticleRepository {
-    // Network store
-    private final WebArticleStore articleNetworkStore;
-    // Cache store
-    private final WebArticleStore articleCacheStore;
+  // Network store
+  private final WebArticleStore articleNetworkStore;
+  // Cache store
+  private final WebArticleStore articleCacheStore;
 
-    @Inject
-    DefaultWebArticleRepository(@Network WebArticleStore articleNetworkStore, @Disk WebArticleStore articleCacheStore) {
-        this.articleNetworkStore = articleNetworkStore;
-        this.articleCacheStore = articleCacheStore;
-    }
+  @Inject
+  DefaultWebArticleRepository(@Network WebArticleStore articleNetworkStore, @Disk WebArticleStore articleCacheStore) {
+    this.articleNetworkStore = articleNetworkStore;
+    this.articleCacheStore = articleCacheStore;
+  }
 
-    @NonNull
-    @Override
-    public Observable<WebArticle> getWebArticle(@NonNull final String url) {
-        return articleCacheStore.getWebArticle(url)
-                .flatMap(webArticle -> {
-                    if (webArticle == null) {
-                        Timber.d("Cache miss for %s", url);
-                        //noinspection Convert2MethodRef
-                        return articleNetworkStore.getWebArticle(url)
-                                .flatMap(networkWebArticle -> {
-                                    if (networkWebArticle != null) {
-                                        return articleCacheStore.saveWebArticle(networkWebArticle);
-                                    } else {
-                                        return Observable.just(null);
-                                    }
-                                });
-                    } else {
-                        Timber.d("Cache hit for %s", url);
-                        return Observable.just(webArticle);
-                    }
+  @NonNull
+  @Override
+  public Observable<WebArticle> getWebArticle(@NonNull final String url) {
+    return articleCacheStore.getWebArticle(url)
+        .flatMap(webArticle -> {
+          if (webArticle == null) {
+            Timber.d("Cache miss for %s", url);
+            //noinspection Convert2MethodRef
+            return articleNetworkStore.getWebArticle(url)
+                .flatMap(networkWebArticle -> {
+                  if (networkWebArticle != null) {
+                    return articleCacheStore.saveWebArticle(networkWebArticle);
+                  } else {
+                    return Observable.just(null);
+                  }
                 });
-    }
+          } else {
+            Timber.d("Cache hit for %s", url);
+            return Observable.just(webArticle);
+          }
+        });
+  }
 }

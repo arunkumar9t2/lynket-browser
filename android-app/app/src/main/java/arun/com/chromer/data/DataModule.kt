@@ -48,53 +48,53 @@ import javax.inject.Singleton
 @Module
 abstract class DataModule {
 
-    @Disk
-    @Binds
-    @Singleton
-    internal abstract fun appDiskStore(appDiskStore: AppDiskStore): AppStore
+  @Disk
+  @Binds
+  @Singleton
+  internal abstract fun appDiskStore(appDiskStore: AppDiskStore): AppStore
 
-    @System
-    @Binds
-    @Singleton
-    internal abstract fun appSystemStore(appSystemStore: AppSystemStore): AppStore
+  @System
+  @Binds
+  @Singleton
+  internal abstract fun appSystemStore(appSystemStore: AppSystemStore): AppStore
 
-    @Binds
-    @Singleton
-    internal abstract fun appRepository(appRepository: DefaultAppRepository): AppRepository
+  @Binds
+  @Singleton
+  internal abstract fun appRepository(appRepository: DefaultAppRepository): AppRepository
 
-    @Binds
-    @Singleton
-    internal abstract fun historyStore(historySqlDiskStore: HistorySqlDiskStore): HistoryStore
+  @Binds
+  @Singleton
+  internal abstract fun historyStore(historySqlDiskStore: HistorySqlDiskStore): HistoryStore
 
-    @Binds
-    @Singleton
-    internal abstract fun historyRepository(historyRepository: DefaultHistoryRepository): HistoryRepository
+  @Binds
+  @Singleton
+  internal abstract fun historyRepository(historyRepository: DefaultHistoryRepository): HistoryRepository
 
-    @Binds
-    @Singleton
-    @Disk
-    internal abstract fun websiteDiskStore(websiteDiskStore: WebsiteDiskStore): WebsiteStore
+  @Binds
+  @Singleton
+  @Disk
+  internal abstract fun websiteDiskStore(websiteDiskStore: WebsiteDiskStore): WebsiteStore
 
-    @Binds
-    @Singleton
-    @Network
-    internal abstract fun websiteNetworkStore(websiteNetworkStore: WebsiteNetworkStore): WebsiteStore
+  @Binds
+  @Singleton
+  @Network
+  internal abstract fun websiteNetworkStore(websiteNetworkStore: WebsiteNetworkStore): WebsiteStore
 
-    @Binds
-    @Singleton
-    internal abstract fun websiteRepository(websiteRepository: DefaultWebsiteRepository): WebsiteRepository
+  @Binds
+  @Singleton
+  internal abstract fun websiteRepository(websiteRepository: DefaultWebsiteRepository): WebsiteRepository
 
-    @Binds
-    @Singleton
-    @Disk
-    internal abstract fun diskWebArticleStore(webArticleCacheStore: WebArticleCacheStore): WebArticleStore
+  @Binds
+  @Singleton
+  @Disk
+  internal abstract fun diskWebArticleStore(webArticleCacheStore: WebArticleCacheStore): WebArticleStore
 
-    @Binds
-    @Singleton
-    @Network
-    internal abstract fun networkWebArticleStore(websiteNetworkStore: WebArticleNetworkStore): WebArticleStore
+  @Binds
+  @Singleton
+  @Network
+  internal abstract fun networkWebArticleStore(websiteNetworkStore: WebArticleNetworkStore): WebArticleStore
 
-    @Binds
-    @Singleton
-    internal abstract fun webArticleRepository(webArticleRepository: DefaultWebArticleRepository): WebArticleRepository
+  @Binds
+  @Singleton
+  internal abstract fun webArticleRepository(webArticleRepository: DefaultWebArticleRepository): WebArticleRepository
 }

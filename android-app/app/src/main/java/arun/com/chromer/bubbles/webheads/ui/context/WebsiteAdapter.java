@@ -48,140 +48,140 @@ import butterknife.ButterKnife;
  */
 
 class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> {
-    private final Context context;
-    private final List<Website> websites = new ArrayList<>();
-    private final WebSiteAdapterListener listener;
+  private final Context context;
+  private final List<Website> websites = new ArrayList<>();
+  private final WebSiteAdapterListener listener;
 
-    WebsiteAdapter(@NonNull Context context, @NonNull WebSiteAdapterListener listener) {
-        this.context = context.getApplicationContext();
-        this.listener = listener;
-        setHasStableIds(true);
+  WebsiteAdapter(@NonNull Context context, @NonNull WebSiteAdapterListener listener) {
+    this.context = context.getApplicationContext();
+    this.listener = listener;
+    setHasStableIds(true);
+  }
+
+  @Override
+  public WebSiteHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    return new WebSiteHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_web_head_context_item_template, parent, false));
+  }
+
+  @Override
+  public void onBindViewHolder(WebSiteHolder holder, int position) {
+    final Website website = websites.get(position);
+    holder.deleteIcon.setImageDrawable(new IconicsDrawable(context)
+        .icon(CommunityMaterial.Icon.cmd_close)
+        .color(ContextCompat.getColor(context, R.color.accent_icon_no_focus))
+        .sizeDp(16));
+    holder.shareIcon.setImageDrawable(new IconicsDrawable(context)
+        .icon(CommunityMaterial.Icon.cmd_share_variant)
+        .color(ContextCompat.getColor(context, R.color.accent_icon_no_focus))
+        .sizeDp(16));
+    holder.url.setText(website.preferredUrl());
+    holder.title.setText(website.safeLabel());
+    GlideApp.with(context)
+        .load(website.faviconUrl)
+        .into(holder.icon);
+  }
+
+  @Override
+  public int getItemCount() {
+    return websites.size();
+  }
+
+  @Override
+  public long getItemId(int position) {
+    return websites.get(position).hashCode();
+  }
+
+  List<Website> getWebsites() {
+    return websites;
+  }
+
+  void setWebsites(ArrayList<Website> websites) {
+    this.websites.clear();
+    this.websites.addAll(websites);
+    notifyDataSetChanged();
+  }
+
+  void delete(@NonNull Website website) {
+    final int index = websites.indexOf(website);
+    if (index != -1) {
+      websites.remove(index);
+      notifyItemRemoved(index);
+      listener.onWebSiteDelete(website);
     }
+  }
 
-    @Override
-    public WebSiteHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new WebSiteHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_web_head_context_item_template, parent, false));
+  void update(@NonNull Website web) {
+    final int index = websites.indexOf(web);
+    if (index != -1) {
+      websites.remove(index);
+      websites.add(index, web);
+      notifyItemChanged(index);
     }
+  }
 
-    @Override
-    public void onBindViewHolder(WebSiteHolder holder, int position) {
-        final Website website = websites.get(position);
-        holder.deleteIcon.setImageDrawable(new IconicsDrawable(context)
-                .icon(CommunityMaterial.Icon.cmd_close)
-                .color(ContextCompat.getColor(context, R.color.accent_icon_no_focus))
-                .sizeDp(16));
-        holder.shareIcon.setImageDrawable(new IconicsDrawable(context)
-                .icon(CommunityMaterial.Icon.cmd_share_variant)
-                .color(ContextCompat.getColor(context, R.color.accent_icon_no_focus))
-                .sizeDp(16));
-        holder.url.setText(website.preferredUrl());
-        holder.title.setText(website.safeLabel());
-        GlideApp.with(context)
-                .load(website.faviconUrl)
-                .into(holder.icon);
-    }
+  interface WebSiteAdapterListener {
+    void onWebSiteItemClicked(@NonNull Website website);
 
-    @Override
-    public int getItemCount() {
-        return websites.size();
-    }
+    void onWebSiteDelete(@NonNull Website website);
 
-    @Override
-    public long getItemId(int position) {
-        return websites.get(position).hashCode();
-    }
+    void onWebSiteShare(@NonNull Website website);
 
-    List<Website> getWebsites() {
-        return websites;
-    }
+    void onWebSiteLongClicked(@NonNull Website website);
+  }
 
-    void setWebsites(ArrayList<Website> websites) {
-        this.websites.clear();
-        this.websites.addAll(websites);
-        notifyDataSetChanged();
-    }
+  class WebSiteHolder extends RecyclerView.ViewHolder {
+    @BindView(R.id.web_site_icon)
+    ImageView icon;
+    @BindView(R.id.web_site_title)
+    TextView title;
+    @BindView(R.id.web_site_sub_title)
+    TextView url;
+    @BindView(R.id.delete_icon)
+    ImageView deleteIcon;
+    @BindView(R.id.share_icon)
+    ImageView shareIcon;
 
-    void delete(@NonNull Website website) {
-        final int index = websites.indexOf(website);
-        if (index != -1) {
-            websites.remove(index);
-            notifyItemRemoved(index);
-            listener.onWebSiteDelete(website);
+    WebSiteHolder(View itemView) {
+      super(itemView);
+      ButterKnife.bind(this, itemView);
+      itemView.setOnClickListener(v -> {
+        final Website website = getWebsite();
+        if (website != null) {
+          listener.onWebSiteItemClicked(website);
         }
-    }
+      });
 
-    void update(@NonNull Website web) {
-        final int index = websites.indexOf(web);
-        if (index != -1) {
-            websites.remove(index);
-            websites.add(index, web);
-            notifyItemChanged(index);
+      itemView.setOnLongClickListener(v -> {
+        final Website website = getWebsite();
+        if (website != null) {
+          listener.onWebSiteLongClicked(website);
         }
-    }
+        return true;
+      });
 
-    interface WebSiteAdapterListener {
-        void onWebSiteItemClicked(@NonNull Website website);
-
-        void onWebSiteDelete(@NonNull Website website);
-
-        void onWebSiteShare(@NonNull Website website);
-
-        void onWebSiteLongClicked(@NonNull Website website);
-    }
-
-    class WebSiteHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.web_site_icon)
-        ImageView icon;
-        @BindView(R.id.web_site_title)
-        TextView title;
-        @BindView(R.id.web_site_sub_title)
-        TextView url;
-        @BindView(R.id.delete_icon)
-        ImageView deleteIcon;
-        @BindView(R.id.share_icon)
-        ImageView shareIcon;
-
-        WebSiteHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(v -> {
-                final Website website = getWebsite();
-                if (website != null) {
-                    listener.onWebSiteItemClicked(website);
-                }
-            });
-
-            itemView.setOnLongClickListener(v -> {
-                final Website website = getWebsite();
-                if (website != null) {
-                    listener.onWebSiteLongClicked(website);
-                }
-                return true;
-            });
-
-            deleteIcon.setOnClickListener(v -> {
-                final Website website = getWebsite();
-                if (website != null) {
-                    websites.remove(website);
-                    listener.onWebSiteDelete(website);
-                    notifyDataSetChanged();
-                }
-            });
-
-            shareIcon.setOnClickListener(v -> {
-                final Website website = getWebsite();
-                if (website != null) {
-                    listener.onWebSiteShare(website);
-                }
-            });
+      deleteIcon.setOnClickListener(v -> {
+        final Website website = getWebsite();
+        if (website != null) {
+          websites.remove(website);
+          listener.onWebSiteDelete(website);
+          notifyDataSetChanged();
         }
+      });
 
-        @Nullable
-        private Website getWebsite() {
-            final int position = getAdapterPosition();
-            if (position != RecyclerView.NO_POSITION) {
-                return websites.get(position);
-            } else return null;
+      shareIcon.setOnClickListener(v -> {
+        final Website website = getWebsite();
+        if (website != null) {
+          listener.onWebSiteShare(website);
         }
+      });
     }
+
+    @Nullable
+    private Website getWebsite() {
+      final int position = getAdapterPosition();
+      if (position != RecyclerView.NO_POSITION) {
+        return websites.get(position);
+      } else return null;
+    }
+  }
 }

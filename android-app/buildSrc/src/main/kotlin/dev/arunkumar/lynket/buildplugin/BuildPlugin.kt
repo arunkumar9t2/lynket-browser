@@ -9,37 +9,37 @@ import java.util.*
 
 class BuildPlugin : Plugin<Project> {
 
-    override fun apply(project: Project) {
-        project.publishLocalProperties()
-        project.ensureBuildVariables()
-    }
+  override fun apply(project: Project) {
+    project.publishLocalProperties()
+    project.ensureBuildVariables()
+  }
 
-    private fun Project.putPropertyIfNotExists(key: String, value: Any) {
-        if (!hasProperty(key)) {
-            extensions.add(key, value)
-        }
+  private fun Project.putPropertyIfNotExists(key: String, value: Any) {
+    if (!hasProperty(key)) {
+      extensions.add(key, value)
     }
+  }
 
-    private fun Project.publishLocalProperties() {
-        val localPropertiesFile = rootProject.file("local.properties")
-        if (localPropertiesFile.exists()) {
-            val localProperties = Properties().apply { load(localPropertiesFile.bufferedReader()) }
-            allprojects { project ->
-                localProperties.forEach { key, value ->
-                    project.putPropertyIfNotExists(key.toString(), value)
-                }
-            }
+  private fun Project.publishLocalProperties() {
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+      val localProperties = Properties().apply { load(localPropertiesFile.bufferedReader()) }
+      allprojects { project ->
+        localProperties.forEach { key, value ->
+          project.putPropertyIfNotExists(key.toString(), value)
         }
+      }
     }
+  }
 
-    /**
-     * In case project is not setup with necessary variables, inject empty strings to let debug
-     * build run successfully
-     */
-    private fun Project.ensureBuildVariables() {
-        allprojects { project ->
-            project.putPropertyIfNotExists("FABRIC_KEY", "")
-            project.putPropertyIfNotExists("PLAY_LICENSE_KEY", "")
-        }
+  /**
+   * In case project is not setup with necessary variables, inject empty strings to let debug
+   * build run successfully
+   */
+  private fun Project.ensureBuildVariables() {
+    allprojects { project ->
+      project.putPropertyIfNotExists("FABRIC_KEY", "")
+      project.putPropertyIfNotExists("PLAY_LICENSE_KEY", "")
     }
+  }
 }

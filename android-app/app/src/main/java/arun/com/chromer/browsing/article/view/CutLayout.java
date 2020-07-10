@@ -37,44 +37,44 @@ import android.widget.FrameLayout;
  */
 public class CutLayout extends FrameLayout {
 
-    private static final int CUT_HEIGHT = 48;
+  private static final int CUT_HEIGHT = 48;
 
-    private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Xfermode pdMode = new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
-    private final Path path = new Path();
+  private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+  private final Xfermode pdMode = new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
+  private final Path path = new Path();
 
-    public CutLayout(Context context) {
-        super(context);
-    }
+  public CutLayout(Context context) {
+    super(context);
+  }
 
-    public CutLayout(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
+  public CutLayout(Context context, AttributeSet attrs) {
+    super(context, attrs);
+  }
 
-    public CutLayout(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-    }
+  public CutLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    super(context, attrs, defStyleAttr);
+  }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public CutLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
+  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+  public CutLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    super(context, attrs, defStyleAttr, defStyleRes);
+  }
 
-    @Override
-    protected void dispatchDraw(Canvas canvas) {
-        int saveCount = canvas.saveLayer(0, 0, getWidth(), getHeight(), null, Canvas.ALL_SAVE_FLAG);
-        super.dispatchDraw(canvas);
+  @Override
+  protected void dispatchDraw(Canvas canvas) {
+    int saveCount = canvas.saveLayer(0, 0, getWidth(), getHeight(), null, Canvas.ALL_SAVE_FLAG);
+    super.dispatchDraw(canvas);
 
-        paint.setXfermode(pdMode);
-        path.reset();
-        path.moveTo(0, getHeight() - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                CUT_HEIGHT, getResources().getDisplayMetrics()));
-        path.lineTo(getWidth(), getHeight());
-        path.lineTo(0, getHeight());
-        path.close();
-        canvas.drawPath(path, paint);
+    paint.setXfermode(pdMode);
+    path.reset();
+    path.moveTo(0, getHeight() - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+        CUT_HEIGHT, getResources().getDisplayMetrics()));
+    path.lineTo(getWidth(), getHeight());
+    path.lineTo(0, getHeight());
+    path.close();
+    canvas.drawPath(path, paint);
 
-        canvas.restoreToCount(saveCount);
-        paint.setXfermode(null);
-    }
+    canvas.restoreToCount(saveCount);
+    paint.setXfermode(null);
+  }
 }

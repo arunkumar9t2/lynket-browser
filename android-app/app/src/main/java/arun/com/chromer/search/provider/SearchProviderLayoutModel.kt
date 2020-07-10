@@ -12,19 +12,20 @@ import kotlinx.android.synthetic.main.widget_search_provider_item.*
 
 @EpoxyModelClass(layout = R.layout.widget_search_provider_item)
 abstract class SearchProviderLayoutModel : KotlinEpoxyModelWithHolder<SearchProviderLayoutModel.ViewHolder>() {
-    class ViewHolder : KotlinHolder()
+  class ViewHolder : KotlinHolder()
 
-    @EpoxyAttribute
-    lateinit var searchProvider: SearchProvider
-    @EpoxyAttribute(DoNotHash)
-    lateinit var onClick: View.OnClickListener
+  @EpoxyAttribute
+  lateinit var searchProvider: SearchProvider
 
-    override fun bind(holder: ViewHolder) {
-        super.bind(holder)
-        holder.apply {
-            GlideApp.with(searchProviderIcon).load(searchProvider.iconUri).into(searchProviderIcon)
-            searchProviderName.text = searchProvider.name
-        }
-        holder.containerView.setOnClickListener(onClick)
+  @EpoxyAttribute(DoNotHash)
+  lateinit var onClick: View.OnClickListener
+
+  override fun bind(holder: ViewHolder) {
+    super.bind(holder)
+    holder.apply {
+      GlideApp.with(searchProviderIcon).load(searchProvider.iconUri).into(searchProviderIcon)
+      searchProviderName.text = searchProvider.name
     }
+    holder.containerView.setOnClickListener(onClick)
+  }
 }

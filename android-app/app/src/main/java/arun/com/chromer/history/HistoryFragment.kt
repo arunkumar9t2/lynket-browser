@@ -55,194 +55,197 @@ import javax.inject.Inject
  * Created by arunk on 07-04-2017.
  */
 class HistoryFragment : BaseFragment(), Snackable, FabHandler {
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-    @Inject
-    lateinit var preferences: Preferences
-    @Inject
-    lateinit var rxEventBus: RxEventBus
-    @Inject
-    lateinit var historyAdapter: HistoryAdapter
+  @Inject
+  lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private lateinit var viewModel: HistoryFragmentViewModel
+  @Inject
+  lateinit var preferences: Preferences
 
-    private val incognitoImg: IconicsDrawable by lazy {
-        IconicsDrawable(requireActivity())
-                .icon(CommunityMaterial.Icon.cmd_incognito)
-                .color(ContextCompat.getColor(requireActivity(), R.color.accent))
-                .sizeDp(24)
+  @Inject
+  lateinit var rxEventBus: RxEventBus
+
+  @Inject
+  lateinit var historyAdapter: HistoryAdapter
+
+  private lateinit var viewModel: HistoryFragmentViewModel
+
+  private val incognitoImg: IconicsDrawable by lazy {
+    IconicsDrawable(requireActivity())
+        .icon(CommunityMaterial.Icon.cmd_incognito)
+        .color(ContextCompat.getColor(requireActivity(), R.color.accent))
+        .sizeDp(24)
+  }
+
+  private val historyImg: IconicsDrawable by lazy {
+    IconicsDrawable(requireActivity())
+        .icon(CommunityMaterial.Icon.cmd_history)
+        .colorRes(R.color.accent)
+        .sizeDp(24)
+  }
+
+  private val formattedMessage: CharSequence
+    get() {
+      val provider = preferences.customTabPackage()
+      return when (provider) {
+        null -> getString(R.string.enable_history_subtitle)
+        else -> fromHtml(String.format(
+            getString(R.string.enable_history_subtitle_custom_tab),
+            Utils.getAppNameWithPackage(requireActivity(), provider)
+        ))
+      }
     }
 
-    private val historyImg: IconicsDrawable by lazy {
-        IconicsDrawable(requireActivity())
-                .icon(CommunityMaterial.Icon.cmd_history)
-                .colorRes(R.color.accent)
-                .sizeDp(24)
+  override fun getLayoutRes() = R.layout.fragment_history
+
+  override fun snack(message: String) = (activity as Snackable).snack(message)
+
+  override fun snackLong(message: String) = (activity as Snackable).snackLong(message)
+
+  fun loading(loading: Boolean) {
+    swipeRefreshLayout.isRefreshing = loading
+  }
+
+  override fun onHiddenChanged(hidden: Boolean) {
+    super.onHiddenChanged(hidden)
+    if (!hidden) {
+      requireActivity().setTitle(R.string.title_history)
+    }
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    setupHistoryList()
+    setupIncognitoSwitch()
+  }
+
+  override fun onActivityCreated(savedInstanceState: Bundle?) {
+    super.onActivityCreated(savedInstanceState)
+    viewModel = ViewModelProviders.of(this, viewModelFactory).get(HistoryFragmentViewModel::class.java)
+    observeViewModel()
+  }
+
+  private fun observeViewModel() {
+    val owner = this
+    viewModel.apply {
+      loadingLiveData.observe(owner, Observer { loading(it!!) })
+      historyPagedListLiveData.observe(owner, Observer { historyAdapter.submitList(it) })
+    }
+    loadHistory()
+  }
+
+  private fun setupIncognitoSwitch() {
+    historyCard.setOnClickListener { historySwitch.performClick() }
+    historySwitch.setOnCheckedChangeListener { _, isChecked ->
+      preferences.historyDisabled(!isChecked)
+      if (isChecked) {
+        fullIncognitoModeSwitch.isChecked = false
+      }
+    }
+    enableHistorySubtitle.text = formattedMessage
+    historyIcon.setImageDrawable(historyImg)
+
+    fullIncognitoIcon.setImageDrawable(incognitoImg)
+    fullIncognitoModeCard.setOnClickListener { fullIncognitoModeSwitch.performClick() }
+    fullIncognitoModeSwitch.isChecked = preferences.fullIncognitoMode()
+    fullIncognitoModeSwitch.setOnCheckedChangeListener { _, isChecked ->
+      preferences.fullIncognitoMode(isChecked)
+      if (isChecked) {
+        historySwitch.isChecked = false
+        fullIncognitoModeSwitch.postDelayed({ showIncognitoDialogExplanation() }, 200)
+      }
+      rxEventBus.post(BrowsingOptionsActivity.ProviderChanged())
+    }
+  }
+
+  private fun showIncognitoDialogExplanation() {
+    if (isAdded) {
+      with(MaterialDialog.Builder(requireActivity())) {
+        title(R.string.incognito_mode)
+        content(R.string.full_incognito_mode_explanation)
+        positiveText(android.R.string.ok)
+        icon(incognitoImg)
+        build()
+      }.show()
+    }
+  }
+
+  private fun setupHistoryList() {
+    val linearLayoutManager = LinearLayoutManager(activity)
+    historyList.apply {
+      historyList.layoutManager = linearLayoutManager
+      adapter = historyAdapter
     }
 
-    private val formattedMessage: CharSequence
-        get() {
-            val provider = preferences.customTabPackage()
-            return when (provider) {
-                null -> getString(R.string.enable_history_subtitle)
-                else -> fromHtml(String.format(
-                        getString(R.string.enable_history_subtitle_custom_tab),
-                        Utils.getAppNameWithPackage(requireActivity(), provider)
-                ))
-            }
-        }
+    subs.add(Observable
+        .create({ emitter: Emitter<Boolean> ->
+          emitter.onNext(historyAdapter.itemCount > 0)
+          val simpleAdapterDataSetObserver = SimpleAdapterDataSetObserver {
+            emitter.onNext(historyAdapter.itemCount > 0)
+          }
+          historyAdapter.registerAdapterDataObserver(simpleAdapterDataSetObserver)
+          emitter.setCancellation {
+            historyAdapter.unregisterAdapterDataObserver(simpleAdapterDataSetObserver)
+          }
+        }, Emitter.BackpressureMode.LATEST)
+        .debounce(100, TimeUnit.MILLISECONDS)
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe { hasItems ->
+          if (hasItems) {
+            error.visibility = View.GONE
+          } else {
+            error.visibility = View.VISIBLE
+          }
+        })
 
-    override fun getLayoutRes() = R.layout.fragment_history
 
-    override fun snack(message: String) = (activity as Snackable).snack(message)
-
-    override fun snackLong(message: String) = (activity as Snackable).snackLong(message)
-
-    fun loading(loading: Boolean) {
-        swipeRefreshLayout.isRefreshing = loading
-    }
-
-    override fun onHiddenChanged(hidden: Boolean) {
-        super.onHiddenChanged(hidden)
-        if (!hidden) {
-            requireActivity().setTitle(R.string.title_history)
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupHistoryList()
-        setupIncognitoSwitch()
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(HistoryFragmentViewModel::class.java)
-        observeViewModel()
-    }
-
-    private fun observeViewModel() {
-        val owner = this
-        viewModel.apply {
-            loadingLiveData.observe(owner, Observer { loading(it!!) })
-            historyPagedListLiveData.observe(owner, Observer { historyAdapter.submitList(it) })
-        }
+    swipeRefreshLayout.apply {
+      setColorSchemeColors(ContextCompat.getColor(context!!, R.color.colorPrimary), ContextCompat.getColor(context!!, R.color.accent))
+      setOnRefreshListener {
         loadHistory()
+        isRefreshing = false
+      }
     }
 
-    private fun setupIncognitoSwitch() {
-        historyCard.setOnClickListener { historySwitch.performClick() }
-        historySwitch.setOnCheckedChangeListener { _, isChecked ->
-            preferences.historyDisabled(!isChecked)
-            if (isChecked) {
-                fullIncognitoModeSwitch.isChecked = false
+    ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, LEFT or RIGHT) {
+      override fun onMove(
+          recyclerView: RecyclerView,
+          viewHolder: RecyclerView.ViewHolder,
+          target: RecyclerView.ViewHolder
+      ) = false
+
+      override fun onSwiped(
+          viewHolder: RecyclerView.ViewHolder,
+          direction: Int
+      ) = viewModel.deleteHistory(historyAdapter.getItemAt(viewHolder.adapterPosition))
+    }).attachToRecyclerView(historyList)
+  }
+
+  private fun loadHistory() {
+    viewModel.loadHistory()
+  }
+
+  override fun inject(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
+
+  override fun onResume() {
+    super.onResume()
+    loadHistory()
+    historySwitch.isChecked = !preferences.historyDisabled()
+  }
+
+  override fun onFabClick() {
+    if (historyAdapter.itemCount != 0) {
+      MaterialDialog.Builder(requireActivity())
+          .title(R.string.are_you_sure)
+          .content(R.string.history_deletion_confirmation_content)
+          .positiveText(android.R.string.yes)
+          .negativeText(android.R.string.no)
+          .onPositive { _, _ ->
+            viewModel.deleteAll { rows ->
+              if (isAdded) {
+                snack(String.format(requireContext().getString(R.string.deleted_items), rows))
+              }
             }
-        }
-        enableHistorySubtitle.text = formattedMessage
-        historyIcon.setImageDrawable(historyImg)
-
-        fullIncognitoIcon.setImageDrawable(incognitoImg)
-        fullIncognitoModeCard.setOnClickListener { fullIncognitoModeSwitch.performClick() }
-        fullIncognitoModeSwitch.isChecked = preferences.fullIncognitoMode()
-        fullIncognitoModeSwitch.setOnCheckedChangeListener { _, isChecked ->
-            preferences.fullIncognitoMode(isChecked)
-            if (isChecked) {
-                historySwitch.isChecked = false
-                fullIncognitoModeSwitch.postDelayed({ showIncognitoDialogExplanation() }, 200)
-            }
-            rxEventBus.post(BrowsingOptionsActivity.ProviderChanged())
-        }
+          }.show()
     }
-
-    private fun showIncognitoDialogExplanation() {
-        if (isAdded) {
-            with(MaterialDialog.Builder(requireActivity())) {
-                title(R.string.incognito_mode)
-                content(R.string.full_incognito_mode_explanation)
-                positiveText(android.R.string.ok)
-                icon(incognitoImg)
-                build()
-            }.show()
-        }
-    }
-
-    private fun setupHistoryList() {
-        val linearLayoutManager = LinearLayoutManager(activity)
-        historyList.apply {
-            historyList.layoutManager = linearLayoutManager
-            adapter = historyAdapter
-        }
-
-        subs.add(Observable
-                .create({ emitter: Emitter<Boolean> ->
-                    emitter.onNext(historyAdapter.itemCount > 0)
-                    val simpleAdapterDataSetObserver = SimpleAdapterDataSetObserver {
-                        emitter.onNext(historyAdapter.itemCount > 0)
-                    }
-                    historyAdapter.registerAdapterDataObserver(simpleAdapterDataSetObserver)
-                    emitter.setCancellation {
-                        historyAdapter.unregisterAdapterDataObserver(simpleAdapterDataSetObserver)
-                    }
-                }, Emitter.BackpressureMode.LATEST)
-                .debounce(100, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { hasItems ->
-                    if (hasItems) {
-                        error.visibility = View.GONE
-                    } else {
-                        error.visibility = View.VISIBLE
-                    }
-                })
-
-
-        swipeRefreshLayout.apply {
-            setColorSchemeColors(ContextCompat.getColor(context!!, R.color.colorPrimary), ContextCompat.getColor(context!!, R.color.accent))
-            setOnRefreshListener {
-                loadHistory()
-                isRefreshing = false
-            }
-        }
-
-        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, LEFT or RIGHT) {
-            override fun onMove(
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder,
-                    target: RecyclerView.ViewHolder
-            ) = false
-
-            override fun onSwiped(
-                    viewHolder: RecyclerView.ViewHolder,
-                    direction: Int
-            ) = viewModel.deleteHistory(historyAdapter.getItemAt(viewHolder.adapterPosition))
-        }).attachToRecyclerView(historyList)
-    }
-
-    private fun loadHistory() {
-        viewModel.loadHistory()
-    }
-
-    override fun inject(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
-
-    override fun onResume() {
-        super.onResume()
-        loadHistory()
-        historySwitch.isChecked = !preferences.historyDisabled()
-    }
-
-    override fun onFabClick() {
-        if (historyAdapter.itemCount != 0) {
-            MaterialDialog.Builder(requireActivity())
-                    .title(R.string.are_you_sure)
-                    .content(R.string.history_deletion_confirmation_content)
-                    .positiveText(android.R.string.yes)
-                    .negativeText(android.R.string.no)
-                    .onPositive { _, _ ->
-                        viewModel.deleteAll { rows ->
-                            if (isAdded) {
-                                snack(String.format(requireContext().getString(R.string.deleted_items), rows))
-                            }
-                        }
-                    }.show()
-        }
-    }
+  }
 }

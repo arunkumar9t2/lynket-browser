@@ -27,7 +27,7 @@ import dagger.Module;
 @Module(includes = ViewModelModule.class)
 public class TestAppModule extends AppModule {
 
-    public TestAppModule(Application application) {
-        super(application);
-    }
+  public TestAppModule(Application application) {
+    super(application);
+  }
 }

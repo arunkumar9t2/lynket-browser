@@ -33,32 +33,32 @@ import arun.com.chromer.util.Utils;
  * Created by Arun on 19/06/2016.
  */
 public class SubCheckBoxPreference extends CheckBoxPreference {
-    public SubCheckBoxPreference(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-    }
+  public SubCheckBoxPreference(Context context, AttributeSet attrs, int defStyleAttr) {
+    super(context, attrs, defStyleAttr);
+  }
 
-    public SubCheckBoxPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
+  public SubCheckBoxPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    super(context, attrs, defStyleAttr, defStyleRes);
+  }
 
-    public SubCheckBoxPreference(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
+  public SubCheckBoxPreference(Context context, AttributeSet attrs) {
+    super(context, attrs);
+  }
 
-    public SubCheckBoxPreference(Context context) {
-        super(context);
-    }
+  public SubCheckBoxPreference(Context context) {
+    super(context);
+  }
 
-    @Override
-    public void onBindViewHolder(PreferenceViewHolder holder) {
-        super.onBindViewHolder(holder);
-        TextView title = (TextView) holder.findViewById(android.R.id.title);
-        TextView summary = (TextView) holder.findViewById(android.R.id.summary);
+  @Override
+  public void onBindViewHolder(PreferenceViewHolder holder) {
+    super.onBindViewHolder(holder);
+    TextView title = (TextView) holder.findViewById(android.R.id.title);
+    TextView summary = (TextView) holder.findViewById(android.R.id.summary);
 
-        title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-        summary.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-        int dp56 = Utils.dpToPx(56);
-        title.setPadding(dp56, 0, 0, 0);
-        summary.setPadding(dp56, 0, 0, 0);
-    }
+    title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+    summary.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+    int dp56 = Utils.dpToPx(56);
+    title.setPadding(dp56, 0, 0, 0);
+    summary.setPadding(dp56, 0, 0, 0);
+  }
 }

@@ -41,44 +41,44 @@ import rx.subscriptions.CompositeSubscription;
  * Created by Arunkumar on 05-04-2017.
  */
 public abstract class BaseFragment extends Fragment {
-    protected final CompositeSubscription subs = new CompositeSubscription();
-    private FragmentComponent fragmentComponent;
-    private Unbinder unbinder;
+  protected final CompositeSubscription subs = new CompositeSubscription();
+  private FragmentComponent fragmentComponent;
+  private Unbinder unbinder;
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(getLayoutRes(), container, false);
-        unbinder = ButterKnife.bind(this, view);
-        return view;
+  @Nullable
+  @Override
+  public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    final View view = inflater.inflate(getLayoutRes(), container, false);
+    unbinder = ButterKnife.bind(this, view);
+    return view;
+  }
+
+  @Override
+  public void onDetach() {
+    super.onDetach();
+  }
+
+  @Override
+  public void onAttach(Context context) {
+    fragmentComponent = ((ProvidesActivityComponent) getActivity())
+        .getActivityComponent()
+        .newFragmentComponent(new FragmentModule(this));
+    inject(fragmentComponent);
+    super.onAttach(context);
+  }
+
+  protected abstract void inject(FragmentComponent fragmentComponent);
+
+  @Override
+  public void onDestroy() {
+    subs.clear();
+    if (unbinder != null) {
+      unbinder.unbind();
     }
+    fragmentComponent = null;
+    super.onDestroy();
+  }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        fragmentComponent = ((ProvidesActivityComponent) getActivity())
-                .getActivityComponent()
-                .newFragmentComponent(new FragmentModule(this));
-        inject(fragmentComponent);
-        super.onAttach(context);
-    }
-
-    protected abstract void inject(FragmentComponent fragmentComponent);
-
-    @Override
-    public void onDestroy() {
-        subs.clear();
-        if (unbinder != null) {
-            unbinder.unbind();
-        }
-        fragmentComponent = null;
-        super.onDestroy();
-    }
-
-    @LayoutRes
-    protected abstract int getLayoutRes();
+  @LayoutRes
+  protected abstract int getLayoutRes();
 }

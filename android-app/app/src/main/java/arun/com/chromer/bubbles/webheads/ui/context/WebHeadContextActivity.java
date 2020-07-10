@@ -63,192 +63,192 @@ import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBSITE;
 import static arun.com.chromer.shared.Constants.TEXT_SHARE_INTENT;
 
 public class WebHeadContextActivity extends BaseActivity implements WebsiteAdapter.WebSiteAdapterListener {
-    private final WebHeadEventsReceiver webHeadsEventsReceiver = new WebHeadEventsReceiver();
-    @BindView(R.id.web_sites_list)
-    RecyclerView websiteListView;
-    @BindView(R.id.copy_all)
-    TextView copyAll;
-    @BindView(R.id.share_all)
-    TextView shareAll;
-    @BindView(R.id.context_activity_card_view)
-    CardView rootCardView;
-    @Inject
-    TabsManager tabsManager;
-    private WebsiteAdapter websitesAdapter;
+  private final WebHeadEventsReceiver webHeadsEventsReceiver = new WebHeadEventsReceiver();
+  @BindView(R.id.web_sites_list)
+  RecyclerView websiteListView;
+  @BindView(R.id.copy_all)
+  TextView copyAll;
+  @BindView(R.id.share_all)
+  TextView shareAll;
+  @BindView(R.id.context_activity_card_view)
+  CardView rootCardView;
+  @Inject
+  TabsManager tabsManager;
+  private WebsiteAdapter websitesAdapter;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ButterKnife.bind(this);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    ButterKnife.bind(this);
 
-        if (getIntent() == null || getIntent().getParcelableArrayListExtra(EXTRA_KEY_WEBSITE) == null) {
-            finish();
-        }
-        final ArrayList<Website> websites = getIntent().getParcelableArrayListExtra(EXTRA_KEY_WEBSITE);
-
-        websitesAdapter = new WebsiteAdapter(this, this);
-        websitesAdapter.setWebsites(websites);
-
-        websiteListView.setLayoutManager(new LinearLayoutManager(this));
-        websiteListView.setAdapter(websitesAdapter);
-
-        registerEventsReceiver();
+    if (getIntent() == null || getIntent().getParcelableArrayListExtra(EXTRA_KEY_WEBSITE) == null) {
+      finish();
     }
+    final ArrayList<Website> websites = getIntent().getParcelableArrayListExtra(EXTRA_KEY_WEBSITE);
 
-    @Override
-    protected int getLayoutRes() {
-        return R.layout.activity_web_head_context;
+    websitesAdapter = new WebsiteAdapter(this, this);
+    websitesAdapter.setWebsites(websites);
+
+    websiteListView.setLayoutManager(new LinearLayoutManager(this));
+    websiteListView.setAdapter(websitesAdapter);
+
+    registerEventsReceiver();
+  }
+
+  @Override
+  protected int getLayoutRes() {
+    return R.layout.activity_web_head_context;
+  }
+
+  private void registerEventsReceiver() {
+    final IntentFilter filter = new IntentFilter();
+    filter.addAction(ACTION_EVENT_WEBHEAD_DELETED);
+    filter.addAction(ACTION_EVENT_WEBSITE_UPDATED);
+    LocalBroadcastManager.getInstance(this).registerReceiver(webHeadsEventsReceiver, filter);
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    LocalBroadcastManager.getInstance(this).unregisterReceiver(webHeadsEventsReceiver);
+  }
+
+  @Override
+  public void onWebSiteItemClicked(@NonNull Website website) {
+    finish();
+    tabsManager.openUrl(this, website, true, true, false, false, false);
+    if (Preferences.get(this).webHeadsCloseOnOpen()) {
+      broadcastDeleteWebHead(website);
     }
+  }
 
-    private void registerEventsReceiver() {
-        final IntentFilter filter = new IntentFilter();
-        filter.addAction(ACTION_EVENT_WEBHEAD_DELETED);
-        filter.addAction(ACTION_EVENT_WEBSITE_UPDATED);
-        LocalBroadcastManager.getInstance(this).registerReceiver(webHeadsEventsReceiver, filter);
-    }
+  private void broadcastDeleteWebHead(@NonNull Website website) {
+    final Intent intent = new Intent(ACTION_CLOSE_WEBHEAD_BY_URL);
+    intent.putExtra(EXTRA_KEY_WEBSITE, website);
+    LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+  }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(webHeadsEventsReceiver);
-    }
+  @Override
+  public void onWebSiteDelete(@NonNull final Website website) {
+    final boolean shouldFinish = websitesAdapter.getWebsites().isEmpty();
+    if (shouldFinish) {
+      rootCardView.setVisibility(GONE);
+      broadcastDeleteWebHead(website);
+      finish();
+    } else
+      broadcastDeleteWebHead(website);
+  }
 
-    @Override
-    public void onWebSiteItemClicked(@NonNull Website website) {
-        finish();
-        tabsManager.openUrl(this, website, true, true, false, false, false);
-        if (Preferences.get(this).webHeadsCloseOnOpen()) {
-            broadcastDeleteWebHead(website);
-        }
-    }
+  @Override
+  public void onWebSiteShare(@NonNull Website website) {
+    startActivity(Intent.createChooser(TEXT_SHARE_INTENT.putExtra(EXTRA_TEXT, website.url), getString(R.string.share)));
+  }
 
-    private void broadcastDeleteWebHead(@NonNull Website website) {
-        final Intent intent = new Intent(ACTION_CLOSE_WEBHEAD_BY_URL);
-        intent.putExtra(EXTRA_KEY_WEBSITE, website);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-    }
+  @Override
+  public void onWebSiteLongClicked(@NonNull Website website) {
+    copyToClipboard(website.safeLabel(), website.preferredUrl());
+  }
 
-    @Override
-    public void onWebSiteDelete(@NonNull final Website website) {
-        final boolean shouldFinish = websitesAdapter.getWebsites().isEmpty();
-        if (shouldFinish) {
-            rootCardView.setVisibility(GONE);
-            broadcastDeleteWebHead(website);
-            finish();
-        } else
-            broadcastDeleteWebHead(website);
-    }
+  @OnClick(R.id.copy_all)
+  public void onCopyAllClick() {
+    copyToClipboard("Websites", getCSVUrls().toString());
+  }
 
-    @Override
-    public void onWebSiteShare(@NonNull Website website) {
-        startActivity(Intent.createChooser(TEXT_SHARE_INTENT.putExtra(EXTRA_TEXT, website.url), getString(R.string.share)));
-    }
-
-    @Override
-    public void onWebSiteLongClicked(@NonNull Website website) {
-        copyToClipboard(website.safeLabel(), website.preferredUrl());
-    }
-
-    @OnClick(R.id.copy_all)
-    public void onCopyAllClick() {
-        copyToClipboard("Websites", getCSVUrls().toString());
-    }
-
-    @OnClick(R.id.share_all)
-    public void onShareAllClick() {
-        final CharSequence[] items = new String[]{
-                getString(R.string.comma_separated),
-                getString(R.string.new_line_separated),
-                getString(R.string.share_all_list)
-        };
-        new MaterialDialog.Builder(this)
-                .title(R.string.choose_share_method)
-                .items(items)
-                .itemsCallbackSingleChoice(0, (dialog, itemView, which, text) -> {
-                    if (which == 0) {
-                        startActivity(Intent.createChooser(TEXT_SHARE_INTENT.putExtra(EXTRA_TEXT, getCSVUrls().toString()), getString(R.string.share_all)));
-                    } else if (which == 1) {
-                        startActivity(Intent.createChooser(TEXT_SHARE_INTENT.putExtra(EXTRA_TEXT, getNSVUrls().toString()), getString(R.string.share_all)));
-                    } else {
-                        final ArrayList<Uri> webSites = new ArrayList<>();
-                        for (Website website : websitesAdapter.getWebsites()) {
-                            try {
-                                webSites.add(Uri.parse(website.preferredUrl()));
-                            } catch (Exception ignored) {
-                            }
-                        }
-                        final Intent shareIntent = new Intent();
-                        shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
-                        shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, webSites);
-                        shareIntent.setType("text/plain");
-                        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_all)));
-                    }
-                    return false;
-                }).show();
-    }
-
-    @NonNull
-    private StringBuilder getCSVUrls() {
-        final StringBuilder builder = new StringBuilder();
-        final List<Website> websites = websitesAdapter.getWebsites();
-        final int size = websites.size();
-        for (int i = 0; i < size; i++) {
-            builder.append(websites.get(i).preferredUrl());
-            if (i != size - 1) {
-                builder.append(',')
-                        .append(' ');
+  @OnClick(R.id.share_all)
+  public void onShareAllClick() {
+    final CharSequence[] items = new String[]{
+        getString(R.string.comma_separated),
+        getString(R.string.new_line_separated),
+        getString(R.string.share_all_list)
+    };
+    new MaterialDialog.Builder(this)
+        .title(R.string.choose_share_method)
+        .items(items)
+        .itemsCallbackSingleChoice(0, (dialog, itemView, which, text) -> {
+          if (which == 0) {
+            startActivity(Intent.createChooser(TEXT_SHARE_INTENT.putExtra(EXTRA_TEXT, getCSVUrls().toString()), getString(R.string.share_all)));
+          } else if (which == 1) {
+            startActivity(Intent.createChooser(TEXT_SHARE_INTENT.putExtra(EXTRA_TEXT, getNSVUrls().toString()), getString(R.string.share_all)));
+          } else {
+            final ArrayList<Uri> webSites = new ArrayList<>();
+            for (Website website : websitesAdapter.getWebsites()) {
+              try {
+                webSites.add(Uri.parse(website.preferredUrl()));
+              } catch (Exception ignored) {
+              }
             }
-        }
-        return builder;
-    }
+            final Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
+            shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, webSites);
+            shareIntent.setType("text/plain");
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_all)));
+          }
+          return false;
+        }).show();
+  }
 
-    @NonNull
-    private StringBuilder getNSVUrls() {
-        final StringBuilder builder = new StringBuilder();
-        final List<Website> websites = websitesAdapter.getWebsites();
-        final int size = websites.size();
-        for (int i = 0; i < size; i++) {
-            builder.append(websites.get(i).preferredUrl());
-            if (i != size - 1) {
-                builder.append('\n');
-            }
-        }
-        return builder;
+  @NonNull
+  private StringBuilder getCSVUrls() {
+    final StringBuilder builder = new StringBuilder();
+    final List<Website> websites = websitesAdapter.getWebsites();
+    final int size = websites.size();
+    for (int i = 0; i < size; i++) {
+      builder.append(websites.get(i).preferredUrl());
+      if (i != size - 1) {
+        builder.append(',')
+            .append(' ');
+      }
     }
+    return builder;
+  }
 
-    private void copyToClipboard(String label, String url) {
-        final ClipData clip = ClipData.newPlainText(label, url);
-        final ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        cm.setPrimaryClip(clip);
-        Toast.makeText(this, getString(R.string.copied) + " " + url, LENGTH_SHORT).show();
+  @NonNull
+  private StringBuilder getNSVUrls() {
+    final StringBuilder builder = new StringBuilder();
+    final List<Website> websites = websitesAdapter.getWebsites();
+    final int size = websites.size();
+    for (int i = 0; i < size; i++) {
+      builder.append(websites.get(i).preferredUrl());
+      if (i != size - 1) {
+        builder.append('\n');
+      }
     }
+    return builder;
+  }
+
+  private void copyToClipboard(String label, String url) {
+    final ClipData clip = ClipData.newPlainText(label, url);
+    final ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+    cm.setPrimaryClip(clip);
+    Toast.makeText(this, getString(R.string.copied) + " " + url, LENGTH_SHORT).show();
+  }
+
+  @Override
+  public void inject(@NonNull ActivityComponent activityComponent) {
+    activityComponent.inject(this);
+  }
+
+  /**
+   * This receiver is responsible for receiving events from web head service.
+   */
+  private class WebHeadEventsReceiver extends BroadcastReceiver {
 
     @Override
-    public void inject(@NonNull ActivityComponent activityComponent) {
-        activityComponent.inject(this);
+    public void onReceive(Context context, Intent intent) {
+      switch (intent.getAction()) {
+        case ACTION_EVENT_WEBHEAD_DELETED:
+          final Website website = intent.getParcelableExtra(EXTRA_KEY_WEBSITE);
+          if (website != null) {
+            websitesAdapter.delete(website);
+          }
+          break;
+        case ACTION_EVENT_WEBSITE_UPDATED:
+          final Website web = intent.getParcelableExtra(EXTRA_KEY_WEBSITE);
+          if (web != null) {
+            websitesAdapter.update(web);
+          }
+          break;
+      }
     }
-
-    /**
-     * This receiver is responsible for receiving events from web head service.
-     */
-    private class WebHeadEventsReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            switch (intent.getAction()) {
-                case ACTION_EVENT_WEBHEAD_DELETED:
-                    final Website website = intent.getParcelableExtra(EXTRA_KEY_WEBSITE);
-                    if (website != null) {
-                        websitesAdapter.delete(website);
-                    }
-                    break;
-                case ACTION_EVENT_WEBSITE_UPDATED:
-                    final Website web = intent.getParcelableExtra(EXTRA_KEY_WEBSITE);
-                    if (web != null) {
-                        websitesAdapter.update(web);
-                    }
-                    break;
-            }
-        }
-    }
+  }
 }

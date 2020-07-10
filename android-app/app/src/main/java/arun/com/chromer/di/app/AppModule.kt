@@ -32,29 +32,29 @@ import dev.arunkumar.android.dagger.viewmodel.DefaultViewModelsBuilder
 import javax.inject.Singleton
 
 @Module(includes = [
-    ViewModelModule::class,
-    DefaultViewModelsBuilder::class
+  ViewModelModule::class,
+  DefaultViewModelsBuilder::class
 ])
 open class AppModule(var application: Application) {
-    @Provides
-    @Singleton
-    internal fun providesApplication(): Application = application
+  @Provides
+  @Singleton
+  internal fun providesApplication(): Application = application
 
-    @Provides
-    @Singleton
-    internal fun providesPreferences(): Preferences = Preferences.get(application)
+  @Provides
+  @Singleton
+  internal fun providesPreferences(): Preferences = Preferences.get(application)
 
-    @Provides
-    @Singleton
-    internal fun providersRxkprefs(application: Application) = rxkPrefs(application)
+  @Provides
+  @Singleton
+  internal fun providersRxkprefs(application: Application) = rxkPrefs(application)
 
-    @Provides
-    @Singleton
-    internal fun rxEventBus(): RxEventBus = RxEventBus()
+  @Provides
+  @Singleton
+  internal fun rxEventBus(): RxEventBus = RxEventBus()
 
-    @Provides
-    @Singleton
-    internal fun websiteIconProvider(defaultWebsiteIconsProvider: DefaultWebsiteIconsProvider): WebsiteIconsProvider {
-        return defaultWebsiteIconsProvider
-    }
+  @Provides
+  @Singleton
+  internal fun websiteIconProvider(defaultWebsiteIconsProvider: DefaultWebsiteIconsProvider): WebsiteIconsProvider {
+    return defaultWebsiteIconsProvider
+  }
 }

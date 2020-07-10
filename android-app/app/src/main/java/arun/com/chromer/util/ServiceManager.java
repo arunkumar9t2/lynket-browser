@@ -34,41 +34,41 @@ import arun.com.chromer.shared.Constants;
  * Created by Arun on 30/01/2016.
  */
 public class ServiceManager {
-    private ServiceManager() {
-        throw new AssertionError("Cannot instantiate");
-    }
+  private ServiceManager() {
+    throw new AssertionError("Cannot instantiate");
+  }
 
-    public static void takeCareOfServices(@NonNull Context context) {
-        if (shouldRunAppDetection(context)) {
-            startAppDetectionService(context);
-        } else {
-            stopAppDetectionService(context);
-        }
+  public static void takeCareOfServices(@NonNull Context context) {
+    if (shouldRunAppDetection(context)) {
+      startAppDetectionService(context);
+    } else {
+      stopAppDetectionService(context);
     }
+  }
 
-    private static boolean shouldRunAppDetection(@NonNull Context context) {
-        return Preferences.get(context).isAppBasedToolbar() || Preferences.get(context).perAppSettings();
-    }
+  private static boolean shouldRunAppDetection(@NonNull Context context) {
+    return Preferences.get(context).isAppBasedToolbar() || Preferences.get(context).perAppSettings();
+  }
 
-    public static void startAppDetectionService(@NonNull Context context) {
-        ContextCompat.startForegroundService(context, new Intent(context, AppDetectService.class)
-                .putExtra(Constants.EXTRA_KEY_CLEAR_LAST_TOP_APP, true));
-    }
+  public static void startAppDetectionService(@NonNull Context context) {
+    ContextCompat.startForegroundService(context, new Intent(context, AppDetectService.class)
+        .putExtra(Constants.EXTRA_KEY_CLEAR_LAST_TOP_APP, true));
+  }
 
-    public static void stopAppDetectionService(@NonNull Context context) {
-        context.stopService(new Intent(context, AppDetectService.class));
-    }
+  public static void stopAppDetectionService(@NonNull Context context) {
+    context.stopService(new Intent(context, AppDetectService.class));
+  }
 
-    public static void refreshCustomTabBindings(@NonNull Context context) {
-        final Intent intent = new Intent(Constants.ACTION_REBIND_WEBHEAD_TAB_CONNECTION);
-        intent.putExtra(Constants.EXTRA_KEY_REBIND_WEBHEAD_CXN, true);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-    }
+  public static void refreshCustomTabBindings(@NonNull Context context) {
+    final Intent intent = new Intent(Constants.ACTION_REBIND_WEBHEAD_TAB_CONNECTION);
+    intent.putExtra(Constants.EXTRA_KEY_REBIND_WEBHEAD_CXN, true);
+    LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+  }
 
-    public static void restartAppDetectionService(Context context) {
-        if (shouldRunAppDetection(context)) {
-            stopAppDetectionService(context);
-            startAppDetectionService(context);
-        }
+  public static void restartAppDetectionService(Context context) {
+    if (shouldRunAppDetection(context)) {
+      stopAppDetectionService(context);
+      startAppDetectionService(context);
     }
+  }
 }

@@ -39,40 +39,40 @@ import timber.log.Timber
  * Created by Arunkumar on 24-02-2017.
  */
 abstract class OverlayService : BaseService() {
-    @IntRange(from = 1)
-    abstract fun getNotificationId(): Int
+  @IntRange(from = 1)
+  abstract fun getNotificationId(): Int
 
-    abstract fun getNotification(): Notification
+  abstract fun getNotification(): Notification
 
-    abstract override fun onBind(intent: Intent): IBinder?
+  abstract override fun onBind(intent: Intent): IBinder?
 
-    override fun onCreate() {
-        super.onCreate()
-        checkForOverlayPermission()
-        startForeground(getNotificationId(), getNotification())
+  override fun onCreate() {
+    super.onCreate()
+    checkForOverlayPermission()
+    startForeground(getNotificationId(), getNotification())
+  }
+
+  protected fun stopService() {
+    Timber.d("Stopping service.")
+    ServiceManager.restartAppDetectionService(this) // Temp hack for Oreo.
+    stopForeground(true)
+    (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancel(getNotificationId())
+    stopSelf()
+  }
+
+  protected fun updateNotification(notification: Notification) {
+    val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    nm.notify(getNotificationId(), notification)
+  }
+
+  protected fun checkForOverlayPermission() {
+    if (!Utils.isOverlayGranted(this)) {
+      Toast.makeText(this, getString(R.string.web_head_permission_toast), LENGTH_LONG).show()
+      val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))
+      intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+      startActivity(intent)
+      Timber.d("Exited overlay service since overlay permission was revoked")
+      stopSelf()
     }
-
-    protected fun stopService() {
-        Timber.d("Stopping service.")
-        ServiceManager.restartAppDetectionService(this) // Temp hack for Oreo.
-        stopForeground(true)
-        (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancel(getNotificationId())
-        stopSelf()
-    }
-
-    protected fun updateNotification(notification: Notification) {
-        val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        nm.notify(getNotificationId(), notification)
-    }
-
-    protected fun checkForOverlayPermission() {
-        if (!Utils.isOverlayGranted(this)) {
-            Toast.makeText(this, getString(R.string.web_head_permission_toast), LENGTH_LONG).show()
-            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
-            Timber.d("Exited overlay service since overlay permission was revoked")
-            stopSelf()
-        }
-    }
+  }
 }

@@ -31,16 +31,16 @@ import javax.inject.Inject
 
 class MinimizeBroadcastReceiver : BroadcastReceiver() {
 
-    @Inject
-    lateinit var tabsManager: TabsManager
+  @Inject
+  lateinit var tabsManager: TabsManager
 
-    override fun onReceive(context: Context, intent: Intent) {
-        (context.applicationContext as Chromer).appComponent.inject(this)
-        val url = intent.getStringExtra(Constants.EXTRA_KEY_ORIGINAL_URL)
-        if (url != null) {
-            tabsManager.minimizeTabByUrl(url, CustomTabActivity::class.java.name)
-        } else {
-            Timber.e("Error minimizing")
-        }
+  override fun onReceive(context: Context, intent: Intent) {
+    (context.applicationContext as Chromer).appComponent.inject(this)
+    val url = intent.getStringExtra(Constants.EXTRA_KEY_ORIGINAL_URL)
+    if (url != null) {
+      tabsManager.minimizeTabByUrl(url, CustomTabActivity::class.java.name)
+    } else {
+      Timber.e("Error minimizing")
     }
+  }
 }

@@ -36,52 +36,52 @@ import javax.inject.Inject
 class HistoryFragmentViewModel
 @Inject
 constructor(
-        private val historyRepository: HistoryRepository
+    private val historyRepository: HistoryRepository
 ) : ViewModel() {
 
-    val loadingLiveData = MutableLiveData<Boolean>()
-    var historyPagedListLiveData = historyRepository.pagedHistory()
+  val loadingLiveData = MutableLiveData<Boolean>()
+  var historyPagedListLiveData = historyRepository.pagedHistory()
 
-    private val loaderSubject: PublishSubject<Int> = PublishSubject.create()
-    val subs = CompositeSubscription()
+  private val loaderSubject: PublishSubject<Int> = PublishSubject.create()
+  val subs = CompositeSubscription()
 
-    init {
-        /* subs.add(loaderSubject
-                 .doOnNext { loadingLiveData.postValue(true) }
-                 .switchMap {
-                     historyRepository
-                             .allItemsCursor
-                             .compose(SchedulerProvider.applyIoSchedulers())
-                 }.doOnNext { loadingLiveData.postValue(false) }
-                 .doOnNext(historyCursorLiveData::postValue)
-                 .subscribe())*/
-    }
+  init {
+    /* subs.add(loaderSubject
+             .doOnNext { loadingLiveData.postValue(true) }
+             .switchMap {
+                 historyRepository
+                         .allItemsCursor
+                         .compose(SchedulerProvider.applyIoSchedulers())
+             }.doOnNext { loadingLiveData.postValue(false) }
+             .doOnNext(historyCursorLiveData::postValue)
+             .subscribe())*/
+  }
 
-    fun loadHistory() {
-        loaderSubject.onNext(0)
-    }
+  fun loadHistory() {
+    loaderSubject.onNext(0)
+  }
 
-    fun deleteAll(onSuccess: (rows: Int) -> Unit) {
-        subs.add(historyRepository
-                .deleteAll()
-                .compose(SchedulerProvider.applyIoSchedulers())
-                .doOnNext { rows ->
-                    loadHistory()
-                    onSuccess(rows)
-                }.subscribe())
-    }
+  fun deleteAll(onSuccess: (rows: Int) -> Unit) {
+    subs.add(historyRepository
+        .deleteAll()
+        .compose(SchedulerProvider.applyIoSchedulers())
+        .doOnNext { rows ->
+          loadHistory()
+          onSuccess(rows)
+        }.subscribe())
+  }
 
-    fun deleteHistory(website: Website?) {
-        subs.add(Observable.just(website)
-                .filter { webSite -> webSite?.url != null }
-                .flatMap<Website> { historyRepository.delete(it!!) }
-                .compose(SchedulerProvider.applyIoSchedulers())
-                .doOnError(Timber::e)
-                .doOnNext { loadHistory() }
-                .subscribe())
-    }
+  fun deleteHistory(website: Website?) {
+    subs.add(Observable.just(website)
+        .filter { webSite -> webSite?.url != null }
+        .flatMap<Website> { historyRepository.delete(it!!) }
+        .compose(SchedulerProvider.applyIoSchedulers())
+        .doOnError(Timber::e)
+        .doOnNext { loadHistory() }
+        .subscribe())
+  }
 
-    override fun onCleared() {
-        subs.clear()
-    }
+  override fun onCleared() {
+    subs.clear()
+  }
 }

@@ -47,101 +47,101 @@ import butterknife.BindView;
 
 public class BrowsingModeActivity extends BaseActivity implements BrowsingModeAdapter.BrowsingModeClickListener {
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.browsing_mode_list_view)
-    RecyclerView browsingModeListView;
-    @BindView(R.id.coordinatorLayout)
-    CoordinatorLayout coordinatorLayout;
+  @BindView(R.id.toolbar)
+  Toolbar toolbar;
+  @BindView(R.id.browsing_mode_list_view)
+  RecyclerView browsingModeListView;
+  @BindView(R.id.coordinatorLayout)
+  CoordinatorLayout coordinatorLayout;
 
-    @Inject
-    RxPreferences rxPreferences;
+  @Inject
+  RxPreferences rxPreferences;
 
-    @Inject
-    BrowsingModeAdapter adapter;
-    @Inject
-    TabsManager tabsManager;
+  @Inject
+  BrowsingModeAdapter adapter;
+  @Inject
+  TabsManager tabsManager;
 
-    @Override
-    protected int getLayoutRes() {
-        return R.layout.activity_browsing_mode;
+  @Override
+  protected int getLayoutRes() {
+    return R.layout.activity_browsing_mode;
+  }
+
+  @Override
+  public void inject(@NonNull ActivityComponent activityComponent) {
+    activityComponent.inject(this);
+  }
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setSupportActionBar(toolbar);
+    //noinspection ConstantConditions
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+    browsingModeListView.setLayoutManager(new LinearLayoutManager(this));
+    browsingModeListView.setAdapter(adapter);
+    adapter.setBrowsingModeClickListener(this);
+
+    getSupportFragmentManager()
+        .beginTransaction()
+        .replace(R.id.browse_faster_preferences_container, BrowseFasterPreferenceFragment.newInstance())
+        .commit();
+  }
+
+  @Override
+  protected void onDestroy() {
+    adapter.cleanUp();
+    super.onDestroy();
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    adapter.notifyDataSetChanged();
+  }
+
+  @Override
+  public void onModeClicked(int position, View view) {
+    boolean webHeadsEnabled = position == BrowsingModeAdapter.WEB_HEADS;
+    boolean nativeBubbles = position == BrowsingModeAdapter.NATIVE_BUBBLES;
+
+    rxPreferences.getNativeBubbles().set(nativeBubbles);
+    Preferences.get(this).webHeads(webHeadsEnabled);
+
+    if (webHeadsEnabled) {
+      if (Utils.isOverlayGranted(this)) {
+        Preferences.get(this).webHeads(true);
+      } else {
+        Preferences.get(this).webHeads(false);
+        // Utils.openDrawOverlaySettings(this);
+        final Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.overlay_permission_content, Snackbar.LENGTH_INDEFINITE);
+        snackbar.setAction(R.string.grant, v -> {
+          snackbar.dismiss();
+          Utils.openDrawOverlaySettings(BrowsingModeActivity.this);
+        });
+        snackbar.show();
+      }
+    } else if (nativeBubbles) {
+      new MaterialDialog.Builder(this)
+          .title(R.string.browsing_mode_native_bubbles)
+          .content(R.string.browsing_mode_native_bubbles_warning)
+          .positiveText(R.string.browsing_mode_native_bubbles_guide)
+          .onPositive((dialog, which) -> {
+            tabsManager.openUrl(this,
+                new Website("https://github.com/arunkumar9t2/lynket-browser/wiki/Android-10-Bubbles-Guide"),
+                true,
+                false,
+                false,
+                false,
+                false);
+          })
+          .icon(new IconicsDrawable(this)
+              .icon(CommunityMaterial.Icon.cmd_android_head)
+              .colorRes(R.color.material_dark_color)
+              .sizeDp(24)
+          ).show();
     }
-
-    @Override
-    public void inject(@NonNull ActivityComponent activityComponent) {
-        activityComponent.inject(this);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setSupportActionBar(toolbar);
-        //noinspection ConstantConditions
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        browsingModeListView.setLayoutManager(new LinearLayoutManager(this));
-        browsingModeListView.setAdapter(adapter);
-        adapter.setBrowsingModeClickListener(this);
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.browse_faster_preferences_container, BrowseFasterPreferenceFragment.newInstance())
-                .commit();
-    }
-
-    @Override
-    protected void onDestroy() {
-        adapter.cleanUp();
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onModeClicked(int position, View view) {
-        boolean webHeadsEnabled = position == BrowsingModeAdapter.WEB_HEADS;
-        boolean nativeBubbles = position == BrowsingModeAdapter.NATIVE_BUBBLES;
-
-        rxPreferences.getNativeBubbles().set(nativeBubbles);
-        Preferences.get(this).webHeads(webHeadsEnabled);
-
-        if (webHeadsEnabled) {
-            if (Utils.isOverlayGranted(this)) {
-                Preferences.get(this).webHeads(true);
-            } else {
-                Preferences.get(this).webHeads(false);
-                // Utils.openDrawOverlaySettings(this);
-                final Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.overlay_permission_content, Snackbar.LENGTH_INDEFINITE);
-                snackbar.setAction(R.string.grant, v -> {
-                    snackbar.dismiss();
-                    Utils.openDrawOverlaySettings(BrowsingModeActivity.this);
-                });
-                snackbar.show();
-            }
-        } else if (nativeBubbles) {
-            new MaterialDialog.Builder(this)
-                    .title(R.string.browsing_mode_native_bubbles)
-                    .content(R.string.browsing_mode_native_bubbles_warning)
-                    .positiveText(R.string.browsing_mode_native_bubbles_guide)
-                    .onPositive((dialog, which) -> {
-                        tabsManager.openUrl(this,
-                                new Website("https://github.com/arunkumar9t2/lynket-browser/wiki/Android-10-Bubbles-Guide"),
-                                true,
-                                false,
-                                false,
-                                false,
-                                false);
-                    })
-                    .icon(new IconicsDrawable(this)
-                            .icon(CommunityMaterial.Icon.cmd_android_head)
-                            .colorRes(R.color.material_dark_color)
-                            .sizeDp(24)
-                    ).show();
-        }
-        adapter.notifyDataSetChanged();
-    }
+    adapter.notifyDataSetChanged();
+  }
 }

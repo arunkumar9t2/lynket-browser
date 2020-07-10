@@ -14,50 +14,50 @@ import javax.inject.Qualifier
 
 open class LifecycleEvents constructor(lifecycleOwner: LifecycleOwner) : LifecycleObserver {
 
-    private val lifecycleEventRelay = PublishRelay.create<Lifecycle.Event>()
+  private val lifecycleEventRelay = PublishRelay.create<Lifecycle.Event>()
 
-    val lifecycles: Observable<Lifecycle.Event> = lifecycleEventRelay
+  val lifecycles: Observable<Lifecycle.Event> = lifecycleEventRelay
 
-    init {
-        lifecycleOwner.lifecycle.addObserver(this)
-    }
+  init {
+    lifecycleOwner.lifecycle.addObserver(this)
+  }
 
-    @OnLifecycleEvent(ON_CREATE)
-    fun onCreate() {
-        lifecycleEventRelay.accept(ON_CREATE)
-    }
+  @OnLifecycleEvent(ON_CREATE)
+  fun onCreate() {
+    lifecycleEventRelay.accept(ON_CREATE)
+  }
 
-    @OnLifecycleEvent(ON_RESUME)
-    fun onResume() {
-        lifecycleEventRelay.accept(ON_RESUME)
-    }
+  @OnLifecycleEvent(ON_RESUME)
+  fun onResume() {
+    lifecycleEventRelay.accept(ON_RESUME)
+  }
 
-    @OnLifecycleEvent(ON_START)
-    fun onStart() {
-        lifecycleEventRelay.accept(ON_START)
-    }
+  @OnLifecycleEvent(ON_START)
+  fun onStart() {
+    lifecycleEventRelay.accept(ON_START)
+  }
 
-    @OnLifecycleEvent(ON_PAUSE)
-    fun onPause() {
-        lifecycleEventRelay.accept(ON_PAUSE)
-    }
+  @OnLifecycleEvent(ON_PAUSE)
+  fun onPause() {
+    lifecycleEventRelay.accept(ON_PAUSE)
+  }
 
-    @OnLifecycleEvent(ON_STOP)
-    fun onStop() {
-        lifecycleEventRelay.accept(ON_STOP)
-    }
+  @OnLifecycleEvent(ON_STOP)
+  fun onStop() {
+    lifecycleEventRelay.accept(ON_STOP)
+  }
 
-    @OnLifecycleEvent(ON_DESTROY)
-    fun onDestroy() {
-        lifecycleEventRelay.accept(ON_DESTROY)
-    }
+  @OnLifecycleEvent(ON_DESTROY)
+  fun onDestroy() {
+    lifecycleEventRelay.accept(ON_DESTROY)
+  }
 
-    val created = lifecycleEventRelay.filter { it == ON_CREATE }
-    val resumes = lifecycleEventRelay.filter { it == ON_RESUME }
-    val starts = lifecycleEventRelay.filter { it == ON_START }
-    val pauses = lifecycleEventRelay.filter { it == ON_PAUSE }
-    val stops = lifecycleEventRelay.filter { it == ON_STOP }
-    val destroys = lifecycleEventRelay.filter { it == ON_DESTROY }
+  val created = lifecycleEventRelay.filter { it == ON_CREATE }
+  val resumes = lifecycleEventRelay.filter { it == ON_RESUME }
+  val starts = lifecycleEventRelay.filter { it == ON_START }
+  val pauses = lifecycleEventRelay.filter { it == ON_PAUSE }
+  val stops = lifecycleEventRelay.filter { it == ON_STOP }
+  val destroys = lifecycleEventRelay.filter { it == ON_DESTROY }
 }
 
 @Qualifier

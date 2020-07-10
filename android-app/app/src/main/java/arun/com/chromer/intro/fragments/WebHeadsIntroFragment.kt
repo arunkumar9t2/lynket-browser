@@ -34,25 +34,25 @@ import kotlinx.android.synthetic.main.fragment_slide_over_intro.*
 import javax.inject.Inject
 
 open class WebHeadsIntroFragment : BaseFragment(), ISlideBackgroundColorHolder {
-    override fun getDefaultBackgroundColor(): Int = ContextCompat.getColor(context!!, R.color.tutorialBackgrounColor)
+  override fun getDefaultBackgroundColor(): Int = ContextCompat.getColor(context!!, R.color.tutorialBackgrounColor)
 
-    override fun setBackgroundColor(backgroundColor: Int) {
-        root.setBackgroundColor(backgroundColor)
-    }
+  override fun setBackgroundColor(backgroundColor: Int) {
+    root.setBackgroundColor(backgroundColor)
+  }
 
-    @Inject
-    lateinit var tabsManager: TabsManager
+  @Inject
+  lateinit var tabsManager: TabsManager
 
-    override fun inject(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
-    override fun getLayoutRes() = R.layout.fragment_web_heads_intro
+  override fun inject(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
+  override fun getLayoutRes() = R.layout.fragment_web_heads_intro
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        GlideApp.with(this).load(R.drawable.tutorial_web_heads).into(imageView!!)
-    }
+  override fun onActivityCreated(savedInstanceState: Bundle?) {
+    super.onActivityCreated(savedInstanceState)
+    GlideApp.with(this).load(R.drawable.tutorial_web_heads).into(imageView!!)
+  }
 
-    @OnClick(R.id.watchDemo)
-    fun onSeeDemoClick() {
-        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=3gbz8PI8BVI&feature=youtu.be")))
-    }
+  @OnClick(R.id.watchDemo)
+  fun onSeeDemoClick() {
+    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=3gbz8PI8BVI&feature=youtu.be")))
+  }
 }

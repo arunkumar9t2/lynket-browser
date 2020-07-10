@@ -29,20 +29,20 @@ import android.widget.Toast;
 import arun.com.chromer.R;
 
 public class CopyToClipboardReceiver extends BroadcastReceiver {
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        final String urlToCopy = intent.getDataString();
-        if (urlToCopy != null) {
-            ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText(context.getPackageName(), urlToCopy);
-            clipboard.setPrimaryClip(clip);
-            showToast(context, context.getString(R.string.copied) + " " + urlToCopy);
-        } else {
-            showToast(context, context.getString(R.string.unxp_err));
-        }
+  @Override
+  public void onReceive(Context context, Intent intent) {
+    final String urlToCopy = intent.getDataString();
+    if (urlToCopy != null) {
+      ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+      ClipData clip = ClipData.newPlainText(context.getPackageName(), urlToCopy);
+      clipboard.setPrimaryClip(clip);
+      showToast(context, context.getString(R.string.copied) + " " + urlToCopy);
+    } else {
+      showToast(context, context.getString(R.string.unxp_err));
     }
+  }
 
-    private void showToast(Context context, final String msgToShow) {
-        Toast.makeText(context, msgToShow, Toast.LENGTH_SHORT).show();
-    }
+  private void showToast(Context context, final String msgToShow) {
+    Toast.makeText(context, msgToShow, Toast.LENGTH_SHORT).show();
+  }
 }

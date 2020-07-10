@@ -35,11 +35,11 @@ import static org.junit.Assert.assertEquals;
  */
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
-    @Test
-    public void useAppContext() throws Exception {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
+  @Test
+  public void useAppContext() throws Exception {
+    // Context of the app under test.
+    Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("in.arunkumarsampath.diskcache.test", appContext.getPackageName());
-    }
+    assertEquals("in.arunkumarsampath.diskcache.test", appContext.getPackageName());
+  }
 }

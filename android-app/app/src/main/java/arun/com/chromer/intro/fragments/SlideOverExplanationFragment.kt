@@ -35,33 +35,33 @@ import kotlinx.android.synthetic.main.fragment_slide_over_intro.*
 import javax.inject.Inject
 
 open class SlideOverExplanationFragment : BaseFragment(), ISlideBackgroundColorHolder {
-    override fun getDefaultBackgroundColor(): Int = ContextCompat.getColor(context!!, R.color.tutorialBackgrounColor)
+  override fun getDefaultBackgroundColor(): Int = ContextCompat.getColor(context!!, R.color.tutorialBackgrounColor)
 
-    override fun setBackgroundColor(backgroundColor: Int) {
-        root.setBackgroundColor(backgroundColor)
-    }
+  override fun setBackgroundColor(backgroundColor: Int) {
+    root.setBackgroundColor(backgroundColor)
+  }
 
-    @Inject
-    lateinit var tabsManager: TabsManager
+  @Inject
+  lateinit var tabsManager: TabsManager
 
-    override fun inject(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
-    override fun getLayoutRes() = R.layout.fragment_slide_over_intro
+  override fun inject(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
+  override fun getLayoutRes() = R.layout.fragment_slide_over_intro
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        GlideApp.with(this).load(R.drawable.chromer_hd_icon).into(imageView!!)
-    }
+  override fun onActivityCreated(savedInstanceState: Bundle?) {
+    super.onActivityCreated(savedInstanceState)
+    GlideApp.with(this).load(R.drawable.chromer_hd_icon).into(imageView!!)
+  }
 
-    @OnClick(R.id.tryItButton)
-    fun onTryItClick() {
-        tabsManager.openBrowsingTab(context!!, Website("https://goo.gl/search/lynket"), smart = false, fromNewTab = false)
-        Handler().postDelayed(
-                {
-                    if (isAdded) {
-                        Toast.makeText(context, R.string.slide_over_fragment_close_prompt, Toast.LENGTH_SHORT).show()
-                    }
-                },
-                200
-        )
-    }
+  @OnClick(R.id.tryItButton)
+  fun onTryItClick() {
+    tabsManager.openBrowsingTab(context!!, Website("https://goo.gl/search/lynket"), smart = false, fromNewTab = false)
+    Handler().postDelayed(
+        {
+          if (isAdded) {
+            Toast.makeText(context, R.string.slide_over_fragment_close_prompt, Toast.LENGTH_SHORT).show()
+          }
+        },
+        200
+    )
+  }
 }

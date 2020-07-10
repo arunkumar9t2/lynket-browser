@@ -47,122 +47,123 @@ import javax.inject.Inject
  * Created by arunk on 20-12-2017.
  */
 class TabsFragment : BaseFragment(), FabHandler {
-    @Inject
-    lateinit var tabsManager: TabsManager
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+  @Inject
+  lateinit var tabsManager: TabsManager
 
-    private var tabsViewModel: TabsViewModel? = null
+  @Inject
+  lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    lateinit var tabsAdapter: TabsAdapter
+  private var tabsViewModel: TabsViewModel? = null
 
-    override fun inject(fragmentComponent: FragmentComponent) {
-        fragmentComponent.inject(this)
+  lateinit var tabsAdapter: TabsAdapter
+
+  override fun inject(fragmentComponent: FragmentComponent) {
+    fragmentComponent.inject(this)
+  }
+
+  override fun getLayoutRes(): Int = R.layout.fragment_tabs
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    setupRecyclerView()
+    with(swipeRefreshLayout) {
+      setOnRefreshListener {
+        loadTabs()
+        isRefreshing = false
+      }
+      setColorSchemeResources(
+          R.color.colorPrimary,
+          R.color.colorAccent,
+          R.color.colorPrimaryDarker)
+    }
+  }
+
+  override fun onActivityCreated(savedInstanceState: Bundle?) {
+    super.onActivityCreated(savedInstanceState)
+    tabsViewModel = ViewModelProviders.of(this, viewModelFactory).get(TabsViewModel::class.java)
+    observeViewModel()
+  }
+
+  private fun observeViewModel() {
+    tabsViewModel?.apply {
+      loadingLiveData.observe(this@TabsFragment, Observer<Boolean> { loading ->
+        showLoading(loading!!)
+      })
+      tabsData.observe(this@TabsFragment, Observer<MutableList<TabsManager.Tab>> {
+        setTabs(it!!)
+      })
+    }
+  }
+
+  private fun setupRecyclerView() {
+    // Setup RecyclerView
+    tabsAdapter = TabsAdapter(GlideApp.with(this), tabsManager)
+    tabsRecyclerView.apply {
+      layoutManager = LinearLayoutManager(activity)
+      adapter = tabsAdapter
     }
 
-    override fun getLayoutRes(): Int = R.layout.fragment_tabs
+    val swipeTouch = object : ItemTouchHelper.SimpleCallback(0, LEFT or RIGHT) {
+      override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+        return false
+      }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupRecyclerView()
-        with(swipeRefreshLayout) {
-            setOnRefreshListener {
-                loadTabs()
-                isRefreshing = false
-            }
-            setColorSchemeResources(
-                    R.color.colorPrimary,
-                    R.color.colorAccent,
-                    R.color.colorPrimaryDarker)
+      override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+        val tab = tabsAdapter.getTabAt(viewHolder.adapterPosition)
+        activity?.let {
+          tabsManager.finishTabByUrl(activity!!, Website(tab.url), listOf(tab.getTargetActivityName()))
+          loadTabs()
         }
+      }
+    }
+    ItemTouchHelper(swipeTouch).apply { attachToRecyclerView(tabsRecyclerView) }
+  }
+
+  private fun setTabs(tabs: List<TabsManager.Tab>) {
+    tabsAdapter.submitList(tabs)
+    TransitionManager.beginDelayedTransition(fragmentTabsRoot)
+    if (tabs.isEmpty()) {
+      error.show()
+      swipeRefreshLayout.gone()
+    } else {
+      error.gone()
+      swipeRefreshLayout.show()
+    }
+  }
+
+  private fun showLoading(loading: Boolean) {
+    swipeRefreshLayout.isRefreshing = loading
+  }
+
+  override fun onHiddenChanged(hidden: Boolean) {
+    super.onHiddenChanged(hidden)
+    if (!hidden) {
+      activity!!.setTitle(R.string.title_tabs)
+      loadTabs()
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        tabsViewModel = ViewModelProviders.of(this, viewModelFactory).get(TabsViewModel::class.java)
-        observeViewModel()
+  }
+
+  override fun onResume() {
+    super.onResume()
+    if (!isHidden) {
+      loadTabs()
     }
+  }
 
-    private fun observeViewModel() {
-        tabsViewModel?.apply {
-            loadingLiveData.observe(this@TabsFragment, Observer<Boolean> { loading ->
-                showLoading(loading!!)
-            })
-            tabsData.observe(this@TabsFragment, Observer<MutableList<TabsManager.Tab>> {
-                setTabs(it!!)
-            })
-        }
+  private fun loadTabs() {
+    tabsViewModel?.loadTabs()
+  }
+
+  override fun onFabClick() {
+    if (tabsAdapter.itemCount != 0) {
+      MaterialDialog.Builder(activity!!)
+          .title(R.string.are_you_sure)
+          .content(R.string.tab_deletion_confirmation_content)
+          .positiveText(android.R.string.yes)
+          .negativeText(android.R.string.no)
+          .onPositive { _, _ -> tabsViewModel?.clearAllTabs() }
+          .show()
     }
-
-    private fun setupRecyclerView() {
-        // Setup RecyclerView
-        tabsAdapter = TabsAdapter(GlideApp.with(this), tabsManager)
-        tabsRecyclerView.apply {
-            layoutManager = LinearLayoutManager(activity)
-            adapter = tabsAdapter
-        }
-
-        val swipeTouch = object : ItemTouchHelper.SimpleCallback(0, LEFT or RIGHT) {
-            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-                return false
-            }
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val tab = tabsAdapter.getTabAt(viewHolder.adapterPosition)
-                activity?.let {
-                    tabsManager.finishTabByUrl(activity!!, Website(tab.url), listOf(tab.getTargetActivityName()))
-                    loadTabs()
-                }
-            }
-        }
-        ItemTouchHelper(swipeTouch).apply { attachToRecyclerView(tabsRecyclerView) }
-    }
-
-    private fun setTabs(tabs: List<TabsManager.Tab>) {
-        tabsAdapter.submitList(tabs)
-        TransitionManager.beginDelayedTransition(fragmentTabsRoot)
-        if (tabs.isEmpty()) {
-            error.show()
-            swipeRefreshLayout.gone()
-        } else {
-            error.gone()
-            swipeRefreshLayout.show()
-        }
-    }
-
-    private fun showLoading(loading: Boolean) {
-        swipeRefreshLayout.isRefreshing = loading
-    }
-
-    override fun onHiddenChanged(hidden: Boolean) {
-        super.onHiddenChanged(hidden)
-        if (!hidden) {
-            activity!!.setTitle(R.string.title_tabs)
-            loadTabs()
-        }
-
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (!isHidden) {
-            loadTabs()
-        }
-    }
-
-    private fun loadTabs() {
-        tabsViewModel?.loadTabs()
-    }
-
-    override fun onFabClick() {
-        if (tabsAdapter.itemCount != 0) {
-            MaterialDialog.Builder(activity!!)
-                    .title(R.string.are_you_sure)
-                    .content(R.string.tab_deletion_confirmation_content)
-                    .positiveText(android.R.string.yes)
-                    .negativeText(android.R.string.no)
-                    .onPositive { _, _ -> tabsViewModel?.clearAllTabs() }
-                    .show()
-        }
-    }
+  }
 }

@@ -25,5 +25,5 @@ import timber.log.Timber
  * Created by arunk on 10-12-2017.
  */
 fun Thread.printName() {
-    Timber.d(this.name)
+  Timber.d(this.name)
 }

@@ -49,88 +49,88 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SettingsGroupActivity extends SubActivity implements SettingsGroupAdapter.GroupItemClickListener {
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.settings_list_view)
-    RecyclerView settingsListView;
-    @BindView(R.id.set_default_card)
-    CardView setDefaultCard;
-    @BindView(R.id.set_default_image)
-    ImageView setDefaultImage;
-    private SettingsGroupAdapter adapter;
-    private BroadcastReceiver closeReceiver;
+  @BindView(R.id.toolbar)
+  Toolbar toolbar;
+  @BindView(R.id.settings_list_view)
+  RecyclerView settingsListView;
+  @BindView(R.id.set_default_card)
+  CardView setDefaultCard;
+  @BindView(R.id.set_default_image)
+  ImageView setDefaultImage;
+  private SettingsGroupAdapter adapter;
+  private BroadcastReceiver closeReceiver;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
-        ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
-        //noinspection ConstantConditions
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_settings);
+    ButterKnife.bind(this);
+    setSupportActionBar(toolbar);
+    //noinspection ConstantConditions
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        adapter = new SettingsGroupAdapter(this);
-        settingsListView.setLayoutManager(new LinearLayoutManager(this));
-        settingsListView.setAdapter(adapter);
-        settingsListView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        adapter.setGroupItemClickListener(this);
+    adapter = new SettingsGroupAdapter(this);
+    settingsListView.setLayoutManager(new LinearLayoutManager(this));
+    settingsListView.setAdapter(adapter);
+    settingsListView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+    adapter.setGroupItemClickListener(this);
 
-        setDefaultImage.setImageDrawable(new IconicsDrawable(this)
-                .icon(CommunityMaterial.Icon.cmd_auto_fix)
-                .color(Color.WHITE)
-                .sizeDp(24));
+    setDefaultImage.setImageDrawable(new IconicsDrawable(this)
+        .icon(CommunityMaterial.Icon.cmd_auto_fix)
+        .color(Color.WHITE)
+        .sizeDp(24));
 
-        setDefaultCard.setOnClickListener(v -> {
-            final String defaultBrowser = Utils.getDefaultBrowserPackage(getApplicationContext());
-            if (defaultBrowser.equalsIgnoreCase("android")
-                    || defaultBrowser.startsWith("org.cyanogenmod")
-                    || defaultBrowser.equalsIgnoreCase("com.huawei.android.internal.app")) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.GOOGLE_URL)));
-            } else {
-                final Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                intent.setData(Uri.parse("package:" + defaultBrowser));
-                Toast.makeText(SettingsGroupActivity.this,
-                        Utils.getAppNameWithPackage(getApplicationContext(), defaultBrowser)
-                                + " "
-                                + getString(R.string.default_clear_msg), Toast.LENGTH_LONG).show();
-                startActivity(intent);
-            }
-        });
-        updateDefaultBrowserCard();
+    setDefaultCard.setOnClickListener(v -> {
+      final String defaultBrowser = Utils.getDefaultBrowserPackage(getApplicationContext());
+      if (defaultBrowser.equalsIgnoreCase("android")
+          || defaultBrowser.startsWith("org.cyanogenmod")
+          || defaultBrowser.equalsIgnoreCase("com.huawei.android.internal.app")) {
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.GOOGLE_URL)));
+      } else {
+        final Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        intent.setData(Uri.parse("package:" + defaultBrowser));
+        Toast.makeText(SettingsGroupActivity.this,
+            Utils.getAppNameWithPackage(getApplicationContext(), defaultBrowser)
+                + " "
+                + getString(R.string.default_clear_msg), Toast.LENGTH_LONG).show();
+        startActivity(intent);
+      }
+    });
+    updateDefaultBrowserCard();
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    updateDefaultBrowserCard();
+  }
+
+  @Override
+  protected void onDestroy() {
+    adapter.cleanUp();
+    LocalBroadcastManager.getInstance(this).unregisterReceiver(closeReceiver);
+    super.onDestroy();
+  }
+
+  private void updateDefaultBrowserCard() {
+    if (!Utils.isDefaultBrowser(this)) {
+      setDefaultCard.setVisibility(View.VISIBLE);
+    } else
+      setDefaultCard.setVisibility(View.GONE);
+  }
+
+  @Override
+  public void onGroupItemClicked(int position, View view) {
+    switch (position) {
+      case 0:
+        startActivity(new Intent(this, BrowsingModeActivity.class));
+        break;
+      case 1:
+        startActivity(new Intent(this, LookAndFeelActivity.class));
+        break;
+      case 2:
+        startActivity(new Intent(this, BrowsingOptionsActivity.class));
+        break;
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        updateDefaultBrowserCard();
-    }
-
-    @Override
-    protected void onDestroy() {
-        adapter.cleanUp();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(closeReceiver);
-        super.onDestroy();
-    }
-
-    private void updateDefaultBrowserCard() {
-        if (!Utils.isDefaultBrowser(this)) {
-            setDefaultCard.setVisibility(View.VISIBLE);
-        } else
-            setDefaultCard.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onGroupItemClicked(int position, View view) {
-        switch (position) {
-            case 0:
-                startActivity(new Intent(this, BrowsingModeActivity.class));
-                break;
-            case 1:
-                startActivity(new Intent(this, LookAndFeelActivity.class));
-                break;
-            case 2:
-                startActivity(new Intent(this, BrowsingOptionsActivity.class));
-                break;
-        }
-    }
+  }
 }

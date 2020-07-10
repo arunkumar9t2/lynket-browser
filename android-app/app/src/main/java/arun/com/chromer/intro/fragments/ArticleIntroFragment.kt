@@ -33,25 +33,25 @@ import kotlinx.android.synthetic.main.fragment_slide_over_intro.*
 import javax.inject.Inject
 
 open class ArticleIntroFragment : BaseFragment(), ISlideBackgroundColorHolder {
-    override fun getDefaultBackgroundColor(): Int = ContextCompat.getColor(context!!, R.color.tutorialBackgrounColor)
+  override fun getDefaultBackgroundColor(): Int = ContextCompat.getColor(context!!, R.color.tutorialBackgrounColor)
 
-    override fun setBackgroundColor(backgroundColor: Int) {
-        root.setBackgroundColor(backgroundColor)
-    }
+  override fun setBackgroundColor(backgroundColor: Int) {
+    root.setBackgroundColor(backgroundColor)
+  }
 
-    @Inject
-    lateinit var tabsManager: TabsManager
+  @Inject
+  lateinit var tabsManager: TabsManager
 
-    override fun inject(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
-    override fun getLayoutRes() = R.layout.fragment_article_intro
+  override fun inject(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
+  override fun getLayoutRes() = R.layout.fragment_article_intro
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        GlideApp.with(this).load(R.drawable.tutorial_article_mode).into(imageView!!)
-    }
+  override fun onActivityCreated(savedInstanceState: Bundle?) {
+    super.onActivityCreated(savedInstanceState)
+    GlideApp.with(this).load(R.drawable.tutorial_article_mode).into(imageView!!)
+  }
 
-    @OnClick(R.id.tryItButton)
-    fun onSeeDemoClick() {
-        tabsManager.openArticle(context!!, Website("https://en.wikipedia.org/wiki/Web_browser"))
-    }
+  @OnClick(R.id.tryItButton)
+  fun onSeeDemoClick() {
+    tabsManager.openArticle(context!!, Website("https://en.wikipedia.org/wiki/Web_browser"))
+  }
 }

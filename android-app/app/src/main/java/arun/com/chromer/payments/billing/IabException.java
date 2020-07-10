@@ -26,29 +26,29 @@ package arun.com.chromer.payments.billing;
  * call {@link #getResult()}.
  */
 class IabException extends Exception {
-    private final IabResult mResult;
+  private final IabResult mResult;
 
-    private IabException(IabResult r) {
-        this(r, null);
-    }
+  private IabException(IabResult r) {
+    this(r, null);
+  }
 
-    public IabException(int response, String message) {
-        this(new IabResult(response, message));
-    }
+  public IabException(int response, String message) {
+    this(new IabResult(response, message));
+  }
 
-    private IabException(IabResult r, Exception cause) {
-        super(r.getMessage(), cause);
-        mResult = r;
-    }
+  private IabException(IabResult r, Exception cause) {
+    super(r.getMessage(), cause);
+    mResult = r;
+  }
 
-    public IabException(int response, String message, Exception cause) {
-        this(new IabResult(response, message), cause);
-    }
+  public IabException(int response, String message, Exception cause) {
+    this(new IabResult(response, message), cause);
+  }
 
-    /**
-     * Returns the IAB result (error) that this exception signals.
-     */
-    public IabResult getResult() {
-        return mResult;
-    }
+  /**
+   * Returns the IAB result (error) that this exception signals.
+   */
+  public IabResult getResult() {
+    return mResult;
+  }
 }

@@ -28,27 +28,28 @@ import rx.Observable
  * Created by Arunkumar on 03-03-2017.
  */
 interface HistoryRepository {
-    fun get(website: Website): Observable<Website>
+  fun get(website: Website): Observable<Website>
 
-    fun insert(website: Website): Observable<Website>
+  fun insert(website: Website): Observable<Website>
 
-    fun update(website: Website): Observable<Website>
+  fun update(website: Website): Observable<Website>
 
-    fun delete(website: Website): Observable<Website>
+  fun delete(website: Website): Observable<Website>
 
-    fun exists(website: Website): Observable<Boolean>
+  fun exists(website: Website): Observable<Boolean>
 
-    fun deleteAll(): Observable<Int>
+  fun deleteAll(): Observable<Int>
 
-    fun recents(): io.reactivex.Observable<List<Website>>
+  fun recents(): io.reactivex.Observable<List<Website>>
 
-    fun search(text: String): Observable<List<Website>>
-    /**
-     * Load given range specified by [limit] and [offset]
-     */
-    fun loadHistoryRange(limit: Int, offset: Int): List<Website>
+  fun search(text: String): Observable<List<Website>>
 
-    fun pagedHistory(): LiveData<PagedList<Website>>
+  /**
+   * Load given range specified by [limit] and [offset]
+   */
+  fun loadHistoryRange(limit: Int, offset: Int): List<Website>
 
-    fun changes(): io.reactivex.Observable<Int>
+  fun pagedHistory(): LiveData<PagedList<Website>>
+
+  fun changes(): io.reactivex.Observable<Int>
 }

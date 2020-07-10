@@ -34,26 +34,26 @@ import rx.Observable;
  * Created by arunk on 24-02-2017.
  */
 public interface WebsiteStore {
-    @NonNull
-    Observable<Website> getWebsite(@NonNull String url);
+  @NonNull
+  Observable<Website> getWebsite(@NonNull String url);
 
-    @NonNull
-    Observable<Void> clearCache();
+  @NonNull
+  Observable<Void> clearCache();
 
-    @NonNull
-    Observable<Website> saveWebsite(@NonNull Website website);
+  @NonNull
+  Observable<Website> saveWebsite(@NonNull Website website);
 
-    @NonNull
-    Observable<WebColor> getWebsiteColor(@NonNull final String url);
+  @NonNull
+  Observable<WebColor> getWebsiteColor(@NonNull final String url);
 
-    Observable<WebColor> saveWebsiteColor(@NonNull final String host, @ColorInt int color);
+  Observable<WebColor> saveWebsiteColor(@NonNull final String host, @ColorInt int color);
 
-    @NonNull
-    Pair<Bitmap, Integer> getWebsiteIconAndColor(@NonNull Website website);
+  @NonNull
+  Pair<Bitmap, Integer> getWebsiteIconAndColor(@NonNull Website website);
 
-    @NonNull
-    Pair<Drawable, Integer> getWebsiteRoundIconAndColor(Website website);
+  @NonNull
+  Pair<Drawable, Integer> getWebsiteRoundIconAndColor(Website website);
 
-    @NonNull
-    Pair<Bitmap, Integer> getWebsiteIconWithPlaceholderAndColor(Website website);
+  @NonNull
+  Pair<Bitmap, Integer> getWebsiteIconWithPlaceholderAndColor(Website website);
 }

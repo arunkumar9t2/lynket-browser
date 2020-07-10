@@ -33,56 +33,56 @@ import javax.inject.Inject
 class TabsViewModel
 @Inject
 constructor(
-        private val tabsManager: TabsManager,
-        private val websiteRepository: WebsiteRepository
+    private val tabsManager: TabsManager,
+    private val websiteRepository: WebsiteRepository
 ) : ViewModel() {
-    val loadingLiveData = MutableLiveData<Boolean>()
-    val tabsData = MutableLiveData<MutableList<TabsManager.Tab>>()
+  val loadingLiveData = MutableLiveData<Boolean>()
+  val tabsData = MutableLiveData<MutableList<TabsManager.Tab>>()
 
-    private val loaderSubject: PublishSubject<Int> = PublishSubject.create()
-    val subs = CompositeSubscription()
+  private val loaderSubject: PublishSubject<Int> = PublishSubject.create()
+  val subs = CompositeSubscription()
 
-    init {
-        subs.add(loaderSubject
-                .asObservable()
-                .doOnNext { loadingLiveData.value = true }
-                .switchMap { _ ->
-                    tabsManager.getActiveTabs()
-                            .onErrorReturn { emptyList() }
-                            .subscribeOn(Schedulers.io())
-                            .toObservable()
-                            .concatMapIterable { it }
-                            .concatMap { tab ->
-                                websiteRepository.getWebsiteReadOnly(tab.url)
-                                        .map { website ->
-                                            tab.apply {
-                                                this.website = website
-                                            }
-                                        }
-                            }.toList()
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .doOnNext { tabs ->
-                                loadingLiveData.value = false
-                                tabsData.value = tabs
-                            }
-                }.subscribe())
-    }
+  init {
+    subs.add(loaderSubject
+        .asObservable()
+        .doOnNext { loadingLiveData.value = true }
+        .switchMap { _ ->
+          tabsManager.getActiveTabs()
+              .onErrorReturn { emptyList() }
+              .subscribeOn(Schedulers.io())
+              .toObservable()
+              .concatMapIterable { it }
+              .concatMap { tab ->
+                websiteRepository.getWebsiteReadOnly(tab.url)
+                    .map { website ->
+                      tab.apply {
+                        this.website = website
+                      }
+                    }
+              }.toList()
+              .observeOn(AndroidSchedulers.mainThread())
+              .doOnNext { tabs ->
+                loadingLiveData.value = false
+                tabsData.value = tabs
+              }
+        }.subscribe())
+  }
 
 
-    fun loadTabs() {
-        loaderSubject.onNext(0)
-    }
+  fun loadTabs() {
+    loaderSubject.onNext(0)
+  }
 
-    fun clearAllTabs() {
-        subs.add(tabsManager.closeAllTabs()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSuccess { loadTabs() }
-                .doOnError(Timber::e)
-                .subscribe())
-    }
+  fun clearAllTabs() {
+    subs.add(tabsManager.closeAllTabs()
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .doOnSuccess { loadTabs() }
+        .doOnError(Timber::e)
+        .subscribe())
+  }
 
-    override fun onCleared() {
-        subs.clear()
-    }
+  override fun onCleared() {
+    subs.clear()
+  }
 }

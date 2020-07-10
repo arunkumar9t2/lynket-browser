@@ -25,11 +25,11 @@ import arun.com.chromer.di.app.TestAppModule
 
 class ChromerTestApplication : Chromer() {
 
-    override val appComponent: AppComponent by lazy {
-        DaggerTestAppComponent.builder()
-                .testAppModule(TestAppModule(this))
-                .build()
-    }
+  override val appComponent: AppComponent by lazy {
+    DaggerTestAppComponent.builder()
+        .testAppModule(TestAppModule(this))
+        .build()
+  }
 
-    override fun initFabric() {}
+  override fun initFabric() {}
 }

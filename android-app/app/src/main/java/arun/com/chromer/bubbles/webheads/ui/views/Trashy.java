@@ -60,291 +60,291 @@ import static android.view.WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
  */
 @SuppressLint("ViewConstructor")
 public class Trashy extends FrameLayout {
-    static final double MAGNETISM_THRESHOLD = Utils.dpToPx(120);
-    private static WindowManager windowManager;
-    private static Trashy INSTANCE;
+  static final double MAGNETISM_THRESHOLD = Utils.dpToPx(120);
+  private static WindowManager windowManager;
+  private static Trashy INSTANCE;
 
-    private WindowManager.LayoutParams windowParams;
+  private WindowManager.LayoutParams windowParams;
 
-    private int dispWidth;
-    private int dispHeight;
+  private int dispWidth;
+  private int dispHeight;
 
-    private Spring scaleSpring;
-    private SpringSystem springSystem;
+  private Spring scaleSpring;
+  private SpringSystem springSystem;
 
-    private boolean hidden;
+  private boolean hidden;
 
-    private RemoveHeadCircle removeHeadCircle;
+  private RemoveHeadCircle removeHeadCircle;
 
-    private boolean grew;
+  private boolean grew;
 
-    private int[] centrePoint = null;
+  private int[] centrePoint = null;
 
-    private Trashy(Context context, WindowManager windowManager) {
-        super(context);
-        Trashy.windowManager = windowManager;
+  private Trashy(Context context, WindowManager windowManager) {
+    super(context);
+    Trashy.windowManager = windowManager;
 
-        removeHeadCircle = new RemoveHeadCircle(context);
-        addView(removeHeadCircle);
+    removeHeadCircle = new RemoveHeadCircle(context);
+    addView(removeHeadCircle);
 
 
-        setVisibility(INVISIBLE);
-        hidden = true;
+    setVisibility(INVISIBLE);
+    hidden = true;
 
-        setInitialLocation();
+    setInitialLocation();
 
-        setUpSprings();
-        initCentreCoords();
+    setUpSprings();
+    initCentreCoords();
 
-        Trashy.windowManager.addView(this, windowParams);
+    Trashy.windowManager.addView(this, windowParams);
+  }
+
+  public static void init(@NonNull Context context) {
+    get(context);
+  }
+
+  /**
+   * Returns an instance of this view. If the view is not initialized, then a new view is created
+   * and returned.
+   * The returned view might not have been laid out yet.
+   *
+   * @param context
+   * @return
+   */
+  public synchronized static Trashy get(@NonNull Context context) {
+    if (INSTANCE != null)
+      return INSTANCE;
+    else {
+      Timber.d("Creating new instance of remove web head");
+      WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+      INSTANCE = new Trashy(context, windowManager);
+      return INSTANCE;
+    }
+  }
+
+  public static void destroy() {
+    if (INSTANCE != null) {
+      INSTANCE.destroySelf();
+    }
+  }
+
+  public static void disappear() {
+    if (INSTANCE != null) {
+      INSTANCE.hide();
+    }
+  }
+
+  @SuppressLint("RtlHardcoded")
+  private void setInitialLocation() {
+    final DisplayMetrics metrics = new DisplayMetrics();
+    windowManager.getDefaultDisplay().getMetrics(metrics);
+    dispWidth = metrics.widthPixels;
+    dispHeight = metrics.heightPixels;
+
+    createWindowParams();
+
+    windowParams.gravity = Gravity.LEFT | Gravity.TOP;
+    int offset = getAdaptWidth() / 2;
+    windowParams.x = (dispWidth / 2) - offset;
+    windowParams.y = dispHeight - (dispHeight / 6) - offset;
+  }
+
+  private void createWindowParams() {
+    if (Utils.ANDROID_OREO) {
+      windowParams = new WindowManager.LayoutParams(
+          WRAP_CONTENT,
+          WRAP_CONTENT,
+          TYPE_APPLICATION_OVERLAY,
+          FLAG_NOT_FOCUSABLE | FLAG_NOT_TOUCHABLE,
+          TRANSLUCENT);
+    } else {
+      windowParams = new WindowManager.LayoutParams(
+          WRAP_CONTENT,
+          WRAP_CONTENT,
+          TYPE_SYSTEM_ALERT,
+          FLAG_NOT_FOCUSABLE | FLAG_NOT_TOUCHABLE,
+          TRANSLUCENT);
+    }
+  }
+
+  private void updateView() {
+    if (windowParams != null) {
+      windowManager.updateViewLayout(this, windowParams);
+    }
+  }
+
+  public void destroyAnimator(final Runnable endAction) {
+    if (INSTANCE == null || removeHeadCircle == null) endAction.run();
+
+    INSTANCE.removeHeadCircle.animate()
+        .scaleX(0.0f)
+        .scaleY(0.0f)
+        .alpha(0.5f)
+        .setDuration(300)
+        .withLayer()
+        .withEndAction(endAction)
+        .setInterpolator(new BounceInterpolator())
+        .start();
+  }
+
+  private void destroySelf() {
+    scaleSpring.setAtRest();
+    scaleSpring.destroy();
+    scaleSpring = null;
+
+    removeView(removeHeadCircle);
+    removeHeadCircle = null;
+
+    windowParams = null;
+
+    springSystem = null;
+
+    windowManager.removeView(this);
+
+    centrePoint = null;
+
+    INSTANCE = null;
+    Timber.d("Remove view detached and killed");
+  }
+
+  private int getAdaptWidth() {
+    return Math.max(getWidth(), RemoveHeadCircle.getSizePx());
+  }
+
+  int[] getCenterCoordinates() {
+    if (centrePoint == null) {
+      initCentreCoords();
+    }
+    return centrePoint;
+  }
+
+  private void initCentreCoords() {
+    int offset = getAdaptWidth() / 2;
+    int rX = getWindowParams().x + offset;
+    int rY = getWindowParams().y + offset;
+    centrePoint = new int[]{rX, rY};
+  }
+
+  private void setUpSprings() {
+    springSystem = SpringSystem.create();
+    scaleSpring = springSystem.createSpring();
+
+    SpringConfig scaleSpringConfig = SpringConfig.fromOrigamiTensionAndFriction(100, 9);
+    scaleSpring.setSpringConfig(scaleSpringConfig);
+    scaleSpring.addListener(new SimpleSpringListener() {
+      @Override
+      public void onSpringUpdate(Spring spring) {
+        float value = (float) spring.getCurrentValue();
+        removeHeadCircle.setScaleX(value);
+        removeHeadCircle.setScaleY(value);
+      }
+    });
+  }
+
+  @Override
+  protected void onConfigurationChanged(Configuration newConfig) {
+    super.onConfigurationChanged(newConfig);
+    Timber.d(newConfig.toString());
+    centrePoint = null;
+    setInitialLocation();
+    post(this::updateView);
+  }
+
+  private WindowManager.LayoutParams getWindowParams() {
+    return windowParams;
+  }
+
+  private void hide() {
+    if (!hidden) {
+      scaleSpring.setEndValue(0.0f);
+      hidden = true;
+    }
+  }
+
+  void reveal() {
+    setVisibility(VISIBLE);
+    if (hidden) {
+      scaleSpring.setEndValue(0.9f);
+      hidden = false;
+    }
+  }
+
+  void grow() {
+    if (!grew) {
+      scaleSpring.setCurrentValue(0.9f, true);
+      scaleSpring.setEndValue(1f);
+      grew = true;
+    }
+  }
+
+  void shrink() {
+    if (grew) {
+      scaleSpring.setEndValue(0.9f);
+      grew = false;
+    }
+  }
+
+  /**
+   * Created by Arun on 04/02/2016.
+   */
+  private static class RemoveHeadCircle extends View {
+
+    private static int sSizePx;
+    private static int sDiameterPx;
+    private final Paint mBgPaint;
+
+    public RemoveHeadCircle(Context context) {
+      super(context);
+      mBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+      mBgPaint.setColor(ContextCompat.getColor(getContext(), R.color.remove_web_head_color));
+      mBgPaint.setStyle(Paint.Style.FILL);
+
+      float shadwR = context.getResources().getDimension(R.dimen.remove_head_shadow_radius);
+      float shadwDx = context.getResources().getDimension(R.dimen.remove_head_shadow_dx);
+      float shadwDy = context.getResources().getDimension(R.dimen.remove_head_shadow_dy);
+
+      mBgPaint.setShadowLayer(shadwR, shadwDx, shadwDy, 0x75000000);
+
+      setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+
+      sSizePx = context.getResources().getDimensionPixelSize(R.dimen.remove_head_size);
     }
 
-    public static void init(@NonNull Context context) {
-        get(context);
+    static int getSizePx() {
+      return sSizePx;
     }
 
-    /**
-     * Returns an instance of this view. If the view is not initialized, then a new view is created
-     * and returned.
-     * The returned view might not have been laid out yet.
-     *
-     * @param context
-     * @return
-     */
-    public synchronized static Trashy get(@NonNull Context context) {
-        if (INSTANCE != null)
-            return INSTANCE;
-        else {
-            Timber.d("Creating new instance of remove web head");
-            WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-            INSTANCE = new Trashy(context, windowManager);
-            return INSTANCE;
-        }
-    }
-
-    public static void destroy() {
-        if (INSTANCE != null) {
-            INSTANCE.destroySelf();
-        }
-    }
-
-    public static void disappear() {
-        if (INSTANCE != null) {
-            INSTANCE.hide();
-        }
-    }
-
-    @SuppressLint("RtlHardcoded")
-    private void setInitialLocation() {
-        final DisplayMetrics metrics = new DisplayMetrics();
-        windowManager.getDefaultDisplay().getMetrics(metrics);
-        dispWidth = metrics.widthPixels;
-        dispHeight = metrics.heightPixels;
-
-        createWindowParams();
-
-        windowParams.gravity = Gravity.LEFT | Gravity.TOP;
-        int offset = getAdaptWidth() / 2;
-        windowParams.x = (dispWidth / 2) - offset;
-        windowParams.y = dispHeight - (dispHeight / 6) - offset;
-    }
-
-    private void createWindowParams() {
-        if (Utils.ANDROID_OREO) {
-            windowParams = new WindowManager.LayoutParams(
-                    WRAP_CONTENT,
-                    WRAP_CONTENT,
-                    TYPE_APPLICATION_OVERLAY,
-                    FLAG_NOT_FOCUSABLE | FLAG_NOT_TOUCHABLE,
-                    TRANSLUCENT);
-        } else {
-            windowParams = new WindowManager.LayoutParams(
-                    WRAP_CONTENT,
-                    WRAP_CONTENT,
-                    TYPE_SYSTEM_ALERT,
-                    FLAG_NOT_FOCUSABLE | FLAG_NOT_TOUCHABLE,
-                    TRANSLUCENT);
-        }
-    }
-
-    private void updateView() {
-        if (windowParams != null) {
-            windowManager.updateViewLayout(this, windowParams);
-        }
-    }
-
-    public void destroyAnimator(final Runnable endAction) {
-        if (INSTANCE == null || removeHeadCircle == null) endAction.run();
-
-        INSTANCE.removeHeadCircle.animate()
-                .scaleX(0.0f)
-                .scaleY(0.0f)
-                .alpha(0.5f)
-                .setDuration(300)
-                .withLayer()
-                .withEndAction(endAction)
-                .setInterpolator(new BounceInterpolator())
-                .start();
-    }
-
-    private void destroySelf() {
-        scaleSpring.setAtRest();
-        scaleSpring.destroy();
-        scaleSpring = null;
-
-        removeView(removeHeadCircle);
-        removeHeadCircle = null;
-
-        windowParams = null;
-
-        springSystem = null;
-
-        windowManager.removeView(this);
-
-        centrePoint = null;
-
-        INSTANCE = null;
-        Timber.d("Remove view detached and killed");
-    }
-
-    private int getAdaptWidth() {
-        return Math.max(getWidth(), RemoveHeadCircle.getSizePx());
-    }
-
-    int[] getCenterCoordinates() {
-        if (centrePoint == null) {
-            initCentreCoords();
-        }
-        return centrePoint;
-    }
-
-    private void initCentreCoords() {
-        int offset = getAdaptWidth() / 2;
-        int rX = getWindowParams().x + offset;
-        int rY = getWindowParams().y + offset;
-        centrePoint = new int[]{rX, rY};
-    }
-
-    private void setUpSprings() {
-        springSystem = SpringSystem.create();
-        scaleSpring = springSystem.createSpring();
-
-        SpringConfig scaleSpringConfig = SpringConfig.fromOrigamiTensionAndFriction(100, 9);
-        scaleSpring.setSpringConfig(scaleSpringConfig);
-        scaleSpring.addListener(new SimpleSpringListener() {
-            @Override
-            public void onSpringUpdate(Spring spring) {
-                float value = (float) spring.getCurrentValue();
-                removeHeadCircle.setScaleX(value);
-                removeHeadCircle.setScaleY(value);
-            }
-        });
+    public static int getDiameterPx() {
+      return sDiameterPx;
     }
 
     @Override
-    protected void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        Timber.d(newConfig.toString());
-        centrePoint = null;
-        setInitialLocation();
-        post(this::updateView);
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+      super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+      setMeasuredDimension(sSizePx, sSizePx);
     }
 
-    private WindowManager.LayoutParams getWindowParams() {
-        return windowParams;
+    @Override
+    protected void onDraw(Canvas canvas) {
+      canvas.drawColor(0, PorterDuff.Mode.CLEAR);
+      float radius = (float) (getWidth() / 2.4);
+      canvas.drawCircle(getWidth() / 2, getHeight() / 2, radius, mBgPaint);
+
+      drawDeleteIcon(canvas);
+
+      sDiameterPx = (int) (2 * radius);
     }
 
-    private void hide() {
-        if (!hidden) {
-            scaleSpring.setEndValue(0.0f);
-            hidden = true;
-        }
+    private void drawDeleteIcon(Canvas canvas) {
+      Bitmap deleteIcon = new IconicsDrawable(getContext())
+          .icon(CommunityMaterial.Icon.cmd_delete)
+          .color(Color.WHITE)
+          .sizeDp(18).toBitmap();
+      int cHeight = canvas.getClipBounds().height();
+      int cWidth = canvas.getClipBounds().width();
+      float x = cWidth / 2f - deleteIcon.getWidth() / 2;
+      float y = cHeight / 2f - deleteIcon.getHeight() / 2;
+      canvas.drawBitmap(deleteIcon, x, y, null);
     }
-
-    void reveal() {
-        setVisibility(VISIBLE);
-        if (hidden) {
-            scaleSpring.setEndValue(0.9f);
-            hidden = false;
-        }
-    }
-
-    void grow() {
-        if (!grew) {
-            scaleSpring.setCurrentValue(0.9f, true);
-            scaleSpring.setEndValue(1f);
-            grew = true;
-        }
-    }
-
-    void shrink() {
-        if (grew) {
-            scaleSpring.setEndValue(0.9f);
-            grew = false;
-        }
-    }
-
-    /**
-     * Created by Arun on 04/02/2016.
-     */
-    private static class RemoveHeadCircle extends View {
-
-        private static int sSizePx;
-        private static int sDiameterPx;
-        private final Paint mBgPaint;
-
-        public RemoveHeadCircle(Context context) {
-            super(context);
-            mBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            mBgPaint.setColor(ContextCompat.getColor(getContext(), R.color.remove_web_head_color));
-            mBgPaint.setStyle(Paint.Style.FILL);
-
-            float shadwR = context.getResources().getDimension(R.dimen.remove_head_shadow_radius);
-            float shadwDx = context.getResources().getDimension(R.dimen.remove_head_shadow_dx);
-            float shadwDy = context.getResources().getDimension(R.dimen.remove_head_shadow_dy);
-
-            mBgPaint.setShadowLayer(shadwR, shadwDx, shadwDy, 0x75000000);
-
-            setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-
-            sSizePx = context.getResources().getDimensionPixelSize(R.dimen.remove_head_size);
-        }
-
-        static int getSizePx() {
-            return sSizePx;
-        }
-
-        public static int getDiameterPx() {
-            return sDiameterPx;
-        }
-
-        @Override
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-            setMeasuredDimension(sSizePx, sSizePx);
-        }
-
-        @Override
-        protected void onDraw(Canvas canvas) {
-            canvas.drawColor(0, PorterDuff.Mode.CLEAR);
-            float radius = (float) (getWidth() / 2.4);
-            canvas.drawCircle(getWidth() / 2, getHeight() / 2, radius, mBgPaint);
-
-            drawDeleteIcon(canvas);
-
-            sDiameterPx = (int) (2 * radius);
-        }
-
-        private void drawDeleteIcon(Canvas canvas) {
-            Bitmap deleteIcon = new IconicsDrawable(getContext())
-                    .icon(CommunityMaterial.Icon.cmd_delete)
-                    .color(Color.WHITE)
-                    .sizeDp(18).toBitmap();
-            int cHeight = canvas.getClipBounds().height();
-            int cWidth = canvas.getClipBounds().width();
-            float x = cWidth / 2f - deleteIcon.getWidth() / 2;
-            float y = cHeight / 2f - deleteIcon.getHeight() / 2;
-            canvas.drawBitmap(deleteIcon, x, y, null);
-        }
-    }
+  }
 }

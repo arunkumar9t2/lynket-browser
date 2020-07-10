@@ -33,110 +33,110 @@ import java.util.LinkedList;
  * raw values given by{@link android.view.VelocityTracker}
  */
 public class MovementTracker {
-    private static MovementTracker INSTANCE;
-    private final SizedQueue<Float> xPoints;
-    private final SizedQueue<Float> yPoints;
-    private int trackingSize = 0;
+  private static MovementTracker INSTANCE;
+  private final SizedQueue<Float> xPoints;
+  private final SizedQueue<Float> yPoints;
+  private int trackingSize = 0;
 
-    private MovementTracker() {
-        trackingSize = 10;
-        xPoints = new SizedQueue<>(trackingSize);
-        yPoints = new SizedQueue<>(trackingSize);
+  private MovementTracker() {
+    trackingSize = 10;
+    xPoints = new SizedQueue<>(trackingSize);
+    yPoints = new SizedQueue<>(trackingSize);
+  }
+
+  @NonNull
+  public static MovementTracker obtain() {
+    if (INSTANCE == null) {
+      INSTANCE = new MovementTracker();
     }
+    return INSTANCE;
+  }
 
-    @NonNull
-    public static MovementTracker obtain() {
-        if (INSTANCE == null) {
-            INSTANCE = new MovementTracker();
-        }
-        return INSTANCE;
+  public static float[] adjustVelocities(float[] p1, float[] p2, float xVelocity, float yVelocity) {
+    float downX = p1[0];
+    float downY = p1[1];
+
+    float upX = p2[0];
+    float upY = p2[1];
+
+    float x = 0, y = 0;
+
+    if (upX >= downX && upY >= downY) {
+      // Bottom right
+      x = positive(xVelocity);
+      y = positive(yVelocity);
+    } else if (upX >= downX && upY <= downY) {
+      // Top right
+      x = positive(xVelocity);
+      y = negate(yVelocity);
+    } else if (upX <= downX && upY <= downY) {
+      // Top left
+      x = negate(xVelocity);
+      y = negate(yVelocity);
+    } else if (upX <= downX && upY >= downY) {
+      // Bottom left
+      x = negate(xVelocity);
+      y = positive(yVelocity);
     }
+    return new float[]{x, y};
+  }
 
-    public static float[] adjustVelocities(float[] p1, float[] p2, float xVelocity, float yVelocity) {
-        float downX = p1[0];
-        float downY = p1[1];
+  private static float negate(float value) {
+    return value > 0 ? -value : value;
+  }
 
-        float upX = p2[0];
-        float upY = p2[1];
+  private static float positive(float value) {
+    return Math.abs(value);
+  }
 
-        float x = 0, y = 0;
+  /**
+   * Adds a motion event to the tracker.
+   *
+   * @param event The event to be added.
+   */
+  public void addMovement(@NonNull MotionEvent event) {
+    float x = event.getRawX();
+    float y = event.getRawY();
+    xPoints.add(x);
+    yPoints.add(y);
+  }
 
-        if (upX >= downX && upY >= downY) {
-            // Bottom right
-            x = positive(xVelocity);
-            y = positive(yVelocity);
-        } else if (upX >= downX && upY <= downY) {
-            // Top right
-            x = positive(xVelocity);
-            y = negate(yVelocity);
-        } else if (upX <= downX && upY <= downY) {
-            // Top left
-            x = negate(xVelocity);
-            y = negate(yVelocity);
-        } else if (upX <= downX && upY >= downY) {
-            // Bottom left
-            x = negate(xVelocity);
-            y = positive(yVelocity);
-        }
-        return new float[]{x, y};
+  /**
+   * Clear the tracking queue when user begins the gesture.
+   */
+  public void onDown() {
+    xPoints.clear();
+    yPoints.clear();
+  }
+
+  /**
+   * Clear the tracking queue when user ends the gesture.
+   */
+  public void onUp() {
+    xPoints.clear();
+    yPoints.clear();
+  }
+
+  public float[] getAdjustedVelocities(float xVelocity, float yVelocity) {
+    int trackingThreshold = (int) (0.25 * trackingSize);
+    float[] velocities;
+    if (xPoints.size() >= trackingThreshold) {
+      int downIndex = xPoints.size() - trackingThreshold;
+
+      float[] up = new float[]{xPoints.getLast(), yPoints.getLast()};
+      float[] down = new float[]{xPoints.get(downIndex), yPoints.get(downIndex)};
+
+      velocities = adjustVelocities(down, up, xVelocity, yVelocity);
+    } else {
+      velocities = null;
     }
+    return velocities;
+  }
 
-    private static float negate(float value) {
-        return value > 0 ? -value : value;
-    }
-
-    private static float positive(float value) {
-        return Math.abs(value);
-    }
-
-    /**
-     * Adds a motion event to the tracker.
-     *
-     * @param event The event to be added.
-     */
-    public void addMovement(@NonNull MotionEvent event) {
-        float x = event.getRawX();
-        float y = event.getRawY();
-        xPoints.add(x);
-        yPoints.add(y);
-    }
-
-    /**
-     * Clear the tracking queue when user begins the gesture.
-     */
-    public void onDown() {
-        xPoints.clear();
-        yPoints.clear();
-    }
-
-    /**
-     * Clear the tracking queue when user ends the gesture.
-     */
-    public void onUp() {
-        xPoints.clear();
-        yPoints.clear();
-    }
-
-    public float[] getAdjustedVelocities(float xVelocity, float yVelocity) {
-        int trackingThreshold = (int) (0.25 * trackingSize);
-        float[] velocities;
-        if (xPoints.size() >= trackingThreshold) {
-            int downIndex = xPoints.size() - trackingThreshold;
-
-            float[] up = new float[]{xPoints.getLast(), yPoints.getLast()};
-            float[] down = new float[]{xPoints.get(downIndex), yPoints.get(downIndex)};
-
-            velocities = adjustVelocities(down, up, xVelocity, yVelocity);
-        } else {
-            velocities = null;
-        }
-        return velocities;
-    }
-
-    @Override
-    public String toString() {
-        return xPoints.toString() + yPoints.toString();
-    }
+  @Override
+  public String toString() {
+    return xPoints.toString() + yPoints.toString();
+  }
 }
 
 /**
@@ -146,46 +146,46 @@ public class MovementTracker {
  * @param <E>
  */
 class SizedQueue<E> extends LinkedList<E> {
-    /**
-     * The maximum size of queue
-     */
-    private final int limit;
+  /**
+   * The maximum size of queue
+   */
+  private final int limit;
 
-    SizedQueue(int limit) {
-        this.limit = limit;
-    }
+  SizedQueue(int limit) {
+    this.limit = limit;
+  }
 
-    @Override
-    public boolean add(E o) {
-        super.add(o);
-        while (size() > limit) {
-            super.remove();
-        }
-        return true;
+  @Override
+  public boolean add(E o) {
+    super.add(o);
+    while (size() > limit) {
+      super.remove();
     }
+    return true;
+  }
 
-    @Override
-    public boolean addAll(Collection<? extends E> collection) {
-        throw new UnsupportedOperationException("Not implemented, use add()");
-    }
+  @Override
+  public boolean addAll(Collection<? extends E> collection) {
+    throw new UnsupportedOperationException("Not implemented, use add()");
+  }
 
-    @Override
-    public void add(int location, E object) {
-        throw new UnsupportedOperationException("Not implemented, use add()");
-    }
+  @Override
+  public void add(int location, E object) {
+    throw new UnsupportedOperationException("Not implemented, use add()");
+  }
 
-    @Override
-    public void addFirst(E object) {
-        throw new UnsupportedOperationException("Not implemented, use add()");
-    }
+  @Override
+  public void addFirst(E object) {
+    throw new UnsupportedOperationException("Not implemented, use add()");
+  }
 
-    @Override
-    public void addLast(E object) {
-        throw new UnsupportedOperationException("Not implemented, use add()");
-    }
+  @Override
+  public void addLast(E object) {
+    throw new UnsupportedOperationException("Not implemented, use add()");
+  }
 
-    @Override
-    public boolean addAll(int location, Collection<? extends E> collection) {
-        throw new UnsupportedOperationException("Not implemented, use add()");
-    }
+  @Override
+  public boolean addAll(int location, Collection<? extends E> collection) {
+    throw new UnsupportedOperationException("Not implemented, use add()");
+  }
 }

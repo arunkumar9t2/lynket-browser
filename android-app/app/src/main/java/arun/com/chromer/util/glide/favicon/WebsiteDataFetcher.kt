@@ -26,19 +26,19 @@ import com.bumptech.glide.load.data.DataFetcher
 
 class WebsiteDataFetcher(private val website: Website) : DataFetcher<Website> {
 
-    override fun loadData(priority: Priority, callback: DataFetcher.DataCallback<in Website>) {
-        callback.onDataReady(website)
-    }
+  override fun loadData(priority: Priority, callback: DataFetcher.DataCallback<in Website>) {
+    callback.onDataReady(website)
+  }
 
-    override fun cleanup() {
-        // Do nothing.
-    }
+  override fun cleanup() {
+    // Do nothing.
+  }
 
-    override fun cancel() {
-        // Do nothing.
-    }
+  override fun cancel() {
+    // Do nothing.
+  }
 
-    override fun getDataClass(): Class<Website> = Website::class.java
+  override fun getDataClass(): Class<Website> = Website::class.java
 
-    override fun getDataSource(): DataSource = DataSource.LOCAL
+  override fun getDataSource(): DataSource = DataSource.LOCAL
 }

@@ -35,30 +35,30 @@ import javax.inject.Inject
 class ProviderSelectionViewModel
 @Inject
 constructor(
-        private val appRepository: AppRepository
+    private val appRepository: AppRepository
 ) : ViewModel() {
-    val subs = CompositeSubscription()
+  val subs = CompositeSubscription()
 
-    private val loadingQueue = PublishSubject.create<Int>()
+  private val loadingQueue = PublishSubject.create<Int>()
 
-    val providersLiveData = MutableLiveData<List<Provider>>()
+  val providersLiveData = MutableLiveData<List<Provider>>()
 
-    init {
-        subs.add(loadingQueue.asObservable()
-                .switchMap {
-                    return@switchMap appRepository
-                            .allProviders()
-                            .compose(SchedulerProvider.applyIoSchedulers())
-                }.subscribe({ providers ->
-                    providersLiveData.value = providers
-                }, Timber::e))
-    }
+  init {
+    subs.add(loadingQueue.asObservable()
+        .switchMap {
+          return@switchMap appRepository
+              .allProviders()
+              .compose(SchedulerProvider.applyIoSchedulers())
+        }.subscribe({ providers ->
+          providersLiveData.value = providers
+        }, Timber::e))
+  }
 
-    fun loadProviders() {
-        loadingQueue.onNext(0)
-    }
+  fun loadProviders() {
+    loadingQueue.onNext(0)
+  }
 
-    override fun onCleared() {
-        subs.clear()
-    }
+  override fun onCleared() {
+    subs.clear()
+  }
 }

@@ -48,86 +48,86 @@ import static arun.com.chromer.shared.Constants.EXTRA_KEY_TOOLBAR_COLOR;
 import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBHEAD_COLOR;
 
 public class LookAndFeelActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback, Snackable, SharedPreferences.OnSharedPreferenceChangeListener {
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.coordinatorLayout)
-    CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.error)
-    TextView error;
+  @BindView(R.id.toolbar)
+  Toolbar toolbar;
+  @BindView(R.id.coordinatorLayout)
+  CoordinatorLayout coordinatorLayout;
+  @BindView(R.id.error)
+  TextView error;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_look_and_feel);
-        ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
-        //noinspection ConstantConditions
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_look_and_feel);
+    ButterKnife.bind(this);
+    setSupportActionBar(toolbar);
+    //noinspection ConstantConditions
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.toolbar_options_preferences_container, PersonalizationPreferenceFragment.newInstance())
-                .replace(R.id.web_head_options_preferences_container, WebHeadPreferenceFragment.newInstance())
-                .replace(R.id.article_options_preferences_container, ArticlePreferenceFragment.newInstance())
-                .commit();
+    getSupportFragmentManager()
+        .beginTransaction()
+        .replace(R.id.toolbar_options_preferences_container, PersonalizationPreferenceFragment.newInstance())
+        .replace(R.id.web_head_options_preferences_container, WebHeadPreferenceFragment.newInstance())
+        .replace(R.id.article_options_preferences_container, ArticlePreferenceFragment.newInstance())
+        .commit();
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
+    showHideErrorView();
+  }
+
+  private void showHideErrorView() {
+    if (!Preferences.get(this).webHeads()) {
+      error.setVisibility(View.VISIBLE);
+    } else {
+      error.setVisibility(View.GONE);
     }
+  }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
-        showHideErrorView();
+  @Override
+  protected void onPause() {
+    PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
+    super.onPause();
+  }
+
+  @Override
+  public void onColorSelection(@NonNull ColorChooserDialog dialog, @ColorInt int selectedColor) {
+    switch (dialog.getTitle()) {
+      case R.string.default_toolbar_color:
+        final Intent toolbarColorIntent = new Intent(ACTION_TOOLBAR_COLOR_SET);
+        toolbarColorIntent.putExtra(EXTRA_KEY_TOOLBAR_COLOR, selectedColor);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(toolbarColorIntent);
+        break;
+      case R.string.web_heads_color:
+        final Intent webHeadColorIntent = new Intent(ACTION_WEBHEAD_COLOR_SET);
+        webHeadColorIntent.putExtra(EXTRA_KEY_WEBHEAD_COLOR, selectedColor);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(webHeadColorIntent);
+        break;
     }
+  }
 
-    private void showHideErrorView() {
-        if (!Preferences.get(this).webHeads()) {
-            error.setVisibility(View.VISIBLE);
-        } else {
-            error.setVisibility(View.GONE);
-        }
+  @Override
+  public void onColorChooserDismissed(@NonNull ColorChooserDialog dialog) {
+
+  }
+
+  @Override
+  public void snack(@NonNull String message) {
+    Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_SHORT).show();
+  }
+
+  @Override
+  public void snackLong(@NonNull String message) {
+    Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show();
+  }
+
+  @Override
+  public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+    if (Preferences.WEB_HEAD_ENABLED.equalsIgnoreCase(key)) {
+      showHideErrorView();
     }
-
-    @Override
-    protected void onPause() {
-        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
-        super.onPause();
-    }
-
-    @Override
-    public void onColorSelection(@NonNull ColorChooserDialog dialog, @ColorInt int selectedColor) {
-        switch (dialog.getTitle()) {
-            case R.string.default_toolbar_color:
-                final Intent toolbarColorIntent = new Intent(ACTION_TOOLBAR_COLOR_SET);
-                toolbarColorIntent.putExtra(EXTRA_KEY_TOOLBAR_COLOR, selectedColor);
-                LocalBroadcastManager.getInstance(this).sendBroadcast(toolbarColorIntent);
-                break;
-            case R.string.web_heads_color:
-                final Intent webHeadColorIntent = new Intent(ACTION_WEBHEAD_COLOR_SET);
-                webHeadColorIntent.putExtra(EXTRA_KEY_WEBHEAD_COLOR, selectedColor);
-                LocalBroadcastManager.getInstance(this).sendBroadcast(webHeadColorIntent);
-                break;
-        }
-    }
-
-    @Override
-    public void onColorChooserDismissed(@NonNull ColorChooserDialog dialog) {
-
-    }
-
-    @Override
-    public void snack(@NonNull String message) {
-        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void snackLong(@NonNull String message) {
-        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (Preferences.WEB_HEAD_ENABLED.equalsIgnoreCase(key)) {
-            showHideErrorView();
-        }
-    }
+  }
 }

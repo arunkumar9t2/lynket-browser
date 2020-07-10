@@ -38,30 +38,30 @@ import javax.inject.Inject
 class BrowsingArticleViewModel
 @Inject
 constructor(
-        private val webArticleRepository: WebArticleRepository,
-        searchProviders: SearchProviders
+    private val webArticleRepository: WebArticleRepository,
+    searchProviders: SearchProviders
 ) : ViewModel() {
-    private val subs = CompositeSubscription()
+  private val subs = CompositeSubscription()
 
-    private val loadingQueue = PublishSubject.create<String>()
+  private val loadingQueue = PublishSubject.create<String>()
 
-    val articleLiveData = MutableLiveData<Result<WebArticle>>()
+  val articleLiveData = MutableLiveData<Result<WebArticle>>()
 
-    init {
-        subs.add(loadingQueue.asObservable()
-                .concatMap {
-                    webArticleRepository
-                            .getWebArticle(it)
-                            .compose(SchedulerProvider.applyIoSchedulers())
-                            .compose(Result.applyToObservable())
-                }.subscribe { articleLiveData.value = it })
-    }
+  init {
+    subs.add(loadingQueue.asObservable()
+        .concatMap {
+          webArticleRepository
+              .getWebArticle(it)
+              .compose(SchedulerProvider.applyIoSchedulers())
+              .compose(Result.applyToObservable())
+        }.subscribe { articleLiveData.value = it })
+  }
 
-    val selectedSearchProvider: Observable<SearchProvider> = searchProviders.selectedProvider
+  val selectedSearchProvider: Observable<SearchProvider> = searchProviders.selectedProvider
 
-    fun loadArticle(url: String) = loadingQueue.onNext(url)
+  fun loadArticle(url: String) = loadingQueue.onNext(url)
 
-    override fun onCleared() {
-        subs.clear()
-    }
+  override fun onCleared() {
+    subs.clear()
+  }
 }

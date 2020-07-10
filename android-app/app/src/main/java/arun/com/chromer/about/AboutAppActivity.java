@@ -30,26 +30,26 @@ import arun.com.chromer.shared.base.activity.SubActivity;
 
 public class AboutAppActivity extends SubActivity {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_about);
 
-        final Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        //noinspection ConstantConditions
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(getString(R.string.about));
+    final Toolbar toolbar = findViewById(R.id.toolbar);
+    setSupportActionBar(toolbar);
+    //noinspection ConstantConditions
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    getSupportActionBar().setTitle(getString(R.string.about));
 
-        // Replace the fragment
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.about_fragment, AboutFragment.Companion.newInstance())
-                .commit();
+    // Replace the fragment
+    getSupportFragmentManager()
+        .beginTransaction()
+        .replace(R.id.about_fragment, AboutFragment.Companion.newInstance())
+        .commit();
 
-        // Color status bar for lollipop above
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.primary_dark));
-        }
+    // Color status bar for lollipop above
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.primary_dark));
     }
+  }
 }

@@ -31,15 +31,15 @@ import static android.os.Build.VERSION_CODES.LOLLIPOP;
  */
 public class DocumentUtils {
 
-    @TargetApi(LOLLIPOP)
-    public static ActivityManager.RecentTaskInfo getTaskInfoFromTask(ActivityManager.AppTask task) {
-        ActivityManager.RecentTaskInfo info = null;
-        try {
-            info = task.getTaskInfo();
-        } catch (Exception e) {
-            Timber.d("Failed to retrieve task info: %s", e.toString());
-        }
-        return info;
+  @TargetApi(LOLLIPOP)
+  public static ActivityManager.RecentTaskInfo getTaskInfoFromTask(ActivityManager.AppTask task) {
+    ActivityManager.RecentTaskInfo info = null;
+    try {
+      info = task.getTaskInfo();
+    } catch (Exception e) {
+      Timber.d("Failed to retrieve task info: %s", e.toString());
     }
+    return info;
+  }
 
 }

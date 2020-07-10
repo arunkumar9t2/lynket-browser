@@ -25,7 +25,7 @@ import androidx.annotation.NonNull;
  * Marker to define methods to enable {@link com.google.android.material.snackbar.Snackbar} messages.
  */
 public interface Snackable {
-    void snack(@NonNull final String message);
+  void snack(@NonNull final String message);
 
-    void snackLong(@NonNull final String message);
+  void snackLong(@NonNull final String message);
 }

@@ -31,12 +31,12 @@ import kotlinx.android.synthetic.main.activity_image_view.*
  */
 class ImageViewActivity : AppCompatActivity() {
 
-    public override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_image_view)
-        val url = intent.dataString
-        GlideApp.with(this)
-                .load(url)
-                .into(imageView)
-    }
+  public override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_image_view)
+    val url = intent.dataString
+    GlideApp.with(this)
+        .load(url)
+        .into(imageView)
+  }
 }

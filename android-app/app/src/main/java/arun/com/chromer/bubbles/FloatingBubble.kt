@@ -14,32 +14,32 @@ import javax.inject.Singleton
 
 interface FloatingBubble {
 
-    fun openBubble(
-            website: Website,
-            fromMinimize: Boolean,
-            fromAmp: Boolean,
-            incognito: Boolean,
-            context: Context? = null,
-            @ColorInt
-            color: Int = Constants.NO_COLOR
-    )
+  fun openBubble(
+      website: Website,
+      fromMinimize: Boolean,
+      fromAmp: Boolean,
+      incognito: Boolean,
+      context: Context? = null,
+      @ColorInt
+      color: Int = Constants.NO_COLOR
+  )
 }
 
 
 enum class BubbleType {
-    NATIVE,
-    WEB_HEADS
+  NATIVE,
+  WEB_HEADS
 }
 
 @Singleton
 class FloatingBubbleFactory
 @Inject
 constructor(
-        private val nativeFloatingBubble: Provider<NativeFloatingBubble>,
-        private val webHeadsFloatingBubble: Provider<WebHeadsFloatingBubble>
+    private val nativeFloatingBubble: Provider<NativeFloatingBubble>,
+    private val webHeadsFloatingBubble: Provider<WebHeadsFloatingBubble>
 ) {
-    operator fun get(bubble: BubbleType): FloatingBubble = when (bubble) {
-        NATIVE -> nativeFloatingBubble.get()
-        WEB_HEADS -> webHeadsFloatingBubble.get()
-    }
+  operator fun get(bubble: BubbleType): FloatingBubble = when (bubble) {
+    NATIVE -> nativeFloatingBubble.get()
+    WEB_HEADS -> webHeadsFloatingBubble.get()
+  }
 }

@@ -26,10 +26,10 @@ import dagger.Module;
 @Module
 public class ServiceModule {
 
-    private final Service service;
+  private final Service service;
 
-    public ServiceModule(Service service) {
-        this.service = service;
-    }
+  public ServiceModule(Service service) {
+    this.service = service;
+  }
 
 }

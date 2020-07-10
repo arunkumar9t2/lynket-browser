@@ -34,38 +34,38 @@ import dev.arunkumar.android.dagger.viewmodel.ViewModelKey
 
 @Module
 abstract class ViewModelModule {
-    @Binds
-    @IntoMap
-    @ViewModelKey(BrowsingViewModel::class)
-    internal abstract fun bindBrowsingViewModel(browsingViewModel: BrowsingViewModel): ViewModel
+  @Binds
+  @IntoMap
+  @ViewModelKey(BrowsingViewModel::class)
+  internal abstract fun bindBrowsingViewModel(browsingViewModel: BrowsingViewModel): ViewModel
 
-    @Binds
-    @IntoMap
-    @ViewModelKey(TabsViewModel::class)
-    internal abstract fun tabsViewModel(tabsViewModel: TabsViewModel): ViewModel
+  @Binds
+  @IntoMap
+  @ViewModelKey(TabsViewModel::class)
+  internal abstract fun tabsViewModel(tabsViewModel: TabsViewModel): ViewModel
 
-    @Binds
-    @IntoMap
-    @ViewModelKey(HomeFragmentViewModel::class)
-    internal abstract fun homeFragmentViewModel(homeFragmentViewModel: HomeFragmentViewModel): ViewModel
+  @Binds
+  @IntoMap
+  @ViewModelKey(HomeFragmentViewModel::class)
+  internal abstract fun homeFragmentViewModel(homeFragmentViewModel: HomeFragmentViewModel): ViewModel
 
-    @Binds
-    @IntoMap
-    @ViewModelKey(HistoryFragmentViewModel::class)
-    internal abstract fun historyFragmentViewModel(historyFragmentViewModel: HistoryFragmentViewModel): ViewModel
+  @Binds
+  @IntoMap
+  @ViewModelKey(HistoryFragmentViewModel::class)
+  internal abstract fun historyFragmentViewModel(historyFragmentViewModel: HistoryFragmentViewModel): ViewModel
 
-    @Binds
-    @IntoMap
-    @ViewModelKey(BrowsingArticleViewModel::class)
-    internal abstract fun bindArticleBrowsingViewModel(browsingArticleViewModel: BrowsingArticleViewModel): ViewModel
+  @Binds
+  @IntoMap
+  @ViewModelKey(BrowsingArticleViewModel::class)
+  internal abstract fun bindArticleBrowsingViewModel(browsingArticleViewModel: BrowsingArticleViewModel): ViewModel
 
-    @Binds
-    @IntoMap
-    @ViewModelKey(PerAppSettingsViewModel::class)
-    internal abstract fun perAppSettingViewModel(perAppSettingsViewModel: PerAppSettingsViewModel): ViewModel
+  @Binds
+  @IntoMap
+  @ViewModelKey(PerAppSettingsViewModel::class)
+  internal abstract fun perAppSettingViewModel(perAppSettingsViewModel: PerAppSettingsViewModel): ViewModel
 
-    @Binds
-    @IntoMap
-    @ViewModelKey(ProviderSelectionViewModel::class)
-    internal abstract fun providerSelectionViewModel(providerSelectionViewModel: ProviderSelectionViewModel): ViewModel
+  @Binds
+  @IntoMap
+  @ViewModelKey(ProviderSelectionViewModel::class)
+  internal abstract fun providerSelectionViewModel(providerSelectionViewModel: ProviderSelectionViewModel): ViewModel
 }

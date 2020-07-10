@@ -32,39 +32,39 @@ import androidx.annotation.StringRes
  * Returns true if the given package was installed
  */
 fun PackageManager.isPackageInstalled(packageName: String?): Boolean = try {
-    this.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES)
-    true
+  this.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES)
+  true
 } catch (e: PackageManager.NameNotFoundException) {
-    false
+  false
 }
 
 fun Context.appName(packageName: String): String {
-    val pm = applicationContext.packageManager
-    val ai: ApplicationInfo?
-    ai = try {
-        pm.getApplicationInfo(packageName, 0)
-    } catch (e: PackageManager.NameNotFoundException) {
-        null
-    }
-    return (if (ai != null) pm.getApplicationLabel(ai) else "(unknown)") as String
+  val pm = applicationContext.packageManager
+  val ai: ApplicationInfo?
+  ai = try {
+    pm.getApplicationInfo(packageName, 0)
+  } catch (e: PackageManager.NameNotFoundException) {
+    null
+  }
+  return (if (ai != null) pm.getApplicationLabel(ai) else "(unknown)") as String
 }
 
 data class StringResource(
-        @param:StringRes val resource: Int,
-        val args: List<String> = emptyList(),
-        val resourceArgs: List<Int> = emptyList()
+    @param:StringRes val resource: Int,
+    val args: List<String> = emptyList(),
+    val resourceArgs: List<Int> = emptyList()
 )
 
 fun Context.resolveStringResource(stringResource: StringResource): String {
-    return when {
-        stringResource.args.isNotEmpty() -> getString(
-                stringResource.resource,
-                *stringResource.args.toTypedArray()
-        )
-        stringResource.resourceArgs.isNotEmpty() -> getString(
-                stringResource.resource,
-                *stringResource.resourceArgs.map(::getString).toTypedArray()
-        )
-        else -> getString(stringResource.resource)
-    }
+  return when {
+    stringResource.args.isNotEmpty() -> getString(
+        stringResource.resource,
+        *stringResource.args.toTypedArray()
+    )
+    stringResource.resourceArgs.isNotEmpty() -> getString(
+        stringResource.resource,
+        *stringResource.resourceArgs.map(::getString).toTypedArray()
+    )
+    else -> getString(stringResource.resource)
+  }
 }

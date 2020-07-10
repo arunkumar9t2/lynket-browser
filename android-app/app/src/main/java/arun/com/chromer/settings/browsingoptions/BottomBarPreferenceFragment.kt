@@ -34,41 +34,41 @@ import com.mikepenz.iconics.IconicsDrawable
 
 class BottomBarPreferenceFragment : BasePreferenceFragment(), SharedPreferences.OnSharedPreferenceChangeListener {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        addPreferencesFromResource(R.xml.bottombar_preferences)
-        setupBottomBarPreference()
-        setupMinimizePreference()
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    addPreferencesFromResource(R.xml.bottombar_preferences)
+    setupBottomBarPreference()
+    setupMinimizePreference()
+  }
+
+
+  private fun setupBottomBarPreference() {
+    val bottomBarPreference = findPreference(BOTTOM_BAR_ENABLED) as SwitchPreference
+    bottomBarPreference.icon = IconicsDrawable(requireContext())
+        .icon(CommunityMaterial.Icon.cmd_more)
+        .color(ContextCompat.getColor(requireContext(), R.color.material_dark_light))
+        .sizeDp(24)
+  }
+
+
+  private fun setupMinimizePreference() {
+    with(findPreference(MINIMIZE_BEHAVIOR_PREFERENCE) as IconListPreference) {
+      icon = IconicsDrawable(requireContext())
+          .icon(CommunityMaterial.Icon.cmd_arrow_down)
+          .color(ContextCompat.getColor(requireContext(), R.color.material_dark_light))
+          .sizeDp(24)
+      isVisible = Utils.isLollipopAbove()
     }
+    updatePreferenceSummary(MINIMIZE_BEHAVIOR_PREFERENCE)
+  }
 
+  override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
+    updatePreferenceSummary(key)
+  }
 
-    private fun setupBottomBarPreference() {
-        val bottomBarPreference = findPreference(BOTTOM_BAR_ENABLED) as SwitchPreference
-        bottomBarPreference.icon = IconicsDrawable(requireContext())
-                .icon(CommunityMaterial.Icon.cmd_more)
-                .color(ContextCompat.getColor(requireContext(), R.color.material_dark_light))
-                .sizeDp(24)
+  companion object {
+    fun newInstance(): BottomBarPreferenceFragment {
+      return BottomBarPreferenceFragment()
     }
-
-
-    private fun setupMinimizePreference() {
-        with(findPreference(MINIMIZE_BEHAVIOR_PREFERENCE) as IconListPreference) {
-            icon = IconicsDrawable(requireContext())
-                    .icon(CommunityMaterial.Icon.cmd_arrow_down)
-                    .color(ContextCompat.getColor(requireContext(), R.color.material_dark_light))
-                    .sizeDp(24)
-            isVisible = Utils.isLollipopAbove()
-        }
-        updatePreferenceSummary(MINIMIZE_BEHAVIOR_PREFERENCE)
-    }
-
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-        updatePreferenceSummary(key)
-    }
-
-    companion object {
-        fun newInstance(): BottomBarPreferenceFragment {
-            return BottomBarPreferenceFragment()
-        }
-    }
+  }
 }

@@ -34,82 +34,82 @@ import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
 
 class AmpResolverActivity : BrowsingActivity() {
-    private var ampResolverDialog: AmpResolverDialog? = null
+  private var ampResolverDialog: AmpResolverDialog? = null
 
-    @Inject
-    lateinit var tabsManager: TabsManager
+  @Inject
+  lateinit var tabsManager: TabsManager
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        ampResolverDialog = AmpResolverDialog(this).show()
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    ampResolverDialog = AmpResolverDialog(this).show()
+  }
+
+  override fun getLayoutRes(): Int {
+    return 0
+  }
+
+  override fun inject(activityComponent: ActivityComponent) {
+    activityComponent.inject(this)
+
+  }
+
+  override fun onWebsiteLoaded(website: Website) {
+    ampResolverDialog?.loadedDetails()
+  }
+
+  private fun launchUrl() {
+    if (website!!.hasAmp()) {
+      tabsManager.openBrowsingTab(this, Website.Ampify(website!!), fromNewTab = false)
+    } else {
+      tabsManager.openUrl(this, Website.Ampify(website!!), fromAmp = true)
+    }
+    ampResolverDialog?.dismiss()
+  }
+
+
+  override fun onDestroy() {
+    super.onDestroy()
+    ampResolverDialog?.dismiss()
+  }
+
+  inner class AmpResolverDialog(
+      private var activity: Activity?
+  ) : DialogInterface.OnDismissListener {
+    val subs = CompositeSubscription()
+    private var dialog: MaterialDialog? = null
+
+    fun show(): AmpResolverDialog? {
+      dialog = MaterialDialog.Builder(activity!!)
+          .title(R.string.grabbing_amp_link)
+          .progress(true, Integer.MAX_VALUE)
+          .content(R.string.loading)
+          .dismissListener(this)
+          .positiveText(R.string.skip)
+          .onPositive { _, _ -> launchUrl() }
+          .show()
+      return this
     }
 
-    override fun getLayoutRes(): Int {
-        return 0
+    fun loadedDetails() {
+      if (!TextUtils.isEmpty(website?.ampUrl)) {
+        dialog?.setContent(R.string.link_found)
+      } else {
+        dialog?.setContent(R.string.link_not_found)
+      }
+      Handler().postDelayed({
+        launchUrl()
+      }, 200)
     }
 
-    override fun inject(activityComponent: ActivityComponent) {
-        activityComponent.inject(this)
-
+    fun dismiss() {
+      dialog?.dismiss()
     }
 
-    override fun onWebsiteLoaded(website: Website) {
-        ampResolverDialog?.loadedDetails()
+    override fun onDismiss(dialogInterface: DialogInterface?) {
+      subs.clear()
+      activity?.finish()
+      activity = null
+      dialog = null
     }
-
-    private fun launchUrl() {
-        if (website!!.hasAmp()) {
-            tabsManager.openBrowsingTab(this, Website.Ampify(website!!), fromNewTab = false)
-        } else {
-            tabsManager.openUrl(this, Website.Ampify(website!!), fromAmp = true)
-        }
-        ampResolverDialog?.dismiss()
-    }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-        ampResolverDialog?.dismiss()
-    }
-
-    inner class AmpResolverDialog(
-            private var activity: Activity?
-    ) : DialogInterface.OnDismissListener {
-        val subs = CompositeSubscription()
-        private var dialog: MaterialDialog? = null
-
-        fun show(): AmpResolverDialog? {
-            dialog = MaterialDialog.Builder(activity!!)
-                    .title(R.string.grabbing_amp_link)
-                    .progress(true, Integer.MAX_VALUE)
-                    .content(R.string.loading)
-                    .dismissListener(this)
-                    .positiveText(R.string.skip)
-                    .onPositive { _, _ -> launchUrl() }
-                    .show()
-            return this
-        }
-
-        fun loadedDetails() {
-            if (!TextUtils.isEmpty(website?.ampUrl)) {
-                dialog?.setContent(R.string.link_found)
-            } else {
-                dialog?.setContent(R.string.link_not_found)
-            }
-            Handler().postDelayed({
-                launchUrl()
-            }, 200)
-        }
-
-        fun dismiss() {
-            dialog?.dismiss()
-        }
-
-        override fun onDismiss(dialogInterface: DialogInterface?) {
-            subs.clear()
-            activity?.finish()
-            activity = null
-            dialog = null
-        }
-    }
+  }
 }

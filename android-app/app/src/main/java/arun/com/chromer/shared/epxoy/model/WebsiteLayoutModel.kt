@@ -15,24 +15,26 @@ import kotlinx.android.synthetic.main.widget_website_grid_item.*
 
 @EpoxyModelClass(layout = R.layout.widget_website_grid_item)
 abstract class WebsiteLayoutModel : KotlinEpoxyModelWithHolder<WebsiteLayoutModel.ViewHolder>() {
-    class ViewHolder : KotlinHolder()
+  class ViewHolder : KotlinHolder()
 
-    @EpoxyAttribute
-    lateinit var website: Website
-    @EpoxyAttribute(DoNotHash)
-    lateinit var tabsManager: TabsManager
-    @EpoxyAttribute
-    var query: String = ""
+  @EpoxyAttribute
+  lateinit var website: Website
 
-    override fun bind(holder: ViewHolder) {
-        holder.apply {
-            label.text = website.safeLabel().toSpannable().makeMatchingBold(query)
-            containerView.setOnClickListener {
-                tabsManager.openUrl(containerView.context, website)
-            }
-            GlideApp.with(containerView.context)
-                    .load(website)
-                    .into(icon)
-        }
+  @EpoxyAttribute(DoNotHash)
+  lateinit var tabsManager: TabsManager
+
+  @EpoxyAttribute
+  var query: String = ""
+
+  override fun bind(holder: ViewHolder) {
+    holder.apply {
+      label.text = website.safeLabel().toSpannable().makeMatchingBold(query)
+      containerView.setOnClickListener {
+        tabsManager.openUrl(containerView.context, website)
+      }
+      GlideApp.with(containerView.context)
+          .load(website)
+          .into(icon)
     }
+  }
 }

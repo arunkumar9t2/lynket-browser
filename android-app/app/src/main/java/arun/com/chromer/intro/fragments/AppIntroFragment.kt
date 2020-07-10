@@ -31,81 +31,81 @@ import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder
 import kotlinx.android.synthetic.main.fragment_text_intro.*
 
 open class AppIntroFragment : BaseFragment(), ISlideBackgroundColorHolder {
-    override fun getDefaultBackgroundColor(): Int = ContextCompat.getColor(context!!, R.color.tutorialBackgrounColor)
+  override fun getDefaultBackgroundColor(): Int = ContextCompat.getColor(context!!, R.color.tutorialBackgrounColor)
 
-    override fun setBackgroundColor(backgroundColor: Int) {
-        if (root != null) {
-            root.setBackgroundColor(backgroundColor)
-        }
+  override fun setBackgroundColor(backgroundColor: Int) {
+    if (root != null) {
+      root.setBackgroundColor(backgroundColor)
+    }
+  }
+
+  override fun inject(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
+  override fun getLayoutRes() = R.layout.fragment_text_intro
+
+  private var drawable: Int = 0
+  private var bgColor: Int = 0
+  private var titleColor: Int = 0
+  private var descColor: Int = 0
+  private var title: CharSequence? = null
+  private var description: CharSequence? = null
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    if (this.arguments != null && this.arguments!!.size() != 0) {
+      this.drawable = this.arguments!!.getInt("drawable")
+      this.title = this.arguments!!.getCharSequence("title")
+      this.description = this.arguments!!.getCharSequence("desc")
+      this.bgColor = this.arguments!!.getInt("bg_color")
+      this.titleColor = if (this.arguments!!.containsKey("title_color")) this.arguments!!.getInt("title_color") else 0
+      this.descColor = if (this.arguments!!.containsKey("desc_color")) this.arguments!!.getInt("desc_color") else 0
+    }
+  }
+
+  override fun onActivityCreated(savedInstanceState: Bundle?) {
+    super.onActivityCreated(savedInstanceState)
+    root.setBackgroundColor(this.bgColor)
+    titleTv.text = this.title
+    if (this.titleColor != 0) {
+      titleTv!!.setTextColor(this.titleColor)
     }
 
-    override fun inject(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
-    override fun getLayoutRes() = R.layout.fragment_text_intro
-
-    private var drawable: Int = 0
-    private var bgColor: Int = 0
-    private var titleColor: Int = 0
-    private var descColor: Int = 0
-    private var title: CharSequence? = null
-    private var description: CharSequence? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (this.arguments != null && this.arguments!!.size() != 0) {
-            this.drawable = this.arguments!!.getInt("drawable")
-            this.title = this.arguments!!.getCharSequence("title")
-            this.description = this.arguments!!.getCharSequence("desc")
-            this.bgColor = this.arguments!!.getInt("bg_color")
-            this.titleColor = if (this.arguments!!.containsKey("title_color")) this.arguments!!.getInt("title_color") else 0
-            this.descColor = if (this.arguments!!.containsKey("desc_color")) this.arguments!!.getInt("desc_color") else 0
-        }
+    descriptionTv.text = this.description
+    if (this.descColor != 0) {
+      descriptionTv!!.setTextColor(this.descColor)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        root.setBackgroundColor(this.bgColor)
-        titleTv.text = this.title
-        if (this.titleColor != 0) {
-            titleTv!!.setTextColor(this.titleColor)
-        }
+    // Use glide to load the drawable
+    GlideApp.with(this).load(drawable).into(imageView!!)
+  }
 
-        descriptionTv.text = this.description
-        if (this.descColor != 0) {
-            descriptionTv!!.setTextColor(this.descColor)
-        }
-
-        // Use glide to load the drawable
-        GlideApp.with(this).load(drawable).into(imageView!!)
+  companion object {
+    fun newInstance(
+        title: CharSequence,
+        description: CharSequence,
+        @DrawableRes imageDrawable: Int,
+        @ColorInt bgColor: Int
+    ): AppIntroFragment {
+      return newInstance(title, description, imageDrawable, bgColor, 0, 0)
     }
 
-    companion object {
-        fun newInstance(
-                title: CharSequence,
-                description: CharSequence,
-                @DrawableRes imageDrawable: Int,
-                @ColorInt bgColor: Int
-        ): AppIntroFragment {
-            return newInstance(title, description, imageDrawable, bgColor, 0, 0)
-        }
-
-        fun newInstance(
-                title: CharSequence,
-                description: CharSequence,
-                @DrawableRes imageDrawable: Int,
-                @ColorInt bgColor: Int,
-                @ColorInt titleColor: Int,
-                @ColorInt descColor: Int
-        ): AppIntroFragment {
-            val sampleSlide = AppIntroFragment()
-            val args = Bundle()
-            args.putCharSequence("title", title)
-            args.putCharSequence("desc", description)
-            args.putInt("drawable", imageDrawable)
-            args.putInt("bg_color", bgColor)
-            args.putInt("title_color", titleColor)
-            args.putInt("desc_color", descColor)
-            sampleSlide.arguments = args
-            return sampleSlide
-        }
+    fun newInstance(
+        title: CharSequence,
+        description: CharSequence,
+        @DrawableRes imageDrawable: Int,
+        @ColorInt bgColor: Int,
+        @ColorInt titleColor: Int,
+        @ColorInt descColor: Int
+    ): AppIntroFragment {
+      val sampleSlide = AppIntroFragment()
+      val args = Bundle()
+      args.putCharSequence("title", title)
+      args.putCharSequence("desc", description)
+      args.putInt("drawable", imageDrawable)
+      args.putInt("bg_color", bgColor)
+      args.putInt("title_color", titleColor)
+      args.putInt("desc_color", descColor)
+      sampleSlide.arguments = args
+      return sampleSlide
     }
+  }
 }

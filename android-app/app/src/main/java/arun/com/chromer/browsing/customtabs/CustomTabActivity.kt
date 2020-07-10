@@ -26,46 +26,46 @@ import arun.com.chromer.di.activity.ActivityComponent
 import arun.com.chromer.shared.Constants.EXTRA_KEY_TOOLBAR_COLOR
 
 class CustomTabActivity : BrowsingActivity() {
-    /**
-     * As soon as user presses back, this activity will get focus. We need to kill this activity else
-     * user will see a ghost tab.
-     */
-    private var isLoaded = false
+  /**
+   * As soon as user presses back, this activity will get focus. We need to kill this activity else
+   * user will see a ghost tab.
+   */
+  private var isLoaded = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 
-        val toolbarColor = intent.getIntExtra(EXTRA_KEY_TOOLBAR_COLOR, 0)
+    val toolbarColor = intent.getIntExtra(EXTRA_KEY_TOOLBAR_COLOR, 0)
 
-        if (savedInstanceState == null) {
-            activityComponent.customTabs()
-                    .forUrl(intent.dataString!!)
-                    .toolbarColor(toolbarColor)
-                    .launch()
-        } else finish()
+    if (savedInstanceState == null) {
+      activityComponent.customTabs()
+          .forUrl(intent.dataString!!)
+          .toolbarColor(toolbarColor)
+          .launch()
+    } else finish()
+  }
+
+  override fun inject(activityComponent: ActivityComponent) {
+    activityComponent.inject(this)
+  }
+
+  override fun getLayoutRes(): Int {
+    return 0
+  }
+
+  override fun onAttachedToWindow() {
+    super.onAttachedToWindow()
+    isLoaded = true
+  }
+
+  override fun onResume() {
+    super.onResume()
+    if (isLoaded) {
+      finish()
     }
+  }
 
-    override fun inject(activityComponent: ActivityComponent) {
-        activityComponent.inject(this)
-    }
+  override fun onWebsiteLoaded(website: Website) {
 
-    override fun getLayoutRes(): Int {
-        return 0
-    }
-
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-        isLoaded = true
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (isLoaded) {
-            finish()
-        }
-    }
-
-    override fun onWebsiteLoaded(website: Website) {
-
-    }
+  }
 }

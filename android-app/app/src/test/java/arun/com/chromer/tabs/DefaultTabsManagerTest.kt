@@ -38,60 +38,60 @@ import javax.inject.Inject
  * Created by Arunkumar on 15-12-2017.
  */
 class DefaultTabsManagerTest : ChromerRobolectricSuite() {
-    @Inject
-    lateinit var tabs: TabsManager
+  @Inject
+  lateinit var tabs: TabsManager
 
-    private val url = "https://www.example.com"
+  private val url = "https://www.example.com"
 
-    @Before
-    fun setUp() {
-        testAppComponent.inject(this)
-    }
+  @Before
+  fun setUp() {
+    testAppComponent.inject(this)
+  }
 
-    @Test
-    fun testInject() {
-        assert(::tabs.isInitialized)
-    }
+  @Test
+  fun testInject() {
+    assert(::tabs.isInitialized)
+  }
 
-    @Test
-    @Ignore("Has issues causing timeout on CI")
-    fun testHomeActivityClearedOnExternalIntent() {
-        clearPreferences()
-        preferences.mergeTabs(false)
-        preferences.webHeads(false)
+  @Test
+  @Ignore("Has issues causing timeout on CI")
+  fun testHomeActivityClearedOnExternalIntent() {
+    clearPreferences()
+    preferences.mergeTabs(false)
+    preferences.webHeads(false)
 
-        val homeActivity = Robolectric.buildActivity(HomeActivity::class.java).create().get()
+    val homeActivity = Robolectric.buildActivity(HomeActivity::class.java).create().get()
 
-        tabs.openUrl(application, Website(url), fromApp = false)
-        assert(homeActivity.isFinishing)
-    }
+    tabs.openUrl(application, Website(url), fromApp = false)
+    assert(homeActivity.isFinishing)
+  }
 
-    @Ignore("Needs to be adapted to support Android 10 bubbles")
-    @Test
-    fun testFromWebheadsDoesNotLaunchNewWebHead() {
-        clearPreferences()
-        preferences.webHeads(true)
-        val shadowApp = shadowOf(application)
+  @Ignore("Needs to be adapted to support Android 10 bubbles")
+  @Test
+  fun testFromWebheadsDoesNotLaunchNewWebHead() {
+    clearPreferences()
+    preferences.webHeads(true)
+    val shadowApp = shadowOf(application)
 
-        assertWebHeadServiceLaunched(shadowApp)
+    assertWebHeadServiceLaunched(shadowApp)
 
-        tabs.openUrl(application, Website(url), fromApp = false, fromWebHeads = true)
-        assert(shadowApp.nextStartedService == null)
-    }
+    tabs.openUrl(application, Website(url), fromApp = false, fromWebHeads = true)
+    assert(shadowApp.nextStartedService == null)
+  }
 
-    @Test
-    fun testAmpResolverOpened() {
-        clearPreferences()
-        preferences.ampMode(true)
+  @Test
+  fun testAmpResolverOpened() {
+    clearPreferences()
+    preferences.ampMode(true)
 
-        val shadowApp = shadowOf(application)
-        tabs.openUrl(application, Website(url), fromApp = false, fromWebHeads = false)
-        assert(shadowApp.nextStartedActivity.component == Intent(application, AmpResolverActivity::class.java).component)
-    }
+    val shadowApp = shadowOf(application)
+    tabs.openUrl(application, Website(url), fromApp = false, fromWebHeads = false)
+    assert(shadowApp.nextStartedActivity.component == Intent(application, AmpResolverActivity::class.java).component)
+  }
 
-    private fun assertWebHeadServiceLaunched(shadowApp: ShadowApplication) {
-        tabs.openUrl(application, Website(url), fromApp = false, fromWebHeads = false)
-        assert(shadowApp.peekNextStartedService().component == Intent(application, WebHeadService::class.java).component)
-        assert(shadowApp.nextStartedService.dataString == url)
-    }
+  private fun assertWebHeadServiceLaunched(shadowApp: ShadowApplication) {
+    tabs.openUrl(application, Website(url), fromApp = false, fromWebHeads = false)
+    assert(shadowApp.peekNextStartedService().component == Intent(application, WebHeadService::class.java).component)
+    assert(shadowApp.nextStartedService.dataString == url)
+  }
 }
