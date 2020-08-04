@@ -44,8 +44,8 @@ open class Chromer : Application() {
 
   open val appComponent: AppComponent by lazy {
     DaggerAppComponent.builder()
-        .appModule(AppModule(this))
-        .build()
+      .appModule(AppModule(this))
+      .build()
   }
 
   override fun onCreate() {
@@ -56,14 +56,6 @@ open class Chromer : Application() {
     if (BuildConfig.DEBUG) {
       RxDogTag.install()
       Timber.plant(Timber.DebugTree())
-      /*StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-              //.detectAll()
-              .penaltyLog()
-              .build());
-      StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-              .detectAll()
-              .penaltyLog()
-              .build());*/
     } else {
       Timber.plant(CrashlyticsTree())
     }
@@ -80,13 +72,13 @@ open class Chromer : Application() {
 
   private fun initMaterialDrawer() {
     DrawerImageLoader.init(appComponent.glideDrawerImageLoader())
-        .withHandleAllUris(true)
+      .withHandleAllUris(true)
   }
 
   protected open fun initFabric() {
     val core = CrashlyticsCore.Builder()
-        .disabled(BuildConfig.DEBUG)
-        .build()
+      .disabled(BuildConfig.DEBUG)
+      .build()
     val crashlytics = Crashlytics.Builder().core(core).build()
     Fabric.with(this, crashlytics)
   }
@@ -107,7 +99,6 @@ open class Chromer : Application() {
   }
 
   companion object {
-
     init {
       AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
     }
