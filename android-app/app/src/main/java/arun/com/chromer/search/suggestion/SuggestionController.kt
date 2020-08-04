@@ -28,8 +28,8 @@ import javax.inject.Inject
 class SuggestionController
 @Inject
 constructor(
-    private val activity: Activity,
-    private val tabsManager: TabsManager
+  private val activity: Activity,
+  private val tabsManager: TabsManager
 ) : AsyncEpoxyController() {
 
   private val suggestionsClicksRelay = PublishRelay.create<SuggestionItem>()
@@ -42,23 +42,23 @@ constructor(
 
   private val searchIcon: Drawable by lazy {
     IconicsDrawable(activity)
-        .icon(CommunityMaterial.Icon.cmd_magnify)
-        .color(ContextCompat.getColor(activity, R.color.material_dark_light))
-        .sizeDp(18)
+      .icon(CommunityMaterial.Icon.cmd_magnify)
+      .color(ContextCompat.getColor(activity, R.color.material_dark_light))
+      .sizeDp(18)
   }
 
   private val historyIcon: Drawable by lazy {
     IconicsDrawable(activity)
-        .icon(CommunityMaterial.Icon.cmd_history)
-        .color(ContextCompat.getColor(activity, R.color.md_red_500))
-        .sizeDp(18)
+      .icon(CommunityMaterial.Icon.cmd_history)
+      .color(ContextCompat.getColor(activity, R.color.md_red_500))
+      .sizeDp(18)
   }
 
   private val copyIcon: Drawable by lazy {
     IconicsDrawable(activity)
-        .icon(CommunityMaterial.Icon.cmd_content_copy)
-        .color(ContextCompat.getColor(activity, R.color.md_green_500))
-        .sizeDp(18)
+      .icon(CommunityMaterial.Icon.cmd_content_copy)
+      .color(ContextCompat.getColor(activity, R.color.md_green_500))
+      .sizeDp(18)
   }
 
   var query: String = ""
@@ -147,29 +147,29 @@ constructor(
     }
 
     historySuggestions
-        .filterIsInstance<HistorySuggestionItem>()
-        .onEach { suggestion ->
-          websiteLayout {
-            id(suggestion.hashCode())
-            website(suggestion.website)
-            tabsManager(tabsManager)
-            query(query)
+      .filterIsInstance<HistorySuggestionItem>()
+      .onEach { suggestion ->
+        websiteLayout {
+          id(suggestion.hashCode())
+          website(suggestion.website)
+          tabsManager(tabsManager)
+          query(query)
+        }
+      }.count().let { size ->
+        if (size != 0) {
+          headerLayout {
+            id("history-header")
+            title(activity.getString(R.string.title_history))
+            spanSizeOverride(TotalSpanOverride)
           }
-        }.count().let { size ->
-          if (size != 0) {
-            headerLayout {
-              id("history-header")
-              title(activity.getString(R.string.title_history))
-              spanSizeOverride(TotalSpanOverride)
-            }
-            spaceLayout {
-              id("history-header-space")
-              spaceHeight(activity.dpToPx(4.0))
-              spaceWidth(MATCH_PARENT)
-              spanSizeOverride(TotalSpanOverride)
-            }
+          spaceLayout {
+            id("history-header-space")
+            spaceHeight(activity.dpToPx(4.0))
+            spaceWidth(MATCH_PARENT)
+            spanSizeOverride(TotalSpanOverride)
           }
         }
+      }
 
     googleSuggestions.forEach { suggestion ->
       suggestionLayout {

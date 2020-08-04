@@ -62,10 +62,10 @@ import rx.subjects.PublishSubject
  * 7. Block quotes
  */
 internal class ArticleAdapter(
-    private val article: WebArticle,
-    private var accentColor: Int,
-    private val requestManager: RequestManager,
-    articleTextSizeIncrement: Int
+  private val article: WebArticle,
+  private var accentColor: Int,
+  private val requestManager: RequestManager,
+  articleTextSizeIncrement: Int
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   private var elements: Elements = Elements()
 
@@ -107,15 +107,20 @@ internal class ArticleAdapter(
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
     val context = parent.context
-    val view = LayoutInflater.from(context).inflate(getItemResourceFromType(viewType), parent, false)
+    val view =
+      LayoutInflater.from(context).inflate(getItemResourceFromType(viewType), parent, false)
     return when (viewType) {
       TYPE_HEADER_IMAGE -> HeaderImageViewHolder(view)
       TYPE_TITLE -> TitleTextViewHolder(view)
       TYPE_KEYWORDS -> KeywordsViewHolder(view)
       TYPE_INLINE_IMAGE -> ImageViewHolder(view)
       TYPE_BLOCKQUOTE -> BlockQuoteViewHolder(view)
-      TYPE_HEADER_1, TYPE_HEADER_2, TYPE_HEADER_3, TYPE_HEADER_4, TYPE_HEADER_5, TYPE_HEADER_6 -> SubtitleTextViewHolder(view)
-      TYPE_UNORDERED_LIST_ITEM, TYPE_ORDERED_LIST_ITEM, TYPE_PARAGRAPH, TYPE_PRE -> TextViewHolder(view)
+      TYPE_HEADER_1, TYPE_HEADER_2, TYPE_HEADER_3, TYPE_HEADER_4, TYPE_HEADER_5, TYPE_HEADER_6 -> SubtitleTextViewHolder(
+        view
+      )
+      TYPE_UNORDERED_LIST_ITEM, TYPE_ORDERED_LIST_ITEM, TYPE_PARAGRAPH, TYPE_PRE -> TextViewHolder(
+        view
+      )
       else -> TextViewHolder(view)
     }
   }
@@ -171,9 +176,9 @@ internal class ArticleAdapter(
           if (!TextUtils.isEmpty(article.imageUrl)) {
             holder.url = article.imageUrl
             requestManager.load(article.imageUrl)
-                .apply(placeholderOf(R.color.article_imageBackground))
-                .apply(diskCacheStrategyOf(DiskCacheStrategy.ALL))
-                .into(image)
+              .apply(placeholderOf(R.color.article_imageBackground))
+              .apply(diskCacheStrategyOf(DiskCacheStrategy.ALL))
+              .into(image)
           }
         }
         is TitleTextViewHolder -> {
@@ -280,7 +285,8 @@ internal class ArticleAdapter(
       val text = element.outerHtml()
       val params = textView.layoutParams as ViewGroup.MarginLayoutParams
       if (adapterPosition != RecyclerView.NO_POSITION && adapterPosition == itemCount - 1) {
-        params.bottomMargin = textView.context.resources.getDimensionPixelSize(R.dimen.article_extraBottomPadding)
+        params.bottomMargin =
+          textView.context.resources.getDimensionPixelSize(R.dimen.article_extraBottomPadding)
       } else {
         params.bottomMargin = 0
       }
@@ -336,7 +342,10 @@ internal class ArticleAdapter(
       }
 
       override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KeywordsItemViewHolder {
-        return KeywordsItemViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_article_item_keywords_template, parent, false))
+        return KeywordsItemViewHolder(
+          LayoutInflater.from(parent.context)
+            .inflate(R.layout.layout_article_item_keywords_template, parent, false)
+        )
       }
 
       override fun getItemCount(): Int {

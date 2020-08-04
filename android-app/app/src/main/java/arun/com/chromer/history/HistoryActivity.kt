@@ -39,20 +39,20 @@ class HistoryActivity : BaseActivity(), Snackable {
       supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     }
     supportFragmentManager
-        .beginTransaction()
-        .replace(R.id.fragment_container, HistoryFragment())
-        .commit()
+      .beginTransaction()
+      .replace(R.id.fragment_container, HistoryFragment())
+      .commit()
   }
 
   @OnClick(R.id.fab)
   fun onFabClick() {
     supportFragmentManager.fragments
-        .asSequence()
-        .filter { !it.isHidden && it is FabHandler }
-        .map { it as FabHandler }
-        .toList()
-        .first()
-        .onFabClick()
+      .asSequence()
+      .filter { !it.isHidden && it is FabHandler }
+      .map { it as FabHandler }
+      .toList()
+      .first()
+      .onFabClick()
   }
 
   override fun getLayoutRes(): Int {

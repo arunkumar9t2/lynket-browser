@@ -41,10 +41,10 @@ import javax.inject.Singleton
 class HistorySqlDiskStore
 @Inject
 internal constructor(application: Application) : SQLiteOpenHelper(
-    application,
-    TABLE_NAME,
-    null,
-    DATABASE_VERSION
+  application,
+  TABLE_NAME,
+  null,
+  DATABASE_VERSION
 ), HistoryStore {
 
   private lateinit var database: SQLiteDatabase
@@ -90,7 +90,8 @@ internal constructor(application: Application) : SQLiteOpenHelper(
   override fun get(website: Website): Observable<Website> {
     return Observable.fromCallable {
       open()
-      val cursor = database.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_URL=?", arrayOf(website.url))
+      val cursor =
+        database.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_URL=?", arrayOf(website.url))
       when {
         cursor == null -> return@fromCallable null
         cursor.count == 0 -> {
@@ -109,27 +110,27 @@ internal constructor(application: Application) : SQLiteOpenHelper(
 
   override fun insert(website: Website): Observable<Website> {
     return exists(website)
-        .flatMap<Website> { exists ->
-          if (exists!!) {
-            return@flatMap update(website)
+      .flatMap<Website> { exists ->
+        if (exists!!) {
+          return@flatMap update(website)
+        } else {
+          val values = ContentValues()
+          values.put(COLUMN_URL, website.url)
+          values.put(COLUMN_TITLE, website.title)
+          values.put(COLUMN_FAVICON, website.faviconUrl)
+          values.put(COLUMN_CANONICAL, website.canonicalUrl)
+          values.put(COLUMN_COLOR, website.themeColor)
+          values.put(COLUMN_AMP, website.ampUrl)
+          values.put(COLUMN_BOOKMARKED, website.bookmarked)
+          values.put(COLUMN_CREATED_AT, System.currentTimeMillis())
+          values.put(COLUMN_VISITED, 1)
+          return@flatMap if (database.insert(TABLE_NAME, null, values) != -1L) {
+            Observable.just(website)
           } else {
-            val values = ContentValues()
-            values.put(COLUMN_URL, website.url)
-            values.put(COLUMN_TITLE, website.title)
-            values.put(COLUMN_FAVICON, website.faviconUrl)
-            values.put(COLUMN_CANONICAL, website.canonicalUrl)
-            values.put(COLUMN_COLOR, website.themeColor)
-            values.put(COLUMN_AMP, website.ampUrl)
-            values.put(COLUMN_BOOKMARKED, website.bookmarked)
-            values.put(COLUMN_CREATED_AT, System.currentTimeMillis())
-            values.put(COLUMN_VISITED, 1)
-            return@flatMap if (database.insert(TABLE_NAME, null, values) != -1L) {
-              Observable.just(website)
-            } else {
-              Observable.just(null)
-            }
+            Observable.just(null)
           }
-        }.broadcastChanges()
+        }
+      }.broadcastChanges()
   }
 
   override fun update(website: Website): Observable<Website> {
@@ -181,10 +182,11 @@ internal constructor(application: Application) : SQLiteOpenHelper(
       open()
       val selection = " $COLUMN_URL=?"
       val selectionArgs = arrayOf(website.url)
-      val cursor = database.query(TABLE_NAME,
-          ALL_COLUMN_PROJECTION,
-          selection,
-          selectionArgs, null, null, null
+      val cursor = database.query(
+        TABLE_NAME,
+        ALL_COLUMN_PROJECTION,
+        selection,
+        selectionArgs, null, null, null
       )
       var exists = false
       if (cursor != null && cursor.count > 0) {
@@ -207,14 +209,14 @@ internal constructor(application: Application) : SQLiteOpenHelper(
       open()
       val websites = ArrayList<Website>()
       database.query(
-          TABLE_NAME,
-          ALL_COLUMN_PROJECTION,
-          null,
-          null,
-          null,
-          null,
-          ORDER_BY_TIME_DESC,
-          "8"
+        TABLE_NAME,
+        ALL_COLUMN_PROJECTION,
+        null,
+        null,
+        null,
+        null,
+        ORDER_BY_TIME_DESC,
+        "8"
       )?.use {
         while (it.moveToNext()) {
           websites.add(Website.fromCursor(it))
@@ -230,15 +232,15 @@ internal constructor(application: Application) : SQLiteOpenHelper(
       open()
       val websites = ArrayList<Website>()
       database.query(
-          true,
-          TABLE_NAME,
-          ALL_COLUMN_PROJECTION,
-          "($COLUMN_URL like '%$text%' OR $COLUMN_TITLE like '%$text%')",
-          null,
-          null,
-          null,
-          ORDER_BY_TIME_DESC,
-          "5"
+        true,
+        TABLE_NAME,
+        ALL_COLUMN_PROJECTION,
+        "($COLUMN_URL like '%$text%' OR $COLUMN_TITLE like '%$text%')",
+        null,
+        null,
+        null,
+        ORDER_BY_TIME_DESC,
+        "5"
       )?.use { cursor ->
         while (cursor.moveToNext()) {
           websites.add(Website.fromCursor(cursor))
@@ -250,7 +252,10 @@ internal constructor(application: Application) : SQLiteOpenHelper(
 
   override fun loadHistoryRange(limit: Int, offset: Int): List<Website> {
     open()
-    val cursor = database.rawQuery("SELECT * FROM $TABLE_NAME ORDER BY $ORDER_BY_TIME_DESC LIMIT $limit OFFSET $offset", null)
+    val cursor = database.rawQuery(
+      "SELECT * FROM $TABLE_NAME ORDER BY $ORDER_BY_TIME_DESC LIMIT $limit OFFSET $offset",
+      null
+    )
     cursor.moveToFirst()
     val websites = ArrayList<Website>()
     while (!cursor.isAfterLast) {

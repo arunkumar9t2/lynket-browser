@@ -36,8 +36,8 @@ private fun Application.safeActivityStarted(action: (Activity, UnRegisterAction)
 }
 
 abstract class BrowsingBackgroundLoadingStrategy(
-    private val application: Application,
-    private val schedulerProvider: SchedulerProvider
+  private val application: Application,
+  private val schedulerProvider: SchedulerProvider
 ) : BackgroundLoadingStrategy {
 
   abstract val activityClasses: List<Class<out Activity>>
@@ -64,12 +64,12 @@ abstract class BrowsingBackgroundLoadingStrategy(
 class WebViewBackgroundLoadingStrategy
 @Inject
 constructor(
-    application: Application,
-    schedulerProvider: SchedulerProvider
+  application: Application,
+  schedulerProvider: SchedulerProvider
 ) : BrowsingBackgroundLoadingStrategy(application, schedulerProvider) {
   override val activityClasses: List<Class<out Activity>> = listOf(
-      WebViewActivity::class.java,
-      EmbeddableWebViewActivity::class.java
+    WebViewActivity::class.java,
+    EmbeddableWebViewActivity::class.java
   )
 }
 
@@ -77,10 +77,10 @@ constructor(
 class CustomTabBackgroundLoadingStrategy
 @Inject
 constructor(
-    application: Application,
-    schedulerProvider: SchedulerProvider
+  application: Application,
+  schedulerProvider: SchedulerProvider
 ) : BrowsingBackgroundLoadingStrategy(application, schedulerProvider) {
   override val activityClasses: List<Class<out Activity>> = listOf(
-      CustomTabActivity::class.java
+    CustomTabActivity::class.java
   )
 }

@@ -33,24 +33,26 @@ class PagedHistoryDataSource
 constructor(private val historyStore: HistoryStore) : PositionalDataSource<Website>() {
 
   override fun loadRange(
-      params: LoadRangeParams,
-      callback: LoadRangeCallback<Website>
+    params: LoadRangeParams,
+    callback: LoadRangeCallback<Website>
   ) = callback.onResult(historyStore.loadHistoryRange(params.loadSize, params.startPosition))
 
   override fun loadInitial(
-      params: LoadInitialParams,
-      callback: LoadInitialCallback<Website>
-  ) = callback.onResult(historyStore.loadHistoryRange(
+    params: LoadInitialParams,
+    callback: LoadInitialCallback<Website>
+  ) = callback.onResult(
+    historyStore.loadHistoryRange(
       params.requestedLoadSize,
       params.requestedStartPosition
-  ), 0)
+    ), 0
+  )
 
 
   @Singleton
   class Factory
   @Inject
   constructor(
-      private val pagedHistoryDataSourceProvider: Provider<PagedHistoryDataSource>
+    private val pagedHistoryDataSourceProvider: Provider<PagedHistoryDataSource>
   ) : DataSource.Factory<Int, Website>() {
 
     override fun create(): PagedHistoryDataSource = pagedHistoryDataSourceProvider.get()

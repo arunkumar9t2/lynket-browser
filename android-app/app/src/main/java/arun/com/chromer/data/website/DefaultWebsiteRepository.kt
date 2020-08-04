@@ -44,42 +44,42 @@ import javax.inject.Singleton
 class DefaultWebsiteRepository
 @Inject
 internal constructor(
-    @param:Disk private val cacheStore: WebsiteStore,
-    @param:Network private val webNetworkStore: WebsiteStore,
-    private val historyRepository: HistoryRepository
+  @param:Disk private val cacheStore: WebsiteStore,
+  @param:Network private val webNetworkStore: WebsiteStore,
+  private val historyRepository: HistoryRepository
 ) : WebsiteRepository {
 
   override fun getWebsite(url: String): Observable<Website> {
     val cache = cacheStore.getWebsite(url)
-        .doOnNext { webSite ->
-          if (webSite != null) {
-            historyRepository.insert(webSite).subscribe()
-          }
+      .doOnNext { webSite ->
+        if (webSite != null) {
+          historyRepository.insert(webSite).subscribe()
         }
+      }
 
     val history = historyRepository.get(Website(url))
-        .doOnNext { webSite ->
-          if (webSite != null) {
-            historyRepository.insert(webSite).subscribe()
-          }
+      .doOnNext { webSite ->
+        if (webSite != null) {
+          historyRepository.insert(webSite).subscribe()
         }
+      }
 
 
     val remote = webNetworkStore.getWebsite(url)
-        .filter { webSite -> webSite != null }
-        .doOnNext { webSite ->
-          cacheStore.saveWebsite(webSite).subscribe()
-          historyRepository.insert(webSite).subscribe()
-        }
+      .filter { webSite -> webSite != null }
+      .doOnNext { webSite ->
+        cacheStore.saveWebsite(webSite).subscribe()
+        historyRepository.insert(webSite).subscribe()
+      }
 
 
     return Observable.concat(cache, history, remote)
-        .first { webSite -> webSite != null }
-        .doOnError { Timber.e(it) }
-        .onErrorReturn { throwable ->
-          Timber.e(throwable)
-          Website(url)
-        }.compose(SchedulerProvider.applyIoSchedulers())
+      .first { webSite -> webSite != null }
+      .doOnError { Timber.e(it) }
+      .onErrorReturn { throwable ->
+        Timber.e(throwable)
+        Website(url)
+      }.compose(SchedulerProvider.applyIoSchedulers())
   }
 
 
@@ -87,45 +87,45 @@ internal constructor(
     val cache = cacheStore.getWebsite(url)
     val history = historyRepository.get(Website(url))
     val remote = webNetworkStore.getWebsite(url)
-        .filter { webSite -> webSite != null }
-        .doOnNext { webSite -> cacheStore.saveWebsite(webSite).subscribe() }
+      .filter { webSite -> webSite != null }
+      .doOnNext { webSite -> cacheStore.saveWebsite(webSite).subscribe() }
     return Observable.concat(cache, history, remote)
-        .first { webSite -> webSite != null }
-        .doOnError { Timber.e(it) }
-        .onErrorReturn { throwable ->
-          Timber.e(throwable)
-          Website(url)
-        }.compose(SchedulerProvider.applyIoSchedulers())
+      .first { webSite -> webSite != null }
+      .doOnError { Timber.e(it) }
+      .onErrorReturn { throwable ->
+        Timber.e(throwable)
+        Website(url)
+      }.compose(SchedulerProvider.applyIoSchedulers())
   }
 
   override fun getWebsiteColorSync(url: String): Int {
     return cacheStore.getWebsiteColor(url)
-        .map<WebColor> { webColor ->
-          if (webColor.color == NO_COLOR) {
-            saveWebColor(url).subscribe()
-          }
-          webColor
-        }.toBlocking()
-        .first()
-        .color
+      .map<WebColor> { webColor ->
+        if (webColor.color == NO_COLOR) {
+          saveWebColor(url).subscribe()
+        }
+        webColor
+      }.toBlocking()
+      .first()
+      .color
   }
 
   override fun saveWebColor(url: String): Observable<WebColor> {
     return getWebsiteReadOnly(url)
-        .observeOn(Schedulers.io())
-        .flatMap { webSite ->
-          if (webSite != null) {
-            if (webSite.themeColor() != NO_COLOR) {
-              val color = webSite.themeColor()
+      .observeOn(Schedulers.io())
+      .flatMap { webSite ->
+        if (webSite != null) {
+          if (webSite.themeColor() != NO_COLOR) {
+            val color = webSite.themeColor()
+            cacheStore.saveWebsiteColor(Uri.parse(webSite.url).host!!, color)
+          } else {
+            val color = getWebsiteIconAndColor(webSite).second
+            if (color != NO_COLOR) {
               cacheStore.saveWebsiteColor(Uri.parse(webSite.url).host!!, color)
-            } else {
-              val color = getWebsiteIconAndColor(webSite).second
-              if (color != NO_COLOR) {
-                cacheStore.saveWebsiteColor(Uri.parse(webSite.url).host!!, color)
-              } else Observable.empty()
-            }
-          } else Observable.empty()
-        }
+            } else Observable.empty()
+          }
+        } else Observable.empty()
+      }
   }
 
   override fun clearCache(): Observable<Void> = cacheStore.clearCache()

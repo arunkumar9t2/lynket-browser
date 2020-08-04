@@ -33,7 +33,8 @@ import kotlinx.android.synthetic.main.fragment_slide_over_intro.*
 import javax.inject.Inject
 
 open class ArticleIntroFragment : BaseFragment(), ISlideBackgroundColorHolder {
-  override fun getDefaultBackgroundColor(): Int = ContextCompat.getColor(context!!, R.color.tutorialBackgrounColor)
+  override fun getDefaultBackgroundColor(): Int =
+    ContextCompat.getColor(context!!, R.color.tutorialBackgrounColor)
 
   override fun setBackgroundColor(backgroundColor: Int) {
     root.setBackgroundColor(backgroundColor)

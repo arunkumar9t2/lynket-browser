@@ -37,15 +37,17 @@ import dev.arunkumar.android.AppSchedulersModule
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [
-  AppSchedulersModule::class,
+@Component(
+  modules = [
+    AppSchedulersModule::class,
 
-  AppModule::class,
+    AppModule::class,
 
-  HomeActivity.HomeBuilder::class,
-  TabsModule::class,
-  DataModule::class
-])
+    HomeActivity.HomeBuilder::class,
+    TabsModule::class,
+    DataModule::class
+  ]
+)
 interface AppComponent {
 
   fun glideDrawerImageLoader(): GlideDrawerImageLoader

@@ -45,8 +45,8 @@ import javax.inject.Inject
 @PerActivity
 class ProvidersAdapter @Inject
 constructor(
-    private val activity: Activity,
-    private val requestManager: RequestManager
+  private val activity: Activity,
+  private val requestManager: RequestManager
 ) : RecyclerView.Adapter<ProvidersAdapter.RecentsViewHolder>() {
 
   val installClicks: PublishSubject<Provider> = PublishSubject.create<Provider>()
@@ -62,11 +62,13 @@ constructor(
     setHasStableIds(true)
   }
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = RecentsViewHolder(LayoutInflater.from(parent.context).inflate(
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = RecentsViewHolder(
+    LayoutInflater.from(parent.context).inflate(
       R.layout.activity_provider_selection_provider_item_template,
       parent,
       false
-  ))
+    )
+  )
 
   override fun onBindViewHolder(holder: RecentsViewHolder, position: Int) {
     val provider = providers[position]

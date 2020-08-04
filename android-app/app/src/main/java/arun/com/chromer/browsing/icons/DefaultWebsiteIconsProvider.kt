@@ -25,12 +25,12 @@ class DefaultWebsiteIconsProvider
 constructor(private val application: Application) : WebsiteIconsProvider {
 
   private val placeholderColors = intArrayOf(
-      parseColor("#D32F2F"),
-      parseColor("#C2185B"),
-      parseColor("#303F9F"),
-      parseColor("#6A1B9A"),
-      parseColor("#37474F"),
-      parseColor("#2E7D32")
+    parseColor("#D32F2F"),
+    parseColor("#C2185B"),
+    parseColor("#303F9F"),
+    parseColor("#6A1B9A"),
+    parseColor("#37474F"),
+    parseColor("#2E7D32")
   )
 
   private val randomColor get() = placeholderColors.random()
@@ -41,15 +41,15 @@ constructor(private val application: Application) : WebsiteIconsProvider {
   override fun getBubbleIconAndColor(website: Website): Single<WebsiteIconData> {
     return Single.fromCallable {
       val websiteIcon = GlideApp.with(application)
-          .asBitmap()
-          .load(website)
-          .submit(adaptiveIconOuterSize, adaptiveIconOuterSize)
-          .get()
+        .asBitmap()
+        .load(website)
+        .submit(adaptiveIconOuterSize, adaptiveIconOuterSize)
+        .get()
       val palette = Palette.from(websiteIcon).clearFilters().generate()
       return@fromCallable WebsiteIconData(
-          website = website,
-          icon = padBitmap(websiteIcon),
-          color = ColorUtil.getBestColorFromPalette(palette)
+        website = website,
+        icon = padBitmap(websiteIcon),
+        color = ColorUtil.getBestColorFromPalette(palette)
       )
     }
   }
@@ -62,17 +62,17 @@ constructor(private val application: Application) : WebsiteIconsProvider {
   private fun padBitmap(sourceBitmap: Bitmap): Bitmap {
     val padding = (max(sourceBitmap.height, sourceBitmap.width) * 0.25).toInt()
     val paddedBitmap = createBitmap(
-        sourceBitmap.width + padding,
-        sourceBitmap.height + padding,
-        ARGB_8888
+      sourceBitmap.width + padding,
+      sourceBitmap.height + padding,
+      ARGB_8888
     )
     val canvas = Canvas(paddedBitmap)
     canvas.drawColor(WHITE) // TODO Handle for dark mode
     canvas.drawBitmap(
-        sourceBitmap,
-        (padding / 2).toFloat(),
-        (padding / 2).toFloat(),
-        Paint(Paint.FILTER_BITMAP_FLAG)
+      sourceBitmap,
+      (padding / 2).toFloat(),
+      (padding / 2).toFloat(),
+      Paint(Paint.FILTER_BITMAP_FLAG)
     )
     return paddedBitmap
   }

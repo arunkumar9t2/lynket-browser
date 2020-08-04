@@ -84,12 +84,12 @@ class ShareInterceptActivity : BaseActivity() {
       openLink(url)
     } else {
       searchProviders.selectedProvider
-          .firstOrError()
-          .map { it.getSearchUrl(receivedText) }
-          .subscribeBy(
-              onSuccess = ::openLink,
-              onError = Timber::e
-          )
+        .firstOrError()
+        .map { it.getSearchUrl(receivedText) }
+        .subscribeBy(
+          onSuccess = ::openLink,
+          onError = Timber::e
+        )
     }
   }
 

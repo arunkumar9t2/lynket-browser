@@ -45,18 +45,19 @@ import javax.inject.Inject
 class HistoryAdapter
 @Inject
 constructor(
-    private val defaultTabsManager: TabsManager,
-    private val requestManager: RequestManager
+  private val defaultTabsManager: TabsManager,
+  private val requestManager: RequestManager
 ) : PagedListAdapter<Website, HistoryAdapter.HistoryViewHolder>(Website.DIFFER) {
 
   override fun onCreateViewHolder(
-      parent: ViewGroup,
-      position: Int
-  ): HistoryViewHolder = HistoryViewHolder(parent.inflate(R.layout.activity_history_list_item_template))
+    parent: ViewGroup,
+    position: Int
+  ): HistoryViewHolder =
+    HistoryViewHolder(parent.inflate(R.layout.activity_history_list_item_template))
 
   override fun onBindViewHolder(
-      historyViewHolder: HistoryViewHolder,
-      position: Int
+    historyViewHolder: HistoryViewHolder,
+    position: Int
   ) = historyViewHolder.bind(getItem(position))
 
   fun getItemAt(adapterPosition: Int) = getItem(adapterPosition)
@@ -65,7 +66,7 @@ constructor(
    * History ViewHolder to render history items
    */
   inner class HistoryViewHolder(
-      itemView: View
+    itemView: View
   ) : RecyclerView.ViewHolder(itemView) {
     @BindView(R.id.history_title)
     @JvmField
@@ -113,8 +114,8 @@ constructor(
         historyTitle?.text = website.safeLabel()
         historySubtitle?.text = website.preferredUrl()
         requestManager
-            .load(website)
-            .into(historyFavicon!!)
+          .load(website)
+          .into(historyFavicon!!)
         if (website.hasAmp()) {
           historyAmp?.show()
         } else {

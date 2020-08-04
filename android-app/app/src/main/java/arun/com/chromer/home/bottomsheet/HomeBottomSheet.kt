@@ -36,9 +36,9 @@ class HomeBottomSheet : BottomSheetDialogFragment() {
   }
 
   override fun onCreateView(
-      inflater: LayoutInflater,
-      container: ViewGroup?,
-      savedInstanceState: Bundle?
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
   ): View = inflater.inflate(R.layout.layout_home_bottom_sheet, container, false)
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,54 +47,54 @@ class HomeBottomSheet : BottomSheetDialogFragment() {
       withActivity(requireActivity())
       withSavedInstance(savedInstanceState)
       withAccountHeader(
-          AccountHeaderBuilder().run {
-            withActivity(requireActivity())
-            withHeaderBackground(R.drawable.chromer_header_small)
-            withHeaderBackgroundScaleType(ImageView.ScaleType.CENTER_CROP)
-            withDividerBelowHeader(true)
-            build()
-          })
+        AccountHeaderBuilder().run {
+          withActivity(requireActivity())
+          withHeaderBackground(R.drawable.chromer_header_small)
+          withHeaderBackgroundScaleType(ImageView.ScaleType.CENTER_CROP)
+          withDividerBelowHeader(true)
+          build()
+        })
       addStickyDrawerItems()
       addDrawerItems(
-          PrimaryDrawerItem()
-              .withName(getString(R.string.intro))
-              .withIdentifier(INTRO)
-              .withIcon(CommunityMaterial.Icon.cmd_clipboard_text)
-              .withSelectable(false),
-          PrimaryDrawerItem()
-              .withName(getString(R.string.feedback))
-              .withIdentifier(FEEDBACK)
-              .withIcon(CommunityMaterial.Icon.cmd_message_text)
-              .withSelectable(false),
-          PrimaryDrawerItem()
-              .withName(getString(R.string.rate_play_store))
-              .withIdentifier(RATE)
-              .withIcon(CommunityMaterial.Icon.cmd_comment_text)
-              .withSelectable(false),
-          PrimaryDrawerItem()
-              .withName(R.string.join_beta)
-              .withIdentifier(BETA)
-              .withIcon(CommunityMaterial.Icon.cmd_beta)
-              .withSelectable(false),
-          DividerDrawerItem(),
-          PrimaryDrawerItem()
-              .withName(getString(R.string.share))
-              .withIcon(CommunityMaterial.Icon.cmd_share_variant)
-              .withDescription(getString(R.string.help_chromer_grow))
-              .withIdentifier(SHARE)
-              .withSelectable(false),
-          PrimaryDrawerItem()
-              .withName(getString(R.string.support_development))
-              .withDescription(R.string.consider_donation)
-              .withIcon(CommunityMaterial.Icon.cmd_heart)
-              .withIconColorRes(R.color.accent)
-              .withIdentifier(DONATION)
-              .withSelectable(false),
-          PrimaryDrawerItem()
-              .withName(getString(R.string.about))
-              .withIcon(CommunityMaterial.Icon.cmd_information)
-              .withIdentifier(ABOUT)
-              .withSelectable(false)
+        PrimaryDrawerItem()
+          .withName(getString(R.string.intro))
+          .withIdentifier(INTRO)
+          .withIcon(CommunityMaterial.Icon.cmd_clipboard_text)
+          .withSelectable(false),
+        PrimaryDrawerItem()
+          .withName(getString(R.string.feedback))
+          .withIdentifier(FEEDBACK)
+          .withIcon(CommunityMaterial.Icon.cmd_message_text)
+          .withSelectable(false),
+        PrimaryDrawerItem()
+          .withName(getString(R.string.rate_play_store))
+          .withIdentifier(RATE)
+          .withIcon(CommunityMaterial.Icon.cmd_comment_text)
+          .withSelectable(false),
+        PrimaryDrawerItem()
+          .withName(R.string.join_beta)
+          .withIdentifier(BETA)
+          .withIcon(CommunityMaterial.Icon.cmd_beta)
+          .withSelectable(false),
+        DividerDrawerItem(),
+        PrimaryDrawerItem()
+          .withName(getString(R.string.share))
+          .withIcon(CommunityMaterial.Icon.cmd_share_variant)
+          .withDescription(getString(R.string.help_chromer_grow))
+          .withIdentifier(SHARE)
+          .withSelectable(false),
+        PrimaryDrawerItem()
+          .withName(getString(R.string.support_development))
+          .withDescription(R.string.consider_donation)
+          .withIcon(CommunityMaterial.Icon.cmd_heart)
+          .withIconColorRes(R.color.accent)
+          .withIdentifier(DONATION)
+          .withSelectable(false),
+        PrimaryDrawerItem()
+          .withName(getString(R.string.about))
+          .withIcon(CommunityMaterial.Icon.cmd_information)
+          .withIdentifier(ABOUT)
+          .withSelectable(false)
       )
       withOnDrawerItemClickListener { _, _, drawerItem ->
         when (drawerItem.identifier) {
@@ -103,7 +103,12 @@ class HomeBottomSheet : BottomSheetDialogFragment() {
             emailIntent.putExtra(EXTRA_SUBJECT, getString(R.string.app_name))
             startActivity(createChooser(emailIntent, getString(R.string.send_email)))
           }
-          BETA -> startActivity(Intent(ACTION_VIEW, "https://play.google.com/apps/testing/arun.com.chromer".toUri()))
+          BETA -> startActivity(
+            Intent(
+              ACTION_VIEW,
+              "https://play.google.com/apps/testing/arun.com.chromer".toUri()
+            )
+          )
           RATE -> Utils.openPlayStore(requireActivity(), requireActivity().packageName)
           INTRO -> startActivity(Intent(requireActivity(), ChromerIntroActivity::class.java))
           DONATION -> startActivity(Intent(requireActivity(), DonateActivity::class.java))

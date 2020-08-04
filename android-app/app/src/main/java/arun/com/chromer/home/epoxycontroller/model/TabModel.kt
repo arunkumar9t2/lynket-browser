@@ -22,14 +22,14 @@ abstract class TabModel : KotlinEpoxyModelWithHolder<TabModel.ViewHolder>() {
   override fun bind(holder: ViewHolder) {
     super.bind(holder)
     GlideApp.with(holder.containerView.context)
-        .load(tab.website ?: Website(tab.url))
-        .circleCrop()
-        .into(holder.icon)
+      .load(tab.website ?: Website(tab.url))
+      .circleCrop()
+      .into(holder.icon)
     holder.containerView.setOnClickListener {
       tabsManager.reOrderTabByUrl(
-          holder.containerView.context,
-          Website(tab.url),
-          listOf(tab.getTargetActivityName())
+        holder.containerView.context,
+        Website(tab.url),
+        listOf(tab.getTargetActivityName())
       )
     }
   }

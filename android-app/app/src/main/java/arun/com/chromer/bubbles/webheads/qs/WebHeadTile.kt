@@ -47,8 +47,10 @@ class WebHeadTile : PreferenceQuickSettingsTile() {
   override fun preference(): Boolean = preferences.webHeads()
 
   private fun label() = getString(R.string.web_heads)
-  private fun icon() = Icon.createWithBitmap(IconicsDrawable(this)
+  private fun icon() = Icon.createWithBitmap(
+    IconicsDrawable(this)
       .icon(CommunityMaterial.Icon.cmd_chart_bubble)
       .color(Color.WHITE)
-      .sizeDp(24).toBitmap())
+      .sizeDp(24).toBitmap()
+  )
 }

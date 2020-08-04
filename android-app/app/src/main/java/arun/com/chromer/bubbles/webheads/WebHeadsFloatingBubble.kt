@@ -18,17 +18,17 @@ import javax.inject.Singleton
 class WebHeadsFloatingBubble
 @Inject
 constructor(
-    private val application: Application,
-    private val schedulerProvider: SchedulerProvider
+  private val application: Application,
+  private val schedulerProvider: SchedulerProvider
 ) : FloatingBubble {
 
   override fun openBubble(
-      website: Website,
-      fromMinimize: Boolean,
-      fromAmp: Boolean,
-      incognito: Boolean,
-      context: Context?,
-      color: Int
+    website: Website,
+    fromMinimize: Boolean,
+    fromAmp: Boolean,
+    incognito: Boolean,
+    context: Context?,
+    color: Int
   ) {
     (context ?: application).let { ctx ->
       if (Utils.isOverlayGranted(ctx)) {

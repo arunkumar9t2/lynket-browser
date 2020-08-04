@@ -38,31 +38,37 @@ import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
 import com.bumptech.glide.load.resource.bitmap.BitmapResource
 import timber.log.Timber
 
-class WebsiteDecoder(private val context: Context, glide: Glide) : ResourceDecoder<Website, Bitmap> {
+class WebsiteDecoder(private val context: Context, glide: Glide) :
+  ResourceDecoder<Website, Bitmap> {
   private val bitmapPool: BitmapPool = glide.bitmapPool
   private val size = dpToPx(56.0)
 
   private val placeholderColors = intArrayOf(
-      Color.parseColor("#3891A6"),
-      Color.parseColor("#FDE74C"),
-      Color.parseColor("#DB5461"),
-      Color.parseColor("#EC4E20"),
-      Color.parseColor("#6EEB83"),
-      Color.parseColor("#29335C"),
-      Color.parseColor("#BDE4A8")
+    Color.parseColor("#3891A6"),
+    Color.parseColor("#FDE74C"),
+    Color.parseColor("#DB5461"),
+    Color.parseColor("#EC4E20"),
+    Color.parseColor("#6EEB83"),
+    Color.parseColor("#29335C"),
+    Color.parseColor("#BDE4A8")
   )
 
   override fun handles(source: Website, options: Options): Boolean = true
 
-  override fun decode(website: Website, width: Int, height: Int, options: Options): Resource<Bitmap>? {
+  override fun decode(
+    website: Website,
+    width: Int,
+    height: Int,
+    options: Options
+  ): Resource<Bitmap>? {
     // Try to load using Glide normally
     val websiteFavicon = try {
       GlideApp.with(context)
-          .asBitmap()
-          .load(website.faviconUrl)
-          .useUnlimitedSourceGeneratorsPool(true)
-          .submit()
-          .get()
+        .asBitmap()
+        .load(website.faviconUrl)
+        .useUnlimitedSourceGeneratorsPool(true)
+        .submit()
+        .get()
     } catch (e: Exception) {
       null
     }
@@ -103,10 +109,10 @@ class WebsiteDecoder(private val context: Context, glide: Glide) : ResourceDecod
     val padding = dpToPx(1.0)
 
     canvas.drawCircle(
-        (size / 2).toFloat() - padding / 2,
-        (size / 2).toFloat() - padding / 2,
-        (size / 2).toFloat() - padding,
-        bgPaint
+      (size / 2).toFloat() - padding / 2,
+      (size / 2).toFloat() - padding / 2,
+      (size / 2).toFloat() - padding,
+      bgPaint
     )
 
     val textPaint = Paint(ANTI_ALIAS_FLAG).apply {

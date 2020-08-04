@@ -55,52 +55,63 @@ constructor(private val appRepository: AppRepository) : ViewModel() {
 
   private fun initAppsLoader() {
     subs.add(loadingQueue.asObservable()
-        .onBackpressureLatest()
-        .doOnNext { loading(true) }
-        .concatMap { appRepository.allApps().compose(SchedulerProvider.applyIoSchedulers()) }
-        .doOnNext { loading(false) }
-        .subscribe({ apps ->
-          Timber.d("Apps loaded ${apps.size}")
-          appsLiveData.value = apps
-        }, Timber::e))
+      .onBackpressureLatest()
+      .doOnNext { loading(true) }
+      .concatMap { appRepository.allApps().compose(SchedulerProvider.applyIoSchedulers()) }
+      .doOnNext { loading(false) }
+      .subscribe({ apps ->
+        Timber.d("Apps loaded ${apps.size}")
+        appsLiveData.value = apps
+      }, Timber::e)
+    )
   }
 
   private fun initIncognitoSub() {
     subs.add(incognitoQueue.asObservable()
-        .onBackpressureLatest()
-        .filter { !loadingLiveData.value!! }
-        .doOnNext { loading(true) }
-        .concatMap { (packageName, incognito) ->
-          if (incognito) {
-            appRepository.setPackageIncognito(packageName)
-                .compose(SchedulerProvider.applyIoSchedulers())
-          } else {
-            appRepository.removeIncognito(packageName)
-                .compose(SchedulerProvider.applyIoSchedulers())
-          }
-        }.observeOn(AndroidSchedulers.mainThread())
-        .doOnNext { loading(false) }
-        .map { app -> Pair(appsLiveData.value!!.indexOfFirst { it.packageName == app.packageName }, app) }
-        .subscribe { appLiveData.value = it })
+      .onBackpressureLatest()
+      .filter { !loadingLiveData.value!! }
+      .doOnNext { loading(true) }
+      .concatMap { (packageName, incognito) ->
+        if (incognito) {
+          appRepository.setPackageIncognito(packageName)
+            .compose(SchedulerProvider.applyIoSchedulers())
+        } else {
+          appRepository.removeIncognito(packageName)
+            .compose(SchedulerProvider.applyIoSchedulers())
+        }
+      }.observeOn(AndroidSchedulers.mainThread())
+      .doOnNext { loading(false) }
+      .map { app ->
+        Pair(
+          appsLiveData.value!!.indexOfFirst { it.packageName == app.packageName },
+          app
+        )
+      }
+      .subscribe { appLiveData.value = it })
   }
 
   private fun initBlacklistSub() {
     subs.add(blacklistQueue.asObservable()
-        .onBackpressureLatest()
-        .filter { !loadingLiveData.value!! }
-        .doOnNext { loading(true) }
-        .concatMap { (packageName, blacklisted) ->
-          if (blacklisted) {
-            appRepository.setPackageBlacklisted(packageName)
-                .compose(SchedulerProvider.applyIoSchedulers())
-          } else {
-            appRepository.removeBlacklist(packageName)
-                .compose(SchedulerProvider.applyIoSchedulers())
-          }
-        }.observeOn(AndroidSchedulers.mainThread())
-        .doOnNext { loading(false) }
-        .map { app -> Pair(appsLiveData.value!!.indexOfFirst { it.packageName == app.packageName }, app) }
-        .subscribe { appLiveData.value = it })
+      .onBackpressureLatest()
+      .filter { !loadingLiveData.value!! }
+      .doOnNext { loading(true) }
+      .concatMap { (packageName, blacklisted) ->
+        if (blacklisted) {
+          appRepository.setPackageBlacklisted(packageName)
+            .compose(SchedulerProvider.applyIoSchedulers())
+        } else {
+          appRepository.removeBlacklist(packageName)
+            .compose(SchedulerProvider.applyIoSchedulers())
+        }
+      }.observeOn(AndroidSchedulers.mainThread())
+      .doOnNext { loading(false) }
+      .map { app ->
+        Pair(
+          appsLiveData.value!!.indexOfFirst { it.packageName == app.packageName },
+          app
+        )
+      }
+      .subscribe { appLiveData.value = it })
   }
 
   fun incognito(selections: Pair<String, Boolean>) {

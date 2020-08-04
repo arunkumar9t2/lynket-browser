@@ -36,7 +36,7 @@ import javax.inject.Inject
 class HistoryFragmentViewModel
 @Inject
 constructor(
-    private val historyRepository: HistoryRepository
+  private val historyRepository: HistoryRepository
 ) : ViewModel() {
 
   val loadingLiveData = MutableLiveData<Boolean>()
@@ -62,23 +62,25 @@ constructor(
   }
 
   fun deleteAll(onSuccess: (rows: Int) -> Unit) {
-    subs.add(historyRepository
+    subs.add(
+      historyRepository
         .deleteAll()
         .compose(SchedulerProvider.applyIoSchedulers())
         .doOnNext { rows ->
           loadHistory()
           onSuccess(rows)
-        }.subscribe())
+        }.subscribe()
+    )
   }
 
   fun deleteHistory(website: Website?) {
     subs.add(Observable.just(website)
-        .filter { webSite -> webSite?.url != null }
-        .flatMap<Website> { historyRepository.delete(it!!) }
-        .compose(SchedulerProvider.applyIoSchedulers())
-        .doOnError(Timber::e)
-        .doOnNext { loadHistory() }
-        .subscribe())
+      .filter { webSite -> webSite?.url != null }
+      .flatMap<Website> { historyRepository.delete(it!!) }
+      .compose(SchedulerProvider.applyIoSchedulers())
+      .doOnError(Timber::e)
+      .doOnNext { loadHistory() }
+      .subscribe())
   }
 
   override fun onCleared() {

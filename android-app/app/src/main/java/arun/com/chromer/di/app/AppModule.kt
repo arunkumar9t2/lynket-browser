@@ -31,10 +31,12 @@ import dagger.Provides
 import dev.arunkumar.android.dagger.viewmodel.DefaultViewModelsBuilder
 import javax.inject.Singleton
 
-@Module(includes = [
-  ViewModelModule::class,
-  DefaultViewModelsBuilder::class
-])
+@Module(
+  includes = [
+    ViewModelModule::class,
+    DefaultViewModelsBuilder::class
+  ]
+)
 open class AppModule(var application: Application) {
   @Provides
   @Singleton

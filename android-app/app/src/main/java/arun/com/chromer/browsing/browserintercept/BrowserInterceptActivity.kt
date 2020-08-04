@@ -48,7 +48,7 @@ class BrowserInterceptActivity : BaseActivity() {
         return
       }
       defaultTabsManager.processIncomingIntent(this, intent)
-          .subscribeBy(onComplete = { finishAndRemoveTaskCompat() })
+        .subscribeBy(onComplete = { finishAndRemoveTaskCompat() })
     } ?: run {
       finishAndRemoveTaskCompat()
     }

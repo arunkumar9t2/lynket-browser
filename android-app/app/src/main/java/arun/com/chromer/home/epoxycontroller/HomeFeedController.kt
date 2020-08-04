@@ -18,8 +18,8 @@ import javax.inject.Inject
 class HomeFeedController
 @Inject
 constructor(
-    private val application: Application,
-    private val tabsManager: TabsManager
+  private val application: Application,
+  private val tabsManager: TabsManager
 ) : AsyncEpoxyController() {
 
   var customTabProviderInfo: CustomTabProviderInfo? = null

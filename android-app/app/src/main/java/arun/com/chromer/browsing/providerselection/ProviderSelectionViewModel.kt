@@ -35,7 +35,7 @@ import javax.inject.Inject
 class ProviderSelectionViewModel
 @Inject
 constructor(
-    private val appRepository: AppRepository
+  private val appRepository: AppRepository
 ) : ViewModel() {
   val subs = CompositeSubscription()
 
@@ -45,13 +45,14 @@ constructor(
 
   init {
     subs.add(loadingQueue.asObservable()
-        .switchMap {
-          return@switchMap appRepository
-              .allProviders()
-              .compose(SchedulerProvider.applyIoSchedulers())
-        }.subscribe({ providers ->
-          providersLiveData.value = providers
-        }, Timber::e))
+      .switchMap {
+        return@switchMap appRepository
+          .allProviders()
+          .compose(SchedulerProvider.applyIoSchedulers())
+      }.subscribe({ providers ->
+        providersLiveData.value = providers
+      }, Timber::e)
+    )
   }
 
   fun loadProviders() {

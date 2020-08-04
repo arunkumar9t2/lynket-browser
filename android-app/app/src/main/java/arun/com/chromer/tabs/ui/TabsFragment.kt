@@ -72,9 +72,10 @@ class TabsFragment : BaseFragment(), FabHandler {
         isRefreshing = false
       }
       setColorSchemeResources(
-          R.color.colorPrimary,
-          R.color.colorAccent,
-          R.color.colorPrimaryDarker)
+        R.color.colorPrimary,
+        R.color.colorAccent,
+        R.color.colorPrimaryDarker
+      )
     }
   }
 
@@ -104,14 +105,22 @@ class TabsFragment : BaseFragment(), FabHandler {
     }
 
     val swipeTouch = object : ItemTouchHelper.SimpleCallback(0, LEFT or RIGHT) {
-      override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+      override fun onMove(
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        target: RecyclerView.ViewHolder
+      ): Boolean {
         return false
       }
 
       override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         val tab = tabsAdapter.getTabAt(viewHolder.adapterPosition)
         activity?.let {
-          tabsManager.finishTabByUrl(activity!!, Website(tab.url), listOf(tab.getTargetActivityName()))
+          tabsManager.finishTabByUrl(
+            activity!!,
+            Website(tab.url),
+            listOf(tab.getTargetActivityName())
+          )
           loadTabs()
         }
       }
@@ -158,12 +167,12 @@ class TabsFragment : BaseFragment(), FabHandler {
   override fun onFabClick() {
     if (tabsAdapter.itemCount != 0) {
       MaterialDialog.Builder(activity!!)
-          .title(R.string.are_you_sure)
-          .content(R.string.tab_deletion_confirmation_content)
-          .positiveText(android.R.string.yes)
-          .negativeText(android.R.string.no)
-          .onPositive { _, _ -> tabsViewModel?.clearAllTabs() }
-          .show()
+        .title(R.string.are_you_sure)
+        .content(R.string.tab_deletion_confirmation_content)
+        .positiveText(android.R.string.yes)
+        .negativeText(android.R.string.no)
+        .onPositive { _, _ -> tabsViewModel?.clearAllTabs() }
+        .show()
     }
   }
 }

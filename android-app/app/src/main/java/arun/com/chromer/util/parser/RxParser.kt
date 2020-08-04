@@ -45,9 +45,9 @@ object RxParser {
         // We only need the head tag for meta data.
         var webSiteString = headString(candidateUrl.toString())
         article = ArticleExtractor
-            .with(expanded, webSiteString)
-            .extractMetadata()
-            .article()
+          .with(expanded, webSiteString)
+          .extractMetadata()
+          .article()
         @Suppress("UNUSED_VALUE")
         webSiteString = null
       }
@@ -68,9 +68,9 @@ object RxParser {
       if (isArticle) {
         val document = Jsoup.connect(cruxURL.toString()).get()
         article = ArticleExtractor.with(cruxURL.toString(), document)
-            .extractMetadata()
-            .extractContent()
-            .article()
+          .extractMetadata()
+          .extractContent()
+          .article()
       }
     } catch (e: Exception) {
       Timber.e(e)

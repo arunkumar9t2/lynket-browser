@@ -63,9 +63,9 @@ import javax.inject.Inject
  */
 @PerActivity
 class MenuDelegate @Inject constructor(
-    val activity: Activity,
-    val tabsManager: TabsManager,
-    val preferences: Preferences
+  val activity: Activity,
+  val tabsManager: TabsManager,
+  val preferences: Preferences
 ) {
   /**
    * Currently active URL.
@@ -128,7 +128,8 @@ class MenuDelegate @Inject constructor(
         val secondaryBrowserPackage = preferences.secondaryBrowserPackage()
         if (isPackageInstalled(activity, secondaryBrowserPackage)) {
           actionButton.setTitle(R.string.choose_secondary_browser)
-          val componentName = ComponentName.unflattenFromString(preferences.secondaryBrowserComponent()!!)
+          val componentName =
+            ComponentName.unflattenFromString(preferences.secondaryBrowserComponent()!!)
           try {
             actionButton.icon = activity.packageManager.getActivityIcon(componentName)
           } catch (e: PackageManager.NameNotFoundException) {
@@ -179,24 +180,70 @@ class MenuDelegate @Inject constructor(
 
   fun handleItemSelected(itemId: Int): Boolean {
     when (itemId) {
-      R.id.menu_open_full_page -> tabsManager.openBrowsingTab(activity, website, true, false, listOf(CustomTabActivity::class.java.name), incognito = incognito)
+      R.id.menu_open_full_page -> tabsManager.openBrowsingTab(
+        activity,
+        website,
+        true,
+        false,
+        listOf(CustomTabActivity::class.java.name),
+        incognito = incognito
+      )
       android.R.id.home -> activity.finish()
       R.id.bottom_bar_open_in_new_tab -> tabsManager.openNewTab(activity, currentUrl)
       R.id.bottom_bar_share -> shareUrl()
       R.id.bottom_bar_tabs, R.id.tabs -> tabsManager.showTabsActivity()
-      R.id.bottom_bar_minimize_tab -> tabsManager.minimizeTabByUrl(currentUrl, activity::class.java.name, incognito)
-      R.id.bottom_bar_article_view -> tabsManager.openArticle(activity, website, false, incognito = incognito)
+      R.id.bottom_bar_minimize_tab -> tabsManager.minimizeTabByUrl(
+        currentUrl,
+        activity::class.java.name,
+        incognito
+      )
+      R.id.bottom_bar_article_view -> tabsManager.openArticle(
+        activity,
+        website,
+        false,
+        incognito = incognito
+      )
       R.id.menu_action_button -> when (preferences.preferredAction()) {
-        PREFERRED_ACTION_BROWSER -> activity.sendBroadcast(Intent(activity, SecondaryBrowserReceiver::class.java).setData(currentUri))
-        PREFERRED_ACTION_FAV_SHARE -> activity.sendBroadcast(Intent(activity, FavShareBroadcastReceiver::class.java).setData(currentUri))
+        PREFERRED_ACTION_BROWSER -> activity.sendBroadcast(
+          Intent(
+            activity,
+            SecondaryBrowserReceiver::class.java
+          ).setData(currentUri)
+        )
+        PREFERRED_ACTION_FAV_SHARE -> activity.sendBroadcast(
+          Intent(
+            activity,
+            FavShareBroadcastReceiver::class.java
+          ).setData(currentUri)
+        )
         PREFERRED_ACTION_GEN_SHARE -> shareUrl()
       }
-      R.id.menu_copy_link -> activity.sendBroadcast(Intent(activity, CopyToClipboardReceiver::class.java).setData(currentUri))
-      R.id.menu_open_with -> activity.startActivity(Intent(activity, OpenIntentWithActivity::class.java).setData(currentUri))
+      R.id.menu_copy_link -> activity.sendBroadcast(
+        Intent(
+          activity,
+          CopyToClipboardReceiver::class.java
+        ).setData(currentUri)
+      )
+      R.id.menu_open_with -> activity.startActivity(
+        Intent(
+          activity,
+          OpenIntentWithActivity::class.java
+        ).setData(currentUri)
+      )
       R.id.menu_share -> shareUrl()
-      R.id.menu_share_with -> activity.sendBroadcast(Intent(activity, FavShareBroadcastReceiver::class.java).setData(currentUri))
+      R.id.menu_share_with -> activity.sendBroadcast(
+        Intent(
+          activity,
+          FavShareBroadcastReceiver::class.java
+        ).setData(currentUri)
+      )
       R.id.menu_history -> activity.startActivity(Intent(activity, HistoryActivity::class.java))
-      R.id.menu_add_to_home_screen -> activity.startActivity(Intent(activity, HomeScreenShortcutCreatorActivity::class.java).setData(currentUri))
+      R.id.menu_add_to_home_screen -> activity.startActivity(
+        Intent(
+          activity,
+          HomeScreenShortcutCreatorActivity::class.java
+        ).setData(currentUri)
+      )
     }
     return true
   }
@@ -215,15 +262,16 @@ class MenuDelegate @Inject constructor(
   private fun getTextSizeMenuItemText(): CharSequence {
     val text = activity.getText(R.string.text_size)
     return SpannableStringBuilder()
-        .append("*")
-        .append("   ")
-        .append(text)
-        .apply {
-          setSpan(ImageSpan(textSizeIcon),
-              0,
-              1,
-              Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-          )
-        }
+      .append("*")
+      .append("   ")
+      .append(text)
+      .apply {
+        setSpan(
+          ImageSpan(textSizeIcon),
+          0,
+          1,
+          Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+      }
   }
 }

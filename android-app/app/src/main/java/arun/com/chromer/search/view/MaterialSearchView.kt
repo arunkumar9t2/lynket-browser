@@ -74,9 +74,9 @@ import javax.inject.Inject
 class MaterialSearchView
 @JvmOverloads
 constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+  context: Context,
+  attrs: AttributeSet? = null,
+  defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
   private var viewComponent: ViewComponent? = null
@@ -91,21 +91,21 @@ constructor(
 
   private val xIcon: IconicsDrawable by lazy {
     IconicsDrawable(context)
-        .icon(CommunityMaterial.Icon.cmd_close)
-        .color(normalColor)
-        .sizeDp(16)
+      .icon(CommunityMaterial.Icon.cmd_close)
+      .color(normalColor)
+      .sizeDp(16)
   }
   private val voiceIcon: IconicsDrawable by lazy {
     IconicsDrawable(context)
-        .icon(CommunityMaterial.Icon.cmd_microphone)
-        .color(normalColor)
-        .sizeDp(18)
+      .icon(CommunityMaterial.Icon.cmd_microphone)
+      .color(normalColor)
+      .sizeDp(18)
   }
   private val menuIcon: IconicsDrawable by lazy {
     IconicsDrawable(context)
-        .icon(CommunityMaterial.Icon.cmd_menu)
-        .color(normalColor)
-        .sizeDp(18)
+      .icon(CommunityMaterial.Icon.cmd_menu)
+      .color(normalColor)
+      .sizeDp(18)
   }
 
   @Inject
@@ -129,9 +129,9 @@ constructor(
 
   private val searchTermChanges by lazy {
     msvEditText.textChanges()
-        .skipInitialValue()
-        .takeUntil(viewDetaches)
-        .share()
+      .skipInitialValue()
+      .takeUntil(viewDetaches)
+      .share()
   }
 
   val editText: EditText get() = msvEditText
@@ -139,17 +139,17 @@ constructor(
   fun voiceSearchFailed(): Observable<Any> = voiceSearchFailed.hide()
 
   fun searchPerforms(): Observable<String> = searchPerformed
-      .hide()
-      .switchMap(searchPresenter::getSearchUrl)
+    .hide()
+    .switchMap(searchPresenter::getSearchUrl)
 
   private val leftIconClicks by lazy { msvLeftIcon.clicks().share() }
 
   init {
     if (context is ProvidesActivityComponent) {
       viewComponent = context
-          .activityComponent
-          .viewComponentFactory().create(this)
-          .also { component -> component.inject(this) }
+        .activityComponent
+        .viewComponentFactory().create(this)
+        .also { component -> component.inject(this) }
     }
     addView(inflate(R.layout.widget_material_search_view))
     ButterKnife.bind(this)
@@ -211,8 +211,8 @@ constructor(
   override fun setOnClickListener(onClickListener: OnClickListener?) = Unit
 
   fun menuClicks(): Observable<Unit> = leftIconClicks
-      .filter { focusChanges.value == false }
-      .share()
+    .filter { focusChanges.value == false }
+    .share()
 
   fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     if (requestCode == REQUEST_CODE_VOICE) {
@@ -239,23 +239,23 @@ constructor(
     msvLeftIcon.run {
       setImageDrawable(menuIcon)
       leftIconClicks
-          .filter { focusChanges.value == true }
-          .takeUntil(viewDetaches).subscribe {
-            suggestionController.showSearchProviders = true
-          }
+        .filter { focusChanges.value == true }
+        .takeUntil(viewDetaches).subscribe {
+          suggestionController.showSearchProviders = true
+        }
       Observable.combineLatest(
-          focusChanges,
-          searchPresenter.selectedSearchProvider,
-          BiFunction<Boolean, SearchProvider, CompositeIconResource> { hasFocus, searchProvider ->
-            if (hasFocus) {
-              CompositeIconResource(uri = searchProvider.iconUri)
-            } else {
-              CompositeIconResource(drawable = menuIcon)
-            }
+        focusChanges,
+        searchPresenter.selectedSearchProvider,
+        BiFunction<Boolean, SearchProvider, CompositeIconResource> { hasFocus, searchProvider ->
+          if (hasFocus) {
+            CompositeIconResource(uri = searchProvider.iconUri)
+          } else {
+            CompositeIconResource(drawable = menuIcon)
           }
+        }
       ).compose(schedulerProvider.poolToUi())
-          .takeUntil(viewDetaches)
-          .subscribe { iconResource -> iconResource.apply(this) }
+        .takeUntil(viewDetaches)
+        .subscribe { iconResource -> iconResource.apply(this) }
     }
     searchTermChanges.subscribe {
       suggestionController.showSearchProviders = false
@@ -272,8 +272,8 @@ constructor(
         } else {
           if (Utils.isVoiceRecognizerPresent(context)) {
             (context as Activity).startActivityForResult(
-                Utils.getRecognizerIntent(context),
-                REQUEST_CODE_VOICE
+              Utils.getRecognizerIntent(context),
+              REQUEST_CODE_VOICE
             )
           } else {
             voiceSearchFailed.onNext(Any())
@@ -286,23 +286,23 @@ constructor(
   private fun setupEditText() {
     msvEditText.run {
       focusChanges()
-          .takeUntil(viewDetaches)
-          .subscribe { hasFocus ->
-            if (hasFocus) {
-              gainFocus()
-            } else {
-              loseFocus()
-            }
+        .takeUntil(viewDetaches)
+        .subscribe { hasFocus ->
+          if (hasFocus) {
+            gainFocus()
+          } else {
+            loseFocus()
           }
+        }
       editorActionEvents { event -> event.actionId == IME_ACTION_SEARCH }
-          .map { searchQuery }
-          .observeOn(schedulerProvider.ui)
-          .takeUntil(viewDetaches)
-          .subscribe(::searchPerformed)
+        .map { searchQuery }
+        .observeOn(schedulerProvider.ui)
+        .takeUntil(viewDetaches)
+        .subscribe(::searchPerformed)
       searchTermChanges
-          .takeUntil(viewDetaches)
-          .observeOn(schedulerProvider.ui)
-          .subscribe { handleIconsState() }
+        .takeUntil(viewDetaches)
+        .observeOn(schedulerProvider.ui)
+        .subscribe { handleIconsState() }
     }
   }
 
@@ -311,14 +311,14 @@ constructor(
       registerSearch(searchTermChanges.map { it.toString() })
 
       suggestions.takeUntil(viewDetaches)
-          .observeOn(schedulerProvider.ui)
-          .subscribe(::setSuggestions)
+        .observeOn(schedulerProvider.ui)
+        .subscribe(::setSuggestions)
 
       searchEngines.takeUntil(viewDetaches)
-          .observeOn(schedulerProvider.ui)
-          .subscribe { searchProviders ->
-            suggestionController.searchProviders = searchProviders
-          }
+        .observeOn(schedulerProvider.ui)
+        .subscribe { searchProviders ->
+          suggestionController.searchProviders = searchProviders
+        }
 
       registerSearchProviderClicks(suggestionController.searchProviderClicks)
     }
@@ -326,35 +326,35 @@ constructor(
 
   private fun setupSuggestionController() {
     suggestionController.intercepts()
-        .map { it.isEmpty() }
-        .observeOn(schedulerProvider.ui)
-        .takeUntil(viewDetaches)
-        .subscribe { isEmpty ->
-          searchSuggestions.gone(isEmpty)
-          if (!isEmpty) {
-            searchSuggestions.scrollToPosition(0)
-          }
+      .map { it.isEmpty() }
+      .observeOn(schedulerProvider.ui)
+      .takeUntil(viewDetaches)
+      .subscribe { isEmpty ->
+        searchSuggestions.gone(isEmpty)
+        if (!isEmpty) {
+          searchSuggestions.scrollToPosition(0)
         }
+      }
 
     suggestionController.suggestionClicks
-        .observeOn(schedulerProvider.pool)
-        .map { suggestionItem ->
-          when (suggestionItem) {
-            is HistorySuggestionItem -> suggestionItem.subTitle
-            else -> suggestionItem.title
-          } ?: ""
-        }.filter { it.isNotEmpty() }
-        .observeOn(schedulerProvider.ui)
-        .takeUntil(viewDetaches)
-        .subscribe(::searchPerformed)
+      .observeOn(schedulerProvider.pool)
+      .map { suggestionItem ->
+        when (suggestionItem) {
+          is HistorySuggestionItem -> suggestionItem.subTitle
+          else -> suggestionItem.title
+        } ?: ""
+      }.filter { it.isNotEmpty() }
+      .observeOn(schedulerProvider.ui)
+      .takeUntil(viewDetaches)
+      .subscribe(::searchPerformed)
 
     suggestionController.suggestionLongClicks
-        .filter { it.title.isNotEmpty() }
-        .takeUntil(viewDetaches)
-        .subscribe {
-          msvEditText.setText(it.title)
-          msvEditText.setSelection(it.title.length)
-        }
+      .filter { it.title.isNotEmpty() }
+      .takeUntil(viewDetaches)
+      .subscribe {
+        msvEditText.setText(it.title)
+        msvEditText.setSelection(it.title.length)
+      }
   }
 
   private fun clearFocus(endAction: (() -> Unit)?) {
@@ -366,7 +366,10 @@ constructor(
 
 
   private fun hideKeyboard() {
-    (context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(windowToken, 0)
+    (context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
+      windowToken,
+      0
+    )
   }
 
   private fun setFocusedColor() {

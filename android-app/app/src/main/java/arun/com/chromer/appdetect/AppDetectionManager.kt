@@ -81,7 +81,11 @@ constructor(private val application: Application) {
 
     // Chances are that we picked the opening custom tab, so let's ignore our default provider
     // to be safe
-    if (packageName.equals(Preferences.get(application).customTabPackage()!!, ignoreCase = true)) return false
+    if (packageName.equals(
+        Preferences.get(application).customTabPackage()!!,
+        ignoreCase = true
+      )
+    ) return false
 
     // Ignore google quick search box
     return !packageName.equals("com.google.android.googlequicksearchbox", ignoreCase = true)

@@ -115,8 +115,9 @@ open class WebViewActivity : BrowsingActivity() {
         webView.reload()
       }
       setColorSchemeColors(
-          ContextCompat.getColor(context, R.color.primary),
-          ContextCompat.getColor(context, R.color.accent))
+        ContextCompat.getColor(context, R.color.primary),
+        ContextCompat.getColor(context, R.color.accent)
+      )
     }
   }
 

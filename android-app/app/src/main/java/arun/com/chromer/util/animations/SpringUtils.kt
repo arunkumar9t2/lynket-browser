@@ -37,10 +37,10 @@ private fun getKey(property: DynamicAnimation.ViewProperty) = when (property) {
 
 
 fun View.spring(
-    property: DynamicAnimation.ViewProperty,
-    stiffness: Float = SpringForce.STIFFNESS_MEDIUM,
-    damping: Float = SpringForce.DAMPING_RATIO_NO_BOUNCY,
-    startVelocity: Float? = null
+  property: DynamicAnimation.ViewProperty,
+  stiffness: Float = SpringForce.STIFFNESS_MEDIUM,
+  damping: Float = SpringForce.DAMPING_RATIO_NO_BOUNCY,
+  startVelocity: Float? = null
 ): SpringAnimation {
   val key = getKey(property)
   var springAnim = getTag(key) as? SpringAnimation?

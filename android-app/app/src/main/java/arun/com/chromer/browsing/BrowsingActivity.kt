@@ -78,15 +78,15 @@ abstract class BrowsingActivity : BaseActivity(), UsesViewModel {
 
   private fun setupMinimize() {
     subs.add(rxEventBus
-        .filteredEvents<TabsManager.MinimizeEvent>()
-        .filter { event ->
-          event.tab.url.equals(getCurrentUrl(), ignoreCase = true)
-              && event.tab.getTargetActivityName() == this::class.java.name
-        }.subscribe {
-          if (Utils.ANDROID_LOLLIPOP) {
-            moveTaskToBack(true)
-          }
-        })
+      .filteredEvents<TabsManager.MinimizeEvent>()
+      .filter { event ->
+        event.tab.url.equals(getCurrentUrl(), ignoreCase = true)
+            && event.tab.getTargetActivityName() == this::class.java.name
+      }.subscribe {
+        if (Utils.ANDROID_LOLLIPOP) {
+          moveTaskToBack(true)
+        }
+      })
   }
 
   private fun observeViewModel(savedInstanceState: Bundle?) {
@@ -114,12 +114,14 @@ abstract class BrowsingActivity : BaseActivity(), UsesViewModel {
 
     when (savedInstanceState) {
       null -> {
-        val websiteResult = Result.Success(intent.getParcelableExtra(EXTRA_KEY_WEBSITE)
-            ?: Website(getCurrentUrl()))
+        val websiteResult = Result.Success(
+          intent.getParcelableExtra(EXTRA_KEY_WEBSITE)
+            ?: Website(getCurrentUrl())
+        )
         browsingViewModel.websiteLiveData.value = websiteResult
         browsingViewModel.toolbarColor.value = intent.getIntExtra(
-            EXTRA_KEY_TOOLBAR_COLOR,
-            ContextCompat.getColor(this@BrowsingActivity, R.color.colorPrimary)
+          EXTRA_KEY_TOOLBAR_COLOR,
+          ContextCompat.getColor(this@BrowsingActivity, R.color.colorPrimary)
         )
         loadWebsiteDetails(getCurrentUrl())
       }

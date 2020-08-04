@@ -117,12 +117,14 @@ class ProviderSelectionActivity : BaseActivity() {
 
   private fun setupWebViewCard() {
     GlideApp.with(this)
-        .load(ApplicationIcon.createUri(Constants.SYSTEM_WEBVIEW))
-        .error(IconicsDrawable(this)
-            .icon(CommunityMaterial.Icon.cmd_web)
-            .colorRes(R.color.primary)
-            .sizeDp(56))
-        .into(webViewImg)
+      .load(ApplicationIcon.createUri(Constants.SYSTEM_WEBVIEW))
+      .error(
+        IconicsDrawable(this)
+          .icon(CommunityMaterial.Icon.cmd_web)
+          .colorRes(R.color.primary)
+          .sizeDp(56)
+      )
+      .into(webViewImg)
     if (!Utils.ANDROID_LOLLIPOP) {
       webViewNotRecommended.show()
     }
@@ -130,19 +132,19 @@ class ProviderSelectionActivity : BaseActivity() {
 
   private fun observeViewModel(savedInstanceState: Bundle?) {
     providerSelectionViewModel = ViewModelProviders.of(this, viewModelFactory)
-        .get(ProviderSelectionViewModel::class.java)
-        .apply {
-          providersLiveData.watch(
-              this@ProviderSelectionActivity
-          ) { value ->
-            providersAdapter.providers = value as ArrayList<Provider>
-          }
-
-
-          if (savedInstanceState == null) {
-            loadProviders()
-          }
+      .get(ProviderSelectionViewModel::class.java)
+      .apply {
+        providersLiveData.watch(
+          this@ProviderSelectionActivity
+        ) { value ->
+          providersAdapter.providers = value as ArrayList<Provider>
         }
+
+
+        if (savedInstanceState == null) {
+          loadProviders()
+        }
+      }
   }
 
   @TargetApi(Build.VERSION_CODES.M)
@@ -159,14 +161,14 @@ class ProviderSelectionActivity : BaseActivity() {
   @OnClick(R.id.webViewCard)
   fun onWebViewClick() {
     MaterialDialog.Builder(this)
-        .title(R.string.are_you_sure)
-        .content(R.string.webview_disadvantages)
-        .positiveText(android.R.string.yes)
-        .onPositive { _, _ ->
-          preferences.useWebView(true)
-          notifyProviderChanged()
-          finish()
-        }.show()
+      .title(R.string.are_you_sure)
+      .content(R.string.webview_disadvantages)
+      .positiveText(android.R.string.yes)
+      .onPositive { _, _ ->
+        preferences.useWebView(true)
+        notifyProviderChanged()
+        finish()
+      }.show()
   }
 
   override fun onDestroy() {
@@ -175,9 +177,9 @@ class ProviderSelectionActivity : BaseActivity() {
   }
 
   inner class ProviderDialog(
-      private var activity: Activity?,
-      private val provider: Provider,
-      private val preferences: Preferences
+    private var activity: Activity?,
+    private val provider: Provider,
+    private val preferences: Preferences
   ) : DialogInterface.OnDismissListener {
     val subs = CompositeSubscription()
     private lateinit var unBinder: Unbinder
@@ -197,20 +199,20 @@ class ProviderSelectionActivity : BaseActivity() {
 
     fun show(): ProviderDialog? {
       dialog = MaterialDialog.Builder(activity!!)
-          .title(provider.appName)
-          .customView(R.layout.dialog_provider_info, false)
-          .dismissListener(this)
-          .positiveText(if (provider.installed) R.string.use else R.string.install)
-          .onPositive { _, _ ->
-            if (provider.installed) {
-              preferences.customTabPackage(provider.packageName)
-              notifyProviderChanged()
-            } else {
-              Utils.openPlayStore(activity!!, provider.packageName)
-            }
-            dismiss()
-            activity?.finish()
-          }.show()
+        .title(provider.appName)
+        .customView(R.layout.dialog_provider_info, false)
+        .dismissListener(this)
+        .positiveText(if (provider.installed) R.string.use else R.string.install)
+        .onPositive { _, _ ->
+          if (provider.installed) {
+            preferences.customTabPackage(provider.packageName)
+            notifyProviderChanged()
+          } else {
+            Utils.openPlayStore(activity!!, provider.packageName)
+          }
+          dismiss()
+          activity?.finish()
+        }.show()
       unBinder = ButterKnife.bind(this, dialog!!.customView!!)
 
       GlideApp.with(activity!!).load(provider.iconUri).into(icon!!)

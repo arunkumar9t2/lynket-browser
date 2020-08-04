@@ -14,11 +14,11 @@ constructor(rxPrefs: RxkPrefs) {
 
   val customTabProviderPref by lazy { rxPrefs.string(PREFERRED_CUSTOM_TAB_PACKAGE) }
 
-    val incognitoPref by lazy { rxPrefs.boolean(FULL_INCOGNITO_MODE) }
+  val incognitoPref by lazy { rxPrefs.boolean(FULL_INCOGNITO_MODE) }
 
-    val webviewPref by lazy { rxPrefs.boolean(USE_WEBVIEW_PREF) }
+  val webviewPref by lazy { rxPrefs.boolean(USE_WEBVIEW_PREF) }
 
-    val searchEngine by lazy { rxPrefs.string(SEARCH_ENGINE_PREFERENCE, SearchProviders.GOOGLE) }
+  val searchEngine by lazy { rxPrefs.string(SEARCH_ENGINE_PREFERENCE, SearchProviders.GOOGLE) }
 
-    val nativeBubbles by lazy { rxPrefs.boolean(NATIVE_BUBBLES_PREFERENCE, false) }
+  val nativeBubbles by lazy { rxPrefs.boolean(NATIVE_BUBBLES_PREFERENCE, false) }
 }

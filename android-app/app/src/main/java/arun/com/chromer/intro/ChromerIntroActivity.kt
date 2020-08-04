@@ -42,17 +42,21 @@ class ChromerIntroActivity : AppIntro(), ProvidesActivityComponent {
 
   public override fun onCreate(savedInstanceState: Bundle?) {
     activityComponent = (application as Chromer)
-        .appComponent
-        .newActivityComponent(ActivityModule(this))
+      .appComponent
+      .newActivityComponent(ActivityModule(this))
     inject(activityComponent!!)
     super.onCreate(savedInstanceState)
 
     val bgColor = ContextCompat.getColor(this, R.color.tutorialBackgrounColor)
 
-    addSlide(AppIntroFragment.newInstance(getString(R.string.app_name),
+    addSlide(
+      AppIntroFragment.newInstance(
+        getString(R.string.app_name),
         getString(R.string.intro_1),
         R.drawable.chromer_hd_icon,
-        bgColor))
+        bgColor
+      )
+    )
 
     addSlide(SlideOverExplanationFragment())
 
@@ -60,24 +64,36 @@ class ChromerIntroActivity : AppIntro(), ProvidesActivityComponent {
 
     addSlide(WebHeadsIntroFragment())
 
-    addSlide(AppIntroFragment.newInstance(getString(R.string.amp),
+    addSlide(
+      AppIntroFragment.newInstance(
+        getString(R.string.amp),
         getString(R.string.tutorial_amp_intro),
         R.drawable.tutorial_amp_mode,
-        bgColor))
+        bgColor
+      )
+    )
 
     addSlide(ArticleIntroFragment())
 
     if (Utils.ANDROID_LOLLIPOP) {
-      addSlide(AppIntroFragment.newInstance(getString(R.string.merge_tabs),
+      addSlide(
+        AppIntroFragment.newInstance(
+          getString(R.string.merge_tabs),
           getText(R.string.merge_tabs_explanation_intro),
           R.drawable.tutorial_merge_tabs_and_apps,
-          bgColor))
+          bgColor
+        )
+      )
     }
 
-    addSlide(AppIntroFragment.newInstance(getString(R.string.per_app_settings),
+    addSlide(
+      AppIntroFragment.newInstance(
+        getString(R.string.per_app_settings),
         getText(R.string.per_app_settings_explanation),
         R.drawable.tutorial_per_app_settings,
-        bgColor))
+        bgColor
+      )
+    )
 
     setColorTransitionsEnabled(true)
     showStatusBar(false)

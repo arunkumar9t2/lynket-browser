@@ -35,9 +35,9 @@ import javax.inject.Singleton
 @Singleton
 class DefaultAppRepository
 @Inject internal constructor(
-    private val application: Application,
-    @param:Disk private val diskStore: AppStore,
-    @param:System private val systemStore: AppStore
+  private val application: Application,
+  @param:Disk private val diskStore: AppStore,
+  @param:System private val systemStore: AppStore
 ) : AppRepository {
 
   override fun getApp(packageName: String): Observable<App> {
@@ -50,17 +50,17 @@ class DefaultAppRepository
 
   override fun getPackageColor(packageName: String): Observable<Int> {
     return diskStore.getPackageColor(packageName)
-        .doOnNext { integer ->
-          if (integer == Constants.NO_COLOR) {
-            Timber.d("Color not found, starting extraction.")
-            AppColorExtractorJob.enqueueWork(
-                application,
-                AppColorExtractorJob::class.java,
-                AppColorExtractorJob.JOB_ID,
-                Intent().putExtra(Constants.EXTRA_PACKAGE_NAME, packageName)
-            )
-          }
+      .doOnNext { integer ->
+        if (integer == Constants.NO_COLOR) {
+          Timber.d("Color not found, starting extraction.")
+          AppColorExtractorJob.enqueueWork(
+            application,
+            AppColorExtractorJob::class.java,
+            AppColorExtractorJob.JOB_ID,
+            Intent().putExtra(Constants.EXTRA_PACKAGE_NAME, packageName)
+          )
         }
+      }
   }
 
   override fun setPackageColor(packageName: String, color: Int): Observable<App> {
@@ -98,12 +98,12 @@ class DefaultAppRepository
   override fun allApps(): Observable<List<App>> {
     val appComparator = App.PerAppListComparator()
     return systemStore.getInstalledApps()
-        .map { app ->
-          app.blackListed = diskStore.isPackageBlacklisted(app.packageName)
-          app.incognito = diskStore.isPackageIncognito(app.packageName)
-          app
-        }
-        .toSortedList { app1, app2 -> appComparator.compare(app1, app2) }
+      .map { app ->
+        app.blackListed = diskStore.isPackageBlacklisted(app.packageName)
+        app.incognito = diskStore.isPackageIncognito(app.packageName)
+        app
+      }
+      .toSortedList { app1, app2 -> appComparator.compare(app1, app2) }
   }
 
   override fun allProviders() = systemStore.allProviders()

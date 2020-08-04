@@ -39,9 +39,9 @@ class CustomTabActivity : BrowsingActivity() {
 
     if (savedInstanceState == null) {
       activityComponent.customTabs()
-          .forUrl(intent.dataString!!)
-          .toolbarColor(toolbarColor)
-          .launch()
+        .forUrl(intent.dataString!!)
+        .toolbarColor(toolbarColor)
+        .launch()
     } else finish()
   }
 

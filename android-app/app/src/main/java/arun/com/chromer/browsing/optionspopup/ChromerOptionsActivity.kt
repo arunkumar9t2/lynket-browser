@@ -75,13 +75,13 @@ class ChromerOptionsActivity : BaseActivity() {
     private val newTab = "newTab"
 
     private val items = mutableListOf(
-        settings,
-        tabs,
-        newTab,
-        history,
-        addToHomeScreen,
-        openWith,
-        article
+      settings,
+      tabs,
+      newTab,
+      history,
+      addToHomeScreen,
+      openWith,
+      article
     )
 
     init {
@@ -92,29 +92,35 @@ class ChromerOptionsActivity : BaseActivity() {
 
 
     override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ) = MenuItemHolder(LayoutInflater.from(parent.context).inflate(
+      parent: ViewGroup,
+      viewType: Int
+    ) = MenuItemHolder(
+      LayoutInflater.from(parent.context).inflate(
         R.layout.activity_more_menu_item_template,
         parent,
         false
-    ))
+      )
+    )
 
 
     override fun onBindViewHolder(holder: MenuItemHolder, position: Int) {
       val activity = this@ChromerOptionsActivity
       when (items[position]) {
         settings -> {
-          holder.menu_image.setImageDrawable(IconicsDrawable(holder.itemView.context)
+          holder.menu_image.setImageDrawable(
+            IconicsDrawable(holder.itemView.context)
               .icon(CommunityMaterial.Icon.cmd_settings)
               .colorRes(R.color.accent)
-              .sizeDp(24))
+              .sizeDp(24)
+          )
           holder.menu_text.setText(R.string.settings)
           holder.itemView.setOnClickListener {
-            startActivity(Intent(
+            startActivity(
+              Intent(
                 activity,
                 SettingsGroupActivity::class.java
-            ))
+              )
+            )
             activity.finish()
           }
         }
@@ -135,38 +141,48 @@ class ChromerOptionsActivity : BaseActivity() {
           }
         }
         history -> {
-          holder.menu_image.setImageDrawable(IconicsDrawable(holder.itemView.context)
+          holder.menu_image.setImageDrawable(
+            IconicsDrawable(holder.itemView.context)
               .icon(CommunityMaterial.Icon.cmd_history)
               .colorRes(R.color.accent)
-              .sizeDp(24))
+              .sizeDp(24)
+          )
           holder.menu_text.setText(R.string.title_history)
           holder.itemView.setOnClickListener {
-            startActivity(Intent(
+            startActivity(
+              Intent(
                 activity,
                 HistoryActivity::class.java
-            ))
+              )
+            )
             activity.finish()
           }
         }
         addToHomeScreen -> {
-          holder.menu_image.setImageDrawable(IconicsDrawable(holder.itemView.context)
+          holder.menu_image.setImageDrawable(
+            IconicsDrawable(holder.itemView.context)
               .icon(CommunityMaterial.Icon.cmd_home_variant)
               .colorRes(R.color.accent)
-              .sizeDp(24))
+              .sizeDp(24)
+          )
           holder.menu_text.setText(R.string.add_to_homescreen)
           holder.itemView.setOnClickListener {
-            startActivity(Intent(
+            startActivity(
+              Intent(
                 activity,
                 HomeScreenShortcutCreatorActivity::class.java
-            ).setData(intent.data))
+              ).setData(intent.data)
+            )
             activity.finish()
           }
         }
         openWith -> {
-          holder.menu_image.setImageDrawable(IconicsDrawable(holder.itemView.context)
+          holder.menu_image.setImageDrawable(
+            IconicsDrawable(holder.itemView.context)
               .icon(CommunityMaterial.Icon.cmd_open_in_new)
               .colorRes(R.color.accent)
-              .sizeDp(24))
+              .sizeDp(24)
+          )
           holder.menu_text.setText(R.string.open_with)
           holder.itemView.setOnClickListener {
             startActivity(Intent(activity, OpenIntentWithActivity::class.java).apply {
@@ -177,15 +193,17 @@ class ChromerOptionsActivity : BaseActivity() {
           }
         }
         article -> {
-          holder.menu_image.setImageDrawable(IconicsDrawable(holder.itemView.context)
+          holder.menu_image.setImageDrawable(
+            IconicsDrawable(holder.itemView.context)
               .icon(CommunityMaterial.Icon.cmd_file_document)
               .colorRes(R.color.accent)
-              .sizeDp(24))
+              .sizeDp(24)
+          )
           holder.menu_text.setText(R.string.open_article_view)
           holder.itemView.setOnClickListener {
             tabsManager.openArticle(
-                activity,
-                Website(intent.dataString!!)
+              activity,
+              Website(intent.dataString!!)
             )
             activity.finish()
           }
@@ -195,7 +213,7 @@ class ChromerOptionsActivity : BaseActivity() {
 
     override fun getItemCount() = items.size
 
-    inner class MenuItemHolder(override val containerView: View)
-      : RecyclerView.ViewHolder(containerView), LayoutContainer
+    inner class MenuItemHolder(override val containerView: View) :
+      RecyclerView.ViewHolder(containerView), LayoutContainer
   }
 }

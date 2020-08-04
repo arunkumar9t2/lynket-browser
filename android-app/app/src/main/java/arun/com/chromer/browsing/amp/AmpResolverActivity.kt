@@ -73,20 +73,20 @@ class AmpResolverActivity : BrowsingActivity() {
   }
 
   inner class AmpResolverDialog(
-      private var activity: Activity?
+    private var activity: Activity?
   ) : DialogInterface.OnDismissListener {
     val subs = CompositeSubscription()
     private var dialog: MaterialDialog? = null
 
     fun show(): AmpResolverDialog? {
       dialog = MaterialDialog.Builder(activity!!)
-          .title(R.string.grabbing_amp_link)
-          .progress(true, Integer.MAX_VALUE)
-          .content(R.string.loading)
-          .dismissListener(this)
-          .positiveText(R.string.skip)
-          .onPositive { _, _ -> launchUrl() }
-          .show()
+        .title(R.string.grabbing_amp_link)
+        .progress(true, Integer.MAX_VALUE)
+        .content(R.string.loading)
+        .dismissListener(this)
+        .positiveText(R.string.skip)
+        .onPositive { _, _ -> launchUrl() }
+        .show()
       return this
     }
 

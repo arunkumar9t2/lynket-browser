@@ -11,7 +11,8 @@ import dev.arunkumar.android.epoxy.model.KotlinHolder
 import kotlinx.android.synthetic.main.widget_search_provider_item.*
 
 @EpoxyModelClass(layout = R.layout.widget_search_provider_item)
-abstract class SearchProviderLayoutModel : KotlinEpoxyModelWithHolder<SearchProviderLayoutModel.ViewHolder>() {
+abstract class SearchProviderLayoutModel :
+  KotlinEpoxyModelWithHolder<SearchProviderLayoutModel.ViewHolder>() {
   class ViewHolder : KotlinHolder()
 
   @EpoxyAttribute

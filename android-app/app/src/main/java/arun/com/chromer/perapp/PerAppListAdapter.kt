@@ -45,15 +45,17 @@ import javax.inject.Inject
 @PerActivity
 class PerAppListAdapter @Inject
 internal constructor(
-    private val activity: Activity,
-    private val glideRequests: RequestManager
+  private val activity: Activity,
+  private val glideRequests: RequestManager
 ) : RecyclerView.Adapter<PerAppListAdapter.BlackListItemViewHolder>() {
   private val apps = ArrayList<App>()
 
   private val iconSizeDp = 24
 
-  val incognitoSelections: PublishSubject<Pair<String, Boolean>> = PublishSubject.create<Pair<String, Boolean>>()
-  val blacklistSelections: PublishSubject<Pair<String, Boolean>> = PublishSubject.create<Pair<String, Boolean>>()
+  val incognitoSelections: PublishSubject<Pair<String, Boolean>> =
+    PublishSubject.create<Pair<String, Boolean>>()
+  val blacklistSelections: PublishSubject<Pair<String, Boolean>> =
+    PublishSubject.create<Pair<String, Boolean>>()
 
   private val blacklistSelected: IconicsDrawable by lazy {
     IconicsDrawable(activity).apply {
@@ -92,7 +94,10 @@ internal constructor(
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BlackListItemViewHolder {
-    return BlackListItemViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.activity_per_apps_list_item_template, parent, false))
+    return BlackListItemViewHolder(
+      LayoutInflater.from(parent.context)
+        .inflate(R.layout.activity_per_apps_list_item_template, parent, false)
+    )
   }
 
   override fun onBindViewHolder(holder: BlackListItemViewHolder, position: Int) {

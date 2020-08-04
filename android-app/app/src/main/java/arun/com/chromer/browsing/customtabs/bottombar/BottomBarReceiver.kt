@@ -74,7 +74,8 @@ class BottomBarReceiver : BroadcastReceiver() {
     protected abstract fun onPerform()
   }
 
-  inner class ArticleView internal constructor(context: Context, url: String) : Command(context, url) {
+  inner class ArticleView internal constructor(context: Context, url: String) :
+    Command(context, url) {
 
     override fun onPerform() {
       if (!performCalled) {
@@ -84,7 +85,8 @@ class BottomBarReceiver : BroadcastReceiver() {
     }
   }
 
-  inner class OpenInNewTab internal constructor(context: Context, url: String) : Command(context, url) {
+  inner class OpenInNewTab internal constructor(context: Context, url: String) :
+    Command(context, url) {
 
     override fun onPerform() {
       if (!performCalled) {
@@ -102,14 +104,16 @@ class BottomBarReceiver : BroadcastReceiver() {
     }
   }
 
-  inner class MinimizeUrl internal constructor(context: Context, orgUrl: String) : Command(context, orgUrl) {
+  inner class MinimizeUrl internal constructor(context: Context, orgUrl: String) :
+    Command(context, orgUrl) {
 
     override fun onPerform() {
       tabsManager.minimizeTabByUrl(url, CustomTabActivity::class.java.name)
     }
   }
 
-  inner class TabsScreen internal constructor(context: Context, orgUrl: String) : Command(context, orgUrl) {
+  inner class TabsScreen internal constructor(context: Context, orgUrl: String) :
+    Command(context, orgUrl) {
 
     override fun onPerform() {
       tabsManager.showTabsActivity()

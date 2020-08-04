@@ -36,7 +36,7 @@ class ImageViewActivity : AppCompatActivity() {
     setContentView(R.layout.activity_image_view)
     val url = intent.dataString
     GlideApp.with(this)
-        .load(url)
-        .into(imageView)
+      .load(url)
+      .into(imageView)
   }
 }

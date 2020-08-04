@@ -33,8 +33,8 @@ import javax.inject.Inject
 class TabsViewModel
 @Inject
 constructor(
-    private val tabsManager: TabsManager,
-    private val websiteRepository: WebsiteRepository
+  private val tabsManager: TabsManager,
+  private val websiteRepository: WebsiteRepository
 ) : ViewModel() {
   val loadingLiveData = MutableLiveData<Boolean>()
   val tabsData = MutableLiveData<MutableList<TabsManager.Tab>>()
@@ -44,28 +44,29 @@ constructor(
 
   init {
     subs.add(loaderSubject
-        .asObservable()
-        .doOnNext { loadingLiveData.value = true }
-        .switchMap { _ ->
-          tabsManager.getActiveTabs()
-              .onErrorReturn { emptyList() }
-              .subscribeOn(Schedulers.io())
-              .toObservable()
-              .concatMapIterable { it }
-              .concatMap { tab ->
-                websiteRepository.getWebsiteReadOnly(tab.url)
-                    .map { website ->
-                      tab.apply {
-                        this.website = website
-                      }
-                    }
-              }.toList()
-              .observeOn(AndroidSchedulers.mainThread())
-              .doOnNext { tabs ->
-                loadingLiveData.value = false
-                tabsData.value = tabs
+      .asObservable()
+      .doOnNext { loadingLiveData.value = true }
+      .switchMap { _ ->
+        tabsManager.getActiveTabs()
+          .onErrorReturn { emptyList() }
+          .subscribeOn(Schedulers.io())
+          .toObservable()
+          .concatMapIterable { it }
+          .concatMap { tab ->
+            websiteRepository.getWebsiteReadOnly(tab.url)
+              .map { website ->
+                tab.apply {
+                  this.website = website
+                }
               }
-        }.subscribe())
+          }.toList()
+          .observeOn(AndroidSchedulers.mainThread())
+          .doOnNext { tabs ->
+            loadingLiveData.value = false
+            tabsData.value = tabs
+          }
+      }.subscribe()
+    )
   }
 
 
@@ -75,11 +76,11 @@ constructor(
 
   fun clearAllTabs() {
     subs.add(tabsManager.closeAllTabs()
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .doOnSuccess { loadTabs() }
-        .doOnError(Timber::e)
-        .subscribe())
+      .subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread())
+      .doOnSuccess { loadTabs() }
+      .doOnError(Timber::e)
+      .subscribe())
   }
 
   override fun onCleared() {

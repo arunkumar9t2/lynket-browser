@@ -72,7 +72,7 @@ class NewTabDialogActivity : BaseActivity() {
   }
 
   inner class NewTabDialog(
-      private var activity: Activity?
+    private var activity: Activity?
   ) : DialogInterface.OnDismissListener, LayoutContainer {
 
     override val containerView: View? get() = dialog.customView
@@ -84,10 +84,10 @@ class NewTabDialogActivity : BaseActivity() {
 
     fun show(): NewTabDialog? {
       dialog = MaterialDialog.Builder(activity!!)
-          .backgroundColorRes(android.R.color.transparent)
-          .customView(R.layout.activity_new_tab, false)
-          .dismissListener(this)
-          .show()
+        .backgroundColorRes(android.R.color.transparent)
+        .customView(R.layout.activity_new_tab, false)
+        .dismissListener(this)
+        .show()
 
       dialog.window?.let { diaWindow ->
         diaWindow.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -98,15 +98,15 @@ class NewTabDialogActivity : BaseActivity() {
 
       materialSearchView.apply {
         searchPerforms()
-            .takeUntil(lifecycleEvents.destroys)
-            .subscribe { url ->
-              postDelayed({ launchUrl(url) }, 150)
-            }
+          .takeUntil(lifecycleEvents.destroys)
+          .subscribe { url ->
+            postDelayed({ launchUrl(url) }, 150)
+          }
         voiceSearchFailed()
-            .takeUntil(lifecycleEvents.destroys)
-            .subscribe {
-              Toast.makeText(activity, R.string.no_voice_rec_apps, Toast.LENGTH_SHORT).show()
-            }
+          .takeUntil(lifecycleEvents.destroys)
+          .subscribe {
+            Toast.makeText(activity, R.string.no_voice_rec_apps, Toast.LENGTH_SHORT).show()
+          }
         post {
           gainFocus()
           editText.requestFocus()
@@ -119,11 +119,13 @@ class NewTabDialogActivity : BaseActivity() {
 
     private fun launchUrl(url: String) {
       activity?.let {
-        tabsManager.openUrl(it,
-            website = Website(url),
-            fromApp = true,
-            fromWebHeads = false,
-            fromNewTab = true)
+        tabsManager.openUrl(
+          it,
+          website = Website(url),
+          fromApp = true,
+          fromWebHeads = false,
+          fromNewTab = true
+        )
       }
       dialog.dismiss()
     }

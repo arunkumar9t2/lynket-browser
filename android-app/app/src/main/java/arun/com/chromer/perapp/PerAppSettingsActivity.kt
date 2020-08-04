@@ -80,7 +80,8 @@ class PerAppSettingsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLis
 
   private fun observeViewModel() {
     val owner = this@PerAppSettingsActivity
-    perAppViewModel = ViewModelProviders.of(owner, viewModelFactory).get(PerAppSettingsViewModel::class.java)
+    perAppViewModel =
+      ViewModelProviders.of(owner, viewModelFactory).get(PerAppSettingsViewModel::class.java)
     perAppViewModel.apply {
       loadingLiveData.watch(owner) { loading(it!!) }
       appsLiveData.watch(owner) { apps ->
@@ -114,8 +115,9 @@ class PerAppSettingsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLis
 
     swipeRefreshLayout.apply {
       setColorSchemeResources(
-          R.color.colorPrimary,
-          R.color.colorAccent)
+        R.color.colorPrimary,
+        R.color.colorAccent
+      )
       setOnRefreshListener {
         loadApps()
       }
@@ -140,10 +142,10 @@ class PerAppSettingsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLis
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
   private fun requestUsagePermission() {
     MaterialDialog.Builder(this)
-        .title(R.string.permission_required)
-        .content(R.string.usage_permission_explanation_per_apps)
-        .positiveText(R.string.grant)
-        .onPositive { _, _ -> startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)) }.show()
+      .title(R.string.permission_required)
+      .content(R.string.usage_permission_explanation_per_apps)
+      .positiveText(R.string.grant)
+      .onPositive { _, _ -> startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)) }.show()
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {

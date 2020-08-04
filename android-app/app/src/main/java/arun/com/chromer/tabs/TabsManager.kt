@@ -42,15 +42,15 @@ interface TabsManager {
     val EMBEDDABLE_WEBVIEW_ACTIVITY = EmbeddableWebViewActivity::class.java.name
 
     val ALL_BROWSING_ACTIVITIES = arrayListOf(
-        CUSTOM_TAB_ACTIVITY,
-        ARTICLE_ACTIVITY,
-        WEBVIEW_ACTIVITY,
-        EMBEDDABLE_WEBVIEW_ACTIVITY
+      CUSTOM_TAB_ACTIVITY,
+      ARTICLE_ACTIVITY,
+      WEBVIEW_ACTIVITY,
+      EMBEDDABLE_WEBVIEW_ACTIVITY
     )
     val FULL_BROWSING_ACTIVITIES = arrayListOf(
-        CUSTOM_TAB_ACTIVITY,
-        WEBVIEW_ACTIVITY,
-        EMBEDDABLE_WEBVIEW_ACTIVITY
+      CUSTOM_TAB_ACTIVITY,
+      WEBVIEW_ACTIVITY,
+      EMBEDDABLE_WEBVIEW_ACTIVITY
     )
   }
 
@@ -84,25 +84,25 @@ interface TabsManager {
    * article, reordering existing tabs etc.
    */
   fun openUrl(
-      context: Context,
-      website: Website,
-      fromApp: Boolean = true,
-      fromWebHeads: Boolean = false,
-      fromNewTab: Boolean = false,
-      fromAmp: Boolean = false,
-      incognito: Boolean = false
+    context: Context,
+    website: Website,
+    fromApp: Boolean = true,
+    fromWebHeads: Boolean = false,
+    fromNewTab: Boolean = false,
+    fromAmp: Boolean = false,
+    incognito: Boolean = false
   )
 
   /**
    * Opens the given Uri in a browsing tab.
    */
   fun openBrowsingTab(
-      context: Context,
-      website: Website,
-      smart: Boolean = false,
-      fromNewTab: Boolean,
-      activityNames: List<String>? = null,
-      incognito: Boolean = false
+    context: Context,
+    website: Website,
+    smart: Boolean = false,
+    fromNewTab: Boolean,
+    activityNames: List<String>? = null,
+    incognito: Boolean = false
   )
 
   /**
@@ -116,12 +116,20 @@ interface TabsManager {
    *
    * Optionally specify which Activity class should be brought to front
    */
-  fun reOrderTabByUrl(context: Context, website: Website, activityNames: List<String>? = null): Boolean
+  fun reOrderTabByUrl(
+    context: Context,
+    website: Website,
+    activityNames: List<String>? = null
+  ): Boolean
 
   /**
    * Same as {@link reOrderTabByUrl} but instead of reordering, finishes and removes the task.
    */
-  fun finishTabByUrl(context: Context, website: Website, activityNames: List<String>? = null): Boolean
+  fun finishTabByUrl(
+    context: Context,
+    website: Website,
+    activityNames: List<String>? = null
+  ): Boolean
 
   /**
    * If a task exist with this url already then this method should minimize it a.k.a putting it in
@@ -144,11 +152,11 @@ interface TabsManager {
    * if {@param fromMinimize} is {@code false}
    */
   fun openWebHeads(
-      context: Context,
-      website: Website,
-      fromMinimize: Boolean = false,
-      fromAmp: Boolean = false,
-      incognito: Boolean = false
+    context: Context,
+    website: Website,
+    fromMinimize: Boolean = false,
+    fromAmp: Boolean = false,
+    incognito: Boolean = false
   )
 
   /**
@@ -173,7 +181,12 @@ interface TabsManager {
    */
   fun showTabsActivity()
 
-  fun openArticle(context: Context, website: Website, newTab: Boolean = false, incognito: Boolean = false)
+  fun openArticle(
+    context: Context,
+    website: Website,
+    newTab: Boolean = false,
+    incognito: Boolean = false
+  )
 
   fun shouldUseWebView(incognito: Boolean): Boolean
 }

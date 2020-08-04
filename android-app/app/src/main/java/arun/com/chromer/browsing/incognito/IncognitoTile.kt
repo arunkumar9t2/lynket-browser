@@ -47,8 +47,10 @@ class IncognitoTile : PreferenceQuickSettingsTile() {
   override fun preference(): Boolean = preferences.fullIncognitoMode()
 
   private fun label() = getString(R.string.incognito_mode)
-  private fun icon() = Icon.createWithBitmap(IconicsDrawable(this)
+  private fun icon() = Icon.createWithBitmap(
+    IconicsDrawable(this)
       .icon(CommunityMaterial.Icon.cmd_incognito)
       .color(Color.WHITE)
-      .sizeDp(24).toBitmap())
+      .sizeDp(24).toBitmap()
+  )
 }

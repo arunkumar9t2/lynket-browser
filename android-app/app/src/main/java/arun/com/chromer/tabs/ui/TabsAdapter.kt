@@ -41,25 +41,25 @@ import kotlinx.android.synthetic.main.fragment_tabs_item_template.*
  */
 class TabsAdapter
 constructor(
-    val glideRequests: GlideRequests,
-    val tabsManager: TabsManager
+  val glideRequests: GlideRequests,
+  val tabsManager: TabsManager
 ) : ListAdapter<TabsManager.Tab, TabsAdapter.TabsViewHolder>(TabDiff) {
 
   override fun onCreateViewHolder(
-      parent: ViewGroup,
-      viewType: Int
+    parent: ViewGroup,
+    viewType: Int
   ) = TabsViewHolder(
-      LayoutInflater.from(parent.context).inflate(
-          R.layout.fragment_tabs_item_template,
-          parent,
-          false
-      ),
-      ::getItem
+    LayoutInflater.from(parent.context).inflate(
+      R.layout.fragment_tabs_item_template,
+      parent,
+      false
+    ),
+    ::getItem
   )
 
   override fun onBindViewHolder(
-      holder: TabsViewHolder,
-      position: Int
+    holder: TabsViewHolder,
+    position: Int
   ) = holder.bind(getItem(position))
 
   override fun onViewRecycled(holder: TabsViewHolder) {
@@ -70,8 +70,8 @@ constructor(
   fun getTabAt(adapterPosition: Int): TabsManager.Tab = getItem(adapterPosition)
 
   inner class TabsViewHolder(
-      override val containerView: View,
-      getItem: (Int) -> TabsManager.Tab
+    override val containerView: View,
+    getItem: (Int) -> TabsManager.Tab
   ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     init {
@@ -81,9 +81,9 @@ constructor(
           val tab = getItem(adapterPosition)
           val url = tab.url
           tabsManager.reOrderTabByUrl(
-              itemView.context,
-              Website(url),
-              listOf(tab.getTargetActivityName())
+            itemView.context,
+            Website(url),
+            listOf(tab.getTargetActivityName())
           )
         }
       }
@@ -97,24 +97,30 @@ constructor(
         when (tab.type) {
           WEB_VIEW, WEB_VIEW_EMBEDDED -> {
             websiteTabMode.setText(R.string.web_view)
-            websiteTabModeIcon.setImageDrawable(IconicsDrawable(itemView.context)
+            websiteTabModeIcon.setImageDrawable(
+              IconicsDrawable(itemView.context)
                 .icon(CommunityMaterial.Icon.cmd_web)
                 .color(ContextCompat.getColor(itemView.context, R.color.md_blue_500))
-                .sizeDp(16))
+                .sizeDp(16)
+            )
           }
           CUSTOM_TAB -> {
             websiteTabMode.setText(R.string.custom_tab)
-            websiteTabModeIcon.setImageDrawable(IconicsDrawable(itemView.context)
+            websiteTabModeIcon.setImageDrawable(
+              IconicsDrawable(itemView.context)
                 .icon(CommunityMaterial.Icon.cmd_google_chrome)
                 .color(ContextCompat.getColor(itemView.context, R.color.md_orange_500))
-                .sizeDp(16))
+                .sizeDp(16)
+            )
           }
           ARTICLE -> {
             websiteTabMode.setText(R.string.article_mode)
-            websiteTabModeIcon.setImageDrawable(IconicsDrawable(itemView.context)
+            websiteTabModeIcon.setImageDrawable(
+              IconicsDrawable(itemView.context)
                 .icon(CommunityMaterial.Icon.cmd_file_document)
                 .color(ContextCompat.getColor(itemView.context, R.color.md_grey_700))
-                .sizeDp(16))
+                .sizeDp(16)
+            )
           }
         }
       } else {
@@ -126,13 +132,13 @@ constructor(
   private object TabDiff : DiffUtil.ItemCallback<TabsManager.Tab>() {
 
     override fun areItemsTheSame(
-        oldItem: TabsManager.Tab,
-        newItem: TabsManager.Tab
+      oldItem: TabsManager.Tab,
+      newItem: TabsManager.Tab
     ): Boolean = oldItem == newItem
 
     override fun areContentsTheSame(
-        oldItem: TabsManager.Tab,
-        newItem: TabsManager.Tab
+      oldItem: TabsManager.Tab,
+      newItem: TabsManager.Tab
     ): Boolean = oldItem == newItem
   }
 }

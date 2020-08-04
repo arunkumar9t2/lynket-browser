@@ -85,7 +85,8 @@ class HomeFragment : BaseFragment(), Snackable {
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
-    homeFragmentViewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeFragmentViewModel::class.java)
+    homeFragmentViewModel =
+      ViewModelProviders.of(this, viewModelFactory).get(HomeFragmentViewModel::class.java)
     observeViewModel()
   }
 
@@ -130,10 +131,12 @@ class HomeFragment : BaseFragment(), Snackable {
   }
 
   private fun setupRecents() {
-    recentsHeaderIcon.setImageDrawable(IconicsDrawable(context!!)
+    recentsHeaderIcon.setImageDrawable(
+      IconicsDrawable(context!!)
         .icon(CommunityMaterial.Icon.cmd_history)
         .colorRes(R.color.accent)
-        .sizeDp(24))
+        .sizeDp(24)
+    )
     recentsList.apply {
       layoutManager = GridLayoutManager(activity, 4)
       adapter = recentsAdapter
@@ -160,14 +163,21 @@ class HomeFragment : BaseFragment(), Snackable {
       val isIncognito = preferences.fullIncognitoMode()
       val isWebView = preferences.useWebView()
       if (customTabProvider == null || isIncognito || isWebView) {
-        providerDescription.text = HtmlCompat.fromHtml(getString(R.string.tab_provider_status_message_home, getString(R.string.system_webview)))
+        providerDescription.text = HtmlCompat.fromHtml(
+          getString(
+            R.string.tab_provider_status_message_home,
+            getString(R.string.system_webview)
+          )
+        )
         GlideApp.with(this)
-            .load(ApplicationIcon.createUri(Constants.SYSTEM_WEBVIEW))
-            .error(IconicsDrawable(context!!)
-                .icon(CommunityMaterial.Icon.cmd_web)
-                .colorRes(R.color.primary)
-                .sizeDp(24))
-            .into(providerIcon)
+          .load(ApplicationIcon.createUri(Constants.SYSTEM_WEBVIEW))
+          .error(
+            IconicsDrawable(context!!)
+              .icon(CommunityMaterial.Icon.cmd_web)
+              .colorRes(R.color.primary)
+              .sizeDp(24)
+          )
+          .into(providerIcon)
         if (isIncognito) {
           providerReason.show()
           providerChangeButton.gone()
@@ -179,26 +189,29 @@ class HomeFragment : BaseFragment(), Snackable {
         providerReason.gone()
         providerChangeButton.show()
         val appName = context!!.appName(customTabProvider)
-        providerDescription.text = HtmlCompat.fromHtml(getString(R.string.tab_provider_status_message_home, appName))
+        providerDescription.text =
+          HtmlCompat.fromHtml(getString(R.string.tab_provider_status_message_home, appName))
         GlideApp.with(this)
-            .load(ApplicationIcon.createUri(customTabProvider))
-            .into(providerIcon)
+          .load(ApplicationIcon.createUri(customTabProvider))
+          .into(providerIcon)
       }
     }
   }
 
 
   private fun setupTipsCard() {
-    tipsIcon.setImageDrawable(IconicsDrawable(context!!)
+    tipsIcon.setImageDrawable(
+      IconicsDrawable(context!!)
         .icon(CommunityMaterial.Icon.cmd_lightbulb_on)
         .colorRes(R.color.md_yellow_700)
-        .sizeDp(24))
+        .sizeDp(24)
+    )
   }
 
   private fun setupEventListeners() {
     subs.add(rxEventBus
-        .filteredEvents<BrowsingOptionsActivity.ProviderChanged>()
-        .subscribe { setupProviderCard() })
+      .filteredEvents<BrowsingOptionsActivity.ProviderChanged>()
+      .subscribe { setupProviderCard() })
   }
 
   @OnClick(R.id.providerChangeButton)

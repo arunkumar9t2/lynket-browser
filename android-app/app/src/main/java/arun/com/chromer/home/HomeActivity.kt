@@ -105,10 +105,12 @@ class HomeActivity : BaseActivity(), Snackable, UsesViewModel {
   }
 
   private fun setupToolbar() {
-    tipsIcon.setImageDrawable(IconicsDrawable(this)
+    tipsIcon.setImageDrawable(
+      IconicsDrawable(this)
         .icon(CommunityMaterial.Icon.cmd_lightbulb_on)
         .colorRes(R.color.md_yellow_700)
-        .sizeDp(24))
+        .sizeDp(24)
+    )
   }
 
   private fun setupEventListeners() {
@@ -148,40 +150,40 @@ class HomeActivity : BaseActivity(), Snackable, UsesViewModel {
     materialSearchView.apply {
       // Handle voice item failed
       voiceSearchFailed()
-          .takeUntil(lifecycleEvents.destroys)
-          .subscribe {
-            snack(getString(R.string.no_voice_rec_apps))
-          }
+        .takeUntil(lifecycleEvents.destroys)
+        .subscribe {
+          snack(getString(R.string.no_voice_rec_apps))
+        }
 
       // Handle search events
       searchPerforms()
-          .takeUntil(lifecycleEvents.destroys)
-          .subscribe { url ->
-            postDelayed(150) {
-              tabsManger.openUrl(this@HomeActivity, Website(url))
-            }
+        .takeUntil(lifecycleEvents.destroys)
+        .subscribe { url ->
+          postDelayed(150) {
+            tabsManger.openUrl(this@HomeActivity, Website(url))
           }
+        }
 
       // No focus initially
       clearFocus()
 
       // Handle focus changes
       focusChanges()
-          .takeUntil(lifecycleEvents.destroys)
-          .subscribe { hasFocus ->
-            if (hasFocus) {
-              shadowView.show()
-            } else {
-              shadowView.gone()
-            }
+        .takeUntil(lifecycleEvents.destroys)
+        .subscribe { hasFocus ->
+          if (hasFocus) {
+            shadowView.show()
+          } else {
+            shadowView.gone()
           }
+        }
 
       // Menu clicks
       menuClicks()
-          .takeUntil(lifecycleEvents.destroys)
-          .subscribe {
-            HomeBottomSheet().show(supportFragmentManager, "home-bottom-shher")
-          }
+        .takeUntil(lifecycleEvents.destroys)
+        .subscribe {
+          HomeBottomSheet().show(supportFragmentManager, "home-bottom-shher")
+        }
     }
   }
 

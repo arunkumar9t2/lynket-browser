@@ -31,7 +31,7 @@ private const val BUBBLE_NOTIFICATION_GROUP = "bubbles"
 class BubbleNotificationUtil
 @Inject
 constructor(
-    private val application: Application
+  private val application: Application
 ) {
 
   private val notificationManager by lazy {
@@ -42,9 +42,9 @@ constructor(
     var channel = notificationManager.getNotificationChannel(BUBBLE_NOTIFICATION_CHANNEL_ID)
     if (channel == null) {
       channel = NotificationChannel(
-          BUBBLE_NOTIFICATION_CHANNEL_ID,
-          "Bubbles notification channel",
-          IMPORTANCE_HIGH
+        BUBBLE_NOTIFICATION_CHANNEL_ID,
+        "Bubbles notification channel",
+        IMPORTANCE_HIGH
       ).apply {
         description = "Channel for showing bubbles"
         setAllowBubbles(true)
@@ -59,20 +59,21 @@ constructor(
   }
 
   private fun updateGroupSummaryNotification(lastNotificationColor: Int) {
-    val bubblesSummaryNotification = Notification.Builder(application, BUBBLE_NOTIFICATION_CHANNEL_ID).run {
-      setContentTitle(application.getString(R.string.bubble_notification_group_title))
-      setContentText(application.getString(R.string.bubble_notification_group_description))
-      setGroup(BUBBLE_NOTIFICATION_GROUP)
-      setGroupSummary(true)
-      setAllowSystemGeneratedContextualActions(true)
-      setColor(lastNotificationColor)
-      setColorized(true)
-      setLocalOnly(true)
-      setOngoing(false)
-      setSmallIcon(Icon.createWithResource(application, R.drawable.ic_chromer_notification))
-      setLargeIcon(Icon.createWithResource(application, R.mipmap.ic_launcher_round))
-      build()
-    }
+    val bubblesSummaryNotification =
+      Notification.Builder(application, BUBBLE_NOTIFICATION_CHANNEL_ID).run {
+        setContentTitle(application.getString(R.string.bubble_notification_group_title))
+        setContentText(application.getString(R.string.bubble_notification_group_description))
+        setGroup(BUBBLE_NOTIFICATION_GROUP)
+        setGroupSummary(true)
+        setAllowSystemGeneratedContextualActions(true)
+        setColor(lastNotificationColor)
+        setColorized(true)
+        setLocalOnly(true)
+        setOngoing(false)
+        setSmallIcon(Icon.createWithResource(application, R.drawable.ic_chromer_notification))
+        setLargeIcon(Icon.createWithResource(application, R.mipmap.ic_launcher_round))
+        build()
+      }
     notificationManager.notify(BUBBLE_NOTIFICATION_GROUP.hashCode(), bubblesSummaryNotification)
   }
 
@@ -82,21 +83,21 @@ constructor(
     val website = bubbleData.website
 
     val bubbleIntent = PendingIntent.getActivity(
-        context,
-        website.url.hashCode(),
-        Intent(context, EmbeddableWebViewActivity::class.java).apply {
-          data = Uri.parse(website.url)
-        },
-        PendingIntent.FLAG_UPDATE_CURRENT
+      context,
+      website.url.hashCode(),
+      Intent(context, EmbeddableWebViewActivity::class.java).apply {
+        data = Uri.parse(website.url)
+      },
+      PendingIntent.FLAG_UPDATE_CURRENT
     )
 
     val bubbleIcon: Icon = bubbleData.icon
-        ?.let(Icon::createWithAdaptiveBitmap)
-        ?: bubbleData.fallbackIcon()
+      ?.let(Icon::createWithAdaptiveBitmap)
+      ?: bubbleData.fallbackIcon()
 
     val displayHeight = (application.getSystemService(Context.WINDOW_SERVICE) as WindowManager)
-        .defaultDisplay
-        .let { display -> Point().apply(display::getSize).y }
+      .defaultDisplay
+      .let { display -> Point().apply(display::getSize).y }
 
     val bubbleNotification = Notification.Builder(context, BUBBLE_NOTIFICATION_CHANNEL_ID).run {
       setContentTitle(website.safeLabel())
@@ -133,7 +134,12 @@ constructor(
 
   private fun BubbleLoadData.fallbackIcon(): Icon = if (color != Constants.NO_COLOR) {
     val iconSize = application.dpToPx(108.0)
-    Icon.createWithAdaptiveBitmap(ColorDrawable(color).toBitmap(width = iconSize, height = iconSize))
+    Icon.createWithAdaptiveBitmap(
+      ColorDrawable(color).toBitmap(
+        width = iconSize,
+        height = iconSize
+      )
+    )
   } else {
     Icon.createWithResource(application, R.mipmap.ic_launcher)
   }

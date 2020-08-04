@@ -26,9 +26,9 @@ abstract class TabsInfoModel : KotlinEpoxyModelWithHolder<TabsInfoModel.ViewHold
   override fun bind(holder: ViewHolder) {
     super.bind(holder)
     holder.tabsDescription.text = holder.tabsDescription.context.resources.getQuantityString(
-        R.plurals.active_tabs,
-        tabs.size,
-        tabs.size
+      R.plurals.active_tabs,
+      tabs.size,
+      tabs.size
     )
     holder.tabsCard.setOnClickListener {
       tabsManager.showTabsActivity()
@@ -55,9 +55,9 @@ abstract class TabsInfoModel : KotlinEpoxyModelWithHolder<TabsInfoModel.ViewHold
       tabsPreviewRecyclerView.apply {
         (itemAnimator as? DefaultItemAnimator)?.supportsChangeAnimations = false
         layoutManager = LinearLayoutManager(
-            containerView.context,
-            RecyclerView.HORIZONTAL,
-            false
+          containerView.context,
+          RecyclerView.HORIZONTAL,
+          false
         )
       }
     }

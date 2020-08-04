@@ -49,4 +49,5 @@ fun Drawable.toBitmap(): Bitmap {
 /**
  * Applies given @param color on a new [Drawable] and returns it.
  */
-fun Drawable.applyColor(@ColorInt color: Int): Drawable = this.mutate().apply { setColorFilter(color, PorterDuff.Mode.SRC_ATOP) }
+fun Drawable.applyColor(@ColorInt color: Int): Drawable =
+  this.mutate().apply { setColorFilter(color, PorterDuff.Mode.SRC_ATOP) }

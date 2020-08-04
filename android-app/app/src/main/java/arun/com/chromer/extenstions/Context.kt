@@ -50,20 +50,20 @@ fun Context.appName(packageName: String): String {
 }
 
 data class StringResource(
-    @param:StringRes val resource: Int,
-    val args: List<String> = emptyList(),
-    val resourceArgs: List<Int> = emptyList()
+  @param:StringRes val resource: Int,
+  val args: List<String> = emptyList(),
+  val resourceArgs: List<Int> = emptyList()
 )
 
 fun Context.resolveStringResource(stringResource: StringResource): String {
   return when {
     stringResource.args.isNotEmpty() -> getString(
-        stringResource.resource,
-        *stringResource.args.toTypedArray()
+      stringResource.resource,
+      *stringResource.args.toTypedArray()
     )
     stringResource.resourceArgs.isNotEmpty() -> getString(
-        stringResource.resource,
-        *stringResource.resourceArgs.map(::getString).toTypedArray()
+      stringResource.resource,
+      *stringResource.resourceArgs.map(::getString).toTypedArray()
     )
     else -> getString(stringResource.resource)
   }

@@ -18,7 +18,8 @@ import dev.arunkumar.android.epoxy.model.KotlinHolder
 import kotlinx.android.synthetic.main.widget_suggestions_item_template.*
 
 @EpoxyModelClass(layout = R.layout.widget_suggestions_item_template)
-abstract class SuggestionLayoutModel : KotlinEpoxyModelWithHolder<SuggestionLayoutModel.ViewHolder>() {
+abstract class SuggestionLayoutModel :
+  KotlinEpoxyModelWithHolder<SuggestionLayoutModel.ViewHolder>() {
   @EpoxyAttribute
   lateinit var suggestionItem: SuggestionItem
 

@@ -71,16 +71,16 @@ class HistoryFragment : BaseFragment(), Snackable, FabHandler {
 
   private val incognitoImg: IconicsDrawable by lazy {
     IconicsDrawable(requireActivity())
-        .icon(CommunityMaterial.Icon.cmd_incognito)
-        .color(ContextCompat.getColor(requireActivity(), R.color.accent))
-        .sizeDp(24)
+      .icon(CommunityMaterial.Icon.cmd_incognito)
+      .color(ContextCompat.getColor(requireActivity(), R.color.accent))
+      .sizeDp(24)
   }
 
   private val historyImg: IconicsDrawable by lazy {
     IconicsDrawable(requireActivity())
-        .icon(CommunityMaterial.Icon.cmd_history)
-        .colorRes(R.color.accent)
-        .sizeDp(24)
+      .icon(CommunityMaterial.Icon.cmd_history)
+      .colorRes(R.color.accent)
+      .sizeDp(24)
   }
 
   private val formattedMessage: CharSequence
@@ -88,10 +88,12 @@ class HistoryFragment : BaseFragment(), Snackable, FabHandler {
       val provider = preferences.customTabPackage()
       return when (provider) {
         null -> getString(R.string.enable_history_subtitle)
-        else -> fromHtml(String.format(
+        else -> fromHtml(
+          String.format(
             getString(R.string.enable_history_subtitle_custom_tab),
             Utils.getAppNameWithPackage(requireActivity(), provider)
-        ))
+          )
+        )
       }
     }
 
@@ -120,7 +122,8 @@ class HistoryFragment : BaseFragment(), Snackable, FabHandler {
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
-    viewModel = ViewModelProviders.of(this, viewModelFactory).get(HistoryFragmentViewModel::class.java)
+    viewModel =
+      ViewModelProviders.of(this, viewModelFactory).get(HistoryFragmentViewModel::class.java)
     observeViewModel()
   }
 
@@ -177,29 +180,32 @@ class HistoryFragment : BaseFragment(), Snackable, FabHandler {
     }
 
     subs.add(Observable
-        .create({ emitter: Emitter<Boolean> ->
+      .create({ emitter: Emitter<Boolean> ->
+        emitter.onNext(historyAdapter.itemCount > 0)
+        val simpleAdapterDataSetObserver = SimpleAdapterDataSetObserver {
           emitter.onNext(historyAdapter.itemCount > 0)
-          val simpleAdapterDataSetObserver = SimpleAdapterDataSetObserver {
-            emitter.onNext(historyAdapter.itemCount > 0)
-          }
-          historyAdapter.registerAdapterDataObserver(simpleAdapterDataSetObserver)
-          emitter.setCancellation {
-            historyAdapter.unregisterAdapterDataObserver(simpleAdapterDataSetObserver)
-          }
-        }, Emitter.BackpressureMode.LATEST)
-        .debounce(100, TimeUnit.MILLISECONDS)
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe { hasItems ->
-          if (hasItems) {
-            error.visibility = View.GONE
-          } else {
-            error.visibility = View.VISIBLE
-          }
-        })
+        }
+        historyAdapter.registerAdapterDataObserver(simpleAdapterDataSetObserver)
+        emitter.setCancellation {
+          historyAdapter.unregisterAdapterDataObserver(simpleAdapterDataSetObserver)
+        }
+      }, Emitter.BackpressureMode.LATEST)
+      .debounce(100, TimeUnit.MILLISECONDS)
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe { hasItems ->
+        if (hasItems) {
+          error.visibility = View.GONE
+        } else {
+          error.visibility = View.VISIBLE
+        }
+      })
 
 
     swipeRefreshLayout.apply {
-      setColorSchemeColors(ContextCompat.getColor(context!!, R.color.colorPrimary), ContextCompat.getColor(context!!, R.color.accent))
+      setColorSchemeColors(
+        ContextCompat.getColor(context!!, R.color.colorPrimary),
+        ContextCompat.getColor(context!!, R.color.accent)
+      )
       setOnRefreshListener {
         loadHistory()
         isRefreshing = false
@@ -208,14 +214,14 @@ class HistoryFragment : BaseFragment(), Snackable, FabHandler {
 
     ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, LEFT or RIGHT) {
       override fun onMove(
-          recyclerView: RecyclerView,
-          viewHolder: RecyclerView.ViewHolder,
-          target: RecyclerView.ViewHolder
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        target: RecyclerView.ViewHolder
       ) = false
 
       override fun onSwiped(
-          viewHolder: RecyclerView.ViewHolder,
-          direction: Int
+        viewHolder: RecyclerView.ViewHolder,
+        direction: Int
       ) = viewModel.deleteHistory(historyAdapter.getItemAt(viewHolder.adapterPosition))
     }).attachToRecyclerView(historyList)
   }
@@ -235,17 +241,17 @@ class HistoryFragment : BaseFragment(), Snackable, FabHandler {
   override fun onFabClick() {
     if (historyAdapter.itemCount != 0) {
       MaterialDialog.Builder(requireActivity())
-          .title(R.string.are_you_sure)
-          .content(R.string.history_deletion_confirmation_content)
-          .positiveText(android.R.string.yes)
-          .negativeText(android.R.string.no)
-          .onPositive { _, _ ->
-            viewModel.deleteAll { rows ->
-              if (isAdded) {
-                snack(String.format(requireContext().getString(R.string.deleted_items), rows))
-              }
+        .title(R.string.are_you_sure)
+        .content(R.string.history_deletion_confirmation_content)
+        .positiveText(android.R.string.yes)
+        .negativeText(android.R.string.no)
+        .onPositive { _, _ ->
+          viewModel.deleteAll { rows ->
+            if (isAdded) {
+              snack(String.format(requireContext().getString(R.string.deleted_items), rows))
             }
-          }.show()
+          }
+        }.show()
     }
   }
 }

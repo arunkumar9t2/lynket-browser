@@ -38,8 +38,8 @@ import javax.inject.Inject
 class BrowsingArticleViewModel
 @Inject
 constructor(
-    private val webArticleRepository: WebArticleRepository,
-    searchProviders: SearchProviders
+  private val webArticleRepository: WebArticleRepository,
+  searchProviders: SearchProviders
 ) : ViewModel() {
   private val subs = CompositeSubscription()
 
@@ -49,12 +49,12 @@ constructor(
 
   init {
     subs.add(loadingQueue.asObservable()
-        .concatMap {
-          webArticleRepository
-              .getWebArticle(it)
-              .compose(SchedulerProvider.applyIoSchedulers())
-              .compose(Result.applyToObservable())
-        }.subscribe { articleLiveData.value = it })
+      .concatMap {
+        webArticleRepository
+          .getWebArticle(it)
+          .compose(SchedulerProvider.applyIoSchedulers())
+          .compose(Result.applyToObservable())
+      }.subscribe { articleLiveData.value = it })
   }
 
   val selectedSearchProvider: Observable<SearchProvider> = searchProviders.selectedProvider

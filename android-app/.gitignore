@@ -25,6 +25,7 @@ build/
 .idea/artifacts
 .idea/kotlinc.xml
 .idea/assetWizardSettings.xml
+.idea/kotlinScripting.xml
 # .idea/workspace.xml
 
 # Local configuration file (sdk path, etc)

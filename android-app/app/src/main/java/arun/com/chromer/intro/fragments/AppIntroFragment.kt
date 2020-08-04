@@ -31,7 +31,8 @@ import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder
 import kotlinx.android.synthetic.main.fragment_text_intro.*
 
 open class AppIntroFragment : BaseFragment(), ISlideBackgroundColorHolder {
-  override fun getDefaultBackgroundColor(): Int = ContextCompat.getColor(context!!, R.color.tutorialBackgrounColor)
+  override fun getDefaultBackgroundColor(): Int =
+    ContextCompat.getColor(context!!, R.color.tutorialBackgrounColor)
 
   override fun setBackgroundColor(backgroundColor: Int) {
     if (root != null) {
@@ -56,8 +57,10 @@ open class AppIntroFragment : BaseFragment(), ISlideBackgroundColorHolder {
       this.title = this.arguments!!.getCharSequence("title")
       this.description = this.arguments!!.getCharSequence("desc")
       this.bgColor = this.arguments!!.getInt("bg_color")
-      this.titleColor = if (this.arguments!!.containsKey("title_color")) this.arguments!!.getInt("title_color") else 0
-      this.descColor = if (this.arguments!!.containsKey("desc_color")) this.arguments!!.getInt("desc_color") else 0
+      this.titleColor =
+        if (this.arguments!!.containsKey("title_color")) this.arguments!!.getInt("title_color") else 0
+      this.descColor =
+        if (this.arguments!!.containsKey("desc_color")) this.arguments!!.getInt("desc_color") else 0
     }
   }
 
@@ -80,21 +83,21 @@ open class AppIntroFragment : BaseFragment(), ISlideBackgroundColorHolder {
 
   companion object {
     fun newInstance(
-        title: CharSequence,
-        description: CharSequence,
-        @DrawableRes imageDrawable: Int,
-        @ColorInt bgColor: Int
+      title: CharSequence,
+      description: CharSequence,
+      @DrawableRes imageDrawable: Int,
+      @ColorInt bgColor: Int
     ): AppIntroFragment {
       return newInstance(title, description, imageDrawable, bgColor, 0, 0)
     }
 
     fun newInstance(
-        title: CharSequence,
-        description: CharSequence,
-        @DrawableRes imageDrawable: Int,
-        @ColorInt bgColor: Int,
-        @ColorInt titleColor: Int,
-        @ColorInt descColor: Int
+      title: CharSequence,
+      description: CharSequence,
+      @DrawableRes imageDrawable: Int,
+      @ColorInt bgColor: Int,
+      @ColorInt titleColor: Int,
+      @ColorInt descColor: Int
     ): AppIntroFragment {
       val sampleSlide = AppIntroFragment()
       val args = Bundle()

@@ -33,8 +33,8 @@ abstract class WebsiteLayoutModel : KotlinEpoxyModelWithHolder<WebsiteLayoutMode
         tabsManager.openUrl(containerView.context, website)
       }
       GlideApp.with(containerView.context)
-          .load(website)
-          .into(icon)
+        .load(website)
+        .into(icon)
     }
   }
 }

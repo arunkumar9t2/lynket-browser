@@ -77,8 +77,8 @@ class HomeScreenShortcutCreatorActivity : BrowsingActivity() {
   }
 
   class AddShortcutDialog(
-      private var activity: Activity?,
-      private val websiteLiveData: MutableLiveData<Result<Website>>
+    private var activity: Activity?,
+    private val websiteLiveData: MutableLiveData<Result<Website>>
   ) : DialogInterface.OnDismissListener, TextWatcher {
     private lateinit var unbinder: Unbinder
     private var dialog: MaterialDialog? = null
@@ -105,31 +105,31 @@ class HomeScreenShortcutCreatorActivity : BrowsingActivity() {
 
     fun show(): MaterialDialog? {
       dialog = MaterialDialog.Builder(activity!!)
-          .title(R.string.create_shorcut)
-          .customView(R.layout.dialog_create_shorcut_layout, false)
-          .dismissListener(this)
-          .positiveText(R.string.create)
-          .autoDismiss(true)
-          .onPositive { _, _ ->
-            if (ShortcutManagerCompat.isRequestPinShortcutSupported(activity!!)) {
-              ShortcutManagerCompat.requestPinShortcut(
-                  activity!!,
-                  ShortcutInfoCompat.Builder(activity!!, website.url)
-                      .setIcon(IconCompat.createWithBitmap(iconView?.drawable?.toBitmap()))
-                      .setIntent(Intent(activity, BrowserInterceptActivity::class.java).apply {
-                        action = Intent.ACTION_VIEW
-                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                        data = Uri.parse(website.preferredUrl())
-                      })
-                      .setLongLabel(shortcutName?.text.toString())
-                      .setShortLabel(shortcutName?.text.toString())
-                      .build(),
-                  null
-              )
-            }
+        .title(R.string.create_shorcut)
+        .customView(R.layout.dialog_create_shorcut_layout, false)
+        .dismissListener(this)
+        .positiveText(R.string.create)
+        .autoDismiss(true)
+        .onPositive { _, _ ->
+          if (ShortcutManagerCompat.isRequestPinShortcutSupported(activity!!)) {
+            ShortcutManagerCompat.requestPinShortcut(
+              activity!!,
+              ShortcutInfoCompat.Builder(activity!!, website.url)
+                .setIcon(IconCompat.createWithBitmap(iconView?.drawable?.toBitmap()))
+                .setIntent(Intent(activity, BrowserInterceptActivity::class.java).apply {
+                  action = Intent.ACTION_VIEW
+                  addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                  addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                  data = Uri.parse(website.preferredUrl())
+                })
+                .setLongLabel(shortcutName?.text.toString())
+                .setShortLabel(shortcutName?.text.toString())
+                .build(),
+              null
+            )
           }
-          .show()
+        }
+        .show()
       val dialogView = dialog!!.customView
       unbinder = ButterKnife.bind(this, dialogView!!)
       shortcutName?.addTextChangedListener(this)
@@ -147,14 +147,16 @@ class HomeScreenShortcutCreatorActivity : BrowsingActivity() {
             website = it.data!!
             shortcutName?.setText(website.safeLabel())
             GlideApp.with(activity!!)
-                .load(it.data)
-                .error(GlideApp.with(activity!!).load(ApplicationIcon.createUri(activity!!.packageName)))
-                .into(object : ImageViewTarget<Drawable>(iconView) {
-                  override fun setResource(resource: Drawable?) {
-                    iconView?.setImageDrawable(resource)
-                    loadAttemptFinished()
-                  }
-                })
+              .load(it.data)
+              .error(
+                GlideApp.with(activity!!).load(ApplicationIcon.createUri(activity!!.packageName))
+              )
+              .into(object : ImageViewTarget<Drawable>(iconView) {
+                override fun setResource(resource: Drawable?) {
+                  iconView?.setImageDrawable(resource)
+                  loadAttemptFinished()
+                }
+              })
           }
         }
       }

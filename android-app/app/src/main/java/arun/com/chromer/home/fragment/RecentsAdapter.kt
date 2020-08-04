@@ -41,7 +41,8 @@ import javax.inject.Inject
 @PerFragment
 class RecentsAdapter
 @Inject
-constructor(val tabsManager: TabsManager) : RecyclerView.Adapter<RecentsAdapter.RecentsViewHolder>() {
+constructor(val tabsManager: TabsManager) :
+  RecyclerView.Adapter<RecentsAdapter.RecentsViewHolder>() {
   private val websites = ArrayList<Website>()
 
   init {
@@ -49,15 +50,15 @@ constructor(val tabsManager: TabsManager) : RecyclerView.Adapter<RecentsAdapter.
   }
 
   override fun onCreateViewHolder(
-      parent: ViewGroup,
-      viewType: Int
+    parent: ViewGroup,
+    viewType: Int
   ) = RecentsViewHolder(
-      tabsManager,
-      LayoutInflater.from(parent.context).inflate(
-          R.layout.widget_website_grid_item,
-          parent,
-          false
-      )
+    tabsManager,
+    LayoutInflater.from(parent.context).inflate(
+      R.layout.widget_website_grid_item,
+      parent,
+      false
+    )
   )
 
   override fun onBindViewHolder(holder: RecentsViewHolder, position: Int) {
@@ -83,8 +84,8 @@ constructor(val tabsManager: TabsManager) : RecyclerView.Adapter<RecentsAdapter.
   }
 
   class RecentsViewHolder(
-      val tabsManager: TabsManager,
-      override val containerView: View
+    val tabsManager: TabsManager,
+    override val containerView: View
   ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
     init {
       ButterKnife.bind(this, itemView)
@@ -97,16 +98,16 @@ constructor(val tabsManager: TabsManager) : RecyclerView.Adapter<RecentsAdapter.
           tabsManager.openUrl(itemView.context, website)
         }
         GlideApp.with(itemView)
-            .load(website)
-            .into(icon)
+          .load(website)
+          .into(icon)
       }
     }
   }
 
   private inner class WebsitesDiff
   internal constructor(
-      private val oldList: List<Website>,
-      private val newList: List<Website>
+    private val oldList: List<Website>,
+    private val newList: List<Website>
   ) : DiffUtil.Callback() {
 
     override fun getOldListSize() = oldList.size
@@ -114,18 +115,18 @@ constructor(val tabsManager: TabsManager) : RecyclerView.Adapter<RecentsAdapter.
     override fun getNewListSize() = newList.size
 
     override fun areItemsTheSame(
-        oldItemPosition: Int,
-        newItemPosition: Int
+      oldItemPosition: Int,
+      newItemPosition: Int
     ) = isEquals(oldItemPosition, newItemPosition)
 
     override fun areContentsTheSame(
-        oldItemPosition: Int,
-        newItemPosition: Int
+      oldItemPosition: Int,
+      newItemPosition: Int
     ) = isEquals(oldItemPosition, newItemPosition)
 
     private fun isEquals(
-        oldItemPosition: Int,
-        newItemPosition: Int
+      oldItemPosition: Int,
+      newItemPosition: Int
     ) = oldList[oldItemPosition] == newList[newItemPosition]
   }
 }

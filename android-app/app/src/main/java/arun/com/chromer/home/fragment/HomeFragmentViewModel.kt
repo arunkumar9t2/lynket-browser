@@ -34,7 +34,7 @@ import javax.inject.Inject
 class HomeFragmentViewModel
 @Inject
 constructor(
-    private val historyRepository: HistoryRepository
+  private val historyRepository: HistoryRepository
 ) : ViewModel() {
   private val recentsLoaderSubject: PublishSubject<Int> = PublishSubject.create()
 

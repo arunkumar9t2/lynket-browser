@@ -48,7 +48,10 @@ class ChromerGlideModule : AppGlideModule() {
   override fun isManifestParsingEnabled() = false
 
   override fun applyOptions(context: Context, builder: GlideBuilder) {
-    builder.setDefaultTransitionOptions(Drawable::class.java, DrawableTransitionOptions.withCrossFade())
+    builder.setDefaultTransitionOptions(
+      Drawable::class.java,
+      DrawableTransitionOptions.withCrossFade()
+    )
 
     val defaultOptions = RequestOptions()
     val activityManager = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
@@ -62,10 +65,22 @@ class ChromerGlideModule : AppGlideModule() {
 
   override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
     super.registerComponents(context, glide, registry)
-    registry.prepend(Uri::class.java, ApplicationIcon::class.java, ApplicationIconModelLoader.Factory())
-    registry.append(ApplicationIcon::class.java, Bitmap::class.java, ApplicationIconDecoder(context, glide))
+    registry.prepend(
+      Uri::class.java,
+      ApplicationIcon::class.java,
+      ApplicationIconModelLoader.Factory()
+    )
+    registry.append(
+      ApplicationIcon::class.java,
+      Bitmap::class.java,
+      ApplicationIconDecoder(context, glide)
+    )
 
-    registry.append(Website::class.java, Website::class.java, UnitModelLoader.Factory.getInstance<Website>())
+    registry.append(
+      Website::class.java,
+      Website::class.java,
+      UnitModelLoader.Factory.getInstance<Website>()
+    )
     registry.append(Website::class.java, Bitmap::class.java, WebsiteDecoder(context, glide))
   }
 }

@@ -92,16 +92,16 @@ class ArticleActivity : BrowsingActivity() {
 
   private val textSizeIcon: IconicsDrawable by lazy {
     IconicsDrawable(this)
-        .icon(CommunityMaterial.Icon.cmd_format_size)
-        .color(ContextCompat.getColor(this, R.color.article_secondaryText))
-        .sizeDp(24)
+      .icon(CommunityMaterial.Icon.cmd_format_size)
+      .color(ContextCompat.getColor(this, R.color.article_secondaryText))
+      .sizeDp(24)
   }
 
   private val dismissIcon: IconicsDrawable by lazy {
     IconicsDrawable(this)
-        .icon(CommunityMaterial.Icon.cmd_close)
-        .color(ContextCompat.getColor(this, R.color.article_secondaryText))
-        .sizeDp(24)
+      .icon(CommunityMaterial.Icon.cmd_close)
+      .color(ContextCompat.getColor(this, R.color.article_secondaryText))
+      .sizeDp(24)
   }
 
   public override fun onCreate(savedInstanceState: Bundle?) {
@@ -115,9 +115,9 @@ class ArticleActivity : BrowsingActivity() {
     setupTheme()
 
     articleScrollListener = ArticleScrollListener(
-        toolbar,
-        statusBar,
-        primaryColor
+      toolbar,
+      statusBar,
+      primaryColor
     ).also(recyclerView::addOnScrollListener)
     recyclerView.addOnScrollListener(systemUiLowProfileOnScrollListener)
 
@@ -128,7 +128,8 @@ class ArticleActivity : BrowsingActivity() {
   }
 
   private fun observeViewModel() {
-    browsingArticleViewModel = ViewModelProviders.of(this, viewModelFactory).get(BrowsingArticleViewModel::class.java)
+    browsingArticleViewModel =
+      ViewModelProviders.of(this, viewModelFactory).get(BrowsingArticleViewModel::class.java)
     browsingArticleViewModel.articleLiveData.watch(this) { result ->
       when (result) {
         is Result.Success -> {
@@ -185,11 +186,11 @@ class ArticleActivity : BrowsingActivity() {
     finish()
     Toast.makeText(this, R.string.article_loading_failed, Toast.LENGTH_SHORT).show()
     tabsManager.openBrowsingTab(
-        this,
-        Website(intent.dataString!!),
-        smart = true,
-        fromNewTab = false,
-        activityNames = TabsManager.FULL_BROWSING_ACTIVITIES
+      this,
+      Website(intent.dataString!!),
+      smart = true,
+      fromNewTab = false,
+      activityNames = TabsManager.FULL_BROWSING_ACTIVITIES
     )
   }
 
@@ -216,11 +217,11 @@ class ArticleActivity : BrowsingActivity() {
     transparentSide1.setOnClickListener { finish() }
     transparentSide2.setOnClickListener { finish() }
     dragDismissLayout.addListener(
-        object : ElasticDragDismissFrameLayout.ElasticDragDismissCallback() {
-          override fun onDragDismissed() {
-            finish()
-          }
-        })
+      object : ElasticDragDismissFrameLayout.ElasticDragDismissCallback() {
+        override fun onDragDismissed() {
+          finish()
+        }
+      })
   }
 
 
@@ -234,21 +235,26 @@ class ArticleActivity : BrowsingActivity() {
     textSizeDismiss.setImageDrawable(dismissIcon)
     textSizeSeekbar.progress = preferences.articleTextSizeIncrement()
     subs.add(RxSeekBar
-        .changes(textSizeSeekbar)
-        .skip(1)
-        .subscribe { size ->
-          recyclerView.post {
-            if (::articleAdapter.isInitialized) {
-              articleAdapter.textSizeIncrementSp = size
-            }
+      .changes(textSizeSeekbar)
+      .skip(1)
+      .subscribe { size ->
+        recyclerView.post {
+          if (::articleAdapter.isInitialized) {
+            articleAdapter.textSizeIncrementSp = size
           }
-        })
+        }
+      })
   }
 
   private fun setupTheme() {
     when (preferences.articleTheme()) {
       THEME_BLACK -> handleBlackTheme()
-      THEME_DARK -> setNavigationBarColor(ContextCompat.getColor(this, R.color.article_windowBackground))
+      THEME_DARK -> setNavigationBarColor(
+        ContextCompat.getColor(
+          this,
+          R.color.article_windowBackground
+        )
+      )
     }
     setLowProfileSystemUi()
   }
@@ -290,21 +296,21 @@ class ArticleActivity : BrowsingActivity() {
 
   private fun renderArticle(webArticle: WebArticle) {
     articleAdapter = ArticleAdapter(
-        webArticle,
-        accentColor,
-        requestManager,
-        preferences.articleTextSizeIncrement()
+      webArticle,
+      accentColor,
+      requestManager,
+      preferences.articleTextSizeIncrement()
     ).apply {
       setElements(webArticle.elements)
       RxJavaInterop.toV2Observable(keywordsClicks())
-          .switchMap { key ->
-            browsingArticleViewModel
-                .selectedSearchProvider
-                .map { searchProvider -> searchProvider.getSearchUrl(key) }
-          }.takeUntil(lifecycleEvents.destroys)
-          .subscribe { url ->
-            tabsManager.openUrl(this@ArticleActivity, Website(url))
-          }
+        .switchMap { key ->
+          browsingArticleViewModel
+            .selectedSearchProvider
+            .map { searchProvider -> searchProvider.getSearchUrl(key) }
+        }.takeUntil(lifecycleEvents.destroys)
+        .subscribe { url ->
+          tabsManager.openUrl(this@ArticleActivity, Website(url))
+        }
     }
     recyclerView.apply {
       layoutManager = LinearLayoutManager(this@ArticleActivity)

@@ -70,47 +70,47 @@ import javax.inject.Singleton
 class DefaultTabsManager
 @Inject
 constructor(
-    private val application: Application,
-    private val preferences: Preferences,
-    private val appDetectionManager: AppDetectionManager,
-    private val appRepository: AppRepository,
-    private val websiteRepository: WebsiteRepository,
-    private val backgroundLoadingStrategyFactory: BackgroundLoadingStrategyFactory,
-    private val rxEventBus: RxEventBus,
-    private val floatingBubbleFactory: FloatingBubbleFactory,
-    private val rxPreferences: RxPreferences,
-    private val schedulerProvider: SchedulerProvider
+  private val application: Application,
+  private val preferences: Preferences,
+  private val appDetectionManager: AppDetectionManager,
+  private val appRepository: AppRepository,
+  private val websiteRepository: WebsiteRepository,
+  private val backgroundLoadingStrategyFactory: BackgroundLoadingStrategyFactory,
+  private val rxEventBus: RxEventBus,
+  private val floatingBubbleFactory: FloatingBubbleFactory,
+  private val rxPreferences: RxPreferences,
+  private val schedulerProvider: SchedulerProvider
 ) : TabsManager {
 
   override fun openUrl(
-      context: Context,
-      website: Website,
-      fromApp: Boolean, // TODO Move to sealed classes
-      fromWebHeads: Boolean,
-      fromNewTab: Boolean,
-      fromAmp: Boolean,
-      incognito: Boolean
+    context: Context,
+    website: Website,
+    fromApp: Boolean, // TODO Move to sealed classes
+    fromWebHeads: Boolean,
+    fromNewTab: Boolean,
+    fromAmp: Boolean,
+    incognito: Boolean
   ) {
     openUrlInternal(
-        context,
-        website,
-        fromApp,
-        fromWebHeads,
-        fromNewTab,
-        fromAmp,
-        incognito
+      context,
+      website,
+      fromApp,
+      fromWebHeads,
+      fromNewTab,
+      fromAmp,
+      incognito
     ).subscribeOn(schedulerProvider.pool)
-        .subscribe()
+      .subscribe()
   }
 
   private fun openUrlInternal(
-      context: Context,
-      website: Website,
-      fromApp: Boolean = true,
-      fromWebHeads: Boolean = false,
-      fromNewTab: Boolean = false,
-      fromAmp: Boolean = false,
-      incognito: Boolean = false
+    context: Context,
+    website: Website,
+    fromApp: Boolean = true,
+    fromWebHeads: Boolean = false,
+    fromNewTab: Boolean = false,
+    fromAmp: Boolean = false,
+    incognito: Boolean = false
   ): Completable = Completable.fromAction {
     // Clear non browsing activities if it was external intent.
     if (!fromApp) {
@@ -132,7 +132,12 @@ constructor(
     if (preferences.ampMode() && !fromAmp) {
       if (website.hasAmp()) {
         // We already got the amp url, so open it in a browsing tab.
-        openBrowsingTab(context, Website.Ampify(website), fromNewTab = fromNewTab, incognito = incognito)
+        openBrowsingTab(
+          context,
+          Website.Ampify(website),
+          fromNewTab = fromNewTab,
+          incognito = incognito
+        )
         return@fromAction
       } else if (!fromWebHeads) {
         // Open a proxy activity, attempt an extraction then open the AMP url if exists.
@@ -160,7 +165,11 @@ constructor(
   }
 
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-  override fun reOrderTabByUrl(context: Context, website: Website, activityNames: List<String>?): Boolean {
+  override fun reOrderTabByUrl(
+    context: Context,
+    website: Website,
+    activityNames: List<String>?
+  ): Boolean {
     return findTaskAndExecuteAction(context, website, activityNames) { task ->
       Timber.d("Moved tab to front $website")
       task.moveToFront()
@@ -168,7 +177,11 @@ constructor(
   }
 
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-  override fun finishTabByUrl(context: Context, website: Website, activityNames: List<String>?): Boolean {
+  override fun finishTabByUrl(
+    context: Context,
+    website: Website,
+    activityNames: List<String>?
+  ): Boolean {
     return findTaskAndExecuteAction(context, website, activityNames) { task ->
       Timber.d("Finishing task $website")
       task.finishAndRemoveTask()
@@ -181,10 +194,10 @@ constructor(
    * Upon finding the task, executes {@param foundAction}
    */
   private fun findTaskAndExecuteAction(
-      context: Context,
-      website: Website,
-      activityNames: List<String>?,
-      foundAction: (task: ActivityManager.AppTask) -> Unit
+    context: Context,
+    website: Website,
+    activityNames: List<String>?,
+    foundAction: (task: ActivityManager.AppTask) -> Unit
   ): Boolean {
     try {
       val am = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
@@ -202,7 +215,7 @@ constructor(
               val urlMatches = url != null && website.matches(url)
 
               val taskComponentMatches = activityNames?.contains(componentClassName)
-                  ?: TabsManager.ALL_BROWSING_ACTIVITIES.contains(componentClassName)
+                ?: TabsManager.ALL_BROWSING_ACTIVITIES.contains(componentClassName)
 
               if (taskComponentMatches && urlMatches) {
                 foundAction(task)
@@ -229,41 +242,46 @@ constructor(
   }
 
   override fun processIncomingIntent(
-      activity: Activity,
-      intent: Intent
+    activity: Activity,
+    intent: Intent
   ): Completable = io.reactivex.Single
-      .fromCallable<Pair<String, Boolean>> {
-        // Safety check against malicious intents
-        val safeIntent = SafeIntent(intent)
-        val url = safeIntent.dataString
-        var proceed = true
-        // The first thing to check is if we should blacklist.
-        if (preferences.perAppSettings()) {
-          val lastApp = appDetectionManager.nonFilteredPackage
-          if (lastApp.isNotEmpty()) {
-            if (appRepository.isPackageBlacklisted(lastApp)) {
-              doBlacklistAction(activity, safeIntent)
-              proceed = false
-            } else if (appRepository.isPackageIncognito(lastApp)) {
-              doIncognitoAction(activity, url)
-              proceed = false
-            }
+    .fromCallable<Pair<String, Boolean>> {
+      // Safety check against malicious intents
+      val safeIntent = SafeIntent(intent)
+      val url = safeIntent.dataString
+      var proceed = true
+      // The first thing to check is if we should blacklist.
+      if (preferences.perAppSettings()) {
+        val lastApp = appDetectionManager.nonFilteredPackage
+        if (lastApp.isNotEmpty()) {
+          if (appRepository.isPackageBlacklisted(lastApp)) {
+            doBlacklistAction(activity, safeIntent)
+            proceed = false
+          } else if (appRepository.isPackageIncognito(lastApp)) {
+            doIncognitoAction(activity, url)
+            proceed = false
           }
         }
-        url to proceed
-      }.flatMapCompletable { (url, proceed) ->
-        if (proceed) {
-          openUrlInternal(activity, Website(url), fromApp = false)
-        } else {
-          Completable.complete()
-        }
       }
-      .doOnError { Timber.e(it, "Critical error when processing incoming intent") }
-      .onErrorComplete()
-      .compose(schedulerProvider.poolToUi<Any>())
+      url to proceed
+    }.flatMapCompletable { (url, proceed) ->
+      if (proceed) {
+        openUrlInternal(activity, Website(url), fromApp = false)
+      } else {
+        Completable.complete()
+      }
+    }
+    .doOnError { Timber.e(it, "Critical error when processing incoming intent") }
+    .onErrorComplete()
+    .compose(schedulerProvider.poolToUi<Any>())
 
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-  override fun openArticle(context: Context, website: Website, newTab: Boolean, incognito: Boolean) {
+  override fun openArticle(
+    context: Context,
+    website: Website,
+    newTab: Boolean,
+    incognito: Boolean
+  ) {
     if (!reOrderTabByUrl(context, website, listOf(ArticleActivity::class.java.name))) {
       val intent = Intent(context, ArticleActivity::class.java).apply {
         data = website.preferredUri()
@@ -285,12 +303,12 @@ constructor(
 
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
   override fun openBrowsingTab(
-      context: Context,
-      website: Website,
-      smart: Boolean,
-      fromNewTab: Boolean,
-      activityNames: List<String>?,
-      incognito: Boolean
+    context: Context,
+    website: Website,
+    smart: Boolean,
+    fromNewTab: Boolean,
+    activityNames: List<String>?,
+    incognito: Boolean
   ) {
     val reordered = smart && reOrderTabByUrl(context, website, activityNames)
 
@@ -322,29 +340,31 @@ constructor(
   }
 
   override fun shouldUseWebView(incognito: Boolean): Boolean {
-    val canSafelyOpenCCT = !preferences.useWebView() && CustomTabs.getCustomTabSupportingPackages(application).isNotEmpty()
+    val canSafelyOpenCCT =
+      !preferences.useWebView() && CustomTabs.getCustomTabSupportingPackages(application)
+        .isNotEmpty()
     val isIncognito = preferences.fullIncognitoMode() || incognito
     return !(!isIncognito && canSafelyOpenCCT)
   }
 
   override fun openWebHeads(
-      context: Context,
-      website: Website,
-      fromMinimize: Boolean,
-      fromAmp: Boolean,
-      incognito: Boolean
+    context: Context,
+    website: Website,
+    fromMinimize: Boolean,
+    fromAmp: Boolean,
+    incognito: Boolean
   ) {
     val url = website.preferredUrl()
     val bubbles = rxPreferences.nativeBubbles.get()
     val webHeads = preferences.webHeads()
 
     floatingBubbleFactory[if (bubbles) NATIVE else WEB_HEADS].openBubble(
-        website,
-        fromMinimize,
-        fromAmp,
-        incognito,
-        context,
-        customizedWebsiteColor(website)
+      website,
+      fromMinimize,
+      fromAmp,
+      incognito,
+      context,
+      customizedWebsiteColor(website)
     )
 
     val shouldUseWebView = shouldUseWebView(incognito)
@@ -362,11 +382,11 @@ constructor(
             backgroundLoadingStrategyFactory[CUSTOM_TAB].prepare(url)
           }
           openBrowsingTab(
-              context,
-              website,
-              smart = true,
-              fromNewTab = false,
-              incognito = incognito
+            context,
+            website,
+            smart = true,
+            fromNewTab = false,
+            incognito = incognito
           )
         }
       }
@@ -402,17 +422,17 @@ constructor(
       try {
         val am = application.getSystemService(ACTIVITY_SERVICE) as ActivityManager
         emitter.onSuccess((am.appTasks ?: emptyList<ActivityManager.AppTask>())
-            .asSequence()
-            .map(DocumentUtils::getTaskInfoFromTask)
-            .filter { it != null && it.baseIntent?.dataString != null && it.baseIntent.component != null }
-            .map {
-              val url = it.baseIntent.dataString!!
+          .asSequence()
+          .map(DocumentUtils::getTaskInfoFromTask)
+          .filter { it != null && it.baseIntent?.dataString != null && it.baseIntent.component != null }
+          .map {
+            val url = it.baseIntent.dataString!!
 
-              @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-              val type = getTabType(it.baseIntent.component!!.className)
-              TabsManager.Tab(url, type)
-            }.filter { it.type != OTHER }
-            .toMutableList())
+            @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+            val type = getTabType(it.baseIntent.component!!.className)
+            TabsManager.Tab(url, type)
+          }.filter { it.type != OTHER }
+          .toMutableList())
       } catch (e: Exception) {
         emitter.onError(e)
       }
@@ -422,13 +442,13 @@ constructor(
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
   override fun closeAllTabs(): Single<List<TabsManager.Tab>> {
     return getActiveTabs()
-        .toObservable()
-        .flatMapIterable { it }
-        .map {
-          finishTabByUrl(application, Website(it.url), listOf(it.getTargetActivityName()))
-          it
-        }.toList()
-        .toSingle()
+      .toObservable()
+      .flatMapIterable { it }
+      .map {
+        finishTabByUrl(application, Website(it.url), listOf(it.getTargetActivityName()))
+        it
+      }.toList()
+      .toSingle()
   }
 
   /**
@@ -490,7 +510,10 @@ constructor(
     }
     val secondaryBrowser = preferences.secondaryBrowserPackage()
     if (secondaryBrowser == null) {
-      showSecondaryBrowserHandlingError(activity, activity.getText(R.string.secondary_browser_not_error))
+      showSecondaryBrowserHandlingError(
+        activity,
+        activity.getText(R.string.secondary_browser_not_error)
+      )
       return
     }
     if (activity.packageManager.isPackageInstalled(secondaryBrowser)) {
@@ -501,10 +524,16 @@ constructor(
           Toast.makeText(activity, "Blacklisted", Toast.LENGTH_SHORT).show()
         }
       } catch (e: Exception) {
-        showSecondaryBrowserHandlingError(activity, activity.getText(R.string.secondary_browser_launch_error))
+        showSecondaryBrowserHandlingError(
+          activity,
+          activity.getText(R.string.secondary_browser_launch_error)
+        )
       }
     } else {
-      showSecondaryBrowserHandlingError(activity, activity.getText(R.string.secondary_browser_not_installed))
+      showSecondaryBrowserHandlingError(
+        activity,
+        activity.getText(R.string.secondary_browser_not_installed)
+      )
     }
   }
 
@@ -515,20 +544,21 @@ constructor(
   private fun showSecondaryBrowserHandlingError(activity: Activity, message: CharSequence) {
     Handler(Looper.getMainLooper()).post {
       MaterialDialog.Builder(activity)
-          .title(R.string.secondary_browser_launching_error_title)
-          .content(message)
-          .iconRes(R.mipmap.ic_launcher)
-          .positiveText(R.string.launch_setting)
-          .negativeText(android.R.string.cancel)
-          .theme(Theme.LIGHT)
-          .positiveColorRes(R.color.colorAccent)
-          .negativeColorRes(R.color.colorAccent)
-          .onPositive { _, _ ->
-            val chromerIntent = activity.packageManager.getLaunchIntentForPackage(activity.packageName)
-            chromerIntent!!.addFlags(FLAG_ACTIVITY_CLEAR_TOP)
-            activity.startActivity(chromerIntent)
-          }
-          .dismissListener { activity.finish() }.show()
+        .title(R.string.secondary_browser_launching_error_title)
+        .content(message)
+        .iconRes(R.mipmap.ic_launcher)
+        .positiveText(R.string.launch_setting)
+        .negativeText(android.R.string.cancel)
+        .theme(Theme.LIGHT)
+        .positiveColorRes(R.color.colorAccent)
+        .negativeColorRes(R.color.colorAccent)
+        .onPositive { _, _ ->
+          val chromerIntent =
+            activity.packageManager.getLaunchIntentForPackage(activity.packageName)
+          chromerIntent!!.addFlags(FLAG_ACTIVITY_CLEAR_TOP)
+          activity.startActivity(chromerIntent)
+        }
+        .dismissListener { activity.finish() }.show()
     }
   }
 }

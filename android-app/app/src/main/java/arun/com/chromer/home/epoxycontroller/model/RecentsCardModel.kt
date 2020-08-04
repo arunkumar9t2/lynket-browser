@@ -30,10 +30,10 @@ abstract class RecentsCardModel : KotlinEpoxyModelWithHolder<RecentsCardModel.Vi
   override fun bind(holder: ViewHolder) {
     holder.apply {
       recentsHeaderIcon.setImageDrawable(
-          IconicsDrawable(holder.containerView.context)
-              .icon(CommunityMaterial.Icon.cmd_history)
-              .colorRes(R.color.accent)
-              .sizeDp(24)
+        IconicsDrawable(holder.containerView.context)
+          .icon(CommunityMaterial.Icon.cmd_history)
+          .colorRes(R.color.accent)
+          .sizeDp(24)
       )
       recentsEpoxyGrid.withModels {
         websites.forEach { website ->

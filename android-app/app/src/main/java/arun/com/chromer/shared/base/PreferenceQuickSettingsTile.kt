@@ -42,8 +42,8 @@ abstract class PreferenceQuickSettingsTile : TileService() {
   override fun onCreate() {
     super.onCreate()
     (application as Chromer).appComponent
-        .newServiceComponent(ServiceModule(this))
-        .inject(this)
+      .newServiceComponent(ServiceModule(this))
+      .inject(this)
   }
 
   /**

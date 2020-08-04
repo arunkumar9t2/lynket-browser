@@ -43,20 +43,20 @@ class TabsActivity : BaseActivity(), Snackable {
 
     if (savedInstanceState == null) {
       supportFragmentManager
-          .beginTransaction()
-          .replace(R.id.fragment_container, TabsFragment())
-          .commit()
+        .beginTransaction()
+        .replace(R.id.fragment_container, TabsFragment())
+        .commit()
     }
   }
 
   @OnClick(R.id.fab)
   fun onFabClick() {
     supportFragmentManager.fragments
-        .asSequence()
-        .filter { !it.isHidden && it is FabHandler }
-        .map { it as FabHandler }
-        .first()
-        .onFabClick()
+      .asSequence()
+      .filter { !it.isHidden && it is FabHandler }
+      .map { it as FabHandler }
+      .first()
+      .onFabClick()
   }
 
   override fun getLayoutRes() = R.layout.activity_tabs

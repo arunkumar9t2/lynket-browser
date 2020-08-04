@@ -34,7 +34,8 @@ import kotlinx.android.synthetic.main.fragment_slide_over_intro.*
 import javax.inject.Inject
 
 open class WebHeadsIntroFragment : BaseFragment(), ISlideBackgroundColorHolder {
-  override fun getDefaultBackgroundColor(): Int = ContextCompat.getColor(context!!, R.color.tutorialBackgrounColor)
+  override fun getDefaultBackgroundColor(): Int =
+    ContextCompat.getColor(context!!, R.color.tutorialBackgrounColor)
 
   override fun setBackgroundColor(backgroundColor: Int) {
     root.setBackgroundColor(backgroundColor)
@@ -53,6 +54,11 @@ open class WebHeadsIntroFragment : BaseFragment(), ISlideBackgroundColorHolder {
 
   @OnClick(R.id.watchDemo)
   fun onSeeDemoClick() {
-    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=3gbz8PI8BVI&feature=youtu.be")))
+    startActivity(
+      Intent(
+        Intent.ACTION_VIEW,
+        Uri.parse("https://www.youtube.com/watch?v=3gbz8PI8BVI&feature=youtu.be")
+      )
+    )
   }
 }

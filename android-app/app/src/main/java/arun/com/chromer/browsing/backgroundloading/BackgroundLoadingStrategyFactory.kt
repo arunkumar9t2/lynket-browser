@@ -12,9 +12,9 @@ import javax.inject.Singleton
 class BackgroundLoadingStrategyFactory
 @Inject
 constructor(
-    private val articleStrategyProvider: Provider<ArticleBackgroundLoadingStrategy>,
-    private val webViewStrategyProvider: Provider<WebViewBackgroundLoadingStrategy>,
-    private val customTabsStrategyProvider: Provider<CustomTabBackgroundLoadingStrategy>
+  private val articleStrategyProvider: Provider<ArticleBackgroundLoadingStrategy>,
+  private val webViewStrategyProvider: Provider<WebViewBackgroundLoadingStrategy>,
+  private val customTabsStrategyProvider: Provider<CustomTabBackgroundLoadingStrategy>
 ) {
   operator fun get(@TabType tabType: Int): BackgroundLoadingStrategy = when (tabType) {
     WEB_VIEW -> webViewStrategyProvider.get()
