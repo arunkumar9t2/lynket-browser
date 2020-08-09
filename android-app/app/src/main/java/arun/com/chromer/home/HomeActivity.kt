@@ -44,6 +44,7 @@ import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.tips.TipsActivity
 import arun.com.chromer.util.RxEventBus
 import com.google.android.material.snackbar.Snackbar
+import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import dagger.Binds
@@ -53,6 +54,7 @@ import dev.arunkumar.android.dagger.viewmodel.UsesViewModel
 import dev.arunkumar.android.dagger.viewmodel.ViewModelKey
 import dev.arunkumar.android.dagger.viewmodel.viewModel
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @SuppressLint("CheckResult")
@@ -178,6 +180,11 @@ class HomeActivity : BaseActivity(), Snackable, UsesViewModel {
             shadowView.gone()
           }
         }
+
+      shadowView.clicks()
+        .debounce(100, TimeUnit.MILLISECONDS, schedulerProvider.ui)
+        .takeUntil(lifecycleEvents.destroys)
+        .subscribe { clearFocus() }
 
       // Menu clicks
       menuClicks()
