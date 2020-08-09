@@ -20,10 +20,10 @@
 package arun.com.chromer.di.view
 
 import android.view.View
-import arun.com.chromer.di.scopes.PerView
 import arun.com.chromer.search.view.MaterialSearchView
 import dagger.BindsInstance
 import dagger.Subcomponent
+import dev.arunkumar.android.dagger.view.PerView
 
 @PerView
 @Subcomponent(modules = [ViewModule::class])

@@ -31,6 +31,7 @@ import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder
 import kotlinx.android.synthetic.main.fragment_text_intro.*
 
 open class AppIntroFragment : BaseFragment(), ISlideBackgroundColorHolder {
+
   override fun getDefaultBackgroundColor(): Int =
     ContextCompat.getColor(context!!, R.color.tutorialBackgrounColor)
 
@@ -41,7 +42,8 @@ open class AppIntroFragment : BaseFragment(), ISlideBackgroundColorHolder {
   }
 
   override fun inject(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
-  override fun getLayoutRes() = R.layout.fragment_text_intro
+
+  override val layoutRes: Int get() = R.layout.fragment_text_intro
 
   private var drawable: Int = 0
   private var bgColor: Int = 0

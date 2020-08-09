@@ -52,12 +52,14 @@ class NewTabDialogActivity : BaseActivity() {
   @Inject
   lateinit var tabsManager: TabsManager
 
+  override val layoutRes: Int
+    get() = 0
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     newTabDialog = NewTabDialog(this).show()
   }
 
-  override fun getLayoutRes() = 0
 
   override fun inject(activityComponent: ActivityComponent) = activityComponent.inject(this)
 

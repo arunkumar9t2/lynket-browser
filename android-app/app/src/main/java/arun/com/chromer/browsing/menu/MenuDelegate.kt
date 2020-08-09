@@ -41,7 +41,6 @@ import arun.com.chromer.browsing.customtabs.callbacks.SecondaryBrowserReceiver
 import arun.com.chromer.browsing.openwith.OpenIntentWithActivity
 import arun.com.chromer.browsing.webview.WebViewActivity
 import arun.com.chromer.data.website.model.Website
-import arun.com.chromer.di.scopes.PerActivity
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.history.HistoryActivity
 import arun.com.chromer.settings.Preferences
@@ -54,6 +53,7 @@ import arun.com.chromer.util.Utils.shareText
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import dev.arunkumar.android.dagger.activity.PerActivity
 import javax.inject.Inject
 
 

@@ -46,7 +46,8 @@ open class SlideOverExplanationFragment : BaseFragment(), ISlideBackgroundColorH
   lateinit var tabsManager: TabsManager
 
   override fun inject(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
-  override fun getLayoutRes() = R.layout.fragment_slide_over_intro
+  override val layoutRes: Int
+    get() = R.layout.fragment_slide_over_intro
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)

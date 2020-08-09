@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.core.content.ContextCompat
 import arun.com.chromer.R
-import arun.com.chromer.di.scopes.PerView
 import arun.com.chromer.search.provider.SearchProvider
 import arun.com.chromer.search.provider.searchProviderLayout
 import arun.com.chromer.search.suggestion.items.SuggestionItem
@@ -19,6 +18,7 @@ import com.airbnb.epoxy.AsyncEpoxyController
 import com.jakewharton.rxrelay2.PublishRelay
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import dev.arunkumar.android.dagger.view.PerView
 import dev.arunkumar.android.epoxy.span.TotalSpanOverride
 import dev.arunkumar.common.context.dpToPx
 import io.reactivex.Observable

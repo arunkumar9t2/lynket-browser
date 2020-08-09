@@ -40,13 +40,14 @@ import javax.inject.Inject
 @SuppressLint("GoogleAppIndexingApiWarning")
 class ShareInterceptActivity : BaseActivity() {
 
-  override fun getLayoutRes() = 0
-
   @Inject
   lateinit var tabsManager: TabsManager
 
   @Inject
   lateinit var searchProviders: SearchProviders
+
+  override val layoutRes: Int
+    get() = 0
 
   @TargetApi(Build.VERSION_CODES.M)
   override fun onCreate(savedInstanceState: Bundle?) {

@@ -19,19 +19,20 @@
 
 package arun.com.chromer.di.app
 
+import android.app.Application
+import arun.com.chromer.Chromer
 import arun.com.chromer.appdetect.AppDetectionManager
 import arun.com.chromer.browsing.customtabs.bottombar.BottomBarReceiver
 import arun.com.chromer.browsing.customtabs.callbacks.MinimizeBroadcastReceiver
 import arun.com.chromer.browsing.customtabs.dynamictoolbar.AppColorExtractorJob
 import arun.com.chromer.data.DataModule
 import arun.com.chromer.di.activity.ActivityComponent
-import arun.com.chromer.di.activity.ActivityModule
 import arun.com.chromer.di.service.ServiceComponent
-import arun.com.chromer.di.service.ServiceModule
 import arun.com.chromer.home.HomeActivity
 import arun.com.chromer.tabs.DefaultTabsManager
 import arun.com.chromer.tabs.TabsModule
 import arun.com.chromer.util.drawer.GlideDrawerImageLoader
+import dagger.BindsInstance
 import dagger.Component
 import dev.arunkumar.android.AppSchedulersModule
 import javax.inject.Singleton
@@ -52,9 +53,9 @@ interface AppComponent {
 
   fun glideDrawerImageLoader(): GlideDrawerImageLoader
 
-  fun newActivityComponent(activityModule: ActivityModule): ActivityComponent
+  fun activityComponentFactory(): ActivityComponent.Factory
 
-  fun newServiceComponent(serviceModule: ServiceModule): ServiceComponent
+  fun serviceComponentFactory(): ServiceComponent.Factory
 
   fun appDetectionManager(): AppDetectionManager
 
@@ -65,4 +66,11 @@ interface AppComponent {
   fun inject(bottomBarReceiver: BottomBarReceiver)
 
   fun inject(minimizeBroadcastReceiver: MinimizeBroadcastReceiver)
+
+  @Component.Factory
+  interface Factory {
+    fun create(@BindsInstance application: Application): AppComponent
+  }
 }
+
+fun Application.appComponent() = (this as Chromer).appComponent

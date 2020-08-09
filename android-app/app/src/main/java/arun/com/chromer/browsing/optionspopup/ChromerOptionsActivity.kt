@@ -52,6 +52,9 @@ class ChromerOptionsActivity : BaseActivity() {
   @Inject
   lateinit var tabsManager: TabsManager
 
+  override val layoutRes: Int
+    get() = R.layout.activity_more_menu
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     fromArticle = intent.getBooleanExtra(EXTRA_KEY_FROM_ARTICLE, false)
@@ -59,7 +62,6 @@ class ChromerOptionsActivity : BaseActivity() {
     moreMenuList.adapter = MenuListAdapter()
   }
 
-  override fun getLayoutRes() = R.layout.activity_more_menu
 
   override fun inject(activityComponent: ActivityComponent) = activityComponent.inject(this)
 

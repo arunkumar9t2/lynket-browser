@@ -16,20 +16,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package arun.com.chromer.shared.base.service
 
-package arun.com.chromer.di.scopes;
+import android.app.Service
+import arun.com.chromer.di.app.appComponent
+import arun.com.chromer.di.service.ServiceComponent
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+abstract class BaseService : Service() {
 
-import javax.inject.Scope;
+  private lateinit var serviceComponent: ServiceComponent
 
-/**
- * A scoping annotation to permit objects whose lifetime should
- * conform to the life of the Activity to be memorised in the
- * correct component.
- */
-@Scope
-@Retention(RetentionPolicy.RUNTIME)
-public @interface PerActivity {
+  override fun onCreate() {
+    super.onCreate()
+    serviceComponent = application
+      .appComponent()
+      .serviceComponentFactory()
+      .create(this)
+      .also(::inject)
+  }
+
+  protected abstract fun inject(serviceComponent: ServiceComponent)
 }

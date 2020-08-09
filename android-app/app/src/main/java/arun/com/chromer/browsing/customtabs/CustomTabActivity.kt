@@ -49,10 +49,6 @@ class CustomTabActivity : BrowsingActivity() {
     activityComponent.inject(this)
   }
 
-  override fun getLayoutRes(): Int {
-    return 0
-  }
-
   override fun onAttachedToWindow() {
     super.onAttachedToWindow()
     isLoaded = true
@@ -68,4 +64,6 @@ class CustomTabActivity : BrowsingActivity() {
   override fun onWebsiteLoaded(website: Website) {
 
   }
+
+  override val layoutRes: Int get() = 0
 }

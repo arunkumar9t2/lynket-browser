@@ -19,15 +19,17 @@
 
 package arun.com.chromer.di.fragment
 
-import arun.com.chromer.di.scopes.PerFragment
+import androidx.fragment.app.Fragment
 import arun.com.chromer.history.HistoryFragment
 import arun.com.chromer.home.fragment.HomeFragment
 import arun.com.chromer.intro.fragments.*
 import arun.com.chromer.tabs.ui.TabsFragment
+import dagger.BindsInstance
 import dagger.Subcomponent
+import dev.arunkumar.android.dagger.fragment.PerFragment
 
 @PerFragment
-@Subcomponent(modules = [(FragmentModule::class)])
+@Subcomponent(modules = [FragmentModule::class])
 interface FragmentComponent {
 
   fun inject(homeFragment: HistoryFragment)
@@ -45,4 +47,9 @@ interface FragmentComponent {
   fun inject(articleIntroFragment: ArticleIntroFragment)
 
   fun inject(providerSelectionIntroFragment: ProviderSelectionIntroFragment)
+
+  @Subcomponent.Factory
+  interface Factory {
+    fun create(@BindsInstance fragment: Fragment): FragmentComponent
+  }
 }

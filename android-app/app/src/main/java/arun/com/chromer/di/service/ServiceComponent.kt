@@ -16,26 +16,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package arun.com.chromer.di.service
 
-package arun.com.chromer.di.service;
-
-import org.jetbrains.annotations.NotNull;
-
-import arun.com.chromer.appdetect.AppDetectService;
-import arun.com.chromer.bubbles.webheads.WebHeadService;
-import arun.com.chromer.di.scopes.PerService;
-import arun.com.chromer.shared.base.PreferenceQuickSettingsTile;
-import dagger.Subcomponent;
+import android.app.Service
+import arun.com.chromer.appdetect.AppDetectService
+import arun.com.chromer.bubbles.webheads.WebHeadService
+import arun.com.chromer.shared.base.PreferenceQuickSettingsTile
+import dagger.BindsInstance
+import dagger.Subcomponent
+import dev.arunkumar.android.dagger.service.PerService
 
 @PerService
-@Subcomponent(modules = {
-    ServiceModule.class
-})
-public interface ServiceComponent {
+@Subcomponent(modules = [ServiceModule::class])
+interface ServiceComponent {
+  fun inject(appDetectService: AppDetectService)
+  fun inject(webHeadService: WebHeadService)
+  fun inject(preferenceQuickSettingsTile: PreferenceQuickSettingsTile)
 
-  void inject(AppDetectService appDetectService);
-
-  void inject(WebHeadService webHeadService);
-
-  void inject(@NotNull PreferenceQuickSettingsTile preferenceQuickSettingsTile);
+  @Subcomponent.Factory
+  interface Factory {
+    fun create(@BindsInstance service: Service): ServiceComponent
+  }
 }

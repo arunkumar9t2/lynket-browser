@@ -39,18 +39,15 @@ class AmpResolverActivity : BrowsingActivity() {
   @Inject
   lateinit var tabsManager: TabsManager
 
+  override val layoutRes: Int get() = 0
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     ampResolverDialog = AmpResolverDialog(this).show()
   }
 
-  override fun getLayoutRes(): Int {
-    return 0
-  }
-
   override fun inject(activityComponent: ActivityComponent) {
     activityComponent.inject(this)
-
   }
 
   override fun onWebsiteLoaded(website: Website) {

@@ -16,19 +16,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package arun.com.chromer.di.activity
 
-package arun.com.chromer.di.scopes;
+import android.app.Activity
+import androidx.lifecycle.LifecycleOwner
+import arun.com.chromer.util.glide.GlideApp
+import arun.com.chromer.util.lifecycle.ActivityLifecycle
+import com.bumptech.glide.RequestManager
+import dagger.Module
+import dagger.Provides
+import dev.arunkumar.android.dagger.activity.PerActivity
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+@Module
+class ActivityModule {
+  @Provides
+  fun glideRequests(activity: Activity): RequestManager {
+    return GlideApp.with(activity)
+  }
 
-import javax.inject.Scope;
-
-/**
- * Scoping annotation to confine object lifetime to lifecycle of a
- * {@link androidx.core.app.Fragment}
- */
-@Scope
-@Retention(RetentionPolicy.RUNTIME)
-public @interface PerFragment {
+  @Provides
+  @PerActivity
+  @ActivityLifecycle
+  fun owner(activity: Activity) = activity as LifecycleOwner
 }

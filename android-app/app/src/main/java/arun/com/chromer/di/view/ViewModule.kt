@@ -20,10 +20,10 @@
 package arun.com.chromer.di.view
 
 import android.view.View
-import arun.com.chromer.di.scopes.PerView
 import com.jakewharton.rxbinding3.view.detaches
 import dagger.Module
 import dagger.Provides
+import dev.arunkumar.android.dagger.view.PerView
 import io.reactivex.Observable
 
 @Module

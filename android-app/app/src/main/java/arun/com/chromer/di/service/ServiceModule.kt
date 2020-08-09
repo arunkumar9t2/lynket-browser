@@ -16,19 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package arun.com.chromer.di.service
 
-package arun.com.chromer.di.scopes;
+import dagger.Module
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-
-import javax.inject.Scope;
-
-/**
- * Scoping annotation to confine object lifetime to lifecycle of a
- * {@link android.view.View}
- */
-@Scope
-@Retention(RetentionPolicy.RUNTIME)
-public @interface PerView {
-}
+@Module
+class ServiceModule()

@@ -26,10 +26,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import arun.com.chromer.R
 import arun.com.chromer.data.website.model.Website
-import arun.com.chromer.di.scopes.PerFragment
 import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.glide.GlideApp
 import butterknife.ButterKnife
+import dev.arunkumar.android.dagger.fragment.PerFragment
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.widget_website_grid_item.*
 import java.util.*

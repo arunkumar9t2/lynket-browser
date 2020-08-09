@@ -28,13 +28,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import arun.com.chromer.R
 import arun.com.chromer.data.common.App
-import arun.com.chromer.di.scopes.PerActivity
 import arun.com.chromer.util.glide.appicon.ApplicationIcon
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.bumptech.glide.RequestManager
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import dev.arunkumar.android.dagger.activity.PerActivity
 import rx.subjects.PublishSubject
 import java.util.*
 import javax.inject.Inject

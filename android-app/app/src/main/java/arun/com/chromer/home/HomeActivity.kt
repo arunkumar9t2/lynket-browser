@@ -72,13 +72,14 @@ class HomeActivity : BaseActivity(), Snackable, UsesViewModel {
 
   override fun inject(activityComponent: ActivityComponent) = activityComponent.inject(this)
 
-  override fun getLayoutRes() = R.layout.activity_main
 
   @Inject
   lateinit var homeFeedController: HomeFeedController
 
   @Inject
   lateinit var tabsLifecycleObserver: TabsLifecycleObserver
+
+  override val layoutRes: Int get() = R.layout.activity_main
 
   override fun onCreate(savedInstanceState: Bundle?) {
     setTheme(R.style.AppTheme_NoActionBar)
