@@ -7,7 +7,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import java.util.*
 
-class BuildPlugin : Plugin<Project> {
+class LynketBuildPlugin : Plugin<Project> {
 
   override fun apply(project: Project) {
     project.publishLocalProperties()
