@@ -40,12 +40,13 @@ import kotlinx.android.synthetic.main.layout_tips_card.*
 import javax.inject.Inject
 
 class TipsActivity : BaseActivity() {
-  override fun inject(activityComponent: ActivityComponent) = activityComponent.inject(this)
 
-  override fun getLayoutRes() = R.layout.activity_tips
+  override fun inject(activityComponent: ActivityComponent) = activityComponent.inject(this)
 
   @Inject
   lateinit var requestManager: RequestManager
+
+  override val layoutRes: Int get() = R.layout.activity_tips
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)

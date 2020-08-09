@@ -44,7 +44,8 @@ open class ArticleIntroFragment : BaseFragment(), ISlideBackgroundColorHolder {
   lateinit var tabsManager: TabsManager
 
   override fun inject(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
-  override fun getLayoutRes() = R.layout.fragment_article_intro
+
+  override val layoutRes: Int get() = R.layout.fragment_article_intro
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)

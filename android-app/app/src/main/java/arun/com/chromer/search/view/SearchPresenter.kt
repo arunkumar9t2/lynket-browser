@@ -1,7 +1,6 @@
 package arun.com.chromer.search.view
 
 import android.annotation.SuppressLint
-import arun.com.chromer.di.scopes.PerView
 import arun.com.chromer.di.view.Detaches
 import arun.com.chromer.search.provider.SearchProvider
 import arun.com.chromer.search.provider.SearchProviders
@@ -10,6 +9,7 @@ import arun.com.chromer.search.suggestion.items.SuggestionItem
 import arun.com.chromer.search.suggestion.items.SuggestionType
 import arun.com.chromer.settings.RxPreferences
 import com.jakewharton.rxrelay2.PublishRelay
+import dev.arunkumar.android.dagger.view.PerView
 import dev.arunkumar.android.rxschedulers.SchedulerProvider
 import io.reactivex.BackpressureStrategy.LATEST
 import io.reactivex.Flowable

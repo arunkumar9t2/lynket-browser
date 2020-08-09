@@ -47,6 +47,7 @@ import javax.inject.Inject
  * Created by arunk on 20-12-2017.
  */
 class TabsFragment : BaseFragment(), FabHandler {
+
   @Inject
   lateinit var tabsManager: TabsManager
 
@@ -61,7 +62,8 @@ class TabsFragment : BaseFragment(), FabHandler {
     fragmentComponent.inject(this)
   }
 
-  override fun getLayoutRes(): Int = R.layout.fragment_tabs
+  override val layoutRes: Int get() = R.layout.fragment_tabs
+
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)

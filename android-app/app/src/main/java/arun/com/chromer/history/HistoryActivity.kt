@@ -32,6 +32,9 @@ import kotlinx.android.synthetic.main.activity_history.*
 
 class HistoryActivity : BaseActivity(), Snackable {
 
+  override val layoutRes: Int
+    get() = R.layout.activity_history
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setSupportActionBar(toolbar)
@@ -53,10 +56,6 @@ class HistoryActivity : BaseActivity(), Snackable {
       .toList()
       .first()
       .onFabClick()
-  }
-
-  override fun getLayoutRes(): Int {
-    return R.layout.activity_history
   }
 
   override fun snack(textToSnack: String) {

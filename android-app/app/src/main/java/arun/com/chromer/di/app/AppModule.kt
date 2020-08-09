@@ -37,14 +37,11 @@ import javax.inject.Singleton
     DefaultViewModelsBuilder::class
   ]
 )
-open class AppModule(var application: Application) {
+open class AppModule {
   @Provides
   @Singleton
-  internal fun providesApplication(): Application = application
-
-  @Provides
-  @Singleton
-  internal fun providesPreferences(): Preferences = Preferences.get(application)
+  internal fun providesPreferences(application: Application): Preferences =
+    Preferences.get(application)
 
   @Provides
   @Singleton

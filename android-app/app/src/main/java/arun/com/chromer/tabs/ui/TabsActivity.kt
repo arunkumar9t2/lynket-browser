@@ -32,6 +32,8 @@ import kotlinx.android.synthetic.main.activity_tabs.*
 
 class TabsActivity : BaseActivity(), Snackable {
 
+  override val layoutRes: Int get() = R.layout.activity_tabs
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setSupportActionBar(toolbar)
@@ -59,7 +61,6 @@ class TabsActivity : BaseActivity(), Snackable {
       .onFabClick()
   }
 
-  override fun getLayoutRes() = R.layout.activity_tabs
 
   override fun snack(textToSnack: String) {
     Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_SHORT).show()

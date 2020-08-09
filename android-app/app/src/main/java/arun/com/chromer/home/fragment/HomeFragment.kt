@@ -72,7 +72,7 @@ class HomeFragment : BaseFragment(), Snackable {
 
   override fun inject(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
 
-  override fun getLayoutRes(): Int = R.layout.fragment_home
+  override val layoutRes: Int get() = R.layout.fragment_home
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)

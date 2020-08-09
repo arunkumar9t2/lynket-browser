@@ -18,4 +18,4 @@
  */
 include ":app", ":disk-cache"
 
-// includeBuild "../../base-android"
+includeBuild "../../base-android"

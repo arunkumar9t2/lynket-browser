@@ -59,8 +59,6 @@ open class WebViewActivity : BrowsingActivity() {
 
   override fun inject(activityComponent: ActivityComponent) = activityComponent.inject(this)
 
-  override fun getLayoutRes(): Int = R.layout.activity_web_view
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setupToolbar()
@@ -108,6 +106,8 @@ open class WebViewActivity : BrowsingActivity() {
     super.onToolbarColorSet(websiteThemeColor)
     setAppBarColor(websiteThemeColor)
   }
+
+  override val layoutRes: Int get() = R.layout.activity_web_view
 
   private fun setupSwipeRefresh() {
     with(swipeRefreshLayout) {

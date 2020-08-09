@@ -28,7 +28,6 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import arun.com.chromer.R
 import arun.com.chromer.data.website.model.Website
-import arun.com.chromer.di.scopes.PerFragment
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.inflate
 import arun.com.chromer.extenstions.show
@@ -36,6 +35,7 @@ import arun.com.chromer.tabs.TabsManager
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.bumptech.glide.RequestManager
+import dev.arunkumar.android.dagger.fragment.PerFragment
 import javax.inject.Inject
 
 /**

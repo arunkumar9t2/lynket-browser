@@ -16,21 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package arun.com.chromer.di.fragment
 
-package arun.com.chromer.di.fragment;
-
-
-import androidx.fragment.app.Fragment;
-
-import dagger.Module;
+import androidx.fragment.app.Fragment
+import dagger.Module
 
 @Module
-public class FragmentModule {
-
-  private final Fragment fragment;
-
-  public FragmentModule(Fragment fragment) {
-    this.fragment = fragment;
-  }
-
-}
+class FragmentModule(private val fragment: Fragment) 

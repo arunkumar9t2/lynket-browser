@@ -62,7 +62,8 @@ class PerAppSettingsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLis
     activityComponent.inject(this)
   }
 
-  override fun getLayoutRes(): Int = R.layout.acitivty_per_apps
+  override val layoutRes: Int
+    get() = R.layout.acitivty_per_apps
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)

@@ -16,31 +16,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package arun.com.chromer.shared.base
 
-package arun.com.chromer.shared.base;
-
-import androidx.annotation.NonNull;
-
-import arun.com.chromer.di.activity.ActivityComponent;
+import arun.com.chromer.di.activity.ActivityComponent
 
 /**
  * Created by arunk on 12-11-2017.
- * Marker interface to define a contract to let {@code {@link androidx.core.app.Fragment}} retrieve
- * the {@link ActivityComponent} without explicitly depending on any sub class of {@link android.app.Activity}
+ * Marker interface to define a contract to let `{ androidx.core.app.Fragment}` retrieve
+ * the [ActivityComponent] without explicitly depending on any sub class of [android.app.Activity]
  */
-public interface ProvidesActivityComponent {
+interface ProvidesActivityComponent {
   /**
    * The Activity component for which the fragment component will be sub component of.
    *
-   * @return Instantiated {@link ActivityComponent}
+   * @return Instantiated [ActivityComponent]
    */
-  @NonNull
-  ActivityComponent getActivityComponent();
+  val activityComponent: ActivityComponent
 
   /**
    * Delegates inject calls to component definitions.
    *
    * @param activityComponent Current component.
    */
-  void inject(@NonNull ActivityComponent activityComponent);
+  fun inject(activityComponent: ActivityComponent)
 }

@@ -25,7 +25,6 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex
 import arun.com.chromer.di.app.AppComponent
-import arun.com.chromer.di.app.AppModule
 import arun.com.chromer.di.app.DaggerAppComponent
 import arun.com.chromer.util.ServiceManager
 import com.airbnb.epoxy.EpoxyController
@@ -43,9 +42,7 @@ import timber.log.Timber
 open class Chromer : Application() {
 
   open val appComponent: AppComponent by lazy {
-    DaggerAppComponent.builder()
-      .appModule(AppModule(this))
-      .build()
+    DaggerAppComponent.factory().create(this)
   }
 
   override fun onCreate() {

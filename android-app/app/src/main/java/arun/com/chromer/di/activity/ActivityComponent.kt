@@ -19,6 +19,7 @@
 
 package arun.com.chromer.di.activity
 
+import android.app.Activity
 import arun.com.chromer.browsing.amp.AmpResolverActivity
 import arun.com.chromer.browsing.article.ArticleActivity
 import arun.com.chromer.browsing.browserintercept.BrowserInterceptActivity
@@ -31,8 +32,6 @@ import arun.com.chromer.browsing.shareintercept.ShareInterceptActivity
 import arun.com.chromer.browsing.webview.WebViewActivity
 import arun.com.chromer.bubbles.webheads.ui.context.WebHeadContextActivity
 import arun.com.chromer.di.fragment.FragmentComponent
-import arun.com.chromer.di.fragment.FragmentModule
-import arun.com.chromer.di.scopes.PerActivity
 import arun.com.chromer.di.view.ViewComponent
 import arun.com.chromer.history.HistoryActivity
 import arun.com.chromer.home.HomeActivity
@@ -43,14 +42,16 @@ import arun.com.chromer.settings.browsingoptions.BrowsingOptionsActivity
 import arun.com.chromer.shortcuts.HomeScreenShortcutCreatorActivity
 import arun.com.chromer.tabs.ui.TabsActivity
 import arun.com.chromer.tips.TipsActivity
+import dagger.BindsInstance
 import dagger.Subcomponent
+import dev.arunkumar.android.dagger.activity.PerActivity
 
 @PerActivity
 @Subcomponent(modules = [(ActivityModule::class)])
 interface ActivityComponent {
   fun customTabs(): CustomTabs
 
-  fun newFragmentComponent(fragmentModule: FragmentModule): FragmentComponent
+  fun fragmentComponentFactory(): FragmentComponent.Factory
 
   fun viewComponentFactory(): ViewComponent.Factory
 
@@ -93,4 +94,9 @@ interface ActivityComponent {
   fun inject(historyActivity: HistoryActivity)
 
   fun inject(browsingModeActivity: BrowsingModeActivity)
+
+  @Subcomponent.Factory
+  interface Factory {
+    fun create(@BindsInstance activity: Activity): ActivityComponent
+  }
 }

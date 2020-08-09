@@ -55,8 +55,11 @@ import javax.inject.Inject
  * Created by arunk on 07-04-2017.
  */
 class HistoryFragment : BaseFragment(), Snackable, FabHandler {
+
   @Inject
   lateinit var viewModelFactory: ViewModelProvider.Factory
+
+  override val layoutRes: Int get() = R.layout.fragment_history
 
   @Inject
   lateinit var preferences: Preferences
@@ -96,8 +99,6 @@ class HistoryFragment : BaseFragment(), Snackable, FabHandler {
         )
       }
     }
-
-  override fun getLayoutRes() = R.layout.fragment_history
 
   override fun snack(message: String) = (activity as Snackable).snack(message)
 

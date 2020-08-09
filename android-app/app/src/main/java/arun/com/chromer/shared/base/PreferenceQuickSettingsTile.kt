@@ -25,7 +25,6 @@ import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import androidx.annotation.RequiresApi
 import arun.com.chromer.Chromer
-import arun.com.chromer.di.service.ServiceModule
 import arun.com.chromer.settings.Preferences
 import timber.log.Timber
 import javax.inject.Inject
@@ -42,7 +41,8 @@ abstract class PreferenceQuickSettingsTile : TileService() {
   override fun onCreate() {
     super.onCreate()
     (application as Chromer).appComponent
-      .newServiceComponent(ServiceModule(this))
+      .serviceComponentFactory()
+      .create(this)
       .inject(this)
   }
 

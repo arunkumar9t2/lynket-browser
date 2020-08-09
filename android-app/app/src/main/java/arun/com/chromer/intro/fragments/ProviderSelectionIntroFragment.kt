@@ -34,6 +34,7 @@ import kotlinx.android.synthetic.main.fragment_slide_over_intro.*
 import javax.inject.Inject
 
 open class ProviderSelectionIntroFragment : BaseFragment(), ISlideBackgroundColorHolder {
+
   override fun getDefaultBackgroundColor(): Int =
     ContextCompat.getColor(context!!, R.color.tutorialBackgrounColor)
 
@@ -45,7 +46,9 @@ open class ProviderSelectionIntroFragment : BaseFragment(), ISlideBackgroundColo
   lateinit var tabsManager: TabsManager
 
   override fun inject(fragmentComponent: FragmentComponent) = fragmentComponent.inject(this)
-  override fun getLayoutRes() = R.layout.fragment_provider_selection_intro
+
+  override val layoutRes: Int
+    get() = R.layout.fragment_provider_selection_intro
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)

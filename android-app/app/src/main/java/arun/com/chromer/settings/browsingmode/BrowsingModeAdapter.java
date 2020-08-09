@@ -42,12 +42,12 @@ import java.util.List;
 import javax.inject.Inject;
 
 import arun.com.chromer.R;
-import arun.com.chromer.di.scopes.PerActivity;
 import arun.com.chromer.settings.Preferences;
 import arun.com.chromer.settings.RxPreferences;
 import arun.com.chromer.util.ColorUtil;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dev.arunkumar.android.dagger.activity.PerActivity;
 
 import static com.mikepenz.community_material_typeface_library.CommunityMaterial.Icon;
 

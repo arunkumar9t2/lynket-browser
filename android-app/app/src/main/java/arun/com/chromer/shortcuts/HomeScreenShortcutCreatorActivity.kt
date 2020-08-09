@@ -59,10 +59,13 @@ import rx.subscriptions.CompositeSubscription
 
 
 class HomeScreenShortcutCreatorActivity : BrowsingActivity() {
-  override fun getLayoutRes(): Int = 0
+
   override fun inject(activityComponent: ActivityComponent) = activityComponent.inject(this)
   override fun onWebsiteLoaded(website: Website) {
   }
+
+  override val layoutRes: Int
+    get() = 0
 
   private var shortcutDialog: MaterialDialog? = null
 

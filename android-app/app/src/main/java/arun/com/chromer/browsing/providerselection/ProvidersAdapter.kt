@@ -28,13 +28,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import arun.com.chromer.R
 import arun.com.chromer.data.apps.model.Provider
-import arun.com.chromer.di.scopes.PerActivity
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.show
 import arun.com.chromer.util.glide.GlideApp
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.bumptech.glide.RequestManager
+import dev.arunkumar.android.dagger.activity.PerActivity
 import rx.subjects.PublishSubject
 import java.util.*
 import javax.inject.Inject

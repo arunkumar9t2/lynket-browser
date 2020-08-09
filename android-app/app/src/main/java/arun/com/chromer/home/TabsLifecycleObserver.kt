@@ -2,10 +2,10 @@ package arun.com.chromer.home
 
 import androidx.lifecycle.LifecycleOwner
 import arun.com.chromer.data.website.WebsiteRepository
-import arun.com.chromer.di.scopes.PerActivity
 import arun.com.chromer.tabs.TabsManager
 import arun.com.chromer.util.lifecycle.ActivityLifecycle
 import arun.com.chromer.util.lifecycle.LifecycleEvents
+import dev.arunkumar.android.dagger.activity.PerActivity
 import dev.arunkumar.android.rxschedulers.SchedulerProvider
 import hu.akarnokd.rxjava.interop.RxJavaInterop.toV2Observable
 import hu.akarnokd.rxjava.interop.RxJavaInterop.toV2Single

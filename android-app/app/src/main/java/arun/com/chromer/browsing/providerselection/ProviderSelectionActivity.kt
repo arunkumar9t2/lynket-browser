@@ -75,7 +75,8 @@ class ProviderSelectionActivity : BaseActivity() {
 
   override fun inject(activityComponent: ActivityComponent) = activityComponent.inject(this)
 
-  override fun getLayoutRes() = R.layout.activity_provider_selection
+  override val layoutRes: Int
+    get() = R.layout.activity_provider_selection
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)

@@ -5,9 +5,9 @@ import androidx.lifecycle.Lifecycle.Event.*
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
-import arun.com.chromer.di.scopes.PerActivity
-import arun.com.chromer.di.scopes.PerFragment
 import com.jakewharton.rxrelay2.PublishRelay
+import dev.arunkumar.android.dagger.activity.PerActivity
+import dev.arunkumar.android.dagger.fragment.PerFragment
 import io.reactivex.Observable
 import javax.inject.Inject
 import javax.inject.Qualifier

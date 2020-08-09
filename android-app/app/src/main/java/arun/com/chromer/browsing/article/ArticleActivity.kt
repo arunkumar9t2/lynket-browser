@@ -64,12 +64,13 @@ import kotlinx.android.synthetic.main.activity_article_mode.*
 import javax.inject.Inject
 
 class ArticleActivity : BrowsingActivity() {
-  override fun getLayoutRes() = R.layout.activity_article_mode
   override fun inject(activityComponent: ActivityComponent) = activityComponent.inject(this)
 
   private lateinit var browsingArticleViewModel: BrowsingArticleViewModel
 
   private var url: String? = null
+
+  override val layoutRes: Int get() = R.layout.activity_article_mode
 
   private var primaryColor: Int = 0
   private var accentColor: Int = 0
@@ -288,9 +289,9 @@ class ArticleActivity : BrowsingActivity() {
 
   private fun readCustomizations() {
     when (preferences.articleTheme()) {
-      THEME_LIGHT -> delegate.setLocalNightMode(MODE_NIGHT_NO)
-      THEME_DARK, THEME_BLACK -> delegate.setLocalNightMode(MODE_NIGHT_YES)
-      else -> delegate.setLocalNightMode(MODE_NIGHT_AUTO)
+      THEME_LIGHT -> delegate.localNightMode = MODE_NIGHT_NO
+      THEME_DARK, THEME_BLACK -> delegate.localNightMode = MODE_NIGHT_YES
+      else -> delegate.localNightMode = MODE_NIGHT_AUTO
     }
   }
 
