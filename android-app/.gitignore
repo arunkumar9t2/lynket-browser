@@ -43,3 +43,10 @@ values.properties
 
 # Sandbox stuff
 _sandbox
+
+# VS Code stuff
+.project
+.classpath
+.settings/
+.settings.json
+.vscode/
