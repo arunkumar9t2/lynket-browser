@@ -37,7 +37,7 @@ abstract class BaseActivity : AppCompatActivity(), ProvidesActivityComponent {
 
   protected val subs = CompositeSubscription()
 
-  protected lateinit var unbinder: Unbinder
+  protected var unbinder: Unbinder? = null
 
   override lateinit var activityComponent: ActivityComponent
 
@@ -62,7 +62,7 @@ abstract class BaseActivity : AppCompatActivity(), ProvidesActivityComponent {
 
   override fun onDestroy() {
     subs.clear()
-    unbinder.unbind()
+    unbinder?.unbind()
     super.onDestroy()
   }
 
