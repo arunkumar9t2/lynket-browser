@@ -44,7 +44,7 @@ inline fun <T> LiveData<T>.observeUntilOnDestroy(
   this.observeForever(valueObserver)
   sourceActivity?.application?.registerActivityLifecycleCallbacks(object :
     ActivityLifeCycleCallbackAdapter() {
-    override fun onActivityDestroyed(activity: Activity?) {
+    override fun onActivityDestroyed(activity: Activity) {
       if (activity == sourceActivity) {
         activity.application?.unregisterActivityLifecycleCallbacks(this)
         this@observeUntilOnDestroy.removeObserver(valueObserver)

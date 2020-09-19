@@ -10,7 +10,7 @@ repositories {
 
 dependencies {
   implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-  implementation("com.android.tools.build:gradle:4.1.0-rc01")
+  implementation("com.android.tools.build:gradle:4.1.0-rc03")
 
   testImplementation("org.jetbrains.kotlin:kotlin-test")
   testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
