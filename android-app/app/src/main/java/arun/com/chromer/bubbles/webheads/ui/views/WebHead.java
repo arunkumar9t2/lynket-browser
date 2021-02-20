@@ -677,8 +677,8 @@ public class WebHead extends BaseWebHead implements SpringListener {
   }
 
   static class SpringInterpolator implements android.view.animation.Interpolator {
-    double amp = 1;
-    double frequency = 10;
+    double amp;
+    double frequency;
 
     SpringInterpolator(double amplitude, double frequency) {
       amp = amplitude;

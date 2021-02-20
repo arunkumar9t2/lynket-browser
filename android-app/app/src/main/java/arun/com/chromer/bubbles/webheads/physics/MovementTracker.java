@@ -36,7 +36,7 @@ public class MovementTracker {
   private static MovementTracker INSTANCE;
   private final SizedQueue<Float> xPoints;
   private final SizedQueue<Float> yPoints;
-  private int trackingSize = 0;
+  private int trackingSize;
 
   private MovementTracker() {
     trackingSize = 10;

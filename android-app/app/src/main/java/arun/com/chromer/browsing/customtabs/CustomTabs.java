@@ -129,7 +129,7 @@ public class CustomTabs {
    */
   @ColorInt
   private int toolbarColor = NO_COLOR;
-  private boolean noAnimation = false;
+  private boolean noAnimation;
 
   /**
    * Create an one time usable instance

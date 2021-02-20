@@ -118,7 +118,7 @@ constructor(
   lateinit var suggestionController: SuggestionController
 
   @Inject
-  @field:Detaches
+  @Detaches
   lateinit var viewDetaches: Observable<Unit>
 
   private val voiceSearchFailed = PublishSubject.create<Any>()

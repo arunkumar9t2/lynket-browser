@@ -89,10 +89,10 @@ class TabsFragment : BaseFragment(), FabHandler {
 
   private fun observeViewModel() {
     tabsViewModel?.apply {
-      loadingLiveData.observe(this@TabsFragment, Observer<Boolean> { loading ->
+      loadingLiveData.observe(viewLifecycleOwner, Observer<Boolean> { loading ->
         showLoading(loading!!)
       })
-      tabsData.observe(this@TabsFragment, Observer<MutableList<TabsManager.Tab>> {
+      tabsData.observe(viewLifecycleOwner, Observer<MutableList<TabsManager.Tab>> {
         setTabs(it!!)
       })
     }
