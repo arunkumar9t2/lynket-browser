@@ -83,7 +83,6 @@ public class App implements Parcelable {
 
     if (lhsValueSet ^ rhsValueSet) return (lhsValueSet) ? -1 : 1;
     if (lhsName == null ^ rhsName == null) return lhs == null ? -1 : 1;
-    //noinspection ConstantConditions
     if (lhsName == null && rhsName == null) return 0;
     return lhsName.compareToIgnoreCase(rhsName);
   }

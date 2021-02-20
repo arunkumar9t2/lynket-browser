@@ -19,6 +19,7 @@
 
 package arun.com.chromer.util.glide
 
+import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Context.ACTIVITY_SERVICE
@@ -47,20 +48,13 @@ class ChromerGlideModule : AppGlideModule() {
 
   override fun isManifestParsingEnabled() = false
 
+  @SuppressLint("CheckResult")
   override fun applyOptions(context: Context, builder: GlideBuilder) {
     builder.setDefaultTransitionOptions(
       Drawable::class.java,
       DrawableTransitionOptions.withCrossFade()
     )
-
-    val defaultOptions = RequestOptions()
-    val activityManager = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-      defaultOptions.format(if (activityManager.isLowRamDevice) PREFER_RGB_565 else PREFER_ARGB_8888)
-    }
-    defaultOptions.disallowHardwareConfig()
-    builder.setDefaultRequestOptions(defaultOptions)
+    builder.setDefaultRequestOptions(RequestOptions().disallowHardwareConfig())
   }
 
   override fun registerComponents(context: Context, glide: Glide, registry: Registry) {

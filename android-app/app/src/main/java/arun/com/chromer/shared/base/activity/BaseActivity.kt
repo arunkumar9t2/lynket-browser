@@ -75,10 +75,6 @@ abstract class BaseActivity : AppCompatActivity(), ProvidesActivityComponent {
   }
 
   protected fun finishWithTransition() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      finishAfterTransition()
-    } else {
-      finish()
-    }
+    finishAfterTransition()
   }
 }

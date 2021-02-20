@@ -113,7 +113,6 @@ public class ColorPreference extends Preference {
   }
 
   private String colorHexValue() {
-    //noinspection PointlessBitwiseExpression
     return String.format("#%06X", (0xFFFFFF & color));
   }
 

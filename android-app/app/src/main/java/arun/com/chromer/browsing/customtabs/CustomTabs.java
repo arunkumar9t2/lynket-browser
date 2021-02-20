@@ -361,7 +361,6 @@ public class CustomTabs {
           final Bitmap icon = getAppIconBitmap(pakage);
           final Intent intent = new Intent(activity, SecondaryBrowserReceiver.class);
           final PendingIntent openBrowserPending = PendingIntent.getBroadcast(activity, 0, intent, FLAG_UPDATE_CURRENT);
-          //noinspection ConstantConditions
           builder.setActionButton(icon, activity.getString(R.string.choose_secondary_browser), openBrowserPending);
         }
         break;
@@ -371,7 +370,6 @@ public class CustomTabs {
           final Bitmap icon = getAppIconBitmap(pakage);
           final Intent intent = new Intent(activity, FavShareBroadcastReceiver.class);
           final PendingIntent favSharePending = PendingIntent.getBroadcast(activity, 0, intent, FLAG_UPDATE_CURRENT);
-          //noinspection ConstantConditions
           builder.setActionButton(icon, activity.getString(R.string.fav_share_app), favSharePending);
         }
         break;
@@ -382,7 +380,6 @@ public class CustomTabs {
             .sizeDp(24).toBitmap();
         final Intent intent = new Intent(activity, ShareBroadcastReceiver.class);
         final PendingIntent sharePending = PendingIntent.getBroadcast(activity, 0, intent, FLAG_UPDATE_CURRENT);
-        //noinspection ConstantConditions
         builder.setActionButton(shareIcon, activity.getString(R.string.share_via), sharePending, true);
         break;
     }
@@ -406,11 +403,12 @@ public class CustomTabs {
     final Intent moreMenuActivity = new Intent(activity, ChromerOptionsActivity.class);
     moreMenuActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     moreMenuActivity.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      moreMenuActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-    }
+    moreMenuActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
     moreMenuActivity.putExtra(EXTRA_KEY_ORIGINAL_URL, url);
-    final PendingIntent moreMenuPending = PendingIntent.getActivity(activity, 0, moreMenuActivity, FLAG_UPDATE_CURRENT);
+    final PendingIntent moreMenuPending = PendingIntent.getActivity(activity,
+        0,
+        moreMenuActivity,
+        FLAG_UPDATE_CURRENT);
     builder.addMenuItem(activity.getString(R.string.chromer_options), moreMenuPending);
   }
 

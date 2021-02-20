@@ -53,7 +53,6 @@ public class DefaultWebArticleRepository implements WebArticleRepository {
         .flatMap(webArticle -> {
           if (webArticle == null) {
             Timber.d("Cache miss for %s", url);
-            //noinspection Convert2MethodRef
             return articleNetworkStore.getWebArticle(url)
                 .flatMap(networkWebArticle -> {
                   if (networkWebArticle != null) {

@@ -99,10 +99,7 @@ class ChromerIntroActivity : AppIntro(), ProvidesActivityComponent {
     showSkipButton(true)
     isProgressButtonEnabled = true
 
-    // Color status bar for lollipop above
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      window.statusBarColor = ColorUtil.getDarkenedColorForStatusBar(bgColor)
-    }
+    window.statusBarColor = ColorUtil.getDarkenedColorForStatusBar(bgColor)
   }
 
   override fun onSkipPressed(currentFragment: Fragment?) {

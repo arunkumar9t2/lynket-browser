@@ -53,7 +53,6 @@ import butterknife.ButterKnife;
 /**
  * Created by Arun on 16/06/2016.
  */
-@SuppressWarnings("DeprecatedIsStillUsed")
 @Deprecated
 public class TabView extends FrameLayout {
   public static final int TAB_TYPE_OPTIONS = 0;

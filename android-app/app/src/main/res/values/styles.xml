@@ -42,10 +42,7 @@
         <item name="colorControlHighlight">@color/colorAccentLighter</item>​
     </style>
 
-    <style name="MaterialButtonStyle" parent="Widget.AppCompat.Button.Colored">
-        <item name="colorButtonNormal">@android:color/white</item>
-        <item name="android:textColor">@color/primary</item>
-    </style>
+    <style name="MaterialButtonStyle" parent="Widget.AppCompat.Button.Colored"></style>
 
     <style name="Widget.CardContent" parent="android:Widget">
         <item name="android:paddingLeft">16dp</item>
@@ -106,18 +103,9 @@
         <item name="colorControlHighlight">@color/colorAccentLighter</item>​
     </style>
 
-    <style name="AppTheme.Launcher" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimaryDark">@color/primary_dark</item>
-        <item name="android:windowBackground">@drawable/launch_screen</item>
-    </style>
+    <style name="AppTheme.Launcher" parent="Theme.AppCompat.Light.NoActionBar"></style>
 
-    <style name="Theme.AppCompat.Translucent" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:colorBackgroundCacheHint">@null</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowAnimationStyle">@android:style/Animation</item>
-    </style>
+    <style name="Theme.AppCompat.Translucent" parent="Theme.AppCompat.NoActionBar"></style>
 
     <style name="Preference_TextAppearanceMaterialBody2">
         <item name="android:textSize">14sp</item>

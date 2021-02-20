@@ -188,12 +188,6 @@ public class AppDetectService extends BaseService {
     registerReceiver(screenStateReceiver, filter);
   }
 
-  @SuppressWarnings("unused")
-  void toast(final String toast) {
-    new Handler(Looper.getMainLooper())
-        .post(() -> Toast.makeText(AppDetectService.this, toast, Toast.LENGTH_SHORT).show());
-  }
-
   private interface AppDetector {
     @NonNull
     String getForegroundPackage();

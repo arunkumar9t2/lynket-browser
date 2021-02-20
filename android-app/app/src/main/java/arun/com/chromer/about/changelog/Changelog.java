@@ -56,7 +56,6 @@ public class Changelog {
       final MaterialProgressBar progress = content.findViewById(R.id.changelog_progress);
       final WebView webView = content.findViewById(R.id.changelog_web_view);
       webView.loadData(activity.getString(R.string.changelog_text), "text/html", "utf-8");
-      //noinspection deprecation
       webView.setWebViewClient(new WebViewClient() {
         @Override
         public void onPageFinished(WebView view, String url) {

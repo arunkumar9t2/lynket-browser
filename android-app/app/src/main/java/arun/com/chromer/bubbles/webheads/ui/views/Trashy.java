@@ -66,9 +66,6 @@ public class Trashy extends FrameLayout {
 
   private WindowManager.LayoutParams windowParams;
 
-  private int dispWidth;
-  private int dispHeight;
-
   private Spring scaleSpring;
   private SpringSystem springSystem;
 
@@ -138,8 +135,8 @@ public class Trashy extends FrameLayout {
   private void setInitialLocation() {
     final DisplayMetrics metrics = new DisplayMetrics();
     windowManager.getDefaultDisplay().getMetrics(metrics);
-    dispWidth = metrics.widthPixels;
-    dispHeight = metrics.heightPixels;
+    int dispWidth = metrics.widthPixels;
+    int dispHeight = metrics.heightPixels;
 
     createWindowParams();
 

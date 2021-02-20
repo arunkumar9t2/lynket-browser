@@ -43,9 +43,6 @@ public final class ArticleUtil {
    * Changes the overscroll highlight effect on a recyclerview to be the given color.
    */
   public static void changeRecyclerOverscrollColors(RecyclerView recyclerView, final int color) {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-      return;
-    }
     recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
       private boolean invoked = false;
 
@@ -89,13 +86,7 @@ public final class ArticleUtil {
    * Changes the progress bar's color.
    */
   public static void changeProgressBarColors(ProgressBar progressBar, int color) {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-      Drawable wrapDrawable = DrawableCompat.wrap(progressBar.getIndeterminateDrawable());
-      DrawableCompat.setTint(wrapDrawable, color);
-      progressBar.setIndeterminateDrawable(DrawableCompat.unwrap(wrapDrawable));
-    } else {
-      progressBar.getIndeterminateDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
-    }
+    progressBar.getIndeterminateDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
   }
 
   /**

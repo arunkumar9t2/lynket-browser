@@ -61,7 +61,6 @@ public class LookAndFeelActivity extends AppCompatActivity implements ColorChoos
     setContentView(R.layout.activity_look_and_feel);
     ButterKnife.bind(this);
     setSupportActionBar(toolbar);
-    //noinspection ConstantConditions
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     getSupportFragmentManager()

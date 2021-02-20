@@ -91,7 +91,6 @@ public class BrowsingOptionsActivity extends BaseActivity implements Snackable, 
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setSupportActionBar(toolbar);
-    //noinspection ConstantConditions
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     getSupportFragmentManager()

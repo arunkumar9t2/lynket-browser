@@ -172,8 +172,7 @@ public class AppPreferenceCardView extends CardView {
                   .generate(palette -> {
                     int bestColor = ColorUtil.getBestColorFromPalette(palette);
                     final Drawable foreground = ColorUtil.getRippleDrawableCompat(bestColor);
-                    //noinspection RedundantCast
-                    ((FrameLayout) AppPreferenceCardView.this).setForeground(foreground);
+                    AppPreferenceCardView.this.setForeground(foreground);
                   });
               return false;
             }

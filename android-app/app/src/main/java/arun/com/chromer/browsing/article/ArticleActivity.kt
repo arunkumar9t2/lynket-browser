@@ -27,6 +27,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.ColorInt
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.*
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
@@ -142,6 +143,8 @@ class ArticleActivity : BrowsingActivity() {
           }
         }
         is Result.Failure -> onArticleLoadingFailed()
+        else -> {
+        }
       }
     }
   }
@@ -291,7 +294,7 @@ class ArticleActivity : BrowsingActivity() {
     when (preferences.articleTheme()) {
       THEME_LIGHT -> delegate.localNightMode = MODE_NIGHT_NO
       THEME_DARK, THEME_BLACK -> delegate.localNightMode = MODE_NIGHT_YES
-      else -> delegate.localNightMode = MODE_NIGHT_AUTO
+      else -> delegate.localNightMode = MODE_NIGHT_AUTO_BATTERY
     }
   }
 

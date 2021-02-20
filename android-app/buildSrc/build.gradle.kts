@@ -1,6 +1,6 @@
 plugins {
   `java-gradle-plugin`
-  id("org.jetbrains.kotlin.jvm").version("1.3.31")
+  id("org.jetbrains.kotlin.jvm").version("1.4.30")
 }
 
 repositories {
@@ -10,7 +10,6 @@ repositories {
 
 dependencies {
   implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-  implementation("com.android.tools.build:gradle:4.1.0-rc03")
 
   testImplementation("org.jetbrains.kotlin:kotlin-test")
   testImplementation("org.jetbrains.kotlin:kotlin-test-junit")

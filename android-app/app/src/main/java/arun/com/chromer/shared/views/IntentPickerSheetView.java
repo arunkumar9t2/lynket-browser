@@ -142,10 +142,7 @@ public class IntentPickerSheetView extends FrameLayout {
 
   @Override
   protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-    // Necessary for showing elevation on 5.0+
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      setOutlineProvider(new Utils.ShadowOutline(w, h));
-    }
+    setOutlineProvider(new Utils.ShadowOutline(w, h));
   }
 
   public interface Filter {

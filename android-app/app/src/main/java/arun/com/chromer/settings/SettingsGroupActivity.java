@@ -66,7 +66,6 @@ public class SettingsGroupActivity extends SubActivity implements SettingsGroupA
     setContentView(R.layout.activity_settings);
     ButterKnife.bind(this);
     setSupportActionBar(toolbar);
-    //noinspection ConstantConditions
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     adapter = new SettingsGroupAdapter(this);

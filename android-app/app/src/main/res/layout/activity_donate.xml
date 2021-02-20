@@ -25,8 +25,7 @@
     app:cardElevation="6dp"
     app:cardPreventCornerOverlap="true">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:background="@color/cardview_light_background"

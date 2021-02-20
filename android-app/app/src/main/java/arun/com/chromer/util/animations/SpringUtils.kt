@@ -12,11 +12,7 @@ import androidx.dynamicanimation.animation.SpringForce
 private fun getKey(property: DynamicAnimation.ViewProperty) = when (property) {
   SpringAnimation.TRANSLATION_X -> TRANSLATION_X.name
   SpringAnimation.TRANSLATION_Y -> TRANSLATION_Y.name
-  SpringAnimation.TRANSLATION_Z -> if (SDK_INT >= LOLLIPOP) {
-    TRANSLATION_Z.name
-  } else {
-    "TRANSLATION_Z"
-  }
+  SpringAnimation.TRANSLATION_Z -> TRANSLATION_Z.name
   SpringAnimation.SCALE_X -> SCALE_X.name
   SpringAnimation.SCALE_Y -> SCALE_Y.name
   SpringAnimation.ROTATION -> ROTATION.name
@@ -24,11 +20,7 @@ private fun getKey(property: DynamicAnimation.ViewProperty) = when (property) {
   SpringAnimation.ROTATION_Y -> ROTATION_Y.name
   SpringAnimation.X -> X.name
   SpringAnimation.Y -> Y.name
-  SpringAnimation.Z -> if (SDK_INT >= LOLLIPOP) {
-    Z.name
-  } else {
-    "Z"
-  }
+  SpringAnimation.Z -> Z.name
   SpringAnimation.ALPHA -> ALPHA.name
   SpringAnimation.SCROLL_X -> "SCROLL_X"
   SpringAnimation.SCROLL_Y -> "SCROLL_Y"

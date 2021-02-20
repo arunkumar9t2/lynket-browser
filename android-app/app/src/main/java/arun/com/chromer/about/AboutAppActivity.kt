@@ -43,11 +43,9 @@ class AboutAppActivity : SubActivity() {
       .commit()
 
     // Color status bar for lollipop above
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      window.statusBarColor = ContextCompat.getColor(
-        this,
-        R.color.primary_dark
-      )
-    }
+    window.statusBarColor = ContextCompat.getColor(
+      this,
+      R.color.primary_dark
+    )
   }
 }

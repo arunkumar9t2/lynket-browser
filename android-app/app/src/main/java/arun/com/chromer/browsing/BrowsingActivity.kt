@@ -98,6 +98,8 @@ abstract class BrowsingActivity : BaseActivity(), UsesViewModel {
             website = it.data!!
             onWebsiteLoaded(website!!)
           }
+          else -> {
+          }
         }
       }
 

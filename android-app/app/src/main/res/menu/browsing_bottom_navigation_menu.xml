@@ -27,6 +27,10 @@
         android:icon="@drawable/ic_share_24dp"
         android:title="@string/share" />
     <item
+        android:id="@+id/bottom_bar_tabs"
+        android:icon="@drawable/ic_tabs_24dp"
+        android:title="@string/title_tabs" />
+    <item
         android:id="@+id/bottom_bar_minimize_tab"
         android:icon="@drawable/ic_arrow_down"
         android:title="@string/minimize" />

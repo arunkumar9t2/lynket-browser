@@ -130,7 +130,6 @@ public class AppColorExtractorJob extends JobIntentService {
       final Palette palette = Palette.from(iconBitmap)
           .clearFilters()
           .generate();
-      //noinspection ConstantConditions
       int extractColor = getPreferredColorFromSwatches(palette);
       if (extractColor != NO_COLOR) {
         Timber.d("Extracted %d for %s", extractColor, packageName);

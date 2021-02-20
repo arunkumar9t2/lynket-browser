@@ -76,7 +76,6 @@ public class BrowsingModeActivity extends BaseActivity implements BrowsingModeAd
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setSupportActionBar(toolbar);
-    //noinspection ConstantConditions
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     browsingModeListView.setLayoutManager(new LinearLayoutManager(this));

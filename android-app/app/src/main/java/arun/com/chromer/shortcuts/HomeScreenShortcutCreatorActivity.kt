@@ -161,6 +161,8 @@ class HomeScreenShortcutCreatorActivity : BrowsingActivity() {
                 }
               })
           }
+          else -> {
+          }
         }
       }
       return dialog

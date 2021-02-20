@@ -79,14 +79,14 @@ import static android.widget.Toast.LENGTH_LONG;
 public class Utils {
 
   public static final boolean ANDROID_OREO = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
-  public static final boolean ANDROID_LOLLIPOP = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
+  public static final boolean ANDROID_LOLLIPOP = true;
 
   private Utils() {
     throw new RuntimeException("No instances");
   }
 
   public static boolean isLollipopAbove() {
-    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
+    return true;
   }
 
   public static void openPlayStore(@NonNull Context context, @NonNull String appPackageName) {
@@ -259,7 +259,6 @@ public class Utils {
     return px / scaledDensity;
   }
 
-  @SuppressWarnings("unused")
   public static int pxToDp(int px) {
     return (int) (px / Resources.getSystem().getDisplayMetrics().density);
   }
@@ -378,7 +377,7 @@ public class Utils {
   }
 
   public static boolean isOverlayGranted(@NonNull Context context) {
-    return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(context);
+    return Settings.canDrawOverlays(context);
   }
 
   @TargetApi(Build.VERSION_CODES.M)
