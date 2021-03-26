@@ -40,7 +40,7 @@ class NativeFloatingBubble
 constructor(
   private val schedulerProvider: SchedulerProvider,
   private val websiteRepository: WebsiteRepository,
-  private val bubbleNotificationUtil: BubbleNotificationUtil,
+  private val bubbleNotificationManager: BubbleNotificationManager,
   private val websiteIconsProvider: WebsiteIconsProvider
 ) : FloatingBubble {
 
@@ -72,7 +72,7 @@ constructor(
   )
 
   private fun showBubble(bubbleLoadData: BubbleLoadData): Flowable<BubbleLoadData> {
-    return bubbleNotificationUtil.showBubbles(bubbleLoadData)
+    return bubbleNotificationManager.showBubbles(bubbleLoadData)
       .delay(1, TimeUnit.SECONDS, schedulerProvider.pool) // Avoid notification throttling
       .toFlowable()
       .flatMap { bubbleData ->
@@ -89,6 +89,6 @@ constructor(
                 )
               }
           }.onErrorReturnItem(bubbleData)
-      }.flatMapSingle(bubbleNotificationUtil::showBubbles)
+      }.flatMapSingle(bubbleNotificationManager::showBubbles)
   }
 }

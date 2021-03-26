@@ -28,7 +28,7 @@ private const val BUBBLE_NOTIFICATION_GROUP = "bubbles"
 
 @Singleton
 @RequiresApi(Build.VERSION_CODES.Q)
-class BubbleNotificationUtil
+class BubbleNotificationManager
 @Inject
 constructor(
   private val application: Application
@@ -59,21 +59,23 @@ constructor(
   }
 
   private fun updateGroupSummaryNotification(lastNotificationColor: Int) {
-    val bubblesSummaryNotification =
-      Notification.Builder(application, BUBBLE_NOTIFICATION_CHANNEL_ID).run {
-        setContentTitle(application.getString(R.string.bubble_notification_group_title))
-        setContentText(application.getString(R.string.bubble_notification_group_description))
-        setGroup(BUBBLE_NOTIFICATION_GROUP)
-        setGroupSummary(true)
-        setAllowSystemGeneratedContextualActions(true)
-        setColor(lastNotificationColor)
-        setColorized(true)
-        setLocalOnly(true)
-        setOngoing(false)
-        setSmallIcon(Icon.createWithResource(application, R.drawable.ic_chromer_notification))
-        setLargeIcon(Icon.createWithResource(application, R.mipmap.ic_launcher_round))
-        build()
-      }
+    val bubblesSummaryNotification = Notification.Builder(
+      application,
+      BUBBLE_NOTIFICATION_CHANNEL_ID
+    ).run {
+      setContentTitle(application.getString(R.string.bubble_notification_group_title))
+      setContentText(application.getString(R.string.bubble_notification_group_description))
+      setGroup(BUBBLE_NOTIFICATION_GROUP)
+      setGroupSummary(true)
+      setAllowSystemGeneratedContextualActions(true)
+      setColor(lastNotificationColor)
+      setColorized(true)
+      setLocalOnly(true)
+      setOngoing(false)
+      setSmallIcon(Icon.createWithResource(application, R.drawable.ic_chromer_notification))
+      setLargeIcon(Icon.createWithResource(application, R.mipmap.ic_launcher_round))
+      build()
+    }
     notificationManager.notify(BUBBLE_NOTIFICATION_GROUP.hashCode(), bubblesSummaryNotification)
   }
 
@@ -99,38 +101,47 @@ constructor(
       .defaultDisplay
       .let { display -> Point().apply(display::getSize).y }
 
-    val bubbleNotification = Notification.Builder(context, BUBBLE_NOTIFICATION_CHANNEL_ID).run {
+    val bubbleNotification = notification(context, BUBBLE_NOTIFICATION_CHANNEL_ID) {
       setContentTitle(website.safeLabel())
       setContentText(website.preferredUrl())
       setGroup(BUBBLE_NOTIFICATION_GROUP)
+
       setAllowSystemGeneratedContextualActions(true)
       bubbleData.color.takeIf { it != Constants.NO_COLOR }?.let(::setColor)
+
       setColorized(true)
       setLocalOnly(true)
+
       setOngoing(false) // TODO Register a broadcast receiver and call notificationManager.cancel
       setSmallIcon(Icon.createWithResource(context, R.drawable.ic_chromer_notification))
       setLargeIcon(bubbleIcon)
-      setBubbleMetadata(Notification.BubbleMetadata.Builder().run {
+
+      bubbleMetadata {
+        setIcon(bubbleIcon)
         setIcon(bubbleIcon)
         setIntent(bubbleIntent)
         setAutoExpandBubble(false)
         setSuppressNotification(true)
         setDesiredHeight(Utils.pxToDp((displayHeight * 0.8).toInt()))
-        build()
-      })
-      addPerson(Person.Builder().run {
-        setBot(false)
+      }
+
+      // Required when targeting 10
+      // https://developer.android.com/guide/topics/ui/bubbles#when_bubbles_appear
+      setCategory(Notification.CATEGORY_CALL)
+      style = Notification.MessagingStyle(addPerson {
+        setBot(true)
         setIcon(bubbleIcon)
         setName(website.safeLabel())
         setImportant(true)
-        build()
       })
-      build()
     }
+
     updateGroupSummaryNotification(bubbleData.color)
+
     notificationManager.notify(website.url.hashCode(), bubbleNotification)
     bubbleData
   }.doOnError(Timber::e).onErrorReturnItem(bubbleData)
+
 
   private fun BubbleLoadData.fallbackIcon(): Icon = if (color != Constants.NO_COLOR) {
     val iconSize = application.dpToPx(108.0)
