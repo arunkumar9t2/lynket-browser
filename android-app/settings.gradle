@@ -19,3 +19,15 @@
 include ":app", ":disk-cache"
 
 includeBuild "../../base-android"
+
+//includeBuild("../../scabbard") {
+//    dependencySubstitution {
+//        substitute module("dev.arunkumar:scabbard-processor") with project(":scabbard-processor")
+//    }
+//}
+//
+//includeBuild("../../scabbard/scabbard-gradle-plugin") {
+//    dependencySubstitution {
+//        substitute module("dev.arunkumar:scabbard-gradle-plugin") with project(":")
+//    }
+//}
