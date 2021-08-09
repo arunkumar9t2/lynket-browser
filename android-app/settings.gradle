@@ -18,8 +18,6 @@
  */
 include ":app", ":disk-cache"
 
-includeBuild "../../base-android"
-
 //includeBuild("../../scabbard") {
 //    dependencySubstitution {
 //        substitute module("dev.arunkumar:scabbard-processor") with project(":scabbard-processor")

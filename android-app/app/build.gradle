@@ -128,7 +128,6 @@ dependencies {
   implementation "dev.arunkumar.android:dagger-base:master-SNAPSHOT"
   implementation "dev.arunkumar.android:logging:master-SNAPSHOT"
   implementation "dev.arunkumar.android:dagger-viewmodel:master-SNAPSHOT"
-  implementation "dev.arunkumar.android:viewmodel-utils:master-SNAPSHOT"
   implementation "dev.arunkumar.android:epoxy-utils:master-SNAPSHOT"
   implementation "dev.arunkumar.android:rx-utils:master-SNAPSHOT"
 
@@ -206,6 +205,7 @@ dependencies {
   implementation "com.jakewharton.rxbinding3:rxbinding-appcompat:3.0.0"
   implementation "com.jakewharton.rxbinding3:rxbinding-recyclerview:3.0.0"
   implementation "io.reactivex.rxjava2:rxkotlin:2.4.0"
+  implementation "com.jakewharton.rxrelay2:rxrelay:2.1.1"
 
   implementation "com.uber.rxdogtag:rxdogtag:0.3.0"
 
