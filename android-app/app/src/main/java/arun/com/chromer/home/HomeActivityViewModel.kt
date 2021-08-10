@@ -19,8 +19,6 @@ import com.jakewharton.rxrelay2.PublishRelay
 import dev.arunkumar.android.result.asResource
 import dev.arunkumar.android.rxschedulers.SchedulerProvider
 import dev.arunkumar.common.result.Resource
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -37,6 +35,19 @@ constructor(
 
   val providerInfoLiveData = MutableLiveData<CustomTabProviderInfo>()
   val recentsLiveData = MutableLiveData<Resource<List<Website>>>()
+
+  /**
+   * Relay to convert `onCleared` calls to data stream.
+   *
+   * @see onCleared
+   */
+  private val clearEventsRelay = PublishRelay.create<Int>()
+
+  /**
+   * [Observable] that emits `0` when onCleared is called.
+   */
+  @Suppress("MemberVisibilityCanBePrivate")
+  protected val clearEvents: Observable<Int> = clearEventsRelay.hide()
 
   init {
     start()
@@ -99,27 +110,6 @@ constructor(
   protected fun <T> Observable<T>.untilCleared(): Observable<T> = compose { upstream ->
     upstream.takeUntil(clearEvents)
   }
-
-  /**
-   * Auto terminates the current [Flowable] when `onCleared` occurs.
-   */
-  protected fun <T> Flowable<T>.untilCleared(): Flowable<T> = compose { upstream ->
-    upstream
-      .takeUntil(clearEvents.toFlowable(BackpressureStrategy.LATEST))
-  }
-
-  /**
-   * Relay to convert `onCleared` calls to data stream.
-   *
-   * @see onCleared
-   */
-  private val clearEventsRelay = PublishRelay.create<Int>()
-
-  /**
-   * [Observable] that emits `0` when onCleared is called.
-   */
-  @Suppress("MemberVisibilityCanBePrivate")
-  protected val clearEvents: Observable<Int> = clearEventsRelay.hide()
 
   @CallSuper
   override fun onCleared() {
