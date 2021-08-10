@@ -31,11 +31,14 @@ import androidx.annotation.StringRes
 /**
  * Returns true if the given package was installed
  */
-fun PackageManager.isPackageInstalled(packageName: String?): Boolean = try {
-  this.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES)
-  true
-} catch (e: PackageManager.NameNotFoundException) {
-  false
+fun PackageManager.isPackageInstalled(packageName: String?): Boolean {
+  if (packageName == null) return false
+  return try {
+    this.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES)
+    true
+  } catch (e: PackageManager.NameNotFoundException) {
+    false
+  }
 }
 
 fun Context.appName(packageName: String): String {

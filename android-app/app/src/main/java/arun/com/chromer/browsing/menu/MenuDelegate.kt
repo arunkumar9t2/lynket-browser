@@ -128,10 +128,10 @@ class MenuDelegate @Inject constructor(
         val secondaryBrowserPackage = preferences.secondaryBrowserPackage()
         if (isPackageInstalled(activity, secondaryBrowserPackage)) {
           actionButton.setTitle(R.string.choose_secondary_browser)
-          val componentName =
-            ComponentName.unflattenFromString(preferences.secondaryBrowserComponent()!!)
+          val secondaryBrowserComponent = preferences.secondaryBrowserComponent()!!
+          val componentName = ComponentName.unflattenFromString(secondaryBrowserComponent)
           try {
-            actionButton.icon = activity.packageManager.getActivityIcon(componentName)
+            actionButton.icon = activity.packageManager.getActivityIcon(componentName!!)
           } catch (e: PackageManager.NameNotFoundException) {
             actionButton.isVisible = false
           }
@@ -145,7 +145,7 @@ class MenuDelegate @Inject constructor(
           actionButton.setTitle(R.string.fav_share_app)
           val componentName = ComponentName.unflattenFromString(preferences.favShareComponent()!!)
           try {
-            actionButton.icon = activity.packageManager.getActivityIcon(componentName)
+            actionButton.icon = activity.packageManager.getActivityIcon(componentName!!)
           } catch (e: PackageManager.NameNotFoundException) {
             actionButton.isVisible = false
           }
