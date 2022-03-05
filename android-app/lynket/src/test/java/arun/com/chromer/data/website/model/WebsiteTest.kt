@@ -19,11 +19,11 @@
 
 package arun.com.chromer.data.website.model
 
-import arun.com.chromer.ChromerRobolectricSuite
+import arun.com.chromer.LynketRobolectricSuite
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class WebsiteTest : ChromerRobolectricSuite() {
+class WebsiteTest : LynketRobolectricSuite() {
 
   @Test
   fun ampify() {

@@ -33,8 +33,8 @@ import javax.inject.Inject
 
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [19, 21], application = ChromerTestApplication::class)
-abstract class ChromerRobolectricSuite {
+@Config(sdk = [19, 21], application = LynketTestApplication::class)
+abstract class LynketRobolectricSuite {
   lateinit var testAppComponent: TestAppComponent
 
   @Inject
@@ -45,7 +45,7 @@ abstract class ChromerRobolectricSuite {
   @Before
   fun setup() {
     setupRxSchedulers()
-    testAppComponent = (application as ChromerTestApplication).appComponent as TestAppComponent
+    testAppComponent = (application as LynketTestApplication).appComponent as TestAppComponent
     testAppComponent.inject(this)
   }
 

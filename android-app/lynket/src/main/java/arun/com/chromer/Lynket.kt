@@ -36,7 +36,7 @@ import timber.log.Timber
 /**
  * Created by Arun on 06/01/2016.
  */
-open class Chromer : Application() {
+open class Lynket : Application() {
 
   open val appComponent: AppComponent by lazy {
     DaggerAppComponent.factory().create(this)

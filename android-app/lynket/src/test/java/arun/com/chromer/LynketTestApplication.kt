@@ -23,7 +23,7 @@ import arun.com.chromer.di.app.AppComponent
 import arun.com.chromer.di.app.DaggerTestAppComponent
 import arun.com.chromer.di.app.TestAppModule
 
-class ChromerTestApplication : Chromer() {
+class LynketTestApplication : Lynket() {
 
   override val appComponent: AppComponent by lazy {
     DaggerTestAppComponent.builder()

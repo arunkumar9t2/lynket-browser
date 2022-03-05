@@ -23,7 +23,7 @@ package arun.com.chromer.browsing.customtabs.callbacks
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import arun.com.chromer.Chromer
+import arun.com.chromer.Lynket
 import arun.com.chromer.browsing.customtabs.CustomTabActivity
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.tabs.TabsManager
@@ -36,7 +36,7 @@ class MinimizeBroadcastReceiver : BroadcastReceiver() {
   lateinit var tabsManager: TabsManager
 
   override fun onReceive(context: Context, intent: Intent) {
-    (context.applicationContext as Chromer).appComponent.inject(this)
+    (context.applicationContext as Lynket).appComponent.inject(this)
     val url = intent.getStringExtra(Constants.EXTRA_KEY_ORIGINAL_URL)
     if (url != null) {
       tabsManager.minimizeTabByUrl(url, CustomTabActivity::class.java.name)

@@ -19,7 +19,7 @@
 
 package arun.com.chromer.data.apps
 
-import arun.com.chromer.ChromerRobolectricSuite
+import arun.com.chromer.LynketRobolectricSuite
 import arun.com.chromer.data.common.App
 import org.junit.After
 import org.junit.Assert.assertFalse
@@ -31,7 +31,7 @@ import javax.inject.Inject
 /**
  * Created by arunk on 10-02-2018.
  */
-class DefaultAppRepositoryTest : ChromerRobolectricSuite() {
+class DefaultAppRepositoryTest : LynketRobolectricSuite() {
   @Inject
   @JvmField
   var appRepository: AppRepository? = null

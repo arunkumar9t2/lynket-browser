@@ -21,7 +21,7 @@
 package arun.com.chromer.di.app
 
 import android.app.Application
-import arun.com.chromer.Chromer
+import arun.com.chromer.Lynket
 import arun.com.chromer.appdetect.AppDetectionManager
 import arun.com.chromer.browsing.customtabs.bottombar.BottomBarReceiver
 import arun.com.chromer.browsing.customtabs.callbacks.MinimizeBroadcastReceiver
@@ -74,4 +74,4 @@ interface AppComponent {
   }
 }
 
-fun Application.appComponent() = (this as Chromer).appComponent
+fun Application.appComponent() = (this as Lynket).appComponent

@@ -42,7 +42,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import arun.com.chromer.Chromer;
+import arun.com.chromer.Lynket;
 import arun.com.chromer.R;
 import arun.com.chromer.data.apps.AppRepository;
 import arun.com.chromer.util.ColorUtil;
@@ -62,7 +62,7 @@ public class AppColorExtractorJob extends JobIntentService {
 
   @Override
   protected void onHandleWork(@NonNull Intent intent) {
-    ((Chromer) getApplication()).getAppComponent().inject(this);
+    ((Lynket) getApplication()).getAppComponent().inject(this);
     final String packageName = intent.getStringExtra(EXTRA_PACKAGE_NAME);
     if (packageName != null) {
       if (isValidPackage(packageName))
