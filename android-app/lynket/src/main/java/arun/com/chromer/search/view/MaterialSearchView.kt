@@ -84,7 +84,7 @@ constructor(
   @JvmField
   var normalColor = 0
 
-  @BindColor(R.color.accent)
+  @BindColor(R.color.colorAccent)
   @JvmField
   var focusedColor = 0
 

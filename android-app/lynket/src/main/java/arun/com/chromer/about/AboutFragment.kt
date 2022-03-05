@@ -102,7 +102,7 @@ class AboutFragment : Fragment() {
     )
 
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
-      val materialDark = ContextCompat.getColor(requireActivity(), R.color.accent)
+      val materialDark = ContextCompat.getColor(requireActivity(), R.color.colorAccent)
       holder.about_app_subtitle.visibility = View.VISIBLE
       when (position) {
         0 -> {

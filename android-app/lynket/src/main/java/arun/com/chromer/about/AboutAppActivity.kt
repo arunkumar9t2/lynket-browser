@@ -45,7 +45,7 @@ class AboutAppActivity : SubActivity() {
     // Color status bar for lollipop above
     window.statusBarColor = ContextCompat.getColor(
       this,
-      R.color.primary_dark
+      R.color.colorPrimaryDark
     )
   }
 }
