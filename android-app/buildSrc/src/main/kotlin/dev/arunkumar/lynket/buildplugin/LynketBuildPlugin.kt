@@ -58,7 +58,6 @@ class LynketBuildPlugin : Plugin<Project> {
    */
   private fun Project.ensureBuildVariables() {
     allprojects { project ->
-      project.putPropertyIfNotExists("FABRIC_KEY", "")
       project.putPropertyIfNotExists("PLAY_LICENSE_KEY", "")
     }
   }

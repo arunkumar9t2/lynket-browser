@@ -30,6 +30,4 @@ class ChromerTestApplication : Chromer() {
       .testAppModule(TestAppModule(this))
       .build()
   }
-
-  override fun initFabric() {}
 }

@@ -305,9 +305,6 @@
       android:theme="@style/ArticleImageViewTheme" />
 
     <meta-data
-      android:name="io.fabric.ApiKey"
-      android:value="${FABRIC_KEY}" />
-    <meta-data
       android:name="arun.com.chromer.util.glide.ChromerGlideModule"
       android:value="GlideModule" />
 
