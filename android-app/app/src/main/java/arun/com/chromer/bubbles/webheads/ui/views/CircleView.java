@@ -71,17 +71,13 @@ public class CircleView extends View {
     float outerRadius;
     if (Utils.isLollipopAbove()) {
       outerRadius = getMeasuredWidth() / 2;
-      canvas.drawCircle(getMeasuredWidth() / 2,
-          getMeasuredWidth() / 2,
-          outerRadius,
-          mBgPaint);
     } else {
       outerRadius = (float) (getMeasuredWidth() / 2.4);
-      canvas.drawCircle(getMeasuredWidth() / 2,
-          getMeasuredWidth() / 2,
-          outerRadius,
-          mBgPaint);
     }
+    canvas.drawCircle(getMeasuredWidth() / 2,
+        getMeasuredWidth() / 2,
+        outerRadius,
+        mBgPaint);
   }
 
   @ColorInt

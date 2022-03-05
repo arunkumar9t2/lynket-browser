@@ -299,8 +299,7 @@ class AboutFragment : Fragment() {
       }
 
       override fun onClick(view: View) {
-        val position = adapterPosition
-        when (position) {
+        when (adapterPosition) {
           0 -> return
           1 -> {
             val myProfile =

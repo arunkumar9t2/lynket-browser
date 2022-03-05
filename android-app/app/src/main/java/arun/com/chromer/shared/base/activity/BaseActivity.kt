@@ -18,7 +18,6 @@
  */
 package arun.com.chromer.shared.base.activity
 
-import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.annotation.LayoutRes

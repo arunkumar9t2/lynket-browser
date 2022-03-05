@@ -28,7 +28,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -184,14 +183,14 @@ public class IntentPickerSheetView extends FrameLayout {
     }
   }
 
-  private class SortAlphabetically implements Comparator<ActivityInfo> {
+  private static class SortAlphabetically implements Comparator<ActivityInfo> {
     @Override
     public int compare(ActivityInfo lhs, ActivityInfo rhs) {
       return lhs.label.compareTo(rhs.label);
     }
   }
 
-  private class FilterNone implements Filter {
+  private static class FilterNone implements Filter {
     @Override
     public boolean include(ActivityInfo info) {
       return true;

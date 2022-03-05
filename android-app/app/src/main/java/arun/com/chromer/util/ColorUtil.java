@@ -116,8 +116,8 @@ public class ColorUtil {
   }
 
   private static double colorDifference(@ColorInt int a, @ColorInt int b) {
-    double aLab[] = new double[3];
-    double bLab[] = new double[3];
+    double[] aLab = new double[3];
+    double[] bLab = new double[3];
     ColorUtils.colorToLAB(a, aLab);
     ColorUtils.colorToLAB(b, bLab);
     return ColorUtils.distanceEuclidean(aLab, bLab);

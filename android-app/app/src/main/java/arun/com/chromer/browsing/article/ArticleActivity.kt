@@ -27,7 +27,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.ColorInt
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.*
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders

@@ -53,9 +53,9 @@ internal constructor(
   private val iconSizeDp = 24
 
   val incognitoSelections: PublishSubject<Pair<String, Boolean>> =
-    PublishSubject.create<Pair<String, Boolean>>()
+    PublishSubject.create()
   val blacklistSelections: PublishSubject<Pair<String, Boolean>> =
-    PublishSubject.create<Pair<String, Boolean>>()
+    PublishSubject.create()
 
   private val blacklistSelected: IconicsDrawable by lazy {
     IconicsDrawable(activity).apply {

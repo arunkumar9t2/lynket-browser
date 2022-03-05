@@ -673,7 +673,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
   @Override
   public String toString() {
-    return "Webhead " + getUrl() + "master: " + String.valueOf(isMaster());
+    return "Webhead " + getUrl() + "master: " + isMaster();
   }
 
   static class SpringInterpolator implements android.view.animation.Interpolator {

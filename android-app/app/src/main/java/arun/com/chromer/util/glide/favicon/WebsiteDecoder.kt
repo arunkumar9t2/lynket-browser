@@ -37,6 +37,7 @@ import com.bumptech.glide.load.engine.Resource
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
 import com.bumptech.glide.load.resource.bitmap.BitmapResource
 import timber.log.Timber
+import java.util.*
 
 class WebsiteDecoder(private val context: Context, glide: Glide) :
   ResourceDecoder<Website, Bitmap> {
@@ -121,7 +122,7 @@ class WebsiteDecoder(private val context: Context, glide: Glide) :
       setColor(ColorUtil.getForegroundWhiteOrBlack(color))
       style = Paint.Style.FILL
     }
-    drawTextInCanvasCentre(canvas, textPaint, getFirstLetter(label).toUpperCase())
+    drawTextInCanvasCentre(canvas, textPaint, getFirstLetter(label).uppercase(Locale.getDefault()))
     return icon
   }
 

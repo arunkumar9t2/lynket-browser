@@ -153,7 +153,7 @@ public final class DiskLruCache implements Closeable {
    * This cache uses a single background thread to evict entries.
    */
   final ThreadPoolExecutor executorService =
-      new ThreadPoolExecutor(0, 1, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+      new ThreadPoolExecutor(0, 1, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
   private final File directory;
   private final File journalFile;
   private final File journalFileTmp;
@@ -384,10 +384,8 @@ public final class DiskLruCache implements Closeable {
     if (journalWriter != null) {
       journalWriter.close();
     }
-
-    Writer writer = new BufferedWriter(
-        new OutputStreamWriter(new FileOutputStream(journalFileTmp), DiskCacheUtil.US_ASCII));
-    try {
+    try (Writer writer = new BufferedWriter(
+        new OutputStreamWriter(new FileOutputStream(journalFileTmp), DiskCacheUtil.US_ASCII))) {
       writer.write(MAGIC);
       writer.write("\n");
       writer.write(VERSION_1);
@@ -405,8 +403,6 @@ public final class DiskLruCache implements Closeable {
           writer.write(CLEAN + ' ' + entry.key + entry.getLengths() + '\n');
         }
       }
-    } finally {
-      writer.close();
     }
 
     if (journalFile.exists()) {

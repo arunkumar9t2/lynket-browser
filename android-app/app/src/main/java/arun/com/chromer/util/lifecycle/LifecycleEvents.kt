@@ -52,12 +52,12 @@ open class LifecycleEvents constructor(lifecycleOwner: LifecycleOwner) : Lifecyc
     lifecycleEventRelay.accept(ON_DESTROY)
   }
 
-  val created = lifecycleEventRelay.filter { it == ON_CREATE }
-  val resumes = lifecycleEventRelay.filter { it == ON_RESUME }
-  val starts = lifecycleEventRelay.filter { it == ON_START }
-  val pauses = lifecycleEventRelay.filter { it == ON_PAUSE }
-  val stops = lifecycleEventRelay.filter { it == ON_STOP }
-  val destroys = lifecycleEventRelay.filter { it == ON_DESTROY }
+  val created: Observable<Lifecycle.Event> = lifecycleEventRelay.filter { it == ON_CREATE }
+  val resumes: Observable<Lifecycle.Event> = lifecycleEventRelay.filter { it == ON_RESUME }
+  val starts: Observable<Lifecycle.Event> = lifecycleEventRelay.filter { it == ON_START }
+  val pauses: Observable<Lifecycle.Event> = lifecycleEventRelay.filter { it == ON_PAUSE }
+  val stops: Observable<Lifecycle.Event> = lifecycleEventRelay.filter { it == ON_STOP }
+  val destroys: Observable<Lifecycle.Event> = lifecycleEventRelay.filter { it == ON_DESTROY }
 }
 
 @Qualifier

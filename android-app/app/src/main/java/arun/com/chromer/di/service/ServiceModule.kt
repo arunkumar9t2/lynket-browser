@@ -21,4 +21,4 @@ package arun.com.chromer.di.service
 import dagger.Module
 
 @Module
-class ServiceModule()
+class ServiceModule

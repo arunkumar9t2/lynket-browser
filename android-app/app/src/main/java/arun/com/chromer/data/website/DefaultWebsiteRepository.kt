@@ -100,7 +100,7 @@ internal constructor(
 
   override fun getWebsiteColorSync(url: String): Int {
     return cacheStore.getWebsiteColor(url)
-      .map<WebColor> { webColor ->
+      .map { webColor ->
         if (webColor.color == NO_COLOR) {
           saveWebColor(url).subscribe()
         }

@@ -60,7 +60,7 @@ fun View.circularHideWithSelfCenter(done: (() -> Unit)? = null) {
     val cx = width / 2
     val cy = height / 2
     // get the initial radius for the clipping circle
-    val initialRadius = Math.hypot(cx.toDouble(), cy.toDouble())
+    val initialRadius = hypot(cx.toDouble(), cy.toDouble())
 
     // create the animation (the final radius is zero)
     val anim = ViewAnimationUtils.createCircularReveal(this, cx, cy, initialRadius.toFloat(), 0f)

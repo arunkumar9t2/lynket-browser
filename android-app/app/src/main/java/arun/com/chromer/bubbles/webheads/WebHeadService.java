@@ -19,6 +19,27 @@
 
 package arun.com.chromer.bubbles.webheads;
 
+import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static android.widget.Toast.LENGTH_SHORT;
+import static androidx.core.app.NotificationCompat.PRIORITY_MIN;
+import static arun.com.chromer.shared.Constants.ACTION_CLOSE_WEBHEAD_BY_URL;
+import static arun.com.chromer.shared.Constants.ACTION_EVENT_WEBHEAD_DELETED;
+import static arun.com.chromer.shared.Constants.ACTION_EVENT_WEBSITE_UPDATED;
+import static arun.com.chromer.shared.Constants.ACTION_OPEN_CONTEXT_ACTIVITY;
+import static arun.com.chromer.shared.Constants.ACTION_OPEN_NEW_TAB;
+import static arun.com.chromer.shared.Constants.ACTION_REBIND_WEBHEAD_TAB_CONNECTION;
+import static arun.com.chromer.shared.Constants.ACTION_STOP_WEBHEAD_SERVICE;
+import static arun.com.chromer.shared.Constants.ACTION_WEBHEAD_COLOR_SET;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_AMP;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_INCOGNITO;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_MINIMIZE;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_REBIND_WEBHEAD_CXN;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBHEAD_COLOR;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBSITE;
+import static arun.com.chromer.shared.Constants.NO_COLOR;
+
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.app.Notification;
@@ -81,27 +102,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
-
-import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
-import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static android.widget.Toast.LENGTH_SHORT;
-import static androidx.core.app.NotificationCompat.PRIORITY_MIN;
-import static arun.com.chromer.shared.Constants.ACTION_CLOSE_WEBHEAD_BY_URL;
-import static arun.com.chromer.shared.Constants.ACTION_EVENT_WEBHEAD_DELETED;
-import static arun.com.chromer.shared.Constants.ACTION_EVENT_WEBSITE_UPDATED;
-import static arun.com.chromer.shared.Constants.ACTION_OPEN_CONTEXT_ACTIVITY;
-import static arun.com.chromer.shared.Constants.ACTION_OPEN_NEW_TAB;
-import static arun.com.chromer.shared.Constants.ACTION_REBIND_WEBHEAD_TAB_CONNECTION;
-import static arun.com.chromer.shared.Constants.ACTION_STOP_WEBHEAD_SERVICE;
-import static arun.com.chromer.shared.Constants.ACTION_WEBHEAD_COLOR_SET;
-import static arun.com.chromer.shared.Constants.EXTRA_KEY_FROM_AMP;
-import static arun.com.chromer.shared.Constants.EXTRA_KEY_INCOGNITO;
-import static arun.com.chromer.shared.Constants.EXTRA_KEY_MINIMIZE;
-import static arun.com.chromer.shared.Constants.EXTRA_KEY_REBIND_WEBHEAD_CXN;
-import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBHEAD_COLOR;
-import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBSITE;
-import static arun.com.chromer.shared.Constants.NO_COLOR;
 
 public class WebHeadService extends OverlayService implements WebHeadContract,
     CustomTabManager.ConnectionCallback {
@@ -609,7 +609,7 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     }
   }
 
-  private class WebHeadNavigationCallback extends CustomTabManager.NavigationCallback {
+  private static class WebHeadNavigationCallback extends CustomTabManager.NavigationCallback {
     @Override
     public void onNavigationEvent(int navigationEvent, Bundle extras) {
       switch (navigationEvent) {

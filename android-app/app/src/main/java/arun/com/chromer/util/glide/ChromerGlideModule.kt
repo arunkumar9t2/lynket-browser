@@ -20,13 +20,10 @@
 package arun.com.chromer.util.glide
 
 import android.annotation.SuppressLint
-import android.app.ActivityManager
 import android.content.Context
-import android.content.Context.ACTIVITY_SERVICE
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.os.Build
 import arun.com.chromer.data.website.model.Website
 import arun.com.chromer.util.glide.appicon.ApplicationIcon
 import arun.com.chromer.util.glide.appicon.ApplicationIconDecoder
@@ -36,8 +33,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.GlideBuilder
 import com.bumptech.glide.Registry
 import com.bumptech.glide.annotation.GlideModule
-import com.bumptech.glide.load.DecodeFormat.PREFER_ARGB_8888
-import com.bumptech.glide.load.DecodeFormat.PREFER_RGB_565
 import com.bumptech.glide.load.model.UnitModelLoader
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.module.AppGlideModule
@@ -73,7 +68,7 @@ class ChromerGlideModule : AppGlideModule() {
     registry.append(
       Website::class.java,
       Website::class.java,
-      UnitModelLoader.Factory.getInstance<Website>()
+      UnitModelLoader.Factory.getInstance()
     )
     registry.append(Website::class.java, Bitmap::class.java, WebsiteDecoder(context, glide))
   }

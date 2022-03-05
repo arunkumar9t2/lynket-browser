@@ -49,8 +49,8 @@ constructor(
   private val requestManager: RequestManager
 ) : RecyclerView.Adapter<ProvidersAdapter.RecentsViewHolder>() {
 
-  val installClicks: PublishSubject<Provider> = PublishSubject.create<Provider>()
-  val selections: PublishSubject<Provider> = PublishSubject.create<Provider>()
+  val installClicks: PublishSubject<Provider> = PublishSubject.create()
+  val selections: PublishSubject<Provider> = PublishSubject.create()
 
   var providers = ArrayList<Provider>()
     set(value) {

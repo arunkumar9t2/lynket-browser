@@ -96,7 +96,7 @@ class SettingsGroupAdapter extends RecyclerView.Adapter<SettingsGroupAdapter.Set
     void onGroupItemClicked(int position, final View view);
   }
 
-  public class SettingsItemViewHolder extends RecyclerView.ViewHolder {
+  public static class SettingsItemViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.settins_list_icon)
     ImageView icon;
     @BindView(R.id.settings_list_title)

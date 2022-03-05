@@ -270,8 +270,7 @@ internal class ArticleAdapter(
 
     private var originalTextSize: Float = 0f
 
-    internal var calculatedSize: Float = 0f
-      get() = originalTextSize + textSizeIncrementSp
+    internal val calculatedSize: Float get() = originalTextSize + textSizeIncrementSp
 
     init {
       textView.movementMethod = SuppressiveLinkMovementMethod

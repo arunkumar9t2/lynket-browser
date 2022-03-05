@@ -84,7 +84,7 @@ class NewTabDialogActivity : BaseActivity() {
     private lateinit var unbinder: Unbinder
     private lateinit var dialog: MaterialDialog
 
-    fun show(): NewTabDialog? {
+    fun show(): NewTabDialog {
       dialog = MaterialDialog.Builder(activity!!)
         .backgroundColorRes(android.R.color.transparent)
         .customView(R.layout.activity_new_tab, false)

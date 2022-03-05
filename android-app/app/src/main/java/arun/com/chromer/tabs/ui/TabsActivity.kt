@@ -70,8 +70,8 @@ class TabsActivity : BaseActivity(), Snackable {
     Snackbar.make(coordinatorLayout, textToSnack, Snackbar.LENGTH_LONG).show()
   }
 
-  override fun onOptionsItemSelected(item: MenuItem) = when {
-    item.itemId == android.R.id.home -> {
+  override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+    android.R.id.home -> {
       finish()
       true
     }

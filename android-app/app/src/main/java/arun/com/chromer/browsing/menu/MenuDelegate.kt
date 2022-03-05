@@ -183,9 +183,9 @@ class MenuDelegate @Inject constructor(
       R.id.menu_open_full_page -> tabsManager.openBrowsingTab(
         activity,
         website,
-        true,
-        false,
-        listOf(CustomTabActivity::class.java.name),
+        smart = true,
+        fromNewTab = false,
+        activityNames = listOf(CustomTabActivity::class.java.name),
         incognito = incognito
       )
       android.R.id.home -> activity.finish()

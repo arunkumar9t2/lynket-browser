@@ -304,9 +304,7 @@ class WebsiteUtilities {
       if (this.encoding == null || this.encoding.isEmpty())
         this.encoding = UTF8;
 
-      BufferedInputStream in = null;
-      try {
-        in = new BufferedInputStream(is, K2);
+      try (BufferedInputStream in = new BufferedInputStream(is, K2)) {
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
 
         // detect encoding with the help of meta tag
@@ -352,13 +350,6 @@ class WebsiteUtilities {
         return output.toString(this.encoding);
       } catch (IOException e) {
         Timber.e(e, " url: %s", url);
-      } finally {
-        if (in != null) {
-          try {
-            in.close();
-          } catch (Exception ignored) {
-          }
-        }
       }
       return "";
     }
@@ -373,11 +364,7 @@ class WebsiteUtilities {
 
       final StringBuilder headTagContents = new StringBuilder();
 
-      BufferedReader bufferedReader = null;
-      InputStreamReader inputStreamReader = null;
-      try {
-        inputStreamReader = new InputStreamReader(is, encoding);
-        bufferedReader = new BufferedReader(inputStreamReader);
+      try (InputStreamReader inputStreamReader = new InputStreamReader(is, encoding); BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
         String temp;
         boolean insideHeadTag = false;
         while ((temp = bufferedReader.readLine()) != null) {
@@ -394,21 +381,6 @@ class WebsiteUtilities {
         }
       } catch (IOException e) {
         Timber.e(e);
-      } finally {
-        if (inputStreamReader != null) {
-          try {
-            inputStreamReader.close();
-          } catch (Exception ignored) {
-
-          }
-        }
-        if (bufferedReader != null) {
-          try {
-            bufferedReader.close();
-          } catch (Exception ignored) {
-
-          }
-        }
       }
       return headTagContents.toString();
     }

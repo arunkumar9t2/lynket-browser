@@ -75,7 +75,7 @@ class AmpResolverActivity : BrowsingActivity() {
     val subs = CompositeSubscription()
     private var dialog: MaterialDialog? = null
 
-    fun show(): AmpResolverDialog? {
+    fun show(): AmpResolverDialog {
       dialog = MaterialDialog.Builder(activity!!)
         .title(R.string.grabbing_amp_link)
         .progress(true, Integer.MAX_VALUE)

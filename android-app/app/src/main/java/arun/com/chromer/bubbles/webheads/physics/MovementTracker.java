@@ -135,7 +135,7 @@ public class MovementTracker {
 
   @Override
   public String toString() {
-    return xPoints.toString() + yPoints.toString();
+    return xPoints.toString() + yPoints;
   }
 }
 

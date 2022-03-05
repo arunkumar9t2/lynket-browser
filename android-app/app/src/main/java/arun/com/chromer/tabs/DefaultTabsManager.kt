@@ -424,7 +424,7 @@ constructor(
         emitter.onSuccess((am.appTasks ?: emptyList<ActivityManager.AppTask>())
           .asSequence()
           .map(DocumentUtils::getTaskInfoFromTask)
-          .filter { it != null && it.baseIntent?.dataString != null && it.baseIntent.component != null }
+          .filter { it != null && it.baseIntent.dataString != null && it.baseIntent.component != null }
           .map {
             val url = it.baseIntent.dataString!!
 

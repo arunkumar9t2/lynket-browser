@@ -43,7 +43,6 @@ import arun.com.chromer.di.view.Detaches
 import arun.com.chromer.di.view.ViewComponent
 import arun.com.chromer.extenstions.gone
 import arun.com.chromer.extenstions.inflate
-import arun.com.chromer.search.provider.SearchProvider
 import arun.com.chromer.search.suggestion.SuggestionController
 import arun.com.chromer.search.suggestion.items.SuggestionItem.HistorySuggestionItem
 import arun.com.chromer.search.suggestion.items.SuggestionType.*
@@ -63,7 +62,6 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import dev.arunkumar.android.rxschedulers.SchedulerProvider
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.widget_material_search_view.view.*
@@ -245,15 +243,14 @@ constructor(
         }
       Observable.combineLatest(
         focusChanges,
-        searchPresenter.selectedSearchProvider,
-        BiFunction<Boolean, SearchProvider, CompositeIconResource> { hasFocus, searchProvider ->
-          if (hasFocus) {
-            CompositeIconResource(uri = searchProvider.iconUri)
-          } else {
-            CompositeIconResource(drawable = menuIcon)
-          }
+        searchPresenter.selectedSearchProvider
+      ) { hasFocus, searchProvider ->
+        if (hasFocus) {
+          CompositeIconResource(uri = searchProvider.iconUri)
+        } else {
+          CompositeIconResource(drawable = menuIcon)
         }
-      ).compose(schedulerProvider.poolToUi())
+      }.compose(schedulerProvider.poolToUi())
         .takeUntil(viewDetaches)
         .subscribe { iconResource -> iconResource.apply(this) }
     }

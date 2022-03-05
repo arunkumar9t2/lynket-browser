@@ -22,7 +22,6 @@ package arun.com.chromer.history
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -88,8 +87,7 @@ class HistoryFragment : BaseFragment(), Snackable, FabHandler {
 
   private val formattedMessage: CharSequence
     get() {
-      val provider = preferences.customTabPackage()
-      return when (provider) {
+      return when (val provider = preferences.customTabPackage()) {
         null -> getString(R.string.enable_history_subtitle)
         else -> fromHtml(
           String.format(
@@ -131,8 +129,8 @@ class HistoryFragment : BaseFragment(), Snackable, FabHandler {
   private fun observeViewModel() {
     val owner = viewLifecycleOwner
     viewModel.apply {
-      loadingLiveData.observe(owner, Observer { loading(it!!) })
-      historyPagedListLiveData.observe(owner, Observer { historyAdapter.submitList(it) })
+      loadingLiveData.observe(owner, { loading(it!!) })
+      historyPagedListLiveData.observe(owner, { historyAdapter.submitList(it) })
     }
     loadHistory()
   }

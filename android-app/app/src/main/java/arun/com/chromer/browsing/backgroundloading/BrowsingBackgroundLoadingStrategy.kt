@@ -8,7 +8,6 @@ import arun.com.chromer.browsing.customtabs.CustomTabActivity
 import arun.com.chromer.browsing.webview.EmbeddableWebViewActivity
 import arun.com.chromer.browsing.webview.WebViewActivity
 import arun.com.chromer.util.ActivityLifeCycleCallbackAdapter
-import dev.arunkumar.android.rxschedulers.SchedulerProvider
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -30,14 +29,13 @@ private fun Application.safeActivityStarted(action: (Activity, UnRegisterAction)
           Timber.e(e)
           unRegisterAction()
         }
-      } ?: unRegisterAction()
+      }
     }
   })
 }
 
 abstract class BrowsingBackgroundLoadingStrategy(
   private val application: Application,
-  private val schedulerProvider: SchedulerProvider
 ) : BackgroundLoadingStrategy {
 
   abstract val activityClasses: List<Class<out Activity>>
@@ -65,8 +63,7 @@ class WebViewBackgroundLoadingStrategy
 @Inject
 constructor(
   application: Application,
-  schedulerProvider: SchedulerProvider
-) : BrowsingBackgroundLoadingStrategy(application, schedulerProvider) {
+) : BrowsingBackgroundLoadingStrategy(application) {
   override val activityClasses: List<Class<out Activity>> = listOf(
     WebViewActivity::class.java,
     EmbeddableWebViewActivity::class.java
@@ -78,8 +75,7 @@ class CustomTabBackgroundLoadingStrategy
 @Inject
 constructor(
   application: Application,
-  schedulerProvider: SchedulerProvider
-) : BrowsingBackgroundLoadingStrategy(application, schedulerProvider) {
+) : BrowsingBackgroundLoadingStrategy(application) {
   override val activityClasses: List<Class<out Activity>> = listOf(
     CustomTabActivity::class.java
   )

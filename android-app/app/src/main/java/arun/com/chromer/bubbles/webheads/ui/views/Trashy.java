@@ -19,6 +19,13 @@
 
 package arun.com.chromer.bubbles.webheads.ui.views;
 
+import static android.graphics.PixelFormat.TRANSLUCENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import static android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+import static android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
+import static android.view.WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+import static android.view.WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -47,13 +54,6 @@ import com.mikepenz.iconics.IconicsDrawable;
 import arun.com.chromer.R;
 import arun.com.chromer.util.Utils;
 import timber.log.Timber;
-
-import static android.graphics.PixelFormat.TRANSLUCENT;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-import static android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-import static android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
-import static android.view.WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
-import static android.view.WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
 
 /**
  * Created by Arun on 03/02/2016.
@@ -109,14 +109,13 @@ public class Trashy extends FrameLayout {
    * @return
    */
   public synchronized static Trashy get(@NonNull Context context) {
-    if (INSTANCE != null)
-      return INSTANCE;
-    else {
+    if (INSTANCE != null) {
+    } else {
       Timber.d("Creating new instance of remove web head");
       WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
       INSTANCE = new Trashy(context, windowManager);
-      return INSTANCE;
     }
+    return INSTANCE;
   }
 
   public static void destroy() {

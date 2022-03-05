@@ -25,7 +25,6 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 

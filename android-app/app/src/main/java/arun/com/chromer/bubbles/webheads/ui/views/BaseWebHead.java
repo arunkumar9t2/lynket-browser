@@ -19,6 +19,24 @@
 
 package arun.com.chromer.bubbles.webheads.ui.views;
 
+import static android.graphics.Color.TRANSPARENT;
+import static android.graphics.Color.WHITE;
+import static android.graphics.PixelFormat.TRANSLUCENT;
+import static android.view.Gravity.LEFT;
+import static android.view.Gravity.TOP;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import static android.view.WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
+import static android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+import static android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+import static android.view.WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+import static android.view.WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+import static android.widget.ImageView.ScaleType.CENTER;
+import static com.mikepenz.community_material_typeface_library.CommunityMaterial.Icon.cmd_close;
+import static arun.com.chromer.shared.Constants.NO_COLOR;
+import static arun.com.chromer.util.ColorUtil.getForegroundWhiteOrBlack;
+import static arun.com.chromer.util.Utils.dpToPx;
+import static cn.nekocode.badge.BadgeDrawable.TYPE_NUMBER;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -56,24 +74,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.nekocode.badge.BadgeDrawable;
 import timber.log.Timber;
-
-import static android.graphics.Color.TRANSPARENT;
-import static android.graphics.Color.WHITE;
-import static android.graphics.PixelFormat.TRANSLUCENT;
-import static android.view.Gravity.LEFT;
-import static android.view.Gravity.TOP;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-import static android.view.WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
-import static android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
-import static android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-import static android.view.WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
-import static android.view.WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
-import static android.widget.ImageView.ScaleType.CENTER;
-import static arun.com.chromer.shared.Constants.NO_COLOR;
-import static arun.com.chromer.util.ColorUtil.getForegroundWhiteOrBlack;
-import static arun.com.chromer.util.Utils.dpToPx;
-import static cn.nekocode.badge.BadgeDrawable.TYPE_NUMBER;
-import static com.mikepenz.community_material_typeface_library.CommunityMaterial.Icon.cmd_close;
 
 /**
  * ViewGroup that holds the web head UI elements. Allows configuring various parameters in relation
@@ -552,7 +552,7 @@ public abstract class BaseWebHead extends FrameLayout {
   /**
    * Helper class to hold screen boundaries
    */
-  class ScreenBounds {
+  static class ScreenBounds {
     /**
      * Amount of web head that will be displaced off of the screen horizontally
      */

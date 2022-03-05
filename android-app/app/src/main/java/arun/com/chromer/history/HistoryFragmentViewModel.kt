@@ -76,7 +76,7 @@ constructor(
   fun deleteHistory(website: Website?) {
     subs.add(Observable.just(website)
       .filter { webSite -> webSite?.url != null }
-      .flatMap<Website> { historyRepository.delete(it!!) }
+      .flatMap { historyRepository.delete(it!!) }
       .compose(SchedulerProvider.applyIoSchedulers())
       .doOnError(Timber::e)
       .doOnNext { loadHistory() }

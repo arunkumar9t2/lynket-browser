@@ -23,13 +23,11 @@ import android.annotation.TargetApi;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.widget.EdgeEffect;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.lang.reflect.Field;

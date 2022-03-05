@@ -19,7 +19,7 @@ data class SearchProvider(
   fun getSearchUrl(text: String): String {
     return if (WEB_URL.matcher(text).matches()) {
       when {
-        !text.toLowerCase(Locale.getDefault()).matches("^\\w+://.*".toRegex()) -> "http://$text"
+        !text.lowercase(Locale.getDefault()).matches("^\\w+://.*".toRegex()) -> "http://$text"
         else -> text
       }
     } else searchUrlPrefix + text.replace(" ", "+")

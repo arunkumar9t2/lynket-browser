@@ -313,8 +313,8 @@ public class CustomTabs {
     if (Preferences.get(activity).isAnimationEnabled() && !noAnimation) {
       final int type = Preferences.get(activity).animationType();
       final int speed = Preferences.get(activity).animationSpeed();
-      int start[] = new int[]{};
-      int exit[] = new int[]{};
+      int[] start = new int[]{};
+      int[] exit = new int[]{};
       switch (speed) {
         case ANIMATION_MEDIUM:
           switch (type) {

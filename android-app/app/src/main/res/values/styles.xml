@@ -42,7 +42,7 @@
         <item name="colorControlHighlight">@color/colorAccentLighter</item>​
     </style>
 
-    <style name="MaterialButtonStyle" parent="Widget.AppCompat.Button.Colored"></style>
+    <style name="MaterialButtonStyle" parent="Widget.AppCompat.Button.Colored" />
 
     <style name="Widget.CardContent" parent="android:Widget">
         <item name="android:paddingLeft">16dp</item>
@@ -103,9 +103,9 @@
         <item name="colorControlHighlight">@color/colorAccentLighter</item>​
     </style>
 
-    <style name="AppTheme.Launcher" parent="Theme.AppCompat.Light.NoActionBar"></style>
+    <style name="AppTheme.Launcher" parent="Theme.AppCompat.Light.NoActionBar" />
 
-    <style name="Theme.AppCompat.Translucent" parent="Theme.AppCompat.NoActionBar"></style>
+    <style name="Theme.AppCompat.Translucent" parent="Theme.AppCompat.NoActionBar" />
 
     <style name="Preference_TextAppearanceMaterialBody2">
         <item name="android:textSize">14sp</item>

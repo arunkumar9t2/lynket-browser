@@ -43,8 +43,7 @@ fun PackageManager.isPackageInstalled(packageName: String?): Boolean {
 
 fun Context.appName(packageName: String): String {
   val pm = applicationContext.packageManager
-  val ai: ApplicationInfo?
-  ai = try {
+  val ai: ApplicationInfo? = try {
     pm.getApplicationInfo(packageName, 0)
   } catch (e: PackageManager.NameNotFoundException) {
     null

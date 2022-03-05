@@ -47,7 +47,7 @@ constructor(
    * [Observable] that emits `0` when onCleared is called.
    */
   @Suppress("MemberVisibilityCanBePrivate")
-  protected val clearEvents: Observable<Int> = clearEventsRelay.hide()
+  private val clearEvents: Observable<Int> = clearEventsRelay.hide()
 
   init {
     start()

@@ -36,10 +36,10 @@ import rx.Single
 interface TabsManager {
 
   companion object {
-    val CUSTOM_TAB_ACTIVITY = CustomTabActivity::class.java.name
-    val ARTICLE_ACTIVITY = ArticleActivity::class.java.name
-    val WEBVIEW_ACTIVITY = WebViewActivity::class.java.name
-    val EMBEDDABLE_WEBVIEW_ACTIVITY = EmbeddableWebViewActivity::class.java.name
+    val CUSTOM_TAB_ACTIVITY: String = CustomTabActivity::class.java.name
+    val ARTICLE_ACTIVITY: String = ArticleActivity::class.java.name
+    val WEBVIEW_ACTIVITY: String = WebViewActivity::class.java.name
+    val EMBEDDABLE_WEBVIEW_ACTIVITY: String = EmbeddableWebViewActivity::class.java.name
 
     val ALL_BROWSING_ACTIVITIES = arrayListOf(
       CUSTOM_TAB_ACTIVITY,

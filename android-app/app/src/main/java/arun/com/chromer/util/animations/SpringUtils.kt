@@ -1,7 +1,5 @@
 package arun.com.chromer.util.animations
 
-import android.os.Build.VERSION.SDK_INT
-import android.os.Build.VERSION_CODES.LOLLIPOP
 import android.view.View
 import android.view.View.*
 import androidx.dynamicanimation.animation.DynamicAnimation

@@ -198,7 +198,7 @@ class ProviderSelectionActivity : BaseActivity() {
     @JvmField
     var features: TextView? = null
 
-    fun show(): ProviderDialog? {
+    fun show(): ProviderDialog {
       dialog = MaterialDialog.Builder(activity!!)
         .title(provider.appName)
         .customView(R.layout.dialog_provider_info, false)

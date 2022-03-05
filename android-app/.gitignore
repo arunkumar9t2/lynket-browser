@@ -38,9 +38,6 @@ values.properties
 # Windows thumbnail db
 .DS_Store
 
-# Idea non-crucial project fileS
-*.iws
-
 # Sandbox stuff
 _sandbox
 

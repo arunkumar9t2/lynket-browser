@@ -37,6 +37,8 @@ import arun.com.chromer.data.webarticle.model.WebArticle;
 
 import static arun.com.chromer.shared.Constants.NO_COLOR;
 
+import java.util.Objects;
+
 /**
  * Created by Arun on 05/09/2016.
  */
@@ -199,15 +201,15 @@ public class Website implements Parcelable {
     if (bookmarked != website.bookmarked) return false;
     if (createdAt != website.createdAt) return false;
     if (count != website.count) return false;
-    if (title != null ? !title.equals(website.title) : website.title != null) return false;
+    if (!Objects.equals(title, website.title)) return false;
     if (!url.equals(website.url)) return false;
-    if (faviconUrl != null ? !faviconUrl.equals(website.faviconUrl) : website.faviconUrl != null)
+    if (!Objects.equals(faviconUrl, website.faviconUrl))
       return false;
-    if (canonicalUrl != null ? !canonicalUrl.equals(website.canonicalUrl) : website.canonicalUrl != null)
+    if (!Objects.equals(canonicalUrl, website.canonicalUrl))
       return false;
-    if (themeColor != null ? !themeColor.equals(website.themeColor) : website.themeColor != null)
+    if (!Objects.equals(themeColor, website.themeColor))
       return false;
-    return ampUrl != null ? ampUrl.equals(website.ampUrl) : website.ampUrl == null;
+    return Objects.equals(ampUrl, website.ampUrl);
   }
 
   @Override
