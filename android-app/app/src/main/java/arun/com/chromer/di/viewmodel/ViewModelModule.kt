@@ -37,35 +37,35 @@ abstract class ViewModelModule {
   @Binds
   @IntoMap
   @ViewModelKey(BrowsingViewModel::class)
-  internal abstract fun bindBrowsingViewModel(browsingViewModel: BrowsingViewModel): ViewModel
+  internal abstract fun BrowsingViewModel.bindBrowsingViewModel(): ViewModel
 
   @Binds
   @IntoMap
   @ViewModelKey(TabsViewModel::class)
-  internal abstract fun tabsViewModel(tabsViewModel: TabsViewModel): ViewModel
+  internal abstract fun TabsViewModel.tabsViewModel(): ViewModel
 
   @Binds
   @IntoMap
   @ViewModelKey(HomeFragmentViewModel::class)
-  internal abstract fun homeFragmentViewModel(homeFragmentViewModel: HomeFragmentViewModel): ViewModel
+  internal abstract fun HomeFragmentViewModel.homeFragmentViewModel(): ViewModel
 
   @Binds
   @IntoMap
   @ViewModelKey(HistoryFragmentViewModel::class)
-  internal abstract fun historyFragmentViewModel(historyFragmentViewModel: HistoryFragmentViewModel): ViewModel
+  internal abstract fun HistoryFragmentViewModel.historyFragmentViewModel(): ViewModel
 
   @Binds
   @IntoMap
   @ViewModelKey(BrowsingArticleViewModel::class)
-  internal abstract fun bindArticleBrowsingViewModel(browsingArticleViewModel: BrowsingArticleViewModel): ViewModel
+  internal abstract fun BrowsingArticleViewModel.bindArticleBrowsingViewModel(): ViewModel
 
   @Binds
   @IntoMap
   @ViewModelKey(PerAppSettingsViewModel::class)
-  internal abstract fun perAppSettingViewModel(perAppSettingsViewModel: PerAppSettingsViewModel): ViewModel
+  internal abstract fun PerAppSettingsViewModel.perAppSettingViewModel(): ViewModel
 
   @Binds
   @IntoMap
   @ViewModelKey(ProviderSelectionViewModel::class)
-  internal abstract fun providerSelectionViewModel(providerSelectionViewModel: ProviderSelectionViewModel): ViewModel
+  internal abstract fun ProviderSelectionViewModel.providerSelectionViewModel(): ViewModel
 }

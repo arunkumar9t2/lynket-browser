@@ -129,8 +129,8 @@ class HistoryFragment : BaseFragment(), Snackable, FabHandler {
   private fun observeViewModel() {
     val owner = viewLifecycleOwner
     viewModel.apply {
-      loadingLiveData.observe(owner, { loading(it!!) })
-      historyPagedListLiveData.observe(owner, { historyAdapter.submitList(it) })
+      loadingLiveData.observe(owner) { loading(it!!) }
+      historyPagedListLiveData.observe(owner) { historyAdapter.submitList(it) }
     }
     loadHistory()
   }

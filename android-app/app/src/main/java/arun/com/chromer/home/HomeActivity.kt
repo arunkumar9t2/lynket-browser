@@ -213,6 +213,6 @@ class HomeActivity : BaseActivity(), Snackable, UsesViewModel {
     @Binds
     @IntoMap
     @ViewModelKey(HomeActivityViewModel::class)
-    abstract fun bindHomeViewModel(homeViewModel: HomeActivityViewModel): ViewModel
+    abstract fun HomeActivityViewModel.bindHomeViewModel(): ViewModel
   }
 }

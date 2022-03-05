@@ -30,7 +30,7 @@ import arun.com.chromer.util.ActivityLifeCycleCallbackAdapter
  */
 
 inline fun <T> LiveData<T>.watch(owner: LifecycleOwner, crossinline observer: (T) -> Unit) {
-  this.observe(owner, { observer(it) })
+  this.observe(owner) { observer(it) }
 }
 
 

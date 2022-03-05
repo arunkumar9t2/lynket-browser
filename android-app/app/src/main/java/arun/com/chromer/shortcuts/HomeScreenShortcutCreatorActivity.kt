@@ -64,8 +64,7 @@ class HomeScreenShortcutCreatorActivity : BrowsingActivity() {
   override fun onWebsiteLoaded(website: Website) {
   }
 
-  override val layoutRes: Int
-    get() = 0
+  override val layoutRes: Int get() = 0
 
   private var shortcutDialog: MaterialDialog? = null
 
