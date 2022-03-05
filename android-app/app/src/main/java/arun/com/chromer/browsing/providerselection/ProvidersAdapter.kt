@@ -36,7 +36,6 @@ import butterknife.ButterKnife
 import com.bumptech.glide.RequestManager
 import dev.arunkumar.android.dagger.activity.PerActivity
 import rx.subjects.PublishSubject
-import java.util.*
 import javax.inject.Inject
 
 /**

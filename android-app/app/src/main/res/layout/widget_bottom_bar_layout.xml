@@ -18,176 +18,176 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/bottom_bar_root"
-    android:layout_width="match_parent"
-    android:layout_height="48dp"
+  android:id="@+id/bottom_bar_root"
+  android:layout_width="match_parent"
+  android:layout_height="48dp"
+  android:layout_gravity="center"
+  android:baselineAligned="false"
+  android:gravity="center"
+  android:orientation="horizontal"
+  android:paddingLeft="8dp"
+  android:paddingTop="4dp"
+  android:paddingRight="8dp"
+  android:paddingBottom="4dp"
+  android:weightSum="5">
+
+  <LinearLayout
+    android:id="@+id/bottom_bar_open_in_new_tab"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:baselineAligned="false"
-    android:gravity="center"
-    android:orientation="horizontal"
-    android:paddingLeft="8dp"
-    android:paddingTop="4dp"
-    android:paddingRight="8dp"
-    android:paddingBottom="4dp"
-    android:weightSum="5">
+    android:layout_weight="1"
+    android:contentDescription="@string/open_in_new_tab"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/bottom_bar_open_in_new_tab"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        android:contentDescription="@string/open_in_new_tab"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:orientation="vertical">
+    <ImageView
+      android:id="@+id/bottom_bar_open_in_new_tab_img"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
+      android:layout_gravity="center"
+      android:contentDescription="@string/open_in_new_tab"
+      android:gravity="center"
+      android:padding="4dp"
+      android:scaleType="fitCenter" />
 
-        <ImageView
-            android:id="@+id/bottom_bar_open_in_new_tab_img"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:contentDescription="@string/open_in_new_tab"
-            android:gravity="center"
-            android:padding="4dp"
-            android:scaleType="fitCenter" />
+    <TextView
+      android:id="@+id/bottom_bar_open_in_new_tab_text"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:ellipsize="end"
+      android:gravity="center"
+      android:singleLine="true"
+      android:text="@string/new_tab_text"
+      android:textSize="12sp" />
+  </LinearLayout>
 
-        <TextView
-            android:id="@+id/bottom_bar_open_in_new_tab_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:singleLine="true"
-            android:text="@string/new_tab_text"
-            android:textSize="12sp" />
-    </LinearLayout>
+  <LinearLayout
+    android:id="@+id/bottom_bar_share"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:layout_weight="1"
+    android:contentDescription="@string/share"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/bottom_bar_share"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        android:contentDescription="@string/share"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:orientation="vertical">
+    <ImageView
+      android:id="@+id/bottom_bar_share_img"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
+      android:layout_gravity="center"
+      android:contentDescription="@string/share"
+      android:gravity="center"
+      android:padding="4dp"
+      android:scaleType="fitCenter" />
 
-        <ImageView
-            android:id="@+id/bottom_bar_share_img"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:contentDescription="@string/share"
-            android:gravity="center"
-            android:padding="4dp"
-            android:scaleType="fitCenter" />
+    <TextView
+      android:id="@+id/bottom_bar_share_text"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:ellipsize="end"
+      android:gravity="center"
+      android:singleLine="true"
+      android:text="@string/share"
+      android:textSize="12sp" />
+  </LinearLayout>
 
-        <TextView
-            android:id="@+id/bottom_bar_share_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:singleLine="true"
-            android:text="@string/share"
-            android:textSize="12sp" />
-    </LinearLayout>
+  <LinearLayout
+    android:id="@+id/bottom_bar_tabs"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:layout_weight="1"
+    android:contentDescription="@string/minimize"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/bottom_bar_tabs"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        android:contentDescription="@string/minimize"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:orientation="vertical">
+    <ImageView
+      android:id="@+id/bottom_bar_tabs_img"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
+      android:layout_gravity="center"
+      android:contentDescription="@string/title_tabs"
+      android:gravity="center"
+      android:padding="4dp"
+      android:scaleType="fitCenter" />
 
-        <ImageView
-            android:id="@+id/bottom_bar_tabs_img"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:contentDescription="@string/title_tabs"
-            android:gravity="center"
-            android:padding="4dp"
-            android:scaleType="fitCenter" />
+    <TextView
+      android:id="@+id/bottom_bar_tabs_text"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:ellipsize="end"
+      android:gravity="center"
+      android:singleLine="true"
+      android:text="@string/title_tabs"
+      android:textSize="12sp" />
+  </LinearLayout>
 
-        <TextView
-            android:id="@+id/bottom_bar_tabs_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:singleLine="true"
-            android:text="@string/title_tabs"
-            android:textSize="12sp" />
-    </LinearLayout>
+  <LinearLayout
+    android:id="@+id/bottom_bar_minimize_tab"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:layout_weight="1"
+    android:contentDescription="@string/minimize"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/bottom_bar_minimize_tab"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        android:contentDescription="@string/minimize"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:orientation="vertical">
+    <ImageView
+      android:id="@+id/bottom_bar_minimize_img"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
+      android:layout_gravity="center"
+      android:contentDescription="@string/minimize"
+      android:gravity="center"
+      android:padding="4dp"
+      android:scaleType="fitCenter" />
 
-        <ImageView
-            android:id="@+id/bottom_bar_minimize_img"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:contentDescription="@string/minimize"
-            android:gravity="center"
-            android:padding="4dp"
-            android:scaleType="fitCenter" />
+    <TextView
+      android:id="@+id/bottom_bar_minimize_text"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:ellipsize="end"
+      android:gravity="center"
+      android:singleLine="true"
+      android:text="@string/minimize"
+      android:textSize="12sp" />
+  </LinearLayout>
 
-        <TextView
-            android:id="@+id/bottom_bar_minimize_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:singleLine="true"
-            android:text="@string/minimize"
-            android:textSize="12sp" />
-    </LinearLayout>
+  <LinearLayout
+    android:id="@+id/bottom_bar_article_view"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:layout_weight="1"
+    android:contentDescription="@string/article"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/bottom_bar_article_view"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        android:contentDescription="@string/article"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:orientation="vertical">
+    <ImageView
+      android:id="@+id/bottom_bar_article_view_img"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
+      android:layout_gravity="center"
+      android:contentDescription="@string/article"
+      android:gravity="center"
+      android:padding="4dp"
+      android:scaleType="fitCenter" />
 
-        <ImageView
-            android:id="@+id/bottom_bar_article_view_img"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:contentDescription="@string/article"
-            android:gravity="center"
-            android:padding="4dp"
-            android:scaleType="fitCenter" />
-
-        <TextView
-            android:id="@+id/bottom_bar_article_view_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:singleLine="true"
-            android:text="@string/article"
-            android:textSize="12sp" />
-    </LinearLayout>
+    <TextView
+      android:id="@+id/bottom_bar_article_view_text"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:ellipsize="end"
+      android:gravity="center"
+      android:singleLine="true"
+      android:text="@string/article"
+      android:textSize="12sp" />
+  </LinearLayout>
 </LinearLayout>

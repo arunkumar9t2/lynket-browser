@@ -128,12 +128,12 @@ public class App implements Parcelable {
   @Override
   public String toString() {
     return "App{" +
-        "appName='" + appName + '\'' +
-        ", packageName='" + packageName + '\'' +
-        ", blackListed=" + blackListed +
-        ", incognito=" + incognito +
-        ", color=" + color +
-        '}';
+      "appName='" + appName + '\'' +
+      ", packageName='" + packageName + '\'' +
+      ", blackListed=" + blackListed +
+      ", incognito=" + incognito +
+      ", color=" + color +
+      '}';
   }
 
   public static class PerAppListComparator implements Comparator<App> {

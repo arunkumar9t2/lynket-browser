@@ -17,54 +17,54 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string-array name="animationValues">
-        <item>कुछ नहीं</item>
-        <item>दाईं ओर स्लाइड् करें।</item>
-        <item>ऊपर की ओर स्लाइड करें।</item>
-    </string-array>
-    <string-array name="animationSpeedValues">
-        <item>मध्यम्</item>
-        <item>लघु</item>
-    </string-array>
-    <string-array name="actionValues">
-        <item>द्वितीय ब्राउज़र</item>
-        <item>पसंदीदा शेयर करने की एप्लिकेशन</item>
-        <item>General share</item>
-    </string-array>
-    <string-array name="webHeadsSpawnValues">
-        <item>दाईं</item>
-        <item>बाईं</item>
-    </string-array>
-    <string-array name="webHeadsSizeValues">
-        <item>साधारण</item>
-        <item>छोटा</item>
-    </string-array>
-    <string name="share_text">\"क्रोमर\" आपके शीघ्र एवं सुरक्षित इंटरनेट ब्राउजिंग के लिए! यहाँ ड़ाउनलोड़ करें https://goo.gl/992ils</string>
-    <string name="share_via">… के जरिए शेयर  करें।</string>
-    <string name="custom_tab_provider_not_found">मैच मिलता कस्टम् टैब नहीं पाया गया।</string>
-    <string name="custom_tab_provider_not_found_expln">क्रोमर के काम करने के लिए मैच मिलता कोई भी ब्राउजर होना अनिवार्य है। वर्तमान में आपके फोन में एैसा कोई ब्राउजर नहीं पाया गया। क्या आप गूगल क्रोम् (मुफ्त) प्ले स्टॉर से इन्स्टॉल करना चाहेंगे? अगर आपके पास पहले से ही क्रोम् है, तो क्रप्या उसे नवीन्तम् संस्करण में अद्यतन करें।</string>
-    <string name="install">इंस्टॉल करें</string>
-    <string name="licenses">लाइसेंस</string>
-    <string name="about">एप्लिकेशन के बारे में</string>
-    <string name="help_chromer_grow">क्रोमर को बढने में मदद करें!</string>
-    <string name="share">शेयर करें</string>
-    <string name="share_with">%1$s के साथ शेयर करें</string>
-    <string name="rate_play_store">प्ले स्टोर में रेट करें।</string>
-    <string name="feedback">प्रतिक्रिया</string>
-    <string name="intro">परिचय</string>
-    <string name="send_email">ई-मेल भेजें…</string>
-    <string name="fallback_msg">कस्टम् टैब खेलने में असफल, नॉर्मल ब्राउजर में वापस जा रहा है</string>
-    <string name="open_with">… के साथ खोलें</string>
-    <string name="open_in_browser">%1$s  में खोलें।</string>
-    <string name="unxp_err">अप्रत्याशित त्रुटि, दोबारा प्रयास करें।</string>
-    <string name="unsupported_link">असमर्थित लिंक, दोबारा प्रयास करें।</string>
-    <string name="couldnt_load_price">मूल्य लोड नहीं हो रहा।</string>
-    <string name="coffee">कॉफी</string>
-    <string name="lunch">दोपहर का भोजन</string>
-    <string name="premium_donation">प्रीमियम दान</string>
-    <string name="invalid_link">अमान्य लिंक</string>
-    <string name="copied">नकल हुई</string>
-    <string name="copy_link">लिंक नकल करें</string>
-    <string name="add_to_homescreen">हॉम स्क्रीन में रखें</string>
-    <string name="intro_1">नमस्ते, \n   क्रोमर एक बहुत ही हल्का, सुरक्षित एवं तेज वेब ब्राउजर है।</string>
+  <string-array name="animationValues">
+    <item>कुछ नहीं</item>
+    <item>दाईं ओर स्लाइड् करें।</item>
+    <item>ऊपर की ओर स्लाइड करें।</item>
+  </string-array>
+  <string-array name="animationSpeedValues">
+    <item>मध्यम्</item>
+    <item>लघु</item>
+  </string-array>
+  <string-array name="actionValues">
+    <item>द्वितीय ब्राउज़र</item>
+    <item>पसंदीदा शेयर करने की एप्लिकेशन</item>
+    <item>General share</item>
+  </string-array>
+  <string-array name="webHeadsSpawnValues">
+    <item>दाईं</item>
+    <item>बाईं</item>
+  </string-array>
+  <string-array name="webHeadsSizeValues">
+    <item>साधारण</item>
+    <item>छोटा</item>
+  </string-array>
+  <string name="share_text">\"क्रोमर\" आपके शीघ्र एवं सुरक्षित इंटरनेट ब्राउजिंग के लिए! यहाँ ड़ाउनलोड़ करें https://goo.gl/992ils</string>
+  <string name="share_via">… के जरिए शेयर  करें।</string>
+  <string name="custom_tab_provider_not_found">मैच मिलता कस्टम् टैब नहीं पाया गया।</string>
+  <string name="custom_tab_provider_not_found_expln">क्रोमर के काम करने के लिए मैच मिलता कोई भी ब्राउजर होना अनिवार्य है। वर्तमान में आपके फोन में एैसा कोई ब्राउजर नहीं पाया गया। क्या आप गूगल क्रोम् (मुफ्त) प्ले स्टॉर से इन्स्टॉल करना चाहेंगे? अगर आपके पास पहले से ही क्रोम् है, तो क्रप्या उसे नवीन्तम् संस्करण में अद्यतन करें।</string>
+  <string name="install">इंस्टॉल करें</string>
+  <string name="licenses">लाइसेंस</string>
+  <string name="about">एप्लिकेशन के बारे में</string>
+  <string name="help_chromer_grow">क्रोमर को बढने में मदद करें!</string>
+  <string name="share">शेयर करें</string>
+  <string name="share_with">%1$s के साथ शेयर करें</string>
+  <string name="rate_play_store">प्ले स्टोर में रेट करें।</string>
+  <string name="feedback">प्रतिक्रिया</string>
+  <string name="intro">परिचय</string>
+  <string name="send_email">ई-मेल भेजें…</string>
+  <string name="fallback_msg">कस्टम् टैब खेलने में असफल, नॉर्मल ब्राउजर में वापस जा रहा है</string>
+  <string name="open_with">… के साथ खोलें</string>
+  <string name="open_in_browser">%1$s  में खोलें।</string>
+  <string name="unxp_err">अप्रत्याशित त्रुटि, दोबारा प्रयास करें।</string>
+  <string name="unsupported_link">असमर्थित लिंक, दोबारा प्रयास करें।</string>
+  <string name="couldnt_load_price">मूल्य लोड नहीं हो रहा।</string>
+  <string name="coffee">कॉफी</string>
+  <string name="lunch">दोपहर का भोजन</string>
+  <string name="premium_donation">प्रीमियम दान</string>
+  <string name="invalid_link">अमान्य लिंक</string>
+  <string name="copied">नकल हुई</string>
+  <string name="copy_link">लिंक नकल करें</string>
+  <string name="add_to_homescreen">हॉम स्क्रीन में रखें</string>
+  <string name="intro_1">नमस्ते, \n   क्रोमर एक बहुत ही हल्का, सुरक्षित एवं तेज वेब ब्राउजर है।</string>
 </resources>

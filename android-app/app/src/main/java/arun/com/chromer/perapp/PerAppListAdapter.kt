@@ -36,7 +36,6 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import dev.arunkumar.android.dagger.activity.PerActivity
 import rx.subjects.PublishSubject
-import java.util.*
 import javax.inject.Inject
 
 /**

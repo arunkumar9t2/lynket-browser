@@ -30,13 +30,15 @@ import dev.arunkumar.android.TestSchedulersModule
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [
-  TestSchedulersModule::class,
-  TestAppModule::class,
-  HomeActivity.HomeBuilder::class,
-  TabsModule::class,
-  TestDataModule::class
-])
+@Component(
+  modules = [
+    TestSchedulersModule::class,
+    TestAppModule::class,
+    HomeActivity.HomeBuilder::class,
+    TabsModule::class,
+    TestDataModule::class
+  ]
+)
 interface TestAppComponent : AppComponent {
 
   fun inject(chromerRobolectricSuite: ChromerRobolectricSuite)

@@ -52,7 +52,7 @@ import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class DonateActivity extends AppCompatActivity implements IabBroadcastReceiver.IabBroadcastListener,
-    DialogInterface.OnClickListener {
+  DialogInterface.OnClickListener {
   private static final String COFEE_SKU = "coffee_small";
   private static final String LUNCH_SKU = "lunch_mega";
   private static final String PREMIUM_SKU = "premium_donation";
@@ -242,36 +242,36 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
           else setBlack(holder);
           holder.title.setText(getString(R.string.coffee));
           holder.subtitle.setText(details.get(0) != null ?
-              details.get(0).getPrice() : error);
+            details.get(0).getPrice() : error);
           holder.image.setBackground(new IconicsDrawable(getApplicationContext())
-              .icon(CommunityMaterial.Icon.cmd_coffee)
-              .color(ContextCompat.getColor(getApplicationContext(),
-                  R.color.coffee_color))
-              .sizeDp(ICON_SIZE_DP));
+            .icon(CommunityMaterial.Icon.cmd_coffee)
+            .color(ContextCompat.getColor(getApplicationContext(),
+              R.color.coffee_color))
+            .sizeDp(ICON_SIZE_DP));
           break;
         case 1:
           if (mLunchDone) setGreen(holder);
           else setBlack(holder);
           holder.title.setText(getString(R.string.lunch));
           holder.subtitle.setText(details.get(1) != null ?
-              details.get(1).getPrice() : error);
+            details.get(1).getPrice() : error);
           holder.image.setBackground(new IconicsDrawable(getApplicationContext())
-              .icon(CommunityMaterial.Icon.cmd_food)
-              .color(ContextCompat.getColor(getApplicationContext(),
-                  R.color.lunch_color))
-              .sizeDp(ICON_SIZE_DP));
+            .icon(CommunityMaterial.Icon.cmd_food)
+            .color(ContextCompat.getColor(getApplicationContext(),
+              R.color.lunch_color))
+            .sizeDp(ICON_SIZE_DP));
           break;
         case 2:
           if (mPremiumDone) setGreen(holder);
           else setBlack(holder);
           holder.title.setText(getString(R.string.premium_donation));
           holder.subtitle.setText(details.get(2) != null ?
-              details.get(2).getPrice() : error);
+            details.get(2).getPrice() : error);
           holder.image.setBackground(new IconicsDrawable(getApplicationContext())
-              .icon(CommunityMaterial.Icon.cmd_cash_usd)
-              .color(ContextCompat.getColor(getApplicationContext(),
-                  (R.color.premium_color)))
-              .sizeDp(ICON_SIZE_DP));
+            .icon(CommunityMaterial.Icon.cmd_cash_usd)
+            .color(ContextCompat.getColor(getApplicationContext(),
+              (R.color.premium_color)))
+            .sizeDp(ICON_SIZE_DP));
           break;
       }
     }
@@ -298,15 +298,15 @@ public class DonateActivity extends AppCompatActivity implements IabBroadcastRec
             switch (position) {
               case 0:
                 mHelper.launchPurchaseFlow(DonateActivity.this, COFEE_SKU, RC_REQUEST,
-                    mPurchaseFinishedListener, "coffee");
+                  mPurchaseFinishedListener, "coffee");
                 return;
               case 1:
                 mHelper.launchPurchaseFlow(DonateActivity.this, LUNCH_SKU, RC_REQUEST,
-                    mPurchaseFinishedListener, "lunch");
+                  mPurchaseFinishedListener, "lunch");
                 return;
               case 2:
                 mHelper.launchPurchaseFlow(DonateActivity.this, PREMIUM_SKU, RC_REQUEST,
-                    mPurchaseFinishedListener, "premium");
+                  mPurchaseFinishedListener, "premium");
             }
         });
       }

@@ -18,78 +18,78 @@
   -->
 
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:background="@color/card_background_light"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="@dimen/activity_horizontal_margin"
+      android:layout_marginTop="10dp"
+      android:layout_marginRight="@dimen/activity_horizontal_margin"
+      app:cardElevation="2dp">
+
+      <LinearLayout
+        style="@style/Widget.CardContent.Small"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/card_background_light"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            app:cardElevation="2dp">
+        <FrameLayout
+          android:id="@+id/preference_container"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
 
-            <LinearLayout
-                style="@style/Widget.CardContent.Small"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+      </LinearLayout>
 
-                <FrameLayout
-                    android:id="@+id/preference_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+    </androidx.cardview.widget.CardView>
 
-            </LinearLayout>
+    <androidx.cardview.widget.CardView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="@dimen/activity_horizontal_margin"
+      android:layout_marginTop="10dp"
+      android:layout_marginRight="@dimen/activity_horizontal_margin"
+      android:layout_marginBottom="@dimen/activity_vertical_margin_bottom_fab"
+      app:cardElevation="2dp">
 
-        </androidx.cardview.widget.CardView>
+      <LinearLayout
+        style="@style/Widget.CardContent.Small"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginBottom="@dimen/activity_vertical_margin_bottom_fab"
-            app:cardElevation="2dp">
+        <FrameLayout
+          android:id="@+id/bottom_bar_container"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
 
-            <LinearLayout
-                style="@style/Widget.CardContent.Small"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+        <TextView
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:gravity="center|start"
+          android:paddingStart="45dp"
+          android:paddingLeft="45dp"
+          android:text="@string/available_actions"
+          android:textColor="@color/material_dark_light"
+          android:textSize="14sp"
+          android:textStyle="bold|italic"
+          tools:ignore="RtlSymmetry" />
 
-                <FrameLayout
-                    android:id="@+id/bottom_bar_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+        <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/bottom_bar_action_list"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:padding="10dp"
+          android:scrollbars="none" />
+      </LinearLayout>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center|start"
-                    android:paddingStart="45dp"
-                    android:paddingLeft="45dp"
-                    android:text="@string/available_actions"
-                    android:textColor="@color/material_dark_light"
-                    android:textSize="14sp"
-                    android:textStyle="bold|italic"
-                    tools:ignore="RtlSymmetry" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/bottom_bar_action_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:scrollbars="none" />
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-    </LinearLayout>
+    </androidx.cardview.widget.CardView>
+  </LinearLayout>
 </androidx.core.widget.NestedScrollView>

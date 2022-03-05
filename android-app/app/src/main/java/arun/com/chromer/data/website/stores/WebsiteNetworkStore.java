@@ -61,16 +61,16 @@ public class WebsiteNetworkStore implements WebsiteStore {
   @Override
   public Observable<Website> getWebsite(@NonNull String url) {
     return RxParser.INSTANCE.parseUrl(url)
-        .flatMap(urlArticlePair -> {
-          if (urlArticlePair.second != null) {
-            final Website extractedWebsite = Website.fromArticle(urlArticlePair.second);
-            // We preserve the original url, otherwise breaks cache.
-            extractedWebsite.url = urlArticlePair.first;
-            return Observable.just(extractedWebsite);
-          } else {
-            return Observable.just(new Website(urlArticlePair.first));
-          }
-        }).compose(SchedulerProvider.applyIoSchedulers());
+      .flatMap(urlArticlePair -> {
+        if (urlArticlePair.second != null) {
+          final Website extractedWebsite = Website.fromArticle(urlArticlePair.second);
+          // We preserve the original url, otherwise breaks cache.
+          extractedWebsite.url = urlArticlePair.first;
+          return Observable.just(extractedWebsite);
+        } else {
+          return Observable.just(new Website(urlArticlePair.first));
+        }
+      }).compose(SchedulerProvider.applyIoSchedulers());
   }
 
   @NonNull

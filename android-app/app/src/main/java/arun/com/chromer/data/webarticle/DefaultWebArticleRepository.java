@@ -50,21 +50,21 @@ public class DefaultWebArticleRepository implements WebArticleRepository {
   @Override
   public Observable<WebArticle> getWebArticle(@NonNull final String url) {
     return articleCacheStore.getWebArticle(url)
-        .flatMap(webArticle -> {
-          if (webArticle == null) {
-            Timber.d("Cache miss for %s", url);
-            return articleNetworkStore.getWebArticle(url)
-                .flatMap(networkWebArticle -> {
-                  if (networkWebArticle != null) {
-                    return articleCacheStore.saveWebArticle(networkWebArticle);
-                  } else {
-                    return Observable.just(null);
-                  }
-                });
-          } else {
-            Timber.d("Cache hit for %s", url);
-            return Observable.just(webArticle);
-          }
-        });
+      .flatMap(webArticle -> {
+        if (webArticle == null) {
+          Timber.d("Cache miss for %s", url);
+          return articleNetworkStore.getWebArticle(url)
+            .flatMap(networkWebArticle -> {
+              if (networkWebArticle != null) {
+                return articleCacheStore.saveWebArticle(networkWebArticle);
+              } else {
+                return Observable.just(null);
+              }
+            });
+        } else {
+          Timber.d("Cache hit for %s", url);
+          return Observable.just(webArticle);
+        }
+      });
   }
 }

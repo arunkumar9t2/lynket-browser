@@ -18,87 +18,87 @@
   -->
 
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/context_activity_card_view"
-    android:layout_width="320dp"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/context_activity_card_view"
+  android:layout_width="320dp"
+  android:layout_height="wrap_content"
+  android:minWidth="320dp"
+  app:cardBackgroundColor="@android:color/white"
+  app:cardCornerRadius="3dp"
+  app:cardElevation="10dp"
+  app:cardPreventCornerOverlap="true"
+  app:cardUseCompatPadding="true"
+  tools:context=".bubbles.webheads.ui.context.WebHeadContextActivity">
+
+  <LinearLayout
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minWidth="320dp"
-    app:cardBackgroundColor="@android:color/white"
-    app:cardCornerRadius="3dp"
-    app:cardElevation="10dp"
-    app:cardPreventCornerOverlap="true"
-    app:cardUseCompatPadding="true"
-    tools:context=".bubbles.webheads.ui.context.WebHeadContextActivity">
+    android:clipToPadding="false"
+    android:orientation="vertical">
+
+    <TextView
+      android:layout_width="match_parent"
+      android:layout_height="48dp"
+      android:layout_gravity="center|start"
+      android:background="@color/colorPrimary"
+      android:elevation="2dp"
+      android:gravity="center|start"
+      android:outlineProvider="bounds"
+      android:paddingLeft="15dp"
+      android:paddingRight="15dp"
+      android:text="@string/web_sites"
+      android:textAllCaps="true"
+      android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
+      android:textColor="@android:color/white"
+      tools:targetApi="lollipop" />
+
+    <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/web_sites_list"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:scrollbars="vertical" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:orientation="vertical">
+      android:layout_width="match_parent"
+      android:layout_height="42dp"
+      android:orientation="horizontal"
+      android:weightSum="1">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_gravity="center|start"
-            android:background="@color/colorPrimary"
-            android:elevation="2dp"
-            android:gravity="center|start"
-            android:outlineProvider="bounds"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:text="@string/web_sites"
-            android:textAllCaps="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
-            android:textColor="@android:color/white"
-            tools:targetApi="lollipop" />
+      <TextView
+        android:id="@+id/copy_all"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="0.5"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:text="@string/copy_all"
+        android:textAllCaps="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
+        android:textColor="@color/accent"
+        android:textSize="14sp" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/web_sites_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="vertical" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:orientation="horizontal"
-            android:weightSum="1">
-
-            <TextView
-                android:id="@+id/copy_all"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="0.5"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:text="@string/copy_all"
-                android:textAllCaps="true"
-                android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
-                android:textColor="@color/accent"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/share_all"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="0.5"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:text="@string/share_all"
-                android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
-                android:textColor="@color/accent"
-                android:textSize="14sp" />
-        </LinearLayout>
+      <TextView
+        android:id="@+id/share_all"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="0.5"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:text="@string/share_all"
+        android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
+        android:textColor="@color/accent"
+        android:textSize="14sp" />
     </LinearLayout>
+  </LinearLayout>
 </androidx.cardview.widget.CardView>

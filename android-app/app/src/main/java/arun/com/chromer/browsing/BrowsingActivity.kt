@@ -81,7 +81,7 @@ abstract class BrowsingActivity : BaseActivity(), UsesViewModel {
       .filteredEvents<TabsManager.MinimizeEvent>()
       .filter { event ->
         event.tab.url.equals(getCurrentUrl(), ignoreCase = true)
-            && event.tab.getTargetActivityName() == this::class.java.name
+          && event.tab.getTargetActivityName() == this::class.java.name
       }.subscribe {
         if (Utils.ANDROID_LOLLIPOP) {
           moveTaskToBack(true)

@@ -18,41 +18,41 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:background="?android:attr/selectableItemBackground"
+  android:clickable="true"
+  android:focusable="true"
+  android:gravity="center_vertical"
+  android:minHeight="48dp"
+  android:orientation="horizontal"
+  tools:ignore="Overdraw,RtlHardcoded">
+
+  <ImageView
+    android:id="@+id/menu_image"
+    android:layout_width="24dp"
+    android:layout_height="24dp"
+    android:layout_gravity="center"
+    android:layout_marginLeft="16dp"
+    android:tint="@color/colorAccent"
+    tools:ignore="ContentDescription"
+    tools:srcCompat="@tools:sample/avatars[0]" />
+
+  <RelativeLayout
+    android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
-    android:clickable="true"
-    android:focusable="true"
-    android:gravity="center_vertical"
-    android:minHeight="48dp"
-    android:orientation="horizontal"
-    tools:ignore="Overdraw,RtlHardcoded">
+    android:layout_weight="1"
+    android:paddingLeft="16dp"
+    tools:ignore="RtlSymmetry">
 
-    <ImageView
-        android:id="@+id/menu_image"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_gravity="center"
-        android:layout_marginLeft="16dp"
-        android:tint="@color/colorAccent"
-        tools:ignore="ContentDescription"
-        tools:srcCompat="@tools:sample/avatars[0]" />
-
-    <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:paddingLeft="16dp"
-        tools:ignore="RtlSymmetry">
-
-        <TextView
-            android:id="@+id/menu_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="marquee"
-            android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-            tools:ignore="SelectableText"
-            tools:text="@string/open_article_view" />
-    </RelativeLayout>
+    <TextView
+      android:id="@+id/menu_text"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:ellipsize="marquee"
+      android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+      tools:ignore="SelectableText"
+      tools:text="@string/open_article_view" />
+  </RelativeLayout>
 </LinearLayout>

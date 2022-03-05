@@ -52,7 +52,7 @@ public class ServiceManager {
 
   public static void startAppDetectionService(@NonNull Context context) {
     ContextCompat.startForegroundService(context, new Intent(context, AppDetectService.class)
-        .putExtra(Constants.EXTRA_KEY_CLEAR_LAST_TOP_APP, true));
+      .putExtra(Constants.EXTRA_KEY_CLEAR_LAST_TOP_APP, true));
   }
 
   public static void stopAppDetectionService(@NonNull Context context) {

@@ -148,18 +148,18 @@ public class Trashy extends FrameLayout {
   private void createWindowParams() {
     if (Utils.ANDROID_OREO) {
       windowParams = new WindowManager.LayoutParams(
-          WRAP_CONTENT,
-          WRAP_CONTENT,
-          TYPE_APPLICATION_OVERLAY,
-          FLAG_NOT_FOCUSABLE | FLAG_NOT_TOUCHABLE,
-          TRANSLUCENT);
+        WRAP_CONTENT,
+        WRAP_CONTENT,
+        TYPE_APPLICATION_OVERLAY,
+        FLAG_NOT_FOCUSABLE | FLAG_NOT_TOUCHABLE,
+        TRANSLUCENT);
     } else {
       windowParams = new WindowManager.LayoutParams(
-          WRAP_CONTENT,
-          WRAP_CONTENT,
-          TYPE_SYSTEM_ALERT,
-          FLAG_NOT_FOCUSABLE | FLAG_NOT_TOUCHABLE,
-          TRANSLUCENT);
+        WRAP_CONTENT,
+        WRAP_CONTENT,
+        TYPE_SYSTEM_ALERT,
+        FLAG_NOT_FOCUSABLE | FLAG_NOT_TOUCHABLE,
+        TRANSLUCENT);
     }
   }
 
@@ -173,14 +173,14 @@ public class Trashy extends FrameLayout {
     if (INSTANCE == null || removeHeadCircle == null) endAction.run();
 
     INSTANCE.removeHeadCircle.animate()
-        .scaleX(0.0f)
-        .scaleY(0.0f)
-        .alpha(0.5f)
-        .setDuration(300)
-        .withLayer()
-        .withEndAction(endAction)
-        .setInterpolator(new BounceInterpolator())
-        .start();
+      .scaleX(0.0f)
+      .scaleY(0.0f)
+      .alpha(0.5f)
+      .setDuration(300)
+      .withLayer()
+      .withEndAction(endAction)
+      .setInterpolator(new BounceInterpolator())
+      .start();
   }
 
   private void destroySelf() {
@@ -333,9 +333,9 @@ public class Trashy extends FrameLayout {
 
     private void drawDeleteIcon(Canvas canvas) {
       Bitmap deleteIcon = new IconicsDrawable(getContext())
-          .icon(CommunityMaterial.Icon.cmd_delete)
-          .color(Color.WHITE)
-          .sizeDp(18).toBitmap();
+        .icon(CommunityMaterial.Icon.cmd_delete)
+        .color(Color.WHITE)
+        .sizeDp(18).toBitmap();
       int cHeight = canvas.getClipBounds().height();
       int cWidth = canvas.getClipBounds().width();
       float x = cWidth / 2f - deleteIcon.getWidth() / 2;

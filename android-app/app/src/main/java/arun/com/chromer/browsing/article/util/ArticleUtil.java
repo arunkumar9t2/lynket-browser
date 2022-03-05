@@ -92,7 +92,7 @@ public final class ArticleUtil {
    */
   public static void changeTextSelectionHandleColors(TextView textView, int color) {
     textView.setHighlightColor(Color.argb(
-        40, Color.red(color), Color.green(color), Color.blue(color)));
+      40, Color.red(color), Color.green(color), Color.blue(color)));
 
     try {
       Field editorField = TextView.class.getDeclaredField("mEditor");
@@ -104,14 +104,14 @@ public final class ArticleUtil {
       Class<?> editorClass = editor.getClass();
 
       String[] handleNames = {
-          "mSelectHandleLeft",
-          "mSelectHandleRight",
-          "mSelectHandleCenter"
+        "mSelectHandleLeft",
+        "mSelectHandleRight",
+        "mSelectHandleCenter"
       };
       String[] resNames = {
-          "mTextSelectHandleLeftRes",
-          "mTextSelectHandleRightRes",
-          "mTextSelectHandleRes"
+        "mTextSelectHandleLeftRes",
+        "mTextSelectHandleRightRes",
+        "mTextSelectHandleRes"
       };
 
       for (int i = 0; i < handleNames.length; i++) {

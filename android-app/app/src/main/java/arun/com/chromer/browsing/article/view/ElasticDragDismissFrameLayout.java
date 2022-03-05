@@ -85,13 +85,13 @@ public class ElasticDragDismissFrameLayout extends FrameLayout {
 
   private void init() {
     dragDismissDistance = getResources()
-        .getDimensionPixelSize(R.dimen.article_drag_down_dismiss_distance);
+      .getDimensionPixelSize(R.dimen.article_drag_down_dismiss_distance);
 
     shouldScale = dragDismissScale != 1f;
 
     draggingBackgroundPaint = new Paint();
     draggingBackgroundPaint.setColor(getContext().getResources()
-        .getColor(R.color.article_transparentSideBackground));
+      .getColor(R.color.article_transparentSideBackground));
     draggingBackgroundPaint.setStyle(Paint.Style.FILL);
   }
 
@@ -127,28 +127,28 @@ public class ElasticDragDismissFrameLayout extends FrameLayout {
       } else { // settle back to natural position
         if (fastOutSlowInInterpolator == null) {
           fastOutSlowInInterpolator = AnimationUtils.loadInterpolator(getContext(),
-              android.R.interpolator.fast_out_slow_in);
+            android.R.interpolator.fast_out_slow_in);
         }
         getChildAt(0).animate()
-            .translationY(0f)
-            .scaleX(1f)
-            .scaleY(1f)
-            .setDuration(200L)
-            .setInterpolator(fastOutSlowInInterpolator)
-            .setListener(null)
-            .start();
+          .translationY(0f)
+          .scaleX(1f)
+          .scaleY(1f)
+          .setDuration(200L)
+          .setInterpolator(fastOutSlowInInterpolator)
+          .setListener(null)
+          .start();
 
         ValueAnimator animator = null;
         if (draggingUp) {
           animator = ValueAnimator.ofFloat(draggingBackground.top,
-              draggingBackground.bottom);
+            draggingBackground.bottom);
           animator.addUpdateListener(valueAnimator -> {
             draggingBackground.top = (float) valueAnimator.getAnimatedValue();
             invalidate();
           });
         } else if (draggingDown) {
           animator = ValueAnimator.ofFloat(draggingBackground.bottom,
-              draggingBackground.top);
+            draggingBackground.top);
           animator.addUpdateListener(valueAnimator -> {
             draggingBackground.bottom = (float) valueAnimator.getAnimatedValue();
             invalidate();
@@ -242,7 +242,7 @@ public class ElasticDragDismissFrameLayout extends FrameLayout {
     // if we've reversed direction and gone past the settle point then clear the flags to
     // allow the list to get the scroll events & reset any transforms
     if ((draggingDown && totalDrag >= 0)
-        || (draggingUp && totalDrag <= 0)) {
+      || (draggingUp && totalDrag <= 0)) {
       totalDrag = dragTo = dragFraction = 0;
       draggingDown = draggingUp = false;
       child.setTranslationY(0f);
@@ -262,7 +262,7 @@ public class ElasticDragDismissFrameLayout extends FrameLayout {
     }
 
     dispatchDragCallback(dragFraction, dragTo,
-        Math.min(1f, Math.abs(totalDrag) / dragDismissDistance), totalDrag);
+      Math.min(1f, Math.abs(totalDrag) / dragDismissDistance), totalDrag);
   }
 
   private void dispatchDragCallback(float elasticOffset, float elasticOffsetPixels,
@@ -270,7 +270,7 @@ public class ElasticDragDismissFrameLayout extends FrameLayout {
     if (callbacks != null && !callbacks.isEmpty()) {
       for (ElasticDragDismissCallback callback : callbacks) {
         callback.onDrag(elasticOffset, elasticOffsetPixels,
-            rawOffset, rawOffsetPixels);
+          rawOffset, rawOffsetPixels);
       }
     }
   }

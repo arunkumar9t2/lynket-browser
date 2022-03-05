@@ -19,6 +19,12 @@
 
 package arun.com.chromer.settings.lookandfeel;
 
+import static arun.com.chromer.settings.Preferences.WEB_HEADS_COLOR;
+import static arun.com.chromer.settings.Preferences.WEB_HEAD_ENABLED;
+import static arun.com.chromer.settings.Preferences.WEB_HEAD_SIZE;
+import static arun.com.chromer.settings.Preferences.WEB_HEAD_SPAWN_LOCATION;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBHEAD_COLOR;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -39,18 +45,12 @@ import arun.com.chromer.settings.widgets.ColorPreference;
 import arun.com.chromer.settings.widgets.IconListPreference;
 import arun.com.chromer.shared.Constants;
 
-import static arun.com.chromer.settings.Preferences.WEB_HEADS_COLOR;
-import static arun.com.chromer.settings.Preferences.WEB_HEAD_ENABLED;
-import static arun.com.chromer.settings.Preferences.WEB_HEAD_SIZE;
-import static arun.com.chromer.settings.Preferences.WEB_HEAD_SPAWN_LOCATION;
-import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBHEAD_COLOR;
-
 public class WebHeadPreferenceFragment extends BasePreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
   private final String[] SUMMARY_GROUP = new String[]{
-      WEB_HEAD_SPAWN_LOCATION,
-      WEB_HEADS_COLOR,
-      WEB_HEAD_SIZE,
+    WEB_HEAD_SPAWN_LOCATION,
+    WEB_HEADS_COLOR,
+    WEB_HEAD_SIZE,
   };
 
   private final IntentFilter webHeadColorFilter = new IntentFilter(Constants.ACTION_WEBHEAD_COLOR_SET);
@@ -119,28 +119,28 @@ public class WebHeadPreferenceFragment extends BasePreferenceFragment implements
   private void setIcons() {
     int materialLight = ContextCompat.getColor(getActivity(), R.color.material_dark_light);
     webHeadColor.setIcon(new IconicsDrawable(getActivity())
-        .icon(CommunityMaterial.Icon.cmd_palette)
-        .color(materialLight)
-        .sizeDp(24));
+      .icon(CommunityMaterial.Icon.cmd_palette)
+      .color(materialLight)
+      .sizeDp(24));
     spawnLocation.setIcon(new IconicsDrawable(getActivity())
-        .icon(CommunityMaterial.Icon.cmd_code_tags)
-        .color(materialLight)
-        .sizeDp(24));
+      .icon(CommunityMaterial.Icon.cmd_code_tags)
+      .color(materialLight)
+      .sizeDp(24));
     webHeadSize.setIcon(new IconicsDrawable(getActivity())
-        .icon(CommunityMaterial.Icon.cmd_crop_free)
-        .color(materialLight)
-        .sizeDp(24));
+      .icon(CommunityMaterial.Icon.cmd_crop_free)
+      .color(materialLight)
+      .sizeDp(24));
   }
 
   private void setupWebHeadColorPreference() {
     webHeadColor.setOnPreferenceClickListener(preference -> {
       final int chosenColor = ((ColorPreference) preference).getColor();
       new ColorChooserDialog.Builder(getActivity(), R.string.web_heads_color)
-          .titleSub(R.string.web_heads_color)
-          .allowUserColorInputAlpha(false)
-          .preselect(chosenColor)
-          .dynamicButtonColor(false)
-          .show(getFragmentManager());
+        .titleSub(R.string.web_heads_color)
+        .allowUserColorInputAlpha(false)
+        .preselect(chosenColor)
+        .dynamicButtonColor(false)
+        .show(getFragmentManager());
       return true;
     });
   }

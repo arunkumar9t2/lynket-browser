@@ -19,6 +19,10 @@
 
 package arun.com.chromer.settings.browsingoptions;
 
+import static arun.com.chromer.settings.Preferences.AGGRESSIVE_LOADING;
+import static arun.com.chromer.settings.Preferences.MERGE_TABS_AND_APPS;
+import static arun.com.chromer.settings.Preferences.PER_APP_PREFERENCE_DUMMY;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -37,10 +41,6 @@ import arun.com.chromer.settings.Preferences;
 import arun.com.chromer.settings.preferences.BasePreferenceFragment;
 import arun.com.chromer.settings.widgets.IconSwitchPreference;
 import arun.com.chromer.util.Utils;
-
-import static arun.com.chromer.settings.Preferences.AGGRESSIVE_LOADING;
-import static arun.com.chromer.settings.Preferences.MERGE_TABS_AND_APPS;
-import static arun.com.chromer.settings.Preferences.PER_APP_PREFERENCE_DUMMY;
 
 /**
  * Created by Arun on 21/06/2016.
@@ -73,9 +73,9 @@ public class BehaviorPreferenceFragment extends BasePreferenceFragment {
     final IconSwitchPreference perAppSettingsPreference = (IconSwitchPreference) findPreference(PER_APP_PREFERENCE_DUMMY);
     if (perAppSettingsPreference != null) {
       final Drawable recentImg = new IconicsDrawable(getActivity())
-          .icon(CommunityMaterial.Icon.cmd_filter_variant)
-          .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
-          .sizeDp(24);
+        .icon(CommunityMaterial.Icon.cmd_filter_variant)
+        .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
+        .sizeDp(24);
       perAppSettingsPreference.setIcon(recentImg);
       perAppSettingsPreference.hideSwitch();
       perAppSettingsPreference.setOnPreferenceClickListener(preference -> {
@@ -92,17 +92,17 @@ public class BehaviorPreferenceFragment extends BasePreferenceFragment {
     mergeTabsPreference = (IconSwitchPreference) findPreference(MERGE_TABS_AND_APPS);
     if (mergeTabsPreference != null) {
       final Drawable recentImg = new IconicsDrawable(getActivity())
-          .icon(CommunityMaterial.Icon.cmd_animation)
-          .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
-          .sizeDp(24);
+        .icon(CommunityMaterial.Icon.cmd_animation)
+        .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
+        .sizeDp(24);
       mergeTabsPreference.setIcon(recentImg);
       mergeTabsPreference.setOnPreferenceChangeListener((preference, newValue) -> {
         if (!((Boolean) newValue) && Preferences.get(getContext()).aggressiveLoading()) {
           new MaterialDialog.Builder(getActivity())
-              .title(R.string.merge_tabs_off_title)
-              .content(R.string.merget_tabs_off_content)
-              .positiveText(android.R.string.ok)
-              .show();
+            .title(R.string.merge_tabs_off_title)
+            .content(R.string.merget_tabs_off_content)
+            .positiveText(android.R.string.ok)
+            .show();
           Preferences.get(getContext()).aggressiveLoading(false);
         }
         return true;

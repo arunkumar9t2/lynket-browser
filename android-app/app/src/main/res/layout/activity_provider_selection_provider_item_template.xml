@@ -18,55 +18,55 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:layout_gravity="center"
+  android:background="?attr/selectableItemBackgroundBorderless"
+  android:clickable="true"
+  android:focusable="true"
+  android:gravity="top|center"
+  android:orientation="vertical"
+  android:padding="8dp">
+
+  <ImageView
+    android:id="@+id/icon"
+    android:layout_width="40dp"
+    android:layout_height="40dp"
     android:layout_gravity="center"
-    android:background="?attr/selectableItemBackgroundBorderless"
+    android:layout_marginBottom="8dp"
+    android:scaleType="fitCenter"
+    tools:ignore="ContentDescription"
+    tools:src="@mipmap/ic_launcher" />
+
+  <TextView
+    android:id="@+id/label"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:ellipsize="end"
+    android:fontFamily="sans-serif-condensed"
+    android:gravity="center"
+    android:maxLines="2"
+    android:paddingLeft="2dp"
+    android:paddingRight="2dp"
+    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+    android:textColor="@color/secondary_text_color"
+    tools:text="I am batman" />
+
+  <TextView
+    android:id="@+id/providerInstallButton"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_vertical"
+    android:background="?attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
-    android:gravity="top|center"
-    android:orientation="vertical"
-    android:padding="8dp">
-
-    <ImageView
-        android:id="@+id/icon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="8dp"
-        android:scaleType="fitCenter"
-        tools:ignore="ContentDescription"
-        tools:src="@mipmap/ic_launcher" />
-
-    <TextView
-        android:id="@+id/label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:fontFamily="sans-serif-condensed"
-        android:gravity="center"
-        android:maxLines="2"
-        android:paddingLeft="2dp"
-        android:paddingRight="2dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="@color/secondary_text_color"
-        tools:text="I am batman" />
-
-    <TextView
-        android:id="@+id/providerInstallButton"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:gravity="center"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:text="@string/install"
-        android:textAppearance="@style/TextAppearance.AppCompat.Button"
-        android:textColor="@color/colorAccent"
-        android:textSize="12sp"
-        android:visibility="gone" />
+    android:gravity="center"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"
+    android:text="@string/install"
+    android:textAppearance="@style/TextAppearance.AppCompat.Button"
+    android:textColor="@color/colorAccent"
+    android:textSize="12sp"
+    android:visibility="gone" />
 </LinearLayout>

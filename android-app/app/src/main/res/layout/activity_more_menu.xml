@@ -18,48 +18,48 @@
   -->
 
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/more_menu_card"
-    android:layout_width="320dp"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/more_menu_card"
+  android:layout_width="320dp"
+  android:layout_height="wrap_content"
+  android:minWidth="320dp"
+  app:cardBackgroundColor="@android:color/white"
+  app:cardCornerRadius="4dp"
+  app:cardElevation="12dp"
+  app:cardPreventCornerOverlap="true"
+  app:cardUseCompatPadding="true"
+  tools:context="arun.com.chromer.browsing.optionspopup.ChromerOptionsActivity">
+
+  <LinearLayout
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minWidth="320dp"
-    app:cardBackgroundColor="@android:color/white"
-    app:cardCornerRadius="4dp"
-    app:cardElevation="12dp"
-    app:cardPreventCornerOverlap="true"
-    app:cardUseCompatPadding="true"
-    tools:context="arun.com.chromer.browsing.optionspopup.ChromerOptionsActivity">
+    android:clipToPadding="false"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:orientation="vertical">
+    <TextView
+      android:id="@+id/moreMenuHeader"
+      android:layout_width="match_parent"
+      android:layout_height="48dp"
+      android:layout_gravity="center|start"
+      android:background="@color/colorPrimary"
+      android:elevation="2dp"
+      android:gravity="center|start"
+      android:outlineProvider="bounds"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:text="@string/chromer_options"
+      android:textAllCaps="true"
+      android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
+      android:textColor="@android:color/white"
+      tools:targetApi="lollipop" />
 
-        <TextView
-            android:id="@+id/moreMenuHeader"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_gravity="center|start"
-            android:background="@color/colorPrimary"
-            android:elevation="2dp"
-            android:gravity="center|start"
-            android:outlineProvider="bounds"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:text="@string/chromer_options"
-            android:textAllCaps="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
-            android:textColor="@android:color/white"
-            tools:targetApi="lollipop" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/moreMenuList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:scrollbars="vertical" />
-    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/moreMenuList"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingTop="8dp"
+      android:paddingBottom="8dp"
+      android:scrollbars="vertical" />
+  </LinearLayout>
 </androidx.cardview.widget.CardView>

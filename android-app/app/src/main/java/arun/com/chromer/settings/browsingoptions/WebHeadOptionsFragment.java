@@ -19,6 +19,14 @@
 
 package arun.com.chromer.settings.browsingoptions;
 
+import static arun.com.chromer.settings.Preferences.AGGRESSIVE_LOADING;
+import static arun.com.chromer.settings.Preferences.MERGE_TABS_AND_APPS;
+import static arun.com.chromer.settings.Preferences.WEB_HEADS_COLOR;
+import static arun.com.chromer.settings.Preferences.WEB_HEAD_CLOSE_ON_OPEN;
+import static arun.com.chromer.settings.Preferences.WEB_HEAD_ENABLED;
+import static arun.com.chromer.settings.Preferences.WEB_HEAD_SIZE;
+import static arun.com.chromer.settings.Preferences.WEB_HEAD_SPAWN_LOCATION;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -34,20 +42,12 @@ import arun.com.chromer.settings.preferences.BasePreferenceFragment;
 import arun.com.chromer.settings.widgets.IconCheckboxPreference;
 import arun.com.chromer.util.Utils;
 
-import static arun.com.chromer.settings.Preferences.AGGRESSIVE_LOADING;
-import static arun.com.chromer.settings.Preferences.MERGE_TABS_AND_APPS;
-import static arun.com.chromer.settings.Preferences.WEB_HEADS_COLOR;
-import static arun.com.chromer.settings.Preferences.WEB_HEAD_CLOSE_ON_OPEN;
-import static arun.com.chromer.settings.Preferences.WEB_HEAD_ENABLED;
-import static arun.com.chromer.settings.Preferences.WEB_HEAD_SIZE;
-import static arun.com.chromer.settings.Preferences.WEB_HEAD_SPAWN_LOCATION;
-
 public class WebHeadOptionsFragment extends BasePreferenceFragment {
 
   private final String[] SUMMARY_GROUP = new String[]{
-      WEB_HEAD_SPAWN_LOCATION,
-      WEB_HEADS_COLOR,
-      WEB_HEAD_SIZE,
+    WEB_HEAD_SPAWN_LOCATION,
+    WEB_HEADS_COLOR,
+    WEB_HEAD_SIZE,
   };
 
   private IconCheckboxPreference closeOnOpen;
@@ -104,23 +104,23 @@ public class WebHeadOptionsFragment extends BasePreferenceFragment {
   private void setIcons() {
     final int materialLight = ContextCompat.getColor(getActivity(), R.color.material_dark_light);
     closeOnOpen.setIcon(new IconicsDrawable(getActivity())
-        .icon(CommunityMaterial.Icon.cmd_close_circle_outline)
-        .color(materialLight)
-        .sizeDp(24));
+      .icon(CommunityMaterial.Icon.cmd_close_circle_outline)
+      .color(materialLight)
+      .sizeDp(24));
     aggressiveLoading.setIcon(new IconicsDrawable(getActivity())
-        .icon(CommunityMaterial.Icon.cmd_fast_forward)
-        .color(materialLight)
-        .sizeDp(24));
+      .icon(CommunityMaterial.Icon.cmd_fast_forward)
+      .color(materialLight)
+      .sizeDp(24));
   }
 
   private void setupAggressivePreference() {
     aggressiveLoading.setOnPreferenceChangeListener((preference, newValue) -> {
       if (((Boolean) newValue) && !Preferences.get(getContext()).mergeTabs()) {
         new MaterialDialog.Builder(getActivity())
-            .title(R.string.aggresive_dia_title)
-            .content(R.string.aggresive_dia_content)
-            .positiveText(android.R.string.ok)
-            .show();
+          .title(R.string.aggresive_dia_title)
+          .content(R.string.aggresive_dia_content)
+          .positiveText(android.R.string.ok)
+          .show();
         Preferences.get(getContext()).mergeTabs(true);
       }
       return true;

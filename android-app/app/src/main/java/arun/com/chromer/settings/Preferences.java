@@ -19,6 +19,9 @@
 
 package arun.com.chromer.settings;
 
+import static java.lang.Integer.parseInt;
+import static arun.com.chromer.shared.Constants.CHROME_PACKAGE;
+
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -36,9 +39,6 @@ import javax.inject.Singleton;
 import arun.com.chromer.R;
 import arun.com.chromer.browsing.customtabs.CustomTabs;
 import arun.com.chromer.util.Utils;
-
-import static arun.com.chromer.shared.Constants.CHROME_PACKAGE;
-import static java.lang.Integer.parseInt;
 
 /**
  * Created by Arun on 05/01/2016.
@@ -293,8 +293,8 @@ public class Preferences {
 
   public boolean minimizeToWebHead() {
     return getDefaultSharedPreferences()
-        .getString(MINIMIZE_BEHAVIOR_PREFERENCE, "1")
-        .equals(MINIMIZE_BEHAVIOR_PREFERENCE_KEY);
+      .getString(MINIMIZE_BEHAVIOR_PREFERENCE, "1")
+      .equals(MINIMIZE_BEHAVIOR_PREFERENCE_KEY);
   }
 
   public void articleTextSizeIncrement(int increment) {
@@ -355,8 +355,8 @@ public class Preferences {
 
   public boolean aggressiveLoading() {
     return Utils.ANDROID_LOLLIPOP
-        && webHeads()
-        && getDefaultSharedPreferences().getBoolean(AGGRESSIVE_LOADING, false);
+      && webHeads()
+      && getDefaultSharedPreferences().getBoolean(AGGRESSIVE_LOADING, false);
   }
 
   public void aggressiveLoading(final boolean preference) {

@@ -18,51 +18,51 @@
   -->
 
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorPrimaryDarker">#283593</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="colorAccentHighlight">#42FF4081</color>
-    <color name="colorAccentLighter">#EC407A</color>
-    <color name="colorAccentDarker">#AD1457</color>
-    <!-- this is needed as preference_category_material layout is using this color as the text color -->
-    <color name="preference_fallback_accent_color">@color/accent</color>
+  <color name="colorPrimary">#3F51B5</color>
+  <color name="colorPrimaryDark">#303F9F</color>
+  <color name="colorPrimaryDarker">#283593</color>
+  <color name="colorAccent">#FF4081</color>
+  <color name="colorAccentHighlight">#42FF4081</color>
+  <color name="colorAccentLighter">#EC407A</color>
+  <color name="colorAccentDarker">#AD1457</color>
+  <!-- this is needed as preference_category_material layout is using this color as the text color -->
+  <color name="preference_fallback_accent_color">@color/accent</color>
 
-    <color name="article_colorPrimary">#3F51B5</color>
-    <color name="article_colorPrimaryDark">#303F9F</color>
-    <color name="article_colorAccent">#FF4081</color>
-    <color name="article_toolbarBackground">#33000000</color>
-    <color name="article_transparentSideBackground">#AA000000</color>
+  <color name="article_colorPrimary">#3F51B5</color>
+  <color name="article_colorPrimaryDark">#303F9F</color>
+  <color name="article_colorAccent">#FF4081</color>
+  <color name="article_toolbarBackground">#33000000</color>
+  <color name="article_transparentSideBackground">#AA000000</color>
 
-    <color name="article_windowBackground">@android:color/white</color>
-    <color name="article_imageBackground">#E5E5E5</color>
-    <color name="article_primaryText">#E2000000</color>
-    <color name="article_secondaryText">#8C000000</color>
-    <color name="article_codeblockBackground">#EEEEEE</color>
+  <color name="article_windowBackground">@android:color/white</color>
+  <color name="article_imageBackground">#E5E5E5</color>
+  <color name="article_primaryText">#E2000000</color>
+  <color name="article_secondaryText">#8C000000</color>
+  <color name="article_codeblockBackground">#EEEEEE</color>
 
-    <color name="card_background_light">#EEEEEE</color>
-    <color name="material_dark_color">#212121</color>
-    <color name="material_dark_light">#757575</color>
-    <color name="android_green">#a4c639</color>
-    <color name="donate_green">#4CAF50</color>
-    <color name="coffee_color">#795548</color>
-    <color name="lunch_color">#FF9800</color>
-    <color name="premium_color">#8BC34A</color>
-    <color name="google_plus">#dc4e41</color>
-    <color name="twitter">#55acee</color>
-    <color name="linkedin">#0077b5</color>
-    <color name="play_store_green">#0f9d58</color>
-    <color name="accent_icon_no_focus">#616161</color>
-    <color name="web_head_color">#00BCD4</color>
-    <color name="error">#DD2C00</color>
-    <color name="remove_web_head_color">#ff1744</color>
-    <color name="shadow_color">#60000000</color>
-    <color name="android_10_color">#30DD81</color>
+  <color name="card_background_light">#EEEEEE</color>
+  <color name="material_dark_color">#212121</color>
+  <color name="material_dark_light">#757575</color>
+  <color name="android_green">#a4c639</color>
+  <color name="donate_green">#4CAF50</color>
+  <color name="coffee_color">#795548</color>
+  <color name="lunch_color">#FF9800</color>
+  <color name="premium_color">#8BC34A</color>
+  <color name="google_plus">#dc4e41</color>
+  <color name="twitter">#55acee</color>
+  <color name="linkedin">#0077b5</color>
+  <color name="play_store_green">#0f9d58</color>
+  <color name="accent_icon_no_focus">#616161</color>
+  <color name="web_head_color">#00BCD4</color>
+  <color name="error">#DD2C00</color>
+  <color name="remove_web_head_color">#ff1744</color>
+  <color name="shadow_color">#60000000</color>
+  <color name="android_10_color">#30DD81</color>
 
-    <color name="primary_text_color">@color/material_dark_color</color>
-    <color name="secondary_text_color">#4c4c4c</color>
-    <color name="material_grey_color">#727272</color>
-    <color name="tutorialBackgrounColor">#20232C</color>
+  <color name="primary_text_color">@color/material_dark_color</color>
+  <color name="secondary_text_color">#4c4c4c</color>
+  <color name="material_grey_color">#727272</color>
+  <color name="tutorialBackgrounColor">#20232C</color>
 
-    <color name="home_tabs_icon_color">#266DD3</color>
+  <color name="home_tabs_icon_color">#266DD3</color>
 </resources>

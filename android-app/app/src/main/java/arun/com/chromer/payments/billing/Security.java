@@ -63,8 +63,8 @@ public class Security {
   @SuppressWarnings("JavadocReference")
   public static boolean verifyPurchase(String base64PublicKey, String signedData, String signature) {
     if (TextUtils.isEmpty(signedData) ||
-        TextUtils.isEmpty(base64PublicKey) ||
-        TextUtils.isEmpty(signature)) {
+      TextUtils.isEmpty(base64PublicKey) ||
+      TextUtils.isEmpty(signature)) {
       Timber.tag(TAG).e("Purchase verification failed: missing data.");
       return BuildConfig.DEBUG;
     }

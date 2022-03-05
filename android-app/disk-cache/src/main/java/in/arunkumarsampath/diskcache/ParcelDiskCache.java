@@ -266,7 +266,7 @@ public final class ParcelDiskCache<T extends Parcelable> implements DiskCache<T>
       for (File file : files) {
         String fileName = file.getName();
         if ((!TextUtils.isEmpty(prefix) && fileName.startsWith(prefix) && fileName.indexOf(".") > 0)
-            || (TextUtils.isEmpty(prefix) && fileName.indexOf(".") > 0)) {
+          || (TextUtils.isEmpty(prefix) && fileName.indexOf(".") > 0)) {
           String key = fileName.substring(0, fileName.indexOf("."));
           T value = get(key);
           list.add(value);

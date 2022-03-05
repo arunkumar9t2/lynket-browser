@@ -17,8 +17,8 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="share">공유</string>
-    <string name="unsupported_link">지원되지 않는 링크입니다, 다시 시도하세요</string>
-    <string name="coffee">커피</string>
-    <string name="copy_link">링크 복사</string>
+  <string name="share">공유</string>
+  <string name="unsupported_link">지원되지 않는 링크입니다, 다시 시도하세요</string>
+  <string name="coffee">커피</string>
+  <string name="copy_link">링크 복사</string>
 </resources>

@@ -18,12 +18,12 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-    <item
-        android:id="@+id/blacklist_switch_item"
-        android:title="Switch"
-        app:actionLayout="@layout/widget_blacklist_toolbar_switch"
-        app:showAsAction="always"
-        tools:ignore="HardcodedText" />
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
+  <item
+    android:id="@+id/blacklist_switch_item"
+    android:title="Switch"
+    app:actionLayout="@layout/widget_blacklist_toolbar_switch"
+    app:showAsAction="always"
+    tools:ignore="HardcodedText" />
 </menu>

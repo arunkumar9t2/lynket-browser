@@ -18,91 +18,91 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".settings.SettingsGroupActivity"
-    tools:showIn="@layout/activity_settings">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  app:layout_behavior="@string/appbar_scrolling_view_behavior"
+  tools:context=".settings.SettingsGroupActivity"
+  tools:showIn="@layout/activity_settings">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/set_default_card"
-        style="@style/FullWidthCard"
-        android:layout_marginTop="-8dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        app:cardBackgroundColor="@color/colorAccentDarker"
-        app:cardElevation="4dp"
-        app:cardUseCompatPadding="true"
-        app:contentPaddingBottom="8dp"
-        app:contentPaddingTop="8dp">
+  <androidx.cardview.widget.CardView
+    android:id="@+id/set_default_card"
+    style="@style/FullWidthCard"
+    android:layout_marginTop="-8dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/colorAccentDarker"
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true"
+    app:contentPaddingBottom="8dp"
+    app:contentPaddingTop="8dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
-            android:weightSum="1">
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center_vertical"
+      android:orientation="horizontal"
+      android:paddingTop="4dp"
+      android:paddingBottom="4dp"
+      android:weightSum="1">
 
-            <ImageView
-                android:id="@+id/set_default_image"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:padding="8dp"
-                android:scaleType="fitCenter"
-                tools:ignore="ContentDescription" />
+      <ImageView
+        android:id="@+id/set_default_image"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:padding="8dp"
+        android:scaleType="fitCenter"
+        tools:ignore="ContentDescription" />
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
+      <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/set_default_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="marquee"
-                    android:fontFamily="sans-serif-medium"
-                    android:paddingBottom="2dp"
-                    android:text="@string/set_default_chromer"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@android:color/white"
-                    android:textSize="16sp"
-                    tools:ignore="SelectableText" />
+        <TextView
+          android:id="@+id/set_default_title"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:ellipsize="marquee"
+          android:fontFamily="sans-serif-medium"
+          android:paddingBottom="2dp"
+          android:text="@string/set_default_chromer"
+          android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+          android:textColor="@android:color/white"
+          android:textSize="16sp"
+          tools:ignore="SelectableText" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/set_default_title"
-                    android:layout_alignStart="@id/set_default_title"
-                    android:layout_alignLeft="@id/set_default_title"
-                    android:text="@string/default_pref_xpln"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textColor="@android:color/white"
-                    android:textSize="12sp"
-                    tools:ignore="SelectableText" />
-            </RelativeLayout>
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below="@id/set_default_title"
+          android:layout_alignStart="@id/set_default_title"
+          android:layout_alignLeft="@id/set_default_title"
+          android:text="@string/default_pref_xpln"
+          android:textAppearance="@style/TextAppearance.AppCompat.Small"
+          android:textColor="@android:color/white"
+          android:textSize="12sp"
+          tools:ignore="SelectableText" />
+      </RelativeLayout>
 
-        </LinearLayout>
+    </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
+  </androidx.cardview.widget.CardView>
 
-    <androidx.cardview.widget.CardView
-        style="@style/FullWidthCard"
-        app:cardElevation="4dp"
-        app:cardUseCompatPadding="true">
+  <androidx.cardview.widget.CardView
+    style="@style/FullWidthCard"
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/settings_list_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </androidx.cardview.widget.CardView>
+    <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/settings_list_view"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content" />
+  </androidx.cardview.widget.CardView>
 </LinearLayout>

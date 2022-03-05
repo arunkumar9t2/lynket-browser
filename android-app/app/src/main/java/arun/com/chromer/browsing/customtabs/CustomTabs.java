@@ -19,6 +19,19 @@
 
 package arun.com.chromer.browsing.customtabs;
 
+import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
+import static android.graphics.Color.WHITE;
+import static arun.com.chromer.browsing.customtabs.bottombar.BottomBarManager.createBottomBarRemoteViews;
+import static arun.com.chromer.browsing.customtabs.bottombar.BottomBarManager.getClickableIDs;
+import static arun.com.chromer.browsing.customtabs.bottombar.BottomBarManager.getOnClickPendingIntent;
+import static arun.com.chromer.settings.Preferences.ANIMATION_MEDIUM;
+import static arun.com.chromer.settings.Preferences.ANIMATION_SHORT;
+import static arun.com.chromer.settings.Preferences.PREFERRED_ACTION_BROWSER;
+import static arun.com.chromer.settings.Preferences.PREFERRED_ACTION_FAV_SHARE;
+import static arun.com.chromer.settings.Preferences.PREFERRED_ACTION_GEN_SHARE;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_ORIGINAL_URL;
+import static arun.com.chromer.shared.Constants.NO_COLOR;
+
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -65,19 +78,6 @@ import arun.com.chromer.settings.Preferences;
 import arun.com.chromer.util.Utils;
 import timber.log.Timber;
 
-import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
-import static android.graphics.Color.WHITE;
-import static arun.com.chromer.browsing.customtabs.bottombar.BottomBarManager.createBottomBarRemoteViews;
-import static arun.com.chromer.browsing.customtabs.bottombar.BottomBarManager.getClickableIDs;
-import static arun.com.chromer.browsing.customtabs.bottombar.BottomBarManager.getOnClickPendingIntent;
-import static arun.com.chromer.settings.Preferences.ANIMATION_MEDIUM;
-import static arun.com.chromer.settings.Preferences.ANIMATION_SHORT;
-import static arun.com.chromer.settings.Preferences.PREFERRED_ACTION_BROWSER;
-import static arun.com.chromer.settings.Preferences.PREFERRED_ACTION_FAV_SHARE;
-import static arun.com.chromer.settings.Preferences.PREFERRED_ACTION_GEN_SHARE;
-import static arun.com.chromer.shared.Constants.EXTRA_KEY_ORIGINAL_URL;
-import static arun.com.chromer.shared.Constants.NO_COLOR;
-
 /**
  * A helper class that builds up the view intent according to user Preferences.get(activity) and
  * launches custom tab.
@@ -94,19 +94,19 @@ public class CustomTabs {
    * Fallback in case there was en error launching custom tabs
    */
   private final static CustomTabsFallback CUSTOM_TABS_FALLBACK =
-      (activity, uri) -> {
-        if (activity != null) {
-          final String string = activity.getString(R.string.fallback_msg);
-          Toast.makeText(activity, string, Toast.LENGTH_SHORT).show();
-          try {
-            final Intent intent = new Intent(activity, WebViewActivity.class);
-            intent.setData(uri);
-            activity.startActivity(intent);
-          } catch (ActivityNotFoundException e) {
-            Toast.makeText(activity, activity.getString(R.string.unxp_err), Toast.LENGTH_SHORT).show();
-          }
+    (activity, uri) -> {
+      if (activity != null) {
+        final String string = activity.getString(R.string.fallback_msg);
+        Toast.makeText(activity, string, Toast.LENGTH_SHORT).show();
+        try {
+          final Intent intent = new Intent(activity, WebViewActivity.class);
+          intent.setData(uri);
+          activity.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+          Toast.makeText(activity, activity.getString(R.string.unxp_err), Toast.LENGTH_SHORT).show();
         }
-      };
+      }
+    };
   /**
    * The context to work with
    */
@@ -343,8 +343,8 @@ public class CustomTabs {
       }
       // set it to builder
       builder
-          .setStartAnimations(activity, start[0], start[1])
-          .setExitAnimations(activity, exit[0], exit[1]);
+        .setStartAnimations(activity, start[0], start[1])
+        .setExitAnimations(activity, exit[0], exit[1]);
       activity.overridePendingTransition(start[0], start[1]);
     }
   }
@@ -375,9 +375,9 @@ public class CustomTabs {
         break;
       case PREFERRED_ACTION_GEN_SHARE:
         final Bitmap shareIcon = new IconicsDrawable(activity)
-            .icon(CommunityMaterial.Icon.cmd_share_variant)
-            .color(WHITE)
-            .sizeDp(24).toBitmap();
+          .icon(CommunityMaterial.Icon.cmd_share_variant)
+          .color(WHITE)
+          .sizeDp(24).toBitmap();
         final Intent intent = new Intent(activity, ShareBroadcastReceiver.class);
         final PendingIntent sharePending = PendingIntent.getBroadcast(activity, 0, intent, FLAG_UPDATE_CURRENT);
         builder.setActionButton(shareIcon, activity.getString(R.string.share_via), sharePending, true);
@@ -406,9 +406,9 @@ public class CustomTabs {
     moreMenuActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
     moreMenuActivity.putExtra(EXTRA_KEY_ORIGINAL_URL, url);
     final PendingIntent moreMenuPending = PendingIntent.getActivity(activity,
-        0,
-        moreMenuActivity,
-        FLAG_UPDATE_CURRENT);
+      0,
+      moreMenuActivity,
+      FLAG_UPDATE_CURRENT);
     builder.addMenuItem(activity.getString(R.string.chromer_options), moreMenuPending);
   }
 
@@ -473,8 +473,8 @@ public class CustomTabs {
     final String customTabPkg = Preferences.get(activity).customTabPackage();
     if (Utils.isPackageInstalled(activity, customTabPkg)) {
       if (customTabPkg.equalsIgnoreCase(BETA_PACKAGE)
-          || customTabPkg.equalsIgnoreCase(DEV_PACKAGE)
-          || customTabPkg.equalsIgnoreCase(STABLE_PACKAGE)) {
+        || customTabPkg.equalsIgnoreCase(DEV_PACKAGE)
+        || customTabPkg.equalsIgnoreCase(STABLE_PACKAGE)) {
 
         final Intent chromeReceiver = new Intent(activity, OpenInChromeReceiver.class);
         final PendingIntent openChromePending = PendingIntent.getBroadcast(activity, 0, chromeReceiver, FLAG_UPDATE_CURRENT);
@@ -501,9 +501,9 @@ public class CustomTabs {
       return;
     }
     builder.setSecondaryToolbarViews(
-        createBottomBarRemoteViews(activity, toolbarColor),
-        getClickableIDs(),
-        getOnClickPendingIntent(activity, url)
+      createBottomBarRemoteViews(activity, toolbarColor),
+      getClickableIDs(),
+      getOnClickPendingIntent(activity, url)
     );
   }
 
@@ -536,10 +536,10 @@ public class CustomTabs {
   private int chromeVariantVersion() {
     final String customTabPackage = Preferences.get(activity).customTabPackage();
     if (Utils.isPackageInstalled(activity, customTabPackage)
-        && (customTabPackage.equalsIgnoreCase(STABLE_PACKAGE)
-        || customTabPackage.equalsIgnoreCase(DEV_PACKAGE)
-        || customTabPackage.equalsIgnoreCase(BETA_PACKAGE)
-        || customTabPackage.equalsIgnoreCase(LOCAL_PACKAGE))) {
+      && (customTabPackage.equalsIgnoreCase(STABLE_PACKAGE)
+      || customTabPackage.equalsIgnoreCase(DEV_PACKAGE)
+      || customTabPackage.equalsIgnoreCase(BETA_PACKAGE)
+      || customTabPackage.equalsIgnoreCase(LOCAL_PACKAGE))) {
       try {
         final PackageInfo packageInfo = activity.getPackageManager().getPackageInfo(customTabPackage, 0);
         return Integer.parseInt(packageInfo.versionName.split("\\.")[0]);

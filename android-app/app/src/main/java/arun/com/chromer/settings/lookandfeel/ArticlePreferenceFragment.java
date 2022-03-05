@@ -19,6 +19,9 @@
 
 package arun.com.chromer.settings.lookandfeel;
 
+import static arun.com.chromer.settings.Preferences.ARTICLE_THEME;
+import static arun.com.chromer.settings.Preferences.WEB_HEAD_ENABLED;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -32,13 +35,10 @@ import arun.com.chromer.settings.Preferences;
 import arun.com.chromer.settings.preferences.BasePreferenceFragment;
 import arun.com.chromer.settings.widgets.IconListPreference;
 
-import static arun.com.chromer.settings.Preferences.ARTICLE_THEME;
-import static arun.com.chromer.settings.Preferences.WEB_HEAD_ENABLED;
-
 public class ArticlePreferenceFragment extends BasePreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
   private final String[] SUMMARY_GROUP = new String[]{
-      ARTICLE_THEME
+    ARTICLE_THEME
   };
   private IconListPreference spawnLocation;
 
@@ -82,9 +82,9 @@ public class ArticlePreferenceFragment extends BasePreferenceFragment implements
   private void setIcons() {
     int materialLight = ContextCompat.getColor(getActivity(), R.color.material_dark_light);
     spawnLocation.setIcon(new IconicsDrawable(getActivity())
-        .icon(CommunityMaterial.Icon.cmd_format_color_fill)
-        .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
-        .sizeDp(24));
+      .icon(CommunityMaterial.Icon.cmd_format_color_fill)
+      .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
+      .sizeDp(24));
   }
 
   private void updatePreferenceStates(String key) {

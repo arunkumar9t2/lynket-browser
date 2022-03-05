@@ -53,7 +53,6 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import kotlinx.android.synthetic.main.activity_provider_selection.*
 import rx.subscriptions.CompositeSubscription
-import java.util.*
 import javax.inject.Inject
 
 class ProviderSelectionActivity : BaseActivity() {

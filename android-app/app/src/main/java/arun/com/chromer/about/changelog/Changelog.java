@@ -73,7 +73,7 @@ public class Changelog {
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
           // FIXME Sorry future me but I have to ship this today
           if (url.equalsIgnoreCase("https://goo.gl/photos/BzRV69ABov9zJxVu9")
-              || url.equalsIgnoreCase("https://github.com/arunkumar9t2/lynket-browser/wiki/Android-10-Bubbles-Guide")) {
+            || url.equalsIgnoreCase("https://github.com/arunkumar9t2/lynket-browser/wiki/Android-10-Bubbles-Guide")) {
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             activity.startActivity(i);
             return true;
@@ -82,13 +82,13 @@ public class Changelog {
         }
       });
       new MaterialDialog.Builder(activity)
-          .customView(content, false)
-          .title("Changelog")
-          .positiveText(android.R.string.ok)
-          .neutralText(R.string.rate_play_store)
-          .onNeutral((dialog, which) -> Utils.openPlayStore(activity, activity.getPackageName()))
-          .dismissListener(dialogInterface -> content.removeAllViews())
-          .show();
+        .customView(content, false)
+        .title("Changelog")
+        .positiveText(android.R.string.ok)
+        .neutralText(R.string.rate_play_store)
+        .onNeutral((dialog, which) -> Utils.openPlayStore(activity, activity.getPackageName()))
+        .dismissListener(dialogInterface -> content.removeAllViews())
+        .show();
     } catch (Exception e) {
       e.printStackTrace();
       Toast.makeText(activity, R.string.changelog_skipped, Toast.LENGTH_LONG).show();

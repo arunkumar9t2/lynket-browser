@@ -19,6 +19,8 @@
 
 package arun.com.chromer.util;
 
+import static arun.com.chromer.shared.Constants.NO_COLOR;
+
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -37,56 +39,54 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import static arun.com.chromer.shared.Constants.NO_COLOR;
-
 /**
  * Created by Arun on 12/06/2016.
  */
 public class ColorUtil {
   public final static int[] ACCENT_COLORS = new int[]{
-      Color.parseColor("#FF1744"),
-      Color.parseColor("#F50057"),
-      Color.parseColor("#D500F9"),
-      Color.parseColor("#651FFF"),
-      Color.parseColor("#3D5AFE"),
-      Color.parseColor("#2979FF"),
-      Color.parseColor("#00B0FF"),
-      Color.parseColor("#00E5FF"),
-      Color.parseColor("#1DE9B6"),
-      Color.parseColor("#00E676"),
-      Color.parseColor("#76FF03"),
-      Color.parseColor("#C6FF00"),
-      Color.parseColor("#FFEA00"),
-      Color.parseColor("#FFC400"),
-      Color.parseColor("#FF9100"),
-      Color.parseColor("#FF3D00")
+    Color.parseColor("#FF1744"),
+    Color.parseColor("#F50057"),
+    Color.parseColor("#D500F9"),
+    Color.parseColor("#651FFF"),
+    Color.parseColor("#3D5AFE"),
+    Color.parseColor("#2979FF"),
+    Color.parseColor("#00B0FF"),
+    Color.parseColor("#00E5FF"),
+    Color.parseColor("#1DE9B6"),
+    Color.parseColor("#00E676"),
+    Color.parseColor("#76FF03"),
+    Color.parseColor("#C6FF00"),
+    Color.parseColor("#FFEA00"),
+    Color.parseColor("#FFC400"),
+    Color.parseColor("#FF9100"),
+    Color.parseColor("#FF3D00")
   };
   public final static int[] PLACEHOLDER_COLORS = new int[]{
-      Color.parseColor("#D32F2F"),
-      Color.parseColor("#C2185B"),
-      Color.parseColor("#303F9F"),
-      Color.parseColor("#6A1B9A"),
-      Color.parseColor("#37474F"),
-      Color.parseColor("#2E7D32")
+    Color.parseColor("#D32F2F"),
+    Color.parseColor("#C2185B"),
+    Color.parseColor("#303F9F"),
+    Color.parseColor("#6A1B9A"),
+    Color.parseColor("#37474F"),
+    Color.parseColor("#2E7D32")
   };
   public final static int[] ACCENT_COLORS_700 = new int[]{
-      Color.parseColor("#D32F2F"),
-      Color.parseColor("#C2185B"),
-      Color.parseColor("#7B1FA2"),
-      Color.parseColor("#6200EA"),
-      Color.parseColor("#304FFE"),
-      Color.parseColor("#2962FF"),
-      Color.parseColor("#0091EA"),
-      Color.parseColor("#00B8D4"),
-      Color.parseColor("#00BFA5"),
-      Color.parseColor("#00C853"),
-      Color.parseColor("#64DD17"),
-      Color.parseColor("#AEEA00"),
-      Color.parseColor("#FFD600"),
-      Color.parseColor("#FFAB00"),
-      Color.parseColor("#FF6D00"),
-      Color.parseColor("#DD2C00"),
-      Color.parseColor("#455A64")
+    Color.parseColor("#D32F2F"),
+    Color.parseColor("#C2185B"),
+    Color.parseColor("#7B1FA2"),
+    Color.parseColor("#6200EA"),
+    Color.parseColor("#304FFE"),
+    Color.parseColor("#2962FF"),
+    Color.parseColor("#0091EA"),
+    Color.parseColor("#00B8D4"),
+    Color.parseColor("#00BFA5"),
+    Color.parseColor("#00C853"),
+    Color.parseColor("#64DD17"),
+    Color.parseColor("#AEEA00"),
+    Color.parseColor("#FFD600"),
+    Color.parseColor("#FFAB00"),
+    Color.parseColor("#FF6D00"),
+    Color.parseColor("#DD2C00"),
+    Color.parseColor("#455A64")
   };
   /**
    * Percentage to darken a color by when setting the status bar color.
@@ -248,8 +248,8 @@ public class ColorUtil {
   public static Drawable getRippleDrawableCompat(final @ColorInt int color) {
     if (Utils.isLollipopAbove()) {
       return new RippleDrawable(ColorStateList.valueOf(color),
-          null,
-          null
+        null,
+        null
       );
     }
     int translucentColor = ColorUtils.setAlphaComponent(color, 0x44);

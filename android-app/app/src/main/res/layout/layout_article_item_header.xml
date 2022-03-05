@@ -18,15 +18,15 @@
   -->
 
 <arun.com.chromer.browsing.article.view.CutLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/article_image"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/article_imageHeight"
-        android:contentDescription="@null"
-        android:scaleType="centerCrop"
-        android:src="@color/article_imageBackground" />
+  <androidx.appcompat.widget.AppCompatImageView
+    android:id="@+id/article_image"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/article_imageHeight"
+    android:contentDescription="@null"
+    android:scaleType="centerCrop"
+    android:src="@color/article_imageBackground" />
 
 </arun.com.chromer.browsing.article.view.CutLayout>

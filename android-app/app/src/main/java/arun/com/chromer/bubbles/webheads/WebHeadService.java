@@ -104,7 +104,7 @@ import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 public class WebHeadService extends OverlayService implements WebHeadContract,
-    CustomTabManager.ConnectionCallback {
+  CustomTabManager.ConnectionCallback {
   // Max visible web heads is set 6 for performance reasons.
   public static final int MAX_VISIBLE_WEB_HEADS = 5;
   // Connection manager instance to connect and warm up custom tab providers
@@ -206,17 +206,17 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     final PendingIntent contextActivity = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_OPEN_CONTEXT_ACTIVITY), FLAG_UPDATE_CURRENT);
     final PendingIntent newTab = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_OPEN_NEW_TAB), FLAG_UPDATE_CURRENT);
     Notification notification = new NotificationCompat.Builder(this, WebHeadService.class.getName())
-        .setSmallIcon(R.drawable.ic_chromer_notification)
-        .setPriority(PRIORITY_MIN)
-        .setContentText(getString(R.string.tap_close_all))
-        .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
-        .addAction(R.drawable.ic_add, getText(R.string.open_new_tab), newTab)
-        .addAction(R.drawable.ic_list, getText(R.string.manage), contextActivity)
-        .setContentTitle(getString(R.string.web_heads_service))
-        .setContentIntent(contentIntent)
-        .setAutoCancel(false)
-        .setLocalOnly(true)
-        .build();
+      .setSmallIcon(R.drawable.ic_chromer_notification)
+      .setPriority(PRIORITY_MIN)
+      .setContentText(getString(R.string.tap_close_all))
+      .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
+      .addAction(R.drawable.ic_add, getText(R.string.open_new_tab), newTab)
+      .addAction(R.drawable.ic_list, getText(R.string.manage), contextActivity)
+      .setContentTitle(getString(R.string.web_heads_service))
+      .setContentIntent(contentIntent)
+      .setAutoCancel(false)
+      .setLocalOnly(true)
+      .build();
     notification.flags |= Notification.FLAG_FOREGROUND_SERVICE;
     return notification;
   }
@@ -329,30 +329,30 @@ public class WebHeadService extends OverlayService implements WebHeadContract,
     }
     //noinspection Convert2MethodRef
     subs.add(websiteObservable
-        .filter(website -> website != null)
-        .compose(SchedulerProvider.applyIoSchedulers())
-        .doOnNext(website -> {
-          final WebHead webHead = webHeads.get(webHeadUrl);
-          if (webHead != null) {
-            warmUp(webHead);
-            webHead.setWebsite(website);
-            ContextActivityHelper.signalUpdated(getApplication(), webHead.getWebsite());
+      .filter(website -> website != null)
+      .compose(SchedulerProvider.applyIoSchedulers())
+      .doOnNext(website -> {
+        final WebHead webHead = webHeads.get(webHeadUrl);
+        if (webHead != null) {
+          warmUp(webHead);
+          webHead.setWebsite(website);
+          ContextActivityHelper.signalUpdated(getApplication(), webHead.getWebsite());
+        }
+      })
+      .observeOn(Schedulers.io())
+      .map(website -> websiteRepository.getWebsiteRoundIconAndColor(website))
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe(faviconColor -> {
+        final WebHead webHead = webHeads.get(webHeadUrl);
+        if (webHead != null) {
+          if (faviconColor.first != null) {
+            webHead.setFaviconDrawable(faviconColor.first);
           }
-        })
-        .observeOn(Schedulers.io())
-        .map(website -> websiteRepository.getWebsiteRoundIconAndColor(website))
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(faviconColor -> {
-          final WebHead webHead = webHeads.get(webHeadUrl);
-          if (webHead != null) {
-            if (faviconColor.first != null) {
-              webHead.setFaviconDrawable(faviconColor.first);
-            }
-            if (faviconColor.second != Constants.NO_COLOR) {
-              webHead.setWebHeadColor(faviconColor.second);
-            }
+          if (faviconColor.second != Constants.NO_COLOR) {
+            webHead.setWebHeadColor(faviconColor.second);
           }
-        }, Timber::e));
+        }
+      }, Timber::e));
   }
 
   private void bindToCustomTabSession() {

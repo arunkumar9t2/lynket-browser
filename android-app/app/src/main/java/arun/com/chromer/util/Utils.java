@@ -19,6 +19,8 @@
 
 package arun.com.chromer.util;
 
+import static android.widget.Toast.LENGTH_LONG;
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AppOpsManager;
@@ -71,8 +73,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
-import static android.widget.Toast.LENGTH_LONG;
-
 /**
  * Created by Arun on 17/12/2015.
  */
@@ -104,7 +104,7 @@ public class Utils {
     }
     final List<String> links = new ArrayList<>();
     final Matcher m = Pattern.compile("\\b((?:[a-z][\\w-]+:(?:/{1,3}|[a-z0-9%])|www\\d{0,3}[.]|[a-z0-9.\\-]+[.][a-z]{2,4}/)(?:[^\\s()<>]+|\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\))+(?:\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))", Pattern.CASE_INSENSITIVE)
-        .matcher(string);
+      .matcher(string);
     while (m.find()) {
       String url = m.group();
       if (!url.toLowerCase().matches("^\\w+://.*")) {
@@ -152,7 +152,7 @@ public class Utils {
   public static ComponentName getBrowserComponentForPackage(@NonNull Context context, @NonNull String pkg) {
     Intent webIntentImplicit = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.GOOGLE_URL));
     @SuppressLint("InlinedApi") List<ResolveInfo> resolvedActivityList = context.getApplicationContext().getPackageManager()
-        .queryIntentActivities(webIntentImplicit, PackageManager.MATCH_ALL);
+      .queryIntentActivities(webIntentImplicit, PackageManager.MATCH_ALL);
 
     ComponentName componentName = null;
     for (ResolveInfo info : resolvedActivityList) {
@@ -167,9 +167,9 @@ public class Utils {
   @NonNull
   public static String getDefaultBrowserPackage(@NonNull Context context) {
     ResolveInfo resolveInfo = context.getApplicationContext()
-        .getPackageManager()
-        .resolveActivity(Constants.WEB_INTENT,
-            PackageManager.MATCH_DEFAULT_ONLY);
+      .getPackageManager()
+      .resolveActivity(Constants.WEB_INTENT,
+        PackageManager.MATCH_DEFAULT_ONLY);
 
     return resolveInfo != null ? resolveInfo.activityInfo.packageName.trim() : "";
   }
@@ -209,8 +209,8 @@ public class Utils {
       bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
     } else {
       bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
-          drawable.getIntrinsicHeight(),
-          Bitmap.Config.ARGB_8888);
+        drawable.getIntrinsicHeight(),
+        Bitmap.Config.ARGB_8888);
     }
 
     Canvas canvas = new Canvas(bitmap);
@@ -229,8 +229,8 @@ public class Utils {
       final ApplicationInfo applicationInfo = packageManager.getApplicationInfo(context.getPackageName(), 0);
       final AppOpsManager appOpsManager = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
       int mode = appOpsManager.checkOpNoThrow(
-          AppOpsManager.OPSTR_GET_USAGE_STATS,
-          applicationInfo.uid, applicationInfo.packageName);
+        AppOpsManager.OPSTR_GET_USAGE_STATS,
+        applicationInfo.uid, applicationInfo.packageName);
       return (mode == AppOpsManager.MODE_ALLOWED);
     } catch (PackageManager.NameNotFoundException e) {
       return false;
@@ -302,7 +302,7 @@ public class Utils {
 
   public static boolean isNetworkAvailable(@NonNull Context context) {
     final ConnectivityManager connectivityManager = (ConnectivityManager)
-        context.getSystemService(Context.CONNECTIVITY_SERVICE);
+      context.getSystemService(Context.CONNECTIVITY_SERVICE);
     final NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
     return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
   }
@@ -395,57 +395,57 @@ public class Utils {
 
   public static boolean isValidFavicon(@Nullable Bitmap favicon) {
     return favicon != null && !(favicon.getWidth() == 16 || favicon.getHeight() == 16
-        || favicon.getWidth() == 32 || favicon.getHeight() == 32);
+      || favicon.getWidth() == 32 || favicon.getHeight() == 32);
   }
 
   public static boolean isOnline(@NotNull Context context) {
     final ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     return cm.getActiveNetworkInfo() != null &&
-        cm.getActiveNetworkInfo().isAvailable()
-        && cm.getActiveNetworkInfo().isConnected();
+      cm.getActiveNetworkInfo().isAvailable()
+      && cm.getActiveNetworkInfo().isConnected();
   }
 
   public static Observable<Boolean> deleteCache(@NonNull Context context) {
     return Observable.fromCallable(new Callable<Boolean>() {
-      boolean delete(Context context) {
-        boolean deleted = true;
-        try {
-          final File internalCache = context.getCacheDir();
-          if (internalCache != null && internalCache.isDirectory()) {
-            deleted = deleteDir(internalCache);
+        boolean delete(Context context) {
+          boolean deleted = true;
+          try {
+            final File internalCache = context.getCacheDir();
+            if (internalCache != null && internalCache.isDirectory()) {
+              deleted = deleteDir(internalCache);
+            }
+            final File externalCache = context.getExternalCacheDir();
+            if (externalCache != null && externalCache.isDirectory()) {
+              deleted = deleteDir(externalCache);
+            }
+          } catch (Exception e) {
+            Timber.e(e);
+            return false;
           }
-          final File externalCache = context.getExternalCacheDir();
-          if (externalCache != null && externalCache.isDirectory()) {
-            deleted = deleteDir(externalCache);
-          }
-        } catch (Exception e) {
-          Timber.e(e);
-          return false;
+          return deleted;
         }
-        return deleted;
-      }
 
-      boolean deleteDir(final File dir) {
-        if (dir != null && dir.isDirectory()) {
-          String[] children = dir.list();
-          for (String path : children) {
-            boolean success = deleteDir(new File(dir, path));
-            if (!success) {
-              return false;
+        boolean deleteDir(final File dir) {
+          if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (String path : children) {
+              boolean success = deleteDir(new File(dir, path));
+              if (!success) {
+                return false;
+              }
             }
           }
+          return dir != null && dir.delete();
         }
-        return dir != null && dir.delete();
-      }
 
-      @Override
-      public Boolean call() throws Exception {
-        return delete(context.getApplicationContext());
-      }
-    }).subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .doOnError(Timber::e)
-        .doOnNext(result -> Timber.d("Cache deletion %b", result));
+        @Override
+        public Boolean call() throws Exception {
+          return delete(context.getApplicationContext());
+        }
+      }).subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread())
+      .doOnError(Timber::e)
+      .doOnNext(result -> Timber.d("Cache deletion %b", result));
   }
 
   /**

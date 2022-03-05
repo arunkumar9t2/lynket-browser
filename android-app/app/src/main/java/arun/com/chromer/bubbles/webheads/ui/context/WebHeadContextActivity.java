@@ -19,6 +19,15 @@
 
 package arun.com.chromer.bubbles.webheads.ui.context;
 
+import static android.content.Intent.EXTRA_TEXT;
+import static android.view.View.GONE;
+import static android.widget.Toast.LENGTH_SHORT;
+import static arun.com.chromer.shared.Constants.ACTION_CLOSE_WEBHEAD_BY_URL;
+import static arun.com.chromer.shared.Constants.ACTION_EVENT_WEBHEAD_DELETED;
+import static arun.com.chromer.shared.Constants.ACTION_EVENT_WEBSITE_UPDATED;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBSITE;
+import static arun.com.chromer.shared.Constants.TEXT_SHARE_INTENT;
+
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -52,15 +61,6 @@ import arun.com.chromer.tabs.TabsManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static android.content.Intent.EXTRA_TEXT;
-import static android.view.View.GONE;
-import static android.widget.Toast.LENGTH_SHORT;
-import static arun.com.chromer.shared.Constants.ACTION_CLOSE_WEBHEAD_BY_URL;
-import static arun.com.chromer.shared.Constants.ACTION_EVENT_WEBHEAD_DELETED;
-import static arun.com.chromer.shared.Constants.ACTION_EVENT_WEBSITE_UPDATED;
-import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBSITE;
-import static arun.com.chromer.shared.Constants.TEXT_SHARE_INTENT;
 
 public class WebHeadContextActivity extends BaseActivity implements WebsiteAdapter.WebSiteAdapterListener {
   private final WebHeadEventsReceiver webHeadsEventsReceiver = new WebHeadEventsReceiver();
@@ -157,34 +157,34 @@ public class WebHeadContextActivity extends BaseActivity implements WebsiteAdapt
   @OnClick(R.id.share_all)
   public void onShareAllClick() {
     final CharSequence[] items = new String[]{
-        getString(R.string.comma_separated),
-        getString(R.string.new_line_separated),
-        getString(R.string.share_all_list)
+      getString(R.string.comma_separated),
+      getString(R.string.new_line_separated),
+      getString(R.string.share_all_list)
     };
     new MaterialDialog.Builder(this)
-        .title(R.string.choose_share_method)
-        .items(items)
-        .itemsCallbackSingleChoice(0, (dialog, itemView, which, text) -> {
-          if (which == 0) {
-            startActivity(Intent.createChooser(TEXT_SHARE_INTENT.putExtra(EXTRA_TEXT, getCSVUrls().toString()), getString(R.string.share_all)));
-          } else if (which == 1) {
-            startActivity(Intent.createChooser(TEXT_SHARE_INTENT.putExtra(EXTRA_TEXT, getNSVUrls().toString()), getString(R.string.share_all)));
-          } else {
-            final ArrayList<Uri> webSites = new ArrayList<>();
-            for (Website website : websitesAdapter.getWebsites()) {
-              try {
-                webSites.add(Uri.parse(website.preferredUrl()));
-              } catch (Exception ignored) {
-              }
+      .title(R.string.choose_share_method)
+      .items(items)
+      .itemsCallbackSingleChoice(0, (dialog, itemView, which, text) -> {
+        if (which == 0) {
+          startActivity(Intent.createChooser(TEXT_SHARE_INTENT.putExtra(EXTRA_TEXT, getCSVUrls().toString()), getString(R.string.share_all)));
+        } else if (which == 1) {
+          startActivity(Intent.createChooser(TEXT_SHARE_INTENT.putExtra(EXTRA_TEXT, getNSVUrls().toString()), getString(R.string.share_all)));
+        } else {
+          final ArrayList<Uri> webSites = new ArrayList<>();
+          for (Website website : websitesAdapter.getWebsites()) {
+            try {
+              webSites.add(Uri.parse(website.preferredUrl()));
+            } catch (Exception ignored) {
             }
-            final Intent shareIntent = new Intent();
-            shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
-            shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, webSites);
-            shareIntent.setType("text/plain");
-            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_all)));
           }
-          return false;
-        }).show();
+          final Intent shareIntent = new Intent();
+          shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
+          shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, webSites);
+          shareIntent.setType("text/plain");
+          startActivity(Intent.createChooser(shareIntent, getString(R.string.share_all)));
+        }
+        return false;
+      }).show();
   }
 
   @NonNull
@@ -196,7 +196,7 @@ public class WebHeadContextActivity extends BaseActivity implements WebsiteAdapt
       builder.append(websites.get(i).preferredUrl());
       if (i != size - 1) {
         builder.append(',')
-            .append(' ');
+          .append(' ');
       }
     }
     return builder;

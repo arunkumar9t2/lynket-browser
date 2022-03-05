@@ -18,51 +18,51 @@
   -->
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/coordinatorLayout"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/coordinatorLayout"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:context=".browsing.webview.WebViewActivity">
+
+  <com.google.android.material.appbar.AppBarLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".browsing.webview.WebViewActivity">
+    android:layout_height="wrap_content"
+    android:theme="@style/AppTheme.AppBarOverlay">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+    <androidx.appcompat.widget.Toolbar
+      android:id="@+id/toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="?attr/actionBarSize"
+      android:background="?attr/colorPrimary"
+      app:layout_scrollFlags="scroll|enterAlways"
+      app:popupTheme="@style/AppTheme.PopupOverlay"
+      app:subtitleTextAppearance="@style/TextAppearance.AppCompat.Caption"
+      app:titleTextAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:subtitleTextAppearance="@style/TextAppearance.AppCompat.Caption"
-            app:titleTextAppearance="@style/TextAppearance.AppCompat.Subhead" />
+    <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+      android:id="@+id/progressBar"
+      style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal"
+      android:layout_width="match_parent"
+      android:layout_height="1.5dp"
+      android:indeterminate="false"
+      android:max="100"
+      android:min="0"
+      android:minHeight="3dp"
+      android:padding="0dp"
+      app:mpb_progressStyle="horizontal"
+      tools:targetApi="o" />
 
-        <me.zhanghai.android.materialprogressbar.MaterialProgressBar
-            android:id="@+id/progressBar"
-            style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="1.5dp"
-            android:indeterminate="false"
-            android:max="100"
-            android:min="0"
-            android:minHeight="3dp"
-            android:padding="0dp"
-            app:mpb_progressStyle="horizontal"
-            tools:targetApi="o" />
+  </com.google.android.material.appbar.AppBarLayout>
 
-    </com.google.android.material.appbar.AppBarLayout>
+  <include layout="@layout/activity_web_view_content" />
 
-    <include layout="@layout/activity_web_view_content" />
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigation"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_gravity="bottom"
-        app:labelVisibilityMode="labeled"
-        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
-        app:menu="@menu/browsing_web_view_bottom_navigation_menu" />
+  <com.google.android.material.bottomnavigation.BottomNavigationView
+    android:id="@+id/bottomNavigation"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:layout_gravity="bottom"
+    app:labelVisibilityMode="labeled"
+    app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+    app:menu="@menu/browsing_web_view_bottom_navigation_menu" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -79,11 +79,11 @@ android {
 
   buildTypes.all { buildType ->
     buildType
-        .javaCompileOptions
-        .annotationProcessorOptions
-        .arguments += [
-        logEpoxyTimings              : "true",
-        enableParallelEpoxyProcessing: "true"
+      .javaCompileOptions
+      .annotationProcessorOptions
+      .arguments += [
+      logEpoxyTimings              : "true",
+      enableParallelEpoxyProcessing: "true"
     ]
   }
 

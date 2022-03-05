@@ -53,9 +53,9 @@ class DefaultAppRepositoryTest : ChromerRobolectricSuite() {
     val testSubscriber = appRepository!!.allApps().test()
 
     testSubscriber.awaitTerminalEvent()
-        .assertNoErrors()
-        .assertCompleted()
-        .assertReceivedOnNext(listOf(listOf(App("App", "Package", false, false, 0))))
+      .assertNoErrors()
+      .assertCompleted()
+      .assertReceivedOnNext(listOf(listOf(App("App", "Package", false, false, 0))))
   }
 
   @Test

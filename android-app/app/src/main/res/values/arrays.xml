@@ -18,40 +18,40 @@
   -->
 
 <resources>
-    <string-array name="actionKeys">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-    <string-array name="articleThemeKeys">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-    </string-array>
-    <string-array name="animationKeys">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-    <string-array name="animationSpeedKeys">
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-    <string-array name="webHeadsSpawnKeys">
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-    <string-array name="webHeadsSizeKeys">
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-    <string-array name="minimizePreferenceKeys">
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-    <string-array name="minimizePreferenceValues">
-        <item>@string/minimize_normally</item>
-        <item>@string/minimize_to_web_head</item>
-    </string-array>
+  <string-array name="actionKeys">
+    <item>1</item>
+    <item>2</item>
+    <item>3</item>
+  </string-array>
+  <string-array name="articleThemeKeys">
+    <item>1</item>
+    <item>2</item>
+    <item>3</item>
+    <item>4</item>
+  </string-array>
+  <string-array name="animationKeys">
+    <item>0</item>
+    <item>1</item>
+    <item>2</item>
+  </string-array>
+  <string-array name="animationSpeedKeys">
+    <item>1</item>
+    <item>2</item>
+  </string-array>
+  <string-array name="webHeadsSpawnKeys">
+    <item>1</item>
+    <item>2</item>
+  </string-array>
+  <string-array name="webHeadsSizeKeys">
+    <item>1</item>
+    <item>2</item>
+  </string-array>
+  <string-array name="minimizePreferenceKeys">
+    <item>1</item>
+    <item>2</item>
+  </string-array>
+  <string-array name="minimizePreferenceValues">
+    <item>@string/minimize_normally</item>
+    <item>@string/minimize_to_web_head</item>
+  </string-array>
 </resources>

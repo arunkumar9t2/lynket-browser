@@ -43,17 +43,17 @@ public class ArticlePreloader {
 
   public void preloadArticle(@NonNull Uri uri, @Nullable final ArticlePreloadListener listener) {
     webArticleRepository.getWebArticle(uri.toString())
-        .compose(SchedulerProvider.applyIoSchedulers())
-        .doOnError(throwable -> {
-          if (listener != null) {
-            listener.onComplete(false);
-          }
-        })
-        .subscribe(webArticle -> {
-          if (listener != null) {
-            listener.onComplete(true);
-          }
-        });
+      .compose(SchedulerProvider.applyIoSchedulers())
+      .doOnError(throwable -> {
+        if (listener != null) {
+          listener.onComplete(false);
+        }
+      })
+      .subscribe(webArticle -> {
+        if (listener != null) {
+          listener.onComplete(true);
+        }
+      });
   }
 
   public interface ArticlePreloadListener {

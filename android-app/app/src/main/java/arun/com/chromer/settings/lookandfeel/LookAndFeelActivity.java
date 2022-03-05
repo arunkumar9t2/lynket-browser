@@ -19,6 +19,11 @@
 
 package arun.com.chromer.settings.lookandfeel;
 
+import static arun.com.chromer.shared.Constants.ACTION_TOOLBAR_COLOR_SET;
+import static arun.com.chromer.shared.Constants.ACTION_WEBHEAD_COLOR_SET;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_TOOLBAR_COLOR;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBHEAD_COLOR;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -42,11 +47,6 @@ import arun.com.chromer.shared.base.Snackable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static arun.com.chromer.shared.Constants.ACTION_TOOLBAR_COLOR_SET;
-import static arun.com.chromer.shared.Constants.ACTION_WEBHEAD_COLOR_SET;
-import static arun.com.chromer.shared.Constants.EXTRA_KEY_TOOLBAR_COLOR;
-import static arun.com.chromer.shared.Constants.EXTRA_KEY_WEBHEAD_COLOR;
-
 public class LookAndFeelActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback, Snackable, SharedPreferences.OnSharedPreferenceChangeListener {
   @BindView(R.id.toolbar)
   Toolbar toolbar;
@@ -64,11 +64,11 @@ public class LookAndFeelActivity extends AppCompatActivity implements ColorChoos
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     getSupportFragmentManager()
-        .beginTransaction()
-        .replace(R.id.toolbar_options_preferences_container, PersonalizationPreferenceFragment.newInstance())
-        .replace(R.id.web_head_options_preferences_container, WebHeadPreferenceFragment.newInstance())
-        .replace(R.id.article_options_preferences_container, ArticlePreferenceFragment.newInstance())
-        .commit();
+      .beginTransaction()
+      .replace(R.id.toolbar_options_preferences_container, PersonalizationPreferenceFragment.newInstance())
+      .replace(R.id.web_head_options_preferences_container, WebHeadPreferenceFragment.newInstance())
+      .replace(R.id.article_options_preferences_container, ArticlePreferenceFragment.newInstance())
+      .commit();
   }
 
   @Override

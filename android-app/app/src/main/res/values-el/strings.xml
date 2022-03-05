@@ -17,54 +17,54 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string-array name="animationValues">
-        <item>Κανένα</item>
-        <item>Σύρετε δεξιά</item>
-        <item>Σύρσιμο πάνω</item>
-    </string-array>
-    <string-array name="animationSpeedValues">
-        <item>Μέτριο</item>
-        <item>Σύντομο</item>
-    </string-array>
-    <string-array name="actionValues">
-        <item>Δευτερεύον περιηγητής</item>
-        <item>Αγαπημένη εφαρμογή κοινοποίησης</item>
-        <item>General share</item>
-    </string-array>
-    <string-array name="webHeadsSpawnValues">
-        <item>Δεξιά</item>
-        <item>Αριστερά</item>
-    </string-array>
-    <string-array name="webHeadsSizeValues">
-        <item>Κανονικό</item>
-        <item>Μικρό</item>
-    </string-array>
-    <string name="share_text">Γεια Ελέγξτε το \‘Lynket\’ για γρήγορη και ασφαλή εμπειρία περιήγησης! Κατεβάσετε εδώ  https://goo.gl/992ils</string>
-    <string name="share_via">Κοινοποίηση με…</string>
-    <string name="custom_tab_provider_not_found">Δεν βρέθηκε συμβατός παροχέας προσαρμοσμένης σελίδας</string>
-    <string name="custom_tab_provider_not_found_expln">Το Lynket απαιτεί να έχετε έναν περιηγητή συμβατό με Προσαρμοσμένη σελίδα. Προς το παρών δεν υπάρχουν περιηγητές ατο κινητό σας που να το υποστηρίζουν. Θα θελατε να εγκαταστήσετε το Google Chrome (Δωρεάν) από το Play Store; Εάν το έχετε ήδη, παρακαλώ αναβαθμήστε το στην τελευταία έκδοση.</string>
-    <string name="install">Εγκατάσταση</string>
-    <string name="licenses">Άδειες</string>
-    <string name="about">Σχετικά</string>
-    <string name="help_chromer_grow">Βοηθήστε το Lynket να μεγαλώσει!</string>
-    <string name="share">Κοινοποίηση</string>
-    <string name="share_with">Κοινοποίηση με %1$s</string>
-    <string name="rate_play_store">Αξιολογήστε στο Play Store</string>
-    <string name="feedback">Σχόλια</string>
-    <string name="intro">Intro</string>
-    <string name="send_email">Αποστολή email…</string>
-    <string name="fallback_msg">Αποτυχία ανοίγματος προσαρμοσμένης σελίδας, γυρνώντας πίσω στους κανονικούς περιηγητές</string>
-    <string name="open_with">Άνοιγμα με…</string>
-    <string name="open_in_browser">Άνοιγμα με %1$s</string>
-    <string name="unxp_err">Σφάλμα, δοκιμάστε ξανά</string>
-    <string name="unsupported_link">Μη υποστηριζόμενος σύνδεσμος, δοκιμάστε ξανά</string>
-    <string name="couldnt_load_price">Αδύνατη η φόρτωση τιμής</string>
-    <string name="coffee">Καφές</string>
-    <string name="lunch">Μεσημεριανό</string>
-    <string name="premium_donation">Δωρεά Premium</string>
-    <string name="invalid_link">Λανθασμένος σύνδεσμος</string>
-    <string name="copied">Αντιγράφτηκε</string>
-    <string name="copy_link">Αντιγραφή συνδέσμου</string>
-    <string name="add_to_homescreen">Προσθήκη στην Αρχική Οθόνη</string>
-    <string name="intro_1">Γεια σας!\nΤο Lynket είναι ένας ελαφρύς, ασφαλής και γρήγορος περιηγητής.</string>
+  <string-array name="animationValues">
+    <item>Κανένα</item>
+    <item>Σύρετε δεξιά</item>
+    <item>Σύρσιμο πάνω</item>
+  </string-array>
+  <string-array name="animationSpeedValues">
+    <item>Μέτριο</item>
+    <item>Σύντομο</item>
+  </string-array>
+  <string-array name="actionValues">
+    <item>Δευτερεύον περιηγητής</item>
+    <item>Αγαπημένη εφαρμογή κοινοποίησης</item>
+    <item>General share</item>
+  </string-array>
+  <string-array name="webHeadsSpawnValues">
+    <item>Δεξιά</item>
+    <item>Αριστερά</item>
+  </string-array>
+  <string-array name="webHeadsSizeValues">
+    <item>Κανονικό</item>
+    <item>Μικρό</item>
+  </string-array>
+  <string name="share_text">Γεια Ελέγξτε το \‘Lynket\’ για γρήγορη και ασφαλή εμπειρία περιήγησης! Κατεβάσετε εδώ  https://goo.gl/992ils</string>
+  <string name="share_via">Κοινοποίηση με…</string>
+  <string name="custom_tab_provider_not_found">Δεν βρέθηκε συμβατός παροχέας προσαρμοσμένης σελίδας</string>
+  <string name="custom_tab_provider_not_found_expln">Το Lynket απαιτεί να έχετε έναν περιηγητή συμβατό με Προσαρμοσμένη σελίδα. Προς το παρών δεν υπάρχουν περιηγητές ατο κινητό σας που να το υποστηρίζουν. Θα θελατε να εγκαταστήσετε το Google Chrome (Δωρεάν) από το Play Store; Εάν το έχετε ήδη, παρακαλώ αναβαθμήστε το στην τελευταία έκδοση.</string>
+  <string name="install">Εγκατάσταση</string>
+  <string name="licenses">Άδειες</string>
+  <string name="about">Σχετικά</string>
+  <string name="help_chromer_grow">Βοηθήστε το Lynket να μεγαλώσει!</string>
+  <string name="share">Κοινοποίηση</string>
+  <string name="share_with">Κοινοποίηση με %1$s</string>
+  <string name="rate_play_store">Αξιολογήστε στο Play Store</string>
+  <string name="feedback">Σχόλια</string>
+  <string name="intro">Intro</string>
+  <string name="send_email">Αποστολή email…</string>
+  <string name="fallback_msg">Αποτυχία ανοίγματος προσαρμοσμένης σελίδας, γυρνώντας πίσω στους κανονικούς περιηγητές</string>
+  <string name="open_with">Άνοιγμα με…</string>
+  <string name="open_in_browser">Άνοιγμα με %1$s</string>
+  <string name="unxp_err">Σφάλμα, δοκιμάστε ξανά</string>
+  <string name="unsupported_link">Μη υποστηριζόμενος σύνδεσμος, δοκιμάστε ξανά</string>
+  <string name="couldnt_load_price">Αδύνατη η φόρτωση τιμής</string>
+  <string name="coffee">Καφές</string>
+  <string name="lunch">Μεσημεριανό</string>
+  <string name="premium_donation">Δωρεά Premium</string>
+  <string name="invalid_link">Λανθασμένος σύνδεσμος</string>
+  <string name="copied">Αντιγράφτηκε</string>
+  <string name="copy_link">Αντιγραφή συνδέσμου</string>
+  <string name="add_to_homescreen">Προσθήκη στην Αρχική Οθόνη</string>
+  <string name="intro_1">Γεια σας!\nΤο Lynket είναι ένας ελαφρύς, ασφαλής και γρήγορος περιηγητής.</string>
 </resources>

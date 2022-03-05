@@ -19,6 +19,9 @@
 
 package arun.com.chromer.appdetect;
 
+import static androidx.core.app.NotificationCompat.PRIORITY_MIN;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_CLEAR_LAST_TOP_APP;
+
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.NotificationChannel;
@@ -48,9 +51,6 @@ import arun.com.chromer.di.service.ServiceComponent;
 import arun.com.chromer.shared.base.service.BaseService;
 import arun.com.chromer.util.Utils;
 import timber.log.Timber;
-
-import static androidx.core.app.NotificationCompat.PRIORITY_MIN;
-import static arun.com.chromer.shared.Constants.EXTRA_KEY_CLEAR_LAST_TOP_APP;
 
 public class AppDetectService extends BaseService {
   // Gap at which we polling the system for current foreground app.
@@ -98,17 +98,17 @@ public class AppDetectService extends BaseService {
 
     if (Utils.ANDROID_OREO) {
       startForeground(1, new NotificationCompat.Builder(this, CHANNEL_ID)
-          .setSmallIcon(R.drawable.ic_chromer_notification)
-          .setPriority(PRIORITY_MIN)
-          .setContentText(getString(R.string.app_detection_service_explanation))
-          .setStyle(new NotificationCompat.BigTextStyle()
-              .bigText(getString(R.string.app_detection_service_explanation))
-              .setBigContentTitle(getString(R.string.app_detection_service)))
-          .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
-          .setContentTitle(getString(R.string.app_detection_service))
-          .setAutoCancel(false)
-          .setLocalOnly(true)
-          .build());
+        .setSmallIcon(R.drawable.ic_chromer_notification)
+        .setPriority(PRIORITY_MIN)
+        .setContentText(getString(R.string.app_detection_service_explanation))
+        .setStyle(new NotificationCompat.BigTextStyle()
+          .bigText(getString(R.string.app_detection_service_explanation))
+          .setBigContentTitle(getString(R.string.app_detection_service)))
+        .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
+        .setContentTitle(getString(R.string.app_detection_service))
+        .setAutoCancel(false)
+        .setLocalOnly(true)
+        .build());
     }
 
     if (!Utils.canReadUsageStats(this)) {

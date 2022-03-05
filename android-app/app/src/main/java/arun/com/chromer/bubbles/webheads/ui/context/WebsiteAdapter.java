@@ -67,18 +67,18 @@ class WebsiteAdapter extends RecyclerView.Adapter<WebsiteAdapter.WebSiteHolder> 
   public void onBindViewHolder(WebSiteHolder holder, int position) {
     final Website website = websites.get(position);
     holder.deleteIcon.setImageDrawable(new IconicsDrawable(context)
-        .icon(CommunityMaterial.Icon.cmd_close)
-        .color(ContextCompat.getColor(context, R.color.accent_icon_no_focus))
-        .sizeDp(16));
+      .icon(CommunityMaterial.Icon.cmd_close)
+      .color(ContextCompat.getColor(context, R.color.accent_icon_no_focus))
+      .sizeDp(16));
     holder.shareIcon.setImageDrawable(new IconicsDrawable(context)
-        .icon(CommunityMaterial.Icon.cmd_share_variant)
-        .color(ContextCompat.getColor(context, R.color.accent_icon_no_focus))
-        .sizeDp(16));
+      .icon(CommunityMaterial.Icon.cmd_share_variant)
+      .color(ContextCompat.getColor(context, R.color.accent_icon_no_focus))
+      .sizeDp(16));
     holder.url.setText(website.preferredUrl());
     holder.title.setText(website.safeLabel());
     GlideApp.with(context)
-        .load(website.faviconUrl)
-        .into(holder.icon);
+      .load(website.faviconUrl)
+      .into(holder.icon);
   }
 
   @Override

@@ -19,18 +19,18 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="@string/behavior_preferences">
-        <!--suppress AndroidElementNotAllowed -->
-        <arun.com.chromer.settings.widgets.IconSwitchPreference
-            android:defaultValue="true"
-            android:key="merge_tabs_and_apps_preference"
-            android:summary="@string/merge_tabs_explanation"
-            android:title="@string/merge_tabs" />
-        <!--suppress AndroidElementNotAllowed -->
-        <arun.com.chromer.settings.widgets.IconSwitchPreference
-            android:key="blacklist_preference_dummy"
-            android:summary="@string/per_app_settings_explanation"
-            android:title="@string/per_app_settings" />
-        <!--suppress AndroidElementNotAllowed -->
-    </PreferenceCategory>
+  <PreferenceCategory android:title="@string/behavior_preferences">
+    <!--suppress AndroidElementNotAllowed -->
+    <arun.com.chromer.settings.widgets.IconSwitchPreference
+      android:defaultValue="true"
+      android:key="merge_tabs_and_apps_preference"
+      android:summary="@string/merge_tabs_explanation"
+      android:title="@string/merge_tabs" />
+    <!--suppress AndroidElementNotAllowed -->
+    <arun.com.chromer.settings.widgets.IconSwitchPreference
+      android:key="blacklist_preference_dummy"
+      android:summary="@string/per_app_settings_explanation"
+      android:title="@string/per_app_settings" />
+    <!--suppress AndroidElementNotAllowed -->
+  </PreferenceCategory>
 </PreferenceScreen>

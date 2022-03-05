@@ -17,229 +17,229 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string-array name="animationValues">
-        <item>无动画</item>
-        <item>右侧滑出</item>
-        <item>向上滑出</item>
-    </string-array>
-    <string-array name="animationSpeedValues">
-        <item>中等</item>
-        <item>较快</item>
-    </string-array>
-    <string-array name="actionValues">
-        <item>第二浏览器</item>
-        <item>最喜欢的分享应用</item>
-        <item>常规分享</item>
-    </string-array>
-    <string-array name="webHeadsSpawnValues">
-        <item>右侧</item>
-        <item>左侧</item>
-    </string-array>
-    <string-array name="articleThemeValues">
-        <item>暗色</item>
-        <item>亮色</item>
-        <item>自动</item>
-        <item>Black</item>
-    </string-array>
-    <string-array name="webHeadsSizeValues">
-        <item>正常</item>
-        <item>小</item>
-    </string-array>
-    <string name="share_text">嘿 来查看下 “Lynket”  它可以让你拥有快速且安全的浏览体验！可以在这里下载 https://goo.gl/992ils</string>
-    <string name="share_via">分享至…</string>
-    <string name="custom_tab_provider_not_found">没有找到可兼容的自定义标签页提供程序</string>
-    <string name="custom_tab_provider_not_found_expln">Lynket 将需要您的手机上安装有兼容自定义标签页功能的浏览器。现在在您的手机上没有检测到支持该功能的浏览器。您想在 Play 商店中安装 Chrome 浏览器（免费）吗？如果您已经安装，请将其升级至最新版本。</string>
-    <string name="install">安装</string>
-    <string name="licenses">开源许可</string>
-    <string name="about">关于</string>
-    <string name="help_chromer_grow">帮助 Lynket 成长！</string>
-    <string name="share">分享</string>
-    <string name="share_with">分享至 %1$s</string>
-    <string name="rate_play_store">在 Play 商店内评价</string>
-    <string name="feedback">反馈</string>
-    <string name="intro">简介</string>
-    <string name="send_email">发送电子邮件…</string>
-    <string name="fallback_msg">无法打开自定义标签页，将在浏览器中加载</string>
-    <string name="open_with">选择程序打开…</string>
-    <string name="open_in_browser">在 %1$s 中打开</string>
-    <string name="unxp_err">发生意外错误，请重试</string>
-    <string name="unsupported_link">不支持的链接，请重试</string>
-    <string name="couldnt_load_price">无法加载价格</string>
-    <string name="coffee">一杯咖啡</string>
-    <string name="lunch">一顿午餐</string>
-    <string name="premium_donation">高级捐赠</string>
-    <string name="invalid_link">无效链接</string>
-    <string name="copied">已复制</string>
-    <string name="copy_link">复制链接</string>
-    <string name="add_to_homescreen">添加至主屏幕</string>
-    <string name="intro_1">您好！\nLynket 是一款轻量化，安全且高速的网页浏览器。</string>
-    <string name="intro_4_new">它可以在您点击多个链接时创建叠加式的浮动气泡并选择在后台加载它们!</string>
-    <string name="how_to_use">要如何使用？</string>
-    <string name="intro_6">将 Lynket 设置成你的默认浏览器，Lynket 将会以非入侵的方式显示您所打开的链接。此外您还可以选择仅在需要时调用它。</string>
-    <string name="version">版本</string>
-    <string name="changelog">更新日志</string>
-    <string name="join_google_plus">加入 Google+ 社群</string>
-    <string name="share_ideas">分享您的想法！</string>
-    <string name="support_development">支持开发</string>
-    <string name="consider_donation">考虑捐赠</string>
-    <string name="add_to_circles">加入到 Google+ 圈子</string>
-    <string name="follow_twitter">在 Twitter 上关注</string>
-    <string name="connect_linkedIn">在 Linkedln 上联系</string>
-    <string name="more_apps">更多应用</string>
-    <string name="author">作者</string>
-    <string name="added">已添加</string>
-    <string name="settings">设置</string>
-    <string name="colored_toolbar">为工具栏上色</string>
-    <string name="choose_animation">打开动画</string>
-    <string name="animation_speed">动画速度</string>
-    <string name="default_pref_xpln">将 Lynket 设置为默认浏览器以打开全部链接，或者还可以在弹出程序选择列表时手动选择用 Lynket 加载</string>
-    <string name="personalization">个性化</string>
-    <string name="default_clear_msg">被设置为了默认浏览器，请点击清除默认操作来取消它</string>
-    <string name="dynamic_toolbar_color">工具栏动态变色</string>
-    <string name="keep_chrome_warmedup">使您的浏览器常驻内存以便更快速加载</string>
-    <string name="warmup_browser">浏览器预热</string>
-    <string name="set_default_chromer">设置为默认浏览器</string>
-    <string name="default_provider">自定义标签页提供程序</string>
-    <string name="pre_fetch_content">预读取内容</string>
-    <string name="pre_fetch_desc">扫描屏幕上的链接并在后台加载内容以便立即打开</string>
-    <string name="accessibility_description">这项服务将被 Lynket 用来扫描屏幕上的链接并选择在后台加载它们。Lynket 不会处理除此以外任何形式的信息。即便拒绝启用该项服务您仍然可以继续使用 Lynket 中的轻量化模式。想了解更多信息，请参考 Lynket 应用内的说明。</string>
-    <string name="accessibility_dialog_title">需要获取无障碍权限</string>
-    <string name="accessibility_dialog_desc">为了让 Lynket 能够扫描任何应用内的链接您将需要允许程序接入无障碍服务。请在下一屏内开启无障碍服务，在操作完成后即可启用该选项并享受快速打开页面的乐趣。</string>
-    <string name="open_settings">打开设置</string>
-    <string name="only_on_wifi">仅在 Wi-Fi 下扫描</string>
-    <string name="show_notification">当预读取一个链接时显示通知</string>
-    <string name="default_toolbar_color">默认工具栏颜色</string>
-    <string name="web_heads_color">链接气泡颜色</string>
-    <string name="choose_secondary_browser">第二浏览器</string>
-    <string name="dynamic_toolbar_help">开启工具栏动态变色后，Lynket 将会开始静默化学习颜色适配。起初它可能无法正确适配网站或应用，但随着时间的推移适配的效果将会不断提高。开始享受它吧！</string>
-    <string name="secondary_browser_success">%1$s 已被设为第二浏览器！</string>
-    <string name="fav_share_success">%1$s 已被设为喜爱的分享应用！</string>
-    <string name="default_provider_success">%1$s 将被用来提供自定义标签页！</string>
-    <string name="based_on_app">根据应用</string>
-    <string name="based_on_web">根据网站</string>
-    <string name="preferred_action">优先行为</string>
-    <string name="fav_share_app">喜爱的分享应用</string>
-    <string name="choose_fav_share_app">选择喜爱的分享应用</string>
-    <string name="dynamic_summary_appweb">当网站支持时颜色显示将跟随网页的设置否则依据应用程序的颜色</string>
-    <string name="dynamic_summary_app">颜色显示将跟随打开网页的程序</string>
-    <string name="dynamic_summary_web">颜色显示将跟随加载网页内的设置</string>
-    <string name="no_option_selected">没有选择选项</string>
-    <string name="permission_required">需要获取权限</string>
-    <string name="usage_permission_explanation_appcolor">要开启根据应用动态着色工具栏，Lynket 将需要获取授权来了解当前正在使用的应用。您想要现在允许这项权限吗？</string>
-    <string name="grant">允许</string>
-    <string name="open_source_contributions">开源项目</string>
-    <string name="search_or_type_url">搜索或输入网址</string>
-    <string name="voice_prompt">说出您的疑问</string>
-    <string name="web_heads">链接气泡</string>
-    <string name="webhead_spawn_summary">起始位置</string>
-    <string name="webhead_spawn_title">选择链接气泡的起始显示位置</string>
-    <string name="credits">致谢</string>
-    <string name="icon_design">图标设计</string>
-    <string name="overlay_permission_content">想在屏幕上绘制链接气泡，需要先获取上层显示权限。您要现在允许这项权限吗？</string>
-    <string name="webheads_intro_1">当你在任何应用内打开一个链接时，一个被称作链接气泡的浮动气泡将被创建在你的屏幕上，此时 Lynket 将尝试预先获取链接里的内容。</string>
-    <string name="webheads_intro_2_new">当打开多个链接式时，这些链接气泡将会彼此层叠。在链接气泡上长按可以打开预览菜单。</string>
-    <string name="webheads_intro_3">当拖动一个链接气泡时，屏幕上将出现一个垃圾桶图标。将气泡放置在上面即可选择删除。</string>
-    <string name="webheads_intro_4_lolli">完整后台加载功能将在您使用应用期间时后台加载网页中的内容。\n<b>在打开便签页时可能会出现闪烁情况，这是正常情况而非 Bug。</b></string>
-    <string name="webheads_intro_4">Lynket 将会优先处理用户最后打开的链接并预先获取其中的内容。推荐的使用方法是自上到下依次的打开链接气泡。启用“关闭已点开链接的气泡”选项将可以使操作变得无缝化。</string>
-    <string name="web_head_permission_toast">想要开启链接气泡功能，Lynket 将需要获取在其他应用上层显示内容的权限，请点击允许以继续或者在 Lynket 的设置中禁用链接气泡。</string>
-    <string name="tap_close_all">点击关闭全部</string>
-    <string name="web_heads_service">链接气泡服务</string>
-    <string name="join_beta">加入测试版计划</string>
-    <string name="become_a_tester">成为测试人员</string>
-    <string name="join_beta_content">测试版是具备最新功能但会有少量 Bug 存在的实验性版本。您可以通过加入测试人员并在 Google+ 社群内汇报相关问题的方式来为开发做出贡献。\n\n请确保您已经加入了 Google+ 社群，然后点击成为测试人员按钮来获取 Play 商店内的测试版本链接。\n\n注意：您需要先加入社群以成为测试人员。</string>
-    <string name="no_voice_rec_apps">没有找到可兼容的语音识别应用</string>
-    <string name="loading">正在加载…</string>
-    <string name="share_failed_msg">无法分享到应用，默认返回标准分享</string>
-    <string name="revoke_accessibility_permission">您现在可以撤销掉 Lynket 的无障碍服务了</string>
-    <string name="last_fetched_urls">最近获取过的网址</string>
-    <string name="translations">翻译</string>
-    <string name="merge_tabs">合并标签页和应用</string>
-    <string name="merge_tabs_explanation">您所打开的标签页和应用程序都将显示在最近任务列表内</string>
-    <string name="already_loaded">已加载</string>
-    <string name="add_home_screen_begun">快捷方式稍后会被添加</string>
-    <string name="bottom_bar_pref_summary">显示一个附带额外操作项的工具栏</string>
-    <string name="bottom_bar_pref_title">显示底栏</string>
-    <string name="bottom_bar">底栏</string>
-    <string name="open_in_new_tab">在新标签页中打开</string>
-    <string name="options">选项</string>
-    <string name="customize">自定义</string>
-    <string name="not_set">未设置</string>
-    <string name="not_found">未找到</string>
-    <string name="app_preferences">应用偏好</string>
-    <string name="behavior_preferences">行为</string>
-    <string name="additional_preferences">其他</string>
-    <string name="notifications">通知</string>
-    <string name="webhead_size_title">尺寸</string>
-    <string name="webhead_size_dialog">选择链接气泡尺寸</string>
-    <string name="changelog_skipped">由于一个错误，已跳过更新日志</string>
-    <string name="see_whats_new">看看有什么更新</string>
-    <string name="help_translations">帮助翻译软件至您所使用的语言</string>
-    <string name="aggressive_background_loading">完整的后台加载</string>
-    <string name="aggressive_background_loading_desc">网页将在后台被完全加载而不仅只为预读取</string>
-    <string name="aggresive_dia_title">需要启用合并标签页和应用</string>
-    <string name="aggresive_dia_content">使用这项功能需启用合并标签页和应用选项。现已为您自动开启</string>
-    <string name="merge_tabs_off_title">注意</string>
-    <string name="merget_tabs_off_content">禁用合并标签页和应用功能同时也会禁用掉完整后台加载功能</string>
-    <string name="web_sites">网站</string>
-    <string name="share_all">分享所有</string>
-    <string name="thank_you">非常感谢！</string>
-    <string name="save_time">节省时间</string>
-    <string name="multiple_links">多条链接</string>
-    <string name="merge_tabs_explanation_intro">您的应用和链接气泡都将显示在最近任务列表里</string>
-    <string name="web_close_on_open_desc">链接气泡将在您打开链接后消失</string>
-    <string name="web_close_on_open_title">在点击后关闭链接气泡</string>
-    <string name="minimize">最小化</string>
-    <string name="share_action_explanation"><![CDATA[<b>分享 -</b> 快速地执行 Android 分享动作。]]></string>
-    <string name="minimize_action_explanation"><![CDATA[<b>最小化 -</b> 将最小化当前页面到一个气泡。只在<i>链接气泡与合并标签页</i>功能开启时可用。]]></string>
-    <string name="available_actions">可用动作</string>
-    <string name="secondary_browser_launching_error_title">启动第二浏览器时出错</string>
-    <string name="launch_setting">启动设置</string>
-    <string name="secondary_browser_not_installed">看起来您选定的第二浏览器已经不存在于当前系统了。您是否希望前往设置页面编辑您的第二浏览器偏好？</string>
-    <string name="secondary_browser_launch_error">无法使用您选定的浏览器启动此链接。您是否希望编辑设置？</string>
-    <string name="secondary_browser_not_error">您已经将此应用列入阻止 Lynket 处理链接的黑名单，但并没有设置第二浏览器。您是否希望立刻设置您的第二浏览器？</string>
-    <string name="copy_all">全部复制</string>
-    <string name="title_activity_settings">设置</string>
-    <string name="settings_browsing_mode">浏览模式</string>
-    <string name="settings_look_and_feel">外观</string>
-    <string name="settings_browsing_options">浏览选项</string>
-    <string name="title_activity_browsing_mode">浏览模式</string>
-    <string name="browsing_mode_slide_over">滑出页面</string>
-    <string name="browsing_mode_web_heads">链接气泡</string>
-    <string name="browsing_mode_slide_over_explanation">网站滑出到您正在使用的应用上层。</string>
-    <string name="browsing_mode_web_heads_explanation">网站在后台载入，使您可以保留多个链接，随后可以利用屏幕上的链接气泡重新返回浏览。</string>
-    <string name="load_faster_heading">使用下列选项加快页面载入</string>
-    <string name="amp">加速移动页面 (AMP)</string>
-    <string name="amp_mode">AMP 模式</string>
-    <string name="amp_summary">加载优化的网站移动版本，提供更快更流畅的阅读体验。</string>
-    <string name="article_mode">阅读模式</string>
-    <string name="article_theme">阅读模式主题</string>
-    <string name="article_mode_summary">加载雅致的阅读器模式，聚焦于内容，不含多余元素。</string>
-    <string name="amp_warning_title">AMP 模式警告</string>
-    <string name="title_activity_look_and_feel">界面外观</string>
-    <string name="open">打开</string>
-    <string name="open_full_page">打开完整页面</string>
-    <string name="more">更多</string>
-    <string name="title_history">历史</string>
-    <string name="deleted_items">已删除 %1$d 个项目。</string>
-    <string name="are_you_sure">您确定吗？</string>
-    <string name="history_deletion_confirmation_content">此动作将删除所有历史，且无法撤销。</string>
-    <string name="incognito_mode">隐身模式</string>
-    <string name="recents_intro">最近打开过的链接将显示在此处</string>
-    <string name="amp_article_combined_explanation"><![CDATA[当 <b>AMP 与文章模式同时开启</b>时，Lynket 将尝试加载该页面的 AMP 版本。如果 AMP 版本不可用，将载入文章模式。]]></string>
-    <string name="attention">注意！</string>
-    <string name="manage">管理</string>
-    <string name="more_menu">更多</string>
-    <string name="open_article_view">打开文章视图</string>
-    <string name="browse_seamlessly">无缝浏览</string>
-    <string name="slide_over_explanation">网页会滑出到当前使用的应用上方，您可以点击 X 来快速返回到先前应用</string>
-    <string name="choose_provider">选择标签页提供程序</string>
-    <string name="webViewNotRecommended">出于稳定性和安全性考虑，对于您的Android版本，我们不推荐使用系统的WebView。</string>
-    <string name="webViewPros">您的手机自带的渲染引擎</string>
-    <string name="tab_providers">支持的标签页提供程序</string>
-    <string name="features">特性</string>
-    <string name="webview_disadvantages">WebView缺少诸如数据存储库，自动填写表单，云同步等第三方标签页具有的功能。您仍要使用WebView来渲染网页吗？</string>
-    <string name="try_it">尝试一下</string>
-    <string name="slide_over_fragment_close_prompt">点击 X 来快速关闭标签页</string>
-    <string name="see_demo">查看样例</string>
-    <string name="provider_intro_explanation">Lynket可以与您最喜爱的浏览器搭配使用。\n\n例如，把Google Chrome作为标签页提供程序将会允许你同步浏览历史，使用数据存储库和在您的Google账户上储存的密码。</string>
+  <string-array name="animationValues">
+    <item>无动画</item>
+    <item>右侧滑出</item>
+    <item>向上滑出</item>
+  </string-array>
+  <string-array name="animationSpeedValues">
+    <item>中等</item>
+    <item>较快</item>
+  </string-array>
+  <string-array name="actionValues">
+    <item>第二浏览器</item>
+    <item>最喜欢的分享应用</item>
+    <item>常规分享</item>
+  </string-array>
+  <string-array name="webHeadsSpawnValues">
+    <item>右侧</item>
+    <item>左侧</item>
+  </string-array>
+  <string-array name="articleThemeValues">
+    <item>暗色</item>
+    <item>亮色</item>
+    <item>自动</item>
+    <item>Black</item>
+  </string-array>
+  <string-array name="webHeadsSizeValues">
+    <item>正常</item>
+    <item>小</item>
+  </string-array>
+  <string name="share_text">嘿 来查看下 “Lynket”  它可以让你拥有快速且安全的浏览体验！可以在这里下载 https://goo.gl/992ils</string>
+  <string name="share_via">分享至…</string>
+  <string name="custom_tab_provider_not_found">没有找到可兼容的自定义标签页提供程序</string>
+  <string name="custom_tab_provider_not_found_expln">Lynket 将需要您的手机上安装有兼容自定义标签页功能的浏览器。现在在您的手机上没有检测到支持该功能的浏览器。您想在 Play 商店中安装 Chrome 浏览器（免费）吗？如果您已经安装，请将其升级至最新版本。</string>
+  <string name="install">安装</string>
+  <string name="licenses">开源许可</string>
+  <string name="about">关于</string>
+  <string name="help_chromer_grow">帮助 Lynket 成长！</string>
+  <string name="share">分享</string>
+  <string name="share_with">分享至 %1$s</string>
+  <string name="rate_play_store">在 Play 商店内评价</string>
+  <string name="feedback">反馈</string>
+  <string name="intro">简介</string>
+  <string name="send_email">发送电子邮件…</string>
+  <string name="fallback_msg">无法打开自定义标签页，将在浏览器中加载</string>
+  <string name="open_with">选择程序打开…</string>
+  <string name="open_in_browser">在 %1$s 中打开</string>
+  <string name="unxp_err">发生意外错误，请重试</string>
+  <string name="unsupported_link">不支持的链接，请重试</string>
+  <string name="couldnt_load_price">无法加载价格</string>
+  <string name="coffee">一杯咖啡</string>
+  <string name="lunch">一顿午餐</string>
+  <string name="premium_donation">高级捐赠</string>
+  <string name="invalid_link">无效链接</string>
+  <string name="copied">已复制</string>
+  <string name="copy_link">复制链接</string>
+  <string name="add_to_homescreen">添加至主屏幕</string>
+  <string name="intro_1">您好！\nLynket 是一款轻量化，安全且高速的网页浏览器。</string>
+  <string name="intro_4_new">它可以在您点击多个链接时创建叠加式的浮动气泡并选择在后台加载它们!</string>
+  <string name="how_to_use">要如何使用？</string>
+  <string name="intro_6">将 Lynket 设置成你的默认浏览器，Lynket 将会以非入侵的方式显示您所打开的链接。此外您还可以选择仅在需要时调用它。</string>
+  <string name="version">版本</string>
+  <string name="changelog">更新日志</string>
+  <string name="join_google_plus">加入 Google+ 社群</string>
+  <string name="share_ideas">分享您的想法！</string>
+  <string name="support_development">支持开发</string>
+  <string name="consider_donation">考虑捐赠</string>
+  <string name="add_to_circles">加入到 Google+ 圈子</string>
+  <string name="follow_twitter">在 Twitter 上关注</string>
+  <string name="connect_linkedIn">在 Linkedln 上联系</string>
+  <string name="more_apps">更多应用</string>
+  <string name="author">作者</string>
+  <string name="added">已添加</string>
+  <string name="settings">设置</string>
+  <string name="colored_toolbar">为工具栏上色</string>
+  <string name="choose_animation">打开动画</string>
+  <string name="animation_speed">动画速度</string>
+  <string name="default_pref_xpln">将 Lynket 设置为默认浏览器以打开全部链接，或者还可以在弹出程序选择列表时手动选择用 Lynket 加载</string>
+  <string name="personalization">个性化</string>
+  <string name="default_clear_msg">被设置为了默认浏览器，请点击清除默认操作来取消它</string>
+  <string name="dynamic_toolbar_color">工具栏动态变色</string>
+  <string name="keep_chrome_warmedup">使您的浏览器常驻内存以便更快速加载</string>
+  <string name="warmup_browser">浏览器预热</string>
+  <string name="set_default_chromer">设置为默认浏览器</string>
+  <string name="default_provider">自定义标签页提供程序</string>
+  <string name="pre_fetch_content">预读取内容</string>
+  <string name="pre_fetch_desc">扫描屏幕上的链接并在后台加载内容以便立即打开</string>
+  <string name="accessibility_description">这项服务将被 Lynket 用来扫描屏幕上的链接并选择在后台加载它们。Lynket 不会处理除此以外任何形式的信息。即便拒绝启用该项服务您仍然可以继续使用 Lynket 中的轻量化模式。想了解更多信息，请参考 Lynket 应用内的说明。</string>
+  <string name="accessibility_dialog_title">需要获取无障碍权限</string>
+  <string name="accessibility_dialog_desc">为了让 Lynket 能够扫描任何应用内的链接您将需要允许程序接入无障碍服务。请在下一屏内开启无障碍服务，在操作完成后即可启用该选项并享受快速打开页面的乐趣。</string>
+  <string name="open_settings">打开设置</string>
+  <string name="only_on_wifi">仅在 Wi-Fi 下扫描</string>
+  <string name="show_notification">当预读取一个链接时显示通知</string>
+  <string name="default_toolbar_color">默认工具栏颜色</string>
+  <string name="web_heads_color">链接气泡颜色</string>
+  <string name="choose_secondary_browser">第二浏览器</string>
+  <string name="dynamic_toolbar_help">开启工具栏动态变色后，Lynket 将会开始静默化学习颜色适配。起初它可能无法正确适配网站或应用，但随着时间的推移适配的效果将会不断提高。开始享受它吧！</string>
+  <string name="secondary_browser_success">%1$s 已被设为第二浏览器！</string>
+  <string name="fav_share_success">%1$s 已被设为喜爱的分享应用！</string>
+  <string name="default_provider_success">%1$s 将被用来提供自定义标签页！</string>
+  <string name="based_on_app">根据应用</string>
+  <string name="based_on_web">根据网站</string>
+  <string name="preferred_action">优先行为</string>
+  <string name="fav_share_app">喜爱的分享应用</string>
+  <string name="choose_fav_share_app">选择喜爱的分享应用</string>
+  <string name="dynamic_summary_appweb">当网站支持时颜色显示将跟随网页的设置否则依据应用程序的颜色</string>
+  <string name="dynamic_summary_app">颜色显示将跟随打开网页的程序</string>
+  <string name="dynamic_summary_web">颜色显示将跟随加载网页内的设置</string>
+  <string name="no_option_selected">没有选择选项</string>
+  <string name="permission_required">需要获取权限</string>
+  <string name="usage_permission_explanation_appcolor">要开启根据应用动态着色工具栏，Lynket 将需要获取授权来了解当前正在使用的应用。您想要现在允许这项权限吗？</string>
+  <string name="grant">允许</string>
+  <string name="open_source_contributions">开源项目</string>
+  <string name="search_or_type_url">搜索或输入网址</string>
+  <string name="voice_prompt">说出您的疑问</string>
+  <string name="web_heads">链接气泡</string>
+  <string name="webhead_spawn_summary">起始位置</string>
+  <string name="webhead_spawn_title">选择链接气泡的起始显示位置</string>
+  <string name="credits">致谢</string>
+  <string name="icon_design">图标设计</string>
+  <string name="overlay_permission_content">想在屏幕上绘制链接气泡，需要先获取上层显示权限。您要现在允许这项权限吗？</string>
+  <string name="webheads_intro_1">当你在任何应用内打开一个链接时，一个被称作链接气泡的浮动气泡将被创建在你的屏幕上，此时 Lynket 将尝试预先获取链接里的内容。</string>
+  <string name="webheads_intro_2_new">当打开多个链接式时，这些链接气泡将会彼此层叠。在链接气泡上长按可以打开预览菜单。</string>
+  <string name="webheads_intro_3">当拖动一个链接气泡时，屏幕上将出现一个垃圾桶图标。将气泡放置在上面即可选择删除。</string>
+  <string name="webheads_intro_4_lolli">完整后台加载功能将在您使用应用期间时后台加载网页中的内容。\n<b>在打开便签页时可能会出现闪烁情况，这是正常情况而非 Bug。</b></string>
+  <string name="webheads_intro_4">Lynket 将会优先处理用户最后打开的链接并预先获取其中的内容。推荐的使用方法是自上到下依次的打开链接气泡。启用“关闭已点开链接的气泡”选项将可以使操作变得无缝化。</string>
+  <string name="web_head_permission_toast">想要开启链接气泡功能，Lynket 将需要获取在其他应用上层显示内容的权限，请点击允许以继续或者在 Lynket 的设置中禁用链接气泡。</string>
+  <string name="tap_close_all">点击关闭全部</string>
+  <string name="web_heads_service">链接气泡服务</string>
+  <string name="join_beta">加入测试版计划</string>
+  <string name="become_a_tester">成为测试人员</string>
+  <string name="join_beta_content">测试版是具备最新功能但会有少量 Bug 存在的实验性版本。您可以通过加入测试人员并在 Google+ 社群内汇报相关问题的方式来为开发做出贡献。\n\n请确保您已经加入了 Google+ 社群，然后点击成为测试人员按钮来获取 Play 商店内的测试版本链接。\n\n注意：您需要先加入社群以成为测试人员。</string>
+  <string name="no_voice_rec_apps">没有找到可兼容的语音识别应用</string>
+  <string name="loading">正在加载…</string>
+  <string name="share_failed_msg">无法分享到应用，默认返回标准分享</string>
+  <string name="revoke_accessibility_permission">您现在可以撤销掉 Lynket 的无障碍服务了</string>
+  <string name="last_fetched_urls">最近获取过的网址</string>
+  <string name="translations">翻译</string>
+  <string name="merge_tabs">合并标签页和应用</string>
+  <string name="merge_tabs_explanation">您所打开的标签页和应用程序都将显示在最近任务列表内</string>
+  <string name="already_loaded">已加载</string>
+  <string name="add_home_screen_begun">快捷方式稍后会被添加</string>
+  <string name="bottom_bar_pref_summary">显示一个附带额外操作项的工具栏</string>
+  <string name="bottom_bar_pref_title">显示底栏</string>
+  <string name="bottom_bar">底栏</string>
+  <string name="open_in_new_tab">在新标签页中打开</string>
+  <string name="options">选项</string>
+  <string name="customize">自定义</string>
+  <string name="not_set">未设置</string>
+  <string name="not_found">未找到</string>
+  <string name="app_preferences">应用偏好</string>
+  <string name="behavior_preferences">行为</string>
+  <string name="additional_preferences">其他</string>
+  <string name="notifications">通知</string>
+  <string name="webhead_size_title">尺寸</string>
+  <string name="webhead_size_dialog">选择链接气泡尺寸</string>
+  <string name="changelog_skipped">由于一个错误，已跳过更新日志</string>
+  <string name="see_whats_new">看看有什么更新</string>
+  <string name="help_translations">帮助翻译软件至您所使用的语言</string>
+  <string name="aggressive_background_loading">完整的后台加载</string>
+  <string name="aggressive_background_loading_desc">网页将在后台被完全加载而不仅只为预读取</string>
+  <string name="aggresive_dia_title">需要启用合并标签页和应用</string>
+  <string name="aggresive_dia_content">使用这项功能需启用合并标签页和应用选项。现已为您自动开启</string>
+  <string name="merge_tabs_off_title">注意</string>
+  <string name="merget_tabs_off_content">禁用合并标签页和应用功能同时也会禁用掉完整后台加载功能</string>
+  <string name="web_sites">网站</string>
+  <string name="share_all">分享所有</string>
+  <string name="thank_you">非常感谢！</string>
+  <string name="save_time">节省时间</string>
+  <string name="multiple_links">多条链接</string>
+  <string name="merge_tabs_explanation_intro">您的应用和链接气泡都将显示在最近任务列表里</string>
+  <string name="web_close_on_open_desc">链接气泡将在您打开链接后消失</string>
+  <string name="web_close_on_open_title">在点击后关闭链接气泡</string>
+  <string name="minimize">最小化</string>
+  <string name="share_action_explanation"><![CDATA[<b>分享 -</b> 快速地执行 Android 分享动作。]]></string>
+  <string name="minimize_action_explanation"><![CDATA[<b>最小化 -</b> 将最小化当前页面到一个气泡。只在<i>链接气泡与合并标签页</i>功能开启时可用。]]></string>
+  <string name="available_actions">可用动作</string>
+  <string name="secondary_browser_launching_error_title">启动第二浏览器时出错</string>
+  <string name="launch_setting">启动设置</string>
+  <string name="secondary_browser_not_installed">看起来您选定的第二浏览器已经不存在于当前系统了。您是否希望前往设置页面编辑您的第二浏览器偏好？</string>
+  <string name="secondary_browser_launch_error">无法使用您选定的浏览器启动此链接。您是否希望编辑设置？</string>
+  <string name="secondary_browser_not_error">您已经将此应用列入阻止 Lynket 处理链接的黑名单，但并没有设置第二浏览器。您是否希望立刻设置您的第二浏览器？</string>
+  <string name="copy_all">全部复制</string>
+  <string name="title_activity_settings">设置</string>
+  <string name="settings_browsing_mode">浏览模式</string>
+  <string name="settings_look_and_feel">外观</string>
+  <string name="settings_browsing_options">浏览选项</string>
+  <string name="title_activity_browsing_mode">浏览模式</string>
+  <string name="browsing_mode_slide_over">滑出页面</string>
+  <string name="browsing_mode_web_heads">链接气泡</string>
+  <string name="browsing_mode_slide_over_explanation">网站滑出到您正在使用的应用上层。</string>
+  <string name="browsing_mode_web_heads_explanation">网站在后台载入，使您可以保留多个链接，随后可以利用屏幕上的链接气泡重新返回浏览。</string>
+  <string name="load_faster_heading">使用下列选项加快页面载入</string>
+  <string name="amp">加速移动页面 (AMP)</string>
+  <string name="amp_mode">AMP 模式</string>
+  <string name="amp_summary">加载优化的网站移动版本，提供更快更流畅的阅读体验。</string>
+  <string name="article_mode">阅读模式</string>
+  <string name="article_theme">阅读模式主题</string>
+  <string name="article_mode_summary">加载雅致的阅读器模式，聚焦于内容，不含多余元素。</string>
+  <string name="amp_warning_title">AMP 模式警告</string>
+  <string name="title_activity_look_and_feel">界面外观</string>
+  <string name="open">打开</string>
+  <string name="open_full_page">打开完整页面</string>
+  <string name="more">更多</string>
+  <string name="title_history">历史</string>
+  <string name="deleted_items">已删除 %1$d 个项目。</string>
+  <string name="are_you_sure">您确定吗？</string>
+  <string name="history_deletion_confirmation_content">此动作将删除所有历史，且无法撤销。</string>
+  <string name="incognito_mode">隐身模式</string>
+  <string name="recents_intro">最近打开过的链接将显示在此处</string>
+  <string name="amp_article_combined_explanation"><![CDATA[当 <b>AMP 与文章模式同时开启</b>时，Lynket 将尝试加载该页面的 AMP 版本。如果 AMP 版本不可用，将载入文章模式。]]></string>
+  <string name="attention">注意！</string>
+  <string name="manage">管理</string>
+  <string name="more_menu">更多</string>
+  <string name="open_article_view">打开文章视图</string>
+  <string name="browse_seamlessly">无缝浏览</string>
+  <string name="slide_over_explanation">网页会滑出到当前使用的应用上方，您可以点击 X 来快速返回到先前应用</string>
+  <string name="choose_provider">选择标签页提供程序</string>
+  <string name="webViewNotRecommended">出于稳定性和安全性考虑，对于您的Android版本，我们不推荐使用系统的WebView。</string>
+  <string name="webViewPros">您的手机自带的渲染引擎</string>
+  <string name="tab_providers">支持的标签页提供程序</string>
+  <string name="features">特性</string>
+  <string name="webview_disadvantages">WebView缺少诸如数据存储库，自动填写表单，云同步等第三方标签页具有的功能。您仍要使用WebView来渲染网页吗？</string>
+  <string name="try_it">尝试一下</string>
+  <string name="slide_over_fragment_close_prompt">点击 X 来快速关闭标签页</string>
+  <string name="see_demo">查看样例</string>
+  <string name="provider_intro_explanation">Lynket可以与您最喜爱的浏览器搭配使用。\n\n例如，把Google Chrome作为标签页提供程序将会允许你同步浏览历史，使用数据存储库和在您的Google账户上储存的密码。</string>
 </resources>

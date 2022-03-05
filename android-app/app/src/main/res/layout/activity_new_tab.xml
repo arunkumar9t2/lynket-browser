@@ -18,13 +18,13 @@
   -->
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/transparent">
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@android:color/transparent">
 
-    <arun.com.chromer.search.view.MaterialSearchView
-        android:id="@+id/materialSearchView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom" />
+  <arun.com.chromer.search.view.MaterialSearchView
+    android:id="@+id/materialSearchView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom" />
 </FrameLayout>

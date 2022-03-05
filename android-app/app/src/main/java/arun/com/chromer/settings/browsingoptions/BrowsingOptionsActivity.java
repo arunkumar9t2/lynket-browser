@@ -19,6 +19,9 @@
 
 package arun.com.chromer.settings.browsingoptions;
 
+import static arun.com.chromer.shared.Constants.TEXT_SHARE_INTENT;
+import static arun.com.chromer.shared.Constants.WEB_INTENT;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -64,9 +67,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static arun.com.chromer.shared.Constants.TEXT_SHARE_INTENT;
-import static arun.com.chromer.shared.Constants.WEB_INTENT;
-
 public class BrowsingOptionsActivity extends BaseActivity implements Snackable, SharedPreferences.OnSharedPreferenceChangeListener {
   @BindView(R.id.bottom_bar_action_list)
   public RecyclerView recyclerView;
@@ -94,11 +94,11 @@ public class BrowsingOptionsActivity extends BaseActivity implements Snackable, 
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     getSupportFragmentManager()
-        .beginTransaction()
-        .replace(R.id.behaviour_fragment_container, BehaviorPreferenceFragment.newInstance())
-        .replace(R.id.web_head_fragment_container, WebHeadOptionsFragment.newInstance())
-        .replace(R.id.bottom_bar_preference_fragment_container, BottomBarPreferenceFragment.Companion.newInstance())
-        .commit();
+      .beginTransaction()
+      .replace(R.id.behaviour_fragment_container, BehaviorPreferenceFragment.newInstance())
+      .replace(R.id.web_head_fragment_container, WebHeadOptionsFragment.newInstance())
+      .replace(R.id.bottom_bar_preference_fragment_container, BottomBarPreferenceFragment.Companion.newInstance())
+      .commit();
     initBottomActions();
   }
 
@@ -143,25 +143,25 @@ public class BrowsingOptionsActivity extends BaseActivity implements Snackable, 
         break;
       case R.id.browser_preference_view:
         final IntentPickerSheetView browserPicker = new IntentPickerSheetView(this,
-            WEB_INTENT,
-            R.string.choose_secondary_browser,
-            activityInfo -> {
-              bottomSheetLayout.dismissSheet();
-              browserPreferenceView.updatePreference(activityInfo.componentName);
-              snack(String.format(getString(R.string.secondary_browser_success), activityInfo.label));
-            });
+          WEB_INTENT,
+          R.string.choose_secondary_browser,
+          activityInfo -> {
+            bottomSheetLayout.dismissSheet();
+            browserPreferenceView.updatePreference(activityInfo.componentName);
+            snack(String.format(getString(R.string.secondary_browser_success), activityInfo.label));
+          });
         browserPicker.setFilter(IntentPickerSheetView.selfPackageExcludeFilter(this));
         showPicker(browserPicker);
         break;
       case R.id.favshare_preference_view:
         final IntentPickerSheetView favSharePicker = new IntentPickerSheetView(this,
-            TEXT_SHARE_INTENT,
-            R.string.choose_fav_share_app,
-            activityInfo -> {
-              bottomSheetLayout.dismissSheet();
-              favSharePreferenceView.updatePreference(activityInfo.componentName);
-              snack(String.format(getString(R.string.fav_share_success), activityInfo.label));
-            });
+          TEXT_SHARE_INTENT,
+          R.string.choose_fav_share_app,
+          activityInfo -> {
+            bottomSheetLayout.dismissSheet();
+            favSharePreferenceView.updatePreference(activityInfo.componentName);
+            snack(String.format(getString(R.string.fav_share_success), activityInfo.label));
+          });
         favSharePicker.setFilter(IntentPickerSheetView.selfPackageExcludeFilter(this));
         showPicker(favSharePicker);
         break;
@@ -232,37 +232,37 @@ public class BrowsingOptionsActivity extends BaseActivity implements Snackable, 
       switch (items.get(position)) {
         case NEW_TAB:
           holder.icon.setImageDrawable(new IconicsDrawable(context)
-              .icon(CommunityMaterial.Icon.cmd_plus)
-              .color(iconColor)
-              .sizeDp(18));
+            .icon(CommunityMaterial.Icon.cmd_plus)
+            .color(iconColor)
+            .sizeDp(18));
           holder.action.setText(HtmlCompat.fromHtml(context.getString(R.string.new_tab_action_explanation)));
           break;
         case SHARE:
           holder.icon.setImageDrawable(new IconicsDrawable(context)
-              .icon(CommunityMaterial.Icon.cmd_share_variant)
-              .color(iconColor)
-              .sizeDp(18));
+            .icon(CommunityMaterial.Icon.cmd_share_variant)
+            .color(iconColor)
+            .sizeDp(18));
           holder.action.setText(HtmlCompat.fromHtml(context.getString(R.string.share_action_explanation)));
           break;
         case MINIMIZE:
           holder.icon.setImageDrawable(new IconicsDrawable(context)
-              .icon(CommunityMaterial.Icon.cmd_arrow_down)
-              .color(iconColor)
-              .sizeDp(18));
+            .icon(CommunityMaterial.Icon.cmd_arrow_down)
+            .color(iconColor)
+            .sizeDp(18));
           holder.action.setText(HtmlCompat.fromHtml(context.getString(R.string.minimize_action_explanation)));
           break;
         case ARTICLE:
           holder.icon.setImageDrawable(new IconicsDrawable(context)
-              .icon(CommunityMaterial.Icon.cmd_file_document)
-              .color(iconColor)
-              .sizeDp(18));
+            .icon(CommunityMaterial.Icon.cmd_file_document)
+            .color(iconColor)
+            .sizeDp(18));
           holder.action.setText(HtmlCompat.fromHtml(context.getString(R.string.bottom_bar_article_mode_explanation)));
           break;
         case TABS:
           holder.icon.setImageDrawable(new IconicsDrawable(context)
-              .icon(CommunityMaterial.Icon.cmd_view_agenda)
-              .color(iconColor)
-              .sizeDp(18));
+            .icon(CommunityMaterial.Icon.cmd_view_agenda)
+            .color(iconColor)
+            .sizeDp(18));
           holder.action.setText(HtmlCompat.fromHtml(context.getString(R.string.bottom_bar_tabs_explanation)));
           break;
       }

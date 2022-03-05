@@ -27,8 +27,8 @@ class ChromerTestApplication : Chromer() {
 
   override val appComponent: AppComponent by lazy {
     DaggerTestAppComponent.builder()
-        .testAppModule(TestAppModule(this))
-        .build()
+      .testAppModule(TestAppModule(this))
+      .build()
   }
 
   override fun initFabric() {}

@@ -19,6 +19,9 @@
 
 package arun.com.chromer.browsing.customtabs.callbacks;
 
+import static android.content.Intent.ACTION_VIEW;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
@@ -35,9 +38,6 @@ import java.util.List;
 import arun.com.chromer.R;
 import arun.com.chromer.settings.Preferences;
 import timber.log.Timber;
-
-import static android.content.Intent.ACTION_VIEW;
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class SecondaryBrowserReceiver extends BroadcastReceiver {
   public SecondaryBrowserReceiver() {

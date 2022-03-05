@@ -18,32 +18,32 @@
   -->
 
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">10dp</dimen>
-    <dimen name="activity_horizontal_margin_less">5dp</dimen>
-    <dimen name="activity_vertical_margin_top">10dp</dimen>
-    <dimen name="activity_vertical_margin_bottom_fab">80dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
-    <dimen name="card_margin">16dp</dimen>
-    <dimen name="arun_width">48dp</dimen>
-    <dimen name="arun_height">48dp</dimen>
-    <dimen name="material_search_margin_bottom">8dp</dimen>
-    <dimen name="material_search_margin_top">8dp</dimen>
-    <dimen name="web_head_size_normal">76dp</dimen>
-    <dimen name="web_head_size_small">66dp</dimen>
-    <dimen name="web_head_shadow_radius">2.5dp</dimen>
-    <dimen name="web_head_shadow_dx">0.1dp</dimen>
-    <dimen name="web_head_shadow_dy">1.5dp</dimen>
-    <dimen name="remove_head_size">92dp</dimen>
-    <dimen name="remove_head_shadow_radius">3dp</dimen>
-    <dimen name="remove_head_shadow_dx">0dp</dimen>
-    <dimen name="remove_head_shadow_dy">1dp</dimen>
+  <!-- Default screen margins, per the Android Design guidelines. -->
+  <dimen name="activity_horizontal_margin">10dp</dimen>
+  <dimen name="activity_horizontal_margin_less">5dp</dimen>
+  <dimen name="activity_vertical_margin_top">10dp</dimen>
+  <dimen name="activity_vertical_margin_bottom_fab">80dp</dimen>
+  <dimen name="fab_margin">16dp</dimen>
+  <dimen name="card_margin">16dp</dimen>
+  <dimen name="arun_width">48dp</dimen>
+  <dimen name="arun_height">48dp</dimen>
+  <dimen name="material_search_margin_bottom">8dp</dimen>
+  <dimen name="material_search_margin_top">8dp</dimen>
+  <dimen name="web_head_size_normal">76dp</dimen>
+  <dimen name="web_head_size_small">66dp</dimen>
+  <dimen name="web_head_shadow_radius">2.5dp</dimen>
+  <dimen name="web_head_shadow_dx">0.1dp</dimen>
+  <dimen name="web_head_shadow_dy">1.5dp</dimen>
+  <dimen name="remove_head_size">92dp</dimen>
+  <dimen name="remove_head_shadow_radius">3dp</dimen>
+  <dimen name="remove_head_shadow_dx">0dp</dimen>
+  <dimen name="remove_head_shadow_dy">1dp</dimen>
 
-    <dimen name="article_extraImagePadding">16dp</dimen>
-    <dimen name="article_extraBottomPadding">16dp</dimen>
-    <dimen name="article_imageParallax">96dp</dimen>
-    <dimen name="article_imageHeight">288dp</dimen>
-    <dimen name="article_minToolbarScroll">4dp</dimen>
-    <dimen name="article_articleWidth">-1px</dimen> <!-- match_parent -->
-    <dimen name="article_drag_down_dismiss_distance">192dp</dimen>
+  <dimen name="article_extraImagePadding">16dp</dimen>
+  <dimen name="article_extraBottomPadding">16dp</dimen>
+  <dimen name="article_imageParallax">96dp</dimen>
+  <dimen name="article_imageHeight">288dp</dimen>
+  <dimen name="article_minToolbarScroll">4dp</dimen>
+  <dimen name="article_articleWidth">-1px</dimen> <!-- match_parent -->
+  <dimen name="article_drag_down_dismiss_distance">192dp</dimen>
 </resources>

@@ -19,6 +19,8 @@
 
 package arun.com.chromer.settings.widgets;
 
+import static android.widget.ImageView.ScaleType.CENTER;
+
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -49,8 +51,6 @@ import arun.com.chromer.util.glide.appicon.ApplicationIcon;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-
-import static android.widget.ImageView.ScaleType.CENTER;
 
 public class AppPreferenceCardView extends CardView {
   private static final int CUSTOM_TAB_PROVIDER = 0;
@@ -89,7 +89,7 @@ public class AppPreferenceCardView extends CardView {
   private void init(AttributeSet attrs, int defStyle) {
     // Load attributes
     final TypedArray a = getContext().obtainStyledAttributes(
-        attrs, R.styleable.AppPreferenceCardView, defStyle, 0);
+      attrs, R.styleable.AppPreferenceCardView, defStyle, 0);
     if (!a.hasValue(R.styleable.AppPreferenceCardView_preferenceType)) {
       throw new IllegalArgumentException("Must specify app:preferenceType in xml");
     }
@@ -156,48 +156,48 @@ public class AppPreferenceCardView extends CardView {
     if (Utils.isPackageInstalled(getContext(), appPackage)) {
       icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
       GlideApp.with(getContext())
-          .load(ApplicationIcon.Companion.createUri(appPackage))
-          .fitCenter()
-          .listener(new RequestListener<Drawable>() {
-            @Override
-            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-              return false;
-            }
+        .load(ApplicationIcon.Companion.createUri(appPackage))
+        .fitCenter()
+        .listener(new RequestListener<Drawable>() {
+          @Override
+          public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+            return false;
+          }
 
-            @Override
-            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-              Palette.from(Utils.drawableToBitmap(resource))
-                  .clearFilters()
-                  .generate(palette -> {
-                    int bestColor = ColorUtil.getBestColorFromPalette(palette);
-                    final Drawable foreground = ColorUtil.getRippleDrawableCompat(bestColor);
-                    AppPreferenceCardView.this.setForeground(foreground);
-                  });
-              return false;
-            }
-          })
-          .into(icon);
+          @Override
+          public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+            Palette.from(Utils.drawableToBitmap(resource))
+              .clearFilters()
+              .generate(palette -> {
+                int bestColor = ColorUtil.getBestColorFromPalette(palette);
+                final Drawable foreground = ColorUtil.getRippleDrawableCompat(bestColor);
+                AppPreferenceCardView.this.setForeground(foreground);
+              });
+            return false;
+          }
+        })
+        .into(icon);
     } else {
       icon.setScaleType(CENTER);
       switch (preferenceType) {
         case CUSTOM_TAB_PROVIDER:
           icon.setImageDrawable(new IconicsDrawable(getContext())
-              .icon(CommunityMaterial.Icon.cmd_comment_alert_outline)
-              .colorRes(R.color.error)
-              .sizeDp(30));
+            .icon(CommunityMaterial.Icon.cmd_comment_alert_outline)
+            .colorRes(R.color.error)
+            .sizeDp(30));
           appNameTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.error));
           break;
         case SECONDARY_BROWSER:
           icon.setImageDrawable(new IconicsDrawable(getContext())
-              .icon(CommunityMaterial.Icon.cmd_open_in_app)
-              .colorRes(R.color.material_dark_light)
-              .sizeDp(30));
+            .icon(CommunityMaterial.Icon.cmd_open_in_app)
+            .colorRes(R.color.material_dark_light)
+            .sizeDp(30));
           break;
         case FAVORITE_SHARE:
           icon.setImageDrawable(new IconicsDrawable(getContext())
-              .icon(CommunityMaterial.Icon.cmd_share_variant)
-              .colorRes(R.color.material_dark_light)
-              .sizeDp(30));
+            .icon(CommunityMaterial.Icon.cmd_share_variant)
+            .colorRes(R.color.material_dark_light)
+            .sizeDp(30));
           break;
       }
     }

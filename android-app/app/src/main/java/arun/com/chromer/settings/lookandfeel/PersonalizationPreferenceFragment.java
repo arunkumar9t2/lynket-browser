@@ -19,6 +19,18 @@
 
 package arun.com.chromer.settings.lookandfeel;
 
+import static arun.com.chromer.settings.Preferences.ANIMATION_SPEED;
+import static arun.com.chromer.settings.Preferences.ANIMATION_TYPE;
+import static arun.com.chromer.settings.Preferences.DYNAMIC_COLOR;
+import static arun.com.chromer.settings.Preferences.DYNAMIC_COLOR_APP;
+import static arun.com.chromer.settings.Preferences.DYNAMIC_COLOR_WEB;
+import static arun.com.chromer.settings.Preferences.PREFERRED_ACTION;
+import static arun.com.chromer.settings.Preferences.TOOLBAR_COLOR;
+import static arun.com.chromer.settings.Preferences.TOOLBAR_COLOR_PREF;
+import static arun.com.chromer.shared.Constants.ACTION_TOOLBAR_COLOR_SET;
+import static arun.com.chromer.shared.Constants.EXTRA_KEY_TOOLBAR_COLOR;
+import static arun.com.chromer.shared.Constants.NO_COLOR;
+
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -48,25 +60,13 @@ import arun.com.chromer.settings.widgets.SubCheckBoxPreference;
 import arun.com.chromer.util.ServiceManager;
 import arun.com.chromer.util.Utils;
 
-import static arun.com.chromer.settings.Preferences.ANIMATION_SPEED;
-import static arun.com.chromer.settings.Preferences.ANIMATION_TYPE;
-import static arun.com.chromer.settings.Preferences.DYNAMIC_COLOR;
-import static arun.com.chromer.settings.Preferences.DYNAMIC_COLOR_APP;
-import static arun.com.chromer.settings.Preferences.DYNAMIC_COLOR_WEB;
-import static arun.com.chromer.settings.Preferences.PREFERRED_ACTION;
-import static arun.com.chromer.settings.Preferences.TOOLBAR_COLOR;
-import static arun.com.chromer.settings.Preferences.TOOLBAR_COLOR_PREF;
-import static arun.com.chromer.shared.Constants.ACTION_TOOLBAR_COLOR_SET;
-import static arun.com.chromer.shared.Constants.EXTRA_KEY_TOOLBAR_COLOR;
-import static arun.com.chromer.shared.Constants.NO_COLOR;
-
 public class PersonalizationPreferenceFragment extends BasePreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
   private final String[] SUMMARY_GROUP = new String[]{
-      ANIMATION_SPEED,
-      ANIMATION_TYPE,
-      PREFERRED_ACTION,
-      TOOLBAR_COLOR
+    ANIMATION_SPEED,
+    ANIMATION_TYPE,
+    PREFERRED_ACTION,
+    TOOLBAR_COLOR
   };
 
   private final IntentFilter toolbarColorSetFilter = new IntentFilter(ACTION_TOOLBAR_COLOR_SET);
@@ -149,27 +149,27 @@ public class PersonalizationPreferenceFragment extends BasePreferenceFragment im
 
   private void setupIcons() {
     final Drawable palette = new IconicsDrawable(getActivity())
-        .icon(CommunityMaterial.Icon.cmd_palette)
-        .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
-        .sizeDp(24);
+      .icon(CommunityMaterial.Icon.cmd_palette)
+      .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
+      .sizeDp(24);
     toolbarColorPreference.setIcon(palette);
     coloredToolbarPreference.setIcon(palette);
     dynamicColorPreference.setIcon(new IconicsDrawable(getActivity())
-        .icon(CommunityMaterial.Icon.cmd_format_color_fill)
-        .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
-        .sizeDp(24));
+      .icon(CommunityMaterial.Icon.cmd_format_color_fill)
+      .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
+      .sizeDp(24));
     preferredActionPreference.setIcon(new IconicsDrawable(getActivity())
-        .icon(CommunityMaterial.Icon.cmd_heart)
-        .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
-        .sizeDp(24));
+      .icon(CommunityMaterial.Icon.cmd_heart)
+      .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
+      .sizeDp(24));
     openingAnimationPreference.setIcon(new IconicsDrawable(getActivity())
-        .icon(CommunityMaterial.Icon.cmd_image_filter_none)
-        .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
-        .sizeDp(24));
+      .icon(CommunityMaterial.Icon.cmd_image_filter_none)
+      .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
+      .sizeDp(24));
     animationSpeedPreference.setIcon(new IconicsDrawable(getActivity())
-        .icon(CommunityMaterial.Icon.cmd_speedometer)
-        .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
-        .sizeDp(24));
+      .icon(CommunityMaterial.Icon.cmd_speedometer)
+      .color(ContextCompat.getColor(getActivity(), R.color.material_dark_light))
+      .sizeDp(24));
   }
 
   private void updatePreferenceStates(String key) {
@@ -183,8 +183,8 @@ public class PersonalizationPreferenceFragment extends BasePreferenceFragment im
       final boolean animationEnabled = Preferences.get(getContext()).isAnimationEnabled();
       enableDisablePreference(animationEnabled, ANIMATION_SPEED);
     } else if (key.equalsIgnoreCase(DYNAMIC_COLOR)
-        || key.equalsIgnoreCase(DYNAMIC_COLOR_APP)
-        || key.equalsIgnoreCase(DYNAMIC_COLOR_WEB)) {
+      || key.equalsIgnoreCase(DYNAMIC_COLOR_APP)
+      || key.equalsIgnoreCase(DYNAMIC_COLOR_WEB)) {
       final boolean dynamicColor = Preferences.get(getContext()).dynamicToolbar();
       if (!dynamicColor) {
         dynamicAppPreference.setVisible(false);
@@ -219,10 +219,10 @@ public class PersonalizationPreferenceFragment extends BasePreferenceFragment im
       final boolean isChecked = switchCompat.isChecked();
       if (isChecked) {
         new MaterialDialog.Builder(getActivity())
-            .title(R.string.dynamic_toolbar_color)
-            .content(R.string.dynamic_toolbar_help)
-            .positiveText(android.R.string.ok)
-            .show();
+          .title(R.string.dynamic_toolbar_color)
+          .content(R.string.dynamic_toolbar_help)
+          .positiveText(android.R.string.ok)
+          .show();
       }
       updateDynamicSummary();
       return false;
@@ -233,11 +233,11 @@ public class PersonalizationPreferenceFragment extends BasePreferenceFragment im
     toolbarColorPreference.setOnPreferenceClickListener(preference -> {
       int chosenColor = ((ColorPreference) preference).getColor();
       new ColorChooserDialog.Builder(getActivity(), R.string.default_toolbar_color)
-          .titleSub(R.string.default_toolbar_color)
-          .allowUserColorInputAlpha(false)
-          .preselect(chosenColor)
-          .dynamicButtonColor(false)
-          .show(getFragmentManager());
+        .titleSub(R.string.default_toolbar_color)
+        .allowUserColorInputAlpha(false)
+        .preselect(chosenColor)
+        .dynamicButtonColor(false)
+        .show(getFragmentManager());
       return true;
     });
   }
@@ -245,12 +245,12 @@ public class PersonalizationPreferenceFragment extends BasePreferenceFragment im
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
   private void requestUsagePermission() {
     new MaterialDialog.Builder(getActivity())
-        .title(R.string.permission_required)
-        .content(R.string.usage_permission_explanation_appcolor)
-        .positiveText(R.string.grant)
-        .onPositive((dialog, which) -> getActivity().startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)))
-        .dismissListener(dialog -> dynamicAppPreference.setChecked(Utils.canReadUsageStats(getContext())))
-        .show();
+      .title(R.string.permission_required)
+      .content(R.string.usage_permission_explanation_appcolor)
+      .positiveText(R.string.grant)
+      .onPositive((dialog, which) -> getActivity().startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)))
+      .dismissListener(dialog -> dynamicAppPreference.setChecked(Utils.canReadUsageStats(getContext())))
+      .show();
   }
 
   private void handleAppDetectionService() {

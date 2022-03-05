@@ -115,23 +115,23 @@ class SettingsGroupAdapter extends RecyclerView.Adapter<SettingsGroupAdapter.Set
       switch (position) {
         case 0:
           icon.setImageDrawable(new IconicsDrawable(icon.getContext())
-              .icon(CommunityMaterial.Icon.cmd_earth)
-              .colorRes(R.color.colorAccent)
-              .sizeDp(24));
+            .icon(CommunityMaterial.Icon.cmd_earth)
+            .colorRes(R.color.colorAccent)
+            .sizeDp(24));
           subtitle.setVisibility(View.GONE);
           break;
         case 1:
           icon.setImageDrawable(new IconicsDrawable(icon.getContext())
-              .icon(CommunityMaterial.Icon.cmd_format_paint)
-              .colorRes(R.color.colorAccent)
-              .sizeDp(24));
+            .icon(CommunityMaterial.Icon.cmd_format_paint)
+            .colorRes(R.color.colorAccent)
+            .sizeDp(24));
           subtitle.setVisibility(View.GONE);
           break;
         case 2:
           icon.setImageDrawable(new IconicsDrawable(icon.getContext())
-              .icon(CommunityMaterial.Icon.cmd_settings)
-              .colorRes(R.color.colorAccent)
-              .sizeDp(24));
+            .icon(CommunityMaterial.Icon.cmd_settings)
+            .colorRes(R.color.colorAccent)
+            .sizeDp(24));
           subtitle.setVisibility(View.GONE);
           break;
       }

@@ -62,30 +62,30 @@ public class BottomBarManager {
 
     if (shareImageDrawable == null) {
       shareImageDrawable = new IconicsDrawable(context)
-          .icon(CommunityMaterial.Icon.cmd_share_variant)
-          .sizeDp(24);
+        .icon(CommunityMaterial.Icon.cmd_share_variant)
+        .sizeDp(24);
     }
     if (newTabDrawable == null) {
       newTabDrawable = new IconicsDrawable(context)
-          .icon(CommunityMaterial.Icon.cmd_plus)
-          .sizeDp(24);
+        .icon(CommunityMaterial.Icon.cmd_plus)
+        .sizeDp(24);
     }
     if (minimizeDrawable == null) {
       minimizeDrawable = new IconicsDrawable(context)
-          .icon(CommunityMaterial.Icon.cmd_arrow_down)
-          .sizeDp(24);
+        .icon(CommunityMaterial.Icon.cmd_arrow_down)
+        .sizeDp(24);
     }
 
     if (articleDrawable == null) {
       articleDrawable = new IconicsDrawable(context)
-          .icon(CommunityMaterial.Icon.cmd_file_document)
-          .sizeDp(24);
+        .icon(CommunityMaterial.Icon.cmd_file_document)
+        .sizeDp(24);
     }
 
     if (tabsDrawable == null) {
       tabsDrawable = new IconicsDrawable(context)
-          .icon(CommunityMaterial.Icon.cmd_view_agenda)
-          .sizeDp(24);
+        .icon(CommunityMaterial.Icon.cmd_view_agenda)
+        .sizeDp(24);
     }
 
 
@@ -111,11 +111,11 @@ public class BottomBarManager {
   @NonNull
   public static int[] getClickableIDs() {
     return new int[]{
-        R.id.bottom_bar_open_in_new_tab,
-        R.id.bottom_bar_share,
-        R.id.bottom_bar_tabs,
-        R.id.bottom_bar_minimize_tab,
-        R.id.bottom_bar_article_view};
+      R.id.bottom_bar_open_in_new_tab,
+      R.id.bottom_bar_share,
+      R.id.bottom_bar_tabs,
+      R.id.bottom_bar_minimize_tab,
+      R.id.bottom_bar_article_view};
   }
 
   /**

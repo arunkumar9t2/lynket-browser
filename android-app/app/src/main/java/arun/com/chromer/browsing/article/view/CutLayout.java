@@ -68,7 +68,7 @@ public class CutLayout extends FrameLayout {
     paint.setXfermode(pdMode);
     path.reset();
     path.moveTo(0, getHeight() - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-        CUT_HEIGHT, getResources().getDisplayMetrics()));
+      CUT_HEIGHT, getResources().getDisplayMetrics()));
     path.lineTo(getWidth(), getHeight());
     path.lineTo(0, getHeight());
     path.close();

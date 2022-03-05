@@ -18,38 +18,38 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:layout_marginTop="-32dp"
+  android:orientation="vertical"
+  android:paddingLeft="24dp"
+  android:paddingTop="32dp"
+  android:paddingRight="24dp"
+  android:paddingBottom="16dp">
+
+  <TextView
+    android:id="@+id/articleSiteName"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="-32dp"
-    android:orientation="vertical"
-    android:paddingLeft="24dp"
-    android:paddingTop="32dp"
-    android:paddingRight="24dp"
-    android:paddingBottom="16dp">
+    android:fontFamily="sans-serif-light"
+    android:textColor="@color/article_primaryText"
+    android:textSize="14sp" />
 
-    <TextView
-        android:id="@+id/articleSiteName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light"
-        android:textColor="@color/article_primaryText"
-        android:textSize="14sp" />
+  <TextView
+    android:id="@+id/article_text"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fontFamily="sans-serif-light"
+    android:textColor="@color/article_primaryText"
+    android:textSize="24sp" />
 
-    <TextView
-        android:id="@+id/article_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light"
-        android:textColor="@color/article_primaryText"
-        android:textSize="24sp" />
-
-    <TextView
-        android:id="@+id/articleTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light"
-        android:textColor="@color/article_primaryText"
-        android:textSize="12sp"
-        android:visibility="gone" />
+  <TextView
+    android:id="@+id/articleTitle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fontFamily="sans-serif-light"
+    android:textColor="@color/article_primaryText"
+    android:textSize="12sp"
+    android:visibility="gone" />
 
 </LinearLayout>

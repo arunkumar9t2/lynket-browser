@@ -18,124 +18,124 @@
   -->
 
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingTop="?attr/actionBarSize">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:paddingTop="?attr/actionBarSize">
 
-    <LinearLayout
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/card_background_light"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="@dimen/activity_horizontal_margin"
+      android:layout_marginTop="@dimen/activity_vertical_margin_top"
+      android:layout_marginRight="@dimen/activity_horizontal_margin"
+      android:layout_marginBottom="@dimen/card_margin"
+      app:cardElevation="2dp">
+
+      <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/card_background_light"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin_top"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginBottom="@dimen/card_margin"
-            app:cardElevation="2dp">
+        <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="16dp"
+          android:layout_marginTop="8dp"
+          android:layout_marginRight="16dp"
+          android:layout_marginBottom="8dp"
+          android:text="@string/app_name"
+          android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp">
+        <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/about_app_version_list"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
+      </LinearLayout>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="@string/app_name"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+    </androidx.cardview.widget.CardView>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/about_app_version_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
+    <androidx.cardview.widget.CardView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="@dimen/activity_horizontal_margin"
+      android:layout_marginRight="@dimen/activity_horizontal_margin"
+      android:layout_marginBottom="@dimen/card_margin"
+      app:cardElevation="2dp">
 
-        </androidx.cardview.widget.CardView>
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginBottom="@dimen/card_margin"
-            app:cardElevation="2dp">
+        <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="16dp"
+          android:layout_marginTop="8dp"
+          android:layout_marginRight="16dp"
+          android:layout_marginBottom="8dp"
+          android:text="@string/author"
+          android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+          android:textColor="@color/material_dark_color" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp">
+        <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/about_author_version_list"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="@string/author"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/material_dark_color" />
+      </LinearLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/about_author_version_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+    </androidx.cardview.widget.CardView>
 
-            </LinearLayout>
+    <androidx.cardview.widget.CardView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="@dimen/activity_horizontal_margin"
+      android:layout_marginRight="@dimen/activity_horizontal_margin"
+      android:layout_marginBottom="@dimen/activity_horizontal_margin"
+      app:cardElevation="2dp">
 
-        </androidx.cardview.widget.CardView>
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginBottom="@dimen/activity_horizontal_margin"
-            app:cardElevation="2dp">
+        <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="16dp"
+          android:layout_marginTop="8dp"
+          android:layout_marginRight="16dp"
+          android:layout_marginBottom="8dp"
+          android:text="@string/credits"
+          android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+          android:textColor="@color/material_dark_color" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp">
+        <Space
+          android:layout_width="wrap_content"
+          android:layout_height="5dp" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="@string/credits"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/material_dark_color" />
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="5dp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/creditsRv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"
-                    tools:targetApi="lollipop" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-    </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/creditsRv"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:nestedScrollingEnabled="false"
+          tools:targetApi="lollipop" />
+      </LinearLayout>
+    </androidx.cardview.widget.CardView>
+  </LinearLayout>
 </androidx.core.widget.NestedScrollView>

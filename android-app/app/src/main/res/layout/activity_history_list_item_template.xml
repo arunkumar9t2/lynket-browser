@@ -18,77 +18,77 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:animateLayoutChanges="true"
+  android:background="?android:attr/selectableItemBackground"
+  android:clickable="true"
+  android:focusable="true"
+  android:gravity="center_vertical"
+  android:minHeight="60dp"
+  android:orientation="horizontal"
+  android:paddingTop="4dp"
+  android:paddingBottom="4dp"
+  tools:ignore="RtlHardcoded">
+
+  <ImageView
+    android:id="@+id/history_favicon"
+    android:layout_width="40dp"
+    android:layout_height="40dp"
+    android:layout_gravity="center"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:scaleType="fitCenter"
+    tools:ignore="ContentDescription"
+    tools:src="@mipmap/ic_launcher" />
+
+  <RelativeLayout
+    android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:animateLayoutChanges="true"
+    android:layout_weight="1"
+    android:paddingEnd="16dp"
+    android:paddingRight="16dp"
+    tools:ignore="RtlSymmetry">
+
+    <TextView
+      android:id="@+id/history_title"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:ellipsize="marquee"
+      android:paddingBottom="2dp"
+      android:singleLine="true"
+      android:textAppearance="@style/Preference_TextAppearanceMaterialSubhead"
+      android:textSize="14sp"
+      tools:ignore="SelectableText"
+      tools:text="Test" />
+
+    <TextView
+      android:id="@+id/history_subtitle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/history_title"
+      android:layout_alignLeft="@id/history_title"
+      android:maxLines="1"
+      android:textAppearance="?android:attr/textAppearanceSmall"
+      android:textColor="?android:attr/textColorSecondary"
+      android:textSize="12sp"
+      tools:ignore="SelectableText"
+      tools:text="Test" />
+  </RelativeLayout>
+
+
+  <ImageView
+    android:id="@+id/history_amp"
+    android:layout_width="24dp"
+    android:layout_height="24dp"
+    android:layout_gravity="center"
+    android:layout_marginRight="16dp"
     android:background="?android:attr/selectableItemBackground"
-    android:clickable="true"
-    android:focusable="true"
-    android:gravity="center_vertical"
-    android:minHeight="60dp"
-    android:orientation="horizontal"
-    android:paddingTop="4dp"
-    android:paddingBottom="4dp"
-    tools:ignore="RtlHardcoded">
-
-    <ImageView
-        android:id="@+id/history_favicon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:scaleType="fitCenter"
-        tools:ignore="ContentDescription"
-        tools:src="@mipmap/ic_launcher" />
-
-    <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:paddingEnd="16dp"
-        android:paddingRight="16dp"
-        tools:ignore="RtlSymmetry">
-
-        <TextView
-            android:id="@+id/history_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="marquee"
-            android:paddingBottom="2dp"
-            android:singleLine="true"
-            android:textAppearance="@style/Preference_TextAppearanceMaterialSubhead"
-            android:textSize="14sp"
-            tools:ignore="SelectableText"
-            tools:text="Test" />
-
-        <TextView
-            android:id="@+id/history_subtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/history_title"
-            android:layout_alignLeft="@id/history_title"
-            android:maxLines="1"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="?android:attr/textColorSecondary"
-            android:textSize="12sp"
-            tools:ignore="SelectableText"
-            tools:text="Test" />
-    </RelativeLayout>
-
-
-    <ImageView
-        android:id="@+id/history_amp"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_gravity="center"
-        android:layout_marginRight="16dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:scaleType="fitCenter"
-        android:src="@drawable/ic_action_amp_icon"
-        android:tint="@color/md_blue_500"
-        android:visibility="gone"
-        tools:ignore="ContentDescription"
-        tools:src="@mipmap/ic_launcher_round" />
+    android:scaleType="fitCenter"
+    android:src="@drawable/ic_action_amp_icon"
+    android:tint="@color/md_blue_500"
+    android:visibility="gone"
+    tools:ignore="ContentDescription"
+    tools:src="@mipmap/ic_launcher_round" />
 </LinearLayout>

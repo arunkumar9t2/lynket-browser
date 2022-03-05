@@ -75,9 +75,9 @@ public class CircleView extends View {
       outerRadius = (float) (getMeasuredWidth() / 2.4);
     }
     canvas.drawCircle(getMeasuredWidth() / 2,
-        getMeasuredWidth() / 2,
-        outerRadius,
-        mBgPaint);
+      getMeasuredWidth() / 2,
+      outerRadius,
+      mBgPaint);
   }
 
   @ColorInt

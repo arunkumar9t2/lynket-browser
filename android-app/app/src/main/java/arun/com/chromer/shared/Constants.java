@@ -45,8 +45,8 @@ public class Constants {
   //Objects
   public static final Intent WEB_INTENT = new Intent(Intent.ACTION_VIEW, Uri.parse(GOOGLE_URL));
   public static final Intent TEXT_SHARE_INTENT = new Intent(Intent.ACTION_SEND)
-      .setType("text/plain")
-      .putExtra(Intent.EXTRA_TEXT, "");
+    .setType("text/plain")
+    .putExtra(Intent.EXTRA_TEXT, "");
   public static final Intent DUMMY_INTENT = new Intent("Namey McNameFace");
 
 

@@ -75,23 +75,23 @@ public class SettingsGroupActivity extends SubActivity implements SettingsGroupA
     adapter.setGroupItemClickListener(this);
 
     setDefaultImage.setImageDrawable(new IconicsDrawable(this)
-        .icon(CommunityMaterial.Icon.cmd_auto_fix)
-        .color(Color.WHITE)
-        .sizeDp(24));
+      .icon(CommunityMaterial.Icon.cmd_auto_fix)
+      .color(Color.WHITE)
+      .sizeDp(24));
 
     setDefaultCard.setOnClickListener(v -> {
       final String defaultBrowser = Utils.getDefaultBrowserPackage(getApplicationContext());
       if (defaultBrowser.equalsIgnoreCase("android")
-          || defaultBrowser.startsWith("org.cyanogenmod")
-          || defaultBrowser.equalsIgnoreCase("com.huawei.android.internal.app")) {
+        || defaultBrowser.startsWith("org.cyanogenmod")
+        || defaultBrowser.equalsIgnoreCase("com.huawei.android.internal.app")) {
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.GOOGLE_URL)));
       } else {
         final Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         intent.setData(Uri.parse("package:" + defaultBrowser));
         Toast.makeText(SettingsGroupActivity.this,
-            Utils.getAppNameWithPackage(getApplicationContext(), defaultBrowser)
-                + " "
-                + getString(R.string.default_clear_msg), Toast.LENGTH_LONG).show();
+          Utils.getAppNameWithPackage(getApplicationContext(), defaultBrowser)
+            + " "
+            + getString(R.string.default_clear_msg), Toast.LENGTH_LONG).show();
         startActivity(intent);
       }
     });

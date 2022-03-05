@@ -19,6 +19,10 @@
 
 package arun.com.chromer.browsing.openwith;
 
+import static android.content.Intent.ACTION_VIEW;
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -31,10 +35,6 @@ import arun.com.chromer.R;
 import arun.com.chromer.shared.views.IntentPickerSheetView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static android.content.Intent.ACTION_VIEW;
-import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 
 public class OpenIntentWithActivity extends AppCompatActivity {
@@ -53,15 +53,15 @@ public class OpenIntentWithActivity extends AppCompatActivity {
     if (getIntent() != null && getIntent().getDataString() != null) {
       final Intent webSiteIntent = new Intent(ACTION_VIEW, getIntent().getData());
       final IntentPickerSheetView browserPicker = new IntentPickerSheetView(this,
-          webSiteIntent,
-          R.string.open_with,
-          activityInfo -> {
-            bottomSheet.dismissSheet();
-            webSiteIntent.setComponent(activityInfo.componentName);
-            webSiteIntent.setFlags(FLAG_ACTIVITY_CLEAR_TASK | FLAG_ACTIVITY_NEW_TASK);
-            startActivity(webSiteIntent);
-            finish();
-          });
+        webSiteIntent,
+        R.string.open_with,
+        activityInfo -> {
+          bottomSheet.dismissSheet();
+          webSiteIntent.setComponent(activityInfo.componentName);
+          webSiteIntent.setFlags(FLAG_ACTIVITY_CLEAR_TASK | FLAG_ACTIVITY_NEW_TASK);
+          startActivity(webSiteIntent);
+          finish();
+        });
       browserPicker.setFilter(IntentPickerSheetView.selfPackageExcludeFilter(this));
       bottomSheet.showWithSheetView(browserPicker);
     } else {

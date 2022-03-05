@@ -18,143 +18,143 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="horizontal">
+
+  <View
+    android:id="@+id/transparentSide1"
+    android:layout_width="0dp"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:layout_weight="1"
+    android:background="@color/article_transparentSideBackground" />
 
-    <View
-        android:id="@+id/transparentSide1"
-        android:layout_width="0dp"
+  <arun.com.chromer.browsing.article.view.ElasticDragDismissFrameLayout
+    android:id="@+id/dragDismissLayout"
+    android:layout_width="@dimen/article_articleWidth"
+    android:layout_height="match_parent">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+      android:id="@+id/coordinatorLayout"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@color/article_windowBackground">
+
+
+      <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="@color/article_transparentSideBackground" />
+        android:clipToPadding="false"
+        android:paddingBottom="56dp"
+        android:scrollbars="vertical"
+        app:behavior_overlapTop="?attr/actionBarSize" />
 
-    <arun.com.chromer.browsing.article.view.ElasticDragDismissFrameLayout
-        android:id="@+id/dragDismissLayout"
-        android:layout_width="@dimen/article_articleWidth"
-        android:layout_height="match_parent">
+      <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="244dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true" />
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/coordinatorLayout"
+      <View
+        android:id="@+id/statusBar"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:background="@color/article_toolbarBackground" />
+
+      <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@android:color/transparent"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:elevation="0dp">
+
+        <androidx.appcompat.widget.Toolbar
+          android:id="@+id/toolbar"
+          android:layout_width="match_parent"
+          android:layout_height="?attr/actionBarSize"
+          android:background="@color/article_toolbarBackground"
+          app:layout_scrollFlags=""
+          app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+      </com.google.android.material.appbar.AppBarLayout>
+
+      <LinearLayout
+        android:id="@+id/articleBottomLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+          android:id="@+id/articleTextSizeCard"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_margin="8dp"
+          android:visibility="gone"
+          app:cardBackgroundColor="@color/article_windowBackground">
+
+          <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/article_windowBackground">
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:weightSum="1">
 
+            <ImageView
+              android:id="@+id/textSizeIconView"
+              android:layout_width="24dp"
+              android:layout_height="48dp"
+              android:layout_marginLeft="16dp"
+              android:layout_marginRight="8dp"
+              android:contentDescription="@string/text_size"
+              android:scaleType="fitCenter"
+              tools:ignore="RtlHardcoded" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:paddingBottom="56dp"
-                android:scrollbars="vertical"
-                app:behavior_overlapTop="?attr/actionBarSize" />
+            <androidx.appcompat.widget.AppCompatSeekBar
+              android:id="@+id/textSizeSeekbar"
+              android:layout_width="0dp"
+              android:layout_height="match_parent"
+              android:layout_gravity="center"
+              android:layout_weight="1"
+              android:max="15" />
 
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="244dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:indeterminate="true" />
+            <androidx.appcompat.widget.AppCompatImageView
+              android:id="@+id/textSizeDismiss"
+              android:layout_width="24dp"
+              android:layout_height="48dp"
+              android:layout_marginLeft="8dp"
+              android:layout_marginRight="16dp"
+              android:background="?attr/selectableItemBackgroundBorderless"
+              android:clickable="true"
+              android:focusable="true"
+              android:padding="4dp"
+              android:scaleType="fitCenter"
+              tools:ignore="RtlHardcoded" />
+          </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-            <View
-                android:id="@+id/statusBar"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                android:background="@color/article_toolbarBackground" />
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+          android:id="@+id/bottomNavigation"
+          android:layout_width="match_parent"
+          android:layout_height="48dp"
+          android:layout_gravity="bottom"
+          app:itemIconTint="@color/article_primaryText"
+          app:itemTextColor="@color/article_primaryText"
+          app:labelVisibilityMode="labeled"
+          app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+          app:menu="@menu/browsing_bottom_navigation_menu" />
+      </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+  </arun.com.chromer.browsing.article.view.ElasticDragDismissFrameLayout>
 
-            <com.google.android.material.appbar.AppBarLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:background="@android:color/transparent"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:elevation="0dp">
-
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="@color/article_toolbarBackground"
-                    app:layout_scrollFlags=""
-                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
-            </com.google.android.material.appbar.AppBarLayout>
-
-            <LinearLayout
-                android:id="@+id/articleBottomLinearLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:orientation="vertical">
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/articleTextSizeCard"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:visibility="gone"
-                    app:cardBackgroundColor="@color/article_windowBackground">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:orientation="horizontal"
-                        android:weightSum="1">
-
-                        <ImageView
-                            android:id="@+id/textSizeIconView"
-                            android:layout_width="24dp"
-                            android:layout_height="48dp"
-                            android:layout_marginLeft="16dp"
-                            android:layout_marginRight="8dp"
-                            android:contentDescription="@string/text_size"
-                            android:scaleType="fitCenter"
-                            tools:ignore="RtlHardcoded" />
-
-                        <androidx.appcompat.widget.AppCompatSeekBar
-                            android:id="@+id/textSizeSeekbar"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:max="15" />
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/textSizeDismiss"
-                            android:layout_width="24dp"
-                            android:layout_height="48dp"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginRight="16dp"
-                            android:background="?attr/selectableItemBackgroundBorderless"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:padding="4dp"
-                            android:scaleType="fitCenter"
-                            tools:ignore="RtlHardcoded" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <com.google.android.material.bottomnavigation.BottomNavigationView
-                    android:id="@+id/bottomNavigation"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_gravity="bottom"
-                    app:itemIconTint="@color/article_primaryText"
-                    app:itemTextColor="@color/article_primaryText"
-                    app:labelVisibilityMode="labeled"
-                    app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
-                    app:menu="@menu/browsing_bottom_navigation_menu" />
-            </LinearLayout>
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
-    </arun.com.chromer.browsing.article.view.ElasticDragDismissFrameLayout>
-
-    <View
-        android:id="@+id/transparentSide2"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="@color/article_transparentSideBackground" />
+  <View
+    android:id="@+id/transparentSide2"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:background="@color/article_transparentSideBackground" />
 </LinearLayout>

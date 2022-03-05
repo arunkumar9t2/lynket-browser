@@ -17,185 +17,185 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string-array name="animationValues">
-        <item>Keine</item>
-        <item>Nach rechts wischen</item>
-        <item>Nach oben wischen</item>
-    </string-array>
-    <string-array name="animationSpeedValues">
-        <item>Mittel</item>
-        <item>Schnell</item>
-    </string-array>
-    <string-array name="actionValues">
-        <item>Zweiter Browser</item>
-        <item>Lieblings-Teil-App</item>
-        <item>Allgemeines Teilen</item>
-    </string-array>
-    <string-array name="webHeadsSpawnValues">
-        <item>Rechts</item>
-        <item>Links</item>
-    </string-array>
-    <string-array name="articleThemeValues">
-        <item>Dunkel</item>
-        <item>Hell</item>
-        <item>Automatisch</item>
-        <item>Schwarz</item>
-    </string-array>
-    <string-array name="webHeadsSizeValues">
-        <item>Normal</item>
-        <item>Klein</item>
-    </string-array>
-    <string name="share_text">Hey,  teste \'Lynket\' für schnelles und sicheres surfen. Hier runterladen: https://goo.gl/992ils</string>
-    <string name="share_via">Teilen mit…</string>
-    <string name="custom_tab_provider_not_found">Kein kompatibler Custom-Tab-Anbieter gefunden</string>
-    <string name="custom_tab_provider_not_found_expln">Chrome benötigt einen Custom-Tab-kompatiblen Browser auf deinem Gerät. Momentan sind keine solchen Browser installiert. Würdest du Google Chrome (kostenlos) aus dem Play Store installieren? Wenn du es bereits hast, bitte aktualidiere es auf die neueste Version.</string>
-    <string name="custom_tab_provider_not_found_dialog_content"><![CDATA[Es konnte kein kompatibler benutzerdefinierter Tab-Browser auf deinem Handy gefunden werden. Google Chrome (kostenlos) wird empfohlen. Du kannst immer noch Webseiten innerhalb von Lynket betrachten und den Artikelmodus verwenden, aber für die beste Erfahrung wird ein eigener Tab-Provider dringend empfohlen. Möchtest du jetzt einen installieren?]]></string>
-    <string name="install">Installieren</string>
-    <string name="licenses">Lizenzen</string>
-    <string name="about">Über</string>
-    <string name="help_chromer_grow">Hilf Lynket, bekannter zu werden!</string>
-    <string name="share">Teilen</string>
-    <string name="share_with">Teilen mit %1$s</string>
-    <string name="rate_play_store">Im Play Store bewerten</string>
-    <string name="feedback">Feedback</string>
-    <string name="intro">Einführung</string>
-    <string name="send_email">Email senden…</string>
-    <string name="fallback_msg">Konnte Custom-Tab nicht öffnen, ausweichen auf normalen Browser</string>
-    <string name="open_with">Öffnen mit…</string>
-    <string name="open_in_browser">Öffne in %1$s</string>
-    <string name="unxp_err">Unerwarteter Fehler, erneut versuchen</string>
-    <string name="unsupported_link">Kein unterstützter Link, erneut versuchen</string>
-    <string name="couldnt_load_price">Konnte Preis nicht laden</string>
-    <string name="coffee">Kaffee</string>
-    <string name="lunch">Mittagessen</string>
-    <string name="premium_donation">Premiumspende</string>
-    <string name="invalid_link">Ungültiger Link</string>
-    <string name="copied">Kopiert</string>
-    <string name="copy_link">Link kopieren</string>
-    <string name="add_to_homescreen">Zum Startbildschirm hinzufügen</string>
-    <string name="intro_1">"Hallo! \nLynket ist ein schlanker, sicherer und schneller Browser. "</string>
-    <string name="how_to_use">Wie funktioniert das?</string>
-    <string name="intro_6">Du musst nur Lynket als deinen Standardbrowser festlegen. Lynket wird dir den Link dann unaufdringlich anzeigen. Oder du wählst Lynket nur bei Bedarf.</string>
-    <string name="version">Version</string>
-    <string name="changelog">Neuigkeiten</string>
-    <string name="join_google_plus">Google+ Community beitreten</string>
-    <string name="share_ideas">Teile deine Ideen!</string>
-    <string name="support_development">Unterstütze die Entwicklung</string>
-    <string name="consider_donation">Denke über eine Spende nach</string>
-    <string name="add_to_circles">Zu Google+ Kreisen hinzufügen</string>
-    <string name="follow_twitter">Auf Twitter folgen</string>
-    <string name="connect_linkedIn">Mit LinkedIn verbinden</string>
-    <string name="more_apps">Mehr Apps</string>
-    <string name="author">Entwickler</string>
-    <string name="added">Hinzugefügt</string>
-    <string name="settings">Einstellungen</string>
-    <string name="colored_toolbar">Farbige Aktionsleiste</string>
-    <string name="choose_animation">Animation beim Öffnen</string>
-    <string name="animation_speed">Animationsgeschwindigkeit</string>
-    <string name="default_pref_xpln">Lege Lynket als Standard für das Öffnen von Links fest oder wähle Lynket aus der Liste aus wenn es angezeigt wird</string>
-    <string name="personalization">Personalisieren</string>
-    <string name="default_clear_msg">ist als Standard Browser festgelegt. Bitte ändern indem du \“Auf Standard zurücksetzen\” drückst.</string>
-    <string name="dynamic_toolbar_color">Dynamische Aktionsleistensfarbe</string>
-    <string name="keep_chrome_warmedup">Browser im Speicher behalten für schnelleres Starten</string>
-    <string name="warmup_browser">Browser aufwärmen</string>
-    <string name="set_default_chromer">Als Standard Browser festlegen</string>
-    <string name="default_provider">Custom-Tab-Anbieter</string>
-    <string name="pre_fetch_content">Inhalt Vorabrufen</string>
-    <string name="pre_fetch_desc">Scanne deinen Bildschirm nach Links und lade sie im Hintergrund für einen sofortigen Start</string>
-    <string name="accessibility_description">Dieser Dienst wird genutzt um Lynket Text nach Links scannen zu lassen, um diese im Hintergrund zu laden. Es werden keine anderen Informationen durch Lynket verarbeitet. Du kannst Lynket weiterhin im einfachen Modus benutzen wenn du dies nicht möchtest. Starte die Lynket app für mehr Informationen.</string>
-    <string name="accessibility_dialog_title">Bedienungshilfe muss aktiviert sein</string>
-    <string name="accessibility_dialog_desc">Um Lynket das Scannen nach Links zu erlauben musst du die Bedienungshilfe aktivieren. Bitte aktiviere die Funktion auf dem nächsten Bildschirm. Danach kannst du die Option aktiveren und das schnellere Starten genießen.</string>
-    <string name="open_settings">Einstellungen öffnen</string>
-    <string name="only_on_wifi">Nur bei WLAN-Verbindung scannen</string>
-    <string name="show_notification">Zeige eine Benachrichtigung, während ein Link vorgeladen wird</string>
-    <string name="default_toolbar_color">Standard Aktionsleistenfarbe</string>
-    <string name="web_heads_color">Web Heads Farbe</string>
-    <string name="choose_secondary_browser">Sekundärer Browser</string>
-    <string name="dynamic_toolbar_help">Um das dynamische Färben der Aktionsleiste zu ermöglichen, lernt Lynket im Hintergrund. Manchmal funktioniert es nicht sofort, sondern erst nach einiger Zeit.</string>
-    <string name="secondary_browser_success">%1$s als sekundärer Browser festgelegt!</string>
-    <string name="fav_share_success">%1$s als Lieblingsapp zum Teilen festgelegt!</string>
-    <string name="default_provider_success">%1$s wird für das bereitstellen von Custom Tabs genutzt!</string>
-    <string name="based_on_app">App-basiert</string>
-    <string name="based_on_web">Webseiten-basiert</string>
-    <string name="preferred_action">Bevorzugte Aktion</string>
-    <string name="fav_share_app">Lieblingsapp zum Teilen</string>
-    <string name="choose_fav_share_app">Wähle deine Lieblingsapp zum Teilen</string>
-    <string name="dynamic_summary_appweb">Die Farbe basiert auf der Webseite (falls unterstützt). Ansonsten wird die App Farbe genutzt.</string>
-    <string name="dynamic_summary_app">Die Farbe basiert auf der App, die Webseite startet</string>
-    <string name="dynamic_summary_web">Die Farbe basiert auf der geöffnete Webseite</string>
-    <string name="no_option_selected">Keine Option ausgewählt</string>
-    <string name="permission_required">Berechtigung erforderlich</string>
-    <string name="usage_permission_explanation_appcolor">Um das dynamische Färben der Aktionsleiste (App-basiert) zu ermöglichen, braucht Lynket die Berechtigung die Apps zu kennen, die du benutzt. Möchtest du diese Berechtigung gewähren?</string>
-    <string name="grant">Gewähren</string>
-    <string name="open_source_contributions">Open Source Stuff</string>
-    <string name="search_or_type_url">Suchen oder URL eingeben</string>
-    <string name="voice_prompt">Sprich deine Anfrage</string>
-    <string name="web_heads">Web Heads</string>
-    <string name="webhead_spawn_summary">Position auf dem Bildschirm</string>
-    <string name="webhead_spawn_title">Auswählen wo die Web Heads erscheinen</string>
-    <string name="credits">Credits</string>
-    <string name="icon_design">Icon Design</string>
-    <string name="overlay_permission_content">Um die Web Heads anzuzeigen wird die Berechtigung, etwas über anderen Apps einzublenden benötigt. Möchtest du die Berechtigung gewähren?</string>
-    <string name="webheads_intro_1">Wenn du irgendeinen Link öffnest wird eine \"schwebende Blase\" (Web Head) erstellt und Chromer versucht den Link vorab zu laden.</string>
-    <string name="webheads_intro_3">Wenn du einen Web Head ziehst, erscheint eine Mülltonne. Lass den Web Head darüber los um ihn zu schließen.</string>
-    <string name="webheads_intro_4">"Lynket priorisiert den zuletzt geöffneten Link und lädt ihn vorab. Die beste Methode ist, die Web Heads nacheinander von oben nach unten auszuwählen. Die beste Erfahrung wird gewährleistet, wenn die Web Heads automatisch geschlossen werden beim Antippen. "</string>
-    <string name="web_head_permission_toast">Um Links in schwebenden Blasen zu öffnen, benötigt Lynket die Berechtigung, etwas über anderen Apps einzublenden. Bitte aktivieren oder die Web Heads deaktivieren.</string>
-    <string name="tap_close_all">Drücken um alle zu schließen</string>
-    <string name="web_heads_service">Web Heads Dienst</string>
-    <string name="join_beta">Beta beitreten</string>
-    <string name="become_a_tester">Tester werden</string>
-    <string name="join_beta_content">“Beta Versionen sind experimentell. Sie haben die neuesten Funktionen, enthalten jedoch auch Fehler. Du kannst bei der Entwicklung helfen, indem du als Tester mitmachst und Fehler in der Google+ Community meldest. \n\nBitte stelle sicher,  dass du der Community beigetreten bist und klicke dann auf den Button \”Tester werden\“. \n\nBEACHTE: Du musst der Community beitreten um Tester zu werden. ”</string>
-    <string name="no_voice_rec_apps">Keine kompatible Spracherkennungs App gefunden</string>
-    <string name="loading">Laden…</string>
-    <string name="share_failed_msg">Konnte nicht geteilt werden. Benutze stattdessen die Standard App</string>
-    <string name="revoke_accessibility_permission">Du kannst die Berechtigung für die Bedienungshilfe jetzt deaktivieren.</string>
-    <string name="last_fetched_urls">Letzte geladene URLs</string>
-    <string name="translations">Übersetzungen</string>
-    <string name="merge_tabs">Tabs und Apps zusammen anzeigen</string>
-    <string name="merge_tabs_explanation">Zeige Tabs zusammen mit Apps im \“Zuletzt geöffnet\”-Screen an</string>
-    <string name="already_loaded">Bereits geladen</string>
-    <string name="add_home_screen_begun">Die Verknüpfung wird gleich angelegt</string>
-    <string name="bottom_bar_pref_summary">Zeigt eine zusätzliche Toolbar mit mehr Optionen</string>
-    <string name="bottom_bar_pref_title">Zeige die Bottom-Bar</string>
-    <string name="bottom_bar">Bottom-Bar</string>
-    <string name="open_in_new_tab">In neuem Tab öffnen</string>
-    <string name="options">Einstellungen</string>
-    <string name="customize">Anpassen</string>
-    <string name="not_set">nicht gesetzt</string>
-    <string name="not_found">Nicht gefunden</string>
-    <string name="app_preferences">App Einstellungen</string>
-    <string name="behavior_preferences">Verhalten</string>
-    <string name="additional_preferences">Weiteres</string>
-    <string name="notifications">Benachrichtigungen</string>
-    <string name="webhead_size_title">Größe</string>
-    <string name="webhead_size_dialog">Wähle die Größe der Web Heads</string>
-    <string name="merge_tabs_off_title">Achtung</string>
-    <string name="web_sites">Webseiten</string>
-    <string name="share_all">Alle teilen</string>
-    <string name="thank_you">Vielen Dank!</string>
-    <string name="save_time">Spare Zeit</string>
-    <string name="multiple_links">Mehrere Links</string>
-    <string name="copy_all">Alle kopieren</string>
-    <string name="choose_provider">Anbieter wählen</string>
-    <string name="webViewNotRecommended">Für deine Android-Version wird die Verwendung von WebView aus Gründen der Stabilität und Sicherheit nicht empfohlen.</string>
-    <string name="webViewPros">Die Rendering-Engine, die bei deinem Smartphone mitgeliefert wird.</string>
-    <string name="tab_providers">Unterstützte Anbieter</string>
-    <string name="use">Benutzen</string>
-    <string name="features">Merkmale</string>
-    <string name="webview_disadvantages">WebView mangelt es an vielen Vorteilen wie Datensparmodus, automatisches Ausfüllen von Formularen und Cloud-Synchronisation, die andere Anbieter unterstützen. Möchtest du WebView trotzdem zum Rendern von Webseiten verwenden?</string>
-    <string name="try_it">Probiere es aus</string>
-    <string name="slide_over_fragment_close_prompt">Drücke ×, um den Tab schnell zu schließen</string>
-    <string name="see_demo">Demo ansehen</string>
-    <string name="provider_intro_explanation">Lynket kann mit deinen Lieblingsbrowsern zusammenarbeiten. \n\nWenn du beispielsweise Google Chrome als Anbieter verwendest, kannst du den Verlauf synchronisieren, den Datensparmodus benutzen und gespeicherte Passwörter in deinem Google-Konto verwenden.</string>
-    <string name="chromer_flexible">Flexibel</string>
-    <string name="tutorial_amp_intro">Lynket kann AMP-Seiten automatisch finden und laden, was zu einer schnelleren und flüssigerem Leseerfahrung führt.</string>
-    <string name="illustrations_and_video">Bilder und Video</string>
-    <string name="beta_testers">Google+ Beta-Tester</string>
-    <string name="tips">Tipps</string>
-    <string name="tips_description">Schau dir die Tipps an, um das Beste aus Lynket herauszuholen</string>
-    <string name="choose_provider_tip">Lynket unterstützt jeden Browser, der das Custom-Tab-Protokoll implementiert hat. Lynket übernimmt auch das Verhalten des gewählten Anbieters. Zum Beispiel, wenn Sie Brave benuzten, wird der Adblocker aktiviert.</string>
-    <string name="tips_secondary_browser">Du kannst einen zweiten Browser und eine Lieblingsapp zum Teilen auswählen, um die Website schnell dort aufzurufen oder zu teilen.</string>
-    <string name="tips_article_mode">Wenn Sie im Artikelmodus auf Wörter tippen, wird automatisch eine Suchanfrage durchgeführt.</string>
-    <string name="quick_settings">Schnelleinstellungen</string>
-    <string name="quick_settings_tip">Du kannst Lynkets Schnelleinstellungsschalter in der Statusleiste benutzen, um schnell deine Surfeinstellungen zu ändern.</string>
+  <string-array name="animationValues">
+    <item>Keine</item>
+    <item>Nach rechts wischen</item>
+    <item>Nach oben wischen</item>
+  </string-array>
+  <string-array name="animationSpeedValues">
+    <item>Mittel</item>
+    <item>Schnell</item>
+  </string-array>
+  <string-array name="actionValues">
+    <item>Zweiter Browser</item>
+    <item>Lieblings-Teil-App</item>
+    <item>Allgemeines Teilen</item>
+  </string-array>
+  <string-array name="webHeadsSpawnValues">
+    <item>Rechts</item>
+    <item>Links</item>
+  </string-array>
+  <string-array name="articleThemeValues">
+    <item>Dunkel</item>
+    <item>Hell</item>
+    <item>Automatisch</item>
+    <item>Schwarz</item>
+  </string-array>
+  <string-array name="webHeadsSizeValues">
+    <item>Normal</item>
+    <item>Klein</item>
+  </string-array>
+  <string name="share_text">Hey,  teste \'Lynket\' für schnelles und sicheres surfen. Hier runterladen: https://goo.gl/992ils</string>
+  <string name="share_via">Teilen mit…</string>
+  <string name="custom_tab_provider_not_found">Kein kompatibler Custom-Tab-Anbieter gefunden</string>
+  <string name="custom_tab_provider_not_found_expln">Chrome benötigt einen Custom-Tab-kompatiblen Browser auf deinem Gerät. Momentan sind keine solchen Browser installiert. Würdest du Google Chrome (kostenlos) aus dem Play Store installieren? Wenn du es bereits hast, bitte aktualidiere es auf die neueste Version.</string>
+  <string name="custom_tab_provider_not_found_dialog_content"><![CDATA[Es konnte kein kompatibler benutzerdefinierter Tab-Browser auf deinem Handy gefunden werden. Google Chrome (kostenlos) wird empfohlen. Du kannst immer noch Webseiten innerhalb von Lynket betrachten und den Artikelmodus verwenden, aber für die beste Erfahrung wird ein eigener Tab-Provider dringend empfohlen. Möchtest du jetzt einen installieren?]]></string>
+  <string name="install">Installieren</string>
+  <string name="licenses">Lizenzen</string>
+  <string name="about">Über</string>
+  <string name="help_chromer_grow">Hilf Lynket, bekannter zu werden!</string>
+  <string name="share">Teilen</string>
+  <string name="share_with">Teilen mit %1$s</string>
+  <string name="rate_play_store">Im Play Store bewerten</string>
+  <string name="feedback">Feedback</string>
+  <string name="intro">Einführung</string>
+  <string name="send_email">Email senden…</string>
+  <string name="fallback_msg">Konnte Custom-Tab nicht öffnen, ausweichen auf normalen Browser</string>
+  <string name="open_with">Öffnen mit…</string>
+  <string name="open_in_browser">Öffne in %1$s</string>
+  <string name="unxp_err">Unerwarteter Fehler, erneut versuchen</string>
+  <string name="unsupported_link">Kein unterstützter Link, erneut versuchen</string>
+  <string name="couldnt_load_price">Konnte Preis nicht laden</string>
+  <string name="coffee">Kaffee</string>
+  <string name="lunch">Mittagessen</string>
+  <string name="premium_donation">Premiumspende</string>
+  <string name="invalid_link">Ungültiger Link</string>
+  <string name="copied">Kopiert</string>
+  <string name="copy_link">Link kopieren</string>
+  <string name="add_to_homescreen">Zum Startbildschirm hinzufügen</string>
+  <string name="intro_1">"Hallo! \nLynket ist ein schlanker, sicherer und schneller Browser. "</string>
+  <string name="how_to_use">Wie funktioniert das?</string>
+  <string name="intro_6">Du musst nur Lynket als deinen Standardbrowser festlegen. Lynket wird dir den Link dann unaufdringlich anzeigen. Oder du wählst Lynket nur bei Bedarf.</string>
+  <string name="version">Version</string>
+  <string name="changelog">Neuigkeiten</string>
+  <string name="join_google_plus">Google+ Community beitreten</string>
+  <string name="share_ideas">Teile deine Ideen!</string>
+  <string name="support_development">Unterstütze die Entwicklung</string>
+  <string name="consider_donation">Denke über eine Spende nach</string>
+  <string name="add_to_circles">Zu Google+ Kreisen hinzufügen</string>
+  <string name="follow_twitter">Auf Twitter folgen</string>
+  <string name="connect_linkedIn">Mit LinkedIn verbinden</string>
+  <string name="more_apps">Mehr Apps</string>
+  <string name="author">Entwickler</string>
+  <string name="added">Hinzugefügt</string>
+  <string name="settings">Einstellungen</string>
+  <string name="colored_toolbar">Farbige Aktionsleiste</string>
+  <string name="choose_animation">Animation beim Öffnen</string>
+  <string name="animation_speed">Animationsgeschwindigkeit</string>
+  <string name="default_pref_xpln">Lege Lynket als Standard für das Öffnen von Links fest oder wähle Lynket aus der Liste aus wenn es angezeigt wird</string>
+  <string name="personalization">Personalisieren</string>
+  <string name="default_clear_msg">ist als Standard Browser festgelegt. Bitte ändern indem du \“Auf Standard zurücksetzen\” drückst.</string>
+  <string name="dynamic_toolbar_color">Dynamische Aktionsleistensfarbe</string>
+  <string name="keep_chrome_warmedup">Browser im Speicher behalten für schnelleres Starten</string>
+  <string name="warmup_browser">Browser aufwärmen</string>
+  <string name="set_default_chromer">Als Standard Browser festlegen</string>
+  <string name="default_provider">Custom-Tab-Anbieter</string>
+  <string name="pre_fetch_content">Inhalt Vorabrufen</string>
+  <string name="pre_fetch_desc">Scanne deinen Bildschirm nach Links und lade sie im Hintergrund für einen sofortigen Start</string>
+  <string name="accessibility_description">Dieser Dienst wird genutzt um Lynket Text nach Links scannen zu lassen, um diese im Hintergrund zu laden. Es werden keine anderen Informationen durch Lynket verarbeitet. Du kannst Lynket weiterhin im einfachen Modus benutzen wenn du dies nicht möchtest. Starte die Lynket app für mehr Informationen.</string>
+  <string name="accessibility_dialog_title">Bedienungshilfe muss aktiviert sein</string>
+  <string name="accessibility_dialog_desc">Um Lynket das Scannen nach Links zu erlauben musst du die Bedienungshilfe aktivieren. Bitte aktiviere die Funktion auf dem nächsten Bildschirm. Danach kannst du die Option aktiveren und das schnellere Starten genießen.</string>
+  <string name="open_settings">Einstellungen öffnen</string>
+  <string name="only_on_wifi">Nur bei WLAN-Verbindung scannen</string>
+  <string name="show_notification">Zeige eine Benachrichtigung, während ein Link vorgeladen wird</string>
+  <string name="default_toolbar_color">Standard Aktionsleistenfarbe</string>
+  <string name="web_heads_color">Web Heads Farbe</string>
+  <string name="choose_secondary_browser">Sekundärer Browser</string>
+  <string name="dynamic_toolbar_help">Um das dynamische Färben der Aktionsleiste zu ermöglichen, lernt Lynket im Hintergrund. Manchmal funktioniert es nicht sofort, sondern erst nach einiger Zeit.</string>
+  <string name="secondary_browser_success">%1$s als sekundärer Browser festgelegt!</string>
+  <string name="fav_share_success">%1$s als Lieblingsapp zum Teilen festgelegt!</string>
+  <string name="default_provider_success">%1$s wird für das bereitstellen von Custom Tabs genutzt!</string>
+  <string name="based_on_app">App-basiert</string>
+  <string name="based_on_web">Webseiten-basiert</string>
+  <string name="preferred_action">Bevorzugte Aktion</string>
+  <string name="fav_share_app">Lieblingsapp zum Teilen</string>
+  <string name="choose_fav_share_app">Wähle deine Lieblingsapp zum Teilen</string>
+  <string name="dynamic_summary_appweb">Die Farbe basiert auf der Webseite (falls unterstützt). Ansonsten wird die App Farbe genutzt.</string>
+  <string name="dynamic_summary_app">Die Farbe basiert auf der App, die Webseite startet</string>
+  <string name="dynamic_summary_web">Die Farbe basiert auf der geöffnete Webseite</string>
+  <string name="no_option_selected">Keine Option ausgewählt</string>
+  <string name="permission_required">Berechtigung erforderlich</string>
+  <string name="usage_permission_explanation_appcolor">Um das dynamische Färben der Aktionsleiste (App-basiert) zu ermöglichen, braucht Lynket die Berechtigung die Apps zu kennen, die du benutzt. Möchtest du diese Berechtigung gewähren?</string>
+  <string name="grant">Gewähren</string>
+  <string name="open_source_contributions">Open Source Stuff</string>
+  <string name="search_or_type_url">Suchen oder URL eingeben</string>
+  <string name="voice_prompt">Sprich deine Anfrage</string>
+  <string name="web_heads">Web Heads</string>
+  <string name="webhead_spawn_summary">Position auf dem Bildschirm</string>
+  <string name="webhead_spawn_title">Auswählen wo die Web Heads erscheinen</string>
+  <string name="credits">Credits</string>
+  <string name="icon_design">Icon Design</string>
+  <string name="overlay_permission_content">Um die Web Heads anzuzeigen wird die Berechtigung, etwas über anderen Apps einzublenden benötigt. Möchtest du die Berechtigung gewähren?</string>
+  <string name="webheads_intro_1">Wenn du irgendeinen Link öffnest wird eine \"schwebende Blase\" (Web Head) erstellt und Chromer versucht den Link vorab zu laden.</string>
+  <string name="webheads_intro_3">Wenn du einen Web Head ziehst, erscheint eine Mülltonne. Lass den Web Head darüber los um ihn zu schließen.</string>
+  <string name="webheads_intro_4">"Lynket priorisiert den zuletzt geöffneten Link und lädt ihn vorab. Die beste Methode ist, die Web Heads nacheinander von oben nach unten auszuwählen. Die beste Erfahrung wird gewährleistet, wenn die Web Heads automatisch geschlossen werden beim Antippen. "</string>
+  <string name="web_head_permission_toast">Um Links in schwebenden Blasen zu öffnen, benötigt Lynket die Berechtigung, etwas über anderen Apps einzublenden. Bitte aktivieren oder die Web Heads deaktivieren.</string>
+  <string name="tap_close_all">Drücken um alle zu schließen</string>
+  <string name="web_heads_service">Web Heads Dienst</string>
+  <string name="join_beta">Beta beitreten</string>
+  <string name="become_a_tester">Tester werden</string>
+  <string name="join_beta_content">“Beta Versionen sind experimentell. Sie haben die neuesten Funktionen, enthalten jedoch auch Fehler. Du kannst bei der Entwicklung helfen, indem du als Tester mitmachst und Fehler in der Google+ Community meldest. \n\nBitte stelle sicher,  dass du der Community beigetreten bist und klicke dann auf den Button \”Tester werden\“. \n\nBEACHTE: Du musst der Community beitreten um Tester zu werden. ”</string>
+  <string name="no_voice_rec_apps">Keine kompatible Spracherkennungs App gefunden</string>
+  <string name="loading">Laden…</string>
+  <string name="share_failed_msg">Konnte nicht geteilt werden. Benutze stattdessen die Standard App</string>
+  <string name="revoke_accessibility_permission">Du kannst die Berechtigung für die Bedienungshilfe jetzt deaktivieren.</string>
+  <string name="last_fetched_urls">Letzte geladene URLs</string>
+  <string name="translations">Übersetzungen</string>
+  <string name="merge_tabs">Tabs und Apps zusammen anzeigen</string>
+  <string name="merge_tabs_explanation">Zeige Tabs zusammen mit Apps im \“Zuletzt geöffnet\”-Screen an</string>
+  <string name="already_loaded">Bereits geladen</string>
+  <string name="add_home_screen_begun">Die Verknüpfung wird gleich angelegt</string>
+  <string name="bottom_bar_pref_summary">Zeigt eine zusätzliche Toolbar mit mehr Optionen</string>
+  <string name="bottom_bar_pref_title">Zeige die Bottom-Bar</string>
+  <string name="bottom_bar">Bottom-Bar</string>
+  <string name="open_in_new_tab">In neuem Tab öffnen</string>
+  <string name="options">Einstellungen</string>
+  <string name="customize">Anpassen</string>
+  <string name="not_set">nicht gesetzt</string>
+  <string name="not_found">Nicht gefunden</string>
+  <string name="app_preferences">App Einstellungen</string>
+  <string name="behavior_preferences">Verhalten</string>
+  <string name="additional_preferences">Weiteres</string>
+  <string name="notifications">Benachrichtigungen</string>
+  <string name="webhead_size_title">Größe</string>
+  <string name="webhead_size_dialog">Wähle die Größe der Web Heads</string>
+  <string name="merge_tabs_off_title">Achtung</string>
+  <string name="web_sites">Webseiten</string>
+  <string name="share_all">Alle teilen</string>
+  <string name="thank_you">Vielen Dank!</string>
+  <string name="save_time">Spare Zeit</string>
+  <string name="multiple_links">Mehrere Links</string>
+  <string name="copy_all">Alle kopieren</string>
+  <string name="choose_provider">Anbieter wählen</string>
+  <string name="webViewNotRecommended">Für deine Android-Version wird die Verwendung von WebView aus Gründen der Stabilität und Sicherheit nicht empfohlen.</string>
+  <string name="webViewPros">Die Rendering-Engine, die bei deinem Smartphone mitgeliefert wird.</string>
+  <string name="tab_providers">Unterstützte Anbieter</string>
+  <string name="use">Benutzen</string>
+  <string name="features">Merkmale</string>
+  <string name="webview_disadvantages">WebView mangelt es an vielen Vorteilen wie Datensparmodus, automatisches Ausfüllen von Formularen und Cloud-Synchronisation, die andere Anbieter unterstützen. Möchtest du WebView trotzdem zum Rendern von Webseiten verwenden?</string>
+  <string name="try_it">Probiere es aus</string>
+  <string name="slide_over_fragment_close_prompt">Drücke ×, um den Tab schnell zu schließen</string>
+  <string name="see_demo">Demo ansehen</string>
+  <string name="provider_intro_explanation">Lynket kann mit deinen Lieblingsbrowsern zusammenarbeiten. \n\nWenn du beispielsweise Google Chrome als Anbieter verwendest, kannst du den Verlauf synchronisieren, den Datensparmodus benutzen und gespeicherte Passwörter in deinem Google-Konto verwenden.</string>
+  <string name="chromer_flexible">Flexibel</string>
+  <string name="tutorial_amp_intro">Lynket kann AMP-Seiten automatisch finden und laden, was zu einer schnelleren und flüssigerem Leseerfahrung führt.</string>
+  <string name="illustrations_and_video">Bilder und Video</string>
+  <string name="beta_testers">Google+ Beta-Tester</string>
+  <string name="tips">Tipps</string>
+  <string name="tips_description">Schau dir die Tipps an, um das Beste aus Lynket herauszuholen</string>
+  <string name="choose_provider_tip">Lynket unterstützt jeden Browser, der das Custom-Tab-Protokoll implementiert hat. Lynket übernimmt auch das Verhalten des gewählten Anbieters. Zum Beispiel, wenn Sie Brave benuzten, wird der Adblocker aktiviert.</string>
+  <string name="tips_secondary_browser">Du kannst einen zweiten Browser und eine Lieblingsapp zum Teilen auswählen, um die Website schnell dort aufzurufen oder zu teilen.</string>
+  <string name="tips_article_mode">Wenn Sie im Artikelmodus auf Wörter tippen, wird automatisch eine Suchanfrage durchgeführt.</string>
+  <string name="quick_settings">Schnelleinstellungen</string>
+  <string name="quick_settings_tip">Du kannst Lynkets Schnelleinstellungsschalter in der Statusleiste benutzen, um schnell deine Surfeinstellungen zu ändern.</string>
 </resources>

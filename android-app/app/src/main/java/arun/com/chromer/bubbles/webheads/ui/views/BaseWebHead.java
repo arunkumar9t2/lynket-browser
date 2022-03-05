@@ -149,9 +149,9 @@ public abstract class BaseWebHead extends FrameLayout {
     windowManager.addView(this, windowParams);
     if (xDrawable == null) {
       xDrawable = new IconicsDrawable(context)
-          .icon(cmd_close)
-          .color(WHITE)
-          .sizeDp(18);
+        .icon(cmd_close)
+        .color(WHITE)
+        .sizeDp(18);
     }
     if (deleteColor == NO_COLOR) {
       deleteColor = ContextCompat.getColor(context, R.color.remove_web_head_color);
@@ -193,11 +193,11 @@ public abstract class BaseWebHead extends FrameLayout {
 
     if (badgeDrawable == null) {
       badgeDrawable = new BadgeDrawable.Builder()
-          .type(TYPE_NUMBER)
-          .badgeColor(ContextCompat.getColor(getContext(), R.color.accent))
-          .textColor(WHITE)
-          .number(WEB_HEAD_COUNT)
-          .build();
+        .type(TYPE_NUMBER)
+        .badgeColor(ContextCompat.getColor(getContext(), R.color.accent))
+        .textColor(WHITE)
+        .number(WEB_HEAD_COUNT)
+        .build();
     } else {
       badgeDrawable.setNumber(WEB_HEAD_COUNT);
     }
@@ -296,9 +296,9 @@ public abstract class BaseWebHead extends FrameLayout {
 
     final AnimatorSet animator = new AnimatorSet();
     animator.playTogether(
-        ObjectAnimator.ofFloat(revealView, "scaleX", 1f),
-        ObjectAnimator.ofFloat(revealView, "scaleY", 1f),
-        ObjectAnimator.ofFloat(revealView, "alpha", 1f)
+      ObjectAnimator.ofFloat(revealView, "scaleX", 1f),
+      ObjectAnimator.ofFloat(revealView, "scaleY", 1f),
+      ObjectAnimator.ofFloat(revealView, "alpha", 1f)
     );
     revealView.setLayerType(LAYER_TYPE_HARDWARE, null);
     animator.addListener(new AnimatorListenerAdapter() {
@@ -341,8 +341,8 @@ public abstract class BaseWebHead extends FrameLayout {
     circleBg.setColor(newWebHeadColor);
     final AnimatorSet animator = new AnimatorSet();
     animator.playTogether(
-        ObjectAnimator.ofFloat(revealView, "scaleX", 0f),
-        ObjectAnimator.ofFloat(revealView, "scaleY", 0f)
+      ObjectAnimator.ofFloat(revealView, "scaleX", 0f),
+      ObjectAnimator.ofFloat(revealView, "scaleY", 0f)
     );
     revealView.setLayerType(LAYER_TYPE_HARDWARE, null);
     animator.addListener(new AnimatorListenerAdapter() {
@@ -389,20 +389,20 @@ public abstract class BaseWebHead extends FrameLayout {
     favicon.clearAnimation();
     favicon.setScaleType(CENTER);
     final TransitionDrawable icon = new TransitionDrawable(
-        new Drawable[]{
-            new ColorDrawable(TRANSPARENT),
-            xDrawable
-        });
+      new Drawable[]{
+        new ColorDrawable(TRANSPARENT),
+        xDrawable
+      });
     favicon.setImageDrawable(icon);
     icon.setCrossFadeEnabled(true);
     icon.startTransition(50);
     favicon
-        .animate()
-        .withLayer()
-        .rotation(180)
-        .setDuration(250)
-        .setInterpolator(new LinearOutSlowInInterpolator())
-        .start();
+      .animate()
+      .withLayer()
+      .rotation(180)
+      .setDuration(250)
+      .setInterpolator(new LinearOutSlowInInterpolator())
+      .start();
   }
 
   @SuppressWarnings("SameParameterValue")
@@ -467,10 +467,10 @@ public abstract class BaseWebHead extends FrameLayout {
     if (indicator != null && favicon != null) {
       indicator.animate().alpha(0).withLayer().start();
       TransitionDrawable transitionDrawable = new TransitionDrawable(
-          new Drawable[]{
-              new ColorDrawable(TRANSPARENT),
-              faviconDrawable
-          });
+        new Drawable[]{
+          new ColorDrawable(TRANSPARENT),
+          faviconDrawable
+        });
       favicon.setVisibility(VISIBLE);
       favicon.setImageDrawable(transitionDrawable);
       transitionDrawable.setCrossFadeEnabled(true);
@@ -519,19 +519,19 @@ public abstract class BaseWebHead extends FrameLayout {
   private WindowManager.LayoutParams createWindowParams() {
     if (Utils.ANDROID_OREO) {
       return new WindowManager.LayoutParams(
-          WRAP_CONTENT,
-          WRAP_CONTENT,
-          TYPE_APPLICATION_OVERLAY,
-          FLAG_NOT_FOCUSABLE | FLAG_LAYOUT_NO_LIMITS | FLAG_HARDWARE_ACCELERATED,
-          TRANSLUCENT);
+        WRAP_CONTENT,
+        WRAP_CONTENT,
+        TYPE_APPLICATION_OVERLAY,
+        FLAG_NOT_FOCUSABLE | FLAG_LAYOUT_NO_LIMITS | FLAG_HARDWARE_ACCELERATED,
+        TRANSLUCENT);
     } else
       //noinspection deprecation
       return new WindowManager.LayoutParams(
-          WRAP_CONTENT,
-          WRAP_CONTENT,
-          TYPE_SYSTEM_ALERT,
-          FLAG_NOT_FOCUSABLE | FLAG_LAYOUT_NO_LIMITS | FLAG_HARDWARE_ACCELERATED,
-          TRANSLUCENT);
+        WRAP_CONTENT,
+        WRAP_CONTENT,
+        TYPE_SYSTEM_ALERT,
+        FLAG_NOT_FOCUSABLE | FLAG_LAYOUT_NO_LIMITS | FLAG_HARDWARE_ACCELERATED,
+        TRANSLUCENT);
   }
 
   /**

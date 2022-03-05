@@ -83,9 +83,9 @@ public class BrowsingModeActivity extends BaseActivity implements BrowsingModeAd
     adapter.setBrowsingModeClickListener(this);
 
     getSupportFragmentManager()
-        .beginTransaction()
-        .replace(R.id.browse_faster_preferences_container, BrowseFasterPreferenceFragment.newInstance())
-        .commit();
+      .beginTransaction()
+      .replace(R.id.browse_faster_preferences_container, BrowseFasterPreferenceFragment.newInstance())
+      .commit();
   }
 
   @Override
@@ -123,21 +123,21 @@ public class BrowsingModeActivity extends BaseActivity implements BrowsingModeAd
       }
     } else if (nativeBubbles) {
       new MaterialDialog.Builder(this)
-          .title(R.string.browsing_mode_native_bubbles)
-          .content(R.string.browsing_mode_native_bubbles_warning)
-          .positiveText(R.string.browsing_mode_native_bubbles_guide)
-          .onPositive((dialog, which) -> tabsManager.openUrl(this,
-              new Website("https://github.com/arunkumar9t2/lynket-browser/wiki/Android-10-Bubbles-Guide"),
-              true,
-              false,
-              false,
-              false,
-              false))
-          .icon(new IconicsDrawable(this)
-              .icon(CommunityMaterial.Icon.cmd_android_head)
-              .colorRes(R.color.material_dark_color)
-              .sizeDp(24)
-          ).show();
+        .title(R.string.browsing_mode_native_bubbles)
+        .content(R.string.browsing_mode_native_bubbles_warning)
+        .positiveText(R.string.browsing_mode_native_bubbles_guide)
+        .onPositive((dialog, which) -> tabsManager.openUrl(this,
+          new Website("https://github.com/arunkumar9t2/lynket-browser/wiki/Android-10-Bubbles-Guide"),
+          true,
+          false,
+          false,
+          false,
+          false))
+        .icon(new IconicsDrawable(this)
+          .icon(CommunityMaterial.Icon.cmd_android_head)
+          .colorRes(R.color.material_dark_color)
+          .sizeDp(24)
+        ).show();
     }
     adapter.notifyDataSetChanged();
   }

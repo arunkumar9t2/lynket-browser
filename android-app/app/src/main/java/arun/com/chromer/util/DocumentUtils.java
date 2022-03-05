@@ -19,12 +19,12 @@
 
 package arun.com.chromer.util;
 
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
+
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 
 import timber.log.Timber;
-
-import static android.os.Build.VERSION_CODES.LOLLIPOP;
 
 /**
  * Created by Arun on 03/09/2016.

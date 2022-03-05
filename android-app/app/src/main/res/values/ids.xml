@@ -18,13 +18,13 @@
   -->
 
 <resources>
-    <item name="menu_history" type="id" />
-    <item name="menu_add_to_home_screen" type="id" />
-    <item name="menu_open_full_page" type="id" />
-    <item name="menu_action_button" type="id" />
-    <item name="menu_copy_link" type="id" />
-    <item name="menu_open_with" type="id" />
-    <item name="menu_share" type="id" />
-    <item name="menu_share_with" type="id" />
-    <item name="menu_text_size" type="id" />
+  <item name="menu_history" type="id" />
+  <item name="menu_add_to_home_screen" type="id" />
+  <item name="menu_open_full_page" type="id" />
+  <item name="menu_action_button" type="id" />
+  <item name="menu_copy_link" type="id" />
+  <item name="menu_open_with" type="id" />
+  <item name="menu_share" type="id" />
+  <item name="menu_share_with" type="id" />
+  <item name="menu_text_size" type="id" />
 </resources>

@@ -65,7 +65,7 @@ public final class ArticleScrollListener extends RecyclerView.OnScrollListener {
     final LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
     int firstItem = manager.findFirstCompletelyVisibleItemPosition();
     if (newState == RecyclerView.SCROLL_STATE_IDLE && !transparentBackground &&
-        firstItem == 0 && !isUpdatingBackground) {
+      firstItem == 0 && !isUpdatingBackground) {
       animateBackgroundColor(primaryColor, transparentColor, new DecelerateInterpolator());
       transparentBackground = true;
     }
@@ -76,7 +76,7 @@ public final class ArticleScrollListener extends RecyclerView.OnScrollListener {
     super.onScrolled(recyclerView, dx, dy);
 
     int minDistance = toolbar.getContext().getResources()
-        .getDimensionPixelSize(R.dimen.article_minToolbarScroll);
+      .getDimensionPixelSize(R.dimen.article_minToolbarScroll);
     if (Math.abs(dy) < minDistance) {
       return;
     }
@@ -113,17 +113,17 @@ public final class ArticleScrollListener extends RecyclerView.OnScrollListener {
 
   private void animateTranslation(int to, Interpolator interpolator) {
     toolbar.animate()
-        .translationY(to)
-        .setDuration(ANIMATION_DURATION)
-        .setInterpolator(interpolator)
-        .setListener(new AnimatorListenerAdapter() {
-          @Override
-          public void onAnimationEnd(Animator animation) {
-            super.onAnimationEnd(animation);
-            isUpdatingTranslation = false;
-          }
-        })
-        .start();
+      .translationY(to)
+      .setDuration(ANIMATION_DURATION)
+      .setInterpolator(interpolator)
+      .setListener(new AnimatorListenerAdapter() {
+        @Override
+        public void onAnimationEnd(Animator animation) {
+          super.onAnimationEnd(animation);
+          isUpdatingTranslation = false;
+        }
+      })
+      .start();
     isUpdatingTranslation = true;
   }
 

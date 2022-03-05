@@ -19,6 +19,8 @@
 
 package arun.com.chromer.data.website.model;
 
+import static arun.com.chromer.shared.Constants.NO_COLOR;
+
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
@@ -32,12 +34,10 @@ import androidx.recyclerview.widget.DiffUtil;
 
 import com.chimbori.crux.articles.Article;
 
+import java.util.Objects;
+
 import arun.com.chromer.data.history.model.HistoryTable;
 import arun.com.chromer.data.webarticle.model.WebArticle;
-
-import static arun.com.chromer.shared.Constants.NO_COLOR;
-
-import java.util.Objects;
 
 /**
  * Created by Arun on 05/09/2016.
@@ -247,22 +247,22 @@ public class Website implements Parcelable {
   @Override
   public String toString() {
     return "Website{" +
-        "title='" + title + '\'' +
-        ", url='" + url + '\'' +
-        ", faviconUrl='" + faviconUrl + '\'' +
-        ", canonicalUrl='" + canonicalUrl + '\'' +
-        ", themeColor='" + themeColor + '\'' +
-        ", ampUrl='" + ampUrl + '\'' +
-        ", bookmarked=" + bookmarked +
-        ", createdAt=" + createdAt +
-        ", count=" + count +
-        '}';
+      "title='" + title + '\'' +
+      ", url='" + url + '\'' +
+      ", faviconUrl='" + faviconUrl + '\'' +
+      ", canonicalUrl='" + canonicalUrl + '\'' +
+      ", themeColor='" + themeColor + '\'' +
+      ", ampUrl='" + ampUrl + '\'' +
+      ", bookmarked=" + bookmarked +
+      ", createdAt=" + createdAt +
+      ", count=" + count +
+      '}';
   }
 
   public boolean matches(String url) {
     return url.equalsIgnoreCase(this.url)
-        || url.equalsIgnoreCase(this.ampUrl)
-        || url.equalsIgnoreCase(preferredUrl());
+      || url.equalsIgnoreCase(this.ampUrl)
+      || url.equalsIgnoreCase(preferredUrl());
   }
 }
 

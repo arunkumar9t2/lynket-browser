@@ -18,61 +18,61 @@
   -->
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="@dimen/web_head_size_normal"
-    android:layout_height="@dimen/web_head_size_normal"
-    android:clipToPadding="false"
-    android:orientation="vertical"
-    android:padding="10dp">
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="@dimen/web_head_size_normal"
+  android:layout_height="@dimen/web_head_size_normal"
+  android:clipToPadding="false"
+  android:orientation="vertical"
+  android:padding="10dp">
 
-    <arun.com.chromer.bubbles.webheads.ui.views.ElevatedCircleView
-        android:id="@+id/circleBackground"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:elevation="6dp"
-        tools:ignore="UnusedAttribute" />
+  <arun.com.chromer.bubbles.webheads.ui.views.ElevatedCircleView
+    android:id="@+id/circleBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:elevation="6dp"
+    tools:ignore="UnusedAttribute" />
 
-    <arun.com.chromer.bubbles.webheads.ui.views.CircleView
-        android:id="@+id/revealView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:elevation="6.1dp"
-        tools:ignore="UnusedAttribute" />
+  <arun.com.chromer.bubbles.webheads.ui.views.CircleView
+    android:id="@+id/revealView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:elevation="6.1dp"
+    tools:ignore="UnusedAttribute" />
 
-    <TextView
-        android:id="@+id/indicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:elevation="9.2dp"
-        android:gravity="center"
-        android:maxLines="1"
-        android:textAllCaps="true"
-        android:textColor="@color/md_black_1000"
-        android:textSize="20sp"
-        tools:ignore="SelectableText,UnusedAttribute" />
+  <TextView
+    android:id="@+id/indicator"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:elevation="9.2dp"
+    android:gravity="center"
+    android:maxLines="1"
+    android:textAllCaps="true"
+    android:textColor="@color/md_black_1000"
+    android:textSize="20sp"
+    tools:ignore="SelectableText,UnusedAttribute" />
 
-    <ImageView
-        android:id="@+id/favicon"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_gravity="center"
-        android:elevation="9.3dp"
-        android:gravity="center"
-        android:scaleType="fitCenter"
-        android:visibility="invisible"
-        tools:ignore="ContentDescription,UnusedAttribute" />
+  <ImageView
+    android:id="@+id/favicon"
+    android:layout_width="32dp"
+    android:layout_height="32dp"
+    android:layout_gravity="center"
+    android:elevation="9.3dp"
+    android:gravity="center"
+    android:scaleType="fitCenter"
+    android:visibility="invisible"
+    tools:ignore="ContentDescription,UnusedAttribute" />
 
-    <TextView
-        android:id="@+id/badge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|start"
-        android:elevation="9.4dp"
-        android:gravity="center"
-        android:scaleType="fitCenter"
-        android:visibility="invisible"
-        tools:ignore="ContentDescription,UnusedAttribute" />
+  <TextView
+    android:id="@+id/badge"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="top|start"
+    android:elevation="9.4dp"
+    android:gravity="center"
+    android:scaleType="fitCenter"
+    android:visibility="invisible"
+    tools:ignore="ContentDescription,UnusedAttribute" />
 </FrameLayout>

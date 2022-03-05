@@ -19,6 +19,16 @@
 
 package arun.com.chromer.bubbles.webheads.ui.views;
 
+import static android.view.Gravity.LEFT;
+import static android.view.Gravity.RIGHT;
+import static android.view.Gravity.TOP;
+import static android.view.MotionEvent.ACTION_CANCEL;
+import static android.view.MotionEvent.ACTION_DOWN;
+import static android.view.MotionEvent.ACTION_MOVE;
+import static android.view.MotionEvent.ACTION_UP;
+import static arun.com.chromer.bubbles.webheads.physics.SpringConfigs.FLING;
+import static arun.com.chromer.bubbles.webheads.ui.views.Trashy.MAGNETISM_THRESHOLD;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
@@ -49,16 +59,6 @@ import arun.com.chromer.bubbles.webheads.ui.WebHeadContract;
 import arun.com.chromer.settings.Preferences;
 import arun.com.chromer.util.Utils;
 import timber.log.Timber;
-
-import static android.view.Gravity.LEFT;
-import static android.view.Gravity.RIGHT;
-import static android.view.Gravity.TOP;
-import static android.view.MotionEvent.ACTION_CANCEL;
-import static android.view.MotionEvent.ACTION_DOWN;
-import static android.view.MotionEvent.ACTION_MOVE;
-import static android.view.MotionEvent.ACTION_UP;
-import static arun.com.chromer.bubbles.webheads.physics.SpringConfigs.FLING;
-import static arun.com.chromer.bubbles.webheads.ui.views.Trashy.MAGNETISM_THRESHOLD;
 
 /**
  * Web head object which adds draggable and gesture functionality.
@@ -389,17 +389,17 @@ public class WebHead extends BaseWebHead implements SpringListener {
    */
   private void animateContentScale(final float scale, @Nullable final Runnable endAction) {
     contentRoot.animate()
-        .scaleX(scale)
-        .scaleY(scale)
-        .setInterpolator(new SpringInterpolator(0.2, 5))
-        .setListener(new AnimatorListenerAdapter() {
-          @Override
-          public void onAnimationEnd(Animator animation) {
-            if (endAction != null) {
-              endAction.run();
-            }
+      .scaleX(scale)
+      .scaleY(scale)
+      .setInterpolator(new SpringInterpolator(0.2, 5))
+      .setListener(new AnimatorListenerAdapter() {
+        @Override
+        public void onAnimationEnd(Animator animation) {
+          if (endAction != null) {
+            endAction.run();
           }
-        }).start();
+        }
+      }).start();
   }
 
   public void reveal(@Nullable final Runnable endAction) {
@@ -586,19 +586,19 @@ public class WebHead extends BaseWebHead implements SpringListener {
    */
   private void closeWithAnimation(final boolean receiveCallback) {
     revealInAnimation(deleteColor,
-        () -> {
-          if (circleBg != null && indicator != null) {
-            circleBg.clearElevation();
-            indicator.setVisibility(GONE);
-          }
-          crossFadeFaviconToX();
-        },
-        () -> new Handler()
-            .postDelayed(() -> {
-              if (receiveCallback)
-                webHeadContract.onWebHeadDestroyed(WebHead.this, isLastWebHead());
-              WebHead.super.destroySelf(receiveCallback);
-            }, 200));
+      () -> {
+        if (circleBg != null && indicator != null) {
+          circleBg.clearElevation();
+          indicator.setVisibility(GONE);
+        }
+        crossFadeFaviconToX();
+      },
+      () -> new Handler()
+        .postDelayed(() -> {
+          if (receiveCallback)
+            webHeadContract.onWebHeadDestroyed(WebHead.this, isLastWebHead());
+          WebHead.super.destroySelf(receiveCallback);
+        }, 200));
   }
 
   /**
@@ -609,22 +609,22 @@ public class WebHead extends BaseWebHead implements SpringListener {
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
   private void closeWithAnimationL(final boolean receiveCallback) {
     circleBg.animate()
-        .setDuration(50)
-        .withLayer()
-        .translationZ(0)
-        .z(0)
-        .withEndAction(() ->
-            revealInAnimation(deleteColor,
-                () -> {
-                  crossFadeFaviconToX();
-                  if (indicator != null)
-                    indicator.setVisibility(GONE);
-                },
-                () -> new Handler().postDelayed(() -> {
-                  if (receiveCallback)
-                    webHeadContract.onWebHeadDestroyed(WebHead.this, isLastWebHead());
-                  WebHead.super.destroySelf(receiveCallback);
-                }, 200)));
+      .setDuration(50)
+      .withLayer()
+      .translationZ(0)
+      .z(0)
+      .withEndAction(() ->
+        revealInAnimation(deleteColor,
+          () -> {
+            crossFadeFaviconToX();
+            if (indicator != null)
+              indicator.setVisibility(GONE);
+          },
+          () -> new Handler().postDelayed(() -> {
+            if (receiveCallback)
+              webHeadContract.onWebHeadDestroyed(WebHead.this, isLastWebHead());
+            WebHead.super.destroySelf(receiveCallback);
+          }, 200)));
   }
 
   /**
@@ -687,7 +687,7 @@ public class WebHead extends BaseWebHead implements SpringListener {
 
     public float getInterpolation(float time) {
       return (float) (-1 * Math.pow(Math.E, -time / amp) *
-          Math.cos(frequency * time) + 1);
+        Math.cos(frequency * time) + 1);
     }
   }
 
@@ -712,14 +712,14 @@ public class WebHead extends BaseWebHead implements SpringListener {
         }
         contentRoot.setPivotY((float) (contentRoot.getHeight() * 0.75));
         contentRoot.animate()
-            .scaleX(0.0f)
-            .scaleY(0.0f)
-            .alpha(0.5f)
-            .withLayer()
-            .setDuration(125)
-            .setInterpolator(FAST_OUT_SLOW_IN_INTERPOLATOR)
-            .withEndAction(this::sendCallback)
-            .start();
+          .scaleX(0.0f)
+          .scaleY(0.0f)
+          .alpha(0.5f)
+          .withLayer()
+          .setDuration(125)
+          .setInterpolator(FAST_OUT_SLOW_IN_INTERPOLATOR)
+          .withEndAction(this::sendCallback)
+          .start();
         // Store the touch down point if its master
         if (master) {
           masterDownX = windowParams.x;

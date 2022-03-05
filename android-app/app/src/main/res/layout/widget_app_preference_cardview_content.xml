@@ -18,54 +18,54 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="vertical"
+  android:padding="10dp">
+
+  <ImageView
+    android:id="@+id/app_preference_icon"
+    android:layout_width="55dp"
+    android:layout_height="55dp"
+    android:layout_gravity="center"
+    android:scaleType="fitCenter"
+    tools:ignore="ContentDescription"
+    tools:src="@mipmap/ic_launcher" />
+
+  <Space
+    android:layout_width="match_parent"
+    android:layout_height="7dp" />
+
+
+  <TextView
+    android:id="@+id/app_preference_selection"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="10dp">
+    android:layout_gravity="center"
+    android:fontFamily="sans-serif-condensed"
+    android:gravity="center"
+    android:maxLines="1"
+    android:textColor="@color/material_dark_color"
+    android:textStyle="bold"
+    tools:ignore="SelectableText"
+    tools:text="Firefox" />
 
-    <ImageView
-        android:id="@+id/app_preference_icon"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:layout_gravity="center"
-        android:scaleType="fitCenter"
-        tools:ignore="ContentDescription"
-        tools:src="@mipmap/ic_launcher" />
+  <Space
+    android:layout_width="match_parent"
+    android:layout_height="5dp" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="7dp" />
-
-
-    <TextView
-        android:id="@+id/app_preference_selection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:fontFamily="sans-serif-condensed"
-        android:gravity="center"
-        android:maxLines="1"
-        android:textColor="@color/material_dark_color"
-        android:textStyle="bold"
-        tools:ignore="SelectableText"
-        tools:text="Firefox" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="5dp" />
-
-    <TextView
-        android:id="@+id/app_preference_category"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:fontFamily="sans-serif"
-        android:gravity="center"
-        android:maxLines="2"
-        android:textColor="@color/material_dark_color"
-        android:textSize="14sp"
-        tools:ignore="SelectableText"
-        tools:text="Custom Tab Provider" />
+  <TextView
+    android:id="@+id/app_preference_category"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:fontFamily="sans-serif"
+    android:gravity="center"
+    android:maxLines="2"
+    android:textColor="@color/material_dark_color"
+    android:textSize="14sp"
+    tools:ignore="SelectableText"
+    tools:text="Custom Tab Provider" />
 
 </LinearLayout>

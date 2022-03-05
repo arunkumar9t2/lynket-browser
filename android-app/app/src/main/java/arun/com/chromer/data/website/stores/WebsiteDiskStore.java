@@ -19,6 +19,8 @@
 
 package arun.com.chromer.data.website.stores;
 
+import static arun.com.chromer.shared.Constants.NO_COLOR;
+
 import android.app.Application;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -42,8 +44,6 @@ import io.paperdb.Book;
 import io.paperdb.Paper;
 import rx.Observable;
 import timber.log.Timber;
-
-import static arun.com.chromer.shared.Constants.NO_COLOR;
 
 /**
  * Cache store to get/put {@link Website} objects to disk cache.

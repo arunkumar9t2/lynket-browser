@@ -18,22 +18,22 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:background="?attr/selectableItemBackgroundBorderless"
-    android:clickable="true"
-    android:focusable="true"
-    android:gravity="start|center"
-    android:orientation="vertical"
-    android:padding="2dp">
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:layout_gravity="center"
+  android:background="?attr/selectableItemBackgroundBorderless"
+  android:clickable="true"
+  android:focusable="true"
+  android:gravity="start|center"
+  android:orientation="vertical"
+  android:padding="2dp">
 
-    <ImageView
-        android:id="@+id/icon"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:scaleType="fitCenter"
-        tools:ignore="ContentDescription"
-        tools:srcCompat="@tools:sample/avatars" />
+  <ImageView
+    android:id="@+id/icon"
+    android:layout_width="24dp"
+    android:layout_height="24dp"
+    android:scaleType="fitCenter"
+    tools:ignore="ContentDescription"
+    tools:srcCompat="@tools:sample/avatars" />
 </LinearLayout>

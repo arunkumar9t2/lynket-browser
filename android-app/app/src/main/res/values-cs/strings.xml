@@ -17,9 +17,9 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string-array name="animationValues">
-        <item>Žádná</item>
-        <item>Vysunout do prava</item>
-        <item>Vysunout nahoru</item>
-    </string-array>
+  <string-array name="animationValues">
+    <item>Žádná</item>
+    <item>Vysunout do prava</item>
+    <item>Vysunout nahoru</item>
+  </string-array>
 </resources>

@@ -18,82 +18,82 @@
   -->
 
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/browsing_mode_root"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/browsing_mode_root"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:clickable="true"
+  android:focusable="true"
+  android:gravity="center|start"
+  android:orientation="horizontal"
+  android:weightSum="1"
+  app:cardCornerRadius="2dp"
+  app:cardElevation="1dp"
+  app:cardPreventCornerOverlap="true"
+  app:cardUseCompatPadding="true"
+  app:contentPaddingBottom="8dp"
+  app:contentPaddingTop="8dp">
+
+  <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clickable="true"
-    android:focusable="true"
-    android:gravity="center|start"
-    android:orientation="horizontal"
-    android:weightSum="1"
-    app:cardCornerRadius="2dp"
-    app:cardElevation="1dp"
-    app:cardPreventCornerOverlap="true"
-    app:cardUseCompatPadding="true"
-    app:contentPaddingBottom="8dp"
-    app:contentPaddingTop="8dp">
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <ImageView
+      android:id="@+id/icon"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
+      android:layout_gravity="center"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="16dp"
+      tools:ignore="ContentDescription,RtlHardcoded"
+      tools:src="@tools:sample/avatars" />
+
+    <RelativeLayout
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="8dp"
+      android:layout_weight="1"
+      tools:ignore="RtlHardcoded,RtlSymmetry">
+
+      <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:fontFamily="sans-serif-medium"
+        android:maxLines="1"
+        android:paddingBottom="4dp"
+        android:textAppearance="@style/Preference_TextAppearanceMaterialSubhead"
+        android:textSize="16sp"
+        tools:ignore="SelectableText"
+        tools:text="@tools:sample/full_names" />
 
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            tools:ignore="ContentDescription,RtlHardcoded"
-            tools:src="@tools:sample/avatars" />
+      <TextView
+        android:id="@+id/subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_alignStart="@id/title"
+        android:layout_alignLeft="@id/title"
+        android:paddingBottom="4dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="?android:attr/textColorSecondary"
+        tools:ignore="SelectableText"
+        tools:text="@tools:sample/lorem" />
 
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_weight="1"
-            tools:ignore="RtlHardcoded,RtlSymmetry">
+    </RelativeLayout>
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-medium"
-                android:maxLines="1"
-                android:paddingBottom="4dp"
-                android:textAppearance="@style/Preference_TextAppearanceMaterialSubhead"
-                android:textSize="16sp"
-                tools:ignore="SelectableText"
-                tools:text="@tools:sample/full_names" />
-
-            <TextView
-                android:id="@+id/subtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/title"
-                android:layout_alignStart="@id/title"
-                android:layout_alignLeft="@id/title"
-                android:paddingBottom="4dp"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="?android:attr/textColorSecondary"
-                tools:ignore="SelectableText"
-                tools:text="@tools:sample/lorem" />
-
-        </RelativeLayout>
-
-        <ImageView
-            android:id="@+id/browsing_mode_selector"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:padding="2dp"
-            tools:ignore="ContentDescription"
-            tools:src="@tools:sample/avatars" />
-    </LinearLayout>
+    <ImageView
+      android:id="@+id/browsing_mode_selector"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
+      android:layout_gravity="center"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="16dp"
+      android:padding="2dp"
+      tools:ignore="ContentDescription"
+      tools:src="@tools:sample/avatars" />
+  </LinearLayout>
 </androidx.cardview.widget.CardView>

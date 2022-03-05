@@ -18,47 +18,47 @@
   -->
 
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-    <shortcut
-        android:enabled="true"
-        android:icon="@drawable/ic_shortcut_add"
-        android:shortcutId="new_tab"
-        android:shortcutLongLabel="@string/open_new_tab"
-        android:shortcutShortLabel="@string/open_new_tab"
-        tools:targetApi="n_mr1">
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetClass="arun.com.chromer.browsing.newtab.NewTabDialogActivity"
-            android:targetPackage="arun.com.chromer" />
-        <categories android:name="android.shortcut.conversation" />
-    </shortcut>
+  xmlns:tools="http://schemas.android.com/tools">
+  <shortcut
+    android:enabled="true"
+    android:icon="@drawable/ic_shortcut_add"
+    android:shortcutId="new_tab"
+    android:shortcutLongLabel="@string/open_new_tab"
+    android:shortcutShortLabel="@string/open_new_tab"
+    tools:targetApi="n_mr1">
+    <intent
+      android:action="android.intent.action.VIEW"
+      android:targetClass="arun.com.chromer.browsing.newtab.NewTabDialogActivity"
+      android:targetPackage="arun.com.chromer" />
+    <categories android:name="android.shortcut.conversation" />
+  </shortcut>
 
-    <shortcut
-        android:enabled="true"
-        android:icon="@drawable/ic_shortcut_history"
-        android:shortcutId="history"
-        android:shortcutLongLabel="@string/title_history"
-        android:shortcutShortLabel="@string/title_history"
-        tools:targetApi="n_mr1">
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetClass="arun.com.chromer.history.HistoryActivity"
-            android:targetPackage="arun.com.chromer" />
-        <categories android:name="android.shortcut.conversation" />
-    </shortcut>
+  <shortcut
+    android:enabled="true"
+    android:icon="@drawable/ic_shortcut_history"
+    android:shortcutId="history"
+    android:shortcutLongLabel="@string/title_history"
+    android:shortcutShortLabel="@string/title_history"
+    tools:targetApi="n_mr1">
+    <intent
+      android:action="android.intent.action.VIEW"
+      android:targetClass="arun.com.chromer.history.HistoryActivity"
+      android:targetPackage="arun.com.chromer" />
+    <categories android:name="android.shortcut.conversation" />
+  </shortcut>
 
-    <shortcut
-        android:enabled="true"
-        android:icon="@drawable/ic_shortcut_tabs"
-        android:shortcutId="tabs"
-        android:shortcutLongLabel="@string/title_tabs"
-        android:shortcutShortLabel="@string/title_tabs"
-        tools:targetApi="n_mr1">
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetClass="arun.com.chromer.tabs.ui.TabsActivity"
-            android:targetPackage="arun.com.chromer" />
-        <categories android:name="android.shortcut.conversation" />
-    </shortcut>
-    <!-- Specify more shortcuts here. -->
+  <shortcut
+    android:enabled="true"
+    android:icon="@drawable/ic_shortcut_tabs"
+    android:shortcutId="tabs"
+    android:shortcutLongLabel="@string/title_tabs"
+    android:shortcutShortLabel="@string/title_tabs"
+    tools:targetApi="n_mr1">
+    <intent
+      android:action="android.intent.action.VIEW"
+      android:targetClass="arun.com.chromer.tabs.ui.TabsActivity"
+      android:targetPackage="arun.com.chromer" />
+    <categories android:name="android.shortcut.conversation" />
+  </shortcut>
+  <!-- Specify more shortcuts here. -->
 </shortcuts>

@@ -18,29 +18,29 @@
   -->
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:layout_marginLeft="12dp"
+  android:layout_marginRight="12dp"
+  android:background="@color/article_codeblockBackground"
+  tools:ignore="Overdraw">
+
+  <HorizontalScrollView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="12dp"
-    android:layout_marginRight="12dp"
-    android:background="@color/article_codeblockBackground"
-    tools:ignore="Overdraw">
+    tools:ignore="UselessParent">
 
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:ignore="UselessParent">
+    <TextView
+      android:id="@+id/article_text"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:fontFamily="monospace"
+      android:padding="24dp"
+      android:scrollHorizontally="true"
+      android:textColor="@color/article_secondaryText"
+      android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/article_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="monospace"
-            android:padding="24dp"
-            android:scrollHorizontally="true"
-            android:textColor="@color/article_secondaryText"
-            android:textSize="14sp" />
-
-    </HorizontalScrollView>
+  </HorizontalScrollView>
 
 </FrameLayout>

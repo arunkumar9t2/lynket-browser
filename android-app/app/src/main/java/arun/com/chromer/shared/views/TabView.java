@@ -98,25 +98,25 @@ public class TabView extends FrameLayout {
     switch (mTabType) {
       case TAB_TYPE_OPTIONS:
         tabIcon.setImageDrawable(new IconicsDrawable(getContext())
-            .icon(CommunityMaterial.Icon.cmd_settings)
-            .color(SELECTED_COLOR)
-            .sizeDp(23));
+          .icon(CommunityMaterial.Icon.cmd_settings)
+          .color(SELECTED_COLOR)
+          .sizeDp(23));
         text.setText(R.string.options);
         text.setTextColor(SELECTED_COLOR);
         break;
       case TAB_TYPE_WEB_HEADS:
         tabIcon.setImageDrawable(new IconicsDrawable(getContext())
-            .icon(CommunityMaterial.Icon.cmd_chart_bubble)
-            .color(UN_SELECTED_COLOR)
-            .sizeDp(23));
+          .icon(CommunityMaterial.Icon.cmd_chart_bubble)
+          .color(UN_SELECTED_COLOR)
+          .sizeDp(23));
         text.setText(R.string.web_heads);
         text.setTextColor(UN_SELECTED_COLOR);
         break;
       case TAB_TYPE_CUSTOMIZE:
         tabIcon.setImageDrawable(new IconicsDrawable(getContext())
-            .icon(CommunityMaterial.Icon.cmd_format_paint)
-            .color(UN_SELECTED_COLOR)
-            .sizeDp(23));
+          .icon(CommunityMaterial.Icon.cmd_format_paint)
+          .color(UN_SELECTED_COLOR)
+          .sizeDp(23));
         text.setText(R.string.customize);
         text.setTextColor(UN_SELECTED_COLOR);
         break;
@@ -170,20 +170,20 @@ public class TabView extends FrameLayout {
     clearAnimations();
     final AnimatorSet transformAnimator = new AnimatorSet();
     transformAnimator.playTogether(
-        ObjectAnimator.ofFloat(tabIcon, "translationX", initialIconX),
-        ObjectAnimator.ofFloat(tabIcon, "scaleX", 0.75f),
-        ObjectAnimator.ofFloat(tabIcon, "scaleY", 0.75f),
-        ObjectAnimator.ofFloat(text, "scaleX", 1f),
-        ObjectAnimator.ofFloat(text, "scaleY", 1f),
-        ObjectAnimator.ofFloat(text, "alpha", 1f)
+      ObjectAnimator.ofFloat(tabIcon, "translationX", initialIconX),
+      ObjectAnimator.ofFloat(tabIcon, "scaleX", 0.75f),
+      ObjectAnimator.ofFloat(tabIcon, "scaleY", 0.75f),
+      ObjectAnimator.ofFloat(text, "scaleX", 1f),
+      ObjectAnimator.ofFloat(text, "scaleY", 1f),
+      ObjectAnimator.ofFloat(text, "alpha", 1f)
     );
     transformAnimator.setDuration(275);
     transformAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
 
     final AnimatorSet sequentialAnimator = new AnimatorSet();
     sequentialAnimator.playTogether(
-        transformAnimator,
-        getIconUnSelectionAnimator()
+      transformAnimator,
+      getIconUnSelectionAnimator()
     );
     sequentialAnimator.start();
   }
@@ -192,20 +192,20 @@ public class TabView extends FrameLayout {
     clearAnimations();
     final AnimatorSet transformAnimator = new AnimatorSet();
     transformAnimator.playTogether(
-        ObjectAnimator.ofFloat(tabIcon, "translationX", getIconCentreInLayout()),
-        ObjectAnimator.ofFloat(tabIcon, "scaleX", 1f),
-        ObjectAnimator.ofFloat(tabIcon, "scaleY", 1f),
-        ObjectAnimator.ofFloat(text, "scaleX", 0f),
-        ObjectAnimator.ofFloat(text, "scaleY", 0f),
-        ObjectAnimator.ofFloat(text, "alpha", 0f)
+      ObjectAnimator.ofFloat(tabIcon, "translationX", getIconCentreInLayout()),
+      ObjectAnimator.ofFloat(tabIcon, "scaleX", 1f),
+      ObjectAnimator.ofFloat(tabIcon, "scaleY", 1f),
+      ObjectAnimator.ofFloat(text, "scaleX", 0f),
+      ObjectAnimator.ofFloat(text, "scaleY", 0f),
+      ObjectAnimator.ofFloat(text, "alpha", 0f)
     );
     transformAnimator.setDuration(275);
     transformAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
 
     final AnimatorSet togetherAnimator = new AnimatorSet();
     togetherAnimator.playSequentially(
-        transformAnimator,
-        getIconSelectionAnimator()
+      transformAnimator,
+      getIconSelectionAnimator()
     );
     togetherAnimator.start();
   }

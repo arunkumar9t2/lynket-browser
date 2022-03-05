@@ -18,42 +18,42 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:layout_gravity="center"
+  android:animateLayoutChanges="true"
+  android:gravity="center"
+  android:orientation="vertical"
+  android:paddingLeft="16dp"
+  android:paddingRight="16dp">
+
+  <ImageView
+    android:id="@+id/icon_view"
+    android:layout_width="72dp"
+    android:layout_height="72dp"
     android:layout_gravity="center"
-    android:animateLayoutChanges="true"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp">
+    android:layout_margin="8dp"
+    android:visibility="visible"
+    tools:ignore="ContentDescription"
+    tools:src="@drawable/arun" />
 
-    <ImageView
-        android:id="@+id/icon_view"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:layout_gravity="center"
-        android:layout_margin="8dp"
-        android:visibility="visible"
-        tools:ignore="ContentDescription"
-        tools:src="@drawable/arun" />
+  <TextView
+    android:id="@+id/features"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="4dp"
+    android:gravity="center|start"
+    android:minHeight="36dp"
+    android:text="@string/features"
+    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+    android:textSize="16sp" />
 
-    <TextView
-        android:id="@+id/features"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:gravity="center|start"
-        android:minHeight="36dp"
-        android:text="@string/features"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/providerDetails"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textSize="14sp"
-        tools:text="@string/custom_tab" />
+  <TextView
+    android:id="@+id/providerDetails"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+    android:textSize="14sp"
+    tools:text="@string/custom_tab" />
 </LinearLayout>

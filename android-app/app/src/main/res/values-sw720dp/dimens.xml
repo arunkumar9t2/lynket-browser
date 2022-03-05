@@ -18,5 +18,5 @@
   -->
 
 <resources>
-    <dimen name="article_articleWidth">576dp</dimen>
+  <dimen name="article_articleWidth">576dp</dimen>
 </resources>

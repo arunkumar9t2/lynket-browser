@@ -119,9 +119,9 @@ constructor(
    * such that each [SuggestionType] and its [List] of [SuggestionItem]s are unique.
    */
   fun distinctSuggestionsPublishSelector() = Function<
-      Flowable<Pair<SuggestionType, List<SuggestionItem>>>,
-      Flowable<Pair<SuggestionType, List<SuggestionItem>>>
-      > { source ->
+    Flowable<Pair<SuggestionType, List<SuggestionItem>>>,
+    Flowable<Pair<SuggestionType, List<SuggestionItem>>>
+    > { source ->
     Flowable.mergeArray(
       source.filter { it.first == COPY }.distinctUntilChanged(),
       source.filter { it.first == GOOGLE }.distinctUntilChanged(),

@@ -86,12 +86,22 @@ class DefaultTabsManagerTest : ChromerRobolectricSuite() {
 
     val shadowApp = shadowOf(application)
     tabs.openUrl(application, Website(url), fromApp = false, fromWebHeads = false)
-    assert(shadowApp.nextStartedActivity.component == Intent(application, AmpResolverActivity::class.java).component)
+    assert(
+      shadowApp.nextStartedActivity.component == Intent(
+        application,
+        AmpResolverActivity::class.java
+      ).component
+    )
   }
 
   private fun assertWebHeadServiceLaunched(shadowApp: ShadowApplication) {
     tabs.openUrl(application, Website(url), fromApp = false, fromWebHeads = false)
-    assert(shadowApp.peekNextStartedService().component == Intent(application, WebHeadService::class.java).component)
+    assert(
+      shadowApp.peekNextStartedService().component == Intent(
+        application,
+        WebHeadService::class.java
+      ).component
+    )
     assert(shadowApp.nextStartedService.dataString == url)
   }
 }

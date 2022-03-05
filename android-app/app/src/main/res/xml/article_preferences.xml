@@ -19,15 +19,15 @@
 
 <!--suppress AndroidElementNotAllowed -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:key="settings"
-    android:title="@string/settings">
-    <PreferenceCategory android:title="@string/article_mode">
-        <arun.com.chromer.settings.widgets.IconListPreference
-            android:defaultValue="1"
-            android:dialogTitle="@string/article_theme"
-            android:entries="@array/articleThemeValues"
-            android:entryValues="@array/articleThemeKeys"
-            android:key="article_theme_preference"
-            android:title="@string/article_theme" />
-    </PreferenceCategory>
+  android:key="settings"
+  android:title="@string/settings">
+  <PreferenceCategory android:title="@string/article_mode">
+    <arun.com.chromer.settings.widgets.IconListPreference
+      android:defaultValue="1"
+      android:dialogTitle="@string/article_theme"
+      android:entries="@array/articleThemeValues"
+      android:entryValues="@array/articleThemeKeys"
+      android:key="article_theme_preference"
+      android:title="@string/article_theme" />
+  </PreferenceCategory>
 </PreferenceScreen>

@@ -18,7 +18,7 @@
   -->
 
 <resources>
-    <dimen name="activity_horizontal_margin">128dp</dimen>
-    <dimen name="activity_horizontal_margin_less">123dp</dimen>
-    <dimen name="activity_vertical_margin_bottom_fab">10dp</dimen>
+  <dimen name="activity_horizontal_margin">128dp</dimen>
+  <dimen name="activity_horizontal_margin_less">123dp</dimen>
+  <dimen name="activity_vertical_margin_bottom_fab">10dp</dimen>
 </resources>

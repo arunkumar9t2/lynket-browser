@@ -18,53 +18,53 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:layout_gravity="center"
+  android:animateLayoutChanges="true"
+  android:gravity="center"
+  android:orientation="vertical"
+  android:paddingLeft="16dp"
+  android:paddingRight="16dp">
+
+  <FrameLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:animateLayoutChanges="true"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp">
+    android:layout_height="wrap_content"
+    android:layout_gravity="center">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center">
+    <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+      android:id="@+id/extract_progress"
+      style="@style/Widget.MaterialProgressBar.ProgressBar"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:indeterminate="true"
+      android:padding="8dp"
+      app:mpb_progressStyle="circular" />
 
-        <me.zhanghai.android.materialprogressbar.MaterialProgressBar
-            android:id="@+id/extract_progress"
-            style="@style/Widget.MaterialProgressBar.ProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:indeterminate="true"
-            android:padding="8dp"
-            app:mpb_progressStyle="circular" />
+    <ImageView
+      android:id="@+id/icon_view"
+      android:layout_width="72dp"
+      android:layout_height="72dp"
+      android:layout_gravity="center"
+      android:layout_margin="8dp"
+      android:visibility="gone"
+      tools:ignore="ContentDescription" />
+  </FrameLayout>
 
-        <ImageView
-            android:id="@+id/icon_view"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:layout_gravity="center"
-            android:layout_margin="8dp"
-            android:visibility="gone"
-            tools:ignore="ContentDescription" />
-    </FrameLayout>
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/shortcut_name_wrapper"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/shortcut_name_wrapper"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <EditText
+      android:id="@+id/shortcut_name"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="@string/shortcut_name"
+      android:inputType="textAutoComplete" />
 
-        <EditText
-            android:id="@+id/shortcut_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/shortcut_name"
-            android:inputType="textAutoComplete" />
-
-    </com.google.android.material.textfield.TextInputLayout>
+  </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>

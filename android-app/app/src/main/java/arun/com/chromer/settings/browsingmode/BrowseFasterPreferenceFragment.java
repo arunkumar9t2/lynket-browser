@@ -61,9 +61,9 @@ public class BrowseFasterPreferenceFragment extends BasePreferenceFragment imple
     IconSwitchPreference articleModePreference = (IconSwitchPreference) findPreference(Preferences.ARTICLE_MODE);
     if (articleModePreference != null) {
       final Drawable articleImg = new IconicsDrawable(getActivity())
-          .icon(CommunityMaterial.Icon.cmd_file_document)
-          .color(ContextCompat.getColor(getActivity(), R.color.android_green))
-          .sizeDp(24);
+        .icon(CommunityMaterial.Icon.cmd_file_document)
+        .color(ContextCompat.getColor(getActivity(), R.color.android_green))
+        .sizeDp(24);
       articleModePreference.setIcon(articleImg);
       articleModePreference.setOnPreferenceClickListener(preference -> false);
       articleModePreference.setOnPreferenceChangeListener((preference, newValue) -> {
@@ -81,11 +81,11 @@ public class BrowseFasterPreferenceFragment extends BasePreferenceFragment imple
         final boolean isSlideOver = !Preferences.get(getContext()).webHeads();
         if (isSlideOver && (Boolean) newValue) {
           new MaterialDialog.Builder(getActivity())
-              .title(R.string.amp_warning_title)
-              .content(R.string.amp_warning_content, true)
-              .positiveText(android.R.string.ok)
-              .iconRes(R.drawable.ic_action_amp_icon)
-              .show();
+            .title(R.string.amp_warning_title)
+            .content(R.string.amp_warning_content, true)
+            .positiveText(android.R.string.ok)
+            .iconRes(R.drawable.ic_action_amp_icon)
+            .show();
         }
         showInformationDialog((Boolean) newValue, Preferences.get(getActivity()).articleMode());
         return true;
@@ -97,11 +97,11 @@ public class BrowseFasterPreferenceFragment extends BasePreferenceFragment imple
     dismissDialog();
     if (ampMode && article) {
       dialog = new MaterialDialog.Builder(getActivity())
-          .iconRes(R.drawable.ic_action_amp_icon)
-          .title(R.string.attention)
-          .content(R.string.amp_article_combined_explanation, true)
-          .positiveText(android.R.string.ok)
-          .show();
+        .iconRes(R.drawable.ic_action_amp_icon)
+        .title(R.string.attention)
+        .content(R.string.amp_article_combined_explanation, true)
+        .positiveText(android.R.string.ok)
+        .show();
     }
   }
 

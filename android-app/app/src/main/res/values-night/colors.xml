@@ -18,9 +18,9 @@
   -->
 
 <resources>
-    <color name="article_windowBackground">#303030</color>
-    <color name="article_imageBackground">#212121</color>
-    <color name="article_primaryText">#FFFFFFFF</color>
-    <color name="article_secondaryText">#B2FFFFFF</color>
-    <color name="article_codeblockBackground">#424242</color>
+  <color name="article_windowBackground">#303030</color>
+  <color name="article_imageBackground">#212121</color>
+  <color name="article_primaryText">#FFFFFFFF</color>
+  <color name="article_secondaryText">#B2FFFFFF</color>
+  <color name="article_codeblockBackground">#424242</color>
 </resources>

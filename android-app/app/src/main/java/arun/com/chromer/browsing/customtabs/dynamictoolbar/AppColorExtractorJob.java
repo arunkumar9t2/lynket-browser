@@ -19,6 +19,10 @@
 
 package arun.com.chromer.browsing.customtabs.dynamictoolbar;
 
+import static android.content.pm.PackageManager.GET_META_DATA;
+import static arun.com.chromer.shared.Constants.EXTRA_PACKAGE_NAME;
+import static arun.com.chromer.shared.Constants.NO_COLOR;
+
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -43,10 +47,6 @@ import arun.com.chromer.data.apps.AppRepository;
 import arun.com.chromer.util.ColorUtil;
 import arun.com.chromer.util.Utils;
 import timber.log.Timber;
-
-import static android.content.pm.PackageManager.GET_META_DATA;
-import static arun.com.chromer.shared.Constants.EXTRA_PACKAGE_NAME;
-import static arun.com.chromer.shared.Constants.NO_COLOR;
 
 
 public class AppColorExtractorJob extends JobIntentService {
@@ -104,7 +104,7 @@ public class AppColorExtractorJob extends JobIntentService {
   }
 
   private int getThemedColor(@Nullable Resources resources, int attributeId, @NonNull String packageName)
-      throws PackageManager.NameNotFoundException {
+    throws PackageManager.NameNotFoundException {
     if (resources == null || attributeId == 0) return -1;
     // Create dummy theme
     final Resources.Theme tempTheme = resources.newTheme();
@@ -118,7 +118,7 @@ public class AppColorExtractorJob extends JobIntentService {
     int color = array.getColor(0, NO_COLOR);
     array.recycle();
     if (color == ContextCompat.getColor(this, R.color.md_grey_100)
-        || color == ContextCompat.getColor(this, R.color.md_grey_900)) {
+      || color == ContextCompat.getColor(this, R.color.md_grey_900)) {
       color = NO_COLOR;
     }
     return color;
@@ -128,8 +128,8 @@ public class AppColorExtractorJob extends JobIntentService {
     try {
       final Bitmap iconBitmap = Utils.drawableToBitmap(getPackageManager().getApplicationIcon(packageName));
       final Palette palette = Palette.from(iconBitmap)
-          .clearFilters()
-          .generate();
+        .clearFilters()
+        .generate();
       int extractColor = getPreferredColorFromSwatches(palette);
       if (extractColor != NO_COLOR) {
         Timber.d("Extracted %d for %s", extractColor, packageName);
@@ -152,11 +152,11 @@ public class AppColorExtractorJob extends JobIntentService {
   private int getPreferredColorFromSwatches(Palette palette) {
     final List<Palette.Swatch> swatchList = ColorUtil.getSwatchListFromPalette(palette);
     final Palette.Swatch prominentSwatch = Collections.max(swatchList,
-        (swatch1, swatch2) -> {
-          int a = swatch1 == null ? 0 : swatch1.getPopulation();
-          int b = swatch2 == null ? 0 : swatch2.getPopulation();
-          return a - b;
-        });
+      (swatch1, swatch2) -> {
+        int a = swatch1 == null ? 0 : swatch1.getPopulation();
+        int b = swatch2 == null ? 0 : swatch2.getPopulation();
+        return a - b;
+      });
     if (prominentSwatch != null)
       return prominentSwatch.getRgb();
     else return -1;

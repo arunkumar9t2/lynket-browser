@@ -17,32 +17,32 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/fragmentTabsRoot"
+  android:id="@+id/fragmentTabsRoot"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/tabsRecyclerView"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:clipToPadding="false"
+      android:paddingTop="4dp"
+      android:paddingBottom="4dp">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/tabsRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp">
+    </androidx.recyclerview.widget.RecyclerView>
+  </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        </androidx.recyclerview.widget.RecyclerView>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-    <TextView
-        android:id="@+id/error"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/no_active_tabs"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:visibility="gone" />
+  <TextView
+    android:id="@+id/error"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:text="@string/no_active_tabs"
+    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+    android:visibility="gone" />
 </FrameLayout>

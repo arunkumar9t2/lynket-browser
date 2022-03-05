@@ -26,6 +26,6 @@ import rx.schedulers.Schedulers;
 public class SchedulerProvider {
   public static <T> Observable.Transformer<T, T> applyIoSchedulers() {
     return observable -> observable.subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread());
+      .observeOn(AndroidSchedulers.mainThread());
   }
 }

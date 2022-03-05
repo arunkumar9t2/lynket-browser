@@ -18,54 +18,54 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:layout_gravity="center"
+  android:background="?attr/selectableItemBackground"
+  android:clickable="true"
+  android:focusable="true"
+  android:gravity="top|center"
+  android:orientation="vertical"
+  android:padding="8dp">
+
+  <ImageView
+    android:id="@+id/searchProviderIcon"
+    android:layout_width="48dp"
+    android:layout_height="48dp"
+    android:layout_marginBottom="8dp"
+    android:scaleType="fitCenter"
+    tools:ignore="ContentDescription"
+    tools:srcCompat="@tools:sample/avatars" />
+
+  <TextView
+    android:id="@+id/searchProviderName"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:background="?attr/selectableItemBackground"
-    android:clickable="true"
-    android:focusable="true"
-    android:gravity="top|center"
-    android:orientation="vertical"
-    android:padding="8dp">
-
-    <ImageView
-        android:id="@+id/searchProviderIcon"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginBottom="8dp"
-        android:scaleType="fitCenter"
-        tools:ignore="ContentDescription"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <TextView
-        android:id="@+id/searchProviderName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:fontFamily="sans-serif-condensed"
-        android:gravity="center"
-        android:maxLength="35"
-        android:maxLines="2"
-        android:paddingLeft="2dp"
-        android:paddingRight="2dp"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-        android:textSize="13sp"
-        tools:text="@tools:sample/full_names" />
+    android:ellipsize="end"
+    android:fontFamily="sans-serif-condensed"
+    android:gravity="center"
+    android:maxLength="35"
+    android:maxLines="2"
+    android:paddingLeft="2dp"
+    android:paddingRight="2dp"
+    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+    android:textSize="13sp"
+    tools:text="@tools:sample/full_names" />
 
 
-    <TextView
-        android:id="@+id/searchProviderUrl"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:fontFamily="sans-serif-condensed"
-        android:gravity="center"
-        android:maxLength="35"
-        android:maxLines="2"
-        android:paddingLeft="2dp"
-        android:paddingRight="2dp"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-        android:visibility="gone"
-        tools:text="@tools:sample/full_names" />
+  <TextView
+    android:id="@+id/searchProviderUrl"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:ellipsize="end"
+    android:fontFamily="sans-serif-condensed"
+    android:gravity="center"
+    android:maxLength="35"
+    android:maxLines="2"
+    android:paddingLeft="2dp"
+    android:paddingRight="2dp"
+    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+    android:visibility="gone"
+    tools:text="@tools:sample/full_names" />
 </LinearLayout>

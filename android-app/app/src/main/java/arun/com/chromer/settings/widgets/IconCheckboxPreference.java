@@ -19,14 +19,14 @@
 
 package arun.com.chromer.settings.widgets;
 
+import static android.view.View.GONE;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 
 import androidx.preference.CheckBoxPreference;
 import androidx.preference.PreferenceViewHolder;
-
-import static android.view.View.GONE;
 
 /**
  * A helper preference view without weird margin on preference icon. Attempts to alter properties on

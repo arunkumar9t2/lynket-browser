@@ -18,33 +18,33 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="50dp">
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="50dp">
 
-    <ImageView
-        android:id="@+id/tab_view_icon"
-        android:layout_width="23dp"
-        android:layout_height="match_parent"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:gravity="center_vertical"
-        android:scaleType="fitCenter"
-        android:scaleX="0.75"
-        android:scaleY="0.75"
-        tools:ignore="ContentDescription" />
+  <ImageView
+    android:id="@+id/tab_view_icon"
+    android:layout_width="23dp"
+    android:layout_height="match_parent"
+    android:layout_centerVertical="true"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:gravity="center_vertical"
+    android:scaleType="fitCenter"
+    android:scaleX="0.75"
+    android:scaleY="0.75"
+    tools:ignore="ContentDescription" />
 
-    <TextView
-        android:id="@+id/tab_view_text"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/tab_view_icon"
-        android:fontFamily="sans-serif-medium"
-        android:gravity="center_vertical"
-        android:maxLines="1"
-        android:textColor="@android:color/white"
-        android:textSize="14sp"
-        tools:ignore="RtlHardcoded,SelectableText" />
+  <TextView
+    android:id="@+id/tab_view_text"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_centerVertical="true"
+    android:layout_toRightOf="@id/tab_view_icon"
+    android:fontFamily="sans-serif-medium"
+    android:gravity="center_vertical"
+    android:maxLines="1"
+    android:textColor="@android:color/white"
+    android:textSize="14sp"
+    tools:ignore="RtlHardcoded,SelectableText" />
 </RelativeLayout>

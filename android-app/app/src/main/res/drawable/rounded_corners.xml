@@ -17,11 +17,11 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <corners android:radius="24dp" />
-    <solid android:color="@color/primary" />
-    <padding
-        android:bottom="4dp"
-        android:left="12dp"
-        android:right="12dp"
-        android:top="4dp" />
+  <corners android:radius="24dp" />
+  <solid android:color="@color/primary" />
+  <padding
+    android:bottom="4dp"
+    android:left="12dp"
+    android:right="12dp"
+    android:top="4dp" />
 </shape>

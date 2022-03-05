@@ -19,6 +19,10 @@
 
 package arun.com.chromer.browsing.customtabs.callbacks;
 
+import static android.content.Intent.EXTRA_TEXT;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static android.widget.Toast.LENGTH_SHORT;
+
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -27,10 +31,6 @@ import android.widget.Toast;
 
 import arun.com.chromer.R;
 import arun.com.chromer.settings.Preferences;
-
-import static android.content.Intent.EXTRA_TEXT;
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static android.widget.Toast.LENGTH_SHORT;
 
 public class FavShareBroadcastReceiver extends BroadcastReceiver {
 

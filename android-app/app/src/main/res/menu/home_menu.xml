@@ -18,14 +18,14 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/menu_settings"
-        android:icon="@drawable/ic_settings_24dp"
-        android:title="@string/settings"
-        app:showAsAction="always" />
-    <item
-        android:id="@+id/menu_tips"
-        android:title="@string/tips"
-        app:showAsAction="always" />
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+  <item
+    android:id="@+id/menu_settings"
+    android:icon="@drawable/ic_settings_24dp"
+    android:title="@string/settings"
+    app:showAsAction="always" />
+  <item
+    android:id="@+id/menu_tips"
+    android:title="@string/tips"
+    app:showAsAction="always" />
 </menu>

@@ -19,6 +19,8 @@
 
 package arun.com.chromer.settings.browsingmode;
 
+import static com.mikepenz.community_material_typeface_library.CommunityMaterial.Icon;
+
 import android.app.Application;
 import android.graphics.Color;
 import android.os.Build;
@@ -49,8 +51,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import dev.arunkumar.android.dagger.activity.PerActivity;
 
-import static com.mikepenz.community_material_typeface_library.CommunityMaterial.Icon;
-
 /**
  * Created by Arunkumar on 19-02-2017.
  */
@@ -78,12 +78,12 @@ class BrowsingModeAdapter extends RecyclerView.Adapter<BrowsingModeAdapter.Brows
   @Override
   public BrowsingModeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     return new BrowsingModeViewHolder(
-        LayoutInflater.from(parent.getContext()).inflate(
-            R.layout.activity_browsing_mode_item_template,
-            parent,
-            false
-        ),
-        rxPreferences
+      LayoutInflater.from(parent.getContext()).inflate(
+        R.layout.activity_browsing_mode_item_template,
+        parent,
+        false
+      ),
+      rxPreferences
     );
   }
 
@@ -148,15 +148,15 @@ class BrowsingModeAdapter extends RecyclerView.Adapter<BrowsingModeAdapter.Brows
       switch (position) {
         case SLIDE_OVER:
           icon.setImageDrawable(new IconicsDrawable(icon.getContext())
-              .icon(Icon.cmd_open_in_app)
-              .color(Color.WHITE)
-              .sizeDp(24));
+            .icon(Icon.cmd_open_in_app)
+            .color(Color.WHITE)
+            .sizeDp(24));
           selector.setImageDrawable(new IconicsDrawable(selector.getContext())
-              .icon(webHeads || nativeBubbles
-                  ? Icon.cmd_checkbox_blank_circle_outline
-                  : Icon.cmd_checkbox_marked_circle)
-              .color(Color.WHITE)
-              .sizeDp(24));
+            .icon(webHeads || nativeBubbles
+              ? Icon.cmd_checkbox_blank_circle_outline
+              : Icon.cmd_checkbox_marked_circle)
+            .color(Color.WHITE)
+            .sizeDp(24));
           title.setTextColor(Color.WHITE);
           subtitle.setTextColor(Color.WHITE);
           subtitle.setText(R.string.browsing_mode_slide_over_explanation);
@@ -164,15 +164,15 @@ class BrowsingModeAdapter extends RecyclerView.Adapter<BrowsingModeAdapter.Brows
           break;
         case WEB_HEADS:
           icon.setImageDrawable(new IconicsDrawable(icon.getContext())
-              .icon(Icon.cmd_chart_bubble)
-              .color(Color.WHITE)
-              .sizeDp(24));
+            .icon(Icon.cmd_chart_bubble)
+            .color(Color.WHITE)
+            .sizeDp(24));
           selector.setImageDrawable(new IconicsDrawable(selector.getContext())
-              .icon(!webHeads
-                  ? Icon.cmd_checkbox_blank_circle_outline
-                  : Icon.cmd_checkbox_marked_circle)
-              .color(Color.WHITE)
-              .sizeDp(24));
+            .icon(!webHeads
+              ? Icon.cmd_checkbox_blank_circle_outline
+              : Icon.cmd_checkbox_marked_circle)
+            .color(Color.WHITE)
+            .sizeDp(24));
           title.setTextColor(Color.WHITE);
           subtitle.setTextColor(Color.WHITE);
           subtitle.setText(R.string.browsing_mode_web_heads_explanation);
@@ -181,15 +181,15 @@ class BrowsingModeAdapter extends RecyclerView.Adapter<BrowsingModeAdapter.Brows
         case NATIVE_BUBBLES:
           final int materialDarkColor = ContextCompat.getColor(icon.getContext(), R.color.material_dark_color);
           icon.setImageDrawable(new IconicsDrawable(icon.getContext())
-              .icon(Icon.cmd_android_head)
-              .color(materialDarkColor)
-              .sizeDp(24));
+            .icon(Icon.cmd_android_head)
+            .color(materialDarkColor)
+            .sizeDp(24));
           selector.setImageDrawable(new IconicsDrawable(selector.getContext())
-              .icon(!nativeBubbles
-                  ? Icon.cmd_checkbox_blank_circle_outline
-                  : Icon.cmd_checkbox_marked_circle)
-              .color(materialDarkColor)
-              .sizeDp(24));
+            .icon(!nativeBubbles
+              ? Icon.cmd_checkbox_blank_circle_outline
+              : Icon.cmd_checkbox_marked_circle)
+            .color(materialDarkColor)
+            .sizeDp(24));
           title.setTextColor(materialDarkColor);
           subtitle.setTextColor(ColorUtils.setAlphaComponent(materialDarkColor, (int) (0.8 * 255)));
           subtitle.setText(R.string.browsing_mode_native_bubbles_explanation);

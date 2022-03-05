@@ -17,135 +17,135 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string-array name="animationValues">
-        <item>Hiçbiri</item>
-        <item>Sağa kaydır</item>
-        <item>Yukarı kaydır</item>
-    </string-array>
-    <string-array name="animationSpeedValues">
-        <item>Orta</item>
-        <item>Kısa</item>
-    </string-array>
-    <string-array name="actionValues">
-        <item>İkincil tarayıcı</item>
-        <item>Sık kullanılan paylaşım uygulaması</item>
-        <item>Genel paylaşım</item>
-    </string-array>
-    <string-array name="webHeadsSpawnValues">
-        <item>Sağ</item>
-        <item>Sol</item>
-    </string-array>
-    <string-array name="articleThemeValues">
-        <item>Karanlık</item>
-        <item>Açık</item>
-        <item>Otomatik</item>
-        <item>Black</item>
-    </string-array>
-    <string-array name="webHeadsSizeValues">
-        <item>Normal</item>
-        <item>Küçük</item>
-    </string-array>
-    <string name="share_text">Hey \‘Lynket\’ uygulamasına hızlı ve güvenli gezinti deneyimi için göz at! Buradan indir https://goo.gl/992ils</string>
-    <string name="share_via">…aracılığıyla paylaş</string>
-    <string name="custom_tab_provider_not_found">Uyumlu custom tab sağlayıcısı bulunamadı.</string>
-    <string name="custom_tab_provider_not_found_expln">Lynket, telefonunuzda custom tab uyumlu bir tarayıcı gerektirir. Telefonunuzda bu özelliği destekleyen bir tarayıcı mevcut değil. Google Chrome (Ücretsiz) uygulamasını Play Store üzerinden yüklemek ister misiniz? Eğer cihazınızda yüklü ise, lütfen son sürüme güncelleyin.</string>
-    <string name="install">Yükle</string>
-    <string name="licenses">Lisanslar</string>
-    <string name="about">Hakkında</string>
-    <string name="help_chromer_grow">Lynket\'in büyümesine yardımcı ol!</string>
-    <string name="share">Paylaş</string>
-    <string name="share_with">" %1$s ile paylaş"</string>
-    <string name="rate_play_store">Play Store\'da oyla</string>
-    <string name="feedback">Geri Bildirim</string>
-    <string name="intro">Giriş</string>
-    <string name="send_email">E-Posta gönder…</string>
-    <string name="fallback_msg">Custom tab açılamıyor, WebView\'a geçiliyor.</string>
-    <string name="open_with">…ile aç.</string>
-    <string name="open_in_browser">%1$s \'da aç</string>
-    <string name="unxp_err">Beklenmeyen hata, tekrar deneyin</string>
-    <string name="unsupported_link">Desteklenmeyen bağlantı, tekrar deneyin</string>
-    <string name="couldnt_load_price">Fiyat yüklenemedi</string>
-    <string name="coffee">Kahve</string>
-    <string name="lunch">Öğle Yemeği</string>
-    <string name="premium_donation">Premium Bağış</string>
-    <string name="invalid_link">Geçersiz bağlantı</string>
-    <string name="copied">Kopyalandı</string>
-    <string name="copy_link">Bağlantıyı kopyala</string>
-    <string name="add_to_homescreen">Ana Ekrana ekle</string>
-    <string name="intro_1">Merhaba!\nLynket hafif, güvenli ve hızlı bir tarayıcıdır.</string>
-    <string name="how_to_use">Bu nasıl kullanılır?</string>
-    <string name="intro_6">Sadece Lynket varsayılan tarayıcı olarak ayarlanmış, Lynket, dahil olmadan,  bir şekilde bağlantıyı gösterecektir. Veya gerektiğinde Lynket\'i seçin.</string>
-    <string name="version">Versiyon</string>
-    <string name="changelog">Değişiklikler</string>
-    <string name="join_google_plus">Google+ Topluluğuna Katıl</string>
-    <string name="share_ideas">Fikirlerini paylaş!</string>
-    <string name="support_development">Geliştirmeye destek ol</string>
-    <string name="consider_donation">Bağış yapmayı düşün</string>
-    <string name="add_to_circles">Google+ çemberlerine ekle</string>
-    <string name="follow_twitter">Twitter\'dan takip et</string>
-    <string name="connect_linkedIn">LinkedIn\'den bağlantı kur</string>
-    <string name="more_apps">Daha fazla uygulama</string>
-    <string name="author">Yazar</string>
-    <string name="added">Eklenme</string>
-    <string name="settings">Ayarlar</string>
-    <string name="colored_toolbar">Renkli araç çubuğu</string>
-    <string name="choose_animation">Açılış animasyonu</string>
-    <string name="animation_speed">Animasyon hızı</string>
-    <string name="default_pref_xpln">Tüm bağlantıları açmak için varsayılan olarak Lynket\'i  ayarla ya da gösterildiğinde listeden Lynket\'i  seçebilirsiniz</string>
-    <string name="personalization">Kişiselleştirme</string>
-    <string name="default_clear_msg">varsayılan tarayıcı olarak ayarlanır, lütfen varsayılana tıklayarak temizleyin.</string>
-    <string name="dynamic_toolbar_color">Dinamik araç çubuğu</string>
-    <string name="keep_chrome_warmedup">Daha hızlı açılma için tarayıcınızı bellekte tutun</string>
-    <string name="warmup_browser">Tarayıcı hızlandır</string>
-    <string name="set_default_chromer">Varsayılan Tarayıcı olarak belirle</string>
-    <string name="default_provider">Özel sekme sağlayıcısı</string>
-    <string name="accessibility_dialog_title">Erişilebilirlik izni gerekli</string>
-    <string name="open_settings">Ayarları Aç</string>
-    <string name="only_on_wifi">Sadece Wi-Fi bağlıyken tara</string>
-    <string name="show_notification">Bağlantı ön yüklendiğinde bildirim göster</string>
-    <string name="default_toolbar_color">Varsayılan araç çubuğu rengi</string>
-    <string name="choose_secondary_browser">İkincil tarayıcı</string>
-    <string name="secondary_browser_success">%1$s ikincil tarayıcı olarak ayarlı!</string>
-    <string name="fav_share_success">%1$s varsayılan favori paylaşım uygulaması olarak belirle!</string>
-    <string name="based_on_app">Uygulama tabanlı</string>
-    <string name="based_on_web">Website tabanlı</string>
-    <string name="preferred_action">Tercih edilen eylem</string>
-    <string name="fav_share_app">Favori paylaşım uygulaması</string>
-    <string name="choose_fav_share_app">Varsayılan favori paylaşım uygulaması seç</string>
-    <string name="dynamic_summary_appweb">Eğer web sitesi destekliyor ise renk site tabanlı olarak, desteklemiyor ise uygulama tabanlı olacak</string>
-    <string name="no_option_selected">Herhangi bir seçenek seçilmedi</string>
-    <string name="permission_required">İzin gerekli</string>
-    <string name="grant">İzin ver</string>
-    <string name="open_source_contributions">Açık kaynak şeyi</string>
-    <string name="loading">Yükleniyor…</string>
-    <string name="translations">Çeviriler</string>
-    <string name="bottom_bar">Alt bar</string>
-    <string name="open_in_new_tab">Yeni sekmede aç</string>
-    <string name="options">Seçenekler</string>
-    <string name="customize">Özelleştirme</string>
-    <string name="not_set">Ayarlanmamış</string>
-    <string name="not_found">Bulunamadı</string>
-    <string name="app_preferences">Uygulama Tercihleri</string>
-    <string name="behavior_preferences">Hareket</string>
-    <string name="additional_preferences">Ekstra</string>
-    <string name="notifications">Bildirimler</string>
-    <string name="webhead_size_title">Boyut</string>
-    <string name="webhead_size_dialog">Web başlığının boyutunu seç</string>
-    <string name="changelog_skipped">Değişiklikler bir hata nedeniyle atlanır</string>
-    <string name="see_whats_new">Yenilikleri görün</string>
-    <string name="help_translations">Uygulamayı diline çevirmeye yardım et</string>
-    <string name="merge_tabs_off_title">Dikkat</string>
-    <string name="web_sites">Web Siteler</string>
-    <string name="share_all">Tümünü paylaş</string>
-    <string name="thank_you">Çok teşekkür ederim!</string>
-    <string name="save_time">Zamandan tasarruf</string>
-    <string name="multiple_links">Çoklu bağlantılar</string>
-    <string name="open">Aç</string>
-    <string name="open_full_page">Tam sayfayı aç</string>
-    <string name="more">Daha fazla</string>
-    <string name="title_history">Geçmiş</string>
-    <string name="deleted_items">%1$d öğe silindi.</string>
-    <string name="are_you_sure">Emin misiniz?</string>
-    <string name="history_deletion_confirmation_content">Bu işlem tüm geçmişi silecektir ve geri döndürülemez.</string>
-    <string name="incognito_mode">Gizli mod</string>
+  <string-array name="animationValues">
+    <item>Hiçbiri</item>
+    <item>Sağa kaydır</item>
+    <item>Yukarı kaydır</item>
+  </string-array>
+  <string-array name="animationSpeedValues">
+    <item>Orta</item>
+    <item>Kısa</item>
+  </string-array>
+  <string-array name="actionValues">
+    <item>İkincil tarayıcı</item>
+    <item>Sık kullanılan paylaşım uygulaması</item>
+    <item>Genel paylaşım</item>
+  </string-array>
+  <string-array name="webHeadsSpawnValues">
+    <item>Sağ</item>
+    <item>Sol</item>
+  </string-array>
+  <string-array name="articleThemeValues">
+    <item>Karanlık</item>
+    <item>Açık</item>
+    <item>Otomatik</item>
+    <item>Black</item>
+  </string-array>
+  <string-array name="webHeadsSizeValues">
+    <item>Normal</item>
+    <item>Küçük</item>
+  </string-array>
+  <string name="share_text">Hey \‘Lynket\’ uygulamasına hızlı ve güvenli gezinti deneyimi için göz at! Buradan indir https://goo.gl/992ils</string>
+  <string name="share_via">…aracılığıyla paylaş</string>
+  <string name="custom_tab_provider_not_found">Uyumlu custom tab sağlayıcısı bulunamadı.</string>
+  <string name="custom_tab_provider_not_found_expln">Lynket, telefonunuzda custom tab uyumlu bir tarayıcı gerektirir. Telefonunuzda bu özelliği destekleyen bir tarayıcı mevcut değil. Google Chrome (Ücretsiz) uygulamasını Play Store üzerinden yüklemek ister misiniz? Eğer cihazınızda yüklü ise, lütfen son sürüme güncelleyin.</string>
+  <string name="install">Yükle</string>
+  <string name="licenses">Lisanslar</string>
+  <string name="about">Hakkında</string>
+  <string name="help_chromer_grow">Lynket\'in büyümesine yardımcı ol!</string>
+  <string name="share">Paylaş</string>
+  <string name="share_with">" %1$s ile paylaş"</string>
+  <string name="rate_play_store">Play Store\'da oyla</string>
+  <string name="feedback">Geri Bildirim</string>
+  <string name="intro">Giriş</string>
+  <string name="send_email">E-Posta gönder…</string>
+  <string name="fallback_msg">Custom tab açılamıyor, WebView\'a geçiliyor.</string>
+  <string name="open_with">…ile aç.</string>
+  <string name="open_in_browser">%1$s \'da aç</string>
+  <string name="unxp_err">Beklenmeyen hata, tekrar deneyin</string>
+  <string name="unsupported_link">Desteklenmeyen bağlantı, tekrar deneyin</string>
+  <string name="couldnt_load_price">Fiyat yüklenemedi</string>
+  <string name="coffee">Kahve</string>
+  <string name="lunch">Öğle Yemeği</string>
+  <string name="premium_donation">Premium Bağış</string>
+  <string name="invalid_link">Geçersiz bağlantı</string>
+  <string name="copied">Kopyalandı</string>
+  <string name="copy_link">Bağlantıyı kopyala</string>
+  <string name="add_to_homescreen">Ana Ekrana ekle</string>
+  <string name="intro_1">Merhaba!\nLynket hafif, güvenli ve hızlı bir tarayıcıdır.</string>
+  <string name="how_to_use">Bu nasıl kullanılır?</string>
+  <string name="intro_6">Sadece Lynket varsayılan tarayıcı olarak ayarlanmış, Lynket, dahil olmadan,  bir şekilde bağlantıyı gösterecektir. Veya gerektiğinde Lynket\'i seçin.</string>
+  <string name="version">Versiyon</string>
+  <string name="changelog">Değişiklikler</string>
+  <string name="join_google_plus">Google+ Topluluğuna Katıl</string>
+  <string name="share_ideas">Fikirlerini paylaş!</string>
+  <string name="support_development">Geliştirmeye destek ol</string>
+  <string name="consider_donation">Bağış yapmayı düşün</string>
+  <string name="add_to_circles">Google+ çemberlerine ekle</string>
+  <string name="follow_twitter">Twitter\'dan takip et</string>
+  <string name="connect_linkedIn">LinkedIn\'den bağlantı kur</string>
+  <string name="more_apps">Daha fazla uygulama</string>
+  <string name="author">Yazar</string>
+  <string name="added">Eklenme</string>
+  <string name="settings">Ayarlar</string>
+  <string name="colored_toolbar">Renkli araç çubuğu</string>
+  <string name="choose_animation">Açılış animasyonu</string>
+  <string name="animation_speed">Animasyon hızı</string>
+  <string name="default_pref_xpln">Tüm bağlantıları açmak için varsayılan olarak Lynket\'i  ayarla ya da gösterildiğinde listeden Lynket\'i  seçebilirsiniz</string>
+  <string name="personalization">Kişiselleştirme</string>
+  <string name="default_clear_msg">varsayılan tarayıcı olarak ayarlanır, lütfen varsayılana tıklayarak temizleyin.</string>
+  <string name="dynamic_toolbar_color">Dinamik araç çubuğu</string>
+  <string name="keep_chrome_warmedup">Daha hızlı açılma için tarayıcınızı bellekte tutun</string>
+  <string name="warmup_browser">Tarayıcı hızlandır</string>
+  <string name="set_default_chromer">Varsayılan Tarayıcı olarak belirle</string>
+  <string name="default_provider">Özel sekme sağlayıcısı</string>
+  <string name="accessibility_dialog_title">Erişilebilirlik izni gerekli</string>
+  <string name="open_settings">Ayarları Aç</string>
+  <string name="only_on_wifi">Sadece Wi-Fi bağlıyken tara</string>
+  <string name="show_notification">Bağlantı ön yüklendiğinde bildirim göster</string>
+  <string name="default_toolbar_color">Varsayılan araç çubuğu rengi</string>
+  <string name="choose_secondary_browser">İkincil tarayıcı</string>
+  <string name="secondary_browser_success">%1$s ikincil tarayıcı olarak ayarlı!</string>
+  <string name="fav_share_success">%1$s varsayılan favori paylaşım uygulaması olarak belirle!</string>
+  <string name="based_on_app">Uygulama tabanlı</string>
+  <string name="based_on_web">Website tabanlı</string>
+  <string name="preferred_action">Tercih edilen eylem</string>
+  <string name="fav_share_app">Favori paylaşım uygulaması</string>
+  <string name="choose_fav_share_app">Varsayılan favori paylaşım uygulaması seç</string>
+  <string name="dynamic_summary_appweb">Eğer web sitesi destekliyor ise renk site tabanlı olarak, desteklemiyor ise uygulama tabanlı olacak</string>
+  <string name="no_option_selected">Herhangi bir seçenek seçilmedi</string>
+  <string name="permission_required">İzin gerekli</string>
+  <string name="grant">İzin ver</string>
+  <string name="open_source_contributions">Açık kaynak şeyi</string>
+  <string name="loading">Yükleniyor…</string>
+  <string name="translations">Çeviriler</string>
+  <string name="bottom_bar">Alt bar</string>
+  <string name="open_in_new_tab">Yeni sekmede aç</string>
+  <string name="options">Seçenekler</string>
+  <string name="customize">Özelleştirme</string>
+  <string name="not_set">Ayarlanmamış</string>
+  <string name="not_found">Bulunamadı</string>
+  <string name="app_preferences">Uygulama Tercihleri</string>
+  <string name="behavior_preferences">Hareket</string>
+  <string name="additional_preferences">Ekstra</string>
+  <string name="notifications">Bildirimler</string>
+  <string name="webhead_size_title">Boyut</string>
+  <string name="webhead_size_dialog">Web başlığının boyutunu seç</string>
+  <string name="changelog_skipped">Değişiklikler bir hata nedeniyle atlanır</string>
+  <string name="see_whats_new">Yenilikleri görün</string>
+  <string name="help_translations">Uygulamayı diline çevirmeye yardım et</string>
+  <string name="merge_tabs_off_title">Dikkat</string>
+  <string name="web_sites">Web Siteler</string>
+  <string name="share_all">Tümünü paylaş</string>
+  <string name="thank_you">Çok teşekkür ederim!</string>
+  <string name="save_time">Zamandan tasarruf</string>
+  <string name="multiple_links">Çoklu bağlantılar</string>
+  <string name="open">Aç</string>
+  <string name="open_full_page">Tam sayfayı aç</string>
+  <string name="more">Daha fazla</string>
+  <string name="title_history">Geçmiş</string>
+  <string name="deleted_items">%1$d öğe silindi.</string>
+  <string name="are_you_sure">Emin misiniz?</string>
+  <string name="history_deletion_confirmation_content">Bu işlem tüm geçmişi silecektir ve geri döndürülemez.</string>
+  <string name="incognito_mode">Gizli mod</string>
 </resources>
