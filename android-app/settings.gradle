@@ -17,8 +17,47 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+pluginManagement {
+  includeBuild "build-logic"
+  repositories {
+    gradlePluginPortal()
+    google()
+    mavenCentral()
+  }
+  plugins {
+    // TODO Replace with version catalogs once plugins are supported ready
+    id "com.gradle.enterprise" version "3.6.3"
+  }
+}
+
+plugins {
+  id "com.gradle.enterprise"
+}
+
+enableFeaturePreview("VERSION_CATALOGS")
+
+dependencyResolutionManagement {
+  // repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+  defaultLibrariesExtensionName.set("deps")
+  repositories {
+    google()
+    mavenCentral()
+  }
+}
+
+def isCiServer = System.getenv().containsKey("CI")
+if (isCiServer) {
+  gradleEnterprise {
+    buildScan {
+      termsOfServiceUrl = "https://gradle.com/terms-of-service"
+      termsOfServiceAgree = "yes"
+      tag("CI")
+    }
+  }
+}
+
 rootProject.name = "lynket"
-include ':lynket', ":disk-cache"
+include ":lynket", ":disk-cache"
 
 //includeBuild("../../scabbard") {
 //    dependencySubstitution {
