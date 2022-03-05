@@ -71,6 +71,11 @@ constructor(
         name = QWANT,
         iconUri = "https://lh3.googleusercontent.com/gZM93E0coPblwJysaGbAVgTRXPld0ZDRtrbmclDqWWrPJLKIjyVB9XKqOX8OM9_3GJI=s192-rw".toUri(),
         searchUrlPrefix = "https://www.qwant.com/?q="
+      ),
+      SearchProvider(
+        name = ECOSIA,
+        iconUri = "https://cdn-static.ecosia.org/assets/images/png/apple-touch-icon.png".toUri(),
+        searchUrlPrefix = "https://www.ecosia.org/search?q="
       )
     )
   }
@@ -95,6 +100,7 @@ constructor(
     const val DUCKDUCKGO = "Duck Duck Go"
     const val BING = "Bing"
     const val QWANT = "Qwant"
+    const val ECOSIA = "Ecosia"
 
     val GOOGLE_SEARCH_PROVIDER = SearchProvider(
       name = GOOGLE,
