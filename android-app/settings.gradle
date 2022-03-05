@@ -26,7 +26,7 @@ include ":app", ":disk-cache"
 //}
 //
 //includeBuild("../../scabbard/scabbard-gradle-plugin") {
-//    dependencySubstitution {
-//        substitute module("dev.arunkumar:scabbard-gradle-plugin") with project(":")
-//    }
+//  dependencySubstitution {
+//    substitute module("gradle.plugin.dev.arunkumar:scabbard-gradle-plugin") with project(":")
+//  }
 //}

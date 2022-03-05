@@ -36,7 +36,7 @@ object RxParser {
    * Converts the given URL to its extracted article metadata form. The extraction is not performed
    * if the given url is not a proper web url.
    */
-  private val URL_TO_METADATA_MAPPER = { url: String ->
+  private val URL_TO_METADATA_MAPPER: (String) -> Pair<String, Article?> = { url: String ->
     var article: Article? = null
     try {
       val expanded = WebsiteUtilities.unShortenUrl(url)
@@ -80,11 +80,11 @@ object RxParser {
     Pair(url, article)
   }
 
-  fun parseUrl(url: String?): Observable<Pair<String, Article>> {
+  fun parseUrl(url: String?): Observable<Pair<String, Article?>> {
     return Observable.just<String>(url).map(URL_TO_METADATA_MAPPER)
   }
 
-  fun parseArticle(url: String?): Observable<Pair<String, Article>> {
+  fun parseArticle(url: String?): Observable<Pair<String, Article?>> {
     return Observable.just<String>(url).map(URL_TO_WEB_ARTICLE_PAIR_MAPPER)
   }
 }

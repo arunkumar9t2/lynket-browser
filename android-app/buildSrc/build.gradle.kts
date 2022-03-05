@@ -1,6 +1,6 @@
 plugins {
   `java-gradle-plugin`
-  id("org.jetbrains.kotlin.jvm").version("1.4.32")
+  id("org.jetbrains.kotlin.jvm").version("1.6.10")
 }
 
 repositories {

@@ -81,6 +81,7 @@ constructor(
           id("recents-progress")
         }
       }
+      else -> {}
     }
   }
 }
