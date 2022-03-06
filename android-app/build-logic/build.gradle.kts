@@ -58,4 +58,5 @@ dependencies {
   implementation(deps.dokka)
   implementation(deps.nexus.publish)
   implementation(deps.kotlinx.binaryvalidator)
+  implementation("gradle.plugin.dev.arunkumar:scabbard-gradle-plugin:0.5.0")
 }

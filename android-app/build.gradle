@@ -17,43 +17,17 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-apply plugin: "lynket-build"
-
-buildscript {
-  repositories {
-    google()
-    maven { url "https://jitpack.io" }
-    maven { url "https://plugins.gradle.org/m2/" }
-    jcenter()
-  }
-  dependencies {
-    classpath "com.android.tools.build:gradle:7.1.2"
-    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
-    classpath "gradle.plugin.dev.arunkumar:scabbard-gradle-plugin:0.5.0"
-  }
+plugins {
+  id "build-common"
 }
 
 allprojects {
-  repositories {
-    google()
-    maven { url "https://jitpack.io" }
-    jcenter()
-    mavenCentral()
-    maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
-  }
-
   configurations {
     all {
       resolutionStrategy {
         force "org.ow2.asm:asm:7.0"
-        cacheChangingModulesFor 0, "seconds"
+        // cacheChangingModulesFor 0, "seconds"
       }
-    }
-  }
-
-  tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
-    kotlinOptions {
-      jvmTarget = "1.8"
     }
   }
 }

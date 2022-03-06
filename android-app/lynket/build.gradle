@@ -51,7 +51,8 @@ android {
 
     multiDexEnabled true
 
-    resValue "string", "play_license_key", "$PLAY_LICENSE_KEY"
+    // TODO Update play license key
+    // resValue "string", "play_license_key", "$PLAY_LICENSE_KEY"
 
     vectorDrawables.useSupportLibrary = true
   }

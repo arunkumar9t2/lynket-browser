@@ -19,11 +19,14 @@
  */
 pluginManagement {
   includeBuild "build-logic"
+
   repositories {
     gradlePluginPortal()
     google()
     mavenCentral()
+    jcenter()
   }
+
   plugins {
     // TODO Replace with version catalogs once plugins are supported ready
     id "com.gradle.enterprise" version "3.6.3"
@@ -42,6 +45,10 @@ dependencyResolutionManagement {
   repositories {
     google()
     mavenCentral()
+    jcenter()
+
+    maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
+    maven { url "https://jitpack.io" }
   }
 }
 
@@ -59,14 +66,14 @@ if (isCiServer) {
 rootProject.name = "lynket"
 include ":lynket", ":disk-cache"
 
-//includeBuild("../../scabbard") {
-//    dependencySubstitution {
-//        substitute module("dev.arunkumar:scabbard-processor") with project(":scabbard-processor")
-//    }
-//}
-//
-//includeBuild("../../scabbard/scabbard-gradle-plugin") {
-//  dependencySubstitution {
-//    substitute module("gradle.plugin.dev.arunkumar:scabbard-gradle-plugin") with project(":")
+//  includeBuild("../../scabbard") {
+//      dependencySubstitution {
+//          substitute module("dev.arunkumar:scabbard-processor") with project(":scabbard-processor")
+//      }
 //  }
-//}
+//
+//  includeBuild("../../scabbard/scabbard-gradle-plugin") {
+//    dependencySubstitution {
+//      substitute module("gradle.plugin.dev.arunkumar:scabbard-gradle-plugin") with project(":")
+//    }
+//  }

@@ -18,7 +18,6 @@ package common
 
 import com.diffplug.gradle.spotless.SpotlessExtension
 import com.diffplug.gradle.spotless.SpotlessPlugin
-import com.github.benmanes.gradle.versions.VersionsPlugin
 import gradle.ConfigurablePlugin
 import gradle.deps
 import gradle.version
@@ -26,6 +25,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.jetbrains.dokka.gradle.DokkaPlugin
+import com.github.benmanes.gradle.versions.VersionsPlugin as GradleVersionsPlugin
 
 /**
  * Common build plugin that should be applied to root `build.gradle` file. This plugin can be used
@@ -56,7 +56,7 @@ public class BuildCommonPlugin : ConfigurablePlugin({
     configureSpotless()
   }
 
-  apply<VersionsPlugin>()
+  apply<GradleVersionsPlugin>()
 })
 
 /**
