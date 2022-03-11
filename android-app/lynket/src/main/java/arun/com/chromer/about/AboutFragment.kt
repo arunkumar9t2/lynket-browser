@@ -164,9 +164,7 @@ class AboutFragment : Fragment() {
       }
     }
 
-    override fun getItemCount(): Int {
-      return 7
-    }
+    override fun getItemCount() = 6
 
     internal inner class ItemHolder(override val containerView: View) :
       RecyclerView.ViewHolder(containerView), LayoutContainer, View.OnClickListener {
@@ -196,7 +194,7 @@ class AboutFragment : Fragment() {
           4 -> {
             val licenses = Intent(
               Intent.ACTION_VIEW,
-              Uri.parse("http://htmlpreview.github.com/?https://github.com/arunkumar9t2/chromer/blob/master/notices.html")
+              Uri.parse("https://htmlpreview.github.io/?https://github.com/arunkumar9t2/lynket-browser/blob/main/notices.html")
             )
             requireActivity().startActivity(licenses)
           }
@@ -206,13 +204,6 @@ class AboutFragment : Fragment() {
               Uri.parse("http://os0l2aw.oneskyapp.com/collaboration/project/62112")
             )
             requireActivity().startActivity(oneSkyIntent)
-          }
-          6 -> {
-            val sourceIntent = Intent(
-              Intent.ACTION_VIEW,
-              Uri.parse("https://github.com/arunkumar9t2/lynket-browser")
-            )
-            requireActivity().startActivity(sourceIntent)
           }
         }
       }
