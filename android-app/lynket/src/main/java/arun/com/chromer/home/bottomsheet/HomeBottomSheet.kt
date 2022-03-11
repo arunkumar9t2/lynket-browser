@@ -32,7 +32,6 @@ import androidx.core.net.toUri
 import arun.com.chromer.R
 import arun.com.chromer.about.AboutAppActivity
 import arun.com.chromer.intro.ChromerIntroActivity
-import arun.com.chromer.payments.DonateActivity
 import arun.com.chromer.shared.Constants
 import arun.com.chromer.util.Utils
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -46,12 +45,14 @@ import kotlinx.android.synthetic.main.layout_home_bottom_sheet.*
 class HomeBottomSheet : BottomSheetDialogFragment() {
 
   companion object {
+    // TODO Refactor to items
     private const val INTRO = 1L
     private const val FEEDBACK = 2L
     private const val RATE = 3L
     private const val BETA = 4L
     private const val SHARE = 5L
-    private const val DONATION = 6L
+
+    // private const val DONATION = 6L
     private const val ABOUT = 7L
   }
 
@@ -103,13 +104,13 @@ class HomeBottomSheet : BottomSheetDialogFragment() {
           .withDescription(getString(R.string.help_chromer_grow))
           .withIdentifier(SHARE)
           .withSelectable(false),
-        PrimaryDrawerItem()
+        /*PrimaryDrawerItem()
           .withName(getString(R.string.support_development))
           .withDescription(R.string.consider_donation)
           .withIcon(CommunityMaterial.Icon.cmd_heart)
           .withIconColorRes(R.color.accent)
           .withIdentifier(DONATION)
-          .withSelectable(false),
+          .withSelectable(false),*/
         PrimaryDrawerItem()
           .withName(getString(R.string.about))
           .withIcon(CommunityMaterial.Icon.cmd_information)
@@ -131,7 +132,7 @@ class HomeBottomSheet : BottomSheetDialogFragment() {
           )
           RATE -> Utils.openPlayStore(requireActivity(), requireActivity().packageName)
           INTRO -> startActivity(Intent(requireActivity(), ChromerIntroActivity::class.java))
-          DONATION -> startActivity(Intent(requireActivity(), DonateActivity::class.java))
+          // DONATION -> startActivity(Intent(requireActivity(), DonateActivity::class.java))
           SHARE -> {
             val shareIntent = Intent(ACTION_SEND)
             shareIntent.putExtra(EXTRA_TEXT, getString(R.string.share_text))

@@ -211,10 +211,10 @@
     <activity
       android:name=".about.AboutAppActivity"
       android:theme="@style/AppTheme.NoActionBar" />
-    <activity
-      android:name=".payments.DonateActivity"
-      android:excludeFromRecents="true"
-      android:theme="@style/DialogTheme" />
+    <!--    <activity-->
+    <!--      android:name=".payments.DonateActivity"-->
+    <!--      android:excludeFromRecents="true"-->
+    <!--      android:theme="@style/DialogTheme" />-->
     <activity
       android:name=".perapp.PerAppSettingsActivity"
       android:label="@string/per_app_settings"
