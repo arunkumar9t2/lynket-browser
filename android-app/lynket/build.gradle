@@ -17,15 +17,13 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-apply plugin: "com.android.application"
-apply plugin: "kotlin-android"
+apply plugin: "android-binary-plugin"
 apply plugin: "kotlin-kapt"
 apply plugin: "kotlin-android-extensions"
 apply plugin: "scabbard.gradle"
 
+// TODO move to build-logic
 kapt {
-  useBuildCache = true
   correctErrorTypes = true
 }
 
@@ -35,79 +33,24 @@ scabbard {
 }
 
 android {
-  compileSdkVersion 30
+  // TODO Update play license key
+  // resValue "string", "play_license_key", "$PLAY_LICENSE_KEY"
 
-  compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
+  buildFeatures {
+    compose = true
   }
 
-  defaultConfig {
-    applicationId "arun.com.chromer"
-    minSdkVersion 23
-    targetSdkVersion 29
-    versionCode 56
-    versionName "2.1.3"
-
-    multiDexEnabled true
-
-    // TODO Update play license key
-    // resValue "string", "play_license_key", "$PLAY_LICENSE_KEY"
-
-    vectorDrawables.useSupportLibrary = true
-  }
   buildTypes {
     release {
-      minifyEnabled true
-      shrinkResources true
-      debuggable false
-      proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
       resValue "string", "app_name", "Lynket"
-
-      lintOptions {
-        disable "MissingTranslation"
-      }
     }
     debug {
-      minifyEnabled false
-      shrinkResources false
-      debuggable true
-
       applicationIdSuffix ".debug"
       versionNameSuffix "- dev"
       resValue "string", "app_name", "Lynket-dev"
     }
   }
-
-  buildTypes.all { buildType ->
-    buildType
-      .javaCompileOptions
-      .annotationProcessorOptions
-      .arguments += [
-      logEpoxyTimings              : "true",
-      enableParallelEpoxyProcessing: "true"
-    ]
-  }
-
-  packagingOptions {
-    exclude "META-INF/rxjava.properties"
-  }
-
-  dexOptions {
-    preDexLibraries true
-  }
-
-  testOptions {
-    unitTests {
-      includeAndroidResources = true
-    }
-  }
-
-  lintOptions {
-    abortOnError false
-  }
 }
-
 
 androidExtensions {
   experimental = true
@@ -132,6 +75,14 @@ dependencies {
   implementation "dev.arunkumar.android:dagger-viewmodel:master-SNAPSHOT"
   implementation "dev.arunkumar.android:epoxy-utils:master-SNAPSHOT"
   implementation "dev.arunkumar.android:rx-utils:master-SNAPSHOT"
+
+  // Compose
+  implementation(deps.compose.material)
+  implementation(deps.compose.materialicons)
+  implementation(deps.compose.ui.ui)
+  implementation(deps.compose.ui.toolingpreview)
+  implementation(deps.compose.ui.livedata)
+  debugImplementation(deps.compose.ui.tooling)
 
   // Dependency Injection
   implementation "com.google.dagger:dagger:2.38.1"

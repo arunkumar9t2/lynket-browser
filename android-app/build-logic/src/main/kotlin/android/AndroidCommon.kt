@@ -21,6 +21,7 @@
 package android
 
 import ANDROID_COMPILE_SDK
+import ANDROID_DEBUG_VARIANT
 import ANDROID_MIN_SDK
 import ANDROID_RELEASE_VARIANT
 import ANDROID_TARGET_SDK
@@ -39,8 +40,8 @@ internal fun Project.androidCommon() {
     compileSdkVersion(ANDROID_COMPILE_SDK)
 
     compileOptions {
-      sourceCompatibility = JavaVersion.VERSION_1_8
-      targetCompatibility = JavaVersion.VERSION_1_8
+      sourceCompatibility(JavaVersion.VERSION_11)
+      targetCompatibility(JavaVersion.VERSION_11)
     }
 
     defaultConfig {
@@ -48,18 +49,41 @@ internal fun Project.androidCommon() {
       targetSdk = ANDROID_TARGET_SDK
 
       testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
       vectorDrawables {
         useSupportLibrary = true
       }
+
+      multiDexEnabled = true
     }
 
     buildTypes {
+
       named(ANDROID_RELEASE_VARIANT) {
+        isMinifyEnabled = true
+        isShrinkResources = true
+        isDebuggable = false
+
         proguardFiles(
-          getDefaultProguardFile("proguard-android-optimize.txt"),
+          getDefaultProguardFile(name = "proguard-android-optimize.txt"),
           "proguard-rules.pro"
         )
       }
+
+      named(ANDROID_DEBUG_VARIANT) {
+        isMinifyEnabled = false
+        isShrinkResources = false
+        isDebuggable = true
+      }
+    }
+
+    buildTypes.configureEach {
+      javaCompileOptions
+        .annotationProcessorOptions
+        .arguments += listOf(
+        "logEpoxyTimings" to "true",
+        "enableParallelEpoxyProcessing" to "true"
+      )
     }
 
     composeOptions {
@@ -70,18 +94,26 @@ internal fun Project.androidCommon() {
       resources.excludes += listOf(
         "META-INF/AL2.0",
         "META-INF/LGPL2.1",
-        "META-INF/licenses/**"
+        "META-INF/licenses/**",
+        "META-INF/rxjava.properties"
       )
     }
 
     lintOptions {
       isAbortOnError = false
+      disable.add("MissingTranslation")
+    }
+
+    testOptions {
+      unitTests {
+        isIncludeAndroidResources = true
+      }
     }
   }
 
   tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
-      jvmTarget = "1.8"
+      jvmTarget = "11"
       freeCompilerArgs += listOf(
         "-Xopt-in=kotlin.ExperimentalStdlibApi",
         "-Xopt-in=kotlin.RequiresOptIn",
