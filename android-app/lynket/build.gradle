@@ -28,7 +28,7 @@ kapt {
 }
 
 scabbard {
-  enabled !gradle.startParameter.getTaskNames().any { it.contains("Release") }
+  enabled false
   outputFormat "svg"
 }
 
