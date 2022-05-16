@@ -118,7 +118,7 @@ class HomeScreenShortcutCreatorActivity : BrowsingActivity() {
             ShortcutManagerCompat.requestPinShortcut(
               activity!!,
               ShortcutInfoCompat.Builder(activity!!, website.url)
-                .setIcon(IconCompat.createWithBitmap(iconView?.drawable?.toBitmap()))
+                .setIcon(IconCompat.createWithBitmap(iconView!!.drawable!!.toBitmap()))
                 .setIntent(Intent(activity, BrowserInterceptActivity::class.java).apply {
                   action = Intent.ACTION_VIEW
                   addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
