@@ -30,6 +30,8 @@ pluginManagement {
   plugins {
     // TODO Replace with version catalogs once plugins are supported ready
     id "com.gradle.enterprise" version "3.6.3"
+    id 'com.android.application' version '7.1.2'
+    id 'org.jetbrains.kotlin.android' version '1.6.10'
   }
 }
 
@@ -77,3 +79,4 @@ include ":lynket", ":disk-cache"
 //      substitute module("gradle.plugin.dev.arunkumar:scabbard-gradle-plugin") with project(":")
 //    }
 //  }
+include ':lynket-playground'
