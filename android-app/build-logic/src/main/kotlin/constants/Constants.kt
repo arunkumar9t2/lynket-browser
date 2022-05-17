@@ -35,7 +35,7 @@
  */
 public const val ANDROID_COMPILE_SDK: Int = 31
 public const val ANDROID_MIN_SDK: Int = 23
-public const val ANDROID_TARGET_SDK: Int = 29
+public const val ANDROID_TARGET_SDK: Int = 31
 
 public const val ANDROID_PACKAGE_NAME: String = "arun.com.chromer"
 public const val ANDROID_RELEASE_VARIANT: String = "release"
