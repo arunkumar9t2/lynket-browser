@@ -53,7 +53,9 @@ public class Changelog {
 
   public static void show(final Activity activity) {
     try {
-      @SuppressLint("InflateParams") final FrameLayout content = (FrameLayout) LayoutInflater.from(activity).inflate(R.layout.widget_changelog_layout, null);
+      @SuppressLint("InflateParams") final FrameLayout content = (FrameLayout) LayoutInflater
+        .from(activity)
+        .inflate(R.layout.widget_changelog_layout, null);
       final MaterialProgressBar progress = content.findViewById(R.id.changelog_progress);
       final WebView webView = content.findViewById(R.id.changelog_web_view);
       webView.loadData(activity.getString(R.string.changelog_text), "text/html", "utf-8");
