@@ -19,14 +19,17 @@
  */
 pluginManagement {
   includeBuild "build-logic"
-
   repositories {
+    google {
+      content {
+        includeGroupByRegex("com\\.android.*")
+        includeGroupByRegex("com\\.google.*")
+        includeGroupByRegex("androidx.*")
+      }
+    }
     gradlePluginPortal()
-    google()
     mavenCentral()
-    jcenter()
   }
-
   plugins {
     // TODO Replace with version catalogs once plugins are supported ready
     id "com.gradle.enterprise" version "3.6.3"
@@ -35,33 +38,11 @@ pluginManagement {
   }
 }
 
-plugins {
-  id "com.gradle.enterprise"
-}
-
-enableFeaturePreview("VERSION_CATALOGS")
-
 dependencyResolutionManagement {
-  // repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-  defaultLibrariesExtensionName.set("deps")
+  repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
   repositories {
     google()
     mavenCentral()
-    jcenter()
-
-    maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
-    maven { url "https://jitpack.io" }
-  }
-}
-
-def isCiServer = System.getenv().containsKey("CI")
-if (isCiServer) {
-  gradleEnterprise {
-    buildScan {
-      termsOfServiceUrl = "https://gradle.com/terms-of-service"
-      termsOfServiceAgree = "yes"
-      tag("CI")
-    }
   }
 }
 

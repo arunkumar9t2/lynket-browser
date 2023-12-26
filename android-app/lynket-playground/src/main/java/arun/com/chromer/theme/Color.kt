@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package dev.arunkumar.lynket.playground.ui.theme
+package arun.com.chromer.theme
 
 import androidx.compose.ui.graphics.Color
 

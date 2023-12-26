@@ -77,12 +77,12 @@ dependencies {
   implementation "dev.arunkumar.android:rx-utils:master-SNAPSHOT"
 
   // Compose
-  implementation(deps.compose.material)
-  implementation(deps.compose.materialicons)
-  implementation(deps.compose.ui.ui)
-  implementation(deps.compose.ui.toolingpreview)
-  implementation(deps.compose.ui.livedata)
-  debugImplementation(deps.compose.ui.tooling)
+  implementation(libs.compose.material)
+  implementation(libs.compose.materialicons)
+  implementation(libs.compose.ui.ui)
+  implementation(libs.compose.ui.toolingpreview)
+  implementation(libs.compose.ui.livedata)
+  debugImplementation(libs.compose.ui.tooling)
 
   // Dependency Injection
   implementation "com.google.dagger:dagger:2.42"
