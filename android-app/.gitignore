@@ -26,6 +26,7 @@ build/
 .idea/kotlinc.xml
 .idea/assetWizardSettings.xml
 .idea/kotlinScripting.xml
+.idea/git_toolbox_prj.xml
 # .idea/workspace.xml
 
 # Local configuration file (sdk path, etc)
