@@ -1,7 +1,8 @@
 plugins {
   alias(libs.plugins.androidApplication)
-  alias(libs.plugins.jetbrainsKotlinAndroid)
+  alias(libs.plugins.kotlinAndroid)
   alias(libs.plugins.whetstone)
+  alias(libs.plugins.kotlinKapt)
 }
 
 android {
@@ -67,6 +68,10 @@ dependencies {
   implementation(libs.androidx.ui.graphics)
   implementation(libs.androidx.ui.tooling.preview)
   implementation(libs.androidx.material3)
+
+  // Dagger
+  implementation(libs.dagger)
+  kapt(libs.dagger.compiler)
 
   testImplementation(libs.junit)
 
