@@ -30,8 +30,8 @@ pluginManagement {
   plugins {
     // TODO Replace with version catalogs once plugins are supported ready
     id "com.gradle.enterprise" version "3.6.3"
-    id 'com.android.application' version '7.1.2'
-    id 'org.jetbrains.kotlin.android' version '1.6.10'
+    id "com.android.application" version "7.1.2"
+    id "org.jetbrains.kotlin.android" version "1.6.10"
   }
 }
 
@@ -66,17 +66,6 @@ if (isCiServer) {
 }
 
 rootProject.name = "lynket"
-include ":lynket", ":disk-cache"
-
-//  includeBuild("../../scabbard") {
-//      dependencySubstitution {
-//          substitute module("dev.arunkumar:scabbard-processor") with project(":scabbard-processor")
-//      }
-//  }
-//
-//  includeBuild("../../scabbard/scabbard-gradle-plugin") {
-//    dependencySubstitution {
-//      substitute module("gradle.plugin.dev.arunkumar:scabbard-gradle-plugin") with project(":")
-//    }
-//  }
-include ':lynket-playground'
+//include ":lynket"
+//include ":disk-cache"
+include ":lynket-playground"
