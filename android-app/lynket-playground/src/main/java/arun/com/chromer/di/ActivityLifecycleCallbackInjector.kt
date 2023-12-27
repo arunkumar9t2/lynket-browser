@@ -18,29 +18,27 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer
+package arun.com.chromer.di
 
-import android.app.Application
-import arun.com.chromer.di.ActivityLifecycleCallbackInjector
+import android.app.Activity
+import android.app.Application.ActivityLifecycleCallbacks
+import android.os.Bundle
 import com.deliveryhero.whetstone.Whetstone
-import com.deliveryhero.whetstone.app.ApplicationComponent
-import com.deliveryhero.whetstone.app.ApplicationComponentOwner
-import com.deliveryhero.whetstone.app.ContributesAppInjector
 import javax.inject.Inject
 
-@ContributesAppInjector(generateAppComponent = true)
-class Lynket : Application(), ApplicationComponentOwner {
-
-  override val applicationComponent: ApplicationComponent by lazy {
-    GeneratedApplicationComponent.create(this)
+class ActivityLifecycleCallbackInjector
+@Inject
+constructor() : ActivityLifecycleCallbacks {
+  override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+    if (activity is HasInjector) {
+      Whetstone.inject(activity)
+    }
   }
 
-  @Inject
-  lateinit var activityLifecycleCallbackInjector: ActivityLifecycleCallbackInjector
-
-  override fun onCreate() {
-    Whetstone.inject(this)
-    super.onCreate()
-    registerActivityLifecycleCallbacks(activityLifecycleCallbackInjector)
-  }
+  override fun onActivityStarted(activity: Activity) = Unit
+  override fun onActivityResumed(activity: Activity) = Unit
+  override fun onActivityPaused(activity: Activity) = Unit
+  override fun onActivityStopped(activity: Activity) = Unit
+  override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) = Unit
+  override fun onActivityDestroyed(activity: Activity) = Unit
 }

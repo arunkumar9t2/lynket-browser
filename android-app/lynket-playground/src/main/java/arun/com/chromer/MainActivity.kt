@@ -30,14 +30,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import arun.com.chromer.di.HasInjector
 import arun.com.chromer.theme.LynketTheme
+import com.deliveryhero.whetstone.activity.ContributesActivityInjector
 
-class MainActivity : ComponentActivity() {
+@ContributesActivityInjector
+class MainActivity : ComponentActivity(), HasInjector {
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent {
       LynketTheme {
-        // A surface container using the 'background' color from the theme
         Surface(
           modifier = Modifier.fillMaxSize(),
           color = MaterialTheme.colorScheme.background
