@@ -18,24 +18,30 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package arun.com.chromer
+package arun.com.chromer.home
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import arun.com.chromer.di.HasInjector
 import arun.com.chromer.theme.LynketTheme
 import com.deliveryhero.whetstone.activity.ContributesActivityInjector
+import com.deliveryhero.whetstone.compose.injectedViewModel
 
 @ContributesActivityInjector
-class MainActivity : ComponentActivity(), HasInjector {
+class HomeActivity : ComponentActivity(), HasInjector {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -45,7 +51,7 @@ class MainActivity : ComponentActivity(), HasInjector {
           modifier = Modifier.fillMaxSize(),
           color = MaterialTheme.colorScheme.background
         ) {
-          Greeting("Android")
+          ListItems()
         }
       }
     }
@@ -53,14 +59,22 @@ class MainActivity : ComponentActivity(), HasInjector {
 }
 
 @Composable
-fun Greeting(name: String) {
-  Text(text = "Hello $name!")
-}
+fun ListItems(
+  viewModel: HomeViewModel = injectedViewModel()
+) {
+  val state by viewModel.state.collectAsState()
+  when (state) {
+    is HomeState.Loading -> {
+      Text(text = "Loading")
+    }
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-  LynketTheme {
-    Greeting("Android")
+    is HomeState.Items -> {
+      val items = (state as HomeState.Items).items
+      LazyColumn(contentPadding = PaddingValues(all = 16.dp)) {
+        items(items, key = { it }) { item ->
+          Text(text = item)
+        }
+      }
+    }
   }
 }
