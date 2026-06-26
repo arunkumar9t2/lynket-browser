@@ -106,7 +106,23 @@
 
   <style name="AppTheme.Launcher" parent="Theme.AppCompat.Light.NoActionBar" />
 
-  <style name="Theme.AppCompat.Translucent" parent="Theme.AppCompat.NoActionBar" />
+  <!--
+    Invisible "trampoline" theme used by link interceptors (BrowserInterceptActivity,
+    CustomTabActivity, OpenWith). It was previously translucent in name only, so these
+    activities flashed an opaque full-screen window when launched from another app
+    (e.g. opening a link from Telegram showed a visible switch-away-and-back before the
+    bubble appeared). Making it genuinely transparent, dropping the launch-preview window
+    and disabling enter/exit animations lets the interceptor do its work invisibly.
+  -->
+  <style name="Theme.AppCompat.Translucent" parent="Theme.AppCompat.NoActionBar">
+    <item name="android:windowIsTranslucent">true</item>
+    <item name="android:windowBackground">@android:color/transparent</item>
+    <item name="android:windowContentOverlay">@null</item>
+    <item name="android:windowNoTitle">true</item>
+    <item name="android:backgroundDimEnabled">false</item>
+    <item name="android:windowAnimationStyle">@null</item>
+    <item name="android:windowDisablePreview">true</item>
+  </style>
 
   <style name="Preference_TextAppearanceMaterialBody2">
     <item name="android:textSize">14sp</item>

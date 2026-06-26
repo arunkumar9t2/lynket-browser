@@ -143,8 +143,10 @@
     <!-- Entry point for browser activity -->
     <activity
       android:name=".browsing.browserintercept.BrowserInterceptActivity"
+      android:excludeFromRecents="true"
       android:exported="true"
       android:label="@string/app_name"
+      android:taskAffinity=""
       android:theme="@style/Theme.AppCompat.Translucent" />
 
     <activity-alias
